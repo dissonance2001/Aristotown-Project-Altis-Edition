@@ -12,6 +12,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.battle import BattleParticles
 from direct.particles import ParticleEffect
 from direct.showutil import Effects
+from direct.showutil import Effects
 from toontown.battle.BattleProps import *
 from toontown.battle import SuitBattleGlobals
 from toontown.nametag import NametagGlobals
@@ -234,7 +235,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-liquid = (('glower', 'glower', 4), ('snap', 'snap2', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
+liquid = (('taunt', 'taunt', 4), ('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('snap', 'snap2', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cbutcher = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cdirector = (('finger-wag', 'fingerwag', 4), ('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -1345,6 +1346,7 @@ class Suit(Avatar.Avatar):
         self.desperationMult = 0
         self.isImmune = 0
         self.isLitigationManager = 0
+        self.isOverpressured = 0
         self.isDead = 0
         self.isSoakImmune = 0
         self.isRevive = 0
@@ -2363,6 +2365,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
                 headPart.setTwoSided(True)
             self.setHeight(9.2)
+            self.makeCollectCall(0)
         elif dna.name == 'ubuster':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.604, 0.463, 0.62, 1)
@@ -2794,6 +2797,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
+            self.makeTarget()
         elif dna.name == 'ptjockey':
             self.scale = 5.0 / cSize
             self.handColor = VBase4(0.882, 0.847, 0.784, 1)
@@ -2804,6 +2808,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
+            self.makeTarget()
         elif dna.name == 'fmaker':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.565, 0.29, 0.467, 1)
@@ -6633,8 +6638,59 @@ class Suit(Avatar.Avatar):
         return self.isExplosive
 
     def makeSoaked(self, num):
+        self.makeUnSoaked()
+
         self.actuallySoaked = 1
         self.isSoaked = num
+
+        BattleParticles.loadParticles()
+
+        self.liquidEffect = BattleParticles.createParticleEffect(file='wet2')
+        BattleParticles.setEffectTexture(self.liquidEffect, 'raindrop')
+
+        self.liquidEffect.reparentTo(self)
+        self.liquidEffect.setPos(0, 0, self.height - 2.5)
+
+        self.liquidTrack = ParticleInterval(self.liquidEffect, self, duration=5)
+        self.liquidTrack.loop()
+
+    def makeUnSoaked(self, elite=False):
+        self.actuallySoaked = 0
+        self.isSoaked = 0
+
+        track = getattr(self, 'liquidTrack', None)
+        self.liquidTrack = None
+        if track:
+            try:
+                track.pause()
+            except:
+                pass
+            try:
+                track.finish()
+            except:
+                pass
+
+        effect = getattr(self, 'liquidEffect', None)
+        self.liquidEffect = None
+        if effect:
+            try:
+                effect.disable()
+            except:
+                pass
+            try:
+                if hasattr(effect, 'cleanup') and hasattr(effect, 'renderParent'):
+                    effect.cleanup()
+            except:
+                pass
+            try:
+                effect.detachNode()
+            except:
+                pass
+            try:
+                if not effect.isEmpty():
+                    effect.removeNode()
+            except:
+                pass
 
     def createAfterImage(self, battle, fadeTime=0.4):
         # Find the actor root
@@ -6686,10 +6742,6 @@ class Suit(Avatar.Avatar):
     def makeUnFreshlyZapped(self):
         self.freshlyZapped = 0
 
-    def makeUnSoaked(self, elite=False):
-        self.actuallySoaked = 0
-        self.isSoaked = 0
-
     def makeMarked(self, num):
         self.actuallyMarked = 1
         self.isMarked = num
@@ -6700,9 +6752,149 @@ class Suit(Avatar.Avatar):
 
     def makeTarget(self):
         self.isTarget = 1
+        # ---- CLEANUP ----
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+
+        from math import pi, cos, sin
+
+        totalKnives = 5
+
+        radius = 1.5
+        height = self.height - 1
+
+        # Shared pivot (orbit axis)
+        self.knifePivot = self.attachNewNode("knifePivot")
+        self.knifePivot.setZ(height)
+
+        knifeIntervals = []
+
+        for i in range(totalKnives):
+
+            # Load correct model
+            knife = globalPropPool.getProp('tnt')
+            knife.setScale(0.5)
+            tip = knife.find('**/joint_attachEmitter')
+            sparks = BattleParticles.createParticleEffect(file='tnt')
+            knife.sparksEffect = sparks
+            sparks.start(tip)
+
+            knife.reparentTo(self.knifePivot)
+
+            # Even spacing
+            angle = (2 * pi / totalKnives) * i
+            knife.setPos(cos(angle) * radius,
+                         sin(angle) * radius,
+                         0)
+
+            # Match original orientation
+            knife.lookAt(self.knifePivot)
+            knife.setP(90)
+            knife.setR(90)
+
+            # Individual knife spin (same as your first knife)
+            # spin = LerpHprInterval(
+            #     knife,
+            #     4.0,
+            #     VBase3(360.0, 270.0, 0.0),
+            #     startHpr=VBase3(0.0, 270.0, 0.0)
+            # )
+            #
+            # knifeIntervals.append(spin)
+
+        # Pivot rotation (orbit)
+        orbit = LerpHprInterval(
+            self.knifePivot,
+            4.0,
+            VBase3(360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        # Run everything together
+        self.knifeTrack = Parallel(
+            orbit,
+            *knifeIntervals
+        )
+
+        self.knifeTrack.loop()
 
     def makeUnTarget(self):
         self.isTarget = 0
+        # ---- CLEANUP ----
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+
+        from math import pi, cos, sin
+
+        totalKnives = 0
+
+        radius = 1.5
+        height = self.height - 1
+
+        # Shared pivot (orbit axis)
+        self.knifePivot = self.attachNewNode("knifePivot")
+        self.knifePivot.setZ(height)
+
+        knifeIntervals = []
+
+        for i in range(totalKnives):
+
+            # Load correct model
+            knife = globalPropPool.getProp('tnt')
+            knife.setScale(0.5)
+            tip = knife.find('**/joint_attachEmitter')
+            sparks = BattleParticles.createParticleEffect(file='tnt')
+            knife.sparksEffect = sparks
+            sparks.start(tip)
+
+            knife.reparentTo(self.knifePivot)
+
+            # Even spacing
+            angle = (2 * pi / totalKnives) * i
+            knife.setPos(cos(angle) * radius,
+                         sin(angle) * radius,
+                         0)
+
+            # Match original orientation
+            knife.lookAt(self.knifePivot)
+            knife.setP(90)
+            knife.setR(90)
+
+            # Individual knife spin (same as your first knife)
+            # spin = LerpHprInterval(
+            #     knife,
+            #     4.0,
+            #     VBase3(360.0, 270.0, 0.0),
+            #     startHpr=VBase3(0.0, 270.0, 0.0)
+            # )
+            #
+            # knifeIntervals.append(spin)
+
+        # Pivot rotation (orbit)
+        orbit = LerpHprInterval(
+            self.knifePivot,
+            4.0,
+            VBase3(360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        # Run everything together
+        self.knifeTrack = Parallel(
+            orbit,
+            *knifeIntervals
+        )
+
+        self.knifeTrack.loop()
 
     def makeImmortal(self, elite=False):
         #self.healthBar.setColor(1, 1, 1, 1)
@@ -6977,6 +7169,12 @@ class Suit(Avatar.Avatar):
 
     def makeDead(self, elite=False):
         self.isDead = 1
+        self.removeInsured()
+        self.removeContracted()
+        self.removeSoaked()
+        self.removeSued()
+        self.makeUnMarked()
+        self.makeUnDazed()
 
     def makeUnDead(self, elite=False):
         self.isDead = 0
@@ -7017,12 +7215,59 @@ class Suit(Avatar.Avatar):
     def getDamageReduction(self):
         return self.damageReduction
 
+    def makeFireEffect(self):
+        self.makeUnAngry()
+
+        self.flameEffect = BattleParticles.createParticleEffect('FiredFlame3')
+        BattleParticles.setEffectTexture(self.flameEffect, 'fire')
+
+        self.flameEffect.reparentTo(self)
+        self.flameEffect.setPos(0, 0, 0)
+
+        self.flameTrack = ParticleInterval(self.flameEffect, self, duration=5)
+        self.flameTrack.loop()
+
     def makeAngry(self, num):
         self.isAngry = num
         self.isShielding = 0
 
+    def makeUnAngry(self):
+        self.isAngry = 0
+
+        if self.dna.name == 'sgoat':
+            if hasattr(self, "flameTrack") and self.flameTrack:
+                try:
+                    self.flameTrack.pause()
+                except:
+                    pass
+                try:
+                    self.flameTrack.finish()
+                except:
+                    pass
+                self.flameTrack = None
+
+            if hasattr(self, "flameEffect") and self.flameEffect:
+                effect = self.flameEffect
+                self.flameEffect = None
+
+                try:
+                    effect.disable()
+                except:
+                    pass
+
+                try:
+                    if hasattr(effect, 'renderParent'):
+                        effect.cleanup()
+                except:
+                    pass
+
+                try:
+                    effect.detachNode()
+                except:
+                    pass
+
     def makeCollectCall(self, num):
-        self.isCollectCall += num
+        self.isCollectCall = num
         # ---- CLEANUP ----
         if hasattr(self, "knifeTrack") and self.knifeTrack:
             self.knifeTrack.pause()
@@ -7033,12 +7278,10 @@ class Suit(Avatar.Avatar):
             self.knifePivot.removeNode()
 
         from math import pi, cos, sin
-
-        self.isCollectCall = max(1, num)
         totalKnives = self.isCollectCall
 
         radius = 1.5
-        height = self.height
+        height = self.height + 3
 
         # Shared pivot (orbit axis)
         self.knifePivot = self.attachNewNode("knifePivot")
@@ -7061,17 +7304,18 @@ class Suit(Avatar.Avatar):
                          0)
 
             # Match original orientation
-            knife.setHpr(0, 270, 0)
+            knife.lookAt(self.knifePivot)
+            knife.setP(270)
 
             # Individual knife spin (same as your first knife)
-            spin = LerpHprInterval(
-                knife,
-                4.0,
-                VBase3(360.0, 270.0, 0.0),
-                startHpr=VBase3(0.0, 270.0, 0.0)
-            )
-
-            knifeIntervals.append(spin)
+            # spin = LerpHprInterval(
+            #     knife,
+            #     4.0,
+            #     VBase3(360.0, 270.0, 0.0),
+            #     startHpr=VBase3(0.0, 270.0, 0.0)
+            # )
+            #
+            # knifeIntervals.append(spin)
 
         # Pivot rotation (orbit)
         orbit = LerpHprInterval(
@@ -7919,13 +8163,41 @@ class Suit(Avatar.Avatar):
 
     def makeInsured(self):
         self.isInsured = 1
+        effectColor = Vec4(0, 1, 0.137, 1.00)
+        self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
+        self.cheerEffect.setColor(effectColor)
+
+        self.cheerEffect.reparentTo(self)
+        self.cheerEffect.setPos(0, 0, 0)
+        # self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
+
+        self.cheerTrack.loop()
 
     def removeInsured(self):
         self.isInsured = 0
         self.isInsured2 = 0
+        if hasattr(self, "cheerTrack") and self.cheerTrack:
+            self.cheerTrack.pause()
+            if self.cheerEffect:
+                self.cheerEffect.disable()
+                if hasattr(self.cheerEffect, 'renderParent'):
+                    self.cheerEffect.cleanup()
 
     def makeInsured2(self):
         self.isInsured2 = 1
+        effectColor = Vec4(0, 1, 0.137, 1.00)
+        self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
+        self.cheerEffect.setColor(effectColor)
+
+        self.cheerEffect.reparentTo(self)
+        self.cheerEffect.setPos(0, 0, 0)
+        # self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
+
+        self.cheerTrack.loop()
 
     def addInsuranceRounds(self, num):
         self.insuranceRounds = num
@@ -7935,9 +8207,46 @@ class Suit(Avatar.Avatar):
 
     def removeOilRain(self):
         self.isOilRain = 0
+        if hasattr(self, "oilTrack") and self.oilTrack:
+            try:
+                self.oilTrack.pause()
+            except:
+                pass
+            try:
+                self.oilTrack.finish()
+            except:
+                pass
+            self.oilTrack = None
+
+        if hasattr(self, "oilEffect") and self.oilEffect:
+            effect = self.oilEffect
+            self.oilEffect = None
+
+            try:
+                effect.disable()
+            except:
+                pass
+
+            try:
+                if hasattr(effect, 'renderParent'):
+                    effect.cleanup()
+            except:
+                pass
+
+            try:
+                effect.detachNode()
+            except:
+                pass
 
     def makeOilRain(self):
         self.isOilRain = 1
+        self.oilEffect = BattleParticles.createParticleEffect(file='oil')
+
+        self.oilEffect.reparentTo(self)
+        self.oilEffect.setPos(0, 0, self.height - 2.5)
+
+        self.oilTrack = ParticleInterval(self.oilEffect, self, duration=5)
+        self.oilTrack.loop()
 
     def addOilRainRounds(self, num):
         self.oilRainRounds = num
@@ -7947,13 +8256,41 @@ class Suit(Avatar.Avatar):
 
     def makeContracted(self):
         self.isContracted = 1
+        effectColor = Vec4(0, 1, 0.137, 1.00)
+        self.cheerEffect2 = BattleParticles.createParticleEffect(file='pixieRise')
+        self.cheerEffect2.setColor(effectColor)
+
+        self.cheerEffect2.reparentTo(self)
+        self.cheerEffect2.setPos(0, 0, 0)
+        #self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cheerTrack2 = Sequence(ParticleInterval(self.cheerEffect2, self, duration=5))
+
+        self.cheerTrack2.loop()
 
     def makeContracted2(self):
         self.isContracted2 = 1
+        effectColor = Vec4(0, 1, 0.137, 1.00)
+        self.cheerEffect2 = BattleParticles.createParticleEffect(file='pixieRise')
+        self.cheerEffect2.setColor(effectColor)
+
+        self.cheerEffect2.reparentTo(self)
+        self.cheerEffect2.setPos(0, 0, 0)
+        #self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cheerTrack2 = Sequence(ParticleInterval(self.cheerEffect2, self, duration=5))
+
+        self.cheerTrack2.loop()
 
     def removeContracted(self):
         self.isContracted = 0
         self.isContracted2 = 0
+        if hasattr(self, "cheerTrack2") and self.cheerTrack2:
+            self.cheerTrack2.pause()
+            if self.cheerEffect2:
+                self.cheerEffect2.disable()
+                if hasattr(self.cheerEffect2, 'renderParent'):
+                    self.cheerEffect2.cleanup()
 
     def addContractedRounds(self, num):
         self.contractedRounds = num
@@ -8068,17 +8405,19 @@ class Suit(Avatar.Avatar):
                          0)
 
             # Match original orientation
-            knife.setHpr(0, 270, 0)
+            knife.lookAt(self.knifePivot)
+            knife.setP(270)
+            knife.setR(90)
 
             # Individual knife spin (same as your first knife)
-            spin = LerpHprInterval(
-                knife,
-                4.0,
-                VBase3(360.0, 270.0, 0.0),
-                startHpr=VBase3(0.0, 270.0, 0.0)
-            )
-
-            knifeIntervals.append(spin)
+            # spin = LerpHprInterval(
+            #     knife,
+            #     4.0,
+            #     VBase3(360.0, 270.0, 0.0),
+            #     startHpr=VBase3(0.0, 270.0, 0.0)
+            # )
+            #
+            # knifeIntervals.append(spin)
 
         # Pivot rotation (orbit)
         orbit = LerpHprInterval(
@@ -8148,17 +8487,19 @@ class Suit(Avatar.Avatar):
                          0)
 
             # Match original orientation
-            knife.setHpr(0, 270, 0)
+            knife.lookAt(self.knifePivot)
+            knife.setP(270)
+            knife.setR(90)
 
             # Individual knife spin (same as your first knife)
-            spin = LerpHprInterval(
-                knife,
-                4.0,
-                VBase3(360.0, 270.0, 0.0),
-                startHpr=VBase3(0.0, 270.0, 0.0)
-            )
-
-            knifeIntervals.append(spin)
+            # spin = LerpHprInterval(
+            #     knife,
+            #     4.0,
+            #     VBase3(360.0, 270.0, 0.0),
+            #     startHpr=VBase3(0.0, 270.0, 0.0)
+            # )
+            #
+            # knifeIntervals.append(spin)
 
         # Pivot rotation (orbit)
         orbit = LerpHprInterval(
@@ -8523,6 +8864,9 @@ class Suit(Avatar.Avatar):
 
     def getExtraAttacks(self):
         return self.extraAttack
+
+    def makeOverpressured(self):
+        self.isOverpressured = 1
 
     def removeExtraAttacks(self):
         self.extraAttack = 0

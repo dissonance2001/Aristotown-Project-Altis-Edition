@@ -589,6 +589,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     validSuits.append(s)
 
             self.suits = validSuits
+            self._rebuildSuitStateLists()
             self.needAdjustTownBattle = 1
         oldtoons = self.toons
         self.toons = []
@@ -796,6 +797,34 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
         self.membersKeep = None
 
+    def _getOrderedVisibleSuits(self):
+        if not hasattr(self, 'suitJoinOrder'):
+            self.suitJoinOrder = []
+
+        visibleSuits = [s for s in self.suitJoinOrder
+                        if s in self.activeSuits or s in self.pendingSuits]
+
+        if len(visibleSuits) <= 1:
+            return visibleSuits
+        if len(visibleSuits) == 2:
+            return [visibleSuits[0], visibleSuits[1]]
+
+        firstSuit = visibleSuits[0]
+        secondSuit = visibleSuits[1]
+        middleSuits = visibleSuits[2:]
+
+        return [firstSuit] + middleSuits + [secondSuit]
+
+    def _rebuildSuitStateLists(self):
+        if not hasattr(self, 'suitJoinOrder'):
+            self.suitJoinOrder = []
+
+        canonical = [s for s in self.suitJoinOrder if s in self.suits]
+
+        self.joiningSuits = [s for s in canonical if s in self.joiningSuits]
+        self.pendingSuits = [s for s in canonical if s in self.pendingSuits]
+        self.activeSuits = [s for s in canonical if s in self.activeSuits]
+
     def __removeSuit(self, suit):
         self.notify.debug('__removeSuit(%d)' % suit.doId)
         if self.suits.count(suit) != 0:
@@ -806,6 +835,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.pendingSuits.remove(suit)
         if self.activeSuits.count(suit) != 0:
             self.activeSuits.remove(suit)
+
+        self._rebuildSuitStateLists()
+
         self.suitGone = 1
         if suit.battleTrap != NO_TRAP:
             self.notify.debug('882 calling self.removeTrap, suit=%d' % suit.doId)

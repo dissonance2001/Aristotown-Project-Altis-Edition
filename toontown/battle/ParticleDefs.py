@@ -614,6 +614,110 @@ def floodTheMarket(self):
     f0.addForce(force0)
     self.addForceGroup(f0)
 
+@particle
+def floodTheMarketWaterfall2(self):
+    self.reset()
+    self.setPos(0.0, 5.0, 2.3)
+    self.setHpr(0.0, -45.0, 0.0)
+    self.setScale(4.0, 4.0, 4.0)
+    p0 = Particles.Particles('particles-1')
+    p0.setFactory('PointParticleFactory')
+    p0.setRenderer('SpriteParticleRenderer')
+    p0.setEmitter('DiscEmitter')
+    p0.setPoolSize(50)
+    p0.setBirthRate(0.05)
+    p0.setLitterSize(4)
+    p0.setLitterSpread(1)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    p0.factory.setLifespanBase(0.1)
+    p0.factory.setLifespanSpread(0.1)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(400.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.0)
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode('phase_3.5/models/props/suit-particles', '**/dollar-sign')
+    p0.renderer.setColor(Vec4(1.0, 0.0, 0.0, 1.0))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.2)
+    p0.renderer.setFinalXScale(0.2)
+    p0.renderer.setInitialYScale(0.2)
+    p0.renderer.setFinalYScale(0.2)
+    p0.renderer.setNonanimatedTheta(20.0)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0)
+    p0.emitter.setOffsetForce(Vec3(0.0, 0.0, 0.0))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0, 0.0, 0.0))
+    p0.emitter.setRadiateOrigin(Point3(0.0, -3.0, 0.0))
+    p0.emitter.setRadius(0.2)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    force0 = LinearSinkForce(Point3(0.0, 0.0, -15.0), LinearDistanceForce.FTONEOVERRSQUARED, 3.04, 1.5, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def floodTheMarket2(self):
+    self.reset()
+    self.setPos(0, 7.8, 0.4)
+    self.setHpr(90.0, 0.0, 0.0)
+    self.setScale(1.0, 1.0, 1.0)
+    p0 = Particles.Particles('particles-1')
+    p0.setFactory('PointParticleFactory')
+    p0.setRenderer('SpriteParticleRenderer')
+    p0.setEmitter('RingEmitter')
+    p0.setPoolSize(250)
+    p0.setBirthRate(0.01)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    p0.factory.setLifespanBase(1.6)
+    p0.factory.setLifespanSpread(0.0)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(400.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.0)
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode('phase_3.5/models/props/suit-particles', '**/dollar-sign')
+    p0.renderer.setColor(Vec4(1.0, 0.0, 0.0, 1.0))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.2)
+    p0.renderer.setFinalXScale(0.2)
+    p0.renderer.setInitialYScale(0.2)
+    p0.renderer.setFinalYScale(0.2)
+    p0.renderer.setNonanimatedTheta(20.0)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0)
+    p0.emitter.setOffsetForce(Vec3(0.0, 0.0, 0.0))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0, 0.0, 0.0))
+    p0.emitter.setRadiateOrigin(Point3(-4.0, 0.0, 0.0))
+    p0.emitter.setRadius(1.8607)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('jfo')
+    force0 = LinearJitterForce(1.0, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
 
 @particle
 def smokeTest4(self):
@@ -3919,6 +4023,60 @@ def firedFlame(self):
     p0.emitter.setRadius(0.4000)
     self.addParticles(p0)
 
+@particle
+def firedFlameEffect2(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 0.500)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(2.500, 4.500, 2.500)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(20)
+    p0.setBirthRate(0.25)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.500)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/fire")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.15)
+    p0.renderer.setFinalXScale(0.00025)
+    p0.renderer.setInitialYScale(0.30)
+    p0.renderer.setFinalYScale(0.00025)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 4.800))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, -30.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.4000)
+    self.addParticles(p0)
+
 
 @particle
 def spinSpray(self):
@@ -6187,6 +6345,289 @@ def pixieDrop(self):
     force0 = LinearJitterForce(3.6003, 0)
     force0.setActive(1)
     f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def pixieArrowAura(self):
+    self.reset()
+    self.setPos(0.0, 0.0, 0.0)
+    self.setHpr(180.0, 0.0, 0.0)
+    self.setScale(1.0, 1.0, 1.0)
+
+    p0 = Particles.Particles('particles-1')
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SparkleParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+
+    p0.setPoolSize(10)
+    p0.setBirthRate(0.25)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+
+    # particle lifetime
+    p0.factory.setLifespanBase(1.5)
+    p0.factory.setLifespanSpread(0.2)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(100.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+
+    # fade out
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(1.0)
+
+    # look
+    p0.renderer.setCenterColor(Vec4(1, 0, 0, 1))
+    p0.renderer.setEdgeColor(Vec4(1, 0, 0, 1))
+    p0.renderer.setBirthRadius(0.05)
+    p0.renderer.setDeathRadius(0.0)
+    p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
+
+    # emit in a ring around the toon
+    p0.emitter.setAmplitude(1)
+    p0.emitter.setAmplitudeSpread(.5)
+    p0.emitter.setOffsetForce(Vec3(0, 0, -2))
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETEXPLICIT)
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0, 0.0, -2))
+    p0.emitter.setRadiateOrigin(Point3(0, 0, 0))
+    p0.emitter.setRadius(1.0)
+
+    self.addParticles(p0)
+
+    f0 = ForceGroup.ForceGroup('forces')
+    force0 = LinearJitterForce(0.8, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def wet(self):
+    self.reset()
+    self.setPos(0.000, 0.000, -0.200)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(10)
+    p0.setBirthRate(0.25)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.5)
+    p0.factory.setLifespanSpread(0.2)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(100.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/raindrop")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.06)
+    p0.renderer.setFinalXScale(0.06)
+    p0.renderer.setInitialYScale(0.225)
+    p0.renderer.setFinalYScale(0.225)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 6.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(1.0)
+    self.addParticles(p0)
+
+@particle
+def wet2(self):
+    self.reset()
+    self.setPos(0.000, 0.000, -0.200)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(5)
+    p0.setBirthRate(0.25)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.5)
+    p0.factory.setLifespanSpread(0.2)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(100.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/raindrop")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.06)
+    p0.renderer.setFinalXScale(0.06)
+    p0.renderer.setInitialYScale(0.225)
+    p0.renderer.setFinalYScale(0.225)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 6.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(2.0)
+    self.addParticles(p0)
+
+@particle
+def oil(self):
+    self.reset()
+    self.setPos(0.000, 0.000, -0.200)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(5)
+    p0.setBirthRate(0.25)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.5)
+    p0.factory.setLifespanSpread(0.2)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(100.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/raindrop")
+    p0.renderer.setColor(Vec4(0.161, 0.161, 0.161, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.06)
+    p0.renderer.setFinalXScale(0.06)
+    p0.renderer.setInitialYScale(0.225)
+    p0.renderer.setFinalYScale(0.225)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 6.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(2.0)
+    self.addParticles(p0)
+
+@particle
+def pixieRise(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 0.000)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+
+    # Particle setup
+    p0 = Particles.Particles('particles-1')
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SparkleParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+
+    p0.setPoolSize(100)
+    p0.setBirthRate(0.1)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+
+    # particle lifetime
+    p0.factory.setLifespanBase(1.5)
+    p0.factory.setLifespanSpread(0.2)
+    p0.factory.setMassBase(1.0)
+    p0.factory.setMassSpread(0.0)
+    p0.factory.setTerminalVelocityBase(100.0)
+    p0.factory.setTerminalVelocitySpread(0.0)
+
+    # Rendering
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(1.0)
+
+    p0.renderer.setCenterColor(Vec4(0, 1, 0.137, 1.0))
+    p0.renderer.setEdgeColor(Vec4(0, 1, 0.137, 1.0))
+
+    p0.renderer.setBirthRadius(0.05)
+    p0.renderer.setDeathRadius(0.0)
+
+    p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
+
+    # Emitter settings
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETEXPLICIT)
+
+    # Push particles upward
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 1.5))
+
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, 1.0000))
+
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+
+    # Spawn around the toon in a circle
+    p0.emitter.setRadius(1.0)
+
+    self.addParticles(p0)
+
+    # Small random movement so it doesn't look too straight
+    f0 = ForceGroup.ForceGroup('forces')
+
+    jitter = LinearJitterForce(0.8, 0)
+    jitter.setActive(1)
+    f0.addForce(jitter)
+
     self.addForceGroup(f0)
 
 

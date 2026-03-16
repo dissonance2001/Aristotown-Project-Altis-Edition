@@ -72,6 +72,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.strafeInterval = None
         self.onscreenMessage = None
         self.helicopter = None
+        self.helicopter2 = None
         self.tv = None
         self.tv2 = None
         self.tv3 = None
@@ -697,6 +698,11 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.helicopter.loop('CogNationChopper')
         self.helicopter.setPosHpr(0, -200, 0, 180, 0, 0)
         self.helicopter.setScale(1.0)
+        self.helicopter2 = globalPropPool.getProp('cogChopper_ctc')
+        self.helicopter2.reparentTo(self.geom)
+        self.helicopter2.loop('cogChopper_ctc')
+        self.helicopter2.setPosHpr(50, -225, 0, 180, 0, 0)
+        self.helicopter2.setScale(1.0)
         self.tv = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
         self.tv.reparentTo(self.geom)
         self.tv.setScale(2.0)
@@ -769,6 +775,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         del self.rampB
         del self.rampC
         del self.helicopter
+        del self.helicopter2
 
     def __loadMopaths(self):
         self.toonsEnterA = Mopath.Mopath()

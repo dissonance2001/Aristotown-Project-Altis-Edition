@@ -135,13 +135,13 @@ def getDanceId():
     return encodeId(RESISTANCE_DANCE, getItems(RESISTANCE_DANCE))
 
 def doEffect(textId, speakingToon, nearbyToons):
-    speakingToon.makeCooldown()
-    speakingToon.addCooldownRounds(3)
     menuIndex, _ = decodeId(textId)
     itemValue = getItemValue(textId)
     if menuIndex == RESISTANCE_TOONUP:
         effect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
         fadeColor = VBase4(1, 0.5, 1, 1)
+        speakingToon.makeCooldown()
+        speakingToon.addCooldownRounds(4)
     elif menuIndex == RESISTANCE_MONEY:
         effect = BattleParticles.loadParticleFile('resistanceEffectBean.ptf')
         bean = loader.loadModel('phase_4/models/props/jellybean4.bam')

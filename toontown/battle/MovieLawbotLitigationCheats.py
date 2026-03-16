@@ -358,6 +358,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
+    name = attack['name']
     if suit:
         suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
@@ -366,8 +367,6 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    if suit:
-        animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
@@ -378,14 +377,17 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(indicator.removeNode))
     if dmg > 0:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
         animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
-        origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        if attack['name'] == 'CaseManagerLegalBindings':
+            origPos, origHpr = battle.getActorPosHpr(toon)
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
@@ -883,7 +885,7 @@ def doWhirlwind(attack):
     notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
     toonTrack = getToonTrackCheat(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91,
                              dodgeAnimNames=['sidestep'], showDamageExtraTime=5, showMissedExtraTime=1.0)
-    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
     toonSpinTrack = Sequence(Wait(0.9), LerpHprInterval(toon, 4.0, Point3(10800, 0, 0)),
                                  LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5))
     toonLiftTrack = Sequence(Wait(0.9), LerpPosInterval(toon, 4.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)), LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5))
@@ -1001,7 +1003,7 @@ def doSuppression(attack):
             Wait(1.7)))
 
     toonTrack.append(getToonTrack(attack, 2.2, ['conked'], 2.5, ['jump']))
-    toonTrack.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
+    toonTrack.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 2)))
 
     return Parallel(suitTrack, toonTrack, propTrack)
 
@@ -1124,9 +1126,8 @@ def doSnap2(attack, suit):
             moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'throw-object', playRate=1.5),
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                        Func(suit.setNeutralAnimationDrop)))
-            notifyTrack = Sequence(Wait(3.1),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+            notifyTrack = Sequence(Wait(3.1), Func(toon.makeSnapped), Func(toon.addSnappedRounds, 3), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
             notifyTracks.append(Parallel(Func(toon.checkSnappedUp, 10)))
             x = toon.getX(battle)
             y = toon.getY(battle)
@@ -1196,9 +1197,8 @@ def doSnap(attack, suit):
             suitTrack.append(Func(suit.headsUp, battle, targetPos))
             origPos, origHpr = battle.getActorPosHpr(suit)
             suitTrack.append(Func(suit.setHpr, battle, origHpr))
-            notifyTrack = Sequence(Wait(3.1), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+            notifyTrack = Sequence(Wait(3.1), Func(toon.makeSnapped), Func(toon.addSnappedRounds, 3), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeSnapped), Func(toon.addSnappedRounds, 2)))
             currentBossHealth = -1
             for s in battle.suits:
                 if s.dna.name == 'stenog':
@@ -1357,7 +1357,7 @@ def doCourtSanction(attack):
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+    notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
     currentBossHealth = -1
     for s in battle.suits:
         if s.dna.name == 'lgator':
@@ -1421,7 +1421,7 @@ def doCourtSanctionBindings(attack):
             suitTracks.append(Sequence(Parallel(suitTrack, LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle)), Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)), Func(suit.setNeutralAnimationDrop)))
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
             notifyTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
     toonDamageTrack = getToonTracksCheat(attack, 0.8, ['conked'], 0, ['neutral'])
     return Parallel(suitTracks, toonTracks, toonDamageTrack, propTracks, soundTracks, notifyTracks)
@@ -1584,7 +1584,7 @@ def doLegalBindings2(attack):
         notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
-        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
+        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 3)))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 
@@ -1645,7 +1645,7 @@ def doLegalBindings(attack):
         notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
-        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 2)))
+        toonTracks.append(Parallel(Func(toon.makeDamageOvertime), Func(toon.addDamageOvertimeRounds, 3)))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.75, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 
@@ -1797,7 +1797,7 @@ def doCaseInsurancePlanInsurance(attack, ind, ind2, ind3):
         else:
             suitTrack.append(Func(suit.makeInsured))
         suitTrack.append(Func(suit.setSued2, 0))
-        suitTrack.append(Func(target.addInsuranceRounds, 3))
+        suitTrack.append(Func(suit.checkInsuranceRounds, 3))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(MovieUtil.createSuitInsuranceInterval(theSuit), Func(theSuit.setNeutralAnimationDrop)))
@@ -2188,7 +2188,7 @@ def doEnraged(attack):
                                                      blendType='easeInOut'), LerpColorScaleInterval(suit, duration=.25, colorScale=(1, 1, 1, 1)))
     makeEnraged = Func(suit.makeAngry, 2)
     suitTrack = getSuitAnimTrack(attack)
-    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.removeRageBuilding))
+    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.makeFireEffect), Func(suit.removeRageBuilding))
     suitTrack.append(Wait(2.0))
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
     return Parallel(suitTrack, soundTrack, makeDamageUp, suitColorTrack, headInterval, makeEnraged)
@@ -2203,8 +2203,8 @@ def doShieldsUp(attack):
     soundTrack = Sequence(Wait(suit.getDuration('neutral-enraged-return')), getSoundTrack('SA_defense.ogg'))
     suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), getSuitAnimTrack(attack))
     suitTrack.append(Wait(2.0))
-    makeShielding = Parallel(Func(suit.makeShielding), Func(suit.removeRageBuilding))
-    if suit.isDesperation:
+    makeShielding = Parallel(Func(suit.makeShielding), Func(suit.makeUnAngry), Func(suit.removeRageBuilding))
+    if suit.getDamageUp() > 30:
         makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 30))
     else:
         makeDamageUp = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, - 30))

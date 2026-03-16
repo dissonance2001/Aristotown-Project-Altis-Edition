@@ -205,6 +205,226 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
 
+    def checkCooldownRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getCooldownRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnCooldown))
+        elif self.getCooldownRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addCooldownRounds, self.getCooldownRounds() - 1)).start()
+        else:
+            pass
+
+    def checkInkDrainRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getInkDrainRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnInkDrain))
+        elif self.getInkDrainRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addInkDrainRounds, self.getInkDrainRounds() - 1)).start()
+        else:
+            pass
+
+    def checkBombedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getBombedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnBombed))
+        elif self.getBombedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addBombedRounds, self.getBombedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkGroupDamageDownRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getGroupDamageDownRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnGroupDamageDown))
+        elif self.getGroupDamageDownRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addGroupDamageDownRounds, self.getGroupDamageDownRounds() - 1)).start()
+        else:
+            pass
+
+    def checkGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnGagBoost))
+        elif self.getGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addGagBoostRounds, self.getGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkNoDodgeRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getNoDodgeRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnNoDodge))
+        elif self.getNoDodgeRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addNoDodgeRounds, self.getNoDodgeRounds() - 1)).start()
+        else:
+            pass
+
+    def checkCollectCallRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getCollectCallRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnCollectCalled))
+        elif self.getCollectCallRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addCollectCallRounds, self.getCollectCallRounds() - 1)).start()
+        else:
+            pass
+
+    def checkVulnerabilityRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getVulnerabilityRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnVulnerable))
+        elif self.getVulnerabilityRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addVulnerabilityRounds, self.getVulnerabilityRounds() - 1)).start()
+        else:
+            pass
+
+    def checkCheerRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getCheerRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnCheer))
+        elif self.getCheerRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addCheerRounds, self.getCheerRounds() - 1)).start()
+        else:
+            pass
+
+    def checkSnappedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getSnappedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnSnapped))
+        elif self.getSnappedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addSnappedRounds, self.getSnappedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkWindedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getWindedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnWinded))
+        elif self.getWindedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addWindedRounds, self.getWindedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkEncoreRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getEncoreRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnEncore))
+        elif self.getEncoreRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addEncoreRounds, self.getEncoreRounds() - 1)).start()
+        else:
+            pass
+
+    def checkDamageUpRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDamageUpRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnDamageUp))
+        elif self.getDamageUpRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addDamageUpRounds, self.getDamageUpRounds() - 1)).start()
+        else:
+            pass
+
+    def checkDamageDownRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDamageDownRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnDamageDown))
+        elif self.getDamageDownRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addDamageDownRounds, self.getDamageDownRounds() - 1)).start()
+        else:
+            pass
+
+    def checkConfusedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getConfusedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnConfused))
+        elif self.getConfusedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addConfusedRounds, self.getConfusedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkBurnedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getBurnedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnBurned))
+        elif self.getBurnedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addBurnedRounds, self.getBurnedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkHiddenRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getHiddenRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnHidden))
+        elif self.getHiddenRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addHiddenRounds, self.getHiddenRounds() - 1)).start()
+        else:
+            pass
+
+    def checkMarkedWoodRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getMarkedWoodRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnMarkedWood))
+        elif self.getMarkedWoodRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addMarkedWoodRounds, self.getMarkedWoodRounds() - 1)).start()
+        else:
+            pass
+
+    def checkDamageOvertimeRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDamageOvertimeRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnDamageOvertime))
+        elif self.getDamageOvertimeRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addDamageOvertimeRounds, self.getDamageOvertimeRounds() - 1)).start()
+        else:
+            pass
+
+    def checkLiquidatedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getLiquidatedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnLiquidated))
+        elif self.getLiquidatedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addLiquidatedRounds, self.getLiquidatedRounds() - 1)).start()
+        else:
+            pass
+
     def checkMandatoryToll(self, num):
         if self.damageInterval:
             self.damageInterval.finish()

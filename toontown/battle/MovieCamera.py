@@ -1292,6 +1292,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3)))
+    elif name == 'SafetySoakRetaliation':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
+                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration-5)))
     # union buster cheats
     elif name == 'UnionBusterContractEnforcementHealing':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
@@ -1303,9 +1307,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'UnionBusterUnionCalculator':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterUnionBust':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'UnionBusterUnionBuster':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'UnionBusterUnionBusterDamage':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1358,6 +1362,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
         # racketeer
+    elif name == 'RacketeerOverextendedLeverage2':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerOverextendedLeverage':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerProfiteering':
@@ -1373,15 +1379,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RacketeerExtortion':
         camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerExtortion2':
-        if attackDuration > 2:
-            camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
-        else:
-            camTrack2 = defaultCamera(openShotDuration=0)
-            return camTrack2
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RacketeerCompensation':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'RacketeerHustling':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack2 = defaultCamera(openShotDuration=0)
+        return camTrack2
     elif name == 'RacketeerRacketeering':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerPeckingOrderRetaliation':
@@ -1597,6 +1600,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TollmasterMandatoryTollFinal':
         camTrack.append(Sequence(randomActorShot(suit, battle, 6.0, 'suit'), randomActorShot(suit, battle, 1.0, 'suit'), heldShot(5, 0, .5, 155, 35, 0, 1.375), Func(taskMgr.add, shake_camera_mandatory_toll, 'camera_shake'),
                                  Wait(3.0), Func(taskMgr.remove, 'camera_shake'), Wait(attackDuration - 11.375)))
+    elif name == 'TollmasterRushHour':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TollmasterResonanceTax':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TollmasterResonanceTax2':
@@ -1609,7 +1614,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TollmasterMissedPayment':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=0.5))
+            camTrack.append(allGroupLowShot(suit, attackDuration))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2

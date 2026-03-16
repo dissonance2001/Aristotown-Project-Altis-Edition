@@ -14,6 +14,7 @@ from toontown.battle import SuitBattleGlobals
 from direct.showutil import Effects
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit.DistributedDirectors import DistributedDirectors
+from toontown.suit.DistributedBoardbotBoss import DistributedBoardbotBoss
 from toontown.suit.DistributedLawbotBoss import DistributedLawbotBoss
 from toontown.suit.DistributedCashbotBoss import DistributedCashbotBoss
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
@@ -66,6 +67,22 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         suitTracks = Parallel()
         delay = 0
         for suit in suits:
+            if suit.dna.name == 'cdirector':
+                for obj in base.cr.doId2do.values():
+                    if isinstance(obj, DistributedBoardbotBoss):
+                        obj.hideContingency()
+            if suit.dna.name == 'dking':
+                for obj in base.cr.doId2do.values():
+                    if isinstance(obj, DistributedBoardbotBoss):
+                        obj.hideDividend()
+            if suit.dna.name == 'rkeeper':
+                for obj in base.cr.doId2do.values():
+                    if isinstance(obj, DistributedBoardbotBoss):
+                        obj.hideRecordkeeper()
+            if suit.dna.name == 'liquid':
+                for obj in base.cr.doId2do.values():
+                    if isinstance(obj, DistributedBoardbotBoss):
+                        obj.hideTollmaster()
             if suit.dna.name == 'ambass':
                 for obj in base.cr.doId2do.values():
                     if isinstance(obj, DistributedDirectors):
@@ -134,7 +151,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
 
                 if suit in self.joiningSuits:
                     i = self._getPendingPreviewIndex(suit)
-                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destPos, h = self.suitPendingPointsSilhouettes2[i]
                     destHpr = VBase3(h, 0, 0)
                 else:
                     destPos, destHpr = self.getActorPosHpr(suit, self.suits)
@@ -146,7 +163,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suitTrack.append(LerpPosInterval(suit, 0, startPos))
                 suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
                 suitTrack.append(Func(getDustCloudIval().start))
-                suitTrack.append(Sequence(ActorInterval(suit, 'mob-mentality', startTime=1)))
+                suitTrack.append(Sequence(ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1)))
                 suitTrack.append(Func(suit.loop, 'neutral'))
                 suitTrack.append(LerpPosInterval(suit, 0, startPos2))
                 suitTracks.append(suitTrack)
@@ -208,7 +225,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
 
                 if suit in self.joiningSuits:
                     i = self._getPendingPreviewIndex(suit)
-                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destPos, h = self.suitPendingPointsSilhouettes2[i]
                     destHpr = VBase3(h, 0, 0)
                 else:
                     destPos, destHpr = self.getActorPosHpr(suit, self.suits)

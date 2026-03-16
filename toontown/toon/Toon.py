@@ -1,16 +1,20 @@
 import random
 import types
 from toontown.toon import AccessoryGlobals
+from toontown.battle import BattleParticles
 from toontown.toon import Motion
 from toontown.toon import TTEmote
 from toontown.toon import ToonDNA
 from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
+from toontown.battle import MovieUtil
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.task.Task import Task
 from panda3d.core import *
+from toontown.battle.BattleProps import *
 from toontown.toon.LaffMeter import LaffMeter
+from direct.particles import ParticleEffect
 from toontown.toon.ToonHead import *
 from otp.avatar import Avatar
 from otp.avatar import Emote
@@ -691,9 +695,25 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeBurned(self):
         self.isBurned = 1
+        self.flameEffect = BattleParticles.createParticleEffect('FiredFlame3')
+        BattleParticles.setEffectTexture(self.flameEffect, 'fire')
+
+        self.flameEffect.reparentTo(self)
+        self.flameEffect.setPos(0, 0, 0)
+
+        self.flameTrack = Sequence(ParticleInterval(self.flameEffect, self, duration=5)
+        )
+
+        self.flameTrack.loop()
 
     def makeUnBurned(self):
         self.isBurned = 0
+        if hasattr(self, "flameTrack") and self.flameTrack:
+            self.flameTrack.pause()
+            if self.flameEffect:
+                self.flameEffect.disable()
+                if hasattr(self.flameEffect, 'renderParent'):
+                    self.flameEffect.cleanup()
 
     def addBurnedRounds(self, num):
         self.burnedRounds = num
@@ -703,9 +723,26 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeLiquidated(self):
         self.liquidated = 1
+        effectColor = Vec4(0.00, 1.00, 1.00, 1.00)
+        self.liquidEffect = BattleParticles.createParticleEffect(file='wet')
+        BattleParticles.setEffectTexture(self.liquidEffect, 'raindrop', color=effectColor)
+
+        self.liquidEffect.reparentTo(self)
+        self.liquidEffect.setPos(0, 0, self.height)
+
+        self.liquidTrack = Sequence(ParticleInterval(self.liquidEffect, self, duration=5)
+        )
+
+        self.liquidTrack.loop()
 
     def makeUnLiquidated(self):
         self.liquidated = 0
+        if hasattr(self, "liquidTrack") and self.liquidTrack:
+            self.liquidTrack.pause()
+            if self.liquidEffect:
+                self.liquidEffect.disable()
+                if hasattr(self.liquidEffect, 'renderParent'):
+                    self.liquidEffect.cleanup()
 
     def addLiquidatedRounds(self, num):
         self.liquidatedRounds = num
@@ -727,9 +764,17 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeGagBoost(self, level):
         self.gagBoost = level
+        self.arrowAuraTrack = self.makeLoopingArrowAura()
+        self.arrowAuraTrack.loop()
 
     def makeUnGagBoost(self):
         self.gagBoost = 0
+        if hasattr(self, 'arrowAuraTrack') and self.arrowAuraTrack:
+            self.arrowAuraTrack.pause()
+            for arrow in getattr(self.arrowAuraTrack, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrack = None
 
     def addGagBoostRounds(self, num):
         self.gagBoostRounds = num
@@ -745,9 +790,27 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeCooldown(self):
         self.cooldown = 1
+        effectColor = Vec4(1.00, 0.00, 0.00, 1.00)
+        self.cooldownEffect = BattleParticles.createParticleEffect(file='pixieArrowAura')
+        self.cooldownEffect.setColor(effectColor)
+
+        self.cooldownEffect.reparentTo(self)
+        self.cooldownEffect.setPos(0, 0, self.height)
+        #self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cooldownTrack = Sequence(ParticleInterval(self.cooldownEffect, self, duration=5)
+        )
+
+        self.cooldownTrack.loop()
 
     def makeUnCooldown(self):
         self.cooldown = 0
+        if hasattr(self, "cooldownTrack") and self.cooldownTrack:
+            self.cooldownTrack.pause()
+            if self.cooldownEffect:
+                self.cooldownEffect.disable()
+                if hasattr(self.cooldownEffect, 'renderParent'):
+                    self.cooldownEffect.cleanup()
 
     def addCooldownRounds(self, num):
         self.cooldownRounds = num
@@ -757,10 +820,78 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeMarkedWood(self):
         self.markedWood = 1
+        if hasattr(self, "markedTrack") and self.markedTrack:
+            self.markedTrack.pause()
+            self.markedTrack.finish()
+            self.markedTrack = None
+
+        if hasattr(self, "markedPivot") and self.markedPivot and not self.markedPivot.isEmpty():
+            self.markedPivot.removeNode()
+            self.markedPivot = None
+
+        from math import pi, cos, sin
+
+        totalBills = 1
+        radius = 1.5
+        height = self.height - 1
+
+        self.markedProps = []
+
+        # Shared pivot
+        self.markedPivot = self.attachNewNode("markedPivot")
+        self.markedPivot.setZ(height)
+
+        markedIntervals = []
+
+        for i in range(totalBills):
+            bill = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
+            bill.setTwoSided(True)
+            bill.setScale(.5)
+            bill.reparentTo(self.markedPivot)
+
+            angle = (2 * pi / totalBills) * i
+            bill.setPos(cos(angle) * radius,
+                        sin(angle) * radius,
+                        0)
+
+            bill.lookAt(self.markedPivot)
+            bill.setP(270)
+            bill.setR(90)
+
+            self.markedProps.append(bill)
+
+        # Orbit pivot
+        orbit = LerpHprInterval(
+            self.markedPivot,
+            3.0,
+            VBase3(-360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        self.markedTrack = Parallel(
+            orbit,
+            *markedIntervals
+        )
+
+        self.markedTrack.loop()
 
     def makeUnMarkedWood(self):
         self.markedWood = 0
         self.markedWoodNumber = 0
+        if hasattr(self, "markedTrack") and self.markedTrack:
+            self.markedTrack.pause()
+            self.markedTrack.finish()
+            self.markedTrack = None
+
+        if hasattr(self, "markedProps"):
+            for bill in self.markedProps:
+                if bill and not bill.isEmpty():
+                    MovieUtil.removeProp(bill)
+            self.markedProps = []
+
+        if hasattr(self, "markedPivot") and self.markedPivot and not self.markedPivot.isEmpty():
+            self.markedPivot.removeNode()
+            self.markedPivot = None
 
     def setMarkedWood(self, num):
         self.markedWoodNumber = num
@@ -829,11 +960,44 @@ class Toon(Avatar.Avatar, ToonHead):
     def getNoDodgeRounds(self):
         return self.noDodgeRounds
 
+    def makeConfusedStars(self):
+        # Clean up any existing stars first
+        self.cleanupConfusedStars()
+
+        self.confusedStars = globalPropPool.getProp('stun')
+        self.confusedStars.reparentTo(self)
+        self.confusedStars.setPosHprScale(0, 0, self.height - .5, 0, 0, 0, 1, 1, 1)
+        self.confusedStars.setBlend(frameBlend=base.wantSmoothAnims)
+        self.confusedStars.adjustAllPriorities(100)
+
+        # Loop the stun animation if the prop is an actor
+        try:
+            self.confusedStars.loop('stun')
+        except:
+            pass
+
+    def cleanupConfusedStars(self):
+        if hasattr(self, 'confusedStars') and self.confusedStars:
+            try:
+                self.confusedStars.stop()
+            except:
+                pass
+
+            try:
+                if not self.confusedStars.isEmpty():
+                    MovieUtil.removeProp(self.confusedStars)
+            except:
+                pass
+
+            self.confusedStars = None
+
     def makeConfused(self):
         self.confused = 1
+        self.makeConfusedStars()
 
     def makeUnConfused(self):
         self.confused = 0
+        self.cleanupConfusedStars()
 
     def addConfusedRounds(self, num):
         self.confusedRounds = num
@@ -846,18 +1010,157 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnMandatoryToll(self):
         self.mandatoryToll = 0
+        self.clearMandatoryToll()
+
+    def clearMandatoryToll(self):
+        if hasattr(self, "tollTrack") and self.tollTrack:
+            self.tollTrack.pause()
+            self.tollTrack.finish()
+            self.tollTrack = None
+
+        if hasattr(self, "tollProps") and self.tollProps:
+            for bill in self.tollProps:
+                if bill and not bill.isEmpty():
+                    MovieUtil.removeProp(bill)
+            self.tollProps = []
+
+        if hasattr(self, "tollPivot") and self.tollPivot and not self.tollPivot.isEmpty():
+            self.tollPivot.removeNode()
+            self.tollPivot = None
+
+        self.mandatoryToll = 0
 
     def setMandatoryToll(self, num):
         self.mandatoryTollNumber = num
+        if hasattr(self, "tollTrack") and self.tollTrack:
+            self.tollTrack.pause()
+            self.tollTrack.finish()
+            self.tollTrack = None
+
+        if hasattr(self, "tollPivot") and self.tollPivot and not self.tollPivot.isEmpty():
+            self.tollPivot.removeNode()
+            self.tollPivot = None
+
+        from math import pi, cos, sin
+
+        totalBills = max(1, (self.mandatoryTollNumber / 8))
+        radius = 1.5
+        height = self.height - 1.25
+
+        self.tollProps = []
+
+        # Shared pivot
+        self.tollPivot = self.attachNewNode("tollPivot")
+        self.tollPivot.setZ(height)
+
+        tollIntervals = []
+
+        for i in range(totalBills):
+            bill = globalPropPool.getProp(random.choice(('10dollar', '1dollar', '5dollar', '50dollar')))
+            bill.setTwoSided(True)
+            bill.setScale(.75)
+            bill.reparentTo(self.tollPivot)
+
+            angle = (2 * pi / totalBills) * i
+            bill.setPos(cos(angle) * radius,
+                        sin(angle) * radius,
+                        0)
+
+            bill.lookAt(self.tollPivot)
+            bill.setP(270)
+
+        # Orbit pivot a little slower so the individual spins stand out
+        orbit = LerpHprInterval(
+            self.tollPivot,
+            3.0,
+            VBase3(360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        self.tollTrack = Parallel(
+            orbit,
+            *tollIntervals
+        )
+
+        self.tollTrack.loop()
 
     def getMandatoryToll(self):
         return self.mandatoryTollNumber
 
+    def makeCheerHands(self):
+        from panda3d.core import Vec4
+
+        if hasattr(self, 'cheerHandsTrack') and self.cheerHandsTrack:
+            self.cheerHandsTrack.pause()
+            self.cheerHandsTrack.finish()
+            self.cheerHandsTrack = None
+
+        gloveColor = self.style.getGloveColor()
+        green = Vec4(0, 1, 0, 1)
+
+        glovePieces = self.getPieces(('torso', '*hands*'))
+        handTracks = []
+
+        for piece in glovePieces:
+            pieceTrack = Sequence(
+                LerpColorScaleInterval(
+                    piece,
+                    1.0,
+                    green,
+                    startColorScale=gloveColor
+                ),
+                LerpColorScaleInterval(
+                    piece,
+                    1.0,
+                    gloveColor,
+                    startColorScale=green
+                ),
+                Wait(1.0)
+            )
+            handTracks.append(pieceTrack)
+
+        self.cheerHandsTrack = Parallel(*handTracks)
+        self.cheerHandsTrack.loop()
+
+    def cleanupCheerHands(self):
+        if hasattr(self, 'cheerHandsTrack') and self.cheerHandsTrack:
+            self.cheerHandsTrack.pause()
+            self.cheerHandsTrack.finish()
+            self.cheerHandsTrack = None
+
+        try:
+            gloveColor = self.style.getGloveColor()
+            glovePieces = self.getPieces(('torso', '*hands*'))
+            for piece in glovePieces:
+                piece.clearColorScale()
+                piece.setColorScale(gloveColor)
+        except:
+            pass
+
     def makeCheer(self):
         self.cheer = 1
+        effectColor = Vec4(0, 1, 0.137, 1.00)
+        self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
+        self.cheerEffect.setColor(effectColor)
+
+        self.cheerEffect.reparentTo(self)
+        self.cheerEffect.setPos(0, 0, 0)
+        self.makeCheerHands()
+        #self.cooldownEffect.setHpr(180, 0, 0)
+
+        self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
+
+        self.cheerTrack.loop()
 
     def makeUnCheer(self):
         self.cheer = 0
+        self.cleanupCheerHands()
+        if hasattr(self, "cheerTrack") and self.cheerTrack:
+            self.cheerTrack.pause()
+            if self.cheerEffect:
+                self.cheerEffect.disable()
+                if hasattr(self.cheerEffect, 'renderParent'):
+                    self.cheerEffect.cleanup()
 
     def addCheerRounds(self, num):
         self.cheerRounds = num
@@ -867,22 +1170,46 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeDamageUp(self):
         self.damageUp = 1
+        self.arrowAuraTrackUp = self.makeLoopingArrowAura()
+        self.arrowAuraTrackUp.loop()
 
     def makeUnDamageUp(self):
         self.damageUp = 0
         self.damageUpNumber = 0
+        if hasattr(self, 'arrowAuraTrackUp') and self.arrowAuraTrackUp:
+            self.arrowAuraTrackUp.pause()
+            for arrow in getattr(self.arrowAuraTrackUp, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackUp = None
 
     def makeDamageUpGovernaught(self):
         self.governaughtDamageUp = 1
+        self.arrowAuraTrackGov = self.makeLoopingArrowAura()
+        self.arrowAuraTrackGov.loop()
 
     def makeUnDamageUpGovernaught(self):
         self.governaughtDamageUp = 0
+        if hasattr(self, 'arrowAuraTrackGov') and self.arrowAuraTrackGov:
+            self.arrowAuraTrackGov.pause()
+            for arrow in getattr(self.arrowAuraTrackGov, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackGov = None
 
     def makeRaisedAnte(self):
         self.raisedAnte = 1
+        self.arrowAuraTrackAnte = self.makeLoopingArrowAura()
+        self.arrowAuraTrackAnte.loop()
 
     def makeUnRaisedAnte(self):
         self.raisedAnte = 0
+        if hasattr(self, 'arrowAuraTrackAnte') and self.arrowAuraTrackAnte:
+            self.arrowAuraTrackAnte.pause()
+            for arrow in getattr(self.arrowAuraTrackAnte, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackAnte = None
 
     def setRaisedAnte(self, num):
         self.raisedAnteNumber = num
@@ -898,10 +1225,20 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeDamageDown(self):
         self.damageDown = 1
+        self.arrowAuraTrackDown = self.makeLoopingArrowAuraDown()
+        self.arrowAuraTrackDown.loop()
 
     def makeUnDamageDown(self):
         self.damageDown = 0
         self.damageDownNumber = 0
+        if hasattr(self, 'arrowAuraTrackDown') and self.arrowAuraTrackDown:
+            self.arrowAuraTrackDown.pause()
+
+            for fallingArrow in getattr(self.arrowAuraTrackDown, 'fallingArrowProps', []):
+                if fallingArrow and not fallingArrow.isEmpty():
+                    fallingArrow.removeNode()
+
+            self.arrowAuraTrackDown = None
 
     def addDamageDownRounds(self, num):
         self.damageDownRounds = num
@@ -932,9 +1269,213 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeUnEncore(self):
         self.encore = 0
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and self.knifePivot and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+            self.knifePivot = None
+
+    def makeLoopingArrowAuraDown(self):
+        import random
+        import math
+
+        fallingArrowProps = []
+        partTrack = Parallel()
+
+        def resetFallingArrow(fallingArrow):
+            angle = random.random() * 2.0 * math.pi
+
+            x = 1.0 * math.cos(angle)
+            y = 1.0 * math.sin(angle)
+
+            fallingArrow.setColor(1, 0.984, 0, 1)
+            fallingArrow.setPos(x, y, 3)
+            fallingArrow.setAlphaScale(1)
+
+        for i in xrange(30):
+            fallingArrow = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(hidden)
+
+            fallingArrow.setScale(1.5)
+            fallingArrow.setBillboardPointEye()
+            fallingArrow.setR(90)
+            fallingArrow.setTransparency(1)
+
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25),
+
+                Func(fallingArrow.reparentTo, self),
+                Func(resetFallingArrow, fallingArrow),
+
+                Parallel(
+                    LerpFunctionInterval(
+                        fallingArrow.setZ,
+                        1.0,
+                        fromData=3,
+                        toData=0,
+                        blendType='easeIn'
+                    ),
+
+                    Sequence(
+                        Wait(0.3),
+                        LerpFunctionInterval(
+                            fallingArrow.setAlphaScale,
+                            0.25,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(fallingArrow.reparentTo, hidden)
+            )
+
+            partTrack.append(oneArrowTrack)
+            fallingArrowProps.append(fallingArrow)
+
+        loopTrack = Sequence(partTrack)
+        loopTrack.fallingArrowProps = fallingArrowProps
+        return loopTrack
+
+    def makeLoopingArrowAura(self):
+        import random
+        import math
+
+        arrows = []
+        partTrack = Parallel()
+
+        def resetArrow(arrow):
+            angle = random.random() * 2.0 * math.pi
+
+            x = 1.0 * math.cos(angle)
+            y = 1.0 * math.sin(angle)
+
+            arrow.setColor(random.random(), random.random(), random.random(), 1)
+            arrow.setPos(x, y, 0)
+            arrow.setAlphaScale(1)
+
+        for i in xrange(30):
+            arrow = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(hidden)
+
+            arrow.setScale(1.5)
+            arrow.setBillboardPointEye()
+            arrow.setR(270)
+            arrow.setTransparency(1)
+
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25),
+
+                Func(arrow.reparentTo, self),
+                Func(resetArrow, arrow),
+
+                Parallel(
+                    LerpFunctionInterval(
+                        arrow.setZ,
+                        1.0,
+                        fromData=0,
+                        toData=3,
+                        blendType='easeOut'
+                    ),
+
+                    Sequence(
+                        Wait(0.5),
+                        LerpFunctionInterval(
+                            arrow.setAlphaScale,
+                            0.25,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(arrow.reparentTo, hidden)
+            )
+
+            partTrack.append(oneArrowTrack)
+            arrows.append(arrow)
+
+        loopTrack = Sequence(
+            partTrack
+        )
+
+        loopTrack.arrows = arrows
+        return loopTrack
 
     def setEncore(self, num):
         self.encoreNumber = num
+
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and self.knifePivot and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+            self.knifePivot = None
+
+        from math import pi, cos, sin
+        from panda3d.core import VBase3
+
+        totalKnives = max(1, int(self.encoreNumber / 10))
+        radius = 2.0
+        height = self.height - 2
+
+        parent = self.getParent()
+        self.knifePivot = parent.attachNewNode("knifePivot")
+        self.knifePivot.setPos(self.getPos(parent))
+        self.knifePivot.setZ(self.knifePivot.getZ() + height)
+
+        self.encoreKnives = []
+        knifeIntervals = []
+
+        for i in range(totalKnives):
+            # holder = orbit point
+            knifeHolder = self.knifePivot.attachNewNode("knifeHolder-%d" % i)
+
+            angle = (2 * pi / totalKnives) * i
+            knifeHolder.setPos(cos(angle) * radius,
+                               sin(angle) * radius,
+                               0)
+
+            # actual model
+            knife = globalPropPool.getProp('bugle')
+            knife.setTwoSided(True)
+            knife.setScale(0.2)
+            knife.reparentTo(knifeHolder)
+
+            # --- center the model on its own bounds ---
+            minb, maxb = knife.getTightBounds()
+            center = (minb + maxb) * 0.5
+            knife.setPos(-center)
+
+            # optional extra push outward if it still feels too close
+            knife.setY(knife, -0.5)
+
+            # face outward from the circle
+            knifeHolder.lookAt(knifeHolder.getPos() * 2)
+            knifeHolder.setP(0)
+            knifeHolder.setH(180)
+            if i % 2 == 1:
+                knife.setH(knife.getH() - 180)
+                knife.setY(1)
+
+            self.encoreKnives.append((knifeHolder, knife))
+
+        orbit = LerpHprInterval(
+            self.knifePivot,
+            4.0,
+            VBase3(-360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        self.knifeTrack = orbit
+        self.knifeTrack.loop()
 
     def getEncore(self):
         return self.encoreNumber
@@ -954,6 +1495,14 @@ class Toon(Avatar.Avatar, ToonHead):
     def makeWinded(self):
         self.winded = 1
         self.encore = 0
+        if hasattr(self, "knifeTrack") and self.knifeTrack:
+            self.knifeTrack.pause()
+            self.knifeTrack.finish()
+            self.knifeTrack = None
+
+        if hasattr(self, "knifePivot") and self.knifePivot and not self.knifePivot.isEmpty():
+            self.knifePivot.removeNode()
+            self.knifePivot = None
 
     def makeUnWinded(self):
         self.winded = 0
@@ -967,9 +1516,112 @@ class Toon(Avatar.Avatar, ToonHead):
     def makeBombed(self):
         self.isBombed = 1
 
+        # ---- CLEANUP ----
+        self.cleanupBombed()
+
+        from math import pi, cos, sin
+
+        totalBombs = 1
+        radius = 1.5
+        height = self.height - 2
+
+        self.bombProps = []
+
+        # Shared pivot (orbit axis)
+        self.bombPivot = self.attachNewNode("bombPivot")
+        self.bombPivot.setZ(height)
+
+        bombIntervals = []
+
+        for i in range(totalBombs):
+            bomb = globalPropPool.getProp('tnt')
+            bomb.setScale(0.5)
+
+            tip = bomb.find('**/joint_attachEmitter')
+            sparks = BattleParticles.createParticleEffect(file='tnt')
+            bomb.sparksEffect = sparks
+            sparks.start(tip)
+
+            bomb.reparentTo(self.bombPivot)
+
+            angle = (2 * pi / totalBombs) * i
+            bomb.setPos(cos(angle) * radius,
+                        sin(angle) * radius,
+                        0)
+
+            bomb.lookAt(self.bombPivot)
+            bomb.setP(90)
+            bomb.setR(90)
+
+            self.bombProps.append(bomb)
+
+        orbit = LerpHprInterval(
+            self.bombPivot,
+            4.0,
+            VBase3(360, 0, 0),
+            startHpr=VBase3(0, 0, 0)
+        )
+
+        self.bombTrack = Parallel(
+            orbit,
+            *bombIntervals
+        )
+
+        self.bombTrack.loop()
+
+    def cleanupBombed(self):
+        if hasattr(self, "bombTrack") and self.bombTrack:
+            try:
+                self.bombTrack.pause()
+            except:
+                pass
+            try:
+                self.bombTrack.finish()
+            except:
+                pass
+            self.bombTrack = None
+
+        if hasattr(self, "bombProps") and self.bombProps:
+            for bomb in self.bombProps:
+                if bomb:
+                    if hasattr(bomb, "sparksEffect") and bomb.sparksEffect:
+                        effect = bomb.sparksEffect
+                        bomb.sparksEffect = None
+
+                        try:
+                            effect.disable()
+                        except:
+                            pass
+
+                        try:
+                            if hasattr(effect, "renderParent"):
+                                effect.cleanup()
+                        except:
+                            pass
+
+                        try:
+                            effect.detachNode()
+                        except:
+                            pass
+
+                    try:
+                        if not bomb.isEmpty():
+                            MovieUtil.removeProp(bomb)
+                    except:
+                        pass
+
+            self.bombProps = []
+
+        if hasattr(self, "bombPivot") and self.bombPivot and not self.bombPivot.isEmpty():
+            self.bombPivot.removeNode()
+            self.bombPivot = None
+
+        self.isBombed = 0
+
     def makeUnBombed(self):
         self.isBombed = 0
         self.bombed = 0
+        self.cleanupBombed()
 
     def addBombedRounds(self, num):
         self.bombedRounds = num
@@ -985,10 +1637,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeVulnerable(self):
         self.isVulnerable = 1
+        self.makeTeethProp()
 
     def makeUnVulnerable(self):
         self.isVulnerable = 0
         self.vulnerability = 0
+        self.cleanupTeeth()
 
     def makeGagBan(self):
         self.isGagBan = 1
@@ -1008,12 +1662,59 @@ class Toon(Avatar.Avatar, ToonHead):
     def getVulnerability(self):
         return self.vulnerability
 
+    def makeTeethProp(self):
+        # Clean up any existing teeth first
+        self.cleanupTeeth()
+
+        self.teeth = globalPropPool.getProp('teeth')
+        self.teeth.reparentTo(self.leftHand)
+
+        self.teeth.setScale(5)
+        self.teeth.setH(90)
+        self.teeth.setR(180)
+        self.teeth.setZ(.375)
+
+    def cleanupTeeth(self):
+        if hasattr(self, 'teeth') and self.teeth:
+
+            try:
+                if not self.teeth.isEmpty():
+                    MovieUtil.removeProp(self.teeth)
+            except:
+                pass
+
+            self.teeth = None
+
+    def makeSnapProp(self):
+        # Clean up any existing stars first
+        self.cleanupSnap()
+
+        self.snap = globalPropPool.getProp('litigator-teeth')
+        self.snap.reparentTo(self.leftHand)
+        self.snap.setScale(5)
+        self.snap.setH(90)
+        self.snap.setR(180)
+        self.snap.setZ(.375)
+
+    def cleanupSnap(self):
+        if hasattr(self, 'snap') and self.snap:
+
+            try:
+                if not self.snap.isEmpty():
+                    MovieUtil.removeProp(self.snap)
+            except:
+                pass
+
+            self.snap = None
+
     def makeSnapped(self):
         self.isSnapped = 1
+        self.makeSnapProp()
 
     def makeUnSnapped(self):
         self.isSnapped = 0
         self.snapped = 0
+        self.cleanupSnap()
 
     def setSnapped(self, num):
         self.snapped = num
@@ -1953,7 +2654,6 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnLiquidated()
         self.makeUnGroupDamageDown()
         self.makeUnGagBoost()
-        self.makeUnCooldown()
         self.makeUnMarkedWood()
         self.makeUnInkDrain()
         self.makeUnHidden()
@@ -5455,7 +6155,13 @@ class Toon(Avatar.Avatar, ToonHead):
         print(base.localAvatar.getPos())
         print(base.localAvatar.getHpr())
 
+    def printCameraPos2():
+        print(base.camera.getPos(render))
+        print(base.camera.getHpr(render))
+
     base.accept('[', printCameraPos)
+
+    base.accept(']', printCameraPos2)
             
     def putOnSuit(self, suitType, setDisplayName = True, rental = False):
         if self.isDisguised:

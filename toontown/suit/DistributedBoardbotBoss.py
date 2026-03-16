@@ -97,6 +97,51 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.resetMaxDamage()
         self.maxHP = self.bossMaxDamage
 
+        from toontown.suit.DistributedSuitBase import DistributedSuitBase
+        self.contingency = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('cdirector')
+        self.contingency.setDNA(suitDNA)
+        self.contingency.setPickable(0)
+        self.contingency.setDisplayName('Contingency Director\nBoardbot\nLevel 66.mgr')
+        self.contingency.doId = 0
+        self.contingency.loop('neutral')
+        self.contingency.reparentTo(render)
+        self.contingency.setPosHpr(0, -131.321, 0, 180.0, 0.0, 0.0)
+
+        self.dividend = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('dking')
+        self.dividend.setDNA(suitDNA)
+        self.dividend.setPickable(0)
+        self.dividend.setDisplayName('Dividend King\nBoardbot\nLevel 60.mgr')
+        self.dividend.doId = 0
+        self.dividend.loop('sit-exec')
+        self.dividend.reparentTo(render)
+        self.dividend.setPosHpr(49.844, -80.266, 2.5, 180.0, 0.0, 0.0)
+
+        self.recordkeeper = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('rkeeper')
+        self.recordkeeper.setDNA(suitDNA)
+        self.recordkeeper.setPickable(0)
+        self.recordkeeper.setDisplayName('Recordkeeper\nBoardbot\nLevel 60.mgr')
+        self.recordkeeper.doId = 0
+        self.recordkeeper.loop('sit-exec')
+        self.recordkeeper.reparentTo(render)
+        self.recordkeeper.setPosHpr(-82.031, -80.266, 2.5, 180.0, 0.0, 0.0)
+
+        self.tollmaster = DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('liquid')
+        self.tollmaster.setDNA(suitDNA)
+        self.tollmaster.setPickable(0)
+        self.tollmaster.setDisplayName('Tollmaster\nBoardbot\nLevel 56.mgr')
+        self.tollmaster.doId = 0
+        self.tollmaster.loop('sit-exec')
+        self.tollmaster.reparentTo(render)
+        self.tollmaster.setPosHpr(-53.594, -80.266, 2.5, 180.0, 0.0, 0.0)
+
     def announceGenerate(self):
         global OneBossCog
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
@@ -289,102 +334,151 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def makeIntroductionMovie(self, delayDeletes):
         track = Parallel()
         camera.reparentTo(render)
+        rightDoors = render.findAllMatches('**/rightDoor')
+        leftDoors = render.findAllMatches('**/leftDoor')
         localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
-        dooberTrack = Parallel()
-        if self.doobers:
-            self.__doobersToPromotionPosition(self.doobers[:4], self.battleANode)
-            self.__doobersToPromotionPosition(self.doobers[4:], self.battleBNode)
-            turnPosA = ToontownGlobals.SellbotBossDooberTurnPosA
-            turnPosB = ToontownGlobals.SellbotBossDooberTurnPosB
-            self.__walkDoober(self.doobers[0], 0, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[1], 4, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[2], 8, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[3], 12, turnPosA, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[7], 2, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[6], 6, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[5], 10, turnPosB, dooberTrack, delayDeletes)
-            self.__walkDoober(self.doobers[4], 14, turnPosB, dooberTrack, delayDeletes)
-        toonTrack = Parallel()
-        self.__toonsToPromotionPosition(self.toonsA, self.battleANode)
-        self.__toonsToPromotionPosition(self.toonsB, self.battleBNode)
-        delay = 0
-        for toonId in self.toonsA:
-            self.__walkToonToPromotion(toonId, delay, self.toonsEnterA, toonTrack, delayDeletes)
-            delay += 1
-
-        for toonId in self.toonsB:
-            self.__walkToonToPromotion(toonId, delay, self.toonsEnterB, toonTrack, delayDeletes)
-            delay += 1
-
-        toonTrack.append(Sequence(Wait(delay), self.closeDoors))
-        self.clearChat()
-        self.cagedToon.clearChat()
-        promoteDoobers = TTLocalizer.BossCogPromoteDoobers % SuitDNA.getDeptFullnameP(self.style.dept)
-        doobersAway = TTLocalizer.BossCogDoobersAway[self.style.dept]
-        welcomeToons = TTLocalizer.BossCogWelcomeToons
-        promoteToons = TTLocalizer.BossCogPromoteToons % SuitDNA.getDeptFullnameP(self.style.dept)
-        discoverToons = TTLocalizer.BossCogDiscoverToons
-        attackToons = TTLocalizer.BossCogAttackToons
-        interruptBoss = TTLocalizer.CagedToonInterruptBoss
-        rescueQuery = TTLocalizer.CagedToonRescueQuery
-        bossAnimTrack = Sequence(
-            ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
-            ActorInterval(self, 'ltTurn2Wave', duration=2),
-            ActorInterval(self, 'wave', duration=4, loop=1),
-            ActorInterval(self, 'ltTurn2Wave', startTime=2, endTime=0),
-            ActorInterval(self, 'Ff_speech', duration=7, loop=1))
-        track.append(bossAnimTrack)
-        dialogTrack = Track(
-            (0, Parallel(
-                camera.posHprInterval(8, Point3(-22, -100, 35), Point3(-10, -13, 0), blendType='easeInOut'),
-                IndirectInterval(toonTrack, 0, 18))),
-            (5.6, Func(self.setChatAbsolute, promoteDoobers, CFSpeech | CFTimeout)),
-            (9, IndirectInterval(dooberTrack, 0, 9)),
-            (10, Sequence(
-                Func(self.clearChat),
-                base.camera.posHprInterval(5, Point3(-23.1, 15.7, 17.2), Point3(-160, -2.4, 0), blendType = 'easeInOut'))),
-            (12, Func(self.setChatAbsolute, doobersAway, CFSpeech)),
-            (16, Parallel(
-                Func(self.clearChat),
-                base.camera.posHprInterval(3, Point3(-25, -99, 10), Point3(-14, 10, 0), blendType = 'easeInOut'),
-                IndirectInterval(dooberTrack, 14),
-                IndirectInterval(toonTrack, 30))),
-            (18, Func(self.setChatAbsolute, welcomeToons, CFSpeech | CFTimeout)),
-            (22, Func(self.setChatAbsolute, promoteToons, CFSpeech | CFTimeout)),
-            (22.2, Sequence(
-                Func(self.cagedToon.nametag3d.setScale, 2),
-                Func(self.cagedToon.setChatAbsolute, interruptBoss, CFSpeech | CFTimeout),
-                ActorInterval(self.cagedToon, 'wave'),
-                Func(self.cagedToon.loop, 'neutral'))),
-            (25, Sequence(
-                Func(self.clearChat),
-                Func(self.cagedToon.clearChat),
-                ActorInterval(self, 'Ff_lookRt'))),
-            (27, Sequence(
-                Func(self.cagedToon.setChatAbsolute, "", CFSpeech | CFTimeout),
-                base.camera.posHprInterval(2, Point3(-12, 48, 94), Point3(-26, 20, 0), blendType = 'easeInOut'),
-                ActorInterval(self.cagedToon, 'wave'),
-                Func(self.cagedToon.loop, 'neutral'))),
-            (31, Sequence(
-                base.camera.posHprInterval(2, Point3(-20, -35, 10), Point3(-88, 25, 0), blendType = 'easeInOut'),
-                Func(self.setChatAbsolute, discoverToons, CFSpeech | CFTimeout),
-                Func(self.cagedToon.nametag3d.setScale, 1),
-                Func(self.cagedToon.clearChat))),
-            (34, Sequence(
-                Func(self.clearChat),
-                self.loseCogSuits(self.toonsA, self.battleANode, (0, 18, 5, -180, 0, 0)),
-                self.loseCogSuits(self.toonsB, self.battleBNode, (0, 18, 5, -180, 0, 0)))),
-            (37, Sequence(
-                self.toonNormalEyes(self.involvedToons),
-                base.camera.posHprInterval(2, Point3(-23.4, -145.6, 44.0), Point3(-10.0, -12.5, 0), blendType = 'easeInOut'),
-                Func(self.loop, 'Ff_neutral'),
-                Parallel(self.backupToonsToBattlePosition(self.toonsA, self.battleANode),
-                         self.backupToonsToBattlePosition(self.toonsB, self.battleBNode),
-                         Sequence(
-                             Wait(2),
-                             Func(self.setChatAbsolute, "", CFSpeech | CFTimeout))))))
-        track.append(dialogTrack)
-        return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
+        loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
+        bossTrack = Sequence(Func(self.loop, 'Ff_neutral'), self.loseCogSuits(self.toonsA + self.toonsB, render, (0, -161.321, 5, 180, 0.0, 0.0)),
+                             Parallel(LerpPosHprInterval(base.camera, 2.0, (0, -161.321, 10), (0, 0.0, 0.0),  blendType='easeInOut'),
+                             Sequence(ActorInterval(self.contingency, 'cease'), Func(self.contingency.loop, 'neutral')),
+                                      Func(self.contingency.setChatAbsolute, "Well well... this is unexpected.", CFSpeech | CFTimeout)), Wait(4.0),
+                                      Func(self.contingency.setChatAbsolute, "You've made quite the series of poor decisions.", CFSpeech | CFTimeout), Wait(4.0),
+                                      Func(self.contingency.setChatAbsolute, "You've disrupted our departments, damaged our operations, and interfered with corporate productivity!", CFSpeech | CFTimeout), ActorInterval(self.contingency, 'speak'),
+                             Func(self.contingency.loop, 'neutral'),
+                                      Func(self.contingency.setChatAbsolute, "Fortunately... my team specializes in dealing with such unexpected complications.", CFSpeech | CFTimeout), Wait(4.0),
+                                      Func(self.contingency.setChatAbsolute, "But first...", CFSpeech | CFTimeout), Wait(4.0),
+                                      Func(self.contingency.setChatAbsolute, "The board is currently in session.", CFSpeech | CFTimeout), Wait(2.0),
+                                      Parallel(Sequence(ActorInterval(self.contingency, 'walk'), Func(self.contingency.loop, 'neutral')),
+                                               LerpHprInterval(self.contingency, self.contingency.getDuration('walk'), (0, 0, 0), blendType='easeInOut')),
+                                      Func(self.contingency.setChatAbsolute, "How about we bring this matter directly to them!", CFSpeech | CFTimeout), Wait(3.0),
+                             Func(self.loop, 'Ff_speech'),
+                             Func(self.setChatAbsolute, "Let the record show that the executive board of C.O.G.S. Inc. is now in session.", CFSpeech | CFTimeout),
+                             LerpPosHprInterval(base.camera, 0.0, (0, -37.5721, 60), (0, -20, 0), blendType='easeInOut'),
+                             Wait(4.0),
+                             Func(self.setChatAbsolute, "Reports indicate the Toons have begun interfering with multiple corporate divisions.", CFSpeech | CFTimeout),
+                             LerpPosHprInterval(base.camera, 4.0, (-102.322, -3.0205, 60), (-62.2962, -20, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Such disruptions are unacceptable!", CFSpeech | CFTimeout),
+                             Wait(4.0),
+                             Func(self.setChatAbsolute, "We will discuss the necessary measures to correct this situation.", CFSpeech | CFTimeout),
+                             LerpPosHprInterval(base.camera, 4.0, (0, -27.5721, 60), (0, -20, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Now then... Let's review the situation.", CFSpeech | CFTimeout),
+                             Wait(4.0),
+                             Func(self.setChatAbsolute, "Where do we stand against these... Toons?", CFSpeech | CFTimeout),
+                             LerpPosHprInterval(base.camera, 4.0, (24.8814, 55.2589, 45), (-50.0743, 0, 0), blendType='easeInOut'),
+                             Func(self.loop, 'Ff_neutral'),
+                             LerpPosHprInterval(base.camera, 3.0, (5.9252, 39.0836, 43), (-90, -0, 0), blendType='easeInOut'),
+                             Sequence(Func(self.cfoBoss.loop, 'Ff_speech')),
+                             Func(self.cfoBoss.setChatAbsolute, "Revenue losses from Toon interference have exceeded projections.", CFSpeech | CFTimeout), Wait(4.0), Func(self.cfoBoss.loop, 'Ff_neutral'),
+                             Func(base.camera.setPosHpr, -2.410, 31.641, 37.078, 71.8, 5.34, 0.0),
+                            Parallel(Sequence(ActorInterval(self.vpBoss, 'Ff_lookRt'), ActorInterval(self.vpBoss, 'Ff_lookRt', startTime=self.vpBoss.getDuration('Ff_lookRt'), endTime=0), Func(self.vpBoss.loop, 'Ff_neutral')),
+                                     Func(self.vpBoss.setChatAbsolute, "My sales force is being flattened out there.", CFSpeech | CFTimeout)),
+                             Func(base.camera.setPosHpr, 13.761, 34.660, 39.585, 27.2, 4.38, 0.0),
+                             Func(self.ceoBoss.setChatAbsolute, "Then hire more.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 5.9252, 39.0836, 43, -90, -0, 0),
+                             Func(self.cfoBoss.setChatAbsolute, "Hiring requires money!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, -2.410, 31.641, 37.078, 71.8, 5.34, 0.0),
+                             Func(self.vpBoss.setChatAbsolute, "Which we're losing by the way...", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 45.081, 40.301, 36.134, 35.3, -0.4, 0.0),
+                             Parallel(Sequence(ActorInterval(self.cjBoss, 'Ff_cross_arms_into'), Func(self.cjBoss.loop, 'Ff_cross_arms_loop')),
+                                      Func(self.cjBoss.setChatAbsolute, "I can hear the disruption spreading across the organization.", CFSpeech | CFTimeout)), Wait(4.0),
+                             Func(self.cjBoss.setChatAbsolute, "Chaos leaves a very... distinct sound.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, -27.6814, 50.6378, 43, -325, 0, 0.0),
+                             Parallel(Sequence(ActorInterval(self.cjBoss2, 'Ff_speech'), Func(self.cjBoss2.loop, 'Ff_neutral')),
+                                      Func(self.cjBoss2.setChatAbsolute, "That's why I came out of retirement.", CFSpeech | CFTimeout)),
+                             Func(self.cjBoss2.setChatAbsolute, "Someone needs to ensure the law is properly enforced.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 5.9252, 39.0836, 43, -90, -0, 0),
+                             Parallel(Func(self.cfoBoss.setChatAbsolute, "Didn't the board say your courtroom was... ineffective?", CFSpeech | CFTimeout), Sequence(ActorInterval(self.cfoBoss, 'Ff_lookRt'),
+                                                                                                                                                       ActorInterval(self.cfoBoss, 'Ff_lookRt', playRate=-1),
+                                                                                                                                                       Func(self.cfoBoss.loop, 'Ff_neutral'))),
+                             Func(base.camera.setPosHpr, -27.6814, 50.6378, 43, -325, 0, 0.0),
+                             Func(self.cjBoss2.setChatAbsolute, "The board said my methods were outdated.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 45.081, 40.301, 36.134, 35.3, -0.4, 0.0),
+                             Func(self.cjBoss.setChatAbsolute, "And inefficient.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, -27.6814, 50.6378, 43, -325, 0, 0.0),
+                             Parallel(Func(self.cjBoss2.setChatAbsolute, "Efficiency is not the purpose of the law.", CFSpeech | CFTimeout),
+                                      Sequence(ActorInterval(self.cjBoss2, 'Ff_lookLt'),
+                                               ActorInterval(self.cjBoss2, 'Ff_lookLt', playRate=-1),
+                                               Func(self.cjBoss2.loop, 'Ff_neutral'))),
+                             Func(base.camera.setPosHpr, 45.081, 40.301, 36.134, 35.3, -0.4, 0.0),
+                             Func(self.cjBoss.setChatAbsolute, "No, but it DOES keep the criminals from walking away!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 13.761, 34.660, 39.585, 27.2, 4.38, 0.0), Func(self.ceoBoss.loop, 'Ff_speech'),
+                             Func(self.ceoBoss.setChatAbsolute, "Alright that's enough! This is NOT what we were brought here to discuss!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "You two can debate legal philosophy all day, but while you argue about how the law should work...", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "My department has been dealing with the Toons longer than anyone else in this room!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "Bossbots have been handling these pests since the beginning.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "We've seen every trick they use. Every stunt they pull. Every way they try to disrupt operations.", CFSpeech | CFTimeout), Wait(4.0), Func(self.ceoBoss.loop, 'Ff_neutral'),
+                             Func(base.camera.setPosHpr, -17.77, 26.875, 24.818, -362, 17.4, 10.5),
+                             Func(self.ceoBoss.setChatAbsolute, "And I can assure you...", CFSpeech | CFTimeout), Wait(4.0),
+                             Parallel(Sequence(ActorInterval(self.ceoBoss, 'Ff_point'), Func(self.ceoBoss.loop, 'Ff_neutral')),
+                                      Func(self.ceoBoss.setChatAbsolute, "Debating procedure has never stopped them!", CFSpeech | CFTimeout)),
+                             Func(self.switchIntroMusic),
+                             LerpPosHprInterval(base.camera, 3.0, (0, -46.3761, 10), (180, 0, 0), blendType='easeInOut'),
+                             # walk into the office
+                             Parallel(Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/CHQ_door_open.ogg')), rightDoors[1].hprInterval(2.0, (-20.0, 0.0, 0.0)),
+                                      leftDoors[1].hprInterval(2.0, (200.0, 0.0, 0.0))),
+                             Func(self.contingency.loop, 'walk'),
+                             LerpPosInterval(self.contingency, 5.0, (0, -76.3761, 0)), Func(self.contingency.loop, 'neutral'),
+                            Func(self.contingency.setChatAbsolute, "Sorry to interrupt you, Sir, but we have unauthorized visitors.", CFSpeech | CFTimeout), Wait(3.0),
+                             LerpPosHprInterval(base.camera, 3.0, (24.8814, 55.2589, 45), (-50.0743, 0, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Hmm, it seems our meeting has acquired guests.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 5.9252, 39.0836, 43, -90, -0, 0),
+                             Func(self.cfoBoss.setChatAbsolute, "So these are the ones hurting our margins?", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, -2.410, 31.641, 37.078, 71.8, 5.34, 0.0),
+                             Func(self.vpBoss.setChatAbsolute, "They're smaller than I expected.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, -27.6814, 50.6378, 43, -325, 0, 0.0),
+                             Parallel(Sequence(ActorInterval(self.cjBoss2, 'Ff_speech'), Func(self.cjBoss2.loop, 'Ff_neutral')),
+                                      Func(self.cjBoss2.setChatAbsolute, "Yes... I can hear them. The sound of disorder.", CFSpeech | CFTimeout)), Wait(2.0),
+                             Func(base.camera.setPosHpr, 45.081, 40.301, 36.134, 35.3, -0.4, 0.0),
+                             Parallel(Sequence(ActorInterval(self.cjBoss, 'Ff_cross_arms_out'), Func(self.cjBoss.loop, 'Ff_neutral_f')),
+                                      Func(self.cjBoss.setChatAbsolute, "Then let's correct it!", CFSpeech | CFTimeout)), Wait(2.0),
+                             LerpPosHprInterval(base.camera, 3.0, (24.8814, 55.2589, 50), (-50.0743, 0, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Your division oversees the executive operations of C.O.G.S. Inc. Explain how this happened.", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 3.0, (0, -46.3761, 10), (180, 0, 0), blendType='easeInOut'),
+                             Func(self.contingency.setChatAbsolute, "The Toons have been disrupting multiple departments.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.contingency.setChatAbsolute, "Security breaches, operational damage, financial loss...", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (49.844, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.dividend.setChatAbsolute, "Corporate liquidity remains stable.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.dividend.setChatAbsolute, "Once these Toons are removed... profits will rebound.", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (-82.031, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.recordkeeper.setChatAbsolute, "All incident reports documented. All disciplinary actions prepared.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.recordkeeper.setChatAbsolute, "Just waiting for the outcome!", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (-53.594, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.tollmaster.setChatAbsolute, "Security routes sealed. Escape options are minimal.", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (24.8814, 55.2589, 45), (-50.0743, 0, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Contingency Director...", CFSpeech | CFTimeout), Wait(3.0),
+                             Func(self.setChatAbsolute, "Your team was created for situations exactly like this.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.setChatAbsolute, "Are they capable of resolving this problem?", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 3.0, (0, -46.3761, 10), (180, 0, 0), blendType='easeInOut'),
+                             Func(self.contingency.setChatAbsolute, "My team specializes in preventing corporate collapse.", CFSpeech | CFTimeout), Wait(4.0),
+                             Parallel(Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/CHQ_door_close.ogg')), rightDoors[1].hprInterval(1.0, (90.0, 0.0, 0.0)),
+                                      leftDoors[1].hprInterval(1.0, (90.0, 0.0, 0.0)), Func(self.contingency.setChatAbsolute, "I can assure you they will be able to handle this situation, Sir.", CFSpeech | CFTimeout)), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (49.844, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.dividend.setChatAbsolute, "I've already calculated the return on investment.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.dividend.setChatAbsolute, "Eliminating these Toons should bring our profits right back into the green!", CFSpeech | CFTimeout), Wait(4.0),
+                             Parallel(Func(self.contingency.loop, 'sit-exec'), Func(self.contingency.setPosHpr, (79.219, -80.266, 2.5), (180.0, 0.0, 0.0))),
+                             LerpPosHprInterval(base.camera, 2.0, (-82.031, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.recordkeeper.setChatAbsolute, "Documentation prepared. Damage assessments complete. Defeat reports drafted in advance...", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.recordkeeper.setChatAbsolute, "All that's missing... is their signatures!", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 2.0, (-53.594, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.tollmaster.setChatAbsolute, "Every corridor sealed. Every checkpoint active. No shortcuts. No exits.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.tollmaster.setChatAbsolute, "They're not leaving this floor without paying the toll!", CFSpeech | CFTimeout), Wait(4.0),
+                             LerpPosHprInterval(base.camera, 3.0, (79.219, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
+                             Func(self.contingency.setChatAbsolute, "You Toons are simply another contingency.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.contingency.setChatAbsolute, "You wanted the board's attention, now you have it!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.contingency.setChatAbsolute, "Let's see how well chaos performs under... proper oversight!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(base.camera.setPosHpr, 13.761, 34.660, 39.585, 27.2, 4.38, 0.0), Func(self.ceoBoss.loop, 'Ff_speech'),
+                             Func(self.ceoBoss.setChatAbsolute, "Quite the efficient group you've assembled here.", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "Mr. Chairman, if her team performs the way the reports say they do...", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.setChatAbsolute, "These Toons won't make it past this floor!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.ceoBoss.loop, 'Ff_neutral'),
+                             LerpPosHprInterval(base.camera, 2.0, (24.8814, 55.2589, 45), (-50.0743, 0, 0), blendType='easeInOut'),
+                             Func(self.setChatAbsolute, "Very well.", CFSpeech | CFTimeout), Wait(3.0),
+                             Func(self.setChatAbsolute, "Oversight Committee... you are authorized to resolve this matter.", CFSpeech | CFTimeout), Wait(4.0),
+                             Parallel(Sequence(ActorInterval(self, 'Ff_point'), Func(self.loop, 'Ff_neutral')),
+                                      Func(self.setChatAbsolute, "Show them why this company remains in control!", CFSpeech | CFTimeout)), Wait(2.0),
+                             Func(self.setChatAbsolute, "", CFSpeech | CFTimeout)
+                             )
+        return Sequence(Func(self.stickToonsToFloor), bossTrack, Func(self.unstickToons), name=self.uniqueName('Introduction'))
 
     def __makeRollToBattleTwoMovie(self):
         startPos = Point3(ToontownGlobals.SellbotBossBattleOnePosHpr[0], ToontownGlobals.SellbotBossBattleOnePosHpr[1], ToontownGlobals.SellbotBossBattleOnePosHpr[2])
@@ -574,17 +668,17 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
         self.geom = loader.loadModel('phase_14/models/modules/ExecutiveMeetingRoom')
         self.paperStack1 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
-        self.paperStack2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
-        self.paperStack3 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
-        self.paperStack2.setScale(1.5)
+        # self.paperStack2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
+        # self.paperStack3 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_stacks')
+        #self.paperStack2.setScale(1.5)
         self.paperStack1.setScale(1.5)
-        self.paperStack3.setScale(1.5)
+       # self.paperStack3.setScale(1.5)
         self.paperStack1.reparentTo(self.geom)
-        self.paperStack3.reparentTo(self.geom)
-        self.paperStack2.reparentTo(self.geom)
+       # self.paperStack3.reparentTo(self.geom)
+       # self.paperStack2.reparentTo(self.geom)
         self.paperStack1.setPosHpr(52.2653, 78.2118, -0.05, 126.891, 0, 0)
-        self.paperStack2.setPosHpr(20, -8.55076, -0.05, 0, 0, 0) # Chairman Stack
-        self.paperStack3.setPosHpr(-20, -8.55076, -0.05, 0, 0, 0) # CJ Stack
+        # self.paperStack2.setPosHpr(20, -8.55076, -0.05, 0, 0, 0) # Chairman Stack
+        # self.paperStack3.setPosHpr(-20, -8.55076, -0.05, 0, 0, 0) # CJ Stack
         # self.rampA = self.geom.find('**/north_ramp')
         # self.rampB = self.geom.find('**/west_ramp')
         # self.rampC = self.geom.find('**/east_ramp')
@@ -627,28 +721,26 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.chandeliers.append(chandelier)
 
         for i in range(4):
-            bookshelf = loader.loadModel('phase_14/models/props/LB_AttackShelf-mod.bam')
+            bookshelf = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoomChair')
             bookshelf.setPosHpr(*FourBossBattleGlobals.BookshelfPosHprs[i])
             bookshelf.reparentTo(self.geom)
+            bookshelf.setScale(.75)
             self.bookshelves.append(bookshelf)
 
-        toonIds = [1116, 4119, 3112, 2011, 2001]
-        for i in range(5):
-            npc = Toon.Toon()
-            npc.setPickable(0)
-            npc.setPlayerType(NametagGlobals.CCNonPlayer)
-            dna = ToonDNA.ToonDNA()
-            dna.newToonRandom(11237, 'f', 1)
-            dna.head = 'pls'
-            npc.setDNAString(dna.makeNetString())
-            npc.animFSM.request('neutral')
-            npc.reparentTo(self.cage)
-            toon = npc
-            toon.setPosHpr(*FourBossBattleGlobals.CagedToonPosHprs[i])
-            toon.sadEyes()
-            toon.setActiveShadow(0)
-            toon.loop('sad-neutral')
-            self.cagedToons.append(toon)
+        for i in range(4):
+            bookshelf2 = loader.loadModel('phase_9/models/cogHQ/multislacker_tv')
+            texture2 = loader.loadTexture('phase_9/maps/sellbotHQ/multislacker/ttcc_int_ms_tvScreen_boardbot.png')
+            texture = loader.loadTexture('phase_9/maps/sellbotHQ/multislacker/ttcc_int_ms_palette_board.png')
+            screen = loader.loadModel('phase_9/models/cogHQ/ms_tvScreen')
+            screen.reparentTo(bookshelf2.find('**/tvScreen_origin'))
+            screen.setTexture(texture2, 1)
+            bookshelf2.find('**/tv_body').setTexture(texture, 1)
+            bookshelf2.find('**/tv_legs').setTexture(texture, 1)
+            bookshelf2.setPosHpr(*FourBossBattleGlobals.BookshelfPosHprs2[i])
+            bookshelf2.reparentTo(self.geom)
+            bookshelf2.setScale(1)
+            self.bookshelves.append(bookshelf)
+
 
         self.cageDoor = self.geom.find('**/cage_sides')
         self.cage.setScale(1)
@@ -706,32 +798,32 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.ceoBoss.setName('C. E. O.\nBossbot')
         self.ceoBoss.doId = 0
 
-        self.cioBoss = BossCog.BossCog()
-        dna = SuitDNA.SuitDNA()
-        dna.newBossCog('t')
-        self.cioBoss.cioBoss = True
-        self.cioBoss.setDNA(dna)
-        self.cioBoss.initializeDropShadow()
-        self.cioBoss.setH(0)
-        self.cioBoss.loop('Ff_neutral')
-        self.cioBoss.reparentTo(self.geom)
-        self.cioBoss.setZ(22)
-        self.cioBoss.setName('C. I. O.\nTechbot')
-        self.cioBoss.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
-        self.cioBoss.doId = 0
+        # self.cioBoss = BossCog.BossCog()
+        # dna = SuitDNA.SuitDNA()
+        # dna.newBossCog('t')
+        # self.cioBoss.cioBoss = True
+        # self.cioBoss.setDNA(dna)
+        # self.cioBoss.initializeDropShadow()
+        # self.cioBoss.setH(0)
+        # self.cioBoss.loop('Ff_neutral')
+        # self.cioBoss.reparentTo(self.geom)
+        # self.cioBoss.setZ(22)
+        # self.cioBoss.setName('C. I. O.\nTechbot')
+        # self.cioBoss.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
+        # self.cioBoss.doId = 0
 
-        self.cpoBoss = BossCog.BossCog()
-        dna = SuitDNA.SuitDNA()
-        dna.newBossCog('p')
-        self.cpoBoss.cpoBoss = True
-        self.cpoBoss.setDNA(dna)
-        self.cpoBoss.initializeDropShadow()
-        self.cpoBoss.setH(0)
-        self.cpoBoss.loop('Ff_neutral')
-        self.cpoBoss.reparentTo(self.geom)
-        self.cpoBoss.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
-        self.cpoBoss.setName('C. P. O.\nPressbot')
-        self.cpoBoss.doId = 0
+        # self.cpoBoss = BossCog.BossCog()
+        # dna = SuitDNA.SuitDNA()
+        # dna.newBossCog('p')
+        # self.cpoBoss.cpoBoss = True
+        # self.cpoBoss.setDNA(dna)
+        # self.cpoBoss.initializeDropShadow()
+        # self.cpoBoss.setH(0)
+        # self.cpoBoss.loop('Ff_neutral')
+        # self.cpoBoss.reparentTo(self.geom)
+        # self.cpoBoss.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
+        # self.cpoBoss.setName('C. P. O.\nPressbot')
+        # self.cpoBoss.doId = 0
 
         self.cjBoss2 = BossCog.BossCog()
         dna = SuitDNA.SuitDNA()
@@ -742,21 +834,40 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cjBoss2.setH(0)
         self.cjBoss2.loop('Ff_neutral')
         self.cjBoss2.reparentTo(self.geom)
-        self.cjBoss2.setPosHpr(-20, -8.55076, 22, 180, 0, 0)
+        self.cjBoss2.setPosHpr(-50.0306, 77.9406, 22, -325, 0, 0)
         self.cjBoss2.setName('Chief Justice\nLawbot')
         self.cjBoss2.doId = 0
 
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
 
         self.toonsDiscovered = base.loadMusic('phase_9/audio/bgm/encntr_sting_announce.ogg')
         self.betweenBattleMusic = base.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.battleThreeMusic = base.loadMusic('phase_9/audio/bgm/encntr_head_suit_theme.ogg')
-        self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
+        self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_introduction_stinger.ogg')
+        self.promotionMusic2 = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
+        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_unlock-loop.ogg')
+        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.geom.reparentTo(render)
+
+    def hideContingency(self):
+        self.contingency.hide()
+
+    def hideDividend(self):
+        self.dividend.hide()
+
+    def hideRecordkeeper(self):
+        self.recordkeeper.hide()
+
+    def hideTollmaster(self):
+        self.tollmaster.hide()
+
+    def switchIntroMusic(self):
+        self.promotionMusic.stop()
+        base.playMusic(self.promotionMusic2, looping=1, volume=0.9)
 
     def unloadEnvironment(self):
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
@@ -775,7 +886,6 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         del self.vpBoss
         del self.paperStack1
         del self.paperStack2
-        del self.paperStack3
         del self.bookshelves
         del self.chandeliers
         del self.cioBoss
@@ -890,7 +1000,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         #self.setupBosses()
         self.setCageIndex(0)
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.happy = 1
         self.raised = 1
         self.forward = 1
@@ -904,7 +1014,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterIntroduction(self):
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.stopAnimate()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         self.accept('clickedNametag', self.__clickedNameTag)
@@ -918,11 +1028,12 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def exitIntroduction(self):
         DistributedBossCog.DistributedBossCog.exitIntroduction(self)
         self.promotionMusic.stop()
+        self.promotionMusic2.stop()
 
     def enterBattleOne(self):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
@@ -935,6 +1046,14 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         else:
             cageIndex = 0
         self.setCageIndex(cageIndex)
+        self.battleOneMusic2.setLoop(True)
+        self.battleOneMusic3.play()
+        self.battleOneMusic.stop()
+        taskMgr.doMethodLater(
+            self.battleOneMusic3.length(),
+            self.__startBattleOneLoop,
+            'startBattleOneLoop'
+        )
 
     def exitBattleOne(self):
         DistributedBossCog.DistributedBossCog.exitBattleOne(self)
@@ -943,7 +1062,10 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.disableToonCollision()
         self.releaseToons()
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.battleOneMusic2.stop()
+        self.battleOneMusic3.stop()
+        self.battleOneMusic2.stop()
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.setCageIndex(2)
         self.stickBossToFloor()
         intervalName = 'RollToBattleTwo'
@@ -954,11 +1076,15 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.__showEasyBarrels()
         taskMgr.doMethodLater(0.5, self.enableToonCollision, 'enableToonCollision')
 
+    def __startBattleOneLoop(self, task):
+        self.battleOneMusic2.play()
+        return task.done
+
     def __onToPrepareBattleTwo(self):
         self.disableToonCollision()
        # self.unstickBoss()
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.doneBarrier('RollToBattleTwo')
 
     def exitRollToBattleTwo(self):
@@ -980,7 +1106,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.setCageIndex(2)
         camera.reparentTo(render)
         camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
@@ -1006,7 +1132,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.reparentTo(render)
-        self.setPosHpr(20, -8.55076, 22, 180, 0, 0)
+        self.setPosHpr(52.2653, 78.2118, 22, 307, 0, 0)
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)

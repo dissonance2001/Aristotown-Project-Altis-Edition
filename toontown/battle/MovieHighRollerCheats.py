@@ -415,6 +415,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
+    name = attack['name']
     if suit:
         suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
@@ -423,8 +424,6 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    if suit:
-        animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
@@ -435,6 +434,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(indicator.removeNode))
     if dmg > 0:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
         animTrack.append(Func(toon.setHpr, battle, origHpr))
@@ -442,8 +442,6 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     else:
         animTrack.append(getToonDodgeTrackCheat(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
-        origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
         return animTrack
 
 
@@ -1138,7 +1136,7 @@ def doSingingBluesMegaphone(attack):
         notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextNew, -int(dmg), text="WINDED!", colorCode=1))
         notifyTracks.append(notifyTrack)
         notifyTracks.append(Func(toon.makeWinded))
-        notifyTracks.append(Func(toon.addWindedRounds, 1))
+        notifyTracks.append(Func(toon.addWindedRounds, 2))
         notifyTracks.append(Parallel(Func(toon.checkWinded, 50)))
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
@@ -1202,7 +1200,7 @@ def doCameraFlash(attack):
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=1.0), Wait(suit.getDuration('glower') - 1.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     toonTrack = getToonTrackCheat(attack, 1.0, ['conked'], 0, ['duck'])
     notifyTrack = Sequence(Wait(1.0), Func(toon.showHpTextNew, -int(dmg), text="FLASHED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
+    notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
     oldcolor = render.getColorScale()
     soundTrack2 = getSoundTrack('Photo_shutter.ogg', delay=1.0, node=suit)
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0, 0, 0)),
@@ -1669,6 +1667,7 @@ def doNoAttack(attack):
 
 def doDesperation(attack):
     suit = attack['suit']
+    battle = attack['battle']
     suitTrack = Sequence()
     if suit.dna.name == 'caseman':
         for obj in base.cr.doId2do.values():
@@ -1686,6 +1685,9 @@ def doDesperation(attack):
         for obj in base.cr.doId2do.values():
             if isinstance(obj, DistributedLawbotBoss):
                 suitTrack.append(Func(obj.stopLitigatorMusic))
+    if suit.dna.name == 'liquid':
+        for toon in battle.activeToons:
+            suitTrack.append(Func(toon.makeUnMandatoryToll))
     return suitTrack
 
 def playSplashEffect(render, x, y, z):
@@ -2068,7 +2070,7 @@ def doSingingBlues(attack):
         toon = t['toon']
         dmg = t['hp']
         notifyTracks.append(Func(toon.makeWinded))
-        notifyTracks.append(Func(toon.addWindedRounds, 1))
+        notifyTracks.append(Func(toon.addWindedRounds, 2))
         notifyTracks.append(Parallel(Func(toon.checkWinded, 50)))
     dmg = (attack['target'][0]['hp']) * len(battle.activeToons)
     phone = globalPropPool.getProp('phone')
@@ -2894,7 +2896,7 @@ def doViralSensation(attack):
             partTracks.append(partTrack)
             toonTrack = Sequence()
             toonTrack.append(Wait(damageDelay + 5))
-            toonTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 1)))
+            toonTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 2)))
             toonTrack.append(Parallel(Func(toon.checkDamageUp, 50)))
             toonTrack.append(Func(toon.showHpStringViral, "VIRAL SENSATION!"))
             toonTracks2.append(toonTrack)
@@ -3224,7 +3226,7 @@ def doChoreography(attack):
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
-            toonTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 1)))
+            toonTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
             toonTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
     return Parallel(suitTrack, soundTrack, toonTracks)
 
@@ -3508,7 +3510,7 @@ def doDamageReduction(attack):
         if dmg > 0:
             toonTracks.append(toonTrack)
             smokeTracks.append(smokeTrack)
-            toonTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 1)))
+            toonTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
             toonTracks.append(Parallel(Func(toon.checkDamageDown, 50)))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])

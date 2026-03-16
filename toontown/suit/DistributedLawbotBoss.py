@@ -654,7 +654,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
-        self.battleOneMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
+        self.battleOneMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_guilt_and_resentment.ogg')
         floor = self.geom2.find('**/floor')
         if floor.isEmpty():
             floor = self.geom2.find('**/floor')

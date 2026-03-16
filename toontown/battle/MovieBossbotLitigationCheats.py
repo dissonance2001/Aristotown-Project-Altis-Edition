@@ -316,12 +316,14 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
     if dmg > 0:
         animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        if not attack['name'] == 'AmbassadorMulligan' and not attack['name'] == 'AmbassadorManagerialProtectionImmunity':
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrack(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        if not attack['name'] == 'AmbassadorMulligan' and not attack['name'] == 'AmbassadorManagerialProtectionImmunity':
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return Parallel(animTrack, indicatorTracks)
 
@@ -351,7 +353,6 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
@@ -362,14 +363,13 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(indicator.removeNode))
     if dmg > 0:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
         animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
-        origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
@@ -747,8 +747,8 @@ def doPaperCut(attack):
         partTrack = getPartTrack(particleEffect, .5, 3.5, [particleEffect, toon, 0], softStop=-2)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
         notifyTrack = Sequence(Wait(0.5), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=4))
-        notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 2)))
-        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 3)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 3)))
         notifyTrack.append(Parallel(Func(toon.checkDamageUp, 25)))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
@@ -862,7 +862,7 @@ def doExplodingDocument(attack):
    # toonTrack = getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 2.5, ['slip-forward'])
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="NO DEFENSE!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeNoDodge), Func(toon.addNoDodgeRounds, 2)))
+    notifyTrack.append(Parallel(Func(toon.makeNoDodge), Func(toon.addNoDodgeRounds, 3)))
     return Parallel(explodeTracks, suitTrack, toonTrack, soundTrack, propTrack, notifyTrack, explosionTrack)
 
 def doBookkeepingRetaliation(attack):
@@ -881,7 +881,7 @@ def doBookkeepingRetaliation(attack):
         suitTrack = Sequence(getSuitAnimTrack(attack))
         suitTrack2 = Sequence(ActorInterval(suit, 'effort', duration=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
         notifyTrack = Sequence(Wait(3.4), Func(toon.showHpTextNew, -int(dmg), text="-99% Damage!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 1)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
         notifyTrack.append(Parallel(Func(toon.checkDamageDown, 99)))
         soundTrack1 = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
         soundTrack2 = Sequence(Wait(3.4), SoundInterval(globalBattleSoundCache.getSound('SA_haymaker.ogg')))
@@ -1225,7 +1225,7 @@ def doCollectCall(attack):
     soundTrack = Parallel(soundTrack1, soundTrack2, soundTrack3, soundTrack4)
     toonTrack = Sequence(Wait(1.0), ActorInterval(toon, 'takePhone', duration=3.75))
     toonTrack.append(getToonTakeDamageTrackCheat(attack, toon, target[0]['died'], int(dmg), 0, ['conked']))
-    notifyTrack = Sequence(Wait(4.75), Func(toon.makeCollectCalled), Func(toon.addCollectCallRounds, 1), Func(toon.showHpTextNew, 0, text="CONNECTED!", colorCode=1))
+    notifyTrack = Sequence(Wait(4.75), Func(toon.makeCollectCalled), Func(toon.addCollectCallRounds, 2), Func(toon.showHpTextNew, 0, text="CONNECTED!", colorCode=1))
     return Parallel(explodeTracks, suitTrack, cagePropTracks, toonTrack, notifyTrack, soundTrack, explosionTrack, propTrack)
 
 def doAdvancement(attack):
@@ -1237,8 +1237,8 @@ def doAdvancement(attack):
     suitTrack3 = getSuitAnimTrack(attack)
     suitTrack2 = Sequence(ActorInterval(suit, 'sacrifice-cog', startTime=2.25), Func(suit.setNeutralAnimationDrop))
     for targetSuit in battle.activeSuits:
-        suitTrack = Sequence(Wait(1.5), Func(targetSuit.checkHealingPhrases, 1), ActorInterval(targetSuit, 'slip-forward'),
-                             Func(targetSuit.makeTarget), Func(targetSuit.setNeutralAnimationDrop))
+        suitTrack = Sequence(Wait(1.5), Func(targetSuit.checkHealingPhrases, 1), Func(targetSuit.makeTarget), ActorInterval(targetSuit, 'slip-forward'),
+                             Func(targetSuit.setNeutralAnimationDrop))
         if not targetSuit.dna.name == 'ambass':
             if not targetSuit.isManager:
                 suitTracks.append(suitTrack)
@@ -1367,7 +1367,7 @@ def doBusySignal(attack):
             )
         ))
         notifyTrack = Sequence(Wait(2.75), Func(toon.showHpTextNew, - int(dmg), text="CONFUSED!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
+        notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
         if dmg > 0:
             origH = suit.getH(battle)
             targetPos = toon.getPos(battle)
@@ -2981,7 +2981,7 @@ def doPaperRain(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 30)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="GAG DEBUFF!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
         currentBossHealth = -1
         for s in battle.suits:
             if s.dna.name == 'wtapper':
@@ -3170,7 +3170,7 @@ def doOverheat(attack):
         BattleParticles.setEffectTexture(sprayEffect, 'fire')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="BURNED!", colorCode=4))
-        notifyTrack.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
+        notifyTrack.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 4)))
         if dmg > 0:
             origH = suit.getH(battle)
 
@@ -3319,7 +3319,7 @@ def doGroundbreaker(attack):
         sandTrap.setHpr(Point3(120, 0, 0))
         sandTrap.setScale(0.01)
         sandTrap.setColor(0, 0, 0, 1)
-        puddleTracks.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 1)))
+        puddleTracks.append(Parallel(Func(toon.makeHidden), Func(toon.addHiddenRounds, 2)))
         puddleTracks.append(Sequence(Wait(5.0), Func(toon.hide)))
         puddleTracks.append(Sequence(
             Func(battle.movie.needRestoreRenderProp, sandTrap),

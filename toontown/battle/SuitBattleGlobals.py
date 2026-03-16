@@ -2286,9 +2286,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(4, 5, 6, 8, 12),
                         acc=(75, 75, 75, 75, 75),
                         freq=(30, 30, 30, 30, 30,)))},
- 'shy': {'name': 'Shylock',
-         'singularname': 'a Shylock',
-         'pluralname': 'Shylocks',
+ 'shy': {'name': 'Safe Guard',
+         'singularname': 'a Safe Guard',
+         'pluralname': 'Safe Guards',
          'level': 2,
          'hp': (18, 28, 40, 54, 70, 88, 108),
          'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)

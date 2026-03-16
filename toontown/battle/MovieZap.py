@@ -959,8 +959,13 @@ def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
 
         def getSprayStartPos(coil=coil, toon=toon):
             toon.update(0)
-            p = coil.getPos(render)
-            p.setZ(5)  # Temp "fix," this doesn't like to cooperate
+            n = hidden.attachNewNode('pointBehindSprayProp')
+            n.reparentTo(toon)
+            n.setPos(coil.getPos(toon))
+            n.setZ(1)
+            p = n.getPos(render)
+            n.removeNode()
+            del n
             return p
 
         sprayTrack = Sequence()
@@ -1040,8 +1045,13 @@ def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
 
         def getSprayStartPos(coil=coil, toon=toon):
             toon.update(0)
-            p = coil.getPos(render)
-            p.setZ(5)  # Temp "fix," this doesn't like to cooperate
+            n = hidden.attachNewNode('pointBehindSprayProp')
+            n.reparentTo(toon)
+            n.setPos(coil.getPos(toon))
+            n.setZ(1)
+            p = n.getPos(render)
+            n.removeNode()
+            del n
             return p
 
         sprayTrack = Sequence()
@@ -1119,8 +1129,13 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
 
         def getSprayStartPos(coil = coil, toon = toon):
             toon.update(0)
-            p = coil.getPos(render)
-            p.setZ(5) #Temp "fix," this doesn't like to cooperate
+            n = hidden.attachNewNode('pointBehindSprayProp')
+            n.reparentTo(toon)
+            n.setPos(coil.getPos(toon))
+            n.setZ(5)
+            p = n.getPos(render)
+            n.removeNode()
+            del n
             return p
 
 

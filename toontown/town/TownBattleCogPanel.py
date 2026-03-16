@@ -521,6 +521,8 @@ class TownBattleCogPanel(DirectFrame):
                 self.enraged = status.find('**/worker_management_icon')
             elif self.cog.dna.name == 'wtapper':
                 self.enraged = status.find('**/chain_linked_icon')
+            elif self.cog.dna.name == 'liquid':
+                self.enraged = status.find('**/bewitched_icon')
             else:
                 self.enraged = status.find('**/rage_mode_icon')
             self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
@@ -649,7 +651,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isInsured or self.cog.isInsured2:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/insured_icon')
-            self.insuredRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getInsuranceRounds() - 1),
+            self.insuredRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getInsuranceRounds()),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -.5),
@@ -679,7 +681,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isContracted or self.cog.isContracted2 or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/insured_icon')
-            self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds() - 1),
+            self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds()),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -.5),
@@ -841,7 +843,7 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.suedRoundsText.show()
-            self.sued2RoundsText = DirectLabel(parent=self.sued2, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
+            self.sued2RoundsText = DirectLabel(parent=self.sued, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
                                                text_fg=(1, 0, 0, 1),
                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                pos=(0.25, 0, -.5),

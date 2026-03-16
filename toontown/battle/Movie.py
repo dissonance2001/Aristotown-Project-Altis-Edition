@@ -331,43 +331,38 @@ class Movie(DirectObject.DirectObject):
             MovieUtil.shotDirection = 'left'
         else:
             MovieUtil.shotDirection = 'right'
+        # for toon in self.battle.activeToons:
+        #     if toon.getCooldownRounds() <= 1:
+        #         ptrack.append(Func(toon.makeUnCooldown))
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
-            s.makeUnFreshlyZapped()
-            if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
-                s.makeExtraAttacks(s.getExtraAttacks() + 1)
-            if s.getLuredRounds() == 1:
-                s.makeUnLured()
-            if not s.getLuredRounds() <= 0:
-                s.addLuredRounds(s.getLuredRounds() - 1)
-            if s.getInsuranceRounds() == 1:
-                s.removeInsured()
-            if not s.getInsuranceRounds() <= 0:
-                s.addInsuranceRounds(s.getInsuranceRounds() - 1)
-            if s.getContractedRounds() == 1:
-                s.removeContracted()
-            if not s.getContractedRounds() <= 0:
-                s.addContractedRounds(s.getContractedRounds() - 1)
+            ptrack.append(Func(s.makeUnFreshlyZapped))
             if s.getOilRainRounds() == 1:
-                s.removeOilRain()
+                ptrack.append(Func(s.removeOilRain))
             if not s.getOilRainRounds() <= 0:
-                s.addOilRainRounds(s.getOilRainRounds() - 1)
-            if not s.getExplosiveCondition() <= 0:
-                s.makeExplosive(s.getExplosiveCondition() - 1)
-            if not s.getSleepyCondition() <= 0:
-                s.makeSleepy(s.getSleepyCondition() - 1)
-            if not s.getSoakRounds() <= 0:
-                s.makeSoaked(s.getSoakRounds() - 1)
-            if not s.getMarkRounds() <= 0:
-                s.makeMarked(s.getMarkRounds() - 1)
-            if not s.getSuedRounds() <= 0:
-                s.makeSued(s.getSuedRounds() - 1)
+                ptrack.append(Func(s.addOilRainRounds, s.getOilRainRounds() - 1))
             if not s.getEnrageCounter() <= 1:
-                s.makeAngry(s.getEnrageCounter() - 1)
+                ptrack.append(Func(s.makeAngry, s.getEnrageCounter() - 1))
+            if s.getEnrageCounter() <= 1 and s.dna.name == 'liquid':
+                ptrack.append(Func(s.makeUnAngry))
+            if s.getLuredRounds() == 1:
+                ptrack.append(Func(s.makeUnLured))
+            if not s.getLuredRounds() <= 0:
+                ptrack.append(Func(s.addLuredRounds, s.getLuredRounds() - 1))
+            if not s.getExplosiveCondition() <= 0:
+                ptrack.append(Func(s.makeExplosive, s.getExplosiveCondition() - 1))
+            if not s.getSleepyCondition() <= 0:
+                ptrack.append(Func(s.makeSleepy, s.getSleepyCondition() - 1))
+            if not s.getSoakRounds() <= 0:
+                ptrack.append(Func(s.makeSoaked, s.getSoakRounds() - 1))
+            if not s.getMarkRounds() <= 0:
+                ptrack.append(Func(s.makeMarked, s.getMarkRounds() - 1))
+            if not s.getSuedRounds() <= 0:
+                ptrack.append(Func(s.makeSued, s.getSuedRounds() - 1))
             if s.isDazed:
-                s.makeUnDazed()
+                ptrack.append(Func(s.makeUnDazed))
             if s.dna.name == 'ambass':
-                s.makeUnShielding()
+                ptrack.append(Func(s.makeUnShielding))
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
             ptrack.append(tattacks)
@@ -381,102 +376,48 @@ class Movie(DirectObject.DirectObject):
             for a in self.suitAttackDicts:
                 battle = a['battle']
                 ival, camIval = MovieSuitAttacks.doSuitAttack(a)
-                for s in battle.activeSuits:
-                    if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
-                        ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
+        ptrack.append(Func(callback))
+        for s in self.battle.activeSuits:
+            s.battleTrapIsFresh = 0
+            s.makeUnFreshlyZapped()
+            ptrack.append(Func(s.checkInsuranceCountdown))
+            ptrack.append(Func(s.checkContractedCountdown))
+            if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
+                ptrack.append(Func(s.makeExtraAttacks, s.getExtraAttacks() + 1))
+        for toon in self.battle.activeToons:
+            ptrack.append(Func(toon.checkCooldownRoundCountdown))
+            ptrack.append(Func(toon.checkInkDrainRoundCountdown))
+            ptrack.append(Func(toon.checkBombedRoundCountdown))
+            ptrack.append(Func(toon.checkGroupDamageDownRoundCountdown))
+            ptrack.append(Func(toon.checkGagBoostRoundCountdown))
+            ptrack.append(Func(toon.checkNoDodgeRoundCountdown))
+            ptrack.append(Func(toon.checkCollectCallRoundCountdown))
+            ptrack.append(Func(toon.checkVulnerabilityRoundCountdown))
+            ptrack.append(Func(toon.checkCheerRoundCountdown))
+            ptrack.append(Func(toon.checkSnappedRoundCountdown))
+            ptrack.append(Func(toon.checkWindedRoundCountdown))
+            ptrack.append(Func(toon.checkEncoreRoundCountdown))
+            ptrack.append(Func(toon.checkDamageUpRoundCountdown))
+            ptrack.append(Func(toon.checkDamageDownRoundCountdown))
+            ptrack.append(Func(toon.checkConfusedRoundCountdown))
+            ptrack.append(Func(toon.checkHiddenRoundCountdown))
+            ptrack.append(Func(toon.checkMarkedWoodRoundCountdown))
+            ptrack.append(Func(toon.checkDamageOvertimeRoundCountdown))
+            ptrack.append(Func(toon.checkLiquidatedRoundCountdown))
+        for s in self.battle.activeSuits:
+            if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+                ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
+                                                                               '',
+                                                                               CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
+            else:
+                if s.isSleepy:
+                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsoluteSpecial,
+                                                                             '. . . Z Z Z . . .',
+                                                                             CFThought), Func(s.updateHealthBar, 0, forceUpdate=1)))
+                else:
+                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
-                    else:
-                        if s.isSleepy:
-                            ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsoluteSpecial,
-                                                                                           '. . . Z Z Z . . .',
-                                                                                       CFThought), Func(s.updateHealthBar, 0, forceUpdate=1)))
-                        else:
-                            ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
-                                                                                     '',
-                                                                                     CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
-        ptrack.append(Func(callback))
-        for toon in self.battle.activeToons:
-            if toon.getCooldownRounds() == 1:
-                toon.makeUnCooldown()
-            if not toon.getCooldownRounds() <= 0:
-                toon.addCooldownRounds(toon.getCooldownRounds() - 1)
-            if toon.getBurnedRounds() == 1:
-                toon.makeUnBurned()
-            if not toon.getBurnedRounds() <= 0:
-                toon.addBurnedRounds(toon.getBurnedRounds() - 1)
-            if toon.getLiquidatedRounds() == 1:
-                toon.makeUnLiquidated()
-            if not toon.getLiquidatedRounds() <= 0:
-                toon.addLiquidatedRounds(toon.getLiquidatedRounds() - 1)
-            if toon.getDamageOvertimeRounds() == 1:
-                toon.makeUnDamageOvertime()
-            if not toon.getDamageOvertimeRounds() <= 0:
-                toon.addDamageOvertimeRounds(toon.getDamageOvertimeRounds() - 1)
-            if toon.getMarkedWoodRounds() == 1:
-                toon.makeUnMarkedWood()
-            if not toon.getMarkedWoodRounds() <= 0:
-                toon.addMarkedWoodRounds(toon.getMarkedWoodRounds() - 1)
-            if toon.getHiddenRounds() == 1:
-                toon.makeUnHidden()
-            if not toon.getHiddenRounds() <= 0:
-                toon.addHiddenRounds(toon.getHiddenRounds() - 1)
-            if toon.getConfusedRounds() == 1:
-                toon.makeUnConfused()
-            if not toon.getConfusedRounds() <= 0:
-                toon.addConfusedRounds(toon.getConfusedRounds() - 1)
-            if toon.getDamageUpRounds() == 1:
-                toon.makeUnDamageUp()
-            if not toon.getDamageUpRounds() <= 0:
-                toon.addDamageUpRounds(toon.getDamageUpRounds() - 1)
-            if toon.getDamageDownRounds() == 1:
-                toon.makeUnDamageDown()
-            if not toon.getDamageDownRounds() <= 0:
-                toon.addDamageDownRounds(toon.getDamageDownRounds() - 1)
-            if toon.getEncoreRounds() == 1:
-                toon.makeUnEncore()
-            if not toon.getEncoreRounds() <= 0:
-                toon.addEncoreRounds(toon.getEncoreRounds() - 1)
-            if toon.getWindedRounds() == 1:
-                toon.makeUnWinded()
-            if not toon.getWindedRounds() <= 0:
-                toon.addWindedRounds(toon.getWindedRounds() - 1)
-            if toon.getSnappedRounds() == 1:
-                toon.makeUnSnapped()
-            if not toon.getSnappedRounds() <= 0:
-                toon.addSnappedRounds(toon.getSnappedRounds() - 1)
-            if toon.getCheerRounds() == 1:
-                toon.makeUnCheer()
-            if not toon.getCheerRounds() <= 0:
-                toon.addCheerRounds(toon.getCheerRounds() - 1)
-            if toon.getVulnerabilityRounds() == 1:
-                toon.makeUnVulnerable()
-            if not toon.getVulnerabilityRounds() <= 0:
-                toon.addVulnerabilityRounds(toon.getVulnerabilityRounds() - 1)
-            if toon.getCollectCallRounds() == 1:
-                toon.makeUnCollectCalled()
-            if not toon.getCollectCallRounds() <= 0:
-                toon.addCollectCallRounds(toon.getCollectCallRounds() - 1)
-            if toon.getNoDodgeRounds() == 1:
-                toon.makeUnNoDodge()
-            if not toon.getNoDodgeRounds() <= 0:
-                toon.addNoDodgeRounds(toon.getNoDodgeRounds() - 1)
-            if toon.getGagBoostRounds() == 1:
-                toon.makeUnGagBoost()
-            if not toon.getGagBoostRounds() <= 0:
-                toon.addGagBoostRounds(toon.getGagBoostRounds() - 1)
-            if toon.getGroupDamageDownRounds() == 1:
-                toon.makeUnGroupDamageDown()
-            if not toon.getGroupDamageDownRounds() <= 0:
-                toon.addGroupDamageDownRounds(toon.getGroupDamageDownRounds() - 1)
-            if toon.getBombedRounds() == 1:
-                toon.makeUnBombed()
-            if not toon.getBombedRounds() <= 0:
-                toon.addBombedRounds(toon.getBombedRounds() - 1)
-            if toon.getInkDrainRounds() == 1:
-                toon.makeUnInkDrain()
-            if not toon.getInkDrainRounds() <= 0:
-                toon.addInkDrainRounds(toon.getInkDrainRounds() - 1)
         self._deleteTrack()
         self.track = Sequence(ptrack, name='movie-track-%d' % self.battle.doId)
         if self.battle.localToonPendingOrActive():

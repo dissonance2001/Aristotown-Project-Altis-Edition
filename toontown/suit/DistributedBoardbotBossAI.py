@@ -280,12 +280,10 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
     def enterIntroduction(self):
        # self.calcAndSetBattleDifficulty()
         DistributedMinibossAI.DistributedMinibossAI.enterIntroduction(self)
-        self.__makeDoobers()
         self.b_setBossDamage(0, 0, 0)
 
     def exitIntroduction(self):
         DistributedMinibossAI.DistributedMinibossAI.exitIntroduction(self)
-        self.__resetDoobers()
 
     def enterRollToBattleTwo(self):
         self.divideToons()

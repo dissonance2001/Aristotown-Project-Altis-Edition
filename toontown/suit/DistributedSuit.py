@@ -1146,7 +1146,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         for thingIndex in xrange(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-                suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
+                if not self.dna.name == 'cbutcher':
+                    suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
         if not self.isSkeleton:
             hands = self.find('**/hands')
             suitInterval.append(Func(hands.setColorScale, self.handColor))
@@ -1455,7 +1456,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                    Func(self.showHpTextNew, x, text="SYPHONED!", colorCode=1),
                                                    Func(self.setHealthForMe, -x),
                                                    Func(self.updateHealthBar, 0)),
-                               Func(self.setNeutralAnimationDrop), Func(self.checkCogHP, battle)).start()
+                               Func(self.setNeutralAnimationDrop)).start()
             self.healInterval = Sequence(Parallel(Func(racketeer.showHpTextNew, +x, text="+5% Damage!", colorCode=1), Func(racketeer.makeDamageUp), Func(racketeer.checkDamageUp, + 5),
                                                   Func(racketeer.setHealthForMe, +x),
                                                   Func(racketeer.updateHealthBar, 0)),
@@ -1477,7 +1478,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval = None
         x = int(self.currHP)
         if self.currHP > 0 and not self.isDead:
-            self.damageInterval = Sequence(ActorInterval(self, 'soak', duration = 2.0), Sequence(Parallel(MovieUtil.spawnHeadExplosion(self, battle), Func(self.showHpTextNew, -self.currHP, text="TERMINATED!", colorCode=4),
+            self.damageInterval = Sequence(ActorInterval(self, 'soak', duration = 2.0), Sequence(Parallel( Func(self.makeUnTarget), MovieUtil.spawnHeadExplosion(self, battle), Func(self.showHpTextNew, -self.currHP, text="TERMINATED!", colorCode=4),
                                             Func(self.setHealthForMe, - self.currHP),
                                Func(self.updateHealthBar, 0)),
                                            Func(self.setChatAbsolute, "Ouch.", CFSpeech | CFTimeout), Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(self, battle),
@@ -1503,7 +1504,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0 and not self.getManager() and not self.isDead:
+        if self.currHP > 0 and not self.getManager() and not self.isDead and not self.isContracted and not self.isContracted2 and not self.isOverpressured:
             self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0))).start()
@@ -1723,7 +1724,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.setCollectCall, num)).start()
+        self.damageInterval = Parallel(Func(self.setCollectCall, num), Func(self.makeCollectCall, num)).start()
 
     def checkDesperation(self, num):
         if self.damageInterval:
@@ -1873,13 +1874,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
                                                         Func(self.showHpTextNew, -x, text="AFTERSHOCK!", colorCode=3),
                                                         Func(self.setHealthForMe, -x),
-                                                        Func(self.updateHealthBar, 0)),
+                                                        Func(self.updateHealthBar, 0)), Func(self.makeUnZapped),
                                                Func(self.setNeutralAnimation)).start()
             else:
                 self.damageInterval = Sequence(Parallel(ActorInterval(self, 'small-zap'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
                                                         Func(self.showHpTextNew, -self.getZapCondition(), text="AFTERSHOCK!", colorCode=3),
-                                                        Func(self.setHealthForMe, -self.getZapCondition()),
-                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)
+                                                        Func(self.setHealthForMe, -self.getZapCondition()), Func(self.makeUnZapped),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
                                               ).start()
 
     def checkZapDamage2(self, suit, battle):
@@ -2261,6 +2262,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.healInterval.finish()
             self.healInterval = None
         self.healInterval = Parallel(Func(self.showHpTextNew, 1000, text="+25% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 25), Func(self.setHealthForMe, 1000), Func(self.updateHealthBar, 0)).start()
+
+    def checkInsuranceCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getInsuranceRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.removeInsured))
+        elif self.getInsuranceRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addInsuranceRounds, self.getInsuranceRounds() - 1)).start()
+        else:
+            pass
+
+    def checkContractedCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getContractedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.removeContracted))
+        elif self.getContractedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addContractedRounds, self.getContractedRounds() - 1)).start()
+        else:
+            pass
 
     def setNeutralAnimationHead(self):
         if self.getDizzy() or self.isSleepy or self.isSued:

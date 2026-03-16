@@ -587,6 +587,8 @@ def doSuitAttack(attack):
     elif name == 'LiquidatorTornado':
         suitTrack = MovieBoardbotLitigationCheats.doTornado(attack)
         # tollmaster
+    elif name == 'TollmasterRushHour':
+        suitTrack = MovieBoardbotLitigationCheats.doRushHour(attack)
     elif name == 'TollmasterMandatoryToll':
         suitTrack = MovieBoardbotLitigationCheats.doMandatoryToll(attack)
     elif name == 'TollmasterMandatoryTollFinal':
@@ -722,7 +724,7 @@ def doSuitAttack(attack):
     elif name == 'DividendTotalMarketMeltdown':
         suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
     elif name == 'DividendTotalMarketMeltdown2':
-        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown2(attack)
     elif name == 'DividendPeckingOrder':
         suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
     elif name == 'DividendPeckingOrderZapped':
@@ -825,6 +827,8 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 4)
     elif name == 'SafetyPromotion5':
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 5)
+    elif name == 'SafetySoakRetaliation':
+        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
         # union buster
     elif name == 'UnionBusterUnionDues':
         suitTrack = MovieSellbotLitigationCheats.doMandatoryOvertime(attack)
@@ -861,8 +865,10 @@ def doSuitAttack(attack):
     elif name == 'UnionBusterContractEnforcement2':
         suitTrack = MovieSellbotLitigationCheats.doContractEnforcement(attack, 0, 2, 4)
         # racketeer
-    elif name == 'RacketeerOverextendedLeverage':
+    elif name == 'RacketeerOverextendedLeverage2':
         suitTrack = MovieSellbotLitigationCheats.doOverextendedLeverage(attack)
+    elif name == 'RacketeerOverextendedLeverage':
+        suitTrack = MovieSellbotLitigationCheats.doProtectedRacket(attack)
     elif name == 'RacketeerProfiteering':
         suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 1)
     elif name == 'RacketeerProfiteering2':
@@ -876,7 +882,7 @@ def doSuitAttack(attack):
     elif name == 'RacketeerExtortion':
         suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
-        suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
+        suitTrack = MovieSellbotLitigationCheats.doFloodTheMarket(attack)
     elif name == 'RacketeerCompensation':
         suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
     elif name == 'RacketeerHustling': # Pressurizer Target Check
@@ -1542,6 +1548,8 @@ def doSuitAttack(attack):
         elif name == 'TollmasterResonanceTax3':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax4':
+            resetSuitTrack = Sequence(suitTrack2)
+        elif name == 'RacketeerOverextendedLeverage':
             resetSuitTrack = Sequence(suitTrack2)
         elif name == 'TollmasterResonanceTax5':
             resetSuitTrack = Sequence(suitTrack2)
@@ -3462,7 +3470,7 @@ def doEmbezzle(attack):
     bill = globalPropPool.getProp('10dollar')
     suitTrack = getSuitTrack(attack)
     billPosPoints = [Point3(-0.13024602026049337, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, appearDelay=0.6, remainDelay=0.55, scaleUpPoint=Point3(2.115, 2.115, 2.115))
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(2.115, 2.115, 2.115))
     partTrack = Parallel()
     for i in range(10):
         dollar = MovieUtil.copyProp(BattleParticles.getParticle('dollar-sign'))
@@ -5103,7 +5111,7 @@ def doPickPocket(attack):
     suitTrack = getSuitTrack(attack)
     suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.13024602026049337, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.41, 1.41, 1.41))
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(1.41, 1.41, 1.41))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
@@ -5121,7 +5129,7 @@ def doPennyPinch(attack):
     bill = loader.loadModel('phase_3.5/models/props/cc_m_prp_gen_coin_' + random.choice(coinTypes) + '.bam')
     suitTrack = getSuitTrack(attack)
     billPosPoints = [Point3(-0.3039073806078143, 0.30390738060781786, -0.390738060781473), VBase3(-91.17221418234442, -50.79594790159189, 0)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55, scaleUpPoint=Point3(1.25, 1.25, 1.25))
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(1.25, 1.25, 1.25))
     billPropTrack.append(Func(bill.removeNode))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)

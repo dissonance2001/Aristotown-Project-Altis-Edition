@@ -1153,6 +1153,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.evWalls.unstash()
         self.setPosHpr(*ToontownGlobals.CashbotBossBattleOnePosHpr)
         self.show()
+        self.battleThreeMusic.stop()
         NametagGlobals.setWant2dNametags(True)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)

@@ -585,7 +585,8 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
+            if not suit.dna.name == 'cbutcher':
+                suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
     if not suit.isSkeleton:
         hands = suit.find('**/hands')
         handTint = Vec4(
@@ -921,7 +922,7 @@ def doZapMovie(attack):
     suitTrack = Parallel()
     selfDamageTrack = Sequence(Func(theSuit.checkZapDamage, battle), Func(theSuit.makeUnZapped), Wait(5.0))
     for suit in battle.activeSuits:
-        suitTrack.append(Parallel(Func(suit.checkZapDamage, battle), Func(suit.makeUnZapped), Wait(5.0)))
+        suitTrack.append(Parallel(Func(suit.checkZapDamage, battle), Wait(5.0)))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=theSuit))
     return Parallel(soundTrack, suitTrack)
 
@@ -989,12 +990,7 @@ def doCourtCalculations(attack):
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
-    if suit.isDesperation:
-        suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
-    else:
-        suitSpeechTrack = Func(suit.setChatAbsolute,
-                               "Calculating costs of litigation fees... Price index raised to %s." %
-                              int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+    suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),

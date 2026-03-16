@@ -316,14 +316,15 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
     toon = target['toon']
     battle = attack['battle']
     suit = attack['suit']
-    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    name = attack['name']
+    if suit:
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
     toonPos = toon.getPos(battle)
     indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
     indicator.setHpr(0, -90, 0)
     indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    animTrack.append(Func(toon.headsUp, battle, suitPos))
     indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
                                LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
@@ -334,14 +335,13 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
                                Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
                                Func(indicator.removeNode))
     if dmg > 0:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
         origPos, origHpr = battle.getActorPosHpr(toon)
         animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
-        origPos, origHpr = battle.getActorPosHpr(toon)
-        animTrack.append(Func(toon.setHpr, battle, origHpr))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
@@ -685,7 +685,7 @@ def doOverheat(attack):
             colorTrack.append(resetColor(legsParts))
             colorTrack.append(Func(battle.movie.clearRestoreColor))
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 3)))
+            notifyTracks.append(Parallel(Func(toon.makeBurned), Func(toon.addBurnedRounds, 4)))
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)
             flecksTracks.append(flecksTrack)
@@ -974,7 +974,7 @@ def doPuzzling(attack):
                           CFSpeech | CFTimeout))
     toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, random.choice(("Your wish is my command.", "As you desire, Mr. President.", "As you wish.")),
                           CFSpeech | CFTimeout), Wait(3.0))
-    toonTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 1)))
+    toonTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
     return Parallel(suitTrack, toonTrack)
 
 def doSleepyOvercharge(attack):
@@ -1335,7 +1335,7 @@ def doDriver(attack):
         dmg = t['hp']
         if dmg > 0:
             ballPropTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
-            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
         numBalls = 5  # Change this to any number you want
         startDelay = 2.0  # When first ball appears
         intervalDelay = 0.075  # Time between each ball
@@ -1395,7 +1395,7 @@ def doDriverOLD(attack):
         dmg = t['hp']
         if dmg > 0:
             ballPropTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
-            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
         ball = loader.loadModel('phase_6/models/golf/golf_ball')
         ball.setColorScale(0.75, 0.75, 0.75, 0.5)
         ball.setTransparency(1)

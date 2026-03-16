@@ -974,4 +974,6 @@ ValidStatusConditions = (
     'brokenconnnectionCooldown',
     'bookkeeperHit',
     'alreadyGovDeath',
+    'rushHour',
+    'rushHourcalculator',
 )

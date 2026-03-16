@@ -263,6 +263,15 @@ class BattleBase:
         (Point3(12, 5, 0), 170),
         (Point3(-12, 5, 0), 179),
         (Point3(-16, 5, 0), 170))
+    suitPendingPointsSilhouettes2 = (
+        (Point3(0, 0, 0), 190),
+        (Point3(-4, 0, 0), 179),
+        (Point3(4, 0, 0), 170),
+        (Point3(8, 0, 0), 160),
+        (Point3(-8, 0, 0), 165),
+        (Point3(12, 0, 0), 170),
+        (Point3(-12, 0, 0), 179),
+        (Point3(-16, 0, 0), 170))
     toonPoints = (((Point3(0, -9, 0), 0),),
                   ((Point3(1.5, -9.5, 0), 5), (Point3(-1.5, -9.5, 0), -5)),
                   ((Point3(3, -9.75, 0), 5), (Point3(0, -9, 0), 0), (Point3(-3, -9.75, 0), -5)),

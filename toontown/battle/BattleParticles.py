@@ -98,6 +98,12 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('fingerwag.ptf')
     elif name == 'FiredFlame':
         return loadParticleFile('firedFlame.ptf')
+    elif name == 'FiredFlame3':
+        return loadParticleFile('firedFlameEffect2.ptf')
+    elif name == 'wet2':
+        return loadParticleFile('wet2.ptf')
+    elif name == 'oil':
+        return loadParticleFile('oil.ptf')
     elif name == 'FiredFlame2':
         return loadParticleFile('firedFlame2.ptf')
     elif name == 'FreezeAssets':
