@@ -2458,10 +2458,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)),
                      Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
+            self.setNeutralAnimationHead()
         elif self.getDizzy():
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'lured'),
                      Func(self.setPlayRate, self.getPlayRate2(), 'lured2'), Func(self.loop, 'lured')
                      ).start()
+            self.setNeutralAnimationHead()
         elif self.dna.name == 'clerk' and (self.getActualLevel() == 24 or self.getActualLevel() == 25):
             Sequence(Func(self.setPlayRate, self.getPlayRate2(), 'pace'), Func(self.loop, 'pace')
                      ).start()

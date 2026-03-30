@@ -6639,6 +6639,39 @@ class Suit(Avatar.Avatar):
 
     def makeSoaked(self, num):
         self.makeUnSoaked()
+        track = getattr(self, 'liquidTrack', None)
+        self.liquidTrack = None
+        if track:
+            try:
+                track.pause()
+            except:
+                pass
+            try:
+                track.finish()
+            except:
+                pass
+
+        effect = getattr(self, 'liquidEffect', None)
+        self.liquidEffect = None
+        if effect:
+            try:
+                effect.disable()
+            except:
+                pass
+            try:
+                if hasattr(effect, 'cleanup') and hasattr(effect, 'renderParent'):
+                    effect.cleanup()
+            except:
+                pass
+            try:
+                effect.detachNode()
+            except:
+                pass
+            try:
+                if not effect.isEmpty():
+                    effect.removeNode()
+            except:
+                pass
 
         self.actuallySoaked = 1
         self.isSoaked = num
@@ -8164,6 +8197,12 @@ class Suit(Avatar.Avatar):
     def makeInsured(self):
         self.isInsured = 1
         effectColor = Vec4(0, 1, 0.137, 1.00)
+        if hasattr(self, "cheerTrack") and self.cheerTrack:
+            self.cheerTrack.pause()
+            if self.cheerEffect:
+                self.cheerEffect.disable()
+                if hasattr(self.cheerEffect, 'renderParent'):
+                    self.cheerEffect.cleanup()
         self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
         self.cheerEffect.setColor(effectColor)
 
@@ -8187,6 +8226,12 @@ class Suit(Avatar.Avatar):
 
     def makeInsured2(self):
         self.isInsured2 = 1
+        if hasattr(self, "cheerTrack") and self.cheerTrack:
+            self.cheerTrack.pause()
+            if self.cheerEffect:
+                self.cheerEffect.disable()
+                if hasattr(self.cheerEffect, 'renderParent'):
+                    self.cheerEffect.cleanup()
         effectColor = Vec4(0, 1, 0.137, 1.00)
         self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
         self.cheerEffect.setColor(effectColor)
@@ -8240,6 +8285,36 @@ class Suit(Avatar.Avatar):
 
     def makeOilRain(self):
         self.isOilRain = 1
+        if hasattr(self, "oilTrack") and self.oilTrack:
+            try:
+                self.oilTrack.pause()
+            except:
+                pass
+            try:
+                self.oilTrack.finish()
+            except:
+                pass
+            self.oilTrack = None
+
+        if hasattr(self, "oilEffect") and self.oilEffect:
+            effect = self.oilEffect
+            self.oilEffect = None
+
+            try:
+                effect.disable()
+            except:
+                pass
+
+            try:
+                if hasattr(effect, 'renderParent'):
+                    effect.cleanup()
+            except:
+                pass
+
+            try:
+                effect.detachNode()
+            except:
+                pass
         self.oilEffect = BattleParticles.createParticleEffect(file='oil')
 
         self.oilEffect.reparentTo(self)
@@ -8256,6 +8331,12 @@ class Suit(Avatar.Avatar):
 
     def makeContracted(self):
         self.isContracted = 1
+        if hasattr(self, "cheerTrack2") and self.cheerTrack2:
+            self.cheerTrack2.pause()
+            if self.cheerEffect2:
+                self.cheerEffect2.disable()
+                if hasattr(self.cheerEffect2, 'renderParent'):
+                    self.cheerEffect2.cleanup()
         effectColor = Vec4(0, 1, 0.137, 1.00)
         self.cheerEffect2 = BattleParticles.createParticleEffect(file='pixieRise')
         self.cheerEffect2.setColor(effectColor)
@@ -8270,6 +8351,12 @@ class Suit(Avatar.Avatar):
 
     def makeContracted2(self):
         self.isContracted2 = 1
+        if hasattr(self, "cheerTrack2") and self.cheerTrack2:
+            self.cheerTrack2.pause()
+            if self.cheerEffect2:
+                self.cheerEffect2.disable()
+                if hasattr(self.cheerEffect2, 'renderParent'):
+                    self.cheerEffect2.cleanup()
         effectColor = Vec4(0, 1, 0.137, 1.00)
         self.cheerEffect2 = BattleParticles.createParticleEffect(file='pixieRise')
         self.cheerEffect2.setColor(effectColor)

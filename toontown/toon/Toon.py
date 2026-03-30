@@ -695,6 +695,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeBurned(self):
         self.isBurned = 1
+        if hasattr(self, "flameTrack") and self.flameTrack:
+            self.flameTrack.pause()
+            if self.flameEffect:
+                self.flameEffect.disable()
+                if hasattr(self.flameEffect, 'renderParent'):
+                    self.flameEffect.cleanup()
         self.flameEffect = BattleParticles.createParticleEffect('FiredFlame3')
         BattleParticles.setEffectTexture(self.flameEffect, 'fire')
 
@@ -723,6 +729,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeLiquidated(self):
         self.liquidated = 1
+        if hasattr(self, "liquidTrack") and self.liquidTrack:
+            self.liquidTrack.pause()
+            if self.liquidEffect:
+                self.liquidEffect.disable()
+                if hasattr(self.liquidEffect, 'renderParent'):
+                    self.liquidEffect.cleanup()
         effectColor = Vec4(0.00, 1.00, 1.00, 1.00)
         self.liquidEffect = BattleParticles.createParticleEffect(file='wet')
         BattleParticles.setEffectTexture(self.liquidEffect, 'raindrop', color=effectColor)
@@ -764,6 +776,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeGagBoost(self, level):
         self.gagBoost = level
+        if hasattr(self, 'arrowAuraTrack') and self.arrowAuraTrack:
+            self.arrowAuraTrack.pause()
+            for arrow in getattr(self.arrowAuraTrack, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrack = None
         self.arrowAuraTrack = self.makeLoopingArrowAura()
         self.arrowAuraTrack.loop()
 
@@ -790,6 +808,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeCooldown(self):
         self.cooldown = 1
+        if hasattr(self, "cooldownTrack") and self.cooldownTrack:
+            self.cooldownTrack.pause()
+            if self.cooldownEffect:
+                self.cooldownEffect.disable()
+                if hasattr(self.cooldownEffect, 'renderParent'):
+                    self.cooldownEffect.cleanup()
         effectColor = Vec4(1.00, 0.00, 0.00, 1.00)
         self.cooldownEffect = BattleParticles.createParticleEffect(file='pixieArrowAura')
         self.cooldownEffect.setColor(effectColor)
@@ -1139,6 +1163,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeCheer(self):
         self.cheer = 1
+        self.cleanupCheerHands()
         effectColor = Vec4(0, 1, 0.137, 1.00)
         self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
         self.cheerEffect.setColor(effectColor)
@@ -1170,6 +1195,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeDamageUp(self):
         self.damageUp = 1
+        if hasattr(self, 'arrowAuraTrackUp') and self.arrowAuraTrackUp:
+            self.arrowAuraTrackUp.pause()
+            for arrow in getattr(self.arrowAuraTrackUp, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackUp = None
         self.arrowAuraTrackUp = self.makeLoopingArrowAura()
         self.arrowAuraTrackUp.loop()
 
@@ -1185,6 +1216,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeDamageUpGovernaught(self):
         self.governaughtDamageUp = 1
+        if hasattr(self, 'arrowAuraTrackGov') and self.arrowAuraTrackGov:
+            self.arrowAuraTrackGov.pause()
+            for arrow in getattr(self.arrowAuraTrackGov, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackGov = None
         self.arrowAuraTrackGov = self.makeLoopingArrowAura()
         self.arrowAuraTrackGov.loop()
 
@@ -1199,6 +1236,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeRaisedAnte(self):
         self.raisedAnte = 1
+        if hasattr(self, 'arrowAuraTrackAnte') and self.arrowAuraTrackAnte:
+            self.arrowAuraTrackAnte.pause()
+            for arrow in getattr(self.arrowAuraTrackAnte, 'arrows', []):
+                if not arrow.isEmpty():
+                    arrow.removeNode()
+            self.arrowAuraTrackAnte = None
         self.arrowAuraTrackAnte = self.makeLoopingArrowAura()
         self.arrowAuraTrackAnte.loop()
 
@@ -1225,6 +1268,14 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeDamageDown(self):
         self.damageDown = 1
+        if hasattr(self, 'arrowAuraTrackDown') and self.arrowAuraTrackDown:
+            self.arrowAuraTrackDown.pause()
+
+            for fallingArrow in getattr(self.arrowAuraTrackDown, 'fallingArrowProps', []):
+                if fallingArrow and not fallingArrow.isEmpty():
+                    fallingArrow.removeNode()
+
+            self.arrowAuraTrackDown = None
         self.arrowAuraTrackDown = self.makeLoopingArrowAuraDown()
         self.arrowAuraTrackDown.loop()
 
