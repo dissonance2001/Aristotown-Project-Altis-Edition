@@ -81,7 +81,7 @@ AllSuits = (('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker
             ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('headless-death', 'headless-death'),  ('magic1', 'magic1'), ('magic2', 'magic2'), ('magic3', 'magic3'))
 AllSuitsMinigame = (('victory', 'victory'), ('flail', 'flailing'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),  ('tug-o-war', 'tug-o-war'),
                     ('slip-backward', 'slip-backward'), ('lose3', 'wrecked'), ('slip-forward', 'slip-forward'))
-AllSuitsTutorialBattle = (('lose', 'lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
+AllSuitsTutorialBattle = (('lose', 'lose'), ('skeleton-lose', 'skeleton-lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
                           ('squirt-small-react', 'squirt-small'))
 AllSuitsBattle = (('shuffle-left', 'shuffle-left'),  ('finger-wag', 'finger-wag'), ('shuffle-right', 'shuffle-right'), ('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('speak', 'speak'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
                   ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('rolled', 'rolled'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
@@ -6685,7 +6685,8 @@ class Suit(Avatar.Avatar):
         self.liquidEffect.setPos(0, 0, self.height - 2.5)
 
         self.liquidTrack = ParticleInterval(self.liquidEffect, self, duration=5)
-        self.liquidTrack.loop()
+        if self.currHP > 0:
+            self.liquidTrack.loop()
 
     def makeUnSoaked(self, elite=False):
         self.actuallySoaked = 0
@@ -8211,8 +8212,8 @@ class Suit(Avatar.Avatar):
         # self.cooldownEffect.setHpr(180, 0, 0)
 
         self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
-
-        self.cheerTrack.loop()
+        if self.currHP > 0:
+            self.cheerTrack.loop()
 
     def removeInsured(self):
         self.isInsured = 0
@@ -8241,8 +8242,8 @@ class Suit(Avatar.Avatar):
         # self.cooldownEffect.setHpr(180, 0, 0)
 
         self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
-
-        self.cheerTrack.loop()
+        if self.currHP > 0:
+            self.cheerTrack.loop()
 
     def addInsuranceRounds(self, num):
         self.insuranceRounds = num
@@ -8321,7 +8322,8 @@ class Suit(Avatar.Avatar):
         self.oilEffect.setPos(0, 0, self.height - 2.5)
 
         self.oilTrack = ParticleInterval(self.oilEffect, self, duration=5)
-        self.oilTrack.loop()
+        if self.currHP > 0:
+            self.oilTrack.loop()
 
     def addOilRainRounds(self, num):
         self.oilRainRounds = num
@@ -8346,8 +8348,8 @@ class Suit(Avatar.Avatar):
         #self.cooldownEffect.setHpr(180, 0, 0)
 
         self.cheerTrack2 = Sequence(ParticleInterval(self.cheerEffect2, self, duration=5))
-
-        self.cheerTrack2.loop()
+        if self.currHP > 0:
+            self.cheerTrack2.loop()
 
     def makeContracted2(self):
         self.isContracted2 = 1
@@ -8366,8 +8368,8 @@ class Suit(Avatar.Avatar):
         #self.cooldownEffect.setHpr(180, 0, 0)
 
         self.cheerTrack2 = Sequence(ParticleInterval(self.cheerEffect2, self, duration=5))
-
-        self.cheerTrack2.loop()
+        if self.currHP > 0:
+            self.cheerTrack2.loop()
 
     def removeContracted(self):
         self.isContracted = 0
@@ -9594,3 +9596,161 @@ class Suit(Avatar.Avatar):
         self.Vault.setScale(.7)
         self.Vault.setH(180)
         self.isHud = True
+
+    def cleanupAllBattleEffects(suit):
+        # -------------------------
+        # suit-owned intervals
+        # -------------------------
+        intervalAttrs = [
+            'mtrack',
+            'splashInterval',
+            'headInterval',
+            'neutralInterval',
+            'deathInterval',
+            'headInterval2',
+            'healInterval',
+            'absorbInterval',
+            'playByPlayInterval',
+            'damageInterval',
+            'hpTextInterval',
+            'hpTextInterval2',
+
+            # custom suit effect intervals
+            'knifeTrack',
+            'cheerTrack2',
+            'bombTrack',
+            'flameTrack',
+            'liquidTrack',
+            'oilTrack',
+            'cheerTrack',
+        ]
+
+        for attr in intervalAttrs:
+            interval = getattr(suit, attr, None)
+            if interval:
+                try:
+                    interval.pause()
+                except:
+                    pass
+                try:
+                    interval.finish()
+                except:
+                    pass
+                setattr(suit, attr, None)
+
+        # -------------------------
+        # suit sound sequences
+        # -------------------------
+        soundSequenceList = getattr(suit, 'soundSequenceList', None)
+        if soundSequenceList:
+            for seq in soundSequenceList:
+                try:
+                    seq.finish()
+                except:
+                    pass
+            suit.soundSequenceList = []
+
+        # -------------------------
+        # suit particle effects
+        # -------------------------
+        particleAttrs = [
+            'cheerEffect2',
+            'flameEffect',
+            'liquidEffect',
+            'oilEffect',
+            'cheerEffect',
+        ]
+
+        for attr in particleAttrs:
+            effect = getattr(suit, attr, None)
+            if effect:
+                try:
+                    effect.disable()
+                except:
+                    pass
+                try:
+                    if hasattr(effect, 'renderParent'):
+                        effect.cleanup()
+                except:
+                    pass
+                try:
+                    effect.detachNode()
+                except:
+                    pass
+                try:
+                    if not effect.isEmpty():
+                        effect.removeNode()
+                except:
+                    pass
+                setattr(suit, attr, None)
+
+        # -------------------------
+        # suit nodepaths / pivots
+        # -------------------------
+        nodeAttrs = [
+            'knifePivot',
+            'bombPivot',
+        ]
+
+        for attr in nodeAttrs:
+            node = getattr(suit, attr, None)
+            if node:
+                try:
+                    if not node.isEmpty():
+                        node.removeNode()
+                except:
+                    pass
+                setattr(suit, attr, None)
+
+        # -------------------------
+        # suit prop lists
+        # -------------------------
+        listAttrs = [
+            'bombProps',
+        ]
+
+        for attr in listAttrs:
+            props = getattr(suit, attr, None)
+            if props:
+                for prop in props:
+                    if prop:
+                        if hasattr(prop, 'sparksEffect') and prop.sparksEffect:
+                            effect = prop.sparksEffect
+                            prop.sparksEffect = None
+
+                            try:
+                                effect.disable()
+                            except:
+                                pass
+                            try:
+                                if hasattr(effect, 'renderParent'):
+                                    effect.cleanup()
+                            except:
+                                pass
+                            try:
+                                effect.detachNode()
+                            except:
+                                pass
+
+                        try:
+                            if not prop.isEmpty():
+                                MovieUtil.removeProp(prop)
+                        except:
+                            pass
+
+                setattr(suit, attr, [])
+
+        # -------------------------
+        # stock status props on suits
+        # -------------------------
+        for attr in ('stars', 'suedstars'):
+            prop = getattr(suit, attr, None)
+            if prop:
+                try:
+                    prop.stop()
+                except:
+                    pass
+                try:
+                    prop.detachNode()
+                except:
+                    pass

@@ -423,14 +423,28 @@ def __throwPie(throw, delay, hitCount, npcs):
                 suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
             if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
                 suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
+        totalDamage = hp
+
+        if kbbonus > 0:
+            totalDamage += kbbonus
+        if hpbonus > 0:
+            totalDamage += hpbonus
+
+        # add to queued damage BEFORE building interval
+        suit.addPendingQueuedDamage(totalDamage)
+
+        hpAfter = suit.getQueuedProjectedHP()
+        hpBefore = hpAfter + totalDamage
+
+        crossedZero = hpBefore > 0 and hpAfter <= 0
         showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="MARKED!", attackTrack=THROW_TRACK, colorCode=1))
-        #markDamage = Func(showMarkRounds, suit, level)
+
         value = hp
-        #if kbbonus > 0:
-            #value = kbbonus
-        #if hpbonus > 0:
-            #value = hpbonus
-        updateHealthBar = Func(suit.updateHealthBar, value)
+
+        updateHealthBar = Sequence(
+            Func(suit.setHealthForMe, -value),
+            Func(suit.updateHealthBar, 0)
+        )
         sival = []
         if kbbonus > 0:
             suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -465,9 +479,9 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:
-            suitResponseTrack.append(Func(suit.makeMarked, 1))
+            suitResponseTrack.append(Func(suit.makeMarked, 2))
         else:
-            suitResponseTrack.append(Func(suit.makeMarked, 0))
+            suitResponseTrack.append(Func(suit.makeMarked, 1))
         suitResponseTrack.append(sival)
         #suitResponseTrack.append(Wait(0))
         #suitResponseTrack.append(markDamage)
@@ -475,11 +489,13 @@ def __throwPie(throw, delay, hitCount, npcs):
         if kbbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0, attackTrack=THROW_TRACK))
-            bonusTrack.append(Func(suit.updateHealthBar, kbbonus))
+            bonusTrack.append(Func(suit.setHealthForMe, -kbbonus))
+            bonusTrack.append(Func(suit.updateHealthBar, 0))
         if hpbonus > 0:
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=THROW_TRACK))
-            bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
+            bonusTrack.append(Func(suit.setHealthForMe, -hpbonus))
+            bonusTrack.append(Func(suit.updateHealthBar, 0))
         if kbbonus == 0:
             suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitResponseTrack.append(Func(suit.setDizzy, 0))

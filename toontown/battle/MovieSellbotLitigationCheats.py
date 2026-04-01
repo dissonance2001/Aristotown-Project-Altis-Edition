@@ -820,19 +820,19 @@ def doFloodTheMarket(attack):
                     puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Func(puddle.reparentTo, battle), Func(puddle.setPos, toon.getPos(battle)), LerpScaleInterval(puddle, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
                 if puddleCounter == 1:
                     puddle2 = globalPropPool.getProp('quicksand')
-                    puddle.setColor(Vec4(1.0, 0.0, 0.0, 1))
+                    puddle2.setColor(Vec4(1.0, 0.0, 0.0, 1))
                     puddle2.setHpr(Point3(120, 0, 0))
                     puddle2.setScale(0.01)
                     puddleTrack1 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle2), Func(puddle2.reparentTo, battle), Func(puddle2.setPos, toon.getPos(battle)), LerpScaleInterval(puddle2, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle2.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle2), Func(battle.movie.clearRenderProp, puddle2))
                 if puddleCounter == 2:
                     puddle3 = globalPropPool.getProp('quicksand')
-                    puddle.setColor(Vec4(1.0, 0.0, 0.0, 1))
+                    puddle3.setColor(Vec4(1.0, 0.0, 0.0, 1))
                     puddle3.setHpr(Point3(120, 0, 0))
                     puddle3.setScale(0.01)
                     puddleTrack2 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle3), Func(puddle3.reparentTo, battle), Func(puddle3.setPos, toon.getPos(battle)), LerpScaleInterval(puddle3, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle3.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle3), Func(battle.movie.clearRenderProp, puddle3))
                 if puddleCounter == 3:
                     puddle4 = globalPropPool.getProp('quicksand')
-                    puddle.setColor(Vec4(1.0, 0.0, 0.0, 1))
+                    puddle4.setColor(Vec4(1.0, 0.0, 0.0, 1))
                     puddle4.setHpr(Point3(120, 0, 0))
                     puddle4.setScale(0.01)
                     puddleTrack3 = Sequence(Func(battle.movie.needRestoreRenderProp, puddle4), Func(puddle4.reparentTo, battle), Func(puddle4.setPos, toon.getPos(battle)), LerpScaleInterval(puddle4, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(3.2), LerpFunctionInterval(puddle4.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle4), Func(battle.movie.clearRenderProp, puddle4))
@@ -1206,10 +1206,11 @@ def doHeatWave(attack):
 
 def doOverpressureDeath(attack):
     theSuit = attack['suit']
+    battle = attack['battle']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(Func(theSuit.checkDamage2, 250))
+    notifyTrack = Parallel(theSuit.makeDamageInterval(battle, 250))
     cameraTrack = Wait(5.0)
-    notifyTracks.append(Parallel(notifyTrack, cameraTrack))
+    notifyTracks.append(Parallel(notifyTrack))
     return Sequence(notifyTracks)
 
 def doOverextendedLeverage(attack):
@@ -2270,7 +2271,7 @@ def doProfiteering(attack, ind):
     dmg = target[0]['hp']
     targetSuit = battle.activeSuits[ind]
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
-    selfDamageTrack = Sequence(Wait(2.0), Func(targetSuit.checkProfiteering, suit, battle), Wait(4.0))
+    selfDamageTrack = Sequence(Wait(2.0), targetSuit.makeProfiteeringInterval(suit, battle))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
     return Parallel(suitTrack, selfDamageTrack, soundTrack2)
 

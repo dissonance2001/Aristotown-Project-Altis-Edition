@@ -94,6 +94,9 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             suitTrack = Sequence(Wait(tSuitReact))
             showDamage = Func(suit.showHpText, -totalDamage[targetIndex], openEnded=0)
             updateHealthBar = Func(suit.updateHealthBar, totalDamage[targetIndex])
+
+            # add to queued damage BEFORE building interval
+            suit.addPendingQueuedDamage(totalDamage[targetIndex])
             if isUber:
                 breakEffect = BattleParticles.createParticleEffect(file='soundBreak')
                 breakEffect.setDepthWrite(0)

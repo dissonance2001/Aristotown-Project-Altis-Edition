@@ -758,9 +758,10 @@ def doAbilityQueued(attack):
 
 def doAbsorbMovie(attack):
     theSuit = attack['suit']
+    battle = attack['battle']
     dmg = attack['target'][0]['hp']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(Func(theSuit.checkAbsorbDamage, dmg))
+    notifyTrack = Parallel(theSuit.makeAbsorbDamageInterval(battle, dmg))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
@@ -796,10 +797,11 @@ def doSyphonMovie(attack):
 def doDamageMovie(attack):
     theSuit = attack['suit']
     notifyTracks = Sequence()
+    battle = attack['battle']
     dmg = attack['target'][0]['hp']
     #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
                            #  Func(theSuit.updateHealthBar, 0))
-    notifyTrack = Sequence(Func(theSuit.checkDamage, dmg))
+    notifyTrack = Parallel(theSuit.makeDamageInterval(battle, dmg))
     if theSuit.dna.name == 'safesupervis':
         node = theSuit.getGeomNode().getChild(0)
         notifyTrack.append(Parallel(LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
@@ -812,8 +814,9 @@ def doDamageMovie(attack):
 def doAbsorbMovieLevel(attack):
     theSuit = attack['suit']
     notifyTracks = Sequence()
+    battle = attack['battle']
     dmg = attack['target'][0]['hp']
-    notifyTrack = Sequence(Func(theSuit.checkLevelDamage, dmg))
+    notifyTrack = Parallel(theSuit.makeDamageLevelInterval(battle, dmg))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
@@ -910,9 +913,8 @@ def doSueDamage(attack):
     battle = attack['battle']
     target = attack['target']
     suitTrack = Parallel()
-    selfDamageTrack = Sequence(Func(theSuit.checkSueDamage, battle), Wait(3.0))
     for suit in battle.activeSuits:
-        suitTrack.append(Parallel(Func(suit.checkSueDamage, battle), Wait(3.0)))
+        suitTrack.append(Parallel(suit.makeSueDamageInterval(battle)))
     return Parallel(suitTrack)
 
 def doZapMovie(attack):
@@ -920,9 +922,8 @@ def doZapMovie(attack):
     battle = attack['battle']
     target = attack['target']
     suitTrack = Parallel()
-    selfDamageTrack = Sequence(Func(theSuit.checkZapDamage, battle), Func(theSuit.makeUnZapped), Wait(5.0))
     for suit in battle.activeSuits:
-        suitTrack.append(Parallel(Func(suit.checkZapDamage, battle), Wait(5.0)))
+        suitTrack.append(Parallel(suit.makeZapDamageInterval(battle)))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=theSuit))
     return Parallel(soundTrack, suitTrack)
 

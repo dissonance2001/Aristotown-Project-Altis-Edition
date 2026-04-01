@@ -222,6 +222,10 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         else:
             showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
         updateHealthBar = Func(suit.updateHealthBar, hp)
+        totalDamage = hp
+
+        # add to queued damage BEFORE building interval
+        suit.addPendingQueuedDamage(totalDamage)
         soakRemoval = Func(suit.makeZapped)
         suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(Wait(tContact))

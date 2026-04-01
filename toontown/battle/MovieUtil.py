@@ -494,7 +494,11 @@ def createSuitReviveTrack(suit, battle):
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
     suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Wait(1.0))
-    suitTrack.append(
+    if suit.isSkeleton:
+        suitTrack.append(
+        ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+    else:
+        suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
     for headPart in suit.headParts:
@@ -711,7 +715,11 @@ def createSuitReviveRedd(suit, battle):
         hasAnimatedHead = True
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
     suitTrack.append(Wait(1.0))
-    suitTrack.append(
+    if suit.isSkeleton:
+        suitTrack.append(
+        ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+    else:
+        suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
     #suitTrack.append(Func(suit.setSkelecog2, True))
@@ -943,7 +951,11 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(suit.makeDead))
     suitTrack.append(Func(suit.checkCogLuredDeath, battle))
     suitTrack.append(Wait(1.0))
-    suitTrack.append(
+    if suit.isSkeleton:
+        suitTrack.append(
+        ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+    else:
+        suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.setSkelecog2, True))
@@ -1173,7 +1185,7 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(notify.debug, 'before removeDeathSuit'))
         suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
-        suitTrack.append(Func(cleanupAllBattleEffects, suit))
+        suitTrack.append(Func(suit.cleanupAllBattleEffects))
     elif suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
         suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Wait(1.0))
@@ -1187,11 +1199,11 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
         suitTrack.append(Func(notify.debug, 'after removeDeathSuit'))
         suitTrack.append(Func(suit.makeDead))
-        suitTrack.append(Func(cleanupAllBattleEffects, suit))
+        suitTrack.append(Func(suit.cleanupAllBattleEffects))
     else:
         suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Func(suit.makeDead))
-        suitTrack.append(Func(cleanupAllBattleEffects, suit))
+        suitTrack.append(Func(suit.cleanupAllBattleEffects))
         suitTrack.append(Wait(1.0))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
@@ -1248,10 +1260,15 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
-    suitTrack.append(ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
+    if suit.isSkeleton:
+        suitTrack.append(
+        ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+    else:
+        suitTrack.append(
+        ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(suit.hide))
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
     elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
@@ -1407,10 +1424,15 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     suitTrack.append(Func(suit.setDizzy, 0))
     suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
-    suitTrack.append(ActorInterval(suit, 'lose', startTime=6))
+    if suit.isSkeleton:
+        suitTrack.append(
+        ActorInterval(suit, 'skeleton-lose', startTime=6))
+    else:
+        suitTrack.append(
+        ActorInterval(suit, 'lose', startTime=6))
     suitTrack.append(Func(removeDeathSuit, suit, suit, name='remove-death-suit'))
     suitTrack.append(Func(suit.hide))
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
@@ -1490,8 +1512,14 @@ def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
-    deathSound = base.loader.loadSfx('phase_5/audio/sfx/COG_headless_death.ogg')
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
+    suitType = getSuitBodyType(suit.dna.name)
+    if suitType == 'a':
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/cc_s_sfx_ene_suit_headlessDeath_A.ogg')
+    elif suitType == 'b':
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/cc_s_sfx_ene_suit_headlessDeath_B.ogg')
+    else:
+        deathSound = base.loader.loadSfx('phase_5/audio/sfx/cc_s_sfx_ene_suit_headlessDeath_C.ogg')
     deathSoundTrack = Sequence(Wait(0), SoundInterval(deathSound, volume=0.6))
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
@@ -1514,7 +1542,7 @@ def createSuitWreckingDeathTrack(suit, battle):
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
@@ -1542,7 +1570,7 @@ def createSuitCrashTrack(suit, battle):
     suitTrack.append(Func(suit.hide))
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     if hasAnimatedHead:
         return Parallel(suitTrack, deathSoundTrack, headInterval)
     else:
@@ -1573,7 +1601,7 @@ def midairSuitExplodeTrack(suit, battle):
     smallGearExplosion.setDepthWrite(False)
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
     gears1Track = Sequence(Wait(0.5), ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
     gears2MTrack = Track(
@@ -1668,7 +1696,7 @@ def shortCircuitTrack(suit, battle):
         Func(suit.makeDead),
         Wait(1.0)
     )
-    suitTrack.append(Func(cleanupAllBattleEffects, suit))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
     # Fade out suit parts
     colorTracks = Parallel()
     actorNode = suit.find('**/__Actor_modelRoot')

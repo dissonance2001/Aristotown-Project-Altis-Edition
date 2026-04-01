@@ -1994,7 +1994,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.hpText2.setScale(.7)
         self.hpText2.setBillboardPointEye()
         self.hpText2.setBin('fixed', 99)
-        self.hpText2.setPos(0, 0, -0.75)
+        self.hpText2.setPos(0, 0, -1.5)
         self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
         self.HpTextGenerator.setText("+50% Vulnerable!")
         self.HpTextGenerator.clearShadow()
@@ -2005,7 +2005,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.hpText3.setScale(.7)
         self.hpText3.setBillboardPointEye()
         self.hpText3.setBin('fixed', 99)
-        self.hpText3.setPos(0, 0, -1.5)
+        self.hpText3.setPos(0, 0, -0.75)
             # self.hpTextInterval2 = Sequence(self.hpText2.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'), Wait(1.0), LerpColorScaleInterval(self.hpText2, .25, Vec4(0, 0, 0, 0)),
             #             Func(self.hideHpText))
             # self.hpTextInterval2.start()

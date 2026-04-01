@@ -935,7 +935,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextCourtRecord, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextCourtRecordInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -983,7 +983,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextLegallyBound, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextLegallyBoundInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Legally Bound!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -994,7 +994,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextCourtRecord, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextCourtRecordInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1115,7 +1115,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextBurned, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextBurnedInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Slow Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1163,7 +1163,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextInflation, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextInflationInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1315,7 +1315,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextBusted, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextBustedInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('At-Will Employment!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -1457,7 +1457,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = Func(suit.checkPlayByPlayTextLiquidationEvent, pbpDc, attackDuration - 2)
+            pbpDesc = suit.makePlayByPlayTextLiquidationEventInterval(pbpDc, attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Liquidation Event!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2595,13 +2595,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpDc = PlayByPlayText.PlayByPlayText()
         if name == 'ForemanRedTape' or name == 'ForemanBurning' or name == 'RacketeerPeckingOrderRetaliationSoak' or name == 'MintCompoundingInterest' or name == 'PresidentDriver' or name == 'PowerhouseSnipeSoaked' or name == 'RecordkeeperMinutesTakenDamage':
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
-            pbpTrack = Func(suit.checkPlayByPlayTextCheat, pbpText, displayName, attackDuration - 2)
+            pbpTrack = suit.makePlayByPlayTextCheatInterval(pbpText, displayName, attackDuration - 2)
         else:
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     else:
-        pbpTrack = Func(suit.checkPlayByPlayText, pbpText, displayName, attackDuration - 2)
+        pbpTrack = suit.makePlayByPlayTextInterval(pbpText, displayName, attackDuration - 2)
     track = Sequence(Parallel(camTrack, pbpTrack))
     return track
 

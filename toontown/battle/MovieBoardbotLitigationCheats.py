@@ -2574,8 +2574,9 @@ def doPaperTrail(attack):
 
 def doPhantomEntryDamage(attack):
     theSuit = attack['suit']
+    battle = attack['battle']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(Func(theSuit.checkDamage, 1500))
+    notifyTrack = Sequence(theSuit.makeDamageInterval(battle, 1500))
     notifyTrack.append(Parallel(Func(theSuit.makeUnDamageReduction)))
     cameraTrack = Wait(5.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
@@ -2595,13 +2596,11 @@ def doPhantomEntrySacrifice(attack):
         dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
         return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, battle, oldPos + (0, 0, theSuit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
                         name='dustCloadIval')
-    suitTrack = Sequence(ActorInterval(theSuit, 'mplayer-kneel-into'), Parallel(Func(getDustCloudIval().start), LerpColorScaleInterval(theSuit, 0, (0, 0, 0, 0)), Func(theSuit.hide)))
+    suitTrack = Sequence(ActorInterval(theSuit, 'mplayer-kneel-into'), Func(theSuit.cleanupAllBattleEffects), Parallel(Func(getDustCloudIval().start), LerpColorScaleInterval(theSuit, 0, (0, 0, 0, 0)), Func(theSuit.hide)))
     for suit in battle.activeSuits:
         if suit.dna.name == 'rkeeper':
             notifyTracks.append(Sequence(Func(theSuit.checkPhantomEntrySacrifice, suit)))
             notifyTracks.append(Parallel(Func(suit.makeUnDamageReduction)))
-    cameraTrack = Wait(5.0)
-    notifyTracks.append(Parallel(cameraTrack))
     return Parallel(suitTrack, notifyTracks)
 
 def doPhantomEntrySpawn(attack):

@@ -778,8 +778,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.gagBoost = level
         if hasattr(self, 'arrowAuraTrack') and self.arrowAuraTrack:
             self.arrowAuraTrack.pause()
+            self.arrowAuraTrack.finish()
             for arrow in getattr(self.arrowAuraTrack, 'arrows', []):
-                if not arrow.isEmpty():
+                if arrow and not arrow.isEmpty():
                     arrow.removeNode()
             self.arrowAuraTrack = None
         self.arrowAuraTrack = self.makeLoopingArrowAura()
@@ -789,8 +790,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.gagBoost = 0
         if hasattr(self, 'arrowAuraTrack') and self.arrowAuraTrack:
             self.arrowAuraTrack.pause()
+            self.arrowAuraTrack.finish()
             for arrow in getattr(self.arrowAuraTrack, 'arrows', []):
-                if not arrow.isEmpty():
+                if arrow and not arrow.isEmpty():
                     arrow.removeNode()
             self.arrowAuraTrack = None
 
@@ -1197,6 +1199,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageUp = 1
         if hasattr(self, 'arrowAuraTrackUp') and self.arrowAuraTrackUp:
             self.arrowAuraTrackUp.pause()
+            self.arrowAuraTrackUp.finish()
             for arrow in getattr(self.arrowAuraTrackUp, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1209,6 +1212,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageUpNumber = 0
         if hasattr(self, 'arrowAuraTrackUp') and self.arrowAuraTrackUp:
             self.arrowAuraTrackUp.pause()
+            self.arrowAuraTrackUp.finish()
             for arrow in getattr(self.arrowAuraTrackUp, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1218,6 +1222,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.governaughtDamageUp = 1
         if hasattr(self, 'arrowAuraTrackGov') and self.arrowAuraTrackGov:
             self.arrowAuraTrackGov.pause()
+            self.arrowAuraTrackGov.finish()
             for arrow in getattr(self.arrowAuraTrackGov, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1229,6 +1234,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.governaughtDamageUp = 0
         if hasattr(self, 'arrowAuraTrackGov') and self.arrowAuraTrackGov:
             self.arrowAuraTrackGov.pause()
+            self.arrowAuraTrackGov.finish()
             for arrow in getattr(self.arrowAuraTrackGov, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1238,6 +1244,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.raisedAnte = 1
         if hasattr(self, 'arrowAuraTrackAnte') and self.arrowAuraTrackAnte:
             self.arrowAuraTrackAnte.pause()
+            self.arrowAuraTrackAnte.finish()
             for arrow in getattr(self.arrowAuraTrackAnte, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1249,6 +1256,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.raisedAnte = 0
         if hasattr(self, 'arrowAuraTrackAnte') and self.arrowAuraTrackAnte:
             self.arrowAuraTrackAnte.pause()
+            self.arrowAuraTrackAnte.finish()
             for arrow in getattr(self.arrowAuraTrackAnte, 'arrows', []):
                 if not arrow.isEmpty():
                     arrow.removeNode()
@@ -1270,7 +1278,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageDown = 1
         if hasattr(self, 'arrowAuraTrackDown') and self.arrowAuraTrackDown:
             self.arrowAuraTrackDown.pause()
-
+            self.arrowAuraTrackDown.finish()
             for fallingArrow in getattr(self.arrowAuraTrackDown, 'fallingArrowProps', []):
                 if fallingArrow and not fallingArrow.isEmpty():
                     fallingArrow.removeNode()
@@ -1284,7 +1292,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.damageDownNumber = 0
         if hasattr(self, 'arrowAuraTrackDown') and self.arrowAuraTrackDown:
             self.arrowAuraTrackDown.pause()
-
+            self.arrowAuraTrackDown.finish()
             for fallingArrow in getattr(self.arrowAuraTrackDown, 'fallingArrowProps', []):
                 if fallingArrow and not fallingArrow.isEmpty():
                     fallingArrow.removeNode()

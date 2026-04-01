@@ -381,6 +381,15 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     hpbonus = drop['hpbonus']
     headless = False
     suitTrack = Sequence()
+    totalDamage = hp
+
+    if kbbonus > 0:
+        totalDamage += kbbonus
+    if hpbonus > 0:
+        totalDamage += hpbonus
+
+    # add to queued damage BEFORE building interval
+    suit.addPendingQueuedDamage(totalDamage)
     if hp > 0:
         alreadyHit = 1
     for s in battle.activeSuits:

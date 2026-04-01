@@ -440,7 +440,13 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
         animTrack.append(Func(toon.setHpr, battle, origHpr))
         return Parallel(animTrack, indicatorTracks)
     else:
-        animTrack.append(getToonDodgeTrackCheat(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        if attack['name'] == 'VideographerHardCut':
+            animTrack.append(Func(toon.headsUp, battle, suitPos))
+            animTrack.append(getToonDodgeTrackCheat(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+            origPos, origHpr = battle.getActorPosHpr(toon)
+            animTrack.append(Func(toon.setHpr, battle, origHpr))
+        else:
+            animTrack.append(getToonDodgeTrackCheat(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
         return animTrack
 
@@ -832,8 +838,7 @@ def doDonation2(attack):
                 headTrack.append(Func(headPart.setTexture, texture, 1))
                 headTrack.append(Func(headPart.loop, 'neutral'))
             headTracks.append(headTrack)
-            notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), Func(suit.checkBroadcasterDonation, theSuit, battle)),
-                                    Wait(6.0))
+            notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), suit.makeBroadcasterDonationInterval(theSuit, battle)))
             notifyTracks.append(notifyTrack)
     if theSuit == None:
         theSuit = suit
@@ -878,8 +883,7 @@ def doDonationFail(attack):
                 headTrack.append(Func(headPart.loop, 'neutral'))
             headTracks.append(headTrack)
             notifyTrack = Sequence(Parallel(getSuitAnimTrack(attack), Sequence(Wait(1.0), Func(suit.setChatAbsolute, "Hold on... we're losing signal!", CFSpeech | CFTimeout)),
-                                            Func(suit.checkBroadcasterDonation2, theSuit, battle)),
-                                    Wait(6.0))
+                                            suit.makeBroadcasterDonationInterval(theSuit, battle)))
             notifyTracks.append(notifyTrack)
     if theSuit == None:
         theSuit = suit
@@ -2170,7 +2174,7 @@ def doDonation(attack):
     moveTrack = Sequence(LerpPosInterval(suit, 1.5, sinkPos2, other=battle), LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(3.9), LerpPosInterval(suit, 0, sinkPos2, other=battle), LerpPosInterval(suit, 1.5, dropPos, other=battle), Func(suit.setPos, battle, resetPos))
 
     suitTrack = Sequence(ActorInterval(suit, 'walk'), getSuitAnimTrack(attack), ActorInterval(suit, 'walk'))
-    selfDamageTrack = Sequence(Wait(4.0), Func(suit.checkHighRollerDonation, theSuit, battle))
+    selfDamageTrack = Sequence(Wait(4.0), suit.makeSilhouetteDonation(theSuit, battle))
     managerHealTrack = Sequence(Wait(4.0), Func(theSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHighRollerPhrases),
                                      CFSpeech | CFTimeout),
                                 SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=theSuit))
@@ -2209,13 +2213,11 @@ def doBar(attack):
         suitTrack = getSuitAnimTrack(attack)
         suitTrack.append(Wait(.25))
         if suit.dna.name == 'hroller2':
-            suitTrack.append(Func(suit.setHealthForMe, - (25 * len(battle.activeToons))))
-            suitTrack.append(Func(suit.showHpText, - (25 * len(battle.activeToons))))
+            suitTrack.append(suit.makeBarInterval(battle, (25 * len(battle.activeToons))))
         else:
-            suitTrack.append(Func(suit.setHealthForMe, - (250 * len(battle.activeToons))))
-            suitTrack.append(Func(suit.showHpText, - (250 * len(battle.activeToons))))
-        suitTrack.append(Func(suit.updateHealthBar, 0))
-        suitTrack.append(ActorInterval(suit, 'flatten'))
+            suitTrack.append(suit.makeBarInterval(battle, (250 * len(battle.activeToons))))
+        #suitTrack.append(Func(suit.updateHealthBar, 0))
+        #suitTrack.append(ActorInterval(suit, 'flatten'))
         suitTracks.append(suitTrack)
         suitTrack.append(Func(suit.setNeutralAnimation))
     objZOffset = 0.0
@@ -3180,10 +3182,7 @@ def doDiceRouletteCogs(attack):
             toonTrack = Sequence(
                 Wait(1.5),
                 Parallel(
-                    ActorInterval(suit, 'flatten'),
-                    Func(suit.setHealthForMe, -25),
-                    Func(suit.showHpText, -25),
-                    Func(suit.updateHealthBar, 0)
+                    suit.makeBarInterval(battle, 25)
                 ))
             toonTrack.append(
                     Func(suit.setNeutralAnimation))
@@ -3192,10 +3191,7 @@ def doDiceRouletteCogs(attack):
             toonTrack = Sequence(
                 Wait(1.5),
                 Parallel(
-                    ActorInterval(suit, 'flatten'),
-                    Func(suit.setHealthForMe, -250),
-                    Func(suit.showHpText, -250),
-                    Func(suit.updateHealthBar, 0)
+                    suit.makeBarInterval(battle, 250)
                 ))
             toonTrack.append(
                 Func(suit.setNeutralAnimation))

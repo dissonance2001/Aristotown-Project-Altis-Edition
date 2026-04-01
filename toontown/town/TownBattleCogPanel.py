@@ -681,12 +681,13 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isContracted or self.cog.isContracted2 or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/insured_icon')
-            self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds()),
+            if not self.cog.dna.name == 'supervis':
+                self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds()),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
-            self.contractedRoundsText.show()
+                self.contractedRoundsText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
@@ -843,18 +844,18 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -.5),
                                          text_scale=.5)
             self.suedRoundsText.show()
-            self.sued2RoundsText = DirectLabel(parent=self.sued, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
-                                               text_fg=(1, 0, 0, 1),
-                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                               pos=(0.25, 0, -.5),
-                                               text_scale=.4)
-            self.sued2RoundsText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.sued, slot, slotColor=(0, 0.902, 1, 1))
 
         if self.cog.isSued:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.sued2 = status.find('**/damage_over_time_icon')
+            self.sued2RoundsText = DirectLabel(parent=self.sued2, relief=None, text="-%s" % int(self.cog.getMaxHP() / 4),
+                                               text_fg=(1, 0, 0, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.25, 0, -.5),
+                                               text_scale=.4)
+            self.sued2RoundsText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.sued2, slot, slotColor=(0, 0.902, 1, 1))
 

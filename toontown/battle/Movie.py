@@ -336,9 +336,12 @@ class Movie(DirectObject.DirectObject):
         #         ptrack.append(Func(toon.makeUnCooldown))
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
-            ptrack.append(Func(s.makeUnFreshlyZapped))
             if s.getOilRainRounds() == 1:
                 ptrack.append(Func(s.removeOilRain))
+            if not s.getSoakRounds() <= 0:
+                ptrack.append(Func(s.makeSoaked, s.getSoakRounds() - 1))
+            if not s.getMarkRounds() <= 0:
+                ptrack.append(Func(s.makeMarked, s.getMarkRounds() - 1))
             if not s.getOilRainRounds() <= 0:
                 ptrack.append(Func(s.addOilRainRounds, s.getOilRainRounds() - 1))
             if not s.getEnrageCounter() <= 1:
@@ -353,10 +356,6 @@ class Movie(DirectObject.DirectObject):
                 ptrack.append(Func(s.makeExplosive, s.getExplosiveCondition() - 1))
             if not s.getSleepyCondition() <= 0:
                 ptrack.append(Func(s.makeSleepy, s.getSleepyCondition() - 1))
-            if not s.getSoakRounds() <= 0:
-                ptrack.append(Func(s.makeSoaked, s.getSoakRounds() - 1))
-            if not s.getMarkRounds() <= 0:
-                ptrack.append(Func(s.makeMarked, s.getMarkRounds() - 1))
             if not s.getSuedRounds() <= 0:
                 ptrack.append(Func(s.makeSued, s.getSuedRounds() - 1))
             if s.isDazed:
@@ -379,9 +378,11 @@ class Movie(DirectObject.DirectObject):
         ptrack.append(Func(callback))
         for s in self.battle.activeSuits:
             s.battleTrapIsFresh = 0
-            s.makeUnFreshlyZapped()
+            ptrack.append(Func(s.makeUnFreshlyZapped))
             ptrack.append(Func(s.checkInsuranceCountdown))
             ptrack.append(Func(s.checkContractedCountdown))
+            ptrack.append(Func(s.clearPendingQueuedDamageAll))
+            ptrack.append(Func(s.setPendingQueuedDeath, False))
             if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
                 ptrack.append(Func(s.makeExtraAttacks, s.getExtraAttacks() + 1))
         for toon in self.battle.activeToons:

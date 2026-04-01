@@ -237,6 +237,18 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         else:
             sival = ActorInterval(suit, anim)
         #soakTracks.append(__soakSuit(suit, tContact))
+        totalDamage = hp
+
+        if kbbonus > 0:
+            totalDamage += kbbonus
+        if hpbonus > 0:
+            totalDamage += hpbonus
+
+        # add to queued damage BEFORE building interval
+        suit.addPendingQueuedDamage(totalDamage)
+
+        hpAfter = suit.getQueuedProjectedHP()
+        hpBefore = hpAfter + totalDamage
         if suit.dna.name == 'redd':
             showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
         elif suit.isVirtual:
@@ -349,75 +361,75 @@ def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
 
 def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
         value = math.ceil(hp * 0.75)
-        suitTrack.append(Wait(tContact))
-        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
-            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
-        if suits[suitIndex].isHeavyRain:
-            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        return suitTrack
-    else:
-        return Sequence()
+        return Sequence(
+            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            suits[suitIndex].makeSplashAndDeathInterval(
+                tContact, value, battle, bonus, attackTrack, level=0
+            ),
+            Func(suits[suitIndex].setNeutralAnimationDrop),
+            Func(suits[suitIndex].addStormCellDamage)
+                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
+                else Wait(0),
+            Func(suits[suitIndex].addHeavyRainDamage, value)
+                if suits[suitIndex].isHeavyRain
+                else Wait(0)
+        )
+    return Sequence()
 
 def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
         value = math.ceil(hp * 0.75)
-        suitTrack.append(Wait(tContact))
-        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level=0))
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
-            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
-        if suits[suitIndex].isHeavyRain:
-            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        return suitTrack
-    else:
-        return Sequence()
+        return Sequence(
+            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            suits[suitIndex].makeSplashAndDeathInterval(
+                tContact, value, battle, bonus, attackTrack, level=0
+            ),
+            Func(suits[suitIndex].setNeutralAnimationDrop),
+            Func(suits[suitIndex].addStormCellDamage)
+                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
+                else Wait(0),
+            Func(suits[suitIndex].addHeavyRainDamage, value)
+                if suits[suitIndex].isHeavyRain
+                else Wait(0)
+        )
+    return Sequence()
 
 def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
         value = math.ceil(hp / 3)
-        suitTrack.append(Wait(tContact))
-        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
-            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
-        if suits[suitIndex].isHeavyRain:
-            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        return suitTrack
-    else:
-        return Sequence()
+        return Sequence(
+            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            suits[suitIndex].makeSplashAndDeathInterval(
+                tContact, value, battle, bonus, attackTrack, level=0
+            ),
+            Func(suits[suitIndex].setNeutralAnimationDrop),
+            Func(suits[suitIndex].addStormCellDamage)
+                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
+                else Wait(0),
+            Func(suits[suitIndex].addHeavyRainDamage, value)
+                if suits[suitIndex].isHeavyRain
+                else Wait(0)
+        )
+    return Sequence()
 
 def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
     if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
-        revives = suits[suitIndex].getSkeleRevives()
-        suitTrack = Sequence()
         value = math.ceil(hp / 3)
-        suitTrack.append(Wait(tContact))
-        suitTrack.append(Func(suits[suitIndex].checkSplashDamage, tContact, value, battle, bonus, attackTrack, level))
-        suitTrack.append(Parallel(ActorInterval(suits[suitIndex], 'squirt-small-react'), __soakSuit(suits[suitIndex], tContact)))
-        suitTrack.append(Func(suits[suitIndex].checkDeathCheck, battle))
-        suitTrack.append(Func(suits[suitIndex].setNeutralAnimationDrop))
-        if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell:
-            suitTrack.append(Func(suits[suitIndex].addStormCellDamage))
-        if suits[suitIndex].isHeavyRain:
-            suitTrack.append(Func(suits[suitIndex].addHeavyRainDamage, value))
-        return suitTrack
-    else:
-        return Sequence()
+        return Sequence(
+            Wait(tContact),             __soakSuit(suits[suitIndex], tContact),
+            suits[suitIndex].makeSplashAndDeathInterval(
+                tContact, value, battle, bonus, attackTrack, level=0
+            ),
+            Func(suits[suitIndex].setNeutralAnimationDrop),
+            Func(suits[suitIndex].addStormCellDamage)
+            if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
+            else Wait(0),
+            Func(suits[suitIndex].addHeavyRainDamage, value)
+            if suits[suitIndex].isHeavyRain
+            else Wait(0)
+        )
+    return Sequence()
 
 
 def __getSoundTrack(level, hitSuit, delay, node = None):
