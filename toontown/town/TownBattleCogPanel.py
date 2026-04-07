@@ -1152,7 +1152,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .1, .1, .1)
         elif name == 'cv':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'm' or name == 'tf' or name == 'mdm':
+        elif name == 'm' or name == 'tf' or name == 'mdm' or name == 'dc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .089, .089, .089)
         elif name == 'pp' or name == 'sw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .06, .06, .06)
@@ -1180,8 +1180,6 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
         elif name == 'mh' or name == 'ym' or name == 'trs' or name == 'chairp' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
-        elif name == 'dc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .11, .11, .11)
         elif name == 'pyc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .13, .13, .13)
         elif name == 'gms':
@@ -1191,7 +1189,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'fct':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .12, .12, .12)
         elif name == 'fcs':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .091, .091, .091)
         elif name == 'sd':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
         elif name == 'sh':
@@ -1221,10 +1219,10 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'cc' or name == 'sc':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
         elif name == 'blh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.10, -180, 0, 0, .06, .06, .06)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .17, .177, .177)
         elif name == 'hh':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
-        elif name == 'f' or name == 'cr' or name == 'ca' or name == 'skd' or name == 'tw':
+        elif name == 'f' or name == 'cr' or name == 'ca' or name == 'skd' or name == 'tw' or name == 'asm':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
         elif name == 'nc' or name == 'nd' or name == 'sfs':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)

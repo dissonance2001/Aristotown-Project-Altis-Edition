@@ -199,7 +199,6 @@ def cleanupAllBattleEffects(suit):
         'headInterval2',
         'healInterval',
         'absorbInterval',
-        'playByPlayInterval',
         'damageInterval',
         'hpTextInterval',
         'hpTextInterval2',
@@ -1682,8 +1681,76 @@ def __showProp(prop, parent, pos, hpr = None, scale = None):
     if scale:
         prop.setScale(scale)
 
+def makeZapDeathScorch(pos, parent=render):
+    scorch = loader.loadModel('phase_5.5/models/estate/dirt_mound')
+    scorch.reparentTo(parent)
+    scorch.setBillboardPointWorld()
+    scorch.setPos(pos)
+    scorch.setP(-90)
+    scorch.setScale(0.6)
+    scorch.setColorScale(0.05, 0.05, 0.05, 0.85)
+    scorch.setTransparency(1)
 
-def shortCircuitTrack(suit, battle):
+    scorchTrack = Sequence(
+        Wait(0.4),
+        Parallel(
+            LerpScaleInterval(scorch, 1.2, 1.1, startScale=0.6),
+            LerpColorScaleInterval(
+                scorch,
+                1.2,
+                Vec4(0.05, 0.05, 0.05, 0.0),
+                startColorScale=Vec4(0.05, 0.05, 0.05, 0.85)
+            )
+        ),
+        Func(scorch.removeNode)
+    )
+    scorchTrack.start()
+    return scorch
+
+def shortCircuitTrack(cog, battle=None):
+    if not cog or cog.isEmpty():
+        return Sequence()
+
+    parent = render
+    if battle and not battle.isEmpty():
+        parent = battle
+
+    basePos = cog.getPos(parent)
+    basePos = Point3(basePos[0], basePos[1], max(0.05, basePos[2]))
+
+    suitTrack = Sequence(
+        Wait(1.0),
+        Func(cog.hide),
+        Func(cog.cleanupLoseActor),
+        Func(cog.makeDead),
+        Wait(1.0)
+    )
+    suitTrack.append(Func(cog.cleanupAllBattleEffects))
+    # Fade out suit parts
+    colorTracks = Parallel()
+    actorNode = cog.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    for thingIndex in range(actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        colorTracks.append(Sequence(
+            Func(thing.setDepthWrite, False),
+            Func(thing.setBin, 'fixed', 1),
+            LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0)),
+            Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+        ))
+
+    smoke = BattleParticles.createParticleEffect('zapCogDeathSmoke')
+    smoke.reparentTo(parent)
+    partTrack = ParticleInterval(smoke, cog, duration=4.5, softStopT=-2.5)
+
+    return Sequence(Func(makeZapDeathScorch, basePos, cog),
+        Parallel(suitTrack, colorTracks, partTrack),
+        Func(smoke.cleanup),
+        Func(smoke.removeNode)
+    )
+
+
+def shortCircuitTrackOLDER(suit, battle):
     if suit.isHidden():
         return Sequence()
 
@@ -2419,21 +2486,21 @@ def createSuitFirestarterCigarSmokeInterval(suit):
     stunInterval = Func(suit.loop, 'neutral')
     hasAnimatedHead = False
     if suit.style.name == 'fires':
-        suitInterval = ActorInterval(suit, 'cigar-smoke')
+        suitInterval = ActorInterval(suit, 'cigar-smoke', playRate=1.25)
         for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke'), Func(headPart.loop,
+            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=1.25), Func(headPart.loop,
                         'neutral'))
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
-        return Parallel(headInterval, suitInterval)
+        return Parallel(headInterval)
     elif suit.style.name == 'safesupervis':
-        suitInterval = ActorInterval(suit, 'cigar-smoke')
+        suitInterval = ActorInterval(suit, 'cigar-smoke', playRate=1.25)
         for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke'), Func(headPart.loop,
+            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=1.25), Func(headPart.loop,
                         'neutral'))
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
-        return Parallel(headInterval, suitInterval)
+        return Parallel(headInterval)
     else:
         return stunInterval
 

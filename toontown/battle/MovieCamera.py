@@ -646,7 +646,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Bash':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Beguile':
-        camTrack.append(defaultCamera(openShotDuration=2.1))
+        camTrack.append(Sequence(motionShot(5, 12.5, 10, -210, -20.0, 0.0, 0, suit), Wait(2.1), defaultCamera(openShotDuration=0, attackDuration=attackDuration - 2.1)))
+        #camTrack.append(defaultCamera(openShotDuration=2.1))
     elif name == 'CloseTheLoop':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HostileTakeover':
@@ -1053,7 +1054,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse retaliates against toons with existing\nvulnerabilities!',
+                'The Powerhouse retaliates against toons with existing vulnerabilities!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1066,7 +1067,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse  retaliates against toon who chose\nbanned gags!',
+                'The Powerhouse  retaliates against toon who chose banned gags!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1081,7 +1082,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse retaliates against toons who attacked the Bookkeeper\nwhile Bookkeeping!',
+                'The Powerhouse retaliates against toons who attacked the Bookkeeper while Bookkeeping!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1094,7 +1095,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                'The Powerhouse retaliates against toons who took damage\nfrom fore!',
+                'The Powerhouse retaliates against toons who took damage from fore!',
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1140,7 +1141,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                "The Bookkeeper applies a gag damage debuff to all toons\nwho attacked him while Bookkeeping!",
+                "The Bookkeeper applies a gag damage debuff to all toons who attacked him!",
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Bookkeeping!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1402,6 +1403,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RadiographerHotTake':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'RadiographerHotTakeDamage':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == 'RadiographerHotTakeRetaliation':
         camTrack.append(defaultCamera(openShotDuration=6.75))
     elif name == 'RadiographerOvermodulated':
@@ -1678,7 +1685,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldRelativeShot(suit, 0.0, 10.0, 10.0, -180, -10.0, 0.0, attackDuration))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('The Corporate Butcherer gains %s,000 RPM !' % target[0]['hp'], attackDuration - 2)
+        pbpDesc = pbpDc.getShowIntervalDesc('The Corporate Butcherer gains %s,000 RPM!' % target[0]['hp'], attackDuration - 2)
         pbpTrack = pbpText.getShowIntervalCheat('Revving Up!', attackDuration - 2)
         return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'ButcherRevvingUpWhipsaw':
@@ -1686,7 +1693,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldRelativeShot(suit, 0.0, 10.0, 10.0, -180, -10.0, 0.0, attackDuration))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('The Corporate Butcherer gains %s,000 RPM !\n(Whipsaw: +4,000 RPM)' % (target[0]['hp'] - 4), attackDuration - 2)
+        pbpDesc = pbpDc.getShowIntervalDesc('The Corporate Butcherer gains %s,000 RPM! (Whipsaw: +4,000 RPM)' % (target[0]['hp'] - 4), attackDuration - 2)
         pbpTrack = pbpText.getShowIntervalCheat('Revving Up!', attackDuration - 2)
         return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'ButcherKickback':
@@ -1744,20 +1751,20 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0.75)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc('The Contingency Director retaliates againsted marked\nToons!', attackDuration - 2)
+            pbpDesc = pbpDc.getShowIntervalDesc('The Contingency Director retaliates against marked Toons!', attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Targeted Neutralization!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'ContingencyContingencyClause':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ContingencyContingencyClauseRetaliation':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3)))
     elif name == 'ContingencyRedundantAuthority':
         camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'ContingencyOperationalFreeze':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ContingencyForecastCollapse':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ErclaimLaffSteal':
@@ -2001,7 +2008,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc('The Factory Foreman doubles down damage on Toons\nwho are on cooldown!', attackDuration - 2)
+            pbpDesc = pbpDc.getShowIntervalDesc('The Factory Foreman increases damage on Toons who are on cooldown!', attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Snipe!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2048,7 +2055,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=1.5)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc("The Mint Supervisor punishes Toons who chose banned\ngags!", attackDuration - 2)
+            pbpDesc = pbpDc.getShowIntervalDesc("The Mint Supervisor punishes Toons who chose banned gags!", attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Hurry Sickness!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2225,51 +2232,51 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'BanLevel4':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanLevel5':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanLevel6':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanLevel7':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 7 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanLevel8':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 8 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2278,8 +2285,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 5 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 5 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2288,8 +2295,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 6 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 6 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2298,8 +2305,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 7 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2308,8 +2315,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 4 and 8 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2318,8 +2325,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 6 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 6 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2328,8 +2335,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 7 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2338,8 +2345,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 5 and 8 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2348,8 +2355,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 7 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2358,8 +2365,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 6 and 8 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2368,88 +2375,88 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=2.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Level 7 and 8 gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
         if attack['suit'].dna.name == 'safesupervis':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanToonup':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Toon-Up gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Toon-Up gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanTrap':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Trap gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Trap gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanLure':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Lure gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Lure gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanThrow':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Throw gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Throw gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanSquirt':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Squirt gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Squirt gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanZap':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Zap gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Zap gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanSound':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Sound gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Sound gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'BanDrop':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = defaultCamera(openShotDuration=0.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('Drop gags are off-limits!', 3.5)
-        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', 3.5)
+        pbpDesc = pbpDc.getShowIntervalDesc('Drop gags are off-limits!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Budget Cuts!', attackDuration - 2)
         if attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
@@ -2746,7 +2753,7 @@ def allGroupLowDiagonalShot(avatar, duration):
 
 
 def allGroupHighShot(avatar, duration):
-    return heldShot(0, -15, 10, 0, -10, 0, duration, 'allGroupHighShot')
+    return heldShot(0, -15, 8, 0, -10, 0, duration, 'allGroupHighShot')
 
 
 def toonGroupShot(avatar, duration):

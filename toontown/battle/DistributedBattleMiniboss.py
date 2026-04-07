@@ -271,17 +271,18 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     destHpr = VBase3(h, 0, 0)
                 else:
                     destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-                startPos = destPos + Point3(0, 0, SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)
+                startPos = destPos + Point3(0, 0, 100)
                 self.notify.debug('startPos for %s = %s' % (suit, startPos))
                 suit.reparentTo(self)
+                suit.hide()
                 suit.setPos(startPos)
                 suit.headsUp(self)
                 flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
                 if not suit.dna.name == 'hroller2':
-                    suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
+                    suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
                 else:
-                    suitTrack.append(Track((delay, Sequence(Parallel(flyIval), Func(suit.loop, 'neutral')))))
+                    suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), flyIval), Func(suit.loop, 'neutral')))))
                 suitTracks.append(suitTrack)
                 delay += 1
 

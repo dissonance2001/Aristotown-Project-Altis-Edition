@@ -910,13 +910,24 @@ def doPeckingOrder(attack):
             #next.setScale(0.01)
             #next.reparentTo(suit.getRightHand())
           #  next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
+            toonPos = toon.getPos(battle)
+
             if dmg > 0:
                 notifyTrack = Sequence(Wait(2.5),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+                notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+                notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
                 notifyTracks.append(notifyTrack)
-                hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6,
-                                  random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
+                hitPoint = Point3(
+                    toonPos[0] + (random.random() * 1.5 - 0.75),
+                    toonPos[1] + (random.random() * 1.0 - 0.5),
+                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 1.0 - 0.5)
+                )
             else:
-                hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+                hitPoint = Point3(
+                    toonPos[0] + (random.random() * 3.0 - 1.5),
+                    toonPos[1] - 3.0 + (random.random() * 2.0 - 1.0),
+                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 2.0 - 1.0)
+                )
             birdTrack = Sequence(Wait(throwDelay), Func(next.setScale, 0.01), Func(next.reparentTo, suit.getRightHand()),
                                  Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3), Func(battle.movie.needRestoreRenderProp, next),
                                  Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
@@ -1072,10 +1083,15 @@ def doAutoRepair(attack):
 def doCeaseAndDesist(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+    notifyTrack = Parallel()
+    for t in targets:
+        toon = t['toon']
+        notifyTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 1)))
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(1.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
-    return Parallel(suitTrack, soundTrack)
+    return Parallel(suitTrack, notifyTrack, soundTrack)
 
 def doJuryNotice(attack):
     suit = attack['suit']
@@ -1352,7 +1368,7 @@ def doCourtSanction(attack):
         Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
         Func(sanctioned.removeNode)
     )
     toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
@@ -1389,7 +1405,7 @@ def doCourtSanctionBindings(attack):
         if dmg > 0:
             sanctioned = __makeSanctionedNodePath()
             missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
-            propTrack = Sequence(Func(sanctioned.lookAt, toon),
+            propTrack = Sequence(
                 Wait(0.5),
                 Func(battle.movie.needRestoreRenderProp, sanctioned),
                 Func(sanctioned.reparentTo, render),
@@ -1397,7 +1413,7 @@ def doCourtSanctionBindings(attack):
                 Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 80, 90),
                 Func(sanctioned.setP, 0),
                 Func(sanctioned.setR, 0),
-                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
                 Func(sanctioned.removeNode))
             origH = suit.getH(battle)
 
@@ -1797,7 +1813,10 @@ def doCaseInsurancePlanInsurance(attack, ind, ind2, ind3):
         else:
             suitTrack.append(Func(suit.makeInsured))
         suitTrack.append(Func(suit.setSued2, 0))
-        suitTrack.append(Func(suit.checkInsuranceRounds, 3))
+        if not suit.isInsured2 and not suit.isInsured:
+            suitTrack.append(Func(suit.checkInsuranceRounds, 3))
+        else:
+            suitTrack.append(Func(suit.checkInsuranceRounds, 2))
         suitTracks.append(suitTrack)
         suitTracks.append(tauntInterval)
         suitTracks.append(Sequence(MovieUtil.createSuitInsuranceInterval(theSuit), Func(theSuit.setNeutralAnimationDrop)))
@@ -2120,7 +2139,10 @@ def doCaseInsurancePlanSkelecogInsurance(attack, ind, ind2, ind3):
                 )
 
             suitTrack.append(Func(battle.unSueSuit, target))
-            suitTrack.append(Func(target.addInsuranceRounds, 3))
+            if not suit.isInsured2 and not suit.isInsured:
+                suitTrack.append(Func(suit.checkInsuranceRounds, 3))
+            else:
+                suitTrack.append(Func(suit.checkInsuranceRounds, 2))
             suitTracks.append(suitTrack)
 
             knife = globalPropPool.getProp('shredder-paper')

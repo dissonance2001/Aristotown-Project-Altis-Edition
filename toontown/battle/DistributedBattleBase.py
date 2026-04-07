@@ -1100,48 +1100,33 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if len(self.activeSuits) >= 1:
             for suit in self.activeSuits:
                 suitPos, suitHpr = self.getActorPosHpr(suit)
+                if suit.style.name == 'mh2':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'std2':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'hrollers':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'cinema':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'choreo':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'videog':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'bcaster':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'director':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'fmaker':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                else:
+                    adjustTrack.append(Func(suit.setNeutralAnimation))
+                adjustTrack.start()
                 if self.isSuitLured(suit) == 1:
                     spos = Point3(suitPos[0], suitPos[1] - MovieUtil.SUIT_LURE_DISTANCE, suitPos[2])
                     #adjustTrack.append(Func(suit.setPosHpr, spos, suitHpr))
                     suit.setPosHpr(self, spos, suitHpr)
-                    adjustTrack.append(Func(suit.setDizzy, 1))
-                    if suit.style.name == 'hrollers':
-                        for headPart in suit.animatedHeadParts:
-                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'hroller2':
-                        for headPart in suit.animatedHeadParts:
-                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                    elif suit.style.name == 'hroller':
-                        for headPart in suit.animatedHeadParts:
-                            adjustTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                    else:
-                        for headPart in suit.animatedHeadParts:
-                            adjustTrack.append(Func(headPart.loop, 'neutral-lured'))
                 else:
                     suit.setPosHpr(self, suitPos, suitHpr)
-                    #adjustTrack.append(Func(suit.setPosHpr, suitPos, suitHpr))
-                    if suit.style.name == 'mh2':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'std2':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'hrollers':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'cinema':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'choreo':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'videog':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'bcaster':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'director':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    elif suit.style.name == 'fmaker':
-                        adjustTrack.append(Func(suit.setNeutralAnimationRolled))
-                    else:
-                        adjustTrack.append(Func(suit.setNeutralAnimation))
-                    adjustTrack.append(Func(suit.setDizzy, 0))
-                    adjustTrack.start()
                     if ToontownBattleGlobals.SkipMovie:
                         adjustTrack.finish()
 
@@ -1548,7 +1533,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def exitWaitForServer(self):
         pass
 
-    def createAdjustInterval(self, av, destPos, destHpr, toon = 0, run = 0):
+    def createAdjustInterval(self, av, destPos, destHpr, toon=0, run=0):
         if run == 1:
             adjustTime = self.calcToonMoveTime(destPos, av.getPos(self))
         else:
@@ -1562,7 +1547,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         adjustTrack.append(Func(av.headsUp, self, destPos))
         adjustTrack.append(LerpPosInterval(av, adjustTime, destPos, other=self))
         adjustTrack.append(Func(av.setHpr, self, destHpr))
-        adjustTrack.append(Func(av.setNeutralAnimation))
+        adjustTrack.append(Func(av.setNeutralAnimationAdjustInterval))
         return adjustTrack
 
     def __adjust(self, ts, callback):

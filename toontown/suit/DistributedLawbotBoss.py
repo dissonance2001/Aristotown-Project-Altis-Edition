@@ -377,6 +377,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         tempNode.setPosHpr(0, -45, 12.5, 0, 0, 0)
         bossEndPos = (-2.798, 220, 0)
         loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
+        track2 = Sequence()
 
         def getCamBossPos(tempNode=tempNode):
             return tempNode.getPos(render)
@@ -632,19 +633,19 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom.setScale(1)
         self.geom2.setPos(-2, -90, 0)
         self.geom2.setScale(1)
-        self.cjBoss2 = BossCog.BossCog()
-        dna = SuitDNA.SuitDNA()
-        dna.newBossCog('l2')
-        self.cjBoss2.cjBoss2 = True
-        self.cjBoss2.setDNA(dna)
-        self.cjBoss2.initializeDropShadow()
-        self.cjBoss2.setH(0)
-        self.cjBoss2.loop('Ff_neutral')
-        self.cjBoss2.reparentTo(self.geom2)
-        self.cjBoss2.setPosHpr(-1.5, 135, 0, 180, 0, 0)
-        self.cjBoss2.setName('Chief Justice\nLawbot')
-        self.cjBoss2.setPickable(0)
-        self.cjBoss2.doId = 0
+        # self.cjBoss2 = BossCog.BossCog()
+        # dna = SuitDNA.SuitDNA()
+        # dna.newBossCog('l2')
+        # self.cjBoss2.cjBoss2 = True
+        # self.cjBoss2.setDNA(dna)
+        # self.cjBoss2.initializeDropShadow()
+        # self.cjBoss2.setH(0)
+        # self.cjBoss2.loop('Ff_neutral')
+        # self.cjBoss2.reparentTo(self.geom2)
+        # self.cjBoss2.setPosHpr(-1.5, 135, 0, 180, 0, 0)
+        # self.cjBoss2.setName('Chief Justice\nLawbot')
+        # self.cjBoss2.setPickable(0)
+        # self.cjBoss2.doId = 0
         self.elevatorEntrance = self.geom2.find('**/elevator_origin')
         self.elevatorEntrance.getChildren().detach()
         self.elevatorEntrance.setScale(1)
@@ -890,7 +891,6 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geom.removeNode()
         self.geom2.removeNode()
         del self.geom
-        del self.cjBoss2
         del self.geom2
 
     def __loadMopaths(self):
@@ -1049,7 +1049,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doneBarrier('RollToBattleTwo')
         self.betweenBattleMusic.stop()
         self.stingMusic.stop()
-        self.paper.hide()
+        #self.paper.hide()
         self.battleTwoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_base.ogg')
         self.stenoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
         self.litigatorMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
@@ -1847,12 +1847,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 Func(base.camera.reparentTo, render),
                 Func(base.camera.setPos, -3, 175, 15),
                 Func(base.camera.setHpr, 0, 10, 0))),
-            (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins1, CFSpeech) | CFTimeout),
-            (5.5, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins2, CFSpeech | CFTimeout)),
             (9.5, Sequence(Func(base.camera.wrtReparentTo, render))),
             (9.6, Parallel(
-                rollTrack,
-                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech | CFTimeout))),
+                rollTrack)),
             (13.1, Sequence(Parallel(SoundInterval(whistleSfx),
                    Sequence(
                        Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins4, CFSpeech | CFTimeout),

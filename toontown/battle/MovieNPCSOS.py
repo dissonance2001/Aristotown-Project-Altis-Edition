@@ -117,7 +117,7 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     h = Func(npc.loop, 'neutral')
     seq = Sequence(a, b, c, d, e, ee, f, g, h)
     seq.append(Func(npc.clearChat))
-    seq.append(Parallel(Func(attack['toon'].makeCooldown), Func(attack['toon'].addCooldownRounds, 3)))
+    seq.append(Parallel(Func(attack['toon'].makeCooldown), Func(attack['toon'].addCooldownRounds, 2)))
     if npc.getName() == 'Prince Frizzy':
         princeFrizzyTrack = Sequence()
         princeFrizzyTrack.append(Func(npc.setChatAbsolute, "Start Dancing! I got this covered!", CFSpeech | CFTimeout))
@@ -264,7 +264,7 @@ def __doRestockGags(attack, level, hp):
     pbpTrack = pbpText.getShowInterval(TTLocalizer.MovieNPCSOSRestockGags % text, track.getDuration() - 2)
     return (track, pbpTrack)
 
-def __doSmooch(attack, hp = 0):
+def __doSmooch(attack, level, hp = 0):
     toon = NPCToons.createLocalNPC(attack['npcId'])
     if toon == None:
         return
@@ -294,40 +294,69 @@ def __doSmooch(attack, hp = 0):
     targetTrack = Parallel()
     for target in targets:
         lipcopy = MovieUtil.copyProp(lips)
-        lipsTrack = Sequence(Wait(tLips), Func(MovieUtil.showProp, lipcopy, render, getLipPos), Func(lipcopy.setBillboardPointWorld), LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO), Wait(tThrow - tLips - dScale), LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))), Func(MovieUtil.removeProp, lipcopy))
+
+        lipsTrack = Sequence(
+            Wait(tLips),
+            Func(MovieUtil.showProp, lipcopy, render, getLipPos),
+            Func(lipcopy.setBillboardPointWorld),
+            LerpScaleInterval(lipcopy, dScale, Point3(3, 3, 3), startScale=MovieUtil.PNT3_NEARZERO),
+            Wait(tThrow - tLips - dScale),
+            LerpPosInterval(lipcopy, dThrow, Point3(target.getPos() + Point3(0, 0, target.getHeight()))),
+            Func(MovieUtil.removeProp, lipcopy)
+        )
+
         delay = tThrow + dThrow
-        mtrack = Parallel(lipstickTrack, lipsTrack, __getSoundTrack(2, 2, node=toon), Sequence(ActorInterval(toon, 'smooch')), Sequence(Wait(delay), ActorInterval(target, 'conked'), Func(toon.loop, 'neutral')), Sequence(Wait(delay), Func(__healToon, target, 0)))
-        targetTrack.append(mtrack)
-        track, level, hp = NPCToons.getNPCTrackLevelHp(toon)
-        if level == 0:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 1), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 1:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 2), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 2:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 3), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 3:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 4), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 4:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 5), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 5:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 6), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 6:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 7), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
-        elif level == 7:
-            targetTrack.append(Parallel(Func(target.makeGagBoost, 8), Func(target.addGagBoostRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkGagBoost, hp)))
+
+        buffTrack = Sequence(Wait(delay))
+
+        if level == ToontownBattleGlobals.HEAL_TRACK:
+            buffTrack.append(Func(target.makeToonupGagBoost, 1))
+            buffTrack.append(Func(target.addToonupGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkToonupGagBoost, hp))
+        elif level == ToontownBattleGlobals.TRAP_TRACK:
+            buffTrack.append(Func(target.makeTrapGagBoost, 2))
+            buffTrack.append(Func(target.addTrapGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkTrapGagBoost, hp))
+        elif level == ToontownBattleGlobals.LURE_TRACK:
+            buffTrack.append(Func(target.makeLureGagBoost, 3))
+            buffTrack.append(Func(target.addLureGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkLureGagBoost, hp))
+        elif level == ToontownBattleGlobals.THROW_TRACK:
+            buffTrack.append(Func(target.makeThrowGagBoost, 4))
+            buffTrack.append(Func(target.addThrowGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkThrowGagBoost, hp))
+        elif level == ToontownBattleGlobals.SQUIRT_TRACK:
+            buffTrack.append(Func(target.makeSquirtGagBoost, 5))
+            buffTrack.append(Func(target.addSquirtGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkSquirtGagBoost, hp))
+        elif level == ToontownBattleGlobals.ZAP_TRACK:
+            buffTrack.append(Func(target.makeZapGagBoost, 6))
+            buffTrack.append(Func(target.addZapGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkZapGagBoost, hp))
+        elif level == ToontownBattleGlobals.SOUND_TRACK:
+            buffTrack.append(Func(target.makeSoundGagBoost, 7))
+            buffTrack.append(Func(target.addSoundGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkSoundGagBoost, hp))
+        elif level == ToontownBattleGlobals.DROP_TRACK:
+            buffTrack.append(Func(target.makeDropGagBoost, 8))
+            buffTrack.append(Func(target.addDropGagBoostRounds, 3))
+            buffTrack.append(Func(target.checkDropGagBoost, hp))
         elif level == 8:
-            targetTrack.append(Parallel(Func(target.makeDamageUp), Func(target.addDamageUpRounds, 2)))
-            targetTrack.append(Parallel(Func(target.checkDamageUp, hp)))
-        else:
-            pass
+            buffTrack.append(Func(target.makeDamageUp))
+            buffTrack.append(Func(target.addDamageUpRounds, 3))
+            buffTrack.append(Func(target.checkDamageUp, hp))
+
+        mtrack = Parallel(
+            lipstickTrack,
+            lipsTrack,
+            __getSoundTrack(2, 2, node=toon),
+            Sequence(ActorInterval(toon, 'smooch')),
+            Sequence(Wait(delay), ActorInterval(target, 'conked'), Func(target.loop, 'neutral')),
+            Sequence(Wait(delay), Func(__healToon, target, 0)),
+            buffTrack
+        )
+
+        targetTrack.append(mtrack)
 
     effectTrack.append(targetTrack)
     effectTrack.append(Func(MovieUtil.removeProps, lipsticks))
@@ -338,7 +367,7 @@ def __doSmooch(attack, hp = 0):
 
 
 def __doDamageBoost(attack, level, hp):
-    track = __doSmooch(attack, hp)
+    track = __doSmooch(attack, level, hp)
     pbpText = attack['playByPlayText']
     if level == ToontownBattleGlobals.HEAL_TRACK:
         text = TTLocalizer.MovieNPCSOSHeal

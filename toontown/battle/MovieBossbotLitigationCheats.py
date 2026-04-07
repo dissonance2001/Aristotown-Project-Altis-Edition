@@ -1254,10 +1254,9 @@ def doBrokenConnection(attack):
     soundTrack = getSoundTrack('mus_dialup_0.ogg')
     soundTrack4 = getSoundTrack('SA_hit.ogg', delay=Wait(theSuit.getDuration('throttletwo') - 4),node=suit)
     selfDamageTrack = Sequence(Wait(3), Func(suit.showHpText, "CONNECTION DROPPED!", 2, openEnded=0))
-    makeImmune = Func(suit.makeVulnerable)
-    makeImmune2 = Parallel(Func(suit.makeAngry, 4))
-    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.checkVulnerabilityUp, + 30))
-    return Parallel(notifyTrack, makeImmune, makeImmune2, makeDamageUp, selfDamageTrack, suitTrack, soundTrack4, soundTrack)
+    makeImmune2 = Parallel(Func(suit.makeAngry, 3))
+    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 30))
+    return Parallel(notifyTrack, makeImmune2, makeDamageUp, selfDamageTrack, suitTrack, soundTrack4, soundTrack)
 
 def doBrokenConnectionOLD(attack):
     suit = attack['suit']
@@ -1266,7 +1265,7 @@ def doBrokenConnectionOLD(attack):
     suitTrack.append(Wait(3.0))
     makeImmune = Func(suit.makeVulnerable)
     makeImmune2 = Parallel(Func(suit.makeNonImmortal))
-    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.checkVulnerabilityUp, + 30))
+    makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30))
     selfDamageTrack = Func(suit.showHpText, "CONNECTION DROPPED!", 2, openEnded=0)
     return Parallel(suitTrack, makeImmune, makeImmune2, makeDamageUp, selfDamageTrack)
 
@@ -1442,7 +1441,7 @@ def doWiretapped(attack):
     soundTrack = getSoundTrack('SA_hangup.ogg', delay=0.5, node=suit)
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8)
     makeNotImmune = Func(suit.makeNonImmortal)
-    makeNotImmune2 = Sequence(Func(suit.makeUnVulnerable), Func(suit.checkVulnerabilityUp, - 30))
+    makeNotImmune2 = Sequence(Func(suit.makeUnDamageReduction), Func(suit.checkDamageReduction, -30))
     if suit.getDamageUp() > 30:
         makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 30))
     else:
@@ -1681,28 +1680,15 @@ def doHeadRollerGroup(attack):
     battle = attack['battle']
     selfDamageTracks = Parallel()
     suitTracks = Parallel()
-    waitTrack = Sequence(Wait(10.0))
     managerTrack = Sequence(getSuitAnimTrack(attack))
 
     for targetSuit in battle.activeSuits:
-        suitTrack = Sequence(Wait(1.0), Func(targetSuit.checkHeadRoller, battle))
-        selfDamageTrack = Sequence(Wait(7))
-        suitTrack2 = Sequence(Wait(1.0), ActorInterval(targetSuit, 'soak', duration=2.25),
-                              Parallel(ActorInterval(targetSuit, 'pie-small-react', duration=2.25),
-                                       Func(targetSuit.setChatAbsolute,
-                                            "Nice try.",
-                                            CFSpeech | CFTimeout)),
-                              Wait(1.0), Func(targetSuit.checkCogHP, battle), Func(targetSuit.setNeutralAnimation))
-        selfDamageTrack2 = Sequence(Wait(3.25), Func(targetSuit.showHpTextCheat, -250),
-                                    Func(targetSuit.showHpStringDamaged, "DAMAGED!"),
-                                    Func(targetSuit.setHealthForMe, -250),
-                                    Func(targetSuit.updateHealthBar, 0))
+        suitTrack = Sequence(Wait(1.0), targetSuit.makeHeadRollerInterval(battle))
         if not targetSuit.dna.name == 'ambass':
             if not targetSuit.isManager and targetSuit.isTarget:
-                selfDamageTracks.append(selfDamageTrack)
                 suitTracks.append(suitTrack)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
-    return Parallel(managerTrack, suitTracks, soundTrack, waitTrack)
+    return Parallel(managerTrack, suitTracks, soundTrack)
 
 def doGhostMentality(attack):
     manager = attack['suit']
@@ -1828,6 +1814,83 @@ def doAmbassadorFlyMove(attack):
     return Parallel(suitTrackAnim)
 
 def doCollectCallDues(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+
+    whirlSeq = Parallel()
+    tornadoTrack = Parallel()
+    toonSpinTracks = Parallel()
+    toonLiftTracks = Parallel()
+    damageAnims = []
+    damageAnims.append(['duck',
+                        0.01,
+                        0.01,
+                        1.1])
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 2.1, startTime=2.26))
+    damageAnims.append(['slip-forward'])
+    billTypes = ('10dollar', '1dollar', '5dollar', '50dollar')
+    billModel = globalPropPool.getProp(random.choice(billTypes))
+    billModel.setTwoSided(True)
+    for t in targets:
+        toon = t['toon']
+        whirlSfx = loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_whirlwind.ogg')
+        tornadoNode = NodePath("tornadoNode")
+        tornadoNode.reparentTo(battle)
+        tornadoNode.setPos(0, 3, 1)
+        tornadoNode.setScale(0.2)
+        whirlSfx.setLoop(True)
+        sinkPos = toon.getPos(battle)
+        sinkPos.setZ(sinkPos.getZ() + 25)
+        toonSpinTracks.append(Sequence(Wait(0.9), LerpHprInterval(toon, 5.5, Point3(10800, 0, 0)),
+                                 LerpHprInterval(toon, 0.5, toon.getHpr()), Wait(0.5)))
+        toonLiftTracks.append(Sequence(Wait(0.9), LerpPosInterval(toon, 5.5, Point3(toon.getX(), toon.getY(), toon.getZ() + 50)),
+                                      LerpPosInterval(toon, 0.5, toon.getPos()), Wait(0.5)))
+        for x in range(40):
+            billNode = tornadoNode.attachNewNode("billNode" + str(x))
+            bill = billModel.copyTo(billNode)
+            bill.setPosHprScale(0, 0, 0, random.randint(0, 360), 0, random.randint(0, 360), 10.0 - (x * 0.03),
+                                            10.0 - (x * 0.03), 10.0 - (x * 0.03))
+            bill.reparentTo(tornadoNode.find('**/billNode' + str(x)))
+            bill.hide()
+            originalBillZ = tornadoNode.find('**/billNode' + str(x)).getZ()
+            originalBillH = bill.getH()
+            originalBillR = bill.getR()
+            seq = Sequence(
+                        Parallel(
+                            Sequence(
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.175, (0, 0, random.randint(-10, 10))),
+                                tornadoNode.find('**/billNode' + str(x)).posInterval(0.175, (0, 0, originalBillZ))
+                            ),
+                            Sequence(
+                                bill.hprInterval(0.175, (random.randint(-360, 360), 0, random.randint(-360, 360))),
+                                bill.hprInterval(0.175, (originalBillH, 0, originalBillR))
+                            ),
+                            tornadoNode.find('**/billNode' + str(x)).hprInterval(.25, (-360, 0, 0))
+                        )
+                    )
+            whirlSeq.append(Sequence(
+                        Wait(x * 0.1),
+                        Func(bill.show),
+                        Func(seq.loop),
+                        bill.posInterval(0.5, (30 - x / 2, 0, 75 - (x ** 1.3))),
+                        Wait(4.0),
+                Func(seq.finish),
+                        Func(billNode.removeNode),
+                    ))
+        tornadoTrack.append(Parallel(
+                        Sequence(Func(whirlSfx.play), Func(tornadoNode.wrtReparentTo, render), tornadoNode.posInterval(0.5, toon.getPos()),
+                            Wait(6.25), Func(whirlSfx.stop), Func(tornadoNode.removeNode)
+                        )
+                    ))
+
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    toonTrack = getToonTracks(attack, damageDelay=.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=6, showMissedExtraTime=1.0)
+    soundTrack = getSoundTrack('Toon_bodyfall_synergy.ogg', delay=6.9, node=suit)
+    return Parallel(suitTrack, toonTrack, toonLiftTracks, toonSpinTracks, whirlSeq, soundTrack, tornadoTrack)
+
+def doCollectCallDuesOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -2422,7 +2485,7 @@ def doForeAttack2(attack):
                 )
             )
 
-            ballTrack.append(Func(ball.removeNode))  # Clean up properly
+            ballTrack.append(Func(baseBall.removeNode))  # Clean up properly
 
             ballPropTracks.append(ballTrack)
     toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'],
@@ -2479,7 +2542,7 @@ def doForeAttack(attack):
                 )
             )
 
-            ballTrack.append(Func(ball.removeNode))  # Clean up properly
+            ballTrack.append(Func(baseBall.removeNode))  # Clean up properly
 
             ballPropTracks.append(ballTrack)
     toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'],
@@ -3014,7 +3077,108 @@ def doPaperRain(attack):
                                     dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
     return Parallel(suitTrack, toonTracks, cloudPropTracks, notifyTracks, soundTrack)
 
+def __makeSanctionedNodePath():
+    tn = TextNode('CANCELLED')
+    tn.setFont(getSuitFont())
+    tn.setText('BUDGET CUTS\nBUDGET CUTS\nBUDGET CUTS')
+    tn.setAlign(TextNode.ACenter)
+    tntop = hidden.attachNewNode('CancelledTop')
+    tnpath = tntop.attachNewNode(tn)
+    tnpath.setPosHpr(0, 0, 0, 0, 0, 0)
+    tnpath.setScale(1)
+    tnpath.setColor(0.7, 0, 0, 1)
+    tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
+    tnpathback.setPosHpr(0, 0, 0, 180, 0, 0)
+    tnpath.setScale(1)
+    return tntop
+
+def getToonTrackCheat2(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 0.0001, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, target = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
+    if not target:
+        target = attack['target'][0]
+    toon = target['toon']
+    battle = attack['battle']
+    suit = attack['suit']
+    name = attack['name']
+    if suit:
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+    toonPos = toon.getPos(battle)
+    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+    indicator.setHpr(0, -90, 0)
+    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
+    dmg = target['hp']
+    animTrack = Sequence()
+    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
+                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
+                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
+                               Func(indicator.removeNode))
+    if dmg > 0:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
+        animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        return Parallel(animTrack, indicatorTracks)
+    else:
+        animTrack.append(Func(toon.headsUp, battle, suitPos))
+        animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
+        #indicatorTrack = Sequence(Wait(dodgeDelay + showMissedExtraTime), Func(MovieUtil.indicateMissed, toon))
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        animTrack.append(Func(toon.setHpr, battle, origHpr))
+        return animTrack
+
 def doBudgetCuts(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(ActorInterval(attack['suit'], 'sanction'), Func(suit.setNeutralAnimationDrop))
+    toonTracks = Parallel()
+    partTracks2 = Parallel()
+    rightPosPoints = [Point3(0, 0, 0), VBase3(0, -90, 0)]
+    rightKnifeTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        rightKnives = []
+        partTracks = Parallel()
+        sparkEffect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
+        sparks = sparkEffect.getParticlesNamed('particles-1')
+        sparks.setPoolSize(20)
+        sparks.setLitterSize(20)
+        sparks.renderer.setEdgeColor(Vec4(1.0, 1.0, 1.0, 1.0))
+        sparks.renderer.setEdgeColor(Vec4(1.0, 0.0, 0.0, 1.0))
+        partTracks.append(Sequence(
+            Wait(0.8),
+            Parallel(
+                ParticleInterval(sparkEffect, toon, worldRelative=0, duration=3.0, cleanup=True),
+                autoFinish=1
+            )
+        ))
+        partTracks2.append(partTracks)
+        for i in xrange(0, 3):
+            rightKnives.append(globalPropPool.getProp('dagger'))
+
+        for i in xrange(0, 3):
+            knifeDelay = 0.11
+            rightTrack = Sequence()
+            rightTrack.append(Wait(0.5))
+            rightTrack.append(Wait(i * knifeDelay))
+            rightTrack.append(getPropAppearTrack(rightKnives[i], suit.getLeftHand(), rightPosPoints, 1e-06, Point3(.5, .5, .5), scaleUpTime=0.1))
+            rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['face'], hitDuration=0.25, missDuration=0.25, target=t))
+            rightKnifeTracks.append(rightTrack)
+        toonTrack = Parallel()
+        toonTrack.append(Sequence(Wait(0.8), ActorInterval(toon, 'slip-backward')))
+        toonTrack2 = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack2)
+        toonTracks.append(toonTrack)
+    soundTrack = getSoundTrack('SA_glower_power.ogg', delay=0.5, node=suit)
+    soundTrack2 = getSoundTrack('tt_s_ara_cmg_toonHit.ogg', delay=.8, node=suit)
+    return Parallel(suitTrack, partTracks2, toonTracks, rightKnifeTracks, suitTrack2, soundTrack, soundTrack2)
+
+def doBudgetCutsOLD(attack):
     suit = attack['suit']
     targets = attack['target']
     toonTracks = Parallel()

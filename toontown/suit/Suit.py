@@ -71,7 +71,7 @@ HighRollerDialogArray = []
 StenographerDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
-AllSuits = (('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
+AllSuits = (('effort', 'effort'), ('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'), ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'), ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),
             ('throw-paper', 'throw-paper'), ('mob-mentality', 'mob-mentality'), ('neutral', 'neutral'), ('neutral2', 'neutral'), ('magnet', 'magnet'), ('neutral2-hurt', 'neutral-hurt'),
             ('neutral-hurt', 'neutral-hurt'), ('neutral-unstable', 'neutral-unstable'), ('neutral-enraged-return', 'neutral-enraged-return'), ('ottoman-sit-loop', 'ottoman-sit-loop'),
@@ -83,7 +83,7 @@ AllSuitsMinigame = (('victory', 'victory'), ('flail', 'flailing'), ('flail-wb', 
                     ('slip-backward', 'slip-backward'), ('lose3', 'wrecked'), ('slip-forward', 'slip-forward'))
 AllSuitsTutorialBattle = (('lose', 'lose'), ('skeleton-lose', 'skeleton-lose'), ('lose2', 'headless-death'), ('wrecked', 'wrecked'), ('lose3', 'wrecked'), ('dance', 'song-and-dance'), ('pie-small-react', 'pie-small'),
                           ('squirt-small-react', 'squirt-small'))
-AllSuitsBattle = (('shuffle-left', 'shuffle-left'),  ('finger-wag', 'finger-wag'), ('shuffle-right', 'shuffle-right'), ('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('speak', 'speak'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
+AllSuitsBattle = (('shuffle-left', 'shuffle-left'),  ('finger-wag', 'finger-wag'), ('effort', 'effort'), ('shuffle-right', 'shuffle-right'), ('drop-react', 'anvil-drop'), ('flatten', 'drop'), ('speak', 'speak'), ('song-and-dance', 'song-and-dance'), ('glower', 'glower'), ('headless-death', 'headless-death'), ('dance', 'song-and-dance'), ('frustrated', 'frustrated-f'),
                   ('lose3', 'wrecked'), ('short-squeeze', 'short-squeeze'), ('gag-miss', 'gag-miss'), ('pie-large', 'pie-large'), ('rolled', 'rolled'), ('pie-large-lured', 'pie-large-lured'), ('highroller-neutral-levitate-loop', 'highroller-neutral-levitate-loop', 4),
                   ('highroller-neutral-levitate-in-out', 'highroller-neutral-levitate-in-out', 4), ('wrecked', 'wrecked'), ('sidestep-left', 'sidestep-left'),
                   ('sidestep-right', 'sidestep-right'), ('squirt-large-react', 'squirt-large'), ('sound-react', 'sound-react'), ('sound-react-bow', 'sound-react-bow'),
@@ -103,7 +103,7 @@ enf =  (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('smile', 'smi
 mm = (('speak', 'speak', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4))
 blh = (('pen-squirt', 'pen-squirt', 4), ('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ds = (('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
-mldr = (('golf-club-swing', 'golf-club-swing', 4), ('effort', 'effort', 4))
+ksp = (('golf-club-swing', 'golf-club-swing', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
 hh = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('roll-o-dex', 'roll-o-dex', 4))
 bsht = (('effort', 'effort', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
 cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpocket', 4))
@@ -121,7 +121,7 @@ chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-ju
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
 phouse = (('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('cease', 'cease3', 4), ('roll-o-dex', 'roll-o-dex', 4))
+wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('frustrated', 'frustrated', 4), ('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('quick-jump', 'jump', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('layoffs', 'layoffs', 4), ('bellow2', 'bellow2', 4), ('snap', 'snap2', 4))
 
 # Sellbots
@@ -129,15 +129,15 @@ cc = (('speak', 'speak', 4), ('glower', 'glower', 4))
 tm = (('speak', 'speak', 4), ('pickpocket', 'pickpocket', 4), ('roll-o-dex', 'roll-o-dex', 4), ('finger-wag', 'finger-wag', 4))
 cn = (('speak', 'speak', 4), ('pickpocket', 'pickpocket', 4))
 nd = (('smile', 'smile', 4), ('roll-o-dex', 'roll-o-dex', 4))
-dc = (('glower', 'glower', 4), ('speak', 'speak', 4))
+dc = (('smile', 'smile', 4), ('speak', 'speak', 4))
 gh = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 fcs = (('quick-jump', 'jump', 4), ('effort', 'effort', 4), ('glower', 'glower', 4))
 ms = (('effort', 'effort', 4), ('stomp', 'stomp', 4), ('quick-jump', 'jump', 4))
-cnd = (('speak', 'speak', 4), ('song-and-dance', 'song-and-dance', 4), ('golf-club-swing', 'golf-club-swing', 4), ('smile', 'smile', 4))
+asm = (('cigar-smoke', 'cigar-smoke', 4), ('glower', 'glower', 4))
 tf = (('smile', 'smile', 4), ('glower', 'glower', 4))
 ppl = (('speak', 'speak', 4), ('smile', 'smile', 4), ('golf-club-swing', 'golf-club-swing', 4))
 m = (('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
-ksp = (('speak', 'speak', 4), ('smile', 'smile', 4))
+cnd = (('cigar-smoke', 'cigar-smoke', 4), ('speak', 'speak', 4), ('song-and-dance', 'song-and-dance', 4), ('golf-club-swing', 'golf-club-swing', 4), ('smile', 'smile', 4))
 mh = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4))
 watchm = (('effort', 'effort', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
 foreman = (('finger-wag', 'finger-wag', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
@@ -1439,14 +1439,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(3.25)
         elif dna.name == 'blh':
-            self.scale = 5.0 / bSize
-            self.handColor = VBase4(0.612, 0.584, 0.565, 1)
+            self.scale = 6.0 / cSize
+            self.handColor = VBase4(0.878, 0.733, 0.71, 1)
             self.generateBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/stickler.png')
+            self.generateHead2('Blowhard')
+            texture = loader.loadTexture('phase_3.5/maps/ttrm_t_ene_head_blowhard.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.5)
+            self.setHeight(7.5)
         elif dna.name == 'ds':
             self.scale = 4.5 / bSize
             self.handColor = VBase4(0.643, 0.608, 0.596, 1)
@@ -1458,20 +1458,15 @@ class Suit(Avatar.Avatar):
             self.headTexture = 'DS_hat.png'
             self.generateHead2('hatjp187187')
             self.setHeight(6.08)
-        elif dna.name == 'mldr':
+        elif dna.name == 'ksp':
             self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.776, 0.122, 0.157, 1)
-            self.generateBody()
-            self.generateHead2('ear01')
-            self.generateHead2('head')
-            self.generateHead2('ear03')
-            self.generateHead2('ear04')
-            self.generateHead2('ear02')
-            self.generateHead2('antenna_stick')
-            self.generateHead2('antenna_ball')
-            self.generateHead2('eye_mouth')
-            self.generateHead2('pupils')
-            self.setHeight(7.5)
+            self.handColor = VBase4(0.733, 0.541, 0.525, 1)
+            self.generateFemaleBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/kissup_tex.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.0)
         elif dna.name == 'hh':
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.902, 0.808, 0.788, 1)
@@ -2171,10 +2166,10 @@ class Suit(Avatar.Avatar):
             self.setHeight(5.98)
         elif dna.name == 'dc':
             self.scale = 4.75 / aSize
-            self.handColor = VBase4(0.906, 0.906, 0.933, 1)
+            self.handColor = VBase4(0.824, 0.788, 0.847, 1)
             self.generateBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/doublecross.png')
+            self.generateHead2('twoface')
+            texture = loader.loadTexture('phase_3.5/maps/consig.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.2)
@@ -2205,15 +2200,15 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(6.7)
-        elif dna.name == 'cnd':
-            self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.992, 0.851, 0.757, 1)
+        elif dna.name == 'asm':
+            self.scale = 6.25 / cSize
+            self.handColor = VBase4(0.835, 0.518, 0.514, 1)
             self.generateBody()
-            self.generateHead2('yesman')
-            texture = loader.loadTexture('phase_4/maps/mr_hollywood1.jpg')
+            self.generateHead2('flunky')
+            texture = loader.loadTexture('phase_3.5/maps/mademan.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(7.95)
+            self.setHeight(8.25)
         elif dna.name == 'tf':
             self.scale = 5.75 / aSize
             self.handColor = VBase4(0.965, 0.859, 0.831, 1)
@@ -2225,7 +2220,7 @@ class Suit(Avatar.Avatar):
             self.setHeight(7.45)
         elif dna.name == 'ppl':
             self.scale = 6.0 / aSize
-            self.handColor = VBase4(0.584, 0.686, 0.745, 1)
+            self.handColor = VBase4(0.698, 0.635, 0.737, 1)
             self.generateBody()
             self.generateHead2('root')
             texture = loader.loadTexture('phase_14/maps/peoplepleaser.png')
@@ -2241,15 +2236,15 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(8.11)
-        elif dna.name == 'ksp':
-            self.scale = 6.5 / aSize
-            self.handColor = VBase4(0.733, 0.541, 0.525, 1)
-            self.generateFemaleBody()
-            self.generateHead2('root')
-            texture = loader.loadTexture('phase_14/maps/kissup_tex.png')
+        elif dna.name == 'cnd':
+            self.scale = 6.75 / aSize
+            self.handColor = VBase4(0.992, 0.851, 0.757, 1)
+            self.generateBody()
+            self.generateHead2('yesman')
+            texture = loader.loadTexture('phase_4/maps/mr_hollywood1.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.5)
+            self.setHeight(8.6)
         elif dna.name == 'mh':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.918, 0.886, 0.875, 1)
@@ -5181,7 +5176,8 @@ class Suit(Avatar.Avatar):
             if self.style.name == 'ath':
                 headPart.setX(.03)
             if self.style.name == 'blh':
-                headPart.setH(90)
+                headPart.setY(.1)
+                headPart.setH(180)
             if self.style.name == 'ppl':
                 headPart.setZ(0.9)
                 headPart.setY(1)
@@ -5192,6 +5188,8 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1.15)
             if self.style.name == 'fcs':
                 headPart.setH(180)
+                headPart.setX(.03)
+                headPart.setY(-.1)
             if self.style.name == 'ovt':
                 headPart.setY(-.2)
                 headPart.setScale(1.05)
@@ -9610,7 +9608,6 @@ class Suit(Avatar.Avatar):
             'headInterval2',
             'healInterval',
             'absorbInterval',
-            'playByPlayInterval',
             'damageInterval',
             'hpTextInterval',
             'hpTextInterval2',

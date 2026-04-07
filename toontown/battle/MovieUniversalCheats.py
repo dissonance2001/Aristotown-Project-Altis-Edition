@@ -738,6 +738,7 @@ def doDesperation2(attack):
         toonTracks.append(toonTrack)
     notifyTracks = Sequence()
     makeDamageUps = Parallel()
+    theSuit.setPendingQueuedDesperation(True)
     if theSuit.isDesperation:
         notifyTrack = Sequence(Func(theSuit.showHpStringDesperationDamage))
     else:

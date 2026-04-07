@@ -649,11 +649,6 @@ class DistributedCashbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CFO)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
-            if len(self.involvedToons[:]) == 1 and self.begunSolo:
-                isSolo = 1
-            else:
-                isSolo = 0
-            self.air.achievementsManager.cfo(toonId, solo = isSolo)
 
     def exitVictory(self):
         self.__deleteBattleThreeObjects()

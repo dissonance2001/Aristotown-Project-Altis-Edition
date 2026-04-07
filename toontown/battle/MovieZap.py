@@ -218,9 +218,9 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
            # zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
             #zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
         if toon.getTrackBonusLevel(ZAP_TRACK) > 1:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 4))), Func(suit.makeSoaked, 0))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 2))), Func(suit.makeSoaked, 0))
         else:
-            showDamage = Func(suit.showHpText, -hp, openEnded=0, attackTrack=ZAP_TRACK)
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 4))), Func(suit.makeSoaked, 0))
         updateHealthBar = Func(suit.updateHealthBar, hp)
         totalDamage = hp
 
@@ -831,36 +831,52 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
     battle = zap['battle']
     origHpr = toon.getHpr(battle)
     origPos = toon.getPos(battle)
+
     tazer = globalPropPool.getProp('tazer')
     tazer.setHpr(180, 0, 0)
+
     runBackHpr = Vec3(0, 0, 0)
     hands = toon.getRightHands()
     hand_jointpath0 = hands[0].attachNewNode('handJoint0-path')
     hand_jointpath1 = hand_jointpath0.instanceTo(hands[1])
-    scale = 0.3
+
     tAppearDelay = 0.7
-    dHoseHold = 0.7
-    midPos = Point3(toon.getX(battle)*.5, 0, 0)
     runDur = 1
     tSprayDelay = 2
-    tSpray = 1
-    dSprayScale = 0.1
-    dSprayHold = 1.8
+    dBeamHold = 1.8
     tContact = 2
     tSuitDodges = 2.1
+
     tracks = Parallel()
-    toonTrack = Sequence(Wait(tAppearDelay), Func(MovieUtil.showProp, tazer, hand_jointpath0),
-        Func(toon.loop, 'run'), Wait(1), Func(toon.pingpong, 'cast', fromFrame=30, toFrame=40), Wait(3), Func(toon.stop), 
-        Func(toon.setHpr, battle, runBackHpr), Func(toon.loop, 'run'), Wait(1), Func(toon.stop), Func(toon.loop, 'neutral'), 
-        Func(MovieUtil.removeProp, tazer), Func(toon.setHpr, battle, origHpr))
-    
-    moveTrack = Sequence(Wait(tAppearDelay), LerpPosInterval(toon, runDur, midPos, other=battle), Wait(3), LerpPosInterval(toon, runDur, origPos, 
-        other=battle))
-    
+
+    toonTrack = Sequence(
+        Wait(tAppearDelay),
+        Func(MovieUtil.showProp, tazer, hand_jointpath0),
+        Func(toon.loop, 'run'),
+        Wait(1),
+        Func(toon.pingpong, 'cast', fromFrame=30, toFrame=40),
+        Wait(3),
+        Func(toon.stop),
+        Func(toon.setHpr, battle, runBackHpr),
+        Func(toon.loop, 'run'),
+        Wait(1),
+        Func(toon.stop),
+        Func(toon.loop, 'neutral'),
+        Func(MovieUtil.removeProp, tazer),
+        Func(toon.setHpr, battle, origHpr)
+    )
+
+    moveTrack = Sequence(
+        Wait(tAppearDelay),
+        LerpPosInterval(toon, runDur, Point3(toon.getX(battle) * .5, 0, 0), other=battle),
+        Wait(3),
+        LerpPosInterval(toon, runDur, origPos, other=battle)
+    )
+
     tracks.append(toonTrack)
     tracks.append(moveTrack)
-    soundTrack = __getSoundTrack(level, tSprayDelay, toon)
-    tracks.append(soundTrack)
+    tracks.append(__getSoundTrack(level, tSprayDelay, toon))
+
     for t in targets:
         suit = t['suit']
         hp = t['hp']
@@ -870,11 +886,8 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
         leftSuits = t['leftSuits']
         kbbonus = t['kbbonus']
         rightSuits = t['rightSuits']
-        hitSuit = hp > 0
-        suitPos = suit.getPos(battle)
-        targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(toon=toon):
+        def getBeamStartPos(toon=toon):
             toon.update(0)
             lod0 = toon.getLOD(toon.getLODNames()[0])
             if base.config.GetBool('want-new-anims', 1):
@@ -884,22 +897,23 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
                     joint = lod0.find('**/joint_Rhold')
             else:
                 joint = lod0.find('**/joint_Rhold')
-            p = joint.getPos(render)
-            return p
-
-        sprayTrack = Sequence()
-        sprayTrack.append(Wait(tSprayDelay))
-        sprayTrack.append(
-            MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
-                                  dSprayScale,
-                                  horizScale=scale, vertScale=scale))
+            return joint.getPos(render)
 
         if hp > 0:
-            tracks.append(sprayTrack)
+            tracks.append(makeZapBeamTrack(
+                getBeamStartPos,
+                suit,
+                tDelay=tSprayDelay,
+                duration=dBeamHold
+            ))
+
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle,
-                toon, fShowStun, revived=revived))
-    
+            tracks.append(__getSuitTrack(
+                suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
+                'shock', died, leftSuits, rightSuits, battle,
+                toon, fShowStun, revived=revived
+            ))
+
     return tracks
 
 
@@ -912,42 +926,47 @@ def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
     origHpr = toon.getHpr(battle)
     endPos = toon.getPos(battle)
     endPos.setY(endPos.getY() + 3)
-    scale = sprayScales[level]
-    tButton = 0.0
-    dButtonScale = 0.5
-    dButtonHold = 3.0
-    dSprayScale = 0.1
-    dSprayHold = 1.8
+
+    dBeamHold = 1.8
     tContact = 2.9
     tSpray = 2.5
     tSprayDelay = 2.5
     tSuitDodges = 1.8
     shrinkDuration = 0.4
+
     tracks = Parallel()
-    soundTrack = __getSoundTrack(level, 2.3, toon)
-    tracks.append(soundTrack)
+    tracks.append(__getSoundTrack(level, 2.3, toon))
+
     button = globalPropPool.getProp('zap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
-    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos),
-                         Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'zap-button')),
-                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'),
-                         Func(toon.setHpr, battle, origHpr))
 
+    toonTrack = Sequence(
+        Func(MovieUtil.showProps, buttons, hands),
+        Func(toon.headsUp, battle, endPos),
+        Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'zap-button')),
+        Func(MovieUtil.removeProps, buttons),
+        Func(toon.loop, 'neutral'),
+        Func(toon.setHpr, battle, origHpr)
+    )
     tracks.append(toonTrack)
+
     coil = globalPropPool.getProp('tv')
     coil.setPos(endPos)
     coil.setH(180)
-    propTrack = Sequence()
-    propTrack.append(Func(coil.show))
-    propTrack.append(Func(coil.setScale, Point3(0.1, 0.1, 0.1)))
-    propTrack.append(Func(coil.reparentTo, battle))
-    propTrack.append(LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)))
-    propTrack.append(Wait(tSpray + 2))
-    propTrack.append(LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration))
-    propTrack.append(Func(MovieUtil.removeProp, coil))
+
+    propTrack = Sequence(
+        Func(coil.show),
+        Func(coil.setScale, Point3(0.1, 0.1, 0.1)),
+        Func(coil.reparentTo, battle),
+        LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)),
+        Wait(tSpray + 2),
+        LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration),
+        Func(MovieUtil.removeProp, coil)
+    )
     tracks.append(propTrack)
+
     for t in targets:
         suit = t['suit']
         hp = t['hp']
@@ -957,11 +976,8 @@ def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
         leftSuits = t['leftSuits']
         kbbonus = t['kbbonus']
         rightSuits = t['rightSuits']
-        hitSuit = hp > 0
-        suitPos = suit.getPos(battle)
-        targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(coil=coil, toon=toon):
+        def getBeamStartPos(coil=coil, toon=toon):
             toon.update(0)
             n = hidden.attachNewNode('pointBehindSprayProp')
             n.reparentTo(toon)
@@ -969,23 +985,22 @@ def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
             n.setZ(1)
             p = n.getPos(render)
             n.removeNode()
-            del n
             return p
 
-        sprayTrack = Sequence()
-        sprayTrack.append(Wait(tSprayDelay))
-        sprayTrack.append(
-            MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
-                                  dSprayScale,
-                                  horizScale=scale, vertScale=scale))
-
         if hp > 0:
-            tracks.append(sprayTrack)
+            tracks.append(makeZapBeamTrack(
+                getBeamStartPos,
+                suit,
+                tDelay=tSprayDelay,
+                duration=dBeamHold
+            ))
+
         if hp > 0 or delay <= 0:
-            tracks.append(
-                __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
-                           battle,
-                           toon, fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(
+                suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
+                'large-zap', died, leftSuits, rightSuits, battle,
+                toon, fShowStun, revived=revived
+            ))
 
     return tracks
 
@@ -998,42 +1013,47 @@ def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
     origHpr = toon.getHpr(battle)
     endPos = toon.getPos(battle)
     endPos.setY(endPos.getY() + 3)
-    scale = sprayScales[level]
-    tButton = 0.0
-    dButtonScale = 0.5
-    dButtonHold = 3.0
-    dSprayScale = 0.1
-    dSprayHold = 1.8
+
+    dBeamHold = 1.8
     tContact = 2.9
     tSpray = 2.5
     tSprayDelay = 2.5
     tSuitDodges = 1.8
     shrinkDuration = 0.4
+
     tracks = Parallel()
-    soundTrack = __getSoundTrack(level, 2.3, toon)
-    tracks.append(soundTrack)
+    tracks.append(__getSoundTrack(level, 2.3, toon))
+
     button = globalPropPool.getProp('zap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
-    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos),
-                         Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'zap-button')),
-                         Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'),
-                         Func(toon.setHpr, battle, origHpr))
 
+    toonTrack = Sequence(
+        Func(MovieUtil.showProps, buttons, hands),
+        Func(toon.headsUp, battle, endPos),
+        Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'zap-button')),
+        Func(MovieUtil.removeProps, buttons),
+        Func(toon.loop, 'neutral'),
+        Func(toon.setHpr, battle, origHpr)
+    )
     tracks.append(toonTrack)
+
     coil = globalPropPool.getProp('ttcc_gag_radio')
     coil.setPos(endPos)
     coil.setH(180)
-    propTrack = Sequence()
-    propTrack.append(Func(coil.show))
-    propTrack.append(Func(coil.setScale, Point3(0.1, 0.1, 0.1)))
-    propTrack.append(Func(coil.reparentTo, battle))
-    propTrack.append(LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)))
-    propTrack.append(Wait(tSpray + 2))
-    propTrack.append(LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration))
-    propTrack.append(Func(MovieUtil.removeProp, coil))
+
+    propTrack = Sequence(
+        Func(coil.show),
+        Func(coil.setScale, Point3(0.1, 0.1, 0.1)),
+        Func(coil.reparentTo, battle),
+        LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)),
+        Wait(tSpray + 2),
+        LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration),
+        Func(MovieUtil.removeProp, coil)
+    )
     tracks.append(propTrack)
+
     for t in targets:
         suit = t['suit']
         hp = t['hp']
@@ -1043,11 +1063,8 @@ def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
         leftSuits = t['leftSuits']
         kbbonus = t['kbbonus']
         rightSuits = t['rightSuits']
-        hitSuit = hp > 0
-        suitPos = suit.getPos(battle)
-        targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(coil=coil, toon=toon):
+        def getBeamStartPos(coil=coil, toon=toon):
             toon.update(0)
             n = hidden.attachNewNode('pointBehindSprayProp')
             n.reparentTo(toon)
@@ -1055,25 +1072,110 @@ def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
             n.setZ(1)
             p = n.getPos(render)
             n.removeNode()
-            del n
             return p
 
-        sprayTrack = Sequence()
-        sprayTrack.append(Wait(tSprayDelay))
-        sprayTrack.append(
-            MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
-                                  dSprayScale,
-                                  horizScale=scale, vertScale=scale))
-
         if hp > 0:
-            tracks.append(sprayTrack)
+            tracks.append(makeZapBeamTrack(
+                getBeamStartPos,
+                suit,
+                tDelay=tSprayDelay,
+                duration=dBeamHold
+            ))
+
         if hp > 0 or delay <= 0:
-            tracks.append(
-                __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits,
-                               battle,
-                               toon, fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(
+                suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
+                'small-zap', died, leftSuits, rightSuits, battle,
+                toon, fShowStun, revived=revived
+            ))
 
     return tracks
+
+def makeZapBeamTrack(startPosFunc, suit, tDelay, duration):
+    beam = globalPropPool.getProp('zap_beam')
+    beam.loop('zap_beam')
+    beam.setTransparency(1)
+    beam.hide()
+
+    def setupBeam():
+        startPos = startPosFunc()
+        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.5)
+
+        beam.reparentTo(render)
+        beam.show()
+        beam.setPos(startPos)
+        beam.headsUp(endPos)
+
+        dist = (endPos - startPos).length()
+
+        # Best first guess from your previous screenshot tests:
+        beam.setP(beam.getP() + 20)
+        beam.setScale(2.5, dist * 10, 2.5)
+
+    def cleanupBeam():
+        if beam and not beam.isEmpty():
+            beam.removeNode()
+
+    return Sequence(
+        Wait(tDelay),
+        Func(setupBeam),
+        Parallel(
+            Sequence(
+                Wait(max(0.0, duration - 0.2)),
+                LerpColorScaleInterval(
+                    beam, 0.2,
+                    Vec4(1, 1, 1, 0),
+                    startColorScale=Vec4(1, 1, 1, 1)
+                )
+            )
+        ),
+        Wait(0.2),
+        Func(cleanupBeam)
+    )
+
+def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
+    beam = globalPropPool.getProp('zap_beam')
+    beam.loop('zap_beam')
+    beam.setTransparency(1)
+    beam.hide()
+    beam.setH(90)
+
+    def setupBeam():
+        startPos = coil.getPos(render) + Point3(0, 0, 5.0)
+        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.5)
+
+        beam.reparentTo(render)
+        beam.show()
+        beam.setPos(startPos)
+        beam.headsUp(endPos)
+
+        dist = (endPos - startPos).length()
+
+        # most likely Y-axis stretch
+        beam.setScale(2.5, dist * 10, 2.5)
+
+    def cleanupBeam():
+        if beam and not beam.isEmpty():
+            beam.removeNode()
+
+    return Sequence(
+        Wait(tDelay),
+        Func(setupBeam),
+
+        Parallel(
+            Sequence(
+                Wait(duration - 0.2),
+                LerpColorScaleInterval(
+                    beam, 0.2,
+                    Vec4(1, 1, 1, 0),
+                    startColorScale=Vec4(1, 1, 1, 1)
+                )
+            )
+        ),
+
+        Wait(0.2),
+        Func(cleanupBeam)
+    )
 
 
 def __doTesla(zap, delay, fShowStun, npcs=[]):
@@ -1082,78 +1184,109 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
     hpbonus = zap['hpbonus']
     targets = zap['target']
     battle = zap['battle']
+
     origHpr = toon.getHpr(battle)
     endPos = toon.getPos(battle)
     endPos.setY(endPos.getY() + 3)
+
     scale = sprayScales[level]
-    tButton = 0.0
-    dButtonScale = 0.5
-    dButtonHold = 3.0
-    dSprayScale = 0.1
-    dSprayHold = 1.8
-    tContact = 2.9
-    tSpray = 2.5
+
     tSprayDelay = 2.5
+    tContact = 2.9
     tSuitDodges = 1.8
+    dBeamHold = 1.8
     shrinkDuration = 0.4
+
     tracks = Parallel()
-    soundTrack = __getSoundTrack(level, 2.3, toon)
-    tracks.append(soundTrack)
+
+    # sound
+    tracks.append(__getSoundTrack(level, 2.3, toon))
+
+    # button press
     button = globalPropPool.getProp('zap-button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
     hands = toon.getLeftHands()
-    toonTrack = Sequence(Func(MovieUtil.showProps, buttons, hands), Func(toon.headsUp, battle, endPos), Parallel(ActorInterval(toon, 'pushbutton'), ActorInterval(button, 'zap-button')),
-        Func(MovieUtil.removeProps, buttons), Func(toon.loop, 'neutral'), Func(toon.setHpr, battle, origHpr))
-    
+
+    toonTrack = Sequence(
+        Func(MovieUtil.showProps, buttons, hands),
+        Func(toon.headsUp, battle, endPos),
+
+        Parallel(
+            ActorInterval(toon, 'pushbutton'),
+            ActorInterval(button, 'zap-button')
+        ),
+
+        Func(MovieUtil.removeProps, buttons),
+        Func(toon.loop, 'neutral'),
+        Func(toon.setHpr, battle, origHpr)
+    )
     tracks.append(toonTrack)
+
+    # tesla coil
     coil = globalPropPool.getProp('tesla')
     coil.setPos(endPos)
-    propTrack = Sequence()
-    propTrack.append(Func(coil.show))
-    propTrack.append(Func(coil.setScale, Point3(0.1, 0.1, 0.1)))
-    propTrack.append(Func(coil.reparentTo, battle))
-    propTrack.append(LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)))
-    propTrack.append(Wait(tSpray + 2))
-    propTrack.append(LerpScaleInterval(nodePath=coil, scale=Point3(1.0, 1.0, 0.1), duration=shrinkDuration))
-    propTrack.append(Func(MovieUtil.removeProp, coil))
+
+    propTrack = Sequence(
+        Func(coil.show),
+        Func(coil.setScale, Point3(0.1, 0.1, 0.1)),
+        Func(coil.reparentTo, battle),
+        LerpScaleInterval(coil, 1.5, Point3(1.0, 1.0, 1.0)),
+
+        Wait(tSprayDelay + 2),
+
+        LerpScaleInterval(
+            coil,
+            shrinkDuration,
+            Point3(1.0, 1.0, 0.1)
+        ),
+
+        Func(MovieUtil.removeProp, coil)
+    )
     tracks.append(propTrack)
+
+    # targets
     for t in targets:
         suit = t['suit']
         hp = t['hp']
         died = t['died']
         revived = t['revived']
-        hpbonus = zap['hpbonus']
         leftSuits = t['leftSuits']
         kbbonus = t['kbbonus']
         rightSuits = t['rightSuits']
+
         hitSuit = hp > 0
-        suitPos = suit.getPos(battle)
-        targetPoint = lambda suit = suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(coil = coil, toon = toon):
-            toon.update(0)
-            n = hidden.attachNewNode('pointBehindSprayProp')
-            n.reparentTo(toon)
-            n.setPos(coil.getPos(toon))
-            n.setZ(5)
-            p = n.getPos(render)
-            n.removeNode()
-            del n
-            return p
+        # beam instead of zap track
+        if hitSuit:
+            beamTrack = makeZapBeamTrack2(
+                battle,
+                coil,
+                suit,
+                tDelay=tSprayDelay,
+                duration=dBeamHold
+            )
+            tracks.append(beamTrack)
 
-
-        sprayTrack = Sequence()
-        sprayTrack.append(Wait(tSprayDelay))
-        sprayTrack.append(MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale,
-            horizScale=scale, vertScale=scale))
-
-        if hp > 0:
-            tracks.append(sprayTrack)
+        # suit reaction (unchanged)
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits, battle,
-                toon, fShowStun, revived=revived))
-    
+            tracks.append(__getSuitTrack(
+                suit,
+                tContact,
+                tSuitDodges,
+                hp,
+                hpbonus,
+                kbbonus,
+                'large-zap',
+                died,
+                leftSuits,
+                rightSuits,
+                battle,
+                toon,
+                fShowStun,
+                revived=revived
+            ))
+
     return tracks
 
 def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):

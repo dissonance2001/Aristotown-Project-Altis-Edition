@@ -1208,7 +1208,7 @@ def doOverpressureDeath(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     notifyTracks = Sequence()
-    notifyTrack = Parallel(theSuit.makeDamageInterval(battle, 250))
+    notifyTrack = Parallel(theSuit.makeDamageInterval2(battle, 250), Wait(4.0))
     cameraTrack = Wait(5.0)
     notifyTracks.append(Parallel(notifyTrack))
     return Sequence(notifyTracks)
@@ -1216,12 +1216,12 @@ def doOverpressureDeath(attack):
 def doOverextendedLeverage(attack):
     suit = attack['suit']
     notifyTracks = Parallel()
-    suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.makeVulnerable), Func(suit.checkVulnerabilityUp, + 5))
+    suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.makeVulnerable), Func(suit.checkVulnerabilityUp, + 10))
     soundTrack2 = getSoundTrack('SA_protoon_shake.ogg', delay=0.5, node=suit)
     suitAnimTrack = Sequence(Parallel(ActorInterval(suit, 'quick-jump', duration=1.3)),
                              ActorInterval(suit, 'slip-forward'), Func(suit.setNeutralAnimationDrop))
     cameraTrack = Wait(5.0)
-    notifyTracks.append(Func(suit.showHpString, "+5% Vulnerable!"))
+    notifyTracks.append(Func(suit.showHpString, "+10% Vulnerable!"))
     notifyTracks.append(Parallel(soundTrack2, suitTrack, suitAnimTrack, cameraTrack))
     return Sequence(notifyTracks)
 
@@ -1501,7 +1501,7 @@ def doUnionBuster(attack):
     toon = target[0]['toon']
     dmg = target[0]['hp']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25), Wait(2.0))
     cagePropTracks = Parallel()
     #for t in attack['target']:
         #toon = t['toon']
@@ -1563,6 +1563,7 @@ def doUnionBusterDamage(attack):
         toon = t['toon']
         dmg = t['hp']
         underPressure = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_underPressure')
+        underPressure.setScale(0.75)
         leftGear = underPressure.find('**/geo_gear01')
         rightGear = underPressure.find('**/geo_gear02')
         underPressure.find('**/geo_hole01').hide()
@@ -1708,7 +1709,7 @@ def doUnionBust(attack):
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
         suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
-        selfDamageTrack = Parallel(Func(targetSuit.checkUnionBust, battle))
+        selfDamageTrack = Parallel(targetSuit.makeUnionBustInterval(battle))
         smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, targetSuit),
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
@@ -2110,7 +2111,7 @@ def doBreachOfContractGroup(attack):
         if dmg > 0:
             sanctioned = loader.loadModel('phase_5/models/props/ttrpg_m_ene_prp_deniedSign')
             missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
-            propTrack = Sequence(Func(sanctioned.lookAt, toon),
+            propTrack = Sequence(
                 Wait(0.5),
                 Func(battle.movie.needRestoreRenderProp, sanctioned),
                 Func(sanctioned.reparentTo, render),
@@ -2118,7 +2119,7 @@ def doBreachOfContractGroup(attack):
                 Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
                 Func(sanctioned.setP, 0),
                 Func(sanctioned.setR, 0),
-                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+                getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
                 Func(sanctioned.removeNode))
             origH = suit.getH(battle)
 
@@ -2213,7 +2214,10 @@ def doContractEnforcement(attack, ind, ind2, ind3):
                 )
 
             suitTrack.append(Func(battle.unSueSuit, target))
-            suitTrack.append(Func(target.checkContractedRounds, 3))
+            if not target.isContracted2 and not target.isContracted:
+                suitTrack.append(Func(target.checkContractedRounds, 3))
+            else:
+                suitTrack.append(Func(target.checkContractedRounds, 2))
             suitTracks.append(suitTrack)
 
             knife = globalPropPool.getProp('shredder-paper')
@@ -2476,10 +2480,20 @@ def doPeckingOrderGroup(attack):
             #next.setScale(0.01)
            # next.reparentTo(suit.getRightHand())
             #next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
+            toonPos = toon.getPos(battle)
+
             if dmg > 0:
-                hitPoint = Point3(random.random() * 5 - 2.5, random.random() * 2 - 1 - 6, random.random() * 3 - 1.5 + toon.getHeight() - 0.9)
+                hitPoint = Point3(
+                    toonPos[0] + (random.random() * 1.5 - 0.75),
+                    toonPos[1] + (random.random() * 1.0 - 0.5),
+                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 1.0 - 0.5)
+                )
             else:
-                hitPoint = Point3(random.random() * 2 - 1, random.random() * 4 - 2 - 15, random.random() * 4 - 2 + 2.2)
+                hitPoint = Point3(
+                    toonPos[0] + (random.random() * 3.0 - 1.5),
+                    toonPos[1] - 3.0 + (random.random() * 2.0 - 1.0),
+                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 2.0 - 1.0)
+                )
             birdTrack = Sequence(Wait(throwDelay), Func(next.setScale, 0.01),
                                  Func(next.reparentTo, suit.getRightHand()),
                                  Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3,
@@ -2620,6 +2634,64 @@ def doHotTake(attack):
     notifyTrack.append(Parallel(Func(toon.makeBombed), Func(toon.addBombedRounds, 3)))
     notifyTrack.append(Parallel(Func(toon.checkBombedUp, 50)))
     return Parallel(explodeTracks, suitTrack, toonTrack, notifyTrack, soundTrack, propTrack, explosionTrack, explosionTrack2)
+
+def doHotTakeDamage(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    explodeTracks2 = Parallel()
+    toonTracks = Parallel()
+    notifyTracks = Parallel()
+    soundTracks = Parallel()
+    explosionTracks = Parallel()
+    explosionTrack2s = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonPos = toon.getPos(battle)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
+        explosionTrack = Sequence()
+        explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        gearPoint2 = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+        explosionTrack2 = Sequence()
+        explosionTrack2.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint2, scale=3))
+        explode = []
+        for i in xrange(0, 3):
+            explode.append(globalPropPool.getProp('explosion'))
+        explodePosPoints = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
+        explodePosPoints1 = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
+        explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
+        explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
+        explodeTracks = Parallel()
+        for i in xrange(0, 3):
+            explodeTrack = Sequence()
+            explodeTrack.append(
+                getPropAppearTrack(explode[i], suit, explodePosPoints, 1e-06, Point3(1.7, 1.7, 1.7), scaleUpTime=0.1))
+            explodeTrack.append(
+                getPropAppearTrack(explode[i], suit, explodePosPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+            explodeTrack.append(
+                getPropAppearTrack(explode[i], suit, explodeHprPoints, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+            explodeTrack.append(
+                getPropAppearTrack(explode[i], suit, explodeHprPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.1))
+            explodeTracks.append(explodeTrack)
+        soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        notifyTrack = Sequence(Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=3))
+        notifyTrack.append(Parallel(Func(toon.makeUnBombed)))
+        notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 75)))
+        notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 2)))
+        notifyTrack.append(Parallel(Func(toon.checkDamageUp, 75)))
+        notifyTrack.append(Wait(5.0))
+        if dmg > 0:
+            soundTracks.append(soundTrack)
+            explodeTracks2.append(explodeTracks)
+            explosionTrack2.append(explosionTrack)
+            explosionTrack2s.append(explosionTrack2)
+            notifyTracks.append(notifyTrack)
+    toonTrack = getToonTracksCheat(attack, 0, ['conked'], 0, ['jump'])
+    return Parallel(explodeTracks2, toonTrack, notifyTracks, soundTracks, explosionTracks, explosionTrack2s)
 
 def __createSuitResetPosTrackOvermodulated(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)

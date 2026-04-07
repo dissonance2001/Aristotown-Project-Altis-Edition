@@ -364,7 +364,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'PrepareBattleThree'
-        self.initializeBattles(2, (-2.798, 233, 7.55, 180, 0, 0))
+        self.initializeBattles(2, (-1.5, -30, 0, 0, 0, 0))
 
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 0, self.__donePrepareBattleTwo)
@@ -668,11 +668,6 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CJ)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
-            if len(self.involvedToons[:]) == 1 and self.begunSolo:
-                isSolo = 1
-            else:
-                isSolo = 0
-            self.air.achievementsManager.cj(toonId, solo = isSolo)
 
     def giveCogSummonReward(self, toon, prefDeptIndex, prefSummonType):
         cogLevel = self.toonLevels - 1

@@ -9,7 +9,7 @@ from otp.avatar import AvatarDNA
 notify = directNotify.newCategory('SuitDNA')
 suitHeadTypes = [
     # Bossbots
-'f', 'p', 'stg', 'ym', 'enf', 'mm', 'blh', 'ds', 'mldr', 'hh', 'bsht', 'cr', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed',
+'f', 'p', 'stg', 'ym', 'enf', 'mm', 'blh', 'ds', 'ksp', 'hh', 'bsht', 'cr', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed',
 'choreo', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass',
     # Lawbots
 'bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
@@ -18,7 +18,7 @@ suitHeadTypes = [
 'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra', 'kerberos', 'charon',
 'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
+'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'asm', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
 'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
 'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'liquid', 'rkeeper',
@@ -32,14 +32,14 @@ suitHeadTypes = [
 ]
 suitATypes = [
     # Bossbots
-'ym', 'enf', 'mldr', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'choreo', 'chainsaw', 'chainsaw2', 'phouse',
+'ym', 'enf', 'ksp', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'choreo', 'chainsaw', 'chainsaw2', 'phouse',
 'bkeeper', 'wtapper', 'ambass',
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
 'pp', 'sw', 'nc', 'trs', 'rb', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'nd', 'dc', 'fcs', 'cnd', 'tf', 'ppl', 'm', 'ksp', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
+'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
     # Boardbots
 'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'dold', 'dking', 'crystal', 'chairman', 'liquid', 'rkeeper', 'cbutcher', 'cdirector',
     # Techbots
@@ -49,7 +49,7 @@ suitATypes = [
 ]
 suitBTypes = [
     # Bossbots
-'p', 'ds', 'blh',
+'p', 'ds',
     # Lawbots
 'b', 'pf', 'ac', 'bs', 'sd', 'sh', 'clerk', 'mouthp', 'rainmake', 'erclaim', 'redd', 'sgoat',
     # Cashbots
@@ -65,13 +65,13 @@ suitBTypes = [
 ]
 suitCTypes = [
     # Bossbots
-'f', 'stg', 'mm', 'cr', 'fbed',
+'f', 'stg', 'mm', 'blh', 'cr', 'fbed',
     # Lawbots
 'bf', 'nn', 'ad', 'judy',
     # Cashbots
 'sc', 'tw', 'fct', 'mb', 'bfh', 'supervis', 'treek', 'styx', 'hydra', 'pcrat',
     # Sellbots
-'cc', 'gh', 'dopr', 'dopa', 'mslacker',
+'cc', 'gh', 'asm', 'dopr', 'dopa', 'mslacker',
     # Boardbots
 'bgh', 'ca', 'txm', 'dl', 'shw', 'bfh2', 'ddiver',
     # Techbots

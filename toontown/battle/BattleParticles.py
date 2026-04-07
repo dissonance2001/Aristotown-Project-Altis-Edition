@@ -110,6 +110,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('freezeAssets.ptf')
     elif name == 'GlowerPower':
         return loadParticleFile('glowerPowerKnives.ptf')
+    elif name == 'zapCogDeathSmoke':
+        return loadParticleFile('zapCogDeathSmoke.ptf')
     elif name == 'HostileTakeover':
         return loadParticleFile('glowerPowerKnives.ptf')
     elif name == 'WaterSpray':
@@ -126,6 +128,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('paperRainfall.ptf')
     elif name == 'HotAir':
         return loadParticleFile('hotAirSpray.ptf')
+    elif name == 'FreezeSpray':
+        return loadParticleFile('FreezeSpray.ptf')
     elif name == 'HotAir2':
         return loadParticleFile('hotAirSpray2.ptf')
     elif name == 'PoundKey':

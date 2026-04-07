@@ -442,8 +442,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         value = hp
 
         updateHealthBar = Sequence(
-            Func(suit.setHealthForMe, -value),
-            Func(suit.updateHealthBar, 0)
+            Func(suit.updateHealthBar, value)
         )
         sival = []
         if kbbonus > 0:

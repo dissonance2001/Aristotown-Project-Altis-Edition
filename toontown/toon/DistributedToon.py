@@ -260,6 +260,94 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             pass
 
+    def checkToonupGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getToonupGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnToonupGagBoost))
+        elif self.getToonupGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addToonupGagBoostRounds, self.getToonupGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkTrapGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getTrapGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnTrapGagBoost))
+        elif self.getTrapGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addTrapGagBoostRounds, self.getTrapGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkLureGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getLureGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnLureGagBoost))
+        elif self.getLureGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addLureGagBoostRounds, self.getLureGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkThrowGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getThrowGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnThrowGagBoost))
+        elif self.getThrowGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addThrowGagBoostRounds, self.getThrowGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkSquirtGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getSquirtGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnSquirtGagBoost))
+        elif self.getSquirtGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addSquirtGagBoostRounds, self.getSquirtGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkZapGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getZapGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnZapGagBoost))
+        elif self.getZapGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addZapGagBoostRounds, self.getZapGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkSoundGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getSoundGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnSoundGagBoost))
+        elif self.getSoundGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addSoundGagBoostRounds, self.getSoundGagBoostRounds() - 1)).start()
+        else:
+            pass
+
+    def checkDropGagBoostRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDropGagBoostRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnDropGagBoost))
+        elif self.getDropGagBoostRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addDropGagBoostRounds, self.getDropGagBoostRounds() - 1)).start()
+        else:
+            pass
+
     def checkNoDodgeRoundCountdown(self):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -479,6 +567,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setNeutralAnimation(self):
         Sequence(Func(self.loop, 'neutral')).start()
 
+    def setNeutralAnimationAdjustInterval(self):
+        Sequence(Func(self.loop, 'neutral')).start()
+
     def checkDamageDown(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -496,6 +587,78 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.damageInterval = Parallel(Func(self.setDamageUp, self.getDamageUp())).start()
         else:
             self.damageInterval = Parallel(Func(self.setDamageUp, num)).start()
+
+    def checkToonupGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getToonupGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setToonupGagBoost, self.getToonupGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setToonupGagBoost, num)).start()
+
+    def checkTrapGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getTrapGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setTrapGagBoost, self.getTrapGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setTrapGagBoost, num)).start()
+
+    def checkLureGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getLureGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setLureGagBoost, self.getLureGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setLureGagBoost, num)).start()
+
+    def checkThrowGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getThrowGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setThrowGagBoost, self.getThrowGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setThrowGagBoost, num)).start()
+
+    def checkSquirtGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getSquirtGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setSquirtGagBoost, self.getSquirtGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setSquirtGagBoost, num)).start()
+
+    def checkZapGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getZapGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setZapGagBoost, self.getZapGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setZapGagBoost, num)).start()
+
+    def checkSoundGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getSoundGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setSoundGagBoost, self.getSoundGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setSoundGagBoost, num)).start()
+
+    def checkDropGagBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDropGagBoost() > num:
+            self.damageInterval = Parallel(Func(self.setDropGagBoost, self.getDropGagBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setDropGagBoost, num)).start()
 
     def checkGagBoost(self, num):
         if self.damageInterval:

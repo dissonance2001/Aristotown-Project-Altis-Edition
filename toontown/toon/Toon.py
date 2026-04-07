@@ -594,6 +594,53 @@ class Toon(Avatar.Avatar, ToonHead):
         self.inkDrain = 0
         self.inkDrainNumber = 0
         self.inkDrainRounds = 0
+        self.toonupArrowAuraTrack = None
+        self.trapArrowAuraTrack = None
+        self.lureArrowAuraTrack = None
+        self.throwArrowAuraTrack = None
+        self.squirtArrowAuraTrack = None
+        self.zapArrowAuraTrack = None
+        self.soundArrowAuraTrack = None
+        self.dropArrowAuraTrack = None
+        # Toon-Up
+        self.toonupGagBoost = 0
+        self.toonupGagBoostRounds = 0
+        self.toonupGagBoostNumber = 0
+
+        # Trap
+        self.trapGagBoost = 0
+        self.trapGagBoostRounds = 0
+        self.trapGagBoostNumber = 0
+
+        # Lure
+        self.lureGagBoost = 0
+        self.lureGagBoostRounds = 0
+        self.lureGagBoostNumber = 0
+
+        # Throw
+        self.throwGagBoost = 0
+        self.throwGagBoostRounds = 0
+        self.throwGagBoostNumber = 0
+
+        # Squirt
+        self.squirtGagBoost = 0
+        self.squirtGagBoostRounds = 0
+        self.squirtGagBoostNumber = 0
+
+        # Zap
+        self.zapGagBoost = 0
+        self.zapGagBoostRounds = 0
+        self.zapGagBoostNumber = 0
+
+        # Sound
+        self.soundGagBoost = 0
+        self.soundGagBoostRounds = 0
+        self.soundGagBoostNumber = 0
+
+        # Drop
+        self.dropGagBoost = 0
+        self.dropGagBoostRounds = 0
+        self.dropGagBoostNumber = 0
         self.headParts = []
         self.animatedHeadParts = []
         self.numPies = 0
@@ -774,6 +821,278 @@ class Toon(Avatar.Avatar, ToonHead):
     def getGroupDamageDownRounds(self):
         return self.groupDamageDownRounds
 
+    def makeToonupGagBoost(self, level):
+        self.toonupGagBoost = level
+        if hasattr(self, 'toonupArrowAuraTrack') and self.toonupArrowAuraTrack:
+            self.toonupArrowAuraTrack.pause()
+            self.toonupArrowAuraTrack.finish()
+            for arrow in getattr(self.toonupArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.toonupArrowAuraTrack = None
+        self.toonupArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(0.776, 0, 1, 1))
+        self.toonupArrowAuraTrack.loop()
+
+    def makeUnToonupGagBoost(self):
+        self.toonupGagBoost = 0
+        if hasattr(self, 'toonupArrowAuraTrack') and self.toonupArrowAuraTrack:
+            self.toonupArrowAuraTrack.pause()
+            self.toonupArrowAuraTrack.finish()
+            for arrow in getattr(self.toonupArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.toonupArrowAuraTrack = None
+
+    def addToonupGagBoostRounds(self, num):
+        self.toonupGagBoostRounds = num
+
+    def getToonupGagBoostRounds(self):
+        return self.toonupGagBoostRounds
+
+    def setToonupGagBoost(self, num):
+        self.toonupGagBoostNumber = num
+
+    def getToonupGagBoost(self):
+        return self.toonupGagBoostNumber
+
+    def makeTrapGagBoost(self, level):
+        self.trapGagBoost = level
+        if hasattr(self, 'trapArrowAuraTrack') and self.trapArrowAuraTrack:
+            self.trapArrowAuraTrack.pause()
+            self.trapArrowAuraTrack.finish()
+            for arrow in getattr(self.trapArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.trapArrowAuraTrack = None
+        self.trapArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(1, 0, 0, 1))
+        self.trapArrowAuraTrack.loop()
+
+    def makeUnTrapGagBoost(self):
+        self.trapGagBoost = 0
+        if hasattr(self, 'trapArrowAuraTrack') and self.trapArrowAuraTrack:
+            self.trapArrowAuraTrack.pause()
+            self.trapArrowAuraTrack.finish()
+            for arrow in getattr(self.trapArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.trapArrowAuraTrack = None
+
+    def addTrapGagBoostRounds(self, num):
+        self.trapGagBoostRounds = num
+
+    def getTrapGagBoostRounds(self):
+        return self.trapGagBoostRounds
+
+    def setTrapGagBoost(self, num):
+        self.trapGagBoostNumber = num
+
+    def getTrapGagBoost(self):
+        return self.trapGagBoostNumber
+
+    def makeLureGagBoost(self, level):
+        self.lureGagBoost = level
+        if hasattr(self, 'lureArrowAuraTrack') and self.lureArrowAuraTrack:
+            self.lureArrowAuraTrack.pause()
+            self.lureArrowAuraTrack.finish()
+            for arrow in getattr(self.lureArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.lureArrowAuraTrack = None
+        self.lureArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(0, 1, 0.047, 1))
+        self.lureArrowAuraTrack.loop()
+
+    def makeUnLureGagBoost(self):
+        self.lureGagBoost = 0
+        if hasattr(self, 'lureArrowAuraTrack') and self.lureArrowAuraTrack:
+            self.lureArrowAuraTrack.pause()
+            self.lureArrowAuraTrack.finish()
+            for arrow in getattr(self.lureArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.lureArrowAuraTrack = None
+
+    def addLureGagBoostRounds(self, num):
+        self.lureGagBoostRounds = num
+
+    def getLureGagBoostRounds(self):
+        return self.lureGagBoostRounds
+
+    def setLureGagBoost(self, num):
+        self.lureGagBoostNumber = num
+
+    def getLureGagBoost(self):
+        return self.lureGagBoostNumber
+
+    def makeThrowGagBoost(self, level):
+        self.throwGagBoost = level
+        if hasattr(self, 'throwArrowAuraTrack') and self.throwArrowAuraTrack:
+            self.throwArrowAuraTrack.pause()
+            self.throwArrowAuraTrack.finish()
+            for arrow in getattr(self.throwArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.throwArrowAuraTrack = None
+        self.throwArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(1, 0.651, 0, 1))
+        self.throwArrowAuraTrack.loop()
+
+    def makeUnThrowGagBoost(self):
+        self.throwGagBoost = 0
+        if hasattr(self, 'throwArrowAuraTrack') and self.throwArrowAuraTrack:
+            self.throwArrowAuraTrack.pause()
+            self.throwArrowAuraTrack.finish()
+            for arrow in getattr(self.throwArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.throwArrowAuraTrack = None
+
+    def addThrowGagBoostRounds(self, num):
+        self.throwGagBoostRounds = num
+
+    def getThrowGagBoostRounds(self):
+        return self.throwGagBoostRounds
+
+    def setThrowGagBoost(self, num):
+        self.throwGagBoostNumber = num
+
+    def getThrowGagBoost(self):
+        return self.throwGagBoostNumber
+
+    def makeSquirtGagBoost(self, level):
+        self.squirtGagBoost = level
+        if hasattr(self, 'squirtArrowAuraTrack') and self.squirtArrowAuraTrack:
+            self.squirtArrowAuraTrack.pause()
+            self.squirtArrowAuraTrack.finish()
+            for arrow in getattr(self.squirtArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.squirtArrowAuraTrack = None
+        self.squirtArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(0.988, 0, 1, 1))
+        self.squirtArrowAuraTrack.loop()
+
+    def makeUnSquirtGagBoost(self):
+        self.squirtGagBoost = 0
+        if hasattr(self, 'squirtArrowAuraTrack') and self.squirtArrowAuraTrack:
+            self.squirtArrowAuraTrack.pause()
+            self.squirtArrowAuraTrack.finish()
+            for arrow in getattr(self.squirtArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.squirtArrowAuraTrack = None
+
+    def addSquirtGagBoostRounds(self, num):
+        self.squirtGagBoostRounds = num
+
+    def getSquirtGagBoostRounds(self):
+        return self.squirtGagBoostRounds
+
+    def setSquirtGagBoost(self, num):
+        self.squirtGagBoostNumber = num
+
+    def getSquirtGagBoost(self):
+        return self.squirtGagBoostNumber
+
+    def makeZapGagBoost(self, level):
+        self.zapGagBoost = level
+        if hasattr(self, 'zapArrowAuraTrack') and self.zapArrowAuraTrack:
+            self.zapArrowAuraTrack.pause()
+            self.zapArrowAuraTrack.finish()
+            for arrow in getattr(self.zapArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.zapArrowAuraTrack = None
+        self.zapArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(1, 0.996, 0, 1))
+        self.zapArrowAuraTrack.loop()
+
+    def makeUnZapGagBoost(self):
+        self.zapGagBoost = 0
+        if hasattr(self, 'zapArrowAuraTrack') and self.zapArrowAuraTrack:
+            self.zapArrowAuraTrack.pause()
+            self.zapArrowAuraTrack.finish()
+            for arrow in getattr(self.zapArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.zapArrowAuraTrack = None
+
+    def addZapGagBoostRounds(self, num):
+        self.zapGagBoostRounds = num
+
+    def getZapGagBoostRounds(self):
+        return self.zapGagBoostRounds
+
+    def setZapGagBoost(self, num):
+        self.zapGagBoostNumber = num
+
+    def getZapGagBoost(self):
+        return self.zapGagBoostNumber
+
+    def makeSoundGagBoost(self, level):
+        self.soundGagBoost = level
+        if hasattr(self, 'soundArrowAuraTrack') and self.soundArrowAuraTrack:
+            self.soundArrowAuraTrack.pause()
+            self.soundArrowAuraTrack.finish()
+            for arrow in getattr(self.soundArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.soundArrowAuraTrack = None
+        self.soundArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(0.161, 0, 1, 1))
+        self.soundArrowAuraTrack.loop()
+
+    def makeUnSoundGagBoost(self):
+        self.soundGagBoost = 0
+        if hasattr(self, 'soundArrowAuraTrack') and self.soundArrowAuraTrack:
+            self.soundArrowAuraTrack.pause()
+            self.soundArrowAuraTrack.finish()
+            for arrow in getattr(self.soundArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.soundArrowAuraTrack = None
+
+    def addSoundGagBoostRounds(self, num):
+        self.soundGagBoostRounds = num
+
+    def getSoundGagBoostRounds(self):
+        return self.soundGagBoostRounds
+
+    def setSoundGagBoost(self, num):
+        self.soundGagBoostNumber = num
+
+    def getSoundGagBoost(self):
+        return self.soundGagBoostNumber
+
+    def makeDropGagBoost(self, level):
+        self.dropGagBoost = level
+        if hasattr(self, 'dropArrowAuraTrack') and self.dropArrowAuraTrack:
+            self.dropArrowAuraTrack.pause()
+            self.dropArrowAuraTrack.finish()
+            for arrow in getattr(self.dropArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.dropArrowAuraTrack = None
+        self.dropArrowAuraTrack = self.makeLoopingArrowAuraColored(color=(0, 0.933, 1, 1))
+        self.dropArrowAuraTrack.loop()
+
+    def makeUnDropGagBoost(self):
+        self.dropGagBoost = 0
+        if hasattr(self, 'dropArrowAuraTrack') and self.dropArrowAuraTrack:
+            self.dropArrowAuraTrack.pause()
+            self.dropArrowAuraTrack.finish()
+            for arrow in getattr(self.dropArrowAuraTrack, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            self.dropArrowAuraTrack = None
+
+    def addDropGagBoostRounds(self, num):
+        self.dropGagBoostRounds = num
+
+    def getDropGagBoostRounds(self):
+        return self.dropGagBoostRounds
+
+    def setDropGagBoost(self, num):
+        self.dropGagBoostNumber = num
+
+    def getDropGagBoost(self):
+        return self.dropGagBoostNumber
+
     def makeGagBoost(self, level):
         self.gagBoost = level
         if hasattr(self, 'arrowAuraTrack') and self.arrowAuraTrack:
@@ -807,6 +1126,16 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getGagBoost(self):
         return self.gagBoostNumber
+
+    def cleanupArrowAuraTrack(self, trackName):
+        track = getattr(self, trackName, None)
+        if track:
+            track.pause()
+            track.finish()
+            for arrow in getattr(track, 'arrows', []):
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            setattr(self, trackName, None)
 
     def makeCooldown(self):
         self.cooldown = 1
@@ -1249,7 +1578,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 if not arrow.isEmpty():
                     arrow.removeNode()
             self.arrowAuraTrackAnte = None
-        self.arrowAuraTrackAnte = self.makeLoopingArrowAura()
+        self.arrowAuraTrackAnte = self.makeLoopingArrowAuraAnte()
         self.arrowAuraTrackAnte.loop()
 
     def makeUnRaisedAnte(self):
@@ -1400,7 +1729,136 @@ class Toon(Avatar.Avatar, ToonHead):
         loopTrack.fallingArrowProps = fallingArrowProps
         return loopTrack
 
+    def makeLoopingArrowAuraColored(self, color=(0, 0.918, 1, 1)):
+        import random
+        import math
+
+        arrows = []
+        partTrack = Parallel()
+
+        def resetArrow(arrow):
+            angle = random.random() * 2.0 * math.pi
+
+            x = 1.0 * math.cos(angle)
+            y = 1.0 * math.sin(angle)
+
+            arrow.setColor(*color)  # <-- USE PASSED COLOR
+            arrow.setPos(x, y, 0)
+            arrow.setAlphaScale(1)
+
+        for i in xrange(30):
+            arrow = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(hidden)
+
+            arrow.setScale(1.5)
+            arrow.setBillboardPointEye()
+            arrow.setR(270)
+            arrow.setTransparency(1)
+
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25),
+
+                Func(arrow.reparentTo, self),
+                Func(resetArrow, arrow),
+
+                Parallel(
+                    LerpFunctionInterval(
+                        arrow.setZ,
+                        1.0,
+                        fromData=0,
+                        toData=3,
+                        blendType='easeOut'
+                    ),
+
+                    Sequence(
+                        Wait(0.5),
+                        LerpFunctionInterval(
+                            arrow.setAlphaScale,
+                            0.25,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(arrow.reparentTo, hidden)
+            )
+
+            partTrack.append(oneArrowTrack)
+            arrows.append(arrow)
+
+        loopTrack = Sequence(partTrack)
+        loopTrack.arrows = arrows
+        return loopTrack
+
     def makeLoopingArrowAura(self):
+        import random
+        import math
+
+        arrows = []
+        partTrack = Parallel()
+
+        def resetArrow(arrow):
+            angle = random.random() * 2.0 * math.pi
+
+            x = 1.0 * math.cos(angle)
+            y = 1.0 * math.sin(angle)
+
+            arrow.setColor(0, 0.918, 1, 1)
+            arrow.setPos(x, y, 0)
+            arrow.setAlphaScale(1)
+
+        for i in xrange(30):
+            arrow = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(hidden)
+
+            arrow.setScale(1.5)
+            arrow.setBillboardPointEye()
+            arrow.setR(270)
+            arrow.setTransparency(1)
+
+            oneArrowTrack = Sequence(
+                Wait(0.9 + i * 0.25),
+
+                Func(arrow.reparentTo, self),
+                Func(resetArrow, arrow),
+
+                Parallel(
+                    LerpFunctionInterval(
+                        arrow.setZ,
+                        1.0,
+                        fromData=0,
+                        toData=3,
+                        blendType='easeOut'
+                    ),
+
+                    Sequence(
+                        Wait(0.5),
+                        LerpFunctionInterval(
+                            arrow.setAlphaScale,
+                            0.25,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(arrow.reparentTo, hidden)
+            )
+
+            partTrack.append(oneArrowTrack)
+            arrows.append(arrow)
+
+        loopTrack = Sequence(
+            partTrack
+        )
+
+        loopTrack.arrows = arrows
+        return loopTrack
+
+    def makeLoopingArrowAuraAnte(self):
         import random
         import math
 
@@ -1573,7 +2031,6 @@ class Toon(Avatar.Avatar, ToonHead):
         return self.windedRounds
 
     def makeBombed(self):
-        self.isBombed = 1
 
         # ---- CLEANUP ----
         self.cleanupBombed()
@@ -1627,6 +2084,7 @@ class Toon(Avatar.Avatar, ToonHead):
         )
 
         self.bombTrack.loop()
+        self.isBombed = 1
 
     def cleanupBombed(self):
         if hasattr(self, "bombTrack") and self.bombTrack:
@@ -2725,7 +3183,14 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnRaisedAnte()
         self.makeUnDamageUpGovernaught()
         self.makeUnDamageDown()
-        self.makeUnDamageUp()
+        self.makeUnToonupGagBoost()
+        self.makeUnTrapGagBoost()
+        self.makeUnLureGagBoost()
+        self.makeUnThrowGagBoost()
+        self.makeUnSquirtGagBoost()
+        self.makeUnZapGagBoost()
+        self.makeUnSoundGagBoost()
+        self.makeUnDropGagBoost()
         self.makeUnEncore()
         self.makeUnWinded()
         self.makeUnBombed()
@@ -2782,8 +3247,15 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnRaisedAnte()
         self.makeUnDamageUpGovernaught()
         self.makeUnDamageDown()
-        self.makeUnDamageUp()
         self.makeUnEncore()
+        self.makeUnToonupGagBoost()
+        self.makeUnTrapGagBoost()
+        self.makeUnLureGagBoost()
+        self.makeUnThrowGagBoost()
+        self.makeUnSquirtGagBoost()
+        self.makeUnZapGagBoost()
+        self.makeUnSoundGagBoost()
+        self.makeUnDropGagBoost()
         self.makeUnWinded()
         self.makeUnBombed()
         self.makeUnGagBan()

@@ -647,7 +647,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': "\nAftershock Dmg.: 25%",
+                                                                                   'bonus': "\nAftershock Dmg.: 50%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.37625)
@@ -657,7 +657,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': "",
+                                                                                   'bonus': "\nAftershock Dmg.: 25%",
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})
             self.detailCreditLabel.setPos(-0.22, 0, -0.37625)

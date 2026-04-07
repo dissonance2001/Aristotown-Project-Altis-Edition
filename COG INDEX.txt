@@ -24,11 +24,11 @@ tbc - The Big Cheese Level 8-25
 	
 	Operations Analysts:
 stg - Stooge Level 2-8
-enf - Enforcer Level 4-10
-mldr - The Molder Level 5-15
+enf - Patronizer Level 4-10
+ksp - Kiss-Up Level 5-15
 
 	Field Specialists:
-blh - Stickler Level 4-12
+blh - Blowhard Level 4-12
 bsht - Big Shot Level 6-15
 txl - Toxic Leader Level 7-18
 
@@ -166,14 +166,14 @@ m - The Mingler Level 7-18
 mh - Mr. Hollywood Level 8-25
 
 	Operations Analysts:
-dc - Double Crosser Level 4-10
 cn - Connoisseur Level 2-8
-cnd - Candidate Level 5-15
+dc - Upseller Level 4-10
+asm - Assembly Assassin Level 5-15
 
 	Field Specialists:
 fcs - Forecaster Level 4-12
 ppl - People Pleaser Level 6-15
-ksp - Kiss-Up Level 7-18
+cnd - Candidate Level 7-18
 
 	Facility Cog:
 watchp - Watchman Level 14-15.exe 

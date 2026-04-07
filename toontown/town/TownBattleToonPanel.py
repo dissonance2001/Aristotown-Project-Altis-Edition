@@ -216,7 +216,7 @@ class TownBattleToonPanel(DirectFrame):
                 'attackIcon4', 'attackIcon5', 'attackIcon6', 'attackIcon7',
                 'status', 'status2', 'status3', 'status4', 'attackIcon8', 'attackIcon9',
                 'status5', 'status6', 'status7', 'status8', 'status9', 'status10',
-                'encore', 'govDamageText', 'governaughtDamageUp', 'encoreRounds',
+                'encore', 'govDamageText', 'governaughtDamageUp', 'encoreRounds', 'toonupGagBoost', 'trapGagBoost', 'lureGagBoost', 'throwGagBoost', 'squirtGagBoost', 'soundGagBoost', 'dropGagBoost', 'zapGagBoost',
                 'winded', 'gagBan', 'raisedAnte', 'raisedAnteText',
                 'windedRounds', 'damageUpRounds', 'damageUp',
                 'cheerRounds', 'cheer', 'burnedRounds', 'burned',
@@ -436,6 +436,134 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(self.gagBoost, slot)
             self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
 
+        if avatar.toonupGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.toonupGagBoost = status.find('**/inventory_cannon')
+            self.toonupGagBoostRoundsText = DirectLabel(parent=self.toonupGagBoost, relief=None, text="%s" % avatar.getToonupGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                        text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                        pos=(0.045, 0, -.085),
+                                                        text_scale=.1)
+            self.toonupGagBoostRoundsText.show()
+            self.toonupGagBoostText = DirectLabel(parent=self.toonupGagBoost, relief=None, text="%s" % avatar.getToonupGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                  pos=(0.045, 0, 0.027),
+                                                  text_scale=.07)
+            self.toonupGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.toonupGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.trapGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.trapGagBoost = status.find('**/inventory_wreckingball')
+            self.trapGagBoostRoundsText = DirectLabel(parent=self.trapGagBoost, relief=None, text="%s" % avatar.getTrapGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                      pos=(0.045, 0, -.085),
+                                                      text_scale=.1)
+            self.trapGagBoostRoundsText.show()
+            self.trapGagBoostText = DirectLabel(parent=self.trapGagBoost, relief=None, text="%s" % avatar.getTrapGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.045, 0, 0.027),
+                                                text_scale=.07)
+            self.trapGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.trapGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.lureGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.lureGagBoost = status.find('**/inventory_hypno_goggles')
+            self.lureGagBoostRoundsText = DirectLabel(parent=self.lureGagBoost, relief=None, text="%s" % avatar.getLureGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                      pos=(0.045, 0, -.085),
+                                                      text_scale=.1)
+            self.lureGagBoostRoundsText.show()
+            self.lureGagBoostText = DirectLabel(parent=self.lureGagBoost, relief=None, text="%s" % avatar.getLureGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.045, 0, 0.027),
+                                                text_scale=.07)
+            self.lureGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.lureGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.throwGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.throwGagBoost = status.find('**/inventory_cake')
+            self.throwGagBoostRoundsText = DirectLabel(parent=self.throwGagBoost, relief=None, text="%s" % avatar.getThrowGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                       pos=(0.045, 0, -.085),
+                                                       text_scale=.1)
+            self.throwGagBoostRoundsText.show()
+            self.throwGagBoostText = DirectLabel(parent=self.throwGagBoost, relief=None, text="%s" % avatar.getThrowGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                 pos=(0.045, 0, 0.027),
+                                                 text_scale=.07)
+            self.throwGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.throwGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.squirtGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.squirtGagBoost = status.find('**/inventory_storm_cloud')
+            self.squirtGagBoostRoundsText = DirectLabel(parent=self.squirtGagBoost, relief=None, text="%s" % avatar.getSquirtGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                        text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                        pos=(0.045, 0, -.085),
+                                                        text_scale=.1)
+            self.squirtGagBoostRoundsText.show()
+            self.squirtGagBoostText = DirectLabel(parent=self.squirtGagBoost, relief=None, text="%s" % avatar.getSquirtGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                  pos=(0.045, 0, 0.027),
+                                                  text_scale=.07)
+            self.squirtGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.squirtGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.zapGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.zapGagBoost = status.find('**/inventory_tesla_coil')
+            self.zapGagBoostRoundsText = DirectLabel(parent=self.zapGagBoost, relief=None, text="%s" % avatar.getZapGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                     pos=(0.045, 0, -.085),
+                                                     text_scale=.1)
+            self.zapGagBoostRoundsText.show()
+            self.zapGagBoostText = DirectLabel(parent=self.zapGagBoost, relief=None, text="%s" % avatar.getZapGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                               pos=(0.045, 0, 0.027),
+                                               text_scale=.07)
+            self.zapGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.zapGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.soundGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.soundGagBoost = status.find('**/inventory_fog_horn')
+            self.soundGagBoostRoundsText = DirectLabel(parent=self.soundGagBoost, relief=None, text="%s" % avatar.getSoundGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                       pos=(0.045, 0, -.085),
+                                                       text_scale=.1)
+            self.soundGagBoostRoundsText.show()
+            self.soundGagBoostText = DirectLabel(parent=self.soundGagBoost, relief=None, text="%s" % avatar.getSoundGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                 pos=(0.045, 0, 0.027),
+                                                 text_scale=.07)
+            self.soundGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.soundGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.dropGagBoost:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.dropGagBoost = status.find('**/inventory_boulder')
+            self.dropGagBoostRoundsText = DirectLabel(parent=self.dropGagBoost, relief=None, text="%s" % avatar.getDropGagBoostRounds(), text_fg=(1, 1, 1, 1),
+                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                      pos=(0.045, 0, -.085),
+                                                      text_scale=.1)
+            self.dropGagBoostRoundsText.show()
+            self.dropGagBoostText = DirectLabel(parent=self.dropGagBoost, relief=None, text="%s" % avatar.getDropGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
+                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                pos=(0.045, 0, 0.027),
+                                                text_scale=.07)
+            self.dropGagBoostText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.dropGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
         if avatar.cheer:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.cheer = status.find('**/cheer_icon')
@@ -494,11 +622,11 @@ class TownBattleToonPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.6)
             self.bombedRoundsText.show()
-            self.bombedText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombed() + "%", text_fg=(1, 0, 0, 1),
-                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                          pos=(0.25, 0, 0.15),
-                                          text_scale=.4)
-            self.bombedText.show()
+            # self.bombedText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombed() + "%", text_fg=(1, 0, 0, 1),
+            #                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+            #                               pos=(0.25, 0, 0.15),
+            #                               text_scale=.4)
+            # self.bombedText.show()
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.bombed, slot)
             self._pulseToonStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(0, 0.902, 1, 1))
@@ -794,6 +922,30 @@ class TownBattleToonPanel(DirectFrame):
             damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+            if self.avatar.toonupGagBoost and track == HEAL_TRACK:
+                damage *= (1.0 + self.avatar.getToonupGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonupGagBoost() * 0.01)
+            if self.avatar.trapGagBoost and track == TRAP_TRACK:
+                damage *= (1.0 + self.avatar.getTrapGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getTrapGagBoost() * 0.01)
+            if self.avatar.lureGagBoost and track == LURE_TRACK:
+                damage *= (1.0 + self.avatar.getLureGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getLureGagBoost() * 0.01)
+            if self.avatar.throwGagBoost and track == THROW_TRACK:
+                damage *= (1.0 + self.avatar.getThrowGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getThrowGagBoost() * 0.01)
+            if self.avatar.squirtGagBoost and track == SQUIRT_TRACK:
+                damage *= (1.0 + self.avatar.getSquirtGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getSquirtGagBoost() * 0.01)
+            if self.avatar.zapGagBoost and track == ZAP_TRACK:
+                damage *= (1.0 + self.avatar.getZapGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getZapGagBoost() * 0.01)
+            if self.avatar.soundGagBoost and track == SOUND_TRACK:
+                damage *= (1.0 + self.avatar.getSoundGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getSoundGagBoost() * 0.01)
+            if self.avatar.dropGagBoost and track == DROP_TRACK:
+                damage *= (1.0 + self.avatar.getDropGagBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getDropGagBoost() * 0.01)
             if self.avatar.gagBoost:
                 damage *= (1.0 + self.avatar.getGagBoost() * 0.01)
                 lureValue *= (1.0 + self.avatar.getGagBoost() * 0.01)

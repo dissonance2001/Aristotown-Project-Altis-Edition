@@ -215,7 +215,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         elif geyser:
             animTrack = Sequence()
             suitStartPos = suit.getPos()
-            suitFloat = Point3(0, 0, 14)
+            suitFloat = Point3(0, 0, 20)
             suitEndPos = Point3(suitStartPos[0] + suitFloat[0], suitStartPos[1] + suitFloat[1], suitStartPos[2] + suitFloat[2])
             suitType = getSuitBodyType(suit.getStyleName())
             if suitType == 'a':
