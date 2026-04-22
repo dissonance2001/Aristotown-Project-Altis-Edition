@@ -186,6 +186,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suitTrack.append(Func(suit.makeUnTrapped))
+                suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -326,6 +327,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
                 suitTrack.append(Func(suit.makeUnTrapped))
+                suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -469,6 +471,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suitTrack.append(Func(suit.makeUnTrapped))
+                suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
@@ -719,6 +722,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         else:
             soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suit.setPendingQueuedLured(False)
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'rake' or trapName == 'rake-react':
         totalDamage = hp
@@ -736,6 +740,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
         soundTrack = getSoundTrack('TL_step_on_rake.ogg', delay=0.6, node=suit)
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suit.setPendingQueuedLured(False)
         result.append(Parallel(rakeTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'marbles':
         totalDamage = hp
@@ -751,6 +756,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         damageTrack = Sequence(Wait(0.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
         soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_pie_throw_only.ogg'), duration=0.55, node=suit), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        suit.setPendingQueuedLured(False)
         result.append(Parallel(moveTrack, animTrack, suitTrack, damageTrack, soundTrack))
     elif trapName == 'quicksand':
         totalDamage = hp
@@ -788,6 +794,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             soundTrack.append(Wait(0.25))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
+            suit.setPendingQueuedLured(False)
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'spring':
         totalDamage = hp
@@ -827,6 +834,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             soundTrack.append(Wait(0.375))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
+            suit.setPendingQueuedLured(False)
         result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack))
     elif trapName == 'trapdoor':
         totalDamage = hp
@@ -858,6 +866,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
+            suit.setPendingQueuedLured(False)
             damageTrack = Sequence(Wait(3.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.5))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
@@ -914,6 +923,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             animTrack.append(Wait(1.25))
             animTrack.append(ActorInterval(suit, 'slip-forward', playRate=1.25))
             animTrack.append(Func(suit.setNeutralAnimationTrap))
+            suit.setPendingQueuedLured(False)
             damageTrack = Sequence(Wait(2.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
             soundTrack.append(Wait(0.6))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
@@ -1013,6 +1023,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Func(suit.setDizzy, 0))
         #result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
         result.append(Func(suit.setNeutralAnimationTrap))
+        suit.setPendingQueuedLured(False)
         if suit.dna.name == 'redd' and revived != 0:
             result.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
@@ -1274,6 +1285,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suitTrack.append(Func(suit.makeUnTrapped))
+                suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))

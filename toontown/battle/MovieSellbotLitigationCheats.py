@@ -707,10 +707,10 @@ def doHighPressure(attack):
         suitTrack = getSuitAnimTrack(attack, playRate=2.0)
         suitTrack.append(Wait(1.75))
         if not suit.dna.name == 'cdirector':
-            suitTrack.append(Func(suit.showHpTextNew, - int(50 * len(battle.activeToons)), text="OVERWORKED!", colorCode=3))
+            suitTrack.append(Func(suit.showHpTextNew, - int(50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            suitTrack.append(Parallel(Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
+            suitTrack.append(Parallel(suit.makeHighPressureDeathMovie((50 * len(battle.activeToons)), battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         revives = suit.getMaxSkeleRevives() + 1
         suitTrack.append(Func(suit.setNeutralAnimationDrop))
@@ -1349,8 +1349,19 @@ def doPromotion(attack, ind):
         name='dustCloadIval'
     )
 
+    suitColorTrack = Parallel()
+    actorNode = targetSuit.find('**/__Actor_modelRoot')
+    actorCollection = actorNode.findAllMatches('*')
+    for thingIndex in range(actorCollection.getNumPaths()):
+        thing = actorCollection[thingIndex]
+        if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+            suitColorTrack.append(
+                Sequence(Wait(2.0),
+                    LerpColorScaleInterval(thing, 3.0, (0, 0, 0, 1))
+                )
+            )
     # Keep your original effect timing
-    selfDamageTrack = Sequence(
+    selfDamageTrack = Parallel(suitColorTrack, Sequence(
         Wait(5.0),
         Parallel(
             dustCloudHideIval,
@@ -1359,15 +1370,16 @@ def doPromotion(attack, ind):
                 Func(targetSuit.setNeutralAnimation)
             ),
             Func(targetSuit.makeIntoCTSManager),
-            MovieUtil.createPromotionTrackPressurizer(targetSuit, battle),
             Func(targetSuit.showHpString, "PROMOTION!"),
-            Func(targetSuit.setMaxHP, 1000),
+            Func(targetSuit.setMaxHP, 1250),
+            Func(targetSuit.makeShadow),
             Func(targetSuit.setManager, 1),
+            Func(targetSuit.setDisplayName, targetSuit.createNameInfoShadow()),
             Func(targetSuit.makeShielding),
             Func(targetSuit.updateHealthBar, 0)
         ),
         Func(battle.unSueSuit, targetSuit)
-    )
+    ))
 
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=2.5, node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=5.0)
@@ -1451,7 +1463,7 @@ def doUnionCalculator(attack):
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'), Func(suit.setNeutralAnimationDrop), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute, "You can't stop production; Toons are now required to work %s extra hours." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
-    calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
         ActorInterval(calculator, 'court-costs-calculator'),
@@ -1468,9 +1480,6 @@ def doContractEnforcementHealing(attack):
     cagePropTracks = Parallel()
     soundTracks = Parallel()
     for targetSuit in battle.activeSuits:
-        smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.setColor(0.8, 0.7, 0.5, 1)
-        smoke.setBillboardPointEye()
         currentBossHealth = -1
         for s in battle.suits:
             if s.dna.name == 'safesupervis':
@@ -1733,7 +1742,7 @@ def doUnionBust(attack):
             Sequence(Wait(1.0), cage.posInterval(2, Point3(0, 0, 40), blendType='easeIn'))),
             Func(cage.removeNode)
         )
-        if not targetSuit.dna.name == 'ubuster' and not targetSuit.getManager() and not targetSuit.isContracted and not targetSuit.isContracted2 and not targetSuit.isOverpressured:
+        if not targetSuit.dna.name == 'ubuster' and not targetSuit.getManager() and (targetSuit.isContracted or targetSuit.isContracted2) and not targetSuit.isOverpressured:
             cagePropTracks.append(cagePropTrack)
             selfDamageTracks.append(selfDamageTrack)
             smokeTracks.append(smokeTrack)
@@ -1747,20 +1756,16 @@ def doUnionWages(attack):
     target = attack['target']
     toon = target[0]['toon']
     damageDelay = 1.7
-    calculator = globalPropPool.getProp('calculator')
+    calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitType = getSuitBodyType(attack['suitName'])
-    damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
-        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
-        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
+        ActorInterval(calculator, 'court-costs-calculator'),
         Func(calculator.removeNode)
     )
-    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
     spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
     spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
@@ -1780,11 +1785,11 @@ def doUnionWages(attack):
     spinEffect3.setPos(0.8, -0.7, height3)
     spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
     spinEffect3.setHpr(spinEffect3, 0, 50, 0)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 0, 3.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 0, 3.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 0, 3.9, [spinEffect3, suit, 0], softStop=-2)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 5))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 100, text="+5% Damage!", colorCode=1),
                                 Func(suit.setHealthForMe, + 100),
@@ -1799,20 +1804,16 @@ def doUnionWages2(attack):
     target = attack['target']
     toon = target[0]['toon']
     damageDelay = 1.7
-    calculator = globalPropPool.getProp('calculator')
+    calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitType = getSuitBodyType(attack['suitName'])
-    damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
-        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
-        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
+        ActorInterval(calculator, 'court-costs-calculator'),
         Func(calculator.removeNode)
     )
-    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
     spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
     spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
@@ -1832,11 +1833,11 @@ def doUnionWages2(attack):
     spinEffect3.setPos(0.8, -0.7, height3)
     spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
     spinEffect3.setHpr(spinEffect3, 0, 50, 0)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 0, 3.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 0, 3.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 0, 3.9, [spinEffect3, suit, 0], softStop=-2)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 10))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 200, text="+10% Damage!", colorCode=1),
                                 Func(suit.setHealthForMe, + 200),
@@ -1851,20 +1852,16 @@ def doUnionWages3(attack):
     target = attack['target']
     toon = target[0]['toon']
     damageDelay = 1.7
-    calculator = globalPropPool.getProp('calculator')
+    calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitType = getSuitBodyType(attack['suitName'])
-    damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
-        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
-        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
+        ActorInterval(calculator, 'court-costs-calculator'),
         Func(calculator.removeNode)
     )
-    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
     spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
     spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
@@ -1884,11 +1881,11 @@ def doUnionWages3(attack):
     spinEffect3.setPos(0.8, -0.7, height3)
     spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
     spinEffect3.setHpr(spinEffect3, 0, 50, 0)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 0, 3.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 0, 3.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 0, 3.9, [spinEffect3, suit, 0], softStop=-2)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 15))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 300, text="+15% Damage!", colorCode=1),
                                 Func(suit.setHealthForMe, + 300),
@@ -1903,20 +1900,16 @@ def doUnionWages4(attack):
     target = attack['target']
     toon = target[0]['toon']
     damageDelay = 1.7
-    calculator = globalPropPool.getProp('calculator')
+    calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitType = getSuitBodyType(attack['suitName'])
-    damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
-        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
-        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
+        ActorInterval(calculator, 'court-costs-calculator'),
         Func(calculator.removeNode)
     )
-    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
     spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
     spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
@@ -1936,11 +1929,11 @@ def doUnionWages4(attack):
     spinEffect3.setPos(0.8, -0.7, height3)
     spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
     spinEffect3.setHpr(spinEffect3, 0, 50, 0)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 0, 3.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 0, 3.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 0, 3.9, [spinEffect3, suit, 0], softStop=-2)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 20))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 400, text="+20% Damage!", colorCode=1),
                                 Func(suit.setHealthForMe, + 400),
@@ -1955,20 +1948,16 @@ def doUnionWages5(attack):
     target = attack['target']
     toon = target[0]['toon']
     damageDelay = 1.7
-    calculator = globalPropPool.getProp('calculator')
+    calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitType = getSuitBodyType(attack['suitName'])
-    damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
-    calcDuration = 1.3
-    scaleUpPoint = Point3(1.5, 1.5, 1.5)
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
-        Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
-        ActorInterval(calculator, 'calculator', playRate=1.25),
+        Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
+        ActorInterval(calculator, 'court-costs-calculator'),
         Func(calculator.removeNode)
     )
-    soundTrack = getSoundTrack('SA_calculate.ogg', delay=1.3, node=suit)
+    soundTrack = getSoundTrack('SA_calculating_costs.ogg', node=suit)
     sprayEffect = BattleParticles.createParticleEffect(file='organizeSpray')
     spinEffect1 = BattleParticles.createParticleEffect(file='organizeEffect')
     spinEffect2 = BattleParticles.createParticleEffect(file='organizeEffect')
@@ -1988,11 +1977,11 @@ def doUnionWages5(attack):
     spinEffect3.setPos(0.8, -0.7, height3)
     spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
     spinEffect3.setHpr(spinEffect3, 0, 50, 0)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 0, 0, [sprayEffect, targetSuit, 0], softStop=-2)
-    spinTrack1 = getPartTrack(spinEffect1, 1.1, 5.9, [spinEffect1, suit, 0], softStop=-2)
-    spinTrack2 = getPartTrack(spinEffect2, 1.1, 5.9, [spinEffect2, suit, 0], softStop=-2)
-    spinTrack3 = getPartTrack(spinEffect3, 1.1, 5.9, [spinEffect3, suit, 0], softStop=-2)
+    spinTrack1 = getPartTrack(spinEffect1, 0, 3.9, [spinEffect1, suit, 0], softStop=-2)
+    spinTrack2 = getPartTrack(spinEffect2, 0, 3.9, [spinEffect2, suit, 0], softStop=-2)
+    spinTrack3 = getPartTrack(spinEffect3, 0, 3.9, [spinEffect3, suit, 0], softStop=-2)
     makeImmune = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 25))
     managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextNew, + 500, text="+25% Damage!", colorCode=1),
                                 Func(suit.setHealthForMe, + 500),
@@ -2173,8 +2162,6 @@ def doContractEnforcement(attack, ind, ind2, ind3):
     else:
         targetSuit3 = None
     targetSuits = [s for s in (targetSuit, targetSuit2, targetSuit3, theSuit) if s is not None]
-
-    healSound = getSoundTrack('LB_toonup.ogg')
     suitTracks = Parallel()
     liftTracks = Parallel()
     knifeTracks = Parallel()
@@ -2191,13 +2178,17 @@ def doContractEnforcement(attack, ind, ind2, ind3):
             #liftEffect.setPos(target.getPos(battle))
             liftEffect.setZ(liftEffect.getZ() - 1.3)
             liftEffect.reparentTo(target)
-            liftTracks.append(getPartTrack(liftEffect, 4, 4.0, [liftEffect, target, 0], softStop=-2))
+            liftTracks.append(getPartTrack(liftEffect, 2, 4.0, [liftEffect, target, 0], softStop=-2))
 
             suitTrack = Sequence(
-                Wait(4.25)
+                Wait(2.0)
             )
 
-            suitTrack.append(Func(target.showHpTextNew, 0, text="CONTRACTED!", colorCode=1))
+            suitTrack.append(Func(target.showHpTextNew, 0, text="UNIONIZED!", colorCode=1))
+            if not target.getManager():
+                suitTrack.append(Func(target.setDisplayName, target.createNameInfoContracted()))
+                suitTrack.append(Parallel(Func(target.makeDamageReduction), Func(target.checkDamageReduction, + 10)))
+                suitTrack.append(Parallel(Func(target.makeDamageUp), Func(target.checkDamageUp, + 10)))
             if currentBossHealth > 0:
                 suitTrack.append(Func(target.makeContracted2))
             else:
@@ -2206,9 +2197,8 @@ def doContractEnforcement(attack, ind, ind2, ind3):
             if not target.dna.name == 'ubuster':
                 suitTrack.append(
                     Parallel(
-                        healSound,
                         Func(
-                            target.checkHealingPhrases, 0
+                            target.checkHealingPhrases, 2
                         )
                     )
                 )
@@ -2219,50 +2209,27 @@ def doContractEnforcement(attack, ind, ind2, ind3):
             else:
                 suitTrack.append(Func(target.checkContractedRounds, 2))
             suitTracks.append(suitTrack)
-
-            knife = globalPropPool.getProp('shredder-paper')
-            posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
-
-            knifeTrack = Sequence(
-                getPropAppearTrack(
-                    knife,
-                    theSuit.getRightHand(),
-                    posPoints,
-                    0.75,
-                    VBase3(1.2, 1.2, 1.2),
-                    scaleUpTime=0.25
-                ),
-                Wait(0.95),
-
-                Parallel(
-                    getThrowTrack(knife, (0, 0, target.getHeight() + 2.5), 1.5, target, -20.288),
-                    LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
-                ),
-
-                Wait(0.15),
-
-                Parallel(
-                    LerpPosInterval(knife, 0.45, (0, 0, target.getHeight() - 2.5), other=target, blendType='easeIn'),
-                    LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
-                ),
-
-                Parallel(
-                    LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
-                    LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
-                ),
-
-                Func(knife.removeNode)
-            )
-            knifeTracks.append(knifeTrack)
-
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.25)
+            cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
+            cage.find('**/geo_hole_01').hide()
+            platform = cage.find('**/geo_gearLift_01')
+            cagePos = [Point3(0, 0, 0), Point3(180, 0, 0)]
+            knifeTrack = Sequence(Wait(2.0), getPropAppearTrack(cage, target, cagePos, 0, scaleUpPoint=Point3(1), scaleUpTime=0),
+                                     Parallel(LerpPosInterval(platform, 0.5, Point3(0, 0, 0)), LerpHprInterval(platform, 3.0, Point3(360, 0, 0)), getSoundTrack('LB_toonup.ogg', node=suit),
+                                              Sequence(ActorInterval(target, 'soak', endTime=1),
+                                                       ActorInterval(target, 'soak', startTime=1, endTime=0), Func(target.setNeutralAnimationDrop))),
+                                     LerpScaleInterval(cage, 0.5, Point3(0.01, 0.01, 0.01)),
+                                     Func(cage.removeNode)
+                                     )
+            if not target.dna.name == 'ubuster':
+                knifeTracks.append(knifeTrack)
+    soundTrack = getSoundTrack('LB_camera_shutter_2.ogg', delay=2.0)
+    soundTrack2 = getSoundTrack('SA_mob_mentality2.ogg', delay=0.5)
 
     return Parallel(
-        getSuitAnimTrack(attack, playRate=1.5),
+        getSuitAnimTrack(attack),
         suitTracks,
-        soundTrack2,
         liftTracks,
+        soundTrack2,
         soundTrack,
         knifeTracks
     )
@@ -2450,14 +2417,14 @@ def doCompensation(attack):
     suitTracks = Parallel(getSuitAnimTrack(attack), Sequence(ActorInterval(suit, 'sacrifice-cog', endTime=.75), ActorInterval(suit, 'sacrifice-cog', startTime=1.5, endTime=0, playRate=0.5),
                           Func(suit.setNeutralAnimationDrop)))
     suitTracks.append(Wait(5.0))
-    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:
         suitTrack = Parallel()
         if not suit.dna.name == 'racket':
-            suitTrack.append(Sequence(Parallel(Func(suit.checkCompensation), healSound)))
+            suitTrack.append(Parallel(suit.makeCompensationInterval()))
+            suitTrack.append(healSound)
             suitTracks.append(suitTrack)
-    return Parallel(suitTracks, soundTrack)
+    return Parallel(suitTracks)
 
 def doPeckingOrderGroup(attack):
     suit = attack['suit']

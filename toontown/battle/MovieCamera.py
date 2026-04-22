@@ -1141,9 +1141,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                "The Bookkeeper applies a gag damage debuff to all toons who attacked him!",
+                "The Commissioner applies a gag damage debuff to all toons who attacked him!",
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Bookkeeping!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Closed Session!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
@@ -1269,7 +1269,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'SafetyViolation':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=1.5))
+            camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
+                                 defaultCamera(openShotDuration=0, attackDuration=attackDuration-5)))
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
@@ -1354,14 +1356,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     elif name == 'UnionBusterContractEnforcement':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2)))
     elif name == 'UnionBusterContractEnforcement2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2)))
         # racketeer
     elif name == 'RacketeerOverextendedLeverage2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))

@@ -56,7 +56,7 @@ chainsaw2 - Chainsaw Consultant (Override) Level 50.mgr
 
 	Executive Board:
 phouse - Powerhouse Level 38.mgr
-bkeeper - Bookkeeper Level 44.mgr
+bkeeper - Commissioner Level 44.mgr
 wtapper - Wiretapper Level 44.mgr
 ambass - Ambassador Level 48.mgr
 
@@ -136,12 +136,12 @@ supervis - Mint Supervisor Level 20-25.mgr (OFTF)
 duckshfl - Duck Shuffler Level 5.mgr
 treek - Treekiller Level 24.mgr
 
-	Satellite Investors:
-styx - Styx Level 20.mgr
-nix - Nix Level 21.mgr
-hydra - Hydra Level 22.mgr
-kerberos - Kerberos Level 23.mgr
-charon - Charon Level 25.mgr
+	Cashbot 'Litigation' Team (unfinished):
+payman - Payroll Manager Level 20.mgr
+bookkeep - Bookkeeper Level 35.mgr
+hustle - Hustler Level 40.mgr
+liquidr - Liquidator Level 40.mgr
+treasure - Treasurer Level 45.mgr
 
 	Kudos Manager:
 pcrat - Plutocrat Level 38.mgr

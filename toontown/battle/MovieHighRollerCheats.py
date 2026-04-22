@@ -1539,8 +1539,8 @@ def doElectricShock(attack, ind):
                 SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/AA_lightning.ogg'), duration=0.75, node=cage)
             ),
             Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg'), node=cage),
-            Wait(0.5),
-            LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+            Wait(0.25),
+            LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=0.5),
             Func(MovieUtil.removeProp, cage)
         )
     cagePropTracks.append(cagePropTrack)

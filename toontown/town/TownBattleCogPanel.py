@@ -378,10 +378,10 @@ class TownBattleCogPanel(DirectFrame):
         else:
             t = 'Level ' + str(self.cog.getActualLevel())
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
-            if self.cog.getExecutive():
-                t += TTLocalizer.ExecutivePostFix
-            elif self.cog.getManager():
+            if self.cog.getManager():
                 t += TTLocalizer.ManagerPostFix
+            elif self.cog.getExecutive():
+                t += TTLocalizer.ExecutivePostFix
             else:
                 t += TTLocalizer.GovernaughtPostFix
         if self.cog.getSkeleRevives() > 0:
@@ -694,18 +694,11 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isContracted or self.cog.isContracted2:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/heal_over_time_icon')
-            if self.cog.isContracted2:
-                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+125", text_fg=(0, 1, 0.047, 1),
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+95", text_fg=(0, 1, 0.047, 1),
                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                pos=(0.25, 0, -.5),
                                                text_scale=.4)
-                self.insuredText.show()
-            else:
-                self.insuredText = DirectLabel(parent=self.insured, relief=None, text="+95", text_fg=(0, 1, 0.047, 1),
-                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                               pos=(0.25, 0, -.5),
-                                               text_scale=.4)
-                self.insuredText.show()
+            self.insuredText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
@@ -1124,6 +1117,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'director':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
+        elif name == 'payman':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
         elif name == 'choreo':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
         elif name == 'cinema':
@@ -1258,8 +1253,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
         elif name == 'radiog':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'gatekeep':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .055, .055, .055)
+        elif name == 'gatekeep' or name == 'liquidr':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .05, .05, .05)
         elif name == 'djockey' or name == 'ptjockey':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .055, .055, .055)
         elif name == 'dola':
@@ -1274,6 +1269,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
         elif name == 'chairman':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .095, .095, .095)
+        elif name == 'bookkeep':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)
         elif name == 'dold':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
@@ -1350,7 +1347,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.28, 0.5, 0.12, -180, 0, 0, .14, .14, .14)
         elif name == 'blk':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'psetter':
+        elif name == 'psetter' or name == 'hustle':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
         elif name == 'gld':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)

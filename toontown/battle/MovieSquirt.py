@@ -322,6 +322,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         if kbbonus == 0:
             suitTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitTrack.append(Func(suit.setDizzy, 0))
+        suit.setPendingQueuedLured(False)
         suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
@@ -464,9 +465,9 @@ def __soakSuit(suit, tContact, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher':
+            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, color))
-    if not suit.isSkeleton:
+    if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')
         handTint = Vec4(
             suit.handColor[0] * color[0],
@@ -477,6 +478,8 @@ def __soakSuit(suit, tContact, remove=0):
         suitInterval.append(Func(hands.setColorScale, handTint))
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetLitigator))
+    if suit.dna.name == 'treasure' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeWetTreasurer))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
         suitInterval.append(Parallel(Func(suit.makeDamageDown), Func(suit.checkDamageDown, + 25)))

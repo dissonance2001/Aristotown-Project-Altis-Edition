@@ -4245,7 +4245,6 @@ def doScabbard(attack):
         suitTrack.append(Wait(4.5))
         suitTrack.append(Func(s.checkScabbard))
         if not s.dna.name == 'dking':
-            suitTrack.append(Func(s.checkHealingPhrases, 0))
             suitTrack.append(ActorInterval(s, 'large-zap'))
             suitTrack.append(Func(s.setNeutralAnimationDrop))
         theSuit = attack['suit']
@@ -4791,10 +4790,10 @@ def doResonanceTax(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
+    calculator.setScale(1.25)
     suitType = getSuitBodyType(attack['suitName'])
     damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = Sequence(
@@ -4842,10 +4841,10 @@ def doResonanceTax2(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
+    calculator.setScale(1.25)
     suitType = getSuitBodyType(attack['suitName'])
     damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = Sequence(
@@ -4893,10 +4892,10 @@ def doResonanceTax3(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
+    calculator.setScale(1.25)
     suitType = getSuitBodyType(attack['suitName'])
     damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = Sequence(
@@ -4944,10 +4943,10 @@ def doResonanceTax4(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
+    calculator.setScale(1.25)
     suitType = getSuitBodyType(attack['suitName'])
     damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = Sequence(
@@ -4995,10 +4994,10 @@ def doResonanceTax5(attack):
     damageDelay = 1.7
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
+    calculator.setScale(1.25)
     suitType = getSuitBodyType(attack['suitName'])
     damageSuits = []
-    calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
     calcDuration = 1.3
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     calcPropTrack = Sequence(
@@ -5043,7 +5042,7 @@ def doBalanceTheLedger(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.checkBalanceOfTheLedger, battle, 100))
+        suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(100, battle)))
         suitTracks.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 5)))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
@@ -5065,7 +5064,7 @@ def doBalanceTheLedger2(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.checkBalanceOfTheLedger, battle, 200))
+        suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(200, battle)))
         suitTracks.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 10)))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
@@ -5087,7 +5086,7 @@ def doBalanceTheLedger3(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.checkBalanceOfTheLedger, battle, 300))
+        suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(300, battle)))
         suitTracks.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 15)))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
@@ -5109,7 +5108,7 @@ def doBalanceTheLedger4(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.checkBalanceOfTheLedger, battle, 400))
+        suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(400, battle)))
         suitTracks.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 20)))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
@@ -5131,7 +5130,7 @@ def doBalanceTheLedger5(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.checkBalanceOfTheLedger, battle, 500))
+        suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(500, battle)))
         suitTracks.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 25)))
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)

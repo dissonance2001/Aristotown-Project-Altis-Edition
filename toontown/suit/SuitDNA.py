@@ -15,7 +15,7 @@ suitHeadTypes = [
 'bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra', 'kerberos', 'charon',
+'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'payman', 'bookkeep', 'hustle', 'liquidr', 'treasure',
 'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
 'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'asm', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
@@ -37,7 +37,7 @@ suitATypes = [
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'pp', 'sw', 'nc', 'trs', 'rb', 'kerberos', 'charon', 'hroller', 'erfit', 'hrollers', 'hroller2',
+'pp', 'sw', 'nc', 'trs', 'rb', 'payman', 'liquidr', 'treasure', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
 'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
     # Boardbots
@@ -53,7 +53,7 @@ suitBTypes = [
     # Lawbots
 'b', 'pf', 'ac', 'bs', 'sd', 'sh', 'clerk', 'mouthp', 'rainmake', 'erclaim', 'redd', 'sgoat',
     # Cashbots
-'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'nix',
+'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'hustle',
     # Sellbots
 'tm', 'cn', 'ms', 'bellring', 'prethink', 'psetter',
     # Boardbots
@@ -69,7 +69,7 @@ suitCTypes = [
     # Lawbots
 'bf', 'nn', 'ad', 'judy',
     # Cashbots
-'sc', 'tw', 'fct', 'mb', 'bfh', 'supervis', 'treek', 'styx', 'hydra', 'pcrat',
+'sc', 'tw', 'fct', 'mb', 'bfh', 'supervis', 'treek', 'bookkeep', 'pcrat',
     # Sellbots
 'cc', 'gh', 'asm', 'dopr', 'dopa', 'mslacker',
     # Boardbots

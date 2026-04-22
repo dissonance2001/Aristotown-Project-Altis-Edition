@@ -348,6 +348,8 @@ class Movie(DirectObject.DirectObject):
                 ptrack.append(Func(s.makeAngry, s.getEnrageCounter() - 1))
             if s.getEnrageCounter() <= 1 and s.dna.name == 'liquid':
                 ptrack.append(Func(s.makeUnAngry))
+            if s.getEnrageCounter() <= 1 and s.dna.name == 'wtapper':
+                ptrack.append(Func(s.makeUnAngry))
             if s.getLuredRounds() == 1:
                 ptrack.append(Func(s.makeUnLured))
             if not s.getLuredRounds() <= 0:

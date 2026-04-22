@@ -87,7 +87,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         suitDNA.newSuit('bkeeper')
         self.vaultmaster.setDNA(suitDNA)
         self.vaultmaster.setPickable(0)
-        self.vaultmaster.setDisplayName('Vaultmaster\nBossbot\nLevel 44.mgr')
+        self.vaultmaster.setDisplayName('Commissioner\nBossbot\nLevel 44.mgr')
         self.vaultmaster.doId = 0
         self.vaultmaster.loop('sit-exec')
 
@@ -463,7 +463,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                              Func(self.powerhouse.setChatAbsolute, "You're not built for this!", CFSpeech), Wait(3.0), Func(self.powerhouse.setChatAbsolute, "", CFSpeech)),
 
                          LerpPosInterval(camera, 2, getCamBossPosVaultmaster),
-                         Parallel(Func(self.setChatAbsolute, "Vaultmaster, when something becomes inefficient, it is removed. He decides what remains, and what is written off.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.setChatAbsolute, "Commissioner, when something becomes inefficient, it is removed. He decides what remains, and what is written off.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
                          Parallel(Func(self.vaultmaster.setChatAbsolute, "You are liabilities...", CFSpeech),
                                   Sequence(ActorInterval(self.vaultmaster, 'speak', playRate=1.5), Func(self.vaultmaster.loop, 'neutral'))),
                          Sequence(Func(self.vaultmaster.setChatAbsolute, "Unsecured. Uninsured.", CFSpeech), Wait(3.0), Func(self.vaultmaster.setChatAbsolute, "I will correct that.", CFSpeech),

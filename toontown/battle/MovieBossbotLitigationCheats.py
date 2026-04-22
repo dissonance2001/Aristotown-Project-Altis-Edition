@@ -1256,7 +1256,7 @@ def doBrokenConnection(attack):
     selfDamageTrack = Sequence(Wait(3), Func(suit.showHpText, "CONNECTION DROPPED!", 2, openEnded=0))
     makeImmune2 = Parallel(Func(suit.makeAngry, 3))
     makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 30), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 30))
-    return Parallel(notifyTrack, makeImmune2, makeDamageUp, selfDamageTrack, suitTrack, soundTrack4, soundTrack)
+    return Parallel(notifyTrack, makeDamageUp, selfDamageTrack, makeImmune2, suitTrack, soundTrack4, soundTrack)
 
 def doBrokenConnectionOLD(attack):
     suit = attack['suit']
@@ -1279,7 +1279,7 @@ def doVoicemail(attack):
     suitSpeechTrack = Func(suit.setChatAbsolute,
                            "Every call costs more, and I always keep track... Updating billing record to %s dollars." %
                            int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
-    calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
         ActorInterval(calculator, 'court-costs-calculator'),
@@ -2440,115 +2440,111 @@ def doForeAttack2(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
+
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.75), doForeRevert(attack))
+
     club = globalPropPool.getProp('golf-club')
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
     clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.25, Point3(1.1, 1.1, 1.1))
+
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTracks = Parallel()
+
+    baseBall = loader.loadModel('phase_6/models/golf/golf_ball')
+    baseBall.setColorScale(0.75, 0.75, 0.75, 0.5)
+    baseBall.setTransparency(1)
+    baseBall.setScale(2.5)
+
     for t in targets:
         toon = t['toon']
-        dmg = t['hp']
-        numBalls = 5  # Change this to any number you want
-        startDelay = 2.0  # When first ball appears
-        intervalDelay = 0.075  # Time between each ball
+        numBalls = 5
+        startDelay = 2.0
+        intervalDelay = 0.075
 
-        ballScale = 2.5
-
-        # Load base model once (better performance)
-        baseBall = loader.loadModel('phase_6/models/golf/golf_ball')
-        baseBall.setColorScale(0.75, 0.75, 0.75, 0.5)
-        baseBall.setTransparency(1)
-        baseBall.setScale(ballScale)
-
-        for i in range(numBalls):
-            ball = baseBall.copyTo(render)  # Instance instead of reloading
-
+        for i in xrange(numBalls):
+            ball = baseBall.copyTo(hidden)  # not render
             delay = startDelay + (i * intervalDelay)
-
-            ballTrack = Sequence(
-                Wait(delay),
-                getPropAppearTrack(ball, suit, ballPosPoints, 0, ballScale),
-                Func(ball.wrtReparentTo, render)
-            )
 
             missPoint = lambda b=ball, toon=toon: __toonMissPoint(b, toon)
 
-            ballTrack.append(
+            ballTrack = Sequence(
+                Wait(delay),
+                getPropAppearTrack(ball, suit, ballPosPoints, 0, Point3(2.5, 2.5, 2.5)),
+                Func(ball.wrtReparentTo, render),
                 getPropThrowTrack(
                     attack,
                     ball,
-                    [__toonFacePoint(toon)],
+                    [lambda toon=toon: __toonFacePoint(toon)],
                     [missPoint],
                     0.1,
                     target=t
-                )
+                ),
+                Func(ball.removeNode)
             )
 
-            ballTrack.append(Func(baseBall.removeNode))  # Clean up properly
-
             ballPropTracks.append(ballTrack)
-    toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'],
-                               showMissedExtraTime=1.7)
+
+    toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'], showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack)
+
+    cleanupTrack = Sequence(Func(baseBall.removeNode))
+
+    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack, cleanupTrack)
 
 def doForeAttack(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
+
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.75), doForeRevert(attack))
+
     club = globalPropPool.getProp('golf-club')
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
     clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 2.25, Point3(1.1, 1.1, 1.1))
+
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTracks = Parallel()
+
+    baseBall = loader.loadModel('phase_6/models/golf/golf_ball')
+    baseBall.setColorScale(0.75, 0.75, 0.75, 0.5)
+    baseBall.setTransparency(1)
+    baseBall.setScale(2.5)
+
     for t in targets:
         toon = t['toon']
-        dmg = t['hp']
-        numBalls = 5  # Change this to any number you want
-        startDelay = 2.0  # When first ball appears
-        intervalDelay = 0.075  # Time between each ball
+        numBalls = 5
+        startDelay = 2.0
+        intervalDelay = 0.075
 
-        ballScale = 2.5
-
-        # Load base model once (better performance)
-        baseBall = loader.loadModel('phase_6/models/golf/golf_ball')
-        baseBall.setColorScale(0.75, 0.75, 0.75, 0.5)
-        baseBall.setTransparency(1)
-        baseBall.setScale(ballScale)
-
-        for i in range(numBalls):
-            ball = baseBall.copyTo(render)  # Instance instead of reloading
-
+        for i in xrange(numBalls):
+            ball = baseBall.copyTo(hidden)  # not render
             delay = startDelay + (i * intervalDelay)
-
-            ballTrack = Sequence(
-                Wait(delay),
-                getPropAppearTrack(ball, suit, ballPosPoints, 0, ballScale),
-                Func(ball.wrtReparentTo, render)
-            )
 
             missPoint = lambda b=ball, toon=toon: __toonMissPoint(b, toon)
 
-            ballTrack.append(
+            ballTrack = Sequence(
+                Wait(delay),
+                getPropAppearTrack(ball, suit, ballPosPoints, 0, Point3(2.5, 2.5, 2.5)),
+                Func(ball.wrtReparentTo, render),
                 getPropThrowTrack(
                     attack,
                     ball,
-                    [__toonFacePoint(toon)],
+                    [lambda toon=toon: __toonFacePoint(toon)],
                     [missPoint],
                     0.1,
                     target=t
-                )
+                ),
+                Func(ball.removeNode)
             )
 
-            ballTrack.append(Func(baseBall.removeNode))  # Clean up properly
-
             ballPropTracks.append(ballTrack)
-    toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'],
-                               showMissedExtraTime=1.7)
+
+    toonTracks = getToonTracks(attack, 2.5, ['slip-forward'], 1, ['duck'], showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack)
+
+    cleanupTrack = Sequence(Func(baseBall.removeNode))
+
+    return Parallel(suitTrack, ballPropTracks, toonTracks, soundTrack, clubPropTrack, cleanupTrack)
 
 def doGeneration2(attack):
     suit = attack['suit']

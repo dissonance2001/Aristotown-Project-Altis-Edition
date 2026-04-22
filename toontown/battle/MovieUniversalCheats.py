@@ -585,9 +585,9 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher':
+            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
-    if not suit.isSkeleton:
+    if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')
         handTint = Vec4(
             suit.handColor[0] * color[0],
@@ -598,6 +598,8 @@ def __soakRemoval(suit, remove=0):
         suitInterval.append(Func(hands.setColorScale, suit.handColor))
     if suit.dna.name == 'lgator' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryLitigator))
+    if suit.dna.name == 'treasure' and not suit.isSkeleton:
+        suitInterval.append(Func(suit.makeDryTreasurer))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeDryFirestarter))
     if suit.style.name == 'fires' and not suit.isSkeleton:
@@ -736,7 +738,7 @@ def doDesperation2(attack):
     for t in battle.activeToons:
         toonTrack = Parallel(Func(t.makeUnGagBan))
         toonTracks.append(toonTrack)
-    notifyTracks = Sequence()
+    notifyTracks = Sequence(Func(theSuit.setChatAbsolute, "", CFSpeech | CFTimeout))
     makeDamageUps = Parallel()
     theSuit.setPendingQueuedDesperation(True)
     if theSuit.isDesperation:
@@ -993,7 +995,7 @@ def doCourtCalculations(attack):
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
-    calcPosPoints = [Point3(-0.35, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+    calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
         ActorInterval(calculator, 'court-costs-calculator'),

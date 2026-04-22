@@ -818,7 +818,7 @@ def doSuitAttack(attack):
     elif name == 'SafetyHeatWaveCalculation':
         suitTrack = MovieSellbotLitigationCheats.doHeatWaveCalculation(attack)
     elif name == 'SafetyViolation':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat(attack)
+        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
     elif name == 'SafetyPromotion':
         suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 1)
     elif name == 'SafetyPromotion2':
@@ -1825,6 +1825,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'payman' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
@@ -1839,6 +1842,8 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
             track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
         elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'firestarter-cigar-smoke', playRate=playRate))
+        elif attack['suitName'] == 'payman' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
+            track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
         elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'firestarter-cigar-smoke', playRate=playRate))
         else:
@@ -5193,6 +5198,8 @@ def doCigarSmoke(attack):
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     if suit.dna.name == 'hho' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)
+    elif suit.dna.name == 'payman' and not suit.isSkeleton:
+        return doHeadHonchoCigarSmoke(attack)
     elif suit.dna.name == 'fires' and not suit.isSkeleton:
         return doFirestarterCigarSmoke(attack)
     elif suit.dna.name == 'safesupervis' and not suit.isSkeleton:
@@ -5276,6 +5283,8 @@ def doCigarSmokeOLD(attack):
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     if suit.dna.name == 'hho' and not suit.isSkeleton:
+        return doHeadHonchoCigarSmoke(attack)
+    elif suit.dna.name == 'payman' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)
     elif suit.dna.name == 'fires' and not suit.isSkeleton:
         return doFirestarterCigarSmoke(attack)
@@ -6029,8 +6038,8 @@ def doFired(attack):
         baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
         flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
-        flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, [baseFlameSmall, toon, 0], softStop=-1)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, [flameSmall, toon, 0], softStop=-1)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
 
         def changeColor(parts):
@@ -6117,8 +6126,8 @@ def doFiredPressurizer(attack):
         baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
         flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
-        flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, [baseFlameSmall, toon, 0], softStop=-1)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, [flameSmall, toon, 0], softStop=-1)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
 
         def changeColor(parts):
@@ -6170,7 +6179,6 @@ def doAudit(attack):
     targets = attack['target']
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
     BattleParticles.loadParticles()
     particleEffects = []
     particleEffects2 = []
@@ -6203,11 +6211,14 @@ def doAudit(attack):
     suitName = attack['suitName']
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
+        calculator.setScale(1.25)
     if suitType == 'b':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.43352601156069426, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     if suitType == 'c':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.34682080924855896, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
@@ -6223,7 +6234,6 @@ def doCalculate(attack):
     targets = attack['target']
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
     BattleParticles.loadParticles()
     particleEffects = []
     particleEffects2 = []
@@ -6255,11 +6265,14 @@ def doCalculate(attack):
     partTracks5 = getPartTracks(attack, particleEffects5, 1.9, 2.8, 0, softStop=-1)
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
+        calculator.setScale(1.25)
     if suitType == 'b':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.43352601156069426, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     if suitType == 'c':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.34682080924855896, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),
@@ -6276,7 +6289,6 @@ def doTabulate(attack):
     targets = attack['target']
     calculator = globalPropPool.getProp('calculator')
     calculator.setTwoSided(True)
-    calculator.setScale(1.5)
     BattleParticles.loadParticles()
     particleEffects = []
     particleEffects2 = []
@@ -6308,11 +6320,14 @@ def doTabulate(attack):
     partTrack5 = getPartTrack(particleEffect5, 1.9, 2.8, [particleEffect5, suit, 0], softStop=-1)
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        calcPosPoints = [Point3(-.85, 0.25, -0.1), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(-0.7803468208092497, 0.26011560693641655, -0.1), VBase3(0, 0.0, 170.63583815028903)]
+        calculator.setScale(1.25)
     if suitType == 'b':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.43352601156069426, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     if suitType == 'c':
-        calcPosPoints = [Point3(0, 0.25, -0.025), VBase3(1.352, 0.0, 180.0)]
+        calcPosPoints = [Point3(0, 0.34682080924855896, 0), VBase3(0, 0.0, 180.0)]
+        calculator.setScale(1)
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getLeftHand(), *calcPosPoints),
         ActorInterval(calculator, 'calculator', playRate=1.25),

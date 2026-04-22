@@ -248,6 +248,51 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         nameInfo = self.createNameInfo()
         self.setDisplayName(nameInfo)
 
+    def createNameInfoContracted(self):
+        name = self.name
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getExecutive() and not self.getManager():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getGovernaught() and not self.getManager():
+            level += TTLocalizer.GovernaughtPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "Unionized\n%s" % name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoOverpressured(self):
+        name = self.name
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getExecutive() and not self.getManager():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getGovernaught() and not self.getManager():
+            level += TTLocalizer.GovernaughtPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "Overpressured\n%s" % name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
+
+    def createNameInfoShadow(self):
+        name = self.name
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+        level += TTLocalizer.ManagerPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "Burned\n%s" % name,
+                                                        'dept': dept,
+                                                        'level': level}
+        return nameInfo
 
     def createNameInfo(self):
         name = self.name
