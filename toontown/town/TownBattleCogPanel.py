@@ -375,6 +375,8 @@ class TownBattleCogPanel(DirectFrame):
             self.sharkwatcher.setPosHprScale(-0.3925, 0.5, 0.025, 0, 0, 0, .24, .24, .24)
         if self.cog.dna.name == 'hrollers':
             t = 'Level 25'
+        elif self.cog.isShadow:
+            t = 'Level 30'
         else:
             t = 'Level ' + str(self.cog.getActualLevel())
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
@@ -637,6 +639,17 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.desperation, slot, slotColor=(1, 0.984, 0, 1))
 
+        if self.cog.isOverseer:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.collectcall = status.find('**/gatekeeper_icon')
+            self.collectcallText = DirectLabel(parent=self.collectcall, relief=None, text="%s" % self.cog.getOverseerRounds(), text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -.5),
+                                         text_scale=.5)
+            self.collectcallText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.collectcall, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isCollectCall:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.collectcall = status.find('**/cashback_icon')
@@ -681,7 +694,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isContracted or self.cog.isContracted2 or self.cog.dna.name == 'supervis' or self.cog.dna.name == 'ovt':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/insured_icon')
-            if not self.cog.dna.name == 'supervis':
+            if not self.cog.dna.name == 'supervis' and not self.cog.dna.name == 'ovt':
                 self.contractedRoundsText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getContractedRounds()),
                                          text_fg=(1, 1, 1, 1),
                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -705,6 +718,30 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.isOilRain:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.insured = status.find('**/oilrain_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getOilRainRounds() - 1),
+                                           text_fg=(1, 1, 1, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, -.5),
+                                           text_scale=.5)
+            self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isOilRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/diving_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getOilRainRounds() - 1),
+                                           text_fg=(1, 1, 1, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, -.5),
+                                           text_scale=.5)
+            self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isOilRain:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/fizzle_icon')
             self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getOilRainRounds() - 1),
                                            text_fg=(1, 1, 1, 1),
                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -1089,6 +1126,44 @@ class TownBattleCogPanel(DirectFrame):
     def __blinkGray(self, task):
         self.healthBar2.setProp('barColor', self.healthColors[10])
 
+    def _fitSuitHeadToFrame(self, head, pos=(-0.27, 0.5, 0.115), hpr=(-180, 0, 0), targetSize=0.22):
+        head.setHpr(*hpr)
+        head.setScale(1)
+
+        minPoint, maxPoint = head.getTightBounds()
+        size = maxPoint - minPoint
+
+        biggestAxis = max(size.getX(), size.getY(), size.getZ())
+        if biggestAxis <= 0:
+            head.setPosHprScale(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2], 0.1, 0.1, 0.1)
+            return
+
+        scale = targetSize / biggestAxis
+
+        center = (minPoint + maxPoint) * 0.5
+        head.setPos(-center * scale)
+        head.setScale(scale)
+
+        root = self.attachNewNode('suitHeadRoot')
+        head.reparentTo(root)
+        root.setPosHpr(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
+
+        self.suitHeadRoot = root
+
+    def generateSuitHead(self, name):
+        self.suitHeadRoot = self.attachNewNode('suitHeadRoot')
+        self.suitHead = Suit.attachSuitHead(self.suitHeadRoot, name)
+
+        self._fitSuitHeadToFrame(
+            self.suitHead,
+            pos=(-0.27, 0.5, 0.115),
+            hpr=(-180, 0, 0),
+            targetSize=0.22
+        )
+
+        if name == 'cbutcher':
+            self.suitHead.setColor(0, 0, 0, 1)
+
 
     def generateSuitHead(self, name):
         self.suitHead = Suit.attachSuitHead(self, name)
@@ -1276,7 +1351,7 @@ class TownBattleCogPanel(DirectFrame):
         elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
         elif name == 'wsi' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .12, .12, .12)
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.10, -180, 0, 0, .12, .12, .12)
         elif name == 'shw':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .00001, .00001, .00001)
         elif name == 'autocad':
@@ -1353,6 +1428,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)
         elif name == 'arbit' or name == 'cdirector':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0925, .0925, .0925)
+        elif name == 'lgator' or name == 'treasure':
+            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1275, -180, 0, 0, .1, .1, .1)
         else:
             self.suitHead.setPos(-0.27, 0.5, 0.13)
 

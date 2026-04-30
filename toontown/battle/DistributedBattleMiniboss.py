@@ -282,7 +282,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if not suit.dna.name == 'hroller2':
                     suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
                 else:
-                    suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), flyIval), Func(suit.loop, 'neutral')))))
+                    suitTrack.append(Track((delay, Sequence(Parallel(flyIval), Func(suit.loop, 'neutral')))))
                 suitTracks.append(suitTrack)
                 delay += 1
 

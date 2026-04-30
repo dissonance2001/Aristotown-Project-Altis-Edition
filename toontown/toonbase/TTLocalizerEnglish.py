@@ -4094,6 +4094,10 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
 'TollmasterBalanceTheLedger3',
 'TollmasterBalanceTheLedger4',
 'TollmasterBalanceTheLedger5',
+'ContingencyMarkLiquidated',
+'ContingencyMarkRevisedFiling',
+'RecordkeeperRevisedFilingLiquidation',
+'RecordkeeperRedlinedClauseMissedPayment',
                   'LiquidatorOilRain',
                   'LiquidatorTornado',
                   'LiquidatorOilRainDamage',
@@ -4318,6 +4322,10 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
                   'LitigatorSnapBindings',
                   'StenographerSanctionSuppression',
  'DirectorBackToOnes',
+
+'PayrollPayrollProcessing',
+'PayrollPerformanceBonus',
+
                   'DisableLevel45',
                   'DisableLevel46',
                   'DisableLevel47',
@@ -4417,7 +4425,7 @@ SuitCheatDescription = {
 'PowerhouseDropImmune': "The Powerhouse is now entirely immune to drop!",
 'PowerhouseZapImmune': "The Powerhouse is now entirely immune to zap!",
 'PowerhouseSyphon': "The Powerhouse is now syphoning health from the toons!",
-'PowerhouseSyphonDesperation': "The Powerhouse gives a syphon ability to all cogs!",
+'PowerhouseSyphonDesperation': "Attacking cogs will syphon health from the Toons this round!",
 'PowerhouseSnipeVulnerable': "The Powerhouse retaliates against toons with existing damage vulnerabilities!",
 'PowerhouseSnipeGagBan': "The Powerhouse doubles down damage on toons who picked banned gags!",
 'PowerhouseSnipeSoaked': "The Powerhouse burns Toons at random!",
@@ -4431,8 +4439,8 @@ SuitCheatDescription = {
 'BookkeeperPaperCutSoaked': "The Commissioner retaliates against marked Toons!",
 'BookkeeperPaperCutMarked': "The Commissioner gains a damage boost when not attacked during Closed Session!",
 'BookkeeperPaperCut': "The Commissioner marks a Toon to take extra damage!",
-'BookkeeperExplodingDocument': "The Commissioner restricts all high leveled gags from a Toon!",
-'BookkeeperMandatoryFiling': "The Commissioner removes your defense!",
+'BookkeeperExplodingDocument': "All cogs will now heal from combo and knockback damage!",
+'BookkeeperMandatoryFiling': "Toon's defense is stripped at random!",
 'BookkeeperBookkeepingRetaliation': "The Commissioner retaliates against toons who attacked him while in Closed Session!",
 'BookkeeperBookkeeping': "The Commissioner is focusing, if left unattacked, he will become stronger!",
     # Wiretapper Cheats
@@ -4440,9 +4448,9 @@ SuitCheatDescription = {
 'WiretapperCollectCall2': "The Wiretapper is about to collect!",
 'WiretapperCollectCallDamage': "The dues are racking up!",
 'WiretapperWiretapped': "The Wiretapper syphons health from the toons!",
-'WiretapperVoicemail': "The Wiretapper is now immune for the next round!",
+'WiretapperVoicemail': "The Wiretapper becomes immune when ignored!",
 'WiretapperBusySignal': "The Wiretapper confuses the collect called Toon when not attacked by them!",
-'WiretapperBrokenConnection': "The Wiretapper loses her connection when not attacked!",
+'WiretapperBrokenConnection': "The Wiretapper will deal and take more damage in this mode!",
     # Ambassador Cheats
 'AmbassadorHeadRoller': "The Ambassador becomes stronger for every cog he sacrifices!",
 'AmbassadorHeadRoller2': "The Ambassador becomes stronger for every cog he sacrifices!",
@@ -4461,7 +4469,7 @@ SuitCheatDescription = {
 'AmbassadorPhase2': "The Ambassador has lost his outer shell and has become stronger!",
 'AmbassadorDamageUp': "The Ambassador becomes stronger for every cog he sacrifices!",
 'AmbassadorManagerialProtection': "The Ambassador calls cogs to his side!",
-'AmbassadorManagerialProtectionImmunity': "The Ambassador attacks again when he sacrifices cogs!",
+'AmbassadorManagerialProtectionImmunity': "The Ambassador applies a damage vulnerability!",
 'AmbassadorMulligan': "The Ambassador attacks again when Toons destroy cogs!",
     # Safety Supervisor Cheats
 'SafetySoakRetaliation': "The Pressurizer retaliates when soaked!",
@@ -4523,6 +4531,9 @@ SuitCheatDescription = {
 'RadiographerOvermodulated4': "The Radiographer unlures a cog and gives them an extra attack!",
 'RadiographerOvermodulated5': "The Radiographer unlures a cog and gives them an extra attack!",
 'RadiographerDanceSession': "The Radiographer is now taking and dealing less damage while in this mode!",
+        # Payroll Manager Cheats
+'PayrollPayrollProcessing': "The Payroll Manager pays all cogs!",
+'PayrollPerformanceBonus': "The Payroll Manager gives a bonus to all grunt cogs!",
     # Derrick Man Cheats
 'DerrickManRefinement': "The Derrick Man heals all cogs for 40% of their max HP!",
     # DOLA Cheats
@@ -4598,8 +4609,10 @@ SuitCheatDescription = {
  'TollmasterBalanceTheLedger4': "The Tollmaster destroys damaged cogs and distributes their resources to all manager cogs!",
  'TollmasterBalanceTheLedger5': "The Tollmaster destroys damaged cogs and distributes their resources to all manager cogs!",
     # Recordkeeper Cheats
- 'RecordkeeperMinutesTaken': "The Recordkeeper increases the audit when attacked or when banned gags are used!",
- 'RecordkeeperMinutesTakenContingency': "The Recordkeeper increases the audit when the Contingency Director gains an ability!",
+ 'RecordkeeperRevisedFilingLiquidation': "The Recordkeeper retaliates against liquidated Toons!",
+ 'RecordkeeperRedlinedClauseMissedPayment': "The Recordkeeper puts Toons on cooldown who have missed payments!",
+ 'RecordkeeperMinutesTaken': "The minutes increase when The Recordkeeper is attacked or when banned gags are used!",
+ 'RecordkeeperMinutesTakenContingency': "The minutes increase when the Contingency Director gains an ability!",
  'RecordkeeperMinutesTakenDamage': "The minutes are adding up!",
  'RecordkeeperPaperTrail': "The Phantom Recordkeeper creates a shadow entity of a Toon!",
  'RecordkeeperRevisedFiling': "Toons will now receive and deal more damage at random!",
@@ -4630,6 +4643,8 @@ SuitCheatDescription = {
  'ButcherScabbard': "The Corporate Butcherer charges all cogs!",
  'ButcherLayoffs': "The Corporate Butcherer fires all cogs!",
     # Contingency Director Cheats
+ 'ContingencyMarkRevisedFiling': "The Contingency Director marks revised Toons!",
+ 'ContingencyMarkLiquidated': "The Contingency Director marks liquidated Toons!",
  'ContingencyFailsafeProtocol': "The Contingency Director gains a damage defense when attacked!",
  'ContingencyRiskThresholdBreach75': "The Contingency Director absorbs all damage dealt to other cogs!",
  'ContingencyRiskThresholdBreach50': "The Contingency Director marks a Toon!",
@@ -4715,8 +4730,8 @@ SuitCheatDescription = {
 'HighRollerCheerRetaliation': "The Purple Silhouette retaliates against Toons with cheer!",
     # Videographer Cheats
  'VideographerHardCut': "The Videographer takes random gag levels off the script!",
- 'VideographerRisingStars': "The Videographer summons a cog to his side!",
- 'VideographerRisingStars2': "The Videographer summons a cog to his side!",
+ 'VideographerRisingStars': "The Videographer brings cogs to the stage!",
+ 'VideographerRisingStars2': "The Videographer brings cogs to the stage!",
  'VideographerRisingStarsSilhouette': "The Videographer creates a silhouette of himself!",
  'VideographerRisingStarsSacrifice': "The Videographer virtualizes all Mr. Hollywoods and Stunt Doubles!",
  'VideographerVideoStatic': "The Videographer's signal is becoming more unstable!",
@@ -4745,7 +4760,7 @@ SuitCheatDescription = {
  'DirectorBudgetExpansion': "The Director inflates the budget whenever cogs are destroyed!",
  'DirectorProductionBudget': "The budget is inflating!",
     # Factory Foreman Cheats
- 'ForemanSnipe': "not needed",
+ 'ForemanSnipe': "The Factory Foreman increases damage to Toons on cooldown!",
  'ForemanRedTape': "The Factory Foreman places 2 Toons on cooldown at random!",
  'ForemanContractor': "The Factory Foreman partners himself with a Toon!",
  'ForemanBurning': "The Factory Foreman burns 2 Toons at random!",
@@ -5064,7 +5079,7 @@ SuitAttackNames = {
     'PowerhouseDropImmune': "Tank Mentality!",
     'PowerhouseZapImmune': "Tank Mentality!",
     'PowerhouseSyphon': "Tank Mentality!",
-    'PowerhouseSyphonDesperation': "Tank Mentality!",
+    'PowerhouseSyphonDesperation': "Power Drain!",
     'PowerhouseSnipeVulnerable': "Burn!",
     'PowerhouseSnipeGagBan': "Burn!",
     'PowerhouseSnipeSoaked': "Burn!",
@@ -5079,7 +5094,7 @@ SuitAttackNames = {
     'BookkeeperPaperCutMarked': "Closed Session!",
     'BookkeeperPaperCut': "Liability Flag!",
     'BookkeeperMandatoryFiling': "Mandatory Filing!",
-    'BookkeeperExplodingDocument': "Asset Lockdown!",
+    'BookkeeperExplodingDocument': "Executive Oversight!",
     'BookkeeperBookkeepingRetaliation': "Closed Session!",
     'BookkeeperBookkeeping': "Closed Session!",
     # Wiretapper Cheats
@@ -5109,7 +5124,7 @@ SuitAttackNames = {
     'AmbassadorPhase2': "Enraged!",
     'AmbassadorDamageUp': "Compensation!",
     'AmbassadorManagerialProtection': "Managerial Protection!",
-    'AmbassadorManagerialProtectionImmunity': "Premier Shot!",
+    'AmbassadorManagerialProtectionImmunity': "Pink Slip!",
     'AmbassadorMulligan': "Premier Shot!",
     # Safety Supervisor Cheats
     'SafetyHighPressure': "Total Correction!",
@@ -5259,6 +5274,8 @@ SuitAttackNames = {
     'TollmasterResonanceTax4': "Account Rollover!",
     'TollmasterResonanceTax5': "Account Rollover!",
     # Recordkeeper Cheats
+    'RecordkeeperRedlinedClauseMissedPayment': "Redlined Clause!",
+    'RecordkeeperRevisedFilingLiquidation': "Revised Filing!",
     'RecordkeeperMinutesTaken': "Minutes Taken Audit!",
     'RecordkeeperMinutesTakenContingency': "Minutes Taken Audit!",
     'RecordkeeperMinutesTakenDamage': "Minutes Taken!",
@@ -5291,6 +5308,8 @@ SuitAttackNames = {
     'ButcherScabbard': "Scabbard!",
     'ButcherLayoffs': "Layoffs!",
     # Contingency Director Cheats
+    'ContingencyMarkLiquidated': "Targeted Audit!",
+    'ContingencyMarkRevisedFiling': "Targeted Audit!",
     'ContingencyFailsafeProtocol': "Failsafe Protocol!",
     'ContingencyRiskThresholdBreach75': "Centralized Liability!",
     'ContingencyRiskThresholdBreach50': "Targeted Audit!",
@@ -5301,10 +5320,13 @@ SuitAttackNames = {
     'ContingencyOperationalFreeze': "Operational Freeze!",
     'ContingencyForecastCollapse': "Forecast Collapse!",
     'ContingencyRiskThresholdBreach': "Risk Threshold Breach!",
+             # Payroll Manager Cheats
+    'PayrollPayrollProcessing': "Payroll Processing!",
+    'PayrollPerformanceBonus': "Performance Bonus!",
     # Factory Foreman Cheats
-     'ForemanSnipe': "not needed",
+     'ForemanSnipe': "Snipe!",
      'ForemanRedTape': "Red Tape!",
-     'ForemanContractor': "Contracting!",
+     'ForemanContractor': "",
      'ForemanBurning': "Smoked!",
      'ForemanBurningDamage': "Smoked!",
      'ForemanSleepyOvercharge': "",
@@ -5596,14 +5618,21 @@ SuitAttackTaunts = {
             "If you don't like it, there's a money back guarantee!",
             "Let's see what's behind door number two!",
             "This is a life-changing product!"]},
-'CloseTheLoop': ["We're closed for business.",
+'CloseTheLoop': {    
+    'wtapper': ["Let's close the loop on this conversation.",
+                    "Nothing slips past my network!",
+                    "I've traced every step, there's nowhere left to go!",
+                "You're caught in the feedback now.",
+                    "You really thought this wouldn't come back around?"],
+        None: ["We're closed for business.",
                 'You might say this is a close call.',
                 "I'm closing in on you.",
                 "I'm keeping a close eye on you.",
                 "You aren't qualified for this position.",
                 'You should be hearing back from me soon.',
                 'Only successful applicants will receive a callback.',
-                'Your time is coming to a close.'],
+                'Your time is coming to a close.',
+                "Case closed."]},
 'HostileTakeover': {
     'dking': ["Negotiations are over.",
               "This is no longer voluntary!",
@@ -5638,11 +5667,11 @@ SuitAttackTaunts = {
                 "Every action leaves a record. Yours are... concerning.",
                 "I'll be reviewing this thoroughly. Nothing slips past me.",
                 "There's a pattern here; and I don't like it.",],
-     'rkeeper': ["Time to see how messy things really are!",
-                "I hope you kept your receipts.",
-                "Let's check who's really pulling their weight!",
-                "Your file is up to date. I did all the heavy lifting.",
-                "Audit in progress... And yes, it's thorough."],
+     'rkeeper': ["Let's review your performance... line by line.",
+                "Hmm... discrepancies already. How unfortunate.",
+                "Every mistake you've made? I've logged it.",
+                "Your numbers don't reconcile, they never do.",
+                "I'm afraid your record is unacceptable!"],
      None: ["I believe your books don't balance.",
            "Looks like you're in the red.",
            'Let me help you with your books.',
@@ -5747,7 +5776,7 @@ SuitAttackTaunts = {
             'treasure':["That won't clear, you never had the funds.",
                 "Transaction declined, you've come up short!",
                 "Your attempt has failed, there's nothing backing it.",
-                "You're operating on empty"],
+                "You're operating on empty!"],
         'bookkeep': ["Submitting transaction... declined. Not enough to cover it!",
                 "That won't clear, it was never going to.",
                 "Insufficient funds. Try again... properly!",
@@ -6058,7 +6087,25 @@ SuitAttackTaunts = {
             "You'll want to dress up before you go OUT.",
             "I think I'll tie you up."]
  },
-'NickelAndDime': ["idk what phrase goes here this attack doesnt work"],
+'NickelAndDime': {
+        'liquid': ["Failure to pay in full will result in continued charges.",
+               "Incremental payments are still payments.",
+               "The meter is always running!",
+               "Every passage has a cost, paid in full, one coin at a time.",
+               "Tolls aren't always large, but they are frequent.",
+               "Consider this a recurring toll."],
+        'racket': ["I'll bleed you dry one coin at a time!",
+               "I prefer stady income over risky plays.",
+               "You're funding my operation nicely.",
+               "Why rush? Profit's better when it lingers.",
+               "Every little bit adds up, especially when it's yours.",
+               "I don't need big wins, I'll take it piece by piece!"],
+    None: ["I think I'll cash in on this opportunity.",
+                  "Could you spare this Cog some change?",
+                  "This is what I call 'mint condition'.",
+                  "This'll cost you a pretty penny.",
+                  "Everything has it's price.",
+                  "These ones are a dime a dozen."]},
  'Crunch': {
              'bookkeep': ["There it is... everything balances perfectly!",
                 "Yes... that total is correct!",
@@ -6105,7 +6152,13 @@ SuitAttackTaunts = {
                 "Allow me to reverbiagize.",
                 "These words might be out of your grasp.",
                 "Why don't I introduce you to my value proposition?"]},
- 'Downsize': ["Would you like a smaller size for just a quarter more?",
+ 'Downsize': {
+          'rkeeper': ["We're making necessary reductions, starting with you!",
+                "You've exceeded your allocation, time to scale back.",
+                "Consider this a restructuring.",
+                "You're operating above your limits, I'll correct that!",
+                "Excess will be eliminated."],
+     None: ["Would you like a smaller size for just a quarter more?",
                 "You can get this in a smaller size.",
                 "Try this on for size!",
                 "Do you know how to get down?",
@@ -6116,7 +6169,7 @@ SuitAttackTaunts = {
                 "What's wrong? You look down.",
                 "Come on down!",
                 "Why don't I size you up, or should I say, down?",
-                "Let's get down to business."],
+                "Let's get down to business."]},
  'EvictionNotice': {
 'ovt': ["I'm out of place... I mean, you're out of place.",
              "Prepare to be confused about your location.",
@@ -6244,6 +6297,12 @@ SuitAttackTaunts = {
                 "Will you look at that! Your stock is rising!",
                 "You're worth more than you look, Toon!"]},
 'BlueChip': {
+        'dking': ["Ah... a premium asset, ripe for acquisition!",
+                "Let me show you what a real investment looks like!",
+                "Careful now, this one's been performing exceptionally well!",
+                "I only deal in the finest instruments of destruction.",
+                "Watch closely, this is what stability looks like.",
+               "Your value is about to be reallocated."],
     'ambass': ["You can't cash out of this blow.",
              "Your portfolio just tanked.",
             "There's no limit to premium power.",
@@ -6569,8 +6628,9 @@ SuitAttackTaunts = {
                 "Your funds, your options, everything is on hold... indefinitely.",
                    "You're completely cut off now.",],
      'liquid': ["Struggling won't thaw this.",
-                "Funds withheld pending investigation.",
-                "Your liquidity has been suspended.",
+                "Consider this a precautionary measure.",
+                "Let's put a hold on your resources.",
+                "I'm afraid your account is under review.",
                 "Liquidity has been revoked.",],
     'racket': ["Time to lock up what's mine.",
                     "Consider yourself locked and iced.",
@@ -6951,6 +7011,16 @@ SuitAttackTaunts = {
             "I'm putting you away for good."]
  },
  'Legalese': {
+        'liquid':["Ah, you didn't review the terms, did you?",
+                "Let's see how well you understand the fine print.",
+                "Everything you do is subject to revision.",
+                "Confused? Good. That's how I like my clients.",
+                "You agreed to this the moment you walked in here!"],
+        'rkeeper': ["Per clause seven, subsection B... Oh, you wouldn't understand...",
+               "I'll simplify; you're already losing!",
+               "You agreed to this the moment you walked in here!",
+               "The terms are binding, the outcome is inevitable!",
+               "Do try to keep up, it's all perfectly clear... to me."],
      'arbit': ["Allow me to clarify... in terms you'll never understand!",
                "Prepare for a contractual catastrophe.",
                "Time for a binding barrage of clauses.",
@@ -7013,6 +7083,11 @@ SuitAttackTaunts = {
             "You're all washed up."],
  },
  'MarketCrash': {
+        'liquid':["Markets fluctuate... but I decide when they fall.",
+                "Brace yourself, this is a full collapse!",
+                "Time to correct this overvaluation.",
+                "That's what happens when you can't pay the toll!",
+                "Let's bring everything back to zero."],
      'treasure':["There it is, the collapse was unavoidable!",
                 "Everything falls eventually, this is your moment.",
                 "Your value just dropped sharply!",
@@ -7564,6 +7639,11 @@ SuitAttackTaunts = {
             'Say Cheese!']
  },
  'RedTape': {
+        'rkeeper': ["Nothing proceeds without proper authorization.",
+                "You'll need to file the correct forms first.",
+                "Processing your request... indefinitely.",
+                "You're buried in paperwork now.",
+                "Let's see how you perform under restrictions!"],
        'liquidr': ["You'll need approval for that.",
                   "You're not moving forward.",
                 "Everything has to go through me now.",
@@ -8198,7 +8278,10 @@ SuitAttackTaunts = {
                      "Consider this a corporate tax on your vitality.",
                      "Redirecting your health into my reserves.",
                         "I'll never run out of resources with Toons like you."],
-'PowerhouseSyphonDesperation': ["Your attacks will be more enlightening from now on."],
+'PowerhouseSyphonDesperation': ["You feel that? That's their's, MAKE IT YOURS!",
+                                "Why fight fair when you can TAKE it?",
+                                "Don't just hit 'em, RIP it out of 'em!",
+                                "They walked in here full... let's fix that!"],
 'PowerhouseSnipeVulnerable': ["Let's see how long you last under real pressure!",
                               "I don't need speed, I need results!",
                               "Let's apply pressure where it hurts!",
@@ -8242,6 +8325,7 @@ SuitAttackTaunts = {
                          "This grid is surging with energy; you can't unplug me now!",
                          "You'll run out of juice long before I do!",
                                "I'm just getting warmed up!"],
+ 'BookkeeperExplodingDocument': ['Hrm...', 'Hmph...', 'Hm, hm...', 'Hrnhmpf...'],
 'BookkeeperPaperCut': ["Mmmph... that one.",
                                "Mm-hmm... you...",
                                "Mmm... yeah. You.",
@@ -8272,7 +8356,6 @@ SuitAttackTaunts = {
                           "You are receiving a collect call from me... do you accept the charges?",
                             "Ring-a-ling! You have a collect call waiting for you."],
 'WiretapperCollectCallDamage': ["This call is collect, and you're paying the charges.",
-                                "Collect calling is expensive, can you pay the price?",
                                 "Operator? Charge these Toons extra.",
                                 "You can't afford to keep me waiting.",
                                 "The longer you fight, the more it costs you.",
@@ -8299,10 +8382,10 @@ SuitAttackTaunts = {
                          "You should've stayed focused on me!",
                         "You're nothing without the connection!",
                          "I don't tolerate insubordination!",],
-'WiretapperBrokenConnection': ["You don't get to mute me!",
-                                "Ignoring me was the worst option.",
-                                "Never ignore the one who's listening.",
-                               "Am I not worth your attention?",
+'WiretapperBrokenConnection': ["-zzzt- Connection's slipping... no, no... I'm not done.",
+                                "I'm losing the feed, so I'll just burn through it.",
+                                "You think this gives you an advantage?",
+                               "If I'm going down, I'm taking you with me!",
                                "I'm breaking up... can you hear that?"],
                     #ambassador cheats
 'AmbassadorHeadRoller': ["Every organization requires restructuring, and your contribution will now serve a higher purpose.",
@@ -8372,13 +8455,12 @@ SuitAttackTaunts = {
                                  "This is not a one suit show.",
                                    "I do NOT have time for this, come take care of these Toons!."
                                  ],
-'AmbassadorManagerialProtectionImmunity': ["This drive will send you straight to the rough.",
-                        "Lining up the perfect shot... at you.",
-                        "Consider this a hostile tee-off.",
-                        "Careful, you're in my hazard zone.",
-                        "You'll never escape the back nine.",
-                        "Heads up, this one's for the green!",
-                        "I always finish under par, you finish under rubble."],
+'AmbassadorManagerialProtectionImmunity': ["I'm afraid your position is no longer secure.",
+                        "This won't end well for you.",
+                        "Your protection has been revoked.",
+                        "You won't be able to withstand what's coming!",
+                        "You won't recover from this!",
+                        "You signed your own dismissal the moment you stepped in here!"],
 'AmbassadorMulligan': ["This drive will send you straight to the rough.",
                         "Lining up the perfect shot... at you.",
                         "Consider this a hostile tee-off.",
@@ -8672,6 +8754,15 @@ SuitAttackTaunts = {
                                 "Skibidididoooodadahradadooh!",
                                 "Lalalabodadeeda-deebadaaaa!",
                                 "Beep-badayadadeep!"],
+
+'PayrollPayrollProcessing': ["Alright everyone, payroll is being processed. You'll see your compensation shortly!",
+                                "Funds have been allocated, please enjoy your adjusted balances.",
+                                "Let's get those numbers looking better, payment is on the way!",
+                                "Compensation cycle complete. Everyone should be feeling improved."],
+'PayrollPerformanceBonus': ["Outstanding work! Full performance deserves a little extra.",
+                                "You've exceeded expectations, bonus applied!",
+                                "Perfect condition? That earns you a reward.",
+                                "Excellent Efficiency! Let's enhance that further."],
     #directors
 'DerrickManRefinement': ["Take a breather. Drinks are on me.",
                                 "These Toons have such unrefined tastes, don't they?",
@@ -9100,6 +9191,17 @@ SuitAttackTaunts = {
                             "There seems to be an inconsistency.",
                               "Allow me to make an adjustment...",
                               "It's amazing what changes with proper documentation."],
+'RecordkeeperRevisedFilingLiquidation': ["Now everyone can see you properly.",
+                              "There is no hiding in updated records.",
+                              "Efficiency improves when errors are exposed.",
+                            "There seems to be an inconsistency.",
+                              "Allow me to make an adjustment...",
+                              "It's amazing what changes with proper documentation."],
+'RecordkeeperRedlinedClauseMissedPayment': ["This is temporary... though I doubt you'll last that long.",
+                              "I'm afraid that action is temporarily suspended.",
+                               "Did you even read the agreement?",
+                               "There's a restriction here you failed to notice.",
+                            "You don't qualify anymore."],
 'RecordkeeperRedlinedClause': ["This is temporary... though I doubt you'll last that long.",
                               "I'm afraid that action is temporarily suspended.",
                                "Did you even read the agreement?",
@@ -9365,6 +9467,16 @@ SuitAttackTaunts = {
                                  "Efficiency demands compensation.",
                                  "You don't get to opt out of this one, Toon.",
                       ],
+'ContingencyMarkRevisedFiling': ["Your progress funds my response.",
+"This is no longer a negotiation.",
+        "Efficiency demands compensation.",
+        "You don't get to opt out of this one, Toon.",
+],
+'ContingencyMarkLiquidated': ["Your progress funds my response.",
+"This is no longer a negotiation.",
+        "Efficiency demands compensation.",
+        "You don't get to opt out of this one, Toon.",
+],
 'ContingencyRiskThresholdBreach': ["This scenario just escalated.",
                     "You've crossed a line.",
                                    "You should've stopped earlier!",
@@ -9455,81 +9567,272 @@ SuitAttackTaunts = {
                     "Consider this a litigation expense.",
                     "I don't work pro bono, Toon."],
 'CalculatingFees': ["Calculating costs of litigation fees... Price index raised to x."],
-    # Gag Bans
-'BanLevel4': {'wtapper': ['Any Level 4 Gags Toons use will be cut from the budget.'],
-                    None: ["Any Level 4 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel5': {'wtapper': ['Any Level 5 Gags Toons use will be cut from the budget.'],
-                    None: ["Any Level 5 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel6':  {'wtapper': ['Any Level 6 Gags Toons use will be cut from the budget.'],
-                    None: ["Any Level 6 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel7': {'wtapper': ['Any Level 7 Gags Toons use will be cut from the budget.'],
-                    None: ["Any Level 7 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel8': {'wtapper': ['Any Level 8 Gags Toons use will be cut from the budget.'],
-                    None: ["Any Level 8 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel45': {'safesupervis': ["New compliance policy in effect... Level 4 and 5 Gags no longer meet safety criteria."],
-                    None: ["Any Level 4 and 5 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel46': {'safesupervis': ["New compliance policy in effect... Level 4 and 6 Gags no longer meet safety criteria."],
-                    None: ["Any Level 4 and 6 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel47': {'safesupervis': ["New compliance policy in effect... Level 4 and 7 Gags no longer meet safety criteria."],
-                    None: ["Any Level 4 and 7 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel48': {'safesupervis': ["New compliance policy in effect... Level 4 and 8 Gags no longer meet safety criteria."],
-                    None: ["Any Level 4 and 8 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel56': {'safesupervis': ["New compliance policy in effect... Level 5 and 6 Gags no longer meet safety criteria."],
-                    None: ["Any Level 5 and 6 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel57': {'safesupervis': ["New compliance policy in effect... Level 5 and 7 Gags no longer meet safety criteria."],
-                    None: ["Any Level 5 and 7 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel58':  {'safesupervis': ["New compliance policy in effect... Level 5 and 8 Gags no longer meet safety criteria."],
-                    None: ["Any Level 5 and 8 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel67':  {'safesupervis': ["New compliance policy in effect... Level 6 and 7 Gags no longer meet safety criteria."],
-                    None: ["Any Level 6 and 7 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel68':  {'safesupervis': ["New compliance policy in effect... Level 6 and 8 Gags no longer meet safety criteria."],
-                    None: ["Any Level 6 and 8 Gags Toons use can and will be held against them in a court of law."]},
-'BanLevel78':  {'safesupervis': ["New compliance policy in effect... Level 7 and 8 Gags no longer meet safety criteria."],
-                    None: ["Any Level 7 and 8 Gags Toons use can and will be held against them in a court of law."]},
-'BanToonup': {'wtapper': ['Any Toon-Up Gags Toons use will be cut from the budget.'],
-                    None: ["Any Toon-Up Gags Toons use can and will be held against them in a court of law."]},
-'BanTrap': {'wtapper': ['Any Trap Gags Toons use will be cut from the budget.'],
-                    None: ["Any Trap Gags Toons use can and will be held against them in a court of law."]},
-'BanLure':  {'wtapper': ['Any Lure Gags Toons use will be cut from the budget.'],
-                    None: ["Any Lure Gags Toons use can and will be held against them in a court of law."]},
-'BanThrow': {'wtapper': ['Any Throw Gags Toons use will be cut from the budget.'],
-                    None: ["Any Throw Gags Toons use can and will be held against them in a court of law."]},
-'BanSquirt':  {'wtapper': ['Any Squirt Gags Toons use will be cut from the budget.'],
-                    None: ["Any Squirt Gags Toons use can and will be held against them in a court of law."]},
-'BanZap':  {'wtapper': ['Any Zap Gags Toons use will be cut from the budget.'],
-                    None: ["Any Zap Gags Toons use can and will be held against them in a court of law."]},
-'BanSound':  {'wtapper': ['Any Sound Gags Toons use will be cut from the budget.'],
-                    None: ["Any Sound Gags Toons use can and will be held against them in a court of law."]},
-'BanDrop': {'wtapper': ['Any Drop Gags Toons use will be cut from the budget.'],
-                    None: ["Any Drop Gags Toons use can and will be held against them in a court of law."]},
-'BanToonupTrap': ["Any Toon-Up and Trap Gags Toons use can and will be held against them in a court of law."],
-'BanToonupLure':  ["Any Toon-Up and Lure Gags Toons use can and will be held against them in a court of law."],
-'BanToonupThrow': ["Any Toon-Up and Throw Gags Toons use can and will be held against them in a court of law."],
-'BanToonupSquirt':  ["Any Toon-Up and Squirt Gags Toons use can and will be held against them in a court of law."],
-'BanToonupZap': ["Any Toon-Up and Zap Gags Toons use can and will be held against them in a court of law."],
-'BanToonupSound':  ["Any Toon-Up and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanToonupDrop':  ["Any Toon-Up and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanTrapLure':  ["Any Trap and Lure Gags Toons use can and will be held against them in a court of law."],
-'BanTrapThrow':  ["Any Trap and Throw Gags Toons use can and will be held against them in a court of law."],
-'BanTrapSquirt': ["Any Trap and Squirt Gags Toons use can and will be held against them in a court of law."],
-'BanTrapZap':  ["Any Trap and Zap Gags Toons use can and will be held against them in a court of law."],
-'BanTrapSound': ["Any Trap and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanTrapDrop':  ["Any Trap and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanLureThrow': ["Any Lure and Throw Gags Toons use can and will be held against them in a court of law."],
-'BanLureSquirt':  ["Any Lure and Squirt Gags Toons use can and will be held against them in a court of law."],
-'BanLureZap': ["Any Lure and Zap Gags Toons use can and will be held against them in a court of law."],
-'BanLureSound':  ["Any Lure and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanLureDrop': ["Any Lure and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanThrowSquirt': ["Any Throw and Squirt Gags Toons use can and will be held against them in a court of law."],
-'BanThrowZap':  ["Any Throw and Zap Gags Toons use can and will be held against them in a court of law."],
-'BanThrowSound': ["Any Throw and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanThrowDrop': ["Any Throw and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanSquirtZap':  ["Any Squirt and Zap Gags Toons use can and will be held against them in a court of law."],
-'BanSquirtSound': ["Any Squirt and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanSquirtDrop':  ["Any Squirt and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanZapSound': ["Any Zap and Sound Gags Toons use can and will be held against them in a court of law."],
-'BanZapDrop': ["Any Zap and Drop Gags Toons use can and will be held against them in a court of law."],
-'BanSoundDrop':  ["Any Sound and Drop Gags Toons use can and will be held against them in a court of law."],
+        # Gag Bans
+'BanLevel4': {
+    'wtapper': ["Intercepted and denied... Level 4 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 4 Gags have been deemed operational liabilities."],
+    None: ["Any Level 4 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel5': {
+    'wtapper': ["Intercepted and denied... Level 5 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 5 Gags have been deemed operational liabilities."],
+    None: ["Any Level 5 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel6': {
+    'wtapper': ["Intercepted and denied... Level 6 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 6 Gags have been deemed operational liabilities."],
+    None: ["Any Level 6 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel7': {
+    'wtapper': ["Intercepted and denied... Level 7 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 7 Gags have been deemed operational liabilities."],
+    None: ["Any Level 7 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel8': {
+    'wtapper': ["Intercepted and denied... Level 8 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 8 Gags have been deemed operational liabilities."],
+    None: ["Any Level 8 Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanLevel45': {
+    'wtapper': ["Intercepted and denied... Level 4 and 5 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 4 and 5 Gags have been deemed operational liabilities."],
+    None: ["Any Level 4 and 5 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel46': {
+    'wtapper': ["Intercepted and denied... Level 4 and 6 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 4 and 6 Gags have been deemed operational liabilities."],
+    None: ["Any Level 4 and 6 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel47': {
+    'wtapper': ["Intercepted and denied... Level 4 and 7 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 4 and 7 Gags have been deemed operational liabilities."],
+    None: ["Any Level 4 and 7 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel48': {
+    'wtapper': ["Intercepted and denied... Level 4 and 8 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 4 and 8 Gags have been deemed operational liabilities."],
+    None: ["Any Level 4 and 8 Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanLevel56': {
+    'wtapper': ["Intercepted and denied... Level 5 and 6 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 5 and 6 Gags have been deemed operational liabilities."],
+    None: ["Any Level 5 and 6 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel57': {
+    'wtapper': ["Intercepted and denied... Level 5 and 7 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 5 and 7 Gags have been deemed operational liabilities."],
+    None: ["Any Level 5 and 7 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel58': {
+    'wtapper': ["Intercepted and denied... Level 5 and 8 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 5 and 8 Gags have been deemed operational liabilities."],
+    None: ["Any Level 5 and 8 Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanLevel67': {
+    'wtapper': ["Intercepted and denied... Level 6 and 7 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 6 and 7 Gags have been deemed operational liabilities."],
+    None: ["Any Level 6 and 7 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel68': {
+    'wtapper': ["Intercepted and denied... Level 6 and 8 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 6 and 8 Gags have been deemed operational liabilities."],
+    None: ["Any Level 6 and 8 Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLevel78': {
+    'wtapper': ["Intercepted and denied... Level 7 and 8 Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Level 7 and 8 Gags have been deemed operational liabilities."],
+    None: ["Any Level 7 and 8 Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanToonup': {
+    'wtapper': ["I'm trimming the excess, Toon-Up gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Toon-Up Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrap': {
+    'wtapper': ["I'm trimming the excess, Trap gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Trap Gags have been deemed operational liabilities."],
+    None: ["Any Trap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLure': {
+    'wtapper': ["I'm trimming the excess, Lure gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Lure Gags have been deemed operational liabilities."],
+    None: ["Any Lure Gags Toons use can and will be held against them in a court of law."]
+},
+'BanThrow': {
+    'wtapper': ["I'm trimming the excess, Throw gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Throw Gags have been deemed operational liabilities."],
+    None: ["Any Throw Gags Toons use can and will be held against them in a court of law."]
+},
+'BanSquirt': {
+    'wtapper': ["I'm trimming the excess, Squirt gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Squirt Gags have been deemed operational liabilities."],
+    None: ["Any Squirt Gags Toons use can and will be held against them in a court of law."]
+},
+'BanZap': {
+    'wtapper': ["I'm trimming the excess, Zap gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Zap Gags have been deemed operational liabilities."],
+    None: ["Any Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanSound': {
+    'wtapper': ["I'm trimming the excess, Sound gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Sound Gags have been deemed operational liabilities."],
+    None: ["Any Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanDrop': {
+    'wtapper': ["I'm trimming the excess, Drop gags won't go through."],
+    'cdirector': ["New compliance policy in effect... Drop Gags have been deemed operational liabilities."],
+    None: ["Any Drop Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupTrap': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Trap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Trap Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Trap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupLure': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Lure Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Lure Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Lure Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupThrow': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Throw Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Throw Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Throw Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupSquirt': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Squirt Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Squirt Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Squirt Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupZap': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Zap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Zap Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupSound': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanToonupDrop': {
+    'wtapper': ["Intercepted and denied... Toon-Up and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Toon-Up and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Toon-Up and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanTrapLure': {
+    'wtapper': ["Intercepted and denied... Trap and Lure Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Lure Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Lure Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrapThrow': {
+    'wtapper': ["Intercepted and denied... Trap and Throw Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Throw Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Throw Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrapSquirt': {
+    'wtapper': ["Intercepted and denied... Trap and Squirt Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Squirt Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Squirt Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrapZap': {
+    'wtapper': ["Intercepted and denied... Trap and Zap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Zap Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrapSound': {
+    'wtapper': ["Intercepted and denied... Trap and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanTrapDrop': {
+    'wtapper': ["Intercepted and denied... Trap and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Trap and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Trap and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanLureThrow': {
+    'wtapper': ["Intercepted and denied... Lure and Throw Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Lure and Throw Gags have been deemed operational liabilities."],
+    None: ["Any Lure and Throw Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLureSquirt': {
+    'wtapper': ["Intercepted and denied... Lure and Squirt Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Lure and Squirt Gags have been deemed operational liabilities."],
+    None: ["Any Lure and Squirt Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLureZap': {
+    'wtapper': ["Intercepted and denied... Lure and Zap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Lure and Zap Gags have been deemed operational liabilities."],
+    None: ["Any Lure and Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLureSound': {
+    'wtapper': ["Intercepted and denied... Lure and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Lure and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Lure and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanLureDrop': {
+    'wtapper': ["Intercepted and denied... Lure and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Lure and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Lure and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanThrowSquirt': {
+    'wtapper': ["Intercepted and denied... Throw and Squirt Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Throw and Squirt Gags have been deemed operational liabilities."],
+    None: ["Any Throw and Squirt Gags Toons use can and will be held against them in a court of law."]
+},
+'BanThrowZap': {
+    'wtapper': ["Intercepted and denied... Throw and Zap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Throw and Zap Gags have been deemed operational liabilities."],
+    None: ["Any Throw and Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanThrowSound': {
+    'wtapper': ["Intercepted and denied... Throw and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Throw and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Throw and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanThrowDrop': {
+    'wtapper': ["Intercepted and denied... Throw and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Throw and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Throw and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanSquirtZap': {
+    'wtapper': ["Intercepted and denied... Squirt and Zap Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Squirt and Zap Gags have been deemed operational liabilities."],
+    None: ["Any Squirt and Zap Gags Toons use can and will be held against them in a court of law."]
+},
+'BanSquirtSound': {
+    'wtapper': ["Intercepted and denied... Squirt and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Squirt and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Squirt and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanSquirtDrop': {
+    'wtapper': ["Intercepted and denied... Squirt and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Squirt and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Squirt and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanZapSound': {
+    'wtapper': ["Intercepted and denied... Zap and Sound Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Zap and Sound Gags have been deemed operational liabilities."],
+    None: ["Any Zap and Sound Gags Toons use can and will be held against them in a court of law."]
+},
+'BanZapDrop': {
+    'wtapper': ["Intercepted and denied... Zap and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Zap and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Zap and Drop Gags Toons use can and will be held against them in a court of law."]
+},
+
+'BanSoundDrop': {
+    'wtapper': ["Intercepted and denied... Sound and Drop Gags are dead weight."],
+    'cdirector': ["New compliance policy in effect... Sound and Drop Gags have been deemed operational liabilities."],
+    None: ["Any Sound and Drop Gags Toons use can and will be held against them in a court of law."]
+},
 'DisableLevel45': ["A new mandate has passed. Level 4 and 5 Gags are now disabled."],
 'DisableLevel46': ["A new mandate has passed. Level 4 and 6 Gags are now disabled."],
 'DisableLevel47': ["A new mandate has passed. Level 4 and 7 Gags are now disabled."],

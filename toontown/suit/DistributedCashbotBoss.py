@@ -367,7 +367,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.triviaMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_trivia.ogg')
         self.stingerMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_stinger.ogg')
         self.phaseTwoCutsceneMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_2.ogg')
-        self.phaseTwoMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_3.ogg')
+        self.phaseTwoMusic = loader.loadMusic('phase_12/audio/bgm/merc/instance_majorplayer_battle_2.ogg')
         self.phaseThreeCutsceneMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_3.ogg')
         self.phaseThreeMusic = loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/BONUSROUND.ogg')
 

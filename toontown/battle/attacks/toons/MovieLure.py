@@ -14,7 +14,7 @@ from toontown.chat.ChatGlobals import *
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 import random
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieLures')
 
@@ -29,6 +29,7 @@ def doLures(lures):
     npcArrivals, npcDepartures, npcs = MovieNPCSOS.doNPCTeleports(lures)
     mtrack = Parallel()
     for l in lures:
+        battle = l['battle']
         ival = __doLureLevel(l, npcs)
         if ival:
             mtrack.append(ival)
@@ -37,7 +38,7 @@ def doLures(lures):
     camDuration = mtrack.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
-    camTrack = MovieCamera.chooseLureShot(lures, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseLureShot(lures, camDuration, battle, enterDuration, exitDuration)
     return (lureTrack, camTrack)
 
 def showLureRounds(suit, battle, level):
@@ -81,7 +82,7 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isDesperation and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.isAngry and not trapProp and not suit.dna.name == 'cbutcher' and not suit.dna.name == 'wtapper':
+    elif suit.isAngry and not trapProp and not suit.dna.name == 'cbutcher' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'liquid':
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isBookkeeping and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
@@ -160,7 +161,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
 
     def positionDollar(dollar, suit):
         dollar.reparentTo(suit)
-        dollar.setPos(0, MovieUtil.SUIT_LURE_DOLLAR_DISTANCE, 0)
+        dollar.setPos(0, 7.5, 0)
 
     poleTrack = Sequence(Func(MovieUtil.showProps, poles, hands), ActorInterval(pole, 'fishing-pole'), Func(MovieUtil.removeProps, poles))
     toonTrack = Sequence(Func(toon.headsUp, battle, MovieUtil.calcAvgSuitPos(lure)), ActorInterval(toon, 'battlecast'), Func(toon.loop, 'neutral'))
@@ -173,7 +174,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
         revived = target['revived']
         trapProp = suit.battleTrapProp
         dollar = globalPropPool.getProp(dollarName)
-        tracks.append(Sequence(Func(positionDollar, dollar, suit), Func(dollar.wrtReparentTo, battle), ActorInterval(dollar, dollarName, duration=3), getSplicedLerpAnimsTrack(dollar, dollarName, 0.7, 2.0, startTime=3), LerpPosInterval(dollar, 0.2, Point3(0, -10, 7)), Func(MovieUtil.removeProp, dollar)))
+        tracks.append(Sequence(Func(positionDollar, dollar, suit), Func(dollar.wrtReparentTo, battle), ActorInterval(dollar, dollarName, duration=3), getSplicedLerpAnimsTrack(dollar, dollarName, 0.7, 2.0, startTime=3), LerpPosInterval(dollar, 0.2, Point3(0, -5, 7)), Func(MovieUtil.removeProp, dollar)))
         if sidestep == 0:
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
@@ -185,45 +186,46 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.makeUnTrapped))
                 suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isLureImmune and not suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'wtapper':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.dna.name == 'hroller2' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 else:
                     if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     suitTrack.append(Wait(3.5))
                     suitName = suit.getStyleName()
                     retardPos, retardHpr = battle.getActorPosHpr(suit)
@@ -326,49 +328,46 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 numShakes = 3
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
-                suitTrack.append(Func(suit.makeUnTrapped))
                 suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
-                elif suit.isLureImmune:
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isLureImmune and not suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                elif suit.isImmortal and suit.dna.name == 'videog':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isImmortal and suit.dna.name == 'videog':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'wtapper':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.isImmortal and suit.dna.name == 'videog':
-                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.isImmortal and suit.dna.name == 'videog':
-                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.dna.name == 'hroller':
-                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.dna.name == 'hroller2' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 else:
                     if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     suitTrack.append(ActorInterval(suit, 'magnet', startTime=2.37, endTime=1.82))
@@ -470,49 +469,46 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.makeUnTrapped))
                 suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
-                elif suit.isLureImmune:
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isLureImmune and not suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isImmortal and suit.dna.name == 'videog':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'wtapper':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.isImmortal and suit.dna.name == 'videog':
-                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.dna.name == 'hroller':
-                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.dna.name == 'hroller2' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 else:
                     if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     suitTrack.append(ActorInterval(suit, 'hypnotized'))
@@ -1284,49 +1280,46 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
-                suitTrack.append(Func(suit.makeUnTrapped))
                 suit.setPendingQueuedLured(True)
                 if suit.dna.name == 'sgoat' and suit.isAngry and suit.isDesperation:
                     suitTrack.append(Func(suit.loop, 'neutral-enraged'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpTextWhite, 'LURE IMMUNE!'))
-                elif suit.isLureImmune:
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isLureImmune and not suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.isImmortal and suit.dna.name == 'wtapper':
-                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
-                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'hroller':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and suit.dna.name == 'videog':
                     suitTrack.append(Func(suit.loop, 'neutral%s' % (
                         '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
+                elif suit.isImmortal and suit.dna.name == 'wtapper':
+                    suitTrack.append(Func(suit.loop, 'neutral%s' % (
+                        '-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '')))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.isImmortal and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
                     suitTrack.append(ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1))
                     suitTrack.append(Func(suit.loop, 'highroller-neutral-levitate-loop'))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
-                elif suit.dna.name == 'hroller':
-                    suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 elif suit.dna.name == 'hroller2' and not suit.isPhase3:
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                    tracks.append(Func(suit.showHpString, 'LURE IMMUNE!'))
+                    tracks.append(Func(suit.showHpTextNew, 0, text='LURE IMMUNE!', colorCode=1))
                 else:
                     if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                         suitTrack.append(Func(suit.setNeutralAnimationRolled))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     else:
                         suitTrack.append(Func(suit.setNeutralAnimation))
+                        suitTrack.append(Func(suit.makeUnTrapped))
                     suitTrack.append(Wait(suitDelay))
                     suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                     suitTrack.append(ActorInterval(suit, 'hypnotized'))

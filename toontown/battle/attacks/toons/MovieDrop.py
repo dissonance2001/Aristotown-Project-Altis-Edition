@@ -7,7 +7,7 @@ from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import MovieUtil
 from otp.otpbase import OTPLocalizerEnglish
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle.MovieUtil import calcAvgSuitPos
 from direct.showutil import Effects
 

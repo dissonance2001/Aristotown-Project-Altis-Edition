@@ -317,11 +317,11 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         for suit in deadSuits:
             if suit in self.activeSuits:
                 self.activeSuits.remove(suit)
-        if len(self.reserveSuits) > 0 and len(self.activeSuits) < 6:
+        if len(self.reserveSuits) > 0 and len(self.activeSuits) < 7:
             self.joinedReserves = []
             hpPercent = 100 - (totalHp / totalMaxHp) * 100.0
             for info in self.reserveSuits:
-                if info[1] <= hpPercent and len(self.activeSuits) < 6:
+                if info[1] <= hpPercent and len(self.activeSuits) < 7:
                     self.suits.append(info[0])
                     self.activeSuits.append(info[0])
                     self.joinedReserves.append(info)

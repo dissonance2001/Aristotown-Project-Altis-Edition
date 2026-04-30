@@ -9,8 +9,7 @@ from toontown.battle import MovieCamera
 from toontown.suit.SuitDNA import *
 from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieUtil
-from toontown.battle import MovieThrow
-import PlayByPlayText
+from toontown.battle.attacks.toons import MovieThrow
 from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
@@ -334,9 +333,11 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         if died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        if not died:
+            suitTrack.append(suit.makeDeathCheckInterval(0, battle))
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
-        return MovieUtil.createSuitDodgeMultitrack(tDodge, suit, leftSuits, rightSuits)
+        return MovieUtil.createSuitDodgeMultitrack(battle, tDodge, suit, leftSuits, rightSuits)
 
 
 def say(statement):
@@ -361,7 +362,7 @@ def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
         return Sequence()
 
 def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
         value = math.ceil(hp * 0.75)
         return Sequence(
             Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
@@ -379,7 +380,7 @@ def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, atta
     return Sequence()
 
 def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
         value = math.ceil(hp * 0.75)
         return Sequence(
             Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
@@ -397,7 +398,7 @@ def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
     return Sequence()
 
 def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
         value = math.ceil(hp / 3)
         return Sequence(
             Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
@@ -415,7 +416,7 @@ def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, att
     return Sequence()
 
 def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal:
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
         value = math.ceil(hp / 3)
         return Sequence(
             Wait(tContact),             __soakSuit(suits[suitIndex], tContact),

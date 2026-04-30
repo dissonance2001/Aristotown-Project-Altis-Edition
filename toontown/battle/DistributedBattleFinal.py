@@ -156,6 +156,7 @@ class DistributedBattleFinal(DistributedBattleBase.DistributedBattleBase):
             toon.makeUnGagBan()
             toon.makeUnVulnerable()
             toon.makeUnSnapped()
+            toon.cleanupAllAuraTracks()
 
         name = self.uniqueName('floorReward')
         track = Sequence(toonTracks, name=name)

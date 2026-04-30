@@ -30,7 +30,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         else:
             self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarCogTitle
         self.avatarButtons = []
-        for i in xrange(6):
+        for i in xrange(7):
             button = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')), command=self.__handleAvatar, extraArgs=[i])
             if self.toon:
                 button.setScale(.5, .5, -.5)
@@ -89,7 +89,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         self.__placeButtons(numToons, [], localNum)
 
     def __placeButtons(self, numAvatars, invalidTargets, localNum):
-        for i in xrange(6):
+        for i in xrange(7):
             if numAvatars > i and i not in invalidTargets and i != localNum:
                 self.avatarButtons[i].show()
             else:
@@ -151,6 +151,22 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
             self.avatarButtons[3].setX(-0.4)
             self.avatarButtons[4].setX(-1.15)
             self.avatarButtons[5].setX(-1.9)
+        elif numAvatars == 7 and confused:
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(2.25)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(1.5)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(0.75)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(0.0)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(-0.75)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(-1.5)
+            self.avatarButtons[random.choice((0, 1, 2, 3, 4, 5, 6))].setX(-2.25)
+        elif numAvatars == 7 and not confused:
+            self.avatarButtons[0].setX(2.25)
+            self.avatarButtons[1].setX(1.5)
+            self.avatarButtons[2].setX(0.75)
+            self.avatarButtons[3].setX(0.0)
+            self.avatarButtons[4].setX(-0.75)
+            self.avatarButtons[5].setX(-1.5)
+            self.avatarButtons[6].setX(-2.25)
         else:
             self.notify.error('Invalid number of avatars: %s' % numAvatars)
         return None

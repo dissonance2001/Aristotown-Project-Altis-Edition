@@ -6,26 +6,26 @@ from direct.showbase import DirectObject
 from toontown.battle.BattleBase import *
 from toontown.battle import BattleExperience
 from toontown.battle import BattleParticles
-from toontown.battle import MovieDrop
+from toontown.battle.attacks.toons import MovieDrop
 from toontown.battle import BattleProps
-from toontown.battle import MovieFire
-from toontown.battle import MovieSue
+from toontown.battle.attacks.toons import MovieFire
+from toontown.battle.attacks.toons import MovieSue
 import PlayByPlayText
 from otp.otpbase import OTPLocalizerEnglish
 from toontown.battle.BattleSounds import *
-from toontown.battle import MovieHeal
-from toontown.battle import MovieLure
-from toontown.battle import MovieNPCSOS
-from toontown.battle import MoviePetSOS
-from toontown.battle import MovieSOS
-from toontown.battle import MovieSound
-from toontown.battle import MovieSquirt
-from toontown.battle import MovieSuitAttacks
-from toontown.battle import MovieThrow
+from toontown.battle.attacks.toons import MovieHeal
+from toontown.battle.attacks.toons import MovieLure
+from toontown.battle.attacks.toons import MovieNPCSOS
+from toontown.battle.attacks.toons import MoviePetSOS
+from toontown.battle.attacks.toons import MovieSOS
+from toontown.battle.attacks.toons import MovieSound
+from toontown.battle.attacks.toons import MovieSquirt
+from toontown.battle.attacks.suits import MovieSuitAttacks
+from toontown.battle.attacks.toons import MovieThrow
 from toontown.battle import MovieToonVictory
-from toontown.battle import MovieTrap
+from toontown.battle.attacks.toons import MovieTrap
 from toontown.battle import MovieCamera
-from toontown.battle import MovieZap
+from toontown.battle.attacks.toons import MovieZap
 from toontown.battle import MovieUtil
 from toontown.battle import PlayByPlayText
 from toontown.battle import RewardPanel
@@ -338,6 +338,8 @@ class Movie(DirectObject.DirectObject):
             s.battleTrapIsFresh = 0
             if s.getOilRainRounds() == 1:
                 ptrack.append(Func(s.removeOilRain))
+            if not s.getOverseerRounds() <= 0:
+                ptrack.append(Func(s.makeOverseer, s.getOverseerRounds() - 1))
             if not s.getSoakRounds() <= 0:
                 ptrack.append(Func(s.makeSoaked, s.getSoakRounds() - 1))
             if not s.getMarkRounds() <= 0:
@@ -352,6 +354,8 @@ class Movie(DirectObject.DirectObject):
                 ptrack.append(Func(s.makeUnAngry))
             if s.getLuredRounds() == 1:
                 ptrack.append(Func(s.makeUnLured))
+            if s.getOverseerRounds() == 1:
+                ptrack.append(Func(s.makeUnOverseer))
             if not s.getLuredRounds() <= 0:
                 ptrack.append(Func(s.addLuredRounds, s.getLuredRounds() - 1))
             if not s.getExplosiveCondition() <= 0:

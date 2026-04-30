@@ -780,6 +780,10 @@ SuitContractedPhrases = ("This wasn't in my job description.",
                    "Do I get benefits... or just responsibilities?",
                    "I don't remember agreeing to this.",
                       "I'm not sure this is better...")
+SuitSyphonPhrases = ("I'll take that!",
+                   "Hey... I feel stronger!",
+                   "What is this power?",
+                      "Don't mind if I do!")
 SuitMarkedPhrases = ("Well it's been fun.",
                    "So much for that promotion.",
                    "Uh oh.",

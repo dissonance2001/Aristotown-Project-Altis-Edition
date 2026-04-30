@@ -1072,13 +1072,12 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
     def __suitCanJoinBattle(self, zoneId):
         battle = self.battleMgr.getBattle(zoneId)
-        if len(battle.suits) >= 6:
+        if len(battle.suits) >= 7:
             return 0
         if battle:
             for s in battle.suits:
                 if s.dna.name in SuitBattleGlobals.SpecialCogDict:
-                    if not s.dna.name == 'hrollers':
-                        return 1
+                    return 1
             if simbase.config.GetBool('suits-always-join', 0):
                 return 1
             jChanceList = self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_JCHANCE]

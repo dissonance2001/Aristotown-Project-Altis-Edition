@@ -12,7 +12,7 @@ from direct.task.Task import Task
 from direct.task.TaskManagerGlobal import taskMgr
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import MovieCamera
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle import MovieUtil
 from toontown.battle.MovieUtil import calcAvgSuitPos
 
@@ -297,11 +297,17 @@ def __getSoundTrack(level, hitSuit, node = None):
     soundEffect = globalBattleSoundCache.getSound(hitSoundFiles[level])
     soundTrack = Sequence()
     if level == 7:
-        throwSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake.ogg')
+        if hitSuit:
+            throwSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake.ogg')
+        else:
+            throwSound = globalBattleSoundCache.getSound('AA_throw_wedding_cake_miss.ogg')
     else:
         throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
     if level == 7:
-        throwTrack = Sequence(Wait(1), SoundInterval(throwSound, node=node))
+        if hitSuit: 
+            throwTrack = Sequence(Wait(1), SoundInterval(throwSound, node=node))
+        else:
+            throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
     else:
         throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
     soundTrack.append(Wait(tPieHitsSuit))
@@ -524,7 +530,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitResponseTrack.append(Func(suit.makeSued, 3))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
-        suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
+        suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(battle, delay + tSuitDodges, suit, leftSuits, rightSuits)
     if not hitSuit and delay > 0:
         return [toonTrack, soundTrack, pieTrack]
     else:
@@ -737,7 +743,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
         else:
             groupHitValues = groupHitDict.values()
             if groupHitValues.count(0) == len(groupHitValues):
-                singleSuitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges, suit, leftSuits, rightSuits)
+                singleSuitResponseTrack = MovieUtil.createSuitDodgeMultitrack(battle, delay + tSuitDodges, suit, leftSuits, rightSuits)
             else:
                 singleSuitResponseTrack = Sequence(Wait(tPieHitsSuit - 0.1), Func(MovieUtil.indicateMissed, suit, 1.0))
         groupSuitResponseTrack.append(singleSuitResponseTrack)

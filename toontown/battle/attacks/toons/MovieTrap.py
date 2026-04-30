@@ -10,8 +10,8 @@ from direct.actor import Actor
 from direct.particles import ParticleEffect
 from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
-from toontown.battle import MovieNPCSOS
-from toontown.battle.MovieSound import createSuitResetPosTrack
+from toontown.battle.attacks.toons import MovieNPCSOS
+from toontown.battle.attacks.toons.MovieSound import createSuitResetPosTrack
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieTrap')
 
 def doTraps(traps):
@@ -23,6 +23,7 @@ def doTraps(traps):
     for trap in traps:
         targets = trap['target']
         target = trap['target']
+        battle = trap['battle']
         suitId = targets[0]['suit'].doId
         if suitId in suitTrapsDict:
             suitTrapsDict[suitId].append(trap)
@@ -86,7 +87,7 @@ def doTraps(traps):
     camDuration = mtrack.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
-    camTrack = MovieCamera.chooseTrapShot(traps, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseTrapShot(traps, camDuration, battle, enterDuration, exitDuration)
     return (trapTrack, camTrack)
 
 
@@ -244,7 +245,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
             trapProp.pose(trapName, trapProp.getNumFrames(trapName) - 1)
         elif trapName == 'tnt':
             trapProp.setHpr(0, 90, 0)
-            trapProp.setPos(0, MovieUtil.SUIT_TRAP_TNT_DISTANCE, 0.1)
+            trapProp.setPos(0, MovieUtil.SUIT_TRAP_TNT_DISTANCE, 0.5)
         else:
             notify.warning('placeTrap() - Incorrect trap: %s placed on a suit' % trapName)
 
@@ -269,6 +270,23 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
     throwTrack.append(Func(MovieUtil.removeProps, propList))
     toonTrack = Sequence(Func(toon.headsUp, battle, targetPos), ActorInterval(toon, 'toss'), Func(toon.loop, 'neutral'))
     return Parallel(propTrack, throwTrack, toonTrack)
+
+def safeRemoveExistingTrap(suit, battle):
+    try:
+        battle.removeTrap(suit)
+    except:
+        pass
+
+    if hasattr(suit, 'battleTrapProp') and suit.battleTrapProp:
+        try:
+            if not suit.battleTrapProp.isEmpty():
+                MovieUtil.removeProp(suit.battleTrapProp)
+        except:
+            pass
+
+    suit.battleTrapProp = None
+    suit.battleTrap = NO_TRAP
+    suit.battleTrapIsFresh = 0
 
 def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr = None, explode = 0, visibleOnlyForThisSuitId = None):
     toon = trap['toon']
@@ -323,9 +341,9 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
         trapTrack.append(Func(MovieUtil.removeProp, trapProp))
         trapTrack.append(Func(battle.removeTrap, suit))
     else:
-        if suit.battleTrap != NO_TRAP:
-            notify.debug('trapSuit() - trap: %d destroyed existing trap: %d' % (level, suit.battleTrap))
-            battle.removeTrap(suit)
+        if suit.battleTrap != NO_TRAP or suit.battleTrapProp:
+            notify.debug('trapSuit() - removing existing trap before placing new one')
+            safeRemoveExistingTrap(suit, battle)
         suit.battleTrapProp = trapProp
         suit.battleTrap = level
         suit.battleTrapIsFresh = 1

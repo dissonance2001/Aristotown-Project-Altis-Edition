@@ -8,7 +8,7 @@ from toontown.chat.ChatGlobals import *
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import MovieUtil
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 
 from toontown.toonbase import ToontownBattleGlobals
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
@@ -105,11 +105,10 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 soundEffect = globalBattleSoundCache.getSound(hitSoundFiles[0])
             if isUber:
                 delayTime = random.random()
-                suitTrack.append(Wait(delayTime + 2.0))
+                suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
-                #suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5))) THIS CRASHES PANDA WITH A BOUNDING SPHERE ERROR
-                suitTrack.append(Sequence(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit)))
-                if died:
+                suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
+                if died and not suit.isVirtual:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -325,7 +324,6 @@ def headExplodeTrack(suit, battle):
     headParts = suit.getHeadParts()
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
-    suitTrack.append(Wait(0.15))
     explodeTrack = Parallel()
     for part in headParts:
         explodeTrack.append(Func(MovieUtil.miscHide, part))
@@ -348,11 +346,11 @@ def headExplodeTrack(suit, battle):
     bigGearExplosion.setDepthWrite(False)
     explosionTrack = Sequence()
     explosionTrack.append(MovieUtil.createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(0.5), ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
     gears2MTrack = Track(
         (0.1, ParticleInterval(singleGear, battle, worldRelative=0, duration=0.4, cleanup=True)),
         (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=0.5, cleanup=True)),
-        (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=2.0, cleanup=True)), name='gears2MTrack'
+        (0.9, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack'
     )
 
     return Parallel(suitTrack, explosionTrack, deathSoundTrack, gears1Track, gears2MTrack)

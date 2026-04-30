@@ -236,8 +236,8 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.phaseFourMusic = base.loader.loadMusic('phase_12/audio/bgm/BossBot_CEO_v2.ogg')
         self.pickupFoodSfx = loader.loadSfx('phase_6/audio/sfx/SZ_MM_gliss.ogg')
         self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/LB_litigation_casemgr.ogg')
-        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/RT_chairman_loop.ogg')
-        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/RT_chairman_intro.ogg')
+        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_unlock-loop.ogg')
+        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
 
         for i in range(14):

@@ -14,7 +14,7 @@ from direct.directnotify import DirectNotifyGlobal
 import random
 from toontown.battle import MovieCamera
 from toontown.battle import MovieUtil
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle.MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')

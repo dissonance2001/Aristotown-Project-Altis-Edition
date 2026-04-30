@@ -70,6 +70,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         self._pendingQueuedDeath = False
         self._pendingQueuedHealing = 0
         self.rpmIncrease2 = 0
+        self._pendingQueuedRevive = False
         self.splashInterval = None
         self.legList = None
         self.initState = None
@@ -873,6 +874,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def clearPendingQueuedLured(self):
         self._pendingQueuedLured = False
 
+    def setPendingQueuedRevive(self, value):
+        self._pendingQueuedRevive = bool(value)
+
+    def getProjectedRevive(self):
+        return getattr(self, '_pendingQueuedRevive', False)
+
+    def clearPendingQueuedRevive(self):
+        self._pendingQueuedRevive = False
+
     def makeCogStepBackInterval(self, battle):
         if self.getProjectedLured():
             return self.__createSuitResetPosTrack(battle)
@@ -1070,6 +1080,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.deathInterval.start()
         elif self.getHP() > 0 and num == 2:
             self.deathInterval = Sequence(Func(self.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitContractedPhrases), CFSpeech | CFTimeout))
+            self.deathInterval.start()
+        elif self.getHP() > 0 and num == 3 and (not self.getDizzy() or self.getLuredRounds() == 0):
+            self.deathInterval = Sequence(Func(self.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitSyphonPhrases), CFSpeech | CFTimeout))
             self.deathInterval.start()
         else:
             pass
@@ -1416,12 +1429,63 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             suitTrack.append(MovieUtil.shortCircuitTrack(self, battle))
             suitTrack.append(Func(self.makeDead))
         return suitTrack
+    
+    def makeDeathCheckInterval(self, dmg, battle):
+        suitTrack = Sequence()
+
+        if self.currHP <= 0 or self.isDead:
+            return suitTrack
+
+        # Build-time pending splash state
+        if not hasattr(self, '_pendingQueuedDamage'):
+            self._pendingQueuedDamage = 0
+        if not hasattr(self, '_pendingQueuedDeath'):
+            self._pendingQueuedDeath = False
+
+        oldPending = self._pendingQueuedDamage
+        newPending = oldPending + dmg
+
+        hpBeforeThisCall = self.currHP - oldPending
+        hpAfterThisCall = self.currHP - newPending
+
+        self._pendingQueuedDamage = newPending
+        crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
+
+        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
+            self._pendingQueuedDeath = True
+            revives = self.getSkeleRevives()
+            suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+
+            if self.dna.name == 'redd' and not self.isVirtual:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.isVirtual:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
+            elif not self.isSkeleton and revives >= 2:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif self.isSkeleton and revives >= 2:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif self.isSkeleton and revives >= 1 and not self.isRevive:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(self, battle))
+            elif not self.isSkeleton and revives >= 1:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
+            elif not self.isVirtual:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitDeathTrack(self, battle))
+
+        return suitTrack
+
 
     def makeSplashAndDeathInterval(self, tContact, hp, battle, bonus, attackTrack, level,
                                    reactName='squirt-small-react'):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = int(math.ceil(hp))
@@ -1580,7 +1644,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 Parallel(headInterval).start()
 
     def createSuitBellowInterval(self):
-        if self.style.name == 'lgator' or self.style.name == 'treasure':
+        if self.style.name == 'lgator' or self.style.name == 'treasure' or self.style.name == 'clubpres':
             suitInterval = Sequence(ActorInterval(self, 'bellow'), Func(self.setNeutralAnimation))
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'bellow'), Func(self.setNeutralAnimation))
@@ -1592,22 +1656,9 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         # if self.headInterval:
         #     self.headInterval.finish()
         #     self.headInterval = None
-        if self.style.name == 'hroller2':
-            for headPart in self.animatedHeadParts:
-                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-                hasAnimatedHead = True
-        elif self.style.name == 'hrollers':
-            for headPart in self.animatedHeadParts:
-                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-                hasAnimatedHead = True
-        elif self.style.name == 'hroller':
-            for headPart in self.animatedHeadParts:
-                self.headInterval = Func(headPart.loop, 'stun', fromFrame=0, toFrame=22)
-                hasAnimatedHead = True
-        else:
-            for headPart in self.animatedHeadParts:
-                self.headInterval = Func(headPart.loop, 'stun')
-                hasAnimatedHead = True
+        for headPart in self.animatedHeadParts:
+            self.headInterval = Sequence(Func(headPart.loop, 'stun'))
+            hasAnimatedHead = True
         if hasAnimatedHead:
             self.headInterval.start()
         else:
@@ -1676,6 +1727,23 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, 95, text="CONTRACTED!", colorCode=1),
                                          Func(self.setHealthForMe, 95), Func(self.updateHealthBar, 0)).start()
+            
+    def checkPayrollProcessing(self):
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, 0),
+                                         Func(self.updateHealthBar, 0)).start()
+        elif self.currHP + 95 > (self.maxHP * self.hardMaxHP):
+            self.healInterval = Parallel(Func(self.showHpTextNew, x),
+                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            self.addPendingQueuedHealing(x)
+        else:
+            self.healInterval = Parallel(Func(self.showHpTextNew, 95),
+                                         Func(self.setHealthForMe, 95), Func(self.updateHealthBar, 0)).start()
+            self.addPendingQueuedHealing(95)
 
     def checkPerformanceReview(self):
         x = int((self.maxHP * self.hardMaxHP) - self.currHP)
@@ -1855,7 +1923,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeProfiteeringInterval(self, racketeer, battle):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         x = int(self.currHP)
@@ -1933,7 +2001,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeUnionBustInterval(self, battle):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         if not hasattr(self, '_pendingQueuedDamage'):
@@ -2047,10 +2115,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                                              Func(self.updateHealthBar, 0))).start()
             self.addPendingQueuedHealing(hp)
 
-    def makeBalanceTheLedgerInterval(self, hp, battle):
+    def makeBalanceTheLedgerInterval(self, hp, battle, damageMult):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         if not hasattr(self, '_pendingQueuedDamage'):
@@ -2073,9 +2141,28 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                             Func(self.setHealthForMe, - self.currHP),
                                Func(self.updateHealthBar, 0)), MovieUtil.createSuitHeadlessDeathTrack(self, battle),
                                           ))
-        managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp),
+        if damageMult == 1:
+            managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp, text="+5% Damage!", colorCode=1),
                                                              Func(self.setHealthForMe, + hp),
                                                              Func(self.updateHealthBar, 0)))
+        elif damageMult == 2:
+            managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp, text="+10% Damage!", colorCode=1),
+                                                             Func(self.setHealthForMe, + hp),
+                                                             Func(self.updateHealthBar, 0)))
+        elif damageMult == 3:
+            managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp, text="+15% Damage!", colorCode=1),
+                                                             Func(self.setHealthForMe, + hp),
+                                                             Func(self.updateHealthBar, 0)))
+        elif damageMult == 4:
+            managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp, text="+20% Damage!", colorCode=1),
+                                                             Func(self.setHealthForMe, + hp),
+                                                             Func(self.updateHealthBar, 0)))
+        elif damageMult == 5:
+            managerHealTrack = Sequence(Wait(1.5), Parallel(Func(self.showHpTextNew, + hp, text="+25% Damage!", colorCode=1),
+                                                             Func(self.setHealthForMe, + hp),
+                                                             Func(self.updateHealthBar, 0)))
+        else:
+            managerHealTrack = Sequence()
         if hpBeforeThisCall < self.maxHP and not self.getManager():
             suitTrack.append(showDamage)
         if self.getManager():
@@ -2376,7 +2463,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             self.damageInterval = None
         self.damageInterval = Parallel(Func(self.setDamageReduction, self.getDamageReduction() + num)).start()
 
-    def makeDeathCheckInterval(self, battle):
+    def makeDeathCheckIntervalOLD(self, battle):
         suitTrack = Sequence()
 
         if self.currHP <= 0 and not self.isDead:
@@ -2507,7 +2594,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeDamageLevelInterval(self, battle, levelDamage):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = int(levelDamage)
@@ -2529,7 +2616,26 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
 
         self._pendingQueuedDamage = newPending
 
-        showDamage = Sequence(
+        if self.dna.name == 'hroller':
+            if float(self.currHP) < levelDamage:
+                x = int(self.currHP - 1)
+                showDamage = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                                         Func(self.showHpText, - x), Func(self.setHealthForMe, - x),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                           Func(self.removeLevelDamage))
+            else:
+                showDamage = Sequence(
+            Parallel(
+                ActorInterval(self, 'pie-small-react'),
+                MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                Func(self.showHpTextNew, -dmg),
+                Func(self.setHealthForMe, -dmg),
+                Func(self.updateHealthBar, 0)
+            ),
+            Func(self.setNeutralAnimation)
+        )
+        else:
+            showDamage = Sequence(
             Parallel(
                 ActorInterval(self, 'pie-small-react'),
                 MovieUtil.createSuitStunInterval(self, 0, 2.0),
@@ -2543,7 +2649,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         suitTrack.append(showDamage)
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
-        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
+        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead and not self.dna.name == 'hroller':
             self._pendingQueuedDeath = True
             revives = self.getSkeleRevives()
             suitTrack.append(self.makeCogStepBackDeathInterval(battle))
@@ -2573,7 +2679,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeDamageInterval(self, battle, absorbDamage):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = int(absorbDamage)
@@ -2651,7 +2757,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeDamageInterval2(self, battle, absorbDamage):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = int(absorbDamage)
@@ -2717,7 +2823,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeAbsorbDamageInterval(self, battle, absorbDamage):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = int(absorbDamage)
@@ -2796,7 +2902,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeBarInterval(self, battle, damage):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         if not hasattr(self, '_pendingQueuedDamage'):
@@ -2867,7 +2973,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeSueDamageInterval(self, battle):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
         if not self.isSued:
             return suitTrack
@@ -2943,7 +3049,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeZapDamageInterval(self, battle):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
         if not self.isZapped or self.freshlyZapped:
             return suitTrack
@@ -2959,7 +3065,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         projectedCurrentHP = self.currHP - oldPending
 
         # If queued damage already reduces it to 0 or below, do not sacrifice it again
-        if projectedCurrentHP <= 0:
+        if projectedCurrentHP <= 0 and not self.getProjectedLured():
             return suitTrack
 
         dmg = int(self.getZapCondition())
@@ -3261,6 +3367,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
             self._pendingQueuedDeath = True
             revives = self.getSkeleRevives()
+            suitTrack.append(Wait(self.getDuration('walk') + 2))
             suitTrack.append(self.makeCogStepBackDeathInterval(battle))
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
@@ -3285,7 +3392,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def makeRedundantAuthorityInterval(self, battle):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         dmg = 375
@@ -3455,10 +3562,36 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                                Func(videog.setNeutralAnimation)).start()
             videog.addPendingQueuedHealing(3000)
 
+    def makeSyphonInterval(self):
+        suitTrack = Sequence()
+
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
+            return suitTrack
+
+        if not hasattr(self, '_pendingQueuedDamage'):
+            self._pendingQueuedDamage = 0
+        if not hasattr(self, '_pendingQueuedDeath'):
+            self._pendingQueuedDeath = False
+
+        oldPending = self._pendingQueuedDamage
+
+        # HP this suit effectively has left after already-queued damage
+        projectedCurrentHP = self.currHP - oldPending
+
+        # If queued damage already reduces it to 0 or below, do not sacrifice it again
+        if projectedCurrentHP <= 0:
+            return suitTrack
+
+        showDamage = Sequence(Sequence(ActorInterval(self, 'effort', startTime=self.getDuration('effort'), endTime=max(0, self.getDuration('effort') - 1.0), playRate=-1.0),
+                                                           ActorInterval(self, 'effort', startTime=max(0, self.getDuration('effort') - 1.0))), Func(self.setNeutralAnimationDrop))
+        if not self.dna.name == 'phouse' and not self.getProjectedLured():
+            suitTrack.append(showDamage)
+        return suitTrack
+
     def makeCompensationInterval(self):
         suitTrack = Sequence()
 
-        if self.currHP <= 0 or self.isDead:
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
         if not hasattr(self, '_pendingQueuedDamage'):
@@ -3483,6 +3616,16 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if hpBeforeThisCall < self.maxHP and not self.dna.name == 'racket':
             suitTrack.append(showDamage)
         return suitTrack
+    
+    
+    def checkPerformanceBonus(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        if not self.currHP <= 0 and not self.getManager():
+            self.healInterval = Sequence(Parallel(Func(self.showHpString, "+10% Damage!"), Func(self.makeDamageUp), Func(self.checkDamageUp, + 10))).start()
+        else:
+            pass
 
 
     def checkCompensation(self):

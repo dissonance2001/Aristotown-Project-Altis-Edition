@@ -362,6 +362,20 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
             0, maxHp)
+        elif self.avatar.isShadow and self.maxHp > 9999 and tempHp <= 0:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            0, maxHp)
+        elif self.avatar.isShadow and self.maxHp > 9999:
+            self.hpLabel[
+                'text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
+            int(tempHp), maxHp)
+        elif self.avatar.isShadow and tempHp <= 0:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            0, maxHp)
+        elif self.avatar.isShadow:
+            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
+            int(tempHp), maxHp)
         elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999:
             self.hpLabel[
                 'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (

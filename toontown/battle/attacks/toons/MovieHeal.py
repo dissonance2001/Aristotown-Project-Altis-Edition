@@ -8,7 +8,7 @@ from toontown.battle.BattleProps import *
 from toontown.battle.BattleSounds import *
 from toontown.battle import HealJokes
 from toontown.battle import MovieCamera
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
 from toontown.effects import Splash

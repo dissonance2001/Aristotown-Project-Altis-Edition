@@ -10,7 +10,7 @@ BattleCamDefaultHpr1 = Vec3(0, 0, 0)
 BattleCamDefaultPos2 = Point3(0, -11, 22.5)
 BattleCamDefaultHpr2 = Vec3(0, -60, 0)
 BattleCamDefaultFov = 100
-BattleCamMenuFov = 65.0
+BattleCamMenuFov = 70.0
 BattleCamMenuFov2 = 85.0
 BattleCamJoinPos = Point3(0, -12, 13)
 BattleCamJoinHpr = Vec3(0, -45, 0)
@@ -215,7 +215,7 @@ AvPropAccuracy = (
 (95, 95, 95, 95, 95, 95, 95, 95),
 (100, 100, 100, 100, 100, 100, 100, 100),
 (95, 95, 95, 95, 95, 95, 95, 95),
-(80, 80, 80, 80, 80, 80, 80, 80))
+(100, 100, 100, 100, 100, 100, 100, 100))
 AvDropBonusAccuracy = (90, 90, 90, 90, 90, 90, 90, 90)
 AvTrackAccStrings = TTLocalizer.BattleGlobalAvTrackAccStrings
 AvPropDamage = (
@@ -960,6 +960,12 @@ ValidStatusConditions = (
     'embezzlecalculator',
     'marketcalculator',
     'liquidationcalculator',
+    'liquidationcalculator2',
+    'liquidationRetaliation',
+    'missedPaymentRetaliation',
+    'markedForRedlined',
+    'markedForMark',
+    'markedForRevised',
     'recordkeeperShielding',
     'disableGroupGags',
     'disableSingleGags',
@@ -984,4 +990,7 @@ ValidStatusConditions = (
     'rushHour',
     'rushHourcalculator',
     'noUnionBust',
+    'processcalculator',
+    'bonuscalculator',
+    'pinkslipcalculator',
 )

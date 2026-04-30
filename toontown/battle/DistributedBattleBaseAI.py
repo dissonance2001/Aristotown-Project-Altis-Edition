@@ -24,7 +24,7 @@ from toontown.pets import DistributedPetProxyAI
 class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBaseAI')
 
-    def __init__(self, air, zoneId, finishCallback = None, maxSuits = 6, bossBattle = 0, tutorialFlag = 0, interactivePropTrackBonus = -1):
+    def __init__(self, air, zoneId, finishCallback = None, maxSuits = 7, bossBattle = 0, tutorialFlag = 0, interactivePropTrackBonus = -1):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.serialNum = 0
         self.zoneId = zoneId
@@ -1268,7 +1268,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
 
     def suitCanJoin(self):
-        return len(self.suits) < 6 and self.isJoinable()
+        return len(self.suits) < 7 and self.isJoinable()
 
     def toonCanJoin(self):
         return len(self.toons) < 4 and self.isJoinable()

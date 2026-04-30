@@ -848,9 +848,9 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.promotionMusic = base.loader.loadMusic('phase_14/audio/bgm/ET_introduction_stinger.ogg')
         self.promotionMusic2 = base.loader.loadMusic('phase_14/audio/bgm/ET_boss_prep.ogg')
         self.betweenPhaseMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
-        self.battleOneMusic = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
-        self.battleOneMusic2 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_unlock-loop.ogg')
-        self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
+        self.battleOneMusic = loader.loadMusic('phase_14/audio/bgm/RT_chairman_intro.ogg')
+        self.battleOneMusic2 = loader.loadMusic('phase_14/audio/bgm/RT_chairman_loop.ogg')
+        self.battleOneMusic3 = loader.loadMusic('phase_14/audio/bgm/RT_chairman_intro.ogg')
         self.geom.reparentTo(render)
 
     def hideContingency(self):

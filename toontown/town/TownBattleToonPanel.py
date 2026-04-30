@@ -1054,7 +1054,7 @@ class TownBattleToonPanel(DirectFrame):
                     returnStr += '-'
                 else:
                     returnStr += marker
-            elif targetIndex >= 0 and targetIndex <= 5:
+            elif targetIndex >= 0 and targetIndex <= 6:
                 if i == targetIndex:
                     returnStr += marker
                 else:

@@ -79,6 +79,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.dmgMult = 1.0
         self.vulnerabilityMult = 1.0
         self.maxSkeleRevives = 0
+        self.governaught = 0
         self.executive = 0
         self.manager = 0
         self.dizzy = 0
@@ -86,7 +87,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.sued = 0
         self.playRate = 1
         self.actualLevel = 0
-        self.governaught = 0
         self.maxHP = 10
         self.currHP = 10
         self.sillySurgeText = False
@@ -286,12 +286,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         name = self.name
         dept = self.getStyleDept()
         level = str(self.getActualLevel())
-        level += TTLocalizer.ManagerPostFix
         if self.getSkeleRevives() > 0:
             level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "Burned\n%s" % name,
                                                         'dept': dept,
-                                                        'level': level}
+                                                        'level': "30.mgr"}
         return nameInfo
 
     def createNameInfo(self):

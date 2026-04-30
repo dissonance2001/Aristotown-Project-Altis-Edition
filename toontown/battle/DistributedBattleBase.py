@@ -1261,18 +1261,22 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         base.camLens.setMinFov(self.camMenuFov/(4./3.))
         NametagGlobals.setWant2dNametags(False)
         self.townBattle.setState('Attack')
+        self.townBattle.stopTimerSound()
         self.accept(self.localToonBattleEvent, self.__handleLocalToonBattleEvent)
 
-    def startTimer(self, ts = 0):
+    def startTimer(self, ts=0):
         self.notify.debug('startTimer()')
         self.__adjustTownBattle()
+
         if ts >= CLIENT_INPUT_TIMEOUT:
             self.notify.warning('startTimer() - ts: %f timeout: %f' % (ts, CLIENT_INPUT_TIMEOUT))
             self.__timedOut()
             return
 
+        self.clockTick = None
+
         self.timer.startCallback(CLIENT_INPUT_TIMEOUT - ts, self.__timedOut)
-        timeTask = Task.loop(Task(self.__countdown), Task.pause(1))
+        timeTask = Task.loop(Task(self.__countdown), Task.pause(.2))
         taskMgr.add(timeTask, self.timerCountdownTaskName)
         self.townBattle.adjustStatusEffects(self.activeToons)
 
@@ -1310,6 +1314,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             base.camLens.setMinFov(self.camFov/(4./3.))
             self.ignore(self.localToonBattleEvent)
             self.__stopTimer()
+            self.townBattle.stopTimerSound()
 
     def __handleLocalToonBattleEvent(self, response):
         self.townBattle.adjustStatusEffects(self.activeToons)
@@ -1676,6 +1681,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('enterAdjusting()')
         if self.localToonActive():
             self.__stopTimer()
+            self.townBattle.stopTimerSound()
 
         self.delayDeleteMembers()
         self.__adjust(ts, self.__handleAdjustDone)

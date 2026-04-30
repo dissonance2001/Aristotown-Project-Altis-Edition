@@ -6,9 +6,8 @@ from toontown.battle.BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.battle import MovieUtil
 from toontown.suit.SuitDNA import *
-from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
-from toontown.battle import MovieNPCSOS
+from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleParticles
@@ -101,7 +100,8 @@ def __doSuitZaps(zaps, npcs):
     else:
         fShowStun = 0
     for s in zaps:
-        tracks = __doZap(s, delay, fShowStun, uberClone, npcs)
+        lastZap = zaps.index(s) == len(zaps) - 1
+        tracks = __doZap(s, delay, fShowStun, lastZap, uberClone, npcs)
         if s['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX:
             uberClone = 1
         if tracks:
@@ -113,7 +113,7 @@ def __doSuitZaps(zaps, npcs):
     return toonTracks
 
 
-def __doZap(zap, delay, fShowStun, uberClone = 0, npcs=[]):
+def __doZap(zap, delay, fShowStun, lastZap, uberClone = 0, npcs=[]):
     zapSequence = Sequence(Wait(delay))
     if type(zap['target']) == type([]):
         for target in zap['target']:
@@ -128,11 +128,11 @@ def __doZap(zap, delay, fShowStun, uberClone = 0, npcs=[]):
          zap['target']['suit'].doId,
          zap['target']['hp']))
     if uberClone:
-        ival = zapfn_array[zap['level']](zap, delay, fShowStun, uberClone, npcs=npcs)
+        ival = zapfn_array[zap['level']](zap, delay, fShowStun, lastZap, uberClone, npcs=npcs)
         if ival:
             zapSequence.append(ival)
     else:
-        ival = zapfn_array[zap['level']](zap, delay, fShowStun, npcs=npcs)
+        ival = zapfn_array[zap['level']](zap, delay, fShowStun, lastZap, npcs=npcs)
         if ival:
             zapSequence.append(ival)
     return [zapSequence]
@@ -198,11 +198,17 @@ def __createSuitResetPosTrack(suit, battle):
 def createSuitResetPosTrack(suit, battle):
     return __createSuitResetPosTrack(suit, battle)
 
-def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 2.0, uberRepeat = 0, revived = 0, npcs = [], dodge=False):
+def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, lastZap = 0, beforeStun = 0.5, afterStun = 2.0, uberRepeat = 0, revived = 0, npcs = [], dodge=False):
     if hp > 0:
+        level = zap['level']
         suitTrack = Sequence()
         zapTracks = Parallel()
         deathTracks = Sequence(Wait(0.8))
+        headTrack = Sequence()
+        for headPart in suit.animatedHeadParts:
+            headTrack.append(Func(headPart.pose, 'stun', 5))
+            headTrack.append(Wait(1.0))
+            headTrack.append(Func(suit.setNeutralAnimationHead))
         scapeGoatTrack = Sequence()
         sival = ActorInterval(suit, anim)
         sival = []
@@ -227,13 +233,16 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         # add to queued damage BEFORE building interval
         suit.addPendingQueuedDamage(totalDamage)
         soakRemoval = Func(suit.makeZapped)
-        suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(Wait(tContact))
+        suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
-        suitTrack.append(Parallel(MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunInterval(suit, .5, 2.0), deathTracks))
+        if lastZap:
+            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+        else:
+            suitTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
         bonusTrack = Sequence(Wait(tContact))
         if kbbonus == 0:
             #suitTrack.append(__createSuitResetPosTrack(suit, battle))
@@ -246,9 +255,14 @@ def __getSuitTrack(suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died, lef
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if died != 0 and suit.isVirtual:
+            suitTrack.append(Func(suit.makeUnZapped))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual:
+        if died != 0 and not suit.isVirtual and level > 3:
+            deathTracks.append(Func(suit.makeUnZapped))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
+        if died != 0 and not suit.isVirtual and level <= 3:
+            suitTrack.append(Func(suit.makeUnZapped))
+            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         if revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
@@ -578,7 +592,7 @@ def __getSoundTrack(level, delay, node = None):
         return soundTrack
 
 
-def __doJoybuzzer(zap, delay, fShowStun, npcs=[]):
+def __doJoybuzzer(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -623,11 +637,11 @@ def __doJoybuzzer(zap, delay, fShowStun, npcs=[]):
         sprayTrack = MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale)
         if hp > 0 or delay <= 0:
             tracks.append(sprayTrack)
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, lastZap, revived=revived))
     return tracks
 
 
-def __doRug(zap, delay, fShowStun, npcs=[]):
+def __doRug(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -679,11 +693,11 @@ def __doRug(zap, delay, fShowStun, npcs=[]):
             sprayTrack = MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale)
             tracks.append(Sequence(Wait(tSpray), sprayTrack))
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, lastZap, revived=revived))
     return tracks
 
 
-def __doBalloon(zap, delay, fShowStun, npcs=[]):
+def __doBalloon(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -748,11 +762,11 @@ def __doBalloon(zap, delay, fShowStun, npcs=[]):
         if hp > 0:
             tracks.append(pistolTrack)
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'small-zap', died, leftSuits, rightSuits, battle, toon, fShowStun, lastZap, revived=revived))
     return tracks
 
 
-def __doBattery(zap, delay, fShowStun, npcs=[]):
+def __doBattery(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -801,29 +815,33 @@ def __doBattery(zap, delay, fShowStun, npcs=[]):
         suitPos = suit.getPos(battle)
         targetPoint = lambda suit=suit: __suitTargetPoint(suit)
 
-        def getSprayStartPos(battery=battery, toon=toon):
+        def getBeamStartPos(toon=toon):
             toon.update(0)
-            p = battery.getPos(render)
-            p.setZ(5)  # Temp "fix," this doesn't like to cooperate
-            return p
-
-        sprayTrack = Sequence()
-        sprayTrack.append(Wait(tSprayDelay))
-        sprayTrack.append(
-            MovieUtil.getZapTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold,
-                                  dSprayScale,
-                                  horizScale=scale, vertScale=scale))
+            lod0 = toon.getLOD(toon.getLODNames()[0])
+            if base.config.GetBool('want-new-anims', 1):
+                if not lod0.find('**/def_joint_right_hold').isEmpty():
+                    joint = lod0.find('**/def_joint_right_hold')
+                else:
+                    joint = lod0.find('**/joint_Rhold')
+            else:
+                joint = lod0.find('**/joint_Rhold')
+            return joint.getPos(render)
 
         if hp > 0:
-            tracks.append(sprayTrack)
+            tracks.append(makeZapBeamTrack(
+                getBeamStartPos,
+                suit,
+                tDelay=tSprayDelay,
+                duration=dBeamHold
+            ))
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon,
-                fShowStun, revived=revived))
+            tracks.append(__getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'shock', died, leftSuits, rightSuits, battle, toon,
+                fShowStun, lastZap, revived=revived))
     
     return tracks
 
 
-def __doTazer(zap, delay, fShowStun, npcs=[]):
+def __doTazer(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -908,16 +926,16 @@ def __doTazer(zap, delay, fShowStun, npcs=[]):
             ))
 
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(
+            tracks.append(__getSuitTrack(zap, 
                 suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
                 'shock', died, leftSuits, rightSuits, battle,
-                toon, fShowStun, revived=revived
+                toon, fShowStun, lastZap, revived=revived
             ))
 
     return tracks
 
 
-def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
+def __doBrokenTV(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -996,15 +1014,15 @@ def __doBrokenTV(zap, delay, fShowStun, npcs=[]):
             ))
 
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(
+            tracks.append(__getSuitTrack(zap, 
                 suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
                 'large-zap', died, leftSuits, rightSuits, battle,
-                toon, fShowStun, revived=revived
+                toon, fShowStun, lastZap, revived=revived
             ))
 
     return tracks
 
-def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
+def __doBrokenRadio(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -1083,10 +1101,10 @@ def __doBrokenRadio(zap, delay, fShowStun, npcs=[]):
             ))
 
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(
+            tracks.append(__getSuitTrack(zap, 
                 suit, tContact, tSuitDodges, hp, hpbonus, kbbonus,
                 'small-zap', died, leftSuits, rightSuits, battle,
-                toon, fShowStun, revived=revived
+                toon, fShowStun, lastZap, revived=revived
             ))
 
     return tracks
@@ -1095,6 +1113,7 @@ def makeZapBeamTrack(startPosFunc, suit, tDelay, duration):
     beam = globalPropPool.getProp('zap_beam')
     beam.loop('zap_beam')
     beam.setTransparency(1)
+    beam.setTwoSided(True)
     beam.hide()
 
     def setupBeam():
@@ -1108,9 +1127,8 @@ def makeZapBeamTrack(startPosFunc, suit, tDelay, duration):
 
         dist = (endPos - startPos).length()
 
-        # Best first guess from your previous screenshot tests:
         beam.setP(beam.getP() + 20)
-        beam.setScale(2.5, dist * 10, 2.5)
+        beam.setScale(1, dist * 10, 1)
 
     def cleanupBeam():
         if beam and not beam.isEmpty():
@@ -1137,6 +1155,7 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
     beam = globalPropPool.getProp('zap_beam')
     beam.loop('zap_beam')
     beam.setTransparency(1)
+    beam.setTwoSided(True)
     beam.hide()
     beam.setH(90)
 
@@ -1152,7 +1171,7 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
         dist = (endPos - startPos).length()
 
         # most likely Y-axis stretch
-        beam.setScale(2.5, dist * 10, 2.5)
+        beam.setScale(1, dist * 10, 1)
 
     def cleanupBeam():
         if beam and not beam.isEmpty():
@@ -1178,7 +1197,7 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
     )
 
 
-def __doTesla(zap, delay, fShowStun, npcs=[]):
+def __doTesla(zap, delay, fShowStun, lastZap, npcs=[]):
     toon = zap['toon']
     level = zap['level']
     hpbonus = zap['hpbonus']
@@ -1270,7 +1289,7 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
 
         # suit reaction (unchanged)
         if hp > 0 or delay <= 0:
-            tracks.append(__getSuitTrack(
+            tracks.append(__getSuitTrack(zap, 
                 suit,
                 tContact,
                 tSuitDodges,
@@ -1283,13 +1302,13 @@ def __doTesla(zap, delay, fShowStun, npcs=[]):
                 rightSuits,
                 battle,
                 toon,
-                fShowStun,
+                fShowStun, lastZap,
                 revived=revived
             ))
 
     return tracks
 
-def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):
+def __doStagelight(zap, delay, fShowStun, lastZap, uberClone = 0, npcs=[]):
     if npcs is None:
         npcs = []
     toon = zap['toon']
@@ -1362,15 +1381,15 @@ def __doStagelight(zap, delay, fShowStun, uberClone = 0, npcs=[]):
         )
         if hp > 0 or delay <= 0:
             tracks.append(
-                __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
-                               battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
+                __getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
+                               battle, toon, fShowStun, lastZap, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
     tracks.append(cagePropTracks)
 
 
     return tracks
 
 
-def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
+def __doLightning(zap, delay, fShowStun, lastZap, uberClone = 0, npcs=[]):
     if npcs is None:
         npcs = []
     toon = zap['toon']
@@ -1422,14 +1441,14 @@ def __doLightning(zap, delay, fShowStun, uberClone = 0, npcs=[]):
             cagePropTracks.append(cagePropTrack)
         if hp > 0 or delay <= 0:
             tracks.append(
-                __getSuitTrack(suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
-                           battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
+                __getSuitTrack(zap, suit, tContact, tSuitDodges, hp, hpbonus, kbbonus, 'large-zap', died, leftSuits, rightSuits,
+                           battle, toon, fShowStun, lastZap, beforeStun=2.6, afterStun=2.3, revived=revived, npcs=npcs))
 
 
     tracks.append(cagePropTracks)
 
 
-    return tracks
+    return Sequence(Wait(0.5), tracks)
 
 
 def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):

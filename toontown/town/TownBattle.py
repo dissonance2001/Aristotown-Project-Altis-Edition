@@ -96,9 +96,11 @@ class TownBattle(StateData.StateData):
          None,
          None,
          None,
+         None,
         None,
         None]
         self.cogSueCosts = [None,
+         None,
          None,
          None,
          None,
@@ -110,7 +112,7 @@ class TownBattle(StateData.StateData):
                            TownBattleToonPanel.TownBattleToonPanel(3),
                            TownBattleToonPanel.TownBattleToonPanel(4),
                            TownBattleToonPanel.TownBattleToonPanel(5)]
-        self.cogPanels = [TownBattleCogPanel.TownBattleCogPanel(self) for i in xrange(6)]
+        self.cogPanels = [TownBattleCogPanel.TownBattleCogPanel(self) for i in xrange(7)]
         self.timer = ToontownTimer.ToontownTimer()
         self.timer.reparentTo(base.a2dTopRight)
         self.timer.setPos(-0.151, 0, -1.808)
@@ -206,17 +208,25 @@ class TownBattle(StateData.StateData):
             self.fsm.request(state)
 
     def checkTimer(self):
-        if self.clockTick != None:
+        if self.clockTick is not None:
             return
-        elif self.clockTick == None:
-            self.clockTick = SoundInterval(globalBattleSoundCache.getSound('round_running_out.ogg'), node=base.localAvatar, listenerNode=base.localAvatar).start()
-        else:
-            return
+
+        self.clockTick = SoundInterval(
+            globalBattleSoundCache.getSound('round_running_out.ogg'),
+            node=base.localAvatar,
+            listenerNode=base.localAvatar
+        )
+        self.clockTick.start()
+
+    def stopTimerSound(self):
+        if self.clockTick is not None:
+            self.clockTick.pause()
+            self.clockTick = None
 
     def updateTimer(self, time):
         self.time = time
         self.timer.setTime(time)
-        self.clockTick = None
+
         if time == 10:
             self.checkTimer()
 
