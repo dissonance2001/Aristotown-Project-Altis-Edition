@@ -893,6 +893,7 @@ def doDriver(attack):
     ballPropTracks = Parallel()
     for t in targets:
         toon = t['toon']
+        dmg = t['hp']
         ball = globalPropPool.getProp('golf-ball')
         ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.75, 1.75, 1.75)),
                                  Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),

@@ -2968,14 +2968,14 @@ class BattleCalculatorAI:
                                             self.deadSuits += 1
                                             if target2.dna.name == 'std2' or target2.dna.name == 'mh2':
                                                 self.governaughtCogs += 1
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                             elif target2.getExecutive():
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                             elif target2.getGovernaught():
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                                 self.governaughtCogs += 1
                                             else:
-                                                self.levelDamage += (target2.getActualLevel() * 4)
+                                                self.levelDamage += (target2.getActualLevel() * 5)
                             else:
                                 if not self.suitHasCondition(target2.doId, 'immune'):
                                     target2.setHP(target2.getHP() - math.ceil(damageDone / 3))
@@ -3015,14 +3015,14 @@ class BattleCalculatorAI:
                                             self.deadSuits += 1
                                             if target2.dna.name == 'std2' or target2.dna.name == 'mh2':
                                                 self.governaughtCogs += 1
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                             elif target2.getExecutive():
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                             elif target2.getGovernaught():
-                                                self.levelDamage += (target2.getActualLevel() * 7)
+                                                self.levelDamage += (target2.getActualLevel() * 9)
                                                 self.governaughtCogs += 1
                                             else:
-                                                self.levelDamage += (target2.getActualLevel() * 4)
+                                                self.levelDamage += (target2.getActualLevel() * 5)
                         if suitIndex + 1 < len(activeSuits):
                             target3 = activeSuits[suitIndex + 1]
                             organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
@@ -3065,14 +3065,14 @@ class BattleCalculatorAI:
                                             self.deadSuits += 1
                                             if target3.dna.name == 'std2' or target3.dna.name == 'mh2':
                                                 self.governaughtCogs += 1
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                             elif target3.getExecutive():
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                             elif target3.getGovernaught():
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                                 self.governaughtCogs += 1
                                             else:
-                                                self.levelDamage += (target3.getActualLevel() * 4)
+                                                self.levelDamage += (target3.getActualLevel() * 5)
                             else:
                                 if not self.suitHasCondition(target3.doId, 'immune'):
                                     target3.setHP(target3.getHP() - math.ceil(damageDone / 3))
@@ -3112,14 +3112,14 @@ class BattleCalculatorAI:
                                             self.deadSuits += 1
                                             if target3.dna.name == 'std2' or target3.dna.name == 'mh2':
                                                 self.governaughtCogs += 1
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                             elif target3.getExecutive():
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                             elif target3.getGovernaught():
-                                                self.levelDamage += (target3.getActualLevel() * 7)
+                                                self.levelDamage += (target3.getActualLevel() * 9)
                                                 self.governaughtCogs += 1
                                             else:
-                                                self.levelDamage += (target3.getActualLevel() * 4)
+                                                self.levelDamage += (target3.getActualLevel() * 5)
                     else:
                         currTarget.setHP(currTarget.getHP() - damageDone)
                 targetId = currTarget.getDoId()
@@ -3152,12 +3152,12 @@ class BattleCalculatorAI:
                             if currTarget.dna.name == 'std2' or currTarget.dna.name == 'mh2':
                                 self.governaughtCogs += 1
                             if currTarget.getExecutive():
-                                self.levelDamage += (currTarget.getActualLevel() * 7)
+                                self.levelDamage += (currTarget.getActualLevel() * 9)
                             elif currTarget.getGovernaught():
-                                self.levelDamage += (currTarget.getActualLevel() * 7)
+                                self.levelDamage += (currTarget.getActualLevel() * 9)
                                 self.governaughtCogs += 1
                             else:
-                                self.levelDamage += (currTarget.getActualLevel() * 4)
+                                self.levelDamage += (currTarget.getActualLevel() * 5)
                         self.suitLeftBattle(targetId)
                         attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
                         if self.notify.getDebug():
@@ -10531,6 +10531,8 @@ class BattleCalculatorAI:
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                     toon.setHp(toon.hp + math.ceil(result))
                 elif atkType['name'] == 'LiquidatorHeavyRainDamage':
+                    attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
+                elif atkType['name'] == 'ForemanBurningDamage':
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                 elif atkType['name'] == 'AbsorbMovie':
                     if theSuit.dna.name == 'cbutcher':
