@@ -347,7 +347,10 @@ def doSuitAttack(attack):
     elif name == 'HeadShrink':
         suitTrack = doHeadShrink(attack)
     elif name == 'HotAir':
-        suitTrack = doHotAir(attack)
+        if suit.dna.name == 'safesupervis':
+            suitTrack = doHotAirPressurizer(attack)
+        else:
+            suitTrack = doHotAir(attack)
     elif name == 'Jargon':
         suitTrack = doJargon(attack)
     elif name == 'Legalese':
@@ -2077,42 +2080,68 @@ def doFiveOClockShadow(attack):
 def doDisassemble(attack):
     suit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
     target = attack['target']
-    toon = target[0]['toon']
     dmg = target[0]['hp']
-    damageDelay = 1.5
-    attackDelay = 1.5
-    sprayEffect = BattleParticles.createParticleEffect(file='reorgSpray')
-    suitTrack = Sequence(Wait(1), ActorInterval(suit, attack['animName']))
-    suitPos = suit.getPos(battle)
-    cagePropTracks = Parallel()
-    cage = loader.loadModel('phase_3.5/models/modules/desk_only')
-    card = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
-    propTrackNew = Parallel()
-    laptopPosPoints = [Point3(-2, 1.5, 2.5), VBase3(0, 0, 0)]
-    laptopDuration = 2.8
-    scaleUpPoint = Point3(1.75, 1.75, 1.75)
-    propTrackNew.append(
-        Sequence(getPropTrack(card, cage, laptopPosPoints, 1e-06, 2, scaleUpPoint=scaleUpPoint, scaleUpTime=0,
-                     anim=1, animStartTime=0.5, animDuration=2.5,
-                     propName='ttht_m_ene_techbotLaptop'), Func(card.removeNode)))
-    cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
-    cagePropTrack = Sequence(
-        getPropAppearTrack(cage, battle, cagePos, 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
-        Parallel(
-            SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
+    toon = target[0]['toon']
+    suitTrack = Sequence(Wait(1.0), getSuitAnimTrack(attack))
+    sprayEffect = BattleParticles.createParticleEffect('ReOrgSprayNew')
+    desk = loader.loadModel('phase_3.5/models/modules/desk_only')
+    desk.reparentTo(battle)
+    desk.setPos(suit, 2.5, 3.5, 1.0)
+    desk.setHpr(suit, 0, 0, 0)
+    desk.setScale(0.01)
+    desk.setTransparency(1)
+    desk.setAlphaScale(1)
+
+    laptop = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
+    laptop.reparentTo(desk)
+    laptop.setPos(-2.0, 1.5, 2.5)
+    laptop.setHpr(0, 0, 0)
+    laptop.setScale(1.75)
+
+    deskTrack = Sequence(
+        LerpScaleInterval(
+            desk,
+            1.0,
+            Point3(1.5, 1.5, 1.5),
+            startScale=Point3(0.01, 0.01, 0.01)
         ),
-        Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
-        Wait(2.0),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-        Func(cage.removeNode)
+
+        SoundInterval(
+            base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'),
+            duration=0.75,
+            node=desk
+        ),
+
+        Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=desk),
+
+        Wait(1.0),
+
+        LerpFunctionInterval(desk.setAlphaScale, fromData=1, toData=0, duration=1.0),
+
+        Func(cleanupBashDesk, desk, laptop)
     )
 
-    cagePropTracks.append(cagePropTrack)
-    partTrack = getPartTrack(sprayEffect, 1.0, 1.9, [sprayEffect, suit, 0])
+    laptopTrack = Sequence(
+        Wait(0.2),
+        ActorInterval(laptop, 'ttht_m_ene_techbotLaptop', playRate=1.5)
+    )
+
+    toonTracks = getToonTracks(
+        attack,
+        damageDelay=1.5,
+        splicedDamageAnims=[['slip-backward']],
+        dodgeDelay=1.0,
+        splicedDodgeAnims=[['jump']]
+    )
+
+    soundTrack = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=1.5, node=suit)
+
+    sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
+    BattleParticles.loadParticles()
+    BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
+                                        color=Vec4(1, 0, 0, 1))
+    partTrack = getPartTrack(sprayEffects, 1.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
     if dmg > 0:
         headParts = toon.getHeadParts()
         headTracks = Parallel()
@@ -2124,7 +2153,7 @@ def doDisassemble(attack):
             h = part.getH()
             p = part.getP()
             r = part.getR()
-            headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)),
+            headTracks.append(Sequence(Wait(2), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)),
                                        LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)),
                                        LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)),
                                        LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)),
@@ -2139,9 +2168,9 @@ def doDisassemble(attack):
                                        LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2),
                                        LerpPosInterval(part, 0.1, Point3(x, y, z)), Wait(0.9)))
 
-        def getChestTrack(part, attackDelay=attackDelay):
+        def getChestTrack(part, attackDelay=1):
             origScale = part.getScale()
-            return Sequence(Wait(attackDelay), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1),
+            return Sequence(Wait(2), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1),
                             LerpHprInterval(part, 1.1, part.getHpr()))
 
         chestTracks = Parallel()
@@ -2165,12 +2194,12 @@ def doDisassemble(attack):
                        0.01,
                        0,
                        0.6])
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01,
+    toonTrack = getToonTrack(attack, damageDelay=2, splicedDamageAnims=damageAnims, dodgeDelay=0.01,
                              dodgeAnimNames=['duck'])
     if dmg > 0:
-        return Parallel(suitTrack, tauntInterval, cagePropTracks, toonTrack, propTrackNew, headTracks, chestTracks)
+        return Parallel(suitTrack, partTrack, deskTrack, laptopTrack, toonTracks, headTracks, chestTracks)
     else:
-        return Parallel(suitTrack, tauntInterval, cagePropTracks, propTrackNew, toonTrack)
+        return Parallel(suitTrack, partTrack, deskTrack, laptopTrack, toonTracks)
 
 
 def doPoundKey(attack):
@@ -2559,11 +2588,10 @@ def doElectrostaticEnergy(attack):
             Parallel(cagePosition),
             Parallel(
                 cage.posInterval(0, Point3(toonPos.getX(), y, 0.1), blendType='easeIn'),
-                SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/AA_lightning.ogg'), duration=0.75, node=cage)
             ),
             Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg'), node=cage),
-            Wait(0.5),
-            LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+            Wait(.25),
+            LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.25),
             Func(cage.removeNode)
         )
         cagePropTracks.append(cagePropTrack)
@@ -4949,75 +4977,137 @@ def doShake(attack):
 def doBash(attack):
     suit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(Wait(1), ActorInterval(suit, attack['animName']), Func(suit.setNeutralAnimation))
-    suitPos = suit.getPos(battle)
-    cagePropTracks = Parallel()
-    cage = loader.loadModel('phase_3.5/models/modules/desk_only')
-    card = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
-    card.setScale(1.75)
-    laptopPosPoints = [Point3(-2, 1.5, 2.5), VBase3(0, 0, 0)]
-    laptopDuration = 2.8
-    scaleUpPoint = Point3(1.75, 1.75, 1.75)
-    propTrackNew = Sequence(
-        Func(__showProp, card, cage, *laptopPosPoints),
-        ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
-        Func(card.removeNode)
-    )
-    cagePropTrack = Sequence(
-            getPropAppearTrack(cage, suit, Point3(2.5, 4, 0), 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
-            Parallel(
-                SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
-            ),
-            Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
-            Wait(1.0),
-            LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-            Func(cage.removeNode)
-        )
 
-    cagePropTracks.append(cagePropTrack)
+    suitTrack = Sequence(Wait(1.0), getSuitAnimTrack(attack))
+
+    desk = loader.loadModel('phase_3.5/models/modules/desk_only')
+    desk.reparentTo(battle)
+    desk.setPos(suit, 2.5, 3.5, 1.0)
+    desk.setHpr(suit, 0, 0, 0)
+    desk.setScale(0.01)
+    desk.setTransparency(1)
+    desk.setAlphaScale(1)
+
+    laptop = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
+    laptop.reparentTo(desk)
+    laptop.setPos(-2.0, 1.5, 2.5)
+    laptop.setHpr(0, 0, 0)
+    laptop.setScale(1.75)
+
+    deskTrack = Sequence(
+        LerpScaleInterval(
+            desk,
+            1.0,
+            Point3(1.5, 1.5, 1.5),
+            startScale=Point3(0.01, 0.01, 0.01)
+        ),
+
+        SoundInterval(
+            base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'),
+            duration=0.75,
+            node=desk
+        ),
+
+        Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=desk),
+
+        Wait(1.0),
+
+        LerpFunctionInterval(desk.setAlphaScale, fromData=1, toData=0, duration=1.0),
+
+        Func(cleanupBashDesk, desk, laptop)
+    )
+
+    laptopTrack = Sequence(
+        Wait(0.2),
+        ActorInterval(laptop, 'ttht_m_ene_techbotLaptop', playRate=1.5)
+    )
+
+    toonTracks = getToonTracks(
+        attack,
+        damageDelay=1.5,
+        splicedDamageAnims=[['slip-backward']],
+        dodgeDelay=1.0,
+        splicedDodgeAnims=[['jump']]
+    )
+
     soundTrack = getSoundTrack('tt_s_ara_cmg_itemHitsFloor.ogg', delay=1.5, node=suit)
-    damageAnims = [['slip-backward']]
-    dodgeAnims = [['jump']]
-    toonTracks = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=1.0, splicedDodgeAnims=dodgeAnims)
-    return Parallel(suitTrack, tauntInterval, cagePropTracks, propTrackNew, toonTracks, soundTrack)
+
+    return Parallel(suitTrack, deskTrack, laptopTrack, toonTracks, soundTrack)
+
+
+def cleanupBashDesk(desk, laptop=None):
+    if laptop:
+        try:
+            MovieUtil.removeProp(laptop)
+        except:
+            try:
+                laptop.removeNode()
+            except:
+                pass
+
+    if desk:
+        try:
+            desk.removeNode()
+        except:
+            pass
+
 
 def doDataCorruption(attack):
     suit = attack['suit']
     battle = attack['battle']
-    tauntIndex = attack['taunt']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    tauntInterval = Sequence(Wait(1), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    suitTrack = Sequence(Wait(1), ActorInterval(suit, attack['animName']), Func(suit.setNeutralAnimation))
-    suitPos = suit.getPos(battle)
-    cagePropTracks = Parallel()
-    cage = loader.loadModel('phase_3.5/models/modules/desk_only')
-    card = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
-    card.setScale(1.75)
-    propTrackNew = Parallel()
-    laptopPosPoints = [Point3(-2, 1.5, 2.5), VBase3(0, 0, 0)]
-    laptopDuration = 2.8
-    scaleUpPoint = Point3(1.75, 1.75, 1.75)
-    propTrackNew = Sequence(
-        Func(__showProp, card, cage, *laptopPosPoints),
-        ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
-        Func(card.removeNode)
-    )
-    cagePos = [Point3(suitPos.getX() - 3, suitPos.getY() - 3, 0), suit.getHpr(battle)]
-    cagePropTrack = Sequence(
-            getPropAppearTrack(cage, suit, Point3(2.5, 4, 0), 0.01, scaleUpPoint=Point3(1.5), scaleUpTime=1),
-            Parallel(
-                SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'), duration=0.75, node=cage)
-            ),
-            Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=cage),
-            Wait(1.0),
-            LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=1.0),
-            Func(cage.removeNode)
-        )
 
-    cagePropTracks.append(cagePropTrack)
+    suitTrack = Sequence(Wait(1.0), getSuitAnimTrack(attack))
+
+    desk = loader.loadModel('phase_3.5/models/modules/desk_only')
+    desk.reparentTo(battle)
+    desk.setPos(suit, 2.5, 3.5, 1.0)
+    desk.setHpr(suit, 0, 0, 0)
+    desk.setScale(0.01)
+    desk.setTransparency(1)
+    desk.setAlphaScale(1)
+
+    laptop = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
+    laptop.reparentTo(desk)
+    laptop.setPos(-2.0, 1.5, 2.5)
+    laptop.setHpr(0, 0, 0)
+    laptop.setScale(1.75)
+
+    deskTrack = Sequence(
+        LerpScaleInterval(
+            desk,
+            1.0,
+            Point3(1.5, 1.5, 1.5),
+            startScale=Point3(0.01, 0.01, 0.01)
+        ),
+
+        SoundInterval(
+            base.loader.loadSfx('phase_5/audio/sfx/asfhdfha.ogg'),
+            duration=0.75,
+            node=desk
+        ),
+
+        Func(base.playSfx, base.loader.loadSfx('phase_9/audio/sfx/asfhafhsdh.ogg'), node=desk),
+
+        Wait(1.0),
+
+        LerpFunctionInterval(desk.setAlphaScale, fromData=1, toData=0, duration=1.0),
+
+        Func(cleanupBashDesk, desk, laptop)
+    )
+
+    laptopTrack = Sequence(
+        Wait(0.2),
+        ActorInterval(laptop, 'ttht_m_ene_techbotLaptop', playRate=1.5)
+    )
+
+    toonTracks = getToonTracks(
+        attack,
+        damageDelay=1.5,
+        splicedDamageAnims=[['slip-backward']],
+        dodgeDelay=1.0,
+        splicedDodgeAnims=[['jump']]
+    )
+
     damageAnims = [['cringe']]
     dodgeAnims = [['jump']]
     toonTracks = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=1.0,
@@ -5026,7 +5116,7 @@ def doDataCorruption(attack):
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 1.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 1, (oldcolor)))
-    return Parallel(suitTrack, tauntInterval, cagePropTracks, toonTracks, propTrackNew, lightingTrack)
+    return Parallel(lightingTrack, suitTrack, deskTrack, laptopTrack, toonTracks)
 
 
 def doHangUp(attack):
@@ -5328,11 +5418,14 @@ def doBounceRate(attack):
     dmg = target[0]['hp']
     hitSuit = dmg > 0
     check = globalPropPool.getProp('ttrpg_m_ene_prp_bouncedRate')
+    check.setTwoSided(True)
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'c':
-        checkPosPoints = [Point3(0, 0.5, -1), VBase3(-90, 90, 0)]
+        checkPosPoints = [Point3(0.04341534008683112, -0.390738060781473, 0.02), VBase3(177.65557163531116, 180.0, 190.1591895803184)]
+    elif suitType == 'b':
+        checkPosPoints = [Point3(-0.13024602026049337, -0.390738060781473, -0.08670520231213885), VBase3(-5.73082489146168, -174.27745664739885, 173.48769898697537)]
     else:
-        checkPosPoints = [Point3(1.5, 0.65, 0), VBase3(-180, 0, 0)]
+        checkPosPoints = [Point3(1.6063675832127373, 0.30390738060781786, -0.13024602026049337), VBase3(-7.814761215629517, 180.0, 180)]
     bounce1Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'one')
     bounce2Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'two')
     bounce3Point = lambda suit=suit, toon=toon, battle=battle: getThrowEndPoint(suit, toon, battle, 'three')
@@ -5629,6 +5722,91 @@ def doFiredPressurizer(attack):
             flecksTracks.append(flecksSmallTrack)
 
     return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, colorTracks, soundTrack)
+
+def doHotAirPressurizer(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    BattleParticles.loadParticles()
+    sprayEffects = []
+    for t in targets:
+        sprayEffect = BattleParticles.createParticleEffect('HotAirPressurizer')
+        #BattleParticles.setEffectTexture(sprayEffect, 'fire')
+        sprayEffects.append(sprayEffect)
+
+    sprayDelay = 0.6
+    flameDelay = 1.25
+    flameDuration = 3.5
+    flecksDelay = flameDelay + 0.8
+    flecksDuration = flameDuration - 0.8
+    damageDelay = 1.5
+    dodgeDelay = 1.0
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    sprayTracks = getPartTracks(attack, sprayEffects, sprayDelay, 3.3, 0, softStop=-1)
+    baseFlameTracks = Parallel()
+    flameTracks = Parallel()
+    flecksTracks = Parallel()
+    colorTracks = Parallel()
+    damageAnims = []
+    damageAnims.append(['cringe',
+                        0.01,
+                        0.7,
+                        0.62])
+    damageAnims.append(['slip-forward',
+                        0.01,
+                        0.4,
+                        1.2])
+    damageAnims.append(['slip-forward', 0.01, 1.0])
+    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=1.0, dodgeAnimNames=['sidestep'])
+    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=0.5, node=suit)
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0], softStop=-1)
+        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0], softStop=-1)
+        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0], softStop=-1)
+
+        def changeColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+
+            return track
+
+        def resetColor(parts):
+            track = Parallel()
+            for partNum in xrange(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.clearColorScale))
+
+            return track
+
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            colorTrack = Sequence()
+            colorTrack.append(Wait(2.0))
+            colorTrack.append(Func(battle.movie.needRestoreColor))
+            colorTrack.append(changeColor(headParts))
+            colorTrack.append(changeColor(torsoParts))
+            colorTrack.append(changeColor(legsParts))
+            colorTrack.append(Wait(2.5))
+            colorTrack.append(resetColor(headParts))
+            colorTrack.append(resetColor(torsoParts))
+            colorTrack.append(resetColor(legsParts))
+            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            baseFlameTracks.append(baseFlameTrack)
+            flameTracks.append(flameTrack)
+            flecksTracks.append(flecksTrack)
+            colorTracks.append(colorTrack)
+
+    return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
 
 
 def doAudit(attack):

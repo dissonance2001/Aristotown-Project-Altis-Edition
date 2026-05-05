@@ -2759,7 +2759,7 @@ def zapCog(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0, endTime=0.8), ActorInterval(suit, anim, startTime=0))
+    spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0))
     if suit.isShadow or suit.dna.name == 'cbutcher':
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
     else:

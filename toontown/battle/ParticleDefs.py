@@ -6923,6 +6923,66 @@ def hotAirSpray(self):
     self.addForceGroup(f0)
 
 @particle
+def hotAirSprayPressurizer(self):
+    self.reset()
+    self.setPos(0.000, 3.000, 4.000)
+    self.setHpr(0.000, 10.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(50)
+    p0.setBirthRate(0.05)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(3.0)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.addTextureFromFile('phase_3.5/maps/flame.png')
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(.75)
+    p0.renderer.setFinalXScale(.75)
+    p0.renderer.setInitialYScale(.75)
+    p0.renderer.setFinalYScale(.75)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(15.0000)
+    p0.emitter.setAmplitudeSpread(5.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 10.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -1.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.25000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, -10.0000, -9.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 1.3661, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
 def hotAirSpray2(self):
     self.reset()
     self.setPos(0.000, 2.500, 3.200) # originally (0,4,4)

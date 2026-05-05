@@ -126,6 +126,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('paperRainfall.ptf')
     elif name == 'HotAir':
         return loadParticleFile('hotAirSpray.ptf')
+    elif name == 'HotAirPressurizer':
+        return loadParticleFile('hotAirSprayPressurizer.ptf')
     elif name == 'FreezeSpray':
         return loadParticleFile('FreezeSpray.ptf')
     elif name == 'HotAir2':

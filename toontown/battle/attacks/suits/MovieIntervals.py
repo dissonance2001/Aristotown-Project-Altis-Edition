@@ -473,6 +473,21 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyViolation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['name'] == 'ScapegoatEnraged':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['name'] == 'LitigatorBayouBash':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['name'] == 'CaseManagerInsurancePlan2':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['name'] == 'CaseManagerInsurancePlan':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['name'] == 'CaseManagerLegalBindings2':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'RacketeerPeckingOrderRetaliation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))

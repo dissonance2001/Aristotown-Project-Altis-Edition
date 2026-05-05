@@ -2122,6 +2122,12 @@ def doTrickOfTheLight(attack):
     suitTrack = Sequence(Parallel(ActorInterval(suit, 'neutral2'), Wait(2.0)), ActorInterval(suit, 'highroller-neutral-levitate-in-out', duration=1), Func(suit.loop, 'highroller-neutral-levitate-loop'), Wait(1.0))
     suitTrack.append(Func(suit.makeImmortal))
     suitTrack.append(Func(suit.makeUnVulnerable))
+    suitTrack.append(Func(suit.makeSoaked, 0))
+    suitTrack.append(Func(suit.makeUnSoaked))
+    suitTrack.append(Func(suit.makeUnMarked))
+    suitTrack.append(Func(suit.splatSuit, 0, 1))
+    suitTrack.append(Func(suit.makeUnZapped))
+    suitTrack.append(Func(suit.makeUnDazed))
     return Parallel(suitTrack, suitTrack2)
 
 def doPhase3(attack):

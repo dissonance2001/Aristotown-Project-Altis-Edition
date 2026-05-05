@@ -640,7 +640,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Audit':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Bash':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.75, attackDuration=1.75), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(2.0),
+                                 Func(taskMgr.remove, 'camera_shake'), Wait(attackDuration - 3.75)))
     elif name == 'Beguile':
         camTrack.append(Sequence(motionShot(5, 12.5, 10, -210, -20.0, 0.0, 0, suit), Wait(2.1), defaultCamera(openShotDuration=0, attackDuration=attackDuration - 2.1)))
         #camTrack.append(defaultCamera(openShotDuration=2.1))
@@ -655,9 +656,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PennyPinch':
         camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'Disassemble':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'DataCorruption':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'DataBreach':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'VersionControl':
@@ -675,7 +676,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Reprogram':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'CloudStorage':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'DiskScratch':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'VoodooMagic':
@@ -870,8 +871,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorObjection':
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2)))
     elif name == 'ArbitratorPaperFiling':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5),
-                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 2.5)))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5), motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 2.5)))
     elif name == 'ArbitratorWhirlwind':
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
     elif name == 'ArbitratorThrowBook':

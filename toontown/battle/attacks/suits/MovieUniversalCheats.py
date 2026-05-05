@@ -410,7 +410,7 @@ def doSoakRemoval(attack):
     battle = attack['battle']
     suitTrack = Parallel()
     if suit.dna.name == 'safesupervis':
-        suitTrack.append(Parallel(Func(suit.makeUnDamageDown), Func(suit.checkDamageDown, - 25), ActorInterval(suit, 'soak', startTime=3.5), __soakRemoval(suit, 1), Func(suit.makeUnSoaked)))
+        suitTrack.append(Parallel(Func(suit.makeUnDamageDown), Func(suit.checkDamageDown, - 25), ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), Func(suit.makeUnSoaked)))
     else:
         suitTrack.append(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), Func(suit.makeUnSoaked)))
     for suit in battle.activeSuits:
