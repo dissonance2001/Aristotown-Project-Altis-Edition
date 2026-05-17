@@ -309,8 +309,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def announceGenerate(self):
         self.startLookAround()
+
         if base.wantNametags:
             self.nametag.manage(base.marginManager)
+
+            # Hide bottom arrow nametag only
+            self.nametag.unmanage(base.marginManager)
 
         DistributedToon.DistributedToon.announceGenerate(self)
 
