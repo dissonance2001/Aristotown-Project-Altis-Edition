@@ -67,6 +67,7 @@ from toontown.toonbase.ToontownGlobals import *
 from toontown.toontowngui import NewsPageButtonManager
 from toontown.friends.FriendHandle import FriendHandle
 from direct.controls import ControlManager
+from toontown.camera.OrbitalCamera import OrbitalCamera
 
 WantNewsPage = base.config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
 if WantNewsPage:
@@ -318,26 +319,36 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         DistributedToon.DistributedToon.announceGenerate(self)
 
+        # Orbit camera
+        self.orbitalCamera = OrbitalCamera(self)
+        self.orbitalCamera.start()
+
         acceptingNewFriends = settings.get('acceptingNewFriends', {})
         acceptingNonFriendWhispers = settings.get('acceptingNonFriendWhispers', {})
         nametagStyle_index = settings.get('lastNametag', {})
         fishingRods_index = settings.get('lastRod', {})
         cheesyEffect_index = settings.get('lastEffect', {})
+
         if str(self.doId) not in acceptingNewFriends:
             acceptingNewFriends[str(self.doId)] = True
             settings['acceptingNewFriends'] = acceptingNewFriends
+
         if str(self.doId) not in acceptingNonFriendWhispers:
             acceptingNonFriendWhispers[str(self.doId)] = True
             settings['acceptingNonFriendWhispers'] = acceptingNonFriendWhispers
+
         if str(self.doId) not in nametagStyle_index:
             nametagStyle_index[str(self.doId)] = 0
             settings['lastNametag'] = nametagStyle_index
+
         if str(self.doId) not in fishingRods_index:
             fishingRods_index[str(self.doId)] = 0
             settings['lastRod'] = fishingRods_index
+
         if str(self.doId) not in cheesyEffect_index:
             cheesyEffect_index[str(self.doId)] = 0
             settings['lastEffect'] = cheesyEffect_index
+
         self.acceptingNewFriends = acceptingNewFriends[str(self.doId)]
         self.acceptingNonFriendWhispers = acceptingNonFriendWhispers[str(self.doId)]
 
