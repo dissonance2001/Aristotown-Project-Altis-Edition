@@ -135,6 +135,16 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             interval = self.activeIntervals[name]
             interval.finish()
 
+    def swapClientSuitOrder(self, suitA, suitB):
+        if suitA not in self.activeSuits or suitB not in self.activeSuits:
+            return
+
+        i = self.activeSuits.index(suitA)
+        j = self.activeSuits.index(suitB)
+
+        self.activeSuits[i], self.activeSuits[j] = self.activeSuits[j], self.activeSuits[i]
+        self.needAdjustTownBattle = 1
+
     def setBattleConditions(self, toonId, conditionNames, conditionVals, conditionTurns):
         if toonId == base.localAvatar.doId:
             base.localAvatar.battleConditions = {}
@@ -678,13 +688,24 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('adjust(%f) from server' % globalClockDelta.localElapsedTime(timestamp))
         self.adjustFsm.request('Adjusting', [globalClockDelta.localElapsedTime(timestamp)])
 
-    def setMovie(self, active, toons, suits, toonAttacks, suitAttacks):
+    def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks):
+        self.toonTrackOrder = toonTrackOrder
+        base.localAvatar.toonTrackOrder = toonTrackOrder
+
+        print('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder)
         if self.__battleCleanedUp:
             return
         self.notify.debug('setMovie()')
-        if int(active) == 1:
+        if int(movieHasBeenMade) == 1:
             self.notify.debug('setMovie() - movie is active')
-            self.movie.genAttackDicts(toons, suits, toonAttacks, suitAttacks)
+            self.movie.genAttackDicts(avIds, suitIds, toonAttacks, suitAttacks)
+
+    def setToonTrackOrder(self, toonTrackOrder):
+        self.toonTrackOrder = toonTrackOrder
+        base.localAvatar.toonTrackOrder = toonTrackOrder
+
+        if hasattr(base.localAvatar, 'inventory'):
+            base.localAvatar.inventory.applyDisplayTrackOrder()
 
     def setChosenToonAttacks(self, ids, tracks, levels, targets):
         if self.__battleCleanedUp:
@@ -1276,10 +1297,32 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.clockTick = None
 
         self.timer.startCallback(CLIENT_INPUT_TIMEOUT - ts, self.__timedOut)
+        speedMult = self.getBattleSpeedMult()
+
+        realTimeout = (CLIENT_INPUT_TIMEOUT - ts) / speedMult
+
+        self.timer.startCallback(realTimeout, self.__timedOut)
+
         timeTask = Task.loop(Task(self.__countdown), Task.pause(.2))
         taskMgr.add(timeTask, self.timerCountdownTaskName)
         self.townBattle.adjustStatusEffects(self.activeToons)
 
+    def getBattleSpeedMult(self):
+        mult = 1.0
+        for s in self.suits:
+            if hasattr(s, 'battleSpeed') and s.battleSpeed > 0:
+                mult = max(mult, s.getBattleSpeed())
+        return mult
+        
+    def setTrackPlayRate(self, track, playRate):
+        for seq in track:
+            if isinstance(seq, SoundInterval):
+                if seq.sound is None:
+                    continue
+                seq.sound.setPlayRate(playRate)
+            elif isinstance(seq, MetaInterval):
+                self.setTrackPlayRate(seq, playRate)
+    
     def __stopTimer(self):
         self.notify.debug('__stopTimer()')
         self.timer.stop()
@@ -1288,11 +1331,15 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def __countdown(self, task):
         if hasattr(self.townBattle, 'timer'):
             self.__adjustTownBattle()
-            self.townBattle.updateTimer(int(self.timer.getT()))
 
+            speedMult = self.getBattleSpeedMult()
+            remaining = int(self.timer.getT() * speedMult)
+
+            self.townBattle.updateTimer(remaining)
         else:
             self.notify.warning('__countdown has tried to update a timer that has been deleted. Stopping timer')
             self.__stopTimer()
+
         return Task.done
 
     def enterWaitForInput(self, ts = 0):

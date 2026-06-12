@@ -396,6 +396,24 @@ def removeZapSuit(suit, zapSuit):
         zapSuit.detachNode()
         suit.cleanupZapActor()
 
+def removeZapSuitPowerhouse(suit, zapSuit):
+    notify.debug('removeDeathSuit()')
+    if not zapSuit.isEmpty():
+        zapSuit.detachNode()
+        suit.cleanupZapActorPowerhouse()
+
+def removeZapSuitPowerhouseSquirt(suit, zapSuit):
+    notify.debug('removeDeathSuit()')
+    if not zapSuit.isEmpty():
+        zapSuit.detachNode()
+        suit.cleanupZapActorPowerhouseSquirt()
+
+def removeZapSuitPowerhouseZap(suit, zapSuit):
+    notify.debug('removeDeathSuit()')
+    if not zapSuit.isEmpty():
+        zapSuit.detachNode()
+        suit.cleanupZapActorPowerhouseZap()
+
 
 def insertReviveSuit(suit, deathSuit, battle = None, pos = None, hpr = None):
     holdParent = suit.getParent()
@@ -625,8 +643,8 @@ def createSuitReviveTrack(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
-    elif suit.style.name == 'ubuster':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+    elif suit.style.name == 'ubuster' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'radiog':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
@@ -1101,8 +1119,8 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
-    elif suit.style.name == 'ubuster':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+    elif suit.style.name == 'ubuster' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'radiog':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
@@ -1242,7 +1260,6 @@ def createVirtualSuitDeathTrack(suit, battle):
         suitTrack.append(Func(suit.makeDead))
         suitTrack.append(Func(suit.cleanupAllBattleEffects))
     else:
-        suitTrack.append(Parallel(Func(suit.checkCogLuredDeath, battle)))
         suitTrack.append(Func(suit.makeDead))
         suitTrack.append(Func(notify.debug, 'before insertDeathSuit'))
         suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
@@ -1408,8 +1425,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'dopr':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
-    elif suit.style.name == 'ubuster':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+    elif suit.style.name == 'ubuster' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
     elif suit.style.name == 'radiog':
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
     elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
@@ -1465,6 +1482,13 @@ def createSuitDeathTrack(suit, battle):
         returnval.append(headInterval)
     return returnval
 
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
+    propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))
+    if poseExtraArgs:
+        propTrack.append(Func(prop.pose, *poseExtraArgs))
+    propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale))
+    return propTrack
+
 def createSuitDeathTrackExplosiveForeman(suit, battle):
     suitTrack = Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -1472,6 +1496,34 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     deathSuit = suit
     deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
     hasAnimatedHead = False
+    toonPos = suit.getPos(battle)
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + suit.height - 0.2)
+    explosionTrack3 = Sequence()
+    explosionTrack3.append(createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    gearPoint2 = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+    explosionTrack2 = Sequence()
+    explosionTrack2.append(createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint2, scale=3))
+    explode = []
+    for i in xrange(0, 3):
+        explode.append(globalPropPool.getProp('explosion'))
+    explodePosPoints = [Point3(0, 15, 5), PNT3_ZERO]
+    explodePosPoints1 = [Point3(0, 15, 5), PNT3_ZERO]
+    explodeHprPoints = [Point3(180, 0, 0), PNT3_ZERO]
+    explodeHprPoints1 = [Point3(180, 0, 0), PNT3_ZERO]
+    explodeTracks = Parallel()
+    for i in xrange(0, 3):
+        explodeTrack = Sequence()
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodePosPoints, 1e-06, Point3(1.7, 1.7, 1.7), scaleUpTime=0.1))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodePosPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodeHprPoints, 1e-06, Point3(0, 0, 0), scaleUpTime=0.3))
+        explodeTrack.append(
+            getPropAppearTrack(explode[i], suit, explodeHprPoints1, 1e-06, Point3(0, 0, 0), scaleUpTime=0.1))
+        explodeTracks.append(explodeTrack)
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
@@ -1509,7 +1561,7 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
-    returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
+    returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack3, explosionTrack2, explosionTrack)
     if hasAnimatedHead:
         returnval.append(headInterval)
     return returnval
@@ -1883,6 +1935,18 @@ def createSuitDodgeMultitrack(battle, tDodge, suit, leftSuits, rightSuits):
         suitTracks.append(Sequence(ActorInterval(s, sidestepAnim),  Func(s.setNeutralAnimationDrop)))
 
     suitTracks.append(Sequence(ActorInterval(suit, sidestepAnim), Func(suit.setNeutralAnimationDrop), suit.makeCogStepBackDeathInterval(battle)))
+    suitTracks.append(Func(indicateMissed, suit))
+    suitTracks.append(Sequence(SoundInterval(soundTrack, volume=0.7)))
+    return Sequence(Wait(tDodge), suitTracks)
+
+def createSuitDodgeMultitrackSue(battle, tDodge, suit, leftSuits, rightSuits):
+    suitTracks = Parallel()
+    soundTrack = base.loader.loadSfx('phase_5/audio/sfx/ENC_cogjump_to_side.ogg')
+    suitDodgeList, sidestepAnim = avatarDodge(leftSuits, rightSuits, 'sidestep-left', 'sidestep-right')
+    for s in suitDodgeList:
+        suitTracks.append(Sequence(ActorInterval(s, sidestepAnim),  Func(s.setNeutralAnimationDrop)))
+
+    suitTracks.append(Sequence(ActorInterval(suit, sidestepAnim), Func(suit.setNeutralAnimationDrop)))
     suitTracks.append(Func(indicateMissed, suit))
     suitTracks.append(Sequence(SoundInterval(soundTrack, volume=0.7)))
     return Sequence(Wait(tDodge), suitTracks)
@@ -2737,7 +2801,7 @@ def zapCogNeutral(suit, anim, before, after, battle):
         flashTrack = Sequence(Func(suit.setColorScale, (1,1,0,1)), Wait(.2), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack))
 
-def zapCog(suit, anim, before, after, battle):
+def zapCog(suit, anim, before, after, battle, died):
     zapSuit = suit.getZapActor()
     zapSuit.setBlend(frameBlend = base.wantSmoothAnims)
     suitPos = suit.getPos(battle)
@@ -2759,16 +2823,20 @@ def zapCog(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0))
+    if not died or suit.isVirtual or suit.isOverpressured:
+        spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0), suit.makeCogStepBackDeathInterval(battle))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    else:
+        spazzTrack = Sequence(Func(stopZapCogNeutral, suit), Func(startZapCogNeutral, suit, anim))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
     if suit.isShadow or suit.dna.name == 'cbutcher':
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
     else:
         flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
-    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
-def zapCogPowerhouse(suit, anim, before, after, battle):
-    zapSuit = suit.getZapActor()
+def zapCogPowerhouseZap(suit, anim, before, after, battle):
+    zapSuit = suit.getZapActorPowerhouseZap()
     zapSuit.setBlend(frameBlend = base.wantSmoothAnims)
     suitPos = suit.getPos(battle)
     suitHpr = suit.getHpr(battle)
@@ -2791,9 +2859,69 @@ def zapCogPowerhouse(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
     spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
     if suit.isShadow or suit.dna.name == 'cbutcher':
-        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Wait(after))
     else:
-        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
+
+def zapCogPowerhouseSquirt(suit, anim, before, after, battle):
+    zapSuit = suit.getZapActorPowerhouseSquirt()
+    zapSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    suitPos = suit.getPos(battle)
+    suitHpr = suit.getHpr(battle)
+    zapSuit.setBin("fixed", 0)
+    zapSuit.setDepthTest(False)
+    zapSuit.setDepthWrite(False)
+    zapSfx = loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg')
+    if suit.isSkeleton:
+        suitBody = [suit]
+    else:
+        suitBody = [suit.find('**/body')]
+    zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
+    # for bodyPart in suitBody:
+    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
+    #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
+    spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
+    if suit.isShadow or suit.dna.name == 'cbutcher':
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Wait(after))
+    else:
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
+
+def zapCogPowerhouse(suit, anim, before, after, battle):
+    zapSuit = suit.getZapActorPowerhouse()
+    zapSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    suitPos = suit.getPos(battle)
+    suitHpr = suit.getHpr(battle)
+    zapSuit.setBin("fixed", 0)
+    zapSuit.setDepthTest(False)
+    zapSuit.setDepthWrite(False)
+    zapSfx = loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg')
+    if suit.isSkeleton:
+        suitBody = [suit]
+    else:
+        suitBody = [suit.find('**/body')]
+    zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
+    # for bodyPart in suitBody:
+    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
+    #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
+    #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
+    spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
+    if suit.isShadow or suit.dna.name == 'cbutcher':
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Wait(after))
+    else:
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 

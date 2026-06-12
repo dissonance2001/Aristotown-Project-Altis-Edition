@@ -392,22 +392,21 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     suit.addPendingQueuedDamage(totalDamage)
     if hp > 0:
         alreadyHit = 1
-    for s in battle.activeSuits:
-        if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
-            suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
     showDamage = Func(suit.showHpText, -hp, openEnded=0)
     updateHealthBar = Func(suit.updateHealthBar, hp)
     if majorObject:
         anim = 'flatten'
     else:
         anim = 'drop-react'
-    if died and majorObject and not suit.isVirtual:
+    if died and majorObject and not suit.isVirtual and not suit.isOverpressured:
         suitReact = ActorInterval(suit, anim, endTime=0.55)
     elif not lastDrop:
         suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
     else:
         suitReact = Sequence(ActorInterval(suit, anim), Func(suit.setNeutralAnimationDrop))
     suitTrack.append(Wait(delay + tObjectAppears))
+    if suit.dropRushJob:
+        suitTrack.append(Func(suit.makeUnDropRushJob))
     if hp > 0:
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
@@ -421,7 +420,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if died and not suit.isVirtual:
+    if died and not suit.isVirtual and not suit.isOverpressured:
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -446,9 +445,9 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
     if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-    if died != 0 and suit.isVirtual:
+    if died != 0 and suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    if died != 0 and not suit.isVirtual:
+    if died != 0 and not suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
     #suitTrack.append(Func(suit.setNeutralAnimationDrop))
     suitIndex = battle.activeSuits.index(suit)

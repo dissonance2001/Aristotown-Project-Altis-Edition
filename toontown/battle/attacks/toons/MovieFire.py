@@ -321,7 +321,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
     hands = toon.getLeftHands()
     toonTrack = Sequence()
     toonTrack.append(Wait(delay))
-    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 3)))
+    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
     button = globalPropPool.getProp('button')
     button2 = MovieUtil.copyProp(button)
     buttons = [button, button2]
@@ -332,7 +332,7 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
         toonTrack.append(ActorInterval(toon, 'duck'))
     toonTrack.append(Func(toon.loop, 'neutral'))
     toonTrack.append(Func(toon.setHpr, battle, origHpr))
-    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 3)))
+    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
     buttonTrack = Sequence()
     buttonShow = Func(MovieUtil.showProps, buttons, hands)
     buttonScaleUp = LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01))
@@ -431,10 +431,14 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
-        suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25),Func(suit.showHpTextWhite,
-                                           'FIRE IMMUNE!'), Func(suit.setChatAbsolute, random.choice(
-        OTPLocalizerEnglish.SuitFireManager), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
-                                                                 ActorInterval(suit, 'gag-miss'), Func(suit.setNeutralAnimation)))
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitFireManager:
+            suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4), Func(suit.setChatAbsolute, random.choice(
+        OTPLocalizerEnglish.SuitFireManager[suit.getStyleName()]), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
+                                                                 ActorInterval(suit, 'gag-miss'), Func(suit.setNeutralAnimationDrop)))
+        else:
+            suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4), Func(suit.setChatAbsolute, random.choice(
+        OTPLocalizerEnglish.SuitFireManagerNone), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
+                                                                 ActorInterval(suit, 'gag-miss'), Func(suit.setNeutralAnimationDrop)))
     return [toonTrack,
      soundTrack,
      buttonTrack,

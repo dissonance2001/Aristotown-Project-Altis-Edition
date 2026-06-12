@@ -33,8 +33,8 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                     Vec4(1, 0.533, 0, 1.0),
                     Vec4(1, 0, 0, 1),
                     Vec4(1, 0, 0, 1),
-                    Vec4(0.3, 0.3, 0.3, 1),  # out
-                    Vec4(1, 0, 0, 1),  # 12
+                    Vec4(0.3, 0.3, 0.3, 1), #out
+                    Vec4(1, 0, 0, 1), #12
                     Vec4(0.0, 1.0, 1.0, 1),  # overheal
                     Vec4(0.553, 0, 1, 1),  # overcharge
                     Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
@@ -43,34 +43,39 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                     Vec4(186 / 255, 82 / 255, 1, 1),
                     Vec4(0.702, 0, 1, 1),
                     Vec4(1, 1, 1, 1),
-                    Vec4(1, 0, 0.906, 1))  # 18 white (20 magenta sil)
+                    Vec4(1, 0, 0.906, 1), #18
+                    Vec4(0, 0.502, 0.502, 1), #19 teal
+                    Vec4(0.827, 0.686, 0.216, 1)) # 20 gold
     healthGlowColors = (Vec4(0, 1, 0.078, 1),
-                        Vec4(0.388, 1, 0, 1),
-                        Vec4(0.686, 1, 0, 1),
-                        Vec4(0.882, 1, 0, 1),
-                        Vec4(0.988, 1, 0, 1),
-                        Vec4(1, 0.831, 0, 1),
-                        Vec4(1, 0.714, 0, 1),
-                        Vec4(1, 0.533, 0, 1.0),
-                        Vec4(1, 0, 0, 1),
-                        Vec4(1, 0, 0, 1),
-                        Vec4(0, 0, 0, 0),  # out
-                        Vec4(1, 0, 0, 1),
-                        Vec4(0.0, 1.0, 1.0, 1),  # overheal
-                        Vec4(0.553, 0, 1, 1),  # overcharge
-                        Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
-                        Vec4(0, 0.361, 1, 1),
-                        Vec4(1, 1, 1, 1),  # 15 blue silhouette
-                        Vec4(186 / 255, 82 / 255, 1, 1),
+                    Vec4(0.388, 1, 0, 1),
+                    Vec4(0.686, 1, 0, 1),
+                    Vec4(0.882, 1, 0, 1),
+                    Vec4(0.988, 1, 0, 1),
+                    Vec4(1, 0.831, 0, 1),
+                    Vec4(1, 0.714, 0, 1),
+                    Vec4(1, 0.533, 0, 1.0),
+                    Vec4(1, 0, 0, 1),
+                    Vec4(1, 0, 0, 1),
+                    Vec4(0, 0, 0, 0), #out
+                    Vec4(1, 0, 0, 1),
+                    Vec4(0.0, 1.0, 1.0, 1),  # overheal
+                    Vec4(0.553, 0, 1, 1),  # overcharge
+                    Vec4(1, 0.6, 0.89, 1),  # 14 pink silhouette
+                    Vec4(0, 0.361, 1, 1),
+                    Vec4(1, 1, 1, 1),  # 15 blue silhouette
+                    Vec4(186 / 255, 82 / 255, 1, 1),
                         Vec4(0.702, 0, 1, 1),
                         Vec4(1, 1, 1, 1),
-                        Vec4(1, 0, 0.906, 1)
-                        )  # 18 white
+                        Vec4(1, 0, 0.906, 1), 
+                   Vec4(0, 0.502, 0.502, 1), #19 teal
+                    Vec4(0.827, 0.686, 0.216, 1)
+                        ) #18 white
 
     def __init__(self, avatar):
         AvatarPanel.AvatarPanel.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
         self.avName = avatar.getName()
         self.avatr = avatar
+        self.name = None
         gui = loader.loadModel('phase_3.5/models/gui/suit_detail_panel')
         gui.find('**/shadow').setTransparency(TransparencyAttrib.MAlpha)
         gui.find('**/shadow').setColor(1, 1, 1, 0.4)
@@ -196,8 +201,92 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             biggest = max(d[0], d[1], d[2])
             s = 0.3 / biggest
             self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+        if self.avatar.style.name == 'clubpres':
+            if self.avatar.getActualLevel() == 20:
+                self.name = 'High Stakes Club President'
+            elif self.avatar.getActualLevel() == 21:
+                self.name = 'Mulligan Club President'
+            elif self.avatar.getActualLevel() == 22:
+                self.name = 'Ancient Club President'
+            elif self.avatar.getActualLevel() == 23:
+                self.name = 'Chip Fan Club President'
+            elif self.avatar.getActualLevel() == 24:
+                self.name = 'Puzzling Club President'
+            elif self.avatar.getActualLevel() == 25:
+                self.name = 'Shivering Club President'
+            elif self.avatar.getActualLevel() == 26:
+                self.name = 'Sensational Club President'
+            elif self.avatar.getActualLevel() == 27:
+                self.name = 'Commissioning Club President'
+        elif self.avatar.style.name == 'supervis':
+            if self.avatar.getActualLevel() == 20:
+                self.name = 'Abacus Mint Supervisor'
+            elif self.avatar.getActualLevel() == 21:
+                self.name = 'Controlling Mint Supervisor'
+            elif self.avatar.getActualLevel() == 22:
+                self.name = 'Compounding Mint Supervisor'
+            elif self.avatar.getActualLevel() == 23:
+                self.name = 'Accountant Mint Supervisor'
+            elif self.avatar.getActualLevel() == 24:
+                self.name = 'Spongy Mint Supervisor'
+            elif self.avatar.getActualLevel() == 25:
+                self.name = 'Fraudulent Mint Supervisor'
+            elif self.avatar.getActualLevel() == 26:
+                self.name = 'Immovable Mint Supervisor'
+            elif self.avatar.getActualLevel() == 27:
+                self.name = 'Ledgering Mint Supervisor'
+            elif self.avatar.getActualLevel() == 28:
+                self.name = 'Auditing Mint Supervisor'
+            elif self.avatar.getActualLevel() == 29:
+                self.name = 'Usurer Mint Supervisor'
+            elif self.avatar.getActualLevel() == 30:
+                self.name = 'Scheming Mint Supervisor'
+        elif self.avatar.style.name == 'clerk':
+            if self.avatar.getActualLevel() == 20:
+                self.name = 'Sneaky Head Attorney'
+            elif self.avatar.getActualLevel() == 21:
+                self.name = 'Omnipotent Head Attorney'
+            elif self.avatar.getActualLevel() == 22:
+                self.name = 'Overseer Head Attorney'
+            elif self.avatar.getActualLevel() == 23:
+                self.name = 'Monolithic Head Attorney'
+            elif self.avatar.getActualLevel() == 24:
+                self.name = 'Chrono Head Attorney'
+            elif self.avatar.getActualLevel() == 25:
+                self.name = 'Laborious Head Attorney'
+            elif self.avatar.getActualLevel() == 26:
+                self.name = 'Draining Head Attorney'
+            elif self.avatar.getActualLevel() == 27:
+                self.name = 'Shaking Head Attorney'
+            elif self.avatar.getActualLevel() == 28:
+                self.name = 'Dizzy Head Attorney'
+        elif self.avatar.style.name == 'foreman':
+            if self.avatar.getActualLevel() == 20:
+                self.name = 'Sleepy Factory Foreman'
+            elif self.avatar.getActualLevel() == 21:
+                self.name = 'Burning Factory Foreman'
+            elif self.avatar.getActualLevel() == 22:
+                self.name = 'Explosive Factory Foreman'
+            elif self.avatar.getActualLevel() == 23:
+                self.name = 'Contractor Factory Foreman'
+            elif self.avatar.getActualLevel() == 24:
+                self.name = 'Red Tape\nFactory Foreman'
+            elif self.avatar.getActualLevel() == 25:
+                self.name = 'Sniper Factory Foreman'
+            elif self.avatar.getActualLevel() == 26:
+                self.name = 'Unionized Factory Foreman'
+            elif self.avatar.getActualLevel() == 27:
+                self.name = 'Contributing Factory Foreman'
+            elif self.avatar.getActualLevel() == 28:
+                self.name = 'Polishing Factory Foreman'
+            elif self.avatar.getActualLevel() == 29:
+                self.name = 'Extortionist Factory Foreman'
+            else:
+                self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name']
+        else:
+            self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name']
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.36), relief=None,
-                                     text=SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name'],
+                                     text=self.name,
                                      text_font=avatar.getFont(), text_pos=(0, 0),
                                      text_scale=0.0475, text_wordwrap=8, text_shadow=(1, 1, 1, 1))
         healthGui = loader.loadModel('phase_3.5/models/char/ttcc_ene_insignias')
@@ -532,7 +621,59 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         else:
             condition = 11
         avatar = self.avatar
-        if self.avatar.isFired:
+        if self.avatar.dna.name == 'hrollers':
+            level = str('25') + TTLocalizer.ManagerPostFix
+        elif self.avatar.style.name == 'clubpres':
+            if self.avatar.getActualLevel() == 20:
+                level = str('21') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 26:
+                level = str('21') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 27:
+                level = str('26') + TTLocalizer.ManagerPostFix
+            else:
+                level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
+        elif self.avatar.style.name == 'supervis':
+            if self.avatar.getActualLevel() == 23:
+                level = str('24') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 24:
+                level = str('28') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 27:
+                level = str('23') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 28:
+                level = str('24') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 29:
+                level = str('27') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 30:
+                level = str('25') + TTLocalizer.ManagerPostFix
+            else:
+                level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
+        elif self.avatar.style.name == 'clerk':
+            if self.avatar.getActualLevel() == 21:
+                level = str('23') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 23:
+                level = str('24') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 24:
+                level = str('25') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 25:
+                level = str('26') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 27:
+                level = str('24') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 28:
+                level = str('21') + TTLocalizer.ManagerPostFix
+            else:
+                level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
+        elif self.avatar.style.name == 'foreman':
+            if self.avatar.getActualLevel() == 26:
+                level = str('21') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 27:
+                level = str('25') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 28:
+                level = str('26') + TTLocalizer.ManagerPostFix
+            elif self.avatar.getActualLevel() == 29:
+                level = str('28') + TTLocalizer.ManagerPostFix
+            else:
+                level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
+        elif self.avatar.isFired:
             level = str(self.avatar.getActualLevel())
         elif self.avatar.getExecutive() and not self.avatar.getManager():
             level = str(self.avatar.getActualLevel()) + TTLocalizer.ExecutivePostFix
@@ -592,6 +733,20 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                                blendType='easeInOut'))
                     self.changeInterval.start()
                 if self.avatar.dna.name == 'hrollers':
+                    if self.avatar.getActualLevel() == 36:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[22]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
+                    if self.avatar.getActualLevel() == 35:
+                        self.changeInterval = Parallel(
+                            LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                                   blendType='easeInOut'),
+                            LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[21]),
+                                                   blendType='easeInOut'))
+                        self.changeInterval.start()
                     if self.avatar.getActualLevel() == 34:
                         self.changeInterval = Parallel(
                             LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),

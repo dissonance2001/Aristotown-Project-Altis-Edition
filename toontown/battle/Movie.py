@@ -44,6 +44,17 @@ camPos = Point3(14, 0, 10)
 camHpr = Vec3(89, -30, 0)
 randomBattleTimestamp = base.config.GetBool('random-battle-timestamp', 0)
 
+CONTENT_SYNC_CONDITION_ORDERS = {
+    'contentSync1': [DROP, SQUIRT, ZAP, TRAP, THROW, LURE, SOUND, HEAL],
+    'contentSync2': [SOUND, DROP, SQUIRT, HEAL, ZAP, TRAP, LURE, THROW],
+    'contentSync3': [SQUIRT, SOUND, HEAL, TRAP, THROW, ZAP, LURE, DROP],
+    'contentSync4': [SQUIRT, TRAP, LURE, DROP, HEAL, ZAP, SOUND, THROW],
+    'contentSync5': [THROW, SOUND, DROP, TRAP, SQUIRT, HEAL, LURE, ZAP],
+    'contentSync6': [THROW, SQUIRT, ZAP, SOUND, TRAP, LURE, DROP, HEAL],
+    'contentSync7': [TRAP, DROP, SQUIRT, SOUND, THROW, ZAP, LURE, HEAL],
+    'contentSync8': [TRAP, SQUIRT, DROP, THROW, ZAP, LURE, HEAL, SOUND],
+}
+
 class Movie(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('Movie')
 
@@ -323,10 +334,101 @@ class Movie(DirectObject.DirectObject):
             self.rewardPanel.destroy()
         self.rewardPanel = None
 
+    def __updateSuitRoundEffects(self, s):
+        s.battleTrapIsFresh = 0
+        if s.getOilRainRounds() == 1:
+            s.removeOilRain()
+        if not s.getOverseerRounds() <= 0:
+            s.makeOverseer(s.getOverseerRounds() - 1)
+        if not s.getSoakRounds() <= 0:
+            s.makeSoaked(s.getSoakRounds() - 1)
+        if not s.getDeepFrozenRounds() <= 0:
+            s.makeDeepFrozen(s.getDeepFrozenRounds() - 1)
+        if not s.getMarkRounds() <= 0:
+            s.makeMarked(s.getMarkRounds() - 1)
+        if not s.getOilRainRounds() <= 0:
+            s.addOilRainRounds(s.getOilRainRounds() - 1)
+        if not s.getEnrageCounter() <= 1:
+            s.makeAngry(s.getEnrageCounter() - 1)
+        if s.getEnrageCounter() <= 1 and s.dna.name in ('liquid', 'wtapper'):
+            s.makeUnAngry()
+        if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
+            s.makeExtraAttacks(s.getExtraAttacks() + 1)
+        if s.getLuredRounds() == 1:
+            s.makeUnLured()
+        if s.getOverseerRounds() == 1:
+            s.makeUnOverseer()
+        if s.getDeepFrozenRounds() == 1:
+            s.makeUnDeepFrozen()
+        if not s.getLuredRounds() <= 0:
+            s.addLuredRounds(s.getLuredRounds() - 1)
+        if not s.getExplosiveCondition() <= 0:
+            s.makeExplosive(s.getExplosiveCondition() - 1)
+        if not s.getSleepyCondition() <= 0:
+            s.makeSleepy(s.getSleepyCondition() - 1)
+        if not s.getSuedRounds() <= 0:
+            s.makeSued(s.getSuedRounds() - 1)
+        if s.isDazed:
+            s.makeUnDazed()
+        if s.isGreenLight:
+            s.makeUnGreenLight()
+        if s.isRedLight:
+            s.makeUnRedLight()
+        if s.dna.name == 'ambass':
+            s.makeUnShielding()
+
+
+    def __cleanupSuitAfterMovie(self, s):
+        s.battleTrapIsFresh = 0
+        s.makeUnFreshlyZapped()
+        s.checkInsuranceCountdown()
+        s.checkContractedCountdown()
+        s.clearPendingQueuedDamageAll()
+        s.clearPendingQueuedHealingAll()
+        s.setPendingQueuedDeath(False)
+
+
+    def __updateToonRoundEffects(self, toon):
+        for methodName in (
+            'checkCooldownRoundCountdown',
+            'checkInkDrainRoundCountdown',
+            'checkBombedRoundCountdown',
+            'checkGroupDamageDownRoundCountdown',
+            'checkGagBoostRoundCountdown',
+            'checkNoDodgeRoundCountdown',
+            'checkCollectCallRoundCountdown',
+            'checkVulnerabilityRoundCountdown',
+            'checkCheerRoundCountdown',
+            'checkBurnedRoundCountdown',
+            'checkZappedRoundCountdown',
+            'checkSnappedRoundCountdown',
+            'checkWindedRoundCountdown',
+            'checkFrozenRoundCountdown',
+            'checkToonupGagBoostRoundCountdown',
+            'checkTrapGagBoostRoundCountdown',
+            'checkLureGagBoostRoundCountdown',
+            'checkThrowGagBoostRoundCountdown',
+            'checkSquirtGagBoostRoundCountdown',
+            'checkZapGagBoostRoundCountdown',
+            'checkSoundGagBoostRoundCountdown',
+            'checkDropGagBoostRoundCountdown',
+            'checkEncoreRoundCountdown',
+            'checkDamageUpRoundCountdown',
+            'checkDamageDownRoundCountdown',
+            'checkViralSensationRoundCountdown',
+            'checkConfusedRoundCountdown',
+            'checkHiddenRoundCountdown',
+            'checkMarkedWoodRoundCountdown',
+            'checkDamageOvertimeRoundCountdown',
+            'checkLiquidatedRoundCountdown'
+        ):
+            if hasattr(toon, methodName):
+                getattr(toon, methodName)()
+
     def play(self, ts, callback):
         self.hasBeenReset = 0
-        ptrack = Sequence()
-        camtrack = Sequence()
+        ptrack = Sequence(Wait(1.0))
+        camtrack = Sequence(Wait(1.0))
         if random.random() > 0.5:
             MovieUtil.shotDirection = 'left'
         else:
@@ -335,95 +437,45 @@ class Movie(DirectObject.DirectObject):
         #     if toon.getCooldownRounds() <= 1:
         #         ptrack.append(Func(toon.makeUnCooldown))
         for s in self.battle.activeSuits:
-            s.battleTrapIsFresh = 0
-            if s.getOilRainRounds() == 1:
-                ptrack.append(Func(s.removeOilRain))
-            if not s.getOverseerRounds() <= 0:
-                ptrack.append(Func(s.makeOverseer, s.getOverseerRounds() - 1))
-            if not s.getSoakRounds() <= 0:
-                ptrack.append(Func(s.makeSoaked, s.getSoakRounds() - 1))
-            if not s.getMarkRounds() <= 0:
-                ptrack.append(Func(s.makeMarked, s.getMarkRounds() - 1))
-            if not s.getOilRainRounds() <= 0:
-                ptrack.append(Func(s.addOilRainRounds, s.getOilRainRounds() - 1))
-            if not s.getEnrageCounter() <= 1:
-                ptrack.append(Func(s.makeAngry, s.getEnrageCounter() - 1))
-            if s.getEnrageCounter() <= 1 and s.dna.name == 'liquid':
-                ptrack.append(Func(s.makeUnAngry))
-            if s.getEnrageCounter() <= 1 and s.dna.name == 'wtapper':
-                ptrack.append(Func(s.makeUnAngry))
-            if s.getLuredRounds() == 1:
-                ptrack.append(Func(s.makeUnLured))
-            if s.getOverseerRounds() == 1:
-                ptrack.append(Func(s.makeUnOverseer))
-            if not s.getLuredRounds() <= 0:
-                ptrack.append(Func(s.addLuredRounds, s.getLuredRounds() - 1))
-            if not s.getExplosiveCondition() <= 0:
-                ptrack.append(Func(s.makeExplosive, s.getExplosiveCondition() - 1))
-            if not s.getSleepyCondition() <= 0:
-                ptrack.append(Func(s.makeSleepy, s.getSleepyCondition() - 1))
-            if not s.getSuedRounds() <= 0:
-                ptrack.append(Func(s.makeSued, s.getSuedRounds() - 1))
-            if s.isDazed:
-                ptrack.append(Func(s.makeUnDazed))
-            if s.dna.name == 'ambass':
-                ptrack.append(Func(s.makeUnShielding))
+            ptrack.append(Func(self.__updateSuitRoundEffects, s))
+        preSuitAttacks = []
+        postSuitAttacks = []
+
+        for a in self.suitAttackDicts:
+            phase = a.get('phase', 'postToon')
+
+            if phase == 'preToon':
+                preSuitAttacks.append(a)
+            elif phase in ('postToon', 'normal', None):
+                postSuitAttacks.append(a)
+            # after-squirt and other custom phases are ignored here
+            # because __doToonAttacks() will play them in the middle
+
+        preSattacks, preScam = self.__doSuitAttacks(preSuitAttacks, 'pre-suit-attacks')
+        if preSattacks:
+            ptrack.append(preSattacks)
+            camtrack.append(preScam)
+
         tattacks, tcam = self.__doToonAttacks()
         if tattacks:
             ptrack.append(tattacks)
             camtrack.append(tcam)
             for t in self.battle.activeToons:
                 t.loop('neutral')
-        sattacks, scam = self.__doSuitAttacks()
+
+        sattacks, scam = self.__doSuitAttacks(postSuitAttacks, 'post-suit-attacks')
         if sattacks:
             ptrack.append(sattacks)
             camtrack.append(scam)
-            for a in self.suitAttackDicts:
-                battle = a['battle']
-                ival, camIval = MovieSuitAttacks.doSuitAttack(a)
         ptrack.append(Func(callback))
         for s in self.battle.activeSuits:
-            s.battleTrapIsFresh = 0
-            ptrack.append(Func(s.makeUnFreshlyZapped))
-            ptrack.append(Func(s.checkInsuranceCountdown))
-            ptrack.append(Func(s.checkContractedCountdown))
-            ptrack.append(Func(s.clearPendingQueuedDamageAll))
-            ptrack.append(Func(s.clearPendingQueuedHealingAll))
-            ptrack.append(Func(s.setPendingQueuedDeath, False))
-            if s.dna.name == 'clubpres' and s.getActualLevel() == 21:
-                ptrack.append(Func(s.makeExtraAttacks, s.getExtraAttacks() + 1))
+            ptrack.append(Func(self.__cleanupSuitAfterMovie, s))
+
         for toon in self.battle.activeToons:
-            ptrack.append(Func(toon.checkCooldownRoundCountdown))
-            ptrack.append(Func(toon.checkInkDrainRoundCountdown))
-            ptrack.append(Func(toon.checkBombedRoundCountdown))
-            ptrack.append(Func(toon.checkGroupDamageDownRoundCountdown))
-            ptrack.append(Func(toon.checkGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkNoDodgeRoundCountdown))
-            ptrack.append(Func(toon.checkCollectCallRoundCountdown))
-            ptrack.append(Func(toon.checkVulnerabilityRoundCountdown))
-            ptrack.append(Func(toon.checkCheerRoundCountdown))
-            ptrack.append(Func(toon.checkBurnedRoundCountdown))
-            ptrack.append(Func(toon.checkSnappedRoundCountdown))
-            ptrack.append(Func(toon.checkWindedRoundCountdown))
-            ptrack.append(Func(toon.checkToonupGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkTrapGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkLureGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkThrowGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkSquirtGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkZapGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkSoundGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkDropGagBoostRoundCountdown))
-            ptrack.append(Func(toon.checkEncoreRoundCountdown))
-            ptrack.append(Func(toon.checkDamageUpRoundCountdown))
-            ptrack.append(Func(toon.checkDamageDownRoundCountdown))
-            ptrack.append(Func(toon.checkConfusedRoundCountdown))
-            ptrack.append(Func(toon.checkHiddenRoundCountdown))
-            ptrack.append(Func(toon.checkMarkedWoodRoundCountdown))
-            ptrack.append(Func(toon.checkDamageOvertimeRoundCountdown))
-            ptrack.append(Func(toon.checkLiquidatedRoundCountdown))
+            ptrack.append(Func(self.__updateToonRoundEffects, toon))
         for s in self.battle.activeSuits:
             if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
-                ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsolute,
+                ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsoluteSpecial,
                                                                                '',
                                                                                CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
             else:
@@ -432,7 +484,7 @@ class Movie(DirectObject.DirectObject):
                                                                              '. . . Z Z Z . . .',
                                                                              CFThought), Func(s.updateHealthBar, 0, forceUpdate=1)))
                 else:
-                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsolute,
+                    ptrack.append(Parallel(Func(s.setNeutralAnimation), Func(s.setChatAbsoluteSpecial,
                                                                              '',
                                                                              CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
         self._deleteTrack()
@@ -450,20 +502,25 @@ class Movie(DirectObject.DirectObject):
         for toon in self.battle.toons:
             self.track.delayDeletes.append(DelayDelete.DelayDelete(toon, 'Movie.play'))
 
-        playRate = 1
-        self.setTrackPlayRate(self.track, playRate)
-        self.track.start(ts, playRate=playRate)
+        speedSuit = None
+
         for s in self.battle.suits:
-            if s.dna.name == 'psetter':
-                theSuit = s
-                self.setTrackPlayRate(self.track, theSuit.getPlayRate())
-                self.track.start(ts, playRate=theSuit.getPlayRate())
-            elif s.dna.name == 'clerk' and s.getActualLevel() == 24:
-                theSuit = s
-                self.setTrackPlayRate(self.track, theSuit.getPlayRate())
-                self.track.start(ts, playRate=theSuit.getPlayRate())
-            else:
-                pass
+            if s.battleSpeed > 0:
+                speedSuit = s
+                break
+
+        if speedSuit:
+            for suit in self.battle.activeSuits:
+                if not suit.battleSpeed:
+                    suit.checkBattleSpeed(speedSuit, 0)
+                    break
+
+            speed = speedSuit.getBattleSpeed()
+        else:
+            speed = 1.0
+
+        self.setTrackPlayRate(self.track, speed)
+        self.track.start(ts, playRate=speed)
         return None
 
     def setTrackPlayRate(self, track, playRate):
@@ -614,69 +671,136 @@ class Movie(DirectObject.DirectObject):
         if self.playByPlayText:
             self.playByPlayText.hide()
 
+    def applyPendingContentSync(self):
+        if not hasattr(base.localAvatar, 'battleConditions'):
+            return
+
+        if 'pendingContentSync' not in base.localAvatar.battleConditions:
+            return
+
+        orderId = base.localAvatar.battleConditions['pendingContentSync'][0]
+        cond = 'contentSync%s' % orderId
+
+        base.localAvatar.currentContentSyncOrderCondition = cond
+
+        if hasattr(base.localAvatar, 'inventory'):
+            base.localAvatar.inventory.applyDisplayTrackOrder()
+
+
+    def getMovieToonTrackOrder(self):
+        for toon in self.battle.activeToons:
+            if toon.contentSync == 1:
+                order = [DROP, SQUIRT, ZAP, TRAP, THROW, LURE, SOUND, HEAL]
+
+            elif toon.contentSync == 2:
+                order = [SOUND, DROP, SQUIRT, HEAL, ZAP, TRAP, LURE, THROW]
+
+            elif toon.contentSync == 3:
+                order = [SQUIRT, SOUND, HEAL, TRAP, THROW, ZAP, LURE, DROP]
+
+            elif toon.contentSync == 4:
+                order = [SQUIRT, TRAP, LURE, DROP, HEAL, ZAP, SOUND, THROW]
+
+            elif toon.contentSync == 5:
+                order = [THROW, SOUND, DROP, TRAP, SQUIRT, HEAL, LURE, ZAP]
+
+            elif toon.contentSync == 6:
+                order = [THROW, SQUIRT, ZAP, SOUND, TRAP, LURE, DROP, HEAL]
+
+            elif toon.contentSync == 7:
+                order = [TRAP, DROP, SQUIRT, SOUND, THROW, ZAP, LURE, HEAL]
+
+            elif toon.contentSync == 8:
+                order = [TRAP, SQUIRT, DROP, THROW, ZAP, LURE, HEAL, SOUND]
+
+            else:
+                order = [HEAL, TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP]
+
+        return order
+
     def __doToonAttacks(self):
-        if base.config.GetBool('want-toon-attack-anims', 1):
-            track = Sequence(name='toon-attacks')
-            camTrack = Sequence(name='toon-attacks-cam')
-            ival, camIval = MovieFire.doFires(self.__findToonAttack(FIRE))
+        if not base.config.GetBool('want-toon-attack-anims', 1):
+            return (None, None)
+
+        track = Sequence(name='toon-attacks')
+        camTrack = Sequence(name='toon-attacks-cam')
+
+        # Special tracks always happen first.
+        specialTracks = [
+            (FIRE, MovieFire.doFires),
+            (SUE, MovieSue.doSues),
+            (SOS, MovieSOS.doSOSs),
+            (NPCSOS, MovieNPCSOS.doNPCSOSs),
+            (PETSOS, MoviePetSOS.doPetSOSs)
+        ]
+
+        for toonTrack, func in specialTracks:
+            ival, camIval = func(self.__findToonAttack(toonTrack))
             if ival:
                 track.append(ival)
                 camTrack.append(camIval)
-            ival, camIval = MovieSue.doSues(self.__findToonAttack(SUE))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
-            ival, camIval = MovieSOS.doSOSs(self.__findToonAttack(SOS))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
-            ival, camIval = MovieNPCSOS.doNPCSOSs(self.__findToonAttack(NPCSOS))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
-            ival, camIval = MoviePetSOS.doPetSOSs(self.__findToonAttack(PETSOS))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+
+        # Synced/randomized gag track order.
+        order = self.getMovieToonTrackOrder()
+        for toonTrack in order:
+            self.__doToonTrackMoviePhase(toonTrack, track, camTrack)
+
+        if len(track) == 0:
+            return (None, None)
+
+        return (track, camTrack)
+        
+    def __doSuitReactionPhase(self, phaseName):
+        return self.__doSuitAttackPhase(phaseName)
+    
+    def __doToonTrackMoviePhase(self, toonTrack, track, camTrack):
+        ival = None
+        camIval = None
+        phaseName = None
+
+        if toonTrack == HEAL:
             hasHealBonus = self.battle.getInteractivePropTrackBonus() == HEAL
             ival, camIval = MovieHeal.doHeals(self.__findToonAttack(HEAL), hasHealBonus)
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-heal'
+
+        elif toonTrack == TRAP:
             ival, camIval = MovieTrap.doTraps(self.__findToonAttack(TRAP))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-trap'
+
+        elif toonTrack == LURE:
             ival, camIval = MovieLure.doLures(self.__findToonAttack(LURE))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-lure'
+
+        elif toonTrack == THROW:
             ival, camIval = MovieThrow.doThrows(self.__findToonAttack(THROW))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-throw'
+
+        elif toonTrack == SQUIRT:
             ival, camIval = MovieSquirt.doSquirts(self.__findToonAttack(SQUIRT))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-squirt'
+
+        elif toonTrack == ZAP:
             ival, camIval = MovieZap.doZaps(self.__findToonAttack(ZAP))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-zap'
+
+        elif toonTrack == SOUND:
             ival, camIval = MovieSound.doSounds(self.__findToonAttack(SOUND))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
+            phaseName = 'after-sound'
+
+        elif toonTrack == DROP:
             ival, camIval = MovieDrop.doDrops(self.__findToonAttack(DROP))
-            if ival:
-                track.append(ival)
-                camTrack.append(camIval)
-            if len(track) == 0:
-                return (None, None)
-            else:
-                return (track, camTrack)
-        else:
-            return (None, None)
+            phaseName = 'after-drop'
+
+        if ival:
+            track.append(ival)
+            camTrack.append(camIval)
+
+        if phaseName:
+            sival, scamIval = self.__doSuitAttackPhase(phaseName)
+            if sival:
+                track.append(sival)
+                camTrack.append(scamIval)
+
 
     def genRewardDicts(self, id0, origExp0, earnedExp0, origQuests0, items0, missedItems0, origMerits0, merits0, parts0, id1, origExp1, earnedExp1, origQuests1, items1, missedItems1, origMerits1, merits1, parts1, id2, origExp2, earnedExp2, origQuests2, items2, missedItems2, origMerits2, merits2, parts2, id3, origExp3, earnedExp3, origQuests3, items3, missedItems3, origMerits3, merits3, parts3, deathList, uberList, helpfulToonsList):
         self.deathList = deathList
@@ -1051,6 +1175,21 @@ class Movie(DirectObject.DirectObject):
         if setCapture:
             pass
         return tp
+    
+    def __doSuitAttackPhase(self, phaseName):
+        if not base.config.GetBool('want-suit-anims', 1):
+            return (None, None)
+
+        phaseAttacks = []
+
+        for a in self.suitAttackDicts:
+            if a.get('phase') == phaseName:
+                phaseAttacks.append(a)
+
+        if not phaseAttacks:
+            return (None, None)
+
+        return self.__doSuitAttacks(phaseAttacks, phaseName)
 
     def __genSuitAttackDicts(self, toons, suits, suitAttacks):
         for sa in suitAttacks:
@@ -1075,6 +1214,226 @@ class Movie(DirectObject.DirectObject):
                 adict['battle'] = self.battle
                 adict['playByPlayText'] = self.playByPlayText
                 adict['taunt'] = sa[SUIT_TAUNT_COL]
+
+
+                phaseByName = {
+                    'KnockbackThrow': 'after-throw',
+                    'KnockbackSquirt': 'after-squirt',
+                    'ComboThrow': 'after-throw',
+                    'ComboSquirt': 'after-squirt',
+                    'ComboDrop': 'after-drop',
+                    'LitigatorSnapSoak': 'after-squirt',
+                    'PowerhouseGeneration': 'after-zap',
+                    'PowerhouseSnipeCollectCall': 'after-squirt',
+                    'TollmasterLedgerOfSound': 'after-sound',
+                    'DividendZapRetaliation': 'after-zap',
+                    'AttorneyOverseerDrop': 'after-drop',
+                    'AttorneyOverseerSquirt': 'after-squirt',
+                    'AttorneyOverseerThrow': 'after-throw',
+                    'HighStakesTrap': 'after-heal',
+                    'HighStakesLure': 'after-trap',
+                    'HighStakesSound': 'after-zap',
+                    'HighStakesThrow': 'after-lure',
+                    'HighStakesSquirt': 'after-throw',
+                    'HighStakesZap': 'after-squirt',
+                    'HighStakesDrop': 'after-sound',
+                    'LureRemovalHeal': 'after-heal',
+                    'LureRemovalTrap': 'after-trap',
+                    'LureRemovalLure': 'after-lure',
+                    'LureRemovalSound': 'after-sound',
+                    'LureRemovalThrow': 'after-throw',
+                    'LureRemovalSquirt': 'after-squirt',
+                    'LureRemovalZap': 'after-zap',
+                    'LureRemovalDrop': 'after-drop',
+                    'HighRollerSplashback': 'after-squirt',
+                    'HighRollerBar2': 'after-trap',
+                    'HighRollerCheerRetaliation': 'after-heal',
+                    'MintLedger': 'after-sound',
+
+                    # Court Record / gag ban retaliation
+                    # 'StenographerCourtRecordBan': 'after-gag-check',
+                    # 'CaseManagerCourtRecordBan': 'after-gag-check',
+
+                    'GagBanRetaliationHeal': 'after-heal',
+                    'GagBanRetaliationTrap': 'after-trap',
+                    'GagBanRetaliationLure': 'after-lure',
+                    'GagBanRetaliationThrow': 'after-throw',
+                    'GagBanRetaliationSquirt': 'after-squirt',
+                    'GagBanRetaliationZap': 'after-zap',
+                    'GagBanRetaliationSound': 'after-sound',
+                    'GagBanRetaliationDrop': 'after-drop',
+
+                    # Absorb movies
+                    'AbsorbMovieLure': 'after-lure',
+                    'AbsorbMovieThrow': 'after-throw',
+                    'AbsorbMovieSquirt': 'after-squirt',
+                    'AbsorbMovieZap': 'after-zap',
+                    'AbsorbMovieSound': 'after-sound',
+                    'AbsorbMovieDrop': 'after-drop',
+
+                    'AbsorbMovieLevelLure': 'after-lure',
+                    'AbsorbMovieLevelThrow': 'after-throw',
+                    'AbsorbMovieLevelSquirt': 'after-squirt',
+                    'AbsorbMovieLevelZap': 'after-zap',
+                    'AbsorbMovieLevelSound': 'after-sound',
+                    'AbsorbMovieLevelDrop': 'after-drop',
+                }
+
+                PRE_TOON_ATTACKS = (
+                    'ZapMovie',
+                    'SueDamage',
+                    'SueApplication',
+                    'AbilityQueuedPreToon',
+                    'BookkeeperPaperCut',
+                    'ContingencyRiskThresholdBreach50',
+                    'ArbitratorPaperFiling',
+                    'HustlerCustomerRetention',
+                    'RadiographerHotTake',
+                    'SafetyHeatWaveCalculation',
+                    'RecordkeeperRedlinedClauseMissedPayment',
+                    'BookkeeperMandatoryFiling',
+                    'SafetyPromotion',
+                    'AttorneyRemand',
+                    'HighStakesHeal',
+                    'SafetyPromotion2',
+                    'SafetyPromotion3',
+                    'ContingencySelfRepair',
+                    'SafetyPromotion4',
+                    'PowerhouseBurnDamage',
+                    'VideographerElectricShock',
+                    'VideographerElectricShock2',
+                    'VideographerElectricShock3',
+                    'VideographerElectricShock4',
+                    'PowerhouseAbsorb',
+                    'HighRollerSingingBlues',
+                     'HighRollerLureResistance2',
+                     'PresidentMandatoryFiling',
+                     'PresidentLiability',
+                    'HighRollerLureResistance',
+                    'MintLureResistance2',
+                    'MintLureResistance',
+                    'RecordkeeperRedlinedClause',
+                    'SafetyPromotion5',
+                    'LureRemovalPreToon',
+                )
+                regularAttacks = [
+                    'AcidRain',
+                    'Aftershock',
+                    'Audit',
+                    'Bash',
+                    'Beguile',
+                    'CloseTheLoop',
+                    'HostileTakeover',
+                    'NickelAndDime',
+                    'Quash',
+                    'PennyPinch',
+                    'Disassemble',
+                    'DataCorruption',
+                    'DataBreach',
+                    'VersionControl',
+                    'DenialOfService',
+                    'Overload',
+                    'Breakthrough',
+                    'Encrypt',
+                    'BounceRate',
+                    'Reprogram',
+                    'CloudStorage',
+                    'DoubleCross',
+                    'Forecast',
+                    'GoldDust',
+                    'GoldRush',
+                    'DiskScratch',
+                    'MysteriousDisappearance',
+                    'VoodooMagic',
+                    'ElectrostaticEnergy',
+                    'Bite',
+                    'BounceCheck',
+                    'BrainStorm',
+                    'BuzzWord',
+                    'Calculate',
+                    'Canned',
+                    'EvictionNotice',
+                    'Chomp',
+                    'Watercooler',
+                    'CigarSmoke',
+                    'ClipOnTie',
+                    'Crunch',
+                    'Demotion',
+                    'DoubleTalk',
+                    'Downsize',
+                    'EvilEye',
+                    'FiveOClockShadow',
+                    'SandTrap',
+                    'Filibuster',
+                    'FillWithLead',
+                    'FingerWag',
+                    'Fired',
+                    'FountainPen',
+                    'FreezeAssets',
+                    'GlowerPower',
+                    'ReArrange',
+                    'ShortSqueeze',
+                    'BlueChip',
+                    'FallingKnife',
+                    'GuiltTrip',
+                    'Embezzle',
+                    'FloodTheMarket',
+                    'MoneyTrip',
+                    'HalfWindsor',
+                    'HangUp',
+                    'HeadShrink',
+                    'HotAir',
+                    'Jargon',
+                    'Legalese',
+                    'LawBook',
+                    'Liquidate',
+                    'MarketCrash',
+                    'MumboJumbo',
+                    'ParadigmShift',
+                    'PeckingOrder',
+                    'PickPocket',
+                    'PinkSlip',
+                    'PlayHardball',
+                    'PoundKey',
+                    'PowerTie',
+                    'PowerTrip',
+                    'Quake',
+                    'RazzleDazzle',
+                    'RedTape',
+                    'ReOrg',
+                    'RestrainingOrder',
+                    'Rolodex',
+                    'RubberStamp',
+                    'RubOut',
+                    'Sacked',
+                    'Schmooze',
+                    'TestSchmooze',
+                    'Shake',
+                    'Inject',
+                    'Shred',
+                    'SongAndDance',
+                    'Spin',
+                    'Synergy',
+                    'Tabulate',
+                    'Golf',
+                    'ThrowBook',
+                    'Novel',
+                    'Newspaper',
+                    'Tremor',
+                    'Withdrawal',
+                    'WriteOff',
+                ]
+
+                if suit and adict['name'] in phaseByName:
+                    adict['phase'] = phaseByName[adict['name']]
+                elif suit and adict['name'] in PRE_TOON_ATTACKS:
+                    adict['phase'] = 'preToon'
+                elif suit and adict['name'] in regularAttacks and suit.isDeepFrozen:
+                    adict['phase'] = 'preToon'
+                else:
+                    adict['phase'] = 'postToon'
+
+
                 hps = sa[SUIT_HP_COL]
                 if adict['group'] == ATK_TGT_GROUP:
                     targets = []
@@ -1096,7 +1455,7 @@ class Movie(DirectObject.DirectObject):
                         adict['target'] = targets
                     else:
                         targetGone = 1
-                elif adict['group'] == ATK_TGT_SINGLE or adict['group'] == ATK_TGT_DOUBLE or adict['group'] == ATK_TGT_TRIPLE:
+                else:
                     targets = []
                     for targetIndex in sa[SUIT_TGT_COL]:
                         targetId = toons[targetIndex]
@@ -1126,43 +1485,129 @@ class Movie(DirectObject.DirectObject):
                         targets.append(tdict)
 
                     adict['target'] = targets
-                else:
-                    self.notify.warning('got suit attack not group or single!')
                 if targetGone == 0:
                     self.suitAttackDicts.append(adict)
                 else:
                     self.notify.warning('genSuitAttackDicts() - target gone!')
 
-    def __doSuitAttacks(self):
-        if base.config.GetBool('want-suit-anims', 1):
-            track = Sequence(name='suit-attacks')
-            camTrack = Sequence(name='suit-attacks-cam')
-            isLocalToonSad = False
-            for a in self.suitAttackDicts:
-                ival, camIval = MovieSuitAttacks.doSuitAttack(a)
-                if ival:
-                    track.append(ival)
-                    camTrack.append(camIval)
-                targetField = a.get('target')
-                if targetField is None:
-                    continue
-                # if a['group'] == ATK_TGT_GROUP:
-                #     for target in targetField:
-                #         if target['died'] and target['toon'].doId == base.localAvatar.doId:
-                #             isLocalToonSad = False
-                # 
-                # elif a['group'] == ATK_TGT_SINGLE:
-                #     if targetField['died'] and targetField['toon'].doId == base.localAvatar.doId:
-                #         isLocalToonSad = False
-                for target in targetField:
-                    if target['died'] and target['toon'].doId == base.localAvatar.doId:
-                        isLocalToonSad = False
-                
-                if isLocalToonSad:
-                    continue
 
-            if len(track) == 0:
-                return (None, None)
-            return (track, camTrack)
-        else:
+    def __doSuitAttacks(self, suitAttacks=None, name='suit-attacks'):
+        if not base.config.GetBool('want-suit-anims', 1):
             return (None, None)
+
+        if suitAttacks is None:
+            suitAttacks = self.suitAttackDicts
+
+        track = Sequence(name=name)
+        camTrack = Sequence(name=name + '-cam')
+
+        parallelRemovalNames = (
+            'MarkRemoval',
+            'SoakRemoval',
+            'ZapMovie',
+            'SueDamage',
+            'SueApplication',
+            'SueRemoval',
+            'AbsorbMovieLure',
+            'AbsorbMovieThrow',
+            'AbsorbMovieSquirt',
+            'AbsorbMovieZap',
+            'AbsorbMovieSound',
+            'AbsorbMovieDrop',
+             'AbsorbMovieLure',
+        'AbsorbMovieThrow',
+        'AbsorbMovieSquirt',
+        'AbsorbMovieZap',
+        'AbsorbMovieSound',
+        'AbsorbMovieDrop',
+        )
+
+        attackCounts = {}
+        for a in suitAttacks:
+            attackName = a.get('name')
+            attackCounts[attackName] = attackCounts.get(attackName, 0) + 1
+
+        def getGroupedCamera(attack, attackName, count, duration, fallbackCamTrack):
+            battle = self.battle
+
+            if attackName in ('AbsorbMovieLure',
+                            'AbsorbMovieThrow',
+                            'AbsorbMovieSquirt',
+                            'AbsorbMovieZap',
+                            'AbsorbMovieSound',
+                            'ZapMovie',
+                            'SueDamage',
+                            'AbsorbMovieDrop',
+                            'AbsorbMovieLure',
+                        'AbsorbMovieThrow',
+                        'AbsorbMovieSquirt',
+                        'AbsorbMovieZap',
+                        'AbsorbMovieSound',
+                        'AbsorbMovieDrop',):
+                if count > 1:
+                    return MovieCamera.heldShot(0.0, -15.0, 10.0, 0, -20, 0, duration)
+                else:
+                    return MovieCamera.chooseSuitShot(attack, duration)
+
+            return fallbackCamTrack
+
+        pendingName = None
+        pendingTrack = Parallel()
+        pendingCamTrack = Parallel()
+
+        def flushPending():
+            if len(pendingTrack) > 0:
+                track.append(pendingTrack)
+                camTrack.append(pendingCamTrack)
+
+        for a in suitAttacks:
+            attackName = a.get('name')
+
+            ival, camIval = MovieSuitAttacks.doSuitAttack(a)
+            if not ival:
+                continue
+
+            if attackName in parallelRemovalNames:
+                if pendingName is None:
+                    pendingName = attackName
+
+                if attackName != pendingName:
+                    flushPending()
+                    pendingName = attackName
+                    pendingTrack = Parallel()
+                    pendingCamTrack = Parallel()
+
+                count = attackCounts.get(attackName, 1)
+                duration = ival.getDuration()
+
+                camIval = getGroupedCamera(a,
+                    attackName,
+                    count,
+                    duration,
+                    camIval
+                )
+
+                pendingTrack.append(ival)
+
+                if camIval:
+                    pendingCamTrack.append(camIval)
+
+                continue
+
+            flushPending()
+
+            pendingName = None
+            pendingTrack = Parallel()
+            pendingCamTrack = Parallel()
+
+            track.append(ival)
+
+            if camIval:
+                camTrack.append(camIval)
+
+        flushPending()
+
+        if len(track) == 0:
+            return (None, None)
+
+        return (track, camTrack)

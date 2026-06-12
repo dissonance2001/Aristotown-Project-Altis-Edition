@@ -1201,6 +1201,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 level = min(max(level, type), type + 11)
             elif type == 14:
                 level = min(max(level, type), type + 12)
+            elif type == 16:
+                level = min(max(level, type), type + 10)
             else:
                 level = min(max(level, type), type + 4)
         if track is None:
@@ -1214,12 +1216,12 @@ def oftfset():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName=random.choice(('foreman', 'clerk', 'supervis', 'clubpres', 'ovt')), suitLevel=random.choice((16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)), skelecog=0, revives=0, waiter=0)
     return "Spawned a random Overclocked Face The Family set in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
@@ -1288,6 +1290,8 @@ def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    if name not in SuitBattleGlobals.SuitAttributes:
+        return "Could not spawn %s in current zone, cog does not exist." % name
     pointmap = sp.streetPointList
     if revives > 2:
         return "Unable to spawn %s with more than 2 revives."  % suitFullName

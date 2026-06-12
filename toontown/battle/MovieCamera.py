@@ -682,7 +682,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'VoodooMagic':
         camTrack.append(defaultCamera(openShotDuration=0.75))
     elif name == 'ElectrostaticEnergy':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'Bite':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BounceCheck':
@@ -877,8 +877,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorThrowBook':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
-                                 moveShot(0.0, -10.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration - 3.2)))
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.2)))
     elif name == 'ArbitratorThrowBook2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
@@ -997,6 +997,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
         # scapegoat cheats
+    elif name == 'ScapegoatRageBuilding':
+        camTrack2 = Sequence(Wait(attackDuration))
+        return camTrack2
     elif name == 'ScapegoatShieldsUp':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ScapegoatEnraged':
@@ -1005,7 +1008,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ScapegoatGavel':
         camTrack.append(defaultCamera(openShotDuration=2))
     elif name == 'ScapegoatBarnyardBash':
-        camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+        if attackDuration > 2:
+            camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
     elif name == 'ScapegoatCourtRecordBan':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -1045,54 +1052,57 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     elif name == 'PowerhouseSnipeVulnerable':
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons with existing vulnerabilities!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Power Surge!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             return camTrack2
     elif name == 'PowerhouseSnipeGagBan':
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse  retaliates against toon who chose banned gags!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Power Surge!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             return camTrack2
     elif name == 'PowerhouseSnipeSoaked':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(defaultCamera(openShotDuration=1.75))
+    elif name == 'PowerhouseToleranceBuilding':
+        camTrack2 = Sequence(Wait(attackDuration))
+        return camTrack2
     elif name == 'PowerhouseSnipeBookkept':
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons who attacked the Bookkeeper while Bookkeeping!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Power Surge!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             return camTrack2
     elif name == 'PowerhouseSnipeMulligan':
         if attackDuration > 2:
-            camTrack2 = defaultCamera(openShotDuration=1.0)
+            camTrack2 = defaultCamera(openShotDuration=1.75)
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
                 'The Powerhouse retaliates against toons who took damage from fore!',
                 attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Burn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Power Surge!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
@@ -1112,7 +1122,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = suit.makePlayByPlayTextBurnedInterval(pbpDc, attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Slow Burn!', attackDuration - 2)
+            pbpTrack = pbpText.getShowIntervalCheat('Short Circuit!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
@@ -1262,7 +1272,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SafetyHeatWaveCalculation':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'SafetyOverpressureDeath':
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'SafetyViolation':
         if attackDuration > 2:
             camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
@@ -1295,6 +1306,58 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
                                  defaultCamera(openShotDuration=0, attackDuration=attackDuration-5)))
+        # hustler cheats
+    elif name == 'HustlerLimitedTimeOfferApprove':
+        if attackDuration > 2:
+            camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
+        else:
+            camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+            return camTrack2
+    elif name == 'HustlerLimitedTimeOfferDenied':
+        if attackDuration > 2:
+            camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        else:
+            camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+            return camTrack2
+    elif name == 'HustlerSalesPitch':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3), motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 3)))
+    elif name == 'HustlerClosingTime':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+    elif name == 'HustlerBaitAndSwitch':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'HustlerCustomerRetention':
+        camTrack.append(Sequence(heldShot(0, 15, 20, -180, -20, 0, attackDuration)))
+    elif name == 'HustlerExclusiveOfferRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'HustlerExclusiveOffer':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'HustlerHalfWindsor':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    # traffic manager cheats
+    elif name == 'TrafficDetour':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'TrafficCongestionPricing':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'TrafficRedLight':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+    elif name == 'TrafficRedLightRetaliation':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+            return camTrack2
+    elif name == 'TrafficGreenLight':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'TrafficGreenLightRetaliation':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=0.5))
+        else:
+            camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+            return camTrack2
+    elif name == 'TrafficYield':
+        camTrack.append(defaultCamera(openShotDuration=0.5))
     # union buster cheats
     elif name == 'UnionBusterContractEnforcementHealing':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
@@ -1331,7 +1394,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'UnionBusterUnionWages5':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterBreachOfContract':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(heldShot(10, 0, 10, 115, -30, 0, attackDuration))
     elif name == 'UnionBusterBreachOfContract2':
         if attackDuration > 2:
             camTrack.append(defaultCamera(openShotDuration=0.5))
@@ -1351,22 +1414,18 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'UnionBusterContractEnforcement':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2)))
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'UnionBusterContractEnforcement2':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2)))
+        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
         # racketeer
     elif name == 'RacketeerOverextendedLeverage2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerOverextendedLeverage':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RacketeerProfiteering':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(3.7),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 5.2)))
     elif name == 'RacketeerProfiteering2':
         camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerProfiteering3':
@@ -1378,7 +1437,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RacketeerExtortion':
         camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
     elif name == 'RacketeerExtortion2':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(Sequence(heldShot(10, 0, 10, 115, -30, 0, 1.0), Parallel(Wait(attackDuration - 1), cameraActorShot(suit, 'summon-cog', attackDuration - 1))))
     elif name == 'RacketeerCompensation':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'RacketeerHustling':
@@ -1445,6 +1504,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'DOPRAmbushMarketing':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         #dividend king
+    elif name == 'DividendZapRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'DividendAccountRollover':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DividendAccountRollover2':
@@ -1652,21 +1713,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 2)))
         # record keeper
     elif name == 'RecordkeeperMinutesTaken':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 2.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 2)))
     elif name == 'RecordkeeperMinutesTakenContingency':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 2.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 2)))
     elif name == 'RecordkeeperMinutesTakenDamage':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(heldShot(0, 15, 20, -180, -20, 0, attackDuration))
     elif name == 'RecordkeeperPaperTrail':
         camTrack.append(defaultCamera(openShotDuration=6.75))
     elif name == 'RecordkeeperRevisedFiling':
-        camTrack.append(heldShot(0, 15, 20, -180, -20, 0, attackDuration))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 1)))
     elif name == 'RecordkeeperRevisedFilingLiquidation':
-        camTrack.append(heldShot(0, 15, 20, -180, -20, 0, attackDuration))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 1)))
     elif name == 'RecordkeeperRedlinedClause':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'RecordkeeperRedlinedClauseMissedPayment':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperAuditCycle':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperPhantomEntryDamage':
@@ -1740,6 +1801,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ButcherLayoffs':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 3.875), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3.875)))
         # contingency director
+    elif name == 'ContingencySelfRepair':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
     elif name == 'ContingencyFailsafeProtocol':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyRiskThresholdBreach':
@@ -1772,7 +1836,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyContingencyClauseRetaliation':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3)))
     elif name == 'ContingencyRedundantAuthority':
-        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ContingencyOperationalFreeze':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ContingencyForecastCollapse':
@@ -1942,10 +2006,15 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=0.5, attackDuration=2.0), randomActorShot(suit, battle, attackDuration - 2, 'suit')))
     elif name == 'HighRollerBar':
         camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'HighRollerBar2':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'HighRollerLureResistance':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'HighRollerLureResistance2':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'HighRollerSingingBlues':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 15, 5, -180, 0.0, 0.0, 0, suit), Wait(4)))
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=attackDuration - 4)))
+                                 motionShot(0.0, 15, 5, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'HighRollerDamageReduction':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HighRollerSplashback':
@@ -2035,8 +2104,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ForemanContractor':
         camTrack2 = Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(3), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3))
         return camTrack2
+    elif name == 'ForemanContributing':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'ForemanUnionized':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'ForemanContractorDeath':
+        camTrack2 = Sequence(Wait(attackDuration))
+        return camTrack2
     elif name == 'ForemanBurning':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'ForemanExtortion':
+        camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
+    elif name == 'ForemanPolish':
+        camTrack.append(Sequence(heldShot(0.0, -15.0, 10.0, 0, -20, 0, suit.getDuration('snap') + .5), cameraActorShot(suit, 'summon-cog', (attackDuration - (suit.getDuration('snap') + .5)))))
     elif name == 'ForemanBurningDamage':
         if attackDuration > 2:
             camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
@@ -2064,8 +2144,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ForemanCompensation5':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintUsury':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2)))
+    elif name == 'MintLureResistance':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'MintLureResistance2':
+        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'MintMovingGoalposts':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'MintAudit':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'MintLedger':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=suit.getDuration('glower')), randomActorShot(suit, battle, attackDuration - suit.getDuration('glower'), 'suit')))
     elif name == 'MintHurrySickness':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=1.5)
@@ -2109,27 +2202,103 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         return camTrack2
     elif name == 'MintSynergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'MintScheming':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'WhistleCompensation':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'AttorneyObjection':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
-    elif name == 'AttorneyOverseer':
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'AttorneyDrainingPower':
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name == 'AttorneyShakedownVulnerable':
+        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name == 'AttorneyShakedownCooldown':
+        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name == 'AttorneyInkDrain':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'AttorneyDizzy':
+        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
+    elif name == 'AttorneyRemand':
+        camTrack.append(Sequence(motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(3.7),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 5.2)))
+    elif name in (
+        'AttorneyOverseer',
+        'AttorneyOverseerDrop',
+        'AttorneyOverseerSquirt',
+        'AttorneyOverseerThrow'
+        ):
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
     elif name == 'AttorneyObjectionSustained':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'AttorneyObjectionOverruled':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AttorneyChrono':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
     elif name == 'AttorneyRushJob':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 heldRelativeShot(suit, 0.0, 6.8096, 8, -180, -10.0, 0.0, attackDuration)))
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
     elif name == 'AttorneyHurrySickness':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = Sequence(Wait(attackDuration))
+            return camTrack2
     elif name == 'PresidentTargetCheck':
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
+    elif name == 'PresidentLiability2':
+        camTrack.append(defaultCamera(openShotDuration=.5))
+    elif name == 'PresidentLiability':
+        camTrack.append(defaultCamera(openShotDuration=.5))
+    elif name == 'PresidentMandatoryFiling':
+        camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name in ('RushJobTrap'
+            'RushJobLure'
+            'RushJobThrow'
+            'RushJobSquirt'
+            'RushJobZap'
+            'RushJobSound'
+            'RushJobDrop'):
+        dmg = attack['target'][0]['hp']
+        targetSuit = battle.activeSuits[dmg]
+        banDesc = {
+            'RushJobTrap': 'The %s needs you to use the Trap track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobLure': 'The %s needs you to use the Lure track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobThrow': 'The %s needs you to use the Throw track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobSquirt': 'The %s needs you to use the Squirt track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobZap': 'The %s needs you to use the Zap track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobSound': 'The %s needs you to use the Sound track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobDrop': 'The %s needs you to use the Drop track on the %s!' % (suit.name, targetSuit.name),
+        }
+
+        banDescHustler = {
+            'RushJobTrap': '%s needs you to use the Trap track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobLure': '%s needs you to use the Lure track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobThrow': '%s needs you to use the Throw track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobSquirt': '%s needs you to use the Squirt track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobZap': '%s needs you to use the Zap track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobSound': '%s needs you to use the Sound track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobDrop': '%s needs you to use the Drop track on the %s!' % (suit.name, targetSuit.name),
+        }
+
+        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.5),
+                                 motionShot(0.0, 9.0, targetSuit.height + 5, -180, -30.0, 0.0, 0, targetSuit), Wait(attackDuration - 1.5))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
+        pbpDesc2 = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Rush Job!', attackDuration - 2)
+        pbpTrack2 = pbpText.getShowIntervalCheat('Limited Time Offer!', attackDuration - 2)
+
+        if suit.dna.name == 'hustle':
+            return Parallel(pbpTrack2, pbpDesc2, camTrack2)
+        else:
+            return Parallel(pbpTrack, pbpDesc, camTrack2)
+
     elif name == 'PresidentExtraTip':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
@@ -2162,6 +2331,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'PresidentSnap':
         camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'PresidentSensational':
+        camTrack.append(heldShot(0.0, -20.0, 12.0, 0, -10, 0, attackDuration - 1.5))
+    elif name == 'PresidentViralSensation':
+        camTrack2 = Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        return camTrack2
     elif name == 'PresidentSyphon':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'PresidentBayouBellow':
@@ -2169,7 +2343,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PresidentSnipe':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'PresidentDeepFreeze':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(3.0), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration - 3)))
     elif name == 'PresidentFrozenDeath':
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
@@ -2182,6 +2356,21 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.25))
     elif name == 'PresidentHighStakes':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name in (
+    'HighStakesHeal',
+    'HighStakesTrap',
+    'HighStakesLure',
+    'HighStakesSound',
+    'HighStakesThrow',
+    'HighStakesSquirt',
+    'HighStakesZap',
+    'HighStakesDrop'
+        ):
+        camTrack2 = Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        if attackDuration > 1:
+            return camTrack2
+        else:
+            return Parallel()
     #universal cheats
     elif name == 'Desperation':
         camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
@@ -2189,7 +2378,23 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Desperation2':
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
+    elif name in (
+        'KnockbackThrow',
+    'KnockbackSquirt'
+    ):
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name in (
+            'ComboThrow',
+    'ComboSquirt',
+    'ComboDrop'
+    ):
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
     elif name == 'AbilityQueued':
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'AbilityQueuedPreToon':
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'SynergyFees':
@@ -2208,6 +2413,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AmbassadorTargetCheck':
         camTrack2 = Sequence(Wait(attackDuration))
         return camTrack2
+    elif name == 'UnstableTransformation':
+        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'SoakRemoval':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
@@ -2220,7 +2428,18 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MarkRemoval':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
-    elif name == 'LureRemoval':
+    elif name in (
+        'LureRemovalPreToon',
+        'LureRemoval',
+        'LureRemovalHeal',
+        'LureRemovalTrap',
+        'LureRemovalLure',
+        'LureRemovalSound',
+        'LureRemovalThrow',
+        'LureRemovalSquirt',
+        'LureRemovalZap',
+        'LureRemovalDrop'
+            ):
         camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
         return camTrack2
     elif name == 'SueApplication':
@@ -2232,10 +2451,37 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AbsorbMovie':
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
-    elif name == 'ZapMovie':
+    elif name == 'AbsorbMovieLevel':
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
-    elif name == 'AbsorbMovieLevel':
+    elif name in (
+        'AbsorbMovieLure',
+        'AbsorbMovieThrow',
+        'AbsorbMovieSquirt',
+        'AbsorbMovieZap',
+        'AbsorbMovieSound',
+        'AbsorbMovieDrop'
+    ):
+        camTrack2 = Sequence(
+            motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit),
+            Wait(attackDuration)
+        )
+        return camTrack2
+
+    elif name in (
+        'AbsorbMovieLevelLure',
+        'AbsorbMovieLevelThrow',
+        'AbsorbMovieLevelSquirt',
+        'AbsorbMovieLevelZap',
+        'AbsorbMovieLevelSound',
+        'AbsorbMovieLevelDrop'
+    ):
+        camTrack2 = Sequence(
+            motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit),
+            Wait(attackDuration)
+        )
+        return camTrack2
+    elif name == 'ZapMovie':
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'SueDamage':
@@ -2299,16 +2545,20 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
         camTrack2 = defaultCamera(openShotDuration=2.5)
         camTrack3 = defaultCamera(openShotDuration=0.5)
+        camTrack4 = defaultCamera(openShotDuration=1.5)
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Contingency Clause!', attackDuration - 2)
         pbpTrack2 = pbpText.getShowIntervalCheat('Wire Cut!', attackDuration - 2)
+        pbpTrack3 = pbpText.getShowIntervalCheat('Contract Enforcement!', attackDuration - 2)
 
         if attack['suit'].dna.name == 'cdirector':
             return Parallel(pbpTrack, pbpDesc, camTrack2)
         elif attack['suit'].dna.name == 'wtapper':
             return Parallel(pbpTrack2, pbpDesc, camTrack3)
+        elif attack['suit'].dna.name == 'ubuster':
+            return Parallel(pbpTrack3, pbpDesc, camTrack4)
         else:
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name in (
@@ -2358,7 +2608,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
-        pbpTrack = pbpText.getShowIntervalCheat('Mandatory Compliance!', attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Contingency Clause!', attackDuration - 2)
         pbpTrack2 = pbpText.getShowIntervalCheat('Wire Cut!', attackDuration - 2)
 
         if attack['suit'].dna.name == 'cdirector':
@@ -2382,6 +2632,45 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         'DisableLevel67', 'DisableLevel68', 'DisableLevel78'
     ):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+    elif name in (
+        'GagBanRetaliationHeal',
+        'GagBanRetaliationTrap',
+        'GagBanRetaliationLure',
+        'GagBanRetaliationThrow',
+        'GagBanRetaliationSquirt',
+        'GagBanRetaliationZap',
+        'GagBanRetaliationSound',
+        'GagBanRetaliationDrop'
+    ):
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDescUnionBuster = pbpDc.getShowIntervalDesc('The Union Buster retaliates against Toons who chose banned gags!', attackDuration - 2)
+        pbpTrackUnionBuster = pbpText.getShowIntervalCheat('Breach Of Contract!', attackDuration - 2)
+        pbpDescContingency = pbpDc.getShowIntervalDesc('The Contingency Director punishes Toons for using banned gags!', attackDuration - 2)
+        pbpTrackContingency = pbpText.getShowIntervalCheat('Contingency Clause!', attackDuration - 2)
+        pbpDescRacketeer = pbpDc.getShowIntervalDesc("The Racketeer retaliates against Toons who used banned gags!", attackDuration - 2)
+        pbpTrackRacketeer = pbpText.getShowIntervalCheat("Corporate Dominion!", attackDuration - 2)
+        pbpDescWiretapper = suit.makePlayByPlayTextInflationInterval(pbpDc, attackDuration - 2)
+        pbpTrackWiretapper = pbpText.getShowIntervalCheat('Wire Cut!', attackDuration - 2)
+        pbpDescStenoCase = suit.makePlayByPlayTextCourtRecordInterval(pbpDc, attackDuration - 2)
+        pbpTrackStenoCase = pbpText.getShowIntervalCheat('Court Record!', attackDuration - 2)
+        camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+        camTrackRacketeer = defaultCamera(openShotDuration=1.5)
+        camTrackUnionBuster = defaultCamera(openShotDuration=0.75)
+        camTrackContingnency = Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3))
+        if attackDuration > 2:
+            if suit.dna.name == 'caseman' or suit.dna.name == 'stenog':
+                return Parallel(pbpTrackStenoCase, pbpDescStenoCase, camTrack2)
+            elif suit.dna.name == 'wtapper':
+                return Parallel(pbpTrackWiretapper, pbpDescWiretapper, camTrack2)
+            elif suit.dna.name == 'racket':
+                return Parallel(pbpTrackRacketeer, pbpDescRacketeer, camTrackRacketeer)
+            elif suit.dna.name == 'cdirector':
+                return Parallel(pbpTrackContingency, pbpDescContingency, camTrackContingnency)
+            elif suit.dna.name == 'ubuster':
+                    return Parallel(pbpTrackUnionBuster, pbpDescUnionBuster, camTrackUnionBuster)
+        else:
+            return camTrack2
     else:
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
@@ -2395,7 +2684,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'MintCompoundingInterest',
             'PresidentDriver',
             'PowerhouseSnipeSoaked',
-            'RecordkeeperMinutesTakenDamage'
         ):
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = suit.makePlayByPlayTextCheatInterval(pbpText, displayName, attackDuration - 2)
@@ -2424,7 +2712,7 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
             diedText = av.getName() + ' was defeated!'
             diedTextList = [diedText]
             diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
-    elif groupStatus == ATK_TGT_DOUBLE or groupStatus == ATK_TGT_TRIPLE or groupStatus == ATK_TGT_GROUP:
+    else:
         av = None
         shotChoices = [avatarCloseUpThreeQuarterRightShot, suitGroupThreeQuarterLeftBehindShot]
         deadToons = []
@@ -2442,8 +2730,6 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
                 diedTextList.append(toon.getName() + ' was defeated!')
 
             diedTrack = pbpText.getToonsDiedInterval(diedTextList, 3.5)
-    else:
-        notify.error('Bad groupStatus: %s' % groupStatus)
     track = apply(random.choice(shotChoices), [av, duration])
     return track
 

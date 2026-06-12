@@ -236,11 +236,13 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         suitTrack.append(Wait(tContact))
         suitTrack.append(Func(suit.makeSoaked, 0))
         suitTrack.append(showDamage)
+        if suit.zapRushJob:
+            suitTrack.append(Func(suit.makeUnZapRushJob))
         suitTrack.append(updateHealthBar)
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
         if lastZap:
-            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
         else:
             suitTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
         bonusTrack = Sequence(Wait(tContact))
@@ -254,13 +256,13 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
             bonusTrack.append(updateHealthBar)
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if died != 0 and suit.isVirtual:
+        if died != 0 and suit.isVirtual and not suit.isOverpressured:
             suitTrack.append(Func(suit.makeUnZapped))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual and level > 3:
+        if died != 0 and not suit.isVirtual and level > 3 and not suit.isOverpressured:
             deathTracks.append(Func(suit.makeUnZapped))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        if died != 0 and not suit.isVirtual and level <= 3:
+        if died != 0 and not suit.isVirtual and level <= 3 and not suit.isOverpressured:
             suitTrack.append(Func(suit.makeUnZapped))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         if revived != 0 and suit.isSkeleton:
@@ -870,15 +872,8 @@ def __doTazer(zap, delay, fShowStun, lastZap, npcs=[]):
     toonTrack = Sequence(
         Wait(tAppearDelay),
         Func(MovieUtil.showProp, tazer, hand_jointpath0),
-        Func(toon.loop, 'run'),
-        Wait(1),
         Func(toon.pingpong, 'cast', fromFrame=30, toFrame=40),
         Wait(3),
-        Func(toon.stop),
-        Func(toon.setHpr, battle, runBackHpr),
-        Func(toon.loop, 'run'),
-        Wait(1),
-        Func(toon.stop),
         Func(toon.loop, 'neutral'),
         Func(MovieUtil.removeProp, tazer),
         Func(toon.setHpr, battle, origHpr)
@@ -892,7 +887,6 @@ def __doTazer(zap, delay, fShowStun, lastZap, npcs=[]):
     )
 
     tracks.append(toonTrack)
-    tracks.append(moveTrack)
     tracks.append(__getSoundTrack(level, tSprayDelay, toon))
 
     for t in targets:
@@ -1116,9 +1110,11 @@ def makeZapBeamTrack(startPosFunc, suit, tDelay, duration):
     beam.setTwoSided(True)
     beam.hide()
 
+    beamStageData = []
+
     def setupBeam():
         startPos = startPosFunc()
-        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.5)
+        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.25)
 
         beam.reparentTo(render)
         beam.show()
@@ -1127,29 +1123,75 @@ def makeZapBeamTrack(startPosFunc, suit, tDelay, duration):
 
         dist = (endPos - startPos).length()
 
-        beam.setP(beam.getP() + 20)
+        beam.setP(beam.getP() + 10)
         beam.setScale(1, dist * 10, 1)
+        beam.setColorScale(1, 1, 1, 1)
+
+        del beamStageData[:]
+        beamStageData.extend(getBeamGeomStages(beam))
+
+        for geomNp, ts in beamStageData:
+            geomNp.setTexOffset(ts, 0, 0)
+            geomNp.setTexScale(ts, 1, 1)
+
+    def phaseZap(t):
+        # stronger movement so it is obvious
+        offset = t * 20.0
+
+        for geomNp, ts in beamStageData:
+            if not geomNp.isEmpty():
+                # Try V first
+                geomNp.setTexOffset(ts, offset, 0)  
 
     def cleanupBeam():
+        for geomNp, ts in beamStageData:
+            if not geomNp.isEmpty():
+                geomNp.clearTexTransform(ts)
+
         if beam and not beam.isEmpty():
-            beam.removeNode()
+            MovieUtil.removeProp(beam)
 
     return Sequence(
         Wait(tDelay),
         Func(setupBeam),
         Parallel(
+            LerpFunctionInterval(
+                phaseZap,
+                duration,
+                fromData=0.0,
+                toData=1.0
+            ),
             Sequence(
                 Wait(max(0.0, duration - 0.2)),
                 LerpColorScaleInterval(
-                    beam, 0.2,
+                    beam,
+                    0.2,
                     Vec4(1, 1, 1, 0),
                     startColorScale=Vec4(1, 1, 1, 1)
                 )
             )
         ),
-        Wait(0.2),
+        Wait(0.05),
         Func(cleanupBeam)
     )
+
+def getBeamGeomStages(beam):
+    data = []
+
+    for geomNp in beam.findAllMatches('**/+GeomNode'):
+        stages = geomNp.findAllTextureStages()
+
+        for i in xrange(stages.getNumTextureStages()):
+            ts = stages.getTextureStage(i)
+
+            tex = geomNp.getTexture(ts)
+            if tex:
+                tex.setWrapU(tex.WMRepeat)
+                tex.setWrapV(tex.WMRepeat)
+
+            data.append((geomNp, ts))
+
+    return data
 
 def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
     beam = globalPropPool.getProp('zap_beam')
@@ -1159,9 +1201,29 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
     beam.hide()
     beam.setH(90)
 
+    beamStageData = []
+
+    def getBeamGeomStages(beam):
+        data = []
+
+        for geomNp in beam.findAllMatches('**/+GeomNode'):
+            stages = geomNp.findAllTextureStages()
+
+            for i in xrange(stages.getNumTextureStages()):
+                ts = stages.getTextureStage(i)
+
+                tex = geomNp.getTexture(ts)
+                if tex:
+                    tex.setWrapU(tex.WMRepeat)
+                    tex.setWrapV(tex.WMRepeat)
+
+                data.append((geomNp, ts))
+
+        return data
+
     def setupBeam():
-        startPos = coil.getPos(render) + Point3(0, 0, 5.0)
-        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.5)
+        startPos = coil.getPos(render) + Point3(0, 0, 4.5)
+        endPos = suit.getPos(render) + Point3(0, 0, suit.getHeight() * 0.25)
 
         beam.reparentTo(render)
         beam.show()
@@ -1170,22 +1232,58 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
 
         dist = (endPos - startPos).length()
 
-        # most likely Y-axis stretch
         beam.setScale(1, dist * 10, 1)
+        beam.setColorScale(1, 1, 1, 1)
+
+        del beamStageData[:]
+        beamStageData.extend(getBeamGeomStages(beam))
+
+        for geomNp, ts in beamStageData:
+            if not geomNp.isEmpty():
+                geomNp.setTexOffset(ts, 0, 0)
+
+    def phaseZap(t):
+        offset = t * 14.0
+
+        for geomNp, ts in beamStageData:
+            if not geomNp.isEmpty():
+                # Keep this axis if it matches your working direction.
+                # Swap to (offset, 0), (-offset, 0), or (0, offset) if needed.
+                geomNp.setTexOffset(ts, offset, 0)
 
     def cleanupBeam():
+        for geomNp, ts in beamStageData:
+            if not geomNp.isEmpty():
+                geomNp.clearTexTransform(ts)
+
         if beam and not beam.isEmpty():
-            beam.removeNode()
+            try:
+                beam.stop('zap_beam')
+            except:
+                pass
+
+            try:
+                MovieUtil.removeProp(beam)
+            except:
+                beam.removeNode()
 
     return Sequence(
         Wait(tDelay),
         Func(setupBeam),
 
         Parallel(
+            LerpFunctionInterval(
+                phaseZap,
+                duration,
+                fromData=0.0,
+                toData=1.0
+            ),
+
             Sequence(
-                Wait(duration - 0.2),
+                Wait(max(0.0, duration - 0.2)),
                 LerpColorScaleInterval(
-                    beam, 0.2,
+                    beam,
+                    0.2,
                     Vec4(1, 1, 1, 0),
                     startColorScale=Vec4(1, 1, 1, 1)
                 )
@@ -1431,9 +1529,8 @@ def __doLightning(zap, delay, fShowStun, lastZap, uberClone = 0, npcs=[]):
         y = suitPos.getY()
         cagePos = [Point3(suitPos.getX(), y, 100.0), suit.getHpr(battle)]
         cagePropTrack = Sequence(
-            getPropAppearTrack(cage, battle, cagePos, 3.5, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
-            Parallel(cagePosition),
-            Parallel(cage.posInterval(0, Point3(suitPos.getX(), y + 1, 0.1), blendType='easeIn')), Wait(0.25),
+            getPropAppearTrack(cage, suit, Point3(0, 0, 100), 3.5, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
+            Parallel(cagePosition), Wait(0.25),
             LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=0.5),
             Func(cage.removeNode)
             )

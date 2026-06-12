@@ -402,6 +402,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return self.zoneId
 
     def d_setMovie(self):
+        print('D_SETMOVIE RAW TOONATTACKS:', self.toonAttacks)
         self.notify.debug('network:setMovie()')
         self.sendUpdate('setMovie', self.getMovie())
         self.__updateEncounteredCogs()
@@ -450,8 +451,13 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 attack = getToonAttack(index)
                 toonAttack = toonAttack + tuple(attack)
             toonAttacks = toonAttacks + [toonAttack]
+        toonTrackOrder = getattr(self, 'toonTrackOrder',
+                         [HEAL, TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP])
+
+        print('SERVER SENDING TRACK ORDER:', toonTrackOrder)
 
         p.append(toonAttacks)
+        p.append(toonTrackOrder)
         suitAttacks = []
         for sa in self.suitAttacks:
             suitAttack = ()
@@ -476,6 +482,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         p.append(suitAttacks)
 
         return p
+    
+    def d_setToonTrackOrder(self):
+        defaultOrder = [HEAL, TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP]
+        order = getattr(self, 'toonTrackOrder', defaultOrder)
+        self.sendUpdate('setToonTrackOrder', [order])
 
     def d_setChosenToonAttacks(self):
         self.notify.debug('network:setChosenToonAttacks()')
@@ -1022,19 +1033,17 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def timeout(self):
         toonId = self.air.getAvatarIdFromSender()
-        if self.ignoreResponses == 1:
-            self.notify.debug('timeout() - ignoring toon: %d' % toonId)
+
+        print('TIMEOUT CALLED:', toonId, self.toonAttacks.get(toonId))
+
+        if toonId in self.toonAttacks:
+            print('IGNORING TIMEOUT, TOON ALREADY HAS ATTACK:', self.toonAttacks[toonId])
             return
-        elif self.fsm.getCurrentState().getName() != 'WaitForInput':
-            self.notify.warning('timeout() - in state: %s' % self.fsm.getCurrentState().getName())
-            return
-        elif self.toons.count(toonId) == 0:
-            self.notify.warning('timeout() - toon: %d not in toon list' % toonId)
-            return
+
         self.toonAttacks[toonId] = getToonAttack(toonId)
         self.d_setChosenToonAttacks()
         self.responses[toonId] += 1
-        self.notify.debug('toon: %d timed out' % toonId)
+
         if self.__allActiveToonsResponded():
             self.__requestMovie(timeout=1)
 
@@ -1101,6 +1110,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def requestAttack(self, track, level, av):
         toonId = self.air.getAvatarIdFromSender()
+        oldAttack = self.toonAttacks.get(toonId)
+
+        if track == NO_ATTACK:
+            if oldAttack and oldAttack[TOON_TRACK_COL] in (SUE, FIRE):
+                return
         if self.ignoreResponses == 1:
             self.notify.debug('requestAttack() - ignoring toon: %d' % toonId)
             return
@@ -1161,6 +1175,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.toonAttacks[toonId] = getToonAttack(toonId, track=FIRE, target=av)
         elif track == SUE:
             self.toonAttacks[toonId] = getToonAttack(toonId, track=SUE, target=av)
+            print('SET SUE ATTACK:', self.toonAttacks[toonId])
         else:
             if not self.validate(toonId, track >= 0 and track <= MAX_TRACK_INDEX, 'requestAttack: invalid track %s' % track):
                 return
@@ -1307,15 +1322,16 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.movieHasBeenMade = 1
         self.movieHasPlayed = 0
         self.rewardHasPlayed = 0
+
         for t in self.activeToons:
+
             if t not in self.toonAttacks:
                 self.toonAttacks[t] = getToonAttack(t)
+
             attack = self.toonAttacks[t]
+
             if attack[TOON_TRACK_COL] == PASS or attack[TOON_TRACK_COL] == UN_ATTACK:
                 self.toonAttacks[t] = getToonAttack(t)
-            if self.toonAttacks[t][TOON_TRACK_COL] != NO_ATTACK:
-                self.addHelpfulToon(t)
-
         self.battleCalc.calculateRound()
 
         self.battleCalc.decrementConditionTurns()
@@ -1346,6 +1362,60 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.d_setMovie()
         self.b_setState('PlayMovie')
         return Task.done
+    
+    def getCustomVisualSuitOrder(self):
+        return self._getCustomActiveSuitOrder(self.activeSuits)
+    
+    def swapSuitVisualIndexes(self, suitIdA, suitIdB):
+        suitA = self.findSuit(suitIdA)
+        suitB = self.findSuit(suitIdB)
+
+        if suitA is None or suitB is None:
+            return False
+        if suitA not in self.suits or suitB not in self.suits:
+            return False
+        if suitA == suitB:
+            return False
+
+        i = self.suits.index(suitA)
+        j = self.suits.index(suitB)
+
+        self.suits[i], self.suits[j] = self.suits[j], self.suits[i]
+
+        self._rebuildSuitStateLists()
+        self.needAdjust = 1
+
+        self.d_setMembers()
+
+        return True
+
+
+    def moveSuitToVisualIndex(self, suitId, visualIndex):
+        suit = self.findSuit(suitId)
+        if suit is None:
+            return
+
+        if suit not in self.activeSuits:
+            return
+
+        # Start from the same custom order your battle positioning uses.
+        ordered = self.getCustomVisualSuitOrder()
+
+        if suit not in ordered:
+            return
+
+        ordered.remove(suit)
+
+        visualIndex = max(0, min(visualIndex, len(ordered)))
+        ordered.insert(visualIndex, suit)
+
+        # Store this as the new active order.
+        # This makes getMembers() send the reordered activeSuits list.
+        self.activeSuits = ordered[:]
+
+        self.needAdjust = 1
+        self.d_setMembers()
+        self.__requestAdjust()
 
     def sendEarnedExperience(self, toonId):
         toon = self.getToon(toonId)
@@ -1798,17 +1868,13 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         if toon != None:
                             targetIndex = self.activeToons.index(activeToon)
                             toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
-                            if targetIndex >= len(hps):
-                                self.notify.warning('DAMAGE: toon %s is no longer in battle!' % activeToon)
-                            else:
-                                hp = hps[targetIndex]
-                                if hp > 0:
-                                    self.notify.debug('DAMAGE: toon: %d hit for dmg: %d' % (activeToon, hp))
-                                    if toonDied != 0:
-                                        toonHpDict[toon.doId][2] = 1
-                                    toonHpDict[toon.doId][1] += hp
+                            hp = hps[targetIndex]
+                            if hp > 0:
+                                if toonDied != 0:
+                                    toonHpDict[toon.doId][2] = 1
+                                toonHpDict[toon.doId][1] += hp
                 
-                elif attack['group'] == ATK_TGT_TRIPLE or attack['group'] == ATK_TGT_DOUBLE or attack['group'] == ATK_TGT_SINGLE:
+                else:
                     for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
                         if targetIndex >= len(self.activeToons):
                             self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)
@@ -1816,25 +1882,17 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         toonId = self.activeToons[targetIndex]
                         toon = self.getToon(toonId)
                         toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
-                        if targetIndex >= len(hps):
-                            self.notify.warning('DAMAGE: toon %s is no longer in battle!' % toonId)
-                        else:
-                            hp = hps[targetIndex]
-                            if hp > 0:
-                                self.notify.debug('DAMAGE: toon: %d hit for dmg: %d' % (toonId, hp))
-                                if toonDied != 0:
-                                    toonHpDict[toon.doId][2] = 1
-                                toonHpDict[toon.doId][1] += hp
+                        hp = hps[targetIndex]
+                        if hp > 0:
+                            if toonDied != 0:
+                                toonHpDict[toon.doId][2] = 1
+                            toonHpDict[toon.doId][1] += hp
 
         deadToons = []
         for activeToon in self.activeToons:
             hp = toonHpDict[activeToon]
             toon = self.getToon(activeToon)
             if toon != None:
-                self.notify.debug('AFTER ROUND: currtoonHP: %d toonMAX: %d hheal: %d damage: %d' % (toon.hp,
-                 toon.maxHp,
-                 hp[0],
-                 hp[1]))
                 toon.hpOwnedByBattle = 0
                 hpDelta = hp[0] - hp[1]
                 if hpDelta >= 0:
@@ -1845,7 +1903,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     self.notify.debug('movieDone() - toon: %d was killed' % activeToon)
                     toon.inventory.zeroInv(1)
                     deadToons.append(activeToon)
-                self.notify.debug('AFTER ROUND: toon: %d setHp: %d' % (toon.doId, toon.hp))
                 if toon.unlimitedGags:
                     toon.doRestock(noUber=0, noPaid=0)
 

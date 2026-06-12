@@ -110,7 +110,7 @@ cr = (('glower', 'glower', 4), ('effort', 'effort', 4), ('pickpocket', 'pickpock
 txl = (('effort', 'effort', 4), ('glower', 'glower', 4), ('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4))
 tbc = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('cigar-smoke', 'cigar-smoke', 4))
 autocad = (('glower', 'glower', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
-clubpres = (('snap', 'snap2', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
+clubpres = (('sanction', 'sanction', 4), ('snap', 'snap2', 4), ('bellow', 'bellow', 4), ('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4), ('frustrated', 'frustrated', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4), ('cigar-smoke', 'cigar-smoke', 4))
 derrman = (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 derrhand = (('pen-squirt', 'fountain-pen', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('summon', 'summon', 4))
 mplayer = (('shot1', 'majorplayer-fusiondance-shot1', 4), ('shot2', 'majorplayer-fusiondance-shot2', 4), ('shot3', 'majorplayer-fusiondance-shot3', 4), ('shot4', 'majorplayer-fusiondance-shot4', 4), ('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
@@ -119,9 +119,9 @@ fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 choreo = (('song-and-dance', 'song-and-dance', 4),  ('quick-jump', 'jump', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4), ('speak', 'speak', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 chainsaw2 = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('neutral', 'neutral-override', 4))
-phouse = (('snap', 'snap2', 4), ('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
+phouse = (('layoffs', 'layoffs', 4), ('snap', 'snap2', 4), ('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
 bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
-wtapper = (('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('roll-o-dex', 'roll-o-dex', 4))
+wtapper = (('cease', 'cease3', 4), ('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('frustrated', 'frustrated', 4), ('neutral-override', 'neutral-override', 4), ('snap-override', 'snap-override', 4), ('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('snap', 'snap2', 4))
 
 # Sellbots
@@ -140,7 +140,7 @@ m = (('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4))
 cnd = (('cigar-smoke', 'cigar-smoke', 4), ('speak', 'speak', 4), ('song-and-dance', 'song-and-dance', 4), ('golf-club-swing', 'golf-club-swing', 4), ('smile', 'smile', 4))
 mh = (('smile', 'smile', 4), ('speak', 'speak', 4), ('golf-club-swing', 'golf-club-swing', 4), ('song-and-dance', 'song-and-dance', 4))
 watchm = (('effort', 'effort', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4))
-foreman = (('finger-wag', 'finger-wag', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
+foreman = (('snap', 'snap', 4), ('finger-wag', 'finger-wag', 4), ('rolled', 'rolled', 4), ('frustrated', 'frustrated', 4), ('speak', 'speak', 4), ('magic3-alt', 'magic3-alt', 4))
 dopr = (('effort', 'effort', 4), ('glower', 'glower', 4), ('speak', 'speak', 4))
 dopa = (('speak', 'speak', 4), ('effort', 'effort', 4))
 bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
@@ -149,8 +149,8 @@ prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 cinema = (('snap', 'snap2', 4), ('neutral', 'rolled', 4), ('throttletwo', 'throttletwo', 4), ('shot5', 'shot5', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
-racket = (('pickpocket', 'pickpocket', 4), ('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
-ubuster = (('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction3', 4))
+hustle = (('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4), ('stomp', 'stomp', 4), ('smile', 'smile', 4), ('pickpocket', 'pickpocket', 4), ('cigar-smoke', 'cigar-smoke', 4))
+ubuster = (('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
 safesupervis = (('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
@@ -175,14 +175,14 @@ duckshfl = (('shot1', 'fusiondance-shot1', 4), ('shot2', 'fusiondance-shot2', 4)
 treek = (('shredder', 'shredder', 4), ('pen-squirt', 'fountain-pen', 4))
 payman = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4), ('pickpocket', 'pickpocket', 4), ('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
 bookkeep = (('pencil-sharpener', 'pencil-sharpener', 4), ('shredder', 'shredder', 4), ('hold-eraser', 'hold-eraser', 4), ('pen-squirt', 'fountain-pen', 4))
-hustle = (('smile', 'smile', 4), ('pickpocket', 'pickpocket', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+racket = (('pickpocket', 'pickpocket', 4), ('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 liquidr = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 treasure = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 pcrat = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 hroller = (('cease', 'cease3', 4), ('taunt', 'taunt', 4), ('wheelspin', 'wheelspin', 4), ('shot5', 'shot5', 4), ('bust', 'bust', 4), ('snap', 'snap2', 4), ('song-and-dance', 'song-and-dance', 4), ('walk', 'awalk', 4))
 erfit = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 hrollers = (('glower', 'glower', 4), ('sanction', 'sanction', 4), ('snap', 'snap2', 4), ('shot5', 'shot5', 4), ('neutral', 'rolled', 4))
-hroller2 = (('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap2', 4), ('shot5', 'shot5', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
+hroller2 = (('finger-wag', 'finger-wag', 4), ('wheelspin', 'wheelspin', 4), ('bust', 'bust', 4), ('snap', 'snap2', 4), ('shot5', 'shot5', 4), ('song-and-dance', 'song-and-dance', 4), ('neutral', 'rolled', 4), ('neutral-hurt', 'rolled', 4))
 
 # Lawbots
 bf = (('pickpocket', 'pickpocket', 4), ('shredder', 'shredder', 4), ('finger-wag', 'finger-wag', 4))
@@ -238,8 +238,8 @@ dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 liquid = (('taunt', 'taunt', 4), ('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('snap', 'snap2', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cbutcher = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
-cdirector = (('rubber-stamp', 'rubber-stamp', 4), ('finger-wag', 'fingerwag', 4), ('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
-dking = (('snap', 'snap2', 4), ('pickpocket', 'pickpocket', 4), ('effort', 'effort', 4), ('scabbard', 'scabbard', 4), ('pen-squirt', 'fountain-pen', 4))
+cdirector = (('scabbard', 'scabbard', 4), ('rubber-stamp', 'rubber-stamp', 4), ('finger-wag', 'fingerwag', 4), ('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
+dking = (('scabbard', 'scabbard', 4), ('snap', 'snap2', 4), ('pickpocket', 'pickpocket', 4), ('effort', 'effort', 4), ('scabbard', 'scabbard', 4), ('pen-squirt', 'fountain-pen', 4))
 ottoman = (('effort', 'effort', 4), ('hold-pencil', 'hold-pencil', 4), ('pen-squirt', 'fountain-pen', 4))
 crystal = (('shot5', 'shot5', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('defense', 'defense', 4))
 chairman = (('pickpocket', 'pickpocket', 4), ('sanction', 'sanction', 4), ('frustrated', 'frustrated', 4), ('snap', 'snap', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -1163,7 +1163,9 @@ class Suit(Avatar.Avatar):
                     Vec4(186 / 255, 82 / 255, 1, 1),
                     Vec4(0.702, 0, 1, 1),
                     Vec4(1, 1, 1, 1),
-                    Vec4(1, 0, 0.906, 1)) # 18 white (20 magenta sil)
+                    Vec4(1, 0, 0.906, 1), #18
+                    Vec4(0, 0.502, 0.502, 1), #19 teal
+                    Vec4(0.827, 0.686, 0.216, 1)) # 20 gold
     healthGlowColors = (Vec4(0, 1, 0.078, 1),
                     Vec4(0.388, 1, 0, 1),
                     Vec4(0.686, 1, 0, 1),
@@ -1184,7 +1186,9 @@ class Suit(Avatar.Avatar):
                     Vec4(186 / 255, 82 / 255, 1, 1),
                         Vec4(0.702, 0, 1, 1),
                         Vec4(1, 1, 1, 1),
-                        Vec4(1, 0, 0.906, 1)
+                        Vec4(1, 0, 0.906, 1), 
+                   Vec4(0, 0.502, 0.502, 1), #19 teal
+                    Vec4(0.827, 0.686, 0.216, 1)
                         ) #18 white
     medallionColors = {'c': Vec4(0.863, 0.776, 0.769, 1.0),
      's': Vec4(0.843, 0.745, 0.745, 1.0),
@@ -1220,6 +1224,7 @@ class Suit(Avatar.Avatar):
         self.overseerRounds = 0
         self.rpm = 10
         self.rpmIncrease = 0
+        self.battleSpeed = 0
         self.isKickback = 0
         self.isDisguised = 0
         self.isWaiter = 0
@@ -1244,6 +1249,13 @@ class Suit(Avatar.Avatar):
         self.isZapImmune = 0
         self.isDropImmune = 0
         self.isShielding = 0
+        self.trapRushJob = 0
+        self.lureRushJob = 0
+        self.throwRushJob = 0
+        self.squirtRushJob = 0
+        self.zapRushJob = 0
+        self.soundRushJob = 0
+        self.dropRushJob = 0
         self.isManager = 0
         self.isHeavyRain = 0
         self.isFreezingRain = 0
@@ -1254,6 +1266,8 @@ class Suit(Avatar.Avatar):
         self.stormCellDamage = 60
         self.heavyRainDamage = 0
         self.isFrozen = 0
+        self.isDeepFrozen = 0
+        self.deepFrozenRounds = 0
         self.isSkelecogDialogue = 0
         self.isImmune = 0
         self.isDamageUp = 0
@@ -1276,6 +1290,8 @@ class Suit(Avatar.Avatar):
         self.isExplosive = 0
         self.isLureResist = 0
         self.isTarget = 0
+        self.isGreenLight = 0
+        self.isRedLight = 0
         self.splats = set()
 
     def delete(self):
@@ -1340,6 +1356,9 @@ class Suit(Avatar.Avatar):
         self.headTexture = None
         self.loseActor = None
         self.zapActor = None
+        self.zapActorPowerhouse = None
+        self.zapActorPowerhouseSquirt = None
+        self.zapActorPowerhouseZap = None
         self.isSkeleton = 0
         self.isFired = 0
         self.isDazed = 0
@@ -1531,7 +1550,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('autocaddie', animated=True)
-            self.setHeight(9.5)
+            self.setHeight(9.75)
             self.isSkelecogDialogue = 1
         elif dna.name == 'derrman':
             self.scale = 4.5 / aSize
@@ -1801,10 +1820,10 @@ class Suit(Avatar.Avatar):
             self.makeExecutive()
             self.setHeight(6.6)
         elif dna.name == 'clerk':
-            self.scale = 7.2 / bSize
+            self.scale = 7.6 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
             self.makeSkeletonManager()
-            self.setHeight(8.7)
+            self.setHeight(9.375)
         elif dna.name == 'arbit':
             self.scale = 7.2 / aSize
             self.handColor = VBase4(0.69, 0.678, 0.765, 1)
@@ -2041,15 +2060,15 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.95)
         elif dna.name == 'ovt':
-            self.scale = 7.2 / bSize
+            self.scale = 7.6 / bSize
             self.handColor = VBase4(0.337, 0.392, 0.6, 1)
             self.makeSkeletonManager()
-            self.setHeight(8.7)
+            self.setHeight(9.1)
         elif dna.name == 'supervis':
             self.scale = 8.0 / cSize
             self.handColor = VBase4(0.286, 0.29, 0.286, 1)
             self.makeSkeletonManager()
-            self.setHeight(10.0)
+            self.setHeight(10.25)
         elif dna.name == 'duckshfl':
             self.scale = 5.0 / bSize
             self.handColor = VBase4(0.714, 0.118, 0.055, 1)
@@ -2085,17 +2104,19 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.75)
             self.setTransparency(1)
-        elif dna.name == 'hustle':
-            self.scale = 6.5 / bSize
-            self.handColor = VBase4(0.369, 0.369, 0.369, 1)
-            self.generatePaceBody()
-            self.makeHustler()
-            self.makeLitigationManager()
-            self.generateHead3('pacesetter', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_hustler.png')
+        elif dna.name == 'racket':
+            self.scale = 7.2 / aSize
+            self.handColor = VBase4(0.169, 0.169, 0.169, 1)
+            self.generateCounterFitBody()
+            self.generateHead3('magnate', animated=True)
+            #self.makeExecutive()
+            self.makeRacketeer()
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_racket_cash.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.75)
+                headPart.setTwoSided(True)
+            self.setHeight(9.2)
+            self.makeCollectCall(0)
         elif dna.name == 'liquidr':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.29, 0.424, 0.376, 1)
@@ -2303,7 +2324,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.2 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
             self.makeSkeletonManager()
-            self.setHeight(9.2)
+            self.setHeight(9.5)
         elif dna.name == 'dopr':
             self.scale = 7.0 / cSize
             self.handColor = VBase4(1, 1, 1, 1.0)
@@ -2382,33 +2403,30 @@ class Suit(Avatar.Avatar):
             self.generateHead3('dopa', animated=True)
             self.setHeight(9.5)
             self.setTransparency(1)
-        elif dna.name == 'racket':
-            self.scale = 7.2 / aSize
-            self.handColor = VBase4(0.169, 0.169, 0.169, 1)
-            self.generateCounterFitBody()
-            self.generateHead3('magnate', animated=True)
-            #self.makeExecutive()
-            self.makeRacketeer()
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_racket.png')
+        elif dna.name == 'hustle':
+            self.scale = 6.5 / bSize
+            self.handColor = VBase4(0.173, 0.173, 0.173, 1)
+            self.generatePaceBody()
+            self.makeHustler()
+            self.makeLitigationManager()
+            self.generateHead3('pacesetter', animated=True)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_hustler2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-                headPart.setTwoSided(True)
-            self.setHeight(9.2)
-            self.makeCollectCall(0)
+            self.setHeight(8.75)
         elif dna.name == 'ubuster':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.604, 0.463, 0.62, 1)
+            self.scale = 7.2 / aSize
+            self.handColor = VBase4(1, 0.486, 0, 1)
             self.generateBody()
-            self.generateHead2('skeleskull_A')
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
+            self.generateHead3('dold', animated=True)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.generateHead3('dopr', animated=True)
             self.makeExecutive()
-            self.setHeight(8.7)
+            self.setHeight(10.0)
             self.setTransparency(1)
         elif dna.name == 'safesupervis':
-            self.scale = 7.5 / aSize
+            self.scale = 7.3 / aSize
             self.handColor = VBase4(0.286, 0.176, 0.286, 1)
             self.generateBody()
             self.makeExecutive()
@@ -2416,7 +2434,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_firestarter_2.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(10.5)
+            self.setHeight(10.3)
             self.setTransparency(1)
         elif dna.name == 'psetter':
             self.scale = 6.2 / bSize
@@ -3286,23 +3304,23 @@ class Suit(Avatar.Avatar):
                 headPart.setH(0)
                 headPart.setScale(1)
                 #headModel.find('**/head').setTexture(texture, 1)
-        if self.style.body == 'a' and self.style.name == 'ubuster':
-            self.generateHead3('dopr', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-            for headPart in self.headParts:
-                headPart.setZ(0)
-                headPart.setTexture(texture, 1)
-                headPart.setY(0)
-                headPart.setX(0)
-                headPart.setR(0)
-                headPart.setH(0)
-                headPart.setScale(1.3)
+        # if self.style.body == 'a' and self.style.name == 'ubuster':
+        #     self.generateHead3('dopr', animated=True)
+        #     texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        #     for headPart in self.headParts:
+        #         headPart.setZ(0)
+        #         headPart.setTexture(texture, 1)
+        #         headPart.setY(0)
+        #         headPart.setX(0)
+        #         headPart.setR(0)
+        #         headPart.setH(0)
+        #         headPart.setScale(1.3)
         if self.style.body == 'a' and self.style.name == 'ambass':
             self.generateHead3('prethinker2', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'ubuster' and not self.style.name == 'radiog':
+        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'radiog':
             self.generateHead3('skullA', animated=True)
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
                                          self.style.dept)
@@ -3895,7 +3913,7 @@ class Suit(Avatar.Avatar):
         elif self.isExecutive and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'charon' and not self.style.name == 'hydra'\
-                and not self.style.name == 'radiog' and not self.style.name == 'ubuster' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx' and not self.isWaiter:
+                and not self.style.name == 'radiog' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx' and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
@@ -5068,12 +5086,12 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
         if headType == 'sellbotForemanHat' and self.style.body == 'b':
             headModel = loader.loadModel('phase_14/models/char/ttr_m_ene_sellbotForeman')
-        if headType == 'skeleskull_A' and self.style.name == 'ubuster':
-            headModel = loader.loadModel('phase_5/models/char/skullbase')
-            headModel.setZ(-.1)
-            headModel.setY(-.2)
-            textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
-            headModel.setTexture(textureGlass, 1)
+        # if headType == 'skeleskull_A' and self.style.name == 'ubuster':
+        #     headModel = loader.loadModel('phase_5/models/char/skullbase')
+        #     headModel.setZ(-.1)
+        #     headModel.setY(-.2)
+        #     textureGlass = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_s_exe.png')
+        #     headModel.setTexture(textureGlass, 1)
         if headType == 'skeleskull_A' and self.style.name == 'radiog':
             headModel = loader.loadModel('phase_5/models/char/skullbase')
             headModel.setZ(-.1)
@@ -5792,7 +5810,39 @@ class Suit(Avatar.Avatar):
             condition = 11
         self.condition = condition
         if self.style.name == 'hrollers':
-            if self.getActualLevel() == 34: #36
+            if self.getActualLevel() == 36: #36
+                self.setDisplayName(self.createNameInfoGold())
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(22)
+            elif self.getActualLevel() == 35: #36
+                self.setDisplayName(self.createNameInfoTeal())
+                if condition == 10:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.75), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                elif condition == 11:
+                    taskMgr.remove(self.uniqueName('blink-task'))
+                    if self.healthCondition == 10:
+                        taskMgr.remove(self.uniqueName('blink-task'))
+                    blinkTask = Task.loop(Task(self.__pulseRed), Task.pause(0.25), Task(self.__pulseGray),
+                                          Task.pause(0.1))
+                    taskMgr.add(blinkTask, self.uniqueName('blink-task'))
+                else:
+                    self.virtualize(21)
+            elif self.getActualLevel() == 34: #36
                 self.setDisplayName(self.createNameInfoMagenta())
                 if condition == 10:
                     taskMgr.remove(self.uniqueName('blink-task'))
@@ -5966,6 +6016,10 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoPuzzling())
             elif self.getActualLevel() == 25:
                 self.setDisplayName(self.createNameInfoShivering())
+            elif self.getActualLevel() == 26:
+                self.setDisplayName(self.createNameInfoSensational())
+            elif self.getActualLevel() == 27:
+                self.setDisplayName(self.createNameInfoCommissioning())
             else:
                 pass
         if self.style.name == 'ovt':
@@ -5984,6 +6038,16 @@ class Suit(Avatar.Avatar):
                 self.makeShielding()
             elif self.getActualLevel() == 25:
                 self.setDisplayName(self.createNameInfoFraudulent())
+            elif self.getActualLevel() == 26:
+                self.setDisplayName(self.createNameInfoImmovable())
+            elif self.getActualLevel() == 27:
+                self.setDisplayName(self.createNameInfoLedgering())
+            elif self.getActualLevel() == 28:
+                self.setDisplayName(self.createNameInfoAuditing())
+            elif self.getActualLevel() == 29:
+                self.setDisplayName(self.createNameInfoUsurer())
+            elif self.getActualLevel() == 30:
+                self.setDisplayName(self.createNameInfoScheming())
             else:
                 pass
         if self.style.name == 'clerk':
@@ -5999,6 +6063,12 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoChrono())
             elif self.getActualLevel() == 25:
                 self.setDisplayName(self.createNameInfoLaborious())
+            elif self.getActualLevel() == 26:
+                self.setDisplayName(self.createNameInfoDraining())
+            elif self.getActualLevel() == 27:
+                self.setDisplayName(self.createNameInfoShaking())
+            elif self.getActualLevel() == 28:
+                self.setDisplayName(self.createNameInfoDizzy())
             else:
                 pass
         if self.style.name == 'foreman':
@@ -6018,6 +6088,14 @@ class Suit(Avatar.Avatar):
                 self.setDisplayName(self.createNameInfoRedTape())
             elif self.getActualLevel() == 25:
                 self.setDisplayName(self.createNameInfoSniper())
+            elif self.getActualLevel() == 26:
+                self.setDisplayName(self.createNameInfoUnionized())
+            elif self.getActualLevel() == 27:
+                self.setDisplayName(self.createNameInfoContributing())
+            elif self.getActualLevel() == 28:
+                self.setDisplayName(self.createNameInfoPolishing())
+            elif self.getActualLevel() == 29:
+                self.setDisplayName(self.createNameInfoExtortionist())
             else:
                 pass
         #self.healthCondition = condition
@@ -6109,7 +6187,11 @@ class Suit(Avatar.Avatar):
         else:
             self.healthBarGlow.setColor(0, 0, 0, 0)
             if self.style.name == 'hrollers':
-                if self.getActualLevel() == 34:
+                if self.getActualLevel() == 36:
+                    self.virtualize(22)
+                elif self.getActualLevel() == 35:
+                    self.virtualize(21)
+                elif self.getActualLevel() == 34:
                     self.virtualize(20)
                 elif self.getActualLevel() == 33:
                     self.virtualize(19)
@@ -6468,18 +6550,18 @@ class Suit(Avatar.Avatar):
                 headPart.setH(0)
                 headPart.setScale(1)
                 #headModel.find('**/head').setTexture(texture, 1)
-        if self.style.body == 'a' and self.style.name == 'ubuster':
-            self.zapActorHeadParts = []
-            self.generateHeadZap('dopr', animated=True, targetActor=self.zapActor)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-            for headPart in self.zapActorHeadParts:
-                headPart.setZ(0)
-                headPart.setTexture(texture, 1)
-                headPart.setY(0)
-                headPart.setX(0)
-                headPart.setR(0)
-                headPart.setH(0)
-                headPart.setScale(1.3)
+        # if self.style.body == 'a' and self.style.name == 'ubuster':
+        #     self.zapActorHeadParts = []
+        #     self.generateHeadZap('dopr', animated=True, targetActor=self.zapActor)
+        #     texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        #     for headPart in self.zapActorHeadParts:
+        #         headPart.setZ(0)
+        #         headPart.setTexture(texture, 1)
+        #         headPart.setY(0)
+        #         headPart.setX(0)
+        #         headPart.setR(0)
+        #         headPart.setH(0)
+        #         headPart.setScale(1.3)
         if self.style.body == 'a' and self.style.name == 'ambass':
             self.zapActorHeadParts = []
             self.generateHeadZap('prethinker2', animated=True, targetActor=self.zapActor)
@@ -6491,7 +6573,7 @@ class Suit(Avatar.Avatar):
                 headPart.find('**/brain').hide()
                 headPart.setScale(1)
                 headPart.setZ(-.3)
-        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'ubuster' and not self.style.name == 'radiog':
+        if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'clubpres' and not self.style.name == 'radiog':
             self.zapActorHeadParts = []
             self.generateHeadZap('skullA', animated=True, targetActor=self.zapActor)
             if self.isExecutive or self.isManager:
@@ -6731,8 +6813,8 @@ class Suit(Avatar.Avatar):
 
             if self.style.name == 'derrhand':
                 headPart.setTexture(textureDerrick, 1)
-            elif self.style.name == 'ubuster':
-                headPart.setTexture(textureDopr, 1)
+            # elif self.style.name == 'ubuster':
+            #     headPart.setTexture(textureDopr, 1)
             elif self.style.name == 'dold':
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
@@ -6777,6 +6859,643 @@ class Suit(Avatar.Avatar):
         self.zapActor.setHpr(self.getHpr())
 
         return self.zapActor
+    
+    def cleanupZapActorPowerhouse(self):
+        self.notify.debug('cleanupLoseActor()')
+        if self.zapActorPowerhouse != None:
+            self.notify.debug('cleanupLoseActor() - got one')
+            self.zapActorPowerhouse.cleanup()
+
+        self.zapActorPowerhouse = None
+
+    def getZapActorPowerhouse(self):
+        model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
+        anims = self.generateAnimDict()
+
+        self.zapActorPowerhouse = Actor.Actor(model, anims)
+
+        self.zapActorPowerhouse.setBlend(frameBlend=base.wantSmoothAnims)
+        self.zapActorPowerhouse.setLODAnimation(
+            base.lodMaxRange,
+            base.lodMinRange,
+            base.lodDelayFactor
+        )
+
+        def resetPowerhouseHeadParts():
+            self.zapActorHeadParts = []
+
+        def applyHeadPartDefaults(scale=1):
+            for headPart in self.zapActorHeadParts:
+                headPart.setZ(0)
+                headPart.setY(0)
+                headPart.setX(0)
+                headPart.setR(0)
+                headPart.setH(0)
+                headPart.setScale(scale)
+
+        if self.style.body == 'a' and self.style.name == 'derrhand':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('derrickhand_skele', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'dold':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dold', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold_skelecog.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullA', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'radiog':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopa', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults(scale=1.2)
+
+        if self.style.body == 'a' and self.style.name == 'autocad':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('autocaddie', animated=True, targetActor=self.zapActorPowerhouse)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'clubpres':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('autocaddie', animated=True, targetActor=self.zapActorPowerhouse)
+            applyHeadPartDefaults()
+
+        # if self.style.body == 'a' and self.style.name == 'ubuster':
+        #     resetPowerhouseHeadParts()
+        #     self.generateHeadZap('dopr', animated=True, targetActor=self.zapActorPowerhouse)
+        #     texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        #     for headPart in self.zapActorHeadParts:
+        #         headPart.setTexture(texture, 1)
+        #     applyHeadPartDefaults(scale=1.3)
+
+        if self.style.body == 'a' and self.style.name == 'ambass':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('prethinker2', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+                headPart.find('**/glass').setTexture(textureGlass, 1)
+                headPart.find('**/brain').hide()
+                headPart.setScale(1)
+                headPart.setZ(-0.3)
+
+        if (
+            self.style.body == 'a' and
+            self.style.name not in ('autocad', 'dold', 'derrhand', 'ambass', 'clubpres', 'radiog')
+        ):
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullA', animated=True, targetActor=self.zapActorPowerhouse)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'b':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullB', animated=True, targetActor=self.zapActorPowerhouse)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name == 'dopa':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopa', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name == 'dopr':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopr', animated=True, targetActor=self.zapActorPowerhouse)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name not in ('dopa', 'dopr'):
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullC', animated=True, targetActor=self.zapActorPowerhouse)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        parts = self.zapActorPowerhouse.findAllMatches('**/pPlane*')
+        for partNum in xrange(parts.getNumPaths()):
+            parts.getPath(partNum).setTwoSided(1)
+
+        self.zapActorPowerhouse.leftHand = self.zapActorPowerhouse.find('**/joint_Lhold')
+        self.zapActorPowerhouse.rightHand = self.zapActorPowerhouse.find('**/joint_Rhold')
+        self.zapActorPowerhouse.shadowJoint = self.zapActorPowerhouse.find('**/joint_shadow')
+        self.zapActorPowerhouse.nametagNull = self.zapActorPowerhouse.find('**/joint_nameTag')
+
+        dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
+        dropShadow.setScale(0.45)
+        dropShadow.setColor(0.0, 0.0, 0.0, 0.5)
+        dropShadow.reparentTo(self.zapActorPowerhouse.shadowJoint)
+
+        texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+
+        if self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+        elif self.getExecutive() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.style.name == 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+        elif self.getGovernaught() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+
+        body = self.zapActorPowerhouse.find('**/body')
+        if not body.isEmpty():
+            body.setTexture(texture, 1)
+
+        meter = self.zapActorPowerhouse.find('**/emblem_healthmeter')
+        if not meter.isEmpty():
+            meter.show()
+
+        modelRoot = self.zapActorPowerhouse
+
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+        modelRoot.find('**/bowtie').hide()
+
+        modelRoot.find('**/necktie-s').setTexture(texture, 1)
+        if self.style.name != 'wsi':
+            modelRoot.find('**/necktie-w').setTexture(texture, 1)
+        modelRoot.find('**/bowtie').setTexture(texture, 1)
+
+        if self.isWaiter:
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 'l' and self.style.name != 'wsi':
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 's':
+            modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'wsi':
+            modelRoot.find('**/bowtie').hide()
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
+        elif self.style.name == 'hydra':
+            modelRoot.find('**/bowtie').show()
+            modelRoot.setColor((0.729, 0.729, 0.729, 1))
+            modelRoot.find('**/bowtie').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'charon':
+            modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/necktie-s').show()
+            modelRoot.setColor((0.51, 0.49, 0.467, 1))
+            modelRoot.find('**/necktie-s').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'nix':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.6, 0.6, 0.6, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'styx':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.671, 0.671, 0.671, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'kerberos':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.62, 0.659, 0.624, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'rainmake':
+            pass
+        elif self.style.name in (
+            'racket', 'erfit', 'erclaim', 'hrollers', 'hroller2', 'hroller',
+            'bellring', 'psetter', 'hustle', 'ins', 'dking', 'ddiver',
+            'gatekeep'
+        ):
+            pass
+        elif self.style.name == 'ovt':
+            modelRoot.find('**/bowtie').show()
+        else:
+            modelRoot.find('**/necktie-w').show()
+
+        textureDerrick = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
+        textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+        textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+        textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+
+        headParts = self.zapActorPowerhouse.findAllMatches('**/joint_head*')
+        for i in xrange(headParts.getNumPaths()):
+            headPart = headParts.getPath(i)
+
+            if self.style.name == 'derrhand':
+                headPart.setTexture(textureDerrick, 1)
+            # elif self.style.name == 'ubuster':
+            #     headPart.setTexture(textureDopr, 1)
+            elif self.style.name == 'dold':
+                headPart.setTexture(textureDold, 1)
+            elif self.style.name == 'radiog':
+                headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'dopa':
+                headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'ambass':
+                headPart.setTexture(textureAmbassador, 1)
+            else:
+                headPart.setTexture(texture, 1)
+
+        try:
+            self.generateCorporateTie(self.zapActorPowerhouse)
+        except:
+            pass
+
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+
+        if self.getExecutive():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getGovernaught():
+            level += TTLocalizer.GovernaughtPostFix
+
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {
+            'name': self.name,
+            'dept': dept,
+            'level': level
+        }
+
+        try:
+            self.zapActorPowerhouse.setDisplayName(nameInfo)
+        except:
+            pass
+
+        self.zapActorPowerhouse.setScale(self.scale)
+        self.zapActorPowerhouse.setPos(self.getPos())
+        self.zapActorPowerhouse.setHpr(self.getHpr())
+
+        return self.zapActorPowerhouse
+
+    def cleanupZapActorPowerhouseSquirt(self):
+        self.notify.debug('cleanupZapActorPowerhouseSquirt()')
+        if hasattr(self, 'zapActorPowerhouseSquirt') and self.zapActorPowerhouseSquirt:
+            try:
+                self.zapActorPowerhouseSquirt.cleanup()
+                self.zapActorPowerhouseSquirt.removeNode()
+            except:
+                pass
+        self.zapActorPowerhouseSquirt = None
+
+
+    def cleanupZapActorPowerhouseZap(self):
+        self.notify.debug('cleanupZapActorPowerhouseZap()')
+        if hasattr(self, 'zapActorPowerhouseZap') and self.zapActorPowerhouseZap:
+            try:
+                self.zapActorPowerhouseZap.cleanup()
+                self.zapActorPowerhouseZap.removeNode()
+            except:
+                pass
+        self.zapActorPowerhouseZap = None
+
+
+    def __makeZapActorPowerhouseVariant(self, attrName):
+        model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
+        anims = self.generateAnimDict()
+
+        zapActor = Actor.Actor(model, anims)
+        setattr(self, attrName, zapActor)
+
+        zapActor.setBlend(frameBlend=base.wantSmoothAnims)
+        zapActor.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+
+        def resetPowerhouseHeadParts():
+            self.zapActorHeadParts = []
+
+        def applyHeadPartDefaults(scale=1):
+            for headPart in self.zapActorHeadParts:
+                headPart.setZ(0)
+                headPart.setY(0)
+                headPart.setX(0)
+                headPart.setR(0)
+                headPart.setH(0)
+                headPart.setScale(scale)
+
+        if self.style.body == 'a' and self.style.name == 'derrhand':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('derrickhand_skele', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'dold':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dold', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold_skelecog.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullA', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'radiog':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopa', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults(scale=1.2)
+
+        if self.style.body == 'a' and self.style.name == 'autocad':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('autocaddie', animated=True, targetActor=zapActor)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'a' and self.style.name == 'clubpres':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('autocaddie', animated=True, targetActor=zapActor)
+            applyHeadPartDefaults()
+
+        # if self.style.body == 'a' and self.style.name == 'ubuster':
+        #     resetPowerhouseHeadParts()
+        #     self.generateHeadZap('dopr', animated=True, targetActor=zapActor)
+        #     texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        #     for headPart in self.zapActorHeadParts:
+        #         headPart.setTexture(texture, 1)
+        #     applyHeadPartDefaults(scale=1.3)
+
+        if self.style.body == 'a' and self.style.name == 'ambass':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('prethinker2', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+                headPart.find('**/glass').setTexture(textureGlass, 1)
+                headPart.find('**/brain').hide()
+                headPart.setScale(1)
+                headPart.setZ(-0.3)
+
+        if (
+            self.style.body == 'a' and
+            self.style.name not in ('autocad', 'dold', 'derrhand', 'ambass', 'clubpres', 'radiog')
+        ):
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullA', animated=True, targetActor=zapActor)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'b':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullB', animated=True, targetActor=zapActor)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name == 'dopa':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopa', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name == 'dopr':
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('dopr', animated=True, targetActor=zapActor)
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        if self.style.body == 'c' and self.style.name not in ('dopa', 'dopr'):
+            resetPowerhouseHeadParts()
+            self.generateHeadZap('skullC', animated=True, targetActor=zapActor)
+
+            if self.isExecutive or self.isManager:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+            elif self.isGovernaught:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+            else:
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+
+            for headPart in self.zapActorHeadParts:
+                headPart.setTexture(texture, 1)
+            applyHeadPartDefaults()
+
+        parts = zapActor.findAllMatches('**/pPlane*')
+        for partNum in xrange(parts.getNumPaths()):
+            parts.getPath(partNum).setTwoSided(1)
+
+        zapActor.leftHand = zapActor.find('**/joint_Lhold')
+        zapActor.rightHand = zapActor.find('**/joint_Rhold')
+        zapActor.shadowJoint = zapActor.find('**/joint_shadow')
+        zapActor.nametagNull = zapActor.find('**/joint_nameTag')
+
+        dropShadow = loader.loadModel('phase_3/models/props/drop_shadow')
+        dropShadow.setScale(0.45)
+        dropShadow.setColor(0.0, 0.0, 0.0, 0.5)
+        dropShadow.reparentTo(zapActor.shadowJoint)
+
+        texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+
+        if self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+        elif self.getExecutive() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
+        elif self.style.name == 'dold':
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+        elif self.getGovernaught() and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
+
+        body = zapActor.find('**/body')
+        if not body.isEmpty():
+            body.setTexture(texture, 1)
+
+        meter = zapActor.find('**/emblem_healthmeter')
+        if not meter.isEmpty():
+            meter.show()
+
+        modelRoot = zapActor
+
+        modelRoot.find('**/necktie-s').hide()
+        modelRoot.find('**/necktie-w').hide()
+        modelRoot.find('**/bowtie').hide()
+
+        modelRoot.find('**/necktie-s').setTexture(texture, 1)
+        if self.style.name != 'wsi':
+            modelRoot.find('**/necktie-w').setTexture(texture, 1)
+        modelRoot.find('**/bowtie').setTexture(texture, 1)
+
+        if self.isWaiter:
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 'l' and self.style.name != 'wsi':
+            modelRoot.find('**/bowtie').show()
+        elif self.style.dept == 's':
+            modelRoot.find('**/necktie-s').show()
+        elif self.style.name == 'wsi':
+            modelRoot.find('**/bowtie').hide()
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.find('**/necktie-w').setTexture(texture3, 1)
+        elif self.style.name == 'hydra':
+            modelRoot.find('**/bowtie').show()
+            modelRoot.setColor((0.729, 0.729, 0.729, 1))
+            modelRoot.find('**/bowtie').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'charon':
+            modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/necktie-s').show()
+            modelRoot.setColor((0.51, 0.49, 0.467, 1))
+            modelRoot.find('**/necktie-s').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'nix':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.6, 0.6, 0.6, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'styx':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.671, 0.671, 0.671, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'kerberos':
+            modelRoot.find('**/necktie-w').show()
+            modelRoot.setColor((0.62, 0.659, 0.624, 1))
+            modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
+        elif self.style.name == 'rainmake':
+            pass
+        elif self.style.name in (
+            'racket', 'erfit', 'erclaim', 'hrollers', 'hroller2', 'hroller',
+            'bellring', 'psetter', 'hustle', 'ins', 'dking', 'ddiver',
+            'gatekeep'
+        ):
+            pass
+        elif self.style.name == 'ovt':
+            modelRoot.find('**/bowtie').show()
+        else:
+            modelRoot.find('**/necktie-w').show()
+
+        textureDerrick = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
+        textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+        textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+        textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+
+        headParts = zapActor.findAllMatches('**/joint_head*')
+        for i in xrange(headParts.getNumPaths()):
+            headPart = headParts.getPath(i)
+
+            if self.style.name == 'derrhand':
+                headPart.setTexture(textureDerrick, 1)
+            # elif self.style.name == 'ubuster':
+            #     headPart.setTexture(textureDopr, 1)
+            elif self.style.name == 'dold':
+                headPart.setTexture(textureDold, 1)
+            elif self.style.name == 'radiog':
+                headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'dopa':
+                headPart.setTexture(textureDopa, 1)
+            elif self.style.name == 'ambass':
+                headPart.setTexture(textureAmbassador, 1)
+            else:
+                headPart.setTexture(texture, 1)
+
+        try:
+            self.generateCorporateTie(zapActor)
+        except:
+            pass
+
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+
+        if self.getExecutive():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getGovernaught():
+            level += TTLocalizer.GovernaughtPostFix
+
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {
+            'name': self.name,
+            'dept': dept,
+            'level': level
+        }
+
+        try:
+            zapActor.setDisplayName(nameInfo)
+        except:
+            pass
+
+        zapActor.setScale(self.scale)
+        zapActor.setPos(self.getPos())
+        zapActor.setHpr(self.getHpr())
+
+        return zapActor
+
+
+    def getZapActorPowerhouseSquirt(self):
+        return self.__makeZapActorPowerhouseVariant('zapActorPowerhouseSquirt')
+
+
+    def getZapActorPowerhouseZap(self):
+        return self.__makeZapActorPowerhouseVariant('zapActorPowerhouseZap')
 
     def makeSkeleton(self, elite=False):
         model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
@@ -6835,8 +7554,8 @@ class Suit(Avatar.Avatar):
         for headPart in self.headParts:
             if self.style.name == 'derrhand':
                 headPart.setTexture(textureDerrick, 1)
-            elif self.style.name == 'ubuster':
-                headPart.setTexture(textureDopr, 1)
+            # elif self.style.name == 'ubuster':
+            #     headPart.setTexture(textureDopr, 1)
             elif self.style.name == 'dold':
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
@@ -6953,8 +7672,8 @@ class Suit(Avatar.Avatar):
         for headPart in self.headParts:
             if self.style.name == 'derrhand':
                 headPart.setTexture(textureDerrick, 1)
-            elif self.style.name == 'ubuster':
-                headPart.setTexture(textureDopr, 1)
+            # elif self.style.name == 'ubuster':
+            #     headPart.setTexture(textureDopr, 1)
             elif self.style.name == 'dold':
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
@@ -7109,7 +7828,7 @@ class Suit(Avatar.Avatar):
         self.liquidEffect.setPos(0, 0, self.height - 2.5)
 
         self.liquidTrack = ParticleInterval(self.liquidEffect, self, duration=5)
-        if self.currHP > 0 and num > 0:
+        if self.currHP > 0:
             self.liquidTrack.loop()
 
     def makeUnSoaked(self, elite=False):
@@ -7482,6 +8201,122 @@ class Suit(Avatar.Avatar):
        # self.__changeColor()
         self.isImmortal = 0
 
+    def makeRushJobArrow(self, track):
+        self.cleanupRushJobArrow()
+
+        trackColors = {
+            1:   Vec4(1, 0, 0, 1),
+            2:   Vec4(0, 1, 0.016, 1),
+            3:  Vec4(1, 0.682, 0, 1),
+            4: Vec4(1, 0, 0.969, 1),
+            5:    Vec4(1, 0.996, 0, 1),
+            6:  Vec4(0.102, 0, 1, 1),
+            7:   Vec4(0, 0.976, 1, 1),
+        }
+
+        color = trackColors.get(track, Vec4(1, 1, 1, 1))
+
+        auraNode = self.attachNewNode('rushJobArrowNode')
+        auraNode.setPos(0, 0, self.getHeight() + 2.5)
+        auraNode.setScale(10)
+        auraNode.setBillboardPointEye()
+
+        arrowModel = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
+        arrow = arrowModel.find('**/minnieArrow').copyTo(auraNode)
+        arrowModel.removeNode()
+
+        arrow.setColor(color)
+        arrow.setTransparency(TransparencyAttrib.MAlpha)
+        arrow.setTwoSided(True)
+        arrow.setHpr(0, 0, 90)
+
+        self.rushJobArrowNode = auraNode
+        self.rushJobArrow = arrow
+
+        self.rushJobArrowTrack = Sequence(
+            LerpPosInterval(auraNode, 2.5, Point3(0, 0, self.getHeight() + 3.0),
+                            startPos=Point3(0, 0, self.getHeight() + 2.4),
+                            blendType='easeInOut'),
+            LerpPosInterval(auraNode, 2.5, Point3(0, 0, self.getHeight() + 2.4),
+                            startPos=Point3(0, 0, self.getHeight() + 3.0),
+                            blendType='easeInOut')
+        )
+        self.rushJobArrowTrack.loop()
+
+    def cleanupRushJobArrow(self):
+        if hasattr(self, 'rushJobArrowTrack') and self.rushJobArrowTrack:
+            try:
+                self.rushJobArrowTrack.finish()
+            except:
+                pass
+            self.rushJobArrowTrack = None
+
+        if hasattr(self, 'rushJobArrowNode') and self.rushJobArrowNode:
+            try:
+                if not self.rushJobArrowNode.isEmpty():
+                    self.rushJobArrowNode.removeNode()
+            except:
+                pass
+            self.rushJobArrowNode = None
+
+        self.rushJobArrow = None
+
+    def makeTrapRushJob(self):
+        self.trapRushJob = 1
+        self.makeRushJobArrow(1)
+
+    def makeUnTrapRushJob(self):
+        self.trapRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeLureRushJob(self):
+        self.lureRushJob = 1
+        self.makeRushJobArrow(2)
+
+    def makeUnLureRushJob(self):
+        self.lureRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeThrowRushJob(self):
+        self.throwRushJob = 1
+        self.makeRushJobArrow(3)
+
+    def makeUnThrowRushJob(self):
+        self.throwRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeSquirtRushJob(self):
+        self.squirtRushJob = 1
+        self.makeRushJobArrow(4)
+
+    def makeUnSquirtRushJob(self):
+        self.squirtRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeZapRushJob(self):
+        self.zapRushJob = 1
+        self.makeRushJobArrow(5)
+
+    def makeUnZapRushJob(self):
+        self.zapRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeSoundRushJob(self):
+        self.soundRushJob = 1
+        self.makeRushJobArrow(6)
+
+    def makeUnSoundRushJob(self):
+        self.soundRushJob = 0
+        self.cleanupRushJobArrow()
+
+    def makeDropRushJob(self):
+        self.dropRushJob = 1
+        self.makeRushJobArrow(7)
+
+    def makeUnDropRushJob(self):
+        self.dropRushJob = 0
+        self.cleanupRushJobArrow()
+
     def makeLured(self, prestige):
         self.isLured = prestige
 
@@ -7613,9 +8448,19 @@ class Suit(Avatar.Avatar):
                     LerpColorScaleInterval(node, duration=1, colorScale=(0.89, 0.608, 0.608, 1),
                                            blendType='easeInOut'),
                     LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
+        self.suitColorTrack2 = Sequence(
+                    LerpColorScaleInterval(node, duration=1, colorScale=(0.671, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(0.671, 0, 1, 1),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
         self.isVulnerable = 1
-        if not self.style.name == 'bcaster' and not self.style.name == 'cbutcher' and not self.style.name == 'hroller' and not self.style.name == 'hroller2' and not self.style.name == 'phouse':
+        if not self.style.name == 'bcaster' and not self.style.name == 'cbutcher' and not self.style.name == 'hroller' and not self.style.name == 'hroller2' and not self.style.name == 'phouse' and not self.isOverpressured:
             self.suitColorTrack.loop()
+        if self.isOverpressured:
+            self.suitColorTrack2.loop()
 
     def setVulnerability(self, num):
         if self.style.name == 'phouse':
@@ -7736,6 +8581,7 @@ class Suit(Avatar.Avatar):
 
     def makeUnVulnerable(self):
         self.isVulnerable = 0
+        self.vulnerability = 0
         if self.suitColorTrack != None:
             self.suitColorTrack.finish()
 
@@ -7799,9 +8645,42 @@ class Suit(Avatar.Avatar):
         self.flameTrack = ParticleInterval(self.flameEffect, self, duration=5)
         self.flameTrack.loop()
 
+    def makeGreenLight(self, num):
+        self.isGreenLight = num
+        node = self.getGeomNode().getChild(0)
+        self.suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=1, colorScale=(0.537, 0.878, 0.533, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(0.537, 0.878, 0.533, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
+        self.suitColorTrack.loop()
+
+    def makeRedLight(self, num):
+        self.isRedLight = num
+        node = self.getGeomNode().getChild(0)
+        self.suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=1, colorScale=(1, 0, 0, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 0, 0, 1),
+                                                         blendType='easeInOut'),
+                                  LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
+        self.suitColorTrack.loop()
+
+    def makeUnGreenLight(self):
+        self.isGreenLight = 0
+        if self.suitColorTrack != None:
+            self.suitColorTrack.finish()
+
+    def makeUnRedLight(self):
+        self.isRedLight = 0
+        if self.suitColorTrack != None:
+            self.suitColorTrack.finish()
+
     def makeAngry(self, num):
         self.isAngry = num
-        self.isShielding = 0
 
     def makeUnAngry(self):
         self.isAngry = 0
@@ -8484,7 +9363,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         if self.isSkeleton:
             self.setSuitClothesSkeleton()
-            if self.style.body == 'a' and self.style.name == 'radiog' or self.style.name == 'ubuster':
+            if self.style.body == 'a' and self.style.name == 'radiog':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
             if self.style.body == 'a' and self.style.name == 'laa':
@@ -8493,7 +9372,7 @@ class Suit(Avatar.Avatar):
                 modelRoot.find('**/necktie-w').setTexture(texture2, 1)
                 modelRoot.find('**/necktie-w').show()
                 modelRoot.find('**/bowtie').hide()
-            if self.style.body == 'a' and not self.style.name == 'derrhand' and not self.style.name == 'dold' and not self.style.name == 'ubuster' and not self.style.name == 'radiog' \
+            if self.style.body == 'a' and not self.style.name == 'derrhand' and not self.style.name == 'dold' and not self.style.name == 'radiog' \
                 and not self.style.name == 'charon' and not self.style.name == 'autocad' and not self.style.name == 'clubpres' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
                                              self.style.dept)
@@ -8848,7 +9727,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isGovernaught = 1
         try:
-            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_racket2.png')
+            texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_racket_cash.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
@@ -9121,7 +10000,7 @@ class Suit(Avatar.Avatar):
         return self.oilRainRounds
 
     def makeContracted(self):
-        if not self.getManager() and self.currHP > 0 and not self.isShadow:
+        if not self.getManager() and self.currHP > 0 and not self.isShadow and not self.getGovernaught():
             self.setDisplayName(self.createNameInfoContracted())
         self.isContracted = 1
         if hasattr(self, "cheerTrack2") and self.cheerTrack2:
@@ -9143,7 +10022,7 @@ class Suit(Avatar.Avatar):
             self.cheerTrack2.loop()
 
     def makeContracted2(self):
-        if not self.getManager() and self.currHP > 0 and not self.isShadow:
+        if not self.getManager() and self.currHP > 0 and not self.isShadow and not self.getGovernaught():
             self.setDisplayName(self.createNameInfoContracted())
         self.isContracted2 = 1
         if hasattr(self, "cheerTrack2") and self.cheerTrack2:
@@ -9336,7 +10215,7 @@ class Suit(Avatar.Avatar):
 
         self.extraAttack = max(1, num)
         if self.style.name == 'clubpres':
-            totalKnives = self.extraAttack + 1
+            totalKnives = self.extraAttack
         else:
             totalKnives = self.extraAttack
 
@@ -9835,6 +10714,24 @@ class Suit(Avatar.Avatar):
     def makeUnFrozen(self):
         self.isFrozen = 0
 
+    def getDeepFrozenRounds(self):
+        return self.isDeepFrozen
+
+    def makeBattleSpeed(self, num):
+        self.battleSpeed = num
+
+    def makeUnBattleSpeed(self):
+        self.battleSpeed = 0
+
+    def getBattleSpeed(self):
+        return self.battleSpeed
+
+    def makeDeepFrozen(self, num):
+        self.isDeepFrozen = num
+
+    def makeUnDeepFrozen(self):
+        self.isDeepFrozen = 0
+
     def makeIntoSoaked(self):
         self.isSoaked = 1
 
@@ -10013,9 +10910,9 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'racket' and not self.isSkeleton:
             loadDialog(1)
             return FeatherbedderDialogArray
-        elif self.style.name == 'ubuster':
-            loadDialog(1)
-            return DOPRDialogArray
+        # elif self.style.name == 'ubuster':
+        #     loadDialog(1)
+        #     return DOPRDialogArray
         elif self.style.name == 'safesupervis' and not self.isSkeleton:
             loadDialog(1)
             return FirestarterDialogArray
@@ -10032,6 +10929,9 @@ class Suit(Avatar.Avatar):
             loadDialog(1)
             return DOLADialogArray
         elif self.style.name == 'dold' and not self.isSkeleton:
+            loadDialog(1)
+            return DOLDDialogArray
+        elif self.style.name == 'ubuster' and not self.isSkeleton:
             loadDialog(1)
             return DOLDDialogArray
         elif self.style.name == 'dold' and self.isSkeleton:

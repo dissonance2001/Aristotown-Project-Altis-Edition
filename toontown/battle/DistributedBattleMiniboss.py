@@ -123,7 +123,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 for obj in base.cr.doId2do.values():
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideUnionBuster()
-            if suit.dna.name == 'racket':
+            if suit.dna.name == 'hustle':
                 for obj in base.cr.doId2do.values():
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideRacketeer()

@@ -136,10 +136,12 @@ supervis - Mint Supervisor Level 20-25.mgr (OFTF)
 duckshfl - Duck Shuffler Level 5.mgr
 treek - Treekiller Level 24.mgr
 
-	Cashbot 'Litigation' Team (unfinished):
+	Payroll Manager:
 payman - Payroll Manager Level 20.mgr
+
+	Profit Syndicate (unfinished):
 bookkeep - Bookkeeper Level 35.mgr
-hustle - Hustler Level 40.mgr
+racket - Racketeer Level 40.mgr
 liquidr - Liquidator Level 40.mgr
 treasure - Treasurer Level 45.mgr
 
@@ -200,10 +202,10 @@ psetter - Pacesetter Level 66.mgr
 cinema - Photographer Level 26.mgr
 
 	Pressure Division:
-radiog - Radiographer Level 32.mgr
-racket - Racketeer Level 38.mgr
-ubuster - Union Buster Level 38.mgr
-safesupervis - Pressurizer Level 44.mgr
+radiog - Radiographer Level 35.mgr
+hustle - Hustler Level 40.mgr
+ubuster - Traffic Manager Level 40.mgr
+safesupervis - Pressurizer Level 45.mgr
 
 =============BOARDBOTS:===============
 	Regular Cogs:
@@ -282,7 +284,7 @@ ant - Antivirus Level 14-15.exe
 sya - Senior Developer Level 20.mgr 
 
 	Prethinker Desk Jockies:
-djockey - Desk Jockey Level 3-10 (No .gov Variant)
+djockey - Desk Jockey Level 3-10 (No .adv Variant)
 ptjockey - Desk Jockey Level 3-10 (Prethinker)(not yet implemented)
 
 	Videographer Manager:

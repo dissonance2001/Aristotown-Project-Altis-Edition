@@ -15,11 +15,11 @@ suitHeadTypes = [
 'bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'payman', 'bookkeep', 'hustle', 'liquidr', 'treasure',
+'sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'ovt', 'supervis', 'duckshfl', 'treek', 'payman', 'bookkeep', 'racket', 'liquidr', 'treasure',
 'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
 'cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'asm', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'dopr', 'dopa', 'bellring', 'mh2', 'prethink', 'mslacker', 'cinema',
-'radiog', 'racket', 'ubuster', 'safesupervis', 'psetter',
+'radiog', 'hustle', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
 'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'liquid', 'rkeeper',
 'cbutcher', 'cdirector', 'dking', 'ottoman', 'crystal', 'chairman',
@@ -37,9 +37,9 @@ suitATypes = [
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'whistleb', 'arbit', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'pp', 'sw', 'nc', 'trs', 'rb', 'payman', 'liquidr', 'treasure', 'hroller', 'erfit', 'hrollers', 'hroller2',
+'pp', 'sw', 'nc', 'trs', 'rb', 'payman', 'racket', 'liquidr', 'treasure', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
-'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'racket', 'ubuster', 'safesupervis',
+'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'ubuster', 'safesupervis',
     # Boardbots
 'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'dold', 'dking', 'crystal', 'chairman', 'liquid', 'rkeeper', 'cbutcher', 'cdirector',
     # Techbots
@@ -53,9 +53,9 @@ suitBTypes = [
     # Lawbots
 'b', 'pf', 'ac', 'bs', 'sd', 'sh', 'clerk', 'mouthp', 'rainmake', 'erclaim', 'redd', 'sgoat',
     # Cashbots
-'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'hustle',
+'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl',
     # Sellbots
-'tm', 'cn', 'ms', 'bellring', 'prethink', 'psetter',
+'tm', 'cn', 'ms', 'bellring', 'prethink', 'hustle', 'psetter',
     # Boardbots
 'pph', 'ins', 'ang', 'dola', 'ottoman',
     # Techbots

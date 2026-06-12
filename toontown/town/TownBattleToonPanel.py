@@ -25,7 +25,15 @@ class TownBattleToonPanel(DirectFrame):
         else:
             gui = loader.loadModel('phase_3.5/models/gui//battlegui/toon_panel')
         
-        DirectFrame.__init__(self, relief=None, image=gui.find('**/toon_panel_frame'))
+        DirectFrame.__init__(self, relief=None)
+        self.panelFrame = DirectFrame(
+            parent=self,
+            relief=None,
+            image=gui.find('**/toon_panel_frame'),
+            pos=(0, 0.1, 0),
+            scale=1
+        )
+        self.panelFrame.setBin('fixed', 10)
         self.setScale(0.5)
         self.initialiseoptions(TownBattleToonPanel)
         self.status = None
@@ -107,6 +115,9 @@ class TownBattleToonPanel(DirectFrame):
         self.cooldownRounds = None
         self.burned = None
         self.burnedRounds = None
+        self.zapped = None
+        self.zappedRounds = None
+        self.choiceOrganicStage = None
         # self.snapped = status.find('**/vulnerable_icon')
         # self.snapped.setPosHprScale(-0.25, 0, 0.03, -180, 0, 0, .125, .125, .125)
         # self.snapped.reparentTo(self)
@@ -136,9 +147,49 @@ class TownBattleToonPanel(DirectFrame):
         self.knockbackText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.knockbackText.hide()
         self.undecidedText = DirectLabel(parent=self, relief=None, pos=(0.22, 0.05, -0.03), text=TTLocalizer.TownBattleUndecided, text_scale=0.3, text_fg=(1, 1, 1, 1), text_font=getSignFont())
+        self.undecidedText.hide()
         self.passText = DirectLabel(parent=self, relief=None, pos=(0.2, 0, 0.03),
                                     text='', text_scale=0.1, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.passText.hide()
+        self.choiceRoot = self.attachNewNode('choiceRoot')
+        self.choiceRoot.setPos(0, 0, 0)
+        self.choicePanelModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+        self.choiceStatusModels = loader.loadModel('phase_3.5/models/gui/status_effects')
+
+        self.choiceEmblem = DirectFrame(
+            parent=self.choiceRoot,
+            relief=None,
+            image=self.choicePanelModels.find('**/emblem_gag'),
+            pos=(0.21, 0, 0.075),
+            scale=.5
+        )
+        self.choiceEmblem.hide()
+        self.choiceOrganicTex = loader.loadTexture('phase_3.5/maps/battlegui/pres_scroll_bg.png')
+        self.choiceOrganicTex.setWrapU(Texture.WMRepeat)
+        self.choiceOrganicTex.setWrapV(Texture.WMRepeat)
+
+        self.choiceOrganicStage = TextureStage('toon-panel-choice-organic')
+        self.setChoiceOrganic(False)
+        self.choiceOrganicIval = LerpFunctionInterval(
+            self.updateChoiceOrganicScroll,
+            duration=3.0,
+            fromData=0.0,
+            toData=1.0
+        )
+        self.choiceOrganicIval.loop()
+
+        self.undecidedIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choicePanelModels.find('**/emblem_question'), pos=(0.21, 0, 0.075), scale=.5)
+        self.passIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choicePanelModels.find('**/pass_icon'), pos=(0.21, 0, 0.075), scale=.25)
+        self.fireIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/toon_accuracy_down_icon'), pos=(0.21, 0, 0.075), scale=.25)
+        self.sueIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/sued_icon'), pos=(0.21, 0, 0.05), scale=.25)
+        self.sosIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/toon_accuracy_up_icon'), pos=(0.21, 0, 0.075), scale=.25)
+        self.undecidedIcon.show()
+        self.undecidedIcon.setBin('fixed', 0)
+        for icon in (self.passIcon, self.fireIcon, self.sueIcon, self.sosIcon):
+            icon.setBin('fixed', 0)
+            icon.hide()
+
+        self.choiceEmblem.setBin('fixed', 0)
         self.hpChangeEvent = None
         self.gagNode = self.attachNewNode('gag')
         self.gagNode.setScale(2.0)
@@ -151,9 +202,58 @@ class TownBattleToonPanel(DirectFrame):
         passGui.reparentTo(self.passNode)
         self.passNode.hide()
         self.laffMeter = None
-        self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.24), text_scale=0.1, text_font=getSignFont())
+        self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.24), text_scale=0.1, text_fg=(1, 1, 1, 1), text_font=getSignFont())
         self.hide()
         gui.removeNode()
+
+    def setChoiceOrganic(self, organic):
+        if not getattr(self, 'choiceOrganicStage', None):
+            return
+
+        if not getattr(self, 'choiceEmblem', None):
+            return
+
+        imageNode = self.choiceEmblem.component('image0')
+
+        if organic:
+            imageNode.setTexture(self.choiceOrganicStage, self.choiceOrganicTex, 1)
+            imageNode.setTexScale(self.choiceOrganicStage, 6, 6)
+            imageNode.setTransparency(1)
+        else:
+            imageNode.clearTexture(self.choiceOrganicStage)
+
+
+    def updateChoiceOrganicScroll(self, t):
+        if not getattr(self, 'choiceEmblem', None):
+            return
+
+        if getattr(self.choiceEmblem, 'isEmpty', None) and self.choiceEmblem.isEmpty():
+            return
+
+        if not getattr(self, 'choiceOrganicStage', None):
+            return
+
+        try:
+            imageNode = self.choiceEmblem.component('image0')
+        except:
+            return
+
+        imageNode.setTexOffset(self.choiceOrganicStage, t, -t)
+
+    def hideChoiceIcons(self):
+        self.choiceEmblem.hide()
+        self.undecidedIcon.hide()
+        self.passIcon.hide()
+        self.fireIcon.hide()
+        self.sueIcon.hide()
+        self.sosIcon.hide()
+
+    def showChoiceIcon(self, icon, color, organic=False):
+        self.hideChoiceIcons()
+        self.choiceEmblem['image_color'] = color
+        self.setChoiceOrganic(organic)
+        self.choiceEmblem.show()
+        icon.show()
 
     def _attachToonStatusIcon(self, iconNode, slot, slotColor=(1, 1, 1, 1), scale=(1, 1, 1)):
         if slot is None:
@@ -219,7 +319,7 @@ class TownBattleToonPanel(DirectFrame):
                 'encore', 'govDamageText', 'governaughtDamageUp', 'encoreRounds', 'toonupGagBoost', 'trapGagBoost', 'lureGagBoost', 'throwGagBoost', 'squirtGagBoost', 'soundGagBoost', 'dropGagBoost', 'zapGagBoost',
                 'winded', 'gagBan', 'raisedAnte', 'raisedAnteText',
                 'windedRounds', 'damageUpRounds', 'damageUp',
-                'cheerRounds', 'cheer', 'burnedRounds', 'burned',
+                'cheerRounds', 'cheer', 'burnedRounds', 'burned', 'zapped', 'zappedRounds',
                 'liquidatedText', 'liquidated', 'damageDownRounds',
                 'damageDown', 'groupDamageDown', 'groupDamageDownText',
                 'groupDamageDownRoundsText', 'bombed', 'bombedText',
@@ -399,7 +499,7 @@ class TownBattleToonPanel(DirectFrame):
             self.govDamageText.show()
             self.governaughtDamageUp.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.governaughtDamageUp, slot)
+            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if avatar.damageUp:
@@ -416,8 +516,24 @@ class TownBattleToonPanel(DirectFrame):
                                             text_scale=.4)
             self.damageUpText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.damageUp, slot)
+            self._attachToonStatusIcon(self.damageUp, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
+
+        if avatar.isViralSensation:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.groupDamageDown = status.find('**/singing_blues_icon')
+            self.groupDamageDownRoundsText = DirectLabel(parent=self.groupDamageDown, relief=None, text="%s" % avatar.getViralSensationRounds(), text_fg=(1, 1, 1, 1),
+                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                         pos=(0.25, 0, -.5),
+                                                         text_scale=.6)
+            self.groupDamageDownRoundsText.show()
+            self.groupDamageDownText = DirectLabel(parent=self.groupDamageDown, relief=None, text="-%s" % avatar.getViralSensationBoost(), text_fg=(1, 1, 1, 1),
+                                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                   pos=(0.25, 0, 0.15),
+                                                   text_scale=.4)
+            self.groupDamageDownText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.groupDamageDown, slot, slotColor=(1, 0.984, 0, 1))
 
         if avatar.gagBoost:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -433,7 +549,7 @@ class TownBattleToonPanel(DirectFrame):
                                             text_scale=.4)
             self.gagBoostText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.gagBoost, slot)
+            self._attachToonStatusIcon(self.gagBoost, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if avatar.toonupGagBoost:
@@ -597,6 +713,12 @@ class TownBattleToonPanel(DirectFrame):
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.gagBan, slot, slotColor=(0, 0.902, 1, 1))
 
+        if avatar.isDancePartner:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.gagBan = status.find('**/singing_blues_icon')
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.gagBan, slot, slotColor=(0, 0.902, 1, 1))
+
         if avatar.isSnapped:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.snapped = status.find('**/vulnerable_icon')
@@ -611,8 +733,7 @@ class TownBattleToonPanel(DirectFrame):
                                            text_scale=.4)
             self.snappedText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.snapped, slot)
-            self._pulseToonStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.snapped, slot, slotColor=(0, 0.902, 1, 1))
 
         if avatar.isBombed:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -628,8 +749,7 @@ class TownBattleToonPanel(DirectFrame):
             #                               text_scale=.4)
             # self.bombedText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.bombed, slot)
-            self._pulseToonStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.bombed, slot, slotColor=(0, 0.902, 1, 1))
 
         if avatar.isVulnerable:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -645,8 +765,7 @@ class TownBattleToonPanel(DirectFrame):
                                               text_scale=.4)
             self.vulnerableText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.vulnerable, slot)
-            self._pulseToonStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.vulnerable, slot, slotColor=(0, 0.902, 1, 1))
 
         if avatar.markedWood: # marked for extra damage not marked wood
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -702,10 +821,33 @@ class TownBattleToonPanel(DirectFrame):
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.burned, slot, slotColor=(0, 0.902, 1, 1))
 
+        if avatar.isZapped:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.zapped = status.find('**/reward_cooldown_icon')
+            self.zappedRounds = DirectLabel(parent=self.zapped, relief=None, text="%s" % avatar.getZappedRounds(),
+                                         text_fg=(1, 1, 1, 1),
+                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                            pos=(0.25, 0, -.5),
+                                            text_scale=.6)
+            self.zappedRounds.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.zapped, slot, slotColor=(0, 0.902, 1, 1))
+
         if avatar.liquidated:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.liquidated = status.find('**/heavyrain_icon')
             self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getLiquidatedRounds(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.6)
+            self.liquidatedText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.liquidated, slot, slotColor=(0, 0.902, 1, 1))
+
+        if avatar.frozen:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.liquidated = status.find('**/disruptive_advertisement_icon')
+            self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getFrozenRounds(), text_fg=(1, 1, 1, 1),
                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                               pos=(0.25, 0, -.5),
                                               text_scale=.6)
@@ -778,7 +920,7 @@ class TownBattleToonPanel(DirectFrame):
             self.collectCallRoundsText.show()
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.collectCall, slot, slotColor=(0, 0.902, 1, 1))
-
+            
         if avatar.mandatoryToll:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.mandatoryToll = status.find('**/bewitched_icon')
@@ -789,6 +931,7 @@ class TownBattleToonPanel(DirectFrame):
             self.mandatoryTollNumberText.show()
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.mandatoryToll, slot, slotColor=(0, 0.902, 1, 1))
+
 
         if avatar.groupDamageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -866,10 +1009,7 @@ class TownBattleToonPanel(DirectFrame):
          numTargets,
          targetIndex,
          localNum))
-        self.undecidedText.hide()
-        self.sosText.hide()
-        self.fireText.hide()
-        self.sueText.hide()
+        self.hideChoiceIcons()
         self.roundsText.hide()
         self.damageText.hide()
         self.exeDamageText.hide()
@@ -879,39 +1019,48 @@ class TownBattleToonPanel(DirectFrame):
         self.selfHealText.hide()
         self.gagNode.hide()
         self.whichText.hide()
+        self.undecidedText.hide()
         self.passNode.hide()
-        self.passText.hide()
         if self.hasGag:
             self.gag.removeNode()
             self.hasGag = 0
         if track == BattleBase.NO_ATTACK or track == BattleBase.UN_ATTACK:
-            self.undecidedText.show()
-            #self.undecidedText2.show()
+            self.showChoiceIcon(self.undecidedIcon, Vec4(0.6, 0.6, 0.6, 1))
+
         elif track == BattleBase.PASS_ATTACK:
-            self.passText.show()
-            self.passText['text'] = 'PASS'
+            self.showChoiceIcon(self.passIcon, Vec4(1, 0, 0, 1))
+
         elif track == BattleBase.FIRE:
-            self.fireText.show()
+            self.showChoiceIcon(self.fireIcon, Vec4(0.937, 0.718, 0.816, 1))
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
+
         elif track == BattleBase.SUE:
-            self.sueText.show()
+            self.showChoiceIcon(self.sueIcon, Vec4(0.682, 0.714, 0.824, 1))
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
+
         elif track == BattleBase.SOS or track == BattleBase.NPCSOS or track == BattleBase.PETSOS:
-            self.sosText.show()
+            self.showChoiceIcon(self.sosIcon, Vec4(0, 1, 0.031, 1))
         elif track >= MIN_TRACK_INDEX and track <= MAX_TRACK_INDEX:
-            self.undecidedText.hide()
+            organic = self.avatar.trackBonusLevel[track] >= 1
+
+            self.choiceEmblem['image_color'] = Vec4(
+                TrackColors[track][0],
+                TrackColors[track][1],
+                TrackColors[track][2],
+                1
+            )
+            self.choiceEmblem.show()
+            self.setChoiceOrganic(organic)
+            self.choiceEmblem.show()
             self.passText.hide()
             self.gagNode.show()
             invButton = base.localAvatar.inventory.buttonLookup(track, level)
             self.gag = invButton.instanceUnderNode(self.gagNode, 'gag')
             self.gag.setScale(0.8)
             self.gag.setPos(0.105, -0.2, 0.035)
-            if self.avatar.trackBonusLevel[track] >= 1:
-                self.gag.setColor(0.6, 0.6, 1.0, 1)
-            else:
-                self.gag.setColor(1, 1, 1, 1)
+            self.gag.setColor(1, 1, 1, 1)
             self.hasGag = 1
             allGagBoost = False
             if 'allGagBoost' in self.avatar.battleConditions:
@@ -970,6 +1119,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.inkDrain:
                 damage *= (1.0 + self.avatar.getInkDrain() * 0.01)
                 lureValue *= (1.0 + self.avatar.getInkDrain() * 0.01)
+            if self.avatar.isViralSensation:
+                damage *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
+                lureValue *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
             if self.avatar.groupDamageDown and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)
@@ -1066,12 +1218,58 @@ class TownBattleToonPanel(DirectFrame):
 
     def cleanup(self):
         self.ignoreAll()
+
+        if getattr(self, 'choiceOrganicIval', None):
+            self.choiceOrganicIval.finish()
+            self.choiceOrganicIval = None
+
         self.cleanupLaffMeter()
+        self._cleanupToonStatusDisplay()
+
         if self.hasGag:
             self.gag.removeNode()
-            del self.gag
-        self.gagNode.removeNode()
-        del self.gagNode
+            self.hasGag = 0
+
+        for nodeName in (
+            'panelFrame',
+            'choiceEmblem',
+            'undecidedIcon',
+            'passIcon',
+            'fireIcon',
+            'sueIcon',
+            'sosIcon'
+        ):
+            node = getattr(self, nodeName, None)
+            if node:
+                try:
+                    node.destroy()
+                except:
+                    node.removeNode()
+                setattr(self, nodeName, None)
+
+        if getattr(self, 'choiceRoot', None):
+            self.choiceRoot.removeNode()
+            self.choiceRoot = None
+
+        if getattr(self, 'gagNode', None):
+            self.gagNode.removeNode()
+            self.gagNode = None
+
+        if getattr(self, 'passNode', None):
+            self.passNode.removeNode()
+            self.passNode = None
+
+        if getattr(self, 'choicePanelModels', None):
+            self.choicePanelModels.removeNode()
+            self.choicePanelModels = None
+
+        if getattr(self, 'choiceStatusModels', None):
+            self.choiceStatusModels.removeNode()
+            self.choiceStatusModels = None
+
+        self.choiceOrganicTex = None
+        self.choiceOrganicStage = None
+
         DirectFrame.destroy(self)
 
     def cleanupLaffMeter(self):

@@ -1092,7 +1092,7 @@ def shred(self):
 @particle
 def shred2(self):
     self.reset()
-    self.setPos(0.000, 12.500, 6.000)
+    self.setPos(0.000, 15.000, 6.000)
     self.setHpr(180.000, -15.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
@@ -1134,7 +1134,7 @@ def shred2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(20.0000)
+    p0.emitter.setAmplitude(25.0000)
     p0.emitter.setAmplitudeSpread(1.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 3.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -1172,6 +1172,262 @@ def withdrawal(self):
     #p0.setRenderer("PointParticleRenderer")
     p0.setEmitter("DiscEmitter")
     p0.setPoolSize(150)
+    p0.setBirthRate(0.0200)
+    p0.setLitterSize(10)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAIN)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/snow-particle")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.04)
+    p0.renderer.setFinalXScale(0.3125)
+    p0.renderer.setInitialYScale(0.03)
+    p0.renderer.setFinalYScale(0.25)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Line parameters
+    #p0.renderer.setHeadColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    #p0.renderer.setTailColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(-0.4000)
+    p0.emitter.setAmplitudeSpread(0.1000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 1.5000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(1.7000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearVectorForce(Vec3(0.0000, 1.0000, 0.0000), 1.0000, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def inkdrain(self):
+    self.reset()
+    self.setPos(0.000, 10.000, 3.500)
+    self.setHpr(-180.000, 0.000, 0.000)
+    self.setScale(4.000, 4.000, 4.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(300)
+    p0.setBirthRate(0.0200)
+    p0.setLitterSize(10)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAIN)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/snow-particle")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.04)
+    p0.renderer.setFinalXScale(0.3125)
+    p0.renderer.setInitialYScale(0.03)
+    p0.renderer.setFinalYScale(0.25)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Line parameters
+    #p0.renderer.setHeadColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    #p0.renderer.setTailColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(-0.4000)
+    p0.emitter.setAmplitudeSpread(0.1000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 1.5000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(1.7000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearVectorForce(Vec3(0.0000, 1.0000, 0.0000), 1.0000, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def inkdrain2(self):
+    self.reset()
+    self.setPos(0.000, 10.000, 3.500)
+    self.setHpr(-180.000, 0.000, 0.000)
+    self.setScale(4.000, 4.000, 4.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(300)
+    p0.setBirthRate(0.0200)
+    p0.setLitterSize(10)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAIN)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/snow-particle")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.04)
+    p0.renderer.setFinalXScale(0.3125)
+    p0.renderer.setInitialYScale(0.03)
+    p0.renderer.setFinalYScale(0.25)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Line parameters
+    #p0.renderer.setHeadColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    #p0.renderer.setTailColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(-0.4000)
+    p0.emitter.setAmplitudeSpread(0.1000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 1.5000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(1.7000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearVectorForce(Vec3(0.0000, 1.0000, 0.0000), 1.0000, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def inkdrain3(self):
+    self.reset()
+    self.setPos(0.000, 10.000, 3.500)
+    self.setHpr(-180.000, 0.000, 0.000)
+    self.setScale(4.000, 4.000, 4.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(300)
+    p0.setBirthRate(0.0200)
+    p0.setLitterSize(10)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAIN)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/snow-particle")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.04)
+    p0.renderer.setFinalXScale(0.3125)
+    p0.renderer.setInitialYScale(0.03)
+    p0.renderer.setFinalYScale(0.25)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Line parameters
+    #p0.renderer.setHeadColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    #p0.renderer.setTailColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(-0.4000)
+    p0.emitter.setAmplitudeSpread(0.1000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 1.5000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(1.7000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearVectorForce(Vec3(0.0000, 1.0000, 0.0000), 1.0000, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+@particle
+def inkdrain4(self):
+    self.reset()
+    self.setPos(0.000, 10.000, 3.500)
+    self.setHpr(-180.000, 0.000, 0.000)
+    self.setScale(4.000, 4.000, 4.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(300)
     p0.setBirthRate(0.0200)
     p0.setLitterSize(10)
     p0.setLitterSpread(0)
@@ -1700,7 +1956,7 @@ def filibusterSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(12.5000)
+    p0.emitter.setAmplitude(10.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 10.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -1963,7 +2219,7 @@ def numberSpray(self):
 @particle
 def demotionUnFreeze(self):
     self.reset()
-    self.setPos(0.000, 0.000, 3.000)
+    self.setPos(0.000, 0.000, 1.000)
     self.setHpr(0.000, 0.000, 0.000)
     self.setScale(2.000, 2.000, 2.000)
     p0 = Particles.Particles('particles-1')
@@ -2893,20 +3149,20 @@ def downsizeSpray2(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(4.9000)
-    p0.emitter.setAmplitudeSpread(0.3000)
-    p0.emitter.setOffsetForce(Vec3(0.0000, 7.0000, 0.0000))
+    p0.emitter.setAmplitude(12.5000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 4.1000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
-    p0.emitter.setRadiateOrigin(Point3(0.0000, -3.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -2.0000, 0.0000))
     # Sphere Volume parameters
-    p0.emitter.setRadius(0.0010)
+    p0.emitter.setRadius(0.0200)
     self.addParticles(p0)
     f0 = ForceGroup.ForceGroup('forces')
     # Force parameters
-    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -5.3000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
+    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -7.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
     force0.setActive(1)
     f0.addForce(force0)
-    force1 = LinearVectorForce(Vec3(0.0000, -7.0000, 0.0000), 1.0000, 0)
+    force1 = LinearVectorForce(Vec3(0.0000, -10.0000, 0.0000), 1.0000, 0)
     force1.setActive(1)
     f0.addForce(force1)
     force3 = LinearJitterForce(8.5449, 0)
@@ -2960,20 +3216,20 @@ def downsizeSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(4.9000)
-    p0.emitter.setAmplitudeSpread(0.3000)
-    p0.emitter.setOffsetForce(Vec3(0.0000, 10.0000, 0.0000))
+    p0.emitter.setAmplitude(15.000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 4.1000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
-    p0.emitter.setRadiateOrigin(Point3(0.0000, -3.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -2.0000, 0.0000))
     # Sphere Volume parameters
-    p0.emitter.setRadius(0.0010)
+    p0.emitter.setRadius(0.0200)
     self.addParticles(p0)
     f0 = ForceGroup.ForceGroup('forces')
     # Force parameters
-    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -5.3000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
+    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -7.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
     force0.setActive(1)
     f0.addForce(force0)
-    force1 = LinearVectorForce(Vec3(0.0000, -7.0000, 0.0000), 1.0000, 0)
+    force1 = LinearVectorForce(Vec3(0.0000, -10.0000, 0.0000), 1.0000, 0)
     force1.setActive(1)
     f0.addForce(force1)
     force3 = LinearJitterForce(8.5449, 0)
@@ -3111,7 +3367,7 @@ def reorgCloud(self):
 @particle
 def demotionFreeze(self):
     self.reset()
-    self.setPos(0.000, 0.000, 3.000)
+    self.setPos(0.000, 0.000, 1.000)
     self.setHpr(0.000, 0.000, 0.000)
     self.setScale(2.000, 2.000, 2.000)
     p0 = Particles.Particles('particles-1')
@@ -3197,7 +3453,7 @@ def demotionSpray(self):
     # Sprite parameters
     p0.renderer.setIgnoreScale(1)
     p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/roll-o-dex")
-    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setColor(Vec4(1, 1, 1, 1.00))
     p0.renderer.setXScaleFlag(0)
     p0.renderer.setYScaleFlag(0)
     p0.renderer.setAnimAngleFlag(0)
@@ -3211,6 +3467,61 @@ def demotionSpray(self):
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
     p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -4.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.8900)
+    self.addParticles(p0)
+
+@particle
+def demotionSprayExtortion(self):
+    self.reset()
+    self.setPos(0.000, 0.00, 3.000)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    #p0.setRenderer("PointParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(150)
+    p0.setBirthRate(0.0500)
+    p0.setLitterSize(7)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.8000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/roll-o-dex")
+    p0.renderer.setColor(Vec4(0, 1, 0.047, 1.00))
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.2)
+    p0.renderer.setFinalXScale(0.2)
+    p0.renderer.setInitialYScale(0.2)
+    p0.renderer.setFinalYScale(0.2)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(15)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 6.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -3251,7 +3562,7 @@ def demotionFreeze2(self):
     p0.renderer.setUserAlpha(1.00)
     # Sprite parameters
     p0.renderer.setIgnoreScale(1)
-    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/roll-o-dex")
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/dollar-sign")
     p0.renderer.setColor(Vec4(0, 1, 0.004, 1))
     p0.renderer.setXScaleFlag(0)
     p0.renderer.setYScaleFlag(0)
@@ -6861,9 +7172,135 @@ def pixieRise(self):
 
     self.addForceGroup(f0)
 
+@particle
+def hotAirSprayPressurizer(self):
+    self.reset()
+    self.setPos(0.000, 2.500, 3.200) # originally (0,4,4)
+    self.setHpr(-180.000, 80.000, -180.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(10)
+    p0.setBirthRate(0.2000)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.6000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.addTextureFromFile('phase_3.5/maps/flame.png')
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(.75)
+    p0.renderer.setFinalXScale(.5)
+    p0.renderer.setInitialYScale(.75)
+    p0.renderer.setFinalYScale(.5)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 5.1000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -2.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.0200)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -7.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    force1 = LinearVectorForce(Vec3(0.0000, -15.0000, 0.0000), 1.0000, 0)
+    force1.setActive(1)
+    f0.addForce(force1)
+    self.addForceGroup(f0)
 
 @particle
 def hotAirSpray(self):
+    self.reset()
+    self.setPos(0.000, 2.500, 3.200) # originally (0,4,4)
+    self.setHpr(-180.000, 80.000, -180.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(10)
+    p0.setBirthRate(0.2000)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.6000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAUSER)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setIgnoreScale(1)
+    p0.renderer.setTextureFromNode("phase_3.5/models/props/suit-particles", "**/fire")
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.75)
+    p0.renderer.setFinalXScale(0.5)
+    p0.renderer.setInitialYScale(0.75)
+    p0.renderer.setFinalYScale(0.5)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 5.1000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, -2.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(0.0200)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -7.0000), LinearDistanceForce.FTONEOVERRSQUARED, 1.0000, 2.5308, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    force1 = LinearVectorForce(Vec3(0.0000, -15.0000, 0.0000), 1.0000, 0)
+    force1.setActive(1)
+    f0.addForce(force1)
+    self.addForceGroup(f0)
+
+
+@particle
+def hotAirSprayOLD(self):
     self.reset()
     self.setPos(0.000, 3.000, 4.000)
     self.setHpr(0.000, 10.000, 0.000)
@@ -6923,7 +7360,7 @@ def hotAirSpray(self):
     self.addForceGroup(f0)
 
 @particle
-def hotAirSprayPressurizer(self):
+def hotAirSprayPressurizerOLD(self):
     self.reset()
     self.setPos(0.000, 3.000, 4.000)
     self.setHpr(0.000, 10.000, 0.000)

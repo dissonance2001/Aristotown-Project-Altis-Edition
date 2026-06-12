@@ -422,13 +422,6 @@ def __throwPie(throw, delay, hitCount, npcs):
         pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
     if hitSuit:
         suitResponseTrack = Sequence()
-        for s in battle.activeSuits:
-            if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
-                suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
-            if s.dna.name == 'clerk' and s.getActualLevel() == 20:
-                suitResponseTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
-            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
-                suitResponseTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         totalDamage = hp
 
         if kbbonus > 0:
@@ -481,6 +474,8 @@ def __throwPie(throw, delay, hitCount, npcs):
         else:
             sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
+        if suit.throwRushJob:
+            suitResponseTrack.append(Func(suit.makeUnThrowRushJob))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:
@@ -508,14 +503,24 @@ def __throwPie(throw, delay, hitCount, npcs):
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
         #suitResponseTrack.append(Wait(1.0))
         if suit.dna.name == 'redd' and revived != 0:
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         if revived != 0 and suit.isSkeleton:
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         if died != 0 and suit.isVirtual:
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual:
+        if died != 0 and not suit.isVirtual and not suit.isOverpressured:
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         suitIndex = battle.activeSuits.index(suit)
         if suit.dna.name == 'sgoat' and suit.isShielding:
@@ -719,6 +724,8 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
             else:
                 sival = ActorInterval(suit, 'pie-small-react')
             singleSuitResponseTrack.append(Wait(delay + tPieHitsSuit))
+            if suit.throwRushJob:
+                singleSuitResponseTrack.append(Func(suit.makeUnThrowRushJob))
             singleSuitResponseTrack.append(showDamage)
             singleSuitResponseTrack.append(updateHealthBar)
             singleSuitResponseTrack.append(sival)
@@ -733,9 +740,9 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
                 bonusTrack.append(Func(suit.updateHealthBar, hpbonus))
             if revived != 0:
                 singleSuitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-            if suit.virtual and died !=0:
+            if suit.virtual and died !=0 and not suit.isOverpressured:
                 singleSuitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, toon, battle))
-            elif died != 0:
+            elif died != 0 and not suit.isOverpressured:
                 singleSuitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
             else:
                 singleSuitResponseTrack.append(Func(suit.setNeutralAnimation))

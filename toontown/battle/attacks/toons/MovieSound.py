@@ -92,6 +92,8 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             died = target['died']
             revived = target['revived']
             suitTrack = Sequence(Wait(tSuitReact))
+            if suit.soundRushJob:
+                suitTrack.append(Func(suit.makeUnSoundRushJob))
             showDamage = Func(suit.showHpText, -totalDamage[targetIndex], openEnded=0)
             updateHealthBar = Func(suit.updateHealthBar, totalDamage[targetIndex])
 
@@ -108,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
-                if died and not suit.isVirtual:
+                if died and not suit.isVirtual and not suit.isOverpressured:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -300,9 +302,9 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual:
+        if died != 0 and suit.isVirtual and not suit.isOverpressured:
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died and not suit.isVirtual:
+        if died and not suit.isVirtual and not suit.isOverpressured:
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
             if sound['level'] < 7:

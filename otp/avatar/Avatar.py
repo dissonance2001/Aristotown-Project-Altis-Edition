@@ -38,7 +38,6 @@ class Avatar(Actor, ShadowCaster):
 
         Actor.__init__(self, None, None, other, flattenable=0, setFinal=1)
         self.setBlend(frameBlend = base.wantSmoothAnims)
-        self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         ShadowCaster.__init__(self)
         self.name = ''
         self.npcType = None
@@ -362,6 +361,48 @@ class Avatar(Actor, ShadowCaster):
         if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:
             retval = dialogueArray[sfxIndex]
         return retval
+    
+    def setChatAbsoluteSpecial(self, chatString, chatFlags, dialogue=None, interrupt=True):
+        searchString = chatString.lower()
+        if chatFlags & CFQuicktalker:
+            self.nametag.setChatType(NametagGlobals.SPEEDCHAT)
+        else:
+            self.nametag.setChatType(NametagGlobals.CHAT)
+
+        if chatFlags & CFThought:
+            self.nametag.setChatBalloonType(NametagGlobals.THOUGHT_BALLOON)
+        else:
+            self.nametag.setChatBalloonType(NametagGlobals.CHAT_BALLOON)
+
+        if chatFlags & CFPageButton:
+            self.nametag.setChatButton(NametagGlobals.pageButton)
+        else:
+            self.nametag.setChatButton(NametagGlobals.noButton)
+
+        if chatFlags & CFReversed:
+            self.nametag.setChatReversed(True)
+        else:
+            self.nametag.setChatReversed(False)
+        if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
+            self.animHead = 'murmur'
+        elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
+            self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
+        else:
+            stringLength = len(chatString)
+            if stringLength <= 1:
+                self.animHead = None
+            elif stringLength <= OTPLocalizer.DialogLength1:
+                self.animHead = 'grunt'
+            elif stringLength <= OTPLocalizer.DialogLength2:
+                self.animHead = 'murmur'
+            elif stringLength <= OTPLocalizer.DialogLength3:
+                self.animHead = 'statement'
+            else:
+                self.animHead = 'statement'
+        self.nametag.setChatText(chatString, chatFlags)
+        self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
     def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1):
         self.clearChat()
@@ -407,15 +448,10 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, timeout=(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if self.animHead == None:
-            for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
-                ).start()
-        else:
-            for headPart in self.animatedHeadParts: Sequence(
-                ActorInterval(headPart, self.animHead),
-                Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
-            ).start()
+        for headPart in self.animatedHeadParts: 
+            Sequence(ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else '',))
+                    ).start()
 
     def checkCogHP(self, battle):
         pass
@@ -463,21 +499,9 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if self.dna.name == 'crf':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
-                ).start()
-        if self.dna.name == 'mad':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
-                ).start()
-        if self.dna.name == 'dsf':
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',), fromFrame=0, toFrame=22)
-                ).start()
-        else:
-                for headPart in self.animatedHeadParts: Sequence(
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 else '',))
+        for headPart in self.animatedHeadParts: 
+            Sequence(ActorInterval(headPart, self.animHead),
+                     Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else '',))
                 ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):

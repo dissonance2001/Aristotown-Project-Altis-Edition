@@ -1552,7 +1552,8 @@ dclass DistributedBattleBase : DistributedObject {
   setInitialSuitPos(int16/10, int16/10, int16/10) required broadcast ram;
   setMembers(uint32[], string, string, string, string, string, uint32[], string, string, string, string, string, string, string, string, int16) required broadcast ram;
   adjust(int16) broadcast;
-  setMovie(int8, uint32[], uint32[], ToonAttack[], SuitAttack[]) required broadcast ram;
+  setMovie(int8, uint32[], uint32[], ToonAttack[], int8[], SuitAttack[]) required broadcast ram;
+  setToonTrackOrder(int8[]) broadcast ram;
   setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
   denyLocalToonJoin();

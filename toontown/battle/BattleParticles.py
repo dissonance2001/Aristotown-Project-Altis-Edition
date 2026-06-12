@@ -80,6 +80,8 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('demotionUnFreeze2.ptf')
     elif name == 'DemotionSpray':
         return loadParticleFile('demotionSpray.ptf')
+    elif name == 'DemotionSprayExtortion':
+        return loadParticleFile('demotionSprayExtortion.ptf')
     elif name == 'DemotionSpray3':
         return loadParticleFile('reOrgSpray2.ptf')
     elif name == 'downsizeCloud2':
@@ -118,6 +120,14 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('waterSpray.ptf')
     elif name == 'NickelAndDime':
         return loadParticleFile('nickelDime.ptf')
+    elif name == 'InkDrain':
+        return loadParticleFile('inkdrain.ptf')
+    elif name == 'InkDrain2':
+        return loadParticleFile('inkdrain2.ptf')
+    elif name == 'InkDrain3':
+        return loadParticleFile('inkdrain3.ptf')
+    elif name == 'InkDrain4':
+        return loadParticleFile('inkdrain4.ptf')
     elif name == 'SprayLift':
         return __makeSprayLift()
     elif name == 'HeavyRainfall':

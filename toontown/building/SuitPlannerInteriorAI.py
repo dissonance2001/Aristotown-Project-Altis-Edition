@@ -465,13 +465,13 @@ class SuitPlannerInteriorAI:
             elif level >= 16:
                 returnval = random.randint(9, 14)
             elif level >= 15:
-                returnval = random.randint(9, 14)
+                returnval = random.randint(5, 14)
             elif level >= 14:
-                returnval = random.randint(7, 14)
+                returnval = random.randint(5, 14)
             elif level >= 13:
-                returnval = random.randint(7, 13)
+                returnval = random.randint(5, 13)
             elif level >= 12:
-                returnval = random.randint(7, 12)
+                returnval = random.randint(5, 12)
             elif level >= 11:
                 returnval = random.choice((5, 7, 8, 9, 10, 11))
             elif level >= 10:
@@ -499,7 +499,7 @@ class SuitPlannerInteriorAI:
 
             return returnval
 
-        suitLevel = random.randint(10, 31)
+        suitLevel = random.randint(15, 31)
         suitLevel3 = random.randint(1, 31)
         suitLevel2 = random.randint(7, 15)
         suitKind = suitKindFromLevel(suitLevel)
@@ -637,6 +637,12 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'sil10':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', 36, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil11':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 37, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'sil12':
+            suit = self.__genSuitObject(self.zoneId, 27, 'm', 38, 0)
             reserveSuits.append(suit)
         if specialCode == 'videog':
             suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)

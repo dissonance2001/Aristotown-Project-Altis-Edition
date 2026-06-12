@@ -172,9 +172,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     # Calculate heading to toon
     targets = attack['target']
     origPos, origHpr = battle.getActorPosHpr(suit)
-    for t in targets:
-        toon = t['toon']
-        track.append(Func(toon.headsUp, origPos))
+    # for t in targets:
+    #     toon = t['toon']
+    #     track.append(Func(toon.headsUp, origPos))
     origPos2 = suit.getPos(battle)
     suit.setPos(battle, origPos)
     targetPos = toon.getPos(battle)
@@ -223,7 +223,8 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         shuffleAnim = 'shuffle-left'
     track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle))
     )
-    track.append(
+    if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+        track.append(
         Func(suit.setNeutralAnimationDrop))
     return track
 
@@ -277,10 +278,10 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
         track.append(Func(toon.headsUp, battle, suitActualPos))
 
     delta = (targetH - origH + 180) % 360 - 180
-    for s in battle.activeSuits:
-        if s.dna.name == 'psetter':
-            theSuit = s
-            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
+    # for s in battle.activeSuits:
+    #     if s.dna.name == 'psetter':
+    #         theSuit = s
+    #         track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     if attack['suitName'] == 'radiog' and attack[
         'name'] == 'RadiographerRadioInfrequency':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
@@ -439,7 +440,9 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
             Func(suit.loop, 'neutral-enraged'))
     else:
         if not attack['name'] == 'BroadcasterDonation':
-            track.append(Func(suit.setNeutralAnimationDrop))
+            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+                track.append(
+                Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 
@@ -451,10 +454,10 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     track = Sequence(Wait(delay))
     unsueTrack = Func(battle.unSueSuit, suit)
-    for s in battle.activeSuits:
-        if s.dna.name == 'psetter':
-            theSuit = s
-            track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
+    # for s in battle.activeSuits:
+    #     if s.dna.name == 'psetter':
+    #         theSuit = s
+    #         track.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     if attack['suitName'] == 'radiog' and attack[
         'name'] == 'RadiographerRadioInfrequency':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
@@ -468,6 +471,9 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyHeatWave':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'hustle' and attack['name'] == 'HustlerClosingTime':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyViolation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
@@ -609,7 +615,9 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
             Func(suit.loop, 'neutral-enraged'))
     else:
         if not attack['name'] == 'BroadcasterDonation':
-            track.append(Func(suit.setNeutralAnimationDrop))
+            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+                track.append(
+                Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 
@@ -676,7 +684,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
         if dmg > 0:
             animTrack.append(getToonTakeDamageTrack(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))
             origPos, origHpr = battle.getActorPosHpr(toon)
-            if not attack['name'] == 'RacketeerExtortion':
+            if not attack['name'] == 'RacketeerExtortion' and not attack['name'] == 'ForemanExtortion' and not attack['name'] == 'RacketeerExtortion2' and not attack['name'] == 'PresidentSyphon':
                 animTrack.append(Func(toon.setHpr, battle, origHpr))
             return Parallel(animTrack, indicatorTracks)
         else:
@@ -737,7 +745,19 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
         return Parallel(animTrack, indicatorTracks)
     else:
         animTrack.append(Func(toon.headsUp, battle, suitPos))
-        if attack['name'] == 'VideographerHardCut':
+        if attack['name'] == 'MintMovingGoalposts':
+            for t in battle.activeToons:
+                animTrack.append(Func(t.headsUp, battle, suitPos))
+        if attack['name'] == 'HighRollerDamageReduction':
+            for t in battle.activeToons:
+                animTrack.append(Func(t.headsUp, battle, suitPos))
+        if attack['name'] == 'HustlerBaitAndSwitch':
+            for t in battle.activeToons:
+                animTrack.append(Func(t.headsUp, battle, suitPos))
+        if attack['name'] == 'ContingencyOperationalFreeze':
+            for t in battle.activeToons:
+                animTrack.append(Func(t.headsUp, battle, suitPos))
+        if attack['name'] == 'VideographerHardCut' or attack['name'] == 'MintMovingGoalposts' or attack['name'] == 'HighRollerDamageReduction' or attack['name'] == 'HustlerBaitAndSwitch' or attack['name'] == 'ContingencyOperationalFreeze':
             animTrack.append(getToonDodgeTrackCheat2(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         else:
             animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
@@ -755,8 +775,61 @@ def getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims
 
 def getToonDodgeTrackCheat2(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime):
     toon = target['toon']
+    battle = attack['battle']
     toonTrack = Sequence()
-    if attack['name'] == 'VideographerHardCut':
+    if attack['name'] == 'MintMovingGoalposts':
+        for t in battle.activeToons:
+            toonTrack.append(Wait(dodgeDelay))
+            if dodgeAnimNames:
+                for d in dodgeAnimNames:
+                    if d == 'sidestep':
+                        toonTrack.append(getAllyToonsDodgeParallel(target))
+                    else:
+                        toonTrack.append(ActorInterval(t, d))
+
+            else:
+                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+            toonTrack.append(Func(t.loop, 'neutral'))
+    elif attack['name'] == 'HighRollerDamageReduction':
+        for t in battle.activeToons:
+            toonTrack.append(Wait(dodgeDelay))
+            if dodgeAnimNames:
+                for d in dodgeAnimNames:
+                    if d == 'sidestep':
+                        toonTrack.append(getAllyToonsDodgeParallel(target))
+                    else:
+                        toonTrack.append(ActorInterval(t, d))
+
+            else:
+                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+            toonTrack.append(Func(t.loop, 'neutral'))
+    elif attack['name'] == 'HustlerBaitAndSwitch':
+        for t in battle.activeToons:
+            toonTrack.append(Wait(dodgeDelay))
+            if dodgeAnimNames:
+                for d in dodgeAnimNames:
+                    if d == 'sidestep':
+                        toonTrack.append(getAllyToonsDodgeParallel(target))
+                    else:
+                        toonTrack.append(ActorInterval(t, d))
+
+            else:
+                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+            toonTrack.append(Func(t.loop, 'neutral'))
+    elif attack['name'] == 'ContingencyOperationalFreeze':
+        for t in battle.activeToons:
+            toonTrack.append(Wait(dodgeDelay))
+            if dodgeAnimNames:
+                for d in dodgeAnimNames:
+                    if d == 'sidestep':
+                        toonTrack.append(getAllyToonsDodgeParallel(target))
+                    else:
+                        toonTrack.append(ActorInterval(t, d))
+
+            else:
+                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+            toonTrack.append(Func(t.loop, 'neutral'))
+    elif attack['name'] == 'VideographerHardCut':
         toonTrack.append(Wait(dodgeDelay))
         if dodgeAnimNames:
             for d in dodgeAnimNames:

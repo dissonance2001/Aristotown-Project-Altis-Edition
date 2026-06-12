@@ -238,6 +238,18 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             pass
 
+
+    def checkFrozenRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getFrozenRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnFrozen))
+        elif self.getFrozenRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addFrozenRounds, self.getFrozenRounds() - 1)).start()
+        else:
+            pass
+
     def checkGroupDamageDownRoundCountdown(self):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -469,6 +481,28 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             pass
 
+    def checkViralSensationRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getViralSensationRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnViralSensation))
+        elif self.getViralSensationRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addViralSensationRounds, self.getViralSensationRounds() - 1)).start()
+        else:
+            pass
+
+    def checkZappedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getZappedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnZapped))
+        elif self.getZappedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addZappedRounds, self.getZappedRounds() - 1)).start()
+        else:
+            pass
+
     def checkHiddenRoundCountdown(self):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -623,6 +657,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.damageInterval = Parallel(Func(self.setThrowGagBoost, self.getThrowGagBoost())).start()
         else:
             self.damageInterval = Parallel(Func(self.setThrowGagBoost, num)).start()
+
+    def checkViralSensationBoost(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getViralSensationBoost() > num:
+            self.damageInterval = Parallel(Func(self.setViralSensationBoost, self.getViralSensationBoost())).start()
+        else:
+            self.damageInterval = Parallel(Func(self.setViralSensationBoost, num)).start()
 
     def checkSquirtGagBoost(self, num):
         if self.damageInterval:
@@ -3252,6 +3295,181 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if hpGained > 0:
             self.showHpText(hpGained, hasInteractivePropBonus=hasInteractivePropBonus)
             self.hpChange(quietly=0)
+
+    def showHpStringHighStakesBigLoss(self, number): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("BIG LOSS!!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0, 0, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.85)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                   LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("%s%% Damage!" % number)
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+        self.hpText2.setScale(.85)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.875)
+
+    def showHpStringHighStakesBigLoss2(self, number): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("BIG LOSS!!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0, 0, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.85)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("%s%% Damage!" % number)
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+        self.hpText2.setScale(.85)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.875)
+
+    def showHpStringHighStakesLoss(self, number): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("Loss!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(1, 0.561, 0, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.85)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("%s%% Damage!" % number)
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.85)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.875)
+
+    def showHpStringHighStakesWin(self, number): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("Win!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(0, 1, 0.004, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.85)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("+%s%% Damage!" % number)
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.85)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.875)
+
+    def showHpStringHighStakesBigWin(self, number): # damage string
+        if self.HpTextEnabled and not self.ghostMode:
+            self.HpTextGenerator.setText("BIG WIN!!")
+            self.HpTextGenerator.clearShadow()
+            self.HpTextGenerator.setAlign(TextNode.ACenter)
+            if self.hpTextInterval:
+                self.hpTextInterval.finish()
+                self.hpTextInterval = None
+            if self.hpTextInterval2:
+                self.hpTextInterval2.finish()
+                self.hpTextInterval2 = None
+            self.HpTextGenerator.setTextColor(0.404, 0, 1, 1)
+            self.hpTextNode = self.HpTextGenerator.generate()
+            self.hpText = self.attachNewNode(self.hpTextNode)
+            self.hpText.setScale(0.85)
+            self.hpText.setBillboardPointEye()
+            self.hpText.setBin('fixed', 100)
+            self.hpText.setPos(0, 0, self.height / 2)
+            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 2), blendType='easeOut'), Wait(1.0),
+                                                LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
+            self.hpTextInterval.start()
+
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
+        self.HpTextGenerator.setText("+%s%% Damage!" % number)
+        self.HpTextGenerator.clearShadow()
+        self.HpTextGenerator.setAlign(TextNode.ACenter)
+        self.hpTextNode2 = self.HpTextGenerator.generate()
+        self.hpText2 = self.hpText.attachNewNode(self.hpTextNode2)
+        self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+        self.hpText2.setScale(.85)
+        self.hpText2.setBillboardPointEye()
+        self.hpText2.setBin('fixed', 99)
+        self.hpText2.setPos(0, 0, -0.875)
 
     def showHpTextNew(self, number, text=None, bonus=0, scale=0.85, attackTrack=-1, colorCode=0):
         if self.HpTextEnabled and not self.ghostMode:

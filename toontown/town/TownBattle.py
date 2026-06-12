@@ -47,6 +47,7 @@ class TownBattle(StateData.StateData):
         self.bldg = 0
         self.track = -1
         self.level = -1
+        self.lastActionMode = 'Inventory'
         self.target = 0
         self.toonAttacks = [(-1, 0, 0),
          (-1, 0, 0),
@@ -358,6 +359,7 @@ class TownBattle(StateData.StateData):
         self.notify.debug('doneStatus: %s' % doneStatus)
         mode = doneStatus['mode']
         if mode == 'Inventory':
+            self.lastActionMode = 'Inventory'
             self.track = doneStatus['track']
             self.level = doneStatus['level']
             self.toonPanels[self.localNum].setValues(self.localNum, self.track, self.level)
@@ -409,11 +411,15 @@ class TownBattle(StateData.StateData):
             self.fsm.request('Run')
         elif mode == 'SOS':
             self.fsm.request('SOS')
+            self.lastActionMode = 'SOS'
         elif mode == 'Fire':
             self.fsm.request('Fire')
+            self.lastActionMode = 'Fire'
         elif mode == 'Sue':
             self.fsm.request('Sue')
+            self.lastActionMode = 'Sue'
         elif mode == 'Pass':
+            self.lastActionMode = 'Pass'
             response = {}
             response['mode'] = 'Pass'
             response['id'] = -1
@@ -484,16 +490,16 @@ class TownBattle(StateData.StateData):
                 self.cogPanels[i].setCogInformation(cogs[i])
 
             if currStateName == 'ChooseCog':
-                self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track)
+                self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track, self.level)
             elif currStateName == 'ChooseToon':
-                self.chooseToonPanel.adjustToons(self.numToons, self.localNum)
+                self.chooseToonPanel.adjustToons(self.numToons, self.localNum, self.track, self.level)
             canHeal, canTrap, canLure = self.checkHealTrapLure()
             base.localAvatar.inventory.setBattleCreditMultiplier(self.creditMultiplier)
             base.localAvatar.inventory.setActivateMode('battle', heal=canHeal, trap=canTrap, lure=canLure, bldg=self.bldg, creditLevel=self.creditLevel, tutorialFlag=self.tutorialFlag)
 
     def enterChooseCog(self):
         self.cog = 0
-        self.chooseCogPanel.enter(self.numCogs, luredIndices=self.luredIndices, trappedIndices=self.trappedIndices, track=self.track)
+        self.chooseCogPanel.enter(self.numCogs, luredIndices=self.luredIndices, trappedIndices=self.trappedIndices, track=self.track, level=self.level)
         self.accept(self.chooseCogPanelDoneEvent, self.__handleChooseCogPanelDone)
 
     def exitChooseCog(self):
@@ -517,9 +523,9 @@ class TownBattle(StateData.StateData):
         else:
             self.notify.warning('unknown mode: %s' % mode)
 
-    def enterAttackWait(self, chosenToon = -1):
+    def enterAttackWait(self, chosenToon=-1):
         self.accept(self.waitPanelDoneEvent, self.__handleAttackWaitBack)
-        self.waitPanel.enter(self.numToons)
+        self.waitPanel.enter(self.numToons, self.track, self.level, self.lastActionMode)
 
     def exitAttackWait(self):
         self.waitPanel.exit()
@@ -544,7 +550,12 @@ class TownBattle(StateData.StateData):
 
     def enterChooseToon(self):
         self.toon = 0
-        self.chooseToonPanel.enter(self.numToons, localNum=self.localNum)
+        self.chooseToonPanel.enter(
+            self.numToons,
+            localNum=self.localNum,
+            track=self.track,
+            level=self.level
+        )
         self.accept(self.chooseToonPanelDoneEvent, self.__handleChooseToonPanelDone)
 
     def exitChooseToon(self):

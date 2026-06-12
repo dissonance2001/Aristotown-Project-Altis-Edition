@@ -1,5 +1,5 @@
 # Server:
-server-version AristoTown-Altis-Edition-1.8.0
+server-version AristoTown-Altis-Edition-2.0.0.
 min-access-level 100
 shard-low-pop 50
 shard-mid-pop 100

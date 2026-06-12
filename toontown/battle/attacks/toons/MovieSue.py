@@ -13,6 +13,7 @@ from toontown.nametag.NametagGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 import random
 from toontown.battle import MovieCamera
+from toontown.battle.attacks.suits import MovieIntervals
 from toontown.battle import MovieUtil
 from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle.MovieUtil import calcAvgSuitPos
@@ -96,7 +97,7 @@ def doSues(sues):
     notify.debug('groupHitDict = %s' % groupHitDict)
     notify.debug('totalHitDict = %s' % totalHitDict)
 
-    delay = 0.0
+    delay = random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
     mtrack = Parallel()
     firedTargets = []
     for ss in suitSues:
@@ -104,7 +105,7 @@ def doSues(sues):
             ival = __doSuitSues(ss)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + 0
+            delay = delay + random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
 
     retTrack = Sequence()
     retTrack.append(npcArrivals)
@@ -159,7 +160,7 @@ def __doSuitSues(sues):
             else:
                 suitList.remove(sue['target'][i]['suit'])
             for x in xrange(len(sue['target'])):
-                tracks = __throwPie(sue, i, delay, hitCount, showSuitCannon)
+                tracks = __throwPie(sue, delay, hitCount)
                 i = i + 1
                 if tracks:
                     for track in tracks:
@@ -171,7 +172,7 @@ def __doSuitSues(sues):
                 showSuitCannon = 0
             else:
                 suitList.remove(sue['target']['suit'])
-            tracks = __throwPie(sue, i, delay, hitCount, showSuitCannon)
+            tracks = __throwPie(sue, delay, hitCount)
             if tracks:
                 for track in tracks:
                     toonTracks.append(track)
@@ -282,25 +283,34 @@ def __pieMissGroupLerpCallback(t, missDict):
         pie.setPos(newPos)
         pie.setScale(newScale)
 
-
 def __getSoundTrack(level, hitSuit, node = None):
+    soundEffect = globalBattleSoundCache.getSound('LB_receive_evidence.ogg')
+    soundEffect2 = globalBattleSoundCache.getSound('LB_evidence_miss.ogg')
+    soundTrack = Sequence()
+    throwSound = globalBattleSoundCache.getSound('AA_pie_throw_only.ogg')
+    throwTrack = Sequence(Wait(2.6), SoundInterval(throwSound, node=node))
+    soundTrack.append(Wait(tPieHitsSuit))
+    soundTrack.append(Parallel(SoundInterval(soundEffect, node=node), SoundInterval(soundEffect2, node=node)))
+    if hitSuit:
+        return Parallel(throwTrack, soundTrack)
+    else:
+        return throwTrack
+
+def __getSoundTrack2(level, hitSuit, node = None):
     throwSound = globalBattleSoundCache.getSound('AA_drop_trigger_box.ogg')
     throwTrack = Sequence(Wait(2.15), SoundInterval(throwSound, node=node))
     return throwTrack
 
 
-def __throwPie(throw, i, delay, hitCount, showCannon = 1):
+def __throwPie(throw, delay, hitCount):
     toon = throw['toon']
     if 'npc' in throw:
         toon = throw['npc']
     hpbonus = throw['hpbonus']
     target = throw['target']
-    try:
-        target = target[i]
-    except:
-        pass
     suit = target['suit']
     hp = target['hp']
+    explodeTrack = Sequence()
     kbbonus = target['kbbonus']
     sidestep = throw['sidestep']
     died = target['died']
@@ -315,113 +325,90 @@ def __throwPie(throw, i, delay, hitCount, showCannon = 1):
      suit.doId,
      hp,
      died))
-    pieName = pieNames[0]
+    pieName = pieNames[level]
     hitSuit = hp > 0
-    button = globalPropPool.getProp('button')
-    buttonType = globalPropPool.getPropType('button')
-    button2 = MovieUtil.copyProp(button)
-    buttons = [button, button2]
-    hands = toon.getLeftHands()
+    pie = globalPropPool.getProp('lawbook')
+    pieType = globalPropPool.getPropType('lawbook')
+    pie2 = MovieUtil.copyProp(pie)
+    pies = [pie, pie2]
+    hands = toon.getRightHands()
+    soundTrack = __getSoundTrack(level, hitSuit, suit)
     toonTrack = Sequence()
     toonFace = Func(toon.headsUp, battle, suitPos)
     toonTrack.append(Wait(delay))
     toonTrack.append(toonFace)
-    toonTrack.append(ActorInterval(toon, 'pushbutton'))
-    if hitSuit:
-        toonTrack.append(ActorInterval(toon, 'wave', duration=2.0))
-        toonTrack.append(ActorInterval(toon, 'duck'))
+    toonTrack.append(Parallel(soundTrack, ActorInterval(toon, 'throw')))
+    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
     toonTrack.append(Func(toon.loop, 'neutral'))
-    toonTrack.append(Func(toon.setHpr, battle, origHpr))
-    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 3)))
-    buttonTrack = Sequence()
-    buttonShow = Func(MovieUtil.showProps, buttons, hands)
-    buttonScaleUp = LerpScaleInterval(button, 1.0, button.getScale(), startScale=Point3(0.01, 0.01, 0.01))
-    buttonScaleDown = LerpScaleInterval(button, 1.0, Point3(0.01, 0.01, 0.01), startScale=button.getScale())
-    buttonHide = Func(MovieUtil.removeProps, buttons)
-    buttonTrack.append(Wait(delay))
-    buttonTrack.append(buttonShow)
-    buttonTrack.append(buttonScaleUp)
-    buttonTrack.append(Wait(2.5))
-    buttonTrack.append(buttonScaleDown)
-    buttonTrack.append(buttonHide)
-    soundTrack = __getSoundTrack(level, hitSuit, toon)
-    suitResponseTrack = Sequence()
-    reactIval = Sequence()
-    if showCannon and hitSuit:
-        showDamage = Func(suit.showHpText, -hp, openEnded=0)
-        updateHealthBar = Func(suit.updateHealthBar, hp)
-        cannon = loader.loadModel('phase_4/models/minigames/toon_cannon')
-        barrel = cannon.find('**/cannon')
-        barrel.setHpr(0, 90, 0)
-        cannonHolder = render.attachNewNode('CannonHolder')
-        cannon.reparentTo(cannonHolder)
-        cannon.setPos(0, 0, -8.6)
-        cannonHolder.setPos(suit.getPos(render))
-        cannonHolder.setHpr(suit.getHpr(render))
-        cannonAttachPoint = barrel.attachNewNode('CannonAttach')
-        kapowAttachPoint = barrel.attachNewNode('kapowAttach')
-        scaleFactor = 1.6
-        iScale = 1 / scaleFactor
-        barrel.setScale(scaleFactor, 1, scaleFactor)
-        cannonAttachPoint.setScale(iScale, 1, iScale)
-        cannonAttachPoint.setPos(0, 6.7, 0)
-        kapowAttachPoint.setPos(0, -0.5, 1.9)
-        suit.reparentTo(cannonAttachPoint)
-        suit.setPos(0, 0, 0)
-        suit.setHpr(0, -90, 0)
-        suitLevel = suit.getActualLevel()
-        if suitLevel > 12:
-            suitLevel = 12
-        deep = 2.5 + suitLevel * 0.2
-        suitScale = 0.9
-        import math
-        suitScale = 0.9 - math.sqrt(suitLevel) * 0.1
-        sival = []
-        posInit = cannonHolder.getPos()
-        posFinal = Point3(posInit[0] + 0.0, posInit[1] + 0.0, posInit[2] + 7.0)
-        kapow = globalPropPool.getProp('kapow')
-        kapow.reparentTo(kapowAttachPoint)
-        kapow.hide()
-        kapow.setScale(0.25)
-        kapow.setBillboardPointEye()
-        smoke = loader.loadModel('phase_4/models/props/test_clouds')
-        smoke.reparentTo(cannonAttachPoint)
-        smoke.setScale(0.5)
-        smoke.hide()
-        smoke.setBillboardPointEye()
-        soundBomb = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_fire_alt.ogg')
-        playSoundBomb = SoundInterval(soundBomb, node=cannonHolder)
-        soundFly = base.loader.loadSfx('phase_4/audio/sfx/firework_whistle_01.ogg')
-        playSoundFly = SoundInterval(soundFly, node=cannonHolder)
-        soundCannonAdjust = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_adjust.ogg')
-        playSoundCannonAdjust = SoundInterval(soundCannonAdjust, duration=0.6, node=cannonHolder)
-        soundCogPanic = base.loader.loadSfx('phase_5/audio/sfx/ENC_cogafssm.ogg')
-        playSoundCogPanic = SoundInterval(soundCogPanic, node=cannonHolder)
-        reactIval = Parallel(ActorInterval(suit, 'pie-small-react'), Sequence(Wait(0.0), LerpPosInterval(cannonHolder, 2.0, posFinal, startPos=posInit, blendType='easeInOut'), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 45, 0), startHpr=Point3(0, 90, 0), blendType='easeIn'), playSoundCannonAdjust), Wait(2.0), Parallel(LerpHprInterval(barrel, 0.6, Point3(0, 90, 0), startHpr=Point3(0, 45, 0), blendType='easeIn'), playSoundCannonAdjust), LerpPosInterval(cannonHolder, 1.0, posInit, startPos=posFinal, blendType='easeInOut')), Sequence(Wait(0.0), Parallel(ActorInterval(suit, 'flail'), suit.scaleInterval(1.0, suitScale), LerpPosInterval(suit, 0.25, Point3(0, -1.0, 0.0)), Sequence(Wait(0.25), Parallel(playSoundCogPanic, LerpPosInterval(suit, 1.5, Point3(0, -deep, 0.0), blendType='easeIn')))), Wait(2.5), Parallel(playSoundBomb, playSoundFly, Sequence(Func(smoke.show), Parallel(LerpScaleInterval(smoke, 0.5, 3), LerpColorScaleInterval(smoke, 0.5, Vec4(2, 2, 2, 0))), Func(smoke.hide)), Sequence(Func(kapow.show),
-        ActorInterval(kapow, 'kapow'), Func(kapow.hide)), LerpPosInterval(suit, 3.0, Point3(0, 150.0, 0.0)), suit.scaleInterval(3.0, 0.01)), Func(suit.hide)))
-        if hitCount == 1:
-            sival = Sequence(Parallel(reactIval, MovieUtil.createSuitStunIntervalFired(suit, 0.3, 1.3)), Wait(0.0), Func(cannonHolder.remove))
-        else:
-            sival = reactIval
-        suitResponseTrack.append(Wait(delay + tPieHitsSuit))
-        suitResponseTrack.append(showDamage)
-        suitResponseTrack.append(updateHealthBar)
-        suitResponseTrack.append(sival)
-        suitResponseTrack.append(Func(battle.sueSuit, suit))
-        bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
-        if kbbonus > 0:
-            bonusTrack.append(Wait(0.75))
-            bonusTrack.append(Func(suit.showHpText, -kbbonus, 2, openEnded=0))
-        if hpbonus > 0:
-            bonusTrack.append(Wait(0.75))
-            bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0))
-        suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
-
+    if not 'npc' in throw:
+        toonTrack.append(Func(toon.setHpr, battle, origHpr))
+    pieShow = Func(MovieUtil.showProps, pies, hands)
+    pieAnim = Func(__animProp, pies, pieName, pieType)
+    pieScale1 = LerpScaleInterval(pie, 1.0, pie.getScale(), startScale=MovieUtil.PNT3_NEARZERO)
+    pieScale2 = LerpScaleInterval(pie2, 1.0, pie2.getScale(), startScale=MovieUtil.PNT3_NEARZERO)
+    pieScale = Parallel(pieScale1, pieScale2)
+    piePreflight = Func(__propPreflight, pies, suit, toon, battle)
+    pieTrack = Sequence(Wait(delay), pieShow, pieAnim, pieScale, Func(battle.movie.needRestoreRenderProp, pies[0]), Wait(tPieLeavesHand - 1.0), piePreflight)
+    if hitSuit:
+        pieFly = LerpPosInterval(pie, tPieHitsSuit - tPieLeavesHand, pos=MovieUtil.avatarFacePoint(suit, other=battle), name=pieFlyTaskName, other=battle)
+        pieHide = Func(MovieUtil.removeProps, pies)
+        pieTrack.append(pieHide)
+        pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
     else:
-        suitResponseTrack = Parallel(suitResponseTrack, Sequence(Wait(4.25), Func(suit.setChatAbsolute, random.choice(
-        OTPLocalizerEnglish.SuitFireManager), CFSpeech | CFTimeout), Func(MovieUtil.indicateMissed, suit, 0.6),
-                                                                 ActorInterval(suit, 'gag-miss'), ActorInterval(suit, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))))
-    return [toonTrack,
-     soundTrack,
-     buttonTrack,
-     suitResponseTrack]
+        missDict = {}
+        if sidestep:
+            suitPoint = MovieUtil.avatarFacePoint(suit, other=battle)
+        else:
+            suitPoint = __suitMissPoint(suit, other=battle)
+        piePreMiss = Func(__piePreMiss, missDict, pie, suitPoint, battle)
+        pieMiss = LerpFunctionInterval(__pieMissLerpCallback, extraArgs=[missDict], duration=(tPieHitsSuit - tPieLeavesHand) * ratioMissToHit)
+        pieHide = Func(MovieUtil.removeProps, pies)
+        pieTrack.append(piePreMiss)
+        pieTrack.append(pieMiss)
+        pieTrack.append(pieHide)
+        pieTrack.append(Func(battle.movie.clearRenderProp, pies[0]))
+    if hitSuit:
+        suitResponseTrack = Sequence()
+        totalDamage = hp
+
+        hpAfter = suit.getQueuedProjectedHP()
+        hpBefore = hpAfter + totalDamage
+
+        showDamage = Parallel(Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=1))
+        explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+        splatName = 'dust'
+        splat = globalPropPool.getProp('dust')
+        explode = globalPropPool.getProp('dust')
+        explode.setTwoSided(True)
+
+        explode.setBillboardPointWorld(2)
+        explodeTrack.append(Sequence(Wait(delay + tPieHitsSuit)))
+        explodeTrack.append(
+            getPropAppearTrack(explode, suit, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
+        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
+
+        sival = []
+        sival = ActorInterval(suit, 'pie-small-react')
+        suitResponseTrack.append(Wait(delay + tPieHitsSuit))
+        suitResponseTrack.append(Func(suit.makeSued, 4))
+        suitResponseTrack.append(showDamage)
+        suitResponseTrack.append(sival)
+        bonusTrack = Sequence(Wait(delay + tPieHitsSuit))
+        suitResponseTrack.append(Func(suit.setNeutralAnimationDrop))
+        suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
+    else:
+        if suit.getStyleName() in OTPLocalizerEnglish.SuitSueManager:
+            suitResponseTrack = Parallel(Sequence(Wait(delay + 2.45), Func(suit.setChatAbsolute, random.choice(
+        OTPLocalizerEnglish.SuitSueManager[suit.getStyleName()]), CFSpeech | CFTimeout)), MovieUtil.createSuitDodgeMultitrackSue(battle, delay + 2.45, suit, leftSuits, rightSuits))
+        else:
+            suitResponseTrack = Parallel(Sequence(Wait(delay + 2.45), Func(suit.setChatAbsolute, random.choice(
+        OTPLocalizerEnglish.SuitSueManagerNone), CFSpeech | CFTimeout)), MovieUtil.createSuitDodgeMultitrackSue(battle, delay + 2.45, suit, leftSuits, rightSuits))
+    if not hitSuit and delay > 0:
+        return [toonTrack, soundTrack, pieTrack, suitResponseTrack]
+    else:
+        return [toonTrack, explodeTrack,
+         pieTrack,
+         suitResponseTrack]
+    
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
+    return MovieIntervals.getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint, scaleUpTime, startScale, poseExtraArgs)

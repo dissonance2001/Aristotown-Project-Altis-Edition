@@ -98,16 +98,16 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         suitDNA.newSuit('ubuster')
         self.unionbuster.setDNA(suitDNA)
         self.unionbuster.setPickable(0)
-        self.unionbuster.setDisplayName('Union Buster\nSellbot\nLevel 40.mgr')
+        self.unionbuster.setDisplayName('Traffic Manager\nSellbot\nLevel 40.mgr')
         self.unionbuster.doId = 0
         self.unionbuster.loop('sit-exec')
 
         self.racketeer = DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('racket')
+        suitDNA.newSuit('hustle')
         self.racketeer.setDNA(suitDNA)
         self.racketeer.setPickable(0)
-        self.racketeer.setDisplayName('Racketeer\nSellbot\nLevel 40.mgr')
+        self.racketeer.setDisplayName('Hustler\nSellbot\nLevel 40.mgr')
         self.racketeer.doId = 0
         self.racketeer.loop('sit-exec')
 
@@ -477,8 +477,8 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          Func(self.setChatAbsolute, "That's exactly why the Pressure Division exists.", CFSpeech), Wait(4.0),
                          Func(self.pelvis.setH, 180),
                          Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Radiographer... You watch them.", CFSpeech)),
-                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Racketeer... You squeeze them.", CFSpeech)),
-                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Union Buster... You fracture their cooperation.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Hustler... You squeeze them.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Traffic Manager... You fracture their cooperation.", CFSpeech)),
                          Parallel(Func(self.pelvis.setH, 180), Parallel(ActorInterval(self, 'Ff_lookLt'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "And you Pressurizer...", CFSpeech),),
                                   Func(self.setChatAbsolute, "", CFSpeech),
                     Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Wait(2),

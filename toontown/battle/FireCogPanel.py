@@ -4,6 +4,7 @@ from direct.fsm import StateData
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleBase
 from direct.gui.DirectGui import *
+import random
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 
@@ -20,44 +21,90 @@ class FireCogPanel(StateData.StateData):
 
     def load(self):
         gui = loader.loadModel('phase_3.5/models/gui/battlegui/targeting')
-        gui2 = loader.loadModel('phase_3.5/models/gui/battle_gui_new')
-        self.frame = DirectFrame(relief=None, image=gui.find('**/targeting_main'), text_align=TextNode.ALeft,
-                                 pos=(0, 0, 0), scale=0.65)
+        self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+        self.invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+        self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        self.passIcon = self.rowModels.find('**/pass_icon')
+        self.fireIcon = self.status.find('**/toon_accuracy_down_icon')
+        self.sueIcon = self.status.find('**/sued_icon')
+        self.sosIcon = self.status.find('**/toon_accuracy_up_icon')
+        self.invModels = []
+        for track in range(len(AvPropsNew)):
+            itemList = []
+            for item in range(len(AvPropsNew[track])):
+                itemList.append(self.invModel.find('**/' + AvPropsNew[track][item]))
+            self.invModels.append(itemList)
+
+        self.frame = DirectFrame(
+            relief=None,
+            image=gui.find('**/targeting_main'),
+            text_align=TextNode.ALeft,
+            pos=(0, 0, -0.025),
+            scale=0.425
+        )
         self.frame.hide()
-        self.statusFrame = DirectFrame(parent=self.frame, relief=None, image=gui2.find('**/ToonBtl_Status_BG'),
-                                       image_color=Vec4(0, 0, 0, 0), pos=(0.611, 0, 0))
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, image=gui2.find('**/PckMn_Select_Tab'),
-                                     image_color=Vec4(1, 0, 0, 1), text='', text_fg=Vec4(1, 1, 1, 1),
-                                     text_pos=(0, -0.025, -0.5), text_scale=0.08, pos=(-0.013, 0, -0.3))
-        if self.toon:
-            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarToonTitle
-        else:
-            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarCogTitle
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_scale=0.075, pos=(0, 0, -0.275))
         self.avatarButtons = []
         for i in xrange(7):
             button = DirectButton(parent=self.frame, relief=None, image=(
             gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')),
                                   command=self.__handleAvatar, extraArgs=[i])
-            button.setScale(.5, .5, .5)
-            button.setPos(0, 0, 0.7)
+            button.setScale(.675, .675, .675)
+            button.setPos(0, 0, 1)
             self.avatarButtons.append(button)
 
-        self.backButton = DirectButton(parent=self.frame, relief=None, image=(
-        gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(-0.847, -0.3, -0.011),
-                                       scale=.5, text=TTLocalizer.TownBattleChooseAvatarBack, text_scale=0.3,
-                                       text_pos=(0.01, -0.015), text_fg=Vec4(0, 0, 0, 1), command=self.__handleBack)
-
+        self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(0, 0, -0.6),
+                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getSignFont(), command=self.__handleBack)
+        self.backButton.setBin('fixed', 0) 
         gui.removeNode()
+        self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+
+        self.fireIcon = self.status.find('**/toon_accuracy_down_icon')
+
+        self.gagEmblem = DirectFrame(
+            parent=self.frame,
+            image=self.rowModels.find('**/emblem_gag'),
+            pos=(0, 0, 0.145),
+            scale=1,
+            relief=None
+        )
+        self.gagEmblem['image_color'] = Vec4(0.937, 0.718, 0.816, 1)
+        self.gagEmblem.setBin('fixed', 0)
+
+        self.gagIcon = DirectFrame(
+            parent=self.frame,
+            relief=None,
+            image=self.fireIcon,
+            scale=1,
+            pos=(0, 0, 0.145)
+        )
+        self.gagIcon['image'] = self.fireIcon
+        self.gagIcon.setScale(.75)
+        self.gagIcon['image_scale'] = .75
+        self.gagIcon.setBin('fixed', 20)
         self.loaded = 1
 
     def unload(self):
         if self.loaded:
             self.frame.destroy()
             del self.frame
-            del self.statusFrame
-            del self.textFrame
             del self.avatarButtons
             del self.backButton
+            self.gagIcon.destroy()
+            self.gagEmblem.destroy()
+            self.textFrame.destroy()
+
+            self.invModel.removeNode()
+            self.rowModels.removeNode()
+            self.status.removeNode()
+            del self.status
+
+            del self.gagIcon
+            del self.gagEmblem
+            del self.textFrame
+            del self.invModels
+            del self.invModel
+            del self.rowModels
         self.loaded = 0
 
     def enter(self, numAvatars, localNum = None, luredIndices = None, trappedIndices = None, track = None, fireCosts = None):
@@ -120,40 +167,35 @@ class FireCogPanel(StateData.StateData):
             self.textFrame['text'] = TTLocalizer.FireCogTitle % localAvatar.getPinkSlips()
         else:
             self.textFrame['text'] = TTLocalizer.FireCogLowTitle % localAvatar.getPinkSlips()
-        if numAvatars == 1:
-            self.avatarButtons[0].setX(0)
-        elif numAvatars == 2:
-            self.avatarButtons[0].setX(0.4)
-            self.avatarButtons[1].setX(-0.4)
-        elif numAvatars == 3:
-            self.avatarButtons[0].setX(0.75)
-            self.avatarButtons[1].setX(0.0)
-            self.avatarButtons[2].setX(-0.75)
-        elif numAvatars == 4:
-            self.avatarButtons[0].setX(1.15)
-            self.avatarButtons[1].setX(0.4)
-            self.avatarButtons[2].setX(-0.4)
-            self.avatarButtons[3].setX(-1.15)
-        elif numAvatars == 5:
-            self.avatarButtons[0].setX(1.5)
-            self.avatarButtons[1].setX(0.75)
-            self.avatarButtons[2].setX(0.0)
-            self.avatarButtons[3].setX(-0.75)
-            self.avatarButtons[4].setX(-1.5)
-        elif numAvatars == 6:
-            self.avatarButtons[0].setX(1.9)
-            self.avatarButtons[1].setX(1.15)
-            self.avatarButtons[2].setX(0.4)
-            self.avatarButtons[3].setX(-0.4)
-            self.avatarButtons[4].setX(-1.15)
-            self.avatarButtons[5].setX(-1.9)
-        elif numAvatars == 7:
-            self.avatarButtons[0].setX(2.25)
-            self.avatarButtons[1].setX(1.5)
-            self.avatarButtons[2].setX(0.75)
-            self.avatarButtons[3].setX(0.0)
-            self.avatarButtons[4].setX(-0.75)
-            self.avatarButtons[5].setX(-1.5)
-            self.avatarButtons[6].setX(-2.25)
-        else:
+        confused = False
+        if 'confused' in base.localAvatar.battleConditions:
+            confused = True
+
+        positions = self.__getAvatarPositions(numAvatars)
+
+        if positions is None:
             self.notify.error('Invalid number of avatars: %s' % numAvatars)
+            return None
+
+        indices = range(numAvatars)
+
+        if confused:
+            random.shuffle(indices)
+
+        for posIndex in range(numAvatars):
+            avatarIndex = indices[posIndex]
+            self.avatarButtons[avatarIndex].setX(positions[posIndex])
+
+
+    def __getAvatarPositions(self, numAvatars):
+        positionsByCount = {
+            1: [0],
+            2: [0.61, -0.61],
+            3: [1.14, 0.0, -1.14],
+            4: [1.748, 0.61, -0.61, -1.748],
+            5: [2.28, 1.14, 0.0, -1.14, -2.28],
+            6: [2.888, 1.748, 0.61, -0.61, -1.748, -2.888],
+            7: [3.42, 2.28, 1.14, 0.0, -1.14, -2.28, -3.42],
+        }
+
+        return positionsByCount.get(numAvatars)

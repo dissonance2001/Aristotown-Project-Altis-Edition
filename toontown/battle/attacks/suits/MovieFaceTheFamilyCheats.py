@@ -338,13 +338,27 @@ def doHurrySickness(attack):
     notifyTracks = Parallel()
     suitTracks = Parallel()
     soundTracks = Parallel()
+    for suit in battle.activeSuits:
+        suitTracks.append(Func(suit.makeUnTrapRushJob))
+        suitTracks.append(Func(suit.makeUnLureRushJob))
+        suitTracks.append(Func(suit.makeUnThrowRushJob))
+        suitTracks.append(Func(suit.makeUnSquirtRushJob))
+        suitTracks.append(Func(suit.makeUnZapRushJob))
+        suitTracks.append(Func(suit.makeUnSoundRushJob))
+        suitTracks.append(Func(suit.makeUnDropRushJob))
+    hitAtLeastOneToon = 0
+    for t in targets:
+        dmg = t['hp']
+        if dmg > 0:
+            hitAtLeastOneToon = 1
+    if hitAtLeastOneToon:
+        soundTracks.append(getSoundTrack('SA_hurry_sickness.ogg', delay=0, node=suit))
+        soundTracks.append(getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit))
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
             suitTracks.append(getSuitAnimTrackAttack(attack))
-            soundTracks.append(getSoundTrack('SA_hurry_sickness.ogg', delay=0, node=suit))
-            soundTracks.append(getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit))
             notifyTracks.append(Sequence(Wait(1.5), Parallel(Func(toon.showHpTextNew, -int(dmg)))))
             notifyTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
             notifyTracks.append(Parallel(Func(toon.checkDamageDown, 40)))
@@ -434,7 +448,8 @@ def getResetTrack(suit, battle):
 def doExtraTip(attack, ind):
     theSuit = attack['suit']
     battle = attack['battle']
-    targetSuit = battle.activeSuits[ind]
+    dmg = attack['target'][0]['hp']
+    targetSuit = battle.activeSuits[dmg]
 
     suitTracks = Parallel()
     suitTrack = Sequence()
@@ -482,28 +497,92 @@ def doExtraTip(attack, ind):
         Func(can.removeNode)
     )
     knifeTracks.append(knifeTrack)
+    targetSuit.setPendingQueuedLured(False)
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack1 = getSoundTrack('SA_extra_tip.ogg', delay=2)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=4.0)
     multiTrack = Parallel(soundTrack1, soundTrack2)
     return Parallel(suitTrackAnim, suitTracks, multiTrack, knifeTracks)
 
+def doUnionized(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    dmg = attack['target'][0]['hp']
+    suitTracks2 = Parallel()
+    suitTracks = Sequence(getSuitAnimTrack(attack))
+    suitTracks.append(Sequence(Func(theSuit.makeUnDamageReduction), Func(theSuit.checkDamageReduction, - theSuit.getDamageReduction())))
+    suitTracks.append(Sequence(Wait(3.0), Func(theSuit.makeDamageReduction), Func(theSuit.checkDamageReduction, + (dmg * 10))))
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    for suit in battle.activeSuits:
+        suitTrack = Parallel()
+        suitTrack.append(Parallel(suit.makeCompensationInterval2()))
+        suitTrack.append(healSound)
+        suitTracks2.append(suitTrack)
+    return Parallel(suitTracks, suitTracks2)
+
+def doUsury(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    targetSuit = battle.activeSuits[dmg]
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    targetSuitAnimTrack = Sequence(Wait(2.0), ActorInterval(targetSuit, 'pie-small-react'), targetSuit.makeUsuryInterval(suit, battle), Func(targetSuit.setNeutralAnimationDrop))
+    selfDamageTrack = Sequence(Wait(2.0), Func(targetSuit.checkUsury, suit, battle))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
+    return Parallel(suitTrack, selfDamageTrack, targetSuitAnimTrack, soundTrack2)
+
+def doContributing(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    targetSuit = battle.activeSuits[dmg]
+    suitTrack = Sequence(Parallel(
+    getSuitAnimTrack(attack),
+
+    ActorInterval(suit, 'hypnotized', endTime=.5)),
+
+    Parallel(Func(suit.enableBlend),
+        ActorInterval(suit, 'neutral', loop=1),
+        LerpAnimInterval(
+            suit,
+            duration=2.0,
+            startAnim='hypnotized',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(suit.disableBlend),
+    Func(suit.setNeutralAnimationDrop)
+)
+    targetSuitAnimTrack = Sequence(Wait(1.0), Func(targetSuit.checkHealingPhrases, 0), ActorInterval(targetSuit, 'gag-miss'), Func(targetSuit.setNeutralAnimationDrop))
+    selfDamageTrack = Sequence(Wait(1.0), Func(suit.checkTribute, targetSuit, battle))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.0)
+    return Parallel(suitTrack, selfDamageTrack, targetSuitAnimTrack, soundTrack2)
+
 def doExplosion(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
     suitTracks = Parallel()
+    explosionTrack = Sequence(Wait(3.0), MovieUtil.createSuitDeathTrackExplosiveForeman(theSuit, battle))
     for suit in battle.activeSuits:
         suitTrack = Sequence(Func(theSuit.setChatAbsolute, "My people need me.",
                           CFSpeech | CFTimeout))
         suitTrack.append(Wait(3.0))
-        suitTrack.append(Parallel(MovieUtil.createSuitDeathTrackExplosiveForeman(theSuit, battle), Func(suit.setHealthForMe, - (50 * len(battle.activeToons))), Func(suit.showHpTextNew, - int(50 * len(battle.activeToons))), Func(suit.updateHealthBar, 0), Func(suit.checkCogHPBomb, battle), ActorInterval(suit, 'slip-backward')))
+        suitTrack.append(Parallel(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))), Func(suit.showHpTextNew, - (50 * len(battle.activeToons))), Func(suit.updateHealthBar, 0), suit.makeHighPressureDeathMovie((50 * len(battle.activeToons)), battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         suitTrack.append(Func(suit.setNeutralAnimationDrop))
     damageAnims = [['slip-forward', 0.01, 0.4]]
     toonTracks = getToonTracks(attack, damageDelay=3.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=3.0)
-    return Parallel(suitTracks, toonTracks, soundTrack1)
+    return Parallel(suitTracks, explosionTrack, toonTracks, soundTrack1)
 
 def doContractor(attack):
     theSuit = attack['suit']
@@ -511,17 +590,28 @@ def doContractor(attack):
     target = attack['target']
     toon = target[0]['toon']
     suitTrack = Sequence(Func(theSuit.setChatAbsolute, "Please fill out paperwork with me.",
-                          CFSpeech | CFTimeout))
+                          CFSpeech | CFTimeout), Func(theSuit.makeDanceSession))
     toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, "I am compelled to fill out paperwork with you.",
-                          CFSpeech | CFTimeout), Wait(3.0))
+                          CFSpeech | CFTimeout), Func(toon.makeDancePartner), Wait(3.0))
     return Parallel(suitTrack, toonTrack)
+
+def doContractorRemoval(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    toonTracks = Parallel()
+    suitTrack = Sequence(Func(theSuit.removeDanceSession))
+    for t in targets:
+        toon = t['toon']
+        toonTracks.append(Sequence(Func(toon.makeUnDancePartner)))
+    return Parallel(suitTrack, toonTracks)
 
 def doPuzzling(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    suitTrack = Sequence(Func(theSuit.setChatAbsolute, random.choice(("Your combat skills are laughable.", "You can't outsmart me!", "Prepare to be mind-meddled!")),
+    suitTrack = Sequence(Func(theSuit.setChatAbsolute, random.choice(("Your combat skills are laughable!", "You can't outsmart me!", "Prepare to be mind-meddled!")),
                           CFSpeech | CFTimeout))
     toonTrack = Sequence(Wait(3.0), Func(toon.setChatAbsolute, random.choice(("Your wish is my command.", "As you desire, Mr. President.", "As you wish.")),
                           CFSpeech | CFTimeout), Wait(3.0))
@@ -548,17 +638,43 @@ def doFraudulentDamage(attack):
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     return Sequence(notifyTracks)
 
+def doHighStakesNew(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    toonTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if not dmg == 0:
+            if dmg < -26:
+                toonTrack = Parallel(Wait(2.0), Func(toon.showHpStringHighStakesBigLoss, dmg))
+                toonTracks.append(toonTrack)
+            elif dmg < 0:
+                toonTrack = Parallel(Wait(2.0), Func(toon.showHpStringHighStakesLoss, dmg))
+                toonTracks.append(toonTrack)
+            elif dmg >= 50:
+                toonTrack = Parallel(Wait(2.0), Func(toon.showHpStringHighStakesBigWin, dmg))
+                toonTracks.append(toonTrack)
+            elif dmg > 0:
+                toonTrack = Parallel(Wait(2.0), Func(toon.showHpStringHighStakesWin, dmg))
+                toonTracks.append(toonTrack)
+    return Parallel(toonTracks)
+
 def doHighStakes(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
     suitTrack = Sequence(getSuitAnimTrack(attack))
+    dmg = attack['target'][0]['hp']
     propTracks = Parallel()
     toonTracks = Parallel()
     smokeTracks = Parallel()
-    for t in targets:
-        toon = t['toon']
-        dmg = t['hp']
+    toonTracksReal = Parallel()
+    for toon in battle.activeToons:
+        toonTracks = Parallel()
+        toonTracks.append(Func(toon.makeContentSync, dmg))
+        toonTracksReal.append(toonTracks)
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
@@ -611,7 +727,7 @@ def doHighStakes(attack):
         smokeTracks.append(smokeTrack)
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
-    return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
+    return Parallel(suitTrack, toonTracksReal, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
 
 def doSyphon(attack):
     suit = attack['suit']
@@ -665,37 +781,29 @@ def doDeepFreeze(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    damageDelay = 1.7
-    hitAtleastOneToon = 0
+    BattleParticles.loadParticles()
+    suitSpeechTrack = Sequence(Func(suit.setChatAbsolute, "You've hit me thrice, now prepare to become ice.", CFSpeech | CFTimeout))
+    suitTrack = Sequence(Wait(3.0), getSuitAnimTrackAttack(attack))
+    sprayEffects = Parallel()
+    for suit in battle.activeSuits:
+        sprayEffects.append(Func(suit.makeDeepFrozen, 3))
     for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
+        toon = t['toon']
+        sprayEffect = BattleParticles.createParticleEffect('FreezeSpray')
+        sprayEffect2 = BattleParticles.createParticleEffect('FreezeSpray')
+        partTrack4 = getPartTrack(sprayEffect, 4.0, 3.0, [sprayEffect2, toon, 0], softStop=-1)
+        sprayEffects.append(Func(toon.makeFrozen))
+        sprayEffects.append(Func(toon.addFrozenRounds, 3))
+        sprayEffects.append(partTrack4)
 
-    sprayEffect = BattleParticles.createParticleEffect('WaterSpray')
-    suitName = suit.getStyleName()
-    sprayEffect.setPos(Point3(-5.2, 10.6, 6.7))
-    waterfallEffect = BattleParticles.createParticleEffect(file='snowWaterfall')
-    suitTrack = getSuitAnimTrackAttack(attack)
-    partTrack = getPartTrack(sprayEffect, 1.0, 5.9, [sprayEffect, suit, 0], softStop=1)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 5.9, [waterfallEffect, suit, 0], softStop=1)
-    sprayTrack = getPartTrack(sprayEffect, 1.0, 5.9, [sprayEffect, suit, 0], softStop=1)
-    damageAnims = [['cringe']]
-    dodgeAnims = []
-    dodgeAnims.append(['jump',
-                       0.01,
-                       0,
-                       0.6])
-    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
-    dodgeAnims.append(['jump', 0, 0.91])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['cringe'], dodgeDelay=0.91,
-                               splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
-    synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_freeze.ogg')))
-    makeFrozen = Func(suit.makeFrozen)
-    if hitAtleastOneToon > 0:
-        soundTrack1 = Sequence(Wait(1), SoundInterval(globalBattleSoundCache.getSound('SA_freeze.ogg'), node=suit))
-        return Parallel(suitTrack, partTrack, sprayTrack, makeFrozen, waterfallTrack, synergySoundTrack, toonTracks, soundTrack1)
-    else:
-        return Parallel(suitTrack, partTrack, sprayTrack, waterfallTrack, synergySoundTrack, toonTracks)
+    damageAnims = [['cringe',
+      0.01,
+      0.4,
+      0.8], ['duck', 0.01, 1.6]]
+    toonTracks = getToonTracksCheat(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, splicedDodgeAnims=damageAnims, dodgeDelay=4.0,
+                               showDamageExtraTime=2.1, showMissedExtraTime=2.0)
+    soundTrack = getSoundTrack('SA_deepfreeze.ogg', delay=4.0, node=suit)
+    return Parallel(suitTrack, suitSpeechTrack, toonTracks, sprayEffects, soundTrack)
 
 def doCompensation(attack):
     suit = attack['suit']
@@ -706,10 +814,611 @@ def doCompensation(attack):
 
 def doLifeInsurance(attack):
     suit = attack['suit']
-    healSound = SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_loop.ogg'))
+    healSound = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_loop.ogg'), SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_register.ogg'))))
     suitTrack = Parallel(getSuitAnimTrack(attack), Wait(5.0))
     suitTrack.append(Sequence(Func(suit.checkLifeInsurance), healSound))
     return Parallel(suitTrack)
+
+def doDrainingPower(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Parallel(getSuitAnimTrack(attack), Func(suit.showHpTextNew, 0, text="+15%" + " Damage!", colorCode=1))
+    suitTrack.append(Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, + 15)))
+    soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=1.4, node=suit)
+    return Parallel(suitTrack, soundTrack)
+
+def doShakedownCooldown(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
+    damageDelay = 1.35
+    dodgeDelay = 0.95
+    suitName = suit.getStyleName()
+    suitTrack = Sequence(getSuitTrack(attack))
+    liftTracks = Parallel()
+    toonRiseTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            liftEffect = BattleParticles.createParticleEffect('ShiftLift')
+            liftEffect.setPos(toon.getPos(battle))
+            liftEffect.setZ(liftEffect.getZ() - 1.3)
+            liftTracks.append(getPartTrack(liftEffect, 1.1, 5.1, [liftEffect, battle, 0], softStop=-1))
+            shadow = toon.dropShadow
+            fakeShadow = MovieUtil.copyProp(shadow)
+            x = toon.getX()
+            y = toon.getY()
+            z = toon.getZ()
+            height = 3
+            groundPoint = Point3(x, y, z)
+            risePoint = Point3(x, y, z + height)
+            shakeRight = Point3(x, y + 0.7, z + height)
+            shakeLeft = Point3(x, y - 0.7, z + height)
+            shakeTrack = Sequence()
+            shakeTrack.append(Wait(damageDelay + 0.25))
+            shakeTrack.append(Func(shadow.hide))
+            shakeTrack.append(LerpPosInterval(toon, 1.1, risePoint))
+            for i in xrange(0, 17):
+                shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
+                shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
+
+            shakeTrack.append(LerpPosInterval(toon, 0.1, risePoint))
+            shakeTrack.append(LerpPosInterval(toon, 0.1, groundPoint))
+            shakeTrack.append(Func(shadow.show))
+            shadowTrack = Sequence()
+            shadowTrack.append(Func(battle.movie.needRestoreRenderProp, fakeShadow))
+            shadowTrack.append(Wait(damageDelay + 0.25))
+            shadowTrack.append(Func(fakeShadow.hide))
+            shadowTrack.append(Func(fakeShadow.setScale, 0.27))
+            shadowTrack.append(Func(fakeShadow.reparentTo, toon))
+            shadowTrack.append(Func(fakeShadow.setPos, MovieUtil.PNT3_ZERO))
+            shadowTrack.append(Func(fakeShadow.wrtReparentTo, battle))
+            shadowTrack.append(Func(fakeShadow.show))
+            shadowTrack.append(LerpScaleInterval(fakeShadow, 0.4, Point3(0.17, 0.17, 0.17)))
+            shadowTrack.append(Wait(1.81))
+            shadowTrack.append(LerpScaleInterval(fakeShadow, 0.1, Point3(0.27, 0.27, 0.27)))
+            shadowTrack.append(Func(MovieUtil.removeProp, fakeShadow))
+            shadowTrack.append(Func(battle.movie.clearRenderProp, fakeShadow))
+            toonRiseTracks.append(Parallel(shakeTrack, shadowTrack))
+
+    damageAnims = []
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.9, startTime=2.06))
+    damageAnims.append(['slip-backward', 0.01, 0.5])
+    dodgeAnims = []
+    dodgeAnims.append(['jump',
+     0.01,
+     0,
+     0.6])
+    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
+    dodgeAnims.append(['jump', 0, 0.91])
+    toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
+    toonTracks.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 3)))
+    if hitAtleastOneToon:
+        soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
+        return Parallel(suitTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
+    else:
+        return Parallel(suitTrack, liftTracks, toonTracks, toonRiseTracks)
+    
+def doRushJobTrap(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeTrapRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobLure(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeLureRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTracks = Sequence(Parallel(
+    getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+    Parallel(Func(suit.enableBlend), 
+        ActorInterval(suit, 'neutral', loop=1),
+        LerpAnimInterval(
+            suit,
+            duration=.5,
+            startAnim='rush-job',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(suit.disableBlend),
+    Func(suit.setNeutralAnimationDrop), Wait(2.0)
+)
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobThrow(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeThrowRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobSquirt(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeSquirtRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobZap(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeZapRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobSound(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeSoundRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+
+def doRushJobDrop(attack):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    rushJobTrack = Sequence(Wait(1.0), Func(targetSuit.makeDropRushJob), targetSuit.makeCogStepBackDeathInterval(battle))
+    rushJobTrack.append(Func(targetSuit.makeUnSoaked))
+    rushJobTrack.append(Func(targetSuit.setSued2, 0))
+    rushJobTrack.append(Func(targetSuit.setDizzy, 0))
+    rushJobTrack.append(Func(targetSuit.makeUnMarked))
+    rushJobTrack.append(Func(targetSuit.makeUnZapped))
+    rushJobTrack.append(Func(targetSuit.makeUnDazed))
+    rushJobTrack.append(Func(targetSuit.removeSued))
+    suit = attack['suit']
+    battle = attack['battle']
+    if suit.battleSpeed > 1:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'pace', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='pace',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    else:
+        suitTracks = Sequence(Parallel(
+        getSuitAnimTrack(attack), ActorInterval(suit, 'rush-job', duration=suit.getDuration('rush-job') - .25)),
+        Parallel(Func(suit.enableBlend), 
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(
+                suit,
+                duration=.5,
+                startAnim='rush-job',
+                endAnim='neutral',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            )
+        ),
+
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop), Wait(2.0)
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
+    return Parallel(suitTracks, rushJobTrack, soundTrack)
+    
+def doShakedownVulnerable(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
+    damageDelay = 1.35
+    dodgeDelay = 0.95
+    suitName = suit.getStyleName()
+    suitTrack = Sequence(getSuitTrack(attack))
+    liftTracks = Parallel()
+    toonRiseTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            liftEffect = BattleParticles.createParticleEffect('ShiftLift')
+            liftEffect.setPos(toon.getPos(battle))
+            liftEffect.setZ(liftEffect.getZ() - 1.3)
+            liftTracks.append(getPartTrack(liftEffect, 1.1, 5.1, [liftEffect, battle, 0], softStop=-1))
+            shadow = toon.dropShadow
+            fakeShadow = MovieUtil.copyProp(shadow)
+            x = toon.getX()
+            y = toon.getY()
+            z = toon.getZ()
+            height = 3
+            groundPoint = Point3(x, y, z)
+            risePoint = Point3(x, y, z + height)
+            shakeRight = Point3(x, y + 0.7, z + height)
+            shakeLeft = Point3(x, y - 0.7, z + height)
+            shakeTrack = Sequence()
+            shakeTrack.append(Wait(damageDelay + 0.25))
+            shakeTrack.append(Func(shadow.hide))
+            shakeTrack.append(LerpPosInterval(toon, 1.1, risePoint))
+            for i in xrange(0, 17):
+                shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
+                shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
+
+            shakeTrack.append(LerpPosInterval(toon, 0.1, risePoint))
+            shakeTrack.append(LerpPosInterval(toon, 0.1, groundPoint))
+            shakeTrack.append(Func(shadow.show))
+            shadowTrack = Sequence()
+            shadowTrack.append(Func(battle.movie.needRestoreRenderProp, fakeShadow))
+            shadowTrack.append(Wait(damageDelay + 0.25))
+            shadowTrack.append(Func(fakeShadow.hide))
+            shadowTrack.append(Func(fakeShadow.setScale, 0.27))
+            shadowTrack.append(Func(fakeShadow.reparentTo, toon))
+            shadowTrack.append(Func(fakeShadow.setPos, MovieUtil.PNT3_ZERO))
+            shadowTrack.append(Func(fakeShadow.wrtReparentTo, battle))
+            shadowTrack.append(Func(fakeShadow.show))
+            shadowTrack.append(LerpScaleInterval(fakeShadow, 0.4, Point3(0.17, 0.17, 0.17)))
+            shadowTrack.append(Wait(1.81))
+            shadowTrack.append(LerpScaleInterval(fakeShadow, 0.1, Point3(0.27, 0.27, 0.27)))
+            shadowTrack.append(Func(MovieUtil.removeProp, fakeShadow))
+            shadowTrack.append(Func(battle.movie.clearRenderProp, fakeShadow))
+            toonRiseTracks.append(Parallel(shakeTrack, shadowTrack))
+
+    damageAnims = []
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.9, startTime=2.06))
+    damageAnims.append(['slip-backward', 0.01, 0.5])
+    dodgeAnims = []
+    dodgeAnims.append(['jump',
+     0.01,
+     0,
+     0.6])
+    dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
+    dodgeAnims.append(['jump', 0, 0.91])
+    toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
+    toonTracks.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 3)))
+    toonTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
+    if hitAtleastOneToon:
+        soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
+        return Parallel(suitTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
+    else:
+        return Parallel(suitTrack, liftTracks, toonTracks, toonRiseTracks)
+
+def doInkDrain(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    BattleParticles.loadParticles()
+    particleEffect = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect, 'snow-particle', color=Vec4(0.463, 0.635, 0.388, 1))
+    particleEffect2 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect2, 'snow-particle', color=Vec4(0.427, 0.478, 0.608, 1))
+    particleEffect3 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect3, 'snow-particle', color=Vec4(0.498, 0.22, 0.275, 1))
+    particleEffect4 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect4, 'snow-particle', color=Vec4(0.639, 0.639, 0.639, 1))
+    suitTrack = getSuitAnimTrack(attack)
+    partTrack = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect, suit, 0], softStop=-1)
+    partTrack2 = getPartTrack(particleEffect2, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect2, suit, 0], softStop=-1)
+    partTrack3 = getPartTrack(particleEffect3, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect3, suit, 0], softStop=-1)
+    partTrack4 = getPartTrack(particleEffect4, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect4, suit, 0], softStop=-1)
+    toonTracks = Parallel()
+
+    soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=1.4, node=suit)
+    colorTracks = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        def changeColor(parts):
+            track = Parallel()
+            for partNum in range(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(nextPart.colorScaleInterval(0.1, Vec4(0.5, 0.5, 0.5, 1)))
+
+            return track
+
+        def resetColor(parts):
+            track = Parallel()
+            for partNum in range(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.clearColorScale))
+
+            return track
+
+        headParts = toon.getHeadParts()
+        torsoParts = toon.getTorsoParts()
+        legsParts = toon.getLegsParts()
+        colorTrack = Sequence()
+        colorTrack.append(Func(battle.movie.needRestoreColor))
+        colorTrack.append(changeColor(headParts))
+        colorTrack.append(changeColor(torsoParts))
+        colorTrack.append(changeColor(legsParts))
+        colorTrack.append(Wait(suitTrack.getDuration() + 5.2))
+        colorTrack.append(resetColor(headParts))
+        colorTrack.append(resetColor(torsoParts))
+        colorTrack.append(resetColor(legsParts))
+        colorTrack.append(Func(battle.movie.clearRestoreColor))
+        colorTracks.append(colorTrack)
+        toonTracks.append(Parallel(Func(toon.makeInkDrain), Func(toon.addInkDrainRounds, 3), Func(toon.checkInkDrain, 10)))
+        toonTracks.append(ActorInterval(toon, 'cringe', playRate=0.25))
+        toonTracks.append(Func(toon.loop, 'neutral'))
+
+    return Parallel(suitTrack, colorTracks, partTrack, partTrack2, partTrack3, partTrack4, toonTracks, soundTrack, colorTracks)
+
+def doScheming(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitTrack = Parallel(getSuitAnimTrack(attack))
+    soundTrack = getSoundTrack('SA_multi_level_marketing.ogg', node=suit)
+    suitTrack.append(Func(suit.checkExtraAttacks, 1))
+    return Parallel(suitTrack, soundTrack)
 
 def doAccountantRequirement(attack):
     suit = attack['suit']
@@ -866,17 +1575,149 @@ def doObjectionSustained(attack):
     return Parallel(suitTrack, partTrack1, partTrack2, suitHealTrack, soundTrack2, soundTrack, waterfallTrack, toonTracks)
 
 def doComeOn(attack):
+    theSuit = attack['suit']
+    battle = attack['battle']
+    speedTrack = Parallel()
+    suitTrack = Sequence(Parallel(
+    getSuitAnimTrack(attack)),
+    Parallel(Func(theSuit.enableBlend), 
+        ActorInterval(theSuit, 'pace', loop=1),
+        LerpAnimInterval(
+            theSuit,
+            duration=.25,
+            startAnim='come-on',
+            endAnim='pace',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(theSuit.disableBlend),
+    Func(theSuit.setNeutralAnimationDrop), Wait(2.0)
+)
+    for suit in battle.activeSuits:
+        speedTrack.append(Func(suit.checkBattleSpeed, theSuit, + .5))
+    return Parallel(speedTrack, suitTrack)
+
+def doViralSensation(attack):
     suit = attack['suit']
-    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
-    if not suit.getPlayRate2() >= 8.0:
-        suitTrack.append(Func(suit.setPlayRate2, suit.getPlayRate2() + .5))
-    return suitTrack
+    battle = attack['battle']
+    targets = attack['target']
+    toonTracks2 = Parallel()
+    waitTrack = Sequence(Wait(3.0))
+    if hasattr(suit, 'sensationalStageLight'):
+        cage = suit.sensationalStageLight
+        cagePropTrack = Sequence(LerpFunctionInterval(cage.setAlphaScale, fromData=1, toData=0, duration=0), Wait(3.0)
+            )
+    else:
+        cagePropTrack = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        if dmg > 0:
+            toonTrack = Sequence()
+            toonTrack.append(Parallel(Func(toon.makeViralSensation), Func(toon.addViralSensationRounds, 3)))
+            toonTrack.append(Parallel(Func(toon.checkViralSensationBoost, 50)))
+            toonTrack.append(Func(toon.showHpStringViral, "VIRAL SENSATION!"))
+            toonTracks2.append(toonTrack)
+    soundTrack2 = getSoundTrack('LB_camera_shutter_2.ogg', delay=0, node=suit)
+    return Parallel(waitTrack, soundTrack2, cagePropTrack, toonTracks2)
+
+def doSensational(attack):
+    manager = attack['suit']
+    battle = attack['battle']
+    toons = attack['target']
+    dmg = attack['target'][0]['hp']
+    targetSuit = battle.activeSuits[dmg]
+    cage = globalPropPool.getProp('ttcc_gag_stagelight')
+    targetSuit.sensationalStageLight = cage
+    texture = loader.loadTexture('phase_5/maps/battle/ttcc_gag_stagelight.png')
+    texture2 = loader.loadTexture('phase_3/maps/ttcc_lights_palette.png')
+    cage.find('**/stagelight').setTexture(texture, 1)
+    cage.find('**/spotlight').setTexture(texture2, 1)
+    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
+    suitPos = targetSuit.getPos(battle)
+    y = suitPos.getY()
+    cagePos = [Point3(0, 0, targetSuit.height + 15), targetSuit.getHpr(battle)]
+    cagePropTrack = Sequence( 
+        getPropAppearTrack(cage, targetSuit, cagePos, 1, scaleUpPoint=Point3(1.5, 1.5, 1.5), scaleUpTime=0), Wait(5.0))
+    suitTrack2 = Sequence(Wait(3.0), Func(targetSuit.setChatAbsolute,
+                                               random.choice(("Okay, I think I'm ready!",
+                                                             "I'll do my best!", 
+                                                             "Right now? Let's do this!",
+                                                             "Here goes...")),
+                                               CFSpeech | CFTimeout))
+    suitTrack = getSuitAnimTrack(attack)
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
+    soundTrack2 = getSoundTrack('LB_camera_shutter_2.ogg', delay=1, node=manager)
+    return Parallel(suitTrack, suitTrack2, soundTrack, soundTrack2, cagePropTrack)
+
+def doUnstableTransformation(attack):
+    suit = attack['suit']
+    groupStatus = attack['group']
+    if groupStatus == ATK_TGT_FOREMAN:
+        dnaString = 'foreman'
+        dmg = attack['target'][0]['hp']
+        return Sequence(
+        Func(suit.setUnstableDNAString, dnaString),
+        Func(suit.setLevelDist, (dmg - 16)),
+        Func(suit.setNeutralAnimation)
+    )
+    if groupStatus == ATK_TGT_SUPERVISOR:
+        dnaString = 'supervis'
+        dmg = attack['target'][0]['hp']
+        return Sequence(
+        Func(suit.setUnstableDNAString, dnaString),
+        Func(suit.setLevelDist, (dmg - 16)),
+        Func(suit.setNeutralAnimation)
+    )
+    if groupStatus == ATK_TGT_ATTORNEY:
+        dnaString = 'clerk'
+        dmg = attack['target'][0]['hp']
+        return Sequence(
+        Func(suit.setUnstableDNAString, dnaString),
+        Func(suit.setLevelDist, (dmg - 16)),
+        Func(suit.setNeutralAnimation)
+    )
+    if groupStatus == ATK_TGT_PRESIDENT:
+        dnaString = 'clubpres'
+        dmg = attack['target'][0]['hp']
+        return Sequence(
+        Func(suit.setUnstableDNAString, dnaString),
+        Func(suit.setLevelDist, (dmg - 16)),
+        Func(suit.setNeutralAnimation)
+    )
+    if groupStatus == ATK_TGT_CONFUSED:
+        dnaString = 'ovt'
+        dmg = attack['target'][0]['hp']
+        return Sequence(
+        Func(suit.setUnstableDNAString, dnaString),
+        Func(suit.setLevelDist, (dmg - 15)),
+        Func(suit.setNeutralAnimation)
+    )
 
 def doRushJob(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTracks = Parallel(getSuitAnimTrack(attack, playRate=1.25))
-    suitTracks.append(Wait(2.0))
+    suitTracks = Sequence(Parallel(
+    getSuitAnimTrack(attack)),
+    Parallel(Func(suit.enableBlend), 
+        ActorInterval(suit, 'neutral', loop=1),
+        LerpAnimInterval(
+            suit,
+            duration=.25,
+            startAnim='rush-job',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(suit.disableBlend),
+    Func(suit.setNeutralAnimationDrop), Wait(2.0)
+)
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', node=suit)
     return Parallel(suitTracks, soundTrack)
 
@@ -891,26 +1732,29 @@ def doDriver(attack):
     suitName = attack['suitName']
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTracks = Parallel()
+    notifyTracks = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         ball = globalPropPool.getProp('golf-ball')
+        notifyTrack = Sequence(Wait(3), Func(toon.showHpTextNew, -int(dmg), text="-25% Damage!", colorCode=4))
         ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.75, 1.75, 1.75)),
                                  Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
                                  Wait(1.125))
         if dmg > 0:
             ballPropTracks.append(Parallel(Func(toon.checkDamageDown, 25)))
-            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 3)))
+            ballPropTracks.append(Parallel(Func(toon.makeDamageDown), Func(toon.addDamageDownRounds, 2)))
+            notifyTracks.append(notifyTrack)
         missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
         ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1, target=t))
         ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
         ballPropTracks.append(ballPropTrack)
 
     dodgeDelay = suitTrack.getDuration()
-    toonTracks = getToonTracks(attack, 3, ['slip-backward'], 1.5, ['duck'],
+    toonTracks = getToonTracksCheat(attack, 3, ['slip-backward'], 1.5, ['duck'],
                                showMissedExtraTime=1.7)
     soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.5, node=suit)
-    return Parallel(suitTrack, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
+    return Parallel(suitTrack, notifyTracks, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
 
 def doDriverNO(attack):
     suit = attack['suit']

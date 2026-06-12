@@ -587,8 +587,17 @@ class Toon(Avatar.Avatar, ToonHead):
         self.groupDamageDown = 0
         self.groupDamageDownRounds = 0
         self.isSnapped = 0
+        self.frozen = 0
+        self.frozenRounds = 0
         self.isBurned = 0
+        self.isViralSensation = 0
+        self.viralSensationRounds = 0
+        self.viralSensationBoost = 0
+        self.isDancePartner = 0
         self.burnedRounds = 0
+        self.contentSync = 0
+        self.isZapped = 0
+        self.zappedRounds = 0
         self.snapped = 0
         self.snappedRounds = 0
         self.inkDrain = 0
@@ -740,40 +749,231 @@ class Toon(Avatar.Avatar, ToonHead):
     def getDamageOvertimeRounds(self):
         return self.damageOvertimeRounds
 
-    def makeBurned(self):
-        self.isBurned = 1
-        if self.hp > 0:
-            if hasattr(self, "flameTrack") and self.flameTrack:
-                self.flameTrack.pause()
-                if self.flameEffect:
-                    self.flameEffect.disable()
-                    if hasattr(self.flameEffect, 'renderParent'):
-                        self.flameEffect.cleanup()
-            self.flameEffect = BattleParticles.createParticleEffect('FiredFlame3')
-            BattleParticles.setEffectTexture(self.flameEffect, 'fire')
+    def cleanupShockAura(self):
+        if getattr(self, 'shockAuraTrack', None):
+            try:
+                self.shockAuraTrack.pause()
+                self.shockAuraTrack.finish()
+            except:
+                pass
+            self.shockAuraTrack = None
 
-            self.flameEffect.reparentTo(self)
-            self.flameEffect.setPos(0, 0, 0)
+        if getattr(self, 'shockAuraNode', None):
+            try:
+                if not self.shockAuraNode.isEmpty():
+                    self.shockAuraNode.removeNode()
+            except:
+                pass
+            self.shockAuraNode = None
 
-            self.flameTrack = Sequence(ParticleInterval(self.flameEffect, self, duration=5)
+    def makeShockDamageBurstTrack(self, duration=1.0, sparkCount=28):
+        import random
+
+        burstNode = self.attachNewNode('shockDamageBurstNode')
+
+        toonHeight = 4.0
+        try:
+            toonHeight = self.getHeight()
+        except:
+            if hasattr(self, 'height'):
+                toonHeight = self.height
+
+        sparks = []
+        burstTrack = Parallel()
+
+        def resetBurstSpark(spark):
+            if not spark or spark.isEmpty():
+                return
+
+            x = random.uniform(-1.6, 1.6)
+            y = random.uniform(-1.3, 1.3)
+            z = random.uniform(0.4, max(1.0, toonHeight + 0.8))
+
+            spark.show()
+            spark.setPos(x, y, z)
+            spark.setHpr(
+                random.uniform(0, 360),
+                random.uniform(-25, 25),
+                random.uniform(0, 360)
             )
-            self.flameTrack.loop()
+            spark.setScale(random.uniform(1.4, 2.8))
+            spark.setAlphaScale(1)
+            spark.setColor(1, 0.988, 0.408, 1.0)
 
-    def makeUnBurned(self):
-        self.isBurned = 0
-        if self.hp > 0:
-            if hasattr(self, "flameTrack") and self.flameTrack:
-                self.flameTrack.pause()
-                if self.flameEffect:
-                    self.flameEffect.disable()
-                    if hasattr(self.flameEffect, 'renderParent'):
-                        self.flameEffect.cleanup()
+        for i in xrange(sparkCount):
+            spark = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(burstNode)
 
-    def addBurnedRounds(self, num):
-        self.burnedRounds = num
+            texture = loader.loadTexture('phase_3.5/maps/phase_3.5_palette_2tlla_12.png')
+            spark.setTexture(texture, 1)
+            spark.setBillboardPointEye()
+            spark.setTransparency(1)
+            spark.setTwoSided(True)
+            spark.setLightOff(1)
+            spark.setDepthWrite(False)
+            spark.hide()
+            spark.setR(270)
 
-    def getBurnedRounds(self):
-        return self.burnedRounds
+            oneSparkTrack = Sequence(
+                Wait(random.uniform(0.0, duration * 0.45)),
+                Func(resetBurstSpark, spark),
+
+                Parallel(
+                    LerpHprInterval(
+                        spark,
+                        random.uniform(0.18, 0.35),
+                        Vec3(0, 0, random.choice((90, -90, 180))),
+                        startHpr=Vec3(0, 0, 270)
+                    ),
+
+                    Sequence(
+                        LerpScaleInterval(
+                            spark,
+                            random.uniform(0.15, 0.3),
+                            random.uniform(2.5, 4.0)
+                        ),
+                        LerpScaleInterval(
+                            spark,
+                            random.uniform(0.15, 0.3),
+                            random.uniform(0.8, 1.4)
+                        )
+                    ),
+
+                    LerpFunctionInterval(
+                        spark.setAlphaScale,
+                        random.uniform(0.25, 0.45),
+                        fromData=1,
+                        toData=0
+                    )
+                ),
+
+                Func(spark.hide)
+            )
+
+            burstTrack.append(oneSparkTrack)
+            sparks.append(spark)
+
+        return Sequence(
+            burstTrack,
+            Func(burstNode.removeNode)
+        )
+
+
+    def makeLoopingShockAura(self):
+        import random
+
+        self.cleanupShockAura()
+
+        self.shockAuraNode = self.attachNewNode('shockAuraNode')
+
+        toonHeight = 4.0
+        try:
+            toonHeight = self.getHeight()
+        except:
+            if hasattr(self, 'height'):
+                toonHeight = self.height
+
+        sparks = []
+        partTrack = Parallel()
+
+        def resetSpark(spark):
+            if not spark or spark.isEmpty():
+                return
+
+            x = random.uniform(-1.2, 1.2)
+            y = random.uniform(-1.0, 1.0)
+            z = random.uniform(0.5, max(1.0, toonHeight + 0.5))
+
+            spark.show()
+            spark.setPos(x, y, z)
+            spark.setHpr(
+                random.uniform(0, 360),
+                random.uniform(-20, 20),
+                random.uniform(0, 360)
+            )
+            spark.setScale(random.uniform(0.6, 1.6))
+            spark.setAlphaScale(1)
+            spark.setColor(1, 0.988, 0.408, 1.0)
+
+        for i in xrange(12):
+            spark = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(self.shockAuraNode)
+
+            texture = loader.loadTexture('phase_3.5/maps/phase_3.5_palette_2tlla_12.png')
+            spark.setTexture(texture, 1)
+            spark.setBillboardPointEye()
+            spark.setTransparency(1)
+            spark.setTwoSided(True)
+            spark.setLightOff(1)
+            spark.setDepthWrite(False)
+            spark.hide()
+            spark.setR(270)
+
+            oneSparkTrack = Sequence(
+                Wait(random.uniform(0.0, 0.5) + i * 0.05),
+                Func(resetSpark, spark),
+
+                Parallel(
+                    LerpHprInterval(
+                        spark,
+                        0.35,
+                        Vec3(0, 0, 90),
+                        startHpr=Vec3(0, 0, 270)
+                    ),
+
+                    Sequence(
+                        LerpFunctionInterval(
+                            spark.setAlphaScale,
+                            0.35,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(spark.hide)
+            )
+
+            partTrack.append(oneSparkTrack)
+            sparks.append(spark)
+
+        loopTrack = Sequence(partTrack)
+        loopTrack.sparks = sparks
+        return loopTrack
+
+
+    def makeZapped(self, num=1):
+        if not hasattr(self, 'isZapped'):
+            self.isZapped = 0
+
+        self.isZapped += num
+
+        if getattr(self, 'isDead', False) or self.isEmpty():
+            return
+
+        if getattr(self, 'shockAuraTrack', None):
+            return
+
+        self.shockAuraTrack = self.makeLoopingShockAura()
+        self.shockAuraTrack.loop()
+
+
+    def makeUnZapped(self):
+        self.isZapped = 0
+        self.cleanupShockAura()
+
+
+    def addZappedRounds(self, num):
+        self.zappedRounds = num
+
+
+    def getZappedRounds(self):
+        if not hasattr(self, 'zappedRounds'):
+            self.zappedRounds = 0
+
+        return self.zappedRounds
 
     def makeLiquidated(self):
         self.liquidated = 1
@@ -1223,6 +1423,42 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getHiddenRounds(self):
         return self.hiddenRounds
+    
+    def makeFrozen(self):
+        self.frozen = 1
+
+    def makeUnFrozen(self):
+        self.frozen = 0
+
+    def addFrozenRounds(self, num):
+        self.frozenRounds = num
+
+    def getFrozenRounds(self):
+        return self.frozenRounds
+    
+    def makeViralSensation(self):
+        self.isViralSensation = 1
+
+    def makeUnViralSensation(self):
+        self.isViralSensation = 0
+
+    def addViralSensationRounds(self, num):
+        self.viralSensationRounds = num
+
+    def getViralSensationRounds(self):
+        return self.viralSensationRounds
+
+    def setViralSensationBoost(self, num):
+        self.viralSensationBoost = num
+
+    def getViralSensationBoost(self):
+        return self.viralSensationBoost
+    
+    def makeDancePartner(self):
+        self.isDancePartner = 1
+
+    def makeUnDancePartner(self):
+        self.isDancePartner = 0
 
     def makeCollectCalled(self):
         self.collectCalled = 1
@@ -1433,6 +1669,12 @@ class Toon(Avatar.Avatar, ToonHead):
         if self.hp > 0:
             self.cheer = 1
             self.cleanupCheerHands()
+            if hasattr(self, "cheerTrack") and self.cheerTrack:
+                self.cheerTrack.pause()
+                if self.cheerEffect:
+                    self.cheerEffect.disable()
+                    if hasattr(self.cheerEffect, 'renderParent'):
+                        self.cheerEffect.cleanup()
             effectColor = Vec4(0, 1, 0.137, 1.00)
             self.cheerEffect = BattleParticles.createParticleEffect(file='pixieRise')
             self.cheerEffect.setColor(effectColor)
@@ -1767,6 +2009,44 @@ class Toon(Avatar.Avatar, ToonHead):
 
         loopTrack.arrows = arrows
         return loopTrack
+    
+    def makeContentSync(self, num):
+        self.contentSync = num
+
+    def makeBurned(self):
+        self.isBurned = 1
+        if self.hp > 0:
+            if hasattr(self, "flameTrack") and self.flameTrack:
+                self.flameTrack.pause()
+                if self.flameEffect:
+                    self.flameEffect.disable()
+                    if hasattr(self.flameEffect, 'renderParent'):
+                        self.flameEffect.cleanup()
+            self.flameEffect = BattleParticles.createParticleEffect('FiredFlame3')
+            BattleParticles.setEffectTexture(self.flameEffect, 'fire')
+
+            self.flameEffect.reparentTo(self)
+            self.flameEffect.setPos(0, 0, 0)
+
+            self.flameTrack = Sequence(ParticleInterval(self.flameEffect, self, duration=5)
+            )
+            self.flameTrack.loop()
+
+    def makeUnBurned(self):
+        self.isBurned = 0
+        if self.hp > 0:
+            if hasattr(self, "flameTrack") and self.flameTrack:
+                self.flameTrack.pause()
+                if self.flameEffect:
+                    self.flameEffect.disable()
+                    if hasattr(self.flameEffect, 'renderParent'):
+                        self.flameEffect.cleanup()
+
+    def addBurnedRounds(self, num):
+        self.burnedRounds = num
+
+    def getBurnedRounds(self):
+        return self.burnedRounds
 
     def setEncore(self, num):
         self.encoreNumber = num
@@ -3018,6 +3298,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.cleanupAllAuraTracks()
         self.makeUnCooldown()
         self.makeUnBurned()
+        self.makeContentSync(0)
         self.makeUnDamageOvertime()
         self.makeUnLiquidated()
         self.makeUnGroupDamageDown()
@@ -3045,6 +3326,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnEncore()
         self.makeUnWinded()
         self.makeUnBombed()
+        self.makeUnFrozen()
+        self.makeUnViralSensation()
+        self.makeUnDancePartner()
         self.makeUnGagBan()
         self.makeUnVulnerable()
         self.makeUnSnapped()
@@ -3082,6 +3366,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.cleanupAllAuraTracks()
         self.makeUnCooldown()
         self.makeUnBurned()
+        self.makeContentSync(0)
         self.makeUnDamageOvertime()
         self.makeUnLiquidated()
         self.makeUnGroupDamageDown()
@@ -3111,6 +3396,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnWinded()
         self.makeUnBombed()
         self.makeUnGagBan()
+        self.makeUnFrozen()
+        self.makeUnViralSensation()
+        self.makeUnDancePartner()
         self.makeUnVulnerable()
         self.makeUnSnapped()
         self.standWalkRunReverse = None

@@ -377,6 +377,56 @@ class TownBattleCogPanel(DirectFrame):
             t = 'Level 25'
         elif self.cog.isShadow:
             t = 'Level 30'
+        elif self.cog.dna.name == 'clubpres':
+            if self.cog.getActualLevel() == 20:
+                t = 'Level 21'
+            elif self.cog.getActualLevel() == 26:
+                t = 'Level 21'
+            elif self.cog.getActualLevel() == 27:
+                t = 'Level 26'
+            else:
+                t = 'Level ' + str(self.cog.getActualLevel())
+        elif self.cog.dna.name == 'supervis':
+            if self.cog.getActualLevel() == 24:
+                t = 'Level 28'
+            elif self.cog.getActualLevel() == 23:
+                t = 'Level 24'
+            elif self.cog.getActualLevel() == 27:
+                t = 'Level 23'
+            elif self.cog.getActualLevel() == 28:
+                t = 'Level 24'
+            elif self.cog.getActualLevel() == 29:
+                t = 'Level 27'
+            elif self.cog.getActualLevel() == 30:
+                t = 'Level 25'
+            else:
+                t = 'Level ' + str(self.cog.getActualLevel())
+        elif self.cog.dna.name == 'clerk':
+            if self.cog.getActualLevel() == 27:
+                t = 'Level 24'
+            elif self.cog.getActualLevel() == 28:
+                t = 'Level 21'
+            elif self.cog.getActualLevel() == 24:
+                t = 'Level 25'
+            elif self.cog.getActualLevel() == 25:
+                t = 'Level 26'
+            elif self.cog.getActualLevel() == 21:
+                t = 'Level 23'
+            elif self.cog.getActualLevel() == 23:
+                t = 'Level 24'
+            else:
+                t = 'Level ' + str(self.cog.getActualLevel())
+        elif self.cog.dna.name == 'foreman':
+            if self.cog.getActualLevel() == 27:
+                t = 'Level 21'
+            elif self.cog.getActualLevel() == 27:
+                t = 'Level 25'
+            elif self.cog.getActualLevel() == 28:
+                t = 'Level 26'
+            elif self.cog.getActualLevel() == 29:
+                t = 'Level 28'
+            else:
+                t = 'Level ' + str(self.cog.getActualLevel())
         else:
             t = 'Level ' + str(self.cog.getActualLevel())
         if self.cog.getExecutive() or self.cog.getManager() or self.cog.getGovernaught():
@@ -412,7 +462,7 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                     pos=(0.25, 0, -.5),
                                                     text_scale=.5)
-            elif self.cog.isDesperation or self.cog.isBookkeeping or self.cog.dna.name in ('bcaster', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep')\
+            elif self.cog.isDesperation or self.cog.isBookkeeping or self.cog.dna.name in ('bcaster', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
                     or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper')  or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.isAngry and self.cog.dna.name == 'sgoat'):
                 self.luredManagerText = DirectLabel(parent=self.luredManager, relief=None,
                                                 text="1",
@@ -429,7 +479,7 @@ class TownBattleCogPanel(DirectFrame):
                                                     text_scale=.5)
             self.luredManagerText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.luredManager, slot)
+            self._attachStatusIcon(self.luredManager, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.healthCondition == 13:
@@ -479,7 +529,7 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/schadenfreude_icon')
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.immortal, slot)
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.dna.name == 'hroller2' and not self.cog.isVulnerable and self.cog.isPhase3:
@@ -490,8 +540,24 @@ class TownBattleCogPanel(DirectFrame):
             self._clear_status_interval('rainbowPulseTask')
             self._pulseRainbowStatusSlot(slot, duration=2.0)
 
+        if self.cog.dna.name == 'hustle':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/last_tap_icon')
+            texture = loader.loadTexture(
+                'phase_3.5/maps/battlegui/status_effects_palette_4allc_12.png'
+            )
+
+            self.enraged.clearTexture()
+            self.enraged.setTexture(texture, 1)
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.dna.name == 'hrollers':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            if self.cog.getActualLevel() == 36:
+                self.rainbow = status.find('**/confusion_icon')
+            if self.cog.getActualLevel() == 35:
+                self.rainbow = status.find('**/damage_absorb_icon')
             if self.cog.getActualLevel() == 34:
                 self.rainbow = status.find('**/ink_drain_icon')
             if self.cog.getActualLevel() == 33:
@@ -533,6 +599,44 @@ class TownBattleCogPanel(DirectFrame):
                                               pos=(0.25, 0, -.5),
                                               text_scale=.5)
             self.enrageCountText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isGreenLight:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/fog_icon')
+            texture = loader.loadTexture(
+                'phase_3.5/maps/battlegui/status_effects_palette_4allc_12.png'
+            )
+
+            self.enraged.clearTexture()
+            self.enraged.setTexture(texture, 1)
+            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
+                                              text="1", text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.enrageCountText.show()
+            self.enrageCountText.clearTexture()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isRedLight:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.enraged = status.find('**/heavyrain_icon')
+            texture = loader.loadTexture(
+                'phase_3.5/maps/battlegui/status_effects_palette_4allc_12.png'
+            )
+
+            self.enraged.clearTexture()
+            self.enraged.setTexture(texture, 1)
+            self.enrageCountText = DirectLabel(parent=self.enraged, relief=None,
+                                              text="1", text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.5)
+            self.enrageCountText.show()
+            self.enrageCountText.clearTexture()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.enraged, slot, slotColor=(1, 0.984, 0, 1))
 
@@ -589,7 +693,7 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/backfire_icon')
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.immortal, slot)
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.getGovernaught():
@@ -598,7 +702,7 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.isTarget or self.cog.isExplosive:
+        if self.cog.isTarget or self.cog.isExplosive or self.cog.isOverpressured:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/union_bust_icon')
             if self.cog.isExplosive:
@@ -608,13 +712,14 @@ class TownBattleCogPanel(DirectFrame):
                                                   text_scale=.5)
                 self.damageMultText.show()
             else:
-                self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 0, 0, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.25, 0, -.5),
-                                                  text_scale=.5)
-                self.damageMultText.show()
+                if not self.cog.isOverpressured:
+                    self.damageMultText = DirectLabel(parent=self.immortal, relief=None, text="1", text_fg=(1, 0, 0, 1),
+                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                                    pos=(0.25, 0, -.5),
+                                                    text_scale=.5)
+                    self.damageMultText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.immortal, slot)
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.isSleepy:
@@ -739,10 +844,35 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.isOilRain:
+
+        if self.cog.battleSpeed and self.cog.dna.name == 'clerk' and self.cog.getActualLevel() == 24:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/fizzle_icon')
-            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getOilRainRounds() - 1),
+            self.insured = status.find('**/mileaminute_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="x%s" % (self.cog.getBattleSpeed()),
+                                           text_fg=(1, 1, 1, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, -.5),
+                                           text_scale=.4)
+            self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.battleSpeed and self.cog.dna.name == 'hustle':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/mileaminute_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="x%s" % (self.cog.getBattleSpeed()),
+                                           text_fg=(1, 1, 1, 1),
+                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                           pos=(0.25, 0, -.5),
+                                           text_scale=.4)
+            self.insuredText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isDeepFrozen:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.insured = status.find('**/frozen_icon')
+            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="%s" % (self.cog.getDeepFrozenRounds() - 1),
                                            text_fg=(1, 1, 1, 1),
                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                            pos=(0.25, 0, -.5),
@@ -761,6 +891,12 @@ class TownBattleCogPanel(DirectFrame):
                                                 pos=(0.25, 0, -.5),
                                                 text_scale=.5)
             self.extraAttacksText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.isDanceSession:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.extraAttacks = status.find('**/singing_blues_icon')
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.extraAttacks, slot, slotColor=(1, 0.984, 0, 1))
 
@@ -785,7 +921,7 @@ class TownBattleCogPanel(DirectFrame):
                                               text_scale=.4)
             self.damageMultText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.damageUp, slot)
+            self._attachStatusIcon(self.damageUp, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.isDamageReduction:
@@ -808,7 +944,7 @@ class TownBattleCogPanel(DirectFrame):
                                                      text_scale=.4)
                 self.vulnerabilityText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.damageReduction, slot)
+            self._attachStatusIcon(self.damageReduction, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
         if self.cog.isSyphon:
@@ -816,6 +952,48 @@ class TownBattleCogPanel(DirectFrame):
             self.syphon = status.find('**/ink_drain_icon')
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.trapRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_wreckingball')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.lureRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_hypno_goggles')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.throwRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_cake')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.squirtRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_storm_cloud')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.zapRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_tesla_coil')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.soundRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_fog_horn')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if self.cog.dropRushJob:
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.syphon = status.find('**/inventory_boulder')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.syphon, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
 
         if self.cog.isDamageDown:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -833,7 +1011,7 @@ class TownBattleCogPanel(DirectFrame):
                                                    text_scale=.4)
                 self.damageMultText2.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.damageUp, slot)
+            self._attachStatusIcon(self.damageUp, slot, slotColor=(0, 0.902, 1, 1))
             self._pulseStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(0, 0.902, 1, 1))
 
         if self.cog.isVulnerable and not self.cog.dna.name == 'hroller2':
@@ -862,7 +1040,7 @@ class TownBattleCogPanel(DirectFrame):
                                                      text_scale=.4)
             self.vulnerabilityText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.vulnerable, slot)
+            self._attachStatusIcon(self.vulnerable, slot, slotColor=(0, 0.902, 1, 1))
             self._pulseStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(0, 0.902, 1, 1))
 
         if self.cog.isSued:
@@ -1324,8 +1502,8 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.095, -180, 0, 0, .08, .08, .08)
         elif name == 'liquid':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .075, .075, .075)
-        elif name == 'ubuster':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
+        # elif name == 'ubuster':
+        #     self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
         elif name == 'radiog':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0725, .0725, .0725)
         elif name == 'gatekeep' or name == 'liquidr':
@@ -1346,7 +1524,7 @@ class TownBattleCogPanel(DirectFrame):
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .095, .095, .095)
         elif name == 'bookkeep':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)
-        elif name == 'dold':
+        elif name == 'dold' or name == 'ubuster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
         elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
             self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)

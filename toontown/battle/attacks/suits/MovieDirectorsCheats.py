@@ -214,10 +214,19 @@ def doInkDrainDOLA(attack):
     battle = attack['battle']
     targets = attack['target']
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('Withdrawal')
-    BattleParticles.setEffectTexture(particleEffect, 'snow-particle')
+    particleEffect = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect, 'snow-particle', color=Vec4(0.463, 0.635, 0.388, 1))
+    particleEffect2 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect2, 'snow-particle', color=Vec4(0.427, 0.478, 0.608, 1))
+    particleEffect3 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect3, 'snow-particle', color=Vec4(0.498, 0.22, 0.275, 1))
+    particleEffect4 = BattleParticles.createParticleEffect('InkDrain')
+    BattleParticles.setEffectTexture(particleEffect4, 'snow-particle', color=Vec4(0.639, 0.639, 0.639, 1))
     suitTrack = getSuitAnimTrack(attack)
     partTrack = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect, suit, 0], softStop=-1)
+    partTrack2 = getPartTrack(particleEffect2, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect2, suit, 0], softStop=-1)
+    partTrack3 = getPartTrack(particleEffect3, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect3, suit, 0], softStop=-1)
+    partTrack4 = getPartTrack(particleEffect4, 1e-05, suitTrack.getDuration() + 5.2, [particleEffect4, suit, 0], softStop=-1)
     toonTracks = Parallel()
 
     soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=1.4, node=suit)
@@ -225,17 +234,47 @@ def doInkDrainDOLA(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        toonTracks.append(Parallel(Func(toon.makeInkDrain), Func(toon.addInkDrainRounds, 2), Func(toon.checkInkDrain, 25)))
+        def changeColor(parts):
+            track = Parallel()
+            for partNum in range(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(nextPart.colorScaleInterval(0.1, Vec4(0.5, 0.5, 0.5, 1)))
+
+            return track
+
+        def resetColor(parts):
+            track = Parallel()
+            for partNum in range(0, parts.getNumPaths()):
+                nextPart = parts.getPath(partNum)
+                track.append(Func(nextPart.clearColorScale))
+
+            return track
+
+        headParts = toon.getHeadParts()
+        torsoParts = toon.getTorsoParts()
+        legsParts = toon.getLegsParts()
+        colorTrack = Sequence()
+        colorTrack.append(Func(battle.movie.needRestoreColor))
+        colorTrack.append(changeColor(headParts))
+        colorTrack.append(changeColor(torsoParts))
+        colorTrack.append(changeColor(legsParts))
+        colorTrack.append(Wait(suitTrack.getDuration() + 5.2))
+        colorTrack.append(resetColor(headParts))
+        colorTrack.append(resetColor(torsoParts))
+        colorTrack.append(resetColor(legsParts))
+        colorTrack.append(Func(battle.movie.clearRestoreColor))
+        colorTracks.append(colorTrack)
+        toonTracks.append(Parallel(Func(toon.makeInkDrain), Func(toon.addInkDrainRounds, 3), Func(toon.checkInkDrain, 25)))
         toonTracks.append(ActorInterval(toon, 'cringe', playRate=0.25))
         toonTracks.append(Func(toon.loop, 'neutral'))
 
-    return Parallel(suitTrack, partTrack, toonTracks, soundTrack, colorTracks)
+    return Parallel(suitTrack, colorTracks, partTrack, partTrack2, partTrack3, partTrack4, toonTracks, soundTrack, colorTracks)
 
 def doAmbushMarketing(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitTrack = getSuitAnimTrack(attack)
+    suitTrack = Parallel(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_multi_level_marketing.ogg', node=suit)
     suitTrack.append(Func(suit.checkExtraAttacks, 1))
     return Parallel(suitTrack, soundTrack)

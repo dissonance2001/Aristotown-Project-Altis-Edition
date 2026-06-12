@@ -177,13 +177,6 @@ def __createSuitResetPosTrack2(suit, battle):
 def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
     if hp > 0:
         suitTrack = Sequence()
-        for s in battle.activeSuits:
-            if s.dna.name == 'hrollers' and s.getActualLevel() == 25:
-                suitTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
-            if s.dna.name == 'clerk' and s.getActualLevel() == 20:
-                suitTrack.append(Func(s.showHpStringKnockback, 'NICE KNOCKBACK!'))
-            if s.dna.name == 'hrollers' and s.getActualLevel() == 26:
-                suitTrack.append(Func(s.showHpStringSacrifice, 'NICE COMBO!'))
         soakTracks = Parallel()
         sival = ActorInterval(suit, anim)
         sival = []
@@ -282,6 +275,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         if suit.isSued:
             suitTrack.append(Func(suit.makeSued, 3))
         suitTrack.append(Wait(tContact))
+        if suit.squirtRushJob:
+            suitTrack.append(Func(suit.makeUnSquirtRushJob))
         suitTrack.append(__soakSuit(suit, tContact))
         suitIndex = battle.activeSuits.index(suit)
         soakTracks.append(Wait(tContact))
@@ -329,9 +324,9 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual:
+        if died != 0 and suit.isVirtual and not suit.isOverpressured:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual:
+        if died != 0 and not suit.isVirtual and not suit.isOverpressured:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         if not died:
             suitTrack.append(suit.makeDeathCheckInterval(0, battle))
