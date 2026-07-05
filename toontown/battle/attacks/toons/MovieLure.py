@@ -647,7 +647,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -687,7 +687,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(1.1))
         soundTrack = Sequence(Wait(1.25),
                               SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -721,7 +721,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'lured', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -754,7 +754,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         ballPropTrack.append(Wait(.425))
         ballPropTrack.append(getPropAppearTrack(ball, battle, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 0, 0)))
-        ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 90, 0)))
+        ballPropTrack.append(Parallel(Sequence(Wait(.375), LerpColorScaleInterval(ball, 0.375, (1, 1, 1, 0), blendType='easeInOut')), LerpHprInterval(ball, 0.75, VBase3(0, 90, 0))))
         #ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
         ballPropTrack.append(Func(ball.removeNode))
         sinkPos = trapProp.getPos(battle)
@@ -764,7 +764,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setY(sinkPos.getY() + 12.5)
         dropPos.setZ(dropPos.getZ() + 40)
         #landPos.setY(dropPos.getY() + 4)
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -778,7 +778,9 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
 
         else:
             trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
-            moveTrack = Sequence(Wait(1.25), LerpPosInterval(suit, 0.5, sinkPos, other=battle),
+            moveTrack = Sequence(Wait(1.25), Parallel(Sequence(Wait(.125), Func(suit.setTransparency, 1),
+                        LerpColorScaleInterval(suit, 0.375, (1, 1, 1, 0)),
+                        Func(suit.setColorScale, (1, 1, 1, 1)), Func(suit.clearTransparency)), LerpPosInterval(suit, 0.5, sinkPos, other=battle)),
                                  Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.6))
             soundTrack = Sequence(Wait(1.2),
                                   SoundInterval(globalBattleSoundCache.getSound('AA_trap_wreckingball_nonfatal.ogg'),
@@ -831,7 +833,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -889,18 +891,22 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Func(battle.unlureSuit, suit))
         result.append(Func(suit.setDizzy, 0))
         #result.append(MovieUtil.createSuitResetPosTrack(suit, battle))
-        result.append(Func(suit.setNeutralAnimationTrap))
+        #result.append(Func(suit.setNeutralAnimationTrap))
         suit.setPendingQueuedLured(False)
         if suit.dna.name == 'redd' and revived != 0:
             result.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if revived != 0 and suit.isSkeleton:
+        elif suit.dna.name == 'erfit' and revived != 0:
+            result.append(MovieUtil.createErfitReviveTrack(suit, battle))
+        elif revived != 0 and suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
             result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual and not suitGone and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suitGone and not suit.isOverpressured:
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        else:
+            result.append(Func(suit.setNeutralAnimationTrap))
     return result
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):

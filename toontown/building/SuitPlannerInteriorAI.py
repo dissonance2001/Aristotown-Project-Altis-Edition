@@ -166,11 +166,14 @@ class SuitPlannerInteriorAI:
         suit.setCog(1)
         return flags
 
-    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0, skelecogChance=0, revivesTwoChance=0, revivesThreeChance=0):
+    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0, skelecogChance=0, revivesTwoChance=0, revivesThreeChance=0, forceExecutive=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         #skel, exe = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
         newSuit.setSkeleRevives(revives)
+        # if forceExecutive > 0:
+        #     newSuit.setExecutive(1)
+        #     newSuit.setGovernaught(0)
         if random.randint(1, 100) <= revivesThreeChance:
             newSuit.setSkeleRevives(2)
         elif random.randint(1, 100) <= revivesTwoChance:
@@ -220,6 +223,56 @@ class SuitPlannerInteriorAI:
         suitHandles = {}
         activeSuits = []
         reserveSuits = []
+        MIN_LEVEL_BY_TYPE = {
+            14: 8,   # Big Wig tier can spawn at level 8+
+            13: 7,
+            12: 7,
+            11: 6,
+            10: 6,
+            9: 5,
+            8: 5,
+            7: 3,
+            6: 4, 
+            5: 4,
+            4: 3, 
+            3: 2,
+            2: 2, 
+            1: 1,
+        }
+        MAX_LEVEL_BY_TYPE = {
+            1: 5,
+            2: 6,
+            3: 8,
+            4: 10,
+            5: 10,
+            6: 12,
+            7: 14,
+            8: 15,
+            9: 20,
+            10: 20,
+            11: 20,
+            12: 25,
+            13: 25,
+            14: 50,
+        }
+        def suitKindFromLevel(level):
+            possibleTypes = []
+
+            for suitType in range(1, 15):
+                minLevel = MIN_LEVEL_BY_TYPE.get(suitType, suitType)
+                maxLevel = MAX_LEVEL_BY_TYPE.get(suitType, suitType + 4)
+
+                if level >= minLevel and level <= maxLevel:
+                    possibleTypes.append(suitType)
+
+            if not possibleTypes:
+                return 14
+
+            return random.choice(possibleTypes)
+
+
+        suitLevel = random.randint(15, 20)
+        suitKind = suitKindFromLevel(suitLevel)
         if specialCode == 'ffm':
             miniboss = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
@@ -263,6 +316,17 @@ class SuitPlannerInteriorAI:
             pair6.append(miniboss2)
             pair6.append(miniboss3)
             activeSuits.append(random.choice((pair1, pair2, pair3, pair4, pair5, pair6)))
+        elif specialCode == 'erclaimerfit':
+            miniboss = self.__genSuitObject(self.zoneId, 26, 'm', 26, 1) # Count Erfit
+            miniboss2 = self.__genSuitObject(self.zoneId, 22, 'l', 22, 1) # Count Erclaim
+            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
+            suit2 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
+            suit3 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
+            suit4 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
+            activeSuits.append(suit)
+            activeSuits.append(suit2)
         elif specialCode == 'litpair1':
             miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0) # Litigator
             miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0) # Stenographer
@@ -450,60 +514,110 @@ class SuitPlannerInteriorAI:
     def genReserveSuits(self, specialCode = 'ffm'):
         suitHandles = {}
         reserveSuits = []
-
+        MIN_LEVEL_BY_TYPE = {
+            14: 8,   # Big Wig tier can spawn at level 8+
+            13: 7,
+            12: 7,
+            11: 6,
+            10: 6,
+            9: 5,
+            8: 5,
+            7: 3,
+            6: 4, 
+            5: 4,
+            4: 3, 
+            3: 2,
+            2: 2, 
+            1: 1,
+        }
+        MAX_LEVEL_BY_TYPE = {
+            1: 5,
+            2: 6,
+            3: 8,
+            4: 10,
+            5: 10,
+            6: 12,
+            7: 14,
+            8: 15,
+            9: 20,
+            10: 20,
+            11: 20,
+            12: 25,
+            13: 25,
+            14: 50,
+        }
         def suitKindFromLevel(level):
-            if level >= 25:
-                returnval = 14
-            elif level >= 24:
-                returnval = random.randint(13, 14)
-            elif level >= 21:
-                returnval = random.randint(12, 14)
-            elif level >= 20:
-                returnval = random.randint(11, 14)
-            elif level >= 18:
-                returnval = random.randint(10, 14)
-            elif level >= 16:
-                returnval = random.randint(9, 14)
-            elif level >= 15:
-                returnval = random.randint(5, 14)
-            elif level >= 14:
-                returnval = random.randint(5, 14)
-            elif level >= 13:
-                returnval = random.randint(5, 13)
-            elif level >= 12:
-                returnval = random.randint(5, 12)
-            elif level >= 11:
-                returnval = random.choice((5, 7, 8, 9, 10, 11))
-            elif level >= 10:
-                returnval = random.randint(5, 10)
-            elif level >= 9:
-                returnval = random.choice((3, 5, 6, 7, 8, 9))
-            elif level >= 8:
-                returnval = random.randint(3, 8)
-            elif level >= 7:
-                returnval = random.randint(3, 7)
-            elif level >= 6:
-                returnval = random.randint(2, 6)
-            elif level >= 5:
-                returnval = random.randint(1, 5)
-            elif level >= 4:
-                returnval = random.randint(1, 4)
-            elif level >= 3:
-                returnval = random.randint(1, 3)
-            elif level >= 2:
-                returnval = random.randint(1, 2)
-            elif level == 1:
-                returnval = 1
-            else:
-                returnval = 14
+            possibleTypes = []
 
-            return returnval
+            for suitType in range(1, 15):
+                minLevel = MIN_LEVEL_BY_TYPE.get(suitType, suitType)
+                maxLevel = MAX_LEVEL_BY_TYPE.get(suitType, suitType + 4)
 
-        suitLevel = random.randint(15, 31)
-        suitLevel3 = random.randint(1, 31)
-        suitLevel2 = random.randint(7, 15)
+                if level >= minLevel and level <= maxLevel:
+                    possibleTypes.append(suitType)
+
+            if not possibleTypes:
+                return 14
+
+            return random.choice(possibleTypes)
+
+
+        suitLevel = random.randint(10, 20)
         suitKind = suitKindFromLevel(suitLevel)
+
+        suitLevelHighRoller = random.randint(1, 35)
+        suitKindHighRoller = suitKindFromLevel(suitLevelHighRoller)
+
+        suitLevel3 = random.randint(1, 31)
         suitKind3 = suitKindFromLevel(suitLevel3)
+
+        suitLevelWSI = random.randint(10, 20)
+        suitKindWSI = suitKindFromLevel(suitLevelWSI)
+
+        suitLevel2 = random.randint(7, 15)
+        suitKind2 = suitKindFromLevel(suitLevel2)
+
+        suitLevelDesperation = random.randint(15, 25)
+        suitKindDesperation = suitKindFromLevel(suitLevelDesperation)
+
+        suitLevelNormal = random.randint(10, 20)
+        suitKindNormal = suitKindFromLevel(suitLevelNormal)
+
+        suitLevelErfit1 = random.randint(10, 14)
+        suitKindErfit1 = suitKindFromLevel(suitLevelErfit1)
+        suitLevelErfit2 = random.randint(12, 16)
+        suitKindErfit2 = suitKindFromLevel(suitLevelErfit2)
+        suitLevelErfit3 = random.randint(14, 18)
+        suitKindErfit3 = suitKindFromLevel(suitLevelErfit3)
+        suitLevelErfit4 = random.randint(16, 20)
+        suitKindErfit4 = suitKindFromLevel(suitLevelErfit4)
+        suitLevelErfit5 = random.randint(20, 30)
+        suitKindErfit5 = suitKindFromLevel(suitLevelErfit5)
+        suitLevelErclaim = random.randint(10, 15)
+        suitKindErclaim = suitKindFromLevel(suitLevelErclaim)
+        suitLevelErclaim2 = random.randint(15, 20)
+        suitKindErclaim2 = suitKindFromLevel(suitLevelErclaim)
+        if specialCode == 'erfit1':
+            suit = self.__genSuitObject(self.zoneId, suitKindErfit1, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit1, 0, 100, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'erfit2':
+            suit = self.__genSuitObject(self.zoneId, suitKindErfit2, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit2, 0, 100, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'erfit3':
+            suit = self.__genSuitObject(self.zoneId, suitKindErfit3, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit3, 0, 100, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'erfit4':
+            suit = self.__genSuitObject(self.zoneId, suitKindErfit4, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit4, 0, 100, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'erfit5':
+            suit = self.__genSuitObject(self.zoneId, suitKindErfit5, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit5, 0, 100, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'erclaim':
+            suit = self.__genSuitObject(self.zoneId, suitKindErclaim, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErclaim, 0, 100, 0, 0, 1)
+            reserveSuits.append(suit)
+        if specialCode == 'erclaim2':
+            suit = self.__genSuitObject(self.zoneId, suitKindErclaim2, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErclaim2, 0, 100, 0, 0, 1)
+            reserveSuits.append(suit)
         if specialCode == 'crf':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 25, 'm', 25, 0)
@@ -514,21 +628,37 @@ class SuitPlannerInteriorAI:
             # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0, 15, 0, 0)
             reserveSuits.append(suit)
+        if specialCode == 'litDesperation':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'l', suitLevelDesperation, 0, 15, 0, 0)
+            reserveSuits.append(suit)
         if specialCode == 'amb':
             # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 'c', suitLevel, 0, 15, 0, 0)
+            reserveSuits.append(suit)
+        if specialCode == 'ambDesperation':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'c', suitLevelDesperation, 0, 15, 0, 0)
             reserveSuits.append(suit)
         if specialCode == 'pres':
             # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 15, 0, 0)
             reserveSuits.append(suit)
+        if specialCode == 'presDesperation':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 's', suitLevelDesperation, 0, 15, 0, 0)
+            reserveSuits.append(suit)
         if specialCode == 'bdlit':
             # litigation
             suit = self.__genSuitObject(self.zoneId, suitKind, 'g', suitLevel, 0, 15, 0, 0)
             reserveSuits.append(suit)
+        if specialCode == 'bdlitDesperation':
+            # litigation
+            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'g', suitLevelDesperation, 0, 15, 0, 0)
+            reserveSuits.append(suit)
         if specialCode == 'lit2':
             # witness stand-in
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 15, 0, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKindWSI, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelWSI, 0, 15, 0, 0)
             reserveSuits.append(suit)
         if specialCode == 'phantom':
             miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)
@@ -603,7 +733,7 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(suit)
         if specialCode == 'crf1':
             # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKind3, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel3, 0)
+            suit = self.__genSuitObject(self.zoneId, suitKindHighRoller, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelHighRoller, 0)
             reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
@@ -658,7 +788,7 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
             reserveSuits.append(suit)
         if specialCode == 'fmaker':
-            suit = self.__genSuitObject(self.zoneId, 19, 't', 19, 0)
+            suit = self.__genSuitObject(self.zoneId, 27, 'g', 27, 0)
             reserveSuits.append(suit)
         if specialCode == 'director':
             suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)

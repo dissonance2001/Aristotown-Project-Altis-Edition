@@ -139,20 +139,37 @@ def __doSuitDrops(dropTargetPairs, npcs, npcDrops):
     alreadyDodged = 0
     alreadyTeased = 0
     alreadyHit = 0
+
+    hasDied = sum([pair[1]['died'] for pair in dropTargetPairs]) > 0
+
+    landedPairs = [pair for pair in dropTargetPairs if pair[1]['hp'] > 0]
+    lastHitPair = landedPairs[-1] if landedPairs else None
+    lastPairInSet = dropTargetPairs[-1]
+
     for dropTargetPair in dropTargetPairs:
         drop = dropTargetPair[0]
+        target = dropTargetPair[1]
+
         level = drop['level']
         objName = objects[level]
-        target = dropTargetPair[1]
         hp = target['hp']
-        lastDrop = dropTargetPairs.index(dropTargetPair) == len(dropTargetPairs) - 1
-        track = __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops,
-                                      lastDrop)
+        lastHitDrop = dropTargetPair == lastHitPair
+        lastDropInSet = dropTargetPair == lastPairInSet
+
+        track = __dropObjectForSingle(
+            drop, delay, objName, level,
+            alreadyDodged, alreadyTeased, alreadyHit,
+            npcs, target, npcDrops,
+            lastHitDrop, hasDied, lastDropInSet
+        )
+
         if track:
             toonTracks.append(track)
             delay += TOON_DROP_DELAY
+
         if hp > 0:
             alreadyHit = 1
+
         if level >= 4:
             alreadyTeased = 1
         else:
@@ -218,15 +235,15 @@ def __dropGroupObject(drop, delay, closestTarget, alreadyDodged, alreadyTeased, 
     return returnedParallel
 
 
-def __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop=0):
-    singleDropParallel = __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop)
-    suitTrack = __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyHit, target, npcs, lastDrop)
+def __dropObjectForSingle(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop, hasDied, lastDropInSet):
+    singleDropParallel = __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop, hasDied, lastDropInSet)
+    suitTrack = __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyHit, target, npcs, lastDrop, hasDied, lastDropInSet)
     if suitTrack:
         singleDropParallel.append(suitTrack)
     return singleDropParallel
 
 
-def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop):
+def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alreadyHit, npcs, target, npcDrops, lastDrop=False, hasDied=False, lastDropInSet=False):
     toon = drop['toon']
     repeatNPC = 0
     battle = drop['battle']
@@ -273,7 +290,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
         else:
             object.setPos(suit.getPos(battle))
             object.setHpr(suit.getHpr(battle))
-            if miss and not died:
+            if miss:
                 object.setY(object.getY(battle) + 5)
         if not majorObject:
             if not miss:
@@ -285,7 +302,94 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
     objInit = Func(posObject, object, hp <= 0)
     objectTrack.append(Wait(delay + tObjectAppears))
     objectTrack.append(objInit)
-    if (hp > 0 and (not died and lastDrop)) or 0 < level < 4:
+    visualDied = hasDied and lastDrop
+    roundHasDeath = hasDied
+    if hp > 0 and (visualDied or roundHasDeath) and not suit.isVirtual and not suit.isOverpressured:
+        # killing drop: full hit animation, then shrink away
+        if hasattr(object, 'getAnimControls'):
+            objectTrack.append(ActorInterval(object, objName, duration=landFrames[level] / 24.0))
+
+            def poseProp(prop, animName, level):
+                prop.pose(animName, landFrames[level])
+
+            objectTrack.append(Func(poseProp, object, objName, level))
+            objectTrack.append(Wait(1.0))
+            objectTrack.append(
+                LerpScaleInterval(
+                    object,
+                    dShrinkOnMiss,
+                    Point3(0.01, 0.01, 0.01),
+                    startScale=object.getScale()
+                )
+            )
+        else:
+            startingScale = objStartingScales[level]
+            object2 = MovieUtil.copyProp(object)
+            posObject(object2, True)
+            endingPos = object2.getPos()
+            startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
+            startHpr = object2.getHpr()
+            endHpr = Point3(startHpr[0] + 90, startHpr[1], startHpr[2])
+
+            objectTrack.append(Sequence(
+                Func(object.setScale, startingScale),
+                Func(object.setH, endHpr[0]),
+                LerpPosInterval(object, landFrames[level] / 24.0, endingPos, startPos=startPos),
+                Effects.createZBounce(object, 2, endingPos, 0.5, 1.5),
+                Wait(1.5),
+                LerpScaleInterval(
+                    object,
+                    dShrinkOnMiss,
+                    Point3(0.01, 0.01, 0.01),
+                    startScale=startingScale
+                )
+            ))
+            MovieUtil.removeProp(object2)
+
+    elif hp <= 0:
+        # miss: short/miss animation, then miss shrink
+        if hasattr(object, 'getAnimControls'):
+            objectTrack.append(ActorInterval(object, objName, duration=landFrames[level] / 24.0))
+
+            def poseProp(prop, animName, level):
+                prop.pose(animName, landFrames[level])
+
+            objectTrack.append(Func(poseProp, object, objName, level))
+            objectTrack.append(Wait(1.0))
+            objectTrack.append(
+                LerpScaleInterval(
+                    object,
+                    dShrinkOnMiss,
+                    Point3(0.01, 0.01, 0.01),
+                    startScale=object.getScale()
+                )
+            )
+        else:
+            startingScale = objStartingScales[level]
+            object2 = MovieUtil.copyProp(object)
+            posObject(object2, True)
+            endingPos = object2.getPos()
+            startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
+            startHpr = object2.getHpr()
+            endHpr = Point3(startHpr[0] + 90, startHpr[1], startHpr[2])
+
+            objectTrack.append(Sequence(
+                Func(object.setScale, startingScale),
+                Func(object.setH, endHpr[0]),
+                LerpPosInterval(object, landFrames[level] / 24.0, endingPos, startPos=startPos),
+                Effects.createZBounce(object, 2, endingPos, 0.5, 1.5),
+                Wait(1.5),
+                LerpScaleInterval(
+                    object,
+                    dShrinkOnMiss,
+                    Point3(0.01, 0.01, 0.01),
+                    startScale=startingScale
+                )
+            ))
+            MovieUtil.removeProp(object2)
+
+    else:
+        # normal hit that does not kill: full hit animation, linger/get-up behavior
         if hasattr(object, 'getAnimControls'):
             animProp = ActorInterval(object, objName)
             shrinkProp = LerpScaleInterval(object, dShrink, Point3(0.01, 0.01, 0.01), startScale=object.getScale())
@@ -294,44 +398,26 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
         else:
             startingScale = objStartingScales[level]
             object2 = MovieUtil.copyProp(object)
-            posObject(object2, hp <= 0)
+            posObject(object2, False)
             endingPos = object2.getPos()
             startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
             startHpr = object2.getHpr()
             endHpr = Point3(startHpr[0] + 90, startHpr[1], startHpr[2])
-            animProp = LerpPosInterval(object, landFrames[level] / 24.0, endingPos, startPos=startPos)
-            shrinkProp = LerpScaleInterval(object, dShrink, Point3(0.01, 0.01, 0.01), startScale=startingScale)
-            bounceProp = Effects.createZBounce(object, 2, endingPos, 0.5, 1.5)
-            objAnimShrink = Sequence(Func(object.setScale, startingScale), Func(object.setH, endHpr[0]), animProp, bounceProp, Wait(1.5), shrinkProp)
-            objectTrack.append(objAnimShrink)
+
+            objectTrack.append(Sequence(
+                Func(object.setScale, startingScale),
+                Func(object.setH, endHpr[0]),
+                LerpPosInterval(object, landFrames[level] / 24.0, endingPos, startPos=startPos),
+                Effects.createZBounce(object, 2, endingPos, 0.5, 1.5),
+                Wait(1.0),
+                LerpScaleInterval(
+                    object,
+                    dShrink,
+                    Point3(0.01, 0.01, 0.01),
+                    startScale=startingScale
+                )
+            ))
             MovieUtil.removeProp(object2)
-    elif hasattr(object, 'getAnimControls'):
-        animProp = ActorInterval(object, objName, duration=landFrames[level] / 24.0)
-
-        def poseProp(prop, animName, level):
-            prop.pose(animName, landFrames[level])
-
-        poseProp = Func(poseProp, object, objName, level)
-        wait = Wait(1.0)
-        shrinkProp = LerpScaleInterval(object, dShrinkOnMiss, Point3(0.01, 0.01, 0.01), startScale=object.getScale())
-        objectTrack.append(animProp)
-        objectTrack.append(poseProp)
-        objectTrack.append(wait)
-        objectTrack.append(shrinkProp)
-    else:
-        startingScale = objStartingScales[level]
-        object2 = MovieUtil.copyProp(object)
-        posObject(object2, hp <= 0)
-        endingPos = object2.getPos()
-        startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
-        startHpr = object2.getHpr()
-        endHpr = Point3(startHpr[0] + 90, startHpr[1], startHpr[2])
-        animProp = LerpPosInterval(object, landFrames[level] / 24.0, endingPos, startPos=startPos)
-        shrinkProp = LerpScaleInterval(object, dShrinkOnMiss, Point3(0.01, 0.01, 0.01), startScale=startingScale)
-        bounceProp = Effects.createZBounce(object, 2, endingPos, 0.5, 1.5)
-        objAnimShrink = Sequence(Func(object.setScale, startingScale), Func(object.setH, endHpr[0]), animProp, bounceProp, Wait(1.5), shrinkProp)
-        objectTrack.append(objAnimShrink)
-        MovieUtil.removeProp(object2)
     objectTrack.append(Func(MovieUtil.removeProp, object))
     objectTrack.append(Func(battle.movie.clearRenderProp, object))
     dropShadow = MovieUtil.copyProp(suit.getShadowJoint())
@@ -356,7 +442,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
         else:
             dropShadow.setPos(suit.getPos(battle))
             dropShadow.setHpr(suit.getHpr(battle))
-            if hp <= 0 and not (lastDrop and died):
+            if hp <= 0:
                 dropShadow.setY(dropShadow.getY(battle) + 5)
         dropShadow.setZ(dropShadow.getZ() + 0.5)
 
@@ -364,7 +450,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
     return Parallel(toonTrack, soundTrack, buttonTrack, objectTrack, shadowTrack)
 
 
-def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyHit, target, npcs, lastDrop = 0):
+def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyHit, target, npcs, lastDrop=False, hasDied=False, lastDropInSet=False):
     toon = drop['toon']
     if 'npc' in drop:
         toon = drop['npc']
@@ -373,7 +459,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     suit = target['suit']
     hp = target['hp']
     hitSuit = hp > 0
-    died = target['died']
+    actualDied = target['died']
+    visualDied = hasDied and lastDrop
     revived = target['revived']
     leftSuits = target['leftSuits']
     rightSuits = target['rightSuits']
@@ -398,12 +485,16 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         anim = 'flatten'
     else:
         anim = 'drop-react'
-    if died and majorObject and not suit.isVirtual and not suit.isOverpressured:
+    if visualDied and majorObject and not suit.isVirtual and not suit.isOverpressured and not revived and not suit.dna.name in ['erclaim', 'erfit']:
         suitReact = ActorInterval(suit, anim, endTime=0.55)
-    elif not lastDrop:
+
+    elif not lastDropInSet:
         suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
+
     else:
-        suitReact = Sequence(ActorInterval(suit, anim), Func(suit.setNeutralAnimationDrop))
+        suitReact = Sequence(
+            ActorInterval(suit, anim)
+        )
     suitTrack.append(Wait(delay + tObjectAppears))
     if suit.dropRushJob:
         suitTrack.append(Func(suit.makeUnDropRushJob))
@@ -412,7 +503,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(updateHealthBar)
         suitGettingHit = Parallel(suitReact)
     else:
-        if lastDrop:
+        if lastDropInSet:
             suitGettingHit = Parallel(suitReact)
         else:
             suitGettingHit = Parallel()
@@ -420,12 +511,12 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if died and not suit.isVirtual and not suit.isOverpressured:
+    if visualDied and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
                                       Func(suit.updateHealthBar, hpbonus))
-            suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle))
+            suitGettingHit.append(MovieUtil.createSuitCrashTrack(suit, battle, level))
             suitTrack.append(suitGettingHit)
             if hp > 0:
                 return Parallel(suitTrack, bonusTrack)
@@ -441,14 +532,20 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
     if suit.dna.name == 'redd' and revived != 0:
         suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-    if revived != 0 and suit.isSkeleton:
+    elif suit.dna.name == 'erfit' and revived != 0:
+        suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
+    elif revived != 0 and suit.isSkeleton:
         suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-    if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+    elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-    if died != 0 and suit.isVirtual and not suit.isOverpressured:
+    elif visualDied != 0 and suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    if died != 0 and not suit.isVirtual and not suit.isOverpressured:
+    elif visualDied != 0 and (suit.dna.name == 'erfit' or suit.dna.name == 'erclaim'):
+        suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+    elif visualDied != 0 and not suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
+    else:
+        suitTrack.append(Func(suit.setNeutralAnimationDrop))
     #suitTrack.append(Func(suit.setNeutralAnimationDrop))
     suitIndex = battle.activeSuits.index(suit)
     if suit.dna.name == 'sgoat' and suit.isShielding:
@@ -464,15 +561,15 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     if bonusTrack != None:
         suitTrack = Parallel(suitTrack, bonusTrack)
     else:
-        if not hp > 0 and not died and not alreadyTeased and not alreadyDodged:
+        if not hp > 0 and not visualDied and not alreadyTeased and not alreadyDodged:
             suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
-        elif not hp > 0 and not died and lastDrop and alreadyHit:
+        elif not hp > 0 and not visualDied and lastDropInSet and alreadyHit:
             if majorObject:
                 anim = 'flatten'
             else:
                 anim = 'drop-react'
             suitTrack = Sequence(Wait(delay + tObjectAppears), Parallel(ActorInterval(suit, anim, startTime=TOON_DROP_DELAY)), Func(suit.setNeutralAnimationDrop))
-        elif not hp > 0 and not died:
+        elif not hp > 0 and not visualDied:
             if majorObject:
                 anim = 'flatten'
             else:

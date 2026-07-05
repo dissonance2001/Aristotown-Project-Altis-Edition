@@ -9,12 +9,15 @@ from toontown.toonbase import ToontownGlobals
 from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *
 from toontown.battle import BattleProps
+from toontown.battle.BattleProps import *
+from toontown.battle import BattleProps
 from toontown.battle import MovieUtil
 from toontown.battle import SuitBattleGlobals
 from direct.showutil import Effects
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit.DistributedDirectors import DistributedDirectors
 from toontown.suit.DistributedBoardbotBoss import DistributedBoardbotBoss
+from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
 from toontown.suit.DistributedLawbotBoss import DistributedLawbotBoss
 from toontown.suit.DistributedCashbotBoss import DistributedCashbotBoss
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
@@ -134,7 +137,140 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             if suit.dna.name == 'hroller':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suit, ts, name, callback)
-            if suit.dna.name == 'cbutcher':
+            boss = next((obj for obj in base.cr.doId2do.values()
+            if isinstance(obj, DistributedCountErclaimBoss)), None)
+            if boss:
+                if suit.isSkeleton:
+                    suit.setState('Battle')
+                    suitTrack = Sequence()
+                    oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
+
+                    if suit in self.joiningSuits:
+                        i = self._getPendingPreviewIndex(suit)
+                        destPos, h = self.suitPendingPoints[i]
+                        destHpr = VBase3(h, 0, 0)
+                    else:
+                        destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                    startPos = destPos + Point3(0, 0, 0)
+                    startPos2 = destPos + Point3(0, 0, 0)
+                    self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                    sfx = loader.loadSfx(
+                        "phase_5/audio/sfx/SA_zombie_cogs_rising.ogg"
+                    )
+                    suitTrack.append(Func(suit.reparentTo, self))
+                    suitTrack.append(Func(suit.headsUp, self))
+                    suitTrack.append(LerpPosInterval(suit, 0, startPos))
+                    suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                    suitTrack.append(Parallel(SoundInterval(sfx, node=suit), ActorInterval(suit, 'reanimated')))
+                    suitTrack.append(Func(suit.loop, 'neutral'))
+                    suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                    suitTracks.append(suitTrack)
+                    # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                    suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+                    delay += 0
+                    if self.hasLocalToon():
+                        camera.reparentTo(self)
+                        if random.choice([0, 1]):
+                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        else:
+                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                else:
+                    suit.setState('Battle')
+                    if self.hasLocalToon():
+                        camera.reparentTo(self)
+                        if random.choice([0, 1]):
+                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        else:
+                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                    if suit in self.joiningSuits:
+                        i = self._getPendingPreviewIndex(suit)
+                        destPos, h = self.suitPendingPoints[i]
+                        destHpr = VBase3(h, 0, 0)
+                    else:
+                        destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                    trapProp = globalPropPool.getProp('quicksand')
+                    trapProp.setColor(Vec4(0.1, 0.1, 1.0, 1))
+                    trapProp.setHpr(Point3(300, 0, 0))
+                    trapProp.setScale(0.01)
+                    trapProp.setPos(destPos)
+                    trapProp.reparentTo(self)
+                    smallScale = 0.01
+                    bigScale = 2.25
+                    biggerScale = 2.5
+                    trapTrack = Sequence(
+                        Wait(0.65),
+                        LerpScaleInterval(trapProp, 0.65, biggerScale, blendType='easeIn'),
+                        LerpScaleInterval(trapProp, 0.15, bigScale, blendType='easeOut'),
+                        Wait(1.0),
+                        LerpScaleInterval(trapProp, 0.15, biggerScale, blendType='easeIn'),
+                        LerpScaleInterval(trapProp, 0.65, smallScale, blendType='easeOut'),
+                        Func(trapProp.removeNode)
+                    )
+
+                    def soakSuit():
+                        pass
+
+                    def suitNeutral():
+                        suit.setNeutralAnimation()
+
+                    def createSuitMoveIval(suit, destPos, hole):
+                        dur = suit.getDuration('landing')
+                        fr = suit.getFrameRate('landing')
+                        landingDur = dur
+                        totalDur = 7.3
+                        animTimeInAir = totalDur - dur
+                        flyingDur = animTimeInAir
+                        moveIval = Sequence(
+                            Func(suit.pose, 'landing', 0),
+                                Parallel(
+                                    Sequence(
+                                        ProjectileInterval(suit, duration=flyingDur, endPos=destPos, gravityMult=0.125),
+                                        ActorInterval(suit, 'landing')
+                                    ),
+                                    Sequence(
+                                        Wait(0.5),
+                                    )
+                                ),
+                                Func(suitNeutral)
+                        )
+                        if suit.prop is None:
+                            suit.prop = globalPropPool.getProp('propeller')
+                        propDur = suit.prop.getDuration('propeller')
+                        lastSpinFrame = 8
+                        fr = suit.prop.getFrameRate('propeller')
+                        spinTime = lastSpinFrame / fr
+                        openTime = (lastSpinFrame + 1) / fr
+                        taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
+                        propTrack = Parallel(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), 
+                            SoundInterval(suit.propInSound, duration=flyingDur, node=suit),
+                            Sequence(
+                                ActorInterval(suit.prop, 'propeller', constrainedLoop=1, duration=flyingDur + 1, startTime=0.0, endTime=spinTime),
+                                ActorInterval(suit.prop, 'propeller', duration=landingDur, startTime=openTime),
+                                Func(suit.detachPropeller)
+                            )
+                        )
+                        hole.setPos(self, destPos[0], destPos[1], destPos[2])
+                        underPos = destPos + Point3(0, 0, (-SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)/2)
+                        startPos = destPos + Point3(0, 0, 0)
+                        startPos2 = destPos + Point3(0, 0, 0)
+                        result = Parallel(
+                            Func(suit.attachPropeller),
+                            Sequence(
+                                Func(suit.setPos, underPos),
+                                Parallel(moveIval, propTrack)
+                            )
+                        )
+                        return result
+                    #destPos, destHpr = self.getActorPosHpr(suit)
+                    suit.wrtReparentTo(self)
+                    moveIval = createSuitMoveIval(suit, destPos, trapProp)
+                    # suitInbetweenTrack = Sequence(Func(suit.setSkelecog, 1), Func(suit.healthBar.show), Func(soakSuit), Func(suit.setHp, suit.getMaxHp()), Func(suit.wrtReparentTo, battle))
+                    suitTrack = Sequence(moveIval)
+
+                   # return Parallel(suitTrack, trapTrack)
+                    suitTracks.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                    suitTracks.append(Parallel(suitTrack, trapTrack))
+            elif suit.dna.name == 'cbutcher':
                 suit.setState('Battle')
                 suitTrack = Sequence()
                 oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)

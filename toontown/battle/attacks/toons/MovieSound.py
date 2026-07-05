@@ -298,17 +298,25 @@ def __getSuitDeathTracks(sound):
         revived = target['revived']
         if suit.dna.name == 'redd' and revived != 0:
             deathTracks.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if revived != 0 and suit.isSkeleton:
+        elif suit.dna.name == 'erfit' and revived != 0:
+            deathTracks.append(MovieUtil.createErfitReviveTrack(suit, battle))
+        elif revived != 0 and suit.isSkeleton:
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died and not suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.dna.name == 'erfit':
+            deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        elif died != 0 and suit.dna.name == 'erclaim':
+            deathTracks.append(MovieUtil.makeErclaimDeath(suit, battle))
+        elif died and not suit.isVirtual and not suit.isOverpressured:
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
             if sound['level'] < 7:
                 deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        else:
+            deathTracks.append(Func(suit.setNeutralAnimation))
 
     return deathTracks
 

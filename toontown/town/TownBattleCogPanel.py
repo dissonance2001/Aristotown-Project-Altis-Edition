@@ -8,14 +8,17 @@ from direct.directnotify import DirectNotifyGlobal
 import string
 from toontown.toon import LaffMeter
 from toontown.battle import BattleBase
+from direct.actor.Actor import Actor
 from toontown.battle import DistributedBattleBase
 from toontown.battle import BattleProps
+from toontown.suit import SuitDNA
 from direct.task.Task import Task
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import TTLocalizer
+from toontown.quest.QuestPoster import QuestPoster
 
 class TownBattleCogPanel(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattleCogPanel')
@@ -368,11 +371,6 @@ class TownBattleCogPanel(DirectFrame):
         self._buildStatusSlots()
 
         # Shark Watcher and Leveling Information
-        if self.cog.dna.name == 'shw':
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.sharkwatcher = status.find('**/ripped_icon')
-            self.sharkwatcher.reparentTo(self.healthNode)
-            self.sharkwatcher.setPosHprScale(-0.3925, 0.5, 0.025, 0, 0, 0, .24, .24, .24)
         if self.cog.dna.name == 'hrollers':
             t = 'Level 25'
         elif self.cog.isShadow:
@@ -702,6 +700,12 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
 
+        if self.cog.dna.name == 'mh2' or self.cog.dna.name == 'std2':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.immortal = status.find('**/tie_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.immortal, slot, slotColor=(1, 0.984, 0, 1))
+
         if self.cog.isTarget or self.cog.isExplosive or self.cog.isOverpressured:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.immortal = status.find('**/union_bust_icon')
@@ -857,17 +861,17 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.battleSpeed and self.cog.dna.name == 'hustle':
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.insured = status.find('**/mileaminute_icon')
-            self.insuredText = DirectLabel(parent=self.insured, relief=None, text="x%s" % (self.cog.getBattleSpeed()),
-                                           text_fg=(1, 1, 1, 1),
-                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                           pos=(0.25, 0, -.5),
-                                           text_scale=.4)
-            self.insuredText.show()
-            slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
+        # if self.cog.battleSpeed and self.cog.dna.name == 'hustle':
+        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        #     self.insured = status.find('**/mileaminute_icon')
+        #     self.insuredText = DirectLabel(parent=self.insured, relief=None, text="x%s" % (self.cog.getBattleSpeed()),
+        #                                    text_fg=(1, 1, 1, 1),
+        #                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+        #                                    pos=(0.25, 0, -.5),
+        #                                    text_scale=.4)
+        #     self.insuredText.show()
+        #     slot = self._claimNextStatusSlot()
+        #     self._attachStatusIcon(self.insured, slot, slotColor=(1, 0.984, 0, 1))
 
         if self.cog.isDeepFrozen:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -902,7 +906,7 @@ class TownBattleCogPanel(DirectFrame):
 
         if self.cog.extraAbility:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.extraAttacks = status.find('**/extra_attacks_icon')
+            self.extraAttacks = status.find('**/chainsaw_icon')
             self.extraAttacksText = DirectLabel(parent=self.extraAttacks, relief=None, text="%s" % self.cog.getExtraAbilities(),
                                                 text_fg=(1, 0, 0, 1),
                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -924,9 +928,24 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.damageUp, slot, slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
+        if self.cog.ripped:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.damageUp = status.find('**/ripped_icon')
+            self.damageMultText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % self.cog.getRippedUp() + "%", text_fg=(1, 0, 0, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.4)
+            self.damageMultText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.damageUp, slot, slotColor=(1, 0.984, 0, 1))
+            self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+
         if self.cog.isDamageReduction:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageReduction = status.find('**/shield_icon')  # third slot vulnerability icon
+            if self.cog.dna.name == 'erclaim':
+                self.damageReduction = status.find('**/kickback_icon')  # third slot vulnerability icon
+            else:
+                self.damageReduction = status.find('**/shield_icon') 
             if self.cog.dna.name == 'rkeeper':
                 self.vulnerabilityText = DirectLabel(parent=self.damageReduction, relief=None,
                                                          text="50%",
@@ -1026,7 +1045,7 @@ class TownBattleCogPanel(DirectFrame):
                                                  text_scale=.4)
             elif self.cog.dna.name == 'cbutcher':
                 self.vulnerabilityText = DirectLabel(parent=self.vulnerable, relief=None,
-                                                 text="100%",
+                                                 text="300%",
                                                  text_fg=(0, 1, 0.047, 1),
                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
                                                  pos=(0.25, 0, -.5),
@@ -1304,312 +1323,82 @@ class TownBattleCogPanel(DirectFrame):
     def __blinkGray(self, task):
         self.healthBar2.setProp('barColor', self.healthColors[10])
 
-    def _fitSuitHeadToFrame(self, head, pos=(-0.27, 0.5, 0.115), hpr=(-180, 0, 0), targetSize=0.22):
-        head.setHpr(*hpr)
-        head.setScale(1)
+    def createSuitHead(self, suitName, dimension=.8, setH=180):
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit(suitName)
+        suit = Suit.Suit()
+        suit.setDNA(suitDNA)
+        headParts = suit.getHeadParts()
+        animatedHeadParts = suit.getAnimatedHeadParts()
+        head = hidden.attachNewNode('head')
+        hasAnimatedHead = False
+        for part in headParts:
+            for part in animatedHeadParts:
+                hasAnimatedHead = True
+            if hasAnimatedHead:
+                if 'neutral' in part.getAnimNames() and suitName in ToontownGlobals.animSuitHeadsPosedNeutral:
+                    part.pose('neutral', 1)
 
-        minPoint, maxPoint = head.getTightBounds()
-        size = maxPoint - minPoint
+            if self.cog.dna.name in (
+                'mh',
+                'mh2',
+                'std2',
+                'ds',
+                'cv'
+                ):
+                copyPart = part.copyTo(head)
+                copyPart.setDepthTest(1)
+                copyPart.setDepthWrite(1)
+            else:
+                part.setTwoSided(True)
+                part.setDepthTest(1)
+                part.setDepthWrite(1)
 
-        biggestAxis = max(size.getX(), size.getY(), size.getZ())
-        if biggestAxis <= 0:
-            head.setPosHprScale(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2], 0.1, 0.1, 0.1)
-            return
+                part.reparentTo(head)
+        self.fitGeometry(head, fFlip=1, dimension=dimension, setH=setH)
+        suit.delete()
+        suit = None
+        return head
+    
+    def fitGeometry(self, geom, fFlip = 0, dimension = 0.8, setH=180):
+        p1 = Point3()
+        p2 = Point3()
+        geom.calcTightBounds(p1, p2)
+        if fFlip:
+            t = p1[0]
+            p1.setX(-p2[0])
+            p2.setX(-t)
+        d = p2 - p1
+        biggest = max(d[0], d[2])
+        s = dimension / biggest
+        mid = (p1 + d / 2.0) * s
+        geomXform = hidden.attachNewNode('geomXform')
+        for child in geom.getChildren():
+            child.reparentTo(geomXform)
 
-        scale = targetSize / biggestAxis
+        geomXform.setPosHprScale(-mid[0], -mid[1] + 1, -mid[2], setH, 0, 0, s, s, s)
+        geomXform.reparentTo(geom)
 
-        center = (minPoint + maxPoint) * 0.5
-        head.setPos(-center * scale)
-        head.setScale(scale)
-
-        root = self.attachNewNode('suitHeadRoot')
-        head.reparentTo(root)
-        root.setPosHpr(pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
-
-        self.suitHeadRoot = root
 
     def generateSuitHead(self, name):
-        self.suitHeadRoot = self.attachNewNode('suitHeadRoot')
-        self.suitHead = Suit.attachSuitHead(self.suitHeadRoot, name)
+        self.suitHead = self.attachNewNode('head')
 
-        self._fitSuitHeadToFrame(
-            self.suitHead,
-            pos=(-0.27, 0.5, 0.115),
-            hpr=(-180, 0, 0),
-            targetSize=0.22
-        )
-
-        if name == 'cbutcher':
-            self.suitHead.setColor(0, 0, 0, 1)
-
-
-    def generateSuitHead(self, name):
-        self.suitHead = Suit.attachSuitHead(self, name)
-        self.suitHead.setScale(0.1)
-        AnimList = 'neutral'
-        if name == 'bfh2':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -90, 0, 0, .105, .105, .105)
-        elif name == 'ls':
-            self.suitHead.setPosHprScale(-0.26, 0.5, 0.12, -90, 0, 0, .085, .085, .085)
-        elif name == 'mg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .115, .115, .115)
-        elif name == 'whistleb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0775, .0775, .0775)
-        elif name == 'ksp':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'ppl':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'stenog' or name == 'crystal' or name == 'rkeeper':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'cbutcher':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0725, .0725, .0725)
-            self.suitHead.setColor((0, 0, 0, 1))
-        elif name == 'clubpres':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'fmaker':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'director':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'payman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
-        elif name == 'choreo':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'cinema':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'key':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
-        elif name == 'sgoat':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .1, .1, .1)
-        elif name == 'tbc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'hroller2' or name == 'hrollers' or name == 'hroller' or name == 'ghd':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'hho':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'br':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
-        elif name == 'pph':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.085, -180, 0, 0, .1, .1, .1)
-        elif name == 'bkeeper':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
-        elif name == 'cbr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .065, .065, .065)
-        elif name == 'le':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .115, .115, .115)
-        elif name == 'bgh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .1, .1, .1)
-        elif name == 'cv':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .075, .075, .075)
-        elif name == 'm' or name == 'tf' or name == 'mdm' or name == 'dc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .089, .089, .089)
-        elif name == 'pp' or name == 'sw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .06, .06, .06)
-        elif name == 'p':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .07, .07, .07)
-        elif name == 'bc' or name == 'kbc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'txm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'b':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .09, .09, .09)
-        elif name == 'wtapper':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
-        elif name == 'prethink':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .1, .1, .1)
-        elif name == 'ambass':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'mouthp':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'bf':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'chw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .16, .16, .16)
-        elif name == 'mldr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'mh' or name == 'ym' or name == 'trs' or name == 'chairp' or name == 'std2' or name == 'bsht' or name == 'std' or name == 'enf' or name == 'rb' or name == 'mh2' or name == 'cnd' or name == 'vpr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
-        elif name == 'pyc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .13, .13, .13)
-        elif name == 'gms':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'ms' or name == 'inw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .085, .085, .085)
-        elif name == 'fct':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .12, .12, .12)
-        elif name == 'fcs':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .091, .091, .091)
-        elif name == 'sd':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
-        elif name == 'sh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .09, .09, .09)
-        elif name == 'ang':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'mm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'bw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .09, .09, .09)
-        elif name == 'ad':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .1, .1, .1)
-        elif name == 'rus' or name == 'tm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
-        elif name == 'sdb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'ds':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0825, .0825, .0825)
-        elif name == 'cn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'bs':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'nn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .09, .09, .09)
-        elif name == 'ac':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .08, .08, .08)
-        elif name == 'cc' or name == 'sc':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'blh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .17, .177, .177)
-        elif name == 'hh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
-        elif name == 'f' or name == 'cr' or name == 'ca' or name == 'skd' or name == 'tw' or name == 'asm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .175, .175, .175)
-        elif name == 'nc' or name == 'nd' or name == 'sfs':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)
-        elif name == 'txl':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .085, .085, .085)
-        elif name == 'derrman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .1, .1, .1)
-        elif name == 'treek':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .075, .075, .075)
-        elif name == 'pcrat':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .085, .085, .085)
-        elif name == 'dopa':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .095, .095, .095)
-        elif name == 'dopr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .1675, .1675, .1675)
-        elif name == 'fires':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'safesupervis':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .0675, .0675, .0675)
-        elif name == 'watchm':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1, .1, .1)
-        elif name == 'mplayer' or name == 'mplayer2':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .08, .08, .08)
-        elif name == 'chainsaw' or name == 'chainsaw2':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'duckshfl':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .075, .075, .075)
-        elif name == 'bellring':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.095, -180, 0, 0, .08, .08, .08)
-        elif name == 'liquid':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .075, .075, .075)
-        # elif name == 'ubuster':
-        #     self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1025, .1025, .1025)
-        elif name == 'radiog':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'gatekeep' or name == 'liquidr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .05, .05, .05)
-        elif name == 'djockey' or name == 'ptjockey':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .055, .055, .055)
-        elif name == 'dola':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'phouse':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .065, .065, .065)
-        elif name == 'dking':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
-        elif name == 'racket':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .115, .115, .115)
-        elif name == 'redd':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.145, -180, 0, 0, .08, .08, .08)
-        elif name == 'chairman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .095, .095, .095)
-        elif name == 'bookkeep':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .08, .08, .08)
-        elif name == 'dold' or name == 'ubuster':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .08, .08, .08)
-        elif name == 'mslacker' or name == 'videog' or name == 'bcaster':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .06, .06, .06)
-        elif name == 'wsi' or name == 'kerberos' or name == 'charon' or name == 'bdirector' or name == 'sya' or name == 'pbl' or name == 'foreman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.10, -180, 0, 0, .12, .12, .12)
-        elif name == 'shw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .00001, .00001, .00001)
-        elif name == 'autocad':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .125, .125, .125)
-        elif name == 'hydra' or name == 'styx' or name == 'supervis':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1, -180, 0, 0, .3, .3, .3)
-        elif name == 'clerk' or name == 'ovt' or name == 'ant' or name == 'nix' or name == 'jls':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .2, .2, .2)
-        elif name == 'judy':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .1, .1, .1)
-        elif name == 'bf':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .11, .11, .11)
-        elif name == 'whunter':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0575, .0575, .0575)
-        elif name == 'rainmake':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.155, -180, 0, 0, .07, .07, .07)
-        elif name == 'erfit' or name == 'erclaim':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .075, .075, .075)
-        elif name == 'derrhand':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .09, .09, .09)
-        elif name == 'caseman':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.15, -180, 0, 0, .09, .09, .09)
-        elif name == 'dl':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .11, .11, .11)
-        elif name == 'bfh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .08, .08, .08)
-        elif name == 'dt':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.125, -180, 0, 0, .08, .08, .08)
-        elif name == 'itn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .115, .115, .115)
-        elif name == 'brn':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .085, .085, .085)
-        elif name == 'cmk':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.13, -180, 0, 0, .155, .155, .155)
-        elif name == 'dhr':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .115, .115, .115)
-        elif name == 'ins':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .105, .105, .105)
-        elif name == 'fbed':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.135, -180, 0, 0, .14, .14, .14)
-        elif name == 'shy':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1225, -180, 0, 0, .14, .14, .14)
-        elif name == 'ppb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .105, .105, .105)
-        elif name == 'shb':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .075, .075, .075)
-        elif name == 'bsd':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.14, -180, 0, 0, .15, .15, .15)
-        elif name == 'sbg':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .12, .12, .12)
-        elif name == 'hck':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0875, .0875, .0875)
-        elif name == 'ath':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .08, .08, .08)
-        elif name == 'ghw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .07, .07, .07)
-        elif name == 'dcw':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .065, .065, .065)
-        elif name == 'gzt':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .075, .075, .075)
-        elif name == 'wnk':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .13, .13, .13)
-        elif name == 'nsh':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.105, -180, 0, 0, .08, .08, .08)
-        elif name == 'anc':
-            self.suitHead.setPosHprScale(-0.28, 0.5, 0.11, -180, 0, 0, .0725, .0725, .0725)
-        elif name == 'stg':
-            self.suitHead.setPosHprScale(-0.28, 0.5, 0.12, -180, 0, 0, .14, .14, .14)
-        elif name == 'blk':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .095, .095, .095)
-        elif name == 'psetter' or name == 'hustle':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.12, -180, 0, 0, .105, .105, .105)
-        elif name == 'gld':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.11, -180, 0, 0, .1075, .1075, .1075)
-        elif name == 'arbit' or name == 'cdirector':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.115, -180, 0, 0, .0925, .0925, .0925)
-        elif name == 'lgator' or name == 'treasure':
-            self.suitHead.setPosHprScale(-0.27, 0.5, 0.1275, -180, 0, 0, .1, .1, .1)
+        if self.cog.dna.name == 'ls':
+            head = self.createSuitHead(name, .7, 270)
+        elif self.cog.dna.name == 'bfh2':
+            head = self.createSuitHead(name, .8, 270)
         else:
-            self.suitHead.setPos(-0.27, 0.5, 0.13)
+            head = self.createSuitHead(name, .8, 180)
+        head.copyTo(self.suitHead)
+
+        if self.cog.dna.name == 'shw':
+            self.suitHead.setPos(-0.265, 0.5, 0.1975)
+        else:
+            self.suitHead.setPos(-0.27, 0.5, 0.1975)
+        if self.cog.dna.name == 'ls':
+            self.suitHead.setScale(.225)
+        else:
+            self.suitHead.setScale(.25)
 
     def show(self):
         if settings.get('show-cog-levels', True):

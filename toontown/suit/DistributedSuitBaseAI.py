@@ -332,8 +332,15 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             self.setSkeleton(1)
         self.currHP = self.maxHP
         self.reviveFlag = 1
-        self.setDamageMultiplier(self.getDamageMultiplier() * 1.5)
-        self.setMaxHP(int(self.maxHP * .5))
+        if self.dna.name == 'erfit':
+            self.setDamageMultiplier(self.getDamageMultiplier() * 1.3)
+            self.setMaxHP(int(15777))
+        elif self.dna.name == 'erclaim':
+            self.setDamageMultiplier(self.getDamageMultiplier() * 1.25)
+            self.setMaxHP(int(1992))
+        else:
+            self.setDamageMultiplier(self.getDamageMultiplier() * 1.5)
+            self.setMaxHP(int(self.maxHP * .5))
 
     def reviveCheckAndClear(self):
         returnValue = 0

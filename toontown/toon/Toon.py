@@ -544,6 +544,10 @@ class Toon(Avatar.Avatar, ToonHead):
         self.gagBoostNumber = 0
         self.liquidated = 0
         self.liquidatedRounds = 0
+        self.energized = 0
+        self.energizedRounds = 0
+        self.driedOut = 0
+        self.driedOutRounds = 0
         self.encore = 0
         self.encoreNumber = 0
         self.winded = 0
@@ -578,6 +582,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.cooldown = 0
         self.cooldownRounds = 0
         self.bombedRounds = 0
+        self.hydrated = 0
+        self.hydrationRounds = 0
         self.vulnerability = 0
         self.vulnerabilityRounds = 0
         self.bombed = 0
@@ -977,33 +983,22 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeLiquidated(self):
         self.liquidated = 1
-        if self.hp > 0:
-            if hasattr(self, "liquidTrack") and self.liquidTrack:
-                self.liquidTrack.pause()
-                if self.liquidEffect:
-                    self.liquidEffect.disable()
-                    if hasattr(self.liquidEffect, 'renderParent'):
-                        self.liquidEffect.cleanup()
-            effectColor = Vec4(0.00, 1.00, 1.00, 1.00)
-            self.liquidEffect = BattleParticles.createParticleEffect(file='wet')
-            BattleParticles.setEffectTexture(self.liquidEffect, 'raindrop', color=effectColor)
+        self.cleanupSoaked()
 
-            self.liquidEffect.reparentTo(self)
-            self.liquidEffect.setPos(0, 0, self.height)
+        # if num <= 0 or self.currHP <= 0:
+        #     return
 
-            self.liquidTrack = Sequence(ParticleInterval(self.liquidEffect, self, duration=5)
-            )
-            self.liquidTrack.loop()
+
+        self.liquidEffect = BattleParticles.createParticleEffect(file='wet2')
+
+        self.liquidEffect.reparentTo(self)
+        self.liquidEffect.setPos(0, 0, self.height)
+
+        self.liquidEffect.start(parent=self, renderParent=self)
 
     def makeUnLiquidated(self):
         self.liquidated = 0
-        if self.hp > 0:
-            if hasattr(self, "liquidTrack") and self.liquidTrack:
-                self.liquidTrack.pause()
-                if self.liquidEffect:
-                    self.liquidEffect.disable()
-                    if hasattr(self.liquidEffect, 'renderParent'):
-                        self.liquidEffect.cleanup()
+        self.cleanupSoaked()
 
     def addLiquidatedRounds(self, num):
         self.liquidatedRounds = num
@@ -1266,6 +1261,100 @@ class Toon(Avatar.Avatar, ToonHead):
             except:
                 pass
 
+    def makeDriedOut(self):
+        if self.hydrated > 0:
+            self.energized = 1
+        else:
+            self.driedOut = 1
+
+    def makeUnDriedOut(self):
+        self.driedOut = 0
+
+    def addDriedOutRounds(self, num):
+        if self.hydrated > 0:
+            self.energizedRounds = num
+        else:
+            self.driedOutRounds = num
+
+    def getDriedOutRounds(self):
+        return self.driedOutRounds
+    
+    def makeEnergized(self):
+        self.energized = 1
+
+    def makeUnEnergized(self):
+        self.energized = 0
+
+    def addEnergizedRounds(self, num):
+        self.energizedRounds = num
+
+    def getEnergizedRounds(self):
+        return self.energizedRounds
+    
+    def cleanupSoaked(self):
+        if hasattr(self, 'liquidTrack') and self.liquidTrack:
+            try:
+                self.liquidTrack.pause()
+            except:
+                pass
+            try:
+                self.liquidTrack.finish()
+            except:
+                pass
+            self.liquidTrack = None
+
+        if hasattr(self, 'liquidEffect') and self.liquidEffect:
+            effect = self.liquidEffect
+            self.liquidEffect = None
+
+            try:
+                effect.softStop()
+            except:
+                pass
+
+            try:
+                effect.disable()
+            except:
+                pass
+
+            try:
+                effect.cleanup()
+            except:
+                pass
+
+            try:
+                effect.removeNode()
+            except:
+                try:
+                    effect.detachNode()
+                except:
+                    pass
+
+    def makeHydration(self):
+        self.hydrated = 1
+        self.cleanupSoaked()
+
+        # if num <= 0 or self.currHP <= 0:
+        #     return
+
+
+        self.liquidEffect = BattleParticles.createParticleEffect(file='wet2')
+
+        self.liquidEffect.reparentTo(self)
+        self.liquidEffect.setPos(0, 0, self.height)
+
+        self.liquidEffect.start(parent=self, renderParent=self)
+
+    def makeUnHydration(self):
+        self.hydrated = 0
+        self.cleanupSoaked()
+
+    def addHydrationRounds(self, num):
+        self.hydrationRounds = num
+
+    def getHydrationRounds(self):
+        return self.hydrationRounds
+
     def makeCooldown(self):
         self.cooldown = 1
         if self.hp > 0:
@@ -1275,28 +1364,24 @@ class Toon(Avatar.Avatar, ToonHead):
                     self.cooldownEffect.disable()
                     if hasattr(self.cooldownEffect, 'renderParent'):
                         self.cooldownEffect.cleanup()
-            effectColor = Vec4(1.00, 0.00, 0.00, 1.00)
-            self.cooldownEffect = BattleParticles.createParticleEffect(file='pixieArrowAura')
-            self.cooldownEffect.setColor(effectColor)
+            self.cooldownEffect = BattleParticles.createParticleEffect(file='uniteCooldown')
 
             self.cooldownEffect.reparentTo(self)
             self.cooldownEffect.setPos(0, 0, self.height)
             #self.cooldownEffect.setHpr(180, 0, 0)
 
-            self.cooldownTrack = Sequence(ParticleInterval(self.cooldownEffect, self, duration=5)
+            self.cooldownTrack = Sequence(ParticleInterval(self.cooldownEffect, self, duration=2, softStopT=1)
             )
 
-            self.cooldownTrack.loop()
+            self.cooldownEffect.start()
 
     def makeUnCooldown(self):
         self.cooldown = 0
         if self.hp > 0:
-            if hasattr(self, "cooldownTrack") and self.cooldownTrack:
-                self.cooldownTrack.pause()
-                if self.cooldownEffect:
-                    self.cooldownEffect.disable()
-                    if hasattr(self.cooldownEffect, 'renderParent'):
-                        self.cooldownEffect.cleanup()
+            if hasattr(self, 'cooldownEffect') and self.cooldownEffect:
+                self.cooldownEffect.softStop()
+                self.cooldownEffect.cleanup()
+                self.cooldownEffect = None
 
     def addCooldownRounds(self, num):
         self.cooldownRounds = num
@@ -1684,7 +1769,7 @@ class Toon(Avatar.Avatar, ToonHead):
             self.makeCheerHands()
             #self.cooldownEffect.setHpr(180, 0, 0)
 
-            self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=5))
+            self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=4, softStopT=2))
 
             self.cheerTrack.loop()
 
@@ -3300,6 +3385,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnBurned()
         self.makeContentSync(0)
         self.makeUnDamageOvertime()
+        self.makeUnEnergized()
+        self.makeUnDriedOut()
         self.makeUnLiquidated()
         self.makeUnGroupDamageDown()
         self.makeUnGagBoost()
@@ -3308,6 +3395,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnHidden()
         self.makeUnCollectCalled()
         self.makeUnNoDodge()
+        self.makeUnHydration()
         self.makeUnConfused()
         self.makeUnMandatoryToll()
         self.makeUnCheer()
@@ -3370,10 +3458,13 @@ class Toon(Avatar.Avatar, ToonHead):
         self.makeUnDamageOvertime()
         self.makeUnLiquidated()
         self.makeUnGroupDamageDown()
+        self.makeUnEnergized()
+        self.makeUnDriedOut()
         self.makeUnGagBoost()
         self.makeUnCooldown()
         self.makeUnMarkedWood()
         self.makeUnInkDrain()
+        self.makeUnHydration()
         self.makeUnHidden()
         self.makeUnCollectCalled()
         self.makeUnNoDodge()

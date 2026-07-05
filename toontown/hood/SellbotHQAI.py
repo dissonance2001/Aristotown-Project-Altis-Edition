@@ -13,11 +13,14 @@ class SellbotHQAI(CogHQAI.CogHQAI):
     
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
-            self, air, ToontownGlobals.SellbotHQ, ToontownGlobals.SellbotLobby,
+            self, air, ToontownGlobals.SellbotHQ, ToontownGlobals.SellbotLobby, ToontownGlobals.SellbotMultislackerLobby,
             FADoorCodes.SB_DISGUISE_INCOMPLETE,
+            FADoorCodes.SB_WASHROOM_MISSING,
             DistributedVPElevatorAI.DistributedVPElevatorAI,
-            DistributedSellbotBossMiniAI.DistributedSellbotBossMiniAI
-        )
+            DistributedSellbotBossMiniAI.DistributedSellbotBossMiniAI,
+            DistributedMultislackerElevatorAI.DistributedMultislackerElevatorAI,
+            DistributedSellbotBossAI.DistributedSellbotBossAI,
+            ToontownGlobals.ZoneIdrVP)
 
         self.factoryElevators = []
         self.factoryBoardingParty = None
@@ -30,15 +33,25 @@ class SellbotHQAI(CogHQAI.CogHQAI):
 
         # Sellbot HQ has not just one, but four lobby doors:
         self.cogHQDoors = [self.extDoor]
-        for i in xrange(3):  # CogHQAI already created one of the doors for us.
-            extDoor = self.makeCogHQDoor(self.lobbyZoneId, 0, i + 1, self.lobbyFADoorCode)
+        for i in range(3):  # CogHQAI already created one of the doors for us.
+            extDoor = self.makeCogHQDoor(self.lobbyZoneId, 0, i + 1, self.lobbyFADoorCode, boss=1)
             self.cogHQDoors.append(extDoor)
+
+        # extDoor2 = self.makeCogHQDoor(ToontownGlobals.SellbotMultislackerLobby, 0, 2, self.lobbyFADoorCode, boss=1)
+        # self.cogHQDoors.append(extDoor2)
+        # extDoor3 = self.makeCogHQDoor(ToontownGlobals.SellbotMultislackerLobby, 0, 3, self.lobbyFADoorCode, boss=1)
+        # self.cogHQDoors.append(extDoor3)
         self.createFactoryElevators()
-        if simbase.config.GetBool('want-boarding-groups', True):
-            self.createFactoryBoardingParty()
+        # if simbase.config.GetBool('want-boarding-groups', True):
+        #     self.createFactoryBoardingParty()
         if simbase.config.GetBool('want-suit-planners', True):
             self.createSuitPlanners()
-
+        # self.hardmodeDoor = self.makeHardCogHQDoor(
+        #         ToontownGlobals.SellbotMultislackerLobby,
+        #         0,
+        #         3,
+        #         self.hardmodeFADoorCode
+        #     )
         # Our suit planner needs the Cog HQ doors as well:
         for sp in self.suitPlanners:
             if sp.zoneId == self.zoneId:

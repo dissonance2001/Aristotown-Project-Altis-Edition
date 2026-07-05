@@ -132,7 +132,7 @@ class OrbitalCamera(FSM, NodePath):
     def enterActive(self):
         self.enableInput()
 
-        base.camNode.setLodCenter(self.subject)
+        #base.camNode.setLodCenter(self.subject)
 
         self._initMaxDistance()
         self._startCollisionCheck()
@@ -151,7 +151,7 @@ class OrbitalCamera(FSM, NodePath):
     def exitActive(self):
         self._stopCollisionCheck()
 
-        base.camNode.setLodCenter(NodePath())
+        #base.camNode.setLodCenter(NodePath())
 
         self.ignoreWheel()
         self.ignoreTab()

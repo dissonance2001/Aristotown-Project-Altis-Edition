@@ -22,9 +22,9 @@ suitHeadTypes = [
 'radiog', 'hustle', 'ubuster', 'safesupervis', 'psetter',
     # Boardbots
 'bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'liquid', 'rkeeper',
-'cbutcher', 'cdirector', 'dking', 'ottoman', 'crystal', 'chairman',
+'cbutcher', 'cdirector', 'dking', 'ottoman', 'fmaker', 'chairman',
     # Techbots
-'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'fmaker', 'tas', 'fhu', 'fsh', 'fhj',
+'skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'ant', 'sya', 'djockey', 'ptjockey', 'crystal', 'tas', 'fhu', 'fsh', 'fhj',
 'kdh', 'dar', 'nhy', 'wrt', 'auh',
     # Pressbots
 'ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'jls', 'pbl', 'director', 'bcaster', 'std2', 'videog', 'prt', 'pla', 'plk', 'plh',
@@ -41,9 +41,9 @@ suitATypes = [
     # Sellbots
 'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'ubuster', 'safesupervis',
     # Boardbots
-'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'dold', 'dking', 'crystal', 'chairman', 'liquid', 'rkeeper', 'cbutcher', 'cdirector',
+'mdm', 'cbr', 'mg', 'chw', 'hho', 'chairp', 'bdirector', 'gatekeep', 'dold', 'dking', 'fmaker', 'chairman', 'liquid', 'rkeeper', 'cbutcher', 'cdirector',
     # Techbots
-'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya', 'fmaker',
+'vpr', 'brn', 'key', 'sfs', 'pyc', 'itn', 'rus', 'sya', 'crystal',
     # Pressbots
 'ghw', 'dcw', 'gzt', 'nsh', 'std', 'anc', 'pbl', 'director', 'bcaster', 'std2', 'videog',
 ]
@@ -111,13 +111,13 @@ suitDeptModelPaths = {'c': '**/CorpIcon',
 'p': '**/BoardIcon',
  6: '**/BoardIcon'
                       }
-corpPolyColor = VBase4(0.95, 0.75, 0.75, 1.0)
-legalPolyColor = VBase4(0.75, 0.75, 0.95, 1.0)
-moneyPolyColor = VBase4(0.65, 0.95, 0.85, 1.0)
-salesPolyColor = VBase4(0.95, 0.75, 0.95, 1.0)
-boardPolyColor = VBase4(.45, 0.45, .45, 1.0)
-techPolyColor = VBase4(0.6, 0.48, 0.7, 1.0)
-pressPolyColor = VBase4(0.643, 0.51, 0.525, 1.0)
+corpPolyColor = VBase4(0.839, 0.808, 0.769, 1.0)
+legalPolyColor = VBase4(0.784, 0.816, 0.863, 1.0)
+moneyPolyColor = VBase4(0.78, 0.808, 0.796, 1.0)
+salesPolyColor = VBase4(0.761, 0.714, 0.725, 1.0)
+boardPolyColor = VBase4(0.675, 0.761, 0.769, 1.0)
+techPolyColor = VBase4(0.675, 0.608, 0.69, 1.0)
+pressPolyColor = VBase4(0.647, 0.518, 0.537, 1.0)
 suitsPerLevel = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 suitsPerDept = 28
 levelsPerSuit = 12

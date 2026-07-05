@@ -93,6 +93,10 @@ def getWhereName(zoneId, isToon):
         if isCogHQZone(zoneId):
             if suffix == 0:
                 where = 'cogHQExterior'
+            elif zoneId == LawbotLounge:
+                where = 'cogHQLobby'
+            elif zoneId == SellbotMultislackerLobby:
+                where = 'cogHQLobby'
             elif suffix == 100:
                 where = 'cogHQLobby'
             elif suffix == 200:

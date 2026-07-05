@@ -245,17 +245,21 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.targetNodePath.detachNode()
         self.cr.relatedObjectMgr.abortRequest(self.lawyerRequest)
         self.lawyerRequest = None
-        self.betweenBattleMusic.stop()
-        self.stenoMusic.stop()
-        self.litigatorMusic.stop()
-        self.caseMusic.stop()
-        self.goatMusic.stop()
-        self.promotionMusic.stop()
-        self.stingMusic.stop()
-        self.battleOneMusic.stop()
-        self.battleTwoMusic.stop()
-        self.battleThreeMusic.stop()
-        self.epilogueMusic.stop()
+        for music in (
+            self.betweenBattleMusic,
+            self.stenoMusic,
+            self.litigatorMusic,
+            self.caseMusic,
+            self.goatMusic,
+            self.promotionMusic,
+            self.stingMusic,
+            self.battleOneMusic,
+            self.battleTwoMusic,
+            self.battleThreeMusic,
+            self.epilogueMusic,
+        ):
+            if music is not None:
+                music.stop()
         if self.juryTimer:
             self.juryTimer.destroy()
             del self.juryTimer

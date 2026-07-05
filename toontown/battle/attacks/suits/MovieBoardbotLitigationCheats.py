@@ -1062,7 +1062,7 @@ def __billboardProp(prop):
     prop.setBillboardPointWorld()
     prop.setScale(scale)
 
-def doThrowRetaliation(attack):
+def doThrowRetaliationOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -1439,8 +1439,79 @@ def doSnipe(attack):
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
-        leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+        DefaultPoints = (
+            [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            [Point3(-0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+        )
+        PosPoints = {
+            "dopr": (
+                [Point3(0.6, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.3, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+            ),
+            "dopa": (
+                [Point3(0.6, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+                [Point3(-0.4, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+            ),
+            "tw": (
+                [Point3(0.45, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+                [Point3(-0.35, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+            ),
+            "ad": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "phouse": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "hh": (
+                [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+            ),
+            "tbc": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ambass": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "liquid": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ubuster": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "autocad": (
+                [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            ),
+            "cdirector": (
+                 [Point3(0.6, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            [Point3(0.0, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            ),
+            "clubpres": (
+                [Point3(0.7, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+                [Point3(0.1, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+            ),
+            "chainsaw": (
+                [Point3(0.6, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(0.0, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+            "dl": (
+                [Point3(0.66, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+            ),
+            "shw": (
+                [Point3(1.3, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(-0.9, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+        }
+        leftPosPoints, rightPosPoints = PosPoints.get(
+                suit.dna.name, DefaultPoints
+            )
         explosionTrack = Sequence()
         explosionTrack.append(Wait(1.5))
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
@@ -1623,6 +1694,91 @@ def doDropRetaliation(attack):
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, 1.75, ['nothing'], 0, ['neutral'])
     return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, soundTrack, propTracks)
+
+def doThrowRetaliation(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+    tauntIndex = attack['taunt']
+    dmg = target[0]['hp']
+    toon = attack['target'][0]['toon']
+
+    chip = globalPropPool.getProp("chip_blue")
+    firstHoldPosPoints = [Point3(-0.0012, 0.5083, -0.1271), Point3(-100, 0, 0)]
+    grabPosPoints = [Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)]
+
+    damageDelay = 3.1
+    dodgeDelay = 2.2
+
+    suitTrack = Parallel(getSuitAnimTrack(attack))
+    suitTrack.append(Sequence(Wait(3.0), Func(suit.checkCompensationDividend), healSound))
+
+    landPos = toon.getPos(render)
+    landPos.setZ(landPos.getZ() + 0.25)
+    landUpPos = toon.getPos(render)
+    landUpPos.setZ(landUpPos.getZ() + 0.8)
+
+    invokerScale = suit.getScale()
+    if getSuitBodyType(attack['suitName']) == 'a':
+        scaleFactor = 1.19636963  # Head honcho scale
+        startX, startY = 2.9, 4.2
+        endX, endY = 0.7, 5.1
+        startZ = 7.4
+        endZ = 8.8
+        chipHandScale = 1.15
+        chipGrabScale = 1.15
+        chipFlipMult = 6.5
+    else:
+        scaleFactor = 0.82041587901  # Insider scale
+        startX, startY = 0.9, 2.1
+        endX, endY = 0.9, 2.45
+        startZ = 3.0
+        endZ = 4.4
+        chipHandScale = 0.95
+        chipGrabScale = 0.8
+        chipFlipMult = 5.0
+
+    propTrack = Sequence(
+        getPropAppearTrack(
+            chip,
+            suit.getRightHand(),
+            firstHoldPosPoints,
+            0.2,
+            Point3(chipHandScale),
+            scaleUpTime=0.25,
+        ),
+    )
+
+    chipHandPosRenderStart = Point3(startX * (invokerScale[0] / scaleFactor),
+                                    startY * (invokerScale[0] / scaleFactor),
+                                    startZ * (invokerScale[0] / scaleFactor))
+    chipHandPosRenderEnd = Point3(endX * (invokerScale[0] / scaleFactor),
+                                    endY * (invokerScale[0] / scaleFactor),
+                                    endZ * (invokerScale[0] / scaleFactor))
+
+    propFlyTrack = Sequence(
+        Wait(1.05),
+        Func(chip.wrtReparentTo, suit),
+        Parallel(
+            ProjectileInterval(chip, startPos=chipHandPosRenderStart, endPos=chipHandPosRenderEnd, duration=0.5, gravityMult=chipFlipMult),
+            LerpHprInterval(chip, 0.5, (90, -360, 0), startHpr=(0, 90, 0)),
+        ),
+        Func(chip.wrtReparentTo, suit.getRightHand()),
+        Func(chip.setPosHpr, Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)),
+        Func(chip.setScale, chipGrabScale),
+        Wait(0.7),
+        Func(chip.hide),
+    )
+    soundTrack = getSoundTrack(
+        "SA_blue_chip_bet.ogg", delay=0, node=suit
+    )
+    return Sequence(
+            Parallel(
+                suitTrack, soundTrack, propTrack, propFlyTrack,
+            ),
+            Func(MovieUtil.removeProp, chip),
+        )
 
 def doZapRetaliation(attack):
     suit = attack['suit']
@@ -2303,7 +2459,7 @@ def doPhantomEntryDamage(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     notifyTracks = Sequence()
-    notifyTrack = Sequence(theSuit.makeDamageInterval(battle, 1500))
+    notifyTrack = Sequence(theSuit.makeDamageInterval(battle, 3000))
     notifyTrack.append(Parallel(Func(theSuit.makeUnDamageReduction)))
     cameraTrack = Wait(5.0)
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
@@ -2718,6 +2874,69 @@ def doMissedPaymentNOTHINGN(attack):
         multiTrackList.append(soundTrack)
     return multiTrackList
 
+def doOversightDirective(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    targets = attack['target']
+    selfDamageTracks = Parallel()
+    # for t in targets:
+    #     toon = t['toon']
+    #     dmg = t['hp']
+    #     notifyTrack = Sequence()
+    #     notifyTrack.append(Parallel(Func(toon.makeDamageUpGovernaught)))
+    #     notifyTrack.append(Parallel(Func(toon.checkDamageUpGovernaught, 150)))
+    #     selfDamageTracks.append(notifyTrack)
+    for s in battle.activeSuits:
+        if s.dna.name == 'cdirector':
+            targetSuit = s
+            selfDamageTrack = Sequence(
+                Parallel(
+                    ActorInterval(s, 'finger-wag'),
+                    Func(s.setChatAbsolute, random.choice(("The board has approved emergency escalation!", "All operational safeguards have been suspended.", 
+                                                           "Your resistance has exceeded acceptable projections!")), CFSpeech | CFTimeout)
+                ),
+                Func(s.setNeutralAnimationDrop),
+            )
+            selfDamageTracks.append(selfDamageTrack)
+        if s.dna.name == 'dking':
+            targetSuit = s
+            selfDamageTrack = Sequence(
+                Parallel(
+                    ActorInterval(s, 'blue-chip'),
+                    Func(s.setChatAbsolute, random.choice(("Higher risk demands higher returns.", "Profit margins have just increased!", 
+                                                           "Our shareholders expect stronger performance.", "Every investment must yield greater results.")), CFSpeech | CFTimeout)
+                ),
+                Func(s.setNeutralAnimationDrop),
+            )
+            selfDamageTracks.append(selfDamageTrack)
+        if s.dna.name == 'rkeeper':
+            targetSuit = s
+            selfDamageTrack = Sequence(
+                Parallel(
+                    ActorInterval(s, 'speak'),
+                    Func(s.setChatAbsolute, random.choice(("Minutes updated: unanimous approval.", "The resolution has been entered into the permanent record.", 
+                                                           "Your objections have been officially denied.", "History will remember this as a necessary adjustment.")), CFSpeech | CFTimeout)
+                ),
+                Func(s.setNeutralAnimationDrop),
+            )
+            selfDamageTracks.append(selfDamageTrack)
+        if s.dna.name == 'liquid':
+            targetSuit = s
+            selfDamageTrack = Sequence(
+                Parallel(
+                    ActorInterval(s, 'effort'),
+                    Func(s.setChatAbsolute, random.choice(("The cost of doing business has gone up!", "Outstanding balanced have been recalculated.", 
+                                                           "Every strike now carries additional fees.", "Your debt has become considerably more expensive.")), CFSpeech | CFTimeout)
+                ),
+                Func(s.setNeutralAnimationDrop),
+            )
+            selfDamageTracks.append(selfDamageTrack)
+
+    soundTrack2 = getSoundTrack('SA_overwhelming_authority.ogg')
+
+    return Parallel(selfDamageTracks, soundTrack2)
+
 def doForecastCollapse(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -2732,11 +2951,10 @@ def doForecastCollapse(attack):
                 Wait(4.0),
                 Parallel(
                     ActorInterval(s, 'mob-mentality'),
-                    Func(s.setChatAbsolute, "I won't let you down, Ma'am.", CFSpeech | CFTimeout),
+                    Func(s.setChatAbsolute, "I won't let you down, Sir.", CFSpeech | CFTimeout),
                     Func(s.showHpTextNew, 0, text="+40% Damage!", colorCode=1)
                 ),
                 Func(s.setNeutralAnimationDrop),
-                Func(suit.checkExtraAbilities, 1),
                 Func(s.makeDamageUp),
                 Func(s.checkDamageUp, 40)
             )
@@ -2814,11 +3032,14 @@ def doForecastCollapse(attack):
 def doFailsafeProtocol(attack):
     suit = attack['suit']
     selfDamageTracks = Parallel()
-    selfDamageTrack = Sequence(Wait(3.0), Parallel(Func(suit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 5))
+    selfDamageTrack = Sequence(Parallel(Func(suit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(suit.makeDamageReduction), Func(suit.checkDamageReduction, + 5))
     selfDamageTracks.append(selfDamageTrack)
-    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
-    soundTrack2 = getSoundTrack('SA_cease_and_desist.ogg')
-    return Parallel(suitTrack, selfDamageTracks, soundTrack2)
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'summon-cog', startTime=suit.getDuration('summon-cog'), endTime=suit.getDuration('summon-cog') - 1), Wait(1.0),
+                         ActorInterval(attack['suit'], 'summon-cog', startTime=suit.getDuration('summon-cog') - 1, endTime=suit.getDuration('summon-cog') - 0.25),
+                         Func(suit.setNeutralAnimationDrop), Wait(2.0))
+    suitTrack2 = Sequence(getSuitAnimTrack(attack))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg')
+    return Parallel(suitTrack, suitTrack2, selfDamageTracks, soundTrack2)
 
 def doExplodingDocument(attack):
     suit = attack['suit']
@@ -3273,11 +3494,97 @@ def doZapRetaliationOLD(attack):
     toonTrack = getToonTracks(attack, damageDelay=1, splicedDamageAnims=damageAnims, dodgeDelay=.75, dodgeAnimNames=[], splicedDodgeAnims=[], showDamageExtraTime=0.5)
     return Parallel(suitTrack, cagePropTracks, smokeTracks, toonTrack)
 
+def doContningencyClauseBanMovie(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    tauntIndex = attack['taunt']
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    toonTracks = Parallel()
+    targets = attack['target']
+    for t in targets:
+        toon = t['toon']
+        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTracks.append(toonTrack)
+    targets = attack['target']
+    cagePropTracks = Parallel()
+    zapSfx = loader.loadSfx('phase_5/audio/sfx/AA_cog_shock.ogg')
+    zapTrack = Sequence()
+    notifyTracks = Parallel()
+    cagePropTracks = Parallel()
+    headTrack = Sequence()
+
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(ActorInterval(headPart, 'sparkplug', endTime=headPart.getDuration('sparkplug') - .25))
+        headTrack.append(Parallel(Func(headPart.enableBlend),
+        ActorInterval(headPart, 'neutral', loop=1),
+        LerpAnimInterval(
+            headPart,
+            duration=.25,
+            startAnim='sparkplug',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ))
+        headTrack.append(Func(headPart.disableBlend))
+        headTrack.append(Func(headPart.loop, 'neutral'))
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonPos = toon.getPos(battle)
+        def getChainsawFingerPos():
+            handNode = suit.leftHand.attachNewNode('foo')
+            handNode.setPos(-1.5631, 0.3, 0.0)
+            handPos = handNode.getPos(render)
+            handNode.removeNode()
+            return handPos
+        
+        def getToonTargetPoint(toon):
+            pnt = toon.getPos(render)
+            pnt.setZ(pnt[2] + toon.getHeight() * 0.5)
+            return Point3(pnt)
+        notifyTrack = Sequence(Wait(3.75))
+        notifyTrack.append(Parallel(toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40), ActorInterval(toon, 'slip-backward')))
+        targetPoint = lambda toon = toon: getToonTargetPoint(toon)
+        targetPos = toon.getPos(battle)
+        dSprayScale = 0.05
+        cagePropTrack = Sequence(Wait(3.75), MovieUtil.getZapTrack(
+                        battle,
+                        Point4(1.0, 1.0, 0, 1.0),
+                        getChainsawFingerPos,
+                        targetPoint,
+                        dSprayScale, 0.2, dSprayScale,
+                    ))
+        cagePropTracks.append(cagePropTrack)
+        notifyTracks.append(notifyTrack)
+    soundTrack = getSoundTrack('SA_sparkplug.ogg', delay=0, node=suit)
+    return Parallel(suitTrack, toonTracks, zapTrack, headTrack, soundTrack, cagePropTracks, notifyTracks)
+
 def doRiskThresholdBreach(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
     node = suit.getGeomNode().getChild(0)
+    headTrack = Sequence()
+
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(ActorInterval(headPart, 'revvedup', endTime=headPart.getDuration('revvedup') - .25))
+        headTrack.append(Parallel(Func(headPart.enableBlend),
+        ActorInterval(headPart, 'neutral', loop=1),
+        LerpAnimInterval(
+            headPart,
+            duration=.25,
+            startAnim='revvedup',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ))
+        headTrack.append(Func(headPart.disableBlend))
+        headTrack.append(Func(suit.setNeutralAnimationHead))
     suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=.25, colorScale=(0, 1, 0.078, 1),
                                                      blendType='easeInOut'),
                               LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
@@ -3297,8 +3604,8 @@ def doRiskThresholdBreach(attack):
                               )
     moveTrack = Parallel(Func(suit.checkExtraAbilities, 1), Func(suit.showHpTextNew, 0, text="+1 Ability!", colorCode=1))
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    soundTrack2 = getSoundTrack('SA_wire_cut_knife.ogg')
-    return Parallel(suitTrack, suitColorTrack, moveTrack, soundTrack2)
+    soundTrack2 = getSoundTrack('SA_revving_up.ogg')
+    return Parallel(suitTrack, suitColorTrack, headTrack, moveTrack, soundTrack2)
 
 def doSelfRepair(attack):
     suit = attack['suit']
@@ -3325,11 +3632,29 @@ def doRedundantAuthority(attack):
         if not s.dna.name == 'cdirector':
             selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(s.checkRedundant), Func(s.checkHealingPhrases, 0)))
             selfDamageTracks.append(selfDamageTrack)
-    moveTrack = Parallel(Func(suit.setHealthForMe, - 500), Func(suit.showHpTextNew, - 500), Func(suit.updateHealthBar, 0))
+    moveTrack = Parallel(Func(suit.setHealthForMe, - 1000), Func(suit.showHpTextNew, - 1000), Func(suit.updateHealthBar, 0))
     suitTrack = Sequence(getSuitAnimTrack(attack), suit.makeRedundantAuthorityInterval(battle))
+    headTrack = Sequence()
+
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(ActorInterval(headPart, 'scabbard', endTime=headPart.getDuration('scabbard') - .25))
+        headTrack.append(Parallel(Func(headPart.enableBlend),
+        ActorInterval(headPart, 'neutral', loop=1),
+        LerpAnimInterval(
+            headPart,
+            duration=.25,
+            startAnim='scabbard',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ))
+        headTrack.append(Func(headPart.disableBlend))
+        headTrack.append(Func(headPart.loop, 'neutral'))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=2.0)
     soundTrack = getSoundTrack('SA_scabbard.ogg')
-    return Parallel(suitTrack, moveTrack, selfDamageTracks, soundTrack, soundTrack2)
+    return Parallel(suitTrack, headTrack, moveTrack, selfDamageTracks, soundTrack, soundTrack2)
 
 def doRushHour(attack):
     suit = attack['suit']
@@ -3586,8 +3911,79 @@ def doSnipeCut(attack):
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
-        leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+        DefaultPoints = (
+            [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            [Point3(-0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+        )
+        PosPoints = {
+            "dopr": (
+                [Point3(0.6, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.3, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+            ),
+            "dopa": (
+                [Point3(0.6, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+                [Point3(-0.4, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+            ),
+            "tw": (
+                [Point3(0.45, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+                [Point3(-0.35, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+            ),
+            "ad": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "phouse": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "hh": (
+                [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+            ),
+            "tbc": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ambass": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "liquid": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ubuster": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "autocad": (
+                [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            ),
+             "cdirector": (
+            [Point3(0.6, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            [Point3(0.0, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+        ),
+            "clubpres": (
+                [Point3(0.7, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+                [Point3(0.1, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+            ),
+            "chainsaw": (
+                [Point3(0.6, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(0.0, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+            "dl": (
+                [Point3(0.66, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+            ),
+            "shw": (
+                [Point3(1.3, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(-0.9, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+        }
+        leftPosPoints, rightPosPoints = PosPoints.get(
+                suit.dna.name, DefaultPoints
+            )
         explosionTrack = Sequence()
         explosionTrack.append(Wait(1.5))
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
@@ -4186,15 +4582,15 @@ def doMarkedWood(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(-0.13024602026049337, 0.21707670043415206, -0.21707670043415206), VBase3(90, -180.0, 0)]
-        scale = Point3(1, 1, 1)
+        posPoints = [Point3(-0.1, 0.6, 0.0), VBase3(-1.152, 86.581, -76.784)]
+        scale = Point3(0.6, 1.0, 1.0)
     else:
         posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
-        scale = Point3(1, 1, 1)
+        scale = Point3(0.6, 1.0, 1.0)
     propTracks = Parallel()
-    paper = loader.loadModel('phase_10/models/props/treekiller_log_center')
-    propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
-    propTrack.append(Wait(0.95))
+    paper = loader.loadModel('phase_10/models/props/treekiller_log')
+    propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.5, scale, scaleUpTime=0.25))
+    propTrack.append(Wait(1.2))
     hitPoint = __toonFacePoint(toon)
     hitPoint.setX(hitPoint.getX() - 1.4)
     missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
@@ -4218,7 +4614,7 @@ def doMarkedWood(attack):
 
     toonTracks = getToonTracksCheat(attack, 2.2, ['cringe'], 2, ['jump'])
     notifyTrack = Sequence(Wait(2.25), Func(toon.showHpTextNew, -int(dmg), text="MARKED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 3)))
+    notifyTrack.append(Parallel(Func(toon.makeMarkedWood), Func(toon.addMarkedWoodRounds, 4)))
     currentBossHealth = -1
     for s in battle.suits:
         if s.dna.name == 'cdirector':
@@ -4427,7 +4823,7 @@ def doScabbard(attack):
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
         suitTrack.append(Func(s.checkScabbard))
-        if not s.dna.name == 'dking':
+        if not s.dna.name == 'phouse':
             suitTrack.append(MovieUtil.zapCogPowerhouse(s, 'large-zap', .5, 2.0, battle))
             suitTrack.append(Func(s.setNeutralAnimationDrop))
         theSuit = attack['suit']
@@ -5361,8 +5757,79 @@ def doLedgerOfSound(attack):
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
-        leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
-        rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+        DefaultPoints = (
+            [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            [Point3(-0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+        )
+        PosPoints = {
+            "dopr": (
+                [Point3(0.6, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.3, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+            ),
+            "dopa": (
+                [Point3(0.6, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+                [Point3(-0.4, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+            ),
+            "tw": (
+                [Point3(0.45, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+                [Point3(-0.35, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+            ),
+            "ad": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "phouse": (
+                [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+                [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            ),
+            "hh": (
+                [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+            ),
+            "tbc": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ambass": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "liquid": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "ubuster": (
+                [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            ),
+            "autocad": (
+                [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+                [Point3(-0.1, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            ),
+            "cdirector": (
+                 [Point3(0.6, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            [Point3(0.0, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            ),
+            "clubpres": (
+                [Point3(0.7, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+                [Point3(0.1, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+            ),
+            "chainsaw": (
+                [Point3(0.6, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(0.0, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+            "dl": (
+                [Point3(0.66, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+                [Point3(-0.06, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+            ),
+            "shw": (
+                [Point3(1.3, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+                [Point3(-0.9, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+            ),
+        }
+        leftPosPoints, rightPosPoints = PosPoints.get(
+                suit.dna.name, DefaultPoints
+            )
         explosionTrack = Sequence()
         explosionTrack.append(Wait(1.5))
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))

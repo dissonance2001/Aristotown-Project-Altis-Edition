@@ -594,6 +594,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camera.setPosHpr(10, 0, 10, 115, -30, 0)
         camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
         return task.cont
+    
+    def shake_camera_sacrifice(task):
+        camera = base.camera
+        shake_intensity = 0.5  # Adjust for desired shake intensity
+        x_shake = random.uniform(-shake_intensity, shake_intensity)
+        y_shake = random.uniform(-shake_intensity, shake_intensity)
+        z_shake = random.uniform(-shake_intensity, shake_intensity)
+        camera.setPosHpr(20, -10, 15, 50, -30, 0)
+        camera.setPos(camera.getPos() + Vec3(+ x_shake, y_shake, z_shake))
+        return task.cont
 
     def shake_camera_high_pressure(task):
         camera = base.camera
@@ -1505,7 +1515,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         #dividend king
     elif name == 'DividendZapRetaliation':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DividendAccountRollover':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'DividendAccountRollover2':
@@ -1807,7 +1817,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyFailsafeProtocol':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyRiskThresholdBreach':
-        camTrack.append(Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'ContingencyRiskThresholdBreach75':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyMarkLiquidated':
@@ -1815,11 +1825,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyRiskThresholdBreach50':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ContingencyMarkRevisedFiling':
-        if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=1.5))
-        else:
-            camTrack2 = defaultCamera(openShotDuration=0)
-            return camTrack2
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ContingencyRiskThresholdBreach25':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=0.75)
@@ -1838,7 +1844,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyRedundantAuthority':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ContingencyOperationalFreeze':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'ContingencyForecastCollapse':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
         #cashbot litigation
@@ -1859,10 +1865,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ErclaimScopeCreep':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ErclaimPhase2':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = Sequence()
         return camTrack2
     elif name == 'ErclaimSacrifice':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
+        camTrack.append(Sequence(heldShot(20, -10, 15, 50, -30, 0, 1.5), Func(taskMgr.add, shake_camera_sacrifice, 'camera_shake'), Wait(attackDuration - 2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
     elif name == 'ErclaimSacrifice2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
@@ -1877,15 +1883,28 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
     elif name == 'ErfitHydrationCheck':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        if attack['target'][0]['hp'] > 0:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=2), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 2)))
+        else:
+            camTrack.append(Sequence(defaultCamera(openShotDuration=2.0)))
+    elif name == 'ErfitWringOut':
+        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ErfitHydrationCheckRevert':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3),
-                                 heldShot(5, 0, .5, 155, 35, 0, attackDuration - 3)))
+        if attackDuration > 2:
+            camTrack2 = heldShot(10, 0, 10, 115, -30, 0, attackDuration)
+            return camTrack2
+        else:
+            camTrack2 = defaultCamera(openShotDuration=0)
+            return camTrack2
+    elif name == 'ErclaimHemmorage':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ErfitProToonShake':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'ErclaimHemmorageHealing':
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'ErfitGainsFromTheScrap':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+        camTrack.append(Parallel(cameraActorShot(suit, 'sacrifice-cog', attackDuration), Wait(attackDuration)))
     elif name == 'ErfitGainsFromTheScrap2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
@@ -1899,9 +1918,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
     elif name == 'ErfitPersonalTrainer':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Parallel(cameraActorShot(suit, 'summon-cog', attackDuration), Wait(attackDuration)))
     elif name == 'ErfitPhase2':
-        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     #high roller phase 1 cheats
     elif name == 'HighRollerNoAttack':
@@ -1957,7 +1976,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
     # high roller phase 2 cheats
     elif name == 'HighRollerPhase3':
-        camTrack2 = Sequence(motionShot(0.0, 20, 9.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration))
+        camTrack2 = Sequence(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
         return camTrack2
     # high roller phase 3 cheats
     elif name == 'HighRollerPhase2':
@@ -2543,7 +2562,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'BanLevel78': 'Level 7 and 8 gags are off-limits!'
         }
 
-        camTrack2 = defaultCamera(openShotDuration=2.5)
+        camTrack2 = Sequence(randomActorShot(suit, battle, 3, 'suit'), defaultCamera(openShotDuration=0, attackDuration=attackDuration -3))
         camTrack3 = defaultCamera(openShotDuration=0.5)
         camTrack4 = defaultCamera(openShotDuration=1.5)
         pbpText = attack['playByPlayText']
@@ -2682,6 +2701,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'ForemanBurning',
             'RacketeerPeckingOrderRetaliationSoak',
             'MintCompoundingInterest',
+            'ErfitWringOut',
             'PresidentDriver',
             'PowerhouseSnipeSoaked',
         ):

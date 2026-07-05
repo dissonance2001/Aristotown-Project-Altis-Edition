@@ -284,7 +284,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.deathInterval != None:
             self.deathInterval = None
         elif self.getHP() <= 0 and self.deathInterval == None:
-            self.deathInterval = Sequence(MovieUtil.createSuitCrashTrack(self, battle))
+            self.deathInterval = Sequence(MovieUtil.createSuitCrashTrack(self, battle, 7))
             self.deathInterval.start()
         else:
             pass
@@ -379,6 +379,34 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                          Func(self.updateHealthBar, 0))).start()
             self.addPendingQueuedHealing(syphonHp)
 
+    def personalTrainer(self):
+        x = int(self.maxHP * .1)
+        self.absorbInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, - x),
+                         Func(self.setHealthForMe, - x),
+                         Func(self.updateHealthBar, 0))).start()
+        self.addPendingQueuedDamage(self.maxHP * .1)
+
+    def checkSyphonHPErclaim(self, syphonHp):
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
+            self.absorbInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, 0),
+                         Func(self.setHealthForMe, + 0),
+                         Func(self.updateHealthBar, 0))).start()
+        elif self.currHP + syphonHp > (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
+            self.absorbInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, + x),
+                         Func(self.setHealthForMe, + x),
+                         Func(self.updateHealthBar, 0))).start()
+            self.addPendingQueuedHealing(x)
+        else:
+            self.absorbInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, + syphonHp),
+                         Func(self.setHealthForMe, + syphonHp),
+                         Func(self.updateHealthBar, 0))).start()
+            self.addPendingQueuedHealing(syphonHp)
+
     def addLevelDamage(self, absorbingCog, damage):
         absorbingCog.levelDamage += damage
 
@@ -424,60 +452,60 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def checkAbsorbDamage(self, absorbDamage):
         if self.dna.name == 'sgoat':
-            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                          Func(self.showHpTextNew, - absorbDamage, text="ABSORBED!", colorCode=1), Func(self.setHealthForMe, - absorbDamage),
-                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation), Func(self.addRageBuilding, int(absorbDamage)),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop), Func(self.addRageBuilding, int(absorbDamage)),
                                            Func(self.removeAbsorbDamage)).start()
         else:
             self.absorbInterval = Sequence(
-                Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                Parallel(ActorInterval(self, 'pie-small-react'), 
                          Func(self.showHpTextNew, - absorbDamage, text="ABSORBED!", colorCode=1),
                          Func(self.setHealthForMe, - absorbDamage),
-                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                 Func(self.removeAbsorbDamage)).start()
 
     def checkFraudulentDamage(self):
         self.absorbInterval = Sequence(
-                Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                Parallel(ActorInterval(self, 'pie-small-react'), 
                          Func(self.showHpTextNew, - 158),
                          Func(self.setHealthForMe, - 158),
-                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation)).start()
+                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop)).start()
 
     def checkLevelDamage(self, levelDamage):
         if self.dna.name == 'hroller':
             if float(self.currHP) < levelDamage:
                 x = int(self.currHP - 1)
-                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                          Func(self.showHpText, - x), Func(self.setHealthForMe, - x),
-                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage)).start()
             else:
-                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), 
                                                         Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
-                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                                        Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                                Func(self.removeLevelDamage)).start()
         else:
-            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), 
                                                     Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage)).start()
 
     def checkDamage(self, levelDamage):
         if self.dna.name == 'safesupervis':
-            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                          Func(self.showHpTextNew, - levelDamage, text="OVERHEATED!", colorCode=5), Func(self.setHealthForMe, - levelDamage),
-                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage)).start()
         else:
-            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+            self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                                     Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage)).start()
 
     def checkDamage2(self, levelDamage):
-        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+        self.absorbInterval = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                                     Func(self.showHpText, - levelDamage), Func(self.setHealthForMe, - levelDamage),
-                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                                    Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage)).start()
 
     def checkCogOvercharge(self):
@@ -494,9 +522,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.currHP + (self.maxHP * 0.35) > (self.maxHP * self.hardMaxHP):
             self.healInterval = Parallel(Func(self.showHpTextNew, x, text="REPAIRED!", colorCode=1),
                                          Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+            self.addPendingQueuedHealing(x)
         else:
             self.healInterval = Parallel(Func(self.showHpTextNew, int(self.maxHP * 0.35), text="REPAIRED!", colorCode=1),
                                          Func(self.setHealthForMe, int(self.maxHP * 0.35)), Func(self.updateHealthBar, 0)).start()
+            self.addPendingQueuedHealing(self.maxHP * 0.35)
 
     def __soakRemoval(self, remove=0):
         if remove:
@@ -577,6 +607,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.dna.name == 'redd' and not self.isVirtual:
             suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
             suitTrack.append(Func(self.makeDead))
+        elif self.dna.name == 'erfit' and revives >= 1:
+            suitTrack.append(Func(self.makeDead))
+            suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
         elif self.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
             suitTrack.append(Func(self.makeDead))
@@ -652,6 +685,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -748,6 +784,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual and not self.isOverpressured:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -832,6 +871,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(Func(self.makeSued, 3))
 
             self.splashInterval = Sequence(suitTrack).start()
+
+    def createStagelightInterval(self, show=False):
+        hiddenParts = []
+        for headPart in self.headParts:
+            if not headPart.isHidden():
+                headPart.hide()
+                hiddenParts.append(headPart)
+            if show == True:
+                hiddenParts.show()
 
     def createSuitBellInterval(self):
         if self.style.name == 'liquid':
@@ -1238,6 +1286,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1255,7 +1307,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
             elif not self.isVirtual:
-                suitTrack.append(MovieUtil.createSuitCrashTrack(self, battle))
+                suitTrack.append(MovieUtil.createSuitCrashTrack(self, battle, 7))
                 suitTrack.append(Func(self.makeDead))
 
         return suitTrack
@@ -1304,6 +1356,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1373,6 +1429,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1390,7 +1450,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
             elif not self.isVirtual:
-                suitTrack.append(MovieUtil.createSuitCrashTrack(self, battle))
+                suitTrack.append(MovieUtil.createSuitCrashTrack(self, battle, 7))
                 suitTrack.append(Func(self.makeDead))
 
         return suitTrack
@@ -1419,7 +1479,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         self._pendingQueuedDamage = newPending
 
-        showDamage = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -dmg, text="BUSTED!", colorCode=3),
+        showDamage = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle, 7), Func(self.showHpTextNew, -dmg, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0)))
 
@@ -1583,7 +1643,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.damageInterval = None
         x = int(self.currHP)
         if self.currHP > 0 and not self.getManager() and not self.isDead and not self.isContracted and not self.isContracted2 and not self.isOverpressured:
-            self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
+            self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle, 7), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0))).start()
 
@@ -1801,6 +1861,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.damageInterval = None
         self.damageInterval = Parallel(Func(self.setDamageUp, self.getDamageUp() + num)).start()
 
+    def checkRippedUp(self, num):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        self.damageInterval = Parallel(Func(self.setRippedUp, self.getRippedUp() + num)).start()
+
     def checkCollectCall(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -1823,7 +1889,17 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.damageInterval:
             self.damageInterval.finish()
             self.damageInterval = None
-        self.damageInterval = Parallel(Func(self.makeExtraAbilities, self.getExtraAbilities() + num)).start()
+
+        newAmount = self.getExtraAbilities() + num
+
+        # Higher abilities = shorter duration = faster chain
+        duration = max(0.25, 2.0 - (newAmount * 0.2))
+
+        self.damageInterval = Sequence(
+            Func(self.makeExtraAbilities, newAmount),
+            Func(self.setChainsawTexRoll, duration)
+        )
+        self.damageInterval.start()
 
     def checkDamageDown(self, num):
         if self.damageInterval:
@@ -1870,6 +1946,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
                 suitTrack.append(Func(self.makeDead))
@@ -2015,31 +2095,29 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.dna.name == 'hroller':
             if float(self.currHP) < levelDamage:
                 x = int(self.currHP - 1)
-                showDamage = Sequence(Parallel(ActorInterval(self, 'pie-small-react'), MovieUtil.createSuitStunInterval(self, 0, 2.0),
+                showDamage = Sequence(Parallel(ActorInterval(self, 'pie-small-react'),
                                          Func(self.showHpText, - x), Func(self.setHealthForMe, - x),
-                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimation),
+                                         Func(self.updateHealthBar, 0)), Func(self.setNeutralAnimationDrop),
                                            Func(self.removeLevelDamage))
             else:
                 showDamage = Sequence(
             Parallel(
                 ActorInterval(self, 'pie-small-react'),
-                MovieUtil.createSuitStunInterval(self, 0, 2.0),
                 Func(self.showHpTextNew, -dmg),
                 Func(self.setHealthForMe, -dmg),
                 Func(self.updateHealthBar, 0)
             ),
-            Func(self.setNeutralAnimation)
+            Func(self.setNeutralAnimationDrop)
         )
         else:
             showDamage = Sequence(
             Parallel(
                 ActorInterval(self, 'pie-small-react'),
-                MovieUtil.createSuitStunInterval(self, 0, 2.0),
                 Func(self.showHpTextNew, -dmg),
                 Func(self.setHealthForMe, -dmg),
                 Func(self.updateHealthBar, 0)
             ),
-            Func(self.setNeutralAnimation)
+            Func(self.setNeutralAnimationDrop)
         )
 
         suitTrack.append(showDamage)
@@ -2052,6 +2130,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2099,23 +2181,21 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             showDamage = Sequence(
                 Parallel(
                     ActorInterval(self, 'pie-small-react'),
-                    MovieUtil.createSuitStunInterval(self, 0, 2.0),
                     Func(self.showHpTextNew, -dmg, text="OVERHEATED!", colorCode=5),
                     Func(self.setHealthForMe, -dmg),
                     Func(self.updateHealthBar, 0)
                 ),
-                Func(self.setNeutralAnimation)
+                Func(self.setNeutralAnimatisetNeutralAnimationDropon)
             )
         else:
             showDamage = Sequence(
                 Parallel(
                     ActorInterval(self, 'pie-small-react'),
-                    MovieUtil.createSuitStunInterval(self, 0, 2.0),
                     Func(self.showHpText, -dmg),
                     Func(self.setHealthForMe, -dmg),
                     Func(self.updateHealthBar, 0)
                 ),
-                Func(self.setNeutralAnimation)
+                Func(self.setNeutralAnimationDrop)
             )
 
         suitTrack.append(showDamage)
@@ -2128,6 +2208,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2174,12 +2258,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         showDamage = Sequence(
                 Parallel(
                     ActorInterval(self, 'pie-small-react'),
-                    MovieUtil.createSuitStunInterval(self, 0, 2.0),
                     Func(self.showHpText, -dmg),
                     Func(self.setHealthForMe, -dmg),
                     Func(self.updateHealthBar, 0)
                 ),
-                Func(self.setNeutralAnimation)
+                Func(self.setNeutralAnimationDrop)
             )
 
         suitTrack.append(showDamage)
@@ -2192,6 +2275,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            elif self.dna.name == 'erfit' and revives >= 1:
+                suitTrack.append(self.makeCogStepBackDeathInterval(battle))
+                suitTrack.append(Func(self.makeDead))
+                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2239,24 +2326,22 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             showDamage = Sequence(
                 Parallel(
                     ActorInterval(self, 'pie-small-react'),
-                    MovieUtil.createSuitStunInterval(self, 0, 2.0),
                     Func(self.showHpTextNew, -dmg, text="ABSORBED!", colorCode=1),
                     Func(self.setHealthForMe, -dmg),
                     Func(self.updateHealthBar, 0)
                 ),
-                Func(self.setNeutralAnimation),
+                Func(self.setNeutralAnimationDrop),
                 Func(self.addRageBuilding, int(dmg))
             )
         else:
             showDamage = Sequence(
                 Parallel(
                     ActorInterval(self, 'pie-small-react'),
-                    MovieUtil.createSuitStunInterval(self, 0, 2.0),
                     Func(self.showHpTextNew, -dmg, text="ABSORBED!", colorCode=1),
                     Func(self.setHealthForMe, -dmg),
                     Func(self.updateHealthBar, 0)
                 ),
-                Func(self.setNeutralAnimation)
+                Func(self.setNeutralAnimationDrop)
             )
 
         suitTrack.append(showDamage)
@@ -2490,6 +2575,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
+            # elif self.dna.name == 'erfit' and revives >= 1:
+            #     suitTrack.append(Func(self.makeDead))
+            #     suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(self, battle))
@@ -2640,7 +2728,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         x = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         dmg = int(self.maxHP / 3)
 
-        if self.currHP < 1111:
+        if self.currHP < 111:
             dmg = x
 
         if dmg <= 0:
@@ -2659,7 +2747,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         self._pendingQueuedDamage = newPending
 
-        Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
+        damageTrack = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
                                                    Func(self.showHpText, -dmg),
                                                    Func(self.setHealthForMe, -dmg),
                                                    Func(self.updateHealthBar, 0), ActorInterval(self, 'slip-forward'),
@@ -2851,7 +2939,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
-        dmg = 500
+        dmg = 1000
         if dmg <= 0:
             return suitTrack
         if self.currHP < dmg:
@@ -3018,6 +3106,80 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                Func(videog.setNeutralAnimation)).start()
             videog.addPendingQueuedHealing(3000)
 
+    def erclaimSacrifice(self, videog, battle):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int(self.currHP)
+        self.damageInterval = Sequence(Parallel(Func(self.showHpText, -x),
+                                                Func(self.setHealthForMe, -x),
+                                                Func(self.updateHealthBar, 0))).start()
+        z = int((videog.maxHP * videog.hardMaxHP) - videog.currHP)
+        if videog.currHP >= (videog.maxHP * videog.hardMaxHP):
+            self.healInterval = Sequence(
+                Parallel(Func(videog.showHpTextNew, 0),
+                         Func(videog.setHealthForMe, + 0),
+                         Func(videog.updateHealthBar, 0))).start()
+        elif videog.currHP + x > (videog.maxHP * videog.hardMaxHP):
+            self.healInterval = Sequence(
+                Parallel(Func(videog.showHpTextNew, + z),
+                         Func(videog.setHealthForMe, + z),
+                         Func(videog.updateHealthBar, 0))).start()
+            videog.addPendingQueuedHealing(z)
+        else:
+            self.healInterval = Sequence(
+                Parallel(Func(videog.showHpTextNew, + x),
+                         Func(videog.setHealthForMe, + x),
+                         Func(videog.updateHealthBar, 0))).start()
+            videog.addPendingQueuedHealing(x)
+        # self.healInterval = Sequence(Parallel(Func(videog.showHpText, +x),
+        #                                         Func(videog.setHealthForMe, +x),
+        #                                         Func(videog.updateHealthBar, 0))).start()
+        # videog.addPendingQueuedHealing(x)
+
+    def checkProToonShake(self, dmg, battle):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        if self.currHP >= (self.maxHP * self.hardMaxHP):
+            self.damageInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, 0),
+                         Func(self.setHealthForMe, + 0),
+                         Func(self.updateHealthBar, 0))).start()
+        elif self.currHP + dmg > (self.maxHP * self.hardMaxHP):
+            self.damageInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, + x),
+                         Func(self.setHealthForMe, + x),
+                         Func(self.updateHealthBar, 0))).start()
+            self.addPendingQueuedHealing(x)
+        else:
+            self.damageInterval = Sequence(
+                Parallel(Func(self.showHpTextNew, + dmg),
+                         Func(self.setHealthForMe, + dmg),
+                         Func(self.updateHealthBar, 0))).start()
+            self.addPendingQueuedHealing(dmg)
+
+    def checkProToonShakeErfit(self, dmg, battle):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int(self.currHP)
+        self.damageInterval = Sequence(Parallel(Func(self.showHpText, -dmg),
+                                                  Func(self.setHealthForMe, -dmg),
+                                                  Func(self.updateHealthBar, 0))).start()
+        self.addPendingQueuedDamage(dmg)
+
+
     def makeSyphonInterval(self):
         suitTrack = Sequence()
 
@@ -3178,6 +3340,46 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                                  Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
                     self.addPendingQueuedHealing(200)
 
+    def checkLimitedTimeOffer(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
+        rushJobs = (
+            self.trapRushJob,
+            self.lureRushJob,
+            self.throwRushJob,
+            self.squirtRushJob,
+            self.zapRushJob,
+            self.soundRushJob,
+            self.dropRushJob
+        )
+        if self.currHP > 0 and any(rushJobs):
+            if not self.getManager():
+                if self.currHP >= (self.maxHP * self.hardMaxHP):
+                    self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="OFFER EXPIRED!", colorCode=5),
+                                                 Func(self.updateHealthBar, 0)).start()
+                elif self.currHP > self.maxHP:
+                    self.healInterval = Parallel(Func(self.showHpTextNew, x, text="OFFER EXPIRED", colorCode=5),
+                                                 Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+                    self.addPendingQueuedHealing(x)
+                else:
+                    self.healInterval = Parallel(Func(self.showHpTextNew, self.maxHP, text="OFFER EXPIRED!", colorCode=5),
+                                                 Func(self.setHealthForMe, self.maxHP), Func(self.updateHealthBar, 0)).start()
+                    self.addPendingQueuedHealing(self.maxHP)
+            else:
+                if self.currHP >= (self.maxHP * self.hardMaxHP):
+                    self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="OFFER EXPIRED!", colorCode=5),
+                                                 Func(self.updateHealthBar, 0)).start()
+                elif self.currHP + 450 > (self.maxHP * self.hardMaxHP):
+                    self.healInterval = Parallel(Func(self.showHpTextNew, x, text="OFFER EXPIRED!", colorCode=5),
+                                                 Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
+                    self.addPendingQueuedHealing(x)
+                else:
+                    self.healInterval = Parallel(Func(self.showHpTextNew, 450, text="OFFER EXPIRED!", colorCode=5),
+                                                 Func(self.setHealthForMe, 450), Func(self.updateHealthBar, 0)).start()
+                    self.addPendingQueuedHealing(450)
+
     def checkInsuranceRounds(self, num):
         if self.damageInterval:
             self.damageInterval.finish()
@@ -3258,14 +3460,14 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.currHP >= (self.maxHP * self.hardMaxHP):
                 self.healInterval = Parallel(Func(self.showHpTextNew, 0, colorCode=1),
                                              Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 125 > (self.maxHP * self.hardMaxHP):
+            elif self.currHP + 325 > (self.maxHP * self.hardMaxHP):
                 self.healInterval = Parallel(Func(self.showHpTextNew, x),
                                              Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
                 self.addPendingQueuedHealing(x)
             else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 125),
-                                             Func(self.setHealthForMe, 125), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(125)
+                self.healInterval = Parallel(Func(self.showHpTextNew, 325),
+                                             Func(self.setHealthForMe, 325), Func(self.updateHealthBar, 0)).start()
+                self.addPendingQueuedHealing(325)
 
     def checkOilRain(self):
         if self.healInterval:
@@ -3342,6 +3544,13 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                                              Func(self.updateHealthBar, 0)).start()
                 self.addPendingQueuedHealing(225)
 
+    def checkCompensationDividend(self):
+        if self.healInterval:
+            self.healInterval.finish()
+            self.healInterval = None
+        self.healInterval = Parallel(Func(self.showHpTextNew, 100, text="+10% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 10), Func(self.setHealthForMe, 100), Func(self.updateHealthBar, 0)).start()
+        self.addPendingQueuedHealing(100)
+
     def checkCompensationForeman(self):
         if self.healInterval:
             self.healInterval.finish()
@@ -3377,7 +3586,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.healInterval = Parallel(Func(self.showHpTextNew, 1125, text="+175% Damage!", colorCode=1), Func(self.makeDamageUp), Func(self.checkDamageUp, + 175), Func(self.setHealthForMe, 1125), Func(self.updateHealthBar, 0)).start()
         self.addPendingQueuedHealing(1125)
 
-    def checkCompensationDividend(self):
+    def checkCompensationDividendOLD(self):
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None
@@ -3941,10 +4150,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.luredInterval
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
-        anims = ['bellow', 'neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured', 'bust',
+        anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
                  'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5',
-                 'stun', 'enraged', 'insurance', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup', 'scabbard', 'sparkplug', 'throttle', 'gsnap', 'throttle2', 'mouthdrop', 'dive',
-                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'overclocked', 'come-on', 'zero']
+                 'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
+                 'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust', 
+                 'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
+                 'come-on', 'zero']
         for anim in additionalAnims:
             anims.append(anim)
         animList = {}
@@ -3983,9 +4194,25 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.vulnerabilityMult
 
     def setDizzy(self, dizzy):
-        head = self.find('**/to_head')
+        p1 = Point3(0)
+        p2 = Point3(0)
+        #head = self.find('**/to_head')
         self.dizzy = dizzy
         if dizzy:
+            if self.isSkeleton:
+                actorNode = self.find('**/__Actor_modelRoot')
+                head = actorNode.find('**/joint_head')
+                if self.style.body == 'a':
+                    zVal = max(0.0, p2[2] + 0.8)
+                else:
+                    zVal = max(0.0, p2[2])
+            else:
+                head = self.find('**/joint_head')
+                if self.style.body == 'c':
+                    zVal = max(0.0, p2[2] + 0.4)
+                else:
+                    zVal = max(0.0, p2[2] + 0.8)
+            head.calcTightBounds(p1, p2)
             self.stars.reparentTo(head)
             self.stars.loop('stun')
         else:
@@ -3996,12 +4223,42 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.dizzy
 
     def setDizzy2(self, dizzy2):
-        head = self.find('**/to_head')
+        p1 = Point3(0)
+        p2 = Point3(0)
+        #head = self.find('**/to_head')
         self.dizzy2 = dizzy2
         if self.dizzy:
+            if self.isSkeleton:
+                actorNode = self.find('**/__Actor_modelRoot')
+                head = actorNode.find('**/joint_head')
+                if self.style.body == 'a':
+                    zVal = max(0.0, p2[2] + 0.8)
+                else:
+                    zVal = max(0.0, p2[2])
+            else:
+                head = self.find('**/joint_head')
+                if self.style.body == 'c':
+                    zVal = max(0.0, p2[2] + 0.4)
+                else:
+                    zVal = max(0.0, p2[2] + 0.8)
+            head.calcTightBounds(p1, p2)
             self.stars.reparentTo(head)
             self.stars.loop('stun')
         elif dizzy2:
+            if self.isSkeleton:
+                actorNode = self.find('**/__Actor_modelRoot')
+                head = actorNode.find('**/joint_head')
+                if self.style.body == 'a':
+                    zVal = max(0.0, p2[2] + 0.8)
+                else:
+                    zVal = max(0.0, p2[2])
+            else:
+                head = self.find('**/joint_head')
+                if self.style.body == 'c':
+                    zVal = max(0.0, p2[2] + 0.4)
+                else:
+                    zVal = max(0.0, p2[2] + 0.8)
+            head.calcTightBounds(p1, p2)
             self.stars.reparentTo(head)
             self.stars.loop('stun')
         else:
@@ -4012,9 +4269,25 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.dizzy2
 
     def setSued2(self, sued):
-        head = self.find('**/to_head')
+        p1 = Point3(0)
+        p2 = Point3(0)
+        #head = self.find('**/to_head')
         self.sued = sued
         if sued:
+            if self.isSkeleton:
+                actorNode = self.find('**/__Actor_modelRoot')
+                head = actorNode.find('**/joint_head')
+                if self.style.body == 'a':
+                    zVal = max(0.0, p2[2] + 0.8)
+                else:
+                    zVal = max(0.0, p2[2])
+            else:
+                head = self.find('**/joint_head')
+                if self.style.body == 'c':
+                    zVal = max(0.0, p2[2] + 0.4)
+                else:
+                    zVal = max(0.0, p2[2] + 0.8)
+            head.calcTightBounds(p1, p2)
             self.suedstars.reparentTo(head)
             self.suedstars.loop('stun')
         else:

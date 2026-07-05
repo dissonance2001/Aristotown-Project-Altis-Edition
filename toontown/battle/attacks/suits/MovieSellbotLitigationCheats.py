@@ -198,7 +198,7 @@ def doHighPressure(attack):
             suitTrack.append(Func(suit.showHpTextNew, - int(50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            suitTrack.append(Parallel(suit.makeHighPressureDeathMovie((50 * len(battle.activeToons)), battle), ActorInterval(suit, 'slip-backward')))
+            suitTrack.append(Parallel(suit.makeHighPressureDeathMovie((50 * len(battle.activeToons)), battle), Func(suit.playDialogueForString, "!"), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         revives = suit.getMaxSkeleRevives() + 1
         suitTrack.append(Func(suit.setNeutralAnimationDrop))
@@ -234,7 +234,7 @@ def doHighPressure(attack):
         knifeTracks.append(knifeTrack)
 
     damageAnims = [['slip-forward', 0.01, 0.4]]
-    toonTracks = getToonTracks(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
+    toonTracks = Sequence(Wait(4.0), Parallel(Func(toon.playDialogueForString, "!"), getToonTracks(attack, damageDelay=0.0, splicedDamageAnims=damageAnims, dodgeDelay=0.0, dodgeAnimNames=['sidestep'])))
     soundTrack = getSoundTrack('incoming_whistle.ogg', delay=2.0, node=suit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=1.5, node=suit)
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=4.0)
@@ -1062,7 +1062,7 @@ def doViolation(attack):
         toonTrack = Sequence(
         Wait(2.5),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
             Func(toon.showHpText, -dmg, openEnded=0),
            # Func(__doDamage, toon, dmg, t['died'])
         ),
@@ -1178,7 +1178,7 @@ def doUnionBuster(attack):
     toonTrack = Sequence(
         Wait(.6),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
         ), Wait(1),
         Parallel(Func(toon.showHpTextNew, -int(dmg), text="EMPLOYED!", colorCode=4),
             Func(__doDamageCheat, toon, dmg, target[0]['died']),
@@ -1634,6 +1634,7 @@ def doLimitedTimeOfferDenied(attack):
     targets = attack['target']
     suitTrack = Sequence(getSuitAnimTrack(attack))
     for suit in battle.activeSuits:
+        suitTrack.append(Func(suit.checkLimitedTimeOffer))
         suitTrack.append(Func(suit.makeUnTrapRushJob))
         suitTrack.append(Func(suit.makeUnLureRushJob))
         suitTrack.append(Func(suit.makeUnThrowRushJob))
@@ -1644,9 +1645,8 @@ def doLimitedTimeOfferDenied(attack):
     suitTrack.append(Wait(2.0))
     notifyTracks = Parallel()
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_objection_overruled.ogg'), node=theSuit))
-    managerHealTrack = Sequence(Wait(3), Func(theSuit.showHpTextNew, 0, text="+25% Damage!", colorCode=1))
-    managerHealTrack.append(Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 25)))
-    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.0, node=theSuit)
+    managerHealTrack = Sequence(Wait(3))
+    soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=theSuit.getDuration('frustrated'), node=theSuit)
     hitAtleastOneToon = False
     for t in targets:
         if t['hp'] > 0:
@@ -1714,7 +1714,7 @@ def doUnionBusterDamageOld(attack):
         toonTrack = Sequence(
         Wait(.5),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
         ),
         Wait(2.5),
         Parallel(Func(toon.showHpText, - int(dmg)),
@@ -1749,7 +1749,7 @@ def doUnionBust(attack):
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
-        suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
+        suitTrack = Sequence(Wait(2), Parallel(ActorInterval(targetSuit, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(targetSuit, battle, 7)))
         selfDamageTrack = Parallel(targetSuit.makeUnionBustInterval(battle))
         smokeTrack = Sequence(Wait(2.0), Func(smoke.reparentTo, targetSuit),
                               Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
@@ -2282,7 +2282,7 @@ def doSalesPitch(attack):
         toonTrack = Sequence(
         Wait(suitDelay + 3.1),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
             #Func(__doDamageCheat, toon, dmg, t['died'])
         ),
         Wait(1.75),
@@ -2338,9 +2338,10 @@ def doClosingTime(attack):
     Func(theSuit.disableBlend),
     Func(theSuit.setNeutralAnimationDrop), Wait(2.0)
 )
-    for suit in battle.activeSuits:
-        speedTrack.append(Func(suit.checkBattleSpeed2, theSuit, + .25))
-    return Parallel(speedTrack, suitTrack)
+    speedTrack.append(Func(theSuit.checkBattleSpeed2, theSuit, + .25))
+    makeImmune = Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + 5))
+    managerHealTrack = Sequence(Func(theSuit.showHpTextNew, 0, text="+5% Damage!", colorCode=1))
+    return Parallel(speedTrack, managerHealTrack, makeImmune, suitTrack)
 
 # def doDetour(attack):
 #     suit = attack['suit']
@@ -2437,7 +2438,7 @@ def doContingencyClauseRetaliation(attack):
         toonTrack = Sequence(
         Wait(.5),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
             #Func(__doDamageCheat, toon, dmg, t['died'])
         ),
         Wait(1.25),

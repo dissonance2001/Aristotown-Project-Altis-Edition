@@ -249,6 +249,8 @@ ToontownCentralOld = 20000
 SchoolHouse = 2516
 OTGagShop = 7502
 Dungeon = 7507
+CountErfitLobby = 25200
+CountErfitBattle = 25201
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),
@@ -273,16 +275,17 @@ streetMgrs2Zones = {"duckshfl": [SillyStreet, LoopyLane, PunchlinePlace, WackyWa
                     "fires": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
                     "treek": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
                     "fbed": [LullabyLane, PajamaPlace, TwilightTerrace]}
-streetMgrs2Levels = {"duckshfl": 16,
-                     "ddiver": 17,
-                     "gatekeep": 18,
-                     "bellring": 18,
-                     'mouthp': 18,
-                     "fires": 20,
-                     "treek": 17,
-                     "fbed": 20}
+streetMgrs2Levels = {"duckshfl": 30,
+                     "ddiver": 30,
+                     "gatekeep": 30,
+                     "bellring": 30,
+                     'mouthp': 30,
+                     "fires": 30,
+                     "treek": 30,
+                     "fbed": 30}
 
 # Manager Music
+animSuitHeadsPosedNeutral = ('ddiver', 'chairman', 'cbr', 'shw', 'mg', 'phouse', 'racket', 'bookkeep')
 noCustomMusicManagers = ["bdirector", "ghd", "sya", "radiog", "ubuster", "racket", "safesupervis", "redd", "wsi", "erfit", "ambass", "wtapper", "bkeeper", "phouse", "arbit", "videog"]
 managerMusic = {"djockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
                 "ptjockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
@@ -352,6 +355,7 @@ BossbotCountryClubIntB = 10600
 BossbotCountryClubIntC = 10700
 SellbotHQ = 11000
 SellbotLobby = 11100
+SellbotMultislackerLobby    = 11300
 SellbotFactoryExt = 11200
 SellbotFactoryInt = 11500
 CashbotHQ = 12000
@@ -361,12 +365,43 @@ CashbotMintIntB = 12600
 CashbotMintIntC = 12700
 LawbotHQ = 13000
 LawbotLobby = 13100
+LawbotLounge                = 13700  # OCLO Lobby
 LawbotOfficeExt = 13200
 LawbotOfficeInt = 13300
 LawbotStageIntA = 13300
 LawbotStageIntB = 13400
 LawbotStageIntC = 13500
 LawbotStageIntD = 13600
+ZoneIdrDefault      = 0
+ZoneIdrDerrickMan   = 1
+ZoneIdrDOLA         = 2
+ZoneIdrDungeon      = 3
+ZoneIdrVP           = 4
+ZoneIdrCFO          = 5
+ZoneIdrCLO          = 6
+ZoneIdrCEO          = 7
+ZoneIdrDirectors    = 8
+ZoneIdrChairman     = 9
+ZoneIdrCount        = 10
+ZoneIdrFactory      = 11
+ZoneIdrCoin         = 12
+ZoneIdrDollar       = 13
+ZoneIdrBullion      = 14
+ZoneIdrAOffice      = 15
+ZoneIdrBOffice      = 16
+ZoneIdrCOffice      = 17
+ZoneIdrDOffice      = 18
+ZoneIdrFront        = 19
+ZoneIdrMiddle       = 20
+ZoneIdrBack         = 21
+ZoneIdrBDA          = 22
+ZoneIdrBDB          = 23
+ZoneIdrBDC          = 24
+ZoneIdrEstate       = 25
+ZoneIdrRestoration  = 26
+ZoneIdrErfit        = 27
+ZoneIdrTutorial     = 28
+ZoneIdrLastNum      = 29  # make this the last one ALWAYS
 
 BoardbotHQ = 19000
 BoardbotLobby = 19100
@@ -942,6 +977,7 @@ BossCogNerfedDamageLevels = {BossCogElectricFence: 1,
  BossCogGolfAreaAttack: 8,
  BossCogGearDirectedAttack: 8,
  BossCogOvertimeAttack: 10}
+CountErclaimBattleAPosHpr = (0, 55, 0, 180, 0, 0)
 BossCogBattleAPosHpr = (0,
   60,
  0,

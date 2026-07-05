@@ -201,7 +201,7 @@ AvPropsNew = (
 ('inventory_1dollarbill', 'inventory_small_magnet', 'inventory_5dollarbill', 'inventory_big_magnet', 'inventory_10dollarbill', 'inventory_hypno_goggles', 'inventory_50dollarbill', 'inventory_screen'),
 ('inventory_cup_cake', 'inventory_fruit_pie_slice', 'inventory_cream_pie_slice', 'inventory_cake_slice', 'inventory_fruitpie', 'inventory_creampie', 'inventory_cake', 'inventory_wedding'),
 ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_waterballoon', 'inventory_seltzer_bottle', 'inventory_firehose', 'inventory_storm_cloud', 'inventory_geyser'),
-('inventory_buzzer', 'inventory_rug', 'inventory_balloon', 'inventory_cart_battery', 'inventory_television', 'inventory_tazer', 'inventory_tesla_coil', 'inventory_lightning'),
+('inventory_buzzer', 'inventory_rug', 'inventory_cart_battery', 'inventory_balloon', 'inventory_television', 'inventory_tazer', 'inventory_tesla_coil', 'inventory_lightning'),
 ('inventory_kazoo', 'inventory_bikehorn', 'inventory_whistle', 'inventory_bugle', 'inventory_aoogah', 'inventory_elephant','inventory_fog_horn', 'inventory_opera_singer'),
 ('inventory_flower_pot', 'inventory_sandbag', 'inventory_bowlingball', 'inventory_anvil', 'inventory_weight', 'inventory_safe_box', 'inventory_boulder', 'inventory_piano'))
 AvPropStrings = TTLocalizer.BattleGlobalAvPropStrings
@@ -1035,4 +1035,13 @@ ValidStatusConditions = (
                     'exclusiveCalculator',
                     'baitCalculator',
                     'hustlerTarget',
+                    'boardbotLit',
+                    'hydrated',
+                    'driedOut',
+                    'energized',
+                    'erfitHeal',
+                    'erclaimRevived',
+                    'erfitRevived',
+                    'alreadySacrificed',
+                    'sacrificeCooldown',
 )

@@ -149,21 +149,65 @@ def __suitTargetPoint(suit):
     pnt.setZ(pnt[2] + suit.getHeight() * 0.66)
     return Point3(pnt)
 
-
-def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01):
+def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01, keepFollow = False, fadeDuration=None):
 
     def prepSplash(splash, point):
         if callable(point):
             point = point()
+        if not isinstance(point, LVecBase3f):
+            point = point.getPos()
         splash.reparentTo(render)
         splash.setPos(point)
         scale = splash.getScale()
         splash.setBillboardPointWorld()
         splash.setScale(scale)
 
+    def updateSplashPos(_, point):
+        if callable(point):
+            point = point()
+        if not isinstance(point, LVecBase3f):
+            point = point.getPos(render)
+        splash.setPos(point)
+
     splash = globalPropPool.getProp('splash-from-splat')
     splash.setScale(scale)
-    return Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(delay), Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
+
+    splashTrack = Sequence(
+        Func(prepSplash, splash, point),
+        ActorInterval(splash, 'splash-from-splat'),
+        Wait(splashHold),
+    )
+    moveTrack = Sequence() if not keepFollow else LerpFunctionInterval(
+        updateSplashPos, splashTrack.getDuration(), extraArgs=[point]
+    )
+    fadeTrack = Sequence() if fadeDuration is None else LerpColorScaleInterval(
+        splash, fadeDuration, (1, 1, 1, 0),
+    )
+
+    return Sequence(
+        Func(battle.movie.needRestoreRenderProp, splash),
+        Wait(delay),
+        Parallel(splashTrack, moveTrack),
+        fadeTrack,
+        Func(MovieUtil.removeProp, splash),
+        Func(battle.movie.clearRenderProp, splash)
+    )
+
+
+# def __getSplashTrack(point, scale, delay, battle, splashHold = 0.01):
+
+#     def prepSplash(splash, point):
+#         if callable(point):
+#             point = point()
+#         splash.reparentTo(render)
+#         splash.setPos(point)
+#         scale = splash.getScale()
+#         splash.setBillboardPointWorld()
+#         splash.setScale(scale)
+
+#     splash = globalPropPool.getProp('splash-from-splat')
+#     splash.setScale(scale)
+#     return Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(delay), Func(prepSplash, splash, point), ActorInterval(splash, 'splash-from-splat'), Wait(splashHold), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
 
 def __createSuitResetPosTrack2(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
@@ -317,19 +361,23 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitTrack.append(Func(suit.setDizzy, 0))
         suit.setPendingQueuedLured(False)
-        suitTrack.append(Func(suit.setNeutralAnimation))
+        #suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if revived != 0 and suit.isSkeleton:
+        elif suit.dna.name == 'erfit' and revived != 0:
+            suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
+        elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suit.isOverpressured:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        if not died:
+        else:
             suitTrack.append(suit.makeDeathCheckInterval(0, battle))
+            suitTrack.append(Func(suit.setNeutralAnimation))
+
         return Parallel(suitTrack, bonusTrack, soakTracks)
     else:
         return MovieUtil.createSuitDodgeMultitrack(battle, tDodge, suit, leftSuits, rightSuits)
@@ -851,6 +899,10 @@ def __doSeltzerBottle(squirt, delay, fShowStun):
         tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-small-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=3))
     return tracks
 
+def __suitHitPoint(suit):
+    actorNode = suit.find('**/__Actor_modelRoot')
+    head = actorNode.find('**/joint_head')
+    return head
 
 def __doFireHose(squirt, delay, fShowStun):
     toon = squirt['toon']
@@ -903,15 +955,16 @@ def __doFireHose(squirt, delay, fShowStun):
     base.setColor(1, 1, 1, 0.5)
     base.setPos(toon, 0, 0, 0)
     toon.loop('neutral')
-    targetPoint = lambda suit = suit: __suitTargetPoint(suit)
+    missTargetPoint = lambda suit=suit: __suitTargetPoint(suit)
+    targetPoint = lambda suit=suit: __suitHitPoint(suit)
 
-    def getSprayStartPos(hose = hose, toon = toon, targetPoint = targetPoint):
+    def getSprayMissStartPos(hose = hose, toon = toon, missTargetPoint = missTargetPoint):
         toon.update(0)
         if hose.isEmpty() == 1:
-            if callable(targetPoint):
-                return targetPoint()
+            if callable(missTargetPoint):
+                return missTargetPoint()
             else:
-                return targetPoint
+                return missTargetPoint
         joint = hose.find('**/joint_water_stream')
         n = hidden.attachNewNode('pointBehindSprayProp')
         n.reparentTo(toon)
@@ -921,15 +974,46 @@ def __doFireHose(squirt, delay, fShowStun):
         del n
         return p
 
+    def getSprayStartPos(hose = hose, toon = toon, targetPoint = targetPoint):
+        toon.update(0)
+        if hose.isEmpty() == 1:
+            if callable(targetPoint):
+                return targetPoint()
+            else:
+                return targetPoint
+        return hose.find('**/joint_water_stream')
+
     sprayTrack = Sequence()
     sprayTrack.append(Wait(tSprayDelay))
-    sprayTrack.append(MovieUtil.getSprayTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale))
     tracks.append(sprayTrack)
     hydrantNode.detachNode()
-    propTrack = Sequence(Func(battle.movie.needRestoreRenderProp, hydrantNode), Func(hydrantNode.reparentTo, toon), LerpScaleInterval(hydrantScale, tAppearDelay * 0.5, Point3(1, 1, 1.4), startScale=Point3(1, 1, 0.01)), LerpScaleInterval(hydrantScale, tAppearDelay * 0.3, Point3(1, 1, 0.8), startScale=Point3(1, 1, 1.4)), LerpScaleInterval(hydrantScale, tAppearDelay * 0.1, Point3(1, 1, 1.2), startScale=Point3(1, 1, 0.8)), LerpScaleInterval(hydrantScale, tAppearDelay * 0.1, Point3(1, 1, 1), startScale=Point3(1, 1, 1.2)), ActorInterval(hose, 'firehose', duration=dAnimHold), Wait(dHoseHold - 0.2), LerpScaleInterval(hydrantScale, 0.2, Point3(1, 1, 0.01), startScale=Point3(1, 1, 1)), Func(MovieUtil.removeProps, [hydrantNode, hose]), Func(battle.movie.clearRenderProp, hydrantNode))
+    propTrack = Sequence(
+    Func(battle.movie.needRestoreRenderProp, hydrantNode),
+    Func(hydrantNode.reparentTo, toon),
+
+    LerpScaleInterval(hydrantScale, tAppearDelay * 0.5, Point3(1, 1, 1.4), startScale=Point3(1, 1, 0.01)),
+    LerpScaleInterval(hydrantScale, tAppearDelay * 0.3, Point3(1, 1, 0.8), startScale=Point3(1, 1, 1.4)),
+    LerpScaleInterval(hydrantScale, tAppearDelay * 0.1, Point3(1, 1, 1.2), startScale=Point3(1, 1, 0.8)),
+    LerpScaleInterval(hydrantScale, tAppearDelay * 0.1, Point3(1, 1, 1), startScale=Point3(1, 1, 1.2)),
+
+    ActorInterval(hose, 'firehose', duration=dAnimHold),
+    Wait(dHoseHold - 0.2),
+    LerpScaleInterval(hydrantScale, 0.2, Point3(1, 1, 0.01), startScale=Point3(1, 1, 1)),
+
+    Func(MovieUtil.removeProp, hose),
+    Func(MovieUtil.removeProp, hydrant),
+    Func(hydrantScale.removeNode),
+    Func(hydrantNode.removeNode),
+    Func(battle.movie.clearRenderProp, hydrantNode)
+)
     tracks.append(propTrack)
     if hp > 0:
-        tracks.append(__getSplashTrack(targetPoint, 0.4, 2.7, battle, splashHold=1.5))
+        sprayTrack.append(
+            MovieUtil.getSprayProppedTrack(battle, WaterSprayColor, getSprayStartPos, targetPoint, dSprayScale,
+                                            dSprayHold, dSprayScale, horizScale=scale, vertScale=scale))
+        tracks.append(__getSplashTrack(targetPoint, 0.4, 2.7, battle, splashHold=1.8, keepFollow=True, fadeDuration=0.2))
+    else:
+        sprayTrack.append(MovieUtil.getSprayTrack(battle, WaterSprayColor, getSprayMissStartPos, missTargetPoint, dSprayScale, dSprayHold, dSprayScale, horizScale=scale, vertScale=scale))
     if hp > 0 or delay <= 0:
         tracks.append(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'squirt-large-react', died, leftSuits, rightSuits, battle, toon, fShowStun, revived=revived, level=4))
     return tracks

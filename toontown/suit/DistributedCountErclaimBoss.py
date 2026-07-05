@@ -80,6 +80,10 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.juryBoxIval = None
         self.juryTimer = None
         self.witnessToon = None
+        self.skyModel = None
+        self.skySeq = None
+        self.skyFadeSeq = None
+        self.skyModel2 = None
         self.witnessToonOnstage = False
         self.numToonJurorsSeated = 0
         self.mainDoor = None
@@ -149,8 +153,9 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         disk.reparentTo(self.pelvis)
         disk.setZ(0.8)
         self.loadEnvironment()
-        self.__makeWitnessToon()
-        self.__loadMopaths()
+        self.activateSky()
+        #self.__makeWitnessToon()
+        #self.__loadMopaths()
         base.localAvatar.chatMgr.chatInputSpeedChat.addCJMenu()
         if OneBossCog != None:
             self.notify.warning('Multiple BossCogs visible.')
@@ -163,12 +168,12 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         DistributedBossCog.DistributedBossCog.disable(self)
         self.request('Off')
         self.unloadEnvironment()
-        self.__cleanupWitnessToon()
-        self.__unloadMopaths()
-        self.__clearOnscreenMessage()
+        # self.__cleanupWitnessToon()
+        # self.__unloadMopaths()
+        # self.__clearOnscreenMessage()
         taskMgr.remove(self.uniqueName('PieAdvice'))
-        self.__cleanupStrafe()
-        self.__cleanupJuryBox()
+        # self.__cleanupStrafe()
+        # self.__cleanupJuryBox()
         render.clearTag('pieCode')
         taskMgr.remove('chaseTask')
         self.targetNodePath.detachNode()
@@ -180,13 +185,13 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.battleOneMusic.stop()
         self.battleTwoMusic.stop()
         self.battleThreeMusic.stop()
-        self.epilogueMusic.stop()
-        if self.juryTimer:
-            self.juryTimer.destroy()
-            del self.juryTimer
-        if self.bonusTimer:
-            self.bonusTimer.destroy()
-            del self.bonusTimer
+        # self.epilogueMusic.stop()
+        # if self.juryTimer:
+        #     self.juryTimer.destroy()
+        #     del self.juryTimer
+        # if self.bonusTimer:
+        #     self.bonusTimer.destroy()
+        #     del self.bonusTimer
         base.localAvatar.chatMgr.chatInputSpeedChat.removeCJMenu()
         if OneBossCog == self:
             OneBossCog = None
@@ -256,7 +261,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
                 self.bossDamageMovie.resumeUntil(self.bossDamage * self.bossDamageToMovie)
                 if self.recoverRate:
                     taskMgr.add(self.__recoverBossDamage, taskName)
-        self.makeScaleReflectDamage()
+       # self.makeScaleReflectDamage()
         #self.updateHealthBar()
 
     def getBossDamage(self):
@@ -465,22 +470,63 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('----- __showWaitingMessage')
         self.__showOnscreenMessage(TTLocalizer.BuildingWaitingForVictors)
 
+    def activateSky(self):
+        if self.skySeq:
+            self.skySeq.finish()
+        if self.skyFadeSeq:
+            self.skyFadeSeq.finish()
+        if self.skyModel:
+            self.skyModel.removeNode()
+        if self.skyModel2:
+            self.skyModel2.removeNode()
+
+        self.skyModel = loader.loadModel('phase_8/models/props/DL_sky_extended')
+        self.skyModel.reparentTo(render)
+        self.skyModel2 = loader.loadModel('phase_8/models/props/DL_sky_extended')
+        self.skyModel2.reparentTo(render)
+        colorMult = 0.85
+        skyColor = self.skyModel.getColor()
+
+        def setSkyAlpha(value):
+            self.skyModel.setColorScale(skyColor[0] * colorMult, skyColor[1] * colorMult, skyColor[2] * colorMult, value)
+            self.skyModel2.setColorScale(skyColor[0] * colorMult, skyColor[1] * colorMult, skyColor[2] * colorMult, value)
+
+        self.skyModel.setColorScale(skyColor[0] * colorMult, skyColor[1] * colorMult, skyColor[2] * colorMult, 0.0)
+        self.skyModel2.setColorScale(skyColor[0] * colorMult, skyColor[1] * colorMult, skyColor[2] * colorMult, 0.0)
+        base.setBackgroundColor(Vec3(0.478, 0.510, 0.651) * colorMult)
+        self.skyModel.setZ(-100)
+        self.skyModel2.setZ(-100)
+        self.skyModel2.setP(180)
+        self.skyModel.setScale(1.3)
+        self.skyModel2.setScale(1.3)
+
+        self.skySeq = Parallel(self.skyModel.hprInterval(300, Vec3(360, 0, 0)), self.skyModel2.hprInterval(300, Vec3(360, 180, 0)))
+        self.skySeq.loop()
+
+        self.skyFadeSeq = LerpFunctionInterval(setSkyAlpha, 2.2, fromData=0.0, toData=0.85, blendType='easeOut')
+        self.skyFadeSeq.start()
+
     def loadEnvironment(self):
         self.notify.debug('----- loadEnvironment')
+        self.hide()
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
-        self.geom = loader.loadModel('phase_11/models/lawbotHQ/LawbotCourtroom3')
-        self.geom2 = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoom')
-        self.geom.setPos(0, 0, -71.601)
-        self.geom.setScale(1)
-        self.geom2.setPos(-2, -90, 0)
-        self.geom2.setScale(1)
-        self.elevatorEntrance = self.geom2.find('**/elevator_origin')
+        self.geom = loader.loadModel('phase_13/models/events/halloween/erfit_bossRoom')
+        self.geom.setPos(0, 0, 0)
+        self.geom.setScale(1.1)
+        self.elevatorEntrance = self.geom.find('**/elevator_origin')
         self.elevatorEntrance.getChildren().detach()
         self.elevatorEntrance.setScale(1)
-        elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_Elevator')
-        elevatorModel.reparentTo(self.elevatorEntrance)
-        self.setupElevator(elevatorModel)
-        self.elevatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_elevator.ogg')
+       # self.openDoors = ElevatorUtils.getOpenInterval(self, self.leftDoor, self.rightDoor, self.openSfx, self.finalOpenSfx, self.elevatorType)
+        # bossElevator = self.geom.find('**/elevator_origin')
+        # bossElevator.setH(180)
+        # bossElevator.getChildren().detach()
+        # bossElevator.setScale(1)
+        self.elevatorModel = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_csa_elevatorB')
+        self.elevatorModel.reparentTo(self.elevatorEntrance)
+        self.elevatorModel.setH(180)
+        self.setupElevator(self.elevatorModel)
+        ElevatorUtils.closeDoors(self.elevatorModel.find('**/left_door'), self.elevatorModel.find('**/right_door'), self.elevatorType)
+        self.elevatorMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/elevator_countErfit_2.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
@@ -488,61 +534,72 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.litigatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
         self.caseMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
         self.goatMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
-        self.battleOneMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
-        floor = self.geom2.find('**/floor')
-        if floor.isEmpty():
-            floor = self.geom2.find('**/floor')
-        self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
-        self.evFloor.reparentTo(self.geom2)
-        self.evFloor.setName('floor')
-        plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
-        planeNode = CollisionNode('dropPlane')
-        planeNode.addSolid(plane)
-        planeNode.setCollideMask(ToontownGlobals.PieBitmask)
-        self.geom.attachNewNode(planeNode)
-        self.door3 = self.geom.find('**/SlidingDoor1/')
-        self.door4 = self.geom2.find('**/door_back')
-        self.table = self.geom2.find('**/table')
-        self.paper = self.geom2.find('**/paper')
-        self.gavel1 = self.geom2.find('**/gavel_0')
-        self.gavel2 = self.geom2.find('**/gavel_1')
-        self.collisions = self.geom2.find('**/table_col')
-        self.frontdoors = self.geom2.find('**/g_doors')
-        self.collisionsdoor1 = self.geom2.find('**/entry_R_col')
-        self.collisionsdoor2 = self.geom2.find('**/entry_L_col')
-        if self.door3.isEmpty():
-            self.door3 = self.geom.find('**/interior/CR3_Door')
-        self.mainDoor = self.geom.find('**/Door_1')
-        if not self.mainDoor.isEmpty():
-            itemsToHide = ['entry_R', 'entry_L']
-            for str in itemsToHide:
-                stuffToHide = self.geom2.find('**/%s' % str)
-                if not stuffToHide.isEmpty():
-                    self.notify.debug('found %s' % stuffToHide)
-                    stuffToHide.wrtReparentTo(self.mainDoor)
-                else:
-                    self.notify.debug('not found %s' % stuffToHide)
+        self.battleOneMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/encntr_countErfit.ogg')
+        self.phaseTwoMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/GOLDENFLEX.ogg')
+        # self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
+        # self.evFloor.setName('floor')
+        # plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
+        # planeNode = CollisionNode('dropPlane')
+        # planeNode.addSolid(plane)
+        # planeNode.setCollideMask(ToontownGlobals.PieBitmask)
+        # self.geom.attachNewNode(planeNode)
+        # self.door3 = self.geom.find('**/SlidingDoor1/')
+        # self.door4 = self.geom2.find('**/door_back')
+        # self.table = self.geom2.find('**/table')
+        # self.paper = self.geom2.find('**/paper')
+        # self.gavel1 = self.geom2.find('**/gavel_0')
+        # self.gavel2 = self.geom2.find('**/gavel_1')
+        # self.collisions = self.geom2.find('**/table_col')
+        # self.frontdoors = self.geom2.find('**/g_doors')
+        # self.collisionsdoor1 = self.geom2.find('**/entry_R_col')
+        # self.collisionsdoor2 = self.geom2.find('**/entry_L_col')
+        # if self.door3.isEmpty():
+        #     self.door3 = self.geom.find('**/interior/CR3_Door')
+        # self.mainDoor = self.geom.find('**/Door_1')
+        # if not self.mainDoor.isEmpty():
+        #     itemsToHide = ['entry_R', 'entry_L']
+        #     for str in itemsToHide:
+        #         stuffToHide = self.geom2.find('**/%s' % str)
+        #         if not stuffToHide.isEmpty():
+        #             self.notify.debug('found %s' % stuffToHide)
+        #             stuffToHide.wrtReparentTo(self.mainDoor)
+        #         else:
+        #             self.notify.debug('not found %s' % stuffToHide)
 
-        self.reflectedMainDoor = self.geom.find('**/interiorrefl/CR3_Door')
-        if not self.reflectedMainDoor.isEmpty():
-            itemsToHide = ['Reflections/Door_1']
-            for str in itemsToHide:
-                stuffToHide = self.geom.find('**/%s' % str)
-                if not stuffToHide.isEmpty():
-                    self.notify.debug('found %s' % stuffToHide)
-                    stuffToHide.wrtReparentTo(self.reflectedMainDoor)
-                else:
-                    self.notify.debug('not found %s' % stuffToHide)
+        # self.reflectedMainDoor = self.geom.find('**/interiorrefl/CR3_Door')
+        # if not self.reflectedMainDoor.isEmpty():
+        #     itemsToHide = ['Reflections/Door_1']
+        #     for str in itemsToHide:
+        #         stuffToHide = self.geom.find('**/%s' % str)
+        #         if not stuffToHide.isEmpty():
+        #             self.notify.debug('found %s' % stuffToHide)
+        #             stuffToHide.wrtReparentTo(self.reflectedMainDoor)
+        #         else:
+        #             self.notify.debug('not found %s' % stuffToHide)
 
-        #self.geom.reparentTo(render)
-        self.geom2.reparentTo(render)
-        self.loadWitnessStand()
-        self.loadScale()
-        self.scaleNodePath.stash()
-        self.loadJuryBox()
-        self.loadPodium()
-        ug = self.geom.find('**/Reflections')
-        ug.setBin('ground', -10)
+        self.geom.reparentTo(render)
+        #self.loadWitnessStand()
+        #self.loadScale()
+        #self.scaleNodePath.stash()
+        #self.loadJuryBox()
+        #self.loadPodium()
+
+    # def openDoors(self):
+    #     return Sequence()
+
+    def stopPhaseOneMusic(self):
+        self.battleOneMusic.stop()
+        self.phaseTwoMusic.play()
+        self.phaseTwoMusic.setLoop(True)
+
+    def erfitRevive(self):
+        self.geom.find('**/walls').hide()
+        self.geom.find('**/ceiling').hide()
+        self.geom.find('**/sky').hide()
+        self.geom.find('**/glass').hide()
+        self.geom.find('**/skylight').hide()
+        self.geom.find('**/floor').hide()
+        self.geom.find('**/decor_2').hide()
 
     def loadJuryBox(self):
         self.juryBox = self.geom.find('**/JuryBox')
@@ -749,9 +806,9 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('----- unloadEnvironment')
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
         self.geom.removeNode()
-        self.geom2.removeNode()
+        #self.geom2.removeNode()
         del self.geom
-        del self.geom2
+        #del self.geom2
 
     def __loadMopaths(self):
         self.notify.debug('----- __loadMopaths')
@@ -766,8 +823,8 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
 
     def __unloadMopaths(self):
         self.notify.debug('----- __unloadMopaths')
-        self.toonsEnterA.reset()
-        self.toonsEnterB.reset()
+        # self.toonsEnterA.reset()
+        # self.toonsEnterB.reset()
 
     def enterOff(self):
         self.notify.debug('----- enterOff')
@@ -779,29 +836,29 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('----- enterWaitForToons')
         DistributedBossCog.DistributedBossCog.enterWaitForToons(self)
         self.geom.hide()
-        self.witnessToon.removeActive()
+        #self.witnessToon.removeActive()
 
     def exitWaitForToons(self):
         self.notify.debug('----- exitWaitForToons')
         DistributedBossCog.DistributedBossCog.exitWaitForToons(self)
         self.geom.show()
-        self.witnessToon.addActive()
+       # self.witnessToon.addActive()
 
     def enterElevator(self):
         self.notify.debug('----- enterElevator')
         DistributedBossCog.DistributedBossCog.enterElevator(self)
-        self.witnessToon.removeActive()
-        self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
-        self.happy = 1
-        self.raised = 1
-        self.forward = 1
-        self.doAnimate()
-        self.__hideWitnessToon()
-        if not self.mainDoor.isEmpty():
-            self.mainDoor.stash()
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.stash()
+       # self.witnessToon.removeActive()
+        #self.reparentTo(render)
+        #self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
+       # self.happy = 1
+       # self.raised = 1
+       # self.forward = 1
+       # self.doAnimate()
+        #self.__hideWitnessToon()
+        # if not self.mainDoor.isEmpty():
+        #     self.mainDoor.stash()
+        # if not self.reflectedMainDoor.isEmpty():
+        #     self.reflectedMainDoor.stash()
         base.camera.reparentTo(self.elevatorModel)
         base.camera.setPosHpr(0, 30, 8, 180, 0, 0)
         base.camLens.setMinFov(ToontownGlobals.CJElevatorFov/(4./3.))
@@ -809,17 +866,17 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
     def exitElevator(self):
         self.notify.debug('----- exitElevator')
         DistributedBossCog.DistributedBossCog.exitElevator(self)
-        self.witnessToon.removeActive()
+        #self.witnessToon.removeActive()
 
     def enterIntroduction(self):
         self.notify.debug('----- enterIntroduction')
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
-        self.stopAnimate()
-        self.frontdoors.removeNode()
-        self.collisionsdoor1.removeNode()
-        self.collisionsdoor2.removeNode()
-        self.__hideWitnessToon()
+        # self.stopAnimate()
+        # self.frontdoors.removeNode()
+        # self.collisionsdoor1.removeNode()
+        # self.collisionsdoor2.removeNode()
+       # self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
         NametagGlobals.setWant2dNametags(False)
@@ -829,10 +886,15 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        if not self.mainDoor.isEmpty():
-            self.mainDoor.stash()
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.stash()
+        self.loseSuits()
+        # if not self.mainDoor.isEmpty():
+        #     self.mainDoor.stash()
+        # if not self.reflectedMainDoor.isEmpty():
+        #     self.reflectedMainDoor.stash()
+
+    def loseSuits(self):
+        track = Parallel(Sequence(self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0))))
+        return track
 
     def exitIntroduction(self):
         self.notify.debug('----- exitIntroduction')
@@ -844,12 +906,12 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        if not self.mainDoor.isEmpty():
-            pass
-        if not self.reflectedMainDoor.isEmpty():
-            self.reflectedMainDoor.unstash()
-        if not self.elevatorEntrance.isEmpty():
-            pass
+        # if not self.mainDoor.isEmpty():
+        #     pass
+        # if not self.reflectedMainDoor.isEmpty():
+        #     self.reflectedMainDoor.unstash()
+        # if not self.elevatorEntrance.isEmpty():
+        #     pass
 
     def enterBattleOne(self):
         self.notify.debug('----- LawbotBoss.enterBattleOne ')
@@ -990,12 +1052,12 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         base.localAvatar.setFriendsListButtonActive(1)
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(2)
         localAvatar.inventory.setBattleCreditMultiplier(mult)
-        self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.LawbotBossBattleTwoPosHpr)
-        self.clearChat()
-        self.witnessToon.clearChat()
-        self.releaseToons(finalBattle=1)
-        self.__showWitnessToon()
+       # self.reparentTo(render)
+      #  self.setPosHpr(*ToontownGlobals.LawbotBossBattleTwoPosHpr)
+        #self.clearChat()
+        #self.witnessToon.clearChat()
+       # self.releaseToons(finalBattle=1)
+        #self.__showWitnessToon()
         if not self.useCannons:
             self.toonsToBattlePosition(self.toonsA, self.battleANode)
             self.toonsToBattlePosition(self.toonsB, self.battleBNode)
@@ -1003,15 +1065,15 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         #self.startJuryBoxMoving()
 
     def getChairParent(self):
-        return self.juryBox
+        return self
 
-    def startJuryBoxMoving(self):
-        curPos = self.juryBox.getPos()
-        endingAbsPos = Point3(curPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
-        #reflectedEndingAbsPos = Point3(curReflectedPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curReflectedPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curReflectedPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
-        self.juryBoxIval = Parallel(self.juryBox.posInterval(ToontownGlobals.LawbotBossJuryBoxMoveTime, endingAbsPos), SoundInterval(self.juryMovesSfx, node=self.chairs[2].nodePath, duration=ToontownGlobals.LawbotBossJuryBoxMoveTime, loop=1, volume=1.0))
-        self.juryBoxIval.start()
-        self.juryBox.hide()
+    # def startJuryBoxMoving(self):
+    #     curPos = self.juryBox.getPos()
+    #     endingAbsPos = Point3(curPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
+    #     #reflectedEndingAbsPos = Point3(curReflectedPos[0] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[0], curReflectedPos[1] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[1], curReflectedPos[2] + ToontownGlobals.LawbotBossJuryBoxRelativeEndPos[2])
+    #     self.juryBoxIval = Parallel(self.juryBox.posInterval(ToontownGlobals.LawbotBossJuryBoxMoveTime, endingAbsPos), SoundInterval(self.juryMovesSfx, node=self.chairs[2].nodePath, duration=ToontownGlobals.LawbotBossJuryBoxMoveTime, loop=1, volume=1.0))
+    #     self.juryBoxIval.start()
+    #     self.juryBox.hide()
 
     def exitBattleTwo(self):
         self.notify.debug('----- exitBattleTwo')
@@ -1024,8 +1086,8 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
             self.juryTimer.destroy()
             del self.juryTimer
             self.juryTimer = None
-        for chair in self.chairs.values():
-            chair.stopCogsFlying()
+        # for chair in self.chairs.values():
+        #     chair.stopCogsFlying()
 
         return
 
@@ -1093,14 +1155,14 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         base.camera.setPos(localAvatar.cameraPositions[0][0])
         base.camera.setHpr(0, 0, 0)
         self.clearChat()
-        self.witnessToon.clearChat()
-        self.table.removeNode()
-        self.paper.removeNode()
-        self.gavel1.removeNode()
-        self.gavel2.removeNode()
-        self.collisions.removeNode()
-        self.generateHealthBar()
-        self.updateHealthBar()
+        #self.witnessToon.clearChat()
+        # self.table.removeNode()
+        # self.paper.removeNode()
+        # self.gavel1.removeNode()
+        # self.gavel2.removeNode()
+        # self.collisions.removeNode()
+        # self.generateHealthBar()
+        # self.updateHealthBar()
         self.reparentTo(render)
         self.happy = 1
         self.raised = 1
@@ -1191,13 +1253,13 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('----- enterVictory')
         self.cleanupIntervals()
         self.reparentTo(render)
-        self.door4.removeNode()
+        #self.door4.removeNode()
         base.camera.setPosHpr(0, 200, 8, 0, 0, 0)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleThreePosHpr)
         self.loop('neutral')
         localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
         self.clearChat()
-        self.witnessToon.clearChat()
+       # self.witnessToon.clearChat()
         self.controlToons()
         self.setToonsToNeutral(self.involvedToons)
         self.happy = 1
@@ -1254,7 +1316,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
     def enterReward(self):
         self.cleanupIntervals()
         self.clearChat()
-        self.witnessToon.clearChat()
+       # self.witnessToon.clearChat()
         self.stash()
         self.stopAnimate()
         self.controlToons()
@@ -1292,18 +1354,18 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
     def enterEpilogue(self):
         self.cleanupIntervals()
         self.clearChat()
-        self.witnessToon.clearChat()
+      #  self.witnessToon.clearChat()
         self.stash()
         self.stopAnimate()
         self.controlToons()
         self.__showWitnessToon()
-        self.witnessToon.reparentTo(render)
-        self.witnessToon.setPosHpr(*ToontownGlobals.LawbotBossWitnessEpiloguePosHpr)
-        self.witnessToon.loop('Sit')
-        self.__arrangeToonsAroundWitnessToon()
+        # self.witnessToon.reparentTo(render)
+        # self.witnessToon.setPosHpr(*ToontownGlobals.LawbotBossWitnessEpiloguePosHpr)
+        # self.witnessToon.loop('Sit')
+       # self.__arrangeToonsAroundWitnessToon()
         base.camera.reparentTo(render)
-        base.camera.setPos(self.witnessToon, -9, 12, 6)
-        base.camera.lookAt(self.witnessToon, 0, 0, 3)
+       # base.camera.setPos(self.witnessToon, -9, 12, 6)
+        #base.camera.lookAt(self.witnessToon, 0, 0, 3)
         intervalName = 'EpilogueMovie'
         seq = Sequence(self.makeEpilogueMovie(), name=intervalName)
         seq.start()
@@ -1454,13 +1516,13 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
 
     def doStrafe(self, side, direction):
         gearRoot = self.rotateNode.attachNewNode('gearRoot')
-        if side == 0:
-            gearRoot.setPos(0, -7, 3)
-            gearRoot.setHpr(180, 0, 0)
-            door = self.doorA
-        else:
-            gearRoot.setPos(0, 7, 3)
-            door = self.doorB
+        # if side == 0:
+        #     gearRoot.setPos(0, -7, 3)
+        #     gearRoot.setHpr(180, 0, 0)
+        #     door = self.doorA
+        # else:
+        #     gearRoot.setPos(0, 7, 3)
+        #     door = self.doorB
         gearRoot.setTag('attackCode', str(ToontownGlobals.BossCogStrafeAttack))
         gearModel = self.getGearFrisbee()
         gearModel.setScale(0.1)
@@ -1530,36 +1592,36 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
             if toon:
                 delayDeletes.append(DelayDelete.DelayDelete(toon, 'LawbotBoss.makeIntroductionMovie'))
 
-        track = Parallel()
-        bossAnimTrack = Sequence(
-            ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
-            ActorInterval(self, 'Ff_lookRt', duration=3),
-            ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
-            ActorInterval(self, 'Ff_neutral', duration=2),
-            ActorInterval(self, 'Ff_speech', duration=7, loop=1))
-        track.append(bossAnimTrack)
-        attackToons = TTLocalizer.BossCogAttackToons
-        dialogTrack = Track(
-            (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech)),
+        track = Parallel(Func(self.hide))
+        # bossAnimTrack = Sequence(
+        #     ActorInterval(self, 'Ff_speech', startTime=2, duration=10, loop=1),
+        #     ActorInterval(self, 'Ff_lookRt', duration=3),
+        #     ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
+        #     ActorInterval(self, 'Ff_neutral', duration=2),
+        #     ActorInterval(self, 'Ff_speech', duration=7, loop=1))
+        # track.append(bossAnimTrack)
+        # attackToons = TTLocalizer.BossCogAttackToons
+        # dialogTrack = Track(
+        #     (0, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie1, CFSpeech)),
 
-            (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech)),
+        #     (5.6, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie2, CFSpeech)),
 
-            (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech)),
+        #     (12, Func(self.setChatAbsolute, TTLocalizer.OCLOMovie3, CFSpeech)),
 
-            # Cut to toons losing their cog suits.
-            (18, Sequence(Func(self.clearChat),
-                          self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)),
-                          )),
+        #     # Cut to toons losing their cog suits.
+        #     (18, Sequence(Func(self.clearChat),
+        #                   self.loseCogSuits(self.toonsA + self.toonsB, render, (-2.798, -70, 10, 180, 0, 0)),
+        #                   )),
 
-            # Cut to wide shot of battle arena.  Toons back up and
-            # ramps retract.
-            (24, Sequence(self.toonNormalEyes(self.involvedToons),
-                          Func(self.loop, 'Ff_neutral'),
-                          Func(self.setChatAbsolute, attackToons, CFSpeech), Func(self.setChatAbsolute, '', CFSpeech)
+        #     # Cut to wide shot of battle arena.  Toons back up and
+        #     # ramps retract.
+        #     (24, Sequence(self.toonNormalEyes(self.involvedToons),
+        #                   Func(self.loop, 'Ff_neutral'),
+        #                   Func(self.setChatAbsolute, attackToons, CFSpeech), Func(self.setChatAbsolute, '', CFSpeech)
 
-                          )),
-        )
-        track.append(dialogTrack)
+        #                   )),
+        # )
+        # track.append(dialogTrack)
 
         return Sequence(
             Func(self.stickToonsToFloor),
@@ -1720,48 +1782,26 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('__enterProsecutionCol')
 
     def makeVictoryMovie(self):
-        paperwork = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_big_stacks3')
-        paperwork.setScale(3)
-        whistleSfx = base.loader.loadSfx('phase_5/audio/sfx/incoming_whistleALT.ogg')
-        dropSfx = base.loader.loadSfx('phase_5/audio/sfx/AA_drop_safe_miss.ogg')
-        myFromPos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0], ToontownGlobals.LawbotBossBattleThreePosHpr[1], ToontownGlobals.LawbotBossBattleThreePosHpr[2])
-        paperwork.setPos(myFromPos)
-        myToPos = Point3(myFromPos[0], myFromPos[1] + 60, myFromPos[2])
-        paperPosStart = Point3(myFromPos[0], myFromPos[1] + 30, myFromPos[2]+30)
-        paperToPos = Point3(myFromPos[0], myFromPos[1] + 36, myFromPos[2])
-        rollThroughDoor = self.rollBossToPoint(fromPos=myFromPos, fromHpr=None, toPos=myToPos, toHpr=None, reverse=0)
-        rollTrack = Sequence(
-            Func(self.getGeomNode().setH, 180),
-            rollThroughDoor[0],
-            Func(self.getGeomNode().setH, 0))
-        rollTrackDuration = rollTrack.getDuration()
-        self.notify.debug('rollTrackDuration = %f' % rollTrackDuration)
-        doorStartPos = self.door3.getPos()
-        doorEndPos = Point3(doorStartPos[0], doorStartPos[1], doorStartPos[2] + 35)
-        bossTrack = Track(
-            (0.5, Sequence(
-                Func(self.clearChat),
-                Func(base.camera.reparentTo, render),
-                Func(base.camera.setPos, -3, 175, 15),
-                Func(base.camera.setHpr, 0, 10, 0))),
-            (1.0, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins1, CFSpeech)),
-            (5.5, Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins2, CFSpeech)),
-            (9.5, Sequence(Func(base.camera.wrtReparentTo, render))),
-            (9.6, Parallel(
-                rollTrack,
-                Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins3, CFSpeech),
-                self.door3.posInterval(2, doorEndPos, startPos=doorStartPos))),
-            (13.1, Sequence(Parallel(SoundInterval(whistleSfx),
-                   Sequence(
-                       Func(self.setChatAbsolute, TTLocalizer.LawbotBossDefenseWins4, CFSpeech),
-                       LerpScaleInterval(self.dropShadow, 3, Point3(15, 15, 15)),
-                       Func(paperwork.reparentTo, render),
-                       Parallel(LerpPosInterval(paperwork, 0.1, paperToPos, startPos = paperPosStart), 
-                       SoundInterval(dropSfx),
-                       Func(self.stash)),
-                       Func(paperwork.detachNode))))),
-            (17, Sequence(self.door3.posInterval(1, doorStartPos))))
-        retTrack = Parallel(bossTrack, ActorInterval(self, 'Ff_speech', loop=1))
+        # paperwork = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_big_stacks3')
+        # paperwork.setScale(3)
+        # whistleSfx = base.loader.loadSfx('phase_5/audio/sfx/incoming_whistleALT.ogg')
+        # dropSfx = base.loader.loadSfx('phase_5/audio/sfx/AA_drop_safe_miss.ogg')
+        # myFromPos = Point3(ToontownGlobals.LawbotBossBattleThreePosHpr[0], ToontownGlobals.LawbotBossBattleThreePosHpr[1], ToontownGlobals.LawbotBossBattleThreePosHpr[2])
+        # paperwork.setPos(myFromPos)
+        # myToPos = Point3(myFromPos[0], myFromPos[1] + 60, myFromPos[2])
+        # paperPosStart = Point3(myFromPos[0], myFromPos[1] + 30, myFromPos[2]+30)
+        # paperToPos = Point3(myFromPos[0], myFromPos[1] + 36, myFromPos[2])
+        # rollThroughDoor = self.rollBossToPoint(fromPos=myFromPos, fromHpr=None, toPos=myToPos, toHpr=None, reverse=0)
+        # rollTrack = Sequence(
+        #     Func(self.getGeomNode().setH, 180),
+        #     rollThroughDoor[0],
+        #     Func(self.getGeomNode().setH, 0))
+        # rollTrackDuration = rollTrack.getDuration()
+        # self.notify.debug('rollTrackDuration = %f' % rollTrackDuration)
+       # doorStartPos = self.door3.getPos()
+        #doorEndPos = Point3(doorStartPos[0], doorStartPos[1], doorStartPos[2] + 35)
+        bossTrack = Sequence()
+        #retTrack = Parallel(bossTrack, ActorInterval(self, 'Ff_speech', loop=1))
         return bossTrack
 
     def makeEpilogueMovie(self):

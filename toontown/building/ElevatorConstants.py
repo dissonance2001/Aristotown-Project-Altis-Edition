@@ -16,6 +16,7 @@ ELEVATOR_BOARD_OFFICE = 9
 ELEVATOR_CM = 10
 ELEVATOR_CBM = 11
 ELEVATOR_PACE = 12
+ELEVATOR_ERFIT = 13
 REJECT_NOREASON = 0
 REJECT_SHUFFLE = 1
 REJECT_MINLAFF = 2
@@ -79,12 +80,14 @@ ELEVATOR_VP_2: {'openTime': 4.0,
                'countdown': bboard.get('elevatorCountdown', 5.0),
                'sfxVolume': 0.7,
                'collRadius': 7.5},
-ELEVATOR_ERCLAIM: {'openTime': 4.0,
-                              'closeTime': 4.0,
-                              'width': 15.8,
-                              'countdown': bboard.get('elevatorCountdown', 5.0),
-                              'sfxVolume': 0.7,
-                              'collRadius': 7.5},
+ELEVATOR_ERCLAIM: {
+        'openTime': 2.0,
+        'closeTime': 2.0,
+        'width': 3.5,
+        'countdown': bboard.get('elevatorCountdown', 15.0),
+        'sfxVolume': 1.0,
+        'collRadius': 5
+    },
  ELEVATOR_STAGE: {'openTime': 4.0,
                   'closeTime': 4.0,
                   'width': 6.5,
@@ -104,6 +107,12 @@ ELEVATOR_DIRECTORS: {'openTime': 4.0,
                'sfxVolume': 0.7,
                'collRadius': 7.5},
 ELEVATOR_PACE: {'openTime': 4.0,
+               'closeTime': 4.0,
+               'width': 6.3,
+               'countdown': bboard.get('elevatorCountdown', 5.0),
+               'sfxVolume': 0.7,
+               'collRadius': 7.5},
+    ELEVATOR_ERFIT: {'openTime': 4.0,
                'closeTime': 4.0,
                'width': 6.3,
                'countdown': bboard.get('elevatorCountdown', 5.0),

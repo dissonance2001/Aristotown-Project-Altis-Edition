@@ -332,8 +332,8 @@ def doDesperation2(attack):
     battle = attack['battle']
     targets = attack['target']
     toonTracks = Parallel()
-    for suit in battle.activeSuits:
-        toonTracks.append(Func(suit.makeUnBattleSpeed))
+    # for suit in battle.activeSuits:
+    #     toonTracks.append(Func(suit.makeUnBattleSpeed))
     for t in battle.activeToons:
         toonTrack = Parallel(Func(t.makeContentSync, 0), Func(t.makeUnGagBan))
         toonTracks.append(toonTrack)

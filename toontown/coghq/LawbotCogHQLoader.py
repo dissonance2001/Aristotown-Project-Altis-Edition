@@ -34,6 +34,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LB_courtyard'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_lawfice_Lobby'
         self.cogHQLobbyModelPath = 'phase_11/models/lawbotHQ/LB_CH_Lobby'
+        self.cogHQHardLobbyModelPath = 'phase_11/models/lawbotHQ/LB_CH_Hard_Lobby'
         self.geom = None
 
     def load(self, zoneId):
@@ -68,6 +69,9 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.geom = loader.loadModel(self.cogHQLobbyModelPath)
             #ug = self.geom.find('**/underground')
             #ug.setBin('ground', -10)
+        elif zoneId == ToontownGlobals.LawbotLounge:
+            self.geom = loader.loadModel(self.cogHQHardLobbyModelPath, noCache = True)
+            self.geom.flattenMedium()
         else:
             self.notify.warning('loadPlaceGeom: unclassified zone %s' % zoneId)
         CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)

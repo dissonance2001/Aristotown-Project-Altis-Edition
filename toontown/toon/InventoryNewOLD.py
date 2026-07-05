@@ -606,6 +606,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'viralSensation' in base.localAvatar.battleConditions:
             viralSensation = True
 
+        energized = False
+        if 'energized' in base.localAvatar.battleConditions:
+            energized = True
+
         allGagBoost2 = False
         if 'allGagBoost2' in base.localAvatar.battleConditions:
             allGagBoost2 = True
@@ -639,6 +643,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost2'][0]
             if viralSensation:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['viralSensation'][0]
+            if energized:
+                val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['energized'][0]
             if governaughtBoost:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['governaughtBoost'][0]
             if raisedAnte and not track == LURE_TRACK:
@@ -757,6 +763,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if viralSensation and not track == LURE_TRACK:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['viralSensation'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorizeJustAll(damage, 'viralSensation')
+        if energized and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['energized'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'energized')
         if governaughtBoost and track == LURE_TRACK:
             lureValue = int(math.ceil(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['governaughtBoost'][
@@ -1649,6 +1658,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'viralSensation' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['viralSensation'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
+                        if 'energized' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['energized'][0] > 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageUpPressable(button, track, level)
                         if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(

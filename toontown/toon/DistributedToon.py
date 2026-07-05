@@ -216,6 +216,39 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             pass
 
+    def checkDriedOutRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getDriedOutRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnDriedOut))
+        elif self.getDriedOutRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addDriedOutRounds, self.getDriedOutRounds() - 1)).start()
+        else:
+            pass
+
+    def checkEnergizedRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getEnergizedRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnEnergized))
+        elif self.getEnergizedRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addEnergizedRounds, self.getEnergizedRounds() - 1)).start()
+        else:
+            pass
+
+    def checkHydrationRoundCountdown(self):
+        if self.damageInterval:
+            self.damageInterval.finish()
+            self.damageInterval = None
+        if self.getHydrationRounds() - 1 == 0:
+            self.damageInterval = Parallel(Func(self.makeUnHydration))
+        elif self.getCooldownRounds() > 0:
+            self.damageInterval = Parallel(Func(self.addHydrationRounds, self.getHydrationRounds() - 1)).start()
+        else:
+            pass
+
     def checkInkDrainRoundCountdown(self):
         if self.damageInterval:
             self.damageInterval.finish()

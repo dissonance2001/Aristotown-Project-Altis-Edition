@@ -535,12 +535,12 @@ def doOilRainHeal(attack):
         currentBossHealth = -1
         if s.dna.name == 'phouse':
             currentBossHealth = s.currHP
-        if currentBossHealth >= 1:
-            if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
-                managerHealTracks.append(Func(s.checkRefinementPowerhouse))
-        else:
-            if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
-                managerHealTracks.append(Func(s.checkRefinement))
+        # if currentBossHealth >= 1:
+        #     if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
+        #         managerHealTracks.append(Func(s.checkRefinementPowerhouse))
+        # else:
+        #     if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
+        #         managerHealTracks.append(Func(s.checkRefinement))
         cloud = globalPropPool.getProp('stormcloud')
         rainEffect = BattleParticles.createParticleEffect(file='oilRain')
         rainEffect.setColor(0.259, 0.259, 0.259, 1)
@@ -581,11 +581,11 @@ def doOilRainHeal(attack):
             if currentBossHealth >= 1:
                 moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, Point3(0, 0, -3.1), other=puddle),
                                  LerpPosInterval(s, 0.4, Point3(0, 0, -9.1), other=puddle),
-                                     Func(s.checkRefinementPowerhouse))
+                                     )
             else:
                 moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, Point3(0, 0, -3.1), other=puddle),
                                  LerpPosInterval(s, 0.4, Point3(0, 0, -9.1), other=puddle),
-                                 Func(s.checkRefinement))
+                                 )
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75), 
                              ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
                              ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25),  __soakSuit(s), Func(s.setPos, puddle, Point3(0, 0, 0)), Func(s.makeSoaked, 0),  Func(s.makeUnSoaked),
@@ -673,11 +673,11 @@ def doOilRainHealManager(attack):
             if currentBossHealth >= 1:
                 moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
                                      LerpPosInterval(s, 0.4, sinkPos2, other=battle),
-                                     Func(s.checkRefinementPowerhouseManager))
+                                     )
             else:
                 moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, sinkPos1, other=battle),
                                      LerpPosInterval(s, 0.4, sinkPos2, other=battle),
-                                     Func(s.checkRefinementManager))
+                                     )
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
                                  ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setPos, battle, dropPos), LerpPosInterval(s, 0, landPos, other=battle),
@@ -1139,7 +1139,6 @@ def doWiretapped(attack):
     toonTracksReal = Parallel()
     for toon in battle.activeToons:
         toonTracks = Sequence(Wait(2.8), ActorInterval(toon, 'slip-backward'))
-        toonTracks.append(Func(toon.makeContentSync, dmg))
         toonTracksReal.append(toonTracks)
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
@@ -1184,7 +1183,10 @@ def doWiretapped(attack):
     if suit.getDamageUp() > 30:
         makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 30))
     else:
-        makeDamageUp = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, - 30))
+        if suit.getDamageUp() > 0:
+            makeDamageUp = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, - 30))
+        else:
+            makeDamageUp = Parallel()
     return Parallel(suitTrack, propTrack, soundTrack, makeDamageUp, soundTrack1, toonTracksReal, makeNotImmune, makeNotImmune2, explodeTracks, explosionTrack)
 
 def doManagerialProtectionImmunity(attack):
@@ -1216,10 +1218,10 @@ def doRefinement(attack):
         for s in battle.suits:
             if s.dna.name == 'phouse':
                 currentBossHealth = s.currHP
-        if currentBossHealth >= 1:
-            suitTrack.append(Func(suit.checkRefinementPowerhouse))
-        else:
-            suitTrack.append(Func(suit.checkRefinement))
+        # if currentBossHealth >= 1:
+        #     suitTrack.append(Func(suit.checkRefinementPowerhouse))
+        # else:
+        #     suitTrack.append(Func(suit.checkRefinement))
         suitTrack.append(Func(battle.unSueSuit, suit))
         if not suit.dna.name == 'ambass':
             suitTrack.append(Parallel(Sequence(Wait(3)),
@@ -2294,6 +2296,32 @@ def doGeneration2(attack):
     targetSuit = attack['suit']
     battle = attack['battle']
     suitPos = targetSuit.getPos(battle)
+    BattleParticles.loadParticles()
+    lightning = globalPropPool.getProp('lightning')
+    lightning.reparentTo(battle)
+    lightning.hide()
+    lightning.setScale(1, 1, 3)
+
+    def getCloudTrack(lightning, suit, battle = battle):
+        particleEffect = BattleParticles.loadParticleFile('lightningGagExplosion.ptf')
+        particleEffect.setScale(suit.scale * 1.5)
+        particleNode = suit.attachNewNode('zap-particle-node')
+        particleNode.setColorScaleOff(1)
+        particleEffect.getParticlesNamed('particles-1').emitter.setOffsetForce(Vec3(0.0000, 0.0000, 15.0000 + suit.height))
+        partTrack = getPartTrackLightning(particleEffect, 1 - 0.61, 3.0, [particleEffect, particleNode, 0], softStop=-2.4, renderParent=particleNode)
+        tracks = Parallel()
+        track = Sequence(
+            Wait(1),
+            Func(lambda suit=suit: lightning.setPos(suit.getPos(battle))),
+            Func(lightning.show),
+            Wait(0.1),
+            LerpColorScaleInterval(lightning, 1.0, (1, 1, 1, 0)),
+            Func(MovieUtil.removeProp, lightning)
+        )
+        tracks.append(track)
+        tracks.append(Sequence(partTrack, Func(particleNode.removeNode)))
+        return tracks
+
     headTrack = Sequence(Wait(1))
     suitTrack = Sequence(Parallel(getSuitAnimTrack(attack), ActorInterval(suit, 'mob-mentality', endTime=1)), Parallel(Func(suit.makeVulnerable), Func(suit.checkDamageUp, + 5), Func(suit.checkVulnerabilityUp, + 5)), 
                          MovieUtil.zapCogPowerhouse(suit, 'large-zap', .5, 2.0, battle), Func(suit.setNeutralAnimationDrop))
@@ -2304,10 +2332,7 @@ def doGeneration2(attack):
             headTrack.append(Func(headPart.setTexture, texture2, 1))
     y = suitPos.getY()
     suitPos = targetSuit.getPos(battle)
-    cage = loader.loadModel('phase_5/models/props/lightning')
     suitTrack2 = Sequence(Wait(1.0), Parallel(Func(suit.showHpTextNew, 0, text="GENERATION!", colorCode=3)))
-    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
-    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -2317,14 +2342,7 @@ def doGeneration2(attack):
                           Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                           Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
-        getPropAppearTrack(cage, suit, Point3(0, 0, 100), 1, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
-        Parallel(
-            cage.posInterval(0, Point3(0, 0, 0), blendType='easeIn'),
-
-        ),
-        Wait(0.5),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-        Func(MovieUtil.removeProp, cage)
+        getCloudTrack(lightning, suit)
     )
     cagePropTracks.append(cagePropTrack)
     makeDamageUp = Func(suit.makeDamageUp)
@@ -2354,10 +2372,32 @@ def doGeneration(attack):
     cagePropTracks = Parallel()
     y = suitPos.getY()
     suitPos = targetSuit.getPos(battle)
-    cage = loader.loadModel('phase_5/models/props/lightning')
+    BattleParticles.loadParticles()
+    lightning = globalPropPool.getProp('lightning')
+    lightning.reparentTo(battle)
+    lightning.hide()
+    lightning.setScale(1, 1, 3)
+
+    def getCloudTrack(lightning, suit, battle = battle):
+        particleEffect = BattleParticles.loadParticleFile('lightningGagExplosion.ptf')
+        particleEffect.setScale(suit.scale * 1.5)
+        particleNode = suit.attachNewNode('zap-particle-node')
+        particleNode.setColorScaleOff(1)
+        particleEffect.getParticlesNamed('particles-1').emitter.setOffsetForce(Vec3(0.0000, 0.0000, 15.0000 + suit.height))
+        partTrack = getPartTrackLightning(particleEffect, 1 - 0.61, 3.0, [particleEffect, particleNode, 0], softStop=-2.4, renderParent=particleNode)
+        tracks = Parallel()
+        track = Sequence(
+            Wait(1),
+            Func(lambda suit=suit: lightning.setPos(suit.getPos(battle))),
+            Func(lightning.show),
+            Wait(0.1),
+            LerpColorScaleInterval(lightning, 1.0, (1, 1, 1, 0)),
+            Func(MovieUtil.removeProp, lightning)
+        )
+        tracks.append(track)
+        tracks.append(Sequence(partTrack, Func(particleNode.removeNode)))
+        return tracks
     suitTrack2 = Sequence(Wait(1.0), Parallel(Func(suit.showHpTextNew, 0, text="GENERATION!", colorCode=3)))
-    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
-    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -2367,14 +2407,7 @@ def doGeneration(attack):
                           Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                           Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
-        getPropAppearTrack(cage, suit, Point3(0, 0, 100), 1, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
-        Parallel(
-            cage.posInterval(0, Point3(0, 0, 0), blendType='easeIn'),
-
-        ),
-        Wait(0.5),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-        Func(MovieUtil.removeProp, cage)
+        getCloudTrack(lightning, suit)
     )
     cagePropTracks.append(cagePropTrack)
     makeDamageUp = Func(suit.makeDamageUp)
@@ -2389,15 +2422,37 @@ def doGeneration3(attack):
     targetSuit = attack['suit']
     battle = attack['battle']
     suitPos = targetSuit.getPos(battle)
+    BattleParticles.loadParticles()
+    lightning = globalPropPool.getProp('lightning')
+    lightning.reparentTo(battle)
+    lightning.hide()
+    lightning.setScale(1, 1, 3)
+
+    def getCloudTrack(lightning, suit, battle = battle):
+        particleEffect = BattleParticles.loadParticleFile('lightningGagExplosion.ptf')
+        particleEffect.setScale(suit.scale * 1.5)
+        particleNode = suit.attachNewNode('zap-particle-node')
+        particleNode.setColorScaleOff(1)
+        particleEffect.getParticlesNamed('particles-1').emitter.setOffsetForce(Vec3(0.0000, 0.0000, 15.0000 + suit.height))
+        partTrack = getPartTrackLightning(particleEffect, 1 - 0.61, 3.0, [particleEffect, particleNode, 0], softStop=-2.4, renderParent=particleNode)
+        tracks = Parallel()
+        track = Sequence(
+            Wait(1),
+            Func(lambda suit=suit: lightning.setPos(suit.getPos(battle))),
+            Func(lightning.show),
+            Wait(0.1),
+            LerpColorScaleInterval(lightning, 1.0, (1, 1, 1, 0)),
+            Func(MovieUtil.removeProp, lightning)
+        )
+        tracks.append(track)
+        tracks.append(Sequence(partTrack, Func(particleNode.removeNode)))
+        return tracks
     suitTrack = Sequence(Parallel(getSuitAnimTrack(attack), ActorInterval(suit, 'mob-mentality', endTime=1)), Parallel(Func(suit.makeVulnerable), Func(suit.checkDamageUp, + 10), Func(suit.checkVulnerabilityUp, + 10)), 
                          MovieUtil.zapCogPowerhouseSquirt(suit, 'large-zap', .5, 2.0, battle), Func(suit.setNeutralAnimationDrop))
     cagePropTracks = Parallel()
     y = suitPos.getY()
     suitPos = targetSuit.getPos(battle)
-    cage = loader.loadModel('phase_5/models/props/lightning')
     suitTrack2 = Sequence(Wait(1.0), Parallel(Func(suit.showHpTextNew, 0, text="GENERATION!", colorCode=3)))
-    cagePosition = LerpHprInterval(cage, 0, Point3(180, 0, 0))
-    cagePos = [Point3(suitPos.getX(), y + 1, 100.0), targetSuit.getHpr(battle)]
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
@@ -2407,14 +2462,7 @@ def doGeneration3(attack):
                           Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                           Func(MovieUtil.removeProp, smoke))
     cagePropTrack = Sequence(
-        getPropAppearTrack(cage, suit, Point3(0, 0, 100), 1, scaleUpPoint=Point3(5.0, 2.0, 10.0), scaleUpTime=0),
-        Parallel(
-            cage.posInterval(0, Point3(0, 0, 0), blendType='easeIn'),
-
-        ),
-        Wait(0.5),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
-        Func(MovieUtil.removeProp, cage)
+        getCloudTrack(lightning, suit)
     )
     cagePropTracks.append(cagePropTrack)
     makeDamageUp = Parallel(Func(suit.makeDamageUp))
@@ -2507,14 +2555,14 @@ def doSyphonDesperation(attack):
         makeSyphon = Func(s.makeSyphon, battle)
         suitTrack = Sequence()
         suitTrack.append(Wait(1))
-        if not s.dna.name == 'phouse':
+        if not s.dna.name == 'dking':
             suitTrack.append(Func(s.checkHealingPhrases, 3))
             suitTrack.append(s.makeSyphonInterval())
         suitTracks.append(suitTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(3.0))
     soundTrack1 = getSoundTrack('SA_bash.ogg', node=theSuit)
-    return Parallel(suitTrack, suitTracks, liftTracks, soundTrack1)
+    return Parallel(suitTrack, suitTracks, soundTrack1)
 
 def makeZapBeamTrack(battle, coil, suit, tDelay, duration):
     beam = globalPropPool.getProp('zap_beam')
@@ -2627,6 +2675,15 @@ def makeZapBeamTrack(battle, coil, suit, tDelay, duration):
         Func(cleanupBeam)
     )
 
+def getPartTrackLightning(particleEffect, startDelay, durationDelay, partExtraArgs, softStop=0, renderParent=render):
+    particleEffect = partExtraArgs[0]
+    parent = partExtraArgs[1]
+    if len(partExtraArgs) > 2:
+        worldRelative = partExtraArgs[2]
+    else:
+        worldRelative = 1
+    return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop, renderParent=renderParent))
+
 def doAftershockDamage(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -2635,6 +2692,7 @@ def doAftershockDamage(attack):
     waitTrack = Sequence()
     hitAtleastOneToon = 0
     shakeTracks = Parallel()
+    tContact = 1
     for t in targets:
         if t['hp'] > 0:
             hitAtleastOneToon = 1
@@ -2651,11 +2709,36 @@ def doAftershockDamage(attack):
     soundTracks = Parallel()
     if hitAtleastOneToon > 0:
         waitTrack.append(Sequence(Wait(4.0)))
-        soundTrack = getSoundTrack('AA_battery.ogg', delay=0, node=suit)
+        soundTrack = getSoundTrack('AA_battery.ogg', delay=1.0, node=suit)
         soundTracks.append(soundTrack)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        if dmg <= 0:
+            continue
+        lightning = globalPropPool.getProp('lightning')
+        lightning.reparentTo(battle)
+        lightning.hide()
+        lightning.setScale(1, 1, 3)
+        def getCloudTrack(lightning, suit, battle = battle):
+            particleEffect = BattleParticles.loadParticleFile('lightningGagExplosion.ptf')
+            particleEffect.setScale(suit.scale * 1.5)
+            particleNode = suit.attachNewNode('zap-particle-node')
+            particleNode.setColorScaleOff(1)
+            particleEffect.getParticlesNamed('particles-1').emitter.setOffsetForce(Vec3(0.0000, 0.0000, 15.0000 + suit.height))
+            partTrack = getPartTrackLightning(particleEffect, tContact - 0.61, 3.0, [particleEffect, particleNode, 0], softStop=-2.4, renderParent=particleNode)
+            tracks = Parallel()
+            track = Sequence(
+                Wait(tContact),
+                Func(lambda suit=suit: lightning.setPos(suit.getPos(battle))),
+                Func(lightning.show),
+                Wait(0.1),
+                LerpColorScaleInterval(lightning, 1.0, (1, 1, 1, 0)),
+                Func(MovieUtil.removeProp, lightning)
+            )
+            tracks.append(track)
+            tracks.append(Sequence(partTrack, Func(particleNode.removeNode)))
+            return tracks
         x = toon.getX()
         y = toon.getY()
         z = toon.getZ()
@@ -2664,17 +2747,21 @@ def doAftershockDamage(attack):
         risePoint = Point3(x, y, z)
         shakeRight = Point3(x, y + 0.7, z)
         shakeLeft = Point3(x, y - 0.7, z)
-        shakeTrack = Sequence()
+        shakeTrack = Sequence(Wait(tContact))
+        origPos, origHpr = battle.getActorPosHpr(toon)
         for i in xrange(0, 30):
             shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
             shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
+        shakeTrack.append(LerpPosInterval(toon, 0, origPos, other=battle))
 
         if dmg > 0:
             shakeTracks.append(shakeTrack)
-        notifyTrack = Parallel(toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40), Sequence(Wait(.5), Func(toon.showHpText, - int(dmg))))
+            shakeTracks.append(LerpPosInterval(toon, 0, origPos, other=battle))
+        notifyTrack = Parallel(getSoundTrack('AA_lightning.ogg', delay=0, node=suit), Sequence(getCloudTrack(lightning, toon)),
+                                toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40), Sequence(Wait(1), Func(toon.showHpText, - int(dmg))))
         if dmg > 0:
             notifyTracks.append(notifyTrack)
-    toonDamageTrack = getToonTracksCheat(attack, damageDelay=0, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
+    toonDamageTrack = Sequence(getToonTracksCheat(attack, damageDelay=tContact, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep']))
     return Parallel(notifyTracks, shakeTracks, waitTrack, toonDamageTrack, soundTracks)
 
 
@@ -2696,6 +2783,17 @@ def doAftershock(attack):
         toon = t['toon']
         dmg = t['hp']
         toonPos = toon.getPos(battle)
+        def getChainsawFingerPos():
+            handNode = suit.leftHand.attachNewNode('foo')
+            handNode.setPos(-1.5631, 0.3, 0.0)
+            handPos = handNode.getPos(render)
+            handNode.removeNode()
+            return handPos
+        
+        def getToonTargetPoint(toon):
+            pnt = toon.getPos(render)
+            pnt.setZ(pnt[2] + toon.getHeight() * 0.5)
+            return Point3(pnt)
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
         smoke.setBillboardPointEye()
@@ -2707,14 +2805,17 @@ def doAftershock(attack):
         notifyTrack = Sequence(Wait(2.0), Func(toon.showHpTextNew, -int(dmg), text="SURGED!", colorCode=3))
         notifyTrack.append(toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40))
         notifyTrack.append(Parallel(Func(toon.makeZapped), Func(toon.addZappedRounds, 3)))
+        targetPoint = lambda toon = toon: getToonTargetPoint(toon)
+        targetPos = toon.getPos(battle)
+        dSprayScale = 0.05
         if dmg > 0:
-            cagePropTrack = Sequence(makeZapBeamTrack(
-                battle,
-                suit,
-                toon,
-                tDelay=2,
-                duration=1.5
-            ))
+            cagePropTrack = Sequence(Wait(2.0), MovieUtil.getZapTrack(
+                            battle,
+                            Point4(1.0, 1.0, 0, 1.0),
+                            getChainsawFingerPos,
+                            targetPoint,
+                            dSprayScale, 0.2, dSprayScale,
+                        ))
             cagePropTracks.append(cagePropTrack)
             origH = suit.getH(battle)
 
@@ -2734,7 +2835,7 @@ def doAftershock(attack):
                 shuffleAnim = 'shuffle-right'
             else:
                 shuffleAnim = 'shuffle-left'
-            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'scabbard'),
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), ActorInterval(suit, 'sparkplug', startTime=1.75),
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                        Func(suit.setNeutralAnimationDrop)))
             smokeTracks.append(smokeTrack)

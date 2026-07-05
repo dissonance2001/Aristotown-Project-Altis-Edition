@@ -478,10 +478,10 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
         self.__resetDoobers()
         for i in xrange(12):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
-            level = random.randint(11, 14)
+            level = random.randint(10, 14)
             suit.dna = SuitDNA.SuitDNA()
             suit.dna.newSuitRandom(level=level, dept=self.dna.dept)
-            suit.setLevel(34)
+            suit.setLevel(50)
             suit.setExecutive(1)
             suit.generateWithRequired(self.zoneId)
             self.doobers.append(suit)

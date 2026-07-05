@@ -10,9 +10,11 @@ from toontown.pets import PetAvatarPanel
 from toontown.toon import ToonAvatarPanel
 from toontown.toon import PlayerInfoPanel
 from toontown.suit import SuitAvatarPanel
+from toontown.suit import BossSuitAvatarPanel
 from toontown.toon import ToonDNA
 from toontown.toon import ToonAvatarDetailPanel
 from toontown.toon import PlayerDetailPanel
+from toontown.suit import SuitAvatarPanel, BossSuitAvatarPanel, Suit, BossCog
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import Toon
 from toontown.friends import FriendHandle
@@ -98,8 +100,10 @@ class FriendsListManager:
                             if self.avatarPanel.getType() == 'toon':
                                 return
             self.avatarPanel = ToonAvatarPanel.ToonAvatarPanel(avatar, playerId)
-        else:
+        elif isinstance(avatar, Suit.Suit):
             self.avatarPanel = SuitAvatarPanel.SuitAvatarPanel(avatar)
+        else:
+            self.avatarPanel = BossSuitAvatarPanel.BossSuitAvatarPanel(avatar)
 
     def __handleClickedNametagPlayer(self, avatar, playerId, showType = 1):
         self.notify.debug('__handleClickedNametagPlayer PlayerId%s' % playerId)

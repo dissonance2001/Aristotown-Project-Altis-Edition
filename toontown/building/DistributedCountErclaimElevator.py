@@ -12,16 +12,16 @@ class DistributedCountErclaimElevator(DistributedBossElevator.DistributedBossEle
         self.countdownTime = ElevatorData[self.type]['countdown']
 
     def setupElevator(self):
-        self.elevatorModel = loader.loadModel('phase_4/models/modules/ttcc_gen_sigil')
-        # icon = self.elevatorModel.find('**/big_frame/')
-        # icon.hide()
-        self.leftDoor = self.elevatorModel.find('**/DropShadow')
-        self.rightDoor = self.elevatorModel.find('**/Bolts')
+        self.elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_Elevator')
+        self.leftDoor = self.elevatorModel.find('**/left-door')
+        if self.leftDoor.isEmpty():
+            self.leftDoor = self.elevatorModel.find('**/left_door')
+        self.rightDoor = self.elevatorModel.find('**/right-door')
+        if self.rightDoor.isEmpty():
+            self.rightDoor = self.elevatorModel.find('**/right_door')
         geom = base.cr.playGame.hood.loader.geom
         locator = geom.find('**/elevator_locator')
         self.elevatorModel.reparentTo(locator)
-        self.elevatorModel.setY(-10)
-        self.elevatorModel.setX(30)
         DistributedElevator.DistributedElevator.setupElevator(self)
 
     def getDestName(self):

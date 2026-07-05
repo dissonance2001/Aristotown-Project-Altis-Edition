@@ -42,7 +42,7 @@ class BossCog(Avatar.Avatar):
         Avatar.Avatar.__init__(self)
         self.setFont(ToontownGlobals.getSuitFont())
         self.setPlayerType(NametagGlobals.CCSuit)
-        self.setPickable(0)
+        self.setPickable(1)
         self.doorA = None
         self.doorB = None
         self.bubbleB = None

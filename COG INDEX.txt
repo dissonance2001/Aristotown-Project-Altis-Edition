@@ -15,22 +15,22 @@ many layers as you like.
 	Regular Cogs:
 f- Flunky Level 1-5
 p - Pencil Pusher Level 2-6
-ym - Yesman Level 3-7
-mm - Micromanager Level 4-8
-ds - Downsizer Level 5-12
-hh - Head Hunter Level 6-15
-cr - Corporate Raider Level 7-18
-tbc - The Big Cheese Level 8-25
+ym - Yesman Level 3-10
+mm - Micromanager Level 4-12
+ds - Downsizer Level 5-15
+hh - Head Hunter Level 6-20
+cr - Corporate Raider Level 7-25
+tbc - The Big Cheese Level 8-50
 	
 	Operations Analysts:
 stg - Stooge Level 2-8
 enf - Patronizer Level 4-10
-ksp - Kiss-Up Level 5-15
+ksp - Kiss-Up Level 5-20
 
 	Field Specialists:
-blh - Blowhard Level 4-12
-bsht - Big Shot Level 6-15
-txl - Toxic Leader Level 7-18
+blh - Blowhard Level 3-14
+bsht - Big Shot Level 6-20
+txl - Toxic Leader Level 7-25
 
 	Facility Cog:
 autocad - Autocaddie Level 14-15.exe 
@@ -64,22 +64,22 @@ ambass - Ambassador Level 48.mgr
 	Regular Cogs:
 bf - Bottom Feeder Level 1-5
 b - Bloodsucker Level 2-6
-dt - Double Talker Level 3-7
-ac - Ambulance Chaser Level 4-8
-bs - Back Stabber Level 5-12
-sd - Spin Doctor Level 6-15
-le - Legal Eagle Level 7-18
-bw - Big Wig Level 8-25
+dt - Double Talker Level 3-10
+ac - Ambulance Chaser Level 4-12
+bs - Back Stabber Level 5-15
+sd - Spin Doctor Level 6-20
+le - Legal Eagle Level 7-25
+bw - Big Wig Level 8-50
 
 	Operations Analysts:
 pf - Pettifogger Level 2-8
 cv - Conveyancer Level 4-10
-ad - Advocate Level 5-15
+ad - Advocate Level 5-20
 
 	Field Specialists:
-nn - Needlenose Level 4-12
-sh - Shyster Level 6-15
-br - Barrister Level 7-18
+nn - Needlenose Level 4-14
+sh - Shyster Level 6-20
+br - Barrister Level 7-25
 
 	Facility Cog:
 whistleb - Whistleblower 14-15.exe 
@@ -111,22 +111,22 @@ lgator - Litigator Level 40.mgr
 	Regular Cogs:
 sc - Short Change Level 1-5
 pp - Penny Pincher Level 2-6
-tw - Tightwad Level 3-7
-bc - Bean Counter Level 4-8
-nc - Number Cruncher Level 5-12
-mb - Money Bags Level 6-15
-ls - Loan Shark Level 7-18
-rb - Robber Baron Level 8-25
+tw - Tightwad Level 3-10
+bc - Bean Counter Level 4-12
+nc - Number Cruncher Level 5-15
+mb - Money Bags Level 6-20
+ls - Loan Shark Level 7-25
+rb - Robber Baron Level 8-50
 
 	Operation Analysts:
 shy - Shylock Level 2-8
 sw - The Swindler Level 4-10
-gld - Golden Goose Level 5-15
+gld - Golden Goose Level 5-20
 
 	Field Specialists:
-fct - Fat Cat Level 4-12
-trs - Cheapskate Level 6-15
-bfh - Big Fish Level 7-18
+fct - Fat Cat Level 3-14
+trs - Cheapskate Level 6-20
+bfh - Big Fish Level 7-25
 
 	Facility Manager:
 ovt- Confused Mint Supervisor Level 20.mgr
@@ -160,22 +160,22 @@ hroller2 - High Roller (Phase 2/3) Level 100.mgr
 	Regular Cogs:
 cc - Cold Caller Level 1-5
 tm - Telemarketer Level 2-6
-nd - Name Dropper Level 3-7
-gh - Glad Hander Level 4-8
-ms - Mover & Shaker Level 5-12
-tf - Two-Face Level 6-15
-m - The Mingler Level 7-18
-mh - Mr. Hollywood Level 8-25
+nd - Name Dropper Level 3-10
+gh - Glad Hander Level 4-12
+ms - Mover & Shaker Level 5-15
+tf - Two-Face Level 6-20
+m - The Mingler Level 7-25
+mh - Mr. Hollywood Level 8-50
 
 	Operations Analysts:
 cn - Connoisseur Level 2-8
 dc - Upseller Level 4-10
-asm - Assembly Assassin Level 5-15
+asm - Assembly Assassin Level 5-20
 
 	Field Specialists:
-fcs - Forecaster Level 4-12
-ppl - People Pleaser Level 6-15
-cnd - Candidate Level 7-18
+fcs - Forecaster Level 3-14
+ppl - People Pleaser Level 6-20
+cnd - Candidate Level 7-25
 
 	Facility Cog:
 watchp - Watchman Level 14-15.exe 
@@ -199,7 +199,7 @@ mslacker - Multislacker Level 24.mgr
 psetter - Pacesetter Level 66.mgr
 
 	Videographer Manager:
-cinema - Photographer Level 26.mgr
+cinema - Broadcaster Level 26.mgr
 
 	Pressure Division:
 radiog - Radiographer Level 35.mgr
@@ -211,28 +211,22 @@ safesupervis - Pressurizer Level 45.mgr
 	Regular Cogs:
 bgh - Bagholder Level 1-5
 pph - Paper Hands Level 2-6
-ins - The Insider Level 3-7
-cbr - Circuit Breaker Level 4-8
-dl - Deadlock Level 5-12
-shw - Shark Watcher Level 6-15
-mg - Magnate Level 7-18
-hho - Head Honcho Level 8-25
+ins - The Insider Level 3-10
+cbr - Circuit Breaker Level 4-12
+dl - Deadlock Level 5-15
+shw - Shark Watcher Level 6-20
+mg - Magnate Level 7-25
+hho - Head Honcho Level 8-50
 
 	Operations Analysts:
 ca - Con Artist Level 2-8
 mdm - Middleman Level 4-10
-ang - Angel Investor Level 5-15
+ang - Angel Investor Level 5-20
 
 	Field Specialists:
-txm - Toxic Manager Level 4-12
-bfh2 - Big Fish Level 6-15
-chw - Chairwarmer Level 7-18
-
-	Facility Cog:
-chairp - Chairperson Level 14-15.exe 
-
-	Facility Manager:
-bdirector - Board Director Level 20.mgr
+txm - Toxic Manager Level 3-14
+bfh2 - Big Fish Level 6-20
+chw - Chairwarmer Level 7-25
 
 	Street Managers:
 ddiver - Deep Diver Level 7.mgr
@@ -248,87 +242,61 @@ rkeeper - Recordkeeper Level 60.mgr
 dking - Dividend King Level 60.mgr
 cdirector - Contingency Director Level 66.mgr
 
+	Videographer Manager:
+fmaker - Filmmaker Level 26.mgr
+
 	Recordkeeper Special Cog:
 cbutcher - Phantom Recordkeeper Level 30.mgr
 
 	Extras:
 ottoman - The Ottoman Level 72.mgr (unfinished)
-crystal - Crystalline Level 77.mgr (unfinished)
 chairman - The Chairman Level 100.mgr (unfinished)
 
 =============TECHBOTS:===============
 	Regular Cogs:
 skd- Script Kiddie Level 1-5
 cmk - Code Monkey Level 2-6
-vpr - Voodoo Programmer Level 3-7
-sdb - Shotgun Debugger Level 4-8 
-kbc - Keyboard Cowboy Level 5-12 
-sfs - Software Simian Level 6-15 
-inw - Installer Wizard Level 7-18 
-rus - Root User Level 8-25 
+vpr - Voodoo Programmer Level 3-10
+sdb - Shotgun Debugger Level 4-12
+kbc - Keyboard Cowboy Level 5-15
+sfs - Software Simian Level 6-20 
+inw - Installer Wizard Level 7-25 
+rus - Root User Level 8-50
 
 	Operations Analysts:
 dhr - Data Hoarder Level 2-8
 brn - Brainiac Level 4-10
-blk - Black Hat Level 5-15
+blk - Black Hat Level 5-20
 
 	Field Specialists:
-key - Keyboard Warrior Level 4-12
-pyc - Python Charmer Level 6-15
-sys - Industry Titan Level 7-18
-
-	Facility Cog:
-ant - Antivirus Level 14-15.exe 
-
-	Facility Manager:
-sya - Senior Developer Level 20.mgr 
+key - Keyboard Warrior Level 3-14
+pyc - Python Charmer Level 6-20
+sys - Industry Titan Level 7-25
 
 	Prethinker Desk Jockies:
 djockey - Desk Jockey Level 3-10 (No .adv Variant)
 ptjockey - Desk Jockey Level 3-10 (Prethinker)(not yet implemented)
 
-	Videographer Manager:
-fmaker - Filmmaker Level 26.mgr
-
-	Nothing:
-tas - PLACEHOLDER Level N/A.mgr
-fhu - PLACEHOLDER Level N/A.mgr
-fsh - PLACEHOLDER Level N/A.mgr
-fhj - PLACEHOLDER Level N/A.mgr
-kdh - PLACEHOLDER Level N/A.mgr
-
-	Techbot 'Litigation' Team:
-dar - Black Hat Level 40.mgr (broken)
-nhy - Security Supervisor Level 45.mgr (broken)
-wrt - Keylogger Level 45.mgr (broken)
-auh - Technocrat Level 50.mgr (broken)
-
 =============PRESSBOTS:===============
 	Regular Cogs:
 ppb - Paper Boy Level 1-5
 shb - Shutterbug Level 2-6
-gms - Gumshoe Level 3-7
-hck - Hackette Level 4-8
-ghw - Ghost Writer Level 5-12
-gzt - Gazetteer Level 6-15
-nsh - News Hound Level 7-18
-anc - Anchor Man Level 8-20
+gms - Gumshoe Level 3-10
+hck - Hackette Level 4-12
+ghw - Ghost Writer Level 5-15
+gzt - Gazetteer Level 6-20
+nsh - News Hound Level 7-25
+anc - Anchor Man Level 8-50
 
 	Operations Analysts:
 bsd - Backseat Driver Level 2-8
 sbg - Sandbagger Level 4-10
-dcw - Doctor White Level 5-15
+dcw - Doctor White Level 5-20
 
 	Field Specialists:
-ath - Agonizing Author Level 4-12
-wnk - White Knight Level 6-15
-std - Stunt Double Level 7-18
-
-	Facility Cog:
-jls - Journalist Level 14-15.exe 
-
-	Facility Manager:
-pbl - Publisher Level 20.mgr 
+ath - Agonizing Author Level 3-14
+wnk - White Knight Level 6-20
+std - Stunt Double Level 7-25
 
 	Videographer Manager:
 videog - Videographer Level 99.mgr
@@ -337,13 +305,3 @@ bcaster - Videographer Silhouette Level 33.mgr
 
 	High Roller Stunt Double:
 std2 - Stunt Double - Level 18.exe
-
-	Nothing:
-prt - PLACEHOLDER Level N/A.mgr
-pla - PLACEHOLDER Level N/A.mgr
-plk - PLACEHOLDER Level N/A.mgr
-plh - PLACEHOLDER Level N/A.mgr
-plg - PLACEHOLDER Level N/A.mgr
-plf - PLACEHOLDER Level N/A.mgr
-pld - PLACEHOLDER Level N/A.mgr
-pls - PLACEHOLDER Level N/A.mgr

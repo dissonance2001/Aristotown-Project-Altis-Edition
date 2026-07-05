@@ -5,5 +5,5 @@ class DistributedMultislackerElevatorAI(DistributedBossElevatorAI.DistributedBos
 
     def __init__(self, air, bldg, zone, antiShuffle = 0, minLaff = 0):
         DistributedBossElevatorAI.DistributedBossElevatorAI.__init__(self, air, bldg, zone, antiShuffle=antiShuffle, minLaff=minLaff)
-        self.type = ELEVATOR_VP_2
+        self.type = ELEVATOR_VP
         self.countdownTime = ElevatorData[self.type]['countdown']

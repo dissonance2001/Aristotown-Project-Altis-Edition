@@ -489,6 +489,42 @@ class TownBattleToonPanel(DirectFrame):
             self._clear_toon_status_interval('rainbowPulseTask')
             self.rainbowPulseTask = self._pulseRainbowToonStatusSlot(slot, duration=2.0)
 
+        if avatar.hydrated:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.governaughtDamageUp = status.find('**/monsoon_icon')
+            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getHydrationRounds(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.6)
+            self.govDamageText.show()
+            self.governaughtDamageUp.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
+
+        if avatar.driedOut:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.governaughtDamageUp = status.find('**/ghost_payroll_icon')
+            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getDriedOutRounds(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.6)
+            self.govDamageText.show()
+            self.governaughtDamageUp.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
+
+        if avatar.energized:
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.governaughtDamageUp = status.find('**/last_tap_icon')
+            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getEnergizedRounds(), text_fg=(1, 1, 1, 1),
+                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+                                              pos=(0.25, 0, -.5),
+                                              text_scale=.6)
+            self.govDamageText.show()
+            self.governaughtDamageUp.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
+
         if avatar.governaughtDamageUp:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.governaughtDamageUp = status.find('**/toon_damage_up_icon')
@@ -1122,6 +1158,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.isViralSensation:
                 damage *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
                 lureValue *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
+            if self.avatar.energized:
+                damage *= 1.5
+                lureValue *= 1.5
             if self.avatar.groupDamageDown and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)

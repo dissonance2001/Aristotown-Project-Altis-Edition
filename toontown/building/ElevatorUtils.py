@@ -101,7 +101,17 @@ def getRideElevatorInterval(type = ELEVATOR_NORMAL):
         zMin = 7
         zMid = 7.2
         zMax = 7.4
-    if type in (ELEVATOR_VP, ELEVATOR_DIRECTORS, ELEVATOR_CM,
+    elif type == ELEVATOR_ERCLAIM:
+        yValue = 12
+        zMin = 3.8
+        zMid = 4
+        zMax = 4.2
+    else:
+        yValue = 21
+        zMin = 7
+        zMid = 7.2
+        zMax = 7.4
+    if type in (ELEVATOR_VP, ELEVATOR_DIRECTORS, ELEVATOR_CM, ELEVATOR_ERCLAIM,
      ELEVATOR_CFO,
      ELEVATOR_CJ,
      ELEVATOR_BB):

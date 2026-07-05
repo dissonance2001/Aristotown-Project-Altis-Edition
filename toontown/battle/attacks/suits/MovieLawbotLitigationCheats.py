@@ -167,7 +167,7 @@ def doThrowBookCog(attack, ind):
     suitTracks = Parallel()
     suitTrack = Sequence()
     suitTrack.append(Wait(2.9))
-    suitTrack.append(Parallel(ActorInterval(targetSuit, 'flatten', duration=.55), MovieUtil.createSuitCrashTrack(targetSuit, battle)))
+    suitTrack.append(Parallel(ActorInterval(targetSuit, 'flatten', duration=.55), MovieUtil.createSuitCrashTrack(targetSuit, battle, 7)))
     suitTracks.append(suitTrack)
     posPoints = [Point3(-0.5, 0, 0), VBase3(0, 0, 180)]
     knifeTracks = Parallel()
@@ -415,6 +415,12 @@ def doPeckingOrder(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        if dmg > 0:
+            notifyTrack = Sequence(Wait(2.5),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+            notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 3)))
+            notifyTrack.append(Parallel(Func(toon.makeDamageUp), Func(toon.addDamageUpRounds, 3)))
+            notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 25), Func(toon.checkDamageUp, 25)))
+            notifyTracks.append(notifyTrack)
         for i in xrange(0, numBirds):
             next = globalPropPool.getProp('bird')
             #next.setScale(0.01)
@@ -423,10 +429,6 @@ def doPeckingOrder(attack):
             toonPos = toon.getPos(battle)
 
             if dmg > 0:
-                notifyTrack = Sequence(Wait(2.5),  Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
-                notifyTrack.append(Parallel(Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 2)))
-                notifyTrack.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
-                notifyTracks.append(notifyTrack)
                 hitPoint = Point3(
                     toonPos[0] + (random.random() * 1.5 - 0.75),
                     toonPos[1] + (random.random() * 1.0 - 0.5),
@@ -591,16 +593,23 @@ def doAutoRepair(attack):
 
 
 def doCeaseAndDesist(attack):
-    suit = attack['suit']
+    theSuit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
     notifyTrack = Parallel()
     for t in targets:
         toon = t['toon']
-        notifyTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.checkCooldownRounds, 1)))
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack.append(Wait(1.0))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
+    for suit in battle.activeSuits:
+        suitTrack.append(Func(suit.checkCogLured, battle))
+        suitTrack.append(Func(battle.unlureSuit, suit))
+        suitTrack.append(Func(battle.unSueSuit, suit))
+        suitTrack.append(Func(suit.setSued2, 0))
+        suitTrack.append(Func(suit.setDizzy, 0))
+        suitTrack.append(Func(suit.makeUnZapped))
+        suitTrack.append(Func(suit.makeUnDazed))
+        suitTrack.append(Func(suit.makeDeepFrozen, 2))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
     return Parallel(suitTrack, notifyTrack, soundTrack)
 
 def doJuryNotice(attack):
@@ -1024,7 +1033,7 @@ def doGavelCourtRecord2(attack):
         toonTrack = Sequence(
             Wait(4.0),
             Parallel(
-                Func(toon.enterFlattened),
+                Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
 
             ),
             Wait(1.0),
@@ -1074,7 +1083,7 @@ def doGavelCourtRecord(attack):
         toonTrack = Sequence(
             Wait(2.0),
             Parallel(
-                Func(toon.enterFlattened),
+                Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
 
             ),
             Wait(1.0),

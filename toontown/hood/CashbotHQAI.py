@@ -13,11 +13,14 @@ class CashbotHQAI(CogHQAI.CogHQAI):
     
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
-            self, air, ToontownGlobals.CashbotHQ, ToontownGlobals.CashbotLobby,
+            self, air, ToontownGlobals.CashbotHQ, ToontownGlobals.CashbotLobby, None,
             FADoorCodes.CB_DISGUISE_INCOMPLETE,
+            FADoorCodes.CB_WASHROOM_MISSING,
             DistributedCFOElevatorAI.DistributedCFOElevatorAI,
-            DistributedCashbotBossAI.DistributedCashbotBossAI
-        )
+            DistributedCashbotBossAI.DistributedCashbotBossAI,
+            DistributedCFOElevatorAI.DistributedCFOElevatorAI,
+            DistributedCashbotBossAI.DistributedCashbotBossAI,
+            ToontownGlobals.ZoneIdrCFO)
 
         self.mintElevators = []
         self.mintBoardingParty = None

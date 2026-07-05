@@ -486,6 +486,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             otherNP = render.find('**/door_origin')
         elif ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.BoardbotHQ:
             otherNP = render.find('**/door_origin_' + str(self.doorIndex))
+        elif ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.SellbotMultislackerLobby:
+            otherNP = render.find('**/doorframe_geom')
         elif self.doorType == DoorTypes.EXT_STANDARD:
             otherNP = self.getBuilding().find('**/*door_origin')
         elif self.doorType == DoorTypes.DAISYGARDENSCLASH:

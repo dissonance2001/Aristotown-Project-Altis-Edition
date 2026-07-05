@@ -17,6 +17,12 @@ Props = ((5, 'partyBall', 'partyBall'),
           'fileCabinet',
           'fileCabinet-mod',
           'fileCabinet-chan'),
+            (5,
+   'cannon',
+   'cannon-mod',
+   'cannon-chan',
+   'cannon-grow',
+   'cannon-miss'),
                    (5,
           'feather',
           'feather-mod',
@@ -103,6 +109,7 @@ Props = ((5, 'partyBall', 'partyBall'),
  (5, 'fruitpie-slice', 'fruit-pie-slice'),
          (5, 'fruitpie', 'fruit-pie'),
  (5, 'creampie-slice', 'cream-pie-slice'),
+  (5, 'lightning', 'lightning'),
  (5,
   'birthday-cake',
   'birthday-cake-mod',
@@ -111,6 +118,13 @@ Props = ((5, 'partyBall', 'partyBall'),
           'birthday-cake-slice',
           'birthday-cake-slice-mod',
           'birthday-cake-slice-chan'),
+           (5, 'lightbulb', 'ttcc_gag_lightbulb'),
+ (5, 'radio', 'ttcc_gag_radio'),
+ (5, 'stagelight', 'ttcc_gag_stagelight'),
+           (3.5,
+  'zapbeam',
+  'zap_beam-mod',
+  'zap_beam-chan'),
          (3.5,
           'zap_beam',
           'zap_beam-mod',
@@ -285,10 +299,10 @@ Props = ((5, 'partyBall', 'partyBall'),
           'litigator-teeth',
           'litigator-teeth-mod',
           'litigator-teeth-chan'),
-(5,
- 'cannon',
-          'cannon-mod',
-          'cannon-chan'),
+# (5,
+#  'cannon',
+#           'cannon-mod',
+#           'cannon-chan'),
 (3.5,
  'zap-button',
           'zap-button-mod',
@@ -313,14 +327,6 @@ Props = ((5, 'partyBall', 'partyBall'),
  'squirt-button',
           'squirt-button-mod',
           'squirt-button-chan'),
-(5,
- 'cannon2',
-          'cannon2-mod',
-          'cannon2-chan'),
-(5,
- 'cannon3',
-          'cannon3-mod',
-          'cannon3-chan'),
  (5, 'power-tie', 'power-tie'),
          (5, 'bonus-check', 'bonus-check'),
  (3.5, 'spray', 'spray'),
@@ -390,6 +396,7 @@ Variants = ('cupcake',
  'geyser',
  'ship',
  'trolley',
+ 'singing',
  'traintrack',
             'black-orb',
             'litigator-teeth',
@@ -403,17 +410,27 @@ class PropPool:
         self.propCache = []
         self.propStrings = {}
         self.propTypes = {}
-        self.maxPoolSize = base.config.GetInt('prop-pool-size', 8)
+        self.propAnimNames = {}
+        self.maxPoolSize = ConfigVariableInt('prop-pool-size', 8).getValue()
+        
+        # Load ref's to the props enumerated above
         for p in Props:
             phase = p[0]
             propName = p[1]
             modelName = p[2]
-            if len(p) == 4:
-                animName = p[3]
-                propPath = self.getPath(phase, modelName)
-                animPath = self.getPath(phase, animName)
+            if len(p) >= 4:
                 self.propTypes[propName] = 'actor'
-                self.propStrings[propName] = (propPath, animPath)
+                propPath = self.getPath(phase, modelName)
+                self.propStrings[propName] = [propPath]
+                for i in range(3, len(p)):
+                    animName = p[i]
+                    animPath = self.getPath(phase, animName)
+                    self.propStrings[propName].append(animPath)
+                    if self.propAnimNames.get(propName):
+                        self.propAnimNames[propName].append(animName)
+                    else:
+                        self.propAnimNames[propName] = [animName]
+
             else:
                 propPath = self.getPath(phase, modelName)
                 self.propTypes[propName] = 'model'
@@ -485,6 +502,16 @@ class PropPool:
             self.props[name].setScale(0.5)
         elif name == 'fruitpie':
             self.props[name].setScale(0.75)
+        elif name == 'singing':
+            # Set the color of the head to blue
+            front = self.props[name].find('**/head_front_long')
+            head = self.props[name].find('**/TheHeadLong')
+            earL = self.props[name].find('**/TheEarLongL')
+            earR = self.props[name].find('**/TheEarLongR')
+            front.setColor((0.3647, 0.4235, 0.9373, 1.0))
+            head.setColor((0.3647, 0.4235, 0.9373, 1.0))
+            earL.setColor((0.3647, 0.4235, 0.9373, 1.0))
+            earR.setColor((0.3647, 0.4235, 0.9373, 1.0))
         elif name == 'cc_a_prp_bat_playcard':
             self.props[name].setTwoSided(True)
         elif name == 'cc_a_prp_bat_playcard2':
@@ -612,25 +639,35 @@ class PropPool:
 
     def __getPropCopy(self, name):
         if self.propTypes[name] == 'actor':
+            # Make sure the prop is loaded
             if name not in self.props:
                 prop = Actor.Actor()
                 prop.loadModel(self.propStrings[name][0])
                 animDict = {}
                 animDict[name] = self.propStrings[name][1]
+                if len(self.propStrings[name]) >= 3:
+                    for i in range(2, len(self.propStrings[name])):
+                        animDict[self.propAnimNames[name][i-1]] = self.propStrings[name][i]
                 prop.loadAnims(animDict)
                 prop.setName(name)
                 prop.setBlend(frameBlend = base.wantSmoothAnims)
                 self.storeProp(name, prop)
+                # Modify the geometry if necessary
                 if name in Variants:
                     self.makeVariant(name)
             return Actor.Actor(other=self.props[name])
         else:
+            # Make sure the prop is loaded   
             if name not in self.props:
                 prop = loader.loadModel(self.propStrings[name][0])
                 prop.setName(name)
                 self.storeProp(name, prop)
+                # Modify the geometry if necessary
                 if name in Variants:
                     self.makeVariant(name)
+            # This must be a copyTo(), since the props may get
+            # mangled and mutilated in order to get them
+            # oriented the right way, etc.
             return self.props[name].copyTo(hidden)
 
     def storeProp(self, name, prop):

@@ -11,13 +11,15 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
     
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
-            self, air, ToontownGlobals.BoardbotHQ, ToontownGlobals.BoardbotLobby,
+            self, air, ToontownGlobals.BoardbotHQ, ToontownGlobals.BoardbotLobby, None,
             FADoorCodes.BD_DISGUISE_INCOMPLETE,
+            FADoorCodes.BD_WASHROOM_MISSING,
             DistributedCMElevatorAI.DistributedCMElevatorAI,
-            DistributedBoardbotBossAI.DistributedBoardbotBossAI)
-
-        self.boardofficeElevators = []
-        self.boardofficeBoardingParty = None
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI,
+            DistributedCMElevatorAI.DistributedCMElevatorAI,
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI,
+            ToontownGlobals.ZoneIdrChairman)
+        
         self.suitPlanners = []
 
         self.startup()
@@ -25,22 +27,18 @@ class BoardbotHQAI(CogHQAI.CogHQAI):
     def startup(self):
         CogHQAI.CogHQAI.startup(self)
 
-        self.createBoardOfficeElevators()
+        #self.createBoardOfficeElevators()
         self.makeCogHQDoor(ToontownGlobals.BoardbotLobby, 0, 0)
         self.makeCogHQDoor(ToontownGlobals.BoardbotOfficeLobby, 0, 1)
-        if simbase.config.GetBool('want-boarding-groups', True):
-            self.createBoardOfficeBoardingParty()
+        # if simbase.config.GetBool('want-boarding-groups', True):
+        #     self.createBoardOfficeBoardingParty()
         if simbase.config.GetBool('want-suit-planners', True):
             self.createSuitPlanners()
 		
-    def makeCogHQDoor(self, destinationZone, intDoorIndex, extDoorIndex, lock=0):
-        # For Boardbot HQ, the lobby door index is 2, even though that index
-        # should be for the Boardbot office exterior door.
-        if destinationZone == self.lobbyZoneId:
-            extDoorIndex = 0
-
+    def makeCogHQDoor(self, destinationZone, intDoorIndex, extDoorIndex, lock=0, boss=0):
         return CogHQAI.CogHQAI.makeCogHQDoor(
-            self, destinationZone, intDoorIndex, extDoorIndex, lock=lock)
+            self, destinationZone, intDoorIndex, extDoorIndex, lock=lock, boss=boss
+        )
 
     def createBoardOfficeElevators(self):
         destZones = (

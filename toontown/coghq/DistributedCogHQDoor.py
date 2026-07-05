@@ -107,3 +107,5 @@ class DistributedCogHQDoor(DistributedDoor.DistributedDoor):
             return
         
         DistributedDoor.DistributedDoor.doorTrigger(self, args)
+
+    

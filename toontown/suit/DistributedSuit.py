@@ -779,6 +779,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             else:
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
+        if hasattr(base.cr, 'chatLog') and chatString != "":
+            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.animHead == None and (self.getDizzy() or self.isSleepy or self.isSued):
             if self.dna.name == 'hroller':
@@ -827,6 +829,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
                 ).start()
+            elif self.dna.name == 'cdirector':
+                texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+                texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+                for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture, 1), ActorInterval(headPart, self.animHead),
+                    Func(headPart.setTexture, texture2, 1), Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)
+                ).start()
             else:
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-lured')
@@ -843,6 +851,12 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             elif self.dna.name == 'hrollers' and (float(self.currHP) / float(self.maxHP) <= 0.25):
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
                     Func(headPart.loop, 'neutral-hurt', fromFrame=0, toFrame=22)
+                    ).start()
+            elif self.dna.name == 'cdirector':
+                texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+                texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
+                for headPart in self.animatedHeadParts: Sequence(Func(headPart.setTexture, texture, 1), ActorInterval(headPart, self.animHead),
+                    Func(headPart.setTexture, texture2, 1), Func(headPart.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                     ).start()
             else:
                 for headPart in self.animatedHeadParts: Sequence(ActorInterval(headPart, self.animHead),
@@ -889,6 +903,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             else:
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
+        if hasattr(base.cr, 'chatLog') and chatString != "":
+            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
     def playCurrentDialogue(self, dialogue, chatFlags, interrupt = 1):

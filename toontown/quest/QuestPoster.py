@@ -163,7 +163,7 @@ class QuestPoster(DirectFrame):
             copyPart.setDepthTest(1)
             copyPart.setDepthWrite(1)
 
-        self.fitGeometry(head, fFlip=1)
+        self.fitGeometry(head, fFlip=1, dimension=.8, setH=180)
         suit.delete()
         suit = None
         return head
@@ -207,7 +207,7 @@ class QuestPoster(DirectFrame):
         elevatorNodePath.setPosHpr(0, 0, 0, 0, 0, 0)
         return
 
-    def fitGeometry(self, geom, fFlip = 0, dimension = 0.8):
+    def fitGeometry(self, geom, fFlip = 0, dimension = 0.8, setH=180):
         p1 = Point3()
         p2 = Point3()
         geom.calcTightBounds(p1, p2)
@@ -223,7 +223,7 @@ class QuestPoster(DirectFrame):
         for child in geom.getChildren():
             child.reparentTo(geomXform)
 
-        geomXform.setPosHprScale(-mid[0], -mid[1] + 1, -mid[2], 180, 0, 0, s, s, s)
+        geomXform.setPosHprScale(-mid[0], -mid[1] + 1, -mid[2], setH, 0, 0, s, s, s)
         geomXform.reparentTo(geom)
 
     def clear(self):

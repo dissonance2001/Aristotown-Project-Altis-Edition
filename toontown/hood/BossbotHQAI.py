@@ -13,11 +13,14 @@ class BossbotHQAI(CogHQAI.CogHQAI):
     
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
-            self, air, ToontownGlobals.BossbotHQ, ToontownGlobals.BossbotLobby,
-            FADoorCodes.SB_DISGUISE_INCOMPLETE,
+            self, air, ToontownGlobals.BossbotHQ, ToontownGlobals.BossbotLobby, ToontownGlobals.BossbotLobby,
+            FADoorCodes.BB_DISGUISE_INCOMPLETE,
+            FADoorCodes.BB_WASHROOM_MISSING,
             DistributedDirectorsElevatorAI.DistributedDirectorsElevatorAI,
-            DistributedDirectorsAI.DistributedDirectorsAI
-        )
+            DistributedDirectorsAI.DistributedDirectorsAI,
+            DistributedBBElevatorAI.DistributedBBElevatorAI,
+            DistributedBossbotBossAI.DistributedBossbotBossAI,
+            ToontownGlobals.ZoneIdrCEO)
 
         self.cogKarts = []
         self.courseBoardingParty = None

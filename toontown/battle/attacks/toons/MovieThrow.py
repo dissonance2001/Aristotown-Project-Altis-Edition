@@ -506,22 +506,28 @@ def __throwPie(throw, delay, hitCount, npcs):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        if revived != 0 and suit.isSkeleton:
+        elif suit.dna.name == 'erfit' and revived != 0:
+            if level > 5:
+                suitResponseTrack.append(Wait(1.0))
+            suitResponseTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
+        elif revived != 0 and suit.isSkeleton:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        if revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        if died != 0 and suit.isVirtual:
+        elif died != 0 and suit.isVirtual:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        if died != 0 and not suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suit.isOverpressured:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
+        else:
+            suitResponseTrack.append(Func(suit.setNeutralAnimation))
         suitIndex = battle.activeSuits.index(suit)
         if suit.dna.name == 'sgoat' and suit.isShielding:
             suitResponseTrack.append(Func(suit.addRageBuilding, hp))

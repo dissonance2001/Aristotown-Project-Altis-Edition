@@ -564,7 +564,7 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         
 
 @magicWord(category=CATEGORY_PROGRAMMER)
-def skipVP():
+def skipVPSecond():
     """
     Skips to the final round of the VP.
     """
@@ -584,7 +584,7 @@ def skipVP():
     return 'Skipping the first round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
-def killVP():
+def killVPSecond():
     """
     Kills the VP.
     """

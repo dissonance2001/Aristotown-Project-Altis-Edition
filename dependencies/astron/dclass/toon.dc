@@ -647,6 +647,8 @@ from toontown.coghq import DistributedLawOfficeElevatorInt/AI
 from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
 from toontown.building import DistributedVPElevator/AI
+from toontown.coghq import DistributedCogHQBossDoor/AI
+from toontown.building import DistributedCountErfitElevator/AI
 from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
@@ -2510,6 +2512,9 @@ dclass DistributedHouseDoor : DistributedDoor {
 dclass DistributedCogHQDoor : DistributedDoor {
 };
 
+dclass DistributedCogHQBossDoor : DistributedCogHQDoor {
+};
+
 dclass DistributedSellbotHQDoor : DistributedCogHQDoor {
   informPlayer(uint8) broadcast ram;
 };
@@ -2721,6 +2726,9 @@ dclass DistributedVPElevator : DistributedBossElevator {
 };
 
 dclass DistributedCFOElevator : DistributedBossElevator {
+};
+
+dclass DistributedCountErfitElevator : DistributedBossElevator {
 };
 
 dclass DistributedCBMElevator : DistributedBossElevator {

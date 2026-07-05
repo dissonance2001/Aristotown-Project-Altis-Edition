@@ -340,7 +340,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         loseSuitCamAngle = (0, 19, 6, -180, 0, 0)
         bossTrack = Sequence(Func(self.loop, 'Ff_neutral'), self.loseCogSuits(self.toonsA + self.toonsB, render, (0, -161.321, 5, 180, 0.0, 0.0)),
                              Parallel(LerpPosHprInterval(base.camera, 2.0, (0, -161.321, 10), (0, 0.0, 0.0),  blendType='easeInOut'),
-                             Sequence(ActorInterval(self.contingency, 'cease'), Func(self.contingency.loop, 'neutral')),
+                             Sequence(Wait(4.0)),
                                       Func(self.contingency.setChatAbsolute, "Well well... this is unexpected.", CFSpeech | CFTimeout)), Wait(4.0),
                                       Func(self.contingency.setChatAbsolute, "You've made quite the series of poor decisions.", CFSpeech | CFTimeout), Wait(4.0),
                                       Func(self.contingency.setChatAbsolute, "You've disrupted our departments, damaged our operations, and interfered with corporate productivity!", CFSpeech | CFTimeout), ActorInterval(self.contingency, 'speak'),
@@ -458,7 +458,7 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                              Parallel(Func(self.contingency.loop, 'sit-exec'), Func(self.contingency.setPosHpr, (79.219, -80.266, 2.5), (180.0, 0.0, 0.0))),
                              LerpPosHprInterval(base.camera, 2.0, (-82.031, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
                              Func(self.recordkeeper.setChatAbsolute, "Documentation prepared. Damage assessments complete. Defeat reports drafted in advance...", CFSpeech | CFTimeout), Wait(4.0),
-                             Func(self.recordkeeper.setChatAbsolute, "All that's missing... is their signatures!", CFSpeech | CFTimeout), Wait(4.0),
+                             Func(self.recordkeeper.setChatAbsolute, "All that's missing is their signatures!", CFSpeech | CFTimeout), Wait(4.0),
                              LerpPosHprInterval(base.camera, 2.0, (-53.594, -95.266, 10), (0, 0, 0), blendType='easeInOut'),
                              Func(self.tollmaster.setChatAbsolute, "Every corridor sealed. Every checkpoint active. No shortcuts. No exits.", CFSpeech | CFTimeout), Wait(4.0),
                              Func(self.tollmaster.setChatAbsolute, "They're not leaving this floor without paying the toll!", CFSpeech | CFTimeout), Wait(4.0),

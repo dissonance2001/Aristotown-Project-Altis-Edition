@@ -1,6 +1,7 @@
 from toontown.classicchars import DistributedMickeyAI
 from toontown.hood import HoodAI
 from toontown.safezone import ButterflyGlobals
+from toontown.building import DistributedCountErfitElevatorAI
 from toontown.safezone import DistributedButterflyAI
 from toontown.safezone import DistributedTrolleyAI
 from toontown.toon import NPCToons
@@ -20,6 +21,7 @@ class TTHoodAI(HoodAI.HoodAI):
         self.classicChar = None
 
         self.startup()
+        self.countErfitElevator = None
 
     def startup(self):
         HoodAI.HoodAI.startup(self)
@@ -40,10 +42,22 @@ class TTHoodAI(HoodAI.HoodAI):
             self.WinterCarolingTargetManager = DistributedWinterCarolingTargetAI.DistributedWinterCarolingTargetAI(self.air)
             self.WinterCarolingTargetManager.generateWithRequired(2659)
 
+        #self.createCountErfitElevator()
+
+    def createCountErfitElevator(self):
+        self.countErfitElevator = DistributedCountErfitElevatorAI.DistributedCountErfitElevatorAI(
+            self.air,
+            ToontownGlobals.CountErfitBattle
+        )
+        self.countErfitElevator.generateWithRequired(self.zoneId)
+
     def shutdown(self):
         HoodAI.HoodAI.shutdown(self)
 
         ButterflyGlobals.clearIndexes(self.zoneId)
+        if self.countErfitElevator:
+            self.countErfitElevator.requestDelete()
+            self.countErfitElevator = None
 
     def createTrolley(self):
         self.trolley = DistributedTrolleyAI.DistributedTrolleyAI(self.air)

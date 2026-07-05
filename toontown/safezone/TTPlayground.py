@@ -22,3 +22,6 @@ class TTPlayground(Playground.Playground):
         time = random.random() * 20.0 + 1
         taskMgr.doMethodLater(time, self.__birds, 'TT-birds')
         return Task.done
+    
+    def detectedElevatorCollision(self, elevator):
+        elevator.handleEnterElevator()

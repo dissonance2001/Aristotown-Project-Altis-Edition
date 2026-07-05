@@ -269,14 +269,14 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.LawbotBossBattleFourPosHpr)
+        self.initializeBattles(1, ToontownGlobals.CountErclaimBattleAPosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'lit2')
+            cogs = self.invokeEmptyPlanner(11, 'erclaimerfit')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
-            random.shuffle(activeSuits)
+            #random.shuffle(activeSuits)
             while len(activeSuits) >= 6:
                 suit = activeSuits.pop()
                 reserveSuits.append((suit, 100))
@@ -288,7 +288,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
-            cogs = self.invokeEmptyPlanner(11, 'lit')
+            cogs = self.invokeEmptyPlanner(11, 'crf2')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             random.shuffle(activeSuits)
@@ -334,8 +334,8 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
     def enterOff(self):
         self.notify.debug('enterOff')
         DistributedMinibossAI.DistributedMinibossAI.enterOff(self)
-        self.__deleteBattleThreeObjects()
-        self.__resetLawyers()
+       # self.__deleteBattleThreeObjects()
+        #self.__resetLawyers()
 
     def enterElevator(self):
         self.notify.debug('enterElevatro')
@@ -346,7 +346,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
         self.notify.debug('enterIntroduction')
         DistributedMinibossAI.DistributedMinibossAI.enterIntroduction(self)
         self.b_setBossDamage(ToontownGlobals.LawbotBossInitialDamage, 0, 0)
-        self.__makeChairs()
+       # self.__makeChairs()
 
     def exitIntroduction(self):
         self.notify.debug('exitIntroduction')
@@ -364,7 +364,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(2, ToontownGlobals.LawbotBossBattleLitigationPosHpr)
+        self.initializeBattles(2, ToontownGlobals.CountErclaimBattleAPosHpr)
 
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
@@ -406,9 +406,9 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
         return
 
-    def __makeBattleTwoObjects(self):
-        self.__makeCannons()
-        self.__makeChairs()
+   # def __makeBattleTwoObjects(self):
+       # self.__makeCannons()
+       # self.__makeChairs()
 
     def __deleteCannons(self):
         if self.cannons != None:

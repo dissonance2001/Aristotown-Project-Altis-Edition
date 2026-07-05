@@ -1336,6 +1336,12 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             remaining = int(self.timer.getT() * speedMult)
 
             self.townBattle.updateTimer(remaining)
+
+            warningThreshold = int(10 * speedMult)
+
+            if remaining <= warningThreshold and remaining > 0:
+                self.townBattle.checkTimer()
+
         else:
             self.notify.warning('__countdown has tried to update a timer that has been deleted. Stopping timer')
             self.__stopTimer()
@@ -1351,7 +1357,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.__enterLocalToonWaitForInput()
             self.startTimer(ts)
         self.__adjustTownBattle()
-        self.townBattle.adjustStatusEffects(self.activeToons)
+        #self.townBattle.adjustStatusEffects(self.activeToons)
 
     def exitWaitForInput(self):
         self.__adjustTownBattle()
@@ -1364,7 +1370,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.townBattle.stopTimerSound()
 
     def __handleLocalToonBattleEvent(self, response):
-        self.townBattle.adjustStatusEffects(self.activeToons)
+        #self.townBattle.adjustStatusEffects(self.activeToons)
         mode = response['mode']
         noAttack = 0
         if mode == 'Attack':
@@ -1467,7 +1473,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.choseAttackAlready = 1
 
     def __timedOut(self):
-        self.townBattle.adjustStatusEffects(self.activeToons)
+        #self.townBattle.adjustStatusEffects(self.activeToons)
         if self.choseAttackAlready == 1:
             return
         self.notify.debug('WaitForInput timed out')
@@ -1482,7 +1488,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         pass
 
     def enterPlayMovie(self, ts):
-        self.townBattle.adjustStatusEffects(self.activeToons)
+        #self.townBattle.adjustStatusEffects(self.activeToons)
         self.notify.debug('enterPlayMovie()')
         self.delayDeleteMembers()
         if self.hasLocalToon():
@@ -1712,7 +1718,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             for suit in self.activeSuits:
                 if suit.getSoakedStatus() == 1:
                     soakedSuits.append(self.activeSuits.index(suit))
-            self.townBattle.adjustCogsAndToons(self.activeSuits, luredSuits, trappedSuits, self.activeToons)
+            self.townBattle.adjustCogsAndToons(self.activeSuits, luredSuits, trappedSuits, self.activeToons, self)
             if hasattr(self, 'townBattleAttacks'):
                 self.townBattle.updateChosenAttacks(self.townBattleAttacks[0], self.townBattleAttacks[1], self.townBattleAttacks[2], self.townBattleAttacks[3])
         self.needAdjustTownBattle = 0

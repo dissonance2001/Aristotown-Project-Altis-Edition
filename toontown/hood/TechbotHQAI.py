@@ -11,10 +11,14 @@ class TechbotHQAI(CogHQAI.CogHQAI):
     
     def __init__(self, air):
         CogHQAI.CogHQAI.__init__(
-            self, air, ToontownGlobals.TechbotHQ, ToontownGlobals.TechbotLobby,
-            FADoorCodes.TB_DISGUISE_INCOMPLETE,
+            self, air, ToontownGlobals.TechbotHQ, ToontownGlobals.TechbotLobby, None,
+            FADoorCodes.BD_DISGUISE_INCOMPLETE,
+            FADoorCodes.BD_WASHROOM_MISSING,
             DistributedCMElevatorAI.DistributedCMElevatorAI,
-            DistributedBoardbotBossAI.DistributedBoardbotBossAI)
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI,
+            DistributedCMElevatorAI.DistributedCMElevatorAI,
+            DistributedBoardbotBossAI.DistributedBoardbotBossAI,
+            ToontownGlobals.ZoneIdrChairman)
 
         self.boardofficeElevators = []
         self.boardofficeBoardingParty = None
@@ -32,14 +36,10 @@ class TechbotHQAI(CogHQAI.CogHQAI):
         # if simbase.config.GetBool('want-suit-planners', True):
         #     self.createSuitPlanners()
 		
-    def makeCogHQDoor(self, destinationZone, intDoorIndex, extDoorIndex, lock=0):
-        # For Boardbot HQ, the lobby door index is 2, even though that index
-        # should be for the Boardbot office exterior door.
-        if destinationZone == self.lobbyZoneId:
-            extDoorIndex = 0
-
+    def makeCogHQDoor(self, destinationZone, intDoorIndex, extDoorIndex, lock=0, boss=0):
         return CogHQAI.CogHQAI.makeCogHQDoor(
-            self, destinationZone, intDoorIndex, extDoorIndex, lock=lock)
+            self, destinationZone, intDoorIndex, extDoorIndex, lock=lock, boss=boss
+        )
 
     def createBoardOfficeElevators(self):
         destZones = (

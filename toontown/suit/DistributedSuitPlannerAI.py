@@ -43,7 +43,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
          (1, 2, 3, 4, 5), [], 0],
         [ToontownGlobals.SillyStreet, 8, 20, 0, 5, 20, 3, (1, 5, 10, 40, 60, 80), (10, 15, 15, 15, 15, 15, 15),
          (1, 2, 3, 4, 5), [], 0],
-        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 5, 5), (1, 2, 3, 4, 5),
+        [ToontownGlobals.LoopyLane, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (30, 40, 5, 5, 10, 5, 5), 
+         (1, 2, 3, 4, 5),
          [], 0],
         [ToontownGlobals.PunchlinePlace, 8, 20, 0, 5, 15, 3, (1, 5, 10, 40, 60, 80), (5, 5, 30, 30, 10, 10, 10),
          (1, 2, 3, 4, 5), [], 0],
@@ -58,21 +59,21 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         [ToontownGlobals.AhoyAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(40, 0, 0, 30, 10, 10, 10),
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.WalrusWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (65, 5, 0, 0, 20, 10, 0),
-         (6, 7, 8, 9, 10), [], 0],
+         (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.SleetStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 10, 10, 20, 10, 10, 30),
-         (6, 7, 8, 9), [], 0],
+         (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.PolarPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 70, 5, 5, 5, 5, 5),
-         (6, 7, 8, 9, 10, 11), [], 0],
+         (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.ArcticAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 5, 5, 10, 30, 10, 30),
-         (7, 8, 9, 10, 11, 12), [], 0],
+         (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.AltoAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 25, 50, 15, 5, 5),
-         (5, 6, 7, 8, 9), [], 0],
+         (4, 5, 6, 7, 8, 9), [], 0],
         [ToontownGlobals.BaritoneBoulevard, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 20, 10, 45, 5, 20),
-         (5, 6, 7, 8, 9, 10), [], 0],
+         (4, 5, 6, 7, 8, 9), [], 0],
         [ToontownGlobals.TenorTerrace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (30, 30, 0, 0, 10, 5, 25),
-         (5, 6, 7, 8, 9, 10), [], 0],
+         (4, 5, 6, 7, 8, 9), [], 0],
         [ToontownGlobals.SopranoStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(5, 5, 70, 5, 5, 5, 5),
-         (5, 6, 7, 8, 9, 10, 11), [], 0],
+         (5, 6, 7, 8, 9, 10), [], 0],
         [ToontownGlobals.ElmStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 40, 10, 10, 30, 0),
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.MapleStreet, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(30, 50, 0, 0, 10, 10, 0),
@@ -82,37 +83,37 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         [ToontownGlobals.RoseValley, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 10, 20, 10, 10, 5, 25),
          (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.AcornAvenue, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(10, 10, 10, 20, 30, 10, 10),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (6, 7, 8, 9, 10, 11), [], 0],
         [ToontownGlobals.PeanutPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 20, 20, 20, 10, 5, 25),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (6, 7, 8, 9, 10, 11), [], 0],
         [ToontownGlobals.WalnutWay, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (70, 5, 5, 5, 5, 5, 5),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (6, 7, 8, 9, 10, 11), [], 0],
         [ToontownGlobals.LegumeLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (20, 10, 35, 0, 0, 5, 30),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (6, 7, 8, 9, 10, 11), [], 0],
         [ToontownGlobals.KnightKnoll, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (10, 10, 10, 10, 20, 20, 20),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.NobleNook,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),  (10, 10, 10, 20, 30, 10, 10),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.WizardWay,8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 70, 5, 5, 5, 5, 5),
-         (6, 7, 8, 9, 10, 11, 12), [], 0],
+         (3, 4, 5, 6, 7), [], 0],
         [ToontownGlobals.LullabyLane, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (20, 20, 20, 20, 10, 5, 5),
-         (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
+         (7, 8, 9, 10, 11, 12,), [], 0],
         [ToontownGlobals.PajamaPlace, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (5, 5, 5, 5, 70, 5, 5),
-         (7, 8, 9, 10, 11, 12, 13, 14), [], 0],
+         (7, 8, 9, 10, 11, 12,), [], 0],
         [ToontownGlobals.BossbotHQ, 8, 30, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (100, 0, 0, 0, 0, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+          (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0],
         [ToontownGlobals.SellbotHQ, 8, 20, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 0, 100, 0, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+          (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0],
         [ToontownGlobals.SellbotFactoryExt, 8, 70, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 100, 0, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+          (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0],
         [ToontownGlobals.CashbotHQ, 8, 100, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80),(0, 0, 100, 0, 0, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+          (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0],
         [ToontownGlobals.LawbotHQ, 8, 50, 0, 99, 100, 4, (1, 5, 10, 40, 60, 80), (0, 100, 0, 0, 0, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+         (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0],
         [ToontownGlobals.BoardbotHQ, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 100, 0, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0],
+         (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30), [], 0],
         [ToontownGlobals.TechbotHQ, 8, 20, 0, 0, 0, 4, (1, 5, 10, 40, 60, 80), (0, 0, 0, 0, 0, 100, 0),
-         (15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26), [], 0]
+          (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), [], 0]
     ]
 
     SUIT_HOOD_INFO_ZONE = 0
@@ -440,7 +441,11 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             suitTrack = SuitDNA.getSuitDept(suitName)
         if (suitLevel is None) and (buildingHeight is not None):
             suitLevel = self.chooseSuitLevel(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_LVL], buildingHeight)
-        (suitLevel, suitType, suitTrack) = self.pickLevelTypeAndTrack(suitLevel, suitType, suitTrack)
+        if suitName is not None and suitLevel is not None:
+            suitType = SuitDNA.getSuitType(suitName)
+            suitTrack = SuitDNA.getSuitDept(suitName)
+        else:
+            (suitLevel, suitType, suitTrack) = self.pickLevelTypeAndTrack(suitLevel, suitType, suitTrack)
         newSuit.setupSuitDNA(suitLevel, suitType, suitTrack)
         newSuit.buildingHeight = buildingHeight
         gotDestination = self.chooseDestination(newSuit, startTime, toonBlockTakeover = toonBlockTakeover, cogdoTakeover = cogdoTakeover, minPathLen = minPathLen, maxPathLen = maxPathLen)
@@ -1163,48 +1168,93 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             level = random.choice(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_LVL])
         if random.random() <= ((self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_ECHANCE])/100.0):
             self.isElite = True
+        MIN_LEVEL_BY_TYPE = {
+            14: 8,   # Big Wig tier can spawn at level 8+
+            13: 7,
+            12: 7,
+            11: 6,
+            10: 6,
+            9: 5,
+            8: 5,
+            7: 3,
+            6: 4, 
+            5: 4,
+            4: 3, 
+            3: 2,
+            2: 2, 
+            1: 1,
+        }
+        MAX_LEVEL_BY_TYPE = {
+            1: 5,
+            2: 6,
+            3: 8,
+            4: 10,
+            5: 10,
+            6: 12,
+            7: 14,
+            8: 15,
+            9: 20,
+            10: 20,
+            11: 20,
+            12: 25,
+            13: 25,
+            14: 50,
+        }
         if type is None:
+            possibleTypes = range(1, self.MAX_SUIT_TYPES_HQ + 1)
+
+            typeChoices = []
+            for suitType in possibleTypes:
+                minLevel = MIN_LEVEL_BY_TYPE.get(suitType, suitType)
+                maxLevel = MAX_LEVEL_BY_TYPE.get(suitType, suitType + 4)
+
+                if level >= minLevel and level <= maxLevel:
+                    typeChoices.append(suitType)
+
+            if not typeChoices:
+                typeChoices = possibleTypes
+
+            type = random.choice(typeChoices)
+
             if ZoneUtil.isCogHQZone(self.zoneId):
-                typeChoices = range(max(level - 16, 7), min(level, self.MAX_SUIT_TYPES_HQ) + 1)
-                type = random.choice(typeChoices)
                 if random.random() < self.HQ_SKELE_CHANCE:
                     self.skeleChance = 1
                 if random.random() < self.HQ_VIRTUAL_CHANCE:
                     self.virtualChance = 1
-            else:
-                typeChoices = range(max(level - 16, 1), min(level, self.MAX_SUIT_TYPES) + 1)
-                type = random.choice(typeChoices)
 
-        if level < type:
-            level = type
+        # if level < type:
+        #     level = type
+        minLevel = MIN_LEVEL_BY_TYPE.get(type, type)
 
-        if level > 25:
+        if level < minLevel:
+            level = minLevel
+        if level > 50:
             pass
         else:
             if type == 3:
-                level = min(max(level, type), type + 6)
+                level = min(max(level, minLevel), type + 6)
             elif type == 5:
-                level = min(max(level, type), type + 6)
+                level = min(max(level, minLevel), type + 6)
             elif type == 7:
-                level = min(max(level, type), type + 8)
+                level = min(max(level, minLevel), type + 8)
             elif type == 8:
-                level = min(max(level, type), type + 7)
+                level = min(max(level, minLevel), type + 7)
             elif type == 9:
-                level = min(max(level, type), type + 10)
+                level = min(max(level, minLevel), type + 10)
             elif type == 10:
-                level = min(max(level, type), type + 9)
+                level = min(max(level, minLevel), type + 9)
             elif type == 11:
-                level = min(max(level, type), type + 9)
+                level = min(max(level, minLevel), type + 9)
             elif type == 12:
-                level = min(max(level, type), type + 11)
+                level = min(max(level, minLevel), type + 11)
             elif type == 13:
-                level = min(max(level, type), type + 11)
+                level = min(max(level, minLevel), type + 11)
             elif type == 14:
-                level = min(max(level, type), type + 12)
+                level = min(max(level, minLevel), type + 12)
             elif type == 16:
-                level = min(max(level, type), type + 10)
+                level = min(max(level, minLevel), type + 10)
             else:
-                level = min(max(level, type), type + 4)
+                level = min(max(level, minLevel), type + 4)
         if track is None:
             track = SuitDNA.suitDepts[SuitBattleGlobals.pickFromFreqList(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_TRACK])]
         self.notify.debug('pickLevelTypeAndTrack: %s %s %s' % (level, type, track))
@@ -1230,10 +1280,22 @@ def lblit():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName='lgator', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='stenog', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='caseman', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='sgoat', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='lgator', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='stenog', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='caseman', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='sgoat', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    return "Spawned the Lawbot Litigation Team in current zone."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
+def cblit():
+    av = spellbook.getInvoker()
+    zoneId = av.getLocation()[1]
+    sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
+    pointmap = sp.streetPointList
+    sp.createNewSuit([], pointmap, suitName='racket', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='treasure', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='bookkeep', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='liquidr', suitLevel=None, skelecog=0, revives=0, waiter=0)
     return "Spawned the Lawbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
@@ -1242,10 +1304,10 @@ def bblit():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName='ambass', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='wtapper', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='bkeeper', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='phouse', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='ambass', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='wtapper', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='bkeeper', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='phouse', suitLevel=None, skelecog=0, revives=0, waiter=0)
     return "Spawned the Bossbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
@@ -1254,10 +1316,10 @@ def sblit():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName='safesupervis', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='ubuster', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='racket', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='radiog', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='safesupervis', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='ubuster', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='hustle', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='radiog', suitLevel=None, skelecog=0, revives=0, waiter=0)
     return "Spawned the Sellbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
@@ -1266,10 +1328,10 @@ def bdlit():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName='chairman', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    #sp.createNewSuit([], pointmap, suitName='crystal', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='ottoman', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    #sp.createNewSuit([], pointmap, suitName='dking', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='chairman', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    #sp.createNewSuit([], pointmap, suitName='crystal', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='ottoman', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    #sp.createNewSuit([], pointmap, suitName='dking', suitLevel=None, skelecog=0, revives=0, waiter=0)
     return "Spawned the Boardbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
@@ -1278,14 +1340,14 @@ def bdlit2():
     zoneId = av.getLocation()[1]
     sp = simbase.air.suitPlanners.get(zoneId - (zoneId % 100))
     pointmap = sp.streetPointList
-    sp.createNewSuit([], pointmap, suitName='cdirector', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='dking', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='liquid', suitLevel=1, skelecog=0, revives=0, waiter=0)
-    sp.createNewSuit([], pointmap, suitName='rkeeper', suitLevel=1, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='cdirector', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='dking', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='liquid', suitLevel=None, skelecog=0, revives=0, waiter=0)
+    sp.createNewSuit([], pointmap, suitName='rkeeper', suitLevel=None, skelecog=0, revives=0, waiter=0)
     return "Spawned the Boardbot Litigation Team in current zone."
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int, int, int])
-def spawnCog(name, level = 1, revives = 0, skelecog = 0, waiter = 0):
+def spawnCog(name, level = None, revives = 0, skelecog = 0, waiter = 0):
     suitFullName = SuitBattleGlobals.SuitAttributes[name]['name']
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]

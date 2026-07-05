@@ -6,11 +6,14 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.particles import ParticleEffect
 from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
+from toontown.battle.BattleSounds import *
 from toontown.effects import DustCloud
 from panda3d.core import *
 from toontown.suit import SuitBase
 from toontown.suit.SuitDNA import *
 from toontown.chat.ChatGlobals import *
+from toontown.suit import SuitTimings
+from toontown.toonbase import ToontownGlobals
 from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGlobals import *
 from panda3d.direct import *
@@ -487,219 +490,438 @@ def createTrainTrackAppearTrack(dyingSuit, toon, battle, npcs):
         notify.debug('could not find closest suit, returning empty sequence')
     return retval
 
+def makeErclaimDeath(suit, battle):
+    suitTrack = Sequence()
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
+    batNode = render.attachNewNode('batNode')
+    batNode.setPos(suit, 0, 0, 0)
+
+    # Instance Count death
+    BattleParticles.loadParticles()
+    particleEffectLight = BattleParticles.createParticleEffect('Bats')
+    partTrackLight = ParticleInterval(particleEffectLight, batNode, 0, duration=2, cleanup=True, softStopT=-1.0)
+    particle = particleEffectLight.getParticlesNamed('particles-1')
+    particle.setBirthRate(0.0500)
+    particle.setLitterSize(1)
+
+    particleEffectMedium = BattleParticles.createParticleEffect('Bats')
+    partTrackMedium = ParticleInterval(particleEffectMedium, batNode, 0, duration=3, cleanup=True, softStopT=-1.0)
+    particle = particleEffectMedium.getParticlesNamed('particles-1')
+    particle.setBirthRate(0.0300)
+    particle.setLitterSize(2)
+
+    particleEffectHeavy = BattleParticles.createParticleEffect('Bats')
+    partTrackHeavy = ParticleInterval(particleEffectHeavy, batNode, 0, duration=3, cleanup=True, softStopT=-1.0)
+    particle = particleEffectHeavy.getParticlesNamed('particles-1')
+    particle.setBirthRate(0.0200)
+    particle.setLitterSize(6)
+
+    deathSfx = loader.loadSfx('phase_13/audio/sfx/halloween/COUNT_defeat.ogg')
+
+    def setSuitPartTransparency():
+        actorNode = suit.find('**/__Actor_modelRoot')
+        actorNode.setTransparency(1)
+
+    partTrack = Track(
+        (0.0, Func(base.playSfx, deathSfx)),
+        (0.0, partTrackLight),
+        (1.0, partTrackMedium),
+        (3.0, partTrackHeavy),
+        (4.0, Sequence(Func(setSuitPartTransparency), Func(suit.setChatAbsolute, "", CFSpeech),
+                        LerpColorScaleInterval(suit, 1.0, (1, 1, 1, 0)))),
+        (7.0, Func(batNode.removeNode))
+    )
+
+    # If Count has been assigned defeat dialog, use it. (This happens when his intro is made.)
+    countDialog = random.choice(TTLocalizer.CountDefeatDialogDefaults)
+
+    suitTrack = Track(
+        (0.0, Func(suit.loop, 'neutral-hurt')),
+        (0.5, Func(base.camera.setPosHpr, suit, 0, 22, 10, 180, -18, 0)),
+        (1.0, Func(suit.setChatAbsolute, countDialog[0], CFSpeech)),
+        (5.0, Func(suit.setChatAbsolute, countDialog[1], CFSpeech)),
+        (9.0, Func(suit.setChatAbsolute, countDialog[2], CFSpeech)),
+        (13.0, Func(suit.setChatAbsolute, countDialog[3], CFSpeech)),
+        (13.0, partTrack)
+    )
+    return suitTrack
 
 def createSuitReviveTrack(suit, battle):
     suitTrack = Sequence()
-    suit.setPendingQueuedRevive(True)
-    suitPos, suitHpr = battle.getActorPosHpr(suit)
-    removeTrainTrack(suit, battle, suitTrack)
-    deathSuit = suit
-    deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
-    hasAnimatedHead = False
-    if suit.style.name == 'rainmake' and not suit.isSkeleton:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(Func(headPart.loop, 'murmur'))
-            hasAnimatedHead = True
-    elif suit.style.name == 'payman' and not suit.isSkeleton:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(Func(headPart.loop, 'murmur'))
-            hasAnimatedHead = True
-    elif suit.style.name == 'pcrat' and not suit.isSkeleton:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(Func(headPart.loop, 'murmur'))
-            hasAnimatedHead = True
-    elif suit.style.name == 'cdirector' and not suit.isSkeleton:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(Func(headPart.loop, 'murmur'))
-            hasAnimatedHead = True
-    else:
-        for headPart in suit.animatedHeadParts:
-            hasAnimatedHead = True
-        if hasAnimatedHead:
-            if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
-                for headPart in suit.headParts:
-                    headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
-            else:
-                for headPart in suit.animatedHeadParts:
-                    headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
-    suitTrack.append(Func(suit.makeDead))
-    if suit.isSkeleton:
-        suitTrack.append(
-        ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
-    else:
-        suitTrack.append(
-        ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
-    suitTrack.append(Func(suit.hide))
-    for headPart in suit.headParts:
-        suitTrack.append(Func(headPart.hide))
-    suitTrack.append(Func(suit.setSkelecog2, True))
-    suitTrack.append(Func(battle.unlureSuit, suit))
-    suitTrack.append(Func(battle.unSueSuit, suit))
-    suitTrack.append(Func(suit.setDizzy, 0))
-    suitTrack.append(Func(suit.setSued2, 0))
-    suitTrack.append(Func(suit.show))
-    suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
-    suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
-    suitTrack.append(Func(suit.updateHealthBar, 0))
-    suitTrack.append(Func(suit.makeDamageUp))
-    suitTrack.append(Func(suit.checkDamageUp, 50))
-    suitTrack.append(Func(suit.makeRevive))
-    suitTrack.append(Func(suit.makeUnDead))
-    suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
-    suitTrack.append(Func(suit.loop, 'neutral'))
-    if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
-    elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'crystal' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'ddiver' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
-    elif suit.style.name == 'sgoat' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
-    elif suit.style.name == 'lgator' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
-    elif suit.style.name == 'treasure' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
-    elif suit.style.name == 'liquidr' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_gatekeep_death.ogg')
-    elif suit.style.name == 'hustle' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
-    elif suit.style.name == 'bookkeep' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
-    elif suit.style.name == 'bellring' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
-    elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
-    elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
-    elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
-    elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
-    elif suit.style.name == 'fires' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
-    elif suit.style.name == 'prethink' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
-    elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
-    elif suit.style.name == 'hrollers' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
-    elif suit.style.name == 'chainsaw' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
-    elif suit.style.name == 'chainsaw2' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
-    elif suit.style.name == 'treek' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
-    elif suit.style.name == 'mouthp' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
-    elif suit.style.name == 'hroller2' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
-    elif suit.style.name == 'rainmake' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
-    elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
-    elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
-    elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
-    elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
-    elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
-    elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
-    elif suit.style.name == 'ambass':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
-    elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
-    elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
-    elif suit.style.name == 'dold' and deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
-    elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
-    elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
-    elif suit.style.name == 'derrhand' and deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
-    elif suit.style.name == 'derrman' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
-    elif suit.style.name == 'fbed' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
-    elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
-    elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
-    elif suit.style.name == 'dopa':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
-    elif suit.style.name == 'dopr':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
-    elif suit.style.name == 'ubuster' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
-    elif suit.style.name == 'radiog':
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
-    elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
-    elif suit.style.name == 'ptjockey' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
-    elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
-    elif suit.style.name == 'payman' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
-    elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
-    elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
-    elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
-    elif suit.isFemale and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
-    elif suit.isFemaleSkelecog and deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
-    elif suit.isSkelecogDialogue:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
-    elif deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
-    else:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
-    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
-    BattleParticles.loadParticles()
-    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
-    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
-    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
-    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
-    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
-    smallGears.setPos(gearPoint)
-    singleGear.setPos(gearPoint)
-    smallGears.setDepthWrite(False)
-    singleGear.setDepthWrite(False)
-    smallGearExplosion.setPos(gearPoint)
-    bigGearExplosion.setPos(gearPoint)
-    smallGearExplosion.setDepthWrite(False)
-    bigGearExplosion.setDepthWrite(False)
-    explosionTrack = Sequence()
-    explosionTrack.append(Wait(5.4))
-    explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
-    gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
-    toonMTrack = Parallel(name='toonMTrack')
-    for mtoon in battle.toons:
-        toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+    if suit.style.name == 'erfit':
+        return createErfitReviveTrack(suit, battle)
+    if suit.style.name == 'erclaim':
+        trapProp = globalPropPool.getProp('quicksand')
+        trapProp.setColor(Vec4(0.1, 0.1, 1.0, 1))
+        trapProp.setHpr(Point3(300, 0, 0))
+        trapProp.setScale(0.01)
+        trapProp.setPos(suit.getPos(render))
+        trapProp.reparentTo(render)
+        smallScale = 0.01
+        bigScale = 2.25
+        biggerScale = 2.5
+        trapTrack = Sequence(
+            Wait(0.65),
+            LerpScaleInterval(trapProp, 0.65, biggerScale, blendType='easeIn'),
+            LerpScaleInterval(trapProp, 0.15, bigScale, blendType='easeOut'),
+            Wait(4.0),
+            LerpScaleInterval(trapProp, 0.15, biggerScale, blendType='easeIn'),
+            LerpScaleInterval(trapProp, 0.65, smallScale, blendType='easeOut'),
+            Func(trapProp.removeNode)
+        )
 
-    returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
-    if hasAnimatedHead:
-        returnval.append(headInterval)
-    return returnval
+        def soakSuit():
+            pass
+
+        def suitNeutral():
+            suit.setNeutralAnimation()
+
+        def suitInbetweens():
+            suit.hide()
+            for headPart in suit.headParts:
+                headPart.hide()
+            suit.setSkelecog2(True)
+            suit.setMaxHP(1922)
+            suit.updateHealthBar(0)
+            suit.makeDamageUp()
+            suit.checkDamageUp(25)
+            suit.makeRevive()
+            suit.makeUnDead()
+            suit.wrtReparentTo(battle)
+            suit.show()
+
+        def createSuitMoveIval(suit, destPos, hole):
+            dur = suit.getDuration('landing')
+            fr = suit.getFrameRate('landing')
+            landingDur = dur
+            totalDur = 7.3
+            animTimeInAir = totalDur - dur
+            flyingDur = animTimeInAir
+            moveIval = Sequence(
+                Func(suit.pose, 'landing', 0),
+                    Parallel(
+                        Sequence(
+                            ProjectileInterval(suit, duration=flyingDur, endPos=destPos, gravityMult=0.125),
+                            ActorInterval(suit, 'landing')
+                        ),
+                        Sequence(
+                            Wait(0.5),
+                            Func(suit.showHpTextNew, 0, text="+25% Damage!", colorCode=1)
+                        )
+                    ),
+                    Func(suitNeutral)
+            )
+            if suit.prop is None:
+                suit.prop = globalPropPool.getProp('propeller')
+            propDur = suit.prop.getDuration('propeller')
+            lastSpinFrame = 8
+            fr = suit.prop.getFrameRate('propeller')
+            spinTime = lastSpinFrame / fr
+            openTime = (lastSpinFrame + 1) / fr
+            propTrack = Parallel(
+                SoundInterval(suit.propInSound, duration=flyingDur, node=suit),
+                Sequence(
+                    ActorInterval(suit.prop, 'propeller', constrainedLoop=1, duration=flyingDur + 1, startTime=0.0, endTime=spinTime),
+                    ActorInterval(suit.prop, 'propeller', duration=landingDur, startTime=openTime),
+                    Func(suit.detachPropeller)
+                )
+            )
+            hole.setPos(battle, destPos[0], destPos[1], destPos[2])
+            underPos = destPos + Point3(0, 0, (-SuitTimings.fromSky * ToontownGlobals.SuitWalkSpeed)/2)
+            result = Parallel(
+                Func(suit.attachPropeller),
+                Sequence(
+                    Func(suit.setPos, underPos),
+                    Parallel(moveIval, propTrack)
+                )
+            )
+            return result
+        destPos, destHpr = battle.getActorPosHpr(suit)
+        suit.wrtReparentTo(battle)
+        moveIval = createSuitMoveIval(suit, destPos, trapProp)
+
+        sinkPos1 = trapProp.getPos(battle)
+        sinkPos2 = trapProp.getPos(battle)
+        sinkPos1.setZ(sinkPos1.getZ() - 3.1)
+        sinkPos2.setZ(sinkPos2.getZ() - 9.1)
+
+        moveTrack = Sequence(
+            Wait(0.9),
+            LerpPosInterval(suit, 0.9, sinkPos1, other=battle),
+            LerpPosInterval(suit, 0.4, sinkPos2, other=battle),
+            Func(suit.wrtReparentTo, hidden)
+        )
+        animTrack = Sequence(
+            ActorInterval(suit, 'flail'),
+            ActorInterval(suit, 'flail', startTime=1.1)
+        )
+        fallingSoundTrack = Sequence(
+            Wait(0.7),
+            SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit),
+            Wait(0.1)
+        )
+        suitFallTrack = Sequence(
+            Func(suitNeutral),
+            Wait(0.6),
+            Parallel(moveTrack, animTrack, fallingSoundTrack)
+        )
+        # suitInbetweenTrack = Sequence(Func(suit.setSkelecog, 1), Func(suit.healthBar.show), Func(soakSuit), Func(suit.setHp, suit.getMaxHp()), Func(suit.wrtReparentTo, battle))
+        suitInbetweenTrack = Func(suitInbetweens)
+        suitTrack = Sequence(suitFallTrack, suitInbetweenTrack, moveIval)
+
+        return Parallel(suitTrack, trapTrack)
+    else:
+        suit.setPendingQueuedRevive(True)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        removeTrainTrack(suit, battle, suitTrack)
+        deathSuit = suit
+        deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+        hasAnimatedHead = False
+        if suit.style.name == 'rainmake' and not suit.isSkeleton:
+            for headPart in suit.animatedHeadParts:
+                headInterval = Sequence(Func(headPart.loop, 'murmur'))
+                hasAnimatedHead = True
+        elif suit.style.name == 'payman' and not suit.isSkeleton:
+            for headPart in suit.animatedHeadParts:
+                headInterval = Sequence(Func(headPart.loop, 'murmur'))
+                hasAnimatedHead = True
+        elif suit.style.name == 'pcrat' and not suit.isSkeleton:
+            for headPart in suit.animatedHeadParts:
+                headInterval = Sequence(Func(headPart.loop, 'murmur'))
+                hasAnimatedHead = True
+        # elif suit.style.name == 'cdirector' and not suit.isSkeleton:
+        #     for headPart in suit.animatedHeadParts:
+        #         headInterval = Sequence(Func(headPart.loop, 'murmur'))
+        #         hasAnimatedHead = True
+        else:
+            for headPart in suit.animatedHeadParts:
+                hasAnimatedHead = True
+            if hasAnimatedHead:
+                if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+                    for headPart in suit.headParts:
+                        headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
+                else:
+                    for headPart in suit.animatedHeadParts:
+                        headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
+        suitTrack.append(Func(suit.makeDead))
+        if suit.isSkeleton:
+            suitTrack.append(
+            ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+        else:
+            suitTrack.append(
+            ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))
+        suitTrack.append(Func(suit.hide))
+        for headPart in suit.headParts:
+            suitTrack.append(Func(headPart.hide))
+        suitTrack.append(Func(suit.setSkelecog2, True))
+        suitTrack.append(Func(battle.unlureSuit, suit))
+        suitTrack.append(Func(battle.unSueSuit, suit))
+        suitTrack.append(Func(suit.setDizzy, 0))
+        suitTrack.append(Func(suit.show))
+        suitTrack.append(Sequence(Func(suit.showHpStringSkeletonRevive)))
+        suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
+        suitTrack.append(Func(suit.updateHealthBar, 0))
+        suitTrack.append(Func(suit.makeDamageUp))
+        suitTrack.append(Func(suit.checkDamageUp, 50))
+        suitTrack.append(Func(suit.makeRevive))
+        suitTrack.append(Func(suit.makeUnDead))
+        suitTrack.append(ActorInterval(suit, 'landing', startTime=1.25))
+        suitTrack.append(Func(suit.loop, 'neutral'))
+        if suit.style.name == 'caseman' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        elif suit.style.name == 'stenog' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        elif suit.style.name == 'crystal' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        elif suit.style.name == 'ddiver' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ddiver_death.ogg')
+        elif suit.style.name == 'sgoat' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_sgoat_death.ogg')
+        elif suit.style.name == 'lgator' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
+        elif suit.style.name == 'treasure' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_lgator_death.ogg')
+        elif suit.style.name == 'liquidr' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_gatekeep_death.ogg')
+        elif suit.style.name == 'hustle' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        elif suit.style.name == 'bookkeep' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
+        elif suit.style.name == 'bellring' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        elif suit.style.name == 'whunter' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_whunter_death.ogg')
+        elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        elif suit.style.name == 'chairman' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chairman_death.ogg')
+        elif suit.style.name == 'ottoman' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_ottoman_death.ogg')
+        elif suit.style.name == 'fires' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        elif suit.style.name == 'prethink' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        elif suit.style.name == 'hrollers' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        elif suit.style.name == 'chainsaw' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        elif suit.style.name == 'chainsaw2' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        elif suit.style.name == 'treek' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_treek_death.ogg')
+        elif suit.style.name == 'mouthp' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mouthp_death.ogg')
+        elif suit.style.name == 'hroller2' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        elif suit.style.name == 'rainmake' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
+        elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+        elif suit.style.name == 'director' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+        elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
+        elif suit.style.name == 'bkeeper' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_caseman_death.ogg')
+        elif suit.style.name == 'phouse' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        elif suit.style.name == 'wtapper' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        elif suit.style.name == 'hroller' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_hroller_death.ogg')
+        elif suit.style.name == 'ambass':
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_prethink_death.ogg')
+        elif suit.style.name == 'safesupervis' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fires_death.ogg')
+        elif suit.style.name == 'dold' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        elif suit.style.name == 'dold' and deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death_skel.ogg')
+        elif suit.style.name == 'duckshfl' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_duckshfl_death.ogg')
+        elif suit.style.name == 'derrhand' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death.ogg')
+        elif suit.style.name == 'derrhand' and deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_derrhand_death_skel.ogg')
+        elif suit.style.name == 'derrman' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_derrman_death.ogg')
+        elif suit.style.name == 'fbed' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
+        elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+        elif suit.style.name == 'cdirector':
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
+        elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_bellring_death.ogg')
+        elif suit.style.name == 'cbutcher' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
+        elif suit.style.name == 'dopa':
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        elif suit.style.name == 'dopr':
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopr_death_skel.ogg')
+        elif suit.style.name == 'ubuster' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dold_death.ogg')
+        elif suit.style.name == 'radiog':
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_dopa_death_skel.ogg')
+        elif suit.style.name == 'djockey' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        elif suit.style.name == 'ptjockey' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_ptjockey_death.ogg')
+        elif suit.style.name == 'pcrat' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
+        elif suit.style.name == 'payman' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_pcrat_death.ogg')
+        elif suit.style.name == 'racket' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_fbed_death.ogg')
+        elif suit.style.name == 'dking' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        elif suit.style.name == 'redd' and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_redd_death.ogg')
+        elif suit.isFemale and not deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death_f.ogg')
+        elif suit.isFemaleSkelecog and deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death_f.ogg')
+        elif suit.isSkelecogDialogue:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        elif deathSuit.isSkeleton:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Skel_Cog_Death.ogg')
+        else:
+            spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/Cog_Death.ogg')
+        deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+        deathSoundTrack = Sequence(Wait(0.8), SoundInterval(spinningSound, duration=1.2, startTime=1.5, volume=0.2), SoundInterval(spinningSound, duration=3.0, startTime=0.6, volume=0.8), SoundInterval(deathSound, volume=0.32))
+        BattleParticles.loadParticles()
+        smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+        singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+        smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+        bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+        gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+        smallGears.setPos(gearPoint)
+        singleGear.setPos(gearPoint)
+        smallGears.setDepthWrite(False)
+        singleGear.setDepthWrite(False)
+        smallGearExplosion.setPos(gearPoint)
+        bigGearExplosion.setPos(gearPoint)
+        smallGearExplosion.setDepthWrite(False)
+        bigGearExplosion.setDepthWrite(False)
+        explosionTrack = Sequence()
+        explosionTrack.append(Wait(5.4))
+        explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
+        gears1Track = Sequence(Wait(2.1), ParticleInterval(smallGears, battle, worldRelative=0, duration=4.3, cleanup=True), name='gears1Track')
+        gears2MTrack = Track((0.0, explosionTrack), (0.7, ParticleInterval(singleGear, battle, worldRelative=0, duration=5.7, cleanup=True)), (5.2, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=1.2, cleanup=True)), (5.4, ParticleInterval(bigGearExplosion, battle, worldRelative=0, duration=1.0, cleanup=True)), name='gears2MTrack')
+        toonMTrack = Parallel(name='toonMTrack')
+        for mtoon in battle.toons:
+            toonMTrack.append(Sequence(Wait(2.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
+
+        returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
+        if hasAnimatedHead:
+            returnval.append(headInterval)
+        return returnval
+
+def startCameraSpinTask(suit):
+    taskMgr.add(cameraSpinTask, 'cameraSpinTask', extraArgs=[suit], appendTask=True)
+
+def endCameraSpinTask():
+    taskMgr.remove('cameraSpinTask')
+
+def cameraSpinTask(suit, task = None):
+    taskTime = task.time
+    if round(taskTime * 100) % 2:
+        return task.cont
+
+    # Get the center position.
+    #x, y, z = CountErclaimBattleAPosHpr[:3]
+    suitPos = suit.getPos()
+    x = suitPos.getX()
+    y = suitPos.getY()
+
+    # Move the Z up.
+    z = 10
+
+    # Get X and Y offsets.
+    startRadians = math.pi / 2
+    spinSpeed = 1 / 5.5
+    radius = 19
+    xOffset = math.sin((taskTime * spinSpeed) + startRadians) * radius
+    yOffset = math.cos((taskTime * spinSpeed) + startRadians) * radius
+
+    # Get heading for camera.
+    heading = (-math.degrees((taskTime * spinSpeed) + startRadians) + 180) % 360
+
+    # Set camera pos.
+    camera.setPosHpr(x + xOffset, -y + yOffset, z, heading, -12, 0)
+
+    # # Set erfit, if we need to.
+    # if not self.erfitSet:
+    #     self.placeAliveSuits()
+    #     self.erfitSet = True
+
+    return task.cont
 
 def createAmbassadorReviveTrack(suit, battle):
     suitTrack = Sequence()
@@ -740,6 +962,92 @@ def createAmbassadorReviveTrack(suit, battle):
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
     returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
     return returnval
+
+def createErfitDeathTrack(suit, battle):
+    suitTrack = Sequence()
+    from toontown.battle import MovieCamera
+    suitTrack.append(MovieCamera.heldShot(0.0, -15.0, 10.0, 0, -20, 0, 0))
+    suitTrack.append(Func(suit.cleanupAllBattleEffects))
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    # deathSuit = suit
+    # deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    hasAnimatedHead = False
+    startTalkTime = 0
+    msgTime = 3.0
+    endDelay = 2
+    returnval = Parallel(suitTrack)
+    return Parallel(returnval, Track(
+            (startTalkTime, Parallel(Func(suit.setChatAbsolute, "I can't believe I've been bested at my game!", CFSpeech))),
+            (startTalkTime + (msgTime * 1), Func(suit.setChatAbsolute, "By a Toon, no less, with no muscles or fame!", CFSpeech)),
+            (startTalkTime + (msgTime * 2), Func(suit.setChatAbsolute, "Well, my bro, I hope this won't be the end.", CFSpeech)),
+            (startTalkTime + (msgTime * 3), Func(suit.setChatAbsolute, "Just come back for a rematch, and bring a lazy friend!", CFSpeech)),
+            (startTalkTime + (msgTime * 3), Sequence(Wait(3.0), Parallel(SoundInterval(base.loader.loadSfx('phase_13/audio/sfx/april_toons/erfit_defeat.ogg'), volume=0.62), Func(suit.makeUnSwole), Func(suit.hide)))),
+        ))
+
+def createErfitReviveTrack(suit, battle):
+    suitTrack = Sequence()
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    removeTrainTrack(suit, battle, suitTrack)
+    # deathSuit = suit
+    # deathSuit.setBlend(frameBlend = base.wantSmoothAnims)
+    hasAnimatedHead = False
+    startTalkTime = 1.5
+    msgTime = 4.0
+    endDelay = 2
+    # suitTrack.append(Func(suit.hide))
+    # for headPart in suit.headParts:
+    #     suitTrack.append(Func(headPart.hide))
+   # suitTrack.append(Func(suit.setSkelecog2, True))
+  #  suitTrack.append(Func(suit.show))
+    from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
+    for obj in base.cr.doId2do.values():
+        if isinstance(obj, DistributedCountErclaimBoss):
+            suitTrack.append(Func(obj.stopPhaseOneMusic))
+            suitTrack.append(Func(obj.erfitRevive))
+    suitTrack.append(Func(suit.setHP, 15777))
+    suitTrack.append(Func(suit.getGeomNode().setScale, 7.5 / 6.06))
+    suitTrack.append(Func(suit.setHeight, 10.5))
+    suitTrack.append(Func(suit.setMaxHP2, 15777))
+    suitTrack.append(Func(suit.updateHealthBar, 0))
+    suitTrack.append(Func(suit.makeDamageUp))
+    suitTrack.append(Func(suit.makeSwole))
+    suitTrack.append(Func(suit.checkDamageUp, 30))
+    suitTrack.append(LerpColorScaleInterval(suit.getGeomNode(), 0.5, (1, .2, .2, 1), blendType='easeIn'))
+    suitTrack.append(Func(suit.makeRevive))
+    # suitTrack.append(ActorInterval(suit, 'pie-small-react'))
+    suitTrack.append(Func(suit.setNeutralAnimation))
+    deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
+    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
+    BattleParticles.loadParticles()
+    smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
+    singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
+    smallGearExplosion = BattleParticles.createParticleEffect('GearExplosion', numParticles=10)
+    bigGearExplosion = BattleParticles.createParticleEffect('BigGearExplosion', numParticles=30)
+    gearPoint = Point3(suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height - 0.2)
+    smallGears.setPos(gearPoint)
+    singleGear.setPos(gearPoint)
+    smallGears.setDepthWrite(False)
+    singleGear.setDepthWrite(False)
+    smallGearExplosion.setPos(gearPoint)
+    bigGearExplosion.setPos(gearPoint)
+    smallGearExplosion.setDepthWrite(False)
+    bigGearExplosion.setDepthWrite(False)
+    explosionTrack = Sequence()
+    explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
+    returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
+    return Parallel(returnval, Func(startCameraSpinTask, suit), Track(
+            (startTalkTime, Parallel(Func(suit.setChatAbsolute, "Check it, bros. The fight maxed out my arms!", CFSpeech))),
+            (startTalkTime + (msgTime * 1), Func(suit.setChatAbsolute, "My muscles are so huge! It's time to sound the alarms!", CFSpeech)),
+            (startTalkTime + (msgTime * 2), Func(suit.setChatAbsolute, "Get ready for a show, Toon, you'll surely cower!", CFSpeech)),
+            (startTalkTime + (msgTime * 3) - 1, Parallel(ActorInterval(suit, 'smile'),
+                                                         Func(suit.showHpTextNew, 0,
+                                                              text='+40% Damage',
+                                                              colorCode=1))),
+            (startTalkTime + (msgTime * 3), Func(suit.setChatAbsolute, "Brace yourselves Toons... This is the definition of POWER!", CFSpeech)),
+            (startTalkTime + (msgTime * 3) - 1 + 3.95, Func(suit.setNeutralAnimationDrop)),
+            (startTalkTime + (msgTime * 3) - 1 + 3.95 + endDelay, Parallel(Func(suit.setChatAbsolute, "", CFSpeech | CFTimeout), Func(endCameraSpinTask))),
+        ))
 
 def createSuitReviveRedd(suit, battle):
     suitTrack = Sequence()
@@ -1015,7 +1323,6 @@ def createSuitReviveTrackVirtual(suit, battle):
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
-    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.makeDamageUp))
@@ -1075,6 +1382,8 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+    elif suit.style.name == 'director' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
     elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
@@ -1107,8 +1416,8 @@ def createSuitReviveTrackVirtual(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'cdirector':
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
@@ -1283,6 +1592,11 @@ def createVirtualSuitDeathTrack(suit, battle):
 
 def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
+    suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
+    if suit.style.name == 'erclaim':
+        return makeErclaimDeath(suit, battle)
+    if suit.style.name == 'erfit':
+        return createErfitDeathTrack(suit, battle)
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
@@ -1300,10 +1614,10 @@ def createSuitDeathTrack(suit, battle):
         for headPart in suit.animatedHeadParts:
             headInterval = Sequence(Func(headPart.loop, 'murmur'))
             hasAnimatedHead = True
-    elif suit.style.name == 'cdirector' and not suit.isSkeleton:
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(Func(headPart.loop, 'murmur'))
-            hasAnimatedHead = True
+    # elif suit.style.name == 'cdirector' and not suit.isSkeleton:
+    #     for headPart in suit.animatedHeadParts:
+    #         headInterval = Sequence(Func(headPart.loop, 'murmur'))
+    #         hasAnimatedHead = True
     else:
         for headPart in suit.animatedHeadParts:
             hasAnimatedHead = True
@@ -1318,7 +1632,6 @@ def createSuitDeathTrack(suit, battle):
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
-    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     if suit.isSkeleton:
         suitTrack.append(
@@ -1381,6 +1694,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_rainmake_death.ogg')
     elif suit.style.name == 'mplayer' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
+    elif suit.style.name == 'director' and not deathSuit.isSkeleton:
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_mplayer_death.ogg')
     elif suit.style.name == 'psetter' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_psetter_death.ogg')
     elif suit.style.name == 'videog' and not deathSuit.isSkeleton:
@@ -1413,8 +1728,8 @@ def createSuitDeathTrack(suit, battle):
         spinningSound = base.loader.loadSfx('phase_3.5/audio/sfx/ttcc_ene_fbed_death.ogg')
     elif suit.style.name == 'arbit' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
-    elif suit.style.name == 'cdirector' and not deathSuit.isSkeleton:
-        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_clo_death.ogg')
+    elif suit.style.name == 'cdirector':
+        spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_chainsaw_death.ogg')
     elif suit.style.name == 'rkeeper' and not deathSuit.isSkeleton:
         spinningSound = base.loader.loadSfx('phase_3.5/audio/dial/ttcc_ene_stenog_death.ogg')
     elif suit.style.name == 'liquid' and not deathSuit.isSkeleton:
@@ -1477,8 +1792,11 @@ def createSuitDeathTrack(suit, battle):
     toonMTrack = Parallel(name='toonMTrack')
     for mtoon in battle.toons:
         toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
-    returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
-    if hasAnimatedHead:
+    if suit.style.name == 'erfit':
+        returnval = Parallel(suitTrackErfit)
+    else:
+        returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
+    if hasAnimatedHead and not suit.style.name == 'erfit':
         returnval.append(headInterval)
     return returnval
 
@@ -1527,7 +1845,6 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     suitTrack.append(Func(battle.unlureSuit, suit))
     suitTrack.append(Func(battle.unSueSuit, suit))
     suitTrack.append(Func(suit.setDizzy, 0))
-    suitTrack.append(Func(suit.setSued2, 0))
     suitTrack.append(Func(insertDeathSuit, suit, suit, battle, suitPos, suitHpr))
     if suit.isSkeleton:
         suitTrack.append(
@@ -1609,6 +1926,10 @@ def __KnockbackSilhouette(suitIndex, suits, hp, battle):
 
 def createSuitHeadlessDeathTrack(suit, battle):
     suitTrack = Sequence()
+    if suit.style.name == 'erclaim':
+        return makeErclaimDeath(suit, battle)
+    if suit.style.name == 'erfit':
+        return createErfitDeathTrack(suit, battle)
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
@@ -1651,7 +1972,62 @@ def createSuitWreckingDeathTrack(suit, battle):
     returnval = Parallel(suitTrack, deathSoundTrack)
     return returnval
 
-def createSuitCrashTrack(suit, battle):
+def createSuitCrashTrack(suit, battle, level):
+    suitScale = suit.getGeomNode().getScale()
+    fallSound = globalBattleSoundCache.getSound('cogbldg_land.ogg')
+    crushSound = globalBattleSoundCache.getSound('TL_train_cog.ogg')
+
+    # To make it match up a little better, make the squish sound start a little sooner for these gags.
+    times = {4: 1.25, 5: 0.7, 6: 0.65, 7: 0.0}
+    startTime = times.get(level, 0)
+
+    # Functions for quick death drop extension.
+    finalSeq = Sequence(
+        Wait(3),  # Delay 3 seconds
+        LerpScaleInterval(suit, 0.5, (0.01, 0.01, 0.01), blendType='easeIn'),  # Shrink the silhouette
+        Func(suit.hide), Func(suit.cleanupAllBattleEffects),     # Hide the silhouette
+    )
+
+    initialZ = suit.getZ()
+
+    # Define this here so that we can grab the length.
+    suitFlatten = Sequence(Parallel(LerpFunc(suit.setZ, duration=0.125, fromData=initialZ, toData=initialZ - 1),
+                                    ActorInterval(suit, 'flatten', startFrame=0, endFrame=4)))
+    suitFlattenDuration = suitFlatten.getDuration()
+
+    def waitPlaySquishSound():
+        seq = Sequence(Wait(suitFlattenDuration - startTime), Func(base.playSfx, crushSound))
+        seq.start()
+
+    def suitSquished():
+        node = suit.getGeomNode().getChild(0)
+        node.setColorScale(0, 0, 0, 1)
+        # Flatten the suit
+        suit.pose('flatten', 5)
+        # Position the suit slightly above the ground to prevent clipping
+        suit.setZ(initialZ + 0.1)
+        # Set the scale of the suit to be regular, but flattened
+        suit.getGeomNode().setScale(suitScale[0], suitScale[1], 0.025)
+
+    suitGettingHitParallelHolder = Parallel()
+    suitReact = Sequence(Func(waitPlaySquishSound), 
+                            suitFlatten,                              
+                            Func(base.playSfx, fallSound, volume=0.65),
+                            Func(suit.splatSuit, 0, 1), Func(suit.makeUnMarked), 
+                            Func(suitSquished),                                   
+                            finalSeq)                          
+    suitGettingHitInternal = Sequence(suitReact)
+    suitGettingHitParallelHolder.append(suitGettingHitInternal)
+    hasAnimatedHead = False
+    for headPart in suit.animatedHeadParts:
+        headInterval = Sequence(Func(waitPlaySquishSound), (ActorInterval(headPart, 'neutral', startTime=0, endTime=0)))
+        hasAnimatedHead = True
+    if hasAnimatedHead:
+        suitGettingHitParallelHolder.append(headInterval)
+    suitGettingHit = Sequence(suitGettingHitParallelHolder)
+    return suitGettingHit
+
+def createSuitCrashTrackOLD(suit, battle):
     suitScale = suit.getScale()
     node = suit.getGeomNode().getChild(0)
     suitPos = suit.getPos()
@@ -1690,7 +2066,7 @@ def midairSuitExplodeTrack(suit, battle):
     suitTrack.append(Func(suit.cleanupLoseActor))
     suitTrack.append(Func(suit.makeDead))
     deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
-    deathSoundTrack = Sequence(Wait(0.5), SoundInterval(deathSound, volume=0.8))
+    deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.8))
     BattleParticles.loadParticles()
     smallGears = BattleParticles.createParticleEffect(file='gearExplosionSmall')
     singleGear = BattleParticles.createParticleEffect('GearExplosion', numParticles=1)
@@ -1708,7 +2084,7 @@ def midairSuitExplodeTrack(suit, battle):
     explosionTrack = Sequence()
     suitTrack.append(Func(suit.cleanupAllBattleEffects))
     explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=gearPoint))
-    gears1Track = Sequence(Wait(0.5), ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
+    gears1Track = Sequence(ParticleInterval(smallGears, battle, worldRelative=0, duration=1.0, cleanup=True), name='gears1Track')
     gears2MTrack = Track(
         (0.1, ParticleInterval(singleGear, battle, worldRelative=0, duration=0.4, cleanup=True)),
         (0.5, ParticleInterval(smallGearExplosion, battle, worldRelative=0, duration=0.5, cleanup=True)),
@@ -1813,51 +2189,53 @@ def makeZapDeathScorch(pos, parent=render):
     scorchTrack.start()
     return scorch
 
-def shortCircuitTrack(cog, battle=None):
-    if not cog or cog.isEmpty():
-        return Sequence()
+def shortCircuitTrack(suit, battle=None):
+    # Make a clip plane to erase the cog as we vaporize it
+    
+    plane = Plane(0, 0, 1, 0)  # Create the plane with a surface normal facing straight up, origin at 0
+    planeNode = PlaneNode("suitClipPlane", plane)
+    planeNodePath = suit.attachNewNode(planeNode)
+    ashNodePath = suit.attachNewNode('ashNodePath')
+    suit.setClipPlane(planeNodePath)  # Initialize the clip plane at the suit's feet.
+    
+    # Attach the particle to the plane as it slides up the suit, create an ash pile at feet to begin scaling up
+    BattleParticles.loadParticles()
+    ashEffect = BattleParticles.createParticleEffect(file='suitDistintegrate')
+    
+    ashPile = base.loader.loadModel('props/general/models/cc_m_prp_gen_mound_dirt')
+    ashPile.setColor(0.25, 0.25, 0.25, 1)
+    ashPile.reparentTo(suit)
+    ashPile.hide()
+    
+    # Assemble the track
+    
+    planeStartPos = planeNodePath.getPos()
+    planeEndPos = Vec3(planeStartPos[0], planeStartPos[1], suit.getHeight() + 3.5)
 
-    parent = render
-    if battle and not battle.isEmpty():
-        parent = battle
+    ashNodeEndPosCallback = lambda: Vec3(ashNodePath.getX(), ashNodePath.getY(), suit.getHeight() + 3)
+    
+    dDisintegrate = 1.5
+    dDisappear = 0.5
 
-    basePos = cog.getPos(parent)
-    basePos = Point3(basePos[0], basePos[1], max(0.05, basePos[2]))
-
-    actorNode = cog.find('**/__Actor_modelRoot')
-
-    colorTracks = Parallel()
-    actorCollection = actorNode.findAllMatches('*')
-    for thingIndex in range(actorCollection.getNumPaths()):
-        thing = actorCollection[thingIndex]
-        colorTracks.append(Sequence(
-            Func(thing.setDepthWrite, False),
-            Func(thing.setBin, 'fixed', 1),
-            Parallel(
-                LerpFunctionInterval(thing.setAlphaScale, fromData=1, toData=0, duration=1.5),
-                LerpColorScaleInterval(thing, 1.0, (0, 0, 0, 0))
-            ),
-            Func(thing.setAttrib, ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
-        ))
-
-    shrinkTrack = Sequence(LerpScaleInterval(actorNode, 2.0, (0.01, 0.01, 0.01)), Wait(2.0), LerpScaleInterval(actorNode, 0, (1, 1, 1)))
-
-    smoke = BattleParticles.createParticleEffect('zapCogDeathSmoke')
-    smoke.reparentTo(parent)
-    partTrack = ParticleInterval(smoke, cog, duration=3.5, softStopT=-2.0)
-
-    finishTrack = Sequence(
-                Func(cog.cleanupAllBattleEffects),
-        Func(cog.makeDead),
-        Func(cog.hide)
+    deathHolderTrack = Parallel()
+    suitTrack = Parallel(
+        Func(ashEffect.start, parent=ashNodePath, renderParent=ashNodePath),
+        LerpColorScaleInterval(suit, dDisintegrate / 2.0, Vec4(0, 0, 0, 1)),
+        LerpPosInterval(planeNodePath, dDisintegrate, planeEndPos, startPos = planeStartPos, blendType = 'easeInOut'), # Clip plane moving up
+        LerpPosInterval(ashNodePath, dDisintegrate, ashNodeEndPosCallback, blendType = 'easeInOut'), # Clip plane moving up
+        Func(ashPile.wrtReparentTo, battle),
+        Func(ashNodePath.wrtReparentTo, battle),
+        Func(ashPile.show),
+        LerpScaleInterval(ashPile, dDisintegrate, suit.getScale() * 1.5, startScale=PNT3_NEARZERO), Func(suit.cleanupAllBattleEffects)
+    )  # Ash pile growing
+    hideAshPile = Sequence(
+        LerpScaleInterval(ashPile, dDisappear, PNT3_NEARZERO, blendType='easeIn'),
+        Func(ashPile.detachNode)
     )
 
-    return Sequence(
-        Parallel(Func(makeZapDeathScorch, basePos, cog), colorTracks, shrinkTrack, partTrack),
-        finishTrack,
-        Func(smoke.cleanup),
-        Func(smoke.removeNode)
-    )
+    finalTrack = Sequence(suitTrack, Func(BattleParticles.cleanupSystem, ashEffect, 2), Wait(1.2), Parallel(hideAshPile, Func(suit.hide)))
+    deathHolderTrack.append(finalTrack)
+    return deathHolderTrack
 
 
 def shortCircuitTrackOLDER(suit, battle):
@@ -1979,7 +2357,7 @@ def createToonDodgeMultitrack(tDodge, toon, leftToons, rightToons):
 
 def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
-        suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
+        suitTrack = Sequence(Wait(delay - suit.getDuration('neutral-enraged-return')), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
     elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
@@ -2001,7 +2379,7 @@ def createSuitTeaseMultiTrack(suit, battle, delay = 0.01):
 
 def createSuitTeaseMultiTrackSound(suit, battle, delay = 0.01):
     if suit.dna.name == 'sgoat' and suit.isAngry:
-        suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
+        suitTrack = Sequence(Wait(delay - suit.getDuration('neutral-enraged-return')), ActorInterval(suit, 'neutral-enraged-return'), ActorInterval(suit, 'gag-miss'))
     elif suit.isImmortal and not suit.dna.name == 'hroller' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'videog' and suit.isPhase3:
         suitTrack = Sequence(Wait(delay - 1), ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0, duration=1), ActorInterval(suit, 'gag-miss'))
     else:
@@ -2028,6 +2406,67 @@ def createSuitTeaseMultiTrackDrop(suit, battle, delay = 0.01):
 
 
 SPRAY_LEN = 1.5
+
+def getSprayProppedTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, horizScale = 1.0, vertScale = 1.0, parent = render):
+    track = Sequence()
+    sprayProp = globalPropPool.getProp('spray')
+    sprayScale = hidden.attachNewNode('spray-parent')
+    sprayRot = hidden.attachNewNode('spray-rotate')
+    spray = sprayRot
+    spray.setColor(color)
+    if callable(target):
+        target = target()
+    if callable(origin):
+        origin = origin()
+    if color[3] < 1.0:
+        spray.setTransparency(1)
+
+    def showSpray():
+        sprayRot.reparentTo(parent)
+        sprayRot.clearMat()
+        sprayScale.reparentTo(sprayRot)
+        sprayScale.clearMat()
+        sprayProp.reparentTo(sprayScale)
+        sprayProp.clearMat()
+        sprayRot.setPos(origin.getPos(render))
+        sprayRot.lookAt(Point3(target.getPos(render)))
+
+    track.append(Func(battle.movie.needRestoreRenderProp, sprayProp))
+    track.append(Func(showSpray))
+
+    def setTargetScale(t):
+        targetPos = target.getPos(render)
+        posDifference = Vec3(targetPos - origin.getPos(render))
+        distance = posDifference.length()
+        yScale = (distance / SPRAY_LEN) * t
+        sprayRot.setPos(origin.getPos(render))
+        sprayRot.lookAt(Point3(target.getPos(render)))
+        sprayScale.setScale(Point3(
+            max(yScale * horizScale, 0.01),
+            max(yScale, 0.01),
+            max(yScale * vertScale, 0.01)
+        ))
+
+    def prepareToShrinkSpray():
+        sprayProp.setPos(Point3(0.0, -SPRAY_LEN, 0.0))
+        spray.setPos(target.getPos(render))
+
+    def hideSpray():
+        sprayProp.detachNode()
+        removeProp(sprayProp)
+        sprayRot.removeNode()
+        sprayScale.removeNode()
+
+    sprayTrack = Sequence(
+        LerpFunctionInterval(setTargetScale, duration=dScaleUp, blendType='easeOut'),
+        LerpFunctionInterval(setTargetScale, duration=dHold,    fromData=1),
+        Func(prepareToShrinkSpray),
+        LerpScaleInterval(sprayScale, dScaleDown, PNT3_NEARZERO),
+        Func(hideSpray),
+        Func(battle.movie.clearRenderProp, sprayProp)
+    )
+
+    return Sequence(track, sprayTrack)
 
 def getSprayTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, horizScale = 1.0, vertScale = 1.0, parent = render):
     track = Sequence()
@@ -2090,32 +2529,42 @@ def getSprayTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, ho
     track.append(Func(battle.movie.clearRenderProp, sprayProp))
     return track
 
-def getZapTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, horizScale = 1.0, vertScale = 1.0, parent = render):
+def getZapTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, horizScale = 1.0, vertScale = 1.0, parent = render, activeTrack=False):
     track = Sequence()
-    sprayProp = globalPropPool.getProp('spray')
-    sprayScale = hidden.attachNewNode('spray-parent')
-    sprayRot = hidden.attachNewNode('spray-rotate')
-    spray = sprayRot
-    spray.setColor(color)
+    zapProp = globalPropPool.getProp('zapbeam')
+    zapScale = hidden.attachNewNode('zap-parent')
+    zapRot = hidden.attachNewNode('zap-rotate')
+    
+    def rollTexMatrix(t, obj = zapProp):
+        if not obj.isEmpty():
+            obj.setTexOffset(TextureStage.getDefault(), -t, 0)
+    
+    zapProp.loop('zapbeam')
+    zapTexSlide = LerpFunctionInterval(rollTexMatrix, fromData = 0, toData = 1, duration = 0.125)
+    zapTexSlide.loop()
+    
+    zap = zapRot
+    zap.setDepthWrite(False)
+    zap.setColor(color)
     if color[3] < 1.0:
-        spray.setTransparency(1)
+        zap.setTransparency(1)
 
-    def showSpray(sprayScale, sprayRot, sprayProp, origin, target, parent):
+    def showZap(zapScale, zapRot, zapProp, origin, target, parent):
         if callable(origin):
             origin = origin()
         if callable(target):
             target = target()
-        sprayRot.reparentTo(parent)
-        sprayRot.clearMat()
-        sprayScale.reparentTo(sprayRot)
-        sprayScale.clearMat()
-        sprayProp.reparentTo(sprayScale)
-        sprayProp.clearMat()
-        sprayRot.setPos(origin)
-        sprayRot.lookAt(Point3(target))
+        zapRot.reparentTo(parent)
+        zapRot.clearMat()
+        zapScale.reparentTo(zapRot)
+        zapScale.clearMat()
+        zapProp.reparentTo(zapScale)
+        zapProp.clearMat()
+        zapRot.setPos(origin)
+        zapRot.lookAt(Point3(target))
 
-    track.append(Func(battle.movie.needRestoreRenderProp, sprayProp))
-    track.append(Func(showSpray, sprayScale, sprayRot, sprayProp, origin, target, parent))
+    track.append(Func(battle.movie.needRestoreRenderProp, zapProp))
+    track.append(Func(showZap, zapScale, zapRot, zapProp, origin, target, parent))
 
     def calcTargetScale(target = target, origin = origin, horizScale = horizScale, vertScale = vertScale):
         if callable(target):
@@ -2123,32 +2572,51 @@ def getZapTrack(battle, color, origin, target, dScaleUp, dHold, dScaleDown, hori
         if callable(origin):
             origin = origin()
         distance = Vec3(target - origin).length()
-        yScale = distance / SPRAY_LEN
-        targetScale = Point3(yScale * horizScale, yScale, yScale * vertScale)
+        yScale = distance / 0.1
+        targetScale = Point3(horizScale, yScale, vertScale)
         return targetScale
 
-    track.append(LerpScaleInterval(sprayScale, dScaleUp, calcTargetScale, startScale=PNT3_NEARZERO))
-    track.append(Wait(dHold))
-
-    def prepareToShrinkSpray(spray, sprayProp, origin, target):
+    def trackBeam(_, target=target, origin=origin, horizScale=horizScale, vertScale=vertScale, zapRot=zapRot, zapScale=zapScale):
         if callable(target):
             target = target()
         if callable(origin):
             origin = origin()
-        sprayProp.setPos(Point3(0.0, -SPRAY_LEN, 0.0))
-        spray.setPos(target)
+        zapRot.setPos(origin)
+        zapRot.lookAt(Point3(target))
+        zapScale.setScale(calcTargetScale(target, origin, horizScale, vertScale))
 
-    track.append(Func(prepareToShrinkSpray, spray, sprayProp, origin, target))
-    track.append(LerpScaleInterval(sprayScale, dScaleDown, PNT3_NEARZERO))
+    track.append(LerpScaleInterval(zapScale, dScaleUp, calcTargetScale, startScale=PNT3_NEARZERO))
+    if activeTrack:
+        track.append(LerpFunctionInterval(trackBeam, duration=dHold, fromData=0.0, toData=0.0))
+    else:
+        track.append(Wait(dHold))
 
-    def hideSpray(spray, sprayScale, sprayRot, sprayProp, propPool):
-        sprayProp.detachNode()
-        removeProp(sprayProp)
-        sprayRot.removeNode()
-        sprayScale.removeNode()
+    def prepareToShrinkZap(zap, zapProp, origin, target):
+        if callable(target):
+            target = target()
+        if callable(origin):
+            origin = origin()
+        #zapProp.setPos(Point3(0.0, -SPRAY_LEN, 0.0))
+        #zap.setPos(target)
 
-    track.append(Func(hideSpray, spray, sprayScale, sprayRot, sprayProp, globalPropPool))
-    track.append(Func(battle.movie.clearRenderProp, sprayProp))
+    def updateScaleXZ(value, node=zapScale):
+        xScale = horizScale * value
+        yScale = node.getScale()[1]
+        zScale = vertScale * value
+        node.setScale(xScale, yScale, zScale)
+
+    track.append(Func(prepareToShrinkZap, zap, zapProp, origin, target))
+    track.append(LerpFunctionInterval(updateScaleXZ, duration=dScaleDown, fromData=1.0, toData=0.0))
+
+    def hideZap(zap, zapScale, zapRot, zapProp, propPool):
+        zapProp.detachNode()
+        removeProp(zapProp)
+        zapRot.removeNode()
+        zapScale.removeNode()
+
+    track.append(Func(hideZap, zap, zapScale, zapRot, zapProp, globalPropPool))
+    track.append(Func(zapTexSlide.finish))
+    track.append(Func(battle.movie.clearRenderProp, zapProp))
     return track
 
 
@@ -2777,7 +3245,7 @@ def startZapCogNeutral(suit, anim):
         suit.zapNeutralLoop.finish()
         suit.zapNeutralLoop = None
 
-    suit.zapNeutralLoop = ActorInterval(suit, anim, startTime=0, endTime=0.8)
+    suit.zapNeutralLoop = ActorInterval(suit, anim, startTime=0, endTime=0.75)
     suit.zapNeutralLoop.loop()
 
 def stopZapCogNeutral(suit):
@@ -2825,10 +3293,10 @@ def zapCog(suit, anim, before, after, battle, died):
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
     if not died or suit.isVirtual or suit.isOverpressured:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0), suit.makeCogStepBackDeathInterval(battle))
-        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.75), Wait(after))
     else:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), Func(startZapCogNeutral, suit, anim))
-        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.75), Wait(after))
     if suit.isShadow or suit.dna.name == 'cbutcher':
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
     else:

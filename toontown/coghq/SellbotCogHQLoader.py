@@ -38,6 +38,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.battleMusic = 'phase_9/audio/bgm/SB_courtyard_encntnr.ogg'
         self.cogHQExteriorModelPath = 'phase_9/models/cogHQ/SellbotHQExterior'
         self.cogHQLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby'
+        self.cogHQHardLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby_MS'
         self.factoryExteriorModelPath = 'phase_9/models/cogHQ/SellbotFactoryExterior'
         self.geom = None
         self.spot1Sequence = None
@@ -277,6 +278,10 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             door.find('**/rightDoor').wrtReparentTo(parent)
             self.geom.flattenStrong()
             self.geom2.flattenStrong()
+        elif zoneId == ToontownGlobals.SellbotMultislackerLobby:
+            print 'LOADING SELLBOT HARDMODE LOBBY'
+            self.geom = loader.loadModel('phase_9/models/cogHQ/SellbotHQLobby_MS')
+            self.geom.flattenMedium()
         else:
             self.notify.warning('loadPlaceGeom: unclassified zone %s' % zoneId)
         CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)

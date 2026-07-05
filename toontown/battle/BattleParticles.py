@@ -200,6 +200,10 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
         return loadParticleFile('shred2.ptf')
     elif name == 'Withdrawal':
         return loadParticleFile('withdrawal.ptf')
+    elif name == 'LaffSteal':
+        return loadParticleFile('laffSteal.ptf')
+    elif name == 'Bats':
+        return loadParticleFile('bats.ptf')
     else:
         notify.warning('createParticleEffect() - no name: %s' % name)
     return None
@@ -293,3 +297,21 @@ def __makeSprayLift():
     effect.setHpr(0, 180, 0)
     effect.setPos(0, 0, 0)
     return effect
+
+
+def cleanupSystem(effect, duration=3.0, instant=False):
+    """
+    Cleans up a particle system cleanly.
+    """
+    if hasattr(effect, 'cleaningUp'):
+        return
+    setattr(effect, 'cleaningUp', True)
+    effect.softStop()
+
+    if not instant:
+        def killEffect(_):
+            if effect:
+                effect.cleanup()
+        taskMgr.doMethodLater(duration, killEffect, 'cleanup')
+    else:
+        effect.cleanup()

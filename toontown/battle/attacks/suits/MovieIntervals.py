@@ -290,6 +290,14 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
         'name'] == 'RacketeerPeckingOrderRetaliationSoak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'erfit' and attack[
+        'name'] == 'ErfitPersonalTrainer':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'erfit' and attack[
+        'name'] == 'ErfitGainsFromTheScrap':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack[
         'name'] == 'SafetySoakRetaliation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
@@ -320,6 +328,14 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
                           CFSpeech | CFTimeout))
     elif attack[
         'name'] == 'HighRollerBust':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'ContingencyRedundantAuthority':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'ContingencyRiskThresholdBreach':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack[
@@ -466,6 +482,14 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         'name'] == 'RacketeerPeckingOrderRetaliationSoak':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'erfit' and attack[
+        'name'] == 'ErfitPersonalTrainer':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'erfit' and attack[
+        'name'] == 'ErfitGainsFromTheScrap':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack[
         'name'] == 'SafetySoakRetaliation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
@@ -498,6 +522,34 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyOverpressured':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'cdirector' and attack['name'] in (
+        'BanLevel4', 'BanLevel5', 'BanLevel6', 'BanLevel7', 'BanLevel8',
+        'BanLevel45', 'BanLevel46', 'BanLevel47', 'BanLevel48',
+        'BanLevel56', 'BanLevel57', 'BanLevel58',
+        'BanLevel67', 'BanLevel68', 'BanLevel78',
+
+        'BanToonup', 'BanTrap', 'BanLure', 'BanThrow',
+        'BanSquirt', 'BanZap', 'BanSound', 'BanDrop',
+
+        'BanToonupTrap', 'BanToonupLure', 'BanToonupThrow', 'BanToonupSquirt',
+        'BanToonupZap', 'BanToonupSound', 'BanToonupDrop',
+
+        'BanTrapLure', 'BanTrapThrow', 'BanTrapSquirt', 'BanTrapZap',
+        'BanTrapSound', 'BanTrapDrop',
+
+        'BanLureThrow', 'BanLureSquirt', 'BanLureZap',
+        'BanLureSound', 'BanLureDrop',
+
+        'BanThrowSquirt', 'BanThrowZap', 'BanThrowSound', 'BanThrowDrop',
+
+        'BanSquirtZap', 'BanSquirtSound', 'BanSquirtDrop',
+
+        'BanZapSound', 'BanZapDrop',
+
+        'BanSoundDrop'
+    ):  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyOverpressured2':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
@@ -534,6 +586,14 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
                           CFSpeech | CFTimeout))
     elif attack[
         'name'] == 'HighRollerDiceRouletteNobody':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'ContingencyRedundantAuthority':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack[
+        'name'] == 'ContingencyRiskThresholdBreach':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack[

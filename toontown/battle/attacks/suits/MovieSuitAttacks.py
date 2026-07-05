@@ -273,6 +273,9 @@ suitTrack2ResetNames = [
     'HighRollerCheerRetaliation',
     'SafetyPromotion',
     'SafetyPromotion2',
+    'ErfitPhase2',
+    'ErclaimHemmorageHealing',
+    'ErclaimHemmorage',
     'SafetyPromotion3',
     'SafetyPromotion4',
     'UnstableTransformation',
@@ -281,6 +284,7 @@ suitTrack2ResetNames = [
     'DirectorProductionBudget',
     'DirectorBudgetExpansion',
     'UnionBusterUnionBusterDamage',
+    'DividendZapRetaliation',
     'AmbassadorMulligan',
     'PowerhouseAbsorb',
     'AmbassadorManagerialProtectionImmunity',
@@ -290,6 +294,7 @@ suitTrack2ResetNames = [
     'AbsorbMovieLevel',
     'HighRollerLureResistance',
     'HighRollerLureResistance2',
+    'ErclaimScopeCreep',
     'AbilityQueuedPreToon',
             'AbsorbMovieLure',
         'AbsorbMovieThrow',
@@ -304,6 +309,7 @@ suitTrack2ResetNames = [
         'HighRollerBar2',
         'HustlerLimitedTimeOfferDenied',
         'AbsorbMovieLevelZap',
+        'ErfitHydrationCheckRevert',
         'AbsorbMovieLevelSound',
         'AbsorbMovieLevelDrop',
     'ButcherSparkPlugDamage',
@@ -417,7 +423,7 @@ def doSuitAttack(attack):
     elif name == 'Encrypt':
         suitTrack = doEncrypt(attack)
     elif name == 'BounceRate':
-        suitTrack = doBounceRate(attack)
+        suitTrack = doBounceCheck(attack)
     elif name == 'Reprogram':
         suitTrack = doReprogram(attack)
     elif name == 'CloudStorage':
@@ -944,7 +950,7 @@ def doSuitAttack(attack):
     elif name == 'ContingencyRiskThresholdBreach75':
         suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
     elif name == 'ContingencyRiskThresholdBreach50':
-        suitTrack = MovieBoardbotLitigationCheats.doExplodingDocument(attack) # Marking Application
+        suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack) # Marking Application
     elif name == 'ContingencyRiskThresholdBreach25':
         suitTrack = MovieHighRollerCheats.doSnipe(attack) # Marking Damage
     elif name == 'ContingencySelfRepair':
@@ -956,7 +962,7 @@ def doSuitAttack(attack):
     elif name == 'ContingencyRedundantAuthority':
         suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
     elif name == 'ContingencyOperationalFreeze':
-        suitTrack = MovieBoardbotLitigationCheats.doContentSync(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doHighStakes(attack)
     elif name == 'ContingencyForecastCollapse':
         suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
     elif name == 'ContingencyRiskThresholdBreach':
@@ -964,7 +970,7 @@ def doSuitAttack(attack):
     elif name == 'ContingencyMarkLiquidated':
         suitTrack = MovieBoardbotLitigationCheats.doExplodingDocumentGroup(attack)
     elif name == 'ContingencyMarkRevisedFiling':
-        suitTrack = MovieBoardbotLitigationCheats.doExplodingDocumentGroup(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doOversightDirective(attack)
         # dividend king
     elif name == 'DividendAccountRollover':
         suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
@@ -989,7 +995,7 @@ def doSuitAttack(attack):
     elif name == 'DividendPeckingOrderZapped':
         suitTrack = MovieBoardbotLitigationCheats.doEmbezzle(attack)
     elif name == 'DividendZapRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doZapRetaliationDividend(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
         # ottoman cheats
     elif name == 'OttomanRevisedDraft':
         suitTrack = MovieBoardbotLitigationCheats.doWhirlwind(attack)
@@ -1230,6 +1236,10 @@ def doSuitAttack(attack):
     elif name == 'DOPRAmbushMarketing':
         suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
+    elif name == 'ErclaimHemmorage':
+        suitTrack = MovieCountCheats.doHemmorage(attack)
+    elif name == 'ErclaimHemmorageHealing':
+        suitTrack = MovieCountCheats.doHemmorageHealing(attack)
     elif name == 'ErclaimLaffSteal':
         suitTrack = MovieCountCheats.doLaffSteal(attack)
     elif name == 'ErclaimRiseFromTheScrap':
@@ -1248,6 +1258,8 @@ def doSuitAttack(attack):
         suitTrack = MovieCountCheats.doSacrifice(attack)
     elif name == 'ErclaimSacrifice5':
         suitTrack = MovieCountCheats.doSacrifice(attack)
+    elif name == 'ErfitWringOut':
+        suitTrack = MovieCountCheats.doWringOut(attack)
     elif name == 'ErfitHydrationCheck':
         suitTrack = MovieCountCheats.doHydrationCheck(attack)
     elif name == 'ErfitHydrationCheckRevert':
@@ -1267,7 +1279,7 @@ def doSuitAttack(attack):
     elif name == 'ErfitPersonalTrainer':
         suitTrack = MovieCountCheats.doPersonalTrainer(attack)
     elif name == 'ErfitPhase2':
-        suitTrack = MovieCountCheats.doErfitPhase2(attack)
+        suitTrack = MovieCountCheats.doProToonShakeDamage(attack)
         # high roller phase 1
     elif name == 'HighRollerLureResistance':
         suitTrack = MovieHighRollerCheats.doLureResistance(attack, 1, 3, 5)
@@ -1698,7 +1710,7 @@ def doSuitAttack(attack):
         'BanSoundDrop'
     ):
         if suit.dna.name == 'cdirector':
-            suitTrack = MovieSellbotLitigationCheats.doMandatoryCompliance(attack)
+            suitTrack = MovieBoardbotLitigationCheats.doContningencyClauseBanMovie(attack)
         elif suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
         elif suit.dna.name == 'ubuster':
@@ -2967,12 +2979,13 @@ def doRubOut(attack):
 def doDiskScratch(attack):
     suit = attack['suit']
     targets = attack['target']
-    pad = loader.loadModel('phase_3.5/models/props/cc_m_prp_gen_coin_silver')
+    pad = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
+    pad.setScale(.5)
     suitTrack = getSuitAnimTrack(attack)
-    padPosPoints = [Point3(0, 0, 0), VBase3(14.93, -2.29, 180.0)]
-    padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57)
+    padPosPoints = [Point3(-0.564399421128801, 0, -0.13024602026049337), VBase3(90, 90, 0)]
+    padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57, scaleUpPoint = Point3(.5))
     padPropTrack.append(Func(pad.removeNode))
-    toonTrack = getToonTracks(attack, 2.2, ['cringe'], 2.0, ['jump'])
+    toonTrack = getToonTracks(attack, 3.2, ['cringe'], 3.0, ['nothing'])
     oldcolor = render.getColorScale()
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 2.5, (0, 0.992, 1, 1)),
@@ -2991,8 +3004,35 @@ def doFingerWag(attack):
         particleEffect = BattleParticles.createParticleEffect('FingerWag')
         BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
         suitName = attack['suitName']
-        particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.8)
-        particleEffect.setP(-110)
+        if suit.dna.name == "mm":
+            particleEffect.setPos(0.167, 1.0, 1.3)
+        elif suit.dna.name == "tm":
+            particleEffect.setPos(0, 1.1, suit.getHeight() - 1.2)
+        elif suit.dna.name == "tw" or suit.dna.name == "stg":
+            particleEffect.setPos(0.167, 1.8, 5)
+            particleEffect.setHpr(-90.0, -60.0, 180.0)
+        elif suit.dna.name == "p":
+            particleEffect.setPos(0.167, 1.4, 3.6)
+        elif suit.dna.name == "pp":
+            particleEffect.setPos(0.167, 1, 4.1)
+        elif suit.dna.name == "pf":
+            particleEffect.setPos(0.167, 1.4, 4.65)
+        elif suit.dna.name == "bs" or suit.dna.name == "fct":
+            particleEffect.setPos(0.167, 1.4, 5.3)
+        elif suit.dna.name == "bw":
+            particleEffect.setPos(0.167, 2.0, suit.getHeight() - 1.75)
+            particleEffect.setP(-110)
+        elif suit.dna.name == "sgoat":
+            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2)
+            particleEffect.setP(-110)
+        elif suit.dna.name == "mouthp":
+            particleEffect.setPos(0.167, 2.2, suit.getHeight() - 1.9)
+            particleEffect.setP(-110)
+        elif suit.dna.name in ["erfit", "cdirector", "videog", "safesupervis"]:
+            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
+            particleEffect.setP(-115)
+        else:
+            particleEffect.setPos(0, 1.1, suit.getHeight() - 1.2)
         particleEffects.append(particleEffect)
 
     suitType = getSuitBodyType(attack['suitName'])
@@ -4157,10 +4197,85 @@ def doGlowerPower(attack):
 
     suitTrack = getSuitTrack(attack)
     suitName = suit.getStyleName()
-    leftPosPoints = [Point3(0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
-    rightPosPoints = [Point3(-0.5, 5, suit.height - 2.5), MovieUtil.PNT3_ZERO]
+    DefaultPoints = (
+        [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+        [Point3(-0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+    )
+    PosPoints = {
+        "dopr": (
+            [Point3(0.6, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+            [Point3(-0.3, 4.5, 5.55), MovieUtil.PNT3_ZERO],
+        ),
+        "dopa": (
+            [Point3(0.6, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+            [Point3(-0.4, 5.2, 7.6), MovieUtil.PNT3_ZERO],
+        ),
+        "tw": (
+            [Point3(0.45, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+            [Point3(-0.35, 3.5, 3.9), MovieUtil.PNT3_ZERO],
+        ),
+        "asm": (
+            [Point3(0.45, 3.5, 5.9), MovieUtil.PNT3_ZERO],
+            [Point3(-0.35, 3.5, 5.9), MovieUtil.PNT3_ZERO],
+        ),
+        "ad": (
+            [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+        ),
+        "phouse": (
+            [Point3(0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+            [Point3(-0.36, 4.2, 4.55), MovieUtil.PNT3_ZERO],
+        ),
+        "hh": (
+            [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+            [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
+        ),
+        "tbc": (
+            [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+        ),
+        "ambass": (
+            [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+        ),
+        "liquid": (
+            [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+        ),
+        "ubuster": (
+            [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+        ),
+        "autocad": (
+            [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 3.8, 3.7), MovieUtil.PNT3_ZERO],
+        ),
+        "cdirector": (
+            [Point3(0.6, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+            [Point3(0.0, 5.8, 6.45), MovieUtil.PNT3_ZERO],
+        ),
+        "clubpres": (
+            [Point3(0.7, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+            [Point3(0.1, 5.5, 6.8), MovieUtil.PNT3_ZERO],
+        ),
+        "chainsaw": (
+            [Point3(0.6, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+            [Point3(0.0, 5.8, 6.2), MovieUtil.PNT3_ZERO],
+        ),
+        "dl": (
+            [Point3(0.66, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+            [Point3(-0.06, 4.2, 4.85), MovieUtil.PNT3_ZERO],
+        ),
+        "shw": (
+            [Point3(1.3, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+            [Point3(-0.9, 4.75, 6.2), MovieUtil.PNT3_ZERO],
+        ),
+    }
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
+    leftPosPoints, rightPosPoints = PosPoints.get(
+            suit.dna.name, DefaultPoints
+        )
     for t in targets:
         leftKnives = []
         rightKnives = []
@@ -4460,7 +4575,22 @@ def doEvilEye(attack):
     damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
-    posPoints = [Point3(-0.4, 4.5, suit.height - 2.5), VBase3(-155.0, -20.0, 0.0)]
+    eyePos = {
+            "cr": [Point3(-0.25, 4.85, 5.75), VBase3(-155.0, -20.0, 0.0)],
+            "tf": [Point3(-0.4, 3.85, 5.01), VBase3(-155.0, -20.0, 0.0)],
+            "mg": [Point3(-0.7, 3.9, 5.2), VBase3(-155.0, -20.0, 0.0)],
+            "le": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+            "nsh": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+            "dl": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
+            "br": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
+            "lgator": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+            "wsi": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+        }
+
+    posPoints = eyePos.get(
+            suit.dna.name,
+            [Point3(-0.4, 3.65, 5.01), VBase3(-155.0, -20.0, 0.0)],
+        )
     appearDelay = 0.8
     suitHoldStart = 1.06
     suitHoldStop = 1.69
@@ -5596,7 +5726,7 @@ def doPowerTrip(attack):
     return Parallel(suitTrack, partTrack1, partTrack2, waterfallTrack, soundTrack, toonTracks)
 
 
-def getThrowEndPoint(suit, toon, battle, whichBounce):
+def getThrowEndPointOLD(suit, toon, battle, whichBounce):
     pnt = toon.getPos(toon)
     if whichBounce == 'one':
         pnt.setY(pnt[1] + 10)
@@ -5612,8 +5742,106 @@ def getThrowEndPoint(suit, toon, battle, whichBounce):
         pnt.setY(pnt[1] - 5)
     return Point3(pnt)
 
-
 def doBounceCheck(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    battle = attack['battle']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    hitSuit = dmg > 0
+    check = globalPropPool.getProp("bounced-check")
+    checkPosPoints = [MovieUtil.PNT3_ZERO, VBase3(90, 90, 180)]
+    bounce1Point = lambda: getThrowEndPoint(toon, "one", battle)
+    bounce2Point = lambda: getThrowEndPoint(toon, "two", battle)
+    hitPoint = lambda: getThrowEndPoint(toon, "hit", battle)
+    missPoint = lambda: getThrowEndPoint(toon, "miss", battle)
+    throwDelay = 48/24 / 2
+    dodgeDelay = 1.7 + throwDelay
+    damageDelay = 2.0 + throwDelay
+    suitTrack = getSuitTrack(attack, playRate=2)
+    checkPropTrack = Sequence(
+        getPropAppearTrack(
+            check,
+            suit.getRightHand(),
+            checkPosPoints,
+            1e-05,
+            Point3(8.5, 8.5, 8.5),
+            startScale=MovieUtil.PNT3_ONE,
+        )
+    )
+    checkPropTrack.append(Wait(throwDelay))
+    checkPropTrack.append(Func(check.wrtReparentTo, battle))
+    releaseDur = checkPropTrack.getDuration()
+    grav = -130
+    checkPropTrack.append(
+        getThrowTrack(check, bounce1Point, duration=0.5, parent=battle, gravity=grav)
+    )
+    checkPropTrack.append(
+        getThrowTrack(check, bounce2Point, duration=0.6, parent=battle, gravity=grav)
+    )
+    if hitSuit:
+        checkPropTrack.append(
+            getThrowTrack(check, hitPoint, duration=0.5, parent=battle, gravity=grav)
+        )
+    else:
+        checkPropTrack.append(
+            getThrowTrack(check, missPoint, duration=0.5, parent=battle, gravity=grav)
+        )
+        checkPropTrack.append(
+            LerpScaleInterval(check, 0.1, MovieUtil.PNT3_NEARZERO, blendType='easeIn')
+        )
+    endDur = checkPropTrack.getDuration() - releaseDur - 0.01
+    checkPropTrack.append(Sequence(
+        Func(check.setScale, MovieUtil.PNT3_NEARZERO),
+        Wait(1.0),
+        Func(MovieUtil.removeProp, check)
+    ))
+    spinCheckTrack = Sequence(
+        Wait(releaseDur),
+        LerpHprInterval(check, endDur, startHpr=(0, 90, 0), hpr=(1200, 90, 0)),
+    )
+    toonTrack = Parallel(
+        getToonTrack(attack, damageDelay, ['nothing'], dodgeDelay, ['nothing']),
+        Sequence(
+            Wait(damageDelay),
+            ActorInterval(toon, 'slip-backward', playRate=1.3),
+            Func(toon.loop, 'neutral'),
+        ) if hitSuit else Sequence(Wait(dodgeDelay), Func(toon.doEmote, 24), Wait(1.5), Func(toon.loop, 'neutral')),
+    )
+
+    soundName = "SA_pink_slip.ogg"  # "AA_drop_anvil_miss.ogg"  # "SA_pink_slip.ogg"
+    soundTracks = Parallel(
+        getSoundTrack(soundName, delay=throwDelay + 0.2, duration=0.7,
+                            node=suit),
+        getSoundTrack(soundName, delay=throwDelay+0.8, duration=0.7, node=suit),
+        getSoundTrack(soundName, delay=throwDelay+1.4, duration=0.7, node=suit),
+    )
+    hitSeq = Sequence()
+    if hitSuit:
+        hitSeq = getSoundTrack("Toon_bodyfall_synergy.ogg", delay=throwDelay + 1.9,
+                                    duration=0.6, node=suit)
+
+    BattleParticles.loadParticles()
+    trailEffect = BattleParticles.createParticleEffect(file='bouncecheck')
+    partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, [trailEffect, check, 1], softStop=-1.0)
+
+    return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks, spinCheckTrack, partTrack, hitSeq)
+
+def getThrowEndPoint(toon, whichBounce, battle):
+    pnt = toon.getPos(battle)
+    if whichBounce == "one":
+        pnt = Vec3(-5.0, 0.0, 0.8)
+    elif whichBounce == "two":
+        pnt = Vec3(2.75, -2.0, 0.8)
+    elif whichBounce == "hit":
+        pnt.setZ(pnt[2] + toon.shoulderHeight + 0.3)
+    elif whichBounce == "miss":
+        pnt = Vec3(0, -8, 13)
+    return Point3(pnt)
+
+
+def doBounceCheckOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
@@ -5816,7 +6044,7 @@ def doWatercooler(attack):
      0.6])
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
-    toonTracks = getToonTracks(attack, damageDelay=suitTrack.getDuration() - 1.5, damageAnimNames=['cringe'], dodgeDelay=2.4, splicedDodgeAnims=dodgeAnims)
+    toonTracks = getToonTracks(attack, damageDelay=suitTrack.getDuration() - 2.25, damageAnimNames=['cringe'], dodgeDelay=2.25, splicedDodgeAnims=dodgeAnims)
     soundTrack = Sequence(Wait(1.1), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_appear_only.ogg'), node=suit, duration=1.4722), Wait(0.4), SoundInterval(globalBattleSoundCache.getSound('SA_watercooler_spray_only.ogg'), node=suit, duration=2.313))
     return Parallel(suitTrack, toonTracks, propTrack, sprayTracks, soundTrack, splashTracks)
 
@@ -7184,8 +7412,124 @@ def doShortSqueeze(attack):
 
     return Parallel(suitTrack, shakeTracks, squeezeTracks, coinTracks, toonTracks, soundTracks)
 
-
 def doBlueChip(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    tauntIndex = attack['taunt']
+    dmg = target[0]['hp']
+    toon = attack['target'][0]['toon']
+
+    chip = globalPropPool.getProp("chip_blue")
+    firstHoldPosPoints = [Point3(-0.0012, 0.5083, -0.1271), Point3(-100, 0, 0)]
+    grabPosPoints = [Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)]
+
+    damageDelay = 3.1
+    dodgeDelay = 2.2
+
+    suitTrack = getSuitTrack(attack)
+
+    landPos = toon.getPos(render)
+    landPos.setZ(landPos.getZ() + 0.25)
+    landUpPos = toon.getPos(render)
+    landUpPos.setZ(landUpPos.getZ() + 0.8)
+
+    invokerScale = suit.getScale()
+    if getSuitBodyType(attack['suitName']) == 'a':
+        scaleFactor = 1.19636963  # Head honcho scale
+        startX, startY = 2.9, 4.2
+        endX, endY = 0.7, 5.1
+        startZ = 7.4
+        endZ = 8.8
+        chipHandScale = 1.15
+        chipGrabScale = 1.15
+        chipFlipMult = 6.5
+    else:
+        scaleFactor = 0.82041587901  # Insider scale
+        startX, startY = 0.9, 2.1
+        endX, endY = 0.9, 2.45
+        startZ = 3.0
+        endZ = 4.4
+        chipHandScale = 0.95
+        chipGrabScale = 0.8
+        chipFlipMult = 5.0
+
+    propTrack = Sequence(
+        getPropAppearTrack(
+            chip,
+            suit.getRightHand(),
+            firstHoldPosPoints,
+            0.2,
+            Point3(chipHandScale),
+            scaleUpTime=0.25,
+        ),
+    )
+
+    chipHandPosRenderStart = Point3(startX * (invokerScale[0] / scaleFactor),
+                                    startY * (invokerScale[0] / scaleFactor),
+                                    startZ * (invokerScale[0] / scaleFactor))
+    chipHandPosRenderEnd = Point3(endX * (invokerScale[0] / scaleFactor),
+                                    endY * (invokerScale[0] / scaleFactor),
+                                    endZ * (invokerScale[0] / scaleFactor))
+
+    propFlyTrack = Sequence(
+        Wait(1.05),
+        Func(chip.wrtReparentTo, suit),
+        Parallel(
+            ProjectileInterval(chip, startPos=chipHandPosRenderStart, endPos=chipHandPosRenderEnd, duration=0.5, gravityMult=chipFlipMult),
+            LerpHprInterval(chip, 0.5, (90, -360, 0), startHpr=(0, 90, 0)),
+        ),
+        Func(chip.wrtReparentTo, suit.getRightHand()),
+        Func(chip.setPosHpr, Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)),
+        Func(chip.setScale, chipGrabScale),
+        Wait(0.7),
+        Func(chip.wrtReparentTo, render),
+        Parallel(
+            ProjectileInterval(chip, endPos=landPos, duration=0.95, gravityMult=2.15),
+            LerpHprInterval(chip, 0.95, (0, 450, 0), startHpr=(0, 90, 0)),
+            Sequence(
+                Wait(0.25),
+                LerpScaleInterval(chip, 0.65, 6.5),
+            ),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.15, (20, 441, 0)),
+            LerpPosInterval(chip, 0.15, landUpPos, blendType='easeOut'),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.225, (40, 450, 0)),
+            LerpPosInterval(chip, 0.225, landPos, blendType='easeIn'),
+        ),
+        LerpHprInterval(chip, 0.3, (60, 450, 0)),
+        LerpHprInterval(chip, 0.3, (70, 450, 0), blendType='easeOut'),
+        Wait(0.1),
+        LerpScaleInterval(chip, 0.35, 0.01, blendType='easeIn'),
+        Func(chip.hide),
+    )
+
+    toonTrack = getToonTrack(attack, 3.3, ['squish'], 2.0, ['sidestep'])
+    soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
+    toonReactTrack = Sequence(Wait(3.05), Func(toon.playDialogueForString, "!"), Func(toon.enterFlattened), Wait(1.0), Parallel(ActorInterval(toon, 'jump'), soundTrack2, Func(toon.loop, 'neutral'),   Sequence(Wait(0.5), Func(toon.exitFlattened))))
+    soundTrack = getSoundTrack(
+        "SA_blue_chip.ogg", delay=0, node=suit
+    )
+    if dmg > 0:
+        return Sequence(
+            Parallel(
+                suitTrack, toonTrack, toonReactTrack, soundTrack, propTrack, propFlyTrack,
+            ),
+            Func(MovieUtil.removeProp, chip),
+        )
+    else:
+        return Sequence(
+                Parallel(
+                    suitTrack, toonTrack, soundTrack, propTrack, propFlyTrack,
+                ),
+                Func(MovieUtil.removeProp, chip),
+            )
+
+
+def doBlueChipOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']

@@ -716,6 +716,10 @@ SuitDefeatTaunts = {
              "For the last time!! I!! Am!! Not!! A!! Kid!!",
              "Tell that Resistance that Kilo Kidd sent you crying home!",
              "Get outta here, your aura mocks me!"],
+ 'erclaim': ["Begone!",
+             "This vampire is not famous for forgiveness.",
+             "What is a Toon? A miserable pile of laughter.",
+             "Wished you were a Stakeholder, hm? Hah!"],
 
  # Cashbots
  'ovt': ["Mr. Dolair won't appreciate you stealing anything valuable.",
@@ -757,6 +761,9 @@ SuitDefeatTaunts = {
  'pcrat': ["Perhaps that's 'persuasion' enough for ya!",
            "Time for ya to sleep with the fishes!",
            "And to think that I almost let ya join up with me!"],
+'erfit': ["I recommend working out more before our next encounter.",
+           "Pro tip: Stay hydrated.",
+           "Didn't even break a sweat."],
 
  # Sellbots
  'foreman': ["Sneaking around like that dog, were you? Nice try.",
@@ -873,10 +880,9 @@ SuitSyphonPhrases = ("I'll take that!",
                    "Hey... I feel stronger!",
                    "What is this power?",
                       "Don't mind if I do!")
-SuitMarkedPhrases = ("Well it's been fun.",
-                   "So much for that promotion.",
-                   "Uh oh.",
-                      "Noooooooo!")
+SuitMarkedPhrases = ("So much for that promotion.",
+                   "I don't remember agreeing to this.",
+                   "This wasn't in my job description.")
 SuitBashPhrases = ("You seem to be in alligator territory.",
                    "Good luck treading theses waters now.",
                    "In just a snap.",

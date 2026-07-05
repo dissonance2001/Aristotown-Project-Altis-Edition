@@ -9,22 +9,19 @@ class DistributedMultislackerElevator(DistributedBossElevator.DistributedBossEle
     
     def __init__(self, cr):
         DistributedBossElevator.DistributedBossElevator.__init__(self, cr)
-        self.type = ELEVATOR_VP_2
+        self.type = ELEVATOR_VP
         self.countdownTime = ElevatorData[self.type]['countdown']
 
     def setupElevator(self):
-        self.elevatorModel = loader.loadModel('phase_4/models/modules/ttcc_gen_sigil')
-       # icon = self.elevatorModel.find('**/big_frame/')
-        #icon.hide()
-        self.leftDoor = self.elevatorModel.find('**/DropShadow')
-        self.rightDoor = self.elevatorModel.find('**/Bolts')
+        self.elevatorModel = loader.loadModel('phase_9/models/cogHQ/cogHQ_elevator')
+        icon = self.elevatorModel.find('**/big_frame/')
+        icon.hide()
+        self.leftDoor = self.elevatorModel.find('**/left-door')
+        self.rightDoor = self.elevatorModel.find('**/right-door')
         geom = base.cr.playGame.hood.loader.geom
-        locator = geom.find('**/elevator_locator')
+        locator = geom.find('**/boss_elevator_origin')
         self.elevatorModel.reparentTo(locator)
-        self.elevatorModel.setH(90)
-        self.elevatorModel.setY(100)
-        self.elevatorModel.setZ(-27.5)
-        self.elevatorModel.setX(30)
+        self.elevatorModel.setH(0)
         DistributedElevator.DistributedElevator.setupElevator(self)
 
     def getDestName(self):

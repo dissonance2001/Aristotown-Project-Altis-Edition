@@ -12,9 +12,18 @@ from toontown.building import DoorTypes
 class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogHQDoorAI')
 
-    def __init__(self, air, blockNumber, doorType, destinationZone, doorIndex = 0, lockValue = FADoorCodes.SB_DISGUISE_INCOMPLETE, swing = 3):
+    def __init__(self, air, blockNumber, doorType, destinationZone, doorIndex=0,
+                 lockValue=FADoorCodes.SB_DISGUISE_INCOMPLETE, swing=3, hardmode=False):
+        """
+        :type air: ToontownAIRepository
+        :type doorIndex: int
+        :type hardmode: bool
+        """
+        print 'DOOR AI INIT', destinationZone, doorIndex, hardmode
+        self.notify.debug("init")
         DistributedDoorAI.DistributedDoorAI.__init__(self, air, blockNumber, doorType, doorIndex, lockValue, swing)
         self.destinationZone = destinationZone
+        self.hardmode = hardmode
 
     def requestEnter(self):
         avatarId = self.air.getAvatarIdFromSender()
@@ -26,7 +35,7 @@ class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
                 if CogDisguiseGlobals.isSuitComplete(parts, dept):
                     allowed = 1
                 else:
-                    allowed = 0
+                    allowed = 1
             else:
                 allowed = 1
             

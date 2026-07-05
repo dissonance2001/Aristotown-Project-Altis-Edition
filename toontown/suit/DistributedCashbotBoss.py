@@ -14,6 +14,8 @@ from toontown.suit import DistributedBossCog
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
+from toontown.battle import BattleParticles
+from direct.particles import ParticleEffect
 from toontown.suit import DistributedCashbotBossGoon
 from toontown.suit import SuitDNA
 from toontown.battle.BattleProps import *
@@ -47,6 +49,44 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBoss')
     numFakeGoons = 3
 
+    SUIT_SPAWN_LOCATIONS = [
+        ('mplayer', (-43.380, -34.408, 19.124, -31.372, 0.0, 0.0, 1.0, 1.0, 1.0)),
+        ('ambass', (-30.216, -39.855, 19.124, -23.529, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('wtapper', (-22.591, -43.123, 19.124, -15.686, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('phouse', (-18.234, -44.575, 19.124, -11.764, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('bkeeper', (35.792, -38.344, 19.767, 27.058, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('lgator', (33.222, -21.635, 8.52, 28.214, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('stenog', (27.775, -23.629, 8.52, 17.757, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('caseman', (21.991, -24.593, 8.52, 13.13, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('sgoat', (16.181, -26.045, 8.52, 9.208, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('wsi', (34.818, -31.829, 16.553, 27.717, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('cdirector', (40.934, -35.452, 19.767, 31.685, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('cbutcher', (16.988, -43.486, 19.445, 1.308, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('rkeeper', (22.379, -42.76, 19.445, 10.863, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('redd', (27.437, -40.915, 21.124, 25.902, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('dking', (21.332, -38.344, 16.553, 15.491, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('liquid', (27.188, -29.668, 13.982, 21.275, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('liquidr', (22.939, -29.668, 11.982, 15.491, 0.0, 3, 1.0, 1.0, 1.0)),
+        ('safesupervis', (-34.911, -39.408, 18.7, -21.364, 0, 0, 1.0, 1.0, 1.0)),
+        ('ubuster', (-43.23, -22.699, 13.237, -28.305, 0, 0, 1.0, 1.0, 1.0)),
+        ('derrman', (-35.605, -19.431, 10.332, -21.769, 0, 0, 1.0, 1.0, 1.0)),
+        ('derrhand', (-31.974, -28.916, 10.13, -21.919, 0, 0, 1.0, 1.0, 1.0)),
+        ('dopa', (40.648, -23.132, 13.307, 31.294, 0, 0, 1.0, 1.0, 1.0)),
+        ('dopr', (38.077, -26.024, 13.307, 32.451, 0, 0, 1.0, 1.0, 1.0)),
+        ('dold', (-16.55, -27.952, 10.415, -18.189, 0, 0, 1.0, 1.0, 1.0)),
+        ('dola', (-21.049, -25.06, 10.094, -27.443, 0, 0, 1.0, 1.0, 1.0)),
+        ('hustle', (-29.037, -36.316, 17.356, -19.6, 0, 0, 1.0, 1.0, 1.0)),
+        ('racket', (-24.86, -36.316, 17.035, -13.816, 0, 0, 1.0, 1.0, 1.0)),
+        ('radiog', (-31.929, -33.745, 17.035, -26.541, 0, 0, 1.0, 1.0, 1.0)),
+        ('treasure', (-38.998, -31.496, 16.071, -28.855, 0, 0, 1.0, 1.0, 1.0)),
+        ('bookkeep', (30.089, -31.817, 19.85, 22.044, 0.0, 0, 1.0, 1.0, 1.0)),
+        ('ottoman', (17.236, -31.174, 14.066, 18.573, 0.0, 0, 1.0, 1.0, 1.0)),
+        ('chairman', (-23.573, -30.21, 11.745, -16.131, 0.0, 0, 1.0, 1.0, 1.0)),
+        ('erclaim', (-18.11, -32.138, 13.424, -10.347, 0.0, 0, 1.0, 1.0, 1.0)),
+        ('erfit', (45.2786, -33.2291, 21.3257, 37.0543, 0.0, 0.0, 1.0, 1.0, 1.0)),
+    ]
+    SUIT_TINT = (0.76, 0.76, 0.76, 1.0)
+
     def __init__(self, cr):
         DistributedBossCog.DistributedBossCog.__init__(self, cr)
         FSM.FSM.__init__(self, 'DistributedCashbotBoss')
@@ -73,39 +113,6 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highroller.setDisplayName('High Roller\nCashbot\nLevel 100.mgr')
         self.highroller.doId = 0
         self.highroller.loop('neutral2')
-
-        self.mrhollywood = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('mh2')
-        self.mrhollywood.setDNA(suitDNA)
-        self.mrhollywood.setPickable(0)
-        self.mrhollywood.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
-        self.mrhollywood.doId = 0
-        self.mrhollywood.loop('neutral2')
-        self.videographer = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('videog')
-        self.videographer.setDNA(suitDNA)
-        self.videographer.setPickable(0)
-        self.videographer.setDisplayName('Videographer\nPressbot\nLevel 99.mgr')
-        self.videographer.doId = 0
-        self.videographer.loop('neutral2')
-        self.director = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('mh2')
-        self.director.setDNA(suitDNA)
-        self.director.setPickable(0)
-        self.director.setDisplayName('Mr. Hollywood\nSellbot\nLevel 25.exe')
-        self.director.doId = 0
-        self.director.loop('neutral2')
-        self.filmmaker = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('std2')
-        self.filmmaker.setDNA(suitDNA)
-        self.filmmaker.setPickable(0)
-        self.filmmaker.setDisplayName('Stunt Double\nPressbot\nLevel 18.exe')
-        self.filmmaker.doId = 0
-        self.filmmaker.loop('neutral2')
         self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mplayer')
@@ -255,6 +262,99 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             for goon in self.fakeGoons:
                 goon.request(state)
 
+    def startHighRollerParticles(self):
+        self.stopHighRollerParticles()
+
+        BattleParticles.loadParticles()
+
+        self.hrParticles = []
+
+        # Wall smoke
+        smokeRender = render.attachNewNode('HRSmokeRender')
+        smokeRender.setDepthWrite(False)
+        smokeRender.setBin('fixed', 1)
+
+        smoke = BattleParticles.createParticleEffect(file='hr_wallsmoke')
+        smoke.start(smokeRender)
+        self.hrParticles.append((smoke, smokeRender))
+
+        # Ground stars
+        ground = BattleParticles.createParticleEffect(file='hr_starground')
+        ground.start(render, render)
+        self.hrParticles.append((ground, None))
+
+        # Sky stars
+        sky = BattleParticles.createParticleEffect(file='hr_skystars')
+        sky.start(render, render)
+        self.hrParticles.append((sky, None))
+
+        # Stage lights
+        lights = BattleParticles.createParticleEffect(file='hr_stagelights')
+        lights.start(render, render)
+        self.hrParticles.append((lights, None))
+
+    def stopHighRollerParticles(self):
+        if not hasattr(self, 'hrParticles'):
+            return
+
+        for effect, node in self.hrParticles:
+            try:
+                effect.softStop()
+            except:
+                pass
+
+            try:
+                effect.cleanup()
+            except:
+                pass
+
+            if node:
+                node.removeNode()
+
+        self.hrParticles = []
+
+    def makeHighRollerWheelSpin(self, duration=3.0, spinCount=3):
+        wheel = self.highRollerWheel
+
+        startR = wheel.getR()
+        endR = startR - (360 * spinCount) - random.choice((36, 108, 180, 252, 324))
+
+        pullbackR = startR + ((endR - startR) * -0.02)
+        sendR = startR + ((endR - startR) * 0.10)
+
+        return Sequence(
+            Func(wheel.show),
+            LerpHprInterval(
+                wheel,
+                duration * 0.15,
+                hpr=(wheel.getH(), wheel.getP(), pullbackR),
+                startHpr=(wheel.getH(), wheel.getP(), startR),
+                blendType='easeInOut'
+            ),
+            LerpHprInterval(
+                wheel,
+                duration * 0.10,
+                hpr=(wheel.getH(), wheel.getP(), sendR),
+                startHpr=(wheel.getH(), wheel.getP(), pullbackR),
+                blendType='easeIn'
+            ),
+            LerpHprInterval(
+                wheel,
+                duration * 0.75,
+                hpr=(wheel.getH(), wheel.getP(), endR),
+                startHpr=(wheel.getH(), wheel.getP(), sendR),
+                blendType='easeOut'
+            )
+        )
+    
+    def colorScaleOffAllNodes(self):
+        for colorNode in self.colorScaleOffNodes:
+            colorNode.setColorScaleOff()
+
+    def turnLightsBackOn(self):
+        for lightBeam in self.highRollerArena.findAllMatches("**/stagelight_light"):
+            lightBeam.show()
+
     def loadEnvironment(self):
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
         self.highRollerArena = loader.loadModel('phase_13/models/events/apriltoons/highroller/cc_m_ara_int_highroller.bam')
@@ -279,11 +379,13 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cableTex = self.craneArm.findTexture('MagnetControl')
         self.eyes.setPosHprScale(4.5, 0, -2.5, 90, 90, 0, 0.4, 0.4, 0.4)
         self.safe2.setPosHprScale(0, 0, 0, -90, -90, 0, 1, 1, 1)
+        self.__setupStagelights()
         for headPart in self.animatedHeadParts:
             self.eyes.reparentTo(headPart)
             self.safe2.reparentTo(headPart)
         self.eyes.hide()
         self.safe2.hide()
+        self.colorScaleOffNodes = []
         self.midVault.setPos(10, -222, -70.7)
         self.highRollerArena.setPos(0, -222, -4.05)
         self.endVault.setPos(84, -201, -6)
@@ -294,29 +396,36 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highroller.reparentTo(self.geom)
         self.highroller.setPosHpr(0, -200, 0, 180, 0, 0)
         self.highroller.hide()
-        self.mrhollywood.reparentTo(self.geom)
-        self.mrhollywood.setPosHpr(5, -200, 0, 180, 0, 0)
-        self.mrhollywood.hide()
-        self.videographer.reparentTo(self.geom)
-        self.videographer.setPosHpr(-5, -200, 0, 180, 0, 0)
-        self.videographer.hide()
         self.majorplayer2.reparentTo(self.geom)
         self.majorplayer2.setPosHpr(5, -200, 0, 180, 0, 0)
         self.duckshuffler2.reparentTo(self.geom)
         self.duckshuffler2.setPosHpr(-5, -200, 0, 180, 0, 0)
         self.duckshuffler2.hide()
-        self.director.reparentTo(self.geom)
-        self.director.setPosHpr(-10, -200, 0, 180, 0, 0)
-        self.director.hide()
-        self.filmmaker.reparentTo(self.geom)
-        self.filmmaker.setPosHpr(10, -200, 0, 180, 0, 0)
-        self.filmmaker.hide()
         self.highRollerWheel.reparentTo(self.geom)
         self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
         self.highRollerWheel.hide()
         self.highRollerWheel2.reparentTo(self.geom)
         self.highRollerWheel2.setPosHpr(0, -170, 0, 180, 0, 0)
         self.highRollerWheel2.hide()
+        self.__suits = []
+        self.__initializeAudience()
+        for light in self.highRollerArena.find("**/stage_lights_grp").getChildren():
+            self.colorScaleOffNodes.append(light)
+
+        for lightBeam in self.highRollerArena.findAllMatches("**/stagelight_light"):
+            lightBeam.hide()  # We're gonna also turn these lights off until phase 3.
+
+        for disco_ball in self.highRollerArena.findAllMatches("**/disco_ball_*_geom"):
+            self.colorScaleOffNodes.append(disco_ball)
+
+        for curtain in self.highRollerArena.findAllMatches("**/curtains_*_geom"):
+            self.colorScaleOffNodes.append(curtain)
+
+        for ceil_light in self.highRollerArena.findAllMatches("**/ceiling_lights_*_grp"):
+            self.colorScaleOffNodes.append(ceil_light)
+
+        for geom_node in (self.highRollerArena.find("**/ceiling_stage"), self.highRollerArena.find("**/stage_curtains_back")):
+            self.colorScaleOffNodes.append(geom_node)
         self.highRollerTV.reparentTo(self.geom)
         self.highRollerTV.setPosHpr(-25, -185, 21.75, -10, 0, 0)
         self.endVault.findAllMatches('**/MagnetArms').detach()
@@ -402,6 +511,13 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             'startBattleOneLoop'
         )
 
+    def __setupStagelights(self):
+        # change "statelight" to "spotlight" to target the actual light beam
+        stagelights = self.highRollerArena.findAllMatches('**/ceiling_lights_back_stagelight_*')
+        for stagelight in stagelights:
+            stagelight.setColorScaleOff(1)
+            stagelight.setColor(1, 1, 1, 0.3)
+
     def __startBattleOneLoop(self, task):
         self.phaseOneMusic.setLoop(True)
         self.phaseOneMusic.play()
@@ -414,6 +530,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.battleTwoMusic.stop()
 
     def startPhase2Music(self):
+        self.startHighRollerParticles()
+        self.turnLightsBackOn()
+        self.colorScaleOffAllNodes()
         self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
         self.phaseTwoCutsceneMusic.stop()
         self.phaseTwoMusic.play()
@@ -432,7 +551,61 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def unloadEnvironment(self):
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
+        for suit in self.__suits:
+            suit.cleanup()
+        del self.__suits
+        self.colorScaleOffNodes = []
         self.geom.removeNode()
+
+    def __initializeAudience(self):
+        for suit in self.__suits:
+            suit.cleanup()
+        self.__suits = []
+        for name, posHprScale in self.SUIT_SPAWN_LOCATIONS:
+            suit = self.__createSuit(name)
+            suit.reparentTo(self.highRollerArena)
+            suit.setPosHprScale(*posHprScale)
+            self.__suits.append(suit)
+
+    @staticmethod
+    def __createSuit(name):
+        suit = Suit.Suit()
+        d = SuitDNA.SuitDNA()
+        d.newSuit(name)
+        suit.setDNA(d)
+        suit.loop('neutral')
+        suit.setPlayRate(rate=random.uniform(0.95, 1.05), animName='neutral')
+        suit.setColorScale(0.76, 0.76, 0.76, 1.0)
+        setattr(suit, 'dna', d)
+        setattr(suit, 'getLevel', lambda: 0)
+        setattr(suit, 'getStyleName', lambda: d.name)
+        setattr(suit, 'battleTrapProp', None)
+        suit.hideNametag2d()
+        suit.hideNametag3d()
+        suit.setActiveShadow(0)  # Disable drop shadow calculations
+        suit.hideShadow()  # And then hide it from rendering
+        suit.removeActive()  # Remove nametag calculations
+
+        # # # sigh
+        # # if name in ('foreman', 'charon', 'nix', 'hydra', 'styx', 'kerberos'):
+        # #     suit.makeSkeleton(elite=1)
+
+        # elif name in COG_MINIBOSSES or name == 'ptjockey':
+        #     suit.makeExecutive()
+
+        # if name == 'fbed':
+        #     from panda3d.otp import CFThought
+        #     suit.pose('slip-backward', 33)
+        #     suit.showNametag3d()
+        #     suit.setChatAbsolute(TTLocalizer.ToonSleepString, CFThought, wantHeadAnim=False)
+
+        # if name == 'psetter':
+        #     suit.loop('true-neutral')
+
+        # if name == 'fires':
+        #     suit.specialHead.find("**/fire_seq").setColorScaleOff()
+
+        return suit
 
     def replaceCollisionPolysWithPlanes(self, model):
         newCollisionNode = CollisionNode('collisions')

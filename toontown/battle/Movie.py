@@ -391,6 +391,9 @@ class Movie(DirectObject.DirectObject):
     def __updateToonRoundEffects(self, toon):
         for methodName in (
             'checkCooldownRoundCountdown',
+            'checkDriedOutRoundCountdown',
+            'checkEnergizedRoundCountdown',
+            'checkHydrationRoundCountdown',
             'checkInkDrainRoundCountdown',
             'checkBombedRoundCountdown',
             'checkGroupDamageDownRoundCountdown',
@@ -505,7 +508,7 @@ class Movie(DirectObject.DirectObject):
         speedSuit = None
 
         for s in self.battle.suits:
-            if s.battleSpeed > 0:
+            if s.battleSpeed > 0 and not s.dna.name == 'hustle':
                 speedSuit = s
                 break
 
@@ -1222,11 +1225,12 @@ class Movie(DirectObject.DirectObject):
                     'ComboThrow': 'after-throw',
                     'ComboSquirt': 'after-squirt',
                     'ComboDrop': 'after-drop',
+                    'ReddLiquidationSale': 'after-squirt',
                     'LitigatorSnapSoak': 'after-squirt',
                     'PowerhouseGeneration': 'after-zap',
                     'PowerhouseSnipeCollectCall': 'after-squirt',
                     'TollmasterLedgerOfSound': 'after-sound',
-                    'DividendZapRetaliation': 'after-zap',
+                    'DividendZapRetaliation': 'after-throw',
                     'AttorneyOverseerDrop': 'after-drop',
                     'AttorneyOverseerSquirt': 'after-squirt',
                     'AttorneyOverseerThrow': 'after-throw',
@@ -1281,10 +1285,12 @@ class Movie(DirectObject.DirectObject):
 
                 PRE_TOON_ATTACKS = (
                     'ZapMovie',
+                    'ErclaimHemmorage',
                     'SueDamage',
                     'SueApplication',
                     'AbilityQueuedPreToon',
                     'BookkeeperPaperCut',
+                    'ContingencyMarkRevisedFiling',
                     'ContingencyRiskThresholdBreach50',
                     'ArbitratorPaperFiling',
                     'HustlerCustomerRetention',
@@ -1309,6 +1315,7 @@ class Movie(DirectObject.DirectObject):
                      'HighRollerLureResistance2',
                      'PresidentMandatoryFiling',
                      'PresidentLiability',
+                     'ReddAutoRepair',
                     'HighRollerLureResistance',
                     'MintLureResistance2',
                     'MintLureResistance',
@@ -1501,6 +1508,11 @@ class Movie(DirectObject.DirectObject):
         track = Sequence(name=name)
         camTrack = Sequence(name=name + '-cam')
 
+        parallelGroupNames = {
+            'ErfitProToonShake': 'ErfitPhaseCombo',
+            'ErfitPhase2': 'ErfitPhaseCombo',
+        }
+
         parallelRemovalNames = (
             'MarkRemoval',
             'SoakRemoval',
@@ -1567,11 +1579,13 @@ class Movie(DirectObject.DirectObject):
             if not ival:
                 continue
 
-            if attackName in parallelRemovalNames:
-                if pendingName is None:
-                    pendingName = attackName
+            groupName = parallelGroupNames.get(attackName, attackName)
 
-                if attackName != pendingName:
+            if attackName in parallelRemovalNames or attackName in parallelGroupNames:
+                if pendingName is None:
+                    pendingName = groupName
+
+                if groupName != pendingName:
                     flushPending()
                     pendingName = attackName
                     pendingTrack = Parallel()

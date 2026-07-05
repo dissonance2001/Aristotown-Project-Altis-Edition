@@ -23,6 +23,7 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase import TTLocalizer
 from toontown.pets import PetConstants
 from direct.gui.DirectGui import DGG
+from direct.gui.DirectGui import DirectFrame
 from toontown.battle import FireCogPanel
 from direct.interval.SoundInterval import SoundInterval
 from toontown.battle import SueCogPanel
@@ -38,6 +39,7 @@ class TownBattle(StateData.StateData):
         self.cogs = []
         self.creditLevel = None
         self.clockTick = None
+        self.battle = None
         self.luredIndices = []
         self.trappedIndices = []
         self.numToons = 1
@@ -49,6 +51,8 @@ class TownBattle(StateData.StateData):
         self.level = -1
         self.lastActionMode = 'Inventory'
         self.target = 0
+        self.timeRunningOutTrack = None
+        self.timeRunnoutOutPulseTrack = None
         self.toonAttacks = [(-1, 0, 0),
          (-1, 0, 0),
          (-1, 0, 0),
@@ -119,6 +123,32 @@ class TownBattle(StateData.StateData):
         self.timer.setPos(-0.151, 0, -1.808)
         self.timer.setScale(0.4)
         self.timer.hide()
+        # self.timerHoverRegion = DirectFrame(
+        #     parent=self.timer,
+        #     relief=None,
+        #     state=DGG.NORMAL,
+        #     frameSize=(-0.8, 0.8, -0.8, 0.8),
+        #     pos=(0, 0, 0)
+        # )
+        # self.timerHoverRegion.setTransparency(True)
+
+        # self.timerHoverRegion.bind(DGG.WITHIN, self.__handleWithinTimer)
+        # self.timerHoverRegion.bind(DGG.WITHOUT, self.__handleWithoutTimer)
+        # self.roundCount = DirectFrame(
+        #     parent=base.a2dBottomRight,
+        #     relief=None,
+        #     image='phase_3/maps/gui/ttcc_gui_scaledFrame_shadow.png',
+        #     image_scale=(1.05, 1, -1.808),
+        #     pos=(-0.151, 0, -1.008),
+        #     scale=1,
+        #     text='Round 1',
+        #     text_scale=0.14,
+        #     text_pos=(0, -0.05),
+        #     text_fg=(1, 1, 1, 1),
+        #     text_font=getMinnieFont()
+        # )
+        # self.roundCount.hide()
+        # self.roundCountSeq = None
 
     def cleanup(self):
         self.ignore(self.attackPanelDoneEvent)
@@ -137,7 +167,9 @@ class TownBattle(StateData.StateData):
         del self.SOSPetInfoPanel
         for toonPanel in self.toonPanels:
             toonPanel.cleanup()
-
+        # if self.roundCountSeq:
+        #     self.roundCountSeq.finish()
+        # self.roundCountSeq = None
         del self.toonPanels
         for cogPanel in self.cogPanels:
             cogPanel.cleanup()
@@ -218,18 +250,75 @@ class TownBattle(StateData.StateData):
             listenerNode=base.localAvatar
         )
         self.clockTick.start()
+        self.startTimeRunningOutTrack()
+        self.startTimeRunningOutPulseTrack()
 
     def stopTimerSound(self):
+        if hasattr(self, 'timeRunningOutPulseTrack') and self.timeRunningOutPulseTrack:
+            self.timeRunningOutPulseTrack.finish()
+        if self.timeRunningOutTrack:
+            self.timeRunningOutTrack.finish()
         if self.clockTick is not None:
             self.clockTick.pause()
             self.clockTick = None
+
+    def startTimeRunningOutPulseTrack(self):
+        if hasattr(self, 'timeRunningOutPulseTrack') and self.timeRunningOutPulseTrack:
+            self.timeRunningOutPulseTrack.finish()
+
+        pulse = Sequence()
+
+        duration = 1.0    # Starts slow
+        minDuration = 0.1  # Ends very fast
+        decrease = .1
+
+        scale = self.timer.getScale()
+
+        for i in xrange(20):
+            pulse.append(
+                LerpScaleInterval(
+                    self.timer,
+                    duration,
+                    scale * 1.15,
+                    blendType='easeInOut'
+                )
+            )
+
+            pulse.append(
+                LerpScaleInterval(
+                    self.timer,
+                    duration,
+                    scale,
+                    blendType='easeInOut'
+                )
+            )
+
+            duration = max(minDuration, duration - decrease)
+
+        self.timeRunningOutPulseTrack = pulse
+        self.timeRunningOutPulseTrack.start()
+
+    def startTimeRunningOutTrack(self):
+        if self.timeRunningOutTrack:
+            self.timeRunningOutTrack.finish()
+
+        shakeInterval = Sequence()
+        for _ in range(10):
+            shakeInterval.append(LerpHprInterval(self.timer, 0.025, 15))
+            shakeInterval.append(LerpHprInterval(self.timer, 0.025, 0))
+            shakeInterval.append(LerpHprInterval(self.timer, 0.025, -15))
+            shakeInterval.append(LerpHprInterval(self.timer, 0.025, 0))
+
+        self.timeRunningOutTrack = Parallel(
+            shakeInterval)
+        self.timeRunningOutTrack.start()
 
     def updateTimer(self, time):
         self.time = time
         self.timer.setTime(time)
 
-        if time == 10:
-            self.checkTimer()
+        # if time == 10:
+        #     self.checkTimer()
 
     def __cogPanels(self, num):
         for panel in self.cogPanels:
@@ -452,7 +541,8 @@ class TownBattle(StateData.StateData):
         for i in range(len(toons)):
             self.toonPanels[i].setLaffMeter(toons[i])
 
-    def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons):
+    def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons, battle):
+        self.battle = battle
         cogIds = map(lambda cog: cog.doId, cogs)
         self.notify.debug('adjustCogsAndToons() cogIds: %s self.cogs: %s' % (cogIds, self.cogs))
         self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
@@ -733,3 +823,35 @@ class TownBattle(StateData.StateData):
     def __isGroupHeal(self, levelNum):
         retval = BattleBase.attackAffectsGroup(HEAL_TRACK, levelNum)
         return retval
+    
+    # def __handleWithinTimer(self, *args, **kwargs):
+    #     if not self.roundCount:
+    #         return
+    #     if not self.battle:
+    #         return
+
+    #     currRound = self.battle.TurnsElapsed + 1
+    #     self.roundCount.setText('Round {currRound}')
+    #     self.roundCount['text_scale'] = 0.12 if currRound >= 100 else 0.14
+
+    #     if self.roundCountSeq:
+    #         self.roundCountSeq.pause()
+    #     self.roundCountSeq = Sequence(
+    #         Func(self.roundCount.show),
+    #         LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 1))
+    #     )
+    #     self.roundCountSeq.start()
+
+    # def __handleWithoutTimer(self, *args, **kwargs):
+    #     if not self.roundCount:
+    #         return
+    #     if not self.battle:
+    #         return
+
+    #     if self.roundCountSeq:
+    #         self.roundCountSeq.pause()
+    #     self.roundCountSeq = Sequence(
+    #         LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 0)),
+    #         Func(self.roundCount.hide),
+    #     )
+    #     self.roundCountSeq.start()
