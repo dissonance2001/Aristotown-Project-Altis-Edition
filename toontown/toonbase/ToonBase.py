@@ -33,6 +33,7 @@ from toontown.options import GraphicsOptions
 from toontown.audio.AltisAudio import AltisAudio
 from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from direct.task.Task import Task
+from direct.gui.OnscreenText import OnscreenText
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -47,8 +48,41 @@ class ToonBase(OTPBase.OTPBase):
             height = displayInfo.getDisplayModeHeight(i)
             if (width, height) not in self.resList:
                 self.resList.append((width, height))
-        #  Enable FPS counter (Python 2 compatible)
-        base.setFrameRateMeter(True)
+        # Real-time FPS counter
+        self.fpsFrame = DirectFrame(
+            parent=base.a2dTopRight,
+            frameColor=(0, 0, 0, 0.45),
+            frameSize=(-0.18, 0, -0.042, 0),
+            pos=(-0.006, 0, -0.006),
+            relief=DGG.FLAT
+        )
+
+        self.fpsFrame.setBin("gui-popup", 100)
+        self.fpsFrame.setDepthWrite(False)
+        self.fpsFrame.setDepthTest(False)
+
+        if settings.get('show-fps', False):
+            self.fpsFrame.show()
+        else:
+            self.fpsFrame.hide()
+
+        self.fpsText = OnscreenText(
+            text="0 FPS",
+            parent=self.fpsFrame,
+            pos=(-0.015, -0.030),
+            align=TextNode.ARight,
+            scale=0.038,
+            fg=(1, 1, 1, 1),
+            mayChange=True
+        )
+
+        self.fpsText.setBin("gui-popup", 101)
+        self.fpsText.setDepthWrite(False)
+        self.fpsText.setDepthTest(False)
+
+        self._fpsAccum = 0.0
+        self._fpsFrames = 0
+        taskMgr.add(self.updateFPS, "UpdateFPS")
 
         # Next, separate the resolutions by their ratio:
         self.resDict = {}
@@ -480,11 +514,11 @@ class ToonBase(OTPBase.OTPBase):
         self.screenshotStr = ''
         messenger.send('takingScreenshot')
         if coordOnScreen:
-            coordTextLabel = DirectLabel(pos=(-0.81, 0.001, -0.87), text=ctext, text_scale=0.05, text_fg=VBase4(1.0, 1.0, 1.0, 1.0), text_bg=(0, 0, 0, 0), text_shadow=(0, 0, 0, 1), relief=None)
+            coordTextLabel = DirectLabel(pos=(-0.81, 0.001, -0.87), text=ctext, text_scale=0.05, text_fg=VBase4(1.0, 1.0, 1.0, 1.0), text_bg=(0, 0, 0, 0), text_shadow=(0, 0, 0, 1), relief=DGG.FLAT)
             coordTextLabel.setBin('gui-popup', 0)
             strTextLabel = None
             if len(self.screenshotStr):
-                strTextLabel = DirectLabel(pos=(0.0, 0.001, 0.9), text=self.screenshotStr, text_scale=0.05, text_fg=VBase4(1.0, 1.0, 1.0, 1.0), text_bg=(0, 0, 0, 0), text_shadow=(0, 0, 0, 1), relief=None)
+                strTextLabel = DirectLabel(pos=(0.0, 0.001, 0.9), text=self.screenshotStr, text_scale=0.05, text_fg=VBase4(1.0, 1.0, 1.0, 1.0), text_bg=(0, 0, 0, 0), text_shadow=(0, 0, 0, 1), relief=DGG.FLAT)
                 strTextLabel.setBin('gui-popup', 0)
         self.graphicsEngine.renderFrame()
         screenshot = self.screenshot(namePrefix=namePrefix, imageComment=ctext + ' ' + self.screenshotStr)
@@ -753,6 +787,17 @@ class ToonBase(OTPBase.OTPBase):
             self.INTERACT = 'shift'
     
         self.accept(self.SCREENSHOT_KEY, self.takeScreenShot)
+
+    def setCustomFPSVisible(self, visible):
+        if visible:
+            self.fpsFrame.show()
+        else:
+            self.fpsFrame.hide()
+
+    def updateFPS(self, task):
+        fps = int(globalClock.getAverageFrameRate() or 0)
+        self.fpsText.setText("%d FPS" % fps)
+        return Task.cont
 
     def onWindowEvent(self, window):
         settings['res'] = self.getSize()

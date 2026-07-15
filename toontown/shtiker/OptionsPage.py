@@ -398,17 +398,13 @@ class OptionsTabPage(DirectFrame):
 
         # Helper function to update button text
         def updateFPSButtonText():
-            if getattr(base, 'frameRateMeter', None):
-                self.fpsButton['text'] = "FPS: ON"
-            else:
-                self.fpsButton['text'] = "FPS: OFF"
+            enabled = settings.get('show-fps', False)
+            self.fpsButton['text'] = "FPS: ON" if enabled else "FPS: OFF"
 
         # Toggle function
         def toggleFPS():
-            if getattr(base, 'frameRateMeter', None):
-                base.setFrameRateMeter(False)
-            else:
-                base.setFrameRateMeter(True)
+            settings['show-fps'] = not settings.get('show-fps', False)
+            base.setCustomFPSVisible(settings['show-fps'])
             updateFPSButtonText()
 
         # Create the FPS button
