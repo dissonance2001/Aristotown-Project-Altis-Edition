@@ -10,6 +10,7 @@ from direct.interval.IntervalGlobal import *
 from direct.showbase.DirectObject import DirectObject
 from direct.task import Task
 from panda3d.core import *
+import math
 
 from toontown.dmenu import DMenuQuit, DMenuOptions
 from toontown.hood import SkyUtil
@@ -43,15 +44,12 @@ BUTTONPOSITIONSCLASSIC = (
  Vec3(0.00999999, 0, -0.5181),
  Vec3(0.864907, 0, -0.445659)
  )
-# The main position
 MAIN_POS = (-60, 0, 11)
 MAIN_HPR = (-90, -2, 0)
 
-# To be used when entering PAT
 TOON_HALL_POS = (110, 0, 8)
 TOON_HALL_HPR = (-90, 0, 0)
 
-# To be used when going to menu
 HQ_POS = (14, 16, 8)
 HQ_HPR = (-48, 0, 0)
 
@@ -75,7 +73,6 @@ class PickAToon(DirectObject):
         self.background2d.setTransparency(1)
         self.background2d.setColorScale(.6, .1, .1, 0)
         self.backgroundClassic = None
-        # self.optionsMgr = PickAToonOptions.PickAToonOptions()
         self.optionsMgr = DMenuOptions.DMenuOptions() # This is for the revamped options screen
         self.shardPicker = ShardPicker.ShardPicker()
         self.buttonList = []
@@ -161,28 +158,23 @@ class PickAToon(DirectObject):
 
             self.title = OnscreenText(TTLocalizer.AvatarChooserPickAToon, font = ToontownGlobals.getSignFont(), scale = TTLocalizer.ACtitle, parent = hidden, fg = (1, 0.9, 0.1, 1), pos = (0.0, 0.82))
 
-            # Quit Button
             quitHover = gui.find('**/QuitBtn_RLVR')
             self.quitHover = quitHover
             self.quitButton = DirectButton(image = (shuffleUp, shuffleDown, shuffleUp), relief = None, image_scale = (0.8, 0.7, 0.7), image1_scale = (0.83, 0.73, 0.73), image2_scale = (0.83, 0.73, 0.73), text = TTLocalizer.AvatarChooserQuit, text_font = ToontownGlobals.getSignFont(), text_fg = (0.977, 0.816, 0.133, 1), text_pos = (0, -0.02), text_scale = 0.06, scale = 1, pos = (1.08, 0, -0.907), command = self.quitGame)
             self.quitButton.reparentTo(base.a2dBottomLeft)
             self.quitButton.setPos(0.25, 0, 0.075)
 
-            # Options Button
             self.optionsButton = DirectButton(image = (shuffleUp, shuffleDown, shuffleUp), relief = None, image_scale = (0.8, 0.7, 0.7), image1_scale = (0.83, 0.73, 0.73), image2_scale = (0.83, 0.73, 0.73), text = 'Options', text_font = ToontownGlobals.getSignFont(), text_fg = (0.977, 0.816, 0.133, 1), text_pos = (0, -0.02), text_scale = 0.06, scale = 1, pos = (1.08, 0, -0.907), command = self.openOptions)
             self.optionsButton.reparentTo(base.a2dBottomRight)
             self.optionsButton.setPos(-0.25, 0, 0.075)
 
-            # Shard Selector Button
             self.shardsButton = DirectButton(image = (shuffleUp, shuffleDown, shuffleUp), relief = None, image_scale = (0.8, 0.7, 0.7), image1_scale = (0.83, 0.73, 0.73), image2_scale = (0.83, 0.73, 0.73), text = 'Districts', text_font = ToontownGlobals.getSignFont(), text_fg = (0.977, 0.816, 0.133, 1), text_pos = (0, -0.02), text_scale = 0.06, scale = 1, pos = (1.08, 0, -0.907), command = self.openShardPicker)
             self.shardsButton.reparentTo(base.a2dBottomLeft)
             self.shardsButton.setPos(0.25, 0, 0.2)
 
-            # Area toon is in
             self.area = OnscreenText(parent = self.patNode2d, font = ToontownGlobals.getToonFont(),
                                      pos = (-.1, -.1), scale = .075, text = '', shadow = (0, 0, 0, 1), fg = COLORS[self.selectedToon])
 
-            # DMENU Pat Screen Stuff
             self.play = DirectButton(relief = None, image = (shuffleUp, shuffleDown, shuffleUp), image_scale = (0.8, 0.7, 0.7), image1_scale = (0.83, 0.73, 0.73), image2_scale = (0.83, 0.73, 0.73), text = 'PLAY THIS TOON', text_font = ToontownGlobals.getSignFont(), text_fg = (0.977, 0.816, 0.133, 1), text_pos = (0, -.016), text_scale = 0.035, scale = 1.4, pos = (0, 0, -0.90), command = self.playGame, parent = self.patNode2d)
 
             self.toon = Toon.Toon()
@@ -293,12 +285,58 @@ class PickAToon(DirectObject):
     def playGame(self):
         if self.jumpIn:
             self.jumpIn.finish()
+
         doneStatus = {'mode': 'chose', 'choice': self.selectedToon}
-        Sequence (
-                   Func(self.toon.animFSM.request, 'PATTeleportOut'),
-                   Wait(4),
-                   Func(messenger.send, self.doneEvent, [doneStatus]))#.start() # ALTIS: TODO: Add the states to toon.py
-        messenger.send(self.doneEvent, [doneStatus])
+        self.play['state'] = DGG.DISABLED
+
+        curveStart = Point3(-1, 59, 8.35)
+        curveControl = Point3(0, 69, 8.25)
+        curveEnd = Point3(15, 66.5, 8.15)
+
+        def updateTunnelCurve(t):
+            oneMinusT = 1.0 - t
+            pos = curveStart * (oneMinusT * oneMinusT) + curveControl * (2.0 * oneMinusT * t) + curveEnd * (t * t)
+            tangent = (curveControl - curveStart) * (2.0 * oneMinusT) + (curveEnd - curveControl) * (2.0 * t)
+            heading = -math.degrees(math.atan2(tangent.getX(), tangent.getY()))
+            self.toon.setPos(pos)
+            self.toon.setH(heading)
+
+        Sequence(
+            Func(self.toon.setPlayRate, 0.75, 'victory'),
+            ActorInterval(
+                self.toon,
+                'victory',
+                startFrame = 0,
+                endFrame = 10),
+            ActorInterval(
+                self.toon,
+                'victory',
+                startFrame = 9,
+                endFrame = 0),
+            Func(self.toon.setPlayRate, 1, 'victory'),
+            Func(self.toon.animFSM.request, 'neutral'),
+            Func(self.toon.setH, 0),
+            Func(self.toon.loop, 'run'),
+            LerpPosInterval(
+                self.toon,
+                0.65,
+                curveStart,
+                blendType = 'easeIn'),
+            Parallel(
+                LerpFunctionInterval(
+                    updateTunnelCurve,
+                    fromData = 0.0,
+                    toData = 1.0,
+                    duration = 1.45,
+                    blendType = 'easeInOut'),
+                Sequence(
+                    Wait(0.55),
+                    Func(base.transitions.irisOut, 0.85)
+                )
+            ),
+            Func(self.toon.stop),
+            Func(messenger.send, self.doneEvent, [doneStatus])
+        ).start()
 
     def makeToon(self, position = None):
         doneStatus = {'mode': 'create', 'choice': self.selectedToon}
@@ -315,7 +353,6 @@ class PickAToon(DirectObject):
         button.reparentTo(self.patNode2d)
         button.setPos(BUTTONPOSITIONS[position])
         button.setScale(.5)
-        # Delete Toon button
         trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui.bam')
         if av:
             self.hasToons[position] = True
