@@ -18,15 +18,19 @@ EFFECT_RADIUS = 30
 RESISTANCE_TOONUP = 0
 RESISTANCE_RESTOCK = 1
 RESISTANCE_MONEY = 2
+RESISTANCE_PROMOTION = 3
 
 allowedResistanceMessages = []
 if config.GetBool('want-resistance-toonup', True):
     allowedResistanceMessages.append(RESISTANCE_TOONUP)
 if config.GetBool('want-resistance-restock', True):
     allowedResistanceMessages.append(RESISTANCE_RESTOCK)
+if config.GetBool('want-resistance-promotion', True):
+    allowedResistanceMessages.append(RESISTANCE_PROMOTION)
 
 resistanceMenu = [
-    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY
+    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY,
+    RESISTANCE_PROMOTION
 ]
 resistanceDict = {
     RESISTANCE_TOONUP: {
@@ -42,6 +46,13 @@ resistanceDict = {
         'chatText': TTLocalizer.ResistanceMoneyChat,
         'values': [100, 200, 350, 600, 1200, 2400],
         'items': [0, 1, 2, 3, 4, 5]
+    },
+    RESISTANCE_PROMOTION: {
+        'menuName': 'Promotion Fill',
+        'itemText': 'Fill all Cog promotions',
+        'chatText': 'Toons of the World, Merit up!',
+        'values': [-1],
+        'items': [0]
     },
     RESISTANCE_RESTOCK: {
         'menuName': TTLocalizer.ResistanceRestockMenu,
@@ -115,6 +126,8 @@ def getItemText(textId):
             value = TTLocalizer.ResistanceToonupItemMax
     elif menuIndex is RESISTANCE_RESTOCK:
         value = resistanceDict[menuIndex]['extra'][itemIndex]
+    elif menuIndex is RESISTANCE_PROMOTION:
+        return text
     return text % str(value)
 
 
@@ -189,6 +202,9 @@ def doEffect(textId, speakingToon, nearbyToons):
             p = effect.getParticlesNamed(name)
             p.renderer.setFromNode(icon)
         fadeColor = VBase4(0, 0, 1, 1)
+    elif menuIndex == RESISTANCE_PROMOTION:
+        effect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
+        fadeColor = VBase4(1, 0.85, 0, 1)
     else:
         return
     recolorToons = Parallel()

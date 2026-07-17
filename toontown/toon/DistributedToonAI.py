@@ -2862,6 +2862,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             else:
                 self.addMoney(msgValue)
             self.notify.debug('Money for ' + self.name)
+        elif msgType == ResistanceChat.RESISTANCE_PROMOTION:
+            merits = list(self.getCogMerits())
+            for dept in xrange(min(4, len(merits))):
+                merits[dept] = CogDisguiseGlobals.getTotalMerits(self, dept)
+            self.b_setCogMerits(merits)
+            self.notify.debug('Promotion fill for ' + self.name)
 
     def squish(self, damage):
         self.takeDamage(damage)
