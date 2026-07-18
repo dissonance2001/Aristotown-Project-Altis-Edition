@@ -82,6 +82,12 @@ class ToonBase(OTPBase.OTPBase):
 
         self._fpsAccum = 0.0
         self._fpsFrames = 0
+        self._fpsSamples = []
+        self._targetFPS = 0.0
+        self._displayedFPS = 0.0
+        self._fpsReady = False
+        self._fpsHadLocalAvatar = getattr(self, 'localAvatar', None) is not None
+        self._fpsJustLoaded = False
         taskMgr.add(self.updateFPS, "UpdateFPS")
 
         # Next, separate the resolutions by their ratio:
@@ -795,8 +801,54 @@ class ToonBase(OTPBase.OTPBase):
             self.fpsFrame.hide()
 
     def updateFPS(self, task):
-        fps = int(globalClock.getAverageFrameRate() or 0)
-        self.fpsText.setText("%d FPS" % fps)
+        dt = globalClock.getDt()
+        hasLocalAvatar = getattr(self, 'localAvatar', None) is not None
+
+        if hasLocalAvatar and not self._fpsHadLocalAvatar:
+            self._fpsAccum = 0.0
+            self._fpsFrames = 0
+            self._fpsSamples = []
+            self._fpsJustLoaded = True
+
+        self._fpsHadLocalAvatar = hasLocalAvatar
+        self._fpsAccum += dt
+        self._fpsFrames += 1
+
+        if self._fpsAccum >= 0.20:
+            sampledFPS = float(self._fpsFrames) / self._fpsAccum
+            self._fpsSamples.append(sampledFPS)
+
+            if len(self._fpsSamples) > 5:
+                self._fpsSamples.pop(0)
+
+            self._targetFPS = sum(self._fpsSamples) / float(len(self._fpsSamples))
+            self._fpsAccum = 0.0
+            self._fpsFrames = 0
+
+            if self._fpsJustLoaded:
+                self._displayedFPS = self._targetFPS
+                self._fpsReady = True
+                self._fpsJustLoaded = False
+                self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+            elif not self._fpsReady and len(self._fpsSamples) >= 5:
+                self._displayedFPS = self._targetFPS
+                self._fpsReady = True
+                self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+
+        if self._fpsReady:
+            difference = self._targetFPS - self._displayedFPS
+            moveSpeed = max(8.0, min(240.0, abs(difference) * 3.0))
+            moveAmount = moveSpeed * dt
+
+            if difference > 0.5:
+                self._displayedFPS += min(moveAmount, difference)
+            elif difference < -0.5:
+                self._displayedFPS -= min(moveAmount, -difference)
+            else:
+                self._displayedFPS = self._targetFPS
+
+            self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+
         return Task.cont
 
     def onWindowEvent(self, window):
