@@ -20,7 +20,8 @@ class QuestChoiceGui(DirectFrame):
         self.timer.reparentTo(self)
         self.timer.setScale(0.3)
         base.setCellsActive(base.leftCells, 0)
-        base.setCellsActive([base.bottomCells[0], base.bottomCells[1]], 0)
+        if hasattr(base, 'bottomCells') and base.bottomCells:
+            base.setCellsActive(base.bottomCells[:2], 0)
 
     def setQuests(self, quests, fromNpcId, timeout):
         for i in xrange(0, len(quests), 3):
@@ -56,7 +57,8 @@ class QuestChoiceGui(DirectFrame):
             if base.config.GetBool('want-qa-regression', 0):
                 self.notify.info('QA-REGRESSION: CREATEATASK: Create A Task.')
         base.setCellsActive(base.leftCells, 1)
-        base.setCellsActive([base.bottomCells[0], base.bottomCells[1]], 1)
+        if hasattr(base, 'bottomCells') and base.bottomCells:
+            base.setCellsActive(base.bottomCells[:2], 1)
         self.timer.stop()
         messenger.send('chooseQuest', [questId])
 
