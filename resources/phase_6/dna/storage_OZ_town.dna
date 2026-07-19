@@ -92,6 +92,11 @@ place_model "phase_5/models/modules/TT_C1" [
 	store_node [ "toon_landmark" "toon_landmark_TT_C1" "TT_C1"  ]
 	]
 
+place_model "phase_6/models/modules/OZ_C2" [
+	store_node [ "toon_landmark" "toon_landmark_TT_C2" "" ]
+	]
+
+
 place_model "phase_6/models/golf/outdoor_zone_entrance" [
  store_node [ "prop" "prop_outdoor_zone_entrance" "" ]
 ]

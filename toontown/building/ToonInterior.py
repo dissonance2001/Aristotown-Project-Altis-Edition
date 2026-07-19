@@ -7,6 +7,7 @@ from direct.task import Task
 from pandac.PandaModules import *
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.hood import Place
+from toontown.building import Elevator
 from toontown.hood import ZoneUtil
 from toontown.nametag import NametagGlobals
 from toontown.toon import HealthForceAcknowledge
@@ -37,7 +38,8 @@ class ToonInterior(Place.Place):
           'purchase',
           'phone',
           'stopped',
-          'pet']),
+          'pet',
+          'elevator']),
          State.State('sit', self.enterSit, self.exitSit, ['walk']),
          State.State('stickerBook', self.enterStickerBook, self.exitStickerBook, ['walk',
           'DFA',
@@ -72,6 +74,7 @@ class ToonInterior(Place.Place):
          State.State('pet', self.enterPet, self.exitPet, ['walk']),
          State.State('phone', self.enterPhone, self.exitPhone, ['walk', 'doorOut']),
          State.State('stopped', self.enterStopped, self.exitStopped, ['walk', 'doorOut']),
+         State.State('elevator', self.enterElevator, self.exitElevator, ['walk', 'final']),
          State.State('final', self.enterFinal, self.exitFinal, ['start'])], 'start', 'final')
         self.parentFSMState = parentFSMState
     def load(self):
@@ -124,6 +127,45 @@ class ToonInterior(Place.Place):
         del self._telemLimiter
         NametagGlobals.setWant2dNametags(False)
         self.loader.activityMusic.stop()
+
+
+    def detectedElevatorCollision(self, distElevator):
+        if self.fsm.getCurrentState().getName() != 'elevator':
+            self.fsm.request('elevator', [distElevator])
+
+    def enterElevator(self, distElevator, skipDFABoard=0):
+        self.elevatorDoneEvent = uniqueName('toonInteriorElevatorDone')
+        self.acceptOnce(self.elevatorDoneEvent, self.__handleElevatorDone)
+
+        self.elevator = Elevator.Elevator(
+            self.fsm.getStateNamed('elevator'),
+            self.elevatorDoneEvent,
+            distElevator
+        )
+        self.elevator.load()
+        self.elevator.skipDFABoard = skipDFABoard
+        self.elevator.enter()
+
+    def exitElevator(self):
+        if hasattr(self, 'elevator'):
+            self.elevator.exit()
+            self.elevator.unload()
+            del self.elevator
+
+        if hasattr(self, 'elevatorDoneEvent'):
+            self.ignore(self.elevatorDoneEvent)
+            del self.elevatorDoneEvent
+
+    def __handleElevatorDone(self, doneStatus):
+        where = doneStatus.get('where')
+
+        if where in ('reject', 'exit'):
+            self.fsm.request('walk')
+            return
+
+        self.doneStatus = doneStatus
+        self.fsm.request('final')
+        messenger.send(self.doneEvent)
 
     def setState(self, state):
         self.fsm.request(state)

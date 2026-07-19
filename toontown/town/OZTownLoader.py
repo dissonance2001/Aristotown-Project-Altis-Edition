@@ -9,7 +9,7 @@ class OZTownLoader(TownLoader.TownLoader):
         self.streetClass = OZStreet.OZStreet
         self.musicFile = 'phase_6/audio/bgm/AA_SZ.ogg'
         self.activityMusicFile = 'phase_6/audio/bgm/AA_SZ_activity.ogg'
-        self.townStorageDNAFile = 'phase_6/dna/storage_OZ_town.pdna'
+        self.townStorageDNAFile = 'phase_6/dna/storage_OZ_town.dna'
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)

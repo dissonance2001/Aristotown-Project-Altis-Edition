@@ -51,9 +51,16 @@ class DNALandmarkBuilding(DNANode.DNANode):
 
     def traverse(self, nodePath, dnaStorage):
         node = dnaStorage.findNode(self.code)
-        if node is None:
+
+        if node is None or node.isEmpty():
+            if self.code == 'toon_landmark_TT_C2':
+                node = base.loader.loadModel('phase_6/models/modules/OZ_C2')
+            elif self.code == 'toon_landmark_chainsaw':
+                node = base.loader.loadModel('phase_6/models/modules/ttcc_ext_chainsaw')
+
+        if node is None or node.isEmpty():
             raise DNAError.DNAError('DNALandmarkBuilding code ' + self.code + ' not found in DNAStorage')
-        
+
         npA = nodePath
         nodePath = node.copyTo(nodePath)
         nodePath.setName(self.name)

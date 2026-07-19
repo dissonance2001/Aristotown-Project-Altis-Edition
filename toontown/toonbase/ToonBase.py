@@ -88,6 +88,7 @@ class ToonBase(OTPBase.OTPBase):
         self._fpsReady = False
         self._fpsHadLocalAvatar = getattr(self, 'localAvatar', None) is not None
         self._fpsJustLoaded = False
+        self._fpsZoneId = None
         taskMgr.add(self.updateFPS, "UpdateFPS")
 
         # Next, separate the resolutions by their ratio:
@@ -802,13 +803,30 @@ class ToonBase(OTPBase.OTPBase):
 
     def updateFPS(self, task):
         dt = globalClock.getDt()
-        hasLocalAvatar = getattr(self, 'localAvatar', None) is not None
+        localAvatar = getattr(self, 'localAvatar', None)
+        hasLocalAvatar = localAvatar is not None
+        zoneId = None
+
+        if hasLocalAvatar:
+            try:
+                zoneId = localAvatar.getZoneId()
+            except:
+                zoneId = None
 
         if hasLocalAvatar and not self._fpsHadLocalAvatar:
             self._fpsAccum = 0.0
             self._fpsFrames = 0
             self._fpsSamples = []
             self._fpsJustLoaded = True
+            self._fpsZoneId = zoneId
+        elif hasLocalAvatar and zoneId is not None and self._fpsZoneId is not None and zoneId != self._fpsZoneId:
+            self._fpsAccum = 0.0
+            self._fpsFrames = 0
+            self._fpsSamples = []
+            self._fpsJustLoaded = True
+            self._fpsZoneId = zoneId
+        elif hasLocalAvatar and self._fpsZoneId is None:
+            self._fpsZoneId = zoneId
 
         self._fpsHadLocalAvatar = hasLocalAvatar
         self._fpsAccum += dt
