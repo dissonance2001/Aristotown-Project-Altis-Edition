@@ -560,6 +560,17 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
     def enterTunnelIn(self, requestStatus):
         self.notify.debug('enterTunnelIn(requestStatus=' + str(requestStatus) + ')')
         tunnelOrigin = base.render.find(requestStatus['tunnelName'])
+
+        if tunnelOrigin.isEmpty():
+            tunnelRoot = base.render.find('**/linktunnel_bosshq_13000_DNARoot')
+            if not tunnelRoot.isEmpty():
+                tunnelOrigin = tunnelRoot.find('**/tunnel_origin')
+
+        if tunnelOrigin.isEmpty():
+            self.notify.warning('Missing tunnel origin: %s' % requestStatus.get('tunnelName', ''))
+            self.fsm.request('walk')
+            return
+
         self.accept('tunnelInMovieDone', self.__tunnelInMovieDone)
         base.localAvatar.reconsiderCheesyEffect()
         base.localAvatar.tunnelIn(tunnelOrigin)

@@ -37,140 +37,87 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
         CogHQLoader.CogHQLoader.load(self, zoneId)
         Toon.loadBossbotHQAnims()
 
+    def enter(self, requestStatus):
+        if self.geom is None or self.geom.isEmpty():
+            if requestStatus.get('where') == 'cogHQLobby':
+                self.loadPlaceGeom(ToontownGlobals.BossbotLobby)
+            else:
+                self.loadPlaceGeom(ToontownGlobals.BossbotHQ)
+        CogHQLoader.CogHQLoader.enter(self, requestStatus)
+
     def unloadPlaceGeom(self):
-        if self.geom:
+        if self.geom and not self.geom.isEmpty():
             self.geom.removeNode()
-            self.geom = None
-        if self.helicopter:
-            self.helicopter.removeNode()
-            self.helicopter = None
-        if self.lightPost:
-            self.lightPost.removeNode()
-            self.lightPost = None
-        if self.lightPost2:
-            self.lightPost2.removeNode()
-            self.lightPost2 = None
-        if self.lightPost3:
-            self.lightPost3.removeNode()
-            self.lightPost3 = None
-        if self.lightPost4:
-            self.lightPost4.removeNode()
-            self.lightPost4 = None
-        if self.lightPost5:
-            self.lightPost5.removeNode()
-            self.lightPost5 = None
-        if self.lightPost6:
-            self.lightPost6.removeNode()
-            self.lightPost6 = None
-        if self.dish:
-            self.dish.removeNode()
-            self.dish = None
-        CogHQLoader.CogHQLoader.unloadPlaceGeom(self)
+        self.geom = None
+        self.helicopter = None
+        self.dish = None
+        self.lightPost = None
+        self.lightPost2 = None
+        self.lightPost3 = None
+        self.lightPost4 = None
+        self.lightPost5 = None
+        self.lightPost6 = None
 
     def loadPlaceGeom(self, zoneId):
-        self.notify.info('loadPlaceGeom: %s' % zoneId)
         zoneId = zoneId - zoneId % 100
-        self.notify.debug('zoneId = %d ToontownGlobals.BossbotHQ=%d' % (zoneId, ToontownGlobals.BossbotHQ))
+
+        if self.geom and not self.geom.isEmpty():
+            self.geom.removeNode()
+        self.geom = None
+
         if zoneId == ToontownGlobals.BossbotHQ:
-            self.helicopter = globalPropPool.getProp('CogNationChopper')
-            self.helicopter.loop('CogNationChopper')
-            self.helicopter.reparentTo(render)
-            self.helicopter.setHpr(90, 0, 0)  # Adjust position
-            self.helicopter.setPos(-167.277, 33.2723, 3.9249)
-            self.helicopter.setScale(0.75)
-            self.dish = loader.loadModel('phase_14/models/props/radar.bam')
-            self.dish.reparentTo(render)
-            self.dish.setHpr(-10, 0, 0)  # Adjust position
-            self.dish.setPos(-248.467, -18.5363, 13.9249)
-            self.dish.setScale(0.25)
-            self.lightPost = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost.reparentTo(render)
-            self.lightPost.setHpr(899.728, 0, 0)  # Adjust position
-            self.lightPost.setPos(-140.322, -63.0132, 3.92496)
-            self.lightPost.setScale(2.0)
-            self.lightPost2 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost2.reparentTo(render)
-            self.lightPost2.setHpr(1082.18, 0, 0) # Adjust position
-            self.lightPost2.setPos(-140.424, -26.7279, 3.92527)
-            self.lightPost2.setScale(2.0)
-            self.lightPost3 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost3.reparentTo(render)
-            self.lightPost3.setHpr(1079.88, 0, 0) # Adjust position
-            self.lightPost3.setPos(-140.368, 62.8114, 3.92538)
-            self.lightPost3.setScale(2.0)
-            self.lightPost4 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost4.reparentTo(render)
-            self.lightPost4.setHpr(1259.28, 0, 0) # Adjust position
-            self.lightPost4.setPos(-140.235, 26.7049, 3.92398)
-            self.lightPost4.setScale(2.0)
-            self.lightPost5 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost5.reparentTo(render)
-            self.lightPost5.setHpr(1445.4, 0, 0) # Adjust position
-            self.lightPost5.setPos(290.832, 9.65186, 0.0249996)
-            self.lightPost5.setScale(2.0)
-            self.lightPost6 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            self.lightPost6.reparentTo(render)
-            self.lightPost6.setHpr(1624.35, 0, 0) # Adjust position
-            self.lightPost6.setPos(292.982, -8.64156, 0.024999)
-            self.lightPost6.setScale(2.0)
             self.geom = loader.loadModel(self.cogHQExteriorModelPath)
+
+            if self.geom is None or self.geom.isEmpty():
+                self.notify.error('Unable to load Bossbot HQ exterior model: %s' % self.cogHQExteriorModelPath)
+                return
+
             gzLinkTunnel = self.geom.find('**/LinkTunnel1')
-            gzLinkTunnel.setName('linktunnel_oz_6320_DNARoot')
-            #self.makeSigns()
-            top = self.geom.find('**/TunnelEntrance')
-            origin = top.find('**/tunnel_origin')
-            origin.setH(-33.33)
-            self.geom.flattenMedium()
+            if not gzLinkTunnel.isEmpty():
+                gzLinkTunnel.setName('linktunnel_oz_6320_DNARoot')
+
+            self.helicopter = globalPropPool.getProp('CogNationChopper')
+            if self.helicopter and not self.helicopter.isEmpty():
+                self.helicopter.reparentTo(self.geom)
+                self.helicopter.setPosHprScale(-167.277, 33.2723, 3.9249, 90, 0, 0, 0.75, 0.75, 0.75)
+                self.helicopter.loop('CogNationChopper')
+
+            self.dish = loader.loadModel('phase_14/models/props/radar.bam')
+            if self.dish and not self.dish.isEmpty():
+                self.dish.reparentTo(self.geom)
+                self.dish.setPosHprScale(-248.467, -18.5363, 13.9249, -10, 0, 0, 0.25, 0.25, 0.25)
+
+            lightData = (
+                (-140.322, -63.0132, 3.92496, 899.728),
+                (-140.424, -26.7279, 3.92527, 1082.18),
+                (-140.368, 62.8114, 3.92538, 1079.88),
+                (-140.235, 26.7049, 3.92398, 1259.28),
+                (290.832, 9.65186, 0.0249996, 1445.4),
+                (292.982, -8.64156, 0.024999, 1624.35),
+            )
+
+            lights = []
+            for x, y, z, h in lightData:
+                light = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
+                if light and not light.isEmpty():
+                    light.reparentTo(self.geom)
+                    light.setPosHprScale(x, y, z, h, 0, 0, 2, 2, 2)
+                lights.append(light)
+
+            self.lightPost = lights[0]
+            self.lightPost2 = lights[1]
+            self.lightPost3 = lights[2]
+            self.lightPost4 = lights[3]
+            self.lightPost5 = lights[4]
+            self.lightPost6 = lights[5]
+
         elif zoneId == ToontownGlobals.BossbotLobby:
-            if base.config.GetBool('want-qa-regression', 0):
-                self.notify.info('QA-REGRESSION: COGHQ: Visit BossbotLobby')
-            self.notify.debug('cogHQLobbyModelPath = %s' % self.cogHQLobbyModelPath)
             self.geom = loader.loadModel(self.cogHQLobbyModelPath)
-            self.geom.flattenMedium()
-            # self.helicopter = globalPropPool.getProp('CogNationChopper')
-            # self.helicopter.loop('CogNationChopper')
-            # self.helicopter.reparentTo(render)
-            # self.helicopter.setHpr(90, 0, 0)  # Adjust position
-            # self.helicopter.setPos(-167.277, 33.2723, 3.9249)
-            # self.helicopter.setScale(0.75)
-            # self.dish = loader.loadModel('phase_14/models/props/radar.bam')
-            # self.dish.reparentTo(render)
-            # self.dish.setHpr(-10, 0, 0)  # Adjust position
-            # self.dish.setPos(-248.467, -18.5363, 13.9249)
-            # self.dish.setScale(0.25)
-            # self.lightPost = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost.reparentTo(render)
-            # self.lightPost.setHpr(899.728, 0, 0)  # Adjust position
-            # self.lightPost.setPos(-140.322, -63.0132, 3.92496)
-            # self.lightPost.setScale(2.0)
-            # self.lightPost2 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost2.reparentTo(render)
-            # self.lightPost2.setHpr(1082.18, 0, 0) # Adjust position
-            # self.lightPost2.setPos(-140.424, -26.7279, 3.92527)
-            # self.lightPost2.setScale(2.0)
-            # self.lightPost3 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost3.reparentTo(render)
-            # self.lightPost3.setHpr(1079.88, 0, 0) # Adjust position
-            # self.lightPost3.setPos(-140.368, 62.8114, 3.92538)
-            # self.lightPost3.setScale(2.0)
-            # self.lightPost4 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost4.reparentTo(render)
-            # self.lightPost4.setHpr(1259.28, 0, 0) # Adjust position
-            # self.lightPost4.setPos(-140.235, 26.7049, 3.92398)
-            # self.lightPost4.setScale(2.0)
-            # self.lightPost5 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost5.reparentTo(render)
-            # self.lightPost5.setHpr(1445.4, 0, 0) # Adjust position
-            # self.lightPost5.setPos(290.832, 9.65186, 0.0249996)
-            # self.lightPost5.setScale(2.0)
-            # self.lightPost6 = loader.loadModel('phase_14/models/props/CN-streetlight.bam')
-            # self.lightPost6.reparentTo(render)
-            # self.lightPost6.setHpr(1624.35, 0, 0) # Adjust position
-            # self.lightPost6.setPos(292.982, -8.64156, 0.024999)
-            # self.lightPost6.setScale(2.0)
+            if self.geom is None or self.geom.isEmpty():
+                self.notify.error('Unable to load Bossbot lobby model: %s' % self.cogHQLobbyModelPath)
+                return
         else:
             self.notify.warning('loadPlaceGeom: unclassified zone %s' % zoneId)
-        CogHQLoader.CogHQLoader.loadPlaceGeom(self, zoneId)
 
     def makeSigns(self):
 
