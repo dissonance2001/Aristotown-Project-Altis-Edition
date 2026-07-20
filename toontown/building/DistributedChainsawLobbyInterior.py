@@ -69,7 +69,6 @@ class DistributedChainsawLobbyInterior(DistributedToonInterior.DistributedToonIn
         del self.colors
         del self.dnaStore
         del self.randomGenerator
-        self.interior.flattenMedium()
         for npcToon in self.cr.doFindAllInstances(DistributedNPCToonBase):
             npcToon.initToonState()
 

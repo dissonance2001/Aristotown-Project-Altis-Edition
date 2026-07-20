@@ -131,6 +131,13 @@ class ToonInterior(Place.Place):
 
     def exit(self):
         self.ignoreAll()
+        taskMgr.remove('ChainsawLobbyMusic')
+        if hasattr(self, 'chainsawLobbyMusic') and self.chainsawLobbyMusic:
+            self.chainsawLobbyMusic.stop()
+            self.chainsawLobbyMusic = None
+        if hasattr(self, 'chainsawLobbyMusicFile') and self.chainsawLobbyMusicFile:
+            self.chainsawLobbyMusicFile.stop()
+            self.chainsawLobbyMusicFile = None
         messenger.send('exitToonInterior')
         self._telemLimiter.destroy()
         del self._telemLimiter
