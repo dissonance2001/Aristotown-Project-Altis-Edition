@@ -104,6 +104,8 @@ class ToonInterior(Place.Place):
             taskMgr.doMethodLater(0, self.PizzeriaMusic, 'PizzeriaMusic')
         elif self.zoneId == ToontownGlobals.PacesetterLobby:
             taskMgr.doMethodLater(0, self.PacesetterLobbyMusic, 'PacesetterLobbyMusic')
+        elif self.zoneId == ToontownGlobals.ChainsawLobby:
+            taskMgr.doMethodLater(0, self.ChainsawLobbyMusic, 'ChainsawLobbyMusic')
 
     def PizzeriaMusic(self, task):
             base.musicManager.stopAllSounds()
@@ -119,6 +121,13 @@ class ToonInterior(Place.Place):
             base.musicManager.stopAllSounds()
             self.pacesetterLobbyMusicFile = loader.loadMusic("phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg")
             self.pacesetterLobbyMusic = base.playMusic(self.pacesetterLobbyMusicFile, looping=1)
+            return task.done
+
+    def ChainsawLobbyMusic(self, task):
+            base.musicManager.stopAllSounds()
+            self.chainsawLobbyMusicFile = loader.loadMusic("phase_12/audio/bgm/merc/instance_chainsaw_lobby.ogg")
+            self.chainsawLobbyMusic = base.playMusic(self.chainsawLobbyMusicFile, looping=1)
+            return task.done
 
     def exit(self):
         self.ignoreAll()

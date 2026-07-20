@@ -23,6 +23,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.openSfx = base.loader.loadSfx('phase_3.5/audio/sfx/Door_Open_1.ogg')
         self.closeSfx = base.loader.loadSfx('phase_3.5/audio/sfx/Door_Close_1.ogg')
+        self.openSfxCog = self.openSfx
+        self.closeSfxCog = self.closeSfx
         self.nametag = None
         self.fsm = ClassicFSM.ClassicFSM(
             'DistributedDoor_right',
@@ -107,6 +109,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
     def delete(self):
         del self.fsm
         del self.exitDoorFSM
+        del self.openSfxCog
+        del self.closeSfxCog
         del self.openSfx
         del self.closeSfx
         DistributedObject.DistributedObject.delete(self)
@@ -296,7 +300,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                                             blendType='easeInOut'))
         if self.zoneId == ToontownGlobals.ChainsawExterior and self.doorType == DoorTypes.EXT_UNCAP:
             finalPos = avatar.getParent().getRelativePoint(otherNP,
-                                                           Point3(self.doorX, 2, ToontownGlobals.FloorOffset - 7))
+                                                           Point3(self.doorX, 2, ToontownGlobals.FloorOffset))
         else:
             finalPos = avatar.getParent().getRelativePoint(otherNP, Point3(self.doorX, 2, ToontownGlobals.FloorOffset))
         moveHere = Sequence(self.getAnimStateInterval(avatar, 'walk'),
@@ -316,7 +320,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         if back < -9.0:
             back = -9.0
         if self.zoneId == ToontownGlobals.ChainsawExterior and self.doorType == DoorTypes.EXT_UNCAP:
-            offset = Point3(self.doorX, back, ToontownGlobals.FloorOffset - 7)
+            offset = Point3(self.doorX, back, ToontownGlobals.FloorOffset)
         else:
             offset = Point3(self.doorX, back, ToontownGlobals.FloorOffset)
         otherNP = self.getDoorNodePath()
@@ -492,6 +496,11 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             otherNP = self.getBuilding().find('**/*door_origin')
         elif self.doorType == DoorTypes.DAISYGARDENSCLASH:
             otherNP = self.getBuilding().find('**/*building1_landmark3c_door_origin')
+        elif self.zoneId == ToontownGlobals.ChainsawExterior and self.doorType == DoorTypes.EXT_UNCAP:
+            building = self.getBuilding()
+            otherNP = building.find('**/*door_origin')
+            if otherNP.isEmpty():
+                otherNP = building.find('**/door_origin')
         elif self.doorType in self.specialDoorTypes:
             building = self.getBuilding()
             otherNP = building.find('**/door_origin_' + str(self.doorIndex))
@@ -510,7 +519,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         track.append(self.getAnimStateInterval(avatar, 'walk'))
         if self.zoneId == ToontownGlobals.ChainsawExterior and self.doorType == DoorTypes.EXT_UNCAP:
             track.append(
-                PosHprInterval(avatar, Point3(-self.doorX, 0, ToontownGlobals.FloorOffset - 7), VBase3(179, 0, 0),
+                PosHprInterval(avatar, Point3(-self.doorX, 0, ToontownGlobals.FloorOffset), VBase3(179, 0, 0),
                                other=otherNP))
         else:
             track.append(PosHprInterval(avatar, Point3(-self.doorX, 0, ToontownGlobals.FloorOffset), VBase3(179, 0, 0),
@@ -521,9 +530,9 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 PosHprInterval(camera, VBase3(-self.doorX, 5, avatar.getHeight()), VBase3(180, 0, 0), other=otherNP))
         if self.zoneId == ToontownGlobals.ChainsawExterior and self.doorType == DoorTypes.EXT_UNCAP:
             if avatar.doId == base.localAvatar.doId:
-                finalPos = render.getRelativePoint(otherNP, Point3(-self.doorX, -6, ToontownGlobals.FloorOffset - 7))
+                finalPos = render.getRelativePoint(otherNP, Point3(-self.doorX, -6, ToontownGlobals.FloorOffset))
             else:
-                finalPos = render.getRelativePoint(otherNP, Point3(-self.doorX, -3, ToontownGlobals.FloorOffset - 7))
+                finalPos = render.getRelativePoint(otherNP, Point3(-self.doorX, -3, ToontownGlobals.FloorOffset))
         else:
             if avatar.doId == base.localAvatar.doId:
                 finalPos = render.getRelativePoint(otherNP, Point3(-self.doorX, -6, ToontownGlobals.FloorOffset))

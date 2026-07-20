@@ -608,6 +608,7 @@ from toontown.building import DistributedSchoolHouseInterior/AI
 from toontown.building import DistributedLighthouseInterior/AI
 from toontown.building import DistributedDerrickmanInterior/AI
 from toontown.building import DistributedChainsawInterior/AI
+from toontown.building import DistributedChainsawLobbyInterior/AI
 from toontown.building import DistributedMajorPlayerInterior/AI
 from toontown.building import DistributedPizzeriaInterior/AI
 from toontown.building import DistributedPaceLobbyInterior/AI
@@ -2299,6 +2300,9 @@ dclass DistributedMajorPlayerInterior : DistributedToonInterior {
 };
 
 dclass DistributedChainsawInterior : DistributedToonInterior {
+};
+
+dclass DistributedChainsawLobbyInterior : DistributedToonInterior {
 };
 
 dclass DistributedSuitInterior : DistributedObject {
