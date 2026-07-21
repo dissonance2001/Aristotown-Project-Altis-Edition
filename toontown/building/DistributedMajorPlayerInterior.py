@@ -25,6 +25,19 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
         self.sigilTriggerNodes = []
         self.sigilIdleEffects = {}
         self.trackTextureInterval = None
+        self.boardingTriggerNode = None
+        self.boardingTriggerName = None
+        self.localBoardingRequested = False
+        self.localBoardedSlot = None
+        self.boardedAvIds = {}
+        self.boardingToonTracks = {}
+        self.boardingState = 'open'
+        self.boardingCountdownTaskName = 'majorPlayerBoardingCountdown-%s' % id(self)
+        self.boardingCountdownNode = None
+        self.boardingCountdownText = None
+        self.localToonOnBoard = 0
+        self.elevatorFSM = None
+        self.antiShuffle = 0
 
     def setup(self):
         self.dnaStore = base.cr.playGame.dnaStore
@@ -108,27 +121,24 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
             self.sigilBases[index] = sigilBase
             self.__startIdleGlow(index)
 
-            triggerName = self.uniqueName('majorPlayerSigilTrigger%s' % index)
-            collisionNode = CollisionNode(triggerName)
-            collisionSphere = CollisionSphere(0, 0, 0.6, 1.15)
-            collisionSphere.setTangible(False)
-            collisionNode.addSolid(collisionSphere)
-            collisionNode.setFromCollideMask(BitMask32.allOff())
-            collisionNode.setIntoCollideMask(ToontownGlobals.WallBitmask)
+        self.boardingTriggerName = self.uniqueName('majorPlayerBoardingTrigger')
+        boardingCollisionNode = CollisionNode(self.boardingTriggerName)
+        boardingCollisionSphere = CollisionSphere(0, 0, 0.8, 6.5)
+        boardingCollisionSphere.setTangible(False)
+        boardingCollisionNode.addSolid(boardingCollisionSphere)
+        boardingCollisionNode.setFromCollideMask(BitMask32.allOff())
+        boardingCollisionNode.setIntoCollideMask(ToontownGlobals.WallBitmask)
+        self.boardingTriggerNode = self.sigilRoot.attachNewNode(boardingCollisionNode)
 
-            triggerNode = sigilBase.attachNewNode(collisionNode)
-            self.sigilTriggerNodes.append(triggerNode)
-
-            self.accept(
-                'enter' + triggerName,
-                self.__enterSigil,
-                [index, sigilBase]
-            )
-            self.accept(
-                'exit' + triggerName,
-                self.__exitSigil,
-                [index]
-            )
+        self.accept(
+            'enter' + self.boardingTriggerName,
+            self.__enterBoardingArea
+        )
+        self.accept(
+            'exit' + self.boardingTriggerName,
+            self.__exitBoardingArea
+        )
+        self.accept('elevatorExitButton', self.__handleElevatorExitButton)
 
         del self.colors
         del self.dnaStore
@@ -144,6 +154,325 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
             self.__startMajorPlayerMusic,
             self.majorPlayerMusicTaskName
         )
+
+    def __enterBoardingArea(self, collisionEntry):
+        if self.localBoardingRequested or self.localBoardedSlot is not None:
+            return
+
+        if not base.localAvatar or base.localAvatar.getHp() <= 0:
+            return
+
+        place = base.cr.playGame.getPlace()
+        if place:
+            place.detectedElevatorCollision(self)
+
+        self.localBoardingRequested = True
+        self.sendUpdate('requestBoard', [])
+
+    def __handleElevatorExitButton(self):
+        if self.localBoardedSlot is None:
+            return
+
+        self.sendUpdate('requestExit', [])
+
+    def __exitBoardingArea(self, collisionEntry):
+        if self.localBoardedSlot is not None:
+            return
+
+        if self.localBoardingRequested:
+            self.localBoardingRequested = False
+            self.sendUpdate('requestExit', [])
+
+    def setBoardingState(self, state, timestamp=0):
+        self.boardingState = state
+
+        if state == 'countdown':
+            self.__startBoardingCountdown(5.0)
+        elif state == 'ready':
+            self.__startBoardingCountdown(5.0)
+        elif state == 'open':
+            self.__stopBoardingCountdown()
+
+    def __startBoardingCountdown(self, duration):
+        self.__stopBoardingCountdown()
+
+        self.boardingCountdownText = TextNode('majorPlayerBoardingCountdown')
+        self.boardingCountdownText.setFont(ToontownGlobals.getSignFont())
+        self.boardingCountdownText.setAlign(TextNode.ACenter)
+        self.boardingCountdownText.setTextColor(1.0, 1.0, 1.0, 1.0)
+        self.boardingCountdownText.setText(str(int(duration)))
+
+        self.boardingCountdownNode = self.sigilRoot.attachNewNode(
+            self.boardingCountdownText
+        )
+        self.boardingCountdownNode.setPos(0, 0, 8.0)
+        self.boardingCountdownNode.setScale(1.5)
+        self.boardingCountdownNode.setBillboardPointEye()
+
+        task = taskMgr.add(
+            self.__boardingCountdownTask,
+            self.boardingCountdownTaskName
+        )
+        task.duration = duration
+
+    def __boardingCountdownTask(self, task):
+        remaining = int(max(0, task.duration - task.time) + 0.999)
+
+        if self.boardingCountdownText:
+            self.boardingCountdownText.setText(str(remaining))
+
+        if task.time >= task.duration:
+            self.__finishBoardingCountdown()
+            return Task.done
+
+        return Task.cont
+
+    def __finishBoardingCountdown(self):
+        self.__stopBoardingCountdown()
+        self.__beginMajorPlayerTeleport()
+
+    def __stopBoardingCountdown(self):
+        taskMgr.remove(self.boardingCountdownTaskName)
+
+        if self.boardingCountdownNode:
+            self.boardingCountdownNode.removeNode()
+            self.boardingCountdownNode = None
+
+        self.boardingCountdownText = None
+
+    def __beginMajorPlayerTeleport(self):
+        pass
+
+    def rejectBoard(self, avId, reason=0):
+        if avId == base.localAvatar.doId:
+            self.localBoardingRequested = False
+            self.localBoardedSlot = None
+            self.localToonOnBoard = 0
+            elevator = self.getPlaceElevator()
+            if elevator:
+                elevator.signalDone({'where': 'reject'})
+    
+    def fillSlot0(self, avId, wantBoardingShow=0):
+        self.__fillBoardingSlot(0, avId)
+
+    def fillSlot1(self, avId, wantBoardingShow=0):
+        self.__fillBoardingSlot(1, avId)
+
+    def fillSlot2(self, avId, wantBoardingShow=0):
+        self.__fillBoardingSlot(2, avId)
+
+    def fillSlot3(self, avId, wantBoardingShow=0):
+        self.__fillBoardingSlot(3, avId)
+
+    def emptySlot0(self, avId, bailFlag=0, timestamp=0, timeSent=0):
+        self.__emptyBoardingSlot(0, avId)
+
+    def emptySlot1(self, avId, bailFlag=0, timestamp=0, timeSent=0):
+        self.__emptyBoardingSlot(1, avId)
+
+    def emptySlot2(self, avId, bailFlag=0, timestamp=0, timeSent=0):
+        self.__emptyBoardingSlot(2, avId)
+
+    def emptySlot3(self, avId, bailFlag=0, timestamp=0, timeSent=0):
+        self.__emptyBoardingSlot(3, avId)
+
+    def __fillBoardingSlot(self, slotIndex, avId):
+        if avId == 0:
+            self.__emptyBoardingSlot(slotIndex, 0)
+            return
+
+        toon = self.cr.doId2do.get(avId)
+        sigilBase = self.sigilBases.get(slotIndex + 1)
+
+        if not toon or not sigilBase:
+            return
+
+        oldAvId = self.boardedAvIds.get(slotIndex)
+        if oldAvId and oldAvId != avId:
+            self.__emptyBoardingSlot(slotIndex, oldAvId)
+
+        self.boardedAvIds[slotIndex] = avId
+
+        if avId == base.localAvatar.doId:
+            self.localBoardingRequested = False
+            self.localBoardedSlot = slotIndex
+            self.localToonOnBoard = 1
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.detectedElevatorCollision(self)
+            try:
+                base.localAvatar.disableAvatarControls()
+            except:
+                pass
+
+        oldTrack = self.boardingToonTracks.pop(avId, None)
+        if oldTrack:
+            oldTrack.pause()
+
+        toon.stopSmooth()
+        targetPos = sigilBase.getPos(self.sigilRoot)
+        targetHpr = toon.getHpr(self.sigilRoot)
+
+        track = Sequence(
+            Func(toon.setAnimState, 'run', 1.0),
+            LerpPosInterval(
+                toon,
+                0.75,
+                targetPos,
+                other=self.sigilRoot,
+                blendType='easeInOut'
+            ),
+            LerpHprInterval(
+                toon,
+                0.25,
+                targetHpr,
+                other=self.sigilRoot,
+                blendType='easeInOut'
+            ),
+            Func(toon.setAnimState, 'neutral', 1.0)
+        )
+        if avId == base.localAvatar.doId:
+            elevator = self.getPlaceElevator()
+            if elevator:
+                cameraTrack = Sequence(
+                    Func(
+                        elevator.fsm.request,
+                        'boarding',
+                        [self.getElevatorModel()]
+                    ),
+                    Func(elevator.fsm.request, 'boarded')
+                )
+                track = Parallel(track, cameraTrack)
+
+        self.boardingToonTracks[avId] = track
+        track.start()
+
+        self.__enterSigil(slotIndex + 1, sigilBase, None)
+
+    def __emptyBoardingSlot(self, slotIndex, avId):
+        currentAvId = self.boardedAvIds.get(slotIndex)
+
+        if avId == 0:
+            avId = currentAvId
+
+        if currentAvId is not None:
+            del self.boardedAvIds[slotIndex]
+
+        if avId is None:
+            return
+
+        oldTrack = self.boardingToonTracks.pop(avId, None)
+        if oldTrack:
+            oldTrack.pause()
+
+        toon = self.cr.doId2do.get(avId)
+
+        if avId == base.localAvatar.doId:
+            self.localBoardingRequested = False
+            self.localBoardedSlot = None
+            self.localToonOnBoard = 0
+
+            sigilBase = self.sigilBases.get(slotIndex + 1)
+            if toon and sigilBase:
+                startPos = toon.getPos(self.sigilRoot)
+                exitPos = Point3(
+                    startPos.getX(),
+                    startPos.getY() - 2.5,
+                    startPos.getZ()
+                )
+
+                exitTrack = Sequence(
+                    Func(toon.setAnimState, 'run', 1.0),
+                    LerpPosInterval(
+                        toon,
+                        0.75,
+                        exitPos,
+                        other=self.sigilRoot,
+                        blendType='easeInOut'
+                    ),
+                    Func(toon.setAnimState, 'neutral', 1.0),
+                    Func(self.__finishLocalHopOff)
+                )
+                self.boardingToonTracks[avId] = exitTrack
+                exitTrack.start()
+            else:
+                self.__finishLocalHopOff()
+        elif toon:
+            toon.startSmooth()
+
+        self.__exitSigil(slotIndex + 1, None)
+
+    def __finishLocalHopOff(self):
+        avId = base.localAvatar.doId
+        oldTrack = self.boardingToonTracks.pop(avId, None)
+        if oldTrack:
+            oldTrack.pause()
+
+        try:
+            base.localAvatar.setAnimState('neutral', 1.0)
+        except:
+            pass
+
+        try:
+            camera.wrtReparentTo(render)
+        except:
+            pass
+
+        try:
+            base.localAvatar.attachCamera()
+        except:
+            pass
+
+        try:
+            base.localAvatar.startUpdateSmartCamera()
+        except:
+            pass
+
+        elevator = self.getPlaceElevator()
+        if elevator:
+            try:
+                elevator.fsm.request('exiting')
+            except:
+                pass
+            elevator.signalDone({'where': 'exit'})
+
+        place = base.cr.playGame.getPlace()
+        if place and place.fsm.getCurrentState().getName() != 'walk':
+            try:
+                place.fsm.request('walk')
+            except:
+                pass
+
+        try:
+            base.localAvatar.enableAvatarControls()
+        except:
+            pass
+
+        try:
+            base.localAvatar.setAnimState('neutral', 1.0)
+        except:
+            pass
+
+    def getElevatorModel(self):
+        return self.sigilRoot
+
+    def getPlaceElevator(self):
+        place = base.cr.playGame.getPlace()
+        if place and hasattr(place, 'elevator'):
+            return place.elevator
+        return None
+
+    def getDestName(self):
+        return None
+
+    def getElevatorTripId(self):
+        return 0
+
+    def getAntiShuffle(self):
+        return 0
+
+    def getMinLaff(self):
+        return 0
 
     def __enterSigil(self, index, sigilBase, collisionEntry):
         returnInterval = self.sigilReturnIntervals.pop(index, None)
@@ -301,9 +630,10 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
 
     def disable(self):
         self.__stopMajorPlayerMusic()
+        self.__stopBoardingCountdown()
 
-        if self.trackSpinInterval:
-            self.trackSpinInterval.finish()
+        if self.trackTextureInterval:
+            self.trackTextureInterval.finish()
             self.trackTextureInterval = None
 
         for index, spinInterval in self.sigilSpinIntervals.items():
@@ -332,6 +662,31 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
                 except:
                     pass
         self.sigilIdleEffects = {}
+
+        for avId, track in self.boardingToonTracks.items():
+            if track:
+                track.pause()
+        self.boardingToonTracks = {}
+        self.boardedAvIds = {}
+        self.localBoardingRequested = False
+        self.localBoardedSlot = None
+        self.localToonOnBoard = 0
+
+        try:
+            base.localAvatar.enableAvatarControls()
+        except:
+            pass
+
+        self.ignore('elevatorExitButton')
+
+        if self.boardingTriggerName:
+            self.ignore('enter' + self.boardingTriggerName)
+            self.ignore('exit' + self.boardingTriggerName)
+
+        if self.boardingTriggerNode and not self.boardingTriggerNode.isEmpty():
+            self.boardingTriggerNode.removeNode()
+        self.boardingTriggerNode = None
+        self.boardingTriggerName = None
 
         self.sigilBases = {}
 

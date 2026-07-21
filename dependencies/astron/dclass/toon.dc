@@ -2297,6 +2297,18 @@ dclass DistributedDungeonInterior : DistributedToonInterior {
 };
 
 dclass DistributedMajorPlayerInterior : DistributedToonInterior {
+  fillSlot0(uint32, uint8) broadcast ram;
+  fillSlot1(uint32, uint8) broadcast ram;
+  fillSlot2(uint32, uint8) broadcast ram;
+  fillSlot3(uint32, uint8) broadcast ram;
+  emptySlot0(uint32, int8, int16, int16) broadcast ram;
+  emptySlot1(uint32, int8, int16, int16) broadcast ram;
+  emptySlot2(uint32, int8, int16, int16) broadcast ram;
+  emptySlot3(uint32, int8, int16, int16) broadcast ram;
+  requestBoard() airecv clsend;
+  rejectBoard(uint32, uint8);
+  requestExit() airecv clsend;
+  setBoardingState(string, int16) broadcast ram;
 };
 
 dclass DistributedChainsawInterior : DistributedToonInterior {
