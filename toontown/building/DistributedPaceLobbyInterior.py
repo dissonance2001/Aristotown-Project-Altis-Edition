@@ -9,6 +9,7 @@ from toontown.building import DistributedToonInterior
 from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
+from toontown.building.interior.props.LavaLamp import LavaLamp
 
 
 class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInterior):
@@ -117,6 +118,20 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
         del self.colors
         del self.dnaStore
         del self.randomGenerator
+        self.lavaLamps = []
+        lampData = [
+            ((26.119, 16.110, 2.477), 0, 0),
+            ((28.545, 87.109, -8.553), 1, 0),
+            ((19.204, 96.448, -8.553), 2, 0),
+            ((8.375, 79.841, -8.552), 3, 0),
+            ((-7.447, 73.204, -8.552), 4, 0)
+        ]
+        for pos, colorIndex, h in lampData:
+            lamp = LavaLamp(colorIndex)
+            lamp.reparentTo(self.interior)
+            lamp.setPos(pos)
+            lamp.setH(h)
+            self.lavaLamps.append(lamp)
         self.interior.flattenMedium()
         for npcToon in self.cr.doFindAllInstances(DistributedNPCToonBase):
             npcToon.initToonState()
@@ -152,11 +167,24 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
             self.showerSound.stop()
             self.showerSound = None
 
+        if hasattr(self, 'lavaLamps'):
+            for lamp in self.lavaLamps:
+                lamp.cleanup()
+                lamp.removeNode()
+            del self.lavaLamps
+
         DistributedToonInterior.DistributedToonInterior.disable(self)
+
 
     def delete(self):
         taskMgr.remove(self.bellTaskName)
         taskMgr.remove(self.showerTaskName)
         taskMgr.remove('pacelobbyMusic')
         self.stopPaceLobbyMusic()
+        if hasattr(self, 'lavaLamps'):
+            for lamp in self.lavaLamps:
+                lamp.cleanup()
+                lamp.removeNode()
+            del self.lavaLamps
         DistributedToonInterior.DistributedToonInterior.delete(self)
+
