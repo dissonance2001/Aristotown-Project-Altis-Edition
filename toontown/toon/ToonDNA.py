@@ -3,7 +3,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from panda3d.core import *
 from panda3d.direct import *
-import ast, colorsys, random
+import ast, colorsys, os, random
 from otp.avatar import AvatarDNA
 
 notify = directNotify.newCategory('ToonDNA')
@@ -717,6 +717,96 @@ GirlBottoms = [('phase_3/maps/desat_skirt_1.png', SKIRT),
                ('phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_skirt_suit_hroller_white.png', SKIRT),
 ('phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_skirt_suit_hroller_black.png', SKIRT)
                ]
+
+CUSTOM_CLOTHING_DIRECTORY = 'resources/phase_14/maps/clothing'
+CUSTOM_CLOTHING_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.rgb', '.rgba', '.tga')
+
+
+def _getCustomClothingAssetPath(fullPath):
+    normalized = fullPath.replace('\\', '/')
+    resourcesToken = '/resources/'
+    tokenIndex = normalized.lower().find(resourcesToken)
+    if tokenIndex != -1:
+        return normalized[tokenIndex + len(resourcesToken):]
+
+    if normalized.lower().startswith('resources/'):
+        return normalized[len('resources/'):]
+
+    return normalized
+
+
+def _appendCustomClothingPath(targetList, assetPath):
+    if assetPath not in targetList:
+        targetList.append(assetPath)
+
+
+def loadCustomClothing():
+    searchRoots = [
+        CUSTOM_CLOTHING_DIRECTORY,
+        os.path.join(os.getcwd(), CUSTOM_CLOTHING_DIRECTORY)
+    ]
+
+    clothingRoot = None
+    for searchRoot in searchRoots:
+        if os.path.isdir(searchRoot):
+            clothingRoot = searchRoot
+            break
+
+    if clothingRoot is None:
+        notify.info('Custom clothing directory not found: %s' % CUSTOM_CLOTHING_DIRECTORY)
+        return
+
+    loadedShirts = 0
+    loadedSleeves = 0
+    loadedShorts = 0
+    loadedSkirts = 0
+
+    for currentRoot, directoryNames, fileNames in os.walk(clothingRoot):
+        directoryNames.sort()
+        fileNames.sort()
+
+        for fileName in fileNames:
+            lowerName = fileName.lower()
+            extension = os.path.splitext(lowerName)[1]
+            if extension not in CUSTOM_CLOTHING_EXTENSIONS:
+                continue
+
+            fullPath = os.path.join(currentRoot, fileName)
+            assetPath = _getCustomClothingAssetPath(fullPath)
+
+            if 'sleeve' in lowerName:
+                oldLength = len(Sleeves)
+                _appendCustomClothingPath(Sleeves, assetPath)
+                if len(Sleeves) != oldLength:
+                    loadedSleeves += 1
+            elif 'shirt' in lowerName or 'top' in lowerName:
+                oldLength = len(Shirts)
+                _appendCustomClothingPath(Shirts, assetPath)
+                if len(Shirts) != oldLength:
+                    loadedShirts += 1
+            elif 'short' in lowerName or 'bottom' in lowerName or 'bot' in lowerName:
+                oldBoyLength = len(BoyShorts)
+                _appendCustomClothingPath(BoyShorts, assetPath)
+                if len(BoyShorts) != oldBoyLength:
+                    loadedShorts += 1
+
+                girlEntry = (assetPath, SHORTS)
+                if girlEntry not in GirlBottoms:
+                    GirlBottoms.append(girlEntry)
+            elif 'skirt' in lowerName or 'dress' in lowerName:
+                girlEntry = (assetPath, SKIRT)
+                if girlEntry not in GirlBottoms:
+                    GirlBottoms.append(girlEntry)
+                    loadedSkirts += 1
+
+    notify.info(
+        'Loaded custom clothing: %s shirts, %s sleeves, %s shorts, %s skirts.' %
+        (loadedShirts, loadedSleeves, loadedShorts, loadedSkirts)
+    )
+
+
+loadCustomClothing()
+
 ClothesColors = [VBase4(1, 1, 1, 1.0),
  VBase4(0.863281, 0.40625, 0.417969, 1.0),
  VBase4(0.710938, 0.234375, 0.4375, 1.0),
