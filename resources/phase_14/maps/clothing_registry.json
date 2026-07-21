@@ -1,0 +1,27 @@
+{
+    "outfits": {
+        "reaper_outfit": {
+            "folder": "reaper_outfit", 
+            "shirt": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_shirt_reaper.png", 
+            "shirt_id": 159, 
+            "shorts": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_shorts_reaper.png", 
+            "shorts_id": 67, 
+            "skirt": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_skirt_reaper.png", 
+            "skirt_id": 72, 
+            "sleeves": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_sleeve_reaper.png", 
+            "sleeves_id": 150
+        }, 
+        "toons_in_wonderland_outfit": {
+            "folder": "toons_in_wonderland_outfit", 
+            "shirt": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_shirt_tiw.png", 
+            "shirt_id": 160, 
+            "shorts": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_shorts_tiw.png", 
+            "shorts_id": 68, 
+            "skirt": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_skirt_tiw.png", 
+            "skirt_id": 73, 
+            "sleeves": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_sleeve_tiw.png", 
+            "sleeves_id": 151
+        }
+    }, 
+    "version": 1
+}

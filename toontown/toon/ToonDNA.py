@@ -3,7 +3,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from panda3d.core import *
 from panda3d.direct import *
-import ast, colorsys, os, random
+import ast, colorsys, json, os, random
 from otp.avatar import AvatarDNA
 
 notify = directNotify.newCategory('ToonDNA')
@@ -719,7 +719,16 @@ GirlBottoms = [('phase_3/maps/desat_skirt_1.png', SKIRT),
                ]
 
 CUSTOM_CLOTHING_DIRECTORY = 'resources/phase_14/maps/clothing'
+CUSTOM_CLOTHING_REGISTRY = 'resources/phase_14/maps/clothing_registry.json'
 CUSTOM_CLOTHING_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.rgb', '.rgba', '.tga')
+
+
+def _getExistingPath(path):
+    candidates = [path, os.path.join(os.getcwd(), path)]
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    return candidates[0]
 
 
 def _getCustomClothingAssetPath(fullPath):
@@ -728,81 +737,157 @@ def _getCustomClothingAssetPath(fullPath):
     tokenIndex = normalized.lower().find(resourcesToken)
     if tokenIndex != -1:
         return normalized[tokenIndex + len(resourcesToken):]
-
     if normalized.lower().startswith('resources/'):
         return normalized[len('resources/'):]
-
     return normalized
 
 
-def _appendCustomClothingPath(targetList, assetPath):
-    if assetPath not in targetList:
-        targetList.append(assetPath)
+def _loadClothingRegistry(registryPath):
+    if not os.path.isfile(registryPath):
+        return {'version': 1, 'outfits': {}}
+    try:
+        registryFile = open(registryPath, 'r')
+        try:
+            registry = json.load(registryFile)
+        finally:
+            registryFile.close()
+    except Exception:
+        notify.warning('Could not read custom clothing registry. A new registry will be created.')
+        return {'version': 1, 'outfits': {}}
+    if not isinstance(registry, dict):
+        registry = {}
+    if not isinstance(registry.get('outfits'), dict):
+        registry['outfits'] = {}
+    registry['version'] = 1
+    return registry
+
+
+def _saveClothingRegistry(registryPath, registry):
+    registryDirectory = os.path.dirname(registryPath)
+    if registryDirectory and not os.path.isdir(registryDirectory):
+        os.makedirs(registryDirectory)
+    registryFile = open(registryPath, 'w')
+    try:
+        json.dump(registry, registryFile, indent=4, sort_keys=True)
+        registryFile.write('\n')
+    finally:
+        registryFile.close()
+
+
+def _findOutfitPieces(outfitDirectory):
+    pieces = {}
+    for fileName in sorted(os.listdir(outfitDirectory)):
+        fullPath = os.path.join(outfitDirectory, fileName)
+        if not os.path.isfile(fullPath):
+            continue
+        lowerName = fileName.lower()
+        extension = os.path.splitext(lowerName)[1]
+        if extension not in CUSTOM_CLOTHING_EXTENSIONS:
+            continue
+        assetPath = _getCustomClothingAssetPath(fullPath)
+        if 'sleeve' in lowerName:
+            pieces['sleeves'] = assetPath
+        elif 'shirt' in lowerName or 'top' in lowerName:
+            pieces['shirt'] = assetPath
+        elif 'skirt' in lowerName or 'dress' in lowerName:
+            pieces['skirt'] = assetPath
+        elif 'short' in lowerName or 'bottom' in lowerName or 'bot' in lowerName:
+            pieces['shorts'] = assetPath
+    return pieces
+
+
+def _nextRegistryId(registry, idName, minimumId):
+    usedIds = []
+    for outfitData in registry['outfits'].values():
+        if isinstance(outfitData, dict):
+            value = outfitData.get(idName)
+            if isinstance(value, int):
+                usedIds.append(value)
+    if not usedIds:
+        return minimumId
+    return max(max(usedIds) + 1, minimumId)
+
+
+def _setListItemAtId(targetList, itemId, value, fallbackValue):
+    while len(targetList) <= itemId:
+        targetList.append(fallbackValue)
+    targetList[itemId] = value
 
 
 def loadCustomClothing():
-    searchRoots = [
-        CUSTOM_CLOTHING_DIRECTORY,
-        os.path.join(os.getcwd(), CUSTOM_CLOTHING_DIRECTORY)
-    ]
-
-    clothingRoot = None
-    for searchRoot in searchRoots:
-        if os.path.isdir(searchRoot):
-            clothingRoot = searchRoot
-            break
-
-    if clothingRoot is None:
+    clothingRoot = _getExistingPath(CUSTOM_CLOTHING_DIRECTORY)
+    registryPath = _getExistingPath(CUSTOM_CLOTHING_REGISTRY)
+    if not os.path.isdir(clothingRoot):
         notify.info('Custom clothing directory not found: %s' % CUSTOM_CLOTHING_DIRECTORY)
         return
-
-    loadedShirts = 0
-    loadedSleeves = 0
-    loadedShorts = 0
-    loadedSkirts = 0
-
-    for currentRoot, directoryNames, fileNames in os.walk(clothingRoot):
-        directoryNames.sort()
-        fileNames.sort()
-
-        for fileName in fileNames:
-            lowerName = fileName.lower()
-            extension = os.path.splitext(lowerName)[1]
-            if extension not in CUSTOM_CLOTHING_EXTENSIONS:
+    registry = _loadClothingRegistry(registryPath)
+    outfits = registry['outfits']
+    registryChanged = False
+    baseShirtId = len(Shirts)
+    baseSleeveId = len(Sleeves)
+    baseShortsId = len(BoyShorts)
+    baseGirlBottomId = len(GirlBottoms)
+    folderNames = []
+    for folderName in sorted(os.listdir(clothingRoot)):
+        outfitDirectory = os.path.join(clothingRoot, folderName)
+        if os.path.isdir(outfitDirectory):
+            folderNames.append(folderName)
+    for folderName in folderNames:
+        outfitDirectory = os.path.join(clothingRoot, folderName)
+        pieces = _findOutfitPieces(outfitDirectory)
+        if not pieces:
+            continue
+        outfitData = outfits.get(folderName)
+        if not isinstance(outfitData, dict):
+            outfitData = {}
+            outfits[folderName] = outfitData
+            registryChanged = True
+        outfitData['folder'] = folderName
+        for pieceName in ('shirt', 'sleeves', 'shorts', 'skirt'):
+            idName = pieceName + '_id'
+            assetPath = pieces.get(pieceName)
+            if assetPath is not None and outfitData.get(pieceName) != assetPath:
+                outfitData[pieceName] = assetPath
+                registryChanged = True
+            if assetPath is None:
                 continue
-
-            fullPath = os.path.join(currentRoot, fileName)
-            assetPath = _getCustomClothingAssetPath(fullPath)
-
-            if 'sleeve' in lowerName:
-                oldLength = len(Sleeves)
-                _appendCustomClothingPath(Sleeves, assetPath)
-                if len(Sleeves) != oldLength:
-                    loadedSleeves += 1
-            elif 'shirt' in lowerName or 'top' in lowerName:
-                oldLength = len(Shirts)
-                _appendCustomClothingPath(Shirts, assetPath)
-                if len(Shirts) != oldLength:
-                    loadedShirts += 1
-            elif 'short' in lowerName or 'bottom' in lowerName or 'bot' in lowerName:
-                oldBoyLength = len(BoyShorts)
-                _appendCustomClothingPath(BoyShorts, assetPath)
-                if len(BoyShorts) != oldBoyLength:
-                    loadedShorts += 1
-
-                girlEntry = (assetPath, SHORTS)
-                if girlEntry not in GirlBottoms:
-                    GirlBottoms.append(girlEntry)
-            elif 'skirt' in lowerName or 'dress' in lowerName:
-                girlEntry = (assetPath, SKIRT)
-                if girlEntry not in GirlBottoms:
-                    GirlBottoms.append(girlEntry)
-                    loadedSkirts += 1
-
-    notify.info(
-        'Loaded custom clothing: %s shirts, %s sleeves, %s shorts, %s skirts.' %
-        (loadedShirts, loadedSleeves, loadedShorts, loadedSkirts)
-    )
+            if not isinstance(outfitData.get(idName), int):
+                if pieceName == 'shirt':
+                    outfitData[idName] = _nextRegistryId(registry, idName, baseShirtId)
+                elif pieceName == 'sleeves':
+                    outfitData[idName] = _nextRegistryId(registry, idName, baseSleeveId)
+                elif pieceName == 'shorts':
+                    outfitData[idName] = _nextRegistryId(registry, idName, baseShortsId)
+                else:
+                    outfitData[idName] = _nextRegistryId(registry, idName, baseGirlBottomId)
+                registryChanged = True
+    defaultShirt = Shirts[0]
+    defaultSleeves = Sleeves[0]
+    defaultShorts = BoyShorts[0]
+    defaultGirlBottom = GirlBottoms[0]
+    for folderName in sorted(outfits.keys()):
+        outfitData = outfits[folderName]
+        if not isinstance(outfitData, dict):
+            continue
+        shirtPath = outfitData.get('shirt')
+        shirtId = outfitData.get('shirt_id')
+        if isinstance(shirtPath, basestring) and isinstance(shirtId, int):
+            _setListItemAtId(Shirts, shirtId, shirtPath, defaultShirt)
+        sleevesPath = outfitData.get('sleeves')
+        sleevesId = outfitData.get('sleeves_id')
+        if isinstance(sleevesPath, basestring) and isinstance(sleevesId, int):
+            _setListItemAtId(Sleeves, sleevesId, sleevesPath, defaultSleeves)
+        shortsPath = outfitData.get('shorts')
+        shortsId = outfitData.get('shorts_id')
+        if isinstance(shortsPath, basestring) and isinstance(shortsId, int):
+            _setListItemAtId(BoyShorts, shortsId, shortsPath, defaultShorts)
+        skirtPath = outfitData.get('skirt')
+        skirtId = outfitData.get('skirt_id')
+        if isinstance(skirtPath, basestring) and isinstance(skirtId, int):
+            _setListItemAtId(GirlBottoms, skirtId, (skirtPath, SKIRT), defaultGirlBottom)
+    if registryChanged or not os.path.isfile(registryPath):
+        _saveClothingRegistry(registryPath, registry)
+    notify.info('Loaded %s custom clothing outfit folder(s).' % len(folderNames))
 
 
 loadCustomClothing()
