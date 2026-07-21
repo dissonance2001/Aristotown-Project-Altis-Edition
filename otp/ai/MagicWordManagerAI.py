@@ -90,3 +90,33 @@ def words():
         return "You are chopped liver"
     else:
         return wordString
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def mp():
+    toon = spellbook.getTarget()
+    teleportTargetId = 402002684
+
+    if teleportTargetId not in simbase.air.doId2do:
+        return 'Major Player lobby is not available.'
+
+    if teleportTargetId not in toon.magicWordTeleportRequests:
+        toon.magicWordTeleportRequests.append(teleportTargetId)
+
+    toon.magicTeleportInitiate(teleportTargetId, 4000, 4874)
+    return 'Teleporting to the Major Player Lobby.'
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def pace():
+    toon = spellbook.getTarget()
+    teleportTargetId = 402002684
+
+    if teleportTargetId not in simbase.air.doId2do:
+        return 'Pace Lobby is not available.'
+
+    if teleportTargetId not in toon.magicWordTeleportRequests:
+        toon.magicWordTeleportRequests.append(teleportTargetId)
+
+    toon.magicTeleportInitiate(teleportTargetId, 9000, 9613)
+    return 'Teleporting to the Pacesetter Lobby.'
