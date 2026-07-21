@@ -1031,6 +1031,8 @@ dclass DistributedToon : DistributedPlayer {
   setGlasses(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
   setBackpack(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
   setShoes(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
+  requestSetClothing(blob) clsend airecv;
+  requestSetAccessories(uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8) clsend airecv;
   setGardenSpecials(gardenSpecial [] = []) required ownrecv db airecv;
   setEarnedExperience(uint16[]) ownrecv;
   setTunnelIn(int16, int16/10, int16/10, int16/10, int16/100, int32/100) ownsend broadcast;

@@ -480,6 +480,89 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getChatMode(self):
         return self.chatMode
 
+    def requestSetClothing(self, dnaString):
+        avId = self.air.getAvatarIdFromSender()
+        if avId != self.doId:
+            self.air.writeServerEvent('suspicious', avId, 'Tried to customize another Toon.')
+            return
+
+        testDna = ToonDNA.ToonDNA()
+        if not testDna.isValidNetString(dnaString):
+            self.air.writeServerEvent('suspicious', avId, 'Sent invalid clothing DNA.')
+            return
+
+        testDna.makeFromNetString(dnaString)
+        current = self.dna
+
+        if testDna.head != current.head:
+            return
+        if testDna.legs != current.legs:
+            return
+        if testDna.gender != current.gender:
+            return
+        if testDna.headColor != current.headColor:
+            return
+        if testDna.armColor != current.armColor:
+            return
+        if testDna.legColor != current.legColor:
+            return
+        if testDna.gloveColor != current.gloveColor:
+            return
+        if not testDna.torso or not current.torso:
+            return
+        if testDna.torso[0] != current.torso[0]:
+            return
+        if len(testDna.torso) > 1 and testDna.torso[1] not in ('s', 'd'):
+            return
+
+        if testDna.topTex < 0 or testDna.topTex >= len(ToonDNA.Shirts):
+            return
+        if testDna.sleeveTex < 0 or testDna.sleeveTex >= len(ToonDNA.Sleeves):
+            return
+        if testDna.botTex < 0:
+            return
+        if testDna.gender == 'm':
+            if testDna.botTex >= len(ToonDNA.BoyShorts):
+                return
+            testDna.torso = current.torso[0] + 's'
+        else:
+            if testDna.botTex >= len(ToonDNA.GirlBottoms):
+                return
+            bottomType = ('s', 'd')[ToonDNA.GirlBottoms[testDna.botTex][1]]
+            testDna.torso = current.torso[0] + bottomType
+
+        colorCount = len(ToonDNA.allColorsList)
+        for color in (testDna.topTexColor, testDna.sleeveTexColor, testDna.botTexColor):
+            if color < 0 or color >= colorCount:
+                return
+
+        self.b_setDNAString(testDna.makeNetString())
+
+    def requestSetAccessories(self, hatIdx, hatTexture, hatColor,
+                              glassesIdx, glassesTexture, glassesColor,
+                              backpackIdx, backpackTexture, backpackColor,
+                              shoesIdx, shoesTexture, shoesColor):
+        avId = self.air.getAvatarIdFromSender()
+        if avId != self.doId:
+            self.air.writeServerEvent('suspicious', avId, 'Tried to customize another Toon.')
+            return
+
+        values = (
+            (ToonDNA.HAT, hatIdx, hatTexture, hatColor),
+            (ToonDNA.GLASSES, glassesIdx, glassesTexture, glassesColor),
+            (ToonDNA.BACKPACK, backpackIdx, backpackTexture, backpackColor),
+            (ToonDNA.SHOES, shoesIdx, shoesTexture, shoesColor),
+        )
+
+        for accessoryType, idx, textureIdx, colorIdx in values:
+            if not self.checkAccessorySanity(accessoryType, idx, textureIdx, colorIdx):
+                return
+
+        self.b_setHat(hatIdx, hatTexture, hatColor)
+        self.b_setGlasses(glassesIdx, glassesTexture, glassesColor)
+        self.b_setBackpack(backpackIdx, backpackTexture, backpackColor)
+        self.b_setShoes(shoesIdx, shoesTexture, shoesColor)
+
     def b_setExperience(self, experience):
         self.d_setExperience(experience)
         self.setExperience(experience)

@@ -9,6 +9,9 @@ from toontown.parties import DistributedPartyFireworksActivity
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 
+if not hasattr(TTLocalizer, 'SpellbookPageTitle'):
+    TTLocalizer.SpellbookPageTitle = 'Customize'
+
 class ShtikerBook(DirectFrame, StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('ShtikerBook')
 
@@ -52,6 +55,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
          TTLocalizer.GolfPageTitle,
          TTLocalizer.EventsPageName,
          TTLocalizer.AchievementsPageTitle,
+         TTLocalizer.SpellbookPageTitle,
          TTLocalizer.NewsPageName]
         return
 
@@ -300,6 +304,16 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             iconModels = loader.loadModel('phase_4/models/parties/partyStickerbook')
             iconGeom = iconModels.find('**/Stickerbook_PartyIcon')
             iconModels.detachNode()
+        elif pageName == TTLocalizer.SpellbookPageTitle:
+            iconTexture = loader.loadTexture('phase_3.5/maps/spellbook_button.png')
+            iconCard = CardMaker('spellbookTabIcon')
+            iconCard.setFrame(-0.5, 0.5, -0.5, 0.5)
+            iconGeom = NodePath(iconCard.generate())
+            iconGeom.setTexture(iconTexture, 1)
+            iconGeom.setTransparency(TransparencyAttrib.MAlpha)
+            iconGeom.setPos(0, 0, -0.2)
+            iconImage = None
+            iconScale = (2.5, 2.5, 2.5)
         elif pageName == TTLocalizer.PhotoPageTitle:
             iconGeom = iconModels = loader.loadModel('phase_4/models/minigames/photogame_filmroll')
             iconScale = (1.9, 1.5, 1.5)
