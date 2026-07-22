@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from otp.ai.MagicWordGlobal import *
 from toontown.toonbase import ToontownGlobals
+from toontown.toon.ToonAccessoryPlacementPanel import ToonAccessoryPlacementPanel
 
 lastClickedNametag = None
 
@@ -18,6 +19,17 @@ class MagicWordManager(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.disable(self)
 
     def handleMagicWord(self, magicWord):
+        if magicWord.lower() == '~acc':
+            if hasattr(base, 'apPanel') and getattr(base, 'apPanel', None):
+                try:
+                    base.apPanel.destroy()
+                except:
+                    pass
+                base.apPanel = None
+            else:
+                base.apPanel = ToonAccessoryPlacementPanel()
+            return
+
         if not self.cr.wantMagicWords:
             return
 

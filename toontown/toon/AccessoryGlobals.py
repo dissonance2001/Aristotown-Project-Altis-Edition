@@ -1,3 +1,6 @@
+import os
+import json
+
 HatTransTable = {'hl': ((0.0, -0.32198, 0.406916), (180.0, 320.194427, 0.0), (0.293796, 0.284073, 0.285614)),
  'hs': ((0.0, -0.205193, 0.236684), (180.0, 311.633545, 0.0), (0.291181, 0.268914, 0.268914)),
  'pl': ((0.0, -0.175888, 0.57), (180.0, 330.0, 0.0), (0.433654, 0.377233, 0.424631)),
@@ -1375,3 +1378,119 @@ ExtendedBackpackTransTable = {1: {'m': ((.85, -1, 0.75), (180, 10, 20), (.625, .
  24: {'s': ((0.294021, -1.620192, -0.216908), (180.0, 6.340192, 0.0), (0.32, 0.32, 0.32)),
       'm': ((0.227545, -1.164832, -0.106984), (180.0, 6.0, 0.0), (0.290735, 0.290735, 0.290735)),
       'l': ((0.208737, -1.215698, 0.012413), (180.0, 0.0, 0.0), (0.295111, 0.295111, 0.295111))}}
+
+
+def _findAccessoryPlacementsPath():
+    relativePath = os.path.join(
+        'resources',
+        'phase_14',
+        'accessories',
+        'accessory_placements.json'
+    )
+
+    roots = []
+
+    currentDirectory = os.path.abspath(os.getcwd())
+    while True:
+        if currentDirectory not in roots:
+            roots.append(currentDirectory)
+
+        parentDirectory = os.path.dirname(currentDirectory)
+        if parentDirectory == currentDirectory:
+            break
+
+        currentDirectory = parentDirectory
+
+    try:
+        currentDirectory = os.path.dirname(os.path.abspath(__file__))
+        while True:
+            if currentDirectory not in roots:
+                roots.append(currentDirectory)
+
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+
+            currentDirectory = parentDirectory
+    except:
+        pass
+
+    for root in roots:
+        candidate = os.path.join(root, relativePath)
+        if os.path.isfile(candidate):
+            return candidate
+
+    return None
+
+
+def loadAccessoryPlacementOverrides():
+    placementPath = _findAccessoryPlacementsPath()
+
+    if placementPath is None:
+        print 'AccessoryGlobals: accessory_placements.json not found.'
+        return 0
+
+    try:
+        placementFile = open(placementPath, 'r')
+        try:
+            placementData = json.load(placementFile)
+        finally:
+            placementFile.close()
+    except Exception as error:
+        print 'AccessoryGlobals: failed to read placement file:', error
+        return 0
+
+    tableInfo = (
+        ('hat', ExtendedHatTransTable),
+        ('glasses', ExtendedGlassesTransTable),
+        ('backpack', ExtendedBackpackTransTable)
+    )
+
+    loadedCount = 0
+
+    for typeName, targetTable in tableInfo:
+        typeData = placementData.get(typeName, {})
+
+        if not isinstance(typeData, dict):
+            continue
+
+        for accessoryIdText, dnaPlacements in typeData.items():
+            try:
+                accessoryId = int(accessoryIdText)
+            except:
+                continue
+
+            if not isinstance(dnaPlacements, dict):
+                continue
+
+            if accessoryId not in targetTable:
+                targetTable[accessoryId] = {}
+
+            for dnaKey, placementDataEntry in dnaPlacements.items():
+                if not isinstance(placementDataEntry, dict):
+                    continue
+
+                pos = placementDataEntry.get('pos')
+                hpr = placementDataEntry.get('hpr')
+                scale = placementDataEntry.get('scale')
+
+                if pos is None or hpr is None or scale is None:
+                    continue
+
+                targetTable[accessoryId][dnaKey] = (
+                    tuple(pos),
+                    tuple(hpr),
+                    tuple(scale)
+                )
+
+                print 'AccessoryGlobals: loaded override:', typeName, accessoryId, dnaKey
+                loadedCount += 1
+
+    print 'AccessoryGlobals: loaded placement overrides:', loadedCount
+    print 'AccessoryGlobals: placement file:', placementPath
+
+    return loadedCount
+
+
+loadAccessoryPlacementOverrides()
+

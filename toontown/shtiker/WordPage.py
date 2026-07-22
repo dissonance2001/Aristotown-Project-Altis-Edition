@@ -1,4 +1,6 @@
 from direct.gui import DirectGuiGlobals
+import json
+import os
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -1306,7 +1308,7 @@ class AccTabPage1(DirectFrame):
             if word['state'] != DGG.NORMAL:
                 word['state'] = DGG.NORMAL
 
-        wordName = clothList[listNum]
+        wordName = clothList[wordNum]
         wordName['state'] = DGG.DISABLED
 
         if clothType == 'hat':

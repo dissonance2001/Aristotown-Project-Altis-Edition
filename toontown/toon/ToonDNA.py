@@ -890,7 +890,9 @@ def loadCustomClothing():
     notify.info('Loaded %s custom clothing outfit folder(s).' % len(folderNames))
 
 
+
 loadCustomClothing()
+
 
 ClothesColors = [VBase4(1, 1, 1, 1.0),
  VBase4(0.863281, 0.40625, 0.417969, 1.0),
@@ -2810,6 +2812,323 @@ ShoesStyles = {'none': [0, 0, 0],
  'sfb5': [3, 26, 0],
  'sfb6': [3, 27, 0],
  'smj4': [2, 29, 0]}
+
+
+CUSTOM_ACCESSORY_DIRECTORY = 'resources/phase_14/accessories'
+CUSTOM_ACCESSORY_REGISTRY = 'resources/phase_14/accessories/accessories_registry.json'
+CUSTOM_ACCESSORY_EXTENSIONS = ('.bam',)
+
+
+def _findCustomAccessoryRoot():
+    relativePath = CUSTOM_ACCESSORY_DIRECTORY.replace('/', os.sep)
+    searchRoots = []
+
+    currentDirectory = os.path.abspath(os.getcwd())
+    while True:
+        if currentDirectory not in searchRoots:
+            searchRoots.append(currentDirectory)
+        parentDirectory = os.path.dirname(currentDirectory)
+        if parentDirectory == currentDirectory:
+            break
+        currentDirectory = parentDirectory
+
+    try:
+        currentDirectory = os.path.dirname(os.path.abspath(__file__))
+        while True:
+            if currentDirectory not in searchRoots:
+                searchRoots.append(currentDirectory)
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+    except Exception:
+        pass
+
+    for root in searchRoots:
+        candidate = os.path.join(root, relativePath)
+        if os.path.isdir(candidate):
+            return candidate
+
+    return os.path.join(os.getcwd(), relativePath)
+
+
+def _loadNativeAccessoryRegistry(registryPath):
+    if not os.path.isfile(registryPath):
+        return {'version': 2, 'accessories': {}}
+
+    try:
+        registryFile = open(registryPath, 'r')
+        try:
+            registry = json.load(registryFile)
+        finally:
+            registryFile.close()
+    except Exception:
+        notify.warning('Could not read accessory registry. A new registry will be created.')
+        return {'version': 2, 'accessories': {}}
+
+    if not isinstance(registry, dict):
+        registry = {}
+
+    if not isinstance(registry.get('accessories'), dict):
+        registry['accessories'] = {}
+
+    registry['version'] = 2
+    return registry
+
+
+def _saveNativeAccessoryRegistry(registryPath, registry):
+    registryDirectory = os.path.dirname(registryPath)
+    if registryDirectory and not os.path.isdir(registryDirectory):
+        os.makedirs(registryDirectory)
+
+    registryFile = open(registryPath, 'w')
+    try:
+        json.dump(registry, registryFile, indent=4, sort_keys=True)
+        registryFile.write('\n')
+    finally:
+        registryFile.close()
+
+
+def _getAccessoryTypeFromName(fileName):
+    lowerName = fileName.lower()
+
+    if 'glasses' in lowerName or 'glass' in lowerName:
+        return 'glasses'
+    if 'backpack' in lowerName or 'pack' in lowerName:
+        return 'backpack'
+    if 'shoes' in lowerName or 'shoe' in lowerName:
+        return 'shoes'
+    if 'hat' in lowerName:
+        return 'hat'
+
+    return None
+
+
+def _getNativeAccessoryTables(accessoryType):
+    if accessoryType == 'hat':
+        return HatModels, HatStyles, 'custom_hat_'
+    if accessoryType == 'glasses':
+        return GlassesModels, GlassesStyles, 'custom_glasses_'
+    if accessoryType == 'backpack':
+        return BackpackModels, BackpackStyles, 'custom_backpack_'
+    if accessoryType == 'shoes':
+        return ShoesModels, ShoesStyles, 'custom_shoes_'
+
+    return None, None, None
+
+
+def _setAccessoryModelAtId(modelList, accessoryId, modelPath):
+    while len(modelList) <= accessoryId:
+        modelList.append(None)
+
+    modelList[accessoryId] = modelPath
+
+
+def _nextNativeAccessoryId(modelList, usedIds):
+    accessoryId = len(modelList)
+
+    while accessoryId in usedIds:
+        accessoryId += 1
+
+    return accessoryId
+
+
+def _makeDefaultAccessoryDisplayName(fileName, accessoryType):
+    baseName = os.path.splitext(os.path.basename(fileName))[0]
+    words = [word for word in baseName.replace('-', '_').split('_') if word]
+
+    typeWords = {
+        'hat': ('hat',),
+        'glasses': ('glasses', 'glass'),
+        'backpack': ('backpack', 'pack'),
+        'shoes': ('shoes', 'shoe')
+    }.get(accessoryType, ())
+
+    filteredWords = []
+    for word in words:
+        if word.lower() not in typeWords:
+            filteredWords.append(word)
+
+    if filteredWords:
+        prettyName = ' '.join(filteredWords).title()
+    else:
+        prettyName = baseName.replace('_', ' ').replace('-', ' ').title()
+
+    suffixes = {
+        'hat': 'Hat',
+        'glasses': 'Glasses',
+        'backpack': 'Backpack',
+        'shoes': 'Shoes'
+    }
+
+    suffix = suffixes.get(accessoryType)
+    if suffix:
+        prettyName = '%s %s' % (prettyName, suffix)
+
+    return prettyName.strip()
+
+
+def _makeCustomAccessoryKey(accessoryType, accessoryId, registryKey):
+    safeName = registryKey.lower()
+    safeName = safeName.replace('\\', '_').replace('/', '_')
+    safeName = safeName.replace('.bam', '')
+    safeName = ''.join(
+        character if character.isalnum() else '_'
+        for character in safeName
+    )
+
+    return 'custom_%s_%d_%s' % (
+        accessoryType,
+        accessoryId,
+        safeName
+    )
+
+
+def registerCustomAccessoriesAsNative():
+    accessoryRoot = _findCustomAccessoryRoot()
+
+    if not os.path.isdir(accessoryRoot):
+        try:
+            os.makedirs(accessoryRoot)
+        except Exception:
+            notify.warning('Could not create accessory directory: %s' % accessoryRoot)
+            return
+
+    registryPath = os.path.join(accessoryRoot, 'accessories_registry.json')
+    registry = _loadNativeAccessoryRegistry(registryPath)
+    accessories = registry['accessories']
+    registryChanged = False
+    discovered = []
+
+    for currentRoot, directoryNames, fileNames in os.walk(accessoryRoot):
+        directoryNames.sort()
+
+        for fileName in sorted(fileNames):
+            extension = os.path.splitext(fileName)[1].lower()
+            if extension not in CUSTOM_ACCESSORY_EXTENSIONS:
+                continue
+
+            accessoryType = _getAccessoryTypeFromName(fileName)
+            if accessoryType is None:
+                continue
+
+            fullPath = os.path.join(currentRoot, fileName)
+            relativeToAccessoryRoot = os.path.relpath(
+                fullPath,
+                accessoryRoot
+            ).replace('\\', '/')
+
+            discovered.append((
+                relativeToAccessoryRoot,
+                accessoryType,
+                fullPath
+            ))
+
+    usedIdsByType = {
+        'hat': set(),
+        'glasses': set(),
+        'backpack': set(),
+        'shoes': set()
+    }
+
+    for accessoryData in accessories.values():
+        if not isinstance(accessoryData, dict):
+            continue
+
+        accessoryType = accessoryData.get('type')
+        nativeId = accessoryData.get('native_id')
+
+        if accessoryType in usedIdsByType and isinstance(nativeId, int):
+            usedIdsByType[accessoryType].add(nativeId)
+
+    for registryKey, accessoryType, fullPath in discovered:
+        modelList, styleDict, unusedPrefix = _getNativeAccessoryTables(
+            accessoryType
+        )
+
+        if modelList is None:
+            continue
+
+        accessoryData = accessories.get(registryKey)
+        if not isinstance(accessoryData, dict):
+            accessoryData = {}
+            accessories[registryKey] = accessoryData
+            registryChanged = True
+
+        nativeId = accessoryData.get('native_id')
+
+        if not isinstance(nativeId, int) or nativeId < 0 or nativeId >= 256:
+            nativeId = _nextNativeAccessoryId(
+                modelList,
+                usedIdsByType[accessoryType]
+            )
+
+            if nativeId >= 256:
+                notify.warning(
+                    'Cannot register %s because native accessory IDs are limited to 255.' %
+                    registryKey
+                )
+                continue
+
+            accessoryData['native_id'] = nativeId
+            registryChanged = True
+
+        usedIdsByType[accessoryType].add(nativeId)
+
+        assetPath = _getCustomClothingAssetPath(fullPath)
+        if assetPath.lower().endswith('.bam'):
+            assetPath = assetPath[:-4]
+
+        if accessoryData.get('type') != accessoryType:
+            accessoryData['type'] = accessoryType
+            registryChanged = True
+
+        if accessoryData.get('model') != assetPath:
+            accessoryData['model'] = assetPath
+            registryChanged = True
+
+        internalName = os.path.splitext(os.path.basename(fullPath))[0]
+        if accessoryData.get('name') != internalName:
+            accessoryData['name'] = internalName
+            registryChanged = True
+
+        displayName = accessoryData.get('display_name')
+        if not isinstance(displayName, basestring) or not displayName.strip():
+            accessoryData['display_name'] = _makeDefaultAccessoryDisplayName(
+                fullPath,
+                accessoryType
+            )
+            registryChanged = True
+
+        if accessoryData.get('id') != nativeId:
+            accessoryData['id'] = nativeId
+            registryChanged = True
+
+        _setAccessoryModelAtId(modelList, nativeId, assetPath)
+
+        styleKey = accessoryData.get('style')
+        if not isinstance(styleKey, basestring) or not styleKey:
+            styleKey = _makeCustomAccessoryKey(
+                accessoryType,
+                nativeId,
+                registryKey
+            )
+            accessoryData['style'] = styleKey
+            registryChanged = True
+
+        styleDict[styleKey] = [nativeId, 0, 0]
+
+    if registryChanged or not os.path.isfile(registryPath):
+        _saveNativeAccessoryRegistry(registryPath, registry)
+
+    notify.info(
+        'Registered %d custom accessory model(s) as native accessories.' %
+        len(discovered)
+    )
+
+
+registerCustomAccessoriesAsNative()
+
 
 def isValidHat(itemIdx, textureIdx, colorIdx):
     for style in HatStyles.values():

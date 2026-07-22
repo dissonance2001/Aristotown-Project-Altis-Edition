@@ -1,0 +1,54 @@
+{
+    "accessories": {
+        "glasses_majorplayer_rose.bam": {
+            "display_name": "Solemn Rose", 
+            "folder": "", 
+            "id": 23, 
+            "model": "phase_14/accessories/glasses_majorplayer_rose", 
+            "name": "glasses_majorplayer_rose", 
+            "native_id": 23, 
+            "style": "custom_glasses_23_glasses_majorplayer_rose", 
+            "type": "glasses"
+        }, 
+        "glasses_pacesetter.bam": {
+            "display_name": "Pacesetter's Glasses", 
+            "folder": "", 
+            "id": 22, 
+            "model": "phase_14/accessories/glasses_pacesetter", 
+            "name": "glasses_pacesetter", 
+            "native_id": 22, 
+            "style": "custom_glasses_22_glasses_pacesetter", 
+            "type": "glasses"
+        }, 
+        "hat_icecube.bam": {
+            "display_name": "Brain Freeze", 
+            "folder": "", 
+            "id": 60, 
+            "model": "phase_14/accessories/hat_icecube", 
+            "name": "hat_icecube", 
+            "native_id": 60, 
+            "style": "custom_hat_60_hat_icecube", 
+            "type": "hat"
+        }, 
+        "hat_multislacker.bam": {
+            "display_name": "Multislacker's Hat", 
+            "folder": "", 
+            "id": 59, 
+            "model": "phase_14/accessories/hat_multislacker", 
+            "name": "hat_multislacker", 
+            "native_id": 59, 
+            "style": "custom_hat_59_hat_multislacker", 
+            "type": "hat"
+        }, 
+        "hat_rainmaker.bam": {
+            "display_name": "Storm Cloud Hat", 
+            "id": 61, 
+            "model": "phase_14/accessories/hat_rainmaker", 
+            "name": "hat_rainmaker", 
+            "native_id": 61, 
+            "style": "custom_hat_61_hat_rainmaker", 
+            "type": "hat"
+        }
+    }, 
+    "version": 2
+}

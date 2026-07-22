@@ -1027,12 +1027,12 @@ dclass DistributedToon : DistributedPlayer {
   setGlassesList(uint8[] = []) required ownrecv db;
   setBackpackList(uint8[] = []) required ownrecv db;
   setShoesList(uint8[] = []) required ownrecv db;
-  setHat(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setGlasses(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setBackpack(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setShoes(uint8 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
+  setHat(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
+  setGlasses(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
+  setBackpack(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
+  setShoes(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
   requestSetClothing(blob) clsend airecv;
-  requestSetAccessories(uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8, uint8) clsend airecv;
+  requestSetAccessories(uint16, uint8, uint8, uint16, uint8, uint8, uint16, uint8, uint8, uint16, uint8, uint8) clsend airecv;
   setGardenSpecials(gardenSpecial [] = []) required ownrecv db airecv;
   setEarnedExperience(uint16[]) ownrecv;
   setTunnelIn(int16, int16/10, int16/10, int16/10, int16/100, int32/100) ownsend broadcast;
@@ -2545,10 +2545,10 @@ dclass DistributedNPCToonBase : DistributedNode {
   setPageNumber(int16, int8, int16) broadcast ram clsend;
   avatarEnter() airecv clsend;
   freeAvatar();
-  setHat(uint8 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setGlasses(uint8 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setBackpack(uint8 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setShoes(uint8 = 0, uint8 = 0, uint8 = 0) broadcast ram;
+  setHat(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
+  setGlasses(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
+  setBackpack(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
+  setShoes(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {
@@ -4037,10 +4037,10 @@ struct PotentialToon {
   uint8 aname;
   int16 hp;
   int16 maxHp;
-  uint8[] hat;
-  uint8[] glasses;
-  uint8[] backpack;
-  uint8[] shoes;
+  uint16[] hat;
+  uint16[] glasses;
+  uint16[] backpack;
+  uint16[] shoes;
 };
 
 dclass ClientServicesManager : DistributedObjectGlobal {

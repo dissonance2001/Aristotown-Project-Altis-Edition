@@ -1,6 +1,8 @@
 import random
 import time
 import re
+import json
+import os
 from toontown.toon import Experience
 from toontown.toon import ToonExperience
 from toontown.toon import InventoryBase
@@ -356,8 +358,103 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 broadcastZones = union(broadcastZones, self.estateZones)
             PetObserve.send(broadcastZones, PetObserve.PetActionObserve(PetObserve.Actions.CHANGE_ZONE, self.doId, (oldZoneId, newZoneId)))
 
+    def _getCustomAccessoryTypeName(self, accessoryType):
+        if accessoryType == ToonDNA.HAT:
+            return 'hat'
+        elif accessoryType == ToonDNA.GLASSES:
+            return 'glasses'
+        elif accessoryType == ToonDNA.BACKPACK:
+            return 'backpack'
+        elif accessoryType == ToonDNA.SHOES:
+            return 'shoes'
+        return None
+
+    def _getCustomAccessoryRegistry(self):
+        relativePath = os.path.join(
+            'resources',
+            'phase_14',
+            'accessories',
+            'accessories_registry.json'
+        )
+
+        registryPaths = []
+        currentDirectory = os.path.abspath(os.getcwd())
+
+        while True:
+            registryPaths.append(os.path.join(currentDirectory, relativePath))
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+
+        try:
+            currentDirectory = os.path.dirname(os.path.abspath(__file__))
+            while True:
+                registryPath = os.path.join(currentDirectory, relativePath)
+                if registryPath not in registryPaths:
+                    registryPaths.append(registryPath)
+
+                parentDirectory = os.path.dirname(currentDirectory)
+                if parentDirectory == currentDirectory:
+                    break
+                currentDirectory = parentDirectory
+        except Exception:
+            pass
+
+        for registryPath in registryPaths:
+            if not os.path.isfile(registryPath):
+                continue
+
+            try:
+                registryFile = open(registryPath, 'r')
+                try:
+                    registry = json.load(registryFile)
+                finally:
+                    registryFile.close()
+
+                if isinstance(registry, dict):
+                    return registry
+            except Exception:
+                self.notify.warning(
+                    'Could not read custom accessory registry: %s' %
+                    registryPath
+                )
+
+        return None
+
+    def _isCustomAccessory(self, accessoryType, idx, textureIdx, colorIdx):
+        if textureIdx != 0 or colorIdx != 0:
+            return False
+
+        accessoryTypeName = self._getCustomAccessoryTypeName(accessoryType)
+        if accessoryTypeName is None:
+            return False
+
+        registry = self._getCustomAccessoryRegistry()
+        if not isinstance(registry, dict):
+            return False
+
+        accessories = registry.get('accessories', {})
+        if not isinstance(accessories, dict):
+            return False
+
+        for accessoryData in accessories.values():
+            if not isinstance(accessoryData, dict):
+                continue
+
+            if accessoryData.get('type') != accessoryTypeName:
+                continue
+
+            if accessoryData.get('id') == idx:
+                return True
+
+        return False
+
     def checkAccessorySanity(self, accessoryType, idx, textureIdx, colorIdx):
         if idx == 0 and textureIdx == 0 and colorIdx == 0:
+            return 1
+
+        if self._isCustomAccessory(accessoryType, idx, textureIdx, colorIdx):
             return 1
         if accessoryType == ToonDNA.HAT:
             stylesDict = ToonDNA.HatStyles
@@ -959,6 +1056,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def isValidAccessorySetting(self, accessoryType, geomIdx, texIdx, colorIdx):
         if not geomIdx and not texIdx and not colorIdx:
             return True
+
+        if self._isCustomAccessory(accessoryType, geomIdx, texIdx, colorIdx):
+            return True
+
         return self.hasAccessory(accessoryType, geomIdx, texIdx, colorIdx)
 
     def removeItemInAccessoriesList(self, accessoryType, geomIdx, texIdx, colorIdx):

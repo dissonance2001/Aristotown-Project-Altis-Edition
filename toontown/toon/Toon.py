@@ -1,5 +1,7 @@
 import random
 import types
+import json
+import os
 from toontown.toon import AccessoryGlobals
 from toontown.battle import BattleParticles
 from toontown.toon import Motion
@@ -32,6 +34,85 @@ from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+
+
+def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
+    relativePath = os.path.join(
+        'resources',
+        'phase_14',
+        'accessories',
+        'accessory_placements.json'
+    )
+
+    roots = []
+    currentDirectory = os.path.abspath(os.getcwd())
+
+    while True:
+        if currentDirectory not in roots:
+            roots.append(currentDirectory)
+        parentDirectory = os.path.dirname(currentDirectory)
+        if parentDirectory == currentDirectory:
+            break
+        currentDirectory = parentDirectory
+
+    try:
+        currentDirectory = os.path.dirname(os.path.abspath(__file__))
+        while True:
+            if currentDirectory not in roots:
+                roots.append(currentDirectory)
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+    except:
+        pass
+
+    placementPath = None
+    for root in roots:
+        candidate = os.path.join(root, relativePath)
+        if os.path.isfile(candidate):
+            placementPath = candidate
+            break
+
+    if placementPath is None:
+        return None
+
+    try:
+        placementFile = open(placementPath, 'r')
+        try:
+            placementData = json.load(placementFile)
+        finally:
+            placementFile.close()
+    except Exception as error:
+        print 'Accessory placement override read failed:', error
+        return None
+
+    try:
+        saved = placementData.get(accessoryType, {}).get(
+            str(accessoryId), {}
+        ).get(dnaKey)
+    except Exception:
+        return None
+
+    if not isinstance(saved, dict):
+        return None
+
+    pos = saved.get('pos')
+    hpr = saved.get('hpr')
+    scale = saved.get('scale')
+
+    if pos is None or hpr is None or scale is None:
+        return None
+
+    result = (
+        tuple(pos),
+        tuple(hpr),
+        tuple(scale)
+    )
+
+    print 'APPLYING ACCESSORY OVERRIDE:', accessoryType, accessoryId, dnaKey, result
+    return result
+
 
 def teleportDebug(requestStatus, msg, onlyIfToAv = True):
     if teleportNotify.getDebug():
@@ -667,6 +748,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.hatNodes = []
         self.glassesNodes = []
         self.backpackNodes = []
+        self.shoesNodes = []
         self.hat = (0, 0, 0)
         self.glasses = (0, 0, 0)
         self.backpack = (0, 0, 0)
@@ -2950,6 +3032,209 @@ class Toon(Avatar.Avatar, ToonHead):
 
         return swappedTorso
 
+    def _getCustomAccessoryData(self, accessoryType, accessoryId):
+        registryPaths = []
+        relativePath = os.path.join('resources', 'phase_14', 'accessories', 'accessories_registry.json')
+
+        currentDirectory = os.path.abspath(os.getcwd())
+        while True:
+            registryPaths.append(os.path.join(currentDirectory, relativePath))
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+
+        try:
+            currentDirectory = os.path.dirname(os.path.abspath(__file__))
+            while True:
+                registryPath = os.path.join(currentDirectory, relativePath)
+                if registryPath not in registryPaths:
+                    registryPaths.append(registryPath)
+                parentDirectory = os.path.dirname(currentDirectory)
+                if parentDirectory == currentDirectory:
+                    break
+                currentDirectory = parentDirectory
+        except Exception:
+            pass
+
+        registry = None
+        for registryPath in registryPaths:
+            if not os.path.isfile(registryPath):
+                continue
+            try:
+                registryFile = open(registryPath, 'r')
+                try:
+                    registry = json.load(registryFile)
+                finally:
+                    registryFile.close()
+                break
+            except Exception:
+                registry = None
+
+        if not isinstance(registry, dict):
+            return None
+
+        accessories = registry.get('accessories', {})
+        if not isinstance(accessories, dict):
+            return None
+
+        for accessoryData in accessories.values():
+            if not isinstance(accessoryData, dict):
+                continue
+            if accessoryData.get('type') != accessoryType:
+                continue
+            if accessoryData.get('id') == accessoryId:
+                return accessoryData
+
+        return None
+
+    def _clearCustomAccessoryNodes(self, nodeListName):
+        nodeList = getattr(self, nodeListName, [])
+        for node in nodeList:
+            try:
+                node.removeNode()
+            except Exception:
+                pass
+        setattr(self, nodeListName, [])
+
+    def _generateCustomAccessory(self, accessoryType, accessoryId):
+        accessoryData = self._getCustomAccessoryData(accessoryType, accessoryId)
+        if accessoryData is None:
+            return False
+
+        modelPath = accessoryData.get('model')
+        if not modelPath:
+            return False
+
+        modelCandidates = [modelPath]
+
+        normalizedModelPath = modelPath.replace('\\\\', '/')
+        if normalizedModelPath.startswith('resources/'):
+            normalizedModelPath = normalizedModelPath[len('resources/'):]
+
+        relativeResourcePath = os.path.join('resources', normalizedModelPath)
+        currentDirectory = os.path.abspath(os.getcwd())
+
+        while True:
+            absoluteCandidate = os.path.join(currentDirectory, relativeResourcePath)
+            if absoluteCandidate not in modelCandidates:
+                modelCandidates.append(absoluteCandidate)
+
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+
+        try:
+            currentDirectory = os.path.dirname(os.path.abspath(__file__))
+            while True:
+                absoluteCandidate = os.path.join(currentDirectory, relativeResourcePath)
+                if absoluteCandidate not in modelCandidates:
+                    modelCandidates.append(absoluteCandidate)
+
+                parentDirectory = os.path.dirname(currentDirectory)
+                if parentDirectory == currentDirectory:
+                    break
+                currentDirectory = parentDirectory
+        except Exception:
+            pass
+
+        geom = None
+        loadedModelPath = None
+
+        for modelCandidate in modelCandidates:
+            try:
+                candidateGeom = loader.loadModel(modelCandidate, okMissing=True)
+            except Exception:
+                candidateGeom = None
+
+            if candidateGeom and not candidateGeom.isEmpty():
+                geom = candidateGeom
+                loadedModelPath = modelCandidate
+                break
+
+        if geom is None or geom.isEmpty():
+            print 'CUSTOM ACCESSORY MODEL FAILED:', modelPath
+            print 'CUSTOM ACCESSORY MODEL CANDIDATES:', modelCandidates
+            self.sendLogSuspiciousEvent(
+                'failed to load custom accessory model %s' % modelPath
+            )
+            return True
+
+        print 'CUSTOM ACCESSORY MODEL LOADED:', loadedModelPath
+
+        if accessoryType == 'hat':
+            self._clearCustomAccessoryNodes('hatNodes')
+            placementKey = self.style.head[:2]
+            transOffset = AccessoryGlobals.HatTransTable.get(placementKey)
+            if transOffset is None:
+                return True
+
+            geom.unstash()
+            geom.show()
+            for child in geom.findAllMatches('**'):
+                child.unstash()
+                child.show()
+
+            geom.setPos(*transOffset[0])
+            geom.setHpr(*transOffset[1])
+            geom.setScale(*transOffset[2])
+            geom.setTwoSided(True)
+
+            for headNode in self.findAllMatches('**/__Actor_head'):
+                accessoryNode = headNode.attachNewNode('hatNode')
+                geom.instanceTo(accessoryNode)
+                self.hatNodes.append(accessoryNode)
+
+        elif accessoryType == 'glasses':
+            self._clearCustomAccessoryNodes('glassesNodes')
+            placementKey = self.style.head[:2]
+            transOffset = AccessoryGlobals.GlassesTransTable.get(placementKey)
+            if transOffset is None:
+                return True
+
+            geom.unstash()
+            geom.show()
+            for child in geom.findAllMatches('**'):
+                child.unstash()
+                child.show()
+
+            geom.setPos(*transOffset[0])
+            geom.setHpr(*transOffset[1])
+            geom.setScale(*transOffset[2])
+            geom.setTwoSided(True)
+
+            for headNode in self.findAllMatches('**/__Actor_head'):
+                accessoryNode = headNode.attachNewNode('glassesNode')
+                geom.instanceTo(accessoryNode)
+                self.glassesNodes.append(accessoryNode)
+
+        elif accessoryType == 'backpack':
+            self._clearCustomAccessoryNodes('backpackNodes')
+            placementKey = self.style.torso[:1]
+            transOffset = _getAccessoryPlacementOverride('backpack', accessoryId, placementKey)
+            if transOffset is None and AccessoryGlobals.ExtendedBackpackTransTable.get(accessoryId):
+                transOffset = AccessoryGlobals.ExtendedBackpackTransTable[accessoryId].get(placementKey)
+            if transOffset is None:
+                transOffset = AccessoryGlobals.BackpackTransTable.get(placementKey)
+            if transOffset is None:
+                return True
+            geom.setPos(*transOffset[0])
+            geom.setHpr(*transOffset[1])
+            geom.setScale(*transOffset[2])
+            for attachNode in self.findAllMatches('**/def_joint_attachFlower'):
+                accessoryNode = attachNode.attachNewNode('backpackNode')
+                self.backpackNodes.append(accessoryNode)
+                geom.instanceTo(accessoryNode)
+
+        elif accessoryType == 'shoes':
+            self._clearCustomAccessoryNodes('shoesNodes')
+            accessoryNode = self.attachNewNode('customShoesNode')
+            self.shoesNodes.append(accessoryNode)
+            geom.reparentTo(accessoryNode)
+
+        return True
+
     def generateHat(self, fromRTM = False):
         hat = self.getHat()
         if hat[0] >= len(ToonDNA.HatModels):
@@ -2977,11 +3262,24 @@ class Toon(Avatar.Avatar, ToonHead):
                         hatGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
-                transOffset = None
-                if AccessoryGlobals.ExtendedHatTransTable.get(hat[0]):
-                    transOffset = AccessoryGlobals.ExtendedHatTransTable[hat[0]].get(self.style.head[:2])
+                headKey = self.style.head[:2]
+                transOffset = _getAccessoryPlacementOverride(
+                    'hat',
+                    hat[0],
+                    headKey
+                )
+
                 if transOffset is None:
-                    transOffset = AccessoryGlobals.HatTransTable.get(self.style.head[:2])
+                    hatModelPath = ToonDNA.HatModels[hat[0]]
+                    if isinstance(hatModelPath, basestring) and hatModelPath.startswith('phase_14/accessories/'):
+                        transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
+
+                if transOffset is None:
+                    if AccessoryGlobals.ExtendedHatTransTable.get(hat[0]):
+                        transOffset = AccessoryGlobals.ExtendedHatTransTable[hat[0]].get(headKey)
+
+                if transOffset is None:
+                    transOffset = AccessoryGlobals.HatTransTable.get(headKey)
                     if transOffset is None:
                         return
                 hatGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
@@ -3020,11 +3318,24 @@ class Toon(Avatar.Avatar, ToonHead):
                         glassesGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
-                transOffset = None
-                if AccessoryGlobals.ExtendedGlassesTransTable.get(glasses[0]):
-                    transOffset = AccessoryGlobals.ExtendedGlassesTransTable[glasses[0]].get(self.style.head[:2])
+                headKey = self.style.head[:2]
+                transOffset = _getAccessoryPlacementOverride(
+                    'glasses',
+                    glasses[0],
+                    headKey
+                )
+
                 if transOffset is None:
-                    transOffset = AccessoryGlobals.GlassesTransTable.get(self.style.head[:2])
+                    glassesModelPath = ToonDNA.GlassesModels[glasses[0]]
+                    if isinstance(glassesModelPath, basestring) and glassesModelPath.startswith('phase_14/accessories/'):
+                        transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
+
+                if transOffset is None:
+                    if AccessoryGlobals.ExtendedGlassesTransTable.get(glasses[0]):
+                        transOffset = AccessoryGlobals.ExtendedGlassesTransTable[glasses[0]].get(headKey)
+
+                if transOffset is None:
+                    transOffset = AccessoryGlobals.GlassesTransTable.get(headKey)
                     if transOffset is None:
                         return
                 glassesGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
@@ -3038,6 +3349,8 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def generateBackpack(self, fromRTM = False):
         backpack = self.getBackpack()
+        if self._generateCustomAccessory('backpack', backpack[0]):
+            return
         if backpack[0] >= len(ToonDNA.BackpackModels):
             self.sendLogSuspiciousEvent('tried to put a wrong backpack idx %d' % backpack[0])
             return
@@ -3078,6 +3391,9 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def generateShoes(self):
         shoes = self.getShoes()
+        if self._generateCustomAccessory('shoes', shoes[0]):
+            return
+        self._clearCustomAccessoryNodes('shoesNodes')
         if shoes[0] >= len(ToonDNA.ShoesModels):
             self.sendLogSuspiciousEvent('tried to put a wrong shoes idx %d' % shoes[0])
             return

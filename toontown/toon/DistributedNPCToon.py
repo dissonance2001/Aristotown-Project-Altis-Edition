@@ -53,6 +53,9 @@ class DistributedNPCToon(DistributedNPCToonBase):
 
     def announceGenerate(self):
         DistributedNPCToonBase.announceGenerate(self)
+        if self.getName() == 'Sakamoreo':
+            self.npcType = ''
+            self.setDisplayName(self.getName())
         self.applySakamoreoNametagColor()
 
     def setPlayerType(self, playerType):
