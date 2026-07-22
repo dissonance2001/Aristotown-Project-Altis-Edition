@@ -46,6 +46,18 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.controlManager = ToontownControlManager.ToontownControlManager(True)
         self.initializeCollisions()
         self.initializeSmartCamera()
+        self.mouseLookEnabled = False
+        self.mouseLookSensitivity = 0.18
+        self.mouseLookPitchSensitivity = 0.12
+        self.mouseLookCenterX = 0
+        self.mouseLookCenterY = 0
+        self.freeOrbitYaw = 0.0
+        self.freeOrbitPitch = 0.0
+        self.freeOrbitMinPitch = -30.0
+        self.freeOrbitMaxPitch = 35.0
+        self.cameraZoomStep = 1.5
+        self.cameraZoomMinDistance = 3.0
+        self.cameraZoomMaxDistance = 30.0
         self.cameraPositions = []
         self.animMultiplier = 1.0
         self.runTimeout = 2.5
@@ -734,6 +746,137 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
     def setGeom(self, geom):
         self.__geom = geom
 
+    def enableMouseLook(self):
+        if self.mouseLookEnabled:
+            return
+        if hasattr(base, 'oobeMode') and base.oobeMode:
+            return
+
+        self.mouseLookEnabled = True
+        base.disableMouse()
+
+        if base.win:
+            props = WindowProperties()
+            props.setCursorHidden(True)
+            props.setMouseMode(WindowProperties.MRelative)
+            base.win.requestProperties(props)
+            base.graphicsEngine.openWindows()
+            self.centerMouseLookPointer()
+
+    def disableMouseLook(self):
+        if not self.mouseLookEnabled:
+            return
+
+        self.mouseLookEnabled = False
+
+        if base.win:
+            props = WindowProperties()
+            props.setCursorHidden(False)
+            props.setMouseMode(WindowProperties.MAbsolute)
+            base.win.requestProperties(props)
+            base.graphicsEngine.openWindows()
+
+        base.enableMouse()
+        base.setMouseOnNode(self.node())
+
+    def centerMouseLookPointer(self):
+        if not base.win:
+            return
+
+        self.mouseLookCenterX = base.win.getXSize() / 2
+        self.mouseLookCenterY = base.win.getYSize() / 2
+        base.win.movePointer(0, self.mouseLookCenterX, self.mouseLookCenterY)
+
+    def isToonMovingForCamera(self):
+        return (
+            inputState.isSet('forward') or
+            inputState.isSet('reverse') or
+            inputState.isSet('turnLeft') or
+            inputState.isSet('turnRight') or
+            inputState.isSet('slide') or
+            inputState.isSet('jump')
+        )
+
+    def updateMouseLook(self):
+        if not self.mouseLookEnabled or not base.win:
+            return
+
+        pointer = base.win.getPointer(0)
+        deltaX = pointer.getX() - self.mouseLookCenterX
+        deltaY = pointer.getY() - self.mouseLookCenterY
+
+        if deltaX or deltaY:
+            self.freeOrbitYaw -= deltaX * self.mouseLookSensitivity
+            self.freeOrbitPitch += deltaY * self.mouseLookPitchSensitivity
+
+            while self.freeOrbitYaw > 180.0:
+                self.freeOrbitYaw -= 360.0
+            while self.freeOrbitYaw < -180.0:
+                self.freeOrbitYaw += 360.0
+
+            self.freeOrbitPitch = max(
+                self.freeOrbitMinPitch,
+                min(self.freeOrbitMaxPitch, self.freeOrbitPitch)
+            )
+
+            self.__cameraHasBeenMoved = 1
+
+        self.centerMouseLookPointer()
+
+    def hasFreeOrbitOffset(self):
+        return abs(self.freeOrbitYaw) > 0.001 or abs(self.freeOrbitPitch) > 0.001
+
+    def zoomCameraIn(self):
+        self.adjustCameraZoom(-self.cameraZoomStep)
+
+    def zoomCameraOut(self):
+        self.adjustCameraZoom(self.cameraZoomStep)
+
+    def adjustCameraZoom(self, amount):
+        idealPos = self.getIdealCameraPos()
+        distance = idealPos.length()
+
+        if distance <= 0.001:
+            return
+
+        newDistance = max(
+            self.cameraZoomMinDistance,
+            min(self.cameraZoomMaxDistance, distance + amount)
+        )
+
+        idealPos.normalize()
+        idealPos *= newDistance
+        self.setIdealCameraPos(idealPos)
+        self.__cameraHasBeenMoved = 1
+
+    def getFreeOrbitCameraPos(self, targetCamPos, targetCamLookAt):
+        offset = Vec3(targetCamPos - targetCamLookAt)
+        distance = offset.length()
+
+        if distance <= 0.001:
+            return Point3(targetCamPos)
+
+        horizontal = math.sqrt(offset[0] * offset[0] + offset[1] * offset[1])
+        baseYaw = math.atan2(offset[0], -offset[1])
+        basePitch = math.atan2(offset[2], max(horizontal, 0.001))
+
+        finalYaw = baseYaw + deg2Rad(self.freeOrbitYaw)
+        finalPitch = basePitch + deg2Rad(self.freeOrbitPitch)
+
+        maxPitch = deg2Rad(80.0)
+        if finalPitch > maxPitch:
+            finalPitch = maxPitch
+        elif finalPitch < -maxPitch:
+            finalPitch = -maxPitch
+
+        finalHorizontal = math.cos(finalPitch) * distance
+
+        return Point3(
+            targetCamLookAt[0] + math.sin(finalYaw) * finalHorizontal,
+            targetCamLookAt[1] - math.cos(finalYaw) * finalHorizontal,
+            targetCamLookAt[2] + math.sin(finalPitch) * distance
+        )
+
     def startUpdateSmartCamera(self, push = 1):
         if self._smartCamEnabled:
             LocalAvatar.notify.warning('redundant call to startUpdateSmartCamera')
@@ -758,12 +901,21 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         taskMgr.remove(taskName)
         taskMgr.add(self.updateSmartCamera, taskName, priority=47)
         self.enableSmartCameraViews()
+        self.accept('mouse3', self.enableMouseLook)
+        self.accept('mouse3-up', self.disableMouseLook)
+        self.accept('wheel_up', self.zoomCameraIn)
+        self.accept('wheel_down', self.zoomCameraOut)
 
     def stopUpdateSmartCamera(self):
         if not self._smartCamEnabled:
             LocalAvatar.notify.warning('redundant call to stopUpdateSmartCamera')
             return
         self.disableSmartCameraViews()
+        self.disableMouseLook()
+        self.ignore('mouse3')
+        self.ignore('mouse3-up')
+        self.ignore('wheel_up')
+        self.ignore('wheel_down')
         self.cTrav.removeCollider(self.ccSphereNodePath)
         self.ccTravOnFloor.removeCollider(self.ccRay2NodePath)
         if not base.localAvatar.isEmpty():
@@ -773,6 +925,10 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self._smartCamEnabled = False
 
     def updateSmartCamera(self, task):
+        self.updateMouseLook()
+        if self.mouseLookEnabled and self.isToonMovingForCamera():
+            self.freeOrbitYaw = 0.0
+            self.freeOrbitPitch = 0.0
         if not self.__camCollCanMove and not self.__cameraHasBeenMoved:
             if self.__lastPosWrtRender == camera.getPos(render):
                 if self.__lastHprWrtRender == camera.getHpr(render):
@@ -810,6 +966,8 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         curCamHpr = camera.getHpr()
         targetCamPos = self.getCompromiseCameraPos()
         targetCamLookAt = self.getLookAtPoint()
+        if self.mouseLookEnabled or self.hasFreeOrbitOffset():
+            targetCamPos = self.getFreeOrbitCameraPos(targetCamPos, targetCamLookAt)
         posDone = 0
         if Vec3(curCamPos - targetCamPos).length() <= CLOSE_ENOUGH:
             camera.setPos(targetCamPos)
@@ -825,12 +983,18 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         lerpRatio = 0.15
         lerpRatio = 1 - pow(1 - lerpRatio, globalClock.getDt() * 30.0)
         self.__instantaneousCamPos = targetCamPos * lerpRatio + curCamPos * (1 - lerpRatio)
-        if self.__disableSmartCam or not self.__idealCameraObstructed:
-            newHpr = targetCamHpr * lerpRatio + curCamHpr * (1 - lerpRatio)
+        if self.mouseLookEnabled or self.hasFreeOrbitOffset():
+            self.__instantaneousCamPos = Point3(targetCamPos)
+            camera.setPos(targetCamPos)
+            camera.lookAt(targetCamLookAt)
+            camera.setR(0)
         else:
-            newHpr = targetCamHpr
-        camera.setPos(self.__instantaneousCamPos)
-        camera.setHpr(newHpr)
+            camera.setPos(self.__instantaneousCamPos)
+            if self.__disableSmartCam or not self.__idealCameraObstructed:
+                newHpr = targetCamHpr * lerpRatio + curCamHpr * (1 - lerpRatio)
+            else:
+                newHpr = targetCamHpr
+            camera.setHpr(newHpr)
 
     def popCameraToDest(self):
         newCamPos = self.getCompromiseCameraPos()

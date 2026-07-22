@@ -33,6 +33,32 @@ class DistributedNPCToon(DistributedNPCToonBase):
             icon.setZ(3)
         self.beginCheckTask()
 
+    def applySakamoreoNametagColor(self):
+        if self.getName() != 'Sakamoreo':
+            return
+
+        currentColor = self.nametag.getNametagColor()
+        red = VBase4(1, 0, 0, 1)
+
+        redNametagColor = (
+            (red, currentColor[0][1]),
+            (red, currentColor[1][1]),
+            (red, currentColor[2][1]),
+            (red, currentColor[3][1]),
+            currentColor[4]
+        )
+
+        self.nametag.setNametagColor(redNametagColor)
+        self.nametag.updateAll()
+
+    def announceGenerate(self):
+        DistributedNPCToonBase.announceGenerate(self)
+        self.applySakamoreoNametagColor()
+
+    def setPlayerType(self, playerType):
+        DistributedNPCToonBase.setPlayerType(self, playerType)
+        self.applySakamoreoNametagColor()
+
     def allowedToTalk(self):
         return True
 
@@ -69,8 +95,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
     def handleCollisionSphereEnter(self, collEntry):
         base.cr.playGame.getPlace().fsm.request('quest', [self])
         self.sendUpdate('avatarEnter', [])
-        self.nametag3d.setDepthTest(0)
-        self.nametag3d.setBin('fixed', 0)
 
     def handleOkTeaser(self):
         self.dialog.destroy()

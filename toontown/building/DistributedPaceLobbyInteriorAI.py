@@ -48,9 +48,9 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
 
         dna = (
             'css',
-            'ms',
+            'md',
             'm',
-            'm',
+            'f',
             bodyColor,
             gloves,
             white,
@@ -59,7 +59,7 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             0,
             0,
             0,
-            0,
+            72,
             0
         )
 
@@ -67,7 +67,7 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             -1,
             'Sakamoreo',
             dna,
-            'm',
+            'f',
             0,
             NPCToons.NPC_REGULAR
         )
