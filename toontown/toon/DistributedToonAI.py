@@ -111,6 +111,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.petId = None
         self.quests = []
         self.questHistory = []
+        self.kudosBoardOffers = []
         self.achievements = []
         self.cogs = []
         self.cogCounts = []
@@ -1845,10 +1846,17 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.notify.debug('setting quests to %s' % flattenedQuests)
         questList = []
         questLen = 5
+        migrated = False
         for i in xrange(0, len(flattenedQuests), questLen):
-            questList.append(flattenedQuests[i:i + questLen])
+            quest = flattenedQuests[i:i + questLen]
+            if quest and 90000 <= quest[0] <= 90025:
+                quest[0] -= 82000
+                migrated = True
+            questList.append(quest)
 
         self.quests = questList
+        if migrated:
+            self.d_setQuests(self.getQuests())
 
     def getQuests(self):
         flattenedQuests = []
@@ -1901,6 +1909,130 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def addQuest(self, quest, finalReward):
         self.quests.append(quest)
         self.b_setQuests(self.quests)
+
+    def _isValidKudosBoardQuest(self, questId):
+        if questId not in Quests.KudosBoardQuestIds:
+            return False
+
+        questEntry = Quests.QuestDict.get(questId)
+        if not questEntry:
+            return False
+        if questEntry[Quests.QuestDictStartIndex] != Quests.Start:
+            return False
+
+        for currentQuest in self.quests:
+            if currentQuest[0] == questId:
+                return False
+
+        questClass = Quests.getQuestClass(questId)
+        if not questClass:
+            return False
+        allowedQuestClasses = (
+            Quests.CogQuest,
+            Quests.CogTrackQuest,
+            Quests.CogLevelQuest,
+            Quests.SkelecogQuest,
+            Quests.FishingQuest,
+            Quests.BuildingQuest,
+            Quests.TrolleyQuest,
+            Quests.DeliverGagQuest
+        )
+        if questClass not in allowedQuestClasses:
+            return False
+
+        try:
+            if not questClass.filterFunc(self):
+                return False
+        except:
+            return False
+
+        return True
+
+    def _getKudosBoardOffer(self, questId):
+        if not self._isValidKudosBoardQuest(questId):
+            return None
+
+        toNpcId = Quests.getQuestToNpcId(questId)
+        if toNpcId == Quests.Any or toNpcId == Quests.Same:
+            toNpcId = Quests.ToonHQ
+
+        hoodId = ZoneUtil.getHoodId(self.zoneId)
+        rewardRanges = {
+            ToontownGlobals.ToontownCentral: (60, 130),
+            ToontownGlobals.DonaldsDock: (140, 200),
+            ToontownGlobals.YeOlde: (210, 270),
+            ToontownGlobals.DaisyGardens: (280, 340),
+            ToontownGlobals.MinniesMelodyland: (350, 410),
+            ToontownGlobals.TheBrrrgh: (420, 480),
+            ToontownGlobals.OutdoorZone: (490, 550),
+            ToontownGlobals.DonaldsDreamland: (560, 620)
+        }
+        minimumReward, maximumReward = rewardRanges.get(
+            hoodId,
+            rewardRanges[ToontownGlobals.ToontownCentral]
+        )
+        rewardAmount = random.randrange(
+            minimumReward,
+            maximumReward + 1,
+            10
+        )
+        rewardId = Quests.KudosBoardMoneyRewardIds[rewardAmount]
+
+        return [questId, toNpcId, rewardId]
+
+    def requestKudosBoard(self):
+        validOffers = []
+        hoodId = ZoneUtil.getHoodId(self.zoneId)
+        questIds = list(Quests.KudosBoardQuestIdsByHood.get(
+            hoodId,
+            Quests.KudosBoardQuestIdsByHood[ToontownGlobals.ToontownCentral]
+        ))
+        random.shuffle(questIds)
+
+        for questId in questIds:
+            offer = self._getKudosBoardOffer(questId)
+            if offer:
+                validOffers.append(offer)
+                if len(validOffers) >= 12:
+                    break
+
+        self.kudosBoardOffers = dict(
+            (offer[0], offer) for offer in validOffers
+        )
+        flattenedOffers = []
+        for offer in validOffers:
+            flattenedOffers.extend(offer)
+
+        self.sendUpdate('setKudosBoardOffers', [flattenedOffers])
+        if not validOffers:
+            self.sendUpdate('setKudosBoardResult', [4])
+
+    def chooseKudosBoardQuest(self, questId):
+        if questId not in self.kudosBoardOffers:
+            self.sendUpdate('setKudosBoardResult', [3])
+            return
+
+        if len(self.quests) >= self.getQuestCarryLimit():
+            self.sendUpdate('setKudosBoardResult', [2])
+            return
+
+        offer = self.kudosBoardOffers.get(questId)
+        if not offer or not self._isValidKudosBoardQuest(questId):
+            self.sendUpdate('setKudosBoardResult', [3])
+            return
+
+        toNpcId = offer[1]
+        rewardId = offer[2]
+        quest = [questId, Quests.ToonHQ, toNpcId, rewardId, 0]
+
+        try:
+            finalRewardId = Quests.getFinalRewardId(questId, fAll=1)
+        except:
+            finalRewardId = rewardId
+
+        self.addQuest(quest, finalRewardId)
+        self.kudosBoardOffers = {}
+        self.sendUpdate('setKudosBoardResult', [1])
 
     def removeAllTracesOfQuest(self, questId, rewardId):
         self.notify.debug('removeAllTracesOfQuest: questId: %s rewardId: %s' % (questId, rewardId))

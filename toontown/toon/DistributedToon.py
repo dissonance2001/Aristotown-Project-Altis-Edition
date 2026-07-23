@@ -204,6 +204,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.certs = []
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
+        self.kudosBoardGui = None
 
     def checkCooldownRoundCountdown(self):
         if self.damageInterval:
@@ -823,6 +824,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         
         self.setTrophyScore(0)
         self.removeGMIcon()
+        self.closeKudosBoardGui()
         if self.doId in self.cr.toons:
             del self.cr.toons[self.doId]
         
@@ -1729,6 +1731,44 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def d_requestDeleteQuest(self, questDesc):
         self.sendUpdate('requestDeleteQuest', [list(questDesc)])
+
+    def requestKudosBoard(self):
+        if self != base.localAvatar:
+            return
+        self.sendUpdate('requestKudosBoard', [])
+
+    def setKudosBoardOffers(self, flattenedOffers):
+        if self != base.localAvatar:
+            return
+
+        offers = []
+        for i in xrange(0, len(flattenedOffers), 3):
+            offer = flattenedOffers[i:i + 3]
+            if len(offer) == 3:
+                offers.append(offer)
+
+        self.closeKudosBoardGui()
+
+        from toontown.quest.KudosBoardGui import KudosBoardGui
+        self.kudosBoardGui = KudosBoardGui(offers)
+
+    def chooseKudosBoardQuest(self, questId):
+        if self != base.localAvatar:
+            return
+        self.sendUpdate('chooseKudosBoardQuest', [questId])
+
+    def setKudosBoardResult(self, resultCode):
+        if self != base.localAvatar:
+            return
+
+        if self.kudosBoardGui:
+            self.kudosBoardGui.showResult(resultCode)
+
+    def closeKudosBoardGui(self):
+        if self.kudosBoardGui:
+            gui = self.kudosBoardGui
+            self.kudosBoardGui = None
+            gui.destroy()
 
     def setMaxCarry(self, maxCarry):
         self.maxCarry = maxCarry

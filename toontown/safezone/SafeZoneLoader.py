@@ -37,6 +37,9 @@ class SafeZoneLoader(StateData.StateData):
         self.place = None
         self.playgroundClass = None
         self.townBattleDoneEvent = 'town-battle-done'
+        self.kudosBoardTouching = False
+        self.kudosBoardTouchTaskName = 'kudosBoardTouch-%s' % id(self)
+        self.kudosBoardControlsLocked = False
 
     def load(self):
         self.music = base.loader.loadMusic(self.musicFile)
@@ -47,6 +50,7 @@ class SafeZoneLoader(StateData.StateData):
         self.townBattle.load()
 
     def unload(self):
+        self.stopKudosBoardInteraction()
         self.parentFSMState.removeChild(self.fsm)
         del self.parentFSMState
         self.geom.removeNode()
@@ -131,6 +135,65 @@ class SafeZoneLoader(StateData.StateData):
         self.kudosBoard.reparentTo(self.geom)
         self.kudosBoard.setPos(*placement[0])
         self.kudosBoard.setHpr(*placement[1])
+        self.kudosBoardInteractionPos = Point3(*placement[0])
+
+    def startKudosBoardInteraction(self):
+        taskMgr.remove(self.kudosBoardTouchTaskName)
+        self.kudosBoardTouching = False
+        self.accept('kudosBoardGuiClosed', self.unlockKudosBoardControls)
+        taskMgr.doMethodLater(
+            0.25,
+            self.__checkKudosBoardTouch,
+            self.kudosBoardTouchTaskName
+        )
+
+    def stopKudosBoardInteraction(self):
+        taskMgr.remove(self.kudosBoardTouchTaskName)
+        self.kudosBoardTouching = False
+        if hasattr(base, 'localAvatar') and base.localAvatar:
+            if hasattr(base.localAvatar, 'closeKudosBoardGui'):
+                base.localAvatar.closeKudosBoardGui()
+        self.unlockKudosBoardControls()
+        self.ignore('kudosBoardGuiClosed')
+
+    def __checkKudosBoardTouch(self, task):
+        if not hasattr(base, 'localAvatar') or base.localAvatar is None:
+            return Task.again
+        if not hasattr(self, 'kudosBoardInteractionPos'):
+            return Task.done
+
+        toonPos = base.localAvatar.getPos(render)
+        dx = toonPos[0] - self.kudosBoardInteractionPos[0]
+        dy = toonPos[1] - self.kudosBoardInteractionPos[1]
+        dz = toonPos[2] - self.kudosBoardInteractionPos[2]
+        distanceSquared = dx * dx + dy * dy
+
+        if distanceSquared <= 16.0 and abs(dz) <= 10.0:
+            if not self.kudosBoardTouching:
+                self.kudosBoardTouching = True
+                self.openKudosBoardGui()
+        elif distanceSquared >= 36.0 or abs(dz) > 14.0:
+            self.kudosBoardTouching = False
+
+        return Task.again
+
+    def openKudosBoardGui(self):
+        if not hasattr(base, 'localAvatar') or base.localAvatar is None:
+            return
+        if getattr(base.localAvatar, 'kudosBoardGui', None):
+            return
+        if hasattr(base.localAvatar, 'disableAvatarControls'):
+            base.localAvatar.disableAvatarControls()
+            self.kudosBoardControlsLocked = True
+        base.localAvatar.requestKudosBoard()
+
+    def unlockKudosBoardControls(self):
+        if not self.kudosBoardControlsLocked:
+            return
+        self.kudosBoardControlsLocked = False
+        if hasattr(base, 'localAvatar') and base.localAvatar:
+            if hasattr(base.localAvatar, 'enableAvatarControls'):
+                base.localAvatar.enableAvatarControls()
 
     def makeDictionaries(self, dnaStore):
         self.nodeList = []
@@ -166,8 +229,10 @@ class SafeZoneLoader(StateData.StateData):
         self.place.load()
         self.place.enter(requestStatus)
         base.cr.playGame.setPlace(self.place)
+        self.startKudosBoardInteraction()
 
     def exitPlayground(self):
+        self.stopKudosBoardInteraction()
         self.ignore(self.placeDoneEvent)
         self.place.exit()
         self.place.unload()

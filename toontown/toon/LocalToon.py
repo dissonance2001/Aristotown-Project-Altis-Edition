@@ -324,14 +324,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.orbitalCamera = OrbitalCamera(self)
         self.orbitalCamera.start()
 
-        def __debugPositionTask(task):
-            pos = self.getPos(render)
-            hpr = self.getHpr(render)
-            print "POSITION: %.3f %.3f %.3f    HPR: %.3f %.3f %.3f" % (
-                pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
-            return Task.again
+        #def __debugPositionTask(task):
+            #pos = self.getPos(render)
+            #hpr = self.getHpr(render)
+            #print "POSITION: %.3f %.3f %.3f    HPR: %.3f %.3f %.3f" % (
+                #pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
+            #return Task.again
 
-        taskMgr.doMethodLater(0.5, __debugPositionTask, 'DebugPositionPrinter')
+        #taskMgr.doMethodLater(0.5, __debugPositionTask, 'DebugPositionPrinter')
 
         acceptingNewFriends = settings.get('acceptingNewFriends', {})
         acceptingNonFriendWhispers = settings.get('acceptingNonFriendWhispers', {})

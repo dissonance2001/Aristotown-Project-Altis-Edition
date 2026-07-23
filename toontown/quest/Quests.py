@@ -2277,6 +2277,32 @@ class RecoverItemQuest(LocationBasedQuest):
         return TTLocalizer.QuestsRecoverItemQuestHeadline
 
 
+class FishingQuest(RecoverItemQuest):
+    def getString(self):
+        count = self.getNumItems()
+        if count == 1:
+            return 'Catch 1 Fish'
+        return 'Catch %d Fish' % count
+
+    def getChooseString(self):
+        return self.getString()
+
+    def getPosterString(self):
+        return self.getString()
+
+    def getObjectiveStrings(self):
+        return [self.getString()]
+
+    def getHeadlineString(self):
+        return 'FISHING'
+
+    def getSCStrings(self, toNpcId, progress):
+        forwardProgress = progress & pow(2, 16) - 1
+        if forwardProgress >= self.getNumItems():
+            return getFinishToonTaskSCStrings(toNpcId)
+        return [self.getString()]
+
+
 class TrackChoiceQuest(Quest):
     def __init__(self, id, quest):
         Quest.__init__(self, id, quest)
@@ -2394,31 +2420,54 @@ class FriendNewbieQuest(FriendQuest, NewbieQuest):
 class TrolleyQuest(Quest):
     def __init__(self, id, quest):
         Quest.__init__(self, id, quest)
+        if self.quest:
+            self.checkNumMinigames(self.quest[0])
+
+    def getNumQuestItems(self):
+        return self.getNumMinigames()
+
+    def getNumMinigames(self):
+        if self.quest:
+            return self.quest[0]
+        return 1
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
-        questComplete = toonProgress >= 1
+        questComplete = toonProgress >= self.getNumMinigames()
         return getCompleteStatusWithNpc(questComplete, toNpcId, npc)
 
     def getProgressString(self, avatar, questDesc):
         if self.getCompletionStatus(avatar, questDesc) == COMPLETE:
             return CompleteString
-        else:
+        elif self.getNumMinigames() == 1:
             return ''
+        return '%d / %d played' % (questDesc[4], self.getNumMinigames())
 
     def getString(self):
-        return TTLocalizer.QuestsFriendQuestString
+        count = self.getNumMinigames()
+        if count == 1:
+            return 'Play 1 Trolley Game'
+        return 'Play %d Trolley Games' % count
+
+    def getChooseString(self):
+        return self.getString()
+
+    def getPosterString(self):
+        return self.getString()
 
     def getSCStrings(self, toNpcId, progress):
-        if progress:
+        if progress >= self.getNumMinigames():
             return getFinishToonTaskSCStrings(toNpcId)
-        return TTLocalizer.QuestsTrolleyQuestSCString
+        return [self.getString()]
 
     def getHeadlineString(self):
         return TTLocalizer.QuestsTrolleyQuestHeadline
 
     def getObjectiveStrings(self):
-        return [TTLocalizer.QuestsTrolleyQuestString]
+        return [self.getString()]
+
+    def doesMinigameCount(self, av, avList):
+        return 1
 
 
 class MailboxQuest(Quest):
@@ -3251,9 +3300,87 @@ QuestDict = {
  7215: ([], Cont, (CogTrackLevelQuest, ToontownGlobals.LawbotStageIntA, 50, 'l', 9), Same, Same, 304, 7216, TTLocalizer.QuestDialogDict[7215], 40000, 800),
  7216: ([], Cont, (CogTrackLevelQuest, ToontownGlobals.LawbotStageIntB, 40, 'l', 10), Same, Same, 304, 7217, TTLocalizer.QuestDialogDict[7216], 40000, 800),
  7217: ([], Cont, (CJQuest, ToontownGlobals.LawbotHQ, 1), Same, Same, 304, 7218, TTLocalizer.QuestDialogDict[7217], 40000, 800),
- 7218: ([], Cont, (VisitQuest,), Same, 6006, 304, NA, TTLocalizer.QuestDialogDict[7218], 40000, 800)
+ 7218: ([], Cont, (VisitQuest,), Same, 6006, 304, NA, TTLocalizer.QuestDialogDict[7218], 40000, 800),
+ 8000: ([], Start, (CogQuest, Anywhere, 10, Any), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8001: ([], Start, (CogQuest, Anywhere, 20, Any), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8002: ([], Start, (CogTrackQuest, Anywhere, 10, 'c'), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8003: ([], Start, (CogTrackQuest, Anywhere, 10, 'l'), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8004: ([], Start, (CogTrackQuest, Anywhere, 10, 'm'), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8005: ([], Start, (CogTrackQuest, Anywhere, 10, 's'), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8006: ([], Start, (CogTrackQuest, Anywhere, 10, 'g'), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8007: ([], Start, (CogLevelQuest, Anywhere, 5, 4), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8008: ([], Start, (SkelecogQuest, Anywhere, 5), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8009: ([], Start, (SkelecogQuest, Anywhere, 10), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8010: ([], Start, (FishingQuest, Anywhere, 3, 2003, 100, AnyFish), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8011: ([], Start, (FishingQuest, Anywhere, 5, 2032, 100, AnyFish), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8012: ([], Start, (FishingQuest, Anywhere, 10, 1003, 100, AnyFish), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8013: ([], Start, (FishingQuest, Anywhere, 15, 3007, 100, AnyFish), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8014: ([], Start, (BuildingQuest, Anywhere, 1, Any, 1), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8015: ([], Start, (BuildingQuest, Anywhere, 1, Any, 2), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8016: ([], Start, (BuildingQuest, Anywhere, 1, Any, 3), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8017: ([], Start, (BuildingQuest, Anywhere, 1, Any, 4), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8018: ([], Start, (BuildingQuest, Anywhere, 2, Any, 3), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8019: ([], Start, (TrolleyQuest, 1), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8020: ([], Start, (TrolleyQuest, 3), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8021: ([], Start, (TrolleyQuest, 5), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8022: ([], Start, (DeliverGagQuest, 2, 4, 1), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8023: ([], Start, (DeliverGagQuest, 3, 5, 1), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8024: ([], Start, (DeliverGagQuest, 4, 4, 2), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0),
+ 8025: ([], Start, (DeliverGagQuest, 5, 5, 2), ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0)
  
  }
+
+KudosBoardQuestIdsByHood = {}
+_kudosBoardQuestIds = []
+_kudosBoardHoods = (
+ ToontownGlobals.ToontownCentral,
+ ToontownGlobals.DonaldsDock,
+ ToontownGlobals.YeOlde,
+ ToontownGlobals.DaisyGardens,
+ ToontownGlobals.MinniesMelodyland,
+ ToontownGlobals.TheBrrrgh,
+ ToontownGlobals.OutdoorZone,
+ ToontownGlobals.DonaldsDreamland)
+_kudosBoardDifficulty = (
+ (5, 2, 2, 3, 1, 1, 2, 0),
+ (10, 3, 3, 5, 1, 2, 3, 1),
+ (15, 4, 4, 7, 1, 2, 4, 1),
+ (20, 5, 5, 10, 1, 3, 5, 2),
+ (25, 6, 6, 12, 2, 3, 6, 2),
+ (30, 7, 8, 15, 2, 4, 7, 3),
+ (35, 8, 10, 18, 2, 4, 8, 4),
+ (40, 9, 12, 20, 3, 5, 10, 5))
+_kudosFishItems = (2003, 2032, 1003, 3007)
+
+for _kudosTier, _kudosHood in enumerate(_kudosBoardHoods):
+    _kudosCogCount, _kudosCogLevel, _kudosSkeleCount, _kudosFishCount, _kudosBuildingCount, _kudosFloors, _kudosTrolleyCount, _kudosGagLevel = _kudosBoardDifficulty[_kudosTier]
+    _kudosBaseId = 10000 + _kudosTier * 20
+    _kudosEntries = (
+     (CogQuest, Anywhere, _kudosCogCount, Any),
+     (CogQuest, Anywhere, _kudosCogCount + 5, Any),
+     (CogTrackQuest, Anywhere, _kudosCogCount, 'c'),
+     (CogTrackQuest, Anywhere, _kudosCogCount, 'l'),
+     (CogTrackQuest, Anywhere, _kudosCogCount, 'm'),
+     (CogTrackQuest, Anywhere, _kudosCogCount, 's'),
+     (CogLevelQuest, Anywhere, max(3, _kudosCogCount / 3), _kudosCogLevel),
+     (SkelecogQuest, Anywhere, _kudosSkeleCount),
+     (FishingQuest, Anywhere, _kudosFishCount, _kudosFishItems[_kudosTier % 4], 100, AnyFish),
+     (FishingQuest, Anywhere, _kudosFishCount + 3, _kudosFishItems[(_kudosTier + 1) % 4], 100, AnyFish),
+     (BuildingQuest, Anywhere, _kudosBuildingCount, Any, _kudosFloors),
+     (BuildingQuest, Anywhere, _kudosBuildingCount, Any, min(6, _kudosFloors + 1)),
+     (BuildingQuest, Anywhere, _kudosBuildingCount + 1, Any, _kudosFloors),
+     (TrolleyQuest, _kudosTrolleyCount),
+     (DeliverGagQuest, _kudosGagLevel + 2, 4, _kudosGagLevel),
+     (DeliverGagQuest, _kudosGagLevel + 3, 5, _kudosGagLevel))
+    _kudosPool = []
+    for _kudosOffset, _kudosEntry in enumerate(_kudosEntries):
+        _kudosQuestId = _kudosBaseId + _kudosOffset
+        QuestDict[_kudosQuestId] = ([], Start, _kudosEntry, ToonHQ, ToonHQ, NA, NA, DefaultDialog, 0, 0)
+        _kudosPool.append(_kudosQuestId)
+        _kudosBoardQuestIds.append(_kudosQuestId)
+    KudosBoardQuestIdsByHood[_kudosHood] = tuple(_kudosPool)
+
+KudosBoardQuestIds = tuple(_kudosBoardQuestIds)
  
 Quest2RewardDict = {}
 Tier2Reward2QuestsDict = {}
@@ -4940,6 +5067,27 @@ RewardDict = {100: (MaxHpReward, 1),
  4347: (CogMeritReward, 4, 800),
  4348: (CogMeritReward, 4, 900),
  4349: (CogMeritReward, 4, 1000)}
+
+KudosBoardMoneyRewardIds = {}
+_kudosMoneyRewardId = 624
+_kudosMoneyRewardRanges = (
+ (60, 130),
+ (140, 200),
+ (210, 270),
+ (280, 340),
+ (350, 410),
+ (420, 480),
+ (490, 550),
+ (560, 620))
+for _kudosMoneyMinimum, _kudosMoneyMaximum in _kudosMoneyRewardRanges:
+    for _kudosMoneyAmount in xrange(
+        _kudosMoneyMinimum,
+        _kudosMoneyMaximum + 1,
+        10
+    ):
+        RewardDict[_kudosMoneyRewardId] = (MoneyReward, _kudosMoneyAmount)
+        KudosBoardMoneyRewardIds[_kudosMoneyAmount] = _kudosMoneyRewardId
+        _kudosMoneyRewardId += 1
 
 def getNumTiers():
     return len(RequiredRewardTrackDict) - 1

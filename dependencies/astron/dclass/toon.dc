@@ -1088,6 +1088,10 @@ dclass DistributedToon : DistributedPlayer {
   setQuestHistory(uint16[] = []) required broadcast ownrecv db;
   setQuestCarryLimit(uint8 = 4) required ownrecv db;
   requestDeleteQuest(uint32[]) ownsend airecv;
+  requestKudosBoard() ownsend airecv;
+  setKudosBoardOffers(uint32[]) ownrecv;
+  chooseKudosBoardQuest(uint32) ownsend airecv;
+  setKudosBoardResult(uint8) ownrecv;
   setCheesyEffect(int16 = 0, uint32 = 0, uint32 = 0) required broadcast ownrecv db;
   setCheesyEffects(int16[] = [0]) required broadcast ownrecv db;
   setGhostMode(uint8) broadcast ownrecv ram;

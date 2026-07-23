@@ -300,7 +300,13 @@ class QuestPoster(DirectFrame):
         if quest == None:
             self.notify.warning('Tried to display poster for unknown quest %s' % questId)
             return
+        reward = None
         if rewardId >= 100:
+            reward = Quests.getReward(rewardId)
+        if isinstance(reward, Quests.MoneyReward):
+            self.jbCircle['text'] = str(reward.getAmount())
+            self.jbCircle.show()
+        elif rewardId >= 100:
             self.rewardCircle.show()
         if questExp:
            self.expCircle['text'] = str(questExp)
