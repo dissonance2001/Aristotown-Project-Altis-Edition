@@ -3235,7 +3235,22 @@ class Toon(Avatar.Avatar, ToonHead):
 
         return True
 
+    def _spinCakeHatTask(self, task):
+        nodes = getattr(self, '_cakeHatSpinNodes', [])
+        validNodes = []
+        heading = (task.time * 90.0) % 360.0
+        for node in nodes:
+            if node and not node.isEmpty():
+                node.setH(heading)
+                validNodes.append(node)
+        self._cakeHatSpinNodes = validNodes
+        if not validNodes:
+            return Task.done
+        return Task.cont
+
     def generateHat(self, fromRTM = False):
+        taskMgr.remove('cakeHatSpin-%s' % id(self))
+        self._cakeHatSpinNodes = []
         hat = self.getHat()
         if hat[0] >= len(ToonDNA.HatModels):
             self.sendLogSuspiciousEvent('tried to put a wrong hat idx %d' % hat[0])
@@ -3282,14 +3297,30 @@ class Toon(Avatar.Avatar, ToonHead):
                     transOffset = AccessoryGlobals.HatTransTable.get(headKey)
                     if transOffset is None:
                         return
-                hatGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
-                hatGeom.setHpr(transOffset[1][0], transOffset[1][1], transOffset[1][2])
-                hatGeom.setScale(transOffset[2][0], transOffset[2][1], transOffset[2][2])
                 headNodes = self.findAllMatches('**/__Actor_head')
-                for headNode in headNodes:
-                    hatNode = headNode.attachNewNode('hatNode')
-                    self.hatNodes.append(hatNode)
-                    hatGeom.instanceTo(hatNode)
+                if hat[0] == 63:
+                    hatGeom.setPos(0, 0, 0)
+                    hatGeom.setHpr(0, 0, 0)
+                    hatGeom.setScale(1, 1, 1)
+                    for headNode in headNodes:
+                        hatNode = headNode.attachNewNode('hatNode')
+                        hatNode.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
+                        hatNode.setHpr(transOffset[1][0], transOffset[1][1], transOffset[1][2])
+                        hatNode.setScale(transOffset[2][0], transOffset[2][1], transOffset[2][2])
+                        spinNode = hatNode.attachNewNode('cakeHatSpinNode')
+                        hatGeom.instanceTo(spinNode)
+                        self._cakeHatSpinNodes.append(spinNode)
+                        self.hatNodes.append(hatNode)
+                    if self._cakeHatSpinNodes:
+                        taskMgr.add(self._spinCakeHatTask, 'cakeHatSpin-%s' % id(self))
+                else:
+                    hatGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
+                    hatGeom.setHpr(transOffset[1][0], transOffset[1][1], transOffset[1][2])
+                    hatGeom.setScale(transOffset[2][0], transOffset[2][1], transOffset[2][2])
+                    for headNode in headNodes:
+                        hatNode = headNode.attachNewNode('hatNode')
+                        self.hatNodes.append(hatNode)
+                        hatGeom.instanceTo(hatNode)
 
     def generateGlasses(self, fromRTM = False):
         glasses = self.getGlasses()
