@@ -1,0 +1,93 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [1.28535, 4.7557, 5.14136], \"hpr\": [170.74554, 2.31357, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.7712, \"delay\": 0.0, \"end\": 68.67605, \"blendType\": \"easeOut\", \"start\": 55.82268, \"useStart\": true}"
+            },
+            "3": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 5, \"wrt\": 0, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.0, \"pos\": [0.0, 0.0, 2.05653], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "6": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Look around",
+        "time": 0.90675,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.38559, \"hpr\": [-27.76318, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0.1928, \"duration\": 0.83546, \"hpr\": [23.13605, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Confusion",
+        "time": 0.90675,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 5, \"delay\": 0.0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "showNametag",
+                "kwargs": "{\"actorIndex\": 5}"
+            }
+        }
+    },
+    {
+        "name": "POOF",
+        "time": 2.69175,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 5, \"delay\": 0.0}"
+            },
+            "1": {
+                "eventDefEnum": "dustcloudNode",
+                "kwargs": "{\"nodeIndex\": 4, \"posOffset\": [0.0, 0.0, 5.31872], \"scale\": 0.4, \"delay\": 0.0, \"rate\": 24, \"reattachToRender\": true, \"fBillboard\": false, \"wantSound\": true}"
+            }
+        }
+    },
+    {
+        "name": "Vanish",
+        "time": 2.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            }
+        }
+    }
+]

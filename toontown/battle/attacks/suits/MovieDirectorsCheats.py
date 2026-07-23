@@ -264,7 +264,7 @@ def doInkDrainDOLA(attack):
         colorTrack.append(resetColor(legsParts))
         colorTrack.append(Func(battle.movie.clearRestoreColor))
         colorTracks.append(colorTrack)
-        toonTracks.append(Parallel(Func(toon.makeInkDrain), Func(toon.addInkDrainRounds, 3), Func(toon.checkInkDrain, 25)))
+        toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'inkDrain', modifier=25, turns=3)))
         toonTracks.append(ActorInterval(toon, 'cringe', playRate=0.25))
         toonTracks.append(Func(toon.loop, 'neutral'))
 
@@ -276,5 +276,5 @@ def doAmbushMarketing(attack):
     targets = attack['target']
     suitTrack = Parallel(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_multi_level_marketing.ogg', node=suit)
-    suitTrack.append(Func(suit.checkExtraAttacks, 1))
+    suitTrack.append(Func(suit.setSuitStatusEffect, 'extraAttacks', modifier=5, mode='refreshModifier'))
     return Parallel(suitTrack, soundTrack)

@@ -1,0 +1,155 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-3.32748, 6.16965, 3.85601], \"hpr\": [-149.22781, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0, 0, 0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #2",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"transformation\", \"loop\": 0, \"hasDuration\": true, \"duration\": 2.14, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #3",
+        "time": 0.9367500000000001,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.73907, \"delay\": 0.0, \"pos\": [12.6107, -14.13871, 13.49604], \"hpr\": [40.48825, -27.76328, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [7.01666, -2.53564, 3.85601], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #6",
+        "time": 2.05,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 9}"
+            },
+            "1": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0.0964, \"duration\": 2.10087, \"colorScale\": [1.0, 1.0, 1.0, 0.0], \"startColorScale\": [1.0, 1.0, 1.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "2": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 0.45117, \"delay\": 0, \"parentIndex\": 4, \"renderParentIndex\": 4, \"leaveItGoingForever\": false}"
+            }
+        }
+    },
+    {
+        "name": "Suit #1 React",
+        "time": 2.14575,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"large-zap\", \"loop\": false, \"hasDuration\": true, \"duration\": 2.76348, \"hasStartTime\": true, \"startTime\": 1.07, \"hasEndTime\": true, \"endTime\": 5.20562, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Suit #2 React",
+        "time": 2.14575,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"large-zap\", \"loop\": false, \"hasDuration\": true, \"duration\": 2.76348, \"hasStartTime\": true, \"startTime\": 1.07, \"hasEndTime\": true, \"endTime\": 5.20562, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Suit #3 React",
+        "time": 2.14575,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"large-zap\", \"loop\": false, \"hasDuration\": true, \"duration\": 2.76348, \"hasStartTime\": true, \"startTime\": 1.07, \"hasEndTime\": true, \"endTime\": 5.20562, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Suit #4 React",
+        "time": 2.14575,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"large-zap\", \"loop\": false, \"hasDuration\": true, \"duration\": 2.76348, \"hasStartTime\": true, \"startTime\": 1.07, \"hasEndTime\": true, \"endTime\": 5.20562, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Toons React",
+        "time": 2.14575,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #11",
+        "time": 2.14575,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0, \"duration\": 2.20564, \"colorScale\": [0.533, 0.749, 1, 1.0], \"startColorScale\": [1.0, 1.0, 0.39268, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "toon react end",
+        "time": 4.47675,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    }
+]

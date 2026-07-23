@@ -16,6 +16,419 @@ from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import TTLocalizer
 
+class ToonStatusInformationPanel(DirectFrame):
+    def __init__(self, toon, statusEffects, closeCommand=None):
+        DirectFrame.__init__(
+            self,
+            parent=aspect2d,
+            relief=None
+        )
+
+        self.toon = toon
+        self.statusEffects = statusEffects or []
+        self.closeCommand = closeCommand
+
+        self.statusCards = []
+        self.showTrack = None
+
+        tooltipGui = loader.loadModel(
+            'phase_3.5/models/gui/battlegui/info_panels'
+        )
+
+        keybindsGui = loader.loadModel(
+            'phase_3.5/models/gui/optionspage/keybinds_gui.bam'
+        )
+
+        self.background = DirectFrame(
+            parent=self,
+            relief=None,
+            image=tooltipGui.find('**/info_panel_main_toon'),
+            image_scale=(1, 1, 0.5),
+            frameSize=(-0.485, 0.485, -0.235, 0.235)
+        )
+
+        # Stops clicks from passing through the panel.
+        self.background['state'] = DGG.NORMAL
+
+        self.titleText = DirectLabel(
+            parent=self.background,
+            relief=None,
+            text=self._getToonName(),
+            text_font=ToontownGlobals.getMinnieFont(),
+            text_fg=(0.976, 0.788, 0.165, 1),
+            text_shadow=(0, 0, 0, 1),
+            text_scale=0.035,
+            text_pos=(0, 0.203)
+        )
+
+        self.statusEffectsFrame = DirectScrolledFrame(
+            parent=self.background,
+            relief=None,
+
+            frameSize=(-0.22, 0.25, -0.2315, 0.1425),
+            canvasSize=(-0.22, 0.1, -0.0425, 0.048),
+
+            pos=(0.226, 0, 0),
+
+            scrollBarWidth=0.018,
+
+            verticalScroll_relief=None,
+            verticalScroll_thumb_relief=None,
+
+            verticalScroll_thumb_image=tooltipGui.find(
+                '**/scroll_thumb_toon'
+            ),
+            verticalScroll_thumb_image_scale=(0.25, 1, 0.125),
+
+            verticalScroll_resizeThumb=False
+        )
+
+        self.statusEffectsFrame.horizontalScroll.hide()
+        self.statusEffectsFrame.verticalScroll.incButton.hide()
+        self.statusEffectsFrame.verticalScroll.decButton.hide()
+
+        self.exitButton = DirectButton(
+            parent=self.background,
+            relief=None,
+            image=(
+                keybindsGui.find('**/button_neutral'),
+                keybindsGui.find('**/button_click'),
+                keybindsGui.find('**/button_highlight')
+            ),
+            pos=(0.46, 0, 0.21),
+            scale=0.05,
+            command=self.close
+        )
+
+        tooltipGui.removeNode()
+        keybindsGui.removeNode()
+
+        self.setBin('gui-popup', 200)
+
+        self.rebuildStatusEffects()
+
+    def _getToonName(self):
+        if not self.toon:
+            return 'Toon Information'
+
+        try:
+            return self.toon.getName()
+        except:
+            return 'Toon Information'
+
+    def show(self):
+        if self.showTrack:
+            self.showTrack.finish()
+            self.showTrack = None
+
+        DirectFrame.show(self)
+
+        self.showTrack = Sequence(
+            LerpScaleInterval(
+                self,
+                0.2,
+                2.2,
+                startScale=0.02,
+                blendType='easeInOut'
+            ),
+            LerpScaleInterval(
+                self,
+                0.09,
+                2.0,
+                blendType='easeInOut'
+            )
+        )
+
+        self.showTrack.start()
+
+    def rebuildStatusEffects(self, effects=None):
+        if effects is not None:
+            self.statusEffects = effects
+
+        self._clearStatusCards()
+
+        canvas = self.statusEffectsFrame.getCanvas()
+
+        if not self.statusEffects:
+            emptyLabel = DirectLabel(
+                parent=canvas,
+                relief=None,
+                text='No status effects are active.',
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_fg=(0, 0, 0, 1),
+                text_scale=0.025,
+                text_wordwrap=16,
+                pos=(0, 0, 0.02)
+            )
+
+            self.statusCards.append(emptyLabel)
+
+            self.statusEffectsFrame['canvasSize'] = (
+                -0.22,
+                0.1,
+                -0.0425,
+                0.048
+            )
+
+            self.statusEffectsFrame.verticalScroll.hide()
+            return
+
+        for index, effectData in enumerate(self.statusEffects):
+            card = self._createStatusCard(
+                canvas,
+                effectData,
+                index
+            )
+
+            self.statusCards.append(card)
+
+        self.statusEffectsFrame['canvasSize'] = (
+            -0.22,
+            0.1,
+            -0.0425 + (len(self.statusEffects) - 1) * -0.095,
+            0.048
+        )
+
+        if len(self.statusEffects) <= 4:
+            self.statusEffectsFrame.verticalScroll.hide()
+        else:
+            self.statusEffectsFrame.verticalScroll.show()
+
+        self.statusEffectsFrame.verticalScroll['value'] = 0
+
+    def _createStatusCard(self, parent, effectData, index):
+        isBuff = effectData.get('buff', True)
+
+        tooltipGui = loader.loadModel(
+            'phase_3.5/models/gui/battlegui/info_panels'
+        )
+
+        if isBuff:
+            cardImage = tooltipGui.find(
+                '**/info_panel_buff_toon'
+            )
+        else:
+            cardImage = tooltipGui.find(
+                '**/info_panel_debuff_toon'
+            )
+
+        if cardImage.isEmpty():
+            if isBuff:
+                cardImage = tooltipGui.find('**/tooltip_buff')
+            else:
+                cardImage = tooltipGui.find('**/tooltip_debuff')
+
+        card = DirectFrame(
+            parent=parent,
+            relief=None,
+            image=cardImage,
+            image_scale=(1, 1, 0.25),
+            pos=(0, 0, 0.003 + index * -0.095),
+            scale=0.495
+        )
+
+        iconRoot = card.attachNewNode('toon-status-card-icon')
+        iconRoot.setPos(-0.33, 0, 0.001)
+        iconRoot.setScale(0.12)
+
+        # Copy the original Toon status-slot background.
+        sourceBackground = effectData.get('background')
+
+        if (
+                sourceBackground is not None
+                and not sourceBackground.isEmpty()
+        ):
+            backgroundCopy = sourceBackground.copyTo(iconRoot)
+
+            # Remove the original battle-panel transform.
+            backgroundCopy.setPos(0, 0.01, 0)
+            backgroundCopy.setHpr(0, 0, 0)
+            backgroundCopy.setScale(1.25)
+            backgroundCopy.show()
+
+        # Copy the status icon, including attached turn-count text.
+        sourceNode = effectData.get('node')
+
+        if (
+                sourceNode is not None
+                and not sourceNode.isEmpty()
+        ):
+            iconCopy = sourceNode.copyTo(iconRoot)
+
+            # Put it slightly in front of the background.
+            iconCopy.setPos(0, -0.01, 0)
+            iconCopy.setHpr(0, 0, 0)
+            iconCopy.setScale(1.25)
+            iconCopy.show()
+
+        DirectLabel(
+            parent=card,
+            relief=None,
+            text=effectData.get(
+                'title',
+                'Status Effect'
+            ),
+            text_font=ToontownGlobals.getMinnieFont(),
+            text_fg=(0, 0, 0, 1),
+            text_align=TextNode.ALeft,
+            text_scale=0.052,
+            text_wordwrap=12,
+            pos=(-0.215, 0, 0.025)
+        )
+
+        DirectLabel(
+            parent=card,
+            relief=None,
+            text=effectData.get(
+                'description',
+                'No description available.'
+            ),
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_fg=(0.1, 0.1, 0.1, 1),
+            text_align=TextNode.ALeft,
+            text_scale=0.032,
+            text_wordwrap=19,
+            pos=(-0.215, 0, -0.016)
+        )
+
+        tooltipGui.removeNode()
+
+        return card
+
+    def _clearStatusCards(self):
+        for node in self.statusCards:
+            try:
+                node.destroy()
+            except:
+                try:
+                    node.removeNode()
+                except:
+                    pass
+
+        self.statusCards = []
+
+    def close(self):
+        callback = self.closeCommand
+        self.closeCommand = None
+
+        self.destroy()
+
+        if callback:
+            callback()
+
+    def destroy(self):
+        if self.showTrack:
+            self.showTrack.finish()
+            self.showTrack = None
+
+        self._clearStatusCards()
+
+        DirectFrame.destroy(self)
+
+        self.toon = None
+        self.statusEffects = []
+        self.closeCommand = None
+
+class ToonStatusEffectTooltip(DirectFrame):
+    def __init__(self, parent=None):
+        DirectFrame.__init__(
+            self,
+            parent=parent,
+            relief=None
+        )
+
+        self.showTrack = None
+
+        tooltipGui = loader.loadModel(
+            'phase_3.5/models/gui/battlegui/info_panels'
+        )
+
+        self.buffImage = tooltipGui.find('**/tooltip_buff')
+        self.debuffImage = tooltipGui.find('**/tooltip_debuff')
+        self.buffIcon = tooltipGui.find('**/buff_icon_toon')
+        self.debuffIcon = tooltipGui.find('**/debuff_icon_toon')
+
+        self.background = DirectFrame(
+            parent=self,
+            relief=None,
+            image=self.buffImage,
+            image_scale=(1, 1, 0.5),
+            geom=self.buffIcon,
+            geom_pos=(0, 0, 0.13),
+            geom_scale=0.125
+        )
+
+        self.titleLabel = DirectLabel(
+            parent=self.background,
+            relief=None,
+            pos=(0, 0, 0.039),
+            text='',
+            text_scale=0.053,
+            text_align=TextNode.ACenter,
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_fg=(0, 0, 0, 1),
+            text_wordwrap=18
+        )
+
+        self.descriptionLabel = DirectLabel(
+            parent=self.background,
+            relief=None,
+            pos=(0, 0, -0.01),
+            text='',
+            text_scale=0.0375,
+            text_align=TextNode.ACenter,
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_fg=(0, 0, 0, 1),
+            text_wordwrap=23
+        )
+
+        tooltipGui.removeNode()
+
+        self.setBin('gui-popup', 100)
+        self.hide()
+
+    def setEffect(self, title, description, isBuff=True):
+        if isBuff:
+            self.background['image'] = self.buffImage
+            self.background['geom'] = self.buffIcon
+        else:
+            self.background['image'] = self.debuffImage
+            self.background['geom'] = self.debuffIcon
+
+        self.titleLabel['text'] = title
+        self.descriptionLabel['text'] = description
+
+    def show(self):
+        if self.showTrack:
+            self.showTrack.finish()
+            self.showTrack = None
+
+        DirectFrame.show(self)
+
+        self.showTrack = Sequence(
+            LerpScaleInterval(
+                self,
+                0.15,
+                2.25,
+                startScale=0.05,
+                blendType='easeOut'
+            ),
+            LerpScaleInterval(
+                self,
+                0.08,
+                2.0,
+                blendType='easeInOut'
+            )
+        )
+        self.showTrack.start()
+
+    def destroy(self):
+        if self.showTrack:
+            self.showTrack.finish()
+            self.showTrack = None
+
+        DirectFrame.destroy(self)
+
 class TownBattleToonPanel(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownBattleToonPanel')
 
@@ -40,6 +453,10 @@ class TownBattleToonPanel(DirectFrame):
         self.liquidated = None
         self.liquidatedText = None
         self.governaughtDamageUp = None
+        self.toonStatusIconNodes = []
+        self.toonStatusEffectTooltip = None
+        self.hoveredToonStatusSlot = None
+        self.toonStatusInformationPanel = None
         self.raisedAnte = None
         self.raisedAnteText = None
         self.govDamageText = None
@@ -77,6 +494,10 @@ class TownBattleToonPanel(DirectFrame):
         self.collectCallRoundsText = None
         self.mandatoryToll = None
         self.mandatoryTollNumberText = None
+        self.toonStatusOffset = 0
+        self.toonStatusSlotColors = []
+        self.toonStatusSlotPulses = []
+        self.toonStatusSlotPulseTypes = []
         self.avatar = None
         self.groupDamageDown = None
         self.groupDamageDownText = None
@@ -126,6 +547,8 @@ class TownBattleToonPanel(DirectFrame):
         # self.vulnerable.setPosHprScale(0.22, 0, 0.03, -180, 0, 0, .125, .125, .125)
         # self.vulnerable.reparentTo(self)
         # self.vulnerable.hide()
+        gagSelectGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+        toonPanelGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/toon_panel')
         self.sosText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonSOS, text_fg=(0.176, 1, 0, 1), text_scale=0.1, text_font=getSignFont())
         self.sosText.hide()
         self.fireText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonFire, text_fg=(1, 0, 0, 1), text_scale=0.1, text_font=getSignFont())
@@ -163,6 +586,86 @@ class TownBattleToonPanel(DirectFrame):
             pos=(0.21, 0, 0.075),
             scale=.5
         )
+        self.choiceEmblem.setBin('gui-popup', 100)
+        self.toonPanelFrame = DirectFrame(
+            parent=self,
+        relief=None
+        )
+
+        self.toonPanelBackground = DirectFrame(
+            parent=self,
+            relief=None,
+            image=toonPanelGui.find('**/toon_panel_background')
+        )
+        #self.toonPanelBackground.reparentTo(aspect2d)
+        self.toonPanelBackground.setBin('fixed', -100)
+        self.toonPanelBorder = DirectFrame(
+            parent=self,
+            relief=None,
+            image=toonPanelGui.find('**/toon_panel_frame')
+        )
+
+        self.laffMeterNode = DirectFrame(
+            parent=self,
+            relief=None
+        )
+        self.toonCycleBackButton = DirectButton(
+        parent=self,
+        relief=None,
+        image=(
+            toonPanelGui.find('**/arrow_neutral'),
+            toonPanelGui.find('**/arrow_press'),
+            toonPanelGui.find('**/arrow_hover')
+        ),
+            pos=(-0.384, 0, 0.175),
+            scale=.15,
+    command=self.changeToonStatusOffset,
+    extraArgs=[-1]
+    )
+
+        self.toonCycleForwardButton = DirectButton(
+        parent=self,
+        relief=None,
+        image=(
+            toonPanelGui.find('**/arrow_neutral'),
+            toonPanelGui.find('**/arrow_press'),
+            toonPanelGui.find('**/arrow_hover')
+        ),
+            pos=(-0.082, 0, -0.205),
+            scale=.15,
+    command=self.changeToonStatusOffset,
+    extraArgs=[1]
+    )
+        self.toonCycleBackButton.setR(-90)
+        self.toonCycleBackButton['state'] = DGG.DISABLED
+        self.toonCycleForwardButton['state'] = DGG.DISABLED
+        self.infoButton = DirectButton(
+        parent=self,
+        relief=None,
+        image=(
+            toonPanelGui.find('**/info_neutral'),
+            toonPanelGui.find('**/info_press'),
+            toonPanelGui.find('**/info_hover')
+        ),
+            pos=(0, 0, -0.06),
+            scale=.15, command=self.activateToonInfoButton
+        )
+
+        self.gagLock = DirectFrame(
+            parent=self,
+            relief=None,
+            image=toonPanelGui.find('**/lock_unlocked'),
+            pos=(0.345, 0, -0.04),
+            scale=(0.13, 1, 0.26),
+        )
+        self.gagLocked = DirectFrame(
+            parent=self,
+            relief=None,
+            image=toonPanelGui.find('**/lock_locked'),
+            pos=(0.345, 0, -0.04),
+            scale=(0.13, 1, 0.26),
+        )
+        self.gagLocked.hide()
         self.choiceEmblem.hide()
         self.choiceOrganicTex = loader.loadTexture('phase_3.5/maps/battlegui/pres_scroll_bg.png')
         self.choiceOrganicTex.setWrapU(Texture.WMRepeat)
@@ -177,10 +680,13 @@ class TownBattleToonPanel(DirectFrame):
             toData=1.0
         )
         self.choiceOrganicIval.loop()
-
+        gagSelectGui.removeNode()
+        toonPanelGui.removeNode()
+        self.laffMeterNode.setPos(-0.15, 0, 0.06)
+        self.laffMeterNode.setScale(1.1)
         self.undecidedIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choicePanelModels.find('**/emblem_question'), pos=(0.21, 0, 0.075), scale=.5)
         self.passIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choicePanelModels.find('**/pass_icon'), pos=(0.21, 0, 0.075), scale=.25)
-        self.fireIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/toon_accuracy_down_icon'), pos=(0.21, 0, 0.075), scale=.25)
+        self.fireIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/pinkslip_icon'), pos=(0.21, 0, 0.075), scale=.25)
         self.sueIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/sued_icon'), pos=(0.21, 0, 0.05), scale=.25)
         self.sosIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/toon_accuracy_up_icon'), pos=(0.21, 0, 0.075), scale=.25)
         self.undecidedIcon.show()
@@ -202,9 +708,44 @@ class TownBattleToonPanel(DirectFrame):
         passGui.reparentTo(self.passNode)
         self.passNode.hide()
         self.laffMeter = None
-        self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.24), text_scale=0.1, text_fg=(1, 1, 1, 1), text_font=getSignFont())
+        self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.23), text_scale=0.09, text_fg=(1, 1, 1, 1))
         self.hide()
+        self.toonStatusEffectTooltip = ToonStatusEffectTooltip(parent=self)
+        self.toonStatusEffectTooltip.setPos(0, 0, 0)
+        self.toonStatusEffectTooltip.setScale(2.0)
+        self.toonStatusEffectTooltip.hide()
         gui.removeNode()
+
+    def activateToonInfoButton(self):
+        if self.toonStatusInformationPanel:
+            self.closeToonStatusInformationPanel()
+            return
+
+        if not self.avatar:
+            return
+
+        self.toonStatusInformationPanel = ToonStatusInformationPanel(
+            toon=self.avatar,
+            statusEffects=list(self.toonStatusIconNodes),
+            closeCommand=self._toonInformationPanelClosed
+        )
+
+        self.toonStatusInformationPanel.show()
+
+
+    def _toonInformationPanelClosed(self):
+        self.toonStatusInformationPanel = None
+
+
+    def closeToonStatusInformationPanel(self):
+        panel = self.toonStatusInformationPanel
+        self.toonStatusInformationPanel = None
+
+        if panel:
+            try:
+                panel.destroy()
+            except:
+                pass
 
     def setChoiceOrganic(self, organic):
         if not getattr(self, 'choiceOrganicStage', None):
@@ -255,8 +796,18 @@ class TownBattleToonPanel(DirectFrame):
         self.choiceEmblem.show()
         icon.show()
 
-    def _attachToonStatusIcon(self, iconNode, slot, slotColor=(1, 1, 1, 1), scale=(1, 1, 1)):
-        if slot is None:
+    def _attachToonStatusIcon(
+            self,
+            iconNode,
+            slot,
+            tooltipKey=None,
+            tooltipTitle=None,
+            tooltipDescription=None,
+            tooltipBuff=True,
+            slotColor=(1, 1, 1, 1),
+            scale=(1, 1, 1)):
+
+        if slot is None or iconNode is None or iconNode.isEmpty():
             return
 
         if isinstance(scale, (int, float)):
@@ -269,11 +820,51 @@ class TownBattleToonPanel(DirectFrame):
         slot['bg'].show()
 
         slot['iconRoot'].show()
+
         iconNode.reparentTo(slot['iconRoot'])
-        iconNode.setPosHprScale(0, 0, 0, 0, 0, 0, sx, sy, sz)
+        iconNode.setPosHprScale(
+            0, 0, 0,
+            0, 0, 0,
+            sx, sy, sz
+        )
         iconNode.setColor(1, 1, 1, 1)
         iconNode.setColorScale(1, 1, 1, 1)
         iconNode.show()
+
+        effectData = {
+            'node': iconNode,
+
+            # Keep the original status-slot background.
+            'background': slot['bg'],
+            'slotColor': slotColor,
+
+            'tooltipKey': tooltipKey,
+            'title': tooltipTitle or self._formatToonStatusName(tooltipKey),
+            'description': tooltipDescription or 'No description available.',
+            'buff': tooltipBuff
+        }
+
+        self.toonStatusIconNodes.append(effectData)
+        self.toonStatusSlotColors.append(slotColor)
+        self.toonStatusSlotPulses.append(None)
+        self.toonStatusSlotPulseTypes.append(None)
+
+        # The slot initially corresponds to the effect just added.
+        slot['effectIndex'] = len(self.toonStatusIconNodes) - 1
+
+    def _formatToonStatusName(self, name):
+        if not name:
+            return 'Status Effect'
+
+        result = ''
+
+        for character in name:
+            if character.isupper() and result:
+                result += ' '
+
+            result += character
+
+        return result[:1].upper() + result[1:]
 
     def _clear_toon_status_interval(self, attrName):
         interval = getattr(self, attrName, None)
@@ -294,18 +885,63 @@ class TownBattleToonPanel(DirectFrame):
             setattr(self, attrName, None)
 
     def _cleanupToonStatusDisplay(self):
+        self.toonStatusOffset = 0
+        self.toonStatusIconNodes = []
+        self.toonStatusSlotColors = []
+        self.toonStatusSlotPulses = []
+        self.toonStatusSlotPulseTypes = []
+
+        if self.toonStatusEffectTooltip:
+            self.toonStatusEffectTooltip.hide()
+
+        self.hoveredToonStatusSlot = None
         self._clear_toon_status_interval('pulseTask')
         self._clear_toon_status_interval('rainbowPulseTask')
 
         if hasattr(self, 'toonStatusSlots'):
             for slot in self.toonStatusSlots:
+                if not slot:
+                    continue
+
                 pulse = slot.get('pulse')
-                if pulse is not None:
+                if pulse:
                     try:
                         pulse.finish()
                     except:
                         pass
                     slot['pulse'] = None
+
+                hoverButton = slot.get('hoverButton')
+                if hoverButton:
+                    try:
+                        hoverButton.destroy()
+                    except:
+                        pass
+                    slot['hoverButton'] = None
+
+                bgNode = slot.get('bg')
+                if bgNode and not bgNode.isEmpty():
+                    try:
+                        bgNode.removeNode()
+                    except:
+                        pass
+                    slot['bg'] = None
+
+                iconRoot = slot.get('iconRoot')
+                if iconRoot and not iconRoot.isEmpty():
+                    try:
+                        iconRoot.removeNode()
+                    except:
+                        pass
+                    slot['iconRoot'] = None
+
+                bgModel = slot.get('bgModel')
+                if bgModel and not bgModel.isEmpty():
+                    try:
+                        bgModel.removeNode()
+                    except:
+                        pass
+                    slot['bgModel'] = None
 
         for name in (
                 'gagBoost', 'gagBoostRoundsText', 'gagBoostText',
@@ -319,7 +955,7 @@ class TownBattleToonPanel(DirectFrame):
                 'encore', 'govDamageText', 'governaughtDamageUp', 'encoreRounds', 'toonupGagBoost', 'trapGagBoost', 'lureGagBoost', 'throwGagBoost', 'squirtGagBoost', 'soundGagBoost', 'dropGagBoost', 'zapGagBoost',
                 'winded', 'gagBan', 'raisedAnte', 'raisedAnteText',
                 'windedRounds', 'damageUpRounds', 'damageUp',
-                'cheerRounds', 'cheer', 'burnedRounds', 'burned', 'zapped', 'zappedRounds',
+                'cheerRounds', 'cheer', 'burnedRounds', 'burned', 'zapped', 'zappedRounds', 'extraText', 'statusIcon', 'statusIcon2',
                 'liquidatedText', 'liquidated', 'damageDownRounds',
                 'damageDown', 'groupDamageDown', 'groupDamageDownText',
                 'groupDamageDownRoundsText', 'bombed', 'bombedText',
@@ -374,46 +1010,189 @@ class TownBattleToonPanel(DirectFrame):
 
         slot['bg'].setColorScale(1, 1, 1, 1)
 
-    def _pulseToonStatusSlot(self, slot, fromColor, toColor=(1, 1, 1, 1), duration=1.0):
-        if slot is None:
-            return
+    def _pulseToonStatusSlot(self, slot, fromColor,
+                                toColor=(1, 1, 1, 1), duration=1.0):
+            if slot is None:
+                return
 
-        self._stopToonStatusPulse(slot)
+            index = self.statusEffects - 1
 
-        r, g, b, z = toColor
-        slot['bg'].setColorScale(r, g, b, z)
+            if 0 <= index < len(self.toonStatusSlotPulses):
+                self.toonStatusSlotPulseTypes[index] = 'normal'
+                self.toonStatusSlotPulses[index] = (
+                    fromColor,
+                    toColor,
+                    duration
+                )
 
-        slot['pulse'] = Sequence(
-            LerpColorScaleInterval(slot['bg'], duration, fromColor, blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, toColor, blendType='easeInOut'), Wait(1.0)
-        )
-        slot['pulse'].loop()
+            self._pulseToonStatusSlotVisible(
+                slot,
+                fromColor,
+                toColor,
+                duration
+            )
 
     def _pulseRainbowToonStatusSlot(self, slot, duration=0.35):
         if slot is None:
             return
 
+        index = self.statusEffects - 1
+
+        if 0 <= index < len(self.toonStatusSlotPulses):
+            self.toonStatusSlotPulseTypes[index] = 'rainbow'
+            self.toonStatusSlotPulses[index] = (duration,)
+
+        self._pulseRainbowToonStatusSlotVisible(slot, duration)
+
+    def _pulseRainbowToonStatusSlotVisible(self, slot, duration=0.35):
         self._stopToonStatusPulse(slot)
 
-        slot['bg'].setColorScale(1, 1, 1, 1)
-
         slot['pulse'] = Sequence(
-            LerpColorScaleInterval(slot['bg'], duration, (1, 0, 0, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (1, 0.5, 0, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (1, 1, 0, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (0, 1, 0, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (0, 0, 1, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (0.29, 0, 0.51, 1), blendType='easeInOut'),
-            LerpColorScaleInterval(slot['bg'], duration, (0.56, 0, 1, 1), blendType='easeInOut')
+            LerpColorScaleInterval(slot['bg'], duration, (1, 0, 0, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (1, 0.5, 0, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (1, 1, 0, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (0, 1, 0, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (0, 0, 1, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (0.29, 0, 0.51, 1)),
+            LerpColorScaleInterval(slot['bg'], duration, (0.56, 0, 1, 1))
         )
         slot['pulse'].loop()
 
+    def _pulseToonStatusSlotVisible(
+            self,
+            slot,
+            fromColor,
+            toColor=(1, 1, 1, 1),
+            duration=1.0):
+
+        self._stopToonStatusPulse(slot)
+
+        slot['pulse'] = Sequence(
+            LerpColorScaleInterval(
+                slot['bg'],
+                duration,
+                fromColor,
+                blendType='easeInOut'
+            ),
+            LerpColorScaleInterval(
+                slot['bg'],
+                duration,
+                toColor,
+                blendType='easeInOut'
+            ),
+            Wait(1.0)
+        )
+        slot['pulse'].loop()
+
+    def _applyToonStatusOffset(self):
+        visibleSlots = 4
+
+        if self.toonStatusEffectTooltip:
+            self.toonStatusEffectTooltip.hide()
+
+        self.hoveredToonStatusSlot = None
+
+        for slotIndex in xrange(visibleSlots):
+            slot = self.toonStatusSlots[slotIndex]
+
+            self._stopToonStatusPulse(slot)
+
+            slot['bg'].show()
+            slot['bg'].setColor(0.525, 0.133, 0.122, 1)
+            slot['bg'].setColorScale(1, 1, 1, 1)
+
+            slot['iconRoot'].show()
+            slot['hoverButton'].show()
+            slot['effectIndex'] = None
+
+            for child in slot['iconRoot'].getChildren():
+                child.detachNode()
+
+        for slotIndex in xrange(visibleSlots):
+            effectIndex = self.toonStatusOffset + slotIndex
+
+            if effectIndex >= len(self.toonStatusIconNodes):
+                continue
+
+            effectData = self.toonStatusIconNodes[effectIndex]
+            icon = effectData.get('node')
+
+            if icon is None or icon.isEmpty():
+                continue
+
+            slot = self.toonStatusSlots[slotIndex]
+
+            icon.reparentTo(slot['iconRoot'])
+            icon.setPos(0, 0, 0)
+            icon.show()
+
+            slot['effectIndex'] = effectIndex
+
+            if effectIndex < len(self.toonStatusSlotColors):
+                slot['bg'].setColor(
+                    *self.toonStatusSlotColors[effectIndex]
+                )
+
+            pulseType = self.toonStatusSlotPulseTypes[effectIndex]
+            pulseData = self.toonStatusSlotPulses[effectIndex]
+
+            if pulseType == 'normal' and pulseData:
+                fromColor, toColor, duration = pulseData
+
+                self._pulseToonStatusSlotVisible(
+                    slot,
+                    fromColor,
+                    toColor,
+                    duration
+                )
+
+            elif pulseType == 'rainbow' and pulseData:
+                self._pulseRainbowToonStatusSlotVisible(
+                    slot,
+                    pulseData[0]
+                )
+
+        maxOffset = max(
+            0,
+            len(self.toonStatusIconNodes) - visibleSlots
+        )
+
+        if maxOffset > 0:
+
+            self.toonCycleBackButton['state'] = (
+                DGG.NORMAL
+                if self.toonStatusOffset > 0
+                else DGG.DISABLED
+            )
+
+            self.toonCycleForwardButton['state'] = (
+                DGG.NORMAL
+                if self.toonStatusOffset < maxOffset
+                else DGG.DISABLED
+            )
+        else:
+            self.toonCycleBackButton['state'] = DGG.DISABLED
+            self.toonCycleForwardButton['state'] = DGG.DISABLED
+
+    def changeToonStatusOffset(self, amount):
+        maxOffset = max(
+            0,
+            len(self.toonStatusIconNodes) - 4
+        )
+
+        newOffset = self.toonStatusOffset + amount
+        newOffset = max(0, min(newOffset, maxOffset))
+
+        if newOffset != self.toonStatusOffset:
+            self.toonStatusOffset = newOffset
+            self._applyToonStatusOffset()
+
     def _buildToonStatusSlots(self):
         slotLayouts = [
-            (-0.39, 0, 0.075),  # 1
-            (-0.3675, 0, -0.05),  # 2
-            (-0.29, 0, -0.15),  # 3
-            (-0.1675, 0, -0.1925),  # 4
+            (-0.39, 0, 0.083),  # 1
+            (-0.374, 0, -0.044),  # 2
+            (-0.294, 0, -0.147),  # 3
+            (-0.175, 0, -0.195),  # 4
             (0.12, 0, -0.355),  # 5
             (0.24, 0, -0.355),  # 6
             (0.36, 0, -0.355), # 7
@@ -430,594 +1209,1029 @@ class TownBattleToonPanel(DirectFrame):
             bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
             bgNode = bgModel.find('**/default_background')
             bgNode.reparentTo(self)
-            bgNode.setPosHprScale(x, y, z, 0, 0, 0, .125, .125, .125)
+            bgNode.setPosHprScale(x, y, z, 0, 0, 0, .13, .13, .13)
             bgNode.setColor(0.525, 0.133, 0.122, 1)
 
             iconRoot = self.attachNewNode('toonStatusIconRoot-%d' % i)
-            iconRoot.setPosHprScale(x, y, z, 0, 0, 0, .125, .125, .125)
+            iconRoot.setPosHprScale(x, y, z, 0, 0, 0, .12, .12, .12)
 
-            if i >= 4:
-                bgNode.hide()
-                iconRoot.hide()
+
+            hoverButton = DirectButton(
+                parent=self,
+                relief=DGG.FLAT,
+                frameColor=(0, 0, 0, 0),
+                frameSize=(-0.5, 0.5, -0.5, 0.5),
+                pos=(x, -0.05, z),
+                scale=0.125,
+                state=DGG.NORMAL
+            )
+
+            hoverButton.bind(
+                DGG.WITHIN,
+                self._enterToonStatusSlot,
+                extraArgs=[i]
+            )
+
+            hoverButton.bind(
+                DGG.WITHOUT,
+                self._exitToonStatusSlot,
+                extraArgs=[i]
+            )
 
             self.toonStatusSlots[i] = {
                 'bgModel': bgModel,
                 'bg': bgNode,
                 'iconRoot': iconRoot,
+                'hoverButton': hoverButton,
+                'effectIndex': None,
                 'pulse': None,
             }
+            if i >= 4:
+                bgNode.hide()
+                iconRoot.hide()
+                hoverButton.hide()
 
-        # backward compatibility names
-        self.status = self.toonStatusSlots[0]['bgModel']
-        self.status2 = self.toonStatusSlots[1]['bgModel']
-        self.status3 = self.toonStatusSlots[2]['bgModel']
-        self.status4 = self.toonStatusSlots[3]['bgModel']
-        self.status5 = self.toonStatusSlots[4]['bgModel']
-        self.status6 = self.toonStatusSlots[5]['bgModel']
-        self.status7 = self.toonStatusSlots[6]['bgModel']
-        self.status8 = self.toonStatusSlots[7]['bgModel']
-        self.status9 = self.toonStatusSlots[8]['bgModel']
-        self.status10 = self.toonStatusSlots[9]['bgModel']
+        # # backward compatibility names
+        # self.status = self.toonStatusSlots[0]['bgModel']
+        # self.status2 = self.toonStatusSlots[1]['bgModel']
+        # self.status3 = self.toonStatusSlots[2]['bgModel']
+        # self.status4 = self.toonStatusSlots[3]['bgModel']
+        # self.status5 = self.toonStatusSlots[4]['bgModel']
+        # self.status6 = self.toonStatusSlots[5]['bgModel']
+        # self.status7 = self.toonStatusSlots[6]['bgModel']
+        # self.status8 = self.toonStatusSlots[7]['bgModel']
+        # self.status9 = self.toonStatusSlots[8]['bgModel']
+        # self.status10 = self.toonStatusSlots[9]['bgModel']
 
-        self.attackIcon = self.toonStatusSlots[0]['bg']
-        self.attackIcon1 = self.toonStatusSlots[1]['bg']
-        self.attackIcon2 = self.toonStatusSlots[2]['bg']
-        self.attackIcon3 = self.toonStatusSlots[3]['bg']
-        self.attackIcon4 = self.toonStatusSlots[4]['bg']
-        self.attackIcon5 = self.toonStatusSlots[5]['bg']
-        self.attackIcon6 = self.toonStatusSlots[6]['bg']
-        self.attackIcon7 = self.toonStatusSlots[7]['bg']
-        self.attackIcon8 = self.toonStatusSlots[8]['bg']
-        self.attackIcon9 = self.toonStatusSlots[9]['bg']
+        # self.attackIcon = self.toonStatusSlots[0]['bg']
+        # self.attackIcon1 = self.toonStatusSlots[1]['bg']
+        # self.attackIcon2 = self.toonStatusSlots[2]['bg']
+        # self.attackIcon3 = self.toonStatusSlots[3]['bg']
+        # self.attackIcon4 = self.toonStatusSlots[4]['bg']
+        # self.attackIcon5 = self.toonStatusSlots[5]['bg']
+        # self.attackIcon6 = self.toonStatusSlots[6]['bg']
+        # self.attackIcon7 = self.toonStatusSlots[7]['bg']
+        # self.attackIcon8 = self.toonStatusSlots[8]['bg']
+        # self.attackIcon9 = self.toonStatusSlots[9]['bg']
+
+    def _enterToonStatusSlot(self, slotIndex, event=None):
+        if not self.toonStatusEffectTooltip:
+            return
+
+        if slotIndex < 0 or slotIndex >= len(self.toonStatusSlots):
+            return
+
+        slot = self.toonStatusSlots[slotIndex]
+        effectIndex = slot.get('effectIndex')
+
+        if effectIndex is None:
+            self.toonStatusEffectTooltip.hide()
+            return
+
+        if effectIndex < 0 or effectIndex >= len(self.toonStatusIconNodes):
+            self.toonStatusEffectTooltip.hide()
+            return
+
+        effectData = self.toonStatusIconNodes[effectIndex]
+
+        self.toonStatusEffectTooltip.setEffect(
+            effectData.get('title', 'Status Effect'),
+            effectData.get('description', 'No description available.'),
+            effectData.get('buff', True)
+        )
+
+        self.hoveredToonStatusSlot = slotIndex
+        self.toonStatusEffectTooltip.show()
+
+
+    def _exitToonStatusSlot(self, slotIndex, event=None):
+        if self.hoveredToonStatusSlot != slotIndex:
+            return
+
+        self.hoveredToonStatusSlot = None
+
+        if self.toonStatusEffectTooltip:
+            self.toonStatusEffectTooltip.hide()
 
     def setStatusEffects(self, avatar):
         self.avatar = avatar
         self._cleanupToonStatusDisplay()
         self._buildToonStatusSlots()
 
-        if avatar.raisedAnte:
+        if avatar.hasToonStatusEffect('raisedAnte'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.raisedAnte = status.find('**/raise_the_ante_icon')
-            self.raisedAnteText = DirectLabel(parent=self.raisedAnte, relief=None, text="%s" % avatar.getRaisedAnte() + "%", text_fg=(0, 1, 0.004, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, 0.15),
-                                              text_scale=.4)
-            self.raisedAnteText.show()
-            self.raisedAnte.show()
+            self.statusIcon = status.find('**/raise_the_ante_icon')
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.raisedAnte, slot)
-            self._clear_toon_status_interval('rainbowPulseTask')
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Raising The Ante', 
+                                   tooltipDescription="The stakes are much higher, and so are your Gag damage! Gags are +%s%% more powerful." % avatar.getToonStatusModifier('raisedAnte'), 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 1, 1, 1))
             self.rainbowPulseTask = self._pulseRainbowToonStatusSlot(slot, duration=2.0)
 
-        if avatar.hydrated:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.governaughtDamageUp = status.find('**/monsoon_icon')
-            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getHydrationRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.govDamageText.show()
-            self.governaughtDamageUp.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
-
-        if avatar.driedOut:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.governaughtDamageUp = status.find('**/ghost_payroll_icon')
-            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getDriedOutRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.govDamageText.show()
-            self.governaughtDamageUp.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
-
-        if avatar.energized:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.governaughtDamageUp = status.find('**/last_tap_icon')
-            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getEnergizedRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.govDamageText.show()
-            self.governaughtDamageUp.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
-
-        if avatar.governaughtDamageUp:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.governaughtDamageUp = status.find('**/toon_damage_up_icon')
-            self.govDamageText = DirectLabel(parent=self.governaughtDamageUp, relief=None, text="%s" % avatar.getDamageUpGovernaught() + "%", text_fg=(0, 1, 0.004, 1),
-                                             text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                             pos=(0.25, 0, 0.15),
-                                             text_scale=.4)
-            self.govDamageText.show()
-            self.governaughtDamageUp.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.governaughtDamageUp, slot, slotColor=(1, 0.984, 0, 1))
-            self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
-
-        if avatar.damageUp:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageUp = status.find('**/toon_damage_up_icon')
-            self.damageUpRounds = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUpRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.damageUpRounds.show()
-            self.damageUpText = DirectLabel(parent=self.damageUp, relief=None, text="%s" % avatar.getDamageUp() + "%", text_fg=(0, 1, 0.004, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, 0.15),
-                                            text_scale=.4)
-            self.damageUpText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.damageUp, slot, slotColor=(1, 0.984, 0, 1))
-            self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
-
-        if avatar.isViralSensation:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.groupDamageDown = status.find('**/singing_blues_icon')
-            self.groupDamageDownRoundsText = DirectLabel(parent=self.groupDamageDown, relief=None, text="%s" % avatar.getViralSensationRounds(), text_fg=(1, 1, 1, 1),
-                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                         pos=(0.25, 0, -.5),
-                                                         text_scale=.6)
-            self.groupDamageDownRoundsText.show()
-            self.groupDamageDownText = DirectLabel(parent=self.groupDamageDown, relief=None, text="-%s" % avatar.getViralSensationBoost(), text_fg=(1, 1, 1, 1),
-                                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                   pos=(0.25, 0, 0.15),
-                                                   text_scale=.4)
-            self.groupDamageDownText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.groupDamageDown, slot, slotColor=(1, 0.984, 0, 1))
-
-        if avatar.gagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.gagBoost = status.find('**/toon_damage_up_icon')
-            self.gagBoostRoundsText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.25, 0, -.5),
-                                                  text_scale=.6)
-            self.gagBoostRoundsText.show()
-            self.gagBoostText = DirectLabel(parent=self.gagBoost, relief=None, text="%s" % avatar.getGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, 0.15),
-                                            text_scale=.4)
-            self.gagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.gagBoost, slot, slotColor=(1, 0.984, 0, 1))
-            self._pulseToonStatusSlot(slot, fromColor=(0.027, 1, 0, 1), toColor=(1, 0.984, 0, 1))
-
-        if avatar.toonupGagBoost:
+        if avatar.hasToonStatusEffect('hydrated'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.toonupGagBoost = status.find('**/inventory_cannon')
-            self.toonupGagBoostRoundsText = DirectLabel(parent=self.toonupGagBoost, relief=None, text="%s" % avatar.getToonupGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                        text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                        pos=(0.045, 0, -.085),
-                                                        text_scale=.1)
-            self.toonupGagBoostRoundsText.show()
-            self.toonupGagBoostText = DirectLabel(parent=self.toonupGagBoost, relief=None, text="%s" % avatar.getToonupGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.045, 0, 0.027),
-                                                  text_scale=.07)
-            self.toonupGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.toonupGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+            self.statusIcon = status.find('**/inventory_glass_of_water')
+            iconRoot = NodePath('hydratedIconRoot')
 
-        if avatar.trapGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.trapGagBoost = status.find('**/inventory_wreckingball')
-            self.trapGagBoostRoundsText = DirectLabel(parent=self.trapGagBoost, relief=None, text="%s" % avatar.getTrapGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                      pos=(0.045, 0, -.085),
-                                                      text_scale=.1)
-            self.trapGagBoostRoundsText.show()
-            self.trapGagBoostText = DirectLabel(parent=self.trapGagBoost, relief=None, text="%s" % avatar.getTrapGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.045, 0, 0.027),
-                                                text_scale=.07)
-            self.trapGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.trapGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
 
-        if avatar.lureGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.lureGagBoost = status.find('**/inventory_hypno_goggles')
-            self.lureGagBoostRoundsText = DirectLabel(parent=self.lureGagBoost, relief=None, text="%s" % avatar.getLureGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                      pos=(0.045, 0, -.085),
-                                                      text_scale=.1)
-            self.lureGagBoostRoundsText.show()
-            self.lureGagBoostText = DirectLabel(parent=self.lureGagBoost, relief=None, text="%s" % avatar.getLureGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.045, 0, 0.027),
-                                                text_scale=.07)
-            self.lureGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.lureGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('hydrated'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
 
-        if avatar.throwGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.throwGagBoost = status.find('**/inventory_cake')
-            self.throwGagBoostRoundsText = DirectLabel(parent=self.throwGagBoost, relief=None, text="%s" % avatar.getThrowGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                       pos=(0.045, 0, -.085),
-                                                       text_scale=.1)
-            self.throwGagBoostRoundsText.show()
-            self.throwGagBoostText = DirectLabel(parent=self.throwGagBoost, relief=None, text="%s" % avatar.getThrowGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                 pos=(0.045, 0, 0.027),
-                                                 text_scale=.07)
-            self.throwGagBoostText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.throwGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
 
-        if avatar.squirtGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.squirtGagBoost = status.find('**/inventory_storm_cloud')
-            self.squirtGagBoostRoundsText = DirectLabel(parent=self.squirtGagBoost, relief=None, text="%s" % avatar.getSquirtGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                        text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                        pos=(0.045, 0, -.085),
-                                                        text_scale=.1)
-            self.squirtGagBoostRoundsText.show()
-            self.squirtGagBoostText = DirectLabel(parent=self.squirtGagBoost, relief=None, text="%s" % avatar.getSquirtGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.045, 0, 0.027),
-                                                  text_scale=.07)
-            self.squirtGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.squirtGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Hydrated',
+                tooltipDescription="This Toon is Hydrated, and their Gag accuracy is increased by 20%",
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
-        if avatar.zapGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.zapGagBoost = status.find('**/inventory_tesla_coil')
-            self.zapGagBoostRoundsText = DirectLabel(parent=self.zapGagBoost, relief=None, text="%s" % avatar.getZapGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                     pos=(0.045, 0, -.085),
-                                                     text_scale=.1)
-            self.zapGagBoostRoundsText.show()
-            self.zapGagBoostText = DirectLabel(parent=self.zapGagBoost, relief=None, text="%s" % avatar.getZapGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                               pos=(0.045, 0, 0.027),
-                                               text_scale=.07)
-            self.zapGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.zapGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
-
-        if avatar.soundGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.soundGagBoost = status.find('**/inventory_fog_horn')
-            self.soundGagBoostRoundsText = DirectLabel(parent=self.soundGagBoost, relief=None, text="%s" % avatar.getSoundGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                       pos=(0.045, 0, -.085),
-                                                       text_scale=.1)
-            self.soundGagBoostRoundsText.show()
-            self.soundGagBoostText = DirectLabel(parent=self.soundGagBoost, relief=None, text="%s" % avatar.getSoundGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                 pos=(0.045, 0, 0.027),
-                                                 text_scale=.07)
-            self.soundGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.soundGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
-
-        if avatar.dropGagBoost:
-            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            self.dropGagBoost = status.find('**/inventory_boulder')
-            self.dropGagBoostRoundsText = DirectLabel(parent=self.dropGagBoost, relief=None, text="%s" % avatar.getDropGagBoostRounds(), text_fg=(1, 1, 1, 1),
-                                                      text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                      pos=(0.045, 0, -.085),
-                                                      text_scale=.1)
-            self.dropGagBoostRoundsText.show()
-            self.dropGagBoostText = DirectLabel(parent=self.dropGagBoost, relief=None, text="%s" % avatar.getDropGagBoost() + "%", text_fg=(0, 1, 0.004, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.045, 0, 0.027),
-                                                text_scale=.07)
-            self.dropGagBoostText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.dropGagBoost, slot, slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
-
-        if avatar.cheer:
+        if avatar.hasToonStatusEffect('energized'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.cheer = status.find('**/cheer_icon')
-            self.cheerRounds = DirectLabel(parent=self.cheer, relief=None, text="%s" % avatar.getCheerRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.cheerRounds.show()
+            self.statusIcon = status.find('**/energized_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('energized'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.cheer, slot, slotColor=(1, 0.984, 0, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Energized', 
+                                   tooltipDescription="This Toon's Gags will deal +50% damage, but will take 15% more damage from Cog attacks!", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
 
-        if avatar.encore:
+        if avatar.hasToonStatusEffect('damageUpGov'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.encore = status.find('**/encore_icon')
-            self.encoreRounds = DirectLabel(parent=self.encore, relief=None, text="%s" % avatar.getEncoreRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.encoreRounds.show()
-            self.encoreText = DirectLabel(parent=self.encore, relief=None, text="%s" % avatar.getEncore() + "%", text_fg=(0, 1, 0.004, 1),
-                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                          pos=(0.25, 0, 0.15),
-                                          text_scale=.4)
-            self.encoreText.show()
+            self.statusIcon = status.find('**/toon_damage_up_icon')
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.encore, slot, slotColor=(1, 0.984, 0, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Advanced Boost', 
+                                   tooltipDescription="This Toon's Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('damageUpGov'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
 
-        if avatar.isGagBan:
+        if avatar.hasToonStatusEffect('damageUp'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.gagBan = status.find('**/backfire_icon')
+            self.statusIcon = status.find('**/toon_damage_up_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('damageUp'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.gagBan, slot, slotColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Damage Up', 
+                                   tooltipDescription="This Toon's Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('damageUp'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
 
-        if avatar.isDancePartner:
+        if avatar.hasToonStatusEffect('viralSensation'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.gagBan = status.find('**/singing_blues_icon')
+            self.statusIcon = status.find('**/singing_blues_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('viralSensation'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.gagBan, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.isSnapped:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.snapped = status.find('**/vulnerable_icon')
-            self.snappedRoundsText = DirectLabel(parent=self.snapped, relief=None, text="%s" % avatar.getSnappedRounds(), text_fg=(1, 1, 1, 1),
-                                                 text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                 pos=(0.25, 0, -.5),
-                                                 text_scale=.6)
-            self.snappedRoundsText.show()
-            self.snappedText = DirectLabel(parent=self.snapped, relief=None, text="%s" % avatar.getSnapped() + "%", text_fg=(1, 0, 0, 1),
-                                           text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                           pos=(0.25, 0, 0.15),
-                                           text_scale=.4)
-            self.snappedText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.snapped, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.isBombed:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.bombed = status.find('**/trap_card_icon')
-            self.bombedRoundsText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombedRounds(), text_fg=(1, 1, 1, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.6)
-            self.bombedRoundsText.show()
-            # self.bombedText = DirectLabel(parent=self.bombed, relief=None, text="%s" % avatar.getBombed() + "%", text_fg=(1, 0, 0, 1),
-            #                               text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-            #                               pos=(0.25, 0, 0.15),
-            #                               text_scale=.4)
-            # self.bombedText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.bombed, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.isVulnerable:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.vulnerable = status.find('**/broken_shield_icon')
-            self.vulnerableRoundsText = DirectLabel(parent=self.vulnerable, relief=None, text="%s" % avatar.getVulnerabilityRounds(), text_fg=(1, 1, 1, 1),
-                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                    pos=(0.25, 0, -.5),
-                                                    text_scale=.6)
-            self.vulnerableRoundsText.show()
-            self.vulnerableText = DirectLabel(parent=self.vulnerable, relief=None, text="%s" % avatar.getVulnerability() + "%", text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, 0.15),
-                                              text_scale=.4)
-            self.vulnerableText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.vulnerable, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.markedWood: # marked for extra damage not marked wood
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.markedWood = status.find('**/sued_icon')
-            self.markedWoodRounds = DirectLabel(parent=self.markedWood, relief=None, text="%s" % avatar.getMarkedWoodRounds(), text_fg=(1, 1, 1, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.6)
-            self.markedWoodRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.markedWood, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.inkDrain:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.inkDrain = status.find('**/ink_drain_icon')
-            self.inkDrainRoundsText = DirectLabel(parent=self.inkDrain, relief=None, text="%s" % avatar.getInkDrainRounds(), text_fg=(1, 1, 1, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.25, 0, -.5),
-                                                  text_scale=.6)
-            self.inkDrainRoundsText.show()
-            self.inkDrainText = DirectLabel(parent=self.inkDrain, relief=None, text="%s" % avatar.getInkDrain() + "%", text_fg=(1, 0, 0, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, 0.15),
-                                            text_scale=.4)
-            self.inkDrainText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.inkDrain, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.damageDown:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageDown = status.find('**/toon_damage_down_icon')
-            self.damageDownRounds = DirectLabel(parent=self.damageDown, relief=None, text="%s" % avatar.getDamageDownRounds(), text_fg=(1, 1, 1, 1),
-                                                text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                pos=(0.25, 0, -.5),
-                                                text_scale=.6)
-            self.damageDownRounds.show()
-            self.damageDownText = DirectLabel(parent=self.damageDown, relief=None, text="%s" % avatar.getDamageDown() + "%", text_fg=(1, 0, 0, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, 0.15),
-                                              text_scale=.4)
-            self.damageDownText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.damageDown, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.isBurned:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.burned = status.find('**/trialbyfire_icon')
-            self.burnedRounds = DirectLabel(parent=self.burned, relief=None, text="%s" % avatar.getBurnedRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.burnedRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.burned, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.isZapped:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.zapped = status.find('**/reward_cooldown_icon')
-            self.zappedRounds = DirectLabel(parent=self.zapped, relief=None, text="%s" % avatar.getZappedRounds(),
-                                         text_fg=(1, 1, 1, 1),
-                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.zappedRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.zapped, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.liquidated:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.liquidated = status.find('**/heavyrain_icon')
-            self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getLiquidatedRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.liquidatedText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.liquidated, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.frozen:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.liquidated = status.find('**/disruptive_advertisement_icon')
-            self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getFrozenRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.liquidatedText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.liquidated, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.damageOvertime:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.damageOvertime = status.find('**/damage_over_time_icon')
-            self.damageOvertimeRounds = DirectLabel(parent=self.damageOvertime, relief=None, text="%s" % avatar.getDamageOvertimeRounds(), text_fg=(1, 1, 1, 1),
-                                                    text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                    pos=(0.25, 0, -.5),
-                                                    text_scale=.6)
-            self.damageOvertimeRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.damageOvertime, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.confused:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.confused = status.find('**/confusion_icon')
-            self.confusedRounds = DirectLabel(parent=self.confused, relief=None, text="%s" % avatar.getConfusedRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.confusedRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.confused, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.cooldown:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.cooldown = status.find('**/unite_cooldown_icon')
-            self.cooldownRounds = DirectLabel(parent=self.cooldown, relief=None, text="%s" % avatar.getCooldownRounds(), text_fg=(1, 1, 1, 1),
-                                              text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                              pos=(0.25, 0, -.5),
-                                              text_scale=.6)
-            self.cooldownRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.cooldown, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.hidden:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.hidden = status.find('**/fog_icon')
-            self.hiddenRounds = DirectLabel(parent=self.hidden, relief=None, text="%s" % avatar.getHiddenRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.hiddenRounds.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.hidden, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.noDodge:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.noDodge = status.find('**/hurry_sickness_icon')
-            self.nodDodgeRoundsText = DirectLabel(parent=self.noDodge, relief=None, text="%s" % avatar.getNoDodgeRounds(), text_fg=(1, 1, 1, 1),
-                                                  text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                  pos=(0.25, 0, -.5),
-                                                  text_scale=.6)
-            self.nodDodgeRoundsText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.noDodge, slot, slotColor=(0, 0.902, 1, 1))
-
-        if avatar.collectCalled:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.collectCall = status.find('**/bewitched_icon')
-            self.collectCallRoundsText = DirectLabel(parent=self.collectCall, relief=None, text="%s" % avatar.getCollectCallRounds(), text_fg=(1, 1, 1, 1),
-                                                     text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                     pos=(0.25, 0, -.5),
-                                                     text_scale=.6)
-            self.collectCallRoundsText.show()
-            slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.collectCall, slot, slotColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Viral Sensation', 
+                                   tooltipDescription="This Toon's Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('viralSensation'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
             
-        if avatar.mandatoryToll:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.mandatoryToll = status.find('**/bewitched_icon')
-            self.mandatoryTollNumberText = DirectLabel(parent=self.mandatoryToll, relief=None, text="-%s" % avatar.getMandatoryToll(), text_fg=(1, 0, 0, 1),
-                                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                       pos=(0.25, 0, -.5),
-                                                       text_scale=.6)
-            self.mandatoryTollNumberText.show()
+        if avatar.hasToonStatusEffect('toonupBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_cannon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('toonupBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.mandatoryToll, slot, slotColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Toon-Up Boost', 
+                                   tooltipDescription="This Toon's TOON-UP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('toonupBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
 
-
-        if avatar.groupDamageDown:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.groupDamageDown = status.find('**/fizzle_icon')
-            self.groupDamageDownRoundsText = DirectLabel(parent=self.groupDamageDown, relief=None, text="%s" % avatar.getGroupDamageDownRounds(), text_fg=(1, 1, 1, 1),
-                                                         text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                         pos=(0.25, 0, -.5),
-                                                         text_scale=.6)
-            self.groupDamageDownRoundsText.show()
-            self.groupDamageDownText = DirectLabel(parent=self.groupDamageDown, relief=None, text="-50%", text_fg=(1, 0, 0, 1),
-                                                   text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                                   pos=(0.25, 0, 0.15),
-                                                   text_scale=.4)
-            self.groupDamageDownText.show()
+        if avatar.hasToonStatusEffect('trapBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_wreckingball')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('trapBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.groupDamageDown, slot, slotColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Trap Boost', 
+                                   tooltipDescription="This Toon's TRAP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('trapBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
 
-        if avatar.winded:
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.winded = status.find('**/encore_icon')
-            self.windedRounds = DirectLabel(parent=self.winded, relief=None, text="%s" % avatar.getWindedRounds(), text_fg=(1, 1, 1, 1),
-                                            text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                            pos=(0.25, 0, -.5),
-                                            text_scale=.6)
-            self.windedRounds.show()
-            self.windedText = DirectLabel(parent=self.winded, relief=None, text="%s" % avatar.getWinded() + "%", text_fg=(1, 0, 0, 1),
-                                          text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
-                                          pos=(0.25, 0, 0.15),
-                                          text_scale=.4)
-            self.windedText.show()
+        if avatar.hasToonStatusEffect('lureBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_hypno_goggles')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('lureBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.winded, slot, slotColor=(0, 0.902, 1, 1))
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Lure Boost', 
+                                   tooltipDescription="This Toon's LURE Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('lureBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('throwBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_cake')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('throwBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Throw Boost', 
+                                   tooltipDescription="This Toon's THROW Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('throwBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('squirtBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_storm_cloud')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('squirtBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Squirt Boost', 
+                                   tooltipDescription="This Toon's SQUIRT Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('squirtBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('zapBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_tesla_coil')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('zapBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Zap Boost', 
+                                   tooltipDescription="This Toon's ZAP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('zapBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('soundBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_fog_horn')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('soundBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Sound Boost', 
+                                   tooltipDescription="This Toon's SOUND Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('soundBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('dropBoost'):
+            status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            self.statusIcon = status.find('**/inventory_boulder')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('dropBoost'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Drop Boost', 
+                                   tooltipDescription="This Toon's DROP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('dropBoost'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+        if avatar.hasToonStatusEffect('cheer'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/cheer_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('cheer'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Cheer', 
+                                   tooltipDescription="This Toon's attack accuracy is increased by +10%",  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
+        if avatar.hasToonStatusEffect('encore'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/encore_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('encore'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Encore', 
+                                   tooltipDescription="All Gags have a +%s%% effectiveness boost. By using SOUND again, you'll become Winded." % avatar.getToonStatusModifier('encore'),  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
+        if avatar.hasToonStatusEffect('gagBan'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/backfire_icon')
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Gag Ban', 
+                                   tooltipDescription="Using any banned Gags will result in a harsh punishment.",  
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1), scale=(1.1, 1.1, 1.1))
+            
+        if avatar.hasToonStatusEffect('contaminated'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/worker_management_icon')
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Contaminated', 
+                                   tooltipDescription="This Toon's Gags have been contaminated, using them will result in a harsh punishment.",  
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        # if avatar.isDancePartner:
+        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        #     self.gagBan = status.find('**/singing_blues_icon')
+        #     slot = self._claimNextToonStatusSlot()
+        #     self._attachToonStatusIcon(self.gagBan, slot, slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('snapped'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/vulnerable_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('snapped'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Snapped', 
+                                   tooltipDescription="This Toon takes +%s%% more damage while snapped." % avatar.getToonStatusModifier('snapped'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('hemmorage'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/broken_shield_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('hemmorage'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hemmorage', 
+                                   tooltipDescription="This Toon takes +%s%% more damage." % avatar.getToonStatusModifier('hemmorage'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('driedOut'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/dried_out_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('driedOut'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Dried Out', 
+                                   tooltipDescription="This Toon has been wrung dry and has -50% accuracy!", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('bombed2'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/trap_card_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('bombed2'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hot Take', 
+                                   tooltipDescription="This Toon is now taking and dealing +%s%% more damage." % avatar.getToonStatusModifier('bombed2'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('highStakes'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/highStakes.png')
+            self.statusIcon.setTexture(texture, 1)
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Gag Damage Randomizer', 
+                                   tooltipDescription="At the beginning of every turn, the Contingency Director has a 50% change to randomize your Gag damage!", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('bombed'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/trap_card_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('bombed'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hot Take', 
+                                   tooltipDescription="If this Toon takes damage from any Cog attack this turn, they will receive a dangerous vulnerability and a Gag damage boost.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('wiretapped'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/brokenConnection.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('wiretapped'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            if avatar.getToonStatusModifier('wiretapped') > 0:
+                self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Wiretapped', 
+                                   tooltipDescription="This Toon is dealing +%s%% more damage this round." % avatar.getToonStatusModifier('wiretapped'), 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+            else:
+                self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Wiretapped', 
+                                   tooltipDescription="This Toon is dealing -%s%% less damage this round." % avatar.getToonStatusModifier('wiretapped'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('vulnerable'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/broken_shield_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('vulnerable'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Vulnerable', 
+                                   tooltipDescription="This Toon takes +%s%% more damage while vulnerable." % avatar.getToonStatusModifier('vulnerable'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('aceInTheHole'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/broken_shield_icon')
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Vulnerable', 
+                                   tooltipDescription="The ace up the High Roller's sleeve causes this Toon to take +%s%% more damage from attacks." % avatar.getToonStatusModifier('aceInTheHole'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('commissionerMarked'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/liability_waiver.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('commissionerMarked'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Liability Flag', 
+                                   tooltipDescription="This Toon has been marked by the Commissioner as a liability! The Commissioner will deal extra damage to this Toon if they are attacked by other Cogs.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('contingencyMarked'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/marked_wood_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('contingencyMarked'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Targeted Audit', 
+                                   tooltipDescription="This Toon has been marked by the Contingency Director! The Contingency Director will deal extra damage to this Toon if they are attacked by other Cogs.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('inkDrain'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('inkDrain'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Ink Drain', 
+                                   tooltipDescription="All Gags are -%s%% less effective." % avatar.getToonStatusModifier('inkDrain'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('damageDown'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('damageDown'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Damage Down', 
+                                   tooltipDescription="This Toon's Gags are -%s%% less effective." % avatar.getToonStatusModifier('damageDown'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('sanctioned'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('sanctioned'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Sanctioned', 
+                                   tooltipDescription="This Toon's Gags are -%s%% less effective while sanctioned." % avatar.getToonStatusModifier('sanctioned'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('breached'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('breached'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Breached', 
+                                   tooltipDescription="This Toon's Gags are -%s%% less effective while breached." % avatar.getToonStatusModifier('breached'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('hotShot'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/trialbyfire_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('hotShot'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hot Shot', 
+                                   tooltipDescription="This Toon takes +%s%% more damage." % avatar.getToonStatusModifier('hotShot'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('marketMeltdown'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/trialbyfire_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('marketMeltdown'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Market Meltdown', 
+                                   tooltipDescription="The Dividend King has locked half of your Gag choices, while buffing the other half of them by +%s%%. This Toon will take 25 per round for the duration of the Meltdown." % avatar.getToonStatusModifier('marketMeltdown'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('phantomDebuff'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/worker_management_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('phantomDebuff'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Phantom Entry', 
+                                   tooltipDescription="Your Gags will be -%s%% less effective." % avatar.getToonStatusModifier('phantomDebuff'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('revisedFiling'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/cooked.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('revisedFiling'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Revised Filing', 
+                                   tooltipDescription="This Toon will be taking and dealing +%s%% more damage." % avatar.getToonStatusModifier('revisedFiling'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        # if avatar.frozen:
+        #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
+        #     self.liquidated = status.find('**/disruptive_advertisement_icon')
+        #     self.liquidatedText = DirectLabel(parent=self.liquidated, relief=None, text="%s" % avatar.getFrozenRounds(), text_fg=(1, 1, 1, 1),
+        #                                       text_font=getSignFont(), text_bg=Vec4(0, 0, 0, 0),
+        #                                       pos=(0.25, 0, -.5),
+        #                                       text_scale=.6)
+        #     self.liquidatedText.show()
+        #     slot = self._claimNextToonStatusSlot()
+        #     self._attachToonStatusIcon(self.liquidated, slot, slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('zapped'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/sparkplug_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('zapped'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Power Surged', 
+                                   tooltipDescription="This Toon has been zapped! They will take 25 extra damage at the beginning of the round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('liquidated'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/monsoon_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('liquidated'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Liquidated', 
+                                   tooltipDescription="This Toon has been Liquidated, and as such they will take -30 damage per round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('employed'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/aftershock_dot.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('employed'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='At-Will Employment', 
+                                   tooltipDescription="This Toon has been employed against their will by the Union Buster! They will take -25 damage per round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('bound'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/damage_over_time_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('bound'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Legally Bound', 
+                                   tooltipDescription="While legally bound, this Toon will take -20 damage per round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('confused'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/interference.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('confused'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Confused', 
+                                   tooltipDescription="This Toon is Confused! Group target Gags are disabled, and this Toon's target choice will be randomized.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('soaked'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/soaked_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('soaked'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Soaked?', 
+                                   tooltipDescription="This Toon must have used a defective gag or something...", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('cooldown'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/unite_cooldown_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('cooldown'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Reward Cooldown', 
+                                   tooltipDescription='Your Boss Rewards are currently on cooldown.', 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('groundbroken'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/fog_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('groundbroken'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Groundbroken', 
+                                   tooltipDescription="This Toon has been Groundbroken! They will not take damage from any incoming Cog attacks or be able to use Gags this round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('suppressed'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/contract_limit.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('suppressed'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Evidence Supression', 
+                                   tooltipDescription="This Toon has been removed from battle! They will not take damage from any incoming Cog attacks or be able to use Gags this round.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('noDodge'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/confusion_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('noDodge'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Can't Dodge", 
+                                   tooltipDescription="This Toon will not be able to dodge any incoming Cog attacks.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('collectCalled'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/counterfeit_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('collectCalled'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Collect Call", 
+                                   tooltipDescription="The Wiretapper has started a Collect Call with you! You will both deal more damage to each other, not attacking her will result in a harsh punishment.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+            
+        if avatar.hasToonStatusEffect('mandatoryToll'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/counterfeit_icon')
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Mandatory Toll: %s" % avatar.getToonStatusModifier('mandatoryToll'), 
+                                   tooltipDescription="The Tollmaster will increase the Toll for you everytime you attack him! He will collect this Toll upon reaching a lower HP threshold.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('groupDamageDown'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
+            slot = self._claimNextToonStatusSlot()
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('groupDamageDown'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Radio Infrequency", 
+                                   tooltipDescription="Your group Gags will deal -%s%% less damage." % avatar.getToonStatusModifier('groupDamageDown'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('winded'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/encore_icon')
+            slot = self._claimNextToonStatusSlot()
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('winded'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Winded", 
+                                   tooltipDescription="Your SOUND Gags will deal -50% less damage.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        self._applyToonStatusOffset()
+        if self.toonStatusInformationPanel:
+            self.toonStatusInformationPanel.rebuildStatusEffects(
+                list(self.toonStatusIconNodes)
+            )
 
 
     def setLaffMeter(self, avatar):
         self.notify.debug('setLaffMeter: new avatar %s' % avatar.doId)
         if self.avatar == avatar:
-            self.setStatusEffects(avatar)
             messenger.send(self.avatar.uniqueName('hpChange'), [avatar.hp, avatar.maxHp, 1])
         else:
-            self.setStatusEffects(avatar)
             if self.avatar:
                 self.cleanupLaffMeter()
             self.avatar = avatar
             self.laffMeter = LaffMeter.LaffMeter(avatar.style, avatar.hp, avatar.maxHp)
             self.laffMeter.setAvatar(self.avatar)
-            self.laffMeter.reparentTo(self)
-            self.laffMeter.setPos(-0.15, 0.14, 0.05)
+            self.laffMeter.reparentTo(self.laffMeterNode)
             self.laffMeter.setScale(0.11)
             self.laffMeter.start()
+
+        self.setStatusEffects(avatar)
 
     def setHealthText(self, hp, maxHp, quietly = 0):
         self.healthText['text'] = TTLocalizer.TownBattleHealthText % {'hitPoints': hp,
@@ -1037,6 +2251,7 @@ class TownBattleToonPanel(DirectFrame):
         if self.laffMeter:
             self.laffMeter.adjustFace(hp, self.avatar.maxHp)
         self.setHealthText(hp, maxHp)
+        self.setStatusEffects(self.avatar)
 
     def setValues(self, index, track, level = None, numTargets = None, targetIndex = None, localNum = None):
         self.notify.debug('Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s' % (index,
@@ -1062,12 +2277,18 @@ class TownBattleToonPanel(DirectFrame):
             self.hasGag = 0
         if track == BattleBase.NO_ATTACK or track == BattleBase.UN_ATTACK:
             self.showChoiceIcon(self.undecidedIcon, Vec4(0.6, 0.6, 0.6, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
 
         elif track == BattleBase.PASS_ATTACK:
             self.showChoiceIcon(self.passIcon, Vec4(1, 0, 0, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
 
         elif track == BattleBase.FIRE:
             self.showChoiceIcon(self.fireIcon, Vec4(0.937, 0.718, 0.816, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
 
@@ -1089,8 +2310,9 @@ class TownBattleToonPanel(DirectFrame):
             )
             self.choiceEmblem.show()
             self.setChoiceOrganic(organic)
-            self.choiceEmblem.show()
             self.passText.hide()
+            self.gagLock.hide()
+            self.gagLocked.show()
             self.gagNode.show()
             invButton = base.localAvatar.inventory.buttonLookup(track, level)
             self.gag = invButton.instanceUnderNode(self.gagNode, 'gag')
@@ -1107,61 +2329,85 @@ class TownBattleToonPanel(DirectFrame):
             damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
-            if self.avatar.toonupGagBoost and track == HEAL_TRACK:
-                damage *= (1.0 + self.avatar.getToonupGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getToonupGagBoost() * 0.01)
-            if self.avatar.trapGagBoost and track == TRAP_TRACK:
-                damage *= (1.0 + self.avatar.getTrapGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getTrapGagBoost() * 0.01)
-            if self.avatar.lureGagBoost and track == LURE_TRACK:
-                damage *= (1.0 + self.avatar.getLureGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getLureGagBoost() * 0.01)
-            if self.avatar.throwGagBoost and track == THROW_TRACK:
-                damage *= (1.0 + self.avatar.getThrowGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getThrowGagBoost() * 0.01)
-            if self.avatar.squirtGagBoost and track == SQUIRT_TRACK:
-                damage *= (1.0 + self.avatar.getSquirtGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getSquirtGagBoost() * 0.01)
-            if self.avatar.zapGagBoost and track == ZAP_TRACK:
-                damage *= (1.0 + self.avatar.getZapGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getZapGagBoost() * 0.01)
-            if self.avatar.soundGagBoost and track == SOUND_TRACK:
-                damage *= (1.0 + self.avatar.getSoundGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getSoundGagBoost() * 0.01)
-            if self.avatar.dropGagBoost and track == DROP_TRACK:
-                damage *= (1.0 + self.avatar.getDropGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getDropGagBoost() * 0.01)
-            if self.avatar.gagBoost:
-                damage *= (1.0 + self.avatar.getGagBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getGagBoost() * 0.01)
-            if self.avatar.damageUp:
-                damage *= (1.0 + self.avatar.getDamageUp() * 0.01)
-                lureValue *= (1.0 + self.avatar.getDamageUp() * 0.01)
-            if self.avatar.encore:
-                damage *= (1.0 + self.avatar.getEncore() * 0.01)
-                lureValue *= (1.0 + self.avatar.getEncore() * 0.01)
-            if self.avatar.governaughtDamageUp:
-                damage *= (1.0 + self.avatar.getDamageUpGovernaught() * 0.01)
-                lureValue *= (1.0 + self.avatar.getDamageUpGovernaught() * 0.01)
-            if self.avatar.raisedAnte:
-                damage *= (1.0 + self.avatar.getRaisedAnte() * 0.01)
-                lureValue *= 1
-            if self.avatar.winded and track == SOUND_TRACK:
-                damage *= (1.0 + self.avatar.getWinded() * 0.01)
-                lureValue *= (1.0 + self.avatar.getWinded() * 0.01)
-            if self.avatar.damageDown:
-                damage *= (1.0 + self.avatar.getDamageDown() * 0.01)
-                lureValue *= (1.0 + self.avatar.getDamageDown() * 0.01)
-            if self.avatar.inkDrain:
-                damage *= (1.0 + self.avatar.getInkDrain() * 0.01)
-                lureValue *= (1.0 + self.avatar.getInkDrain() * 0.01)
-            if self.avatar.isViralSensation:
-                damage *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
-                lureValue *= (1.0 + self.avatar.getViralSensationBoost() * 0.01)
-            if self.avatar.energized:
+            if self.avatar.hasToonStatusEffect('toonupBoost') and track == HEAL_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('toonupBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('toonupBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('trapBoost') and track == TRAP_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('trapBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('trapBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('lureBoost') and track == LURE_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('trapBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('trapBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('throwBoost') and track == THROW_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('throwBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('throwBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('squirtBoost') and track == SQUIRT_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('squirtBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('squirtBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('zapBoost') and track == ZAP_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('zapBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('zapBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('soundBoost') and track == SOUND_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('soundBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('soundBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('dropBoost') and track == DROP_TRACK:
+                damage *= (1.0 + self.avatar.getToonStatusModifier('dropBoost') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('dropBoost') * 0.01)
+            if self.avatar.hasToonStatusEffect('damageUp'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('damageUp') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('damageUp') * 0.01)
+            if self.avatar.hasToonStatusEffect('marketMeltdown'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('marketMeltdown') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('marketMeltdown') * 0.01)
+            if self.avatar.hasToonStatusEffect('damageDown'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
+            if self.avatar.hasToonStatusEffect('phantomDebuff'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            if self.avatar.hasToonStatusEffect('sanctioned'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)
+            if self.avatar.hasToonStatusEffect('bombed2'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('bombed2') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('bombed2') * 0.01)
+            if self.avatar.hasToonStatusEffect('breached'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('breached') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('breached') * 0.01)
+            if self.avatar.hasToonStatusEffect('wiretapped'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('wiretapped') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('wiretapped') * 0.01)
+            if self.avatar.hasToonStatusEffect('encore'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('encore') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('encore') * 0.01)
+            if self.avatar.hasToonStatusEffect('winded') and track == SOUND_TRACK:
+                damage *= (1.0 - self.avatar.getToonStatusModifier('winded') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('winded') * 0.01)
+            if self.avatar.hasToonStatusEffect('damageUpGov'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('damageUpGov') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('damageUpGov') * 0.01)
+            if self.avatar.hasToonStatusEffect('markedMeltdown'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('markedMeltdown') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('markedMeltdown') * 0.01)
+            if self.avatar.hasToonStatusEffect('phantomDebuff'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+                lureValue *= (1.0 +-self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            if self.avatar.hasToonStatusEffect('revisedFiling'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
+            if self.avatar.hasToonStatusEffect('raisedAnte'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('raisedAnte') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('raisedAnte') * 0.01)
+            if self.avatar.hasToonStatusEffect('inkDrain'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('inkDrain') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('inkDrain') * 0.01)
+            if self.avatar.hasToonStatusEffect('viralSensation'):
+                damage *= (1.0 + self.avatar.getToonStatusModifier('viralSensation') * 0.01)
+                lureValue *= (1.0 + self.avatar.getToonStatusModifier('viralSensation') * 0.01)
+            if self.avatar.hasToonStatusEffect('energized'):
                 damage *= 1.5
                 lureValue *= 1.5
-            if self.avatar.groupDamageDown and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
+            if self.avatar.hasToonStatusEffect('groupDamageDown') and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)
                 lureValue *= (1.0 + -50 * 0.01)
@@ -1229,7 +2475,7 @@ class TownBattleToonPanel(DirectFrame):
         targetList = range(numTargets)
         targetList.reverse()
         try:
-            if self.avatar.confused:
+            if self.avatar.hasToonStatusEffect('confused'):
                 marker = '-'
             elif self.avatar.trackBonusLevel[track] >= 1:
                 marker = 'O'
@@ -1308,12 +2554,38 @@ class TownBattleToonPanel(DirectFrame):
 
         self.choiceOrganicTex = None
         self.choiceOrganicStage = None
+        if self.toonStatusEffectTooltip:
+            self.toonStatusEffectTooltip.destroy()
+            self.toonStatusEffectTooltip = None
+
+        if getattr(self, 'infoButton', None):
+            self.infoButton.destroy()
+            self.infoButton = None
+
+        if self.toonStatusInformationPanel:
+            try:
+                self.toonStatusInformationPanel.destroy()
+            except:
+                pass
+
+            self.toonStatusInformationPanel = None
+
+        if self.toonStatusEffectTooltip:
+            try:
+                self.toonStatusEffectTooltip.destroy()
+            except:
+                pass
+
+            self.toonStatusEffectTooltip = None
 
         DirectFrame.destroy(self)
 
     def cleanupLaffMeter(self):
         self.notify.debug('Cleaning up laffmeter!')
         self.ignore(self.hpChangeEvent)
+        # if self.laffMeterNode:
+        #     self.laffMeterNode.destroy()
+        #     self.laffMeterNode = None
         if self.laffMeter:
             self.laffMeter.destroy()
             self.laffMeter = None

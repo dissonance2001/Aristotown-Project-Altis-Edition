@@ -878,7 +878,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level)})
                                                               
         elif track == TRAP_TRACK:
-            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': "accString",
+            self.detailDataLabel.configure(text=TTLocalizer.InventoryDetailData % {'accuracy': accString,
                                                                                    'damageString': self.getToonupDmgStr(
                                                                                        track, level),
                                                                                    'damage': str(
@@ -1003,7 +1003,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                        track, level),
                                                                                    'damage': str(
                                                                                        int(damage)) + damageAppendStr,
-                                                                                   'bonus': '\nSoak Rounds: 4\nSplash Damage: %i' % 
+                                                                                   'bonus': '\nDrench Rounds: 4\nSplash Damage: %i' % 
                                                                                        int(math.ceil(damage * .75)),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})

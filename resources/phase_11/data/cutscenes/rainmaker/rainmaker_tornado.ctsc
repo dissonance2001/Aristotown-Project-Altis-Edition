@@ -1,0 +1,340 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.73521, \"delay\": 0.0, \"pos\": [0.0, 9.39736, 3.61337], \"hpr\": [180.0, 5.78404, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"noBlend\", \"startPos\": [0.0, 6.31254, 3.61337], \"startHpr\": [180.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Camera Out",
+        "time": 1.79175,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.02827, \"delay\": 0.0, \"pos\": [17.86621, 2.45655, 4.77015], \"hpr\": [137.65985, 6.94074, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [17.86621, 2.45655, 4.77015], \"startHpr\": [108.73967, 6.94074, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Tornado Time",
+        "time": 1.9687499999999996,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 6.81554, \"delay\": 0, \"parentIndex\": 5, \"renderParentIndex\": 5, \"leaveItGoingForever\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveParticleSystemPos",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 0, \"pos\": [0.0, 0.05129, 0.0], \"delay\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Toon Turnaround",
+        "time": 2.1315,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToPoint",
+                "kwargs": "{\"target\": \"All\", \"point\": [0.0, -20.0, 0.0], \"duration\": 0.93187, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Surprise!",
+        "time": 3.1050000000000004,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"cringe\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Camera Update",
+        "time": 3.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -56.8639, 4.44884], \"hpr\": [-0.0001, 24.29294, 2.31372], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [17.86621, 2.45655, 4.77015], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 5, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "Spin System",
+        "time": 3.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 5.0109, \"hpr\": [-129.93436, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "Hide Shadows",
+        "time": 3.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 11}"
+            },
+            "1": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 12}"
+            },
+            "2": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 13}"
+            },
+            "3": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 14}"
+            }
+        }
+    },
+    {
+        "name": "My New Dad",
+        "time": 4.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 6, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 8, \"targetIndex\": 6, \"wrt\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 9, \"targetIndex\": 6, \"wrt\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 10, \"targetIndex\": 6, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Troll them",
+        "time": 4.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.72622, \"pos\": [20.0, -18.59114, 7.98838], \"startPos\": [0.0, -6.0, 0.0], \"useStartPos\": false, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.54466, \"pos\": [20.0, -44.25559, 11.18369], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.83515, \"pos\": [-10.09351, -60.07458, 8.84305], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 1.16195, \"pos\": [-19.60786, 7.8529, 18.51853], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "Spin Troll Them",
+        "time": 4.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.90777, \"hpr\": [0.0, 28.75804, -39.21557], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 1.08386, \"hpr\": [-132.54672, 50.27464, -146.40514], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "2": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.29594, \"hpr\": [2.17439, 122.11239, -97.6346], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.58097, \"hpr\": [0.92989, 357.68656, -59.40732], \"startHpr\": [-140.70907, 13.61712, -90.78007], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Troll",
+        "time": 5.202401199999997,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "pingpongAllToons",
+                "kwargs": "{\"anim\": \"slip-forward\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0.0, \"startTime\": 0.16, \"endTime\": 0.188}"
+            }
+        }
+    },
+    {
+        "name": "GUI Fade",
+        "time": 7.485,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doScreenFade",
+                "kwargs": "{\"delay\": 0, \"color\": [1.0, 1.0, 1.0], \"fadeInDuration\": 0.94987, \"fadeInBlendType\": \"easeIn\", \"holdDuration\": 0.94987, \"fadeOutDuration\": 1.2712, \"fadeOutBlendType\": \"easeOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Start New Particles",
+        "time": 8.502749999999999,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 1, \"duration\": 1.52959, \"delay\": 0, \"parentIndex\": 15, \"renderParentIndex\": 15, \"leaveItGoingForever\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cleanup",
+        "time": 8.933250000000001,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "Move To Funny",
+        "time": 9.0045,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-6.84451, -85.6119, 43.63761], \"hpr\": [-23.13605, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-18.5608, -20.96537, 4.44884], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "moveToonsToBattlePos",
+                "kwargs": "{\"duration\": 0, \"hasAnim\": false, \"anim\": \"walk\", \"delay\": 0, \"battleNodeIndex\": 0, \"flipY\": 0, \"xyzOffset\": [-1e-05, -70.0, 40.0]}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 16, \"targetIndex\": 7, \"wrt\": 0, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 16}"
+            },
+            "6": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 16, \"delay\": 0, \"pos\": [0.03432, 0.12346, -0.98212], \"hpr\": [12.95726, 180.0, 180.0], \"scale\": [1.32017, 1.0827, 0.8344]}"
+            },
+            "7": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 17, \"targetIndex\": 8, \"wrt\": 0, \"disable\": false}"
+            },
+            "8": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 17}"
+            },
+            "9": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 17, \"delay\": 0, \"pos\": [0.03432, 0.12346, -0.98212], \"hpr\": [12.95726, 180.0, 180.0], \"scale\": [1.32017, 1.0827, 0.8344]}"
+            },
+            "10": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 18, \"targetIndex\": 9, \"wrt\": 0, \"disable\": false}"
+            },
+            "11": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 18}"
+            },
+            "12": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 18, \"delay\": 0, \"pos\": [0.03432, 0.12346, -0.98212], \"hpr\": [12.95726, 180.0, 180.0], \"scale\": [1.32017, 1.0827, 0.8344]}"
+            },
+            "13": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 19, \"targetIndex\": 10, \"wrt\": 0, \"disable\": false}"
+            },
+            "14": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 19}"
+            },
+            "15": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 19, \"delay\": 0, \"pos\": [0.03432, 0.12346, -0.98212], \"hpr\": [12.95726, 180.0, 180.0], \"scale\": [1.32017, 1.0827, 0.8344]}"
+            }
+        }
+    },
+    {
+        "name": "Event #18",
+        "time": 9.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 8, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 9, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 10, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 10.70025,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.06427}"
+            }
+        }
+    }
+]

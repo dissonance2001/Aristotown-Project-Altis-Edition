@@ -338,7 +338,7 @@ def __throwPie(throw, delay, hitCount):
     toonTrack.append(Wait(delay))
     toonTrack.append(toonFace)
     toonTrack.append(Parallel(soundTrack, ActorInterval(toon, 'throw')))
-    toonTrack.append(Parallel(Func(toon.makeCooldown), Func(toon.addCooldownRounds, 2)))
+    toonTrack.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2)))
     toonTrack.append(Func(toon.loop, 'neutral'))
     if not 'npc' in throw:
         toonTrack.append(Func(toon.setHpr, battle, origHpr))
@@ -390,7 +390,7 @@ def __throwPie(throw, delay, hitCount):
         sival = []
         sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
-        suitResponseTrack.append(Func(suit.makeSued, 4))
+        suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(sival)
         bonusTrack = Sequence(Wait(delay + tPieHitsSuit))

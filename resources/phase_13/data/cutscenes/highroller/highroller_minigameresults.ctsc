@@ -1,0 +1,129 @@
+[
+    {
+        "name": "[CAM] Init",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": 1}"
+            }
+        }
+    },
+    {
+        "name": "[HRoll] Move1",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0, \"delay\": 0, \"blendType\": \"noBlend\", \"xyz\": [-0.0, 34.19417, 3.91767], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, 0.0, 0.0], \"duration\": 0.21, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"song-and-dance\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] Zoom",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 4.24411, \"delay\": 0.0, \"end\": 69.0, \"blendType\": \"easeOut\", \"start\": 62.0, \"useStart\": false}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.32647, \"delay\": 0.0, \"end\": 34.0, \"blendType\": \"easeInOut\", \"start\": 69.0, \"useStart\": true}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.06529, \"delay\": 0.0, \"end\": 35.95884, \"blendType\": \"easeInOut\", \"start\": 34.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "[HRoller] Dialogue1",
+        "time": 0.21,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4, \"moveNametag\": true, \"xyz\": [-1.43648, -3.00353, 9.7941], \"scale\": 1.42441, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 1.0, \"moveNametag\": true, \"xyz\": [-1.43647, -5.09295, 8.74942], \"scale\": 2.27324, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "[SFX] Song and Dance",
+        "time": 0.21,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 2.87295, \"volume\": 5.04824, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] AnimStart",
+        "time": 4.99,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] FocusOnToons",
+        "time": 5.3,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 35.4947, 7.66142], \"hpr\": [180.0, -2.3507, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 20.0, 10.44707], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.68559, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeOut\", \"start\": 46.4059, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "[HR] Back",
+        "time": 5.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [0.0, 0.0, -20.0], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] AnimEnd",
+        "time": 5.7,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

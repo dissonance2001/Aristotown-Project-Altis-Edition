@@ -100,8 +100,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.sosPage = None
         self.gardenPage = None
         self.buildingRadar = [0, 0, 0, 0, 0, 0, 0]
-        self.cogTypes = [0, 0, 0, 0, 0, 0, 0]
-        self.cogLevels = [0, 0, 0, 0, 0, 0, 0]
+        self.cogTypes = [7, 7, 7, 7, 7, 7, 7]
+        self.cogLevels = [49, 49, 49, 49, 49, 49, 49]
         self.cogReviveLevels = [0, 0, 0, 0, 0, 0, 0]
         self.cogParts = [0, 0, 0, 0, 0, 0, 0]
         self.cogMerits = [0, 0, 0, 0, 0, 0, 0]
@@ -1585,7 +1585,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.suitPage.updateBuildingRadarButtons(radar)
 
     def setCogTypes(self, types):
-        self.cogTypes = types
+        self.cogTypes = [7] * len(SuitDNA.suitDepts)
+
         if self.disguisePage:
             self.disguisePage.updatePage()
 
@@ -1631,18 +1632,26 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setCogIndex(self, index):
         self.cogIndex = index
+
         if self.cogIndex <= -1:
             if self.isDisguised:
                 self.takeOffSuit()
-        else:
-            parts = self.getCogParts()
-            self.notify.debug("Applying Suit!")
-            if CogDisguiseGlobals.isPaidSuitComplete(self, parts, index):
-                cogIndex = self.cogTypes[index] + SuitDNA.suitsPerDept * index
-                cog = SuitDNA.suitHeadTypes[cogIndex]
-                self.putOnSuit(cog)
-            else:
-                self.putOnSuit(index, rental=True)
+            return
+
+        if index < 0 or index >= len(CogDisguiseGlobals.DefaultDisguiseCogs):
+            self.notify.warning(
+                'Invalid disguise department index: %s' % index
+            )
+            return
+
+        cog = CogDisguiseGlobals.DefaultDisguiseCogs[index]
+
+        self.notify.info(
+            'Putting on disguise for department %s: %s' %
+            (index, cog)
+        )
+
+        self.putOnSuit(cog)
 
     def setPromotionStatus(self, status):
         self.promotionStatus = status

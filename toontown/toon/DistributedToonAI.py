@@ -126,8 +126,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.glasses = (0, 0, 0)
         self.backpack = (0, 0, 0)
         self.shoes = (0, 0, 0)
-        self.cogTypes = [0, 0, 0, 0, 0, 0, 0]
-        self.cogLevels = [0, 0, 0, 0, 0, 0, 0]
+        self.cogTypes = [7, 7, 7, 7, 7, 7, 7]
+        self.cogLevels = [49, 49, 49, 49, 49, 49, 49]
         self.cogReviveLevels = [0, 0, 0, 0, 0, 0, 0]
         self.cogParts = [0, 0, 0, 0, 0, 0, 0]
         self.cogRadar = [0, 0, 0, 0, 0, 0, 0]
@@ -1251,9 +1251,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.d_setHp(self.hp)
 
     def b_setMaxHp(self, maxHp):
-        if maxHp > ToontownGlobals.MaxHpLimit:
-            self.air.writeServerEvent('suspicious', avId=self.doId, issue='Toon tried to go over ' + str(ToontownGlobals.MaxHpLimit) + ' laff.')
-        elif maxHp > 15 and self.uber == 1:
+        if maxHp > 15 and self.uber == 1:
             self.d_setMaxHp(15)
             self.setMaxHp(15)
         elif maxHp > 25 and self.uber == 2:
@@ -1267,10 +1265,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.setMaxHp(maxHp)
 
     def d_setMaxHp(self, maxHp):
-        if (maxHp > ToontownGlobals.MaxHpLimit):
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to go over the HP limit.')
-        else:
-            self.sendUpdate('setMaxHp', [maxHp])
+        self.sendUpdate('setMaxHp', [maxHp])
 
     @staticmethod
     def getGoneSadMessageForAvId(avId):
@@ -1435,17 +1430,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.d_setCogTypes(types)
 
     def setCogTypes(self, types):
-        if not types:
-            self.notify.warning('cogTypes set to bad value: %s. Resetting to [0,0,0,0,0]' % types)
-            self.cogTypes = [0,
-             0,
-             0,
-             0,
-             0,
-             0,
-             0]
-        else:
-            self.cogTypes = types
+        self.cogTypes = [7] * len(SuitDNA.suitDepts)
 
     def d_setCogTypes(self, types):
         self.sendUpdate('setCogTypes', [types])
@@ -1483,37 +1468,22 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.cogTypes
 
     def incCogLevel(self, dept):
-        newLevel = self.cogLevels[dept] + 1
+        newLevel = 50
         cogTypeStr = SuitDNA.suitHeadTypes[self.cogTypes[dept]]
-        lastCog = self.cogTypes[dept] >= SuitDNA.suitsPerDept - 1
-        if not lastCog:
-            maxLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level'] + 4
-        else:
-            maxLevel = ToontownGlobals.MaxCogSuitLevel
-        if newLevel > maxLevel:
-            if not lastCog:
-                self.cogTypes[dept] += 1
-                self.d_setCogTypes(self.cogTypes)
-                cogTypeStr = SuitDNA.suitHeadTypes[self.cogTypes[dept]]
-                self.cogLevels[dept] = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
-                self.d_setCogLevels(self.cogLevels)
-                if self.cogTypes[dept] >= 4:
-                    tpZone = ToontownGlobals.dept2cogHQ(SuitDNA.suitDepts[dept])
-                    if tpZone not in self.teleportZoneArray:
-                        self.addTeleportAccess(tpZone)
-        else:
-            self.cogLevels[dept] += 1
-            self.d_setCogLevels(self.cogLevels)
-            if lastCog:
-                if self.cogLevels[dept] in ToontownGlobals.CogSuitHPLevels:
-                    maxHp = self.getMaxHp()
-                    maxHp = min(ToontownGlobals.MaxHpLimit, maxHp + 1)
-                    self.b_setMaxHp(maxHp)
-                    self.toonUp(maxHp)
-                if self.cogTypes[dept] >= 4:
-                    tpZone = ToontownGlobals.dept2cogHQ(SuitDNA.suitDepts[dept])
-                    if tpZone not in self.teleportZoneArray:
-                        self.addTeleportAccess(tpZone)
+        lastCog = 7
+        maxLevel = 50
+        self.cogLevels[dept]
+        self.d_setCogLevels(self.cogLevels)
+        if lastCog:
+            if self.cogLevels[dept] in ToontownGlobals.CogSuitHPLevels:
+                maxHp = self.getMaxHp()
+                maxHp = min(ToontownGlobals.MaxHpLimit, maxHp + 1)
+                self.b_setMaxHp(maxHp)
+                self.toonUp(maxHp)
+            if self.cogTypes[dept] >= 4:
+                tpZone = ToontownGlobals.dept2cogHQ(SuitDNA.suitDepts[dept])
+                if tpZone not in self.teleportZoneArray:
+                    self.addTeleportAccess(tpZone)
         self.air.writeServerEvent('cogSuit', avId=self.doId, dept=dept, suitType=self.cogTypes[dept], level=self.cogLevels[dept])
 		
     def b_setCogReviveLevels(self, levels):
@@ -1545,7 +1515,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.cogTypes[dept] = 0
             self.d_setCogTypes(self.cogTypes)
         cogTypeStr = SuitDNA.suitHeadTypes[self.cogTypes[dept]]
-        lastCog = self.cogTypes[dept] >= SuitDNA.suitsPerDept - 1
+        lastCog = self.cogTypes[dept] >= 7
         if not lastCog:
             maxLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
         else:
@@ -1692,27 +1662,18 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.d_promote(dept, hardFlag)
 
     def promote(self, dept, hardFlag):
-        if self.cogLevels[dept] < ToontownGlobals.MaxCogSuitLevel:
-            self.cogMerits[dept] = 0
-        if self.cogLevels[dept] >= ToontownGlobals.MaxCogSuitLevel and hardFlag == 1:
-            self.incCogReviveLevel(dept)
-        else:
-            self.incCogLevel(dept)
-            simbase.air.achievementsManager.disguise(self.doId, SuitDNA.suitDepts[dept])
+        self.cogMerits[dept] = 0
+        simbase.air.achievementsManager.disguise(self.doId, SuitDNA.suitDepts[dept])
 
     def d_promote(self, dept, hardFlag):
         merits = self.getCogMerits()
-        if self.cogLevels[dept] < ToontownGlobals.MaxCogSuitLevel:
-            merits[dept] = 0
+        merits[dept] = 0
         self.d_setCogMerits(merits)
 
     def readyForPromotion(self, dept):
         merits = self.cogMerits[dept]
         totalMerits = CogDisguiseGlobals.getTotalMerits(self, dept)
-        if merits >= totalMerits:
-            return 1
-        else:
-            return 0
+        return 1
 
     def b_setCogIndex(self, index):
         self.setCogIndex(index)
@@ -3624,16 +3585,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def doCogInvasion(self, suitIndex, flags = 0, invType = INVASION_TYPE_NORMAL):
         if self.air.suitInvasionManager.getInvading():
             return ['busy', 0, 0]
-            
-        if suitIndex >= len(SuitDNA.suitHeadTypes):
-            self.notify.warning('Bad suit index: %s' % suitIndex)
-            return ['badIndex', suitIndex, 0]
-  
-        track = suitIndex / SuitDNA.suitsPerDept
-        type = suitIndex % SuitDNA.suitsPerDept
 
-        if self.air.suitInvasionManager.startInvasion(
-                suitDeptIndex=track, suitTypeIndex=type, flags=flags, type=invType):
+        if self.air.suitInvasionManager.startInvasionByName(
+                        suitIndex, flags, invType
+                    ):
             return ['success', suitIndex, 0]
 
         return ['fail', suitIndex, 0]
@@ -5217,9 +5172,9 @@ def maxToon(missingTrack=None):
         CogDisguiseGlobals.PartsPerSuitBitmasks[4],
         CogDisguiseGlobals.PartsPerSuitBitmasks[5]# Boardbots
     ])
-    target.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 6)
-    target.b_setCogReviveLevels([ToontownGlobals.MaxCogSuitLevel] * 6)
-    target.b_setCogTypes([SuitDNA.suitsPerDept-1] * 6)
+    target.b_setCogLevels([ToontownGlobals.MaxCogSuitLevel] * 7)
+    target.b_setCogReviveLevels([ToontownGlobals.MaxCogSuitLevel] * 7)
+    target.b_setCogTypes([7] * 7)
 
     # Max their Cog gallery:
     deptCount = len(SuitDNA.suitDepts)
@@ -5999,17 +5954,17 @@ def suit(command, suitName="hho", isMega = 0, flags = 0):
             return 'Successfully spawned a Cog building with: ' + suitFullName
         return "Couldn't spawn a Cog building with: " + suitFullName
     elif command == 'invasion':
-        returnCode = invoker.doCogInvasion(SuitDNA.suitHeadTypes.index(suitName), flags=flags, invType=isMega)
+        returnCode = invoker.doCogInvasion(suitName, flags=flags, invType=isMega)
         if returnCode[0] == 'success':
-            return 'Successfully started Cog Invasion for: ' + suitFullName
+            return 'Successfully started an Invasion for %s in the current zone.' % suitFullName
         return "Couldn't start Cog Invasion for: " + suitFullName
     elif command == 'deptinvasion':
         returnCode = invoker.doDeptInvasion(int(suitName), flags=flags, invType=isMega)
         if returnCode[0] == 'success':
-            return 'Successfully started Cog Invasion for dept index: ' + suitName
+            return 'Successfully started a Department Invasion.'
         return "Couldn't start Cog Invasion for dept index: " + suitName
     elif command == 'invasionend':
-        returnCode = 'Ending Invasion..'
+        returnCode = 'Successfully ended the Invasion in the current zone.'
         simbase.air.suitInvasionManager.stopInvasion()
         return returnCode
     else:

@@ -1,0 +1,929 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 11.64397, 10.99394], \"hpr\": [180.0, -14.69478, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.0, \"delay\": 0.0, \"end\": 20.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 2, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "6": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "7": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 14, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Clones be Dying",
+        "time": 0.15,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 16, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "HR Looks Around",
+        "time": 0.3960000000000008,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.7, \"hpr\": [49.99998, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.9, \"hpr\": [-55.0, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.5, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Wheel Death",
+        "time": 2.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSpawnWheel",
+                "kwargs": "{\"performSpawn\": false, \"performHurt\": true, \"spinDuration\": 3.0, \"spinCount\": 3}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [1] [HR]",
+        "time": 2.81,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.50859], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Zoom Out",
+        "time": 2.81,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.2, \"delay\": 0.0, \"end\": 30.0, \"blendType\": \"easeOut\", \"start\": 20.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.2, \"delay\": 0.0, \"pos\": [0.0, 20.0, 11.47418], \"hpr\": [180.0, -9.50837, 7.76999], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeOut\", \"startPos\": [0.0, 11.64397, 10.99394], \"startHpr\": [180.0, -14.69478, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Head Jiggle",
+        "time": 2.85,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "jiggleNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0.0, \"duration\": 2.0, \"startJig\": 0.1, \"endJig\": 0.2, \"offset\": [0, 0, 0], \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"pos\": [0, 0, 0], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [2] [HR]",
+        "time": 6.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.5], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Reorient",
+        "time": 6.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"hpr\": [180.0, -9.50837, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, -9.50837, 7.76999], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [3] [HR]",
+        "time": 10.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.25, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.5], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [4] [HR]",
+        "time": 14.95,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.5, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.5], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Pull Back",
+        "time": 14.95,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 4.0, \"delay\": 0.0, \"pos\": [-0.0, 7.98116, 9.5], \"hpr\": [0.0, 2.00001, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 20.0, 11.47418], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Position HR w/ Player",
+        "time": 19.85,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "posRelativeToOther",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.0, \"otherNodeIndex\": 4, \"pos\": [-4.61019, -3.31389, 0.0], \"startPos\": [0.0, 5.0, 0.0], \"useStartPos\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 4, \"duration\": 0.0, \"blendType\": \"easeInOut\", \"anim\": \"walk\", \"offset\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Cam: HR Behind Toon",
+        "time": 19.85,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-3.83626, 14.51258, 3.88653], \"hpr\": [-162.30872, 5.18658, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [5.84739, 30.0, 7.82442], \"startHpr\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 30.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "HR Kneel and Smile",
+        "time": 20.202,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mplayer-kneel-into\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mplayer-kneel-neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [5] [HR]",
+        "time": 20.75,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-0.48024, 0.0, 6.43511], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Position Credit Labels",
+        "time": 23.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 5}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0.6, 0.0, -1.2], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [0.5, 0.01, 1.0]}"
+            }
+        }
+    },
+    {
+        "name": "Screen Squish",
+        "time": 24.169,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Freeze Anims",
+        "time": 24.169,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mplayer-kneel-neutral\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"wheelspin\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 1.7, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 8, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "5": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 10, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+			"6": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 17, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Text Scroll",
+        "time": 24.45,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionLerp",
+                "kwargs": "{\"functionIndex\": 3, \"delay\": 0, \"disable\": false, \"hasExtraArg\": true, \"argumentIndex\": 1, \"fromData\": 0, \"toData\": 1, \"duration\": 10.0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "Whistle SFX",
+        "time": 34.05,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Unsquishy",
+        "time": 34.81,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 4, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Unfreeze Anims",
+        "time": 34.81,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mplayer-kneel-neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 9, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Zoom Out",
+        "time": 35.626,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.2, \"delay\": 0.0, \"pos\": [-4.89278, 17.0098, 10.89791], \"hpr\": [-163.17323, -9.50861, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-3.83626, 14.51258, 3.88653], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "HR Stands Up",
+        "time": 35.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mplayer-kneel-out\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.7, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [6] [HR]",
+        "time": 36.237,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.50858], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Shadow Appearance",
+        "time": 37.42,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 7}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [0.0, 0.0, 0.05], \"hpr\": [4.60001, 0.0, 0.0], \"scale\": [0.01, 0.01, 0.01]}"
+            }
+        }
+    },
+    {
+        "name": "Cam: HR and Shadow",
+        "time": 38.118,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 17.0098, 15.0279], \"hpr\": [-180.0, -25.93251, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-4.89278, 17.0098, 10.89791], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 40.0, \"blendType\": \"easeInOut\", \"start\": 30.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Hide Toons",
+        "time": 38.118,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideToons",
+                "kwargs": "{}"
+            }
+        }
+    },
+    {
+        "name": "Boat Appearance",
+        "time": 38.674,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [-6.72322, 0.0, 30.0], \"hpr\": [90.0, 63.1024, 0.0], \"scale\": [1, 1, 1]}"
+            }
+        }
+    },
+    {
+        "name": "Shadow Growth",
+        "time": 38.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 2.5, \"scale\": [2.5, 1.0, 1.0], \"startScale\": [1, 1, 1], \"useStartScale\": 0, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "HR Looks Up",
+        "time": 38.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"soak\", \"loop\": 0, \"hasDuration\": true, \"duration\": 2.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Boat SFX",
+        "time": 39.15,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Boat Attack",
+        "time": 41.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.25, \"pos\": [-6.73, 0.57, 17.11861], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [90.0, 74.33985, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Cut to HR Pain",
+        "time": 41.25,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [2.30512, 4.81192, 1.58141], \"hpr\": [161.84728, 57.91589, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 17.0098, 15.0279], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 40.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "HR Pained Expression",
+        "time": 41.25,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 7, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"wheelspin\", \"loop\": false, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 7.5, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"pos\": [-0.09605, 0.3644, 0.38418], \"hpr\": [5.99999, 3.45765, 0.0], \"scale\": [1.0, 0.75, 1.0]}"
+            }
+        }
+    },
+    {
+        "name": "Resquish Screen",
+        "time": 41.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 5, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "HR Label",
+        "time": 41.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 10}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 10, \"delay\": 0, \"duration\": 0.0, \"pos\": [-0.6, 0.0, 0.0], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 10, \"delay\": 0, \"duration\": 1.2, \"scale\": [0.5, 1.0, 1.0], \"startScale\": [0.01, 1.0, 0.02], \"useStartScale\": true, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Position Toon 2",
+        "time": 44.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [21.11927, 4.98262, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 1, \"delay\": 0, \"duration\": 0, \"hpr\": [212.09154, 0.0, 0.0], \"startHpr\": [4.99998, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.78, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 8, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Position Toon 1",
+        "time": 44.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [14.16122, 5.44665, 12.52721], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 0, \"delay\": 0, \"duration\": 0, \"hpr\": [155.32681, 0.0, 0.0], \"startHpr\": [4.99998, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"startAnim\": \"running-jump\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.1, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 8, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Position Toon 3",
+        "time": 44.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-4.53888, -12.52722, 0.1], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 2, \"delay\": 0, \"duration\": 0, \"hpr\": [188.00663, 0.0, 0.0], \"startHpr\": [4.99998, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"startAnim\": \"wave\", \"loop\": 0, \"hasDuration\": true, \"duration\": 1.12549, \"hasStartTime\": true, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 8, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Position Toon 4",
+        "time": 44.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-28.9131, -56.5727, 6.9], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 0, \"duration\": 0, \"hpr\": [47.48385, 0.0, 0.0], \"startHpr\": [4.99998, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"startAnim\": \"shrug\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 1.28932, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 8, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "4": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 10, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Toon 1 Label",
+        "time": 45.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 10}"
+            },
+            "1": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 11}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 11, \"delay\": 0, \"duration\": 0.0, \"pos\": [-0.6, 0.0, 0.0], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Toon 1",
+        "time": 45.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 9, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [1.41844, -2.4596, 0.68544], \"hpr\": [39.00001, 24.99999, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.38989, -2.82269, 0.14076], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 25.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Show Anvil",
+        "time": 45.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 9}"
+            }
+        }
+    },
+    {
+        "name": "Show Toon 1",
+        "time": 45.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Toon 2 Label",
+        "time": 49.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 11}"
+            },
+            "1": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 12}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 12, \"delay\": 0, \"duration\": 0.0, \"pos\": [-0.6, 0.0, 0.0], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Toon 2",
+        "time": 49.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 9, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [1.78152, -1.91493, 0.867], \"hpr\": [44.00001, -15.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.38989, -2.82269, 0.14076], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 30.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Show Toon 2",
+        "time": 49.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Toon 3 Label",
+        "time": 53.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 12}"
+            },
+            "1": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 13}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 13, \"delay\": 0, \"duration\": 0.0, \"pos\": [-0.6, 0.0, 0.0], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Toon 3",
+        "time": 53.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-3.26509, 16.00583, 4.26312], \"hpr\": [-1.67971, 27.77812, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.38989, -2.82269, 0.14076], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 35.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Show Toon 3",
+        "time": 53.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 2}"
+            }
+        }
+    },
+    {
+        "name": "Toon 4 Label",
+        "time": 57.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 13}"
+            },
+            "1": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 14}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 14, \"delay\": 0, \"duration\": 0.0, \"pos\": [-0.6, 0.0, 0.0], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 14, \"delay\": 3.6, \"duration\": 1.2, \"scale\": [0.01, 1.0, 0.02], \"startScale\": [1, 1, 1], \"useStartScale\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 14}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Toon 4",
+        "time": 57.55,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-26.5, -11.64638, 16.8172], \"hpr\": [148.95418, -11.2, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.38989, -2.82269, 0.14076], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 30.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Show Toon 4",
+        "time": 57.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 3}"
+            }
+        }
+    },
+    {
+        "name": "View go off screen",
+        "time": 61.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 12, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cleanup",
+        "time": 64.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 15, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 9, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

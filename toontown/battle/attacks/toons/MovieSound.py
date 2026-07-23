@@ -92,8 +92,8 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             died = target['died']
             revived = target['revived']
             suitTrack = Sequence(Wait(tSuitReact))
-            if suit.soundRushJob:
-                suitTrack.append(Func(suit.makeUnSoundRushJob))
+            if suit.getSuitStatusModifier('rushJob') == 6:
+                suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
             showDamage = Func(suit.showHpText, -totalDamage[targetIndex], openEnded=0)
             updateHealthBar = Func(suit.updateHealthBar, totalDamage[targetIndex])
 
@@ -110,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
-                if died and not suit.isVirtual and not suit.isOverpressured:
+                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -261,29 +261,23 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             suitTrack.append(Func(suit.setNeutralAnimationTrap))
             suitTrack.append(Wait(0.5))
             suitIndex = battle.activeSuits.index(suit)
-            if suit.dna.name == 'sgoat' and suit.isShielding:
-                suitTrack.append(Func(suit.addRageBuilding, totalDamage[targetIndex]))
-            if suit.dna.name == 'phouse':
-                suitTrack.append(Func(suit.addPowerhouseRotation, totalDamage[targetIndex]))
-            if suit.dna.name == 'liquid' and suit.isStormCell:
-                suitTrack.append(Func(suit.addStormCellDamage))
-            if suit.isHeavyRain:
-                suitTrack.append(Func(suit.addHeavyRainDamage, totalDamage[targetIndex]))
-            if suit.isSued:
-                suitTrack.append(Func(suit.makeSued, 3))
+            if suit.hasSuitStatusEffect('sued'):
+                suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
             if bonusTrack == None:
                 tracks.append(suitTrack)
             else:
                 tracks.append(Parallel(suitTrack, bonusTrack))
                 tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
-        elif totalDamage[targetIndex] <= 0 and not suit.isImmortal:
+        elif totalDamage[targetIndex] <= 0 and not suit.hasSuitStatusEffect('immune') and not suit.hasSuitStatusEffect('videographerImmune') and not suit.hasSuitStatusEffect('silhouetteImmune') \
+                and not suit.hasSuitStatusEffect('soundImmune') and not suit.hasSuitStatusEffect('highRollerImmune'):
             battle = sound['battle']
             tracks.append(suit.makeCogStepBackDeathInterval(battle))
             suit.setPendingQueuedLured(False)
             tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
             #tracks.append(Func(suit.setNeutralAnimationTrap))
-        elif totalDamage[targetIndex] <= 0 and suit.isImmortal and not suit.dna.name == 'hroller':
-            tracks.append(Func(suit.showHpTextWhite, 'IMMUNE!'))
+        elif totalDamage[targetIndex] <= 0 and (suit.hasSuitStatusEffect('immune') or suit.hasSuitStatusEffect('soundImmune')) and not suit.dna.name == 'hroller':
+            suit.setPendingQueuedLured(False)
+            # tracks.append(Func(suit.showHpTextNew, 0, text='Immune!', colorCode=1))
 
     return tracks
 
@@ -304,13 +298,13 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         elif died != 0 and suit.dna.name == 'erfit':
             deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif died != 0 and suit.dna.name == 'erclaim':
             deathTracks.append(MovieUtil.makeErclaimDeath(suit, battle))
-        elif died and not suit.isVirtual and not suit.isOverpressured:
+        elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
             if sound['level'] < 7:
@@ -425,18 +419,14 @@ def __createToonInterval(sound, delay, toon, operaInstrument = None):
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=0.0, endTime=I1))
         retval.append(ActorInterval(toon, 'sound', playRate=1.0, startTime=I1))
     retval.append(Parallel(ActorInterval(toon, 'walk', startTime=0.0001, duration=TIME_TO_WALK_BACK, endTime=1), LerpPosInterval(toon, TIME_TO_WALK_BACK, oldPos, other=battle)))
-    if not toon.encore and not toon.winded and hp > 0:
-        retval.append(Func(toon.makeEncore))
-        retval.append(Func(toon.addEncoreRounds, 2))
+    if not toon.hasToonStatusEffect('encore') and not toon.hasToonStatusEffect('winded') and hp > 0:
         if toon.getTrackBonusLevel(SOUND_TRACK) > 1:
-            retval.append(Parallel(Func(toon.checkEncore, 20)))
+            retval.append(Parallel(Func(toon.setToonStatusEffect, 'encore', modifier=20, turns=2)))
         else:
-            retval.append(Parallel(Func(toon.checkEncore, 10)))
+            retval.append(Parallel(Func(toon.setToonStatusEffect, 'encore', modifier=10, turns=2)))
         retval.append(Func(toon.showHpTextNew, 0, text='Encore!', colorCode=1))
-    elif toon.encore and hp > 0:
-        retval.append(Func(toon.makeWinded))
-        retval.append(Func(toon.addWindedRounds, 3))
-        retval.append(Parallel(Func(toon.checkWinded, 50)))
+    elif toon.hasToonStatusEffect('encore') and hp > 0:
+        retval.append(Parallel(Func(toon.setToonStatusEffect, 'winded', modifier=50, turns=3)))
         retval.append(Func(toon.showHpTextNew, 0, text='Winded!', colorCode=1))
     retval.append(Func(toon.loop, 'neutral'))
     return retval

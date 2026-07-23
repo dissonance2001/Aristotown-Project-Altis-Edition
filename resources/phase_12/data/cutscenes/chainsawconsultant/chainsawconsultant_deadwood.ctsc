@@ -1,0 +1,200 @@
+[
+    {
+        "name": "just another cutscene",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"hpr\": [180.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 12.16477, 7.08061], \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": false}"
+            },
+            "3": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 11, \"delay\": 0, \"duration\": 0.0, \"pos\": [1.0, 50.0, 1.46963], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw plays splatoon 3",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"deadwood\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 1, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 5.0, \"moveNametag\": true, \"xyz\": [-1.45244, 0.0, 7.84313], \"scale\": 1.83515, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "he really likes it",
+        "time": 0.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 4, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "what the dog doin",
+        "time": 1.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.15, \"delay\": 0.0, \"hpr\": [180.0, 0.0, 3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.1, \"delay\": 0.15, \"hpr\": [180.0, 0.0, -3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 3.0], \"useStartHpr\": true}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.1, \"delay\": 0.25, \"hpr\": [180.0, 0.0, 3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, -3.0], \"useStartHpr\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.1, \"delay\": 0.35, \"hpr\": [180.0, 0.0, -3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 3.0], \"useStartHpr\": true}"
+            },
+            "4": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.1, \"delay\": 0.45, \"hpr\": [180.0, 0.0, 3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, -3.0], \"useStartHpr\": true}"
+            },
+            "5": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.1, \"delay\": 0.55, \"hpr\": [180.0, 0.0, -3.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 3.0], \"useStartHpr\": true}"
+            },
+            "6": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.2, \"delay\": 0.65, \"hpr\": [180.0, 0.0, 2.00001], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, -3.0], \"useStartHpr\": true}"
+            },
+            "7": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.35, \"delay\": 0.85, \"hpr\": [180.0, 0.0, -2.00001], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 2.00001], \"useStartHpr\": true}"
+            },
+            "8": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 1.2, \"hpr\": [180.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, -2.00001], \"useStartHpr\": true}"
+            }
+        }
+    },
+    {
+        "name": "chip's mother enters the room",
+        "time": 4.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-16.18102, 7.4942, 9.07771], \"blendType\": \"easeInOut\", \"startPos\": [0.0, 25.0, 8.53304], \"useStartPos\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-43.85632, -8.16993, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 1.0, \"hpr\": [-118.00001, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 1.0, \"hpr\": [117.99999, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "WE NEED TO LEAVE. NOW.",
+        "time": 4.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "toonFireFromCannon",
+                "kwargs": "{\"toonIndex\": 0, \"toonFlyDist\": 150, \"toonFlyDur\": 3.0, \"delay\": 0, \"resetDelay\": 0.5, \"cogCannon\": true, \"aimAtPoint\": true, \"nodeIndex\": 11, \"startHpr\": [180.0, 0.0, 0.0], \"hideAvatar\": true}"
+            },
+            "1": {
+                "eventDefEnum": "toonFireFromCannon",
+                "kwargs": "{\"toonIndex\": 1, \"toonFlyDist\": 150, \"toonFlyDur\": 3.0, \"delay\": 0, \"resetDelay\": 0.5, \"cogCannon\": true, \"aimAtPoint\": true, \"nodeIndex\": 11, \"startHpr\": [180.00001, 1e-05, 1e-05], \"hideAvatar\": true}"
+            },
+            "2": {
+                "eventDefEnum": "toonFireFromCannon",
+                "kwargs": "{\"toonIndex\": 2, \"toonFlyDist\": 150, \"toonFlyDur\": 3.0, \"delay\": 0, \"resetDelay\": 0.5, \"cogCannon\": true, \"aimAtPoint\": true, \"nodeIndex\": 11, \"startHpr\": [-179.0, 0.0, 0.0], \"hideAvatar\": true}"
+            },
+            "3": {
+                "eventDefEnum": "toonFireFromCannon",
+                "kwargs": "{\"toonIndex\": 3, \"toonFlyDist\": 150, \"toonFlyDur\": 3.0, \"delay\": 0, \"resetDelay\": 0.5, \"cogCannon\": true, \"aimAtPoint\": true, \"nodeIndex\": 11, \"startHpr\": [-179.0, 0.0, 0.0], \"hideAvatar\": true}"
+            }
+        }
+    },
+    {
+        "name": "WHY IS SADS BEHIND THE DOOR-",
+        "time": 4.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"pos\": [0.0, 6.0, 5.0], \"blendType\": \"easeInOut\", \"startPos\": [-16.18102, 7.4942, 9.07771], \"useStartPos\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"hpr\": [0.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [-43.85633, -8.16993, 0.0], \"useStartHpr\": true}"
+            }
+        }
+    },
+    {
+        "name": "default dance",
+        "time": 10.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideToons",
+                "kwargs": "{}"
+            }
+        }
+    },
+    {
+        "name": "play megalovania ost",
+        "time": 10.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 1.0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-118.00001, 0.0, 0.0], \"useStartHpr\": true, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 1.0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [117.99999, 0.0, 0.0], \"useStartHpr\": true, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "roll TTCC credits. you lost the game.",
+        "time": 11.562750000000001,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

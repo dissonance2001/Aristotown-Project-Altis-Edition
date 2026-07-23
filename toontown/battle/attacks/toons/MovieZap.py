@@ -260,9 +260,9 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
            # zapTracks.append(__zapNearby2(suit, anim, suitIndex - 1, battle.activeSuits, tContact, hp, battle))
             #zapTracks.append(__zapNearby3(suit, anim, suitIndex - 2, battle.activeSuits, tContact, hp, battle))
         if toon.getTrackBonusLevel(ZAP_TRACK) > 1:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 2))))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.setSuitStatusEffect, 'zapped', modifier=int(math.ceil(hp / 2)), turns=2, mode='refreshModifier'))
         else:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.makeZapped, +int(math.ceil(hp / 4))))
+            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.setSuitStatusEffect, 'zapped', modifier=int(math.ceil(hp / 4)), turns=2, mode='refreshModifier'))
         updateHealthBar = Func(suit.updateHealthBar, hp)
         totalDamage = hp
 
@@ -271,8 +271,8 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         soakRemoval = Func(suit.makeZapped)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)
-        if suit.zapRushJob:
-            suitTrack.append(Func(suit.makeUnZapRushJob))
+        if suit.getSuitStatusModifier('rushJob') == 5:
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
         suitTrack.append(updateHealthBar)
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
@@ -292,21 +292,21 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
         elif died != 0 and suit.dna.name == 'erfit':
-            suitTrack.append(Func(suit.makeUnZapped))
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif died != 0 and suit.dna.name == 'erclaim':
-            suitTrack.append(Func(suit.makeUnZapped))
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.makeErclaimDeath(suit, battle))
         elif suit.dna.name == 'erfit' and revived != 0:
             suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
-            suitTrack.append(Func(suit.makeUnZapped))
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level > 3 and not suit.isOverpressured:
-            deathTracks.append(Func(suit.makeUnZapped))
+        elif died != 0 and not suit.isVirtual and level > 3 and not suit.hasSuitStatusEffect('overpressured'):
+            deathTracks.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level <= 3 and not suit.isOverpressured:
-            suitTrack.append(Func(suit.makeUnZapped))
+        elif died != 0 and not suit.isVirtual and level <= 3 and not suit.hasSuitStatusEffect('overpressured'):
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
@@ -324,16 +324,8 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         #suitTrack.append(Parallel(__soakRemoval(suit, 1)))
         #suitTrack.append(soakRemoval)
         #suitTrack.append(Func(suit.setNeutralAnimation))
-        if suit.dna.name == 'sgoat' and suit.isShielding:
-            suitTrack.append(Func(suit.addRageBuilding, hp))
-        if suit.dna.name == 'phouse':
-            suitTrack.append(Func(suit.addPowerhouseRotation, hp))
-        if suit.dna.name == 'liquid' and suit.isStormCell:
-            suitTrack.append(Func(suit.removeStormCellDamage, -6))
-        if suit.isHeavyRain:
-            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
-        if suit.isSued:
-            suitTrack.append(Func(suit.makeSued, 3))
+        if suit.hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
         return Parallel(suitTrack, bonusTrack, zapTracks)
     elif dodge:
         return Parallel()

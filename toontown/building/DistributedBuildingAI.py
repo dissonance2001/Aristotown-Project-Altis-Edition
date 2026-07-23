@@ -122,24 +122,69 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
 
     def _getMinMaxFloors(self, difficulty):
         return SuitBuildingGlobals.SuitBuildingInfo[difficulty][0]
+    
+    def _getValidTrack(self):
+        validTracks = ('c', 'l', 'm', 's', 'g', 't', 'p')
+
+        if self.track not in validTracks:
+            self.notify.warning(
+                'Invalid building track %r at zone %s, block %s; using c.' % (
+                    self.track,
+                    self.zoneId,
+                    self.block
+                )
+            )
+
+            self.track = 'c'
+
+        return self.track
 
     def suitTakeOver(self, suitTrack, difficulty, buildingHeight):
-        self.notify.debug('%s type Suit takeover at zone %s' % (suitTrack, self.zoneId))
+        self.notify.debug(
+            '%s type Suit takeover at zone %s' % (
+                suitTrack,
+                self.zoneId
+            )
+        )
+
         if not self.isToonBlock():
             return
+
+        validTracks = ('c', 'l', 'm', 's', 'g', 't', 'p')
+
+        if suitTrack not in validTracks:
+            self.notify.warning(
+                'suitTakeOver received invalid suitTrack %r at zone %s, block %s' % (
+                    suitTrack,
+                    self.zoneId,
+                    self.block
+                )
+            )
+
+            suitTrack = 'c'
+
         self.updateSavedBy(None)
-        difficulty = min(difficulty, len(SuitBuildingGlobals.SuitBuildingInfo) - 1)
-        (minFloors, maxFloors) = self._getMinMaxFloors(difficulty)
+
+        difficulty = min(
+            difficulty,
+            len(SuitBuildingGlobals.SuitBuildingInfo) - 1
+        )
+
+        minFloors, maxFloors = self._getMinMaxFloors(difficulty)
+
         if buildingHeight is None:
             numFloors = random.randint(minFloors, maxFloors)
         else:
             numFloors = buildingHeight + 1
-            if (numFloors < minFloors) or (numFloors > maxFloors):
+
+            if numFloors < minFloors or numFloors > maxFloors:
                 numFloors = random.randint(minFloors, maxFloors)
+
         self.track = suitTrack
         self.difficulty = difficulty
         self.numFloors = numFloors
         self.becameSuitTime = time.time()
+
         self.fsm.request('clearOutToonInterior')
 
     def cogdoTakeOver(self, difficulty, buildingHeight, track = 's'):
@@ -185,7 +230,13 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         return [self.block, interiorZoneId]
 
     def getSuitData(self):
-        return [ord(self.track), self.difficulty, self.numFloors]
+        track = self._getValidTrack()
+
+        return [
+            ord(track),
+            self.difficulty,
+            self.numFloors
+        ]
 
     def getState(self):
         return [self.fsm.getCurrentState().getName(), globalClockDelta.getRealNetworkTime()]
@@ -466,10 +517,24 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         return Task.done
 
     def enterBecomingSuit(self):
-        self.sendUpdate('setSuitData', [ord(self.track), self.difficulty, self.numFloors])
+        track = self._getValidTrack()
+
+        self.sendUpdate(
+            'setSuitData',
+            [ord(track), self.difficulty, self.numFloors]
+        )
+
         self.d_setState('becomingSuit')
-        name = self.taskName(str(self.block) + '_becomingSuit-timer')
-        taskMgr.doMethodLater(SuitBuildingGlobals.TO_SUIT_BLDG_TIME, self.becomingSuitTask, name)
+
+        name = self.taskName(
+            str(self.block) + '_becomingSuit-timer'
+        )
+
+        taskMgr.doMethodLater(
+            SuitBuildingGlobals.TO_SUIT_BLDG_TIME,
+            self.becomingSuitTask,
+            name
+        )
 
     def exitBecomingSuit(self):
         name = self.taskName(str(self.block) + '_becomingSuit-timer')
@@ -490,14 +555,47 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         return Task.done
 
     def enterSuit(self):
-        self.sendUpdate('setSuitData', [ord(self.track), self.difficulty, self.numFloors])
-        (zoneId, interiorZoneId) = self.getExteriorAndInteriorZoneId()
-        self.planner = SuitPlannerInteriorAI.SuitPlannerInteriorAI(self.numFloors, self.difficulty, self.track, interiorZoneId)
+        track = self._getValidTrack()
+
+        self.sendUpdate(
+            'setSuitData',
+            [ord(track), self.difficulty, self.numFloors]
+        )
+
+        zoneId, interiorZoneId = self.getExteriorAndInteriorZoneId()
+
+        self.planner = SuitPlannerInteriorAI.SuitPlannerInteriorAI(
+            self.numFloors,
+            self.difficulty,
+            track,
+            interiorZoneId
+        )
+
         self.d_setState('suit')
-        (exteriorZoneId, interiorZoneId) = self.getExteriorAndInteriorZoneId()
-        self.elevator = DistributedElevatorExtAI.DistributedElevatorExtAI(self.air, self)
+
+        exteriorZoneId, interiorZoneId = (
+            self.getExteriorAndInteriorZoneId()
+        )
+
+        self.elevator = (
+            DistributedElevatorExtAI.DistributedElevatorExtAI(
+                self.air,
+                self
+            )
+        )
+
         self.elevator.generateWithRequired(exteriorZoneId)
-        self.air.writeServerEvent('building-cog', self.doId, '%s|%s|%s|%s' % (self.zoneId, self.block, self.track, self.numFloors))
+
+        self.air.writeServerEvent(
+            'building-cog',
+            self.doId,
+            '%s|%s|%s|%s' % (
+                self.zoneId,
+                self.block,
+                track,
+                self.numFloors
+            )
+        )
 
     def exitSuit(self):
         del self.planner

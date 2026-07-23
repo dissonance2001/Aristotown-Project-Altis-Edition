@@ -1,0 +1,141 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 20.0, 7.0], \"hpr\": [180.0, -9.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "nyoom",
+        "time": 0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"end\": 60.45157, \"blendType\": \"easeOut\", \"start\": 25.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.5, \"pos\": [-29.0, 0.0, 7.0], \"hpr\": [-90.0, 6.1276, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [-28.99695, 0.34905, 7.0], \"startHpr\": [268.99999, -9.00001, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "pluto grrr",
+        "time": 0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"soak\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "particles",
+        "time": 0.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [-11.83006, 0.0, 11.80102], \"hpr\": [90.0, -106.20918, 0.0], \"scale\": [1.0, 0.3, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 4.0, \"delay\": 0, \"parentIndex\": 5, \"renderParentIndex\": 5, \"leaveItGoingForever\": false}"
+            },
+            "2": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 1, \"duration\": 4.0, \"delay\": 0, \"parentIndex\": 5, \"renderParentIndex\": 5, \"leaveItGoingForever\": false}"
+            }
+        }
+    },
+    {
+        "name": "toon 1 cold",
+        "time": 2.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"startAnim\": \"cringe\", \"loop\": false, \"hasDuration\": false, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.5, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "toon 2 cold",
+        "time": 2.3,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"startAnim\": \"cringe\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.5, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "toon 3 cold",
+        "time": 2.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"startAnim\": \"cringe\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.5, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "toon 4 cold",
+        "time": 2.7,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"startAnim\": \"cringe\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.5, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Cleanup",
+        "time": 6.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            }
+        }
+    }
+]

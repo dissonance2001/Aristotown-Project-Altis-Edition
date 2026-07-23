@@ -446,7 +446,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             0, maxHp)
             self.corpIcon.hide()
             self.deptLabel['text'] = ''
-        elif self.avatar.isImmortal and not self.avatar.dna.name == 'hroller' and not self.avatar.isPhase3:
+        elif (self.avatar.hasSuitStatusEffect('immune') or self.avatar.hasSuitStatusEffect('videographerImmune')) and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2':
             self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogImmune % (
             'Immune')
         elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
@@ -679,8 +679,10 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             level = str(self.avatar.getActualLevel())
         elif self.avatar.getExecutive() and not self.avatar.getManager():
             level = str(self.avatar.getActualLevel()) + TTLocalizer.ExecutivePostFix
-        elif self.avatar.getGovernaught() and not self.avatar.getExecutive() and not self.avatar.getManager():
+        elif self.avatar.getGovernaught() and not self.avatar.getExecutive() and not self.avatar.getManager() and not self.avatar.dna.name in ['mh2', 'cnd2', 'std2']:
             level = str(self.avatar.getActualLevel()) + TTLocalizer.GovernaughtPostFix
+        elif self.avatar.getGovernaught() and not self.avatar.getExecutive() and not self.avatar.getManager() and self.avatar.dna.name in ['mh2', 'cnd2', 'std2']:
+            level = str(self.avatar.getActualLevel()) + '.exe'
         elif self.avatar.getManager():
             level = str(self.avatar.getActualLevel()) + TTLocalizer.ManagerPostFix
         else:
@@ -711,7 +713,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             taskMgr.add(blinkTask, self.frame.uniqueName('pulse-task'))
         else:
             self.button.setColor(1, 1, 1, 1)
-            if self.avatar.isImmortal and not self.avatar.isPhase3 and not self.avatar.dna.name == 'hroller':
+            if (self.avatar.hasSuitStatusEffect('immune') or self.avatar.hasSuitStatusEffect('videographerImmune')) and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2':
                 self.changeInterval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
                                        blendType='easeInOut'))
                 self.changeInterval.start()
@@ -845,11 +847,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.head.setColor(self.healthColors[10], 1)
 
     def __changeColor(self):
-        if self.avatar.isImmortal and not self.avatar.isPhase3 and not self.avatar.dna.name == 'hroller':
+        if not (self.avatar.hasSuitStatusEffect('immune') or self.avatar.hasSuitStatusEffect('videographerImmune')) and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2':
             self.interval = Parallel(LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 1, 1, 1),
                                    blendType='easeInOut'))
             self.interval.start()
-        elif self.avatar.isImmortal and not self.avatar.isPhase3 and self.avatar.dna.name == 'hroller':
+        elif (self.avatar.hasSuitStatusEffect('immune') or self.avatar.hasSuitStatusEffect('videographerImmune')) and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2':
             self.interval = Sequence(
                 LerpColorScaleInterval(self.button, duration=1, colorScale=(1, 0, 0, 1),
                                        blendType='easeInOut'),
@@ -894,6 +896,20 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                    blendType='easeInOut'))
             self.interval.start()
         if self.avatar.dna.name == 'hrollers':
+            if self.avatar.getActualLevel() == 36:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[22]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
+            if self.avatar.getActualLevel() == 35:
+                self.interval = Parallel(
+                    LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[21]),
+                                           blendType='easeInOut'),
+                    LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                           blendType='easeInOut'))
+                self.interval.start()
             if self.avatar.getActualLevel() == 34:
                 self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(self.healthColors[20]),
                                                                 blendType='easeInOut'),

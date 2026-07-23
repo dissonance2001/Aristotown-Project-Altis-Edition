@@ -171,17 +171,17 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     if self.hasLocalToon():
                         camera.reparentTo(self)
                         if random.choice([0, 1]):
-                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                            camera.setPosHpr(0, -15, 7, 0, 0, 0)
                         else:
-                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                            camera.setPosHpr(0, -15, 7, 0, 0, 0)
                 else:
                     suit.setState('Battle')
                     if self.hasLocalToon():
                         camera.reparentTo(self)
                         if random.choice([0, 1]):
-                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                            camera.setPosHpr(0, -15, 7, 0, 0, 0)
                         else:
-                            camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                            camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     if suit in self.joiningSuits:
                         i = self._getPendingPreviewIndex(suit)
                         destPos, h = self.suitPendingPoints[i]
@@ -309,9 +309,9 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if self.hasLocalToon():
                     camera.reparentTo(self)
                     if random.choice([0, 1]):
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     else:
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
             elif suit.dna.name == 'hrollers' or suit.dna.name == 'bcaster':
                 suit.setState('Battle')
                 suitTrack = Sequence()
@@ -341,23 +341,22 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if self.hasLocalToon():
                     camera.reparentTo(self)
                     if random.choice([0, 1]):
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     else:
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
-            elif suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'choreo' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'director':
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
+                continue
+            boss = next((obj for obj in base.cr.doId2do.values()
+            if isinstance(obj, DistributedCashbotBoss)), None)
+            if boss and not suit.dna.name in ['bcaster', 'hrollers', 'hroller2', 'hroller']:
                 suit.setState('Battle')
                 suitTrack = Sequence()
                 oldPos, oldHpr = self.getActorPosHpr(suit, self.suits)
-
-                def getDustCloudIval(oldPos=oldPos):
-                    dustCloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
-                    dustCloud.setBillboardAxis(2.0)
-                    dustCloud.setZ(3)
-                    dustCloud.setScale(Point3(5.0, 1.0, 1.0))
-                    dustCloud.createTrack()
-                    dustCloud.setColorScale(0.2, 0.2, 0.2, 1)
-                    return Sequence(Func(dustCloud.reparentTo, render), Func(dustCloud.setPos, self, oldPos + (0, 0, suit.getHeight())), dustCloud.track, Func(dustCloud.removeNode),
-                                    name='dustCloadIval')
+                stagelight = globalPropPool.getProp('stagelight')
+                node = stagelight.node()
+                node.setBounds(OmniBoundingVolume())
+                node.setFinal(1)
+                stagelight.reparentTo(suit)
+                stagelight.setPos(0, 0, suit.height + 10)
 
                 if suit in self.joiningSuits:
                     i = self._getPendingPreviewIndex(suit)
@@ -368,6 +367,9 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 startPos = destPos + Point3(0, 0, 0)
                 startPos2 = destPos + Point3(0, 0, 0)
                 self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                sfx = loader.loadSfx(
+                        "phase_11/audio/sfx/LB_camera_shutter_2.ogg"
+                    )
                 suitTrack.append(Func(suit.reparentTo, self))
                 suitTrack.append(Func(suit.headsUp, self))
                 suitTrack.append(Func(suit.hide))
@@ -375,24 +377,25 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suitTrack.append(Func(suit.show))
                 suitTrack.append(LerpPosInterval(suit, 0, startPos))
                 suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-                suitTrack.append(Func(getDustCloudIval().start))
-                suitTrack.append(random.choice((ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1),
-                                                ActorInterval(suit, 'slip-forward', startTime=suit.getDuration('slip-forward') - 1),
-                                                ActorInterval(suit, 'glower', startTime=suit.getDuration('glower') - 1),
-                                                ActorInterval(suit, 'speak', startTime=suit.getDuration('speak') - 1),
-                                                ActorInterval(suit, 'finger-wag', startTime=suit.getDuration('finger-wag') - 1))))
+                suitTrack.append(Parallel(Sequence(Wait(.5), LerpColorScaleInterval(stagelight, .5, VBase4(0, 0, 0, 0))), SoundInterval(sfx, node=suit), random.choice((ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1),
+                                                ActorInterval(suit, 'small-zap', startTime=suit.getDuration('small-zap') - .75),
+                                                ActorInterval(suit, 'slip-backward', startTime=suit.getDuration('slip-backward') - .75),
+                                                ActorInterval(suit, 'pie-small-react', startTime=suit.getDuration('pie-small-react') - .75),
+                                                ActorInterval(suit, 'rake-react', startTime=suit.getDuration('rake-react') - .75),
+                                                ActorInterval(suit, 'finger-wag', startTime=suit.getDuration('finger-wag') - .75)))))
                 suitTrack.append(Func(suit.loop, 'neutral'))
+                suitTrack.append(Func(stagelight.removeNode))
                 suitTrack.append(LerpPosInterval(suit, 0, startPos2))
                 suitTracks.append(suitTrack)
                 # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
-                delay += .1
+                delay += .15
                 if self.hasLocalToon():
                     camera.reparentTo(self)
                     if random.choice([0, 1]):
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     else:
-                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
             else:
                 suitTrack = Sequence()
                 if suit.dna.name == 'hroller2':

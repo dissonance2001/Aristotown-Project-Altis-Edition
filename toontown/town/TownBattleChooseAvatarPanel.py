@@ -28,7 +28,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.frame = DirectFrame(relief=None, image=gui.find('**/targeting_main'), text_align=TextNode.ALeft, pos=(0, 0, -0.025), scale=0.425)
         self.frame.hide()
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_scale=0.1, pos=(0, 0, -0.325))
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), text_scale=0.1, pos=(0, 0, -0.325))
         if self.toon:
             self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarToonTitle
         else:

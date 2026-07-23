@@ -1,0 +1,105 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"hpr\": [180.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            },
+            "2": {
+                "eventDefEnum": "tpToonsToElevator",
+                "kwargs": "{\"target\": \"Players\", \"elevatorModelIndex\": 0, \"isBig\": false}"
+            }
+        }
+    },
+    {
+        "name": "init bs",
+        "time": 1.0394999999999996,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"anim\": \"count-neutral\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "doors open now",
+        "time": 5.9805,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "erfit fall",
+        "time": 6.732749999999999,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.771, \"delay\": 0.0, \"xyz\": [0.0, 0.0, 0.0], \"blendType\": \"easeIn\", \"useStartPos\": true, \"startPos\": [0.0, 0.0, 83.464]}"
+            }
+        }
+    },
+    {
+        "name": "erfit do anim",
+        "time": 6.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"anim\": \"slip-forward\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "crunch",
+        "time": 7.32075,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "heavyDropKill",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"startAnim\": \"cringe\", \"endAnim\": \"neutral\", \"useEndAnim\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": false, \"endTime\": 0, \"playRate\": 1.0, \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "toons do neutral",
+        "time": 9.621749999999999,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"startAnim\": \"neutral\", \"endAnim\": \"neutral\", \"useEndAnim\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "cutscene_end",
+        "time": 11.231250000000001,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.064}"
+            }
+        }
+    }
+]

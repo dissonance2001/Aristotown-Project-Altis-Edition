@@ -159,9 +159,9 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
         propTrack.append(pTracks)
     throwTrack = Sequence()
     throwTrack.append(Wait(throwDelay))
-    throwTrack.append(Func(suit.makeTrapped, level + 1))
-    if suit.trapRushJob:
-        throwTrack.append(Func(suit.makeUnTrapRushJob))
+    throwTrack.append(Func(suit.setSuitStatusEffect, 'trapped', modifier=level + 1))
+    if suit.getSuitStatusModifier('rushJob') == 1:
+        throwTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     throwTrack.append(Func(unthrownProp.reparentTo, hidden))
     throwTrack.append(Func(toon.update))
     if suit.battleTrap != NO_TRAP:
@@ -328,9 +328,9 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTrack.append(Func(trapProp.setScale, Point3(0.1, 0.1, 0.1)))
     trapTrack.append(Func(trapProp.reparentTo, suit))
     trapTrack.append(Func(trapProp.setPos, trapPoint))
-    trapTrack.append(Func(suit.makeTrapped, level + 1))
-    if suit.trapRushJob:
-        trapTrack.append(Func(suit.makeUnTrapRushJob))
+    trapTrack.append(Func(suit.setSuitStatusEffect, 'trapped', modifier=level + 1))
+    if suit.getSuitStatusModifier('rushJob') == 1:
+        trapTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     if propName == 'wreckingball':
         trapTrack.append(LerpScaleInterval(trapProp, 0.25, Point3(2.5, 2.5, 2.5)))
         trapTrack.append(LerpScaleInterval(trapProp, 0.1, Point3(2.2, 2.2, 2.2)))

@@ -1,0 +1,88 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5784, \"delay\": 0.0, \"pos\": [0.0, 6.42669, 7.24163], \"hpr\": [-180.0, 11.56817, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeOut\", \"startPos\": [0.0, 6.42669, 4.24163], \"startHpr\": [-180.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.19, \"delay\": 0.0, \"end\": 59.67224, \"blendType\": \"easeOut\", \"start\": 76.703, \"useStart\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.7, \"pos\": [-1.67095, 10.01122, 7.24163], \"hpr\": [-168.43188, 2e-05, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 6.42669, 4.24163], \"startHpr\": [-180.0, 11.56817, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #2",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"rushjob\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": false, \"endAnim\": \"objection-loop\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #5",
+        "time": 2.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 5, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.55879, \"delay\": 0.0, \"pos\": [0.0, 8.30515, 6.81487], \"hpr\": [-179.99997, 3.92152, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 8.3051, 4.62982], \"startHpr\": [-180.0, 3.92152, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.4987, \"delay\": 0.0, \"end\": 71.29172, \"blendType\": \"easeInOut\", \"start\": 59.67224, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #6",
+        "time": 3.02,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"rushjob\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 1.03493, \"hasFromStartTime\": 0, \"fromStartTime\": 0, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #4",
+        "time": 3.65,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #7",
+        "time": 4.56,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    }
+]

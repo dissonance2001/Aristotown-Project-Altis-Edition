@@ -1,0 +1,1093 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 4, \"pos\": [0.0, 33.0, 10.5], \"duration\": 0.0, \"delay\": 0.0, \"hasAnim\": true, \"anim\": \"neutral\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [0.0, -2.37, 0.0], \"useStartPos\": false, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"hpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "6": {
+                "eventDefEnum": "tpToonsToElevator",
+                "kwargs": "{\"target\": \"Players\", \"elevatorModelIndex\": 0, \"isBig\": 0}"
+            },
+            "7": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"end\": 42.0, \"blendType\": \"easeInOut\", \"start\": 31.5, \"useStart\": true}"
+            },
+            "8": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 0}"
+            },
+            "9": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 4}"
+            },
+            "10": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 2}"
+            },
+            "11": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 3}"
+            },
+            "12": {
+                "eventDefEnum": "cameraToElevator",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "13": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0, \"pos\": [0, 0, 0], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            },
+            "14": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0.0, -0.12853, -12.93], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            }
+        }
+    },
+    {
+        "name": "pan to rain",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 5.0, \"delay\": 0.0, \"hpr\": [180.0, 10.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 5.0, \"delay\": 0.0, \"pos\": [0.0, -45.0, 11.0], \"blendType\": \"easeInOut\", \"startPos\": [0.0, 14.0, 4.0], \"useStartPos\": true}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 1, \"delay\": 0.01, \"duration\": 4.99, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #3",
+        "time": 5.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"Players\", \"pos\": [0.0, -25.0, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\", \"shape\": \"Line\", \"radius\": 3.0, \"h\": 180.0}"
+            },
+            "1": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"Players\", \"pos\": [0.0, -15.0, 0.0], \"duration\": 4.0, \"delay\": 1.5, \"hasAnim\": true, \"anim\": \"walk\", \"shape\": \"Line\", \"radius\": 3.0, \"h\": 180.0}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "DM 1",
+        "time": 8.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-2.05661, -21.18911, 5.3606], \"hpr\": [-175.13888, 3.97924, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-12.5, -45.0, 11.0], \"startHpr\": [0.0, -18.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [1.28532, 0.0, 5.09815], \"scale\": 1.03213, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Rain punchline",
+        "time": 11.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #6",
+        "time": 15.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-9.1581, -26.61966, 4.94281], \"hpr\": [-32.39055, -4.62727, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-32.8125, -45.0, 11.0], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.5}"
+            },
+            "2": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Laugh\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #7",
+        "time": 18.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -12.8376, 5.39222], \"hpr\": [180.0, 2.00001, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-19.6075, -26.61966, 4.94281], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 1.5, \"blendType\": \"noBlend\", \"hpr\": [-180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [14.31361, -7.24424, 8.47704], \"hpr\": [137.27522, -10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -12.8376, 5.39222], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Toons Hide",
+        "time": 19.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [-12.38117, -22.19857, -0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [-18.07199, -17.4806, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-18.76594, -8.7403, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-15.2099, -6.3838, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 0, \"duration\": 0, \"hpr\": [-131.87581, 0.0, 0.0], \"startHpr\": [122.62137, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"startAnim\": \"slip-forward\", \"loop\": false, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.7712, \"hasEndTime\": false, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #8",
+        "time": 22.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"pos\": [-8.0, -20.0, 8.0], \"hpr\": [-77.0, -10.0, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [-1.0, -20.0, 2.0], \"startHpr\": [-90.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 0, \"delay\": 0.0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 2.0, \"pos\": [0.0, -45.0, 11.0], \"hpr\": [-180.0, 10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-1.0, -12.0, 2.0], \"startHpr\": [-90.0, 2.00001, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 1, \"delay\": 2.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "4": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 1, \"delay\": 5.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "DM philosophize",
+        "time": 30.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"pos\": [0.0, -8.84, 3.83], \"hpr\": [-180.0, 5.0, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [-32.812, -45.0, 11.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"hpr\": [0, 0, 0], \"useStartHpr\": 0, \"startHpr\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 7, \"actorIndex\": 0, \"delay\": 1.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.5, 0.0, 6.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.5}"
+            }
+        }
+    },
+    {
+        "name": "Event #10",
+        "time": 35.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 3.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [0.0, 8.0, 0.0], \"useStartPos\": true, \"startPos\": [0.0, -2.37, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": true, \"duration\": 3.0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 8, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.29815], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 3.5, \"delay\": 0.0, \"pos\": [0.0, -15.0, 10.0], \"hpr\": [-180.0, -7.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [4.75757, -13.378, 3.83], \"startHpr\": [-82.34028, 4.0166, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #11",
+        "time": 38.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #13",
+        "time": 39.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 4.0, \"delay\": 0.0, \"pos\": [11.7, -20.0, 3.83], \"blendType\": \"easeInOut\", \"startPos\": [0.0, -8.84, 3.83], \"useStartPos\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 4.0, \"delay\": 0.0, \"hpr\": [-205.0, 10.00001, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 5.0, 0.0], \"useStartHpr\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 9, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.4267], \"scale\": 1.0964, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #14",
+        "time": 43.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 10, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.0, 0.0, 8.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #15",
+        "time": 46.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 11, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.42671], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #16",
+        "time": 49.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [6.2, -60.7, 14.5], \"hpr\": [13.9, -20.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [11.7, -20.0, 3.83], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 12, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.42668], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 1.0, \"blendType\": \"noBlend\", \"hpr\": [-180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0, 0, 0]}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 2.0, \"delay\": 2.0, \"blendType\": \"noBlend\", \"xyz\": [0, 0, 0], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #21",
+        "time": 50.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #22",
+        "time": 52.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 13, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [0.0, -45.0, 11.0], \"hpr\": [180.0, 10.0, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [11.7, -20.0, 3.83], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #19",
+        "time": 55.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 14, \"actorIndex\": 0, \"delay\": 0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.5], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-12.0, -22.0, 3.0], \"hpr\": [-25.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-12.5, -45.0, 11.0], \"startHpr\": [180.0, 10.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [-15.25054, -19.24472, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 2.5, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [1.5, -33.5, 0.1], \"useStartPos\": true, \"startPos\": [1.5, -20.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 2.5, \"blendType\": \"easeInOut\", \"hpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #20",
+        "time": 59.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #21",
+        "time": 59.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [0.0, -15.0, 2.0], \"hpr\": [0.0, 11.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-15.28, -22.0, 3.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 15, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 5.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.5], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #22",
+        "time": 62.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "closeElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Event #23",
+        "time": 65.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -35.0, 11.0], \"hpr\": [180.0, 5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -15.0, 2.0], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.5}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 16, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.5, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #24",
+        "time": 68.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 17, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [-3.5, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 4.0, \"delay\": 0.0, \"pos\": [0.0, -10.0, 3.0], \"hpr\": [180.0, 5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-17.8125, -35.0, 11.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"Players\", \"pos\": [0.0, 0.0, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\", \"shape\": \"Line\", \"radius\": 3.5, \"h\": 180.0}"
+            },
+            "3": {
+                "eventDefEnum": "turnToonsToPoint",
+                "kwargs": "{\"target\": \"Players\", \"point\": [0.0, 33.0, 11.0], \"duration\": 0.0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 18, \"actorIndex\": 1, \"delay\": 4.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.5, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [1.5, -33.5, 0.1], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "6": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Event #25",
+        "time": 75.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -60.7, 8.0], \"hpr\": [0.0, -10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-7.8415, -60.7, 14.5], \"startHpr\": [13.9, -20.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"Players\", \"pos\": [0.0, 7.0, 0.0], \"duration\": 2.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\", \"shape\": \"Line\", \"radius\": 3.0, \"h\": 180.0}"
+            },
+            "2": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Confused\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #26",
+        "time": 77.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "openElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 1.9, \"pos\": [0.0, -15.0, 2.0], \"hpr\": [0.0, 11.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-60.7, -60.7, 8.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 19, \"actorIndex\": 0, \"delay\": 1.9, \"duration\": 2.6, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.55522], \"scale\": 1.382, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #27",
+        "time": 81.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"Players\", \"pos\": [0.0, -8.0, 0.0], \"duration\": 3.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\", \"shape\": \"Line\", \"radius\": 3.0, \"h\": 180.0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -22.0, 0.75], \"hpr\": [-180.0, 10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -15.0, 2.0], \"startHpr\": [-90.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "turnToonsToHpr",
+                "kwargs": "{\"delay\": 0, \"duration\": 0, \"hpr\": [180.0, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 0, \"delay\": 3.0, \"duration\": 1.0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 1, \"delay\": 3.0, \"duration\": 1.0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 2, \"delay\": 3.0, \"duration\": 1.0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 3.0, \"duration\": 1.0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #28",
+        "time": 82.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-12.0, -22.0, 5.0], \"hpr\": [-25.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-2.05, -22.0, 0.75], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "suitProjectileFly",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"flyDuration\": 5.0, \"gravityMult\": 0.6, \"destPos\": [0.0, 4.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 1.6, \"pos\": [13.9, -5.0, 11.0], \"hpr\": [150.00001, -15.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-15.28, -22.0, 5.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.5, \"delay\": 0, \"blendType\": \"noBlend\", \"xyz\": [1.5, -28.0, 0.1], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 20, \"actorIndex\": 0, \"delay\": 3.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.4267], \"scale\": 1.2892, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #47",
+        "time": 83.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"landing\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": true, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #40",
+        "time": 84.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "closeElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Event #29",
+        "time": 88.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [-180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Laugh\"}"
+            },
+            "4": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 21, \"actorIndex\": 0, \"delay\": 1.4, \"duration\": 2.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.81229], \"scale\": 1.51413, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #31",
+        "time": 92.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 22, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [-0.0, -45.0, 11.0], \"hpr\": [180.0, 10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-13.08277, -44.95474, 11.0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "DM tells off",
+        "time": 96.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [10.0, -23.0, 3.0], \"hpr\": [148.00001, 10.0, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [-32.812, -45.0, 11.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"hpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 23, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.4267], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #22",
+        "time": 97.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #33",
+        "time": 99.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 24, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "4": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 5.0, \"delay\": 0.0, \"pos\": [0.0, -5.0, 8.0], \"hpr\": [180.0, -5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-15.0, -20.0, 1.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #34",
+        "time": 104.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Yawn\"}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 2.5}"
+            },
+            "2": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Sleepy\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #37",
+        "time": 107.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 25, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 1.4, \"emoteIndex\": \"Belly Flop\"}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 26, \"actorIndex\": 0, \"delay\": 4.0, \"duration\": 2.5, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.0411], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #36",
+        "time": 107.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"quick-jump\", \"loop\": 0, \"hasDuration\": true, \"duration\": 1.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"quick-jump\", \"loop\": 0, \"hasDuration\": false, \"duration\": 0.9, \"hasStartTime\": true, \"startTime\": 4.8, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #48",
+        "time": 109.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.15, \"delay\": 0.0, \"pos\": [0.0, -5.0, 7.66], \"hpr\": [180.0, -5.0, 5.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"startPos\": [0.0, -5.0, 8.0], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.15, \"delay\": 0.0, \"pos\": [0.0, -5.0, 7.33], \"hpr\": [180.0, -5.0, -5.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"startPos\": [0.0, -5.0, 8.0], \"startHpr\": [180.0, -5.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.15, \"delay\": 0.0, \"pos\": [0.0, -5.0, 7.0], \"hpr\": [180.0, -5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"startPos\": [0.0, -5.0, 8.0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #37",
+        "time": 114.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [0.0, -15.0, 8.0], \"hpr\": [180.0, 5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -5.0, 8.0], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 27, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.7, 0.0, 7.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 2.5, \"pos\": [0.0, -5.0, 8.0], \"hpr\": [180.0, -10.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -15.0, 8.0], \"startHpr\": [180.0, 5.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 28, \"actorIndex\": 0, \"delay\": 2.5, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.55522], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #38",
+        "time": 116.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 1.0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [0, 0, 0], \"useStartHpr\": 0, \"startHpr\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 2.0}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [-180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0, 0, 0]}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #39",
+        "time": 119.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [-1.5, -33.5, 0.1], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [1.5, -33.5, 0.1], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 4, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [2.5, -31.5, 0.1], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [12.0, -22.0, 5.0], \"hpr\": [24.99999, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -5.0, 8.0], \"startHpr\": [0, 0, 0]}"
+            },
+            "4": {
+                "eventDefEnum": "showSuits",
+                "kwargs": "{}"
+            },
+            "5": {
+                "eventDefEnum": "openElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Event #41",
+        "time": 121.75,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": false, \"hasDuration\": true, \"duration\": 0.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 4, \"duration\": 0.5, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [2.5, -26.0, -0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "suitProjectileFly",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0, \"flyDuration\": 5.0, \"gravityMult\": 0.6, \"destPos\": [-4.0, 9.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #42",
+        "time": 122.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"walk\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 0.5, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [-2.5, -28.0, -0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "suitProjectileFly",
+                "kwargs": "{\"suitIndex\": 3, \"delay\": 0, \"flyDuration\": 5.0, \"gravityMult\": 0.6, \"destPos\": [0.0, 10.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"landing\", \"loop\": false, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": false, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #43",
+        "time": 122.75,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"landing\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.5, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 0.5, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [2.5, -28.0, -0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "suitProjectileFly",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0, \"flyDuration\": 5.0, \"gravityMult\": 0.6, \"destPos\": [4.0, 9.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0, \"delay\": 1.0, \"pos\": [13.9, -5.0, 11.0], \"hpr\": [150.00001, -15.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [11.18, -22.0, 5.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 29, \"actorIndex\": 0, \"delay\": 2.0, \"duration\": 5.25, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 6.29816], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #50",
+        "time": 123.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"landing\", \"loop\": 0, \"hasDuration\": true, \"duration\": 0.01, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #44",
+        "time": 127.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": false, \"hasDuration\": true, \"duration\": 1.0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 4, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #45",
+        "time": 127.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"walk\", \"loop\": false, \"hasDuration\": true, \"duration\": 1.0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #46",
+        "time": 128.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 1.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"hpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #50",
+        "time": 128.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #51",
+        "time": 129.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "DM Taunt",
+        "time": 130.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [-1e-05, -25.0, 2.00001], \"hpr\": [180.0, 21.99999, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [-4.255, -22.0, 0.3], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"glower\", \"loop\": 0, \"hasDuration\": true, \"duration\": 2.6, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #53",
+        "time": 130.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 30, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    }
+]

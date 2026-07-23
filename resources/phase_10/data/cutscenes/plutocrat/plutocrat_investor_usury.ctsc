@@ -1,0 +1,81 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 10.2827, 4.88429], \"hpr\": [180.0, 7.84317, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "styx gesture",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"neutral\", \"toAnim\": \"finger-wag\", \"continueToAnim\": false, \"duration\": 3.90166, \"hasFromStartTime\": false, \"fromStartTime\": 0, \"hasFromEndTime\": true, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": true, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": false, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "camera pan",
+        "time": 1.7,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.87146, \"delay\": 0.0, \"pos\": [0.0, 10.2827, 4.88429], \"hpr\": [180.0, 9.15032, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-2.21442, 10.12648, 4.88429], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "do something",
+        "time": 2.78325,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.6899, \"colorScale\": [1.0, 1.0, 1.0, 1.0], \"startColorScale\": [1.0, 0.4553, 0.5461, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 1, \"fromAnim\": \"pie-small-react\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 2.06972, \"hasFromStartTime\": 0, \"fromStartTime\": 0, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.6899, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [0.65868, 1.0, 0.58969, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 4.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 5, \"wrt\": true}"
+            }
+        }
+    }
+]

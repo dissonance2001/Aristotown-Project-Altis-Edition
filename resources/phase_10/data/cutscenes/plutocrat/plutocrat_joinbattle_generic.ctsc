@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Suit Flies In",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [80.0, 0.0, 10.0], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 4, \"wrt\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "suitProjectileFly",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"flyDuration\": 5.5, \"gravityMult\": 1.0, \"destPos\": [0, 0, 0]}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"duration\": 0.2, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [10.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    }
+]

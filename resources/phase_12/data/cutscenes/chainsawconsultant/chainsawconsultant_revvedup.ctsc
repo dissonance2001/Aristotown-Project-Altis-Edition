@@ -1,0 +1,77 @@
+[
+    {
+        "name": "the voices",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-6.89907, 5.80971, 6.17285], \"hpr\": [230.74439, 8.16994, -0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "set chainsaw hp to 0",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 4.1, \"delay\": 0.0, \"end\": 69.98547, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "he's so weak soo so weak please help him",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"revvedup\", \"loop\": 0, \"hasDuration\": false, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 1, \"endAnim\": \"neutral\", \"isInterval\": true, \"oldStyleEndAnim\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-3.21334, 0.38561, 6.69815], \"scale\": 1.96401, \"hideNametag\": false, \"wantHeadAnim\": false, \"wantSound\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 4, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.3, \"isInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "why are you stil  l readng these",
+        "time": 4.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "cleanup on aisle 4",
+        "time": 4.478999999999999,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 2, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

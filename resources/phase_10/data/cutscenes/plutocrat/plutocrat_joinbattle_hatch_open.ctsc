@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Open Left Door",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 18.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 19.0, 0.0], \"startPos\": [0.0, 17.5, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Open Right Door",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -18.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -19.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Open SFX",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 4, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    }
+]

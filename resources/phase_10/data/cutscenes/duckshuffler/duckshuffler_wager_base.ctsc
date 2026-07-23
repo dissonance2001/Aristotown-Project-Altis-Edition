@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-5.253, 9.483, 6.533], \"hpr\": [210.169, -6.941, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 58.814, \"blendType\": \"easeInOut\", \"start\": 31.5, \"useStart\": false}"
+            }
+        }
+    },
+    {
+        "name": "begin roll",
+        "time": 0.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "duckShufflerRoll",
+                "kwargs": "{\"suitIndex\": 0, \"rollWait\": 1.1, \"rollADuration\": 1.259, \"rollBDuration\": 1.459, \"rollCDuration\": 1.659, \"endDuration\": 0.1, \"stopDistance\": 0.04, \"rollCount\": 5.568}"
+            }
+        }
+    },
+    {
+        "name": "Roll SFX",
+        "time": 0.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 4, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "camera head",
+        "time": 2.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.514, 7.713, 3.6], \"blendType\": \"easeInOut\", \"startPos\": [-5.253, 9.483, 6.533], \"useStartPos\": false}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-175.834, 6.749, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [173.151, -6.941, 0.0], \"useStartHpr\": false}"
+            },
+            "4": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 0, \"delay\": 0.0}"
+            },
+            "5": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.799, \"delay\": 0.0, \"end\": 45.639, \"blendType\": \"easeInOut\", \"start\": 58.814, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Result SFX",
+        "time": 3.75,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 4, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "pull cam back",
+        "time": 4.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 45.639, \"useStart\": false}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"pos\": [5.655, -12.596, 7.326], \"blendType\": \"easeInOut\", \"startPos\": [-0.9, 4.628, 1.157], \"useStartPos\": false}"
+            },
+            "4": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"hpr\": [18.0, -9.25501, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [191.568, -0.0, -0.0], \"useStartHpr\": false}"
+            },
+            "5": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 6.792,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    }
+]

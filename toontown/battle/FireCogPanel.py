@@ -25,9 +25,9 @@ class FireCogPanel(StateData.StateData):
         self.invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.passIcon = self.rowModels.find('**/pass_icon')
-        self.fireIcon = self.status.find('**/toon_accuracy_down_icon')
+        self.fireIcon = self.status.find('**/pinkslip_icon')
         self.sueIcon = self.status.find('**/sued_icon')
-        self.sosIcon = self.status.find('**/toon_accuracy_up_icon')
+        self.sosIcon = self.status.find('**/energized_icon')
         self.invModels = []
         for track in range(len(AvPropsNew)):
             itemList = []
@@ -43,7 +43,7 @@ class FireCogPanel(StateData.StateData):
             scale=0.425
         )
         self.frame.hide()
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_scale=0.075, pos=(0, 0, -0.275))
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), text_scale=0.075, pos=(0, 0, -0.275))
         self.avatarButtons = []
         for i in xrange(7):
             button = DirectButton(parent=self.frame, relief=None, image=(
@@ -54,12 +54,12 @@ class FireCogPanel(StateData.StateData):
             self.avatarButtons.append(button)
 
         self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(0, 0, -0.6),
-                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getSignFont(), command=self.__handleBack)
+                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), command=self.__handleBack)
         self.backButton.setBin('fixed', 0) 
         gui.removeNode()
         self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
 
-        self.fireIcon = self.status.find('**/toon_accuracy_down_icon')
+        self.fireIcon = self.status.find('**/pinkslip_icon')
 
         self.gagEmblem = DirectFrame(
             parent=self.frame,

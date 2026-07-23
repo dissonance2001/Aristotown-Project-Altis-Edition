@@ -1,0 +1,63 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 14.0, \"delay\": 0.0, \"pos\": [-0.79983, 6.47571, 8.19737], \"hpr\": [176.51999, 0.0, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"noBlend\", \"startPos\": [-0.6713, 3.64799, 8.1974], \"startHpr\": [176.51999, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "QUIZ SHOW BEGINS",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [-1.28534, 0.0, 7.84056], \"scale\": 1.22493, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-1.28534, 0.0, 7.84056], \"scale\": 1.22493, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 0, \"delay\": 0, \"duration\": 0.5, \"moveNametag\": true, \"xyz\": [-1.28534, 0.0, 7.84056], \"scale\": 1.22493, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 0, \"delay\": 1.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-1.28534, 0.0, 7.84056], \"scale\": 1.22493, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "4": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 7, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-1.28534, 0.0, 7.84056], \"scale\": 1.22493, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 8, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [-1.67095, 0.0, 7.84056], \"scale\": 1.61053, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "XI - FREEDOM DIVE",
+        "time": 7.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"soak\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 2.4, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": false}"
+            }
+        }
+    }
+]

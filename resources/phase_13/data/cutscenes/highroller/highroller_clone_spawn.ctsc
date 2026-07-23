@@ -1,0 +1,255 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Cam Seq",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [0.0, 20.0, 3.25579], \"hpr\": [180.0, 5.78394, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 14.0886, 5.95498], \"startHpr\": [180.0, 1.15665, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeOut\", \"start\": 29.15188, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Setup Suits",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [-10.0, 25.0, -4.775], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [-5.0, 25.0, -4.775], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "4": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [5.0, 25.0, -4.775], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "5": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [10.0, 25.0, -4.775], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.33, \"hasEndTime\": true, \"endTime\": 3.3, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "7": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.33, \"hasEndTime\": true, \"endTime\": 3.3, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "8": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.33, \"hasEndTime\": true, \"endTime\": 3.3, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "9": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.33, \"hasEndTime\": true, \"endTime\": 3.3, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "10": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 8}"
+            },
+            "11": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 9}"
+            },
+            "12": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 10}"
+            },
+            "13": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 11}"
+            }
+        }
+    },
+    {
+        "name": "New Cam",
+        "time": 1.0102500000000003,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Fade In Boys",
+        "time": 1.0102500000000003,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuits",
+                "kwargs": "{}"
+            },
+            "1": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 1, \"vfxIndex\": 0, \"delay\": 0.0}"
+            },
+            "2": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 2, \"vfxIndex\": 0, \"delay\": 0.0}"
+            },
+            "3": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 3, \"vfxIndex\": 0, \"delay\": 0.0}"
+            },
+            "4": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 4, \"vfxIndex\": 0, \"delay\": 0.0}"
+            },
+            "5": {
+                "eventDefEnum": "alphaScaleNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 3.0, \"alphaScale\": 1, \"startAlphaScale\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "6": {
+                "eventDefEnum": "alphaScaleNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 3.0, \"alphaScale\": 1, \"startAlphaScale\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "7": {
+                "eventDefEnum": "alphaScaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 3.0, \"alphaScale\": 1, \"startAlphaScale\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "8": {
+                "eventDefEnum": "alphaScaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 3.0, \"alphaScale\": 1, \"startAlphaScale\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "funny particles",
+        "time": 1.0102500000000003,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 3.0, \"delay\": 0, \"parentIndex\": 4, \"renderParentIndex\": 0, \"leaveItGoingForever\": false}"
+            },
+            "1": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 1, \"duration\": 3.0, \"delay\": 0, \"parentIndex\": 5, \"renderParentIndex\": 0, \"leaveItGoingForever\": false}"
+            },
+            "2": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 2, \"duration\": 3.0, \"delay\": 0, \"parentIndex\": 6, \"renderParentIndex\": 0, \"leaveItGoingForever\": false}"
+            },
+            "3": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 3, \"duration\": 3.0, \"delay\": 0, \"parentIndex\": 7, \"renderParentIndex\": 0, \"leaveItGoingForever\": false}"
+            }
+        }
+    },
+    {
+        "name": "Boy Recovery Arc",
+        "time": 4.02,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.25, \"hasEndTime\": false, \"endTime\": 6.42669, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.25, \"hasEndTime\": false, \"endTime\": 6.42669, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.25, \"hasEndTime\": false, \"endTime\": 6.42669, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"hr-fusion-shot5\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 3.25, \"hasEndTime\": false, \"endTime\": 6.42669, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Neutral & Repos",
+        "time": 4.7715,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [-10.0, 5.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "2": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 8}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [-5.0, 5.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "5": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 9}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "7": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [5.0, 5.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "8": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 10}"
+            },
+            "9": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "10": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [10.0, 5.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "11": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 11}"
+            },
+            "12": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 12, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "End",
+        "time": 5.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.03213}"
+            }
+        }
+    }
+]

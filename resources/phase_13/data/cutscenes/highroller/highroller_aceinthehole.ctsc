@@ -1,0 +1,312 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [1.1897, 3.15141, 8.27811], \"hpr\": [151.79288, -5.87655, 8.227], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 64.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.53441, \"delay\": 0.0, \"end\": 75.0, \"blendType\": \"easeOut\", \"start\": 64.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "[HRoller] Talk",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-1.56705, 0.0, 8.3576], \"scale\": 1.53636, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "[Fog] Create",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "createFog",
+                "kwargs": "{\"nodeIndex\": 0, \"fogType\": \"Exponential\", \"expDensity\": 0, \"fogColor\": [0.05611, 0.0, 0.05938]}"
+            },
+            "1": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0.0, \"duration\": 1.0, \"startDensity\": 0.0, \"endDensity\": 0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "[Fog] Adjust",
+        "time": 2.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0, \"duration\": 2.10606, \"startDensity\": 0, \"endDensity\": 0.3, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] Show All",
+        "time": 3.05,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.0, -4.20133, 2.98248], \"hpr\": [0.0, 16.45419, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [31.34877, 36.47412, 12.39163], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 85.0, \"blendType\": \"easeInOut\", \"start\": 85.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "[SuitsALL] MoveBack",
+        "time": 3.05,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] ToToons",
+        "time": 4.458,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.11, \"delay\": 0.0, \"pos\": [0.0, -0.93663, 2.06835], \"hpr\": [180.0, 16.45417, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -4.20133, 2.98248], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] React1",
+        "time": 4.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 2, \"toonExpression\": \"angry\"}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 0, \"delay\": 0, \"emoteIndex\": \"Bored\"}"
+            },
+            "2": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 1, \"delay\": 0.5, \"emoteIndex\": \"Yawn\"}"
+            },
+            "3": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 2, \"delay\": 0.5, \"emoteIndex\": \"Confused\"}"
+            },
+            "4": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 0.5, \"emoteIndex\": \"Think\"}"
+            },
+            "5": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 3, \"toonExpression\": \"surprise\"}"
+            },
+            "6": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.79559}"
+            },
+            "7": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 2, \"toonExpression\": \"normal\"}"
+            },
+            "8": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.17529}"
+            },
+            "9": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 3, \"toonExpression\": \"normal\"}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] React2",
+        "time": 7.6,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToPoint",
+                "kwargs": "{\"target\": \"All\", \"point\": [-3.13412, 0.0, 0.0], \"duration\": 0.94677, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "setAllEmote",
+                "kwargs": "{\"delay\": 0, \"emoteIndex\": \"Surprise\"}"
+            }
+        }
+    },
+    {
+        "name": "[HRHead] Enter",
+        "time": 8.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.39176, \"pos\": [0.0, 0.0, 0.0], \"startPos\": [0.0, 0.0, -20.0], \"useStartPos\": true, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0, \"duration\": 0.28017, \"startDensity\": 0.3, \"endDensity\": 0.01, \"blendType\": \"easeOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 5}"
+            }
+        }
+    },
+    {
+        "name": "[Card] Anims",
+        "time": 8.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 2, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 3, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "[Card] Unhide",
+        "time": 10.527,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] ZoomOut",
+        "time": 10.65,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.84883, \"delay\": 0.0, \"pos\": [0.0, 7.68475, 16.56366], \"hpr\": [180.0, -23.50604, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -0.93663, 2.06835], \"startHpr\": [180.0, 16.45419, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.19587, \"delay\": 0.0, \"pos\": [0.0, 4.15884, 10.16481], \"hpr\": [180.0, -50.53754, 0.0], \"useStartPos\": true, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 7.68475, 16.56366], \"startHpr\": [0.0, 16.45419, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] Run",
+        "time": 10.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToPoint",
+                "kwargs": "{\"target\": \"All\", \"point\": [0.0, 50.0, 0.0], \"duration\": 0.78353, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "[HRHead] Exit",
+        "time": 10.83,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.52236, \"pos\": [0.0, 20.0, -20.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": true, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 5}"
+            }
+        }
+    },
+    {
+        "name": "[ToonsALL] Squish",
+        "time": 11.486249999999998,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "squishToon",
+                "kwargs": "{\"toonIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "squishToon",
+                "kwargs": "{\"toonIndex\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "squishToon",
+                "kwargs": "{\"toonIndex\": 2}"
+            },
+            "3": {
+                "eventDefEnum": "squishToon",
+                "kwargs": "{\"toonIndex\": 3}"
+            }
+        }
+    },
+    {
+        "name": "[Cam] Final",
+        "time": 12.3255,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.45706, \"delay\": 0.0, \"pos\": [0.0, 3.63648, 3.63537], \"hpr\": [180.0, -2.35047, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 4.15884, 10.16481], \"startHpr\": [180.0, -50.53754, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.48971, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 85.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "[All] Cleanup",
+        "time": 13.223999999999998,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0.0, \"duration\": 1.0, \"startDensity\": 0.01, \"endDensity\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "1": {
+                "eventDefEnum": "destroyFog",
+                "kwargs": "{\"nodeIndex\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 5, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

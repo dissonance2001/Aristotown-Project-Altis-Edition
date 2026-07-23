@@ -159,7 +159,7 @@ def __createSuitResetPosTrack(suit, battle):
     return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
 
 
-def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
+def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0, disrespectBlend=False):
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
@@ -191,6 +191,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
     if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] in ['cinema', 'choreo', 'fmaker'] and attack['name'] == 'SmokeAndMirrors' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
@@ -211,6 +214,8 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
             track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
         elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'firestarter-cigar-smoke', playRate=playRate))
+        elif attack['suitName'] in ['cinema', 'choreo', 'fmaker'] and attack['name'] == 'SmokeAndMirrors' and not attack['suit'].isSkeleton:
+            track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
         elif attack['suitName'] == 'payman' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
             track.append(ActorInterval(suit, 'headhoncho-cigar-smoke', playRate=playRate))
         elif attack['suitName'] == 'safesupervis' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:
@@ -223,9 +228,14 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0):
         shuffleAnim = 'shuffle-left'
     track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle))
     )
-    if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
-        track.append(
-        Func(suit.setNeutralAnimationDrop))
+    if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
+            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+                if not disrespectBlend == True:
+                    track.append(
+                suit.makeBlendInterval(shuffleAnim))
+                else:
+                    track.append(
+                    Func(suit.setNeutralAnimationDrop))
     return track
 
 def getToonGroupCenter(attack, battle):
@@ -245,7 +255,7 @@ def getToonGroupCenter(attack, battle):
     avg /= float(len(points))
     return avg
 
-def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
+def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.0, disrespectBlend=False):
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
@@ -455,15 +465,19 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
         track.append(
             Func(suit.loop, 'neutral-enraged'))
     else:
-        if not attack['name'] == 'BroadcasterDonation':
+        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
             if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
-                track.append(
-                Func(suit.setNeutralAnimationDrop))
+                if not disrespectBlend == True:
+                    track.append(
+                suit.makeBlendInterval(shuffleAnim))
+                else:
+                    track.append(
+                    Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 
 
-def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
+def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, disrespectBlend=False):
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
@@ -674,10 +688,14 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0):
         track.append(
             Func(suit.loop, 'neutral-enraged'))
     else:
-        if not attack['name'] == 'BroadcasterDonation':
+        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
             if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
-                track.append(
-                Func(suit.setNeutralAnimationDrop))
+                if not disrespectBlend == True:
+                    track.append(
+                suit.makeBlendInterval('neutral'))
+                else:
+                    track.append(
+                    Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 

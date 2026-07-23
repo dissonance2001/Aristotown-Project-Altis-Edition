@@ -1,0 +1,72 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.606, \"delay\": 0.0, \"pos\": [0.0, 9.87655, 5.80973], \"hpr\": [180.0, 3.92154, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeIn\", \"startPos\": [0.0, 18.73639, 7.26215], \"startHpr\": [180.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.606, \"delay\": 0.0, \"end\": 43.66016, \"blendType\": \"easeIn\", \"start\": 65.0835, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Hand Thing",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"come-on\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.65868, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #5",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Timer",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.36311}"
+            },
+            "1": {
+                "eventDefEnum": "showTimescaleChange",
+                "kwargs": "{\"enterDuration\": 0.52796, \"holdDuration\": 1.54466, \"exitDuration\": 0.63689, \"timerScale\": 0.63689}"
+            }
+        }
+    },
+    {
+        "name": "End",
+        "time": 2.474,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 43.66016, \"useStart\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    }
+]

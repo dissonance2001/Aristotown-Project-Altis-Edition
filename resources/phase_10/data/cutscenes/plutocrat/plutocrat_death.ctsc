@@ -1,0 +1,275 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 8.6666, 7.01585], \"hpr\": [-180.0, -22.87599, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [1 to 4]",
+        "time": 0.25,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "PC Gloating",
+        "time": 3.3,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"effort\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "PC Hit It!",
+        "time": 9.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mob-mentality\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Cannon",
+        "time": 12.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": false}"
+            },
+            "1": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0.2, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": false}"
+            },
+            "2": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0.4, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": false}"
+            },
+            "3": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 3, \"delay\": 0.6, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": false}"
+            },
+            "4": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 4, \"delay\": 0.8, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": true}"
+            },
+            "5": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 5, \"delay\": 1.0, \"resetDelay\": 2.0, \"cogCannon\": true, \"aimAtPoint\": true, \"aimAtNode\": false, \"point\": [55.0, 0.0, 30.0], \"nodeIndex\": 0, \"fireDelay\": 2.5, \"unemployment\": true}"
+            }
+        }
+    },
+    {
+        "name": "Scale Nametag",
+        "time": 12.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 1.0, \"scale\": [4.0, 1.0, 5.0], \"startScale\": [1.0, 1.0, 1.0], \"useStartScale\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Camera Movement",
+        "time": 12.6,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.75, \"delay\": 0.0, \"pos\": [0.0, -9.0, 8.0], \"hpr\": [0, 0, 0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-17.20549, -5.6667, 7.01585], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [5]",
+        "time": 12.6,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [0.0, 2.42073, 5.32561], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Open Left Door",
+        "time": 13.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 18.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 19.0, 0.0], \"startPos\": [0.0, 17.5, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 20.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Open Right Door",
+        "time": 13.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -18.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -19.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -20.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Open SFX",
+        "time": 13.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 5, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Reparent Nametag 2 R",
+        "time": 13.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Close Left Door",
+        "time": 18.6,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, 8.0, 0.0], \"startPos\": [0.0, 20.0, 0.0], \"useStartPos\": true, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 10.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 8.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 9.0, 0.0], \"startPos\": [0.0, 17.5, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, 8.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Close Right Door",
+        "time": 18.6,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.2, \"pos\": [0.0, -8.0, 0.0], \"startPos\": [0.0, -20.0, 0.0], \"useStartPos\": true, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -10.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -8.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -9.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.0, -8.0, 0.0], \"startPos\": [0.0, -7.99742, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Close SFX",
+        "time": 18.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 6, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    }
+]

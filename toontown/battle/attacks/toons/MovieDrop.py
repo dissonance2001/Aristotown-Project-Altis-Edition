@@ -496,8 +496,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
             ActorInterval(suit, anim)
         )
     suitTrack.append(Wait(delay + tObjectAppears))
-    if suit.dropRushJob:
-        suitTrack.append(Func(suit.makeUnDropRushJob))
+    if suit.getSuitStatusModifier('rushJob') == 7:
+        suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     if hp > 0:
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
@@ -511,7 +511,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if visualDied and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -548,16 +548,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(Func(suit.setNeutralAnimationDrop))
     #suitTrack.append(Func(suit.setNeutralAnimationDrop))
     suitIndex = battle.activeSuits.index(suit)
-    if suit.dna.name == 'sgoat' and suit.isShielding:
-        suitTrack.append(Func(suit.addRageBuilding, hp))
-    if suit.dna.name == 'phouse':
-        suitTrack.append(Func(suit.addPowerhouseRotation, hp))
-    if suit.dna.name == 'liquid' and suit.isStormCell:
-        suitTrack.append(Func(suit.addStormCellDamage))
-    if suit.isHeavyRain:
-        suitTrack.append(Func(suit.addHeavyRainDamage, hp))
-    if suit.isSued:
-        suitTrack.append(Func(suit.makeSued, 3))
+    if suit.hasSuitStatusEffect('sued'):
+        suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
     if bonusTrack != None:
         suitTrack = Parallel(suitTrack, bonusTrack)
     else:

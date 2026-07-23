@@ -1,0 +1,111 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.06041, \"delay\": 0.0, \"pos\": [-2.82777, -2.05658, 5.39844], \"hpr\": [-24.29276, 0.0, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [-3.21336, 2.44212, 5.39844], \"startHpr\": [-109.89637, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"objection-in\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "quick pan",
+        "time": 1.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.18, \"delay\": 0.0, \"pos\": [4.49867, 6.29811, 14.78142], \"hpr\": [148.55698, -46.27232, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [2.86323, 7.00691, 5.39844], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #3",
+        "time": 1.2315,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"objection-loop\", \"loop\": true, \"hasDuration\": true, \"duration\": 0.73907, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "L",
+        "time": 1.3792499999999996,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0, \"duration\": 1.60668, \"colorScale\": [0.114, 0.298, 0.843, 1.0], \"startColorScale\": [1.0, 0.96144, 0.33162, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "1": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.8676, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "3": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.8676, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "4": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0.8676, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "5": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.8676, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "Event #4",
+        "time": 2.023,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"objection-out\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Event #5",
+        "time": 3.071,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #10",
+        "time": 3.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    }
+]

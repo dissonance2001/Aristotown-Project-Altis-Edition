@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showTimescaleChange",
+                "kwargs": "{\"enterDuration\": 0.41903, \"holdDuration\": 1.36311, \"exitDuration\": 0.41903, \"timerScale\": 0.81844}"
+            }
+        }
+    }
+]

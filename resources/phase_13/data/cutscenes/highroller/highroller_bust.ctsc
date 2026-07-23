@@ -1,0 +1,148 @@
+[
+    {
+        "name": "Event #12",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 2, \"targetIndex\": 5, \"wrt\": false, \"disable\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0, 0, 0], \"hpr\": [0, 0, 0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0, 0, 0], \"startHpr\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"hr-bust\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": false}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"bust\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.0, \"pos\": [0.0, -5.96766, 1.16597], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "laugh",
+        "time": 0.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0, \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-0.51411, 1.1568, 7.32643], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": false, \"wantSound\": false, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "finger wag",
+        "time": 3.28,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": true, \"duration\": 0.87, \"volume\": 1.0, \"startTime\": 2.0, \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 2.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "snap",
+        "time": 5.58,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 2, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.35, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #5",
+        "time": 5.612,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNametag",
+                "kwargs": "{\"actorIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 2, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "squish",
+        "time": 6.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 3, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": true, \"duration\": 1.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "weight",
+        "time": 7.043,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 4, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": true, \"duration\": 1.44601, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "dice disappear",
+        "time": 7.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 3, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "reparent to battle",
+        "time": 9.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "setAllAnimStates",
+                "kwargs": "{\"delay\": 0, \"animState\": \"Neutral\"}"
+            }
+        }
+    }
+]

@@ -1,0 +1,158 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 8.89615, 5.26507], \"hpr\": [-180.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"lunch-loop\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"lunch-loop\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 6, \"wrt\": false, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0, 0, 0], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            },
+            "6": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "MS Stops Eating -Body",
+        "time": 1.95,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"lunch-end\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "MS Stops Eating -Head",
+        "time": 1.95,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"lunch-end\", \"loop\": 0, \"hasDuration\": true, \"duration\": 2.49, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Hide Sandwitch",
+        "time": 2.8195000000000006,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 4}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue",
+        "time": 4.45,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": false, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Return Point",
+        "time": 5.271,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 5, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"pos\": [0.0, 10.55919, 7.26218], \"hpr\": [180.0, -11.43794, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 8.89615, 5.26507], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "Walk to Battle",
+        "time": 5.542475799999977,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 3, \"targetIndex\": 5, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 5, \"duration\": 0.5, \"blendType\": \"noBlend\", \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 3.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 2, \"duration\": 0.5, \"blendType\": \"easeInOut\", \"anim\": \"walk\", \"offset\": [0, 0, 0]}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "6": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 3, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            },
+            "7": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [2]",
+        "time": 9.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.5, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": false, \"disable\": false}"
+            }
+        }
+    }
+]

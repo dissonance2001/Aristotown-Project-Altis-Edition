@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"All\", \"pos\": [0.0, -29.45493, 0.0], \"duration\": 0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\", \"shape\": \"Circle\", \"radius\": 2.62563, \"h\": 0.0}"
+            },
+            "1": {
+                "eventDefEnum": "moveToonsToBattlePos",
+                "kwargs": "{\"duration\": 3.68253, \"hasAnim\": true, \"anim\": \"walk\", \"delay\": 0, \"battleNodeIndex\": 0, \"flipY\": 0, \"xyzOffset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    }
+]

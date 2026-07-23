@@ -104,7 +104,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         base.boss = self
         self.currHP = 0
         self.maxHP = self.bossMaxDamage
-
+        self.__sequences = []
         self.highroller = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')
@@ -390,9 +390,12 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highRollerArena.setPos(0, -222, -4.05)
         self.endVault.setPos(84, -201, -6)
         self.geom = NodePath('geom')
+        self.hide()
         self.midVault.reparentTo(self.geom)
+        self.midVault.hide()
         self.highRollerArena.reparentTo(self.geom)
         self.endVault.reparentTo(self.geom)
+        self.endVault.hide()
         self.highroller.reparentTo(self.geom)
         self.highroller.setPosHpr(0, -200, 0, 180, 0, 0)
         self.highroller.hide()
@@ -431,6 +434,12 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.endVault.findAllMatches('**/MagnetArms').detach()
         self.endVault.findAllMatches('**/Safes').detach()
         self.endVault.findAllMatches('**/MagnetControlsAll').detach()
+        self.__graphic = self.highRollerTV.find('**/screen_graphic_full')
+        self.__static = self.highRollerTV.find('**/screen_graphic_static_seq')
+        self.__light1 = self.highRollerTV.find('**/light_group_1_glow')
+        self.__light2 = self.highRollerTV.find('**/light_group_2_glow')
+        self.__stars = self.highRollerTV.find('**/stars')
+        self.__marks = self.highRollerTV.find('**/exclamation_marks')
         cn = self.endVault.find('**/wallsCollision').node()
         cn.setIntoCollideMask(OTPGlobals.WallBitmask | ToontownGlobals.PieBitmask)
         self.door1 = self.midVault.find('**/SlidingDoor1/')
@@ -464,6 +473,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         planeNode.setCollideMask(ToontownGlobals.PieBitmask)
         self.geom.attachNewNode(planeNode)
         self.geom.reparentTo(render)
+        self.__setupExclaim()
+        self.__startAnimations()
         self.introduction = base.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn.ogg')
         self.elevatorMusic = base.loader.loadMusic('phase_10/audio/bgm/cb_elevator.ogg')
         self.battleOneMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle.ogg')
@@ -483,18 +494,21 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def puzzle(self):
         self.puzzleMusic.setLoop(True)
         self.puzzleMusic.play()
+        self.__static.hide()
         self.battleOneMusic.stop()
         self.phaseOneMusic.stop()
 
     def shuffle(self):
         self.shuffleMusic.setLoop(True)
         self.shuffleMusic.play()
+        self.__static.hide()
         self.battleOneMusic.stop()
         self.phaseOneMusic.stop()
 
     def trivia(self):
         self.triviaMusic.setLoop(True)
         self.triviaMusic.play()
+        self.__static.hide()
         self.battleOneMusic.stop()
         self.phaseOneMusic.stop()
 
@@ -502,6 +516,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.stingerMusic.play()
         self.battleOneMusic.stop()
         self.phaseOneMusic.stop()
+        self.__static.hide()
         self.shuffleMusic.stop()
         self.triviaMusic.stop()
         self.puzzleMusic.stop()
@@ -521,17 +536,20 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def __startBattleOneLoop(self, task):
         self.phaseOneMusic.setLoop(True)
         self.phaseOneMusic.play()
+        self.__static.show()
         return task.done
 
     def phase2Intro(self):
         self.battleOneMusic.stop()
         self.phaseOneMusic.stop()
+        self.__static.hide()
         self.phaseTwoCutsceneMusic.play()
         self.battleTwoMusic.stop()
 
     def startPhase2Music(self):
         self.startHighRollerParticles()
         self.turnLightsBackOn()
+        self.__static.show()
         self.colorScaleOffAllNodes()
         self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
         self.phaseTwoCutsceneMusic.stop()
@@ -541,6 +559,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def phase3Intro(self):
         self.phaseTwoMusic.stop()
+        self.__static.hide()
         self.phaseOneMusic.stop()
         self.phaseThreeCutsceneMusic.play()
 
@@ -548,6 +567,76 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.phaseThreeCutsceneMusic.stop()
         self.phaseThreeMusic.play()
         self.phaseThreeMusic.setLoop(True)
+
+    def __setupExclaim(self):
+        """
+        The exclaimation marks need to be set up in a specific way.
+        """
+        self.__marksNode = NodePath('marksNode')
+        # from toontown.battle.BattleProps import globalPropPool
+        # obj = globalPropPool.getProp('anvil')
+        # self.__marksNode.assign(obj.getGeomNode())
+
+        self.__marksNode.reparentTo(self.__marks)
+        self.__marksNode.setHpr(0, 47.0589, 0)
+        self.__marksNode.setPos(0, 0.2 + 4, - 4)
+        self.__marksNode.wrtReparentTo(self.highRollerTV)
+        self.__marks.wrtReparentTo(self.__marksNode)
+
+    def __startAnimations(self):
+        self.marks_pitch_start = 47.0589
+        self.marks_pitch_dist = 0.7
+        self.marks_pitch_duration = 3.0
+
+        self.star_bob_dist = 0.35
+        self.star_bob_duration = 4.0
+
+        self.light_flash_duration = 0.4
+
+        self.text_displacement_scale = 0.33
+        self.text_z_offset = -0.5
+        # Marks Sequence
+        markSequence = Sequence(
+            LerpHprInterval(self.__marksNode, self.marks_pitch_duration / 2.0, hpr=(0, self.marks_pitch_start + self.star_bob_dist, 0), startHpr=(0, self.marks_pitch_start - self.star_bob_dist, 0), blendType='easeInOut'),
+            LerpHprInterval(self.__marksNode, self.marks_pitch_duration / 2.0, hpr=(0, self.marks_pitch_start - self.star_bob_dist, 0), startHpr=(0, self.marks_pitch_start + self.star_bob_dist, 0), blendType='easeInOut')
+        )
+        markSequence.loop()
+        self.__sequences.append(markSequence)
+
+        # Star Sequence
+        starSequence = Sequence(
+            LerpHprInterval(self.__stars, self.star_bob_duration / 2.0, hpr=(0, self.star_bob_dist, 0), startHpr=(0, -self.star_bob_dist, 0), blendType='easeInOut'),
+            LerpHprInterval(self.__stars, self.star_bob_duration / 2.0, hpr=(0, -self.star_bob_dist, 0), startHpr=(0, self.star_bob_dist, 0), blendType='easeInOut')
+        )
+        starSequence.loop()
+        self.__sequences.append(starSequence)
+
+        # Light Sequence
+        lightSequence = Sequence(
+            Func(self.__light1.show),
+            Func(self.__light2.hide),
+            Wait(self.light_flash_duration),
+            Func(self.__light1.hide),
+            Func(self.__light2.show),
+            Wait(self.light_flash_duration),
+        )
+        lightSequence.loop()
+        self.__sequences.append(lightSequence)
+
+    def __setupExclaim(self):
+        """
+        The exclaimation marks need to be set up in a specific way.
+        """
+        self.__marksNode = NodePath('marksNode')
+        # from toontown.battle.BattleProps import globalPropPool
+        # obj = globalPropPool.getProp('anvil')
+        # self.__marksNode.assign(obj.getGeomNode())
+
+        self.__marksNode.reparentTo(self.__marks)
+        self.__marksNode.setHpr(0, 47.0589, 0)
+        self.__marksNode.setPos(0, 0.2 + 4, - 4)
+        self.__marksNode.wrtReparentTo(self.highRollerTV)
+        self.__marks.wrtReparentTo(self.__marksNode)
 
     def unloadEnvironment(self):
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
@@ -673,6 +762,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return Sequence(Func(self.__showFakeGoons, 'Walk'), goonTrack, Func(self.__hideFakeGoons))
 
     def makeIntroductionMovie(self, delayDeletes):
+        self.hide()
         for toonId in self.involvedToons:
             toon = self.cr.doId2do.get(toonId)
             if toon:
@@ -819,6 +909,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return Sequence(Func(base.camera.reparentTo, render), track)
 
     def makePrepareBattleTwoMovie(self, delayDeletes):
+        self.hide()
         startPos = Point3(ToontownGlobals.CashbotBossBattleOnePosHpr[0], ToontownGlobals.CashbotBossBattleOnePosHpr[1], ToontownGlobals.CashbotBossBattleOnePosHpr[2])
         battlePos = Point3(ToontownGlobals.CashbotBossBattleThreePosHpr[0], ToontownGlobals.CashbotBossBattleThreePosHpr[1], ToontownGlobals.CashbotBossBattleThreePosHpr[2])
         startHpr = Point3(ToontownGlobals.CashbotBossBattleOnePosHpr[3], ToontownGlobals.CashbotBossBattleOnePosHpr[4], ToontownGlobals.CashbotBossBattleOnePosHpr[5])
@@ -1270,7 +1361,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.CashbotBossBattleOnePosHpr)
-        self.show()
+        self.hide()
         self.pelvis.setHpr(self.pelvisReversedHpr)
         self.doAnimate()
         self.endVault.unstash()

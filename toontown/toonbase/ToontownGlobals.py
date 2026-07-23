@@ -275,17 +275,17 @@ streetMgrs2Zones = {"duckshfl": [SillyStreet, LoopyLane, PunchlinePlace, WackyWa
                     "fires": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
                     "treek": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
                     "fbed": [LullabyLane, PajamaPlace, TwilightTerrace]}
-streetMgrs2Levels = {"duckshfl": 30,
-                     "ddiver": 30,
-                     "gatekeep": 30,
-                     "bellring": 30,
-                     'mouthp': 30,
-                     "fires": 30,
-                     "treek": 30,
+streetMgrs2Levels = {"duckshfl": 5,
+                     "ddiver": 7,
+                     "gatekeep": 10,
+                     "bellring": 13,
+                     'mouthp': 16,
+                     "fires": 20,
+                     "treek": 24,
                      "fbed": 30}
 
 # Manager Music
-animSuitHeadsPosedNeutral = ('ddiver', 'chairman', 'cbr', 'shw', 'mg', 'phouse', 'racket', 'bookkeep')
+animSuitHeadsPosedNeutral = ('ddiver', 'chairman', 'cbr', 'shw', 'mg', 'phouse', 'racket', 'bookkeep', 'chairman2')
 noCustomMusicManagers = ["bdirector", "ghd", "sya", "radiog", "ubuster", "racket", "safesupervis", "redd", "wsi", "erfit", "ambass", "wtapper", "bkeeper", "phouse", "arbit", "videog"]
 managerMusic = {"djockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
                 "ptjockey": "phase_3.5/audio/bgm/TC_SZ_SH_encntr.ogg",
@@ -355,7 +355,7 @@ BossbotCountryClubIntB = 10600
 BossbotCountryClubIntC = 10700
 SellbotHQ = 11000
 SellbotLobby = 11100
-SellbotMultislackerLobby    = 11300
+SellbotMultislackerLobby = 11300
 SellbotFactoryExt = 11200
 SellbotFactoryInt = 11500
 CashbotHQ = 12000
@@ -365,7 +365,7 @@ CashbotMintIntB = 12600
 CashbotMintIntC = 12700
 LawbotHQ = 13000
 LawbotLobby = 13100
-LawbotLounge                = 13700  # OCLO Lobby
+LawbotLounge = 13700  # OCLO Lobby
 LawbotOfficeExt = 13200
 LawbotOfficeInt = 13300
 LawbotStageIntA = 13300

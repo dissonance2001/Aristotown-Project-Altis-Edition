@@ -108,15 +108,44 @@ COG_LEVEL_RANGES = [
 
     # ...
 ]
+DEPARTMENT_CODES = ['c', 'l', 'm', 's', 'g', 't', 'p']
+
+DEPARTMENT_ICON_PATHS = {
+    'c': '**/CorpIcon',
+    'l': '**/LegalIcon',
+    'm': '**/MoneyIcon',
+    's': '**/SalesIcon',
+    'g': '**/LegalIcon',
+    't': '**/LegalIcon',
+    'p': '**/LegalIcon',
+}
+
+DEPARTMENT_SPLASH_POSITIONS = {
+    'c': (-0.52, 0, 0.0),
+    'l': (0.0, 0, 0.0),
+    'm': (0.52, 0, 0.0),
+
+    's': (-0.52, 0, -0.15),
+    'g': (0.0, 0, -0.15),
+    't': (0.52, 0, -0.15),
+
+    'p': (0.0, 0, -0.3),
+}
 MANAGER_SUITS = [
-'whistleb', 'clubpres', 'ovt', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
+'clubpres', 'ovt', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
                   'kerberos', 'charon', 'pcrat', 'clerk', 'mouthp', 'rainmake', 'whunter', 'wsi',
                   'liquidr', 'treasure', 'hustle', 'bookkeep', 
-                  'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'dking', 'ottoman', 'crystal', 'chairman',
+                  'sgoat', 'caseman', 'stenog', 'lgator', 'bdirector', 'ddiver', 'gatekeep', 'dola', 'dold', 'dking',
                   'sya', 'pbl', 'liquid', 'cbutcher', 'cdirector', 'rkeeper'
 ]
+COG_BIO_QUOTES = {
+    'bkeeper': 'Every cent must be accounted for.',
+    'wtapper': 'Your call may be monitored.',
+    'ambass': 'Let us discuss the terms.',
+}
 DEPT_ORDER = ['c', 'l', 'm', 's', 'g', 't', 'p']
+BOSS_COGS = ['ceo', 'cj', 'clo', 'cfo', 'vp', 'cio', 'hocn', 'chairman', 'chairman2', 'ottoman']
 CONTRACTOR_SUITS = [
     'erfit',
     'hroller',
@@ -129,18 +158,35 @@ FACILITY_MANAGER_SUITS = []
 SECRETARY_SUITS = [
     'judy',
 ]
+CogNameAbbreviations = {
+    'dold': 'D.O.L.D.',
+    'dopa': 'D.O.P.A.',
+    'dopr': 'D.O.P.R.',
+    'dola': 'D.O.L.A.',
+    'wsi': 'W.S.I.',
+    'redd': 'Redd Heir Wing',
+    'ceo': 'C.E.O.',
+    'clo': 'C.L.O.',
+    'vp': 'Senior V.P.',
+    'cio': 'C.I.O.',
+    'hocn': 'H.O.C.N.',
+    'cfo': 'C.F.O.',
+    'chairman': 'Chairman',
+    'ottoman': 'C.O.O.',
+}
 CogIndexDepartments = {
-    'c': ['f', 'p', 'stg', 'ym', 'enf', 'mm', 'blh', 'ds', 'ksp', 'hh', 'bsht', 'cr', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'fires', 'fbed', 'mplayer',
-           'chainsaw', 'choreo', 'phouse', 'bkeeper', 'wtapper', 'ambass'],
-    's': ['cc', 'tm', 'cn', 'nd', 'dc', 'gh', 'fcs', 'ms', 'asm', 'tf', 'ppl', 'm', 'cnd', 'mh', 'foreman', 'dopr', 'dopa', 'bellring', 'prethink', 'mslacker', 
-          'psetter', 'cinema', 'radiog', 'hustle', 'ubuster', 'safesupervis'],
-    'l': ['bf', 'b', 'pf', 'dt', 'cv', 'ac', 'nn', 'bs', 'ad', 'sd', 'sh', 'le', 'br', 'bw', 'whistleb', 'clerk', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim',
-            'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator'],
-    'm': ['sc', 'pp', 'shy', 'tw', 'sw', 'bc', 'fct', 'nc', 'gld', 'mb', 'trs', 'ls', 'bfh', 'rb', 'supervis', 'duckshfl', 'treek', 'pcrat', 'erfit', 'hroller', 
-          'bookkeep', 'racket', 'liquidr', 'treasure'],
-    'g': ['bgh', 'pph', 'ca', 'ins', 'mdm', 'cbr', 'txm', 'dl', 'ang', 'shw', 'bfh2', 'mg', 'chw', 'hho', 'ddiver', 'gatekeep', 'dola', 'dold', 'fmaker', 'liquid', 'rkeeper', 'dking', 'cdirector', 'ottoman', 'chairman',],  # boardbots
-    't': ['skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'djockey'],  # techbots
-    'p': ['ppb', 'shb', 'bsd', 'gms', 'sbg', 'hck', 'ath', 'ghw', 'dcw', 'gzt', 'wnk', 'nsh', 'std', 'anc', 'director', 'videog'],  # pressbots
+    'c': ['f', 'p', 'stg', 'ym', 'enf', 'psh', 'mm', 'ds', 'blh', 'stck', 'hh', 'bsht', 'ppg', 'mldr', 'cr', 'wnk', 'drk', 'ksp', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'fires', 'fbed', 'mplayer', 'chainsaw',
+          'choreo', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'ceo'],
+    's': ['cc', 'tm', 'sbg', 'nd', 'dc', 'gh', 'mad', 'ms', 'lvw', 'bam', 'tf', 'fcs', 'ppl', 'm', 'cnd', 'std', 'mh', 'foreman', 'dopr', 'dopa', 'bellring', 'prethink', 'mslacker', 'psetter', 'cinema', 'radiog',
+          'hustle', 'ubuster', 'safesupervis', 'vp'],
+    'l': ['bf', 'bf2', 'b', 'b2', 'bsd', 'pf', 'dt', 'dt2', 'nn', 'dcr', 'cv', 'ac', 'ac2', 'bs', 'bs2', 'ad', 'dcw', 'bck', 'sd', 'sd2', 'sh', 'surg', 'rat', 'le', 'le2', 'magi', 'whistleb', 'br', 'bw', 'bw2',
+          'clerk', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator', 'cj', 'clo'],
+    'm': ['sc', 'pp', 'nb', 'qc', 'shy', 'tw', 'trs', 'pwn', 'bc', 'nc', 'cow', 'brck', 'mb', 'aud', 'ls', 'gld', 'fct', 'bfh', 'rb', 'supervis', 'duckshfl', 'treek', 'pcrat', 'erfit', 'hroller', 'bookkeep', 'racket',
+          'liquidr', 'treasure', 'cfo'],
+    'g': ['bgh', 'ca', 'pph', 'cn', 'ins', 'sw', 'cbr', 'mdm', 'shrp', 'dl', 'txm', 'neg', 'shw', 'rng', 'cor', 'sab', 'mg', 'bfh2', 'chw', 'ang', 'hho', 'dola', 'dold', 'ddiver', 'gatekeep', 'fmaker', 'liquid',
+        'rkeeper', 'dking', 'cdirector', 'ottoman', 'chairman'],  # boardbots
+    't': ['skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'djockey', 'videog', 'cio'],  # techbots
+    'p': ['ppb', 'shb', 'gms', 'hck', 'ghw', 'gzt', 'nsh', 'anc', 'director', 'hocn'],  # pressbots
 }
 PANEL_COLORS = (VBase4(0.839, 0.808, 0.769, 1.0),
 VBase4(0.784, 0.816, 0.863, 1.0),
@@ -171,127 +217,492 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)
+        self.currentDept = None
+        self.rowIndex = 0
+
+        self.cogsPerRow = 6
+        self.visibleRows = 3
+        self.cogsPerPage = (
+            self.cogsPerRow * self.visibleRows
+        )
 
     def load(self):
         ShtikerPage.ShtikerPage.load(self)
-        frameModel = loader.loadModel('phase_3.5/models/gui/suitpage_frame')
-        frameModel.setScale(0.0253125, 0.03, 0.045)
-        frameModel.setPos(0, 10, -0.575)
-        self.guiTop = NodePath('guiTop')
-        self.guiTop.reparentTo(self)
-        self.frameNode = NodePath('frameNode')
-        self.frameNode.reparentTo(self.guiTop)
-        self.panelNode = NodePath('panelNode')
-        self.panelNode.reparentTo(self.guiTop)
-        self.iconNode = NodePath('iconNode')
-        self.iconNode.reparentTo(self.guiTop)
-        self.enlargedPanelNode = NodePath('enlargedPanelNode')
-        self.enlargedPanelNode.reparentTo(self.guiTop)
-        frame = frameModel.find('**/frame')
-        frame.wrtReparentTo(self.frameNode)
-        screws = frameModel.find('**/screws')
-        screws.wrtReparentTo(self.iconNode)
-        icons = frameModel.find('**/icons')
+
+        self.currentDept = None
+        self.rowIndex = 0
         self.cogHeadCache = {}
-        del frameModel
-        self.title = DirectLabel(parent=self.iconNode, relief=None, text=TTLocalizer.SuitPageTitle, text_scale=0.1, text_pos=(0.04, 0), textMayChange=0)
-        # self.radarButtons = []
-        # icon = icons.find('**/corp_icon')
-        # self.corpRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=icon, image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.575), command=self.toggleRadar, extraArgs=[0])
-        # self.radarButtons.append(self.corpRadarButton)
-        # icon = icons.find('**/legal_icon')
-        # self.legalRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=icon, image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.525), command=self.toggleRadar, extraArgs=[1])
-        # self.radarButtons.append(self.legalRadarButton)
-        # icon = icons.find('**/money_icon')
-        # self.moneyRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.460), command=self.toggleRadar, extraArgs=[2])
-        # self.radarButtons.append(self.moneyRadarButton)
-        # icon = icons.find('**/sales_icon')
-        # self.salesRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.385), command=self.toggleRadar, extraArgs=[3])
-        # self.radarButtons.append(self.salesRadarButton)
-        # icon = icons.find('**/board_icon')
-        # self.boardRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED, image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045), image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.615), command=self.toggleRadar, extraArgs=[4])
-        # self.radarButtons.append(self.boardRadarButton)
-        # icon = icons.find('**/sales_icon')
-        # self.techRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED,
-        #                                      image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045),
-        #                                      image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.715),
-        #                                      command=self.toggleRadar, extraArgs=[4])
-        # self.radarButtons.append(self.techRadarButton)
-        # icon = icons.find('**/sales_icon')
-        # self.pressRadarButton = DirectButton(parent=self.iconNode, relief=None, state=DGG.DISABLED,
-        #                                     image=(icon, icon, icon), image_scale=(0.03375, 1, 0.045),
-        #                                     image2_color=Vec4(1.0, 1.0, 1.0, 0.75), pos=(-0.2, 10, -0.715),
-        #                                     command=self.toggleRadar, extraArgs=[4])
-        # self.radarButtons.append(self.pressRadarButton)
-        # for radarButton in self.radarButtons:
-        #     radarButton.building = 0
-        #     radarButton.buildingRadarLabel = None
-        self.backButton = DirectButton(
-            parent=self.iconNode,
-            relief=None,
-            text='Back',
-            text_scale=0.06,
-            text_fg=(0, 0, 0, 1),
-            pos=(-.875, 10, -0.68),
-            command=self.showDepartmentHome
+        self.cogHeads = []
+        auxGui = loader.loadModel(
+            'phase_3/models/gui/ttcc_gui_generalButtons'
         )
-        self.backButton.hide()
+
+        suitPageButtons = loader.loadModel(
+            'phase_3.5/models/gui/suitpage_buttons'
+        )
+
+        suitPageStatic = loader.loadModel(
+            'phase_3.5/models/gui/suitpage_static'
+        )
+
+        suitPageSplash = loader.loadModel(
+            'phase_3.5/models/gui/suitpage_splash'
+        )
+
+        icons = loader.loadModel(
+            'phase_3/models/gui/cog_icons'
+        )
+        # self.homePageNode = NodePath(
+        #     'homePageNode'
+        # )
+        #self.homePageNode.reparentTo(self.guiTop)
+        border = suitPageSplash.find('**/border')
+        logo = suitPageSplash.find('**/cogs_logo')
+
+        self.guiTop = DirectFrame(
+            parent=self,
+            relief=None
+        )
+        self.guiTop.setZ(0.625)
+
+        # Home page root.
+        self.homePageNode = NodePath('homePageNode')
+        self.homePageNode.reparentTo(self.guiTop)
+
+        # Department page root.
+        self.departmentPageNode = NodePath(
+            'departmentPageNode'
+        )
+        self.departmentPageNode.reparentTo(
+            self.guiTop
+        )
+        self.bioPageNode = NodePath('bioPageNode')
+        self.bioPageNode.reparentTo(self.guiTop)
+
+        self.currentBioSuit = None
+        self.suitModel = None
+        self.bioPageNode.hide()
+        bio = suitPageStatic.find('**/bio')
+
+        self.bioFrame = DirectFrame(
+            parent=self.bioPageNode,
+            relief=None,
+            image=bio,
+            image_scale=(1.7, 1, 1.2),
+            pos=(0, 0, -0.58)
+        )
+
+        self.bioFrame.setBin('gui-popup', 0)
+        self.bioFrame.setDepthTest(False)
+        self.bioFrame.setDepthWrite(False)
+
+        self.bioBackButton = DirectButton(
+            parent=self.bioFrame,
+            relief=None,
+            state=DGG.NORMAL,
+            geom=(
+                suitPageButtons.find('**/back_neutral'),
+                suitPageButtons.find('**/back_press'),
+                suitPageButtons.find('**/back_hover'),
+                suitPageButtons.find('**/back_press')
+            ),
+            geom_scale=(0.4, 1, 0.2),
+            pos=(-0.39, 1, -0.6),
+            frameSize=(-0.19, 0.19, -0.09, 0.09),
+            command=self.leaveCogBio
+        )
+
+        self.bioCogNameLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.0545,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ACenter,
+            text_wordwrap=12,
+            pos=(-0.02, 0, 0.325)
+        )
+
+        self.bioCogQuoteLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.038,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ACenter,
+            text_wordwrap=16,
+            pos=(-0.36, 0, 0.17)
+        )
+
+        self.bioCogLevelLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.04,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ALeft,
+            pos=(-0.675, 0, 0.01)
+        )
+
+        self.bioCogDamageLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.04,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ALeft,
+            pos=(-0.675, 0, -0.04)
+        )
+
+        self.bioCogStatusLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.04,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ALeft,
+            pos=(-0.675, 0, -0.09)
+        )
+
+        self.bioCogAttacksLabel = DirectLabel(
+            parent=self.bioFrame,
+            relief=None,
+            text='',
+            text_scale=0.035,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ALeft,
+            text_wordwrap=18,
+            pos=(-0.675, 0, -0.13)
+        )
+
+        self.bioBackButton.setBin('gui-popup', 100)
+
+        # All Cog panels belong to departmentPageNode.
+        self.panelNode = NodePath('panelNode')
+        self.panelNode.reparentTo(
+            self.departmentPageNode
+        )
+
+        self.enlargedPanelNode = NodePath(
+            'enlargedPanelNode'
+        )
+        self.enlargedPanelNode.reparentTo(
+            self.departmentPageNode
+        )
+
+        # Home icons belong to homePageNode.
+        self.iconNode = NodePath('iconNode')
+        self.iconNode.reparentTo(
+            self.homePageNode
+        )
+
+        self.splashFrame = DirectFrame(
+            parent=self.homePageNode,
+            relief=None,
+            image=border,
+            image_scale=(1.9, 0, 0.95),
+            pos=(0.018, 0, -0.77)
+        )
+
+        self.splashLogo = DirectFrame(
+            parent=self.homePageNode,
+            relief=None,
+            image=logo,
+            image_scale=(0.7, 0, 0.35),
+            pos=(0.018, 0, -0.11)
+        )
+        departments = [
+            ('c', -0.52,  0.22),
+            ('l',  0.00,  0.22),
+            ('m',  0.52,  0.0),
+
+            ('s', -0.52, -0.0),
+            ('g',  0.00, -0.0),
+            ('t',  0.52, -0.0),
+
+            ('p',  0.00, -0.22),
+        ]
+
+
+        # self.panelNode = NodePath('suitPagePanelNode')
+        # self.panelNode.reparentTo(self.departmentNode)
+        self.rowFrames = []
+        # Department page background.
+        background = suitPageStatic.find('**/base_boardbot')
+
+        # Fallback if the custom background isn't present.
+        if background.isEmpty():
+            background = suitPageStatic.find('**/bg')
+
+        # Final fallback so it never crashes.
+        if background.isEmpty():
+            self.backgroundFrame = DirectFrame(
+                parent=self.departmentPageNode,
+                relief=None,
+                frameColor=(0.85, 0.85, 0.85, 1),
+                frameSize=(-0.8, 0.8, -0.55, 0.55),
+                pos=(0, 0, -.7)
+            )
+        else:
+            self.backgroundFrame = DirectFrame(
+                parent=self.departmentPageNode,
+                relief=None,
+                image=background,
+                image_scale=1.65,
+                pos=(0, 0, -.7)
+            )
+        self.backgroundFrame.setBin('gui-popup', 0)
+        self.backgroundFrame.setDepthTest(False)
+        self.backgroundFrame.setDepthWrite(False)
+        # Everything on the department page sits on top of this.
+        self.panelNode.reparentTo(self.backgroundFrame)
+        self.enlargedPanelNode.reparentTo(self.backgroundFrame)
+        rowGeom = suitPageStatic.find('**/row')
+
+        if rowGeom.isEmpty():
+            print 'SuitPage: could not find **/row'
+        else:
+            for rowIndex in xrange(self.visibleRows):
+                rowFrame = DirectFrame(
+                    parent=self.backgroundFrame,
+                    relief=None,
+                    image=rowGeom,
+                    image_scale=(1.6, 1, .6),
+                    pos=(
+                        -0.01,
+                        0,
+                        0.3 - rowIndex * 0.35
+                    )
+                )
+
+                # Keep the rows behind the Cog contents.
+                rowFrame.setBin('gui-popup', 10)
+                rowFrame.setDepthTest(False)
+                rowFrame.setDepthWrite(False)
+
+                self.rowFrames.append(rowFrame)
+        self.panelNode.setBin('gui-popup', 10)
+        self.enlargedPanelNode.setBin('gui-popup', 20)
+        self.pageUpButton = DirectButton(
+            parent=self.departmentPageNode,
+            relief=None,
+            state=DGG.DISABLED,
+            geom=(
+                suitPageButtons.find(
+                    '**/arrow_neutral'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_press'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_hover'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_press'
+                )
+            ),
+            geom_scale=(0.08, 1, 0.08),
+            pos=(0.8, 0, -0.5),
+            frameSize=(-0.04, 0.04, -0.04, 0.04),
+            command=self.changeRowIndex,
+            extraArgs=[-1]
+        )
+        self.pageUpButton.setBin('gui-popup', 10)
+        self.pageDownButton = DirectButton(
+            parent=self.departmentPageNode,
+            relief=None,
+            state=DGG.DISABLED,
+            geom=(
+                suitPageButtons.find(
+                    '**/arrow_neutral'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_press'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_hover'
+                ),
+                suitPageButtons.find(
+                    '**/arrow_press'
+                )
+            ),
+            geom_scale=(0.08, 1, 0.08),
+            pos=(0.8, 0, -0.58),
+            hpr=(0, 180, 0),
+            frameSize=(-0.04, 0.04, -0.04, 0.04),
+            command=self.changeRowIndex,
+            extraArgs=[1]
+        )
+        self.pageDownButton.setBin('gui-popup', 10)
+        # Department page background.
+        background = suitPageStatic.find('**/base_boardbot')
+
+        if background.isEmpty():
+            background = suitPageStatic.find('**/bg')
+
+        self.backgroundFrame = DirectFrame(
+            parent=self.departmentPageNode,
+            relief=None,
+            image=background,
+            image_scale=1.65,
+            pos=(0, 0, -0.7)
+        )
+        # Reparent panel nodes to the visible background.
+        self.panelNode.reparentTo(self.backgroundFrame)
+        self.enlargedPanelNode.reparentTo(
+            self.backgroundFrame
+        )
+
+
+        self.departmentButtons = []
 
         self.makeDepartmentButtons()
-        gui = loader.loadModel('phase_3.5/models/gui/suitpage_gui')
-        self.panelModel = gui.find('**/card')
+
+        # Close/back button from SuitPage(9).
+        self.backButton = DirectButton(
+            parent=self.backgroundFrame,
+            relief=None,
+            state=DGG.NORMAL,
+            image=(
+                auxGui.find('**/CloseBtn_UP'),
+                auxGui.find('**/CloseBtn_DN'),
+                auxGui.find('**/CloseBtn_Rllvr')
+            ),
+            pos=(0.69, 0, 0.47),
+            command=self.showDepartmentHome
+        )
+        self.backButton.setBin('gui-popup', 200)
+        self.backButton.setDepthTest(False)
+        self.backButton.setDepthWrite(False)
+
+        # Department title.
+        self.departmentTitle = DirectLabel(
+            parent=self.backgroundFrame,
+            relief=None,
+            text='',
+            text_scale=0.08,
+            text_fg=(0, 0, 0, 1),
+            text_font=ToontownGlobals.getSuitFont(),
+            text_align=TextNode.ACenter,
+            pos=(0, 0, 0.5875)
+        )
+        self.departmentTitle.setBin('gui-popup', 50)
+        self.departmentTitle.setDepthTest(False)
+        self.departmentTitle.setDepthWrite(False)
+
+        # Keep SuitPage(10)'s Cog card models and functionality.
+        gui = loader.loadModel(
+            'phase_3.5/models/gui/suitpage_gui'
+        )
+
+        #self.panelModel = gui.find('**/card')
         self.shadowModels = []
-        for index in xrange(1, len(SuitDNA.suitHeadTypes) + 1):
-            self.shadowModels.append(gui.find('**/shadow' + str(index)))
-        del gui
-        self.loadCogHeads()
+
+        for index in xrange(
+            1,
+            len(SuitDNA.suitHeadTypes) + 1
+        ):
+            self.shadowModels.append(
+                gui.find('**/shadow' + str(index))
+            )
+
+        #self.loadCogHeads()
         self.makePanels()
-        self.radarOn = [0,
-         0,
-         0,
-         0,
-         0,
-         0,
-         0]
-        priceScale = 0.1
-        emblemIcon = loader.loadModel('phase_3.5/models/gui/tt_m_gui_gen_emblemIcons')
-        silverModel = emblemIcon.find('**/tt_t_gui_gen_emblemSilver')
-        goldModel = emblemIcon.find('**/tt_t_gui_gen_emblemGold')
-        self.silverLabel = DirectLabel(parent=self, relief=None, pos=(-0.25, 0, -0.69), scale=priceScale, image=silverModel, image_pos=(-0.4, 0, 0.4), text=str(localAvatar.emblems[ToontownGlobals.EmblemTypes.Silver]), text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1), text_font=ToontownGlobals.getSignFont(), text_align=TextNode.ALeft)
-        self.goldLabel = DirectLabel(parent=self, relief=None, pos=(0.25, 0, -0.69), scale=priceScale, image=goldModel, image_pos=(-0.4, 0, 0.4), text=str(localAvatar.emblems[ToontownGlobals.EmblemTypes.Gold]), text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1), text_font=ToontownGlobals.getSignFont(), text_align=TextNode.ALeft)
-        if not base.cr.wantEmblems:
-            self.silverLabel.hide()
-            self.goldLabel.hide()
-        self.accept(localAvatar.uniqueName('emblemsChange'), self.__emblemChange)
-        self.guiTop.setZ(0.625)
-        gui2 = loader.loadModel('phase_3.5/models/gui/suit_detail_panel')
-        gui2.find('**/shadow').setTransparency(TransparencyAttrib.MAlpha)
-        gui2.find('**/shadow').setColor(1, 1, 1, 0.4)
-        self.hoverInfo = DirectFrame(geom=gui2.find('**/avatar_panel'), geom_scale=(.5, .25, .175), geom_color=(0.69, 0.706, 0.718, 1), geom_pos=(-1.275, -0.5, -1), relief=None, pos=(0, 0, 0), parent=base.a2dTopRight)
+
+        gui.removeNode()
+
+        self.radarOn = [0, 0, 0, 0, 0, 0, 0]
+
+        self.bigPanel = None
+        self.nextPanel = None
+
+        self.makeHoverInfo()
+
+        self.showDepartmentHome()
+
+        suitPageButtons.removeNode()
+        suitPageStatic.removeNode()
+        suitPageSplash.removeNode()
+        icons.removeNode()
+        auxGui.removeNode()
+
+    def getDepartmentSplashImage(
+            self,
+            suitPageSplash,
+            dept):
+
+        splashPaths = {
+            'c': '**/boss_2',
+            'l': '**/law_2',
+            'm': '**/cash_2',
+            's': '**/sell_2',
+
+            # Change these to your actual custom node names.
+            'g': '**/board_2',
+            't': '**/board_2',
+            'p': '**/board_2',
+        }
+
+        path = splashPaths.get(dept)
+        image = suitPageSplash.find(path)
+
+        if image.isEmpty():
+            print (
+                'Missing department splash image:',
+                dept,
+                path
+            )
+            return None
+
+        return image
+
+    def makeHoverInfo(self):
+        gui = loader.loadModel(
+            'phase_3.5/models/gui/suit_detail_panel'
+        )
+
+        shadow = gui.find('**/shadow')
+
+        if not shadow.isEmpty():
+            shadow.setTransparency(
+                TransparencyAttrib.MAlpha
+            )
+            shadow.setColor(1, 1, 1, 0.4)
+
+        self.hoverInfo = DirectFrame(
+            parent=base.a2dTopRight,
+            relief=None,
+            geom=gui.find('**/avatar_panel'),
+            geom_scale=(0.5, 0.25, 0.175),
+            geom_color=(0.69, 0.706, 0.718, 1),
+            geom_pos=(-1.275, -0.5, -1),
+            pos=(0, 0, 0)
+        )
+
         self.hoverInfo.setBin('gui-popup', 100)
 
-        self.hoverInfoPanel = DirectFrame(
-            parent=self.hoverInfo,
-            relief=None,
-            frameColor=(0.45, 0.45, 0.45, 1),
-            frameSize=(-0.55, 0.55, -0.38, 0.38)
-        )
-        self.hoverInfoPanel.setBin('gui-popup', 100)    
         self.hoverInfoText = DirectLabel(
-            parent=self.hoverInfoPanel,
+            parent=self.hoverInfo,
             relief=None,
             text='',
             text_scale=0.045,
             text_fg=(0, 0, 0, 1),
             text_align=TextNode.ACenter,
             text_wordwrap=22,
-            pos=(-1.275, -0.5, -.75),
+            pos=(-1.275, -0.5, -0.75),
             text_font=ToontownGlobals.getSuitFont()
         )
+
         self.hoverInfoText.setBin('gui-popup', 100)
         self.hoverInfo.hide()
-        self.showDepartmentHome()
-        return
+
+        gui.removeNode()
     
     def getCogHead(self, suitName):
         if suitName not in self.cogHeadCache:
@@ -379,125 +790,379 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
         return 'Level: 0'
     
+    def getCogBioQuote(self, suitName):
+        return COG_BIO_QUOTES.get(
+            suitName,
+            'Business is business.'
+        )
+        
     def showCogDetails(self, panel, extra=None):
-        index = self.panels.index(panel)
-        suitName = SuitDNA.suitHeadTypes[index]
-        attrs = SuitBattleGlobals.SuitAttributes[suitName]
+        suitName = getattr(panel, 'suitName', None)
+
+        if suitName is None:
+            index = self.panels.index(panel)
+            suitName = SuitDNA.suitHeadTypes[index]
+
+        attrs = SuitBattleGlobals.SuitAttributes.get(
+            suitName,
+            {}
+        )
 
         name = attrs.get('name', suitName)
-
         levelText = self.getCogLevelText(suitName)
 
-        text = '%s\n%s' % (name, levelText)
+        text = '%s\n%s' % (
+            name,
+            levelText
+        )
+
+        attacks = attrs.get('attacks', ())
 
         if attacks:
-            text += '\nAttacks:\n' + ', '.join([atk[0] for atk in attacks])
+            attackNames = []
+
+            for attack in attacks:
+                if isinstance(attack, (tuple, list)):
+                    attackNames.append(str(attack[0]))
+                else:
+                    attackNames.append(str(attack))
+
+            text += '\nAttacks:\n' + ', '.join(
+                attackNames
+            )
 
         self.showInfo(panel, text, None)
     
     def showDepartmentHome(self):
-        self.currentDept = None
+        self.resetEnlargedPanel()
 
-        for button in self.departmentButtons:
-            button.show()
+        self.currentDept = None
+        self.rowIndex = 0
+
+        self.cleanupBioSuitModel()
+
+        self.bioPageNode.hide()
+        self.departmentPageNode.hide()
+        self.homePageNode.show()
 
         self.backButton.hide()
 
         for panel in self.panels:
             panel.hide()
 
-        self.rolloverFrame.hide()
+        if hasattr(self, 'rolloverFrame'):
+            self.rolloverFrame.hide()
 
+        if hasattr(self, 'hoverInfo'):
+            self.hoverInfo.hide()
 
-    def showDepartment(self, dept):
-        self.currentDept = dept
+    def changeRowIndex(self, amount):
+        if self.currentDept is None:
+            return
 
-        for button in self.departmentButtons:
-            button.hide()
+        cogList = CogIndexDepartments.get(
+            self.currentDept,
+            []
+        )
 
-        self.backButton.show()
+        totalRows = (
+            len(cogList) + self.cogsPerRow - 1
+        ) // self.cogsPerRow
 
-        cogList = CogIndexDepartments.get(dept, [])
+        maxRowIndex = max(
+            0,
+            totalRows - self.visibleRows
+        )
 
+        newIndex = self.rowIndex + amount
+
+        if newIndex < 0:
+            newIndex = 0
+        elif newIndex > maxRowIndex:
+            newIndex = maxRowIndex
+
+        if newIndex == self.rowIndex:
+            return
+
+        self.resetEnlargedPanel()
+
+        self.rowIndex = newIndex
+        self.refreshDepartmentPanels()
+
+    def getCogDisplayName(self, suitName, abbreviate=False):
+        attrs = SuitBattleGlobals.SuitAttributes.get(suitName)
+
+        # Failsafe if the suit doesn't exist
+        if attrs is None:
+            return "???"
+
+        fullName = attrs.get('name', suitName)
+
+        if suitName in CogNameAbbreviations:
+            if abbreviate:
+                return CogNameAbbreviations[suitName]
+
+        return fullName
+
+    def refreshDepartmentPanels(self):
         for panel in self.panels:
             panel.hide()
 
-        columns = 7
+            if panel.head:
+                panel.head.hide()
 
-        xStart = -0.72
-        zStart = -.2
+        if self.currentDept is None:
+            self.pageUpButton['state'] = DGG.DISABLED
+            self.pageDownButton['state'] = DGG.DISABLED
+            return
 
-        xSpacing = 0.24
-        zSpacing = 0.28
+        cogList = CogIndexDepartments.get(
+            self.currentDept,
+            []
+        )
 
-        visibleIndex = 0
+        firstCogIndex = (
+            self.rowIndex * self.cogsPerRow
+        )
 
-        for visibleIndex, suitName in enumerate(cogList):
+        lastCogIndex = min(
+            firstCogIndex + self.cogsPerPage,
+            len(cogList)
+        )
+
+        visibleCogs = cogList[
+            firstCogIndex:lastCogIndex
+        ]
+
+        xStart = -0.555
+        zStart = 0.3
+
+        xSpacing = 0.219
+        zSpacing = 0.35
+
+        for visibleIndex, suitName in enumerate(
+            visibleCogs
+        ):
             panel = self.getPanelForSuit(suitName)
 
-            if not panel:
+            if panel is None:
                 print 'No panel for suit:', suitName
                 continue
 
-            col = visibleIndex % columns
-            row = visibleIndex / columns
+            column = (
+                visibleIndex % self.cogsPerRow
+            )
 
-            panel.setPos(xStart + col * xSpacing, 0, zStart - row * zSpacing)
+            row = (
+                visibleIndex // self.cogsPerRow
+            )
+
+            panel.reparentTo(self.panelNode)
+
+            panel.setPos(
+                xStart + (column * xSpacing),
+                0,
+                zStart - (row * zSpacing)
+            )
+
+            panel.setScale(panel.scale)
             panel.show()
+            self.ensurePanelHead(panel)
+
+        totalRows = (
+            len(cogList) + self.cogsPerRow - 1
+        ) // self.cogsPerRow
+
+        maxRowIndex = max(
+            0,
+            totalRows - self.visibleRows
+        )
+
+        if self.rowIndex <= 0:
+            self.pageUpButton['state'] = DGG.DISABLED
+        else:
+            self.pageUpButton['state'] = DGG.NORMAL
+
+        if self.rowIndex >= maxRowIndex:
+            self.pageDownButton['state'] = DGG.DISABLED
+        else:
+            self.pageDownButton['state'] = DGG.NORMAL
+
+    def ensurePanelHead(self, panel):
+        if panel is None:
+            return
+
+        if panel.head is not None:
+            panel.head.show()
+            return
+
+        suitName = panel.suitName
+
+        try:
+            sourceHead = self.getCogHead(suitName)
+
+            panel.head = sourceHead.copyTo(panel)
+            panel.head.setPos(0, 0, 0)
+            panel.head.setScale(1)
+            panel.head.show()
+
+        except Exception as error:
+            print (
+                'Could not create visible Cog head %s: %s'
+                % (suitName, error)
+            )
+
+    def resetEnlargedPanel(self):
+        if not self.bigPanel:
+            self.nextPanel = None
+            return
+
+        panel = self.bigPanel
+
+        self.bigPanel = None
+        self.nextPanel = None
+
+        panel.setScale(panel.scale)
+        panel.reparentTo(self.panelNode)
+
+        if panel.summonButton:
+            panel.summonButton.hide()
+            panel.summonButton[
+                'state'
+            ] = DGG.DISABLED
+
+        panel.hide()
+
+        if hasattr(self, 'rolloverFrame'):
+            self.rolloverFrame.hide()
+
+        if hasattr(self, 'hoverInfo'):
+            self.hoverInfo.hide()
+
+
+    def showDepartment(self, dept):
+        self.cleanupBioSuitModel()
+
+        self.currentDept = dept
+        self.rowIndex = 0
+        self.backButton.show()
+
+        self.homePageNode.hide()
+        self.bioPageNode.hide()
+        self.departmentPageNode.show()
+
+        self.departmentTitle['text'] = (
+            SuitDNA.getDeptFullname(dept)
+        )
+
+        self.refreshDepartmentPanels()
 
     def getPanelForSuit(self, suitName):
         return self.panelBySuitName.get(suitName)
 
     def unload(self):
-        if hasattr(self, 'cogHeads'):
-            for node in self.cogHeads:
-                if node:
-                    node.removeNode()
-            self.cogHeads = []
         self.ignoreAll()
-        self.title.destroy()
-        self.rolloverFrame.destroy()
-        for panel in self.panels:
-            panel.destroy()
-        for button in self.departmentButtons:
-            button.destroy()
-        self.backButton.destroy()
-        del self.panels
+        self.cleanupBioSuitModel()
+        if hasattr(self, 'hoverInfo'):
+            self.hoverInfo.destroy()
 
-        self.panelModel.removeNode()
+        if hasattr(self, 'rolloverFrame'):
+            self.rolloverFrame.destroy()
+
+        if hasattr(self, 'panels'):
+            for panel in self.panels:
+                panel.destroy()
+            self.panels = []
+
+        if hasattr(self, 'departmentButtons'):
+            for button in self.departmentButtons:
+                button.destroy()
+            self.departmentButtons = []
+
+        if hasattr(self, 'guiTop'):
+            self.guiTop.destroy()
+
+        self.cogHeadCache = {}
+        self.cogHeads = []
+
         ShtikerPage.ShtikerPage.unload(self)
 
     def makeDepartmentButtons(self):
         self.departmentButtons = []
+        self.departmentFrames = []
 
-        icons = loader.loadModel('phase_3/models/gui/cog_icons')
+        icons = loader.loadModel(
+            'phase_3/models/gui/cog_icons'
+        )
+
+        suitPageSplash = loader.loadModel(
+            'phase_3.5/models/gui/suitpage_splash'
+        )
 
         departments = [
-            ('c', -0.5, -0.2),
-            ('l',  0.0, -0.2),
-            ('m',  0.5, -0.2),
-            ('s', -0.5,-0.625),
-            ('g',  0.0,-0.625),
-            ('t',  0.5,-0.625),
-            ('p',  0.0,-1.05),
+            ('c', -0.52,  0.22),
+            ('l',  0.00,  0.22),
+            ('m',  0.52,  0.22),
+            ('s', -0.52, -0.0),
+            ('g',  0.00, -0.0),
+            ('t',  0.52, -0.0),
+            ('p',  0.00, -0.22),
         ]
 
         for dept, x, z in departments:
-            geom = self.getDepartmentIcon(icons, dept)
+            departmentFrame = DirectFrame(
+                parent=self.splashFrame,
+                relief=None,
+                frameColor=(
+                    0.8,
+                    0.8,
+                    0.8,
+                    0.7
+                ),
+                frameSize=(
+                    -0.22,
+                    0.22,
+                    -0.17,
+                    0.17
+                ),
+                pos=(x, 0, z)
+            )
+
+            geom = self.getDepartmentIcon(
+                icons,
+                dept
+            )
 
             button = DirectButton(
-                parent=self.iconNode,
+                parent=departmentFrame,
                 relief=None,
                 geom=geom,
-                geom_scale=.25,
-                pos=(x, 0, z),
+                geom_scale=0.16,
+                pos=(0, 0, 0.02),
                 command=self.showDepartment,
                 extraArgs=[dept]
             )
 
+            button.nameLabel = DirectLabel(
+                parent=button,
+                relief=None,
+                text='',
+                text_scale=0.22,
+                text_fg=(0, 0, 0, 1),
+                text_font=(
+                    ToontownGlobals.getSuitFont()
+                ),
+                text_align=TextNode.ACenter,
+                pos=(0, 0, 0)
+            )
+
+            self.departmentFrames.append(
+                departmentFrame
+            )
             self.departmentButtons.append(button)
 
         icons.removeNode()
+        suitPageSplash.removeNode()
 
     def enter(self):
         self.updatePage()
@@ -507,14 +1172,17 @@ class SuitPage(ShtikerPage.ShtikerPage):
         return
 
     def exit(self):
-        taskMgr.remove('buildingListResponseTimeout-later')
-        taskMgr.remove('suitListResponseTimeout-later')
+        self.resetEnlargedPanel()
+        self.showDepartmentHome()
+
+        taskMgr.remove(
+            'buildingListResponseTimeout-later'
+        )
+        taskMgr.remove(
+            'suitListResponseTimeout-later'
+        )
         taskMgr.remove('showCogRadarLater')
         taskMgr.remove('showBuildingRadarLater')
-        # for index in xrange(0, len(self.radarOn)):
-        #     if self.radarOn[index]:
-        #         self.toggleRadar(index)
-        #         self.radarButtons[index]['state'] = DGG.NORMAL
 
         ShtikerPage.ShtikerPage.exit(self)
 
@@ -608,22 +1276,31 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
             for typeIndex, suitName in enumerate(cogList):
                 panel = DirectLabel(
-                parent=self.panelNode,
-                pos=(xStart + typeIndex * xOffset, 0.0, yStart - deptIndex * yOffset),
-                relief=None,
-                state=DGG.NORMAL,
-                image=self.panelModel,
-                image_scale=(1, 1, 0.8),
-                image_color=color,
-                text=TTLocalizer.SuitPageMystery,
-                text_scale=0.045,
-                text_fg=(0, 0, 0, 1),
-                text_pos=(0, 0.148, 0),
-                text_font=ToontownGlobals.getSuitFont(),
-                text_wordwrap=8
+                    parent=self.panelNode,
+                    pos=(
+                        xStart + typeIndex * xOffset,
+                        0.0,
+                        yStart - deptIndex * yOffset
+                    ),
+                    relief=None,
+                    state=DGG.NORMAL,
+
+                    # No card image.
+                    text='???',
+                    text_scale=0.0375,
+                    text_fg=(0, 0, 0, 1),
+                    text_pos=(0, 0.1875),
+                    text_font=ToontownGlobals.getSuitFont(),
+                    text_align=TextNode.ACenter,
+                    text_wordwrap=6
                 )
 
                 panel.suitName = suitName
+
+                panel['text'] = self.getCogDisplayName(
+                    suitName,
+                    abbreviate=True
+                )
                 panel.dept = dept
                 panel.deptIndex = deptIndex
                 panel.typeIndex = typeIndex
@@ -639,21 +1316,339 @@ class SuitPage(ShtikerPage.ShtikerPage):
                 panel.hoverButton = DirectButton(
                     parent=panel,
                     relief=None,
-                    image_scale=(.1, .1, .1),
-                    image='phase_3/maps/invisible.png',
+                    frameColor=(0, 0, 0, 0),
+                    frameSize=(-0.10, 0.10, -0.18, 0.13),
                     pressEffect=0
                 )
-                panel.hoverButton.setTransparency(True)
+                panel.hoverButton['command'] = self.openCogBio
+                panel.hoverButton['extraArgs'] = [panel]
+                panel.hoverButton.setTransparency(
+                    TransparencyAttrib.MAlpha
+                )
                 panel.hoverButton.panel = panel
                 self.panelBySuitName[suitName] = panel
 
                 self.addCogRadarLabel(panel)
-
+                self.addQuotaLabel(panel)
                 self.panels.append(panel)
                 base.panels.append(panel)
 
-                panel.hoverButton.bind(DGG.ENTER, self.showCogHoverInfo, [panel])
-                panel.hoverButton.bind(DGG.EXIT, self.hideCogHoverInfo)
+                # panel.hoverButton.bind(DGG.ENTER, self.showCogHoverInfo, [panel])
+                # panel.hoverButton.bind(DGG.EXIT, self.hideCogHoverInfo)
+
+    def openCogBio(self, panel):
+        self.currentBioSuit = panel.suitName
+
+        self.homePageNode.hide()
+        self.departmentPageNode.hide()
+        self.bioPageNode.show()
+        self.backButton.hide()
+
+        self.updateCogBio(panel.suitName)
+
+    def leaveCogBio(self):
+        self.cleanupBioSuitModel()
+
+        self.bioPageNode.hide()
+        self.homePageNode.hide()
+        self.backButton.show()
+        self.departmentPageNode.show()
+
+        self.refreshDepartmentPanels()
+
+    def createBioSuitModel(self, suitName):
+        self.cleanupBioSuitModel()
+
+        dna = SuitDNA.SuitDNA()
+        dna.newSuit(suitName)
+
+        suit = Suit.Suit()
+        suit.setDNA(dna)
+        suit.hideNametag3d()
+        suit.hideNametag2d()
+
+        suit.reparentTo(self.bioFrame)
+        suit.setPos(0.35, 0, -0.4)
+        suit.setH(180)
+        suit.setScale(0.055)
+
+        try:
+            if suitName == 'mplayer':
+                suit.loop('neutral')
+            elif suitName == 'psetter':
+                suit.loop('neutral')
+            else:
+                suit.loop('neutral2')
+        except:
+            suit.loop('neutral')
+
+        suit.setBin('gui-popup', 50)
+        suit.setDepthTest(True)
+        suit.setDepthWrite(True)
+
+        self.suitModel = suit
+
+    def getCogPosition(self, suitName):
+        attrs = SuitBattleGlobals.SuitAttributes.get(
+            suitName,
+            {}
+        )
+
+        # Keep your existing managers unchanged.
+        if suitName in MANAGER_SUITS:
+            return 'Manager'
+
+        if suitName in BOSS_COGS:
+            return 'Boss'
+
+        # Keep contractors unchanged too, if you still use them.
+        if suitName in CONTRACTOR_SUITS:
+            return 'Contractor'
+        
+        if suitName in SECRETARY_SUITS:
+            return 'Secretary'
+
+        hpType = attrs.get('hp', 'normal')
+
+        if isinstance(hpType, basestring):
+            hpType = hpType.lower()
+
+            if hpType == 'field':
+                return 'Field Specialist'
+
+            if hpType == 'operations':
+                return 'Operations Analyst'
+
+        return 'Employee'
+    
+    def getCogPositionShort(self, suitName):
+        attrs = SuitBattleGlobals.SuitAttributes.get(
+            suitName,
+            {}
+        )
+
+        # Keep your existing managers unchanged.
+        if suitName in MANAGER_SUITS:
+            return 'Manager'
+        
+        if suitName in BOSS_COGS:
+            return 'Boss'
+        
+        if suitName in SECRETARY_SUITS:
+            return 'Secretary'
+
+        # Keep contractors unchanged too, if you still use them.
+        if suitName in CONTRACTOR_SUITS:
+            return 'Contractor'
+
+        hpType = attrs.get('hp', 'normal')
+
+        if isinstance(hpType, basestring):
+            hpType = hpType.lower()
+
+            if hpType == 'field':
+                return 'Specialist'
+
+            if hpType == 'operations':
+                return 'Specialist'
+
+        return 'Employee'
+
+    def updateCogBio(self, suitName):
+        attrs = SuitBattleGlobals.SuitAttributes.get(suitName, {})
+        attacks = attrs.get('attacks', ())
+
+        minimumLevel = SuitBattleGlobals.getSuitMinLevel(
+            suitName
+        )
+
+        maximumLevel = SuitBattleGlobals.getSuitMaxLevel(
+            suitName
+        )
+
+        minimumRelativeLevel = (
+            SuitBattleGlobals.getRelativeFromActualLevel(
+                suitName,
+                minimumLevel
+            )
+        )
+
+        maximumRelativeLevel = (
+            SuitBattleGlobals.getRelativeFromActualLevel(
+                suitName,
+                maximumLevel
+            )
+        )
+
+        if minimumLevel == maximumLevel:
+            self.bioCogLevelLabel['text'] = (
+                'Level: %s' % minimumLevel
+            )
+        else:
+            self.bioCogLevelLabel['text'] = (
+                'Level Range: %s-%s'
+                % (minimumLevel, maximumLevel)
+            )
+
+        if suitName in MANAGER_SUITS or suitName in CONTRACTOR_SUITS or suitName in SECRETARY_SUITS:
+            self.bioCogLevelLabel['text'] += '.mgr'
+
+        if suitName in BOSS_COGS:
+            self.bioCogLevelLabel['text'] = 'Level: [CLASSIFIED]'
+
+        hasNoNormalAttacks = False
+        minimumDamage = None
+        maximumDamage = None
+        attackLines = []
+        seenAttackNames = set()
+
+        for attack in attacks:
+            attackName = attack.name
+
+            # Do not display the same attack more than once.
+            if attackName in seenAttackNames:
+                continue
+
+            seenAttackNames.add(attackName)
+
+            if attackName == 'HighRollerNoAttack':
+                hasNoNormalAttacks = True
+                break
+
+            attackMinimumDamage = (
+                SuitBattleGlobals._getOverlevelValue(
+                    attack.hp,
+                    minimumRelativeLevel,
+                    addPerLevel=1
+                )
+            )
+
+            attackMaximumDamage = (
+                SuitBattleGlobals._getOverlevelValue(
+                    attack.hp,
+                    maximumRelativeLevel,
+                    addPerLevel=1
+                )
+            )
+
+            if minimumDamage is None:
+                minimumDamage = attackMinimumDamage
+            else:
+                minimumDamage = min(
+                    minimumDamage,
+                    attackMinimumDamage
+                )
+
+            if maximumDamage is None:
+                maximumDamage = attackMaximumDamage
+            else:
+                maximumDamage = max(
+                    maximumDamage,
+                    attackMaximumDamage
+                )
+
+            displayName = TTLocalizer.SuitAttackNames.get(
+                attackName,
+                attackName
+            ).rstrip('!')
+
+            if attackMinimumDamage == attackMaximumDamage:
+                attackLines.append(
+                    '%s: %s' % (
+                        displayName,
+                        attackMinimumDamage
+                    )
+                )
+            else:
+                attackLines.append(
+                    '%s: %s-%s' % (
+                        displayName,
+                        attackMinimumDamage,
+                        attackMaximumDamage
+                    )
+                )
+
+
+        if hasNoNormalAttacks:
+            self.bioCogDamageLabel['text'] = (
+                'Damage Range: [CLASSIFIED]'
+            )
+            if suitName in BOSS_COGS:
+                self.bioCogAttacksLabel['text'] = (
+                    ''
+                )
+            else:
+                self.bioCogAttacksLabel['text'] = (
+                    'There are no normal suit attacks for this Cog, outside of their abilities.'
+                )
+
+        elif minimumDamage is not None:
+            if minimumDamage == maximumDamage:
+                damageText = str(minimumDamage)
+            else:
+                damageText = '%s-%s' % (
+                    minimumDamage,
+                    maximumDamage
+                )
+
+            self.bioCogDamageLabel['text'] = (
+                'Damage Range: %s' % damageText
+            )
+
+            self.bioCogAttacksLabel['text'] = (
+                'Attacks:\n%s'
+                % '\n'.join(attackLines)
+            )
+
+        else:
+            self.bioCogDamageLabel['text'] = (
+                'Damage Range: [CLASSIFIED]'
+            )
+
+            if suitName in BOSS_COGS:
+                self.bioCogAttacksLabel['text'] = (
+                    ''
+                )
+            else:
+                self.bioCogAttacksLabel['text'] = (
+                    'There are no normal suit attacks for this Cog, outside of their abilities.'
+                )
+
+        self.bioCogStatusLabel['text'] = ('Position: %s') % self.getCogPosition(suitName)
+
+        self.bioCogNameLabel['text'] = self.getCogDisplayName(
+                suitName,
+                abbreviate=False
+            )
+
+        import random
+
+        if suitName in TTLocalizer.SuitFaceoffTaunts:
+            taunts = TTLocalizer.SuitFaceoffTaunts[suitName]
+        else:
+            taunts = TTLocalizer.SuitFaceoffDefaultTaunts
+
+        quote = random.choice(taunts)
+
+        self.bioCogQuoteLabel['text'] = '"%s"' % quote
+
+        self.createBioSuitModel(suitName)
+
+    def cleanupBioSuitModel(self):
+        if not getattr(self, 'suitModel', None):
+            return
+
+        try:
+            self.suitModel.cleanup()
+        except:
+            pass
+
+        try:
+            self.suitModel.removeNode()
+        except:
+            pass
+
+        self.suitModel = None
 
     def showCogHoverInfo(self, panel, extra=None):
         suitName = panel.suitName
@@ -685,9 +1680,9 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
         if isinstance(hp, tuple) or isinstance(hp, list):
             if len(hp) >= 2:
-                return 'Damage Range: %s-%s' % (hp[0], hp[-1])
+                return ': %s-%s Damage' % (hp[0], hp[-1])
             elif len(hp) == 1:
-                return 'Damage: %s' % hp[0]
+                return ': %s Damage' % hp[0]
 
         return 'Damage Range: %s' % hp
 
@@ -708,7 +1703,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
             displayName = TTLocalizer.SuitAttackNames.get(
                 attack.name,
                 attack.name
-            ).rstrip('!') + '-'
+            ).rstrip('!')
 
             damageText = self.getAttackDamageText(attack)
 
@@ -723,7 +1718,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def showInfo(self, panel, text, extra):
         self.rolloverFrame.reparentTo(panel)
-        self.rolloverFrame.show()
+        self.rolloverFrame.hide()
         self.rolloverFrame['text'] = text
 
     def hideInfo(self, extra):
@@ -744,15 +1739,15 @@ class SuitPage(ShtikerPage.ShtikerPage):
     def addQuotaLabel(self, panel):
         suitName = panel.suitName
 
-        status = self.getCogStatus(suitName)
+        status = self.getCogPositionShort(suitName)
 
         quotaLabel = DirectLabel(
             parent=panel,
-            pos=(0.0, 0.0, -0.172),
+            pos=(0.0, 0.0, -0.16),
             relief=None,
             state=DGG.DISABLED,
             text=status,
-            text_scale=0.045,
+            text_scale=0.035,
             text_fg=(0, 0, 0, 1),
             text_font=ToontownGlobals.getSuitFont()
         )
@@ -761,42 +1756,88 @@ class SuitPage(ShtikerPage.ShtikerPage):
         panel.quotaLabel = quotaLabel
         return
     
-    def createSuitHead(self, suitName, panel, dimension=.25, setH=180):
+    def getCombinedHeadParts(self, suit):
+        allParts = []
+        seenNodes = set()
+
+        partGroups = (
+            suit.getHeadParts(),
+            suit.getAnimatedHeadParts()
+        )
+
+        for partGroup in partGroups:
+            for part in partGroup:
+                if not part or part.isEmpty():
+                    continue
+
+                node = part.node()
+
+                if node in seenNodes:
+                    continue
+
+                seenNodes.add(node)
+                allParts.append(part)
+
+        return allParts
+    
+    def createSuitHead(
+        self,
+        suitName,
+        panel,
+        dimension=0.25,
+        setH=180):
+
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit(suitName)
+
         suit = Suit.Suit()
         suit.setDNA(suitDNA)
-        headParts = suit.getHeadParts()
-        animatedHeadParts = suit.getAnimatedHeadParts()
-        head = panel.attachNewNode('head')
-        head.setBin("gui-popup", 50)
-        hasAnimatedHead = False
-        for part in headParts:
-            for part in animatedHeadParts:
-                hasAnimatedHead = True
-            if hasAnimatedHead:
-                if 'neutral' in part.getAnimNames() and suitName in ToontownGlobals.animSuitHeadsPosedNeutral:
-                    part.pose('neutral', 1)
 
-            if suitName in (
-                'mh',
-                'mh2',
-                'std2',
-                'ds',
-                'cv'
-                ):
-                copyPart = part.copyTo(head)
-                copyPart.setDepthTest(1)
-                copyPart.setDepthWrite(1)
-            else:
-                part.setTwoSided(True)
-                part.setDepthTest(1)
-                part.setDepthWrite(1)
+        head = panel.attachNewNode(
+            'head-%s' % suitName
+        )
+        head.setBin('gui-popup', 50)
 
-                part.reparentTo(head)
-        self.fitGeometry(head, fFlip=1, dimension=dimension, setH=setH)
+        animatedParts = list(
+            suit.getAnimatedHeadParts()
+        )
+
+        animatedNodes = set()
+
+        for part in animatedParts:
+            if part and not part.isEmpty():
+                animatedNodes.add(part.node())
+
+        allHeadParts = self.getCombinedHeadParts(suit)
+
+        for part in allHeadParts:
+            isAnimated = part.node() in animatedNodes
+
+            if (
+                isAnimated
+                and suitName in
+                    ToontownGlobals.animSuitHeadsPosedNeutral
+            ):
+                try:
+                    if 'neutral' in part.getAnimNames():
+                        part.pose('neutral', 1)
+                except:
+                    pass
+
+            part.setTwoSided(True)
+            part.setDepthTest(True)
+            part.setDepthWrite(True)
+            part.reparentTo(head)
+
+        self.fitGeometry(
+            head,
+            fFlip=1,
+            dimension=dimension,
+            setH=setH
+        )
+
         suit.delete()
-        suit = None
+
         return head
     
     def fitGeometry(self, geom, fFlip = 0, dimension = 0.25, setH=180):
@@ -875,24 +1916,27 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
         self.cogHeads = []
 
-        for index in xrange(len(SuitDNA.suitHeadTypes)):
-            suitName = SuitDNA.suitHeadTypes[index]
-
-            headNode = NodePath('headNode')
+        for suitName in SuitDNA.suitHeadTypes:
+            headNode = NodePath(
+                'headNode-%s' % suitName
+            )
 
             try:
-                # Use YOUR existing working head creation logic here.
-                # This is the method from the uploaded file's style:
-                head = self.createSuitHead(suitName, dimension=0.22)
-                head.reparentTo(headNode)
-
-                headNode.setScale(1.0)
-                headNode.setPos(0, 0, 0)
+                self.createSuitHead(
+                    suitName,
+                    headNode,
+                    dimension=0.22
+                )
 
                 self.cogHeads.append(headNode)
 
-            except Exception as e:
-                print 'Could not load cog head %s: %s' % (suitName, e)
+            except Exception as error:
+                print (
+                    'Could not load cog head %s: %s'
+                    % (suitName, error)
+                )
+
+                headNode.removeNode()
                 self.cogHeads.append(None)
 
     def resetPanel(self, dept, type):
@@ -926,40 +1970,33 @@ class SuitPage(ShtikerPage.ShtikerPage):
         # panel.hoverButton.unbind(DGG.ENTER)
         # panel.hoverButton.unbind(DGG.EXIT)
 
-        color = PANEL_COLORS[panel.deptIndex]
-        panel['image_color'] = color
-
     def setPanelStatus(self, panel, status):
-        suitName = panel.suitName
-        index = SuitDNA.suitHeadTypes.index(suitName)
+        if panel is None:
+            print 'SuitPage.setPanelStatus: panel is None'
+            return
 
-        if status == COG_UNSEEN:
-            panel['text'] = TTLocalizer.SuitPageMystery
+        suitName = getattr(panel, 'suitName', None)
 
-        elif status == COG_BATTLED:
-            suitFullName = SuitBattleGlobals.SuitAttributes[suitName]['name']
-            panel['text'] = suitFullName
+        if not suitName:
+            print 'SuitPage.setPanelStatus: panel has no suitName'
+            return
 
-            if panel.quotaLabel:
-                panel.quotaLabel.show()
-            else:
-                self.addQuotaLabel(panel)
+        attrs = SuitBattleGlobals.SuitAttributes.get(suitName)
 
-            if panel.head:
-                panel.head.show()
-            else:
-                self.addSuitHead(panel, suitName)
+        if attrs is None:
+            print 'SuitPage.setPanelStatus: missing attributes for', suitName
+            panel['text'] = '???'
+            return
 
-        elif status == COG_DEFEATED:
-            # Remove this if you no longer want quota/count text.
-            if panel.quotaLabel:
-                panel.quotaLabel.show()
+        panel['text'] = self.getCogDisplayName(
+            suitName,
+            abbreviate=True
+        )
 
-        elif status == COG_COMPLETE1:
-            panel['image_color'] = PANEL_COLORS_COMPLETE1[panel.deptIndex]
-
-        elif status == COG_COMPLETE2:
-            panel['image_color'] = PANEL_COLORS_COMPLETE2[panel.deptIndex]
+        if panel.quotaLabel:
+            panel.quotaLabel.show()
+        else:
+            self.addQuotaLabel(panel)
     
     def updateAllCogs(self, status):
         for index in xrange(0, len(base.localAvatar.cogs)):
@@ -967,52 +2004,67 @@ class SuitPage(ShtikerPage.ShtikerPage):
         self.updatePage()
 
     def updatePage(self):
-        DEPT_ORDER = ['c', 'l', 'm', 's', 'g', 't', 'p']
+        avatarCogs = getattr(base.localAvatar, 'cogs', [])
+        suitHeadTypes = SuitDNA.suitHeadTypes
 
         for deptIndex, deptName in enumerate(DEPT_ORDER):
             cogList = CogIndexDepartments.get(deptName, [])
 
             for typeIndex, suitName in enumerate(cogList):
                 try:
-                    index = SuitDNA.suitHeadTypes.index(suitName)
+                    index = suitHeadTypes.index(suitName)
                 except ValueError:
+                    print 'SuitPage: suit not in suitHeadTypes:', suitName
                     continue
 
-                self.updateCogStatus(deptIndex, typeIndex, base.localAvatar.cogs[index])
+                if index < 0 or index >= len(avatarCogs):
+                    print (
+                        'SuitPage: avatar cog index out of range: '
+                        'suit=%s index=%s cogsLength=%s'
+                        % (suitName, index, len(avatarCogs))
+                    )
+                    continue
+
+                self.updateCogStatus(
+                    deptIndex,
+                    typeIndex,
+                    avatarCogs[index]
+                )
 
     def updateCogStatus(self, dept, type, status):
-        if dept == 5:
-            pass 
-        if dept < 0 or dept > len(SuitDNA.suitDepts):
-            print 'ucs: bad cog dept: ', dept
-        elif type < 0 or type > SuitDNA.suitsPerDept:
-            print 'ucs: bad cog type: ', type
-        elif status < COG_UNSEEN or status > COG_COMPLETE2:
-            print 'ucs: bad status: ', status
-        else:
-            self.resetPanel(dept, type)
-            suitName = CogIndexDepartments[DEPT_ORDER[dept]][type]
-            panel = self.panelBySuitName.get(suitName)
-            if status == COG_UNSEEN:
-                self.setPanelStatus(panel, COG_UNSEEN)
-            elif status == COG_BATTLED:
-                self.setPanelStatus(panel, COG_BATTLED)
-            elif status == COG_DEFEATED:
-                self.setPanelStatus(panel, COG_BATTLED)
-                self.setPanelStatus(panel, COG_DEFEATED)
-            elif status == COG_COMPLETE1:
-                self.setPanelStatus(panel, COG_BATTLED)
-                self.setPanelStatus(panel, COG_DEFEATED)
-                self.setPanelStatus(panel, COG_COMPLETE1)
-            elif status == COG_COMPLETE2:
-                self.setPanelStatus(panel, COG_BATTLED)
-                self.setPanelStatus(panel, COG_DEFEATED)
-                self.setPanelStatus(panel, COG_COMPLETE2)
+        if dept < 0 or dept >= len(DEPT_ORDER):
+            print 'ucs: bad cog dept:', dept
+            return
+
+        deptName = DEPT_ORDER[dept]
+        cogList = CogIndexDepartments.get(deptName, [])
+
+        if type < 0 or type >= len(cogList):
+            print (
+                'ucs: bad cog type: %s for department %s, size %s'
+                % (type, deptName, len(cogList))
+            )
+            return
+
+        if status < COG_UNSEEN or status > COG_COMPLETE2:
+            print 'ucs: bad status:', status
+            return
+
+        suitName = cogList[type]
+        panel = self.panelBySuitName.get(suitName)
+
+        if panel is None:
+            print (
+                'SuitPage: no panel for suit %s in department %s'
+                % (suitName, deptName)
+            )
+            return
+
+        self.resetPanel(dept, type)
+        self.setPanelStatus(panel, status)
 
     def updateCogRadarButtons(self, radars):
-        for index in xrange(0, len(radars)):
-            if radars[index] == 1:
-                self.radarButtons[index]['state'] = DGG.NORMAL
+       pass
 
     def updateCogRadar(self, deptNum, panels, timeout = 0):
         taskMgr.remove('suitListResponseTimeout-later')
@@ -1022,11 +2074,19 @@ class SuitPage(ShtikerPage.ShtikerPage):
             cogList = []
         for panel in panels:
             panel.count = 0
-        for cog in cogList:
-            if cog - ((len(SuitDNA.suitDepts)) * SuitDNA.suitsPerDept - 1) > 0: 
-                pass 
-            else:
-                self.panels[cog].count += 1
+        for cogIndex in cogList:
+            if cogIndex < 0 or cogIndex >= len(SuitDNA.suitHeadTypes):
+                print 'SuitPage radar: bad suitHeadTypes index:', cogIndex
+                continue
+
+            suitName = SuitDNA.suitHeadTypes[cogIndex]
+            panel = self.panelBySuitName.get(suitName)
+
+            if panel is None:
+                print 'SuitPage radar: no panel for:', suitName
+                continue
+
+            panel.count += 1
         for panel in panels:
             panel.cogRadarLabel['text'] = TTLocalizer.SuitPageCogRadar % panel.count
             if self.radarOn[deptNum]:
@@ -1045,9 +2105,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         return
 
     def updateBuildingRadarButtons(self, radars):
-        for index in xrange(0, len(radars)):
-            if radars[index] == 1:
-                self.radarButtons[index].building = 1
+        pass
 
     def updateBuildingRadar(self, deptNum, timeout = 0):
         taskMgr.remove('buildingListResponseTimeout-later')

@@ -1125,6 +1125,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     adjustTrack.append(Func(suit.setNeutralAnimationRolled))
                 elif suit.style.name == 'std2':
                     adjustTrack.append(Func(suit.setNeutralAnimationRolled))
+                elif suit.style.name == 'cnd2':
+                    adjustTrack.append(Func(suit.setNeutralAnimationRolled))
                 elif suit.style.name == 'hrollers':
                     adjustTrack.append(Func(suit.setNeutralAnimationRolled))
                 elif suit.style.name == 'cinema':

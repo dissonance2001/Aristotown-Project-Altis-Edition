@@ -22,418 +22,274 @@ def pickFromFreqList(freqList):
 
     return level
 
+def calculateNormalCogHP(actualLevel):
+    """
+    Standard Toontown-style Cog HP formula.
+    """
+    return int((actualLevel + 1) * (actualLevel + 2))
 
-def getActualFromRelativeLevel(name, relLevel):
+def calculateFieldSpecialistCogHP(actualLevel):
+    """
+    Stronger formula for field specialist Cogs.
+
+    """
+    return int((actualLevel * (actualLevel + 1)) + 1)
+
+def calculateOperationsAnalystCogHP(actualLevel):
+    """
+    Stronger formula for operations analyst Cogs.
+    """
+    return int(((actualLevel + 2) * (actualLevel + 3)) - 2)
+
+def getSuitHP(name, actualLevel, relativeLevel):
     data = SuitAttributes[name]
-    # Bossbots
-    if name == 'p':
-        actualLevel = relLevel + 1
-    elif name == 'stg':
-        actualLevel = relLevel + 1
-    elif name == 'ym':
-        actualLevel = relLevel + 2
-    elif name == 'enf':
-        actualLevel = relLevel + 3
-    elif name == 'mm':
-        actualLevel = relLevel + 3
-    elif name == 'blh':
-        actualLevel = relLevel + 2
-    elif name == 'ds':
-        actualLevel = relLevel + 4
-    elif name == 'ksp':
-        actualLevel = relLevel + 4
-    elif name == 'hh':
-        actualLevel = relLevel + 5
-    elif name == 'bsht':
-        actualLevel = relLevel + 5
-    elif name == 'cr':
-        actualLevel = relLevel + 6
-    elif name == 'txl':
-        actualLevel = relLevel + 6
-    elif name == 'tbc':
-        actualLevel = relLevel + 7
-    elif name == 'autocad':
-        actualLevel = relLevel + 13
-    elif name == 'clubpres':
-        actualLevel = relLevel + 19
-    elif name == 'derrman':
-        actualLevel = relLevel + 9
-    elif name == 'derrhand':
-        actualLevel = relLevel + 24
-    elif name == 'mplayer':
-        actualLevel = relLevel + 27
-    elif name == 'fires':
-        actualLevel = relLevel + 19
-    elif name == 'fbed':
-        actualLevel = relLevel + 29
-    elif name == 'choreo':
-        actualLevel = relLevel + 25
-    elif name == 'chainsaw':
-        actualLevel = relLevel + 49
-    elif name == 'chainsaw2':
-        actualLevel = relLevel + 49
-    elif name == 'phouse':
-        actualLevel = relLevel + 37
-    elif name == 'bkeeper':
-        actualLevel = relLevel + 43
-    elif name == 'wtapper':
-        actualLevel = relLevel + 43
-    elif name == 'ambass':
-        actualLevel = relLevel + 47
-    # Lawbots
-    elif name == 'b':
-        actualLevel = relLevel + 1
-    elif name == 'pf':
-        actualLevel = relLevel + 1
-    elif name == 'dt':
-        actualLevel = relLevel + 2
-    elif name == 'cv':
-        actualLevel = relLevel + 3
-    elif name == 'ac':
-        actualLevel = relLevel + 3
-    elif name == 'nn':
-        actualLevel = relLevel + 2
-    elif name == 'bs':
-        actualLevel = relLevel + 4
-    elif name == 'ad':
-        actualLevel = relLevel + 4
-    elif name == 'sd':
-        actualLevel = relLevel + 5
-    elif name == 'sh':
-        actualLevel = relLevel + 5
-    elif name == 'le':
-        actualLevel = relLevel + 6
-    elif name == 'br':
-        actualLevel = relLevel + 6
-    elif name == 'bw':
-        actualLevel = relLevel + 7
-    elif name == 'whistleb':
-        actualLevel = relLevel + 17
-    elif name == 'clerk':
-        actualLevel = relLevel + 19
-    elif name == 'arbit':
-        actualLevel = relLevel + 34
-    elif name == 'judy':
-        actualLevel = relLevel + 19
-    elif name == 'mouthp':
-        actualLevel = relLevel + 15
-    elif name == 'rainmake':
-        actualLevel = relLevel + 15
-    elif name == 'whunter':
-        actualLevel = relLevel + 19
-    elif name == 'erclaim':
-        actualLevel = relLevel + 19
-    elif name == 'redd':
-        actualLevel = relLevel + 19
-    elif name == 'wsi':
-        actualLevel = relLevel + 49
-    elif name == 'sgoat':
-        actualLevel = relLevel + 29
-    elif name == 'caseman':
-        actualLevel = relLevel + 34
-    elif name == 'stenog':
-        actualLevel = relLevel + 34
-    elif name == 'lgator':
-        actualLevel = relLevel + 39
-    # Cashbots
-    elif name == 'pp':
-        actualLevel = relLevel + 1
-    elif name == 'shy':
-        actualLevel = relLevel + 1
-    elif name == 'tw':
-        actualLevel = relLevel + 2
-    elif name == 'sw':
-        actualLevel = relLevel + 3
-    elif name == 'bc':
-        actualLevel = relLevel + 3
-    elif name == 'fct':
-        actualLevel = relLevel + 2
-    elif name == 'nc':
-        actualLevel = relLevel + 4
-    elif name == 'gld':
-        actualLevel = relLevel + 4
-    elif name == 'mb':
-        actualLevel = relLevel + 5
-    elif name == 'trs':
-        actualLevel = relLevel + 5
-    elif name == 'ls':
-        actualLevel = relLevel + 6
-    elif name == 'bfh':
-        actualLevel = relLevel + 6
-    elif name == 'rb':
-        actualLevel = relLevel + 7
-    elif name == 'ovt':
-        actualLevel = relLevel + 21
-    elif name == 'supervis':
-        actualLevel = relLevel + 19
-    elif name == 'duckshfl':
-        actualLevel = relLevel + 4
-    elif name == 'treek':
-        actualLevel = relLevel + 19
-    elif name == 'payman':
-        actualLevel = relLevel + 19
-    elif name == 'bookkeep':
-        actualLevel = relLevel + 34
-    elif name == 'racket':
-        actualLevel = relLevel + 39
-    elif name == 'liquidr':
-        actualLevel = relLevel + 39
-    elif name == 'treasure':
-        actualLevel = relLevel + 44
-    elif name == 'pcrat':
-        actualLevel = relLevel + 37
-    elif name == 'hroller':
-        actualLevel = relLevel + 99
-    elif name == 'erfit':
-        actualLevel = relLevel + 19
-    elif name == 'hrollers':
-        actualLevel = relLevel + 24
-    elif name == 'hroller2':
-        actualLevel = relLevel + 99
-    # Sellbots
-    elif name == 'tm':
-        actualLevel = relLevel + 1
-    elif name == 'cn':
-        actualLevel = relLevel + 1
-    elif name == 'nd':
-        actualLevel = relLevel + 2
-    elif name == 'dc':
-        actualLevel = relLevel + 3
-    elif name == 'gh':
-        actualLevel = relLevel + 3
-    elif name == 'fcs':
-        actualLevel = relLevel + 2
-    elif name == 'ms':
-        actualLevel = relLevel + 4
-    elif name == 'asm':
-        actualLevel = relLevel + 4
-    elif name == 'tf':
-        actualLevel = relLevel + 5
-    elif name == 'ppl':
-        actualLevel = relLevel + 5
-    elif name == 'm':
-        actualLevel = relLevel + 6
-    elif name == 'cnd':
-        actualLevel = relLevel + 6
-    elif name == 'mh':
-        actualLevel = relLevel + 7
-    elif name == 'watchm':
-        actualLevel = relLevel + 13
-    elif name == 'foreman':
-        actualLevel = relLevel + 19
-    elif name == 'dopr':
-        actualLevel = relLevel + 14
-    elif name == 'dopa':
-        actualLevel = relLevel + 29
-    elif name == 'bellring':
-        actualLevel = relLevel + 12
-    elif name == 'cinema':
-        actualLevel = relLevel + 25
-    elif name == 'mh2':
-        actualLevel = relLevel + 24
-    elif name == 'prethink':
-        actualLevel = relLevel + 11
-    elif name == 'mslacker':
-        actualLevel = relLevel + 23
-    elif name == 'radiog':
-        actualLevel = relLevel + 34
-    elif name == 'hustle':
-        actualLevel = relLevel + 39
-    elif name == 'ubuster':
-        actualLevel = relLevel + 39
-    elif name == 'safesupervis':
-        actualLevel = relLevel + 44
-    elif name == 'psetter':
-        actualLevel = relLevel + 65
-    # Boardbots
-    elif name == 'pph':
-        actualLevel = relLevel + 1
-    elif name == 'ca':
-        actualLevel = relLevel + 1
-    elif name == 'ins':
-        actualLevel = relLevel + 2
-    elif name == 'mdm':
-        actualLevel = relLevel + 3
-    elif name == 'cbr':
-        actualLevel = relLevel + 3
-    elif name == 'txm':
-        actualLevel = relLevel + 2
-    elif name == 'dl':
-        actualLevel = relLevel + 4
-    elif name == 'ang':
-        actualLevel = relLevel + 4
-    elif name == 'shw':
-        actualLevel = relLevel + 5
-    elif name == 'bfh2':
-        actualLevel = relLevel + 5
-    elif name == 'mg':
-        actualLevel = relLevel + 6
-    elif name == 'chw':
-        actualLevel = relLevel + 6
-    elif name == 'hho':
-        actualLevel = relLevel + 7
-    elif name == 'chairp':
-        actualLevel = relLevel + 13
-    elif name == 'bdirector':
-        actualLevel = relLevel + 19
-    elif name == 'ddiver':
-        actualLevel = relLevel + 9
-    elif name == 'gatekeep':
-        actualLevel = relLevel + 29
-    elif name == 'trainer':
-        actualLevel = relLevel + 19
-    elif name == 'dola':
-        actualLevel = relLevel + 11
-    elif name == 'dold':
-        actualLevel = relLevel + 24
-    elif name == 'liquid':
-        actualLevel = relLevel + 55
-    elif name == 'rkeeper':
-        actualLevel = relLevel + 59
-    elif name == 'cbutcher':
-        actualLevel = relLevel + 29
-    elif name == 'cdirector':
-        actualLevel = relLevel + 65
-    elif name == 'dking':
-        actualLevel = relLevel + 59
-    elif name == 'ottoman':
-        actualLevel = relLevel + 69
-    elif name == 'fmaker':
-        actualLevel = relLevel + 25
-    elif name == 'chairman':
-        actualLevel = relLevel + 99
-    # Techbots
-    elif name == 'cmk':
-        actualLevel = relLevel + 1
-    elif name == 'dhr':
-        actualLevel = relLevel + 1
-    elif name == 'vpr':
-        actualLevel = relLevel + 2
-    elif name == 'brn':
-        actualLevel = relLevel + 3
-    elif name == 'sdb':
-        actualLevel = relLevel + 3
-    elif name == 'key':
-        actualLevel = relLevel + 2
-    elif name == 'kbc':
-        actualLevel = relLevel + 4
-    elif name == 'blk':
-        actualLevel = relLevel + 4
-    elif name == 'sfs':
-        actualLevel = relLevel + 5
-    elif name == 'pyc':
-        actualLevel = relLevel + 5
-    elif name == 'inw':
-        actualLevel = relLevel + 6
-    elif name == 'itn':
-        actualLevel = relLevel + 6
-    elif name == 'rus':
-        actualLevel = relLevel + 7
-    elif name == 'ant':
-        actualLevel = relLevel + 13
-    elif name == 'sya':
-        actualLevel = relLevel + 19
-    elif name == 'djockey':
-        actualLevel = relLevel + 9
-    elif name == 'ptjockey':
-        actualLevel = relLevel + 29
-    elif name == 'crystal':
-        actualLevel = relLevel + 25
-    # Pressbots
-    elif name == 'shb':
-        actualLevel = relLevel + 1
-    elif name == 'bsd':
-        actualLevel = relLevel + 1
-    elif name == 'gms':
-        actualLevel = relLevel + 2
-    elif name == 'sbg':
-        actualLevel = relLevel + 3
-    elif name == 'hck':
-        actualLevel = relLevel + 3
-    elif name == 'ath':
-        actualLevel = relLevel + 2
-    elif name == 'ghw':
-        actualLevel = relLevel + 4
-    elif name == 'dcw':
-        actualLevel = relLevel + 4
-    elif name == 'gzt':
-        actualLevel = relLevel + 5
-    elif name == 'wnk':
-        actualLevel = relLevel + 5
-    elif name == 'nsh':
-        actualLevel = relLevel + 6
-    elif name == 'std':
-        actualLevel = relLevel + 6
-    elif name == 'anc':
-        actualLevel = relLevel + 7
-    elif name == 'jls':
-        actualLevel = relLevel + 13
-    elif name == 'pbl':
-        actualLevel = relLevel + 19
-    elif name == 'director':
-        actualLevel = relLevel + 29
-    elif name == 'bcaster':
-        actualLevel = relLevel + 32
-    elif name == 'std2':
-        actualLevel = relLevel + 17
-    elif name == 'videog':
-        actualLevel = relLevel + 98
-    else:
-        actualLevel = relLevel
-    return actualLevel
+
+    hpData = data.get('hp', 'normal')
+
+    # Fixed HP:
+    #
+    # 'hp': 5000
+    #
+    if isinstance(hpData, (int, long, float)):
+        return max(1, int(hpData))
+
+    # Formula name:
+    #
+    # 'hp': 'normal'
+    # 'hp': 'specialist'
+    #
+    if isinstance(hpData, basestring):
+        formulaName = hpData.lower()
+
+        if formulaName == 'operations':
+            return calculateOperationsAnalystCogHP(actualLevel)
+        
+        if formulaName == 'field':
+            return calculateFieldSpecialistCogHP(actualLevel)
+
+        if formulaName == 'normal':
+            return calculateNormalCogHP(actualLevel)
+
+        notify.warning(
+            'Unknown HP formula "%s" for %s; using normal formula.' %
+            (hpData, name)
+        )
+
+        return calculateNormalCogHP(actualLevel)
+
+    # Existing HP tuple/list:
+    #
+    # 'hp': (30, 42, 56, 72)
+    #
+    if isinstance(hpData, (tuple, list)):
+        if not hpData:
+            return calculateNormalCogHP(actualLevel)
+
+        if relativeLevel < len(hpData):
+            return int(hpData[relativeLevel])
+
+        # Preserve your current behavior:
+        # once the explicit tuple runs out, use formula HP.
+        return calculateNormalCogHP(actualLevel)
+
+    notify.warning(
+        'Invalid HP data for %s: %s; using normal formula.' %
+        (name, repr(hpData))
+    )
+
+    return calculateNormalCogHP(actualLevel)
+
+# def getActualFromRelativeLevel(name, relLevel):
+#     data = SuitAttributes[name]
+#     return data['level'] + relLevel
 
 
-def getSuitVitals(name, level = -1):
+def getSuitMinLevel(name):
     data = SuitAttributes[name]
+
+    if 'minLevel' in data:
+        return int(data['minLevel'])
+
+    # Preserve the old zero-based SuitAttributes format.
+    return int(data.get('level', 0)) + 1
+
+
+def getSuitMaxLevel(name):
+    data = SuitAttributes[name]
+    minimumLevel = getSuitMinLevel(name)
+
+    if 'maxLevel' in data:
+        return int(data['maxLevel'])
+
+    hpData = data.get('hp', ())
+
+    if isinstance(hpData, (tuple, list)) and hpData:
+        return minimumLevel + len(hpData) - 1
+
+    freqData = data.get('freq', ())
+
+    if isinstance(freqData, (tuple, list)) and freqData:
+        return minimumLevel + len(freqData) - 1
+
+    return minimumLevel + 4
+
+
+def getRandomSuitLevel(name):
+    minimumLevel = getSuitMinLevel(name)
+    maximumLevel = getSuitMaxLevel(name)
+
+    if maximumLevel < minimumLevel:
+        notify.warning(
+            '%s has maxLevel %s below minLevel %s.' %
+            (name, maximumLevel, minimumLevel)
+        )
+
+        maximumLevel = minimumLevel
+
+    return random.randint(
+        minimumLevel,
+        maximumLevel
+    )
+
+
+def clampNaturalSuitLevel(name, actualLevel):
+    minimumLevel = getSuitMinLevel(name)
+    maximumLevel = getSuitMaxLevel(name)
+
+    return max(
+        minimumLevel,
+        min(int(actualLevel), maximumLevel)
+    )
+
+
+def getRelativeFromActualLevel(name, actualLevel):
+    minimumLevel = getSuitMinLevel(name)
+
+    return max(
+        0,
+        int(actualLevel) - minimumLevel
+    )
+
+
+def getActualFromRelativeLevel(name, relativeLevel):
+    minimumLevel = getSuitMinLevel(name)
+
+    return minimumLevel + max(
+        0,
+        int(relativeLevel)
+    )
+
+
+def getSuitVitals(
+        name,
+        level=-1,
+        levelIsActual=False,
+        clampToNaturalRange=False):
+
+    data = SuitAttributes[name]
+
     if level == -1:
-        level = pickFromFreqList(data['freq'])
-    dict = {}
-    dict['level'] = getActualFromRelativeLevel(name, level)
-    if dict['level'] == 11:
-        level = 0
-    dict['hp'] = data['hp'][level]
-    dict['def'] = data['def'][level]
-    dict['initEffects'] = data.get('initEffects', [])
-    attacks = data['attacks']
-    cheats = data['cheats']
-    alist = []
-    clist = []
-    for a in attacks:
-        adict = {}
-        name = a.name
-        adict['name'] = name
-        adict['animName'] = SuitAttacks[name][0]
-        # Try and get the attack data from the appropriate index.
-        try:
-            adict['hp'] = a.hp[level]
-        except IndexError:
-            # Chances are we went over.  Let's do overleveling logic!
-            adict['hp'] = a.hp[len(a.hp) - 1] + (level - (len(a.hp) - 1))
-        # Same thing for the below, except we're just using the final index rather than adding anything to the final index.
-        try:
-            adict['acc'] = a.acc[level]
-        except IndexError:
-            adict['acc'] = a.acc[len(a.acc) - 1]
-        try:
-            adict['freq'] = a.freq[level]
-        except IndexError:
-            adict['freq'] = a.freq[len(a.freq) - 1]
-        adict['group'] = a.groupStatus
-        alist.append(adict)
-    for c in cheats:
-        cdict = {}
-        name = c[0]
-        cdict['name'] = name
-        cdict['animName'] = SuitCheats[name][0]
-        cdict['hp'] = c[1][level]
-        cdict['acc'] = c[2][level]
-        cdict['freq'] = c[3][level]
-        cdict['group'] = SuitCheats[name][1]
-        clist.append(cdict)
+        actualLevel = getRandomSuitLevel(name)
+        relativeLevel = getRelativeFromActualLevel(
+            name,
+            actualLevel
+        )
 
-    dict['attacks'] = alist
-    dict['cheats'] = clist
-    return dict
+    elif levelIsActual:
+        actualLevel = int(level)
+
+        if clampToNaturalRange:
+            actualLevel = clampNaturalSuitLevel(
+                name,
+                actualLevel
+            )
+
+        # Forced levels are intentionally not capped.
+        actualLevel = max(1, actualLevel)
+
+        relativeLevel = getRelativeFromActualLevel(
+            name,
+            actualLevel
+        )
+
+    else:
+        relativeLevel = max(0, int(level))
+        actualLevel = getActualFromRelativeLevel(
+            name,
+            relativeLevel
+        )
+
+        if clampToNaturalRange:
+            actualLevel = clampNaturalSuitLevel(
+                name,
+                actualLevel
+            )
+
+            relativeLevel = getRelativeFromActualLevel(
+                name,
+                actualLevel
+            )
+
+    result = {
+        'level': actualLevel,
+
+        'hp': getSuitHP(
+            name,
+            actualLevel,
+            relativeLevel
+        ),
+
+        'def': _getOverlevelValue(
+            data['def'],
+            relativeLevel,
+            addPerLevel=0
+        ),
+
+        'initEffects': data.get(
+            'initEffects',
+            []
+        )
+    }
+
+    alist = []
+
+    for attack in data['attacks']:
+        attackName = attack.name
+
+        adict = {
+            'name': attackName,
+            'animName': SuitAttacks[attackName][0],
+
+            # Increase by one per overlevel.
+            'hp': _getOverlevelValue(
+                attack.hp,
+                relativeLevel,
+                addPerLevel=1
+            ),
+
+            # Hold the final accuracy forever.
+            'acc': _getOverlevelValue(
+                attack.acc,
+                relativeLevel,
+                addPerLevel=0
+            ),
+
+            # Hold the final frequency forever.
+            'freq': _getOverlevelValue(
+                attack.freq,
+                relativeLevel,
+                addPerLevel=0
+            ),
+
+            'group': attack.groupStatus
+        }
+
+        alist.append(adict)
+
+    result['attacks'] = alist
+    result['cheats'] = []
+
+    return result
 
 
 def calculateDefense(suitLevel, levelOffset, boost=0):
@@ -460,6 +316,30 @@ def getAttackIndex(attackName, suitName):
     notify.warning('Did not find attack %s for suitName %s' % (attackName, suitName))
     return -1
 
+def _getOverlevelValue(values, level, addPerLevel=0):
+    """
+    Get a stat value for a relative Cog level.
+
+    If the level exceeds the provided values:
+        - hold the last value when addPerLevel is 0
+        - increase from the last value when addPerLevel is greater than 0
+    """
+
+    if not values:
+        return 0
+
+    level = max(0, int(level))
+    lastIndex = len(values) - 1
+
+    if level <= lastIndex:
+        return values[level]
+
+    overlevels = level - lastIndex
+
+    return values[lastIndex] + (
+        overlevels * addPerLevel
+    )
+
 def getAttackIndexSoak(attackName):
     '''
     For convenience, until I find a way to use attack names instead of indexes for SUIT_ATK_COL, grab the index based on the attack name.
@@ -475,39 +355,42 @@ def getAttackIndexSoak(attackName):
     #notify.warning('Did not find attack %s for suitName %s' % (attackName, suitName))
     return -1
 
+def getDisplayLevelFromRelative(name, relativeLevel):
+    data = SuitAttributes[name]
+
+    return int(data.get('level', 0)) + int(relativeLevel) + 1
+
 def pickSuitAttack(attacks, suitLevel):
     configAttackName = simbase.config.GetString('attack-type', 'random')
-    if configAttackName == 'random':
-        pass # Proceed downward to calculate and return attackNum
-    elif configAttackName == 'sequence':
-        for i in xrange(len(attacks)):
-            if  attacks[i] not in debugAttackSequence:
-                debugAttackSequence[attacks[i]] = 1
-                return attacks[i].name
 
-    else:
-        # Feasibly, one could just do a "return configAttackName", but with the new system, this will not account for whether or not the Cog has the attack.
-        for i in xrange(len(attacks)):
-            if attacks[i].name == configAttackName:
-                return attacks[i].name
+    if configAttackName == 'sequence':
+        for attack in attacks:
+            if attack not in debugAttackSequence:
+                debugAttackSequence[attack] = 1
+                return attack.name
 
-    attackNum = None
+    elif configAttackName != 'random':
+        for attack in attacks:
+            if attack.name == configAttackName:
+                return attack.name
+
     randNum = random.randint(0, 99)
-    notify.debug('pickSuitAttack: rolled %d' % randNum)
     count = 0
-    index = 0
-    total = 0
-    for c in attacks:
-        total = total + c.freq[suitLevel]
 
-    for c in attacks:
-        count = count + c.freq[suitLevel]
+    for attack in attacks:
+        freq = _getOverlevelValue(
+            attack.freq,
+            suitLevel,
+            addPerLevel=0
+        )
+
+        count += freq
+
         if randNum < count:
-            attackNum = index
-            notify.debug('picking attack %d' % attackNum)
-            break
-        index = index + 1
-    return attacks[attackNum].name
+            return attack.name
+
+    # Fallback in case frequencies do not add to 100.
+    return attacks[-1].name
 
 
 def pickSuitCheat(cheats, suitLevel):
@@ -574,31 +457,44 @@ def getSuitCheat(suitName, suitLevel, cheatNum = -1):
     return cdict
 
 
-def getSuitAttack(suitName, suitLevel, attackName = ''):
+def getSuitAttack(suitName, suitLevel, attackName=''):
     attackChoices = SuitAttributes[suitName]['attacks']
+
     if attackName == '':
-        notify.debug('getSuitAttack: picking attacking for %s' % suitName)
         attackName = pickSuitAttack(attackChoices, suitLevel)
+
     attack = findAttack(suitName, attackName)
-    adict = {}
-    adict['suitName'] = suitName
     name = attack.name
-    adict['name'] = name
-    adict['animName'] = SuitAttacks[name][0]
-    try:
-        adict['hp'] = attack.hp[suitLevel]
-    except IndexError:
-        adict['hp'] = attack.hp[len(attack.hp) - 1] + (suitLevel - (len(attack.hp) - 1))
-    try:
-        adict['acc'] = attack.acc[suitLevel]
-    except IndexError:
-        adict['acc'] = attack.acc[len(attack.acc) - 1]
-    try:
-        adict['freq'] = attack.freq[suitLevel]
-    except IndexError:
-        adict['freq'] = attack.freq[len(attack.freq) - 1]
+
+    adict = {
+        'suitName': suitName,
+        'name': name,
+        'animName': SuitAttacks[name][0],
+
+        # Add one damage per overlevel.
+        'hp': _getOverlevelValue(
+            attack.hp,
+            suitLevel,
+            addPerLevel=1
+        ),
+
+        # Hold final accuracy/frequency.
+        'acc': _getOverlevelValue(
+            attack.acc,
+            suitLevel,
+            addPerLevel=0
+        ),
+
+        'freq': _getOverlevelValue(
+            attack.freq,
+            suitLevel,
+            addPerLevel=0
+        )
+    }
+
     if attack.groupStatus is None:
         attack.groupStatus = SuitAttacks[name][1]
+
     adict['group'] = attack.groupStatus
     return adict
 
@@ -645,7 +541,7 @@ SuitLevel = {
     'hho': 7.0,
 }
 
-SpecialCogDict = ('whistleb', 'clubpres', 'ovt', 'cinema', 'choreo', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
+SpecialCogDict = ('clubpres', 'ovt', 'cinema', 'choreo', 'derrman', 'derrhand', 'mplayer', 'fires', 'fbed', 'mplayer2', 'chainsaw', 'chainsaw2', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'foreman', 'dopr', 'dopa',
                   'bellring', 'prethink', 'mslacker', 'videog', 'radiog', 'ubuster', 'racket', 'safesupervis', 'psetter', 'supervis', 'duckshfl', 'treek', 'styx', 'nix', 'hydra',
                   'kerberos', 'charon', 'pcrat', 'hroller', 'erfit', 'trainer', 'hroller2', 'hrollers', 'clerk', 'arbit', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi',
                   'liquidr', 'treasure', 'hustle', 'bookkeep', 'payman', 
@@ -689,7 +585,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
        'pluralname': 'Flunkies', # cogs plural name, for tasks
        'level': 0, # level the cog starts at (level - 1)
-       'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+       'minLevel': 1, # minimum level this cog can spawn naturally
+        'maxLevel': 5, # maximum level this cog can spawn naturally
+       'hp': 'normal', # cogs hp (more numbers, more levels)
        'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
        'freq':(50,30,10,5,5), # cogs level frequency
        'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
@@ -710,7 +608,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Pencil Pusher',
        'pluralname': 'Pencil Pushers',
        'level': 1,
-       'hp':(12, 20, 30, 42, 56),
+       'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
        'def':(7,7,7,7,7),
        'freq':(30,35,40,45,50),
        'acc':(45,50,55,60,65),
@@ -739,7 +639,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Stooge',
          'pluralname': 'Stooges',
          'level': 1,
-         'hp':(18, 28, 40, 54, 70, 88, 108),
+         'minLevel': 2,
+        'maxLevel': 8,
+          'hp': 'field',
          'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
          'freq':(50,50,30,10,5,5,5), # cogs level frequency
          'acc':(35,35,40,45,50,55,55), # cogs accuracy (more numbers, more levels)
@@ -764,7 +666,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Yesman',
         'pluralname': 'Yesmen',
         'level': 2,
-       'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+       'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65),
         'acc': (45, 50, 55, 60, 65, 70, 75, 80),
@@ -788,8 +692,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'enf': {'name': 'Patronizer',
          'singularname': 'a Patronizer',
          'pluralname': 'Patronizers',
-         'level': 3,
-         'hp': (40, 54, 70, 88, 108, 130, 154),
+         'level': 2,
+         'minLevel': 3,
+        'maxLevel': 9,
+        'hp': 'field',
          'def':(11,11,11,11,11,11,11),
          'freq':(30,30,30,35,40,45,50),
          'acc':(65,65,65,70,75,80,85),
@@ -803,18 +709,47 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                          acc=(75, 75, 80, 80, 85, 85, 85),
                          freq=(30, 30, 30, 30, 30, 30, 30)),
               SuitAttack('HostileTakeover',
-                         hp=(2, 3, 4, 5, 6, 7, 8),
+                         hp=(5, 6, 9, 12, 15, 18, 21, 24),
                          acc=(75, 75, 80, 80, 85, 85, 85),
                          freq=(20, 20, 20, 20, 20, 20, 20)),
               SuitAttack('MoneyTrip',
-                         hp=(2, 3, 3, 4, 4, 5, 5),
+                         hp=(7, 9, 13, 17, 21, 25, 28,),
+                         acc=(75, 75, 80, 80, 85, 85, 85),
+                         freq=(30, 30, 30, 30, 30, 30, 30)))},
+ 'psh': {'name': 'Pushover',
+         'singularname': 'a Pushover',
+         'pluralname': 'Pushovers',
+         'level': 2,
+         'minLevel': 3,
+        'maxLevel': 9,
+        'hp': 'operations',
+         'def':(11,11,11,11,11,11,11),
+         'freq':(30,30,30,35,40,45,50),
+         'acc':(65,65,65,70,75,80,85),
+         'attacks':
+             (SuitAttack('RubOut',
+                         hp=(1, 2, 3, 4, 5, 6, 7),
+                         acc=(75, 75, 80, 80, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('Rolodex',
+                         hp=(4, 6, 9, 12, 15, 16, 17),
+                         acc=(75, 75, 80, 80, 85, 85, 85),
+                         freq=(30, 30, 30, 30, 30, 30, 30)),
+              SuitAttack('FillWithLead',
+                          hp=(3, 4, 5, 6, 8, 10, 12),
+                         acc=(75, 75, 80, 80, 85, 85, 85),
+                         freq=(20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('WriteOff',
+                         hp=(1, 2, 3, 4, 5, 6, 7),
                          acc=(75, 75, 80, 80, 85, 85, 85),
                          freq=(30, 30, 30, 30, 30, 30, 30)))},
  'mm': {'name': 'Micromanager',
         'singularname': 'a Micromanager',
         'pluralname': 'Micromanagers',
         'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+        'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
         'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
@@ -839,36 +774,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(3, 4, 6, 8, 10, 12, 13, 14, 15),
                         acc=(50, 60, 70, 80, 90, 95, 95, 95, 95),
                         freq=(15, 15, 15, 15, 15, 15, 15, 15, 15)))},
- 'blh': {'name': 'Blowhard',
-         'singularname': 'a Blowhard',
-         'pluralname': 'Blowhards',
-         'level': 2,
-          'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
-            'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
-            'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-            'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-            'attacks':
-                (SuitAttack('PickPocket',
-                            hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
-                            acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-                SuitAttack('CigarSmoke',
-                            hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-                SuitAttack('Schmooze',
-                            hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-                SuitAttack('PlayHardball',
-                            hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'ds': {'name': 'Downsizer',
         'singularname': 'a Downsizer',
         'pluralname': 'Downsizers',
         'level': 4,
-        'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -889,36 +801,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(6, 8, 9, 11, 13, 15, 16, 17, 18, 19, 20),
                         acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
                         freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'ksp': {'name': 'Kiss-Up',
-          'singularname': 'a Kiss-Up',
-          'pluralname': 'Kiss-Ups',
-          'level': 4,
-          'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
-            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+ 'blh': {'name': 'Blowhard',
+         'singularname': 'a Blowhard',
+         'pluralname': 'Blowhards',
+         'level': 4,
+        'minLevel': 5,
+        'maxLevel': 14,
+        'hp': 'field',
+            'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+            'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
             'attacks':
-                (SuitAttack('RazzleDazzle',
-                            hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
-                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                (SuitAttack('PickPocket',
+                            hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
+                            acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('CigarSmoke',
+                            hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
                 SuitAttack('Schmooze',
-                            hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
-                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-                SuitAttack('Filibuster',
+                            hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('PlayHardball',
+                            hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+ 'stck': {'name': 'Stickler',
+         'singularname': 'a Stickler',
+         'pluralname': 'Sticklers',
+         'level': 4,
+           'minLevel': 5,
+        'maxLevel': 15,
+        'hp': 'operations',
+            'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+            'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+            'attacks':
+                (SuitAttack('HotAir',
+                            hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                            acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('Fired',
+                             hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+                SuitAttack('PinkSlip',
                             hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
-                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-                SuitAttack('Golf',
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('PlayHardball',
                             hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
-                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'hh': {'name': 'Head Hunter',
         'singularname': 'a Head Hunter',
         'pluralname': 'Head Hunters',
         'level': 5,
-        'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+        'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -951,7 +894,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
           'singularname': 'a Big Shot',
           'pluralname': 'Big Shots',
           'level': 5,
-          'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
+           'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -972,11 +917,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
                             acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'ppg': {'name': 'Propagandist',
+          'singularname': 'a Propagandist',
+          'pluralname': 'Propagandists',
+          'level': 5,
+           'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('RazzleDazzle',
+                            hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                            acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                            freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+                SuitAttack('Schmooze',
+                            hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                            acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('HotAir',
+                            hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                            acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('Tremor',
+                            hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                            acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'mldr': {'name': 'The Molder',
+          'singularname': 'a The Molder',
+          'pluralname': 'The Molders',
+          'level': 5,
+           'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'operations',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('SandTrap',
+                            hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                            acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                            freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+                SuitAttack('GlowerPower',
+                            hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                            acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('Golf',
+                            hp=(8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                            acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                SuitAttack('Quake',
+                            hp=(5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                            acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
  'cr': {'name': 'Corporate Raider',
         'singularname': 'a Corporate Raider',
         'pluralname': 'Corporate Raiders',
         'level': 6,
-        'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -1005,11 +1006,94 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(9, 12, 13, 14, 15, 17, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32),
                         acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'wnk': {'name': 'White Knight',
+         'singularname': 'a White Knight',
+         'pluralname': 'White Knights',
+         'level': 6,
+          'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('ParadigmShift',
+                        hp=(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+            SuitAttack('Quake',
+                        hp=(8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Tremor',
+                        hp=(8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Chomp',
+                        hp=(5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'drk': {'name': 'Dark Horse',
+         'singularname': 'a Dark Horse',
+         'pluralname': 'Dark Horses',
+         'level': 6,
+          'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('PowerTrip',
+                            hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                SuitAttack('Bite',
+                            hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('GlowerPower',
+                            hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('Quake',
+                             hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'ksp': {'name': 'Kiss-Up',
+          'singularname': 'a Kiss-Up',
+          'pluralname': 'Kiss-Ups',
+          'level': 6,
+           'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('RazzleDazzle',
+                            hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                SuitAttack('Schmooze',
+                            hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('Filibuster',
+                            hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('Golf',
+                             hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'txl': {'name': 'Toxic Leader',
          'singularname': 'a Toxic Leader',
          'pluralname': 'Toxic Leaders',
          'level': 6,
-            'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
             'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -1034,7 +1118,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a The Big Cheese',
          'pluralname': 'The Big Cheeses',
          'level': 7,
-            'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702, 756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722, 1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
+            'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',
             'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -1062,7 +1148,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'autocad': {'name': 'Autocaddie',
              'singularname': 'a Autocaddie',
              'pluralname': 'Autocaddies',
-             'level': 14,
+             'level': 13,
              'hp':(375, 425,),
              'def':(60, 60,),
              'freq':(100, 100,),
@@ -1091,7 +1177,8 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'clubpres': {'name': 'Club President',
               'singularname': 'a Club President',
               'pluralname': 'Club Presidents',
-              'level': 15,
+              'minLevel': 20,
+                'maxLevel': 27,
               'hp':(988, 875, 905, 1140, 915, 990, 816, 855),
               'def':(60, 60, 60, 60, 60, 60, 60, 60,),
               'freq':(100, 100, 100, 100, 100, 100, 100, 100,),
@@ -1120,7 +1207,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'derrman': {'name': 'Derrick Man',
              'singularname': 'a Derrick Man',
              'pluralname': 'Derrick Men',
-             'level': 16,
+             'level': 4,
              'hp':(1450,),
              'def':(60,),
              'freq':(100,),
@@ -1149,7 +1236,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'derrhand': {'name': 'Derrick Hand',
               'singularname': 'a Derrick Hand',
               'pluralname': 'Derrick Hand',
-              'level': 17,
+              'level': 24,
               'hp':(3750,),
               'def':(60,),
               'freq':(0,),
@@ -1178,7 +1265,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'mplayer': {'name': 'Major Player',
              'singularname': 'a Major Player',
              'pluralname': 'Major Players',
-             'level': 18,
+             'level': 27,
              'hp':(4444,),
              'def':(60,),
              'freq':(0,),
@@ -1229,7 +1316,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'fbed': {'name': 'Featherbedder',
           'singularname': 'a Featherbedder',
           'pluralname': 'Featherbedders',
-          'level': 20,
+          'level': 29,
           'hp':(3800,),
           'def':(60,),
           'freq':(0,),
@@ -1255,24 +1342,24 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'choreo': {'name': 'Choreographer',
               'singularname': 'a Choreographer',
               'pluralname': 'Choreographers',
-              'level': 21,
+              'level': 25,
               'hp':(2150,),
             'def':(60,),
             'freq':(0,),
             'acc':(50,),
             'attacks':
-                (SuitAttack('HighRollerNoAttack',
-                            hp=(0,),
+                (SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
-                            freq=(100,)),
-                 SuitAttack('HighRollerNoAttack',
-                            hp=(0,),
+                            freq=(0,)),
+                 SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
-                            freq=(0,)))},
+                            freq=(100,)))},
  'chainsaw': {'name': 'Chainsaw Consultant',
               'singularname': 'a Chainsaw Consultant',
               'pluralname': 'Chainsaw Consultants',
-              'level': 22,
+              'level': 49,
               'hp':(12000,),
               'def':(60,),
               'freq':(0,),
@@ -1295,36 +1382,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                               hp=(24,),
                               acc=(100,),
                               freq=(25,)))},
- 'chainsaw2': {'name': 'Chainsaw Consultant',
-               'singularname': 'a Chainsaw Consultant',
-               'pluralname': 'Chainsaw Consultants',
-               'level': 23,
-               'hp':(12000,),
-               'def':(60,),
-               'freq':(0,),
-               'acc':(75,),
-               'initEffects': [StatusEffects.LureResistance(1)],
-               'attacks':
-                   (SuitAttack('Canned',
-                               hp=(26,),
-                               acc=(95,),
-                               freq=(25,)),
-                    SuitAttack('GlowerPower',
-                               hp=(30,),
-                               acc=(95,),
-                               freq=(25,)),
-                    SuitAttack('Rolodex',
-                               hp=(28,),
-                               acc=(95,),
-                               freq=(25,)),
-                    SuitAttack('Quake',
-                               hp=(24,),
-                               acc=(100,),
-                               freq=(25,)))},
  'phouse': {'name': 'Powerhouse',
         'singularname': 'a Powerhouse',
         'pluralname': 'Powerhouse',
-        'level': 24,
+        'level': 37,
         'hp':(6550,),
         'def':(60,),
         'freq':(0,),
@@ -1347,7 +1408,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         acc=(95,),
                         freq=(20,)),
              SuitAttack('PowerhouseSnipeSoaked',
-                        hp=(0,),
+                        hp=(25,),
                         acc=(100,),
                         freq=(0,),
                         groupStatus=ATK_TGT_DOUBLE),
@@ -1358,7 +1419,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'bkeeper': {'name': 'Commissioner',
              'singularname': 'a Commissioner',
              'pluralname': 'Commissioners',
-             'level': 25,
+             'level': 43,
              'hp':(4775,),
              'def':(60,),
              'freq':(0,),
@@ -1391,7 +1452,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'wtapper': {'name': 'Wiretapper',
         'singularname': 'a Wiretapper',
         'pluralname': 'Wiretappers',
-        'level': 26,
+        'level': 43,
         'hp':(5225,),
         'def':(60,),
         'freq':(0,),
@@ -1404,8 +1465,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
               SuitAttack('PoundKey',
                          hp=(35,),
                          acc=(90,),
-                         freq=(20,),
-                        groupStatus=ATK_TGT_GROUP),
+                         freq=(20,)),
               SuitAttack('DoubleTalk',
                          hp=(38,),
                          acc=(85,),
@@ -1425,7 +1485,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'ambass': {'name': 'Ambassador',
             'singularname': 'a Ambassador',
             'pluralname': 'Ambassador',
-            'level': 27,
+            'level': 47,
             'hp':(4990,),
             'def':(65,),
             'freq':(0,),
@@ -1434,12 +1494,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                 (SuitAttack('Golf',
                             hp=(30,),
                             acc=(80,),
-                            freq=(20,)),
+                            freq=(20,),
+                        groupStatus=ATK_TGT_GROUP),
                  SuitAttack('FallingKnife',
                             hp=(40,),
                             acc=(90,),
                             freq=(20,),
-                        groupStatus=ATK_TGT_GROUP),
+                        groupStatus=ATK_TGT_DOUBLE),
                  SuitAttack('Canned',
                             hp=(28,),
                             acc=(85,),
@@ -1461,7 +1522,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Cold Caller',
         'pluralname': 'Cold Callers',
         'level': 0,
-        'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+        'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal', # cogs hp (more numbers, more levels)
         'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
         'freq':(50,30,10,5,5), # cogs level frequency
         'acc':(35,40,45,50,55),
@@ -1486,7 +1549,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Telemarketer',
         'pluralname': 'Telemarketers',
         'level': 1,
-        'hp': (12, 20, 30, 42, 56),
+       'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50),
         'acc': (45, 50, 55, 60, 65),
@@ -1515,36 +1580,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(1, 1, 1, 1, 1),
                         acc=(75, 75, 75, 75, 75),
                         freq=(15, 15, 15, 15, 15,)))},
- 'cn': {'name': 'Connoisseur',
-        'singularname': 'a Connoisseur',
-        'pluralname': 'Connoisseur',
-        'level': 1,
-        'hp': (18, 28, 40, 54, 70, 88, 108),
-        'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
-        'freq':(50,50,30,10,5,5,5), # cogs level frequency
-        'acc':(35,35,40,45,50,55,55),
+ 'sbg': {'name': 'Sandbagger',
+         'singularname': 'a Sandbagger',
+         'pluralname': 'Sandbaggers',
+         'level': 1,
+           'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',
+        'def': (11, 11, 11, 11, 11, 11, 11),
+        'freq': (30, 30, 30, 35, 40, 45, 50),
+        'acc': (65, 65, 65, 70, 75, 80, 85),
         'attacks':
-            (SuitAttack('Filibuster',
-                        hp=(1, 2, 2, 3, 3, 4, 4),  # attack damage
-                        acc=(75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
-             SuitAttack('BuzzWord',
+            (SuitAttack('Sacked',
+                        hp=(3, 5, 7, 10, 12, 13, 14),
+                        acc=(75, 75, 80, 80, 85, 85, 85),
+                        freq=(20, 20, 20, 20, 20, 20, 20)),
+             SuitAttack('SandTrap',
+                        hp=(4, 6, 9, 12, 15, 16, 17),
+                        acc=(75, 75, 80, 80, 85, 85, 85),
+                        freq=(30, 30, 30, 30, 30, 30, 30)),
+             SuitAttack('Canned',
                         hp=(2, 3, 4, 5, 6, 7, 8),
-                        acc=(75, 75, 75, 75, 75, 75, 75),
+                        acc=(75, 75, 80, 80, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('PickPocket',
-                        hp=(3, 4, 5, 6, 8, 10, 12),
-                        acc=(75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('HotAir',
-                        hp=(1, 2, 3, 4, 5, 6, 7),
-                        acc=(60, 70, 80, 80, 90, 90, 90),
-                        freq=(40, 40, 40, 40, 40, 40, 40)))},
+             SuitAttack('HangUp',
+                        hp=(2, 3, 3, 4, 4, 5, 5),
+                        acc=(75, 75, 80, 80, 85, 85, 85),
+                        freq=(30, 30, 30, 30, 30, 30, 30)))},
  'nd': {'name': 'Name Dropper',
         'singularname': 'a Name Dropper',
         'pluralname': 'Name Droppers',
         'level': 2,
-        'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+         'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65),
         'acc': (45, 50, 55, 60, 65, 70, 75, 80),
@@ -1568,33 +1637,37 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dc': {'name': 'Upseller',
         'singularname': 'a Upseller',
         'pluralname': 'Upsellers',
-        'level': 3,
-        'hp': (40, 54, 70, 88, 108, 130, 154),
+        'level': 2,
+         'minLevel': 3,
+        'maxLevel': 9,
+        'hp': 'field',
         'def':(11,11,11,11,11,11,11),
         'freq':(30,30,30,35,40,45,50),
         'acc':(65,65,65,70,75,80,85),
         'attacks':
             (SuitAttack('Filibuster',
-                        hp=(3, 5, 7, 10, 12, 13, 14),
+                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
                         acc=(75, 75, 80, 80, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20)),
              SuitAttack('FloodTheMarket',
-                        hp=(4, 6, 9, 12, 15, 16, 17),
+                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
                         acc=(75, 75, 80, 80, 85, 85, 85),
                         freq=(30, 30, 30, 30, 30, 30, 30)),
              SuitAttack('DoubleTalk',
-                        hp=(2, 3, 4, 5, 6, 7, 8),
+                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
                         acc=(75, 75, 80, 80, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20)),
              SuitAttack('MoneyTrip',
-                        hp=(2, 3, 3, 4, 4, 5, 5),
+                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
                         acc=(75, 75, 80, 80, 85, 85, 85),
                         freq=(30, 30, 30, 30, 30, 30, 30)))},
  'gh': {'name': 'Glad Hander',
         'singularname': 'a Glad Hander',
         'pluralname': 'Glad Handers',
         'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+         'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
         'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
@@ -1615,36 +1688,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(5, 7, 11, 15, 20, 21, 22, 23, 24),
                         acc=(55, 65, 75, 85, 95, 95, 95, 95, 95),
                         freq=(10, 20, 30, 40, 45, 45, 45, 45, 45)))},
- 'fcs': {'name': 'Forecaster',
-         'singularname': 'a Forecaster',
-         'pluralname': 'Forecasters',
-         'level': 2,
-        'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
-        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
-        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+ 'mad': {'name': 'Mad Hander',
+        'singularname': 'a Mad Hander',
+        'pluralname': 'Mad Handers',
+        'level': 3,
+         'minLevel': 4,
+        'maxLevel': 12,
+        'hp': 'operations',
+        'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
+        'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
         'attacks':
-            (SuitAttack('BrainStorm',
-                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
-                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('FreezeAssets',
-                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-            SuitAttack('Quake',
-                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('Liquidate',
-                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+            (SuitAttack('GlowerPower',
+                        hp=(4, 3, 2, 1, 1, 1, 1, 1, 1),
+                        acc=(90, 70, 50, 30, 10, 10, 10, 10, 10),
+                        freq=(40, 30, 20, 10, 5, 5, 5, 5, 5)),
+            SuitAttack('FountainPen',
+                        hp=(3, 3, 2, 1, 1, 1, 1, 1, 1),
+                        acc=(70, 60, 50, 40, 30, 30, 30, 30, 30),
+                        freq=(40, 30, 20, 10, 5, 5, 5, 5, 5)),
+            SuitAttack('Filibuster',
+                        hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
+                        acc=(30, 40, 50, 60, 70, 80, 90, 95, 95),
+                        freq=(10, 20, 30, 40, 45, 45, 45, 45, 45)),
+            SuitAttack('Schmooze',
+                        hp=(5, 7, 11, 15, 20, 21, 22, 23, 24),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95),
+                        freq=(10, 20, 30, 40, 45, 45, 45, 45, 45)))},
  'ms': {'name': 'Mover & Shaker',
         'singularname': 'a Mover & Shaker',
         'pluralname': 'Mover & Shakers',
         'level': 4,
-        'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+          'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -1669,28 +1746,57 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                         acc=(50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'asm': {'name': 'Assembly Assassin',
-         'singularname': 'a Assembly Assassin',
-         'pluralname': 'Assembly Assassins',
+ 'lvw': {'name': 'Live Wire',
+         'singularname': 'a Live Wire',
+         'pluralname': 'Live Wires',
          'level': 4,
-         'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
+        'minLevel': 5,
+        'maxLevel': 15,
+        'hp': 'field',
+        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'attacks':
+            (SuitAttack('Fired',
+                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('HotAir',
+                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('GlowerPower',
+                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('PowerTrip',
+                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+ 'bam': {'name': 'Bamboozler',
+         'singularname': 'a Bamboozler',
+         'pluralname': 'Bamboozlers',
+         'level': 4,
+          'minLevel': 5,
+        'maxLevel': 14,
+        'hp': 'operations',
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
             'attacks':
-                (SuitAttack('GlowerPower',
+                (SuitAttack('ReOrg',
                             hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                             acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
-                SuitAttack('EvilEye',
+                SuitAttack('Spin',
                             hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
                             acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-                SuitAttack('CigarSmoke',
+                SuitAttack('Quake',
                             hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
                             acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-                SuitAttack('ParadigmShift',
+                SuitAttack('Tremor',
                             hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
                             acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
@@ -1698,7 +1804,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Two-Face',
         'pluralname': 'Two-Face',
         'level': 5,
-        'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+        'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -1723,11 +1831,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                         acc=(60, 65, 75, 85, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'fcs': {'name': 'Forecaster',
+         'singularname': 'a Forecaster',
+         'pluralname': 'Forecasters',
+         'level': 5,
+        'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'attacks':
+            (SuitAttack('BrainStorm',
+                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('FreezeAssets',
+                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Quake',
+                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Liquidate',
+                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'ppl': {'name': 'People Pleaser',
          'singularname': 'a People Pleaser',
          'pluralname': 'People Pleasers',
          'level': 5,
-         'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -1752,7 +1889,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a The Mingler',
        'pluralname': 'The Minglers',
        'level': 6,
-       'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+       'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -1777,11 +1916,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(8, 9, 10, 11, 12, 13, 14, 16, 16, 16, 16, 16, 17, 18, 19, 20, 21, 22, 23),
                         acc=(70, 75, 80, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)))},
+ 'std': {'name': 'Stunt Double',
+         'singularname': 'a Stunt Double',
+         'pluralname': 'Stunt Doubles',
+         'level': 6,
+       'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
+        'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+        'attacks':
+            (SuitAttack('RazzleDazzle',
+                        hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                        acc=(75, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+            SuitAttack('PowerTrip',
+                        hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(90, 90, 90, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Golf',
+                        hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('ParadigmShift',
+                        hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'cnd': {'name': 'Candidate',
          'singularname': 'a Candidate',
          'pluralname': 'Candidates',
          'level': 6,
-         'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -1810,9 +1978,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Mr. Hollywood',
         'pluralname': 'Mr. Hollywoods',
         'level': 7,
-        'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702,
-       756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722,
-       1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
+         'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',
         'def': (56,) * 43,
         'freq': (30, 35, 40, 45, 50) + (50,) * 38,
         'acc': (35, 40, 45, 50, 55, 60, 65, 70) + (70,) * 35,
@@ -1857,39 +2025,12 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
                             95, 95, 95, 95, 95, 95, 95),
                         freq=(15,) * 43))},
- 'watchm': {'name': 'Overtimer',
-            'singularname': 'a Overtimer',
-            'pluralname': 'Overtimers',
-            'level': 14,
-            'hp':(375, 425,),
-             'def':(60, 60,),
-             'freq':(100, 100,),
-             'acc':(75, 75,),
-             'attacks':
-                 (SuitAttack('PoundKey',
-                             hp=(28, 30),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('FiveOClockShadow',
-                             hp=(30, 32),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('Audit',
-                             hp=(31, 33),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('Crunch',
-                             hp=(33, 35),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('MarketCrash',
-                             hp=(30, 30),
-                             acc=(75, 75),
-                             freq=(20, 20)))},
  'foreman': {'name': 'Factory Foreman',
              'singularname': 'a Factory Foreman',
              'pluralname': 'Factory Foremen',
-             'level': 15,
+             'level': 19,
+              'minLevel': 20,
+            'maxLevel': 29,
              'hp':(300, 1020, 935, 1210, 895, 1060, 801, 1200, 875, 830),
              'def':(65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
                 'freq':(100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
@@ -1927,7 +2068,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dopr': {'name': 'Director Of Public Relations',
           'singularname': 'a Director Of Public Relations',
           'pluralname': 'Directors Of Public Relations',
-          'level': 16,
+          'level': 9,
           'hp':(2000,),
           'def':(65,),
           'freq':(0,),
@@ -1956,7 +2097,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dopa': {'name': 'Director Of Public Affairs',
           'singularname': 'a Director',
           'pluralname': 'Directors',
-          'level': 17,
+          'level': 29,
           'hp':(4250,),
           'def':(65,),
           'freq':(0,),
@@ -1985,7 +2126,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'bellring': {'name': 'Bellringer',
               'singularname': 'a Bellringer',
               'pluralname': 'Bellringers',
-              'level': 18,
+              'level': 12,
               'hp':(1800,),
               'def':(65,),
               'freq':(0,),
@@ -2010,7 +2151,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'mh2': {'name': 'Mr. Hollywood', # Major Player / High Roller Hollywoods
          'singularname': 'a Mr. Hollywood',
          'pluralname': 'Mr. Hollywoods',
-         'level': 19,
+         'level': 24,
          'hp': (777,),
          'def': (56,),
          'freq': (30,),
@@ -2036,10 +2177,64 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                          hp=(28,),
                          acc=(95,),
                          freq=(15,)))},
+ 'cnd2': {'name': 'Candidate',
+         'singularname': 'a Candidate',
+         'pluralname': 'Candidates',
+         'level': 24,
+         'hp':(666,),
+         'def':(60,),
+         'freq':(0,),
+         'acc':(50,),
+         'attacks':
+             (SuitAttack('Schmooze',
+                          hp=(27,),
+                         acc=(95,),
+                         freq=(25,)),
+            SuitAttack('HotAir',
+                        hp=(28,),
+                         acc=(95,),
+                         freq=(25,)),
+              SuitAttack('Beguile',
+                        hp=(28,),
+                         acc=(95,),
+                         freq=(25,)),
+              SuitAttack('CigarSmoke',
+                          hp=(28,),
+                         acc=(95,),
+                         freq=(10,)),
+              SuitAttack('RazzleDazzle',
+                         hp=(28,),
+                         acc=(95,),
+                         freq=(15,)))},
+ 'std2': {'name': 'Stunt Double',
+         'singularname': 'a Stunt Double',
+         'pluralname': 'Stunt Doubles',
+         'level': 24,
+         'hp':(666,),
+         'def':(60,),
+         'freq':(0,),
+         'acc':(50,),
+         'attacks':
+             (SuitAttack('RazzleDazzle',
+                         hp=(27,),
+                         acc=(95,),
+                         freq=(40,)),
+              SuitAttack('PowerTrip',
+                        hp=(28,),
+                         acc=(95,),
+                         freq=(15,)),
+              SuitAttack('Golf',
+                        hp=(28,),
+                         acc=(95,),
+                         freq=(15,)),
+              SuitAttack('ParadigmShift',
+                         hp=(28,),
+                         acc=(95,),
+                         freq=(30,)))},
  'prethink': {'name': 'Prethinker',
               'singularname': 'a Prethinker',
               'pluralname': 'Prethinkers',
-              'level': 20,
+              'level': 11,
               'hp':(1000,),
               'def':(60,),
               'freq':(0,),
@@ -2064,7 +2259,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'mslacker': {'name': 'Multislacker',
               'singularname': 'a Multislacker',
               'pluralname': 'Multislackers',
-              'level': 21,
+              'level': 23,
               'hp':(3200,),
               'def':(60,),
               'freq':(0,),
@@ -2086,31 +2281,27 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                               hp=(35,),
                               acc=(100,),
                               freq=(25,)))},
- 'cinema': {'name': 'Broadcaster',
-            'singularname': 'a Broadcaster',
-            'pluralname': 'Broadcasters',
-            'level': 22,
+ 'cinema': {'name': 'Photographer',
+            'singularname': 'a Photographer',
+            'pluralname': 'Photographers',
+            'level': 25,
             'hp':(2000,),
             'def':(60,),
             'freq':(0,),
             'acc':(50,),
             'attacks':
-                (SuitAttack('HighRollerNoAttack',
-                            hp=(0,),
-                            acc=(100,),
-                            freq=(100,)),
-                 SuitAttack('VideographerVideoStatic',
-                            hp=(0,),
+                (SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
                             freq=(0,)),
-                 SuitAttack('FilmmakerCameraFlash',
-                            hp=(0,),
+                 SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
-                            freq=(0,)))},
+                            freq=(100,)))},
  'radiog': {'name': 'Radiographer',
             'singularname': 'a Radiographer',
             'pluralname': 'Radiographers',
-            'level': 23,
+            'level': 34,
             'hp':(4750,),
             'def':(60,),
             'freq':(0,),
@@ -2141,43 +2332,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(31,),
                             acc=(95,),
                             freq=(20,)))},
- 'hustle': {'name': 'Hustler',
-           'singularname': 'a Hustler',
-           'pluralname': 'Hustlers',
-           'level': 24,
-           'hp':(4880,),
-           'def':(60,),
-           'freq':(0,),
-           'acc':(100,),
-           'attacks':
-            (SuitAttack('DoubleTalk',
-                         hp=(40,),
-                         acc=(95,),
-                         freq=(20,)),
-              SuitAttack('ShortSqueeze',
-                         hp=(38,),
-                         acc=(90,),
-                         freq=(20,)),
-              SuitAttack('RazzleDazzle',
-                         hp=(37,),
-                         acc=(85,),
-                         freq=(15,)),
-              SuitAttack('BlueChip',
-                         hp=(42,),
-                         acc=(95,),
-                         freq=(15,)),
-              SuitAttack('Beguile',
-                         hp=(35,),
-                         acc=(85,),
-                         freq=(15,)),
-              SuitAttack('Tremor',
-                         hp=(32,),
-                         acc=(80,),
-                         freq=(15,)))},
- 'ubuster': {'name': 'Traffic Manager',
+ 'hustle': {'name': 'Traffic Manager',
              'singularname': 'a Traffic Manager',
              'pluralname': 'Traffic Managers',
-             'level': 25,
+             'level': 39,
              'hp':(4475,),
              'def':(60,),
              'freq':(0,),
@@ -2207,10 +2365,44 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                              hp=(36,),
                              acc=(95,),
                              freq=(20,)))},
+ 'ubuster': {'name': 'Union Buster',
+             'singularname': 'a Union Buster',
+             'pluralname': 'Union Busters',
+             'level': 39,
+             'hp':(4475,),
+             'def':(60,),
+             'freq':(0,),
+             'acc':(75,),
+             'attacks':
+                 (SuitAttack('GlowerPower',
+                             hp=(42,),
+                             acc=(75,),
+                             freq=(20,)),
+                  SuitAttack('FallingKnife',
+                             hp=(39,),
+                             acc=(85,),
+                             freq=(20,)),
+                  SuitAttack('HostileTakeover',
+                             hp=(35,),
+                             acc=(90,),
+                             freq=(15,)),
+                  SuitAttack('EvilEye',
+                             hp=(32,),
+                             acc=(90,),
+                             freq=(15,),
+                                  groupStatus=ATK_TGT_GROUP),
+                  SuitAttack('Fired',
+                             hp=(40,),
+                             acc=(85,),
+                             freq=(10,)),
+                  SuitAttack('PinkSlip',
+                             hp=(45,),
+                             acc=(95,),
+                             freq=(20,)))},
  'safesupervis': {'name': 'Pressurizer',
                   'singularname': 'a Pressurizer',
                   'pluralname': 'Pressurizers',
-                  'level': 26,
+                  'level': 44,
                   'hp':(4850,),
                   'def':(65,),
                   'freq':(0,),
@@ -2244,7 +2436,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'psetter': {'name': 'Pacesetter',
              'singularname': 'a Pacesetter',
              'pluralname': 'Pacesetter',
-             'level': 27,
+             'level': 65,
              'hp':(12750,),
              'def':(65,),
              'freq':(0,),
@@ -2271,7 +2463,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Short Change',
         'pluralname': 'Short Changes',
         'level': 0,
-        'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+         'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal', # cogs hp (more numbers, more levels)
         'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
         'freq':(50,30,10,5,5), # cogs level frequency
         'acc':(35,40,45,50,55),
@@ -2296,7 +2490,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Penny Pincher',
         'pluralname': 'Penny Pinchers',
         'level': 1,
-        'hp':(12, 20, 30, 42, 56),
+         'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
         'def':(7,7,7,7,7),
         'freq':(30,35,40,45,50),
         'acc':(45,50,55,60,65),
@@ -2321,11 +2517,75 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(4, 5, 6, 8, 12),
                         acc=(75, 75, 75, 75, 75),
                         freq=(20, 20, 20, 20, 20,)))},
- 'shy': {'name': 'Safe Guard',
-         'singularname': 'a Safe Guard',
-         'pluralname': 'Safe Guards',
+ 'qc': {'name': 'Quarter Catcher',
+        'singularname': 'a Quarter Catcher',
+        'pluralname': 'Quarter Catchers',
+        'level': 1,
+         'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'field',
+        'def':(7,7,7,7,7),
+        'freq':(30,35,40,45,50),
+        'acc':(45,50,55,60,65),
+        'attacks':
+            (SuitAttack('BounceCheck',
+                        hp=(5, 7, 10, 11, 12),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('FreezeAssets',
+                        hp=(4, 6, 9, 12, 15),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+                SuitAttack('NickelAndDime',
+                        hp=(4, 6, 9, 12, 15),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('FingerWag',
+                        hp=(3, 4, 6, 9, 12),
+                        acc=(50, 50, 50, 50, 50),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('PennyPinch',
+                        hp=(6, 8, 12, 15, 18),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)))},
+ 'nb': {'name': 'Nickel Nabber',
+        'singularname': 'a Nickel Nabber',
+        'pluralname': 'Nickel Nabbers',
+        'level': 1,
+         'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',
+        'def':(7,7,7,7,7),
+        'freq':(30,35,40,45,50),
+        'acc':(45,50,55,60,65),
+        'attacks':
+            (SuitAttack('BounceCheck',
+                         hp=(1, 2, 2, 3, 3, 4, 4),  # a
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('FreezeAssets',
+                         hp=(2, 3, 4, 5, 6, 7, 8),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+                SuitAttack('NickelAndDime',
+                        hp=(3, 4, 5, 6, 8, 9, 10),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('FingerWag',
+                       hp=(1, 2, 3, 4, 5, 6, 7),
+                        acc=(50, 50, 50, 50, 50),
+                        freq=(20, 20, 20, 20, 20,)),
+             SuitAttack('PennyPinch',
+                        hp=(1, 2, 3, 4, 5, 6, 7),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20,)))},
+ 'shy': {'name': 'Shylock',
+         'singularname': 'a Shylock',
+         'pluralname': 'Shylocks',
          'level': 1,
-         'hp': (18, 28, 40, 54, 70, 88, 108),
+          'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',
          'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
          'freq':(50,50,30,10,5,5,5), # cogs level frequency
          'acc':(35,35,40,45,50,55,55),
@@ -2350,7 +2610,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Tightwad',
         'pluralname': 'Tightwads',
         'level': 2,
-       'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+       'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65),
         'acc': (45, 50, 55, 60, 65, 70, 75, 80),
@@ -2375,157 +2637,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(5, 6, 9, 13, 18, 19, 20, 21),
                         acc=(75, 75, 75, 75, 75, 75, 75, 75),
                         freq=(5, 5, 5, 60, 30, 30, 30, 30)))},
- 'sw': {'name': 'The Swindler',
-        'singularname': 'a The Swindler',
-        'pluralname': 'The Swindlers',
-        'level': 2,
-        'hp': (40, 54, 70, 88, 108, 130, 154),
-        'def': (11, 11, 11, 11, 11, 11, 11),
-        'freq': (30, 30, 30, 35, 40, 45, 50),
-        'acc': (65, 65, 65, 70, 75, 80, 85),
-        'attacks':
-            (SuitAttack('HangUp',
-                        hp=(3, 5, 7, 10, 12, 13, 14),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('PoundKey',
-                        hp=(4, 6, 9, 12, 15, 16, 17),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(30, 30, 30, 30, 30, 30, 30)),
-             SuitAttack('ReOrg',
-                        hp=(2, 3, 4, 5, 6, 7, 8),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('PickPocket',
-                        hp=(2, 3, 3, 4, 4, 5, 5),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(30, 30, 30, 30, 30, 30, 30)))},
- 'bc': {'name': 'Bean Counter',
-        'singularname': 'a Bean Counter',
-        'pluralname': 'Bean Counters',
-        'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
-        'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
-        'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
-        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
-        'attacks':
-            (SuitAttack('Audit',
-                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
-                        acc=(95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('Calculate',
-                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
-                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('Tabulate',
-                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
-                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('WriteOff',
-                        hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
-                        acc=(95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'fct': {'name': 'Fat Cat',
-         'singularname': 'a Fat Cat',
-         'pluralname': 'Fat Cats',
-         'level': 2,
-        'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
-        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
-        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'attacks':
-            (SuitAttack('FingerWag',
-                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
-                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('MarketCrash',
-                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-            SuitAttack('Calculate',
-                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('Watercooler',
-                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
- 'nc': {'name': 'Number Cruncher',
-        'singularname': 'a Number Cruncher',
-        'pluralname': 'Number Crunchers',
-        'level': 4,
-        'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
-        'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
-        'attacks':
-            (SuitAttack('Audit',
-                        hp=(5, 6, 8, 10, 12, 14, 15, 16, 17, 18, 19),
-                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-            SuitAttack('Calculate',
-                        hp=(6, 7, 9, 11, 13, 15, 16, 17, 18, 19, 20),
-                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-            SuitAttack('Crunch',
-                        hp=(9, 12, 15, 18, 21, 23, 24, 25, 26, 27, 28),
-                        acc=(60, 65, 75, 80, 85, 90, 90, 90, 90, 90, 90),
-                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
-            SuitAttack('Tabulate',
-                        hp=(8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19),
-                        acc=(90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'gld': {'name': 'Golden Goose',
-         'singularname': 'a Golden Goose',
-         'pluralname': 'Golden Geese',
-         'level': 4,
-         'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
-        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-        'attacks':
-            (SuitAttack('PeckingOrder',
-                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
-                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
-            SuitAttack('Bite',
-                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
-                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('FreezeAssets',
-                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
-                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-            SuitAttack('Embezzle',
-                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
-                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'mb': {'name': 'Money Bags',
-        'singularname': 'a Money Bags',
-        'pluralname': 'Money Bags',
-        'level': 5,
-        'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
-        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-        'attacks':
-            (SuitAttack('Liquidate',
-                        hp=(10, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30),
-                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-            SuitAttack('MarketCrash',
-                        hp=(8, 10, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
-                        acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)),
-            SuitAttack('PowerTie',
-                        hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
-                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'trs': {'name': 'Cheapskate',
          'singularname': 'a Cheapskate',
          'pluralname': 'Cheapskates',
-         'level': 5,
-         'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
+         'level': 2,
+         'minLevel': 3,
+        'maxLevel': 12,
+        'hp': 'field',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -2546,11 +2664,194 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
                         acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'pwn': {'name': 'Pawnbroker',
+         'singularname': 'a Pawnbroker',
+         'pluralname': 'Pawnbrokers',
+         'level': 5,
+          'minLevel': 3,
+        'maxLevel': 14,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('NickelAndDime',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+            SuitAttack('MoneyTrip',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('FreezeAssets',
+                         hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Liquidate',
+                         hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'bc': {'name': 'Bean Counter',
+        'singularname': 'a Bean Counter',
+        'pluralname': 'Bean Counters',
+        'level': 3,
+         'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
+        'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
+        'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
+        'attacks':
+            (SuitAttack('Audit',
+                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
+                        acc=(95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Calculate',
+                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Tabulate',
+                         hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('WriteOff',
+                        hp=(4, 6, 9, 12, 15, 18, 19, 20, 21),
+                        acc=(95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+ 'nc': {'name': 'Number Cruncher',
+        'singularname': 'a Number Cruncher',
+        'pluralname': 'Number Crunchers',
+        'level': 4,
+          'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
+        'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
+        'attacks':
+            (SuitAttack('Audit',
+                        hp=(5, 6, 8, 10, 12, 14, 15, 16, 17, 18, 19),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Calculate',
+                        hp=(6, 7, 9, 11, 13, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Crunch',
+                        hp=(9, 12, 15, 18, 21, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 75, 80, 85, 90, 90, 90, 90, 90, 90),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Tabulate',
+                        hp=(8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19),
+                        acc=(90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'cow': {'name': 'Cash Cow',
+        'singularname': 'a Cash Cow',
+        'pluralname': 'Cash Cows',
+        'level': 4,
+        'minLevel': 5,
+        'maxLevel': 14,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('PowerTie',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Bite',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('FreezeAssets',
+                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Embezzle',
+                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'brck': {'name': 'Gold Bricks',
+        'singularname': 'a Gold Bricks',
+        'pluralname': 'Gold Bricks',
+        'level': 4,
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Audit',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('MoneyTrip',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('MarketCrash',
+                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('PowerTie',
+                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'mb': {'name': 'Money Bags',
+        'singularname': 'a Money Bags',
+        'pluralname': 'Money Bags',
+        'level': 5,
+        'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Liquidate',
+                        hp=(10, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('MarketCrash',
+                        hp=(8, 10, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)),
+            SuitAttack('PowerTie',
+                        hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'aud': {'name': 'Auditor',
+        'singularname': 'a Auditor',
+        'pluralname': 'Auditors',
+        'level': 5,
+        'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Tabulate',
+                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Fired',
+                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                        acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)),
+            SuitAttack('Audit',
+                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'ls': {'name': 'Loan Shark',
         'singularname': 'a Loan Shark',
         'pluralname': 'Loan Sharks',
         'level': 6,
-        'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -2571,11 +2872,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(6, 8, 10, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32),
                         acc=(80, 80, 85, 85, 90, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'gld': {'name': 'Golden Goose',
+         'singularname': 'a Golden Goose',
+         'pluralname': 'Golden Geese',
+         'level': 6,
+          'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('PeckingOrder',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Bite',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('FreezeAssets',
+                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Embezzle',
+                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'fct': {'name': 'Fat Cat',
+         'singularname': 'a Fat Cat',
+         'pluralname': 'Fat Cats',
+         'level': 6,
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
+        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'attacks':
+            (SuitAttack('FingerWag',
+                        hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('MarketCrash',
+                        hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Calculate',
+                        hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Watercooler',
+                        hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'bfh': {'name': 'Big Fish',
          'singularname': 'a Big Fish',
          'pluralname': 'Big Fish',
          'level': 6,
-         'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
             'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -2601,11 +2958,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Robber Baron',
         'pluralname': 'Robber Barons',
         'level': 7,
-        'hp': (
-            90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702,
-            756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722,
-            1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652
-        ),
+        'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',
         'def': (56,) * 43,
         'freq': (30, 35, 40, 45, 50) + (50,) * 38,
         'acc': (35, 40, 45, 50, 55, 60, 65, 70) + (70,) * 35,
@@ -2653,7 +3008,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'ovt': {'name': 'Confused Mint Supervisor',
             'singularname': 'a Confused Mint Supervisor',
             'pluralname': 'Confused Mint Supervisors',
-            'level': 14,
+            'level': 21,
              'hp':(880,),
              'def':(60,),
              'freq':(100,),
@@ -2682,8 +3037,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'supervis': {'name': 'Mint Supervisor',
               'singularname': 'a Mint Supervisor',
               'pluralname': 'Mint Supervisors',
-              'level': 15,
+              'level': 19,
               'hp':(905, 950, 880, 825, 1250, 1175, 835, 900, 890, 800, 975),
+              'minLevel': 20,
+        'maxLevel': 30,
               'def':(60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60),
               'freq':(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
               'acc':(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -2720,7 +3077,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'duckshfl': {'name': 'Duck Shuffler',
               'singularname': 'a Duck Shuffler',
               'pluralname': 'Duck Shufflers',
-              'level': 16,
+              'level': 4,
               'hp':(200,),
               'def':(60,),
               'freq':(100,),
@@ -2737,7 +3094,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'treek': {'name': 'Treekiller',
            'singularname': 'a Treekiller',
            'pluralname': 'Treekiller',
-           'level': 17,
+           'level': 23,
            'hp':(3500,),
            'def':(65,),
            'freq':(0,),
@@ -2762,7 +3119,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'payman': {'name': 'Payroll Manager',
           'singularname': 'a Payroll Manager',
           'pluralname': 'Payroll Managers',
-          'level': 18,
+          'level': 19,
           'hp':(2000,),
           'def':(60,),
           'freq':(0,),
@@ -2779,7 +3136,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'bookkeep': {'name': 'Bookkeeper',
          'singularname': 'a Bookkeeper',
          'pluralname': 'Bookkeepers',
-         'level': 19,
+         'level': 34,
          'hp':(4335,),
          'def':(65,),
          'freq':(0,),
@@ -2812,7 +3169,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'racket': {'name': 'Racketeer',
             'singularname': 'a Racketeer',
             'pluralname': 'Racketeers',
-            'level': 20,
+            'level': 39,
             'hp':(4750,),
             'def':(60,),
             'freq':(0,),
@@ -2845,7 +3202,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'liquidr': {'name': 'Liquidator',
               'singularname': 'a Liquidator',
               'pluralname': 'Liquidators',
-              'level': 21,
+              'level': 39,
               'hp':(5225,),
               'def':(60,),
               'freq':(0,),
@@ -2879,7 +3236,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'treasure': {'name': 'Treasurer',
             'singularname': 'a Treasurer',
             'pluralname': 'Treasurers',
-            'level': 22,
+            'level': 44,
             'hp':(4990,),
             'def':(60,),
             'freq':(0,),
@@ -2912,7 +3269,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'pcrat': {'name': 'Plutocrat',
            'singularname': 'a Plutocrat',
            'pluralname': 'Plutocrats',
-           'level': 23,
+           'level': 37,
            'hp':(6000,),
            'def':(60,),
            'freq':(0,),
@@ -2942,7 +3299,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'hroller': {'name': 'High Roller',
              'singularname': 'a High Roller',
              'pluralname': 'High Rollers',
-             'level': 24,
+             'level': 99,
              'hp':(999,),
              'def':(60,),
              'freq':(0,),
@@ -2959,7 +3316,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'erfit': {'name': 'Count Erfit',
            'singularname': 'a Count Erfit',
            'pluralname': 'Count Erfits',
-           'level': 25,
+           'level': 19,
            'hp': (7777,),
            'def':(60,),
            'freq':(0,),
@@ -2985,8 +3342,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'hrollers': {'name': 'High Roller Silhouette',
               'singularname': 'a High Roller Silhouette',
               'pluralname': 'High Roller Silhouettes',
-              'level': 26,
-              'hp':(12000, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 24000, 12000),
+              'level': 24,
+              'minLevel': 25, 
+                'maxLevel': 36,
+              'hp':(12, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 12000, 24000, 12000),
               'def':(60,60,60,60,60,60,60,60,60,60,),
               'freq':(0,0,0,0,0,0,0,0,0,0,),
               'acc':(75,75,75,75,75,75,75,75,75,75,),
@@ -3002,7 +3361,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'hroller2': {'name': 'High Roller',
               'singularname': 'a High Roller',
               'pluralname': 'High Roller',
-              'level': 27,
+              'level': 99,
               'hp':(77777,),
               'def':(65,),
               'freq':(0,),
@@ -3020,7 +3379,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Bottom Feeder',
         'pluralname': 'Bottom Feeders',
         'level': 0,
-        'hp':(6, 12, 20, 30, 42),
+        'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal',
         'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
         'freq':(50,30,10,5,5), # cogs level frequency
         'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
@@ -3045,7 +3406,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Bloodsucker',
        'pluralname': 'Bloodsuckers',
        'level': 1,
-       'hp':(12, 20, 30, 42, 56),
+       'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
        'def':(7,7,7,7,7),
        'freq':(30,35,40,45,50),
        'acc':(45,50,55,60,65),
@@ -3070,11 +3433,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                        hp=(2, 3, 4, 6, 9),
                        acc=(50, 60, 70, 80, 90),
                        freq=(40, 40, 40, 40, 40,)))},
+ 'bsd': {'name': 'Backseat Driver',
+         'singularname': 'a Backseat Driver',
+         'pluralname': 'Backseat Drivers',
+         'level': 1,
+         'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',
+         'def': (5, 5, 5, 5, 5, 5, 5),  # cogs defence (more numbers, more levels)
+         'freq': (50, 50, 30, 10, 5, 5, 5),  # cogs level frequency
+         'acc': (35, 35, 40, 45, 50, 55, 55),  # cogs accuracy (more numbers, more levels)
+         'attacks':
+             (SuitAttack('Jargon',
+                         hp=(1, 2, 2, 3, 3, 4, 4),  # attack damage
+                         acc=(75, 75, 75, 75, 75, 75, 75),
+                         freq=(20, 20, 20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
+              SuitAttack('FingerWag',
+                         hp=(2, 3, 4, 5, 6, 7, 8),
+                         acc=(75, 75, 75, 75, 75, 75, 75),
+                         freq=(20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('PlayHardball',
+                         hp=(3, 4, 5, 6, 8, 10, 12),
+                         acc=(75, 75, 75, 75, 75, 75, 75),
+                         freq=(20, 20, 20, 20, 20, 20, 20)),
+              SuitAttack('Legalese',
+                         hp=(1, 2, 3, 4, 5, 6, 7),
+                         acc=(60, 70, 80, 80, 90, 90, 90),
+                         freq=(40, 40, 40, 40, 40, 40, 40)))},
  'pf': {'name': 'Pettifogger',
         'singularname': 'a Pettifogger',
         'pluralname': 'Pettifoggers',
         'level': 1,
-        'hp':(18, 28, 40, 54, 70, 88, 108),
+        'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',
         'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
         'freq':(50,50,30,10,5,5,5), # cogs level frequency
         'acc':(35,35,40,45,50,55,55), # cogs accuracy (more numbers, more levels)
@@ -3099,7 +3491,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Double Talker',
         'pluralname': 'Double Talkers',
         'level': 2,
-       'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+        'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65),
         'acc': (45, 50, 55, 60, 65, 70, 75, 80),
@@ -3112,7 +3506,42 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(1, 1, 1, 1, 1, 1, 1, 1),
                         acc=(50, 60, 70, 80, 90, 90, 90, 90),
                         freq=(5, 5, 5, 5, 5, 5, 5, 5)),
-            SuitAttack('BuzzWord',
+            SuitAttack('RazzleDazzle',
+                        hp=(1, 2, 3, 5, 6, 7, 8, 9),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('DoubleTalk',
+                        hp=(6, 6, 9, 13, 18, 19, 20, 21),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Jargon',
+                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('MumboJumbo',
+                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)))},
+'dcr': {'name': 'Double Crosser',
+        'singularname': 'a Double Crosser',
+        'pluralname': 'Double Crossers',
+        'level': 2,
+        'minLevel': 3,
+        'maxLevel': 9,
+        'hp': 'operations',
+        'def': (7, 7, 7, 7, 7, 7, 7, 7),
+        'freq': (30, 35, 40, 45, 50, 55, 60, 65),
+        'acc': (45, 50, 55, 60, 65, 70, 75, 80),
+        'attacks':
+            (SuitAttack('RubberStamp',
+                        hp=(1, 1, 1, 1, 1, 1, 1, 1),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(5, 5, 5, 5, 5, 5, 5, 5)),
+            SuitAttack('PickPocket',
+                        hp=(1, 1, 1, 1, 1, 1, 1, 1),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(5, 5, 5, 5, 5, 5, 5, 5)),
+            SuitAttack('DoubleCross',
                         hp=(1, 2, 3, 5, 6, 7, 8, 9),
                         acc=(50, 60, 70, 80, 90, 90, 90, 90),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20)),
@@ -3132,7 +3561,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Conveyancer',
         'pluralname': 'Conveyancers',
         'level': 3,
-        'hp': (40, 54, 70, 88, 108, 130, 154),
+         'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'operations',
         'def': (11, 11, 11, 11, 11, 11, 11),
         'freq': (30, 30, 30, 35, 40, 45, 50),
         'acc': (65, 65, 65, 70, 75, 80, 85),
@@ -3157,7 +3588,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Ambulance Chaser',
         'pluralname': 'Ambulance Chasers',
         'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+         'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
         'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
         'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
@@ -3182,7 +3615,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Needlenose',
         'pluralname': 'Needlenoses',
         'level': 2,
-        'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
+         'minLevel': 3,
+        'maxLevel': 12,
+        'hp': 'field',
         'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
         'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
@@ -3207,7 +3642,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Back Stabber',
         'pluralname': 'Back Stabbers',
         'level': 4,
-        'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+         'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -3232,7 +3669,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Advocate',
         'pluralname': 'Advocates',
         'level': 4,
-        'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
+         'minLevel': 5,
+        'maxLevel': 15,
+        'hp': 'operations',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -3253,11 +3692,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
                         acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'dcw': {'name': 'Doctor White',
+         'singularname': 'a Doctor White',
+         'pluralname': 'Doctor Whites',
+         'level': 4,
+          'minLevel': 5,
+        'maxLevel': 15,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('FingerWag',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Chomp',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Bite',
+                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Legalese',
+                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'bck': {'name': 'Back Burner',
+         'singularname': 'a Back Burner',
+         'pluralname': 'Back Burners',
+         'level': 4,
+         'minLevel': 5,
+        'maxLevel': 14,
+        'hp': 'field',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Fired',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Legalese',
+                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('PowerTrip',
+                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('HotAir',
+                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'sd': {'name': 'Spin Doctor',
         'singularname': 'a Spin Doctor',
         'pluralname': 'Spin Doctors',
         'level': 5,
-        'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -3286,7 +3781,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Shyster',
         'pluralname': 'Shysters',
         'level': 5,
-        'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -3307,11 +3804,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
                         acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'surg': {'name': 'Surgeon General',
+        'singularname': 'a Surgeon General',
+        'pluralname': 'Surgeon Generals',
+        'level': 5,
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Spin',
+                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+            SuitAttack('WriteOff',
+                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Quake',
+                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('ReOrg',
+                        hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'rat': {'name': 'Ratifier',
+        'singularname': 'a Ratifier',
+        'pluralname': 'Ratifiers',
+        'level': 5,
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Legalese',
+                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+            SuitAttack('WriteOff',
+                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('RestrainingOrder',
+                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Bite',
+                        hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
  'le': {'name': 'Legal Eagle',
         'singularname': 'a Legal Eagle',
         'pluralname': 'Legal Eagles',
         'level': 6,
-        'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -3332,11 +3885,67 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(12, 15, 18, 20, 22, 24, 27, 29, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
                         acc=(70, 75, 80, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)))},
+ 'magi': {'name': 'The Magister',
+        'singularname': 'a The Magister',
+        'pluralname': 'The Magisters',
+        'level': 6,
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'operations',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('ParadigmShift',
+                        hp=(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('Jargon',
+                        hp=(10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('EvictionNotice',
+                        hp=(12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('RestrainingOrder',
+                        hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'whistleb': {'name': 'Whistleblower',
+              'singularname': 'a Whistleblower',
+              'pluralname': 'Whistleblowers',
+              'level': 6,
+               'minLevel': 7,
+            'maxLevel': 20,
+            'hp': 'field',
+              'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+             'attacks':
+                 (SuitAttack('BrainStorm',
+                              hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                        acc=(75, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+                  SuitAttack('RubberStamp',
+                             hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(90, 90, 90, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                  SuitAttack('RestrainingOrder',
+                            hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                  SuitAttack('FingerWag',
+                             hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'br': {'name': 'Barrister',
         'singularname': 'a Barrister',
         'pluralname': 'Barristers',
         'level': 6,
-        'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -3361,9 +3970,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'singularname': 'a Big Wig',
         'pluralname': 'Big Wigs',
         'level': 7,
-       'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702,
-       756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722,
-       1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
+        'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',
         'def': (56,) * 43,
         'freq': (30, 35, 40, 45, 50) + (50,) * 38,
         'acc': (35, 40, 45, 50, 55, 60, 65, 70) + (70,) * 35,
@@ -3408,39 +4017,268 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
                             95, 95, 95, 95, 95, 95, 95),
                         freq=(20,) * 43))},
- 'whistleb': {'name': 'Whistleblower',
-              'singularname': 'a Whistleblower',
-              'pluralname': 'Whistleblowers',
-              'level': 14,
-              'hp':(650,),
-             'def':(60,),
-             'freq':(100,),
-             'acc':(75,),
-             'attacks':
-                 (SuitAttack('BrainStorm',
-                             hp=(30,),
-                             acc=(75,),
-                             freq=(20,)),
-                  SuitAttack('RubberStamp',
-                             hp=(32,),
-                             acc=(75,),
-                             freq=(20,)),
-                  SuitAttack('GuiltTrip',
-                             hp=(33,),
-                             acc=(75,),
-                             freq=(20,)),
-                  SuitAttack('RestrainingOrder',
-                             hp=(35,),
-                             acc=(75,),
-                             freq=(20,)),
-                  SuitAttack('FingerWag',
-                             hp=(30,),
-                             acc=(75,),
-                             freq=(20,)))},
+ 'bf2': {'name': 'Bottom Feeder',
+        'singularname': 'a Bottom Feeder',
+        'pluralname': 'Bottom Feeders',
+        'level': 0,
+         'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal',
+        'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
+        'freq':(50,30,10,5,5), # cogs level frequency
+        'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
+        'attacks':
+            (SuitAttack('RubberStamp',
+                        hp=(2, 3, 4, 5, 6), # attack damage
+                        acc=(75,80,85,90,95), # attack accuracy
+                        freq=(20,20,20,20,20)), # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
+             SuitAttack('Shred',
+                        hp=(2, 4, 6, 8, 10),
+                        acc=(50, 55, 60, 65, 70),  # attack accuracy
+                        freq=(20, 20, 20, 20, 20)),
+             SuitAttack('Watercooler',
+                        hp=(3, 4, 5, 6, 7),
+                        acc=(95, 95, 95, 95, 95),  # attack accuracy
+                        freq=(10, 10, 10, 10, 10)),
+             SuitAttack('PickPocket',
+                        hp=(1, 1, 2, 2, 3),
+                        acc=(25, 30, 35, 40, 45),  # attack accuracy
+                        freq=(50, 50, 50, 50, 50)))},
+ 'b2': {'name': 'Bloodsucker',
+       'singularname': 'a Bloodsucker',
+       'pluralname': 'Bloodsuckers',
+       'level': 1,
+        'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
+       'def':(7,7,7,7,7),
+       'freq':(30,35,40,45,50),
+       'acc':(45,50,55,60,65),
+       'attacks':
+           (SuitAttack('EvictionNotice',
+                       hp=(1, 2, 3, 3, 4),
+                       acc=(75, 75, 75, 75, 75),
+                       freq=(20, 20, 20, 20, 20)),
+            SuitAttack('RedTape',
+                       hp=(2, 3, 4, 6, 9),
+                       acc=(75, 75, 75, 75, 75),
+                       freq=(20, 20, 20, 20, 20,)),
+            SuitAttack('Withdrawal',
+                       hp=(6, 8, 10, 12, 14),
+                       acc=(95, 95, 95, 95, 95),
+                       freq=(10, 10, 10, 10, 10,)),
+            SuitAttack('Bite',
+                       hp=(5, 6, 7, 8, 10),
+                       acc=(60, 75, 80, 85, 90),
+                       freq=(10, 10, 10, 10, 10,)),
+            SuitAttack('Liquidate',
+                       hp=(2, 3, 4, 6, 9),
+                       acc=(50, 60, 70, 80, 90),
+                       freq=(40, 40, 40, 40, 40,)))},
+ 'dt2': {'name': 'Double Talker',
+        'singularname': 'a Double Talker',
+        'pluralname': 'Double Talkers',
+        'level': 2,
+        'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
+        'def': (7, 7, 7, 7, 7, 7, 7, 7),
+        'freq': (30, 35, 40, 45, 50, 55, 60, 65),
+        'acc': (45, 50, 55, 60, 65, 70, 75, 80),
+        'attacks':
+            (SuitAttack('RubberStamp',
+                        hp=(1, 1, 1, 1, 1, 1, 1, 1),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(5, 5, 5, 5, 5, 5, 5, 5)),
+            SuitAttack('BounceCheck',
+                        hp=(1, 1, 1, 1, 1, 1, 1, 1),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(5, 5, 5, 5, 5, 5, 5, 5)),
+            SuitAttack('BuzzWord',
+                        hp=(1, 2, 3, 5, 6, 7, 8, 9),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('DoubleTalk',
+                        hp=(6, 6, 9, 13, 18, 19, 20, 21),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('Jargon',
+                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('MumboJumbo',
+                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                        acc=(50, 60, 70, 80, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'ac2': {'name': 'Ambulance Chaser',
+        'singularname': 'a Ambulance Chaser',
+        'pluralname': 'Ambulance Chasers',
+        'level': 3,
+         'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
+        'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
+        'freq': (30, 35, 40, 45, 50, 55, 60, 65, 70),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 75),
+        'attacks':
+            (SuitAttack('Shake',
+                        hp=(4, 6, 9, 12, 15, 18, 18, 19, 20),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('RedTape',
+                        hp=(6, 8, 12, 15, 19, 20, 21, 22, 23),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Rolodex',
+                        hp=(3, 4, 5, 6, 7, 8, 9, 10, 11),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('HangUp',
+                        hp=(2, 3, 4, 5, 6, 7, 8, 9, 10),
+                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35)))},
+ 'bs2': {'name': 'Back Stabber',
+        'singularname': 'a Back Stabber',
+        'pluralname': 'Back Stabbers',
+        'level': 4,
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
+        'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
+        'attacks':
+            (SuitAttack('GuiltTrip',
+                        hp=(8, 11, 13, 15, 18, 21, 22, 23, 24, 25, 26),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+            SuitAttack('RestrainingOrder',
+                        hp=(6, 7, 9, 11, 13, 15, 16, 17, 18, 19, 20),
+                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+            SuitAttack('PickPocket',
+                        hp=(10, 12, 15, 18, 20, 22, 23, 24, 25, 26, 27),
+                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('FingerWag',
+                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+                        acc=(50, 55, 65, 75, 80, 85, 85, 85, 85, 85, 85),
+                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'sd2': {'name': 'Spin Doctor',
+        'singularname': 'a Spin Doctor',
+        'pluralname': 'Spin Doctors',
+        'level': 5,
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('ParadigmShift',
+                        hp=(9, 10, 13, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('Quake',
+                        hp=(8, 10, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Spin',
+                        hp=(10, 12, 14, 18, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32),
+                        acc=(70, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('ReOrg',
+                        hp=(5, 8, 11, 13, 15, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('WriteOff',
+                        hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'le2': {'name': 'Legal Eagle',
+        'singularname': 'a Legal Eagle',
+        'pluralname': 'Legal Eagles',
+        'level': 6,
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
+        'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
+        'attacks':
+            (SuitAttack('EvilEye',
+                        hp=(10, 11, 13, 15, 16, 18, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Jargon',
+                        hp=(7, 9, 11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32),
+                        acc=(60, 75, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+            SuitAttack('Legalese',
+                        hp=(11, 12, 13, 15, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+                        acc=(55, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+            SuitAttack('PeckingOrder',
+                        hp=(12, 15, 18, 20, 22, 24, 27, 29, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                        acc=(70, 75, 80, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)))},
+ 'bw2': {'name': 'Big Wig',
+        'singularname': 'a Big Wig',
+        'pluralname': 'Big Wigs',
+        'level': 7,
+        'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',
+        'def': (56,) * 43,
+        'freq': (30, 35, 40, 45, 50) + (50,) * 38,
+        'acc': (35, 40, 45, 50, 55, 60, 65, 70) + (70,) * 35,
+        'attacks':
+            (SuitAttack('GuiltTrip',
+                        hp=(11, 14, 16, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                            35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+                            53, 54, 55, 56, 57, 58, 59),
+                        acc=(70, 75, 45, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95),
+                        freq=(20,) * 43),
+            SuitAttack('Quash',
+                        hp=(11, 14, 16, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                            35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+                            53, 54, 55, 56, 57, 58, 59),
+                        acc=(70, 75, 45, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95),
+                        freq=(20,) * 43),
+            SuitAttack('LawBook',
+                        hp=(14, 16, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+                            36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+                            54, 55, 56, 57, 58, 59, 60),
+                        acc=(70, 75, 45, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95),
+                        freq=(20,) * 43),
+            SuitAttack('CigarSmoke',
+                        hp=(13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                            31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+                            49, 50, 51, 52, 53, 54, 55),
+                        acc=(70, 75, 45, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95),
+                        freq=(20,) * 43),
+            SuitAttack('FingerWag',
+                        hp=(13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                            35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+                            53, 54, 55, 56, 57, 58, 59),
+                        acc=(80, 85, 85, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95,
+                            95, 95, 95, 95, 95, 95, 95),
+                        freq=(20,) * 43))},
  'clerk': {'name': 'Head Attorney',
            'singularname': 'a Head Attorney',
            'pluralname': 'Head Attorneys',
-           'level': 15,
+           'level': 19,
+           'minLevel': 20,
+        'maxLevel': 28,
            'hp':(865, 805, 890, 885, 1050, 800, 725, 815, 775,),
            'def':(60, 60, 60, 60, 60, 60, 60, 60, 60,),
            'freq':(100, 100, 100, 100, 100, 100, 100, 100, 100,),
@@ -3470,39 +4308,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                     hp=(33, 33, 33, 33, 33, 33, 33, 33, 33),
                     acc=(85, 85, 85, 85, 85, 85, 85, 85, 85),
                     freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'arbit': {'name': 'Arbitrator',
-           'singularname': 'a Arbitrator',
-           'pluralname': 'Arbitrators',
-           'level': 16,
-           'hp':(3750,),
-           'def':(65,),
-           'freq':(100,),
-           'acc':(75,),
-           'attacks':
-               (SuitAttack('Jargon',
-                             hp=(39,),
-                             acc=(95,),
-                             freq=(10,)),
-                  SuitAttack('EvictionNotice',
-                             hp=(40,),
-                             acc=(85,),
-                             freq=(15,)),
-                  SuitAttack('RestrainingOrder',
-                             hp=(44,),
-                             acc=(90,),
-                             freq=(10,)),
-                  SuitAttack('Legalese',
-                             hp=(36,),
-                             acc=(90,),
-                             freq=(35,)),
-                  SuitAttack('GuiltTrip',
-                             hp=(30,),
-                             acc=(90,),
-                             freq=(30,)))},
  'judy': {'name': 'Judy',
           'singularname': 'a Judy',
           'pluralname': 'Judies',
-          'level': 17,
+          'level': 19,
           'hp':(2750,),
           'def':(65,),
           'freq':(50,),
@@ -3527,7 +4336,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'mouthp': {'name': 'Mouthpiece',
             'singularname': 'a Mouthpiece',
             'pluralname': 'Mouthpieces',
-            'level': 18,
+            'level': 15,
             'hp':(2200,),
             'def':(60,),
             'freq':(50,),
@@ -3552,7 +4361,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'rainmake': {'name': 'Rainmaker',
               'singularname': 'a Rainmaker',
               'pluralname': 'Rainmakers',
-              'level': 19,
+              'level': 15,
               'hp':(2700,),
               'def':(60,),
               'freq':(0,),
@@ -3579,7 +4388,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'whunter': {'name': 'Witch Hunter',
              'singularname': 'a Witch Hunter',
              'pluralname': 'Witch Hunters',
-             'level': 20,
+             'level': 19,
              'hp':(3750,),
              'def':(60,),
              'freq':(0,),
@@ -3605,7 +4414,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'erclaim': {'name': 'Count Erclaim',
              'singularname': 'a Count Erclaim',
              'pluralname': 'Count Erclaims',
-             'level': 21,
+             'level': 19,
              'hp':(2656,),
              'def':(60,),
              'freq':(0,),
@@ -3634,7 +4443,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'redd': {'name': "Redd 'Heir' Wing",
           'singularname': 'a Redd "Heir" Wing',
           'pluralname': 'Redd "Heir" Wings',
-          'level': 22,
+          'level': 19,
           'hp':(2750,),
           'def':(60,),
           'freq':(0,),
@@ -3663,7 +4472,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'wsi': {'name': 'The Witness Stand-In',
          'singularname': 'a The Witness Stand-In',
          'pluralname': 'The Witness Stand-In',
-         'level': 23,
+         'level': 49,
          'hp':(4250,),
          'def':(60,),
          'freq':(0,),
@@ -3692,7 +4501,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'sgoat': {'name': 'Scapegoat',
            'singularname': 'a Scapegoat',
            'pluralname': 'Scapegoats',
-           'level': 24,
+           'level': 29,
            'hp':(5000,),
            'def':(65,),
            'freq':(50,),
@@ -3723,7 +4532,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'caseman': {'name': 'Case Manager',
              'singularname': 'a Case Manager',
              'pluralname': 'Case Managers',
-             'level': 25,
+             'level': 34,
              'hp':(4500,),
              'def':(65,),
              'freq':(50,),
@@ -3753,7 +4562,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'stenog': {'name': 'Stenographer',
             'singularname': 'Stenographer',
             'pluralname': 'Stenographers',
-            'level': 26,
+            'level': 34,
             'hp':(4850,),
             'def':(65,),
             'freq':(50,),
@@ -3783,7 +4592,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'lgator': {'name': 'Litigator',
             'singularname': 'a Litigator',
             'pluralname': 'Litigators',
-            'level': 27,
+            'level': 39,
             'hp':(4950,),
             'def':(65,),
             'freq':(50,),
@@ -3814,7 +4623,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Bagholder', # cogs singular name, for tasks
          'pluralname': 'Bagholders', # cogs plural name, for tasks
          'level': 0, # level the cog starts at (level - 1)
-         'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+          'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal', # cogs hp (more numbers, more levels)
          'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
          'freq':(50,30,10,5,5), # cogs level frequency
          'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
@@ -3835,11 +4646,44 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                          hp=(2, 3, 5, 6, 11),
                          acc=(75, 75, 75, 75, 75),
                          freq=(25, 25, 25, 25, 25)))},
+ 'ca': {'name': 'Con Artist',
+        'singularname': 'a Con Artist',
+        'pluralname': 'Con Artists',
+        'level': 0,
+        'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal',
+        'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
+        'freq':(50,50,30,10,5,5,5), # cogs level frequency
+        'acc':(35,35,40,45,50,55,55), # cogs accuracy (more numbers, more levels)
+        'attacks':
+            (SuitAttack('BounceCheck',
+                        hp=(2, 3, 5, 6, 9),  # attack damage
+                        acc=(75, 80, 85, 90, 95),
+                        freq=(20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
+             SuitAttack('Schmooze',
+                        hp=(2, 4, 6, 8, 11),
+                        acc=(50, 55, 60, 65, 70),
+                        freq=(20, 20, 20, 20, 20)),
+             SuitAttack('FountainPen',
+                        hp=(1, 3, 5, 6, 8),
+                        acc=(50, 55, 60, 65, 70),
+                        freq=(10, 10, 10, 10, 10)),
+             SuitAttack('PickPocket',
+                        hp=(1, 2, 3, 4, 5),
+                        acc=(25, 30, 35, 40, 45),
+                        freq=(10, 10, 10, 10, 10)),
+            SuitAttack('DoubleTalk',
+                        hp=(1, 2, 3, 4, 5, 6, 7),
+                        acc=(25, 30, 35, 40, 45),
+                        freq=(10, 10, 10, 10, 10)))},
  'pph': {'name': 'Paper Hands',
          'singularname': 'a Paper Hands',
          'pluralname': 'Paper Hands',
          'level': 1,
-         'hp':(12, 20, 30, 42, 56),
+         'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
          'def':(7,7,7,7,7),
          'freq':(30,35,40,45,50),
          'acc':(45,50,55,60,65),
@@ -3864,36 +4708,48 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                          hp=(3, 5, 7, 9, 11),
                          acc=(80, 80, 80, 80, 80),
                          freq=(20, 20, 20, 20, 20,)))},
- 'ca': {'name': 'Con Artist',
-        'singularname': 'a Con Artist',
-        'pluralname': 'Con Artists',
+ 'cn': {'name': 'Connoisseur',
+        'singularname': 'a Connoisseur',
+        'pluralname': 'Connoisseurs',
         'level': 1,
-        'hp':(18, 28, 40, 54, 70, 88, 108),
+        'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',
         'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
         'freq':(50,50,30,10,5,5,5), # cogs level frequency
         'acc':(35,35,40,45,50,55,55), # cogs accuracy (more numbers, more levels)
         'attacks':
-            (SuitAttack('FountainPen',
-                        hp=(1, 2, 2, 3, 3, 4, 4),  # attack damage
-                        acc=(75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
-             SuitAttack('Schmooze',
-                        hp=(2, 3, 4, 5, 6, 7, 8),
-                        acc=(75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('MumboJumbo',
-                        hp=(3, 4, 5, 6, 8, 10, 12),
-                        acc=(75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('PickPocket',
-                        hp=(1, 2, 3, 4, 5, 6, 7),
-                        acc=(60, 70, 80, 80, 90, 90, 90),
-                        freq=(40, 40, 40, 40, 40, 40, 40)))},
+            (SuitAttack('HalfWindsor',
+                        hp=(3, 6, 7, 10, 12),  # attack damage
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
+             SuitAttack('ReOrg',
+                        hp=(5, 6, 7, 8, 9),
+                        acc=(75, 75, 75, 75, 75),
+                        freq=(20, 20, 20, 20, 20)),  # m
+             SuitAttack('BrainStorm',
+                        hp=(5, 7, 9, 11, 12),
+                        acc=(75, 75, 75, 75, 75),
+                      freq=(20, 20, 20, 20, 20)),  # m
+                SuitAttack('FingerWag',
+                        hp=(4, 5, 6, 7, 8),
+                        acc=(50, 50, 50, 50, 50),
+                        freq=(10, 10, 10, 10, 10)),
+              SuitAttack('PoundKey',
+                        hp=(3, 4, 5, 6, 7),
+                        acc=(55, 65, 70, 75, 80),
+                        freq=(10, 10, 10, 10, 10)),
+            SuitAttack('DoubleTalk',
+                        hp=(4, 6, 7, 9, 12),
+                        acc=(75, 80, 85, 90, 95),
+                        freq=(20, 20, 20, 20, 20)))},
  'ins': {'name': 'The Insider',
          'singularname': 'a The Insider',
          'pluralname': 'The Insiders',
          'level': 2,
-        'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+        'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
         'def': (7, 7, 7, 7, 7, 7, 7, 7),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50),
         'acc': (45, 50, 55, 60, 65, 65, 65, 65),
@@ -3914,36 +4770,40 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(3, 6, 7, 11, 13, 14, 15, 16),
                         acc=(95, 95, 95, 95, 95, 95, 95, 95),
                         freq=(25, 25, 25, 25, 25, 25, 25, 25)))},
- 'mdm': {'name': 'Middleman',
-         'singularname': 'a Middleman',
-         'pluralname': 'Middlemen',
-         'level': 3,
-         'hp': (40, 54, 70, 88, 108, 130, 154),
-         'def': (11, 11, 11, 11, 11, 11, 11),
-         'freq': (30, 30, 30, 35, 40, 45, 50),
-         'acc': (65, 65, 65, 70, 75, 80, 85),
-         'attacks':
-             (SuitAttack('ReOrg',
-                         hp=(3, 5, 7, 10, 12, 13, 14),
-                         acc=(75, 75, 80, 80, 85, 85, 85),
-                         freq=(20, 20, 20, 20, 20, 20, 20)),
+ 'sw': {'name': 'The Swindler',
+        'singularname': 'a The Swindler',
+        'pluralname': 'The Swindlers',
+        'level': 2,
+         'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',
+        'def':(5,5,5,5,5,5,5), # cogs defence (more numbers, more levels)
+        'freq':(50,50,30,10,5,5,5), # cogs level frequency
+        'acc':(35,35,40,45,50,55,55), # cogs accuracy (more numbers, more levels)
+        'attacks':
+            (SuitAttack('BounceCheck',
+                         hp=(4, 7, 9, 10, 12),
+                         acc=(35, 35, 35, 35, 35),
+                         freq=(25, 25, 25, 25, 25)),
+              SuitAttack('HangUp',
+                         hp=(6, 7, 9, 13, 14),
+                         acc=(35, 35, 35, 35, 35),
+                         freq=(25, 25, 25, 25, 25)),
               SuitAttack('Rolodex',
-                         hp=(4, 6, 9, 12, 15, 16, 17),
-                         acc=(75, 75, 80, 80, 85, 85, 85),
-                         freq=(30, 30, 30, 30, 30, 30, 30)),
-              SuitAttack('MoneyTrip',
-                         hp=(2, 3, 4, 5, 6, 7, 8),
-                         acc=(75, 75, 80, 80, 85, 85, 85),
-                         freq=(20, 20, 20, 20, 20, 20, 20)),
-              SuitAttack('RazzleDazzle',
-                         hp=(2, 3, 3, 4, 4, 5, 5),
-                         acc=(75, 75, 80, 80, 85, 85, 85),
-                         freq=(30, 30, 30, 30, 30, 30, 30)))},
+                         hp=(3, 6, 7, 11, 13),
+                         acc=(50, 50, 50, 50, 50),
+                         freq=(25, 25, 25, 25, 25)),
+              SuitAttack('PickPocket',
+                         hp=(2, 4, 7, 10, 14),
+                         acc=(75, 80, 85, 90, 95),
+                         freq=(25, 25, 25, 25, 25)))},
  'cbr': {'name': 'Circuit Breaker',
          'singularname': 'a Circuit Breaker',
          'pluralname': 'Circuit Breakers',
          'level': 3,
-         'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+          'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
             'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 55, 55, 55, 55),
@@ -3964,36 +4824,71 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(7, 9, 10, 12, 13, 14, 15, 16, 17),
                             acc=(60, 70, 80, 90, 90, 90, 90, 90, 90),
                             freq=(25, 25, 25, 25, 25, 25, 25, 25, 25)))},
- 'txm': {'name': 'Toxic Manager',
-         'singularname': 'a Toxic Manager',
-         'pluralname': 'Toxic Managers',
-         'level': 2,
-        'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
-        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
-        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
-        'attacks':
-            (SuitAttack('GuiltTrip',
-                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30, 31, 32),
-                        acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('FountainPen',
-                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24, 25, 26),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
+ 'mdm': {'name': 'Middleman',
+         'singularname': 'a Middleman',
+         'pluralname': 'Middlemen',
+         'level': 3,
+          'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',
+         'def': (11, 11, 11, 11, 11, 11, 11),
+         'freq': (30, 30, 30, 35, 40, 45, 50),
+         'acc': (65, 65, 65, 70, 75, 80, 85),
+         'attacks':
+             (SuitAttack('ReOrg',
+                         hp=(7, 7, 8, 10, 11),
+                         acc=(60, 75, 80, 85, 90),
+                         freq=(25, 25, 25, 25, 25)),
+              SuitAttack('Rolodex',
+                         hp=(6, 7, 10, 13, 15,),
+                         acc=(60, 70, 75, 80, 90,),
+                         freq=(25, 25, 25, 25, 25)),
+              SuitAttack('MoneyTrip',
+                         hp=(7, 8, 9, 10, 12,),
+                         acc=(55, 65, 75, 85, 95,),
+                         freq=(25, 25, 25, 25, 25)),
+              SuitAttack('RazzleDazzle',
+                         hp=(8, 10, 12, 14, 16,),
+                         acc=(60, 65, 70, 75, 80,),
+                         freq=(25, 25, 25, 25, 25)))},
+ 'shrp': {'name': 'Sharp Seer',
+         'singularname': 'a Sharp Seer',
+         'pluralname': 'Sharp Seers',
+         'level': 3,
+          'minLevel': 4,
+        'maxLevel': 12,
+        'hp': 'field',
+         'def': (11, 11, 11, 11, 11, 11, 11),
+         'freq': (30, 30, 30, 35, 40, 45, 50),
+         'acc': (65, 65, 65, 70, 75, 80, 85),
+         'attacks':
+              (SuitAttack('GlowerPower',
+                        hp=(7, 9, 11, 13, 15, 18, 19, 20, 21, 22, 23),
+                        acc=(80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
             SuitAttack('EvilEye',
-                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26, 27, 28),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('AcidRain',
-                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33, 34, 35),
-                        acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+                        hp=(10, 12, 14, 17, 19, 22, 23, 24, 25, 26, 27),
+                        acc=(70, 75, 80, 85, 85, 85, 85, 85, 85, 85, 85),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('PowerTie',
+                        hp=(8, 9, 11, 13, 15, 17, 18, 19, 20, 21, 22),
+                        acc=(75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('HalfWindsor',
+                        hp=(6, 7, 9, 11, 13, 15, 16, 17, 18, 19, 20),
+                        acc=(60, 65, 70, 75, 80, 85, 85, 85, 85, 85, 85),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('ReOrg',
+                        hp=(8, 10, 12, 14, 16, 19, 20, 21, 22, 23, 24),
+                        acc=(70, 75, 80, 85, 85, 85, 85, 85, 85, 85, 85),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
  'dl': {'name': 'Deadlock',
         'singularname': 'a Deadlock',
         'pluralname': 'Deadlocks',
         'level': 4,
-        'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -4018,28 +4913,61 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(8, 10, 12, 14, 16, 19, 20, 21, 22, 23, 24),
                         acc=(70, 75, 80, 85, 85, 85, 85, 85, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ang': {'name': 'Angel Investor',
-         'singularname': 'a Angel Investor',
-         'pluralname': 'Angel Investors',
+ 'txm': {'name': 'Toxic Manager',
+         'singularname': 'a Toxic Manager',
+         'pluralname': 'Toxic Managers',
          'level': 4,
-          'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',
+        'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
+        'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
+        'attacks':
+            (SuitAttack('AcidRain',
+                         hp=(9, 12, 14, 15, 17),
+                         acc=(60, 75, 80, 85, 90),
+                         freq=(20, 20, 20, 20, 20)),
+              SuitAttack('FountainPen',
+                         hp=(9, 10, 11, 12, 13,),
+                         acc=(60, 75, 80, 85, 90,),
+                         freq=(15, 15, 15, 15, 15)),
+              SuitAttack('GuiltTrip',
+                         hp=(7, 9, 11, 13, 15,),
+                         acc=(60, 75, 80, 85, 90,),
+                         freq=(35, 35, 35, 35, 35)),
+            SuitAttack('PowerTrip',
+                         hp=(6, 9, 12, 15, 18,),
+                         acc=(60, 65, 70, 75, 80,),
+                         freq=(15, 15, 15, 15, 15)),
+              SuitAttack('EvilEye',
+                         hp=(8, 10, 11, 13, 14,),
+                         acc=(55, 65, 70, 75, 80,),
+                         freq=(15, 15, 15, 15, 15)))},
+ 'neg': {'name': 'Negotiator',
+         'singularname': 'a Negotiator',
+         'pluralname': 'Negotiators',
+         'level': 4,
+        'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'operations',
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
             'attacks':
-                (SuitAttack('ShortSqueeze',
+                (SuitAttack('DoubleTalk',
                             hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                             acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
-                SuitAttack('ParadigmShift',
+                SuitAttack('Schmooze',
                             hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
                             acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-                SuitAttack('RazzleDazzle',
+                SuitAttack('Filibuster',
                             hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
                             acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-                SuitAttack('BounceCheck',
+                SuitAttack('HotAir',
                             hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
                             acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
                             freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
@@ -4047,7 +4975,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Shark Watcher',
          'pluralname': 'Shark Watchers',
          'level': 5,
-         'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal',
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -4073,36 +5003,94 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(12, 14, 17, 19, 22, 24, 27, 28, 29, 30, 31, 32, 33, 34, 35),
                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'bfh2': {'name': 'Big Fish',
-          'singularname': 'a Big Fish',
-          'pluralname': 'Big Fish',
-          'level': 5,
-        'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
-        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-        'attacks':
-            (SuitAttack('Bite',
-                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
-                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
-            SuitAttack('Liquidate',
-                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
-                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('PowerTie',
-                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
-                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('Watercooler',
-                        hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
-                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
+ 'rng': {'name': 'Renegade',
+         'singularname': 'a Renegade',
+         'pluralname': 'Renegades',
+         'level': 5,
+          'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'operations',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('PeckingOrder',
+                            hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                SuitAttack('EvilEye',
+                            hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('Golf',
+                            hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('BounceCheck',
+                            hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'sab': {'name': 'Saboteur',
+         'singularname': 'a Saboteur',
+         'pluralname': 'Saboteurs',
+         'level': 5,
+           'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('ShortSqueeze',
+                            hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                SuitAttack('GlowerPower',
+                            hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('PowerTrip',
+                            hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('Embezzle',
+                             hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
+ 'cor': {'name': 'Coordinator',
+         'singularname': 'a Coordinator',
+         'pluralname': 'Coordinator',
+         'level': 5,
+          'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'operations',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('Filibuster',
+                            hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                            acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
+                SuitAttack('Legalese',
+                            hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
+                            acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
+                SuitAttack('RazzleDazzle',
+                            hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
+                            acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('ReOrg',
+                            hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
+                            acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                            freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'mg': {'name': 'Magnate',
         'singularname': 'a Magnate',
         'pluralname': 'Magnates',
         'level': 6,
-        'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -4127,11 +5115,44 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(9, 11, 13, 15, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
                         acc=(90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
+ 'bfh2': {'name': 'Big Fish',
+          'singularname': 'a Big Fish',
+          'pluralname': 'Big Fish',
+          'level': 6,
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal',
+        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+        'attacks':
+            (SuitAttack('Bite',
+                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
+                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Liquidate',
+                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
+                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('PowerTie',
+                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Canned',
+                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+            SuitAttack('Watercooler',
+                        hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                       freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
  'chw': {'name': 'Chairwarmer',
          'singularname': 'a Chairwarmer',
          'pluralname': 'Chairwarmers',
          'level': 6,
-        'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -4152,12 +5173,41 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
                         acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
                         freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
+ 'ang': {'name': 'Angel Investor',
+         'singularname': 'a Angel Investor',
+         'pluralname': 'Angel Investors',
+         'level': 6,
+          'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field',
+            'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
+            'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
+            'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
+            'attacks':
+                (SuitAttack('BounceCheck',
+                             hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
+                        acc=(75, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
+                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
+                SuitAttack('ParadigmShift',
+                            hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
+                        acc=(90, 90, 90, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('RazzleDazzle',
+                            hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
+                SuitAttack('ShortSqueeze',
+                            hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
+                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'hho': {'name': 'Head Honcho',
          'singularname': 'a Head Honcho',
          'pluralname': 'Head Honchos',
          'level': 7,
-        'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702, 756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722, 1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
-        'def': (56,) * 43,
+         'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal',      
+            'def': (56,) * 43,
         'freq': (30, 35, 40, 45, 50) + (50,) * 38,
         'acc': (35, 40, 45, 50, 55, 60, 65, 70) + (70,) * 35,
         'attacks':
@@ -4193,76 +5243,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         acc=(85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90,
                             90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
                         freq=(20,) * 43))},
- 'chairp': {'name': 'Ground Floor Investor',
-            'singularname': 'a Ground Floor Investor',
-            'pluralname': 'Ground Floor Investor',
-            'level': 14,
-            'hp':(375, 425,),
-             'def':(60, 60,),
-             'freq':(100, 100,),
-             'acc':(75, 75,),
-             'attacks':
-                 (SuitAttack('MoneyTrip',
-                             hp=(28, 30),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('FallingKnife',
-                             hp=(30, 32),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('BounceCheck',
-                             hp=(31, 33),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('Crunch',
-                             hp=(33, 35),
-                             acc=(75, 75),
-                             freq=(20, 20)),
-                  SuitAttack('MarketCrash',
-                             hp=(30, 30),
-                             acc=(75, 75),
-                             freq=(20, 20)))},
- 'bdirector': {'name': 'Board Director',
-               'singularname': 'a Board Director',
-               'pluralname': 'Board Directors',
-               'level': 15,
-               'hp':(725,),
-               'def':(60,),
-               'freq':(100,),
-               'acc':(75,),
-               'attacks':
-                   (SuitAttack('SoakRemoval',
-                               hp=(0,),
-                               acc=(100,),
-                               freq=(0,)),
-                    SuitAttack('FallingKnife',
-                               hp=(26,),
-                               acc=(75,),
-                               freq=(20,)),
-                    SuitAttack('BlueChip',
-                               hp=(26,),
-                               acc=(75,),
-                               freq=(20,)),
-                    SuitAttack('MarketCrash',
-                               hp=(30,),
-                               acc=(75,),
-                               freq=(20,)),
-                    SuitAttack('ShortSqueeze',
-                               hp=(24,),
-                               acc=(100,),
-                               freq=(20,)),
-                    SuitAttack('CloudStorage',
-                               hp=(24,),
-                               acc=(100,),
-                               freq=(20,)),
-                    SuitAttack('DenialOfService',
-                               hp=(1,),
-                               acc=(100,),
-                               freq=(0,)))},
  'ddiver': {'name': 'Deep Diver',
             'singularname': 'a Deep Diver',
             'pluralname': 'Deep Diver',
-            'level': 16,
+            'level': 6,
             'hp':(400,),
             'def':(60,),
             'freq':(100,),
@@ -4281,7 +5265,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'gatekeep': {'name': 'Gatekeeper',
               'singularname': 'a Gatekeeper',
               'pluralname': 'Gatekeepers',
-              'level': 17,
+              'level': 9,
               'hp':(1200,),
               'def':(65,),
               'freq':(0,),
@@ -4306,7 +5290,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dola': {'name': 'Director Of Land Acquisition',
           'singularname': 'a L.A.A.',
           'pluralname': 'L.A.A.s',
-          'level': 18,
+          'level': 6,
           'hp':(1675,),
           'def':(60,),
           'freq':(100,),
@@ -4335,7 +5319,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dold': {'name': 'Director Of Land Development',
           'singularname': 'a Director',
           'pluralname': 'Directors',
-          'level': 19,
+          'level': 24,
           'hp':(4000,),
           'def':(60,),
           'freq':(0,),
@@ -4364,7 +5348,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'liquid': {'name': 'Tollmaster',
          'singularname': 'a Tollmaster',
          'pluralname': 'Tollmasters',
-         'level': 20,
+         'level': 55,
          'hp':(10456,),
          'def':(60,),
          'freq':(0,),
@@ -4397,7 +5381,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'rkeeper': {'name': 'Recordkeeper',
             'singularname': 'a Recordkeeper',
             'pluralname': 'Recordkeepers',
-            'level': 21,
+            'level': 59,
             'hp':(12000,),
             'def':(60,),
             'freq':(0,),
@@ -4430,7 +5414,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'cbutcher': {'name': 'Phantom Recordkeeper',
          'singularname': 'a Phantom Recordkeeper',
          'pluralname': 'Phantom Recordkeepers',
-         'level': 22,
+         'level': 29,
          'hp':(6000,),
          'def':(60,),
          'freq':(0,),
@@ -4447,7 +5431,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'cdirector': {'name': 'Contingency Director',
          'singularname': 'a Contingency Director',
          'pluralname': 'Contingency Directors',
-         'level': 23,
+         'level': 65,
          'hp':(13330,),
          'def':(60,),
          'freq':(0,),
@@ -4480,7 +5464,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'dking': {'name': 'Dividend King',
            'singularname': 'a Dividend King',
            'pluralname': 'Dividend Kings',
-           'level': 24,
+           'level': 59,
            'hp':(11500,),
            'def':(60,),
            'freq':(0,),
@@ -4510,62 +5494,64 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            hp=(28,),
                            acc=(80,),
                            freq=(10,)))},
- 'ottoman': {'name': 'Ottoman',
-             'singularname': 'a Ottoman',
-             'pluralname': 'Ottomen',
-             'level': 25,
-             'hp':(17770,),
+ 'ottoman': {'name': 'Chief Operating Officer',
+             'singularname': 'a Chief Operating Officer',
+             'pluralname': 'Chief Operating Officers',
+             'level': 99,
+             'hp':(1,),
              'def':(60,),
              'freq':(0,),
              'acc':(75,),
              'attacks':
-                 (SuitAttack('OttomanFootnoteOverload',
-                             hp=(15,),
-                             acc=(100,),
-                             freq=(50,)),
-                  SuitAttack('OttomanPerformanceReviewRevert',
-                             hp=(15,),
-                             acc=(100,),
-                             freq=(50,)))},
+                 (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
  'fmaker': {'name': 'Filmmaker',
             'singularname': 'a Filmmaker',
             'pluralname': 'Filmmakers',
-            'level': 26,
+            'level': 25,
             'hp':(2225,),
             'def':(60,),
             'freq':(0,),
             'acc':(50,),
             'attacks':
-                (SuitAttack('HighRollerNoAttack',
-                            hp=(0,),
+                (SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
                             freq=(0,)),
-                 SuitAttack('HighRollerNoAttack',
-                            hp=(0,),
+                 SuitAttack('SmokeAndMirrors',
+                            hp=(30,),
                             acc=(100,),
                             freq=(100,)))},
- 'chairman': {'name': 'Chairman',
-              'singularname': 'a Chairman',
-              'pluralname': 'Chairmen',
-              'level': 27,
+ 'chairman': {'name': 'Chairman Of The Board',
+               'singularname': 'a Chairman Of The Board',
+               'pluralname': 'Chairmen Of The Board',
+              'level': 99,
               'hp':(20000,),
               'def':(65,),
               'freq':(0,),
               'acc':(75,),
               'attacks':
-                  (SuitAttack('PowerTrip',
-                              hp=(200,),
-                              acc=(100,),
-                              freq=(50,)),
-                   SuitAttack('PowerTrip',
-                              hp=(200,),
-                              acc=(100,),
-                              freq=(50,)))},
+                  (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
  'skd': {'name': 'Script Kiddie', # cog name
          'singularname': 'a Script Kiddie', # cogs singular name, for tasks
          'pluralname': 'Script Kiddies', # cogs plural name, for tasks
          'level': 0, # level the cog starts at (level - 1)
-         'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+         'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal',    # cogs hp (more numbers, more levels)
          'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
          'freq':(50,30,10,5,5), # cogs level frequency
          'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
@@ -4590,7 +5576,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Code Monkey',
          'pluralname': 'Code Monkies',
          'level': 1,
-         'hp':(12, 20, 30, 42, 56),
+         'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal',    
          'def':(7,7,7,7,7),
          'freq':(30,35,40,45,50),
          'acc':(45,50,55,60,65),
@@ -4619,7 +5607,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Data Hoarder',
          'pluralname': 'Data Hoarders',
          'level': 1,
-         'hp': (18, 28, 40, 54, 70, 88, 108),
+         'minLevel': 2,
+        'maxLevel': 8,
+        'hp': 'operations',    
          'def': (5, 5, 5, 5, 5, 5, 5),  # cogs defence (more numbers, more levels)
          'freq': (50, 50, 30, 10, 5, 5, 5),  # cogs level frequency
          'acc': (35, 35, 40, 45, 50, 55, 55),  # cogs accuracy (more numbers, more levels)
@@ -4644,7 +5634,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Voodoo Programmer',
          'pluralname': 'Voodoo Programmers',
          'level': 2,
-         'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+        'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal',    
             'def': (7, 7, 7, 7, 7, 7, 7, 7),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50),
             'acc': (45, 50, 55, 60, 65, 65, 65, 65),
@@ -4673,7 +5665,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Brainiac',
          'pluralname': 'Brainiacs',
          'level': 3,
-          'hp': (40, 54, 70, 88, 108, 130, 154),
+          'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'operations',    
         'def': (11, 11, 11, 11, 11, 11, 11),
         'freq': (30, 30, 30, 35, 40, 45, 50),
         'acc': (65, 65, 65, 70, 75, 80, 85),
@@ -4698,7 +5692,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Shotgun Debugger',
          'pluralname': 'Shotgun Debuggers',
          'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+        'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal',    
         'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60),
@@ -4727,7 +5723,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Keyboard Warrior',
          'pluralname': 'Keyboard Warriors',
          'level': 2,
-         'hp': (13, 21, 31, 43, 57, 73, 91, 111, 133, 157, 183, 211),
+         'minLevel': 3,
+        'maxLevel': 12,
+        'hp': 'field',    
         'def': (43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43),
         'freq': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (30, 30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
@@ -4752,7 +5750,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Keyboard Cowboy',
          'pluralname': 'Keyboard Cowboys',
          'level': 4,
-         'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+         'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal',    
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -4781,7 +5781,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Black Hat',
 		 'pluralname': 'Black Hats',
 		 'level': 4,
-         'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 340, 378, 418, 460, 504),
+          'minLevel': 5,
+        'maxLevel': 15,
+        'hp': 'operations', 
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -4806,7 +5808,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Software Simian',
          'pluralname': 'Software Simians',
          'level': 5,
-         'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal', 
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -4835,7 +5839,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Python Charmer',
          'pluralname': 'Python Charmers',
          'level': 5,
-         'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 380, 420),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'field', 
             'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -4860,7 +5866,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Installer Wizard',
          'pluralname': 'Installer Wizards',
          'level': 6,
-         'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+        'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal', 
             'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -4889,7 +5897,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Industry Titan',
          'pluralname': 'Industry Titan',
          'level': 6,
-         'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'field', 
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -4914,8 +5924,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Root User',
          'pluralname': 'Root Users',
          'level': 7,
-         'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702,
-        756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722, 1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
+         'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal', 
             'def': (56,) * 43,
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
                     50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
@@ -4952,85 +5963,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             acc=(35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70,
                                 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                             freq=(20,) * 43))},
- 'ant': {'name': 'Antivirus',
-         'singularname': 'a Antivirus',
-         'pluralname': 'Antiviruses',
-         'level': 14,
-         'hp':(272, 306, 342, 380, 420, 462),
-         'def':(50, 50, 50, 50, 50, 50),
-         'freq':(100, 100, 100, 100, 100, 100),
-         'acc':(75, 75, 75, 75, 75, 75),
-         'attacks':
-             (SuitAttack('Bash',
-                         hp=(30, 31, 32, 33, 34, 35),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('VoodooMagic',
-                         hp=(30, 31, 32, 33, 34, 35),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(0, 0, 0, 0, 0, 0)),
-              SuitAttack('BounceRate',
-                         hp=(25, 26, 27, 28, 29, 30),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('Inject',
-                         hp=(31, 31, 31, 31, 31, 31),
-                         acc=(100, 100, 100, 100, 100, 100),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('Encrypt',
-                         hp=(28, 30, 32, 34, 36, 38),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('ElectrostaticEnergy',
-                         hp=(25, 26, 27, 28, 29, 30),
-                         acc=(100, 100, 100, 100, 100, 100),
-                         freq=(10, 10, 10, 10, 10, 10)),
-              SuitAttack('DataCorruption',
-                         hp=(31, 32, 33, 34, 35, 36),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(10, 10, 10, 10, 10, 10)))},
- 'sya': {'name': 'Senior Developer',
-         'singularname': 'a Senior Developer',
-         'pluralname': 'Senior Developers',
-         'level': 15,
-         'hp':(850,),
-         'def':(60,),
-         'freq':(100,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('Bash',
-                         hp=(26,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('Breakthrough',
-                         hp=(26,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('Encrypt',
-                         hp=(30,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('Inject',
-                         hp=(24,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('CloudStorage',
-                         hp=(24,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('DenialOfService',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)))},
  'djockey': {'name': 'Desk Jockey',
              'singularname': 'a Desk Jockey',
              'pluralname': 'Desk Jockies',
-             'level': 16,
-             'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+             'level': 2,
+             'minLevel': 3,
+        'maxLevel': 10,
+        'hp': 'normal', 
              'def': (7, 7, 7, 7, 7, 7, 7, 7),
              'freq': (30, 35, 40, 45, 50, 50, 50, 50),
              'acc': (45, 50, 55, 60, 65, 65, 65, 65),
@@ -5058,8 +5997,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'ptjockey':  {'name': 'Desk Jockey',
              'singularname': 'a Desk Jockey',
              'pluralname': 'Desk Jockies',
-             'level': 17,
-             'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+             'level': 2,
+              'minLevel': 3,
+        'maxLevel': 10,
+        'hp': 'normal', 
              'def': (7, 7, 7, 7, 7, 7, 7, 7),
              'freq': (30, 35, 40, 45, 50, 50, 50, 50),
              'acc': (45, 50, 55, 60, 65, 65, 65, 65),
@@ -5084,258 +6025,64 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                              hp=(3, 4, 6, 9, 12, 15, 18, 21),
                              acc=(70, 70, 70, 70, 70, 70, 70, 70),
                              freq=(20, 20, 20, 20, 20, 20, 20, 20)))},
- 'crystal': {'name': 'Crystalline',
-             'singularname': 'a Crystalline',
-             'pluralname': 'Crystallines',
-             'level': 18,
-             'hp':(18500,),
+ 'bcaster': {'name': 'Videographer Silhouette',
+             'singularname': 'a Videographer Silhouette',
+             'pluralname': 'Videographer Silhouettes',
+             'level': 32,
+             'hp':(3333,),
              'def':(60,),
              'freq':(0,),
-             'acc':(75,),
+             'acc':(50,),
              'attacks':
-                 (SuitAttack('ChairmanTrapRetaliation',
-                             hp=(15,),
+                 (SuitAttack('HighRollerNoAttack',
+                             hp=(0,),
                              acc=(100,),
-                             freq=(50,)),
-                  SuitAttack('ChairmanLureRetaliation',
-                             hp=(15,),
+                             freq=(0,)),
+                  SuitAttack('HighRollerNoAttack',
+                             hp=(0,),
                              acc=(100,),
-                             freq=(50,)))},
- 'tas': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('NickelAndDime',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(0,)),
-              SuitAttack('NickelAndDime',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE))},
- 'fhu': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'fsh': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE))},
- 'fhj': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE))},
- 'kdh': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE))},
- 'dar': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 24,
-         'hp':(6000,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('DiskScratch',
-                         hp=(46,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('DataCorruption',
-                         hp=(36,),
-                         acc=(100,),
-                         freq=(10,)),
-              SuitAttack('ReOrg',
-                         hp=(30,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('Inject',
-                         hp=(34,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('Bash',
-                         hp=(34,),
-                         acc=(100,),
-                         freq=(20,)))},
- 'nhy': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 25,
-         'hp':(5275,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('Bash',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(20,)),
-              SuitAttack('ElectrostaticEnergy',
-                         hp=(47,),
-                         acc=(100,),
-                         freq=(10,)),
-              SuitAttack('DataCorruption',
-                         hp=(37,),
-                         acc=(100,),
-                         freq=(10,)),
-              SuitAttack('Cage',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('ReOrg',
-                         hp=(38,),
-                         acc=(100,),
-                         freq=(10,)),
-              SuitAttack('CloudStorage',
-                         hp=(34,),
-                         acc=(100,),
-                         freq=(10,)))},
- 'wrt': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 26,
-         'hp':(5575,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('SoakRemoval',
-                         hp=(0,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('Inject',
-                         hp=(37,),
-                         acc=(100,),
-                         freq=(15,)),
-              SuitAttack('PoundKey',
-                         hp=(45,),
-                         acc=(100,),
-                         freq=(15,)),
-              SuitAttack('Bomb',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('Bash',
-                         hp=(46,),
-                         acc=(100,),
-                         freq=(15,)),
-              SuitAttack('Synergy',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)))},
- 'auh': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 27,
-         'hp':(5775,),
-         'def':(65,),
-         'freq':(0,),
-         'acc':(75,),
-         'attacks':
-            (SuitAttack('SoakRemoval',
-                        hp=(0,),
-                        acc=(100,),
-                        freq=(0,)),
-             SuitAttack('Bash',
-                        hp=(48,),
-                        acc=(100,),
-                        freq=(20,)),
-             SuitAttack('Synergy',
-                        hp=(1,),
-                        acc=(100,),
-                        freq=(0,)),
-             SuitAttack('ElectrostaticEnergy',
-                        hp=(40,),
-                        acc=(100,),
-                        freq=(20,)),
-             SuitAttack('ReOrg',
-                        hp=(40,),
-                        acc=(100,),
-                        freq=(10,)),
-             SuitAttack('BlueChip',
-                        hp=(40,),
-                        acc=(100,),
-                        freq=(10,)),
-             SuitAttack('FallingKnife',
-                        hp=(45,),
-                        acc=(100,),
-                        freq=(20,)),
-             SuitAttack('CloudStorage',
-                        hp=(39,),
-                        acc=(100,),
-                        freq=(20,)))},
+                             freq=(100,)))},
+ 'videog': {'name': 'Videographer',
+            'singularname': 'a Videographer',
+            'pluralname': 'Videographers',
+            'level': 98,
+            'hp':(12222,),
+            'def':(60,),
+            'freq':(0,),
+            'acc':(75,),
+            'attacks':
+                (SuitAttack('Schmooze',
+                            hp=(32,),
+                            acc=(85,),
+                            freq=(20,)),
+                 SuitAttack('RazzleDazzle',
+                            hp=(34,),
+                            acc=(85,),
+                            freq=(15,),
+                         groupStatus=ATK_TGT_DOUBLE),
+                 SuitAttack('FingerWag',
+                            hp=(28,),
+                            acc=(90,),
+                            freq=(15,)),
+                 SuitAttack('CigarSmoke',
+                            hp=(32,),
+                            acc=(90,),
+                            freq=(15,)),
+                 SuitAttack('SongAndDance',
+                            hp=(28,),
+                            acc=(85,),
+                            freq=(15,)),
+                 SuitAttack('Beguile',
+                            hp=(30,),
+                            acc=(95,),
+                            freq=(20,)))},
  'ppb': {'name': 'Paper Boy', # cog name
          'singularname': 'a Paper Boy', # cogs singular name, for tasks
          'pluralname': 'Paper Boys', # cogs plural name, for tasks
          'level': 0, # level the cog starts at (level - 1)
-         'hp': (6, 12, 20, 30, 42), # cogs hp (more numbers, more levels)
+         'minLevel': 1,
+        'maxLevel': 5,
+        'hp': 'normal', # cogs hp (more numbers, more levels)
          'def':(5,5,5,5,5), # cogs defence (more numbers, more levels)
          'freq':(50,30,10,5,5), # cogs level frequency
          'acc':(35,40,45,50,55), # cogs accuracy (more numbers, more levels)
@@ -5360,7 +6107,9 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'singularname': 'a Shutterbug',
          'pluralname': 'Shutterbugs',
          'level': 1,
-         'hp':(12, 20, 30, 42, 56),
+         'minLevel': 2,
+        'maxLevel': 6,
+        'hp': 'normal', 
          'def':(7,7,7,7,7),
          'freq':(30,35,40,45,50),
          'acc':(45,50,55,60,65),
@@ -5385,36 +6134,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                          hp=(3, 4, 6, 9, 12),
                          acc=(70, 70, 70, 70, 70),
                          freq=(20, 20, 20, 20, 20,)))},
- 'bsd': {'name': 'Backseat Driver',
-         'singularname': 'a Backseat Driver',
-         'pluralname': 'Backseat Drivers',
-         'level': 1,
-         'hp': (18, 28, 40, 54, 70, 88, 108),
-         'def': (5, 5, 5, 5, 5, 5, 5),  # cogs defence (more numbers, more levels)
-         'freq': (50, 50, 30, 10, 5, 5, 5),  # cogs level frequency
-         'acc': (35, 35, 40, 45, 50, 55, 55),  # cogs accuracy (more numbers, more levels)
-         'attacks':
-             (SuitAttack('Jargon',
-                         hp=(1, 2, 2, 3, 3, 4, 4),  # attack damage
-                         acc=(75, 75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20, 20)),  # move frequency (all move frequency of each attack must add up to 100, for example 30,10,60 from level 1 of each attack)
-              SuitAttack('FingerWag',
-                         hp=(2, 3, 4, 5, 6, 7, 8),
-                         acc=(75, 75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20, 20)),
-              SuitAttack('GlowerPower',
-                         hp=(3, 4, 5, 6, 8, 10, 12),
-                         acc=(75, 75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20, 20)),
-              SuitAttack('EvilEye',
-                         hp=(1, 2, 3, 4, 5, 6, 7),
-                         acc=(60, 70, 80, 80, 90, 90, 90),
-                         freq=(40, 40, 40, 40, 40, 40, 40)))},
  'gms': {'name': 'Gumshoe',
          'singularname': 'a Gumshoe',
          'pluralname': 'Gumshoes',
          'level': 2,
-         'hp': (20, 30, 42, 56, 72, 90, 110, 132),
+         'minLevel': 3,
+        'maxLevel': 7,
+        'hp': 'normal', 
             'def': (7, 7, 7, 7, 7, 7, 7, 7),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50),
             'acc': (45, 50, 55, 60, 65, 65, 65, 65),
@@ -5439,36 +6165,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(3, 4, 6, 9, 12, 13, 14, 15),
                             acc=(70, 70, 70, 70, 70, 70, 70, 70),
                             freq=(20, 20, 20, 20, 20, 20, 20, 20)))},
- 'sbg': {'name': 'Sandbagger',
-         'singularname': 'a Sandbagger',
-         'pluralname': 'Sandbaggers',
-         'level': 3,
-          'hp': (40, 54, 70, 88, 108, 130, 154),
-        'def': (11, 11, 11, 11, 11, 11, 11),
-        'freq': (30, 30, 30, 35, 40, 45, 50),
-        'acc': (65, 65, 65, 70, 75, 80, 85),
-        'attacks':
-            (SuitAttack('Sacked',
-                        hp=(3, 5, 7, 10, 12, 13, 14),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('SandTrap',
-                        hp=(4, 6, 9, 12, 15, 16, 17),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(30, 30, 30, 30, 30, 30, 30)),
-             SuitAttack('Canned',
-                        hp=(2, 3, 4, 5, 6, 7, 8),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(20, 20, 20, 20, 20, 20, 20)),
-             SuitAttack('HangUp',
-                        hp=(2, 3, 3, 4, 4, 5, 5),
-                        acc=(75, 75, 80, 80, 85, 85, 85),
-                        freq=(30, 30, 30, 30, 30, 30, 30)))},
  'hck': {'name': 'Hackette',
          'singularname': 'a Hackette',
          'pluralname': 'Hackettes',
          'level': 3,
-        'hp': (30, 42, 56, 72, 90, 110, 132, 156, 182),
+        'minLevel': 4,
+        'maxLevel': 10,
+        'hp': 'normal', 
         'def': (32, 32, 32, 32, 32, 32, 32, 32, 32),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60),
@@ -5493,36 +6196,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(3, 4, 5, 6, 7, 8, 9, 10, 11),
                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'ath': {'name': 'Agonizing Author',
-         'singularname': 'a Agonizing Author',
-         'pluralname': 'Agonizing Authors',
-         'level': 2,
-            'hp':(13, 21, 31, 43, 57, 73, 91, 111, 133, 157),
-            'def':(43,43,43,43,43,43,43,43,43,43),
-            'freq':(30,30,35,40,45,50,50,50,50,50),
-            'acc':(30,30,35,40,45,50,50,50,50,50),
-        'attacks':
-            (SuitAttack('WriteOff',
-                        hp=(3, 5, 8, 12, 16, 20, 24, 28, 29, 30),
-                            acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-                SuitAttack('RubOut',
-                        hp=(7, 9, 12, 14, 16, 18, 20, 22, 23, 24),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95),
-                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30)),
-                SuitAttack('Newspaper',
-                        hp=(5, 6, 9, 12, 15, 18, 21, 24, 25, 26),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95),
-                            freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-                SuitAttack('FillWithLead',
-                        hp=(7, 9, 13, 17, 21, 25, 28, 31, 32, 33),
-                            acc=(70, 70, 80, 90, 95, 95, 95, 95, 95, 95),
-                            freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'ghw': {'name': 'Ghost Writer',
          'singularname': 'a Ghost Writer',
          'pluralname': 'Ghost Writers',
          'level': 4,
-         'hp': (42, 56, 72, 90, 110, 132, 156, 182, 210, 240, 272),
+         'minLevel': 5,
+        'maxLevel': 12,
+        'hp': 'normal', 
         'def': (23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 60, 60, 60, 60, 60),
@@ -5547,36 +6227,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                         acc=(70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'dcw': {'name': 'Doctor White',
-         'singularname': 'a Doctor White',
-         'pluralname': 'Doctor Whites',
-         'level': 4,
-         'hp': (54, 70, 88, 108, 130, 154, 180, 208, 238, 270, 304, 342, 380, 420, 462, 506),
-        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-        'attacks':
-            (SuitAttack('RazzleDazzle',
-                        hp=(5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
-                        acc=(60, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35)),
-            SuitAttack('Chomp',
-                        hp=(4, 6, 8, 10, 12, 13, 14, 14, 15, 15, 16, 17, 18, 19, 20, 21),
-                        acc=(50, 65, 70, 75, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('Bite',
-                        hp=(6, 8, 10, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25),
-                        acc=(55, 65, 75, 85, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-            SuitAttack('Liquidate',
-                        hp=(4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18),
-                        acc=(50, 55, 65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)))},
  'gzt': {'name': 'Gazetteer',
          'singularname': 'a Gazetteer',
          'pluralname': 'Gazetteers',
          'level': 5,
-         'hp': (56, 72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462),
+         'minLevel': 6,
+        'maxLevel': 15,
+        'hp': 'normal', 
         'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
@@ -5601,36 +6258,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         hp=(9, 10, 13, 16, 17, 18, 20, 22, 24, 26, 27, 28, 29, 30, 31),
                         acc=(85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85, 85),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'wnk': {'name': 'White Knight',
-         'singularname': 'a White Knight',
-         'pluralname': 'White Knights',
-         'level': 5,
-         'hp': (43, 57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421),
-        'def': (65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (60, 65, 70, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
-        'attacks':
-            (SuitAttack('Newspaper',
-                        hp=(12, 14, 17, 19, 21, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33),
-                        acc=(85, 85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
-            SuitAttack('Quake',
-                        hp=(17, 20, 23, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40),
-                        acc=(75, 75, 80, 80, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
-            SuitAttack('Tremor',
-                        hp=(13, 15, 17, 20, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34),
-                        acc=(65, 75, 80, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
-            SuitAttack('Chomp',
-                        hp=(10, 11, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
-                        acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)))},
  'nsh': {'name': 'News Hound',
          'singularname': 'a News Hound',
          'pluralname': 'News Hounds',
          'level': 6,
-         'hp': (72, 90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702),
+         'minLevel': 7,
+        'maxLevel': 20,
+        'hp': 'normal', 
             'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
             'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
             'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -5655,36 +6289,13 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                             hp=(12, 15, 18, 20, 22, 24, 27, 29, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45),
                             acc=(75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75),
                             freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'std': {'name': 'Stunt Double',
-         'singularname': 'a Stunt Double',
-         'pluralname': 'Stunt Doubles',
-         'level': 6,
-       'hp': (57, 73, 91, 111, 133, 157, 183, 211, 241, 273, 307, 343, 381, 421, 463, 507, 553, 601, 651),
-        'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
-        'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
-        'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
-        'attacks':
-            (SuitAttack('RazzleDazzle',
-                        hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
-                        acc=(75, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
-                        freq=(40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40)),
-            SuitAttack('PowerTrip',
-                        hp=(11, 13, 15, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34),
-                        acc=(90, 90, 90, 90, 90, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-            SuitAttack('Golf',
-                        hp=(12, 15, 18, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36),
-                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
-            SuitAttack('ParadigmShift',
-                        hp=(14, 17, 20, 22, 24, 26, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42),
-                        acc=(85, 85, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                        freq=(30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30)))},
  'anc': {'name': 'Anchor Man',
          'singularname': 'a Anchor Man',
          'pluralname': 'Anchor Men',
          'level': 7,
-        'hp': (90, 110, 132, 156, 182, 210, 240, 272, 306, 342, 380, 420, 462, 506, 552, 600, 650, 702, 756, 812, 870, 930, 992, 1056, 1122, 1190, 1260, 1332, 1406, 1482, 1560, 1640, 1722, 1806, 1892, 1980, 2070, 2162, 2256, 2352, 2450, 2550, 2652),
+         'minLevel': 8,
+        'maxLevel': 50,
+        'hp': 'normal', 
         'def': (56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56, 56),
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
@@ -5739,84 +6350,10 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
                             20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
                             20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))},
- 'jls': {'name': 'Journalist',
-         'singularname': 'a Journalist',
-         'pluralname': 'Journalists',
-         'level': 14,
-         'hp':(272, 306, 342, 380, 420, 462),
-         'def':(50, 50, 50, 50, 50, 50),
-         'freq':(100, 100, 100, 100, 100, 100),
-         'acc':(75, 75, 75, 75, 75, 75),
-         'attacks':
-             (SuitAttack('Bash',
-                         hp=(30, 31, 32, 33, 34, 35),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('VoodooMagic',
-                         hp=(30, 31, 32, 33, 34, 35),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(0, 0, 0, 0, 0, 0)),
-              SuitAttack('BounceRate',
-                         hp=(25, 26, 27, 28, 29, 30),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('Inject',
-                         hp=(31, 31, 31, 31, 31, 31),
-                         acc=(100, 100, 100, 100, 100, 100),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('Encrypt',
-                         hp=(28, 30, 32, 34, 36, 38),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(10, 10, 10, 10, 10, 10)),
-              SuitAttack('ElectrostaticEnergy',
-                         hp=(25, 26, 27, 28, 29, 30),
-                         acc=(100, 100, 100, 100, 100, 100),
-                         freq=(20, 20, 20, 20, 20, 20)),
-              SuitAttack('DataCorruption',
-                         hp=(31, 32, 33, 34, 35, 36),
-                         acc=(75, 75, 75, 75, 75, 75),
-                         freq=(10, 10, 10, 10, 10, 10)))},
- 'pbl': {'name': 'Publisher',
-         'singularname': 'a Publisher',
-         'pluralname': 'Publishers',
-         'level': 15,
-         'hp':(850,),
-         'def':(60,),
-         'freq':(100,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('Bash',
-                         hp=(26,),
-                         acc=(100,),
-                         freq=(10,)),
-              SuitAttack('WorkersCompensation',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)),
-              SuitAttack('Breakthrough',
-                         hp=(26,),
-                         acc=(100,),
-                         freq=(25,)),
-              SuitAttack('Encrypt',
-                         hp=(30,),
-                         acc=(100,),
-                         freq=(15,)),
-              SuitAttack('Inject',
-                         hp=(24,),
-                         acc=(100,),
-                         freq=(25,)),
-              SuitAttack('CloudStorage',
-                         hp=(24,),
-                         acc=(100,),
-                         freq=(25,)),
-              SuitAttack('DenialOfService',
-                         hp=(1,),
-                         acc=(100,),
-                         freq=(0,)))},
  'director':  {'name': 'Director',
                'singularname': 'a Director',
                'pluralname': 'Directors',
-               'level': 16,
+               'level': 29,
                'hp':(4444,),
                'def':(60,),
                'freq':(0,),
@@ -5830,7 +6367,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            hp=(32,),
                            acc=(80,),
                            freq=(20,)),
-                SuitAttack('CigarSmoke',
+                SuitAttack('SmokeAndMirrors',
                            hp=(34,),
                            acc=(85,),
                            freq=(20,)),
@@ -5842,197 +6379,144 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            hp=(31,),
                            acc=(95,),
                            freq=(20,)))},
- 'bcaster': {'name': 'Videographer Silhouette',
-             'singularname': 'a Videographer Silhouette',
-             'pluralname': 'Videographer Silhouettes',
-             'level': 17,
-             'hp':(3333,),
-             'def':(60,),
-             'freq':(0,),
-             'acc':(50,),
-             'attacks':
-                 (SuitAttack('HighRollerNoAttack',
-                             hp=(0,),
-                             acc=(100,),
-                             freq=(0,)),
-                  SuitAttack('HighRollerNoAttack',
-                             hp=(0,),
-                             acc=(100,),
-                             freq=(100,)))},
- 'std2': {'name': 'Stunt Double',
-         'singularname': 'a Stunt Double',
-         'pluralname': 'Stunt Doubles',
-         'level': 18,
-         'hp':(666,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('RazzleDazzle',
-                         hp=(34,),
-                         acc=(80,),
-                         freq=(40,)),
-              SuitAttack('PowerTrip',
-                         hp=(23,),
-                         acc=(95,),
-                         freq=(15,)),
-              SuitAttack('Golf',
-                         hp=(24,),
-                         acc=(90,),
-                         freq=(15,)),
-              SuitAttack('ParadigmShift',
-                         hp=(29,),
-                         acc=(90,),
-                         freq=(30,)))},
- 'videog': {'name': 'Videographer',
-            'singularname': 'a Videographer',
-            'pluralname': 'Videographers',
-            'level': 19,
-            'hp':(12222,),
-            'def':(60,),
-            'freq':(0,),
-            'acc':(75,),
-            'attacks':
-                (SuitAttack('Schmooze',
-                            hp=(32,),
-                            acc=(85,),
-                            freq=(20,)),
-                 SuitAttack('RazzleDazzle',
-                            hp=(34,),
-                            acc=(85,),
-                            freq=(15,),
-                         groupStatus=ATK_TGT_DOUBLE),
-                 SuitAttack('FingerWag',
-                            hp=(28,),
-                            acc=(90,),
-                            freq=(15,)),
-                 SuitAttack('CigarSmoke',
-                            hp=(32,),
-                            acc=(90,),
-                            freq=(15,)),
-                 SuitAttack('SongAndDance',
-                            hp=(28,),
-                            acc=(85,),
-                            freq=(15,)),
-                 SuitAttack('Beguile',
-                            hp=(30,),
-                            acc=(95,),
-                            freq=(20,)))},
- 'prt': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'pla': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-         'pluralname': 'Skelecogs',
-         'level': 20,
-         'hp':(100,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(50,),
-         'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'plk':  {'name': 'Skelecog',
-          'singularname': 'a Skelecog',
-          'pluralname': 'Skelecogs',
-          'level': 20,
-          'hp':(100,),
-          'def':(60,),
-          'freq':(0,),
-          'acc':(50,),
-          'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'plh': {'name': 'C.E.O.',
-         'singularname': 'a C.E.O.',
-         'pluralname': 'C.E.O.s',
-         'level': 23,
-         'hp':(300,),
-         'def':(60,),
-         'freq':(0,),
-         'acc':(75,),
-         'attacks':
-             (SuitAttack('Accusations',
-                         hp=(20,),
-                         acc=(100,),
-                         freq=(50,)),
-              SuitAttack('Accusations',
-                         hp=(20,),
-                         acc=(100,),
-                         freq=(50,)))},
- 'plg': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-		 'pluralname': 'Skelecogs',
-		 'level': 20,
-		 'hp':(100,),
-		 'def':(60,),
-		 'freq':(0,),
-		 'acc':(50,),
-		 'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'plf': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-		 'pluralname': 'Skelecogs',
-		 'level': 20,
-		 'hp':(100,),
-		 'def':(60,),
-		 'freq':(0,),
-		 'acc':(50,),
-		 'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'pld': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-		 'pluralname': 'Skelecogs',
-		 'level': 20,
-		 'hp':(100,),
-		 'def':(60,),
-		 'freq':(0,),
-		 'acc':(50,),
-		 'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)},
- 'pls': {'name': 'Skelecog',
-         'singularname': 'a Skelecog',
-		 'pluralname': 'Skelecogs',
-		 'level': 20,
-		 'hp':(100,),
-		 'def':(60,),
-		 'freq':(0,),
-		 'acc':(50,),
-		 'attacks':
-             (SuitAttack('FallingKnife',
-                         hp=(7,),
-                         acc=(85,),
-                         freq=(100,),
-                         groupStatus=ATK_TGT_DOUBLE),)}}
+# DUMMY BOSSES
+ 'ceo':  {'name': 'Chief Executive Officer',
+               'singularname': 'a Chief Executive Officer',
+               'pluralname': 'Chief Executive Officer',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+ 'cj':  {'name': 'Chief Justice',
+               'singularname': 'a Chief Justice',
+               'pluralname': 'Chief Justices',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+ 'clo':  {'name': 'Chief Legal Officer',
+               'singularname': 'a Chief Legal Officer',
+               'pluralname': 'Chief Legal Officers',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+ 'cfo':  {'name': 'Chief Financial Officer',
+               'singularname': 'a Chief Financial Officer',
+               'pluralname': 'Chief Financial Officers',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+ 'vp':  {'name': 'Senior Vice President',
+               'singularname': 'a Senior Vice President',
+               'pluralname': 'Senior Vice Presidents',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+'cio':  {'name': 'Chief Informational Officer',
+               'singularname': 'a Chief Informational Officer',
+               'pluralname': 'Chief Informatioal Officers',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+'hocn':  {'name': 'Head Of C.O.G.S. News',
+               'singularname': 'a Head Of C.O.G.S. News',
+               'pluralname': 'Head Of C.O.G.S. News',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+'chairman2':  {'name': 'Chairman Of The Board',
+               'singularname': 'a Chairman Of The Board',
+               'pluralname': 'Chairmen Of The Board',
+               'level': 99,
+               'hp':(1,),
+               'def':(60,),
+               'freq':(0,),
+               'acc':(50,),
+              'attacks':
+               (SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)),
+                SuitAttack('HighRollerNoAttack',
+                           hp=(0,),
+                           acc=(100,),
+                           freq=(50,)))},
+}
 SuitAttacks = {
  'AcidRain': ('magic1', ATK_TGT_SINGLE),
  'Aftershock': ('quick-jump', ATK_TGT_GROUP),
@@ -6053,6 +6537,7 @@ SuitAttacks = {
  'CloseTheLoop': ('phone', ATK_TGT_GROUP),
  'CloudStorage': ('speak', ATK_TGT_SINGLE),
  'CigarSmoke': ('cigar-smoke', ATK_TGT_SINGLE),
+ 'SmokeAndMirrors': ('headhoncho-cigar-smoke', ATK_TGT_SINGLE),
  'Crunch': ('throw-object', ATK_TGT_SINGLE),
  'DataBreach': ('magic1', ATK_TGT_GROUP),
  'DataCorruption': ('magic1', ATK_TGT_GROUP),
@@ -6362,7 +6847,7 @@ SuitAttacks = {
  'HighRollerTrickOfTheLight': ('nothing', ATK_TGT_SINGLE),
  'HighRollerAceInTheHole': ('nothing', ATK_TGT_GROUP),
  'HighRollerVulnerable': ('nothing', ATK_TGT_SINGLE),
- 'HighRollerRaisingTheAnte': ('magic3', ATK_TGT_GROUP),
+ 'HighRollerRaisingTheAnte': ('song-and-dance', ATK_TGT_GROUP),
     # High Roller Silhouette Cheats
  'HighRollerDonation': ('shot5', ATK_TGT_SINGLE),
  'HighRollerSyphon': ('sanction', ATK_TGT_GROUP),

@@ -1,0 +1,62 @@
+[
+    {
+        "name": "camera move",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [180.0, 12, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0, 0, 0], \"useStartHpr\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.48727, \"delay\": 0.0, \"pos\": [0.0, 6.82646, 3.34059], \"blendType\": \"easeOut\", \"startPos\": [0.0, 6.82646, 5.0835], \"useStartPos\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 1.5062, \"delay\": 0.17714, \"pos\": [0.0, 6.82646, 4.21205], \"blendType\": \"noBlend\", \"startPos\": [0.0, 6.82646, 3.34059], \"useStartPos\": 0}"
+            }
+        }
+    },
+    {
+        "name": "suit - do anim",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"transformation\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 0.81967, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "camera setup",
+        "time": 2.196,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 12.63618, 7.11691], \"blendType\": \"easeInOut\", \"startPos\": [0.0, 8.71462, 4.21205], \"useStartPos\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [180.0, -13.07178, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "node spin",
+        "time": 2.196,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 3.8096, \"hpr\": [-29.99999, 0.0, 0.0], \"startHpr\": [30.00001, 0.0, 0.0], \"useStartHpr\": true, \"blendType\": \"noBlend\"}"
+            }
+        }
+    }
+]

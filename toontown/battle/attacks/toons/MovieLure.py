@@ -44,76 +44,35 @@ def doLures(lures):
 def showLureRounds(suit, battle, level):
     trapProp = suit.battleTrapProp
     currentBossHealth = -1
-    if suit.isAngry and suit.isDesperation and suit.dna.name == 'sgoat':
-        suit.showHpString("IMMUNE")
-    elif suit.isImmune:
-        suit.showHpString("IMMUNE")
-    elif suit.dna.name == 'hroller2' and not trapProp:
+    if suit.dna.name in ['hroller2', 'videog', 'bcaster', 'hroller', 'fires', 'fbed', 'mouthp', 'rainmake', 
+                         'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep', 'director'] and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'videog' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'bcaster' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'hroller' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'fires' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'fbed' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'mouthp' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'rainmake' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'whunter' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'wsi' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'redd' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'duckshfl' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'treek' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'bellring' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'ddiver' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.dna.name == 'gatekeep' and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.isDesperation and not trapProp:
+    elif suit.hasSuitStatusEffect('desperation') and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.isAngry and not trapProp and not suit.dna.name == 'cbutcher' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'liquid':
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.isBookkeeping and not trapProp:
+    elif suit.hasSuitStatusEffect('closedSession') and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.getManager() and not trapProp:
         suit.showHpStringGreen("LURED 2 ROUNDS")
-        suit.addLuredRounds(1)
-    elif suit.isLureResist and not trapProp:
+    elif suit.getGovernaught() and not trapProp:
         suit.showHpStringGreen("LURED 2 ROUNDS")
-        suit.addLuredRounds(1)
-    elif suit.isContracted and not trapProp:
+    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
         suit.showHpStringGreen("LURED 2 ROUNDS")
-        suit.addLuredRounds(1)
-    elif suit.isInsured and not trapProp:
+    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
         suit.showHpStringGreen("LURED 2 ROUNDS")
-        suit.addLuredRounds(1)
     elif suit.isSkeleton and suit.currHP > (suit.maxHP * 1.5) and not trapProp:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
         suit.showHpStringGreen("LURED 2 ROUNDS")
-        suit.addLuredRounds(1)
     elif trapProp:
         suit.showHpStringRed("TRAPPED")
     elif suit.isVirtual:
         suit.showHpStringGreen("LURED %i ROUNDS" % (ToontownBattleGlobals.AvLureRounds[level] - 1))
-        suit.addLuredRounds(ToontownBattleGlobals.AvLureRounds[level] - 2)
     elif suit.isSkeleton:
         suit.showHpStringGreen("LURED %i ROUNDS" % (ToontownBattleGlobals.AvLureRounds[level]))
-        suit.addLuredRounds(ToontownBattleGlobals.AvLureRounds[level] - 1)
     else:
         suit.showHpStringGreen("LURED %i ROUNDS" % (ToontownBattleGlobals.AvLureRounds[level] + 1))
-        suit.addLuredRounds(ToontownBattleGlobals.AvLureRounds[level])
 
 
 def __doLureLevel(lure, npcs):
@@ -153,7 +112,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
     targets = lure['target']
     battle = lure['battle']
     sidestep = lure['sidestep']
-    reachAnimDuration = 3.75
+    reachAnimDuration = 85/24
     pole = globalPropPool.getProp('fishing-pole')
     pole2 = MovieUtil.copyProp(pole)
     poles = [pole, pole2]
@@ -178,27 +137,57 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
         if sidestep == 0:
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
-                makeUnLured = Func(suit.makeUnLured)
+                makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    makeLured = Func(suit.makeLured, 2)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    makeLured = Func(suit.makeLured, 1)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
-                    suitTrack.append(Func(suit.makeUnTrapped))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
                 else:
                     suitTrack.append(Func(suit.setNeutralAnimation))
-                    suitTrack.append(Func(suit.makeUnTrapped))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
                 suitTrack.append(Wait(3.5))
                 suitName = suit.getStyleName()
-                retardPos, retardHpr = battle.getActorPosHpr(suit)
-                retardPos.setY(retardPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
+                suitPos, suitHpr = battle.getActorPosHpr(suit)
+                suitPos.setY(suitPos.getY() + MovieUtil.SUIT_EXTRA_REACH_DISTANCE)
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
-                moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.5, retardPos, battle, trapProp)
+                moveTrack = lerpSuit(suit, 0.0, reachAnimDuration / 2.15, suitPos, battle, trapProp, blendType='easeInOut')
                 reachTrack = ActorInterval(suit, 'reach')
                 suitTrack.append(Parallel(moveTrack, reachTrack))
                 if trapProp:
@@ -207,38 +196,22 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 if trapProp:
                     suitTrack.append(Func(trapProp.wrtReparentTo, suit))
                     suit.battleTrapProp = trapProp
-                if trapProp:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'hroller2':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hrollers':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hroller':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                suitTrack.append(Func(suit.setDizzy, 1))
+                suitTrack.append(Func(suit.loopSyncedLuredAnimations))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 suitTrack.append(makeLured)
-                if suit.lureRushJob:
-                    suitTrack.append(Func(suit.makeUnLureRushJob))
+                if suit.getSuitStatusModifier('rushJob') == 2:
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
                 if hp > 0:
                     for headPart in suit.animatedHeadParts:
                         suitTrack.append(Func(headPart.loop, 'stun'))
                     suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                     suitTrack.append(makeUnLured)
                     suitTrack.append(Func(suit.setDizzy, 0))
-                    suitTrack.append(Func(suit.makeDazed))
-                    suitTrack.append(Func(suit.makeUnTrapped))
-                    if suit.isSued:
-                        suitTrack.append(Func(suit.makeSued, 3))
+                    suitTrack.append(Func(suit.setSuitStatusEffect, 'dazed', modifier=1, turns=2))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
+                    if suit.hasSuitStatusEffect('sued'):
+                        suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
         else:
             if not suit.isLured:
@@ -264,7 +237,6 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
     tracks.append(magnetTrack)
     for target in targets:
         suit = target['suit']
-        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -272,13 +244,44 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
             died = target['died']
             revived = target['revived']
             if kbbonus == 1 or hp > 0:
+                suitTrack = Sequence()
                 suitDelay = 2.6
                 suitMoveDuration = 0.8
-                suitTrack = Sequence()
+                makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    makeLured = Func(suit.makeLured, 2)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    makeLured = Func(suit.makeLured, 1)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
@@ -286,7 +289,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:
@@ -301,38 +304,22 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
 
                 suitTrack.append(ActorInterval(suit, 'magnet', startTime=1.16, endTime=0.7))
                 suitTrack.append(ActorInterval(suit, 'magnet', startTime=0.7, duration=1.3))
-                if trapProp:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'hroller2':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hrollers':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hroller':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                suitTrack.append(Func(suit.setDizzy, 1))
+                suitTrack.append(Func(suit.loopSyncedLuredAnimations))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 suitTrack.append(makeLured)
-                if suit.lureRushJob:
-                    suitTrack.append(Func(suit.makeUnLureRushJob))
+                if suit.getSuitStatusModifier('rushJob') == 2:
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
                 if hp > 0:
                     for headPart in suit.animatedHeadParts:
                         suitTrack.append(Func(headPart.loop, 'stun'))
                     suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                     suitTrack.append(makeUnLured)
                     suitTrack.append(Func(suit.setDizzy, 0))
-                    suitTrack.append(Func(suit.makeDazed))
-                    suitTrack.append(Func(suit.makeUnTrapped))
-                    if suit.isSued:
-                        suitTrack.append(Func(suit.makeSued, 3))
+                    suitTrack.append(Func(suit.setSuitStatusEffect, 'dazed', modifier=1, turns=2))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
+                    if suit.hasSuitStatusEffect('sued'):
+                        suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
         else:
@@ -365,7 +352,6 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
     tracks = Parallel(gogglesTrack, toonTrack)
     for target in targets:
         suit = target['suit']
-        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -374,17 +360,48 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
             revived = target['revived']
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
+                makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    makeLured = Func(suit.makeLured, 2)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    makeLured = Func(suit.makeLured, 1)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 suitDelay = 1.6
                 suitAnimDuration = 1.5
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:
@@ -394,38 +411,22 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'hypnotized'))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
-                if trapProp:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'hroller2':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hrollers':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hroller':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                suitTrack.append(Func(suit.setDizzy, 1))
+                suitTrack.append(Func(suit.loopSyncedLuredAnimations))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 suitTrack.append(makeLured)
-                if suit.lureRushJob:
-                    suitTrack.append(Func(suit.makeUnLureRushJob))
+                if suit.getSuitStatusModifier('rushJob') == 2:
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
                 if hp > 0:
                     for headPart in suit.animatedHeadParts:
                         suitTrack.append(Func(headPart.loop, 'stun'))
                     suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                     suitTrack.append(makeUnLured)
                     suitTrack.append(Func(suit.setDizzy, 0))
-                    suitTrack.append(Func(suit.makeDazed))
-                    suitTrack.append(Func(suit.makeUnTrapped))
-                    if suit.isSued:
-                        suitTrack.append(Func(suit.makeSued, 3))
+                    suitTrack.append(Func(suit.setSuitStatusEffect, 'dazed', modifier=1, turns=2))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
+                    if suit.hasSuitStatusEffect('sued'):
+                        suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:
@@ -647,7 +648,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -687,7 +688,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(1.1))
         soundTrack = Sequence(Wait(1.25),
                               SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -721,7 +722,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'lured', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -764,7 +765,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setY(sinkPos.getY() + 12.5)
         dropPos.setZ(dropPos.getZ() + 40)
         #landPos.setY(dropPos.getY() + 4)
-        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -833,7 +834,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-        if died and not suit.isVirtual and not suit.isOverpressured and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -901,9 +902,9 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suitGone and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suitGone and not suit.hasSuitStatusEffect('overpressured'):
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             result.append(Func(suit.setNeutralAnimationTrap))
@@ -978,12 +979,12 @@ def getSplicedLerpAnimsTrack(object, animName, origDuration, newDuration, startT
     return track
 
 
-def lerpSuit(suit, delay, duration, reachPos, battle, trapProp):
+def lerpSuit(suit, delay, duration, reachPos, battle, trapProp, blendType='noBlend'):
     track = Sequence()
     if trapProp:
         track.append(Func(safeWrtReparentTo, trapProp, battle))
     track.append(Wait(delay))
-    track.append(LerpPosInterval(suit, duration, reachPos, other=battle))
+    track.append(LerpPosInterval(suit, duration, reachPos, other=battle, blendType=blendType))
     if trapProp:
         track.append(Func(safeWrtReparentTo, trapProp, suit))
         suit.battleTrapProp = trapProp
@@ -1139,7 +1140,6 @@ def __createSlideshowMultiTrack(lure, npcs = []):
     targets = lure['target']
     for target in targets:
         suit = target['suit']
-        makeUnLured = Func(suit.makeUnLured)
         trapProp = suit.battleTrapProp
         if sidestep == 0:
             hp = target['hp']
@@ -1148,17 +1148,48 @@ def __createSlideshowMultiTrack(lure, npcs = []):
             revived = target['revived']
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
+                makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    makeLured = Func(suit.makeLured, 2)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    makeLured = Func(suit.makeLured, 1)
+                    if suit.getManager() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.getGovernaught() and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
+                    elif suit.isVirtual:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] - 1)
+                    elif suit.isSkeleton:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']])
+                    else:
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 suitDelay = 3.8
                 suitAnimDuration = 1.5
                 opos, ohpr = battle.getActorPosHpr(suit)
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:
@@ -1168,38 +1199,22 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'hypnotized'))
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
-                if trapProp:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                else:
-                    suitTrack.append(Func(suit.setPlayRate, 1 + (suit.battleSpeed * .1), 'lured2'))
-                    suitTrack.append(Func(suit.loop, 'lured2'))
-                if suit.style.name == 'hroller2':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hrollers':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                elif suit.style.name == 'hroller':
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22))
-                else:
-                    for headPart in suit.animatedHeadParts:
-                        suitTrack.append(Func(headPart.loop, 'neutral-lured'))
+                suitTrack.append(Func(suit.setDizzy, 1))
+                suitTrack.append(Func(suit.loopSyncedLuredAnimations))
                 suitTrack.append(Func(battle.lureSuit, suit))
                 suitTrack.append(makeLured)
+                if suit.getSuitStatusModifier('rushJob') == 2:
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
                 if hp > 0:
                     for headPart in suit.animatedHeadParts:
                         suitTrack.append(Func(headPart.loop, 'stun'))
                     suitTrack.append(__createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived, died))
                     suitTrack.append(makeUnLured)
                     suitTrack.append(Func(suit.setDizzy, 0))
-                    suitTrack.append(Func(suit.makeDazed))
-                    suitTrack.append(Func(suit.makeUnTrapped))
-                    if suit.isSued:
-                        suitTrack.append(Func(suit.makeSued, 3))
-                    if suit.lureRushJob:
-                        suitTrack.append(Func(suit.makeUnLureRushJob))
+                    suitTrack.append(Func(suit.setSuitStatusEffect, 'dazed', modifier=1, turns=2))
+                    suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
+                    if suit.hasSuitStatusEffect('sued'):
+                        suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
                 tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
         else:

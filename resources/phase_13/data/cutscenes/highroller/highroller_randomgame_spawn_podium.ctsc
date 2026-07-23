@@ -1,0 +1,186 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-6.92974, -39.43315, 12.98181], \"hpr\": [0.0, -8.39044, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.64266, \"delay\": 0.0, \"end\": 29.79456, \"blendType\": \"easeOut\", \"start\": 59.67864, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #2",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            }
+        }
+    },
+    {
+        "name": "suit 1",
+        "time": 0.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 5, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [0.0, 7.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"mob-mentality\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 0, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 2",
+        "time": 0.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 4, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0.0, 7.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 1, \"fromAnim\": \"small-zap\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 1, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 3",
+        "time": 0.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 3, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [0.0, 7.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 2, \"fromAnim\": \"reach\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.73907, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 2, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 4",
+        "time": 1.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 3}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 2, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [0.0, 7.0, 0.0], \"hpr\": [-174.21592, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 3, \"fromAnim\": \"pie-small-react\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 3, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "Podium Divorce",
+        "time": 2.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Amazing TV Objective",
+        "time": 2.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.0643}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 13, \"delay\": 0, \"pos\": [-0.27115, 17.66841, 14.22114], \"hpr\": [0.0, 0.0, 5.99999], \"scale\": [1.0, 0.5, 0.5]}"
+            },
+            "2": {
+                "eventDefEnum": "highRollerDropTelevisionSet",
+                "kwargs": "{\"doSpawn\": true, \"doDespawn\": false, \"dropDuration\": 0, \"holdDuration\": 0, \"backDuration\": 0, \"spawnDistance\": 60.0, \"despawnDistance\": 6.03486, \"overrideString\": 0, \"useOverrideString\": true, \"showGraphic\": false, \"hideAnyways\": true}"
+            },
+            "3": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 13}"
+            }
+        }
+    }
+]

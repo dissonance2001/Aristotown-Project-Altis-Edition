@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Begin The Rain",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 3.0, \"delay\": 0.0, \"parentIndex\": 3, \"renderParentIndex\": 3}"
+            },
+            "1": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 1, \"duration\": 2.6, \"delay\": 0.6, \"parentIndex\": 3, \"renderParentIndex\": 3}"
+            },
+            "2": {
+                "eventDefEnum": "moveParticleSystemPos",
+                "kwargs": "{\"particleIndex\": 1, \"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 0.0, 0.2], \"blendType\": \"easeInOut\", \"useStartPos\": false, \"startPos\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 4,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    }
+]

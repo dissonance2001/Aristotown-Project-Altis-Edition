@@ -153,8 +153,8 @@ def doEffect(textId, speakingToon, nearbyToons):
     if menuIndex == RESISTANCE_TOONUP:
         effect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
         fadeColor = VBase4(1, 0.5, 1, 1)
-        speakingToon.makeCooldown()
-        speakingToon.addCooldownRounds(4)
+        speakingToon.setToonStatusEffect('cooldown', turns=4)
+        #speakingToon.addCooldownRounds(4)
     elif menuIndex == RESISTANCE_MONEY:
         effect = BattleParticles.loadParticleFile('resistanceEffectBean.ptf')
         bean = loader.loadModel('phase_4/models/props/jellybean4.bam')

@@ -1,0 +1,232 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 5, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [0, 0, 0], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 5, \"wrt\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 16.1381, 5.87948], \"hpr\": [180.0, 0.0, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Zoom In",
+        "time": 2.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.0288, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dive Anim",
+        "time": 2.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"dive\", \"loop\": false, \"hasDuration\": false, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"dive\", \"loop\": false, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Pan with Dive",
+        "time": 3.484,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.93803, \"delay\": 0.0, \"pos\": [-11.86151, 16.2, 6.48464], \"hpr\": [-126.0, -9.80443, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [-8.35148, 16.3211, 1.03803], \"startHpr\": [-145.70802, 23.17581, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Splash",
+        "time": 3.778,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "particleSystemRun",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 0.3, \"delay\": 0, \"parentIndex\": 5, \"renderParentIndex\": 0, \"leaveItGoingForever\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveParticleSystemPos",
+                "kwargs": "{\"particleIndex\": 0, \"duration\": 0, \"pos\": [0.0, 7.4, 0.0], \"delay\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.45389, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            },
+            "4": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [0.0, 7.4, -0.4], \"hpr\": [0, 0, 0], \"scale\": [3.0, 3.0, 4.0]}"
+            }
+        }
+    },
+    {
+        "name": "Toons React to Splash",
+        "time": 3.778,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"conked\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Splash SFX",
+        "time": 3.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 6, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 0.8, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Cut to Emerge",
+        "time": 5.135962400000011,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.84726, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.1801, \"delay\": 0.0, \"pos\": [0.0, 7.7, 3.02592], \"hpr\": [180.0, -11.98249, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 7.7, 3.02592], \"startHpr\": [180.0, -3.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Emerge Head",
+        "time": 5.803016899999989,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 7}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"emergeHead\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"emergeHead\", \"loop\": false, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 0.5, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [0.0, 0.0, 0.43], \"useStartPos\": true, \"startPos\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Look Left",
+        "time": 6.79,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.60517, \"delay\": 0.0, \"hpr\": [189.99999, -11.98249, -0.0], \"blendType\": \"easeInOut\", \"startHpr\": [180.0, -11.98249, 0.0], \"useStartHpr\": true}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Look Right",
+        "time": 7.44425,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.45, \"delay\": 0.0, \"hpr\": [170.0, -11.98249, -0.0], \"blendType\": \"easeInOut\", \"startHpr\": [189.99998, -11.98249, -0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Zoom Out",
+        "time": 7.95,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.51296, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Lower Head",
+        "time": 7.98575,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.36311, \"delay\": 0.0, \"hpr\": [180.0, -11.98249, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [170.0, -11.98249, 0.0], \"useStartHpr\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 1.21036, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [0, 0, 0.1], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Cleanup",
+        "time": 9.5,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 3, \"wrt\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 2, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

@@ -1,0 +1,199 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [8.29999, -127.7, 42.00001], \"hpr\": [-62.09154, 0.0, 0.0], \"scale\": [0.6, 0.6, 0.6]}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [4.669, -122.25335, 42.00001], \"hpr\": [-70.26139, 0.0, 0.0], \"scale\": [0.6, 0.6, 0.6]}"
+            },
+            "6": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "7": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [4.669, -122.253, 42.00001], \"hpr\": [-70.26139, 0.0, 0.0], \"scale\": [0.6, 0.6, 0.6]}"
+            },
+            "8": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 0, \"wrt\": 0, \"disable\": false}"
+            },
+            "9": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [8.29999, -127.7, 42.00001], \"hpr\": [-70.26148, 0.0, 0.0], \"scale\": [0.6, 0.6, 0.6]}"
+            },
+            "10": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 0, \"locked\": true}"
+            },
+            "11": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 1, \"locked\": true}"
+            },
+            "12": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 2, \"locked\": true}"
+            },
+            "13": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 3, \"locked\": true}"
+            }
+        }
+    },
+	{
+        "name": "camera",
+        "time": 0.01,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"pos\": [-20.0, -9.8631, 6.71751], \"hpr\": [-151.71895, 16.33982, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-15.63772, 4.47968, 4.53886], \"startHpr\": [-119.03925, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "cog walk 1",
+        "time": 0.4582500000000003,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [18.31313, -119.99754, 42.0], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.4}"
+            },
+            "4": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"speed\": 1.75, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "cog walk 3",
+        "time": 0.4582500000000003,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [16.49759, -118.18202, 42.00001], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.4}"
+            },
+            "4": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"speed\": 1.75, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "cog walk 2",
+        "time": 0.9582500000000003,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [12.86664, -119.9976, 42.00001], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.4}"
+            },
+            "4": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"speed\": 1.75, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "cog walk 4",
+        "time": 0.9582500000000003,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [14.64581, -122.19437, 42.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "3": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.4}"
+            },
+            "4": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 3, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"speed\": 1.75, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "cleanup",
+        "time": 9.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.1}"
+            }
+        }
+    }
+]

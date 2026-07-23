@@ -1,0 +1,720 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.88897, 22.3457, 6.24162], \"hpr\": [-178.684, -0.25433, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 0}"
+            },
+            "5": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 5, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "7": {
+                "eventDefEnum": "animateAllSuits",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [1] [CS]",
+        "time": 0.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 5.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.2], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Walk to Center",
+        "time": 0.651,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, 5.3, 0.0], \"duration\": 1.0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [0.0, 5.3, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, 10.0, 0.0], \"duration\": 1.0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Suit 1 Moves Back",
+        "time": 1.687,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 3, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Camera Adjusts",
+        "time": 5.187,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "posRelativeToOther",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.0, \"otherNodeIndex\": 0, \"pos\": [0.0, 5.3, 0.0], \"startPos\": [0.0, 5.3, 0.0], \"useStartPos\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "posRelativeToOther",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.0, \"otherNodeIndex\": 5, \"pos\": [0.0, -5.3, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.5, \"delay\": 0.0, \"end\": 80.0, \"blendType\": \"easeIn\", \"start\": 50.0, \"useStart\": true}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 80.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Leap Cam",
+        "time": 5.187,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": true, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Leap Head Anim",
+        "time": 5.187,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"leap\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitHeadAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"laying\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Leap Body Anim",
+        "time": 5.187,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"leap\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"laying\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Leap Sfx",
+        "time": 5.187,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 2, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #42",
+        "time": 6.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playMusic",
+                "kwargs": "{\"musicIndex\": 0, \"loop\": false, \"volume\": 1.0, \"startTime\": 0.0}"
+            }
+        }
+    },
+    {
+        "name": "Toons Dodge",
+        "time": 7.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"sidestep-right\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cam: More Zooms",
+        "time": 9.794,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.2, \"delay\": 0.0, \"end\": 20.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 4, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"end\": 40.0, \"blendType\": \"easeOut\", \"start\": 20.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Slow Zoom In",
+        "time": 13.612,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.5, \"delay\": 0.0, \"end\": 30.0, \"blendType\": \"easeInOut\", \"start\": 40.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cam: To Door",
+        "time": 17.263060599999996,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.94352, 14.02993, 6.45862], \"hpr\": [-119.28115, -5.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [1.13578, 21.44502, 15.71788], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 40.0, \"blendType\": \"easeInOut\", \"start\": 30.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Position Yesman",
+        "time": 17.263060599999996,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            },
+            "1": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 7}"
+            },
+            "2": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.0, \"hpr\": [90.0, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 2.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [14.0, 4.8, 0.0], \"useStartPos\": true, \"startPos\": [30.0, 4.8, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Door SFX",
+        "time": 17.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 8, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 0.7, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Door Opens",
+        "time": 17.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.6, \"hpr\": [-110.00001, 0.0, 0.0], \"startHpr\": [-70.08475, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"duration\": 0.6, \"hpr\": [110.00001, 0.0, 0.0], \"startHpr\": [70.08475, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [2] [YM]",
+        "time": 18.704055,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Door Closes",
+        "time": 19.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.6, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-38.53929, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"duration\": 0.6, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [38.53927, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Door Close SFX",
+        "time": 19.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": true, \"nodeIndex\": 8, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 0.7, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cam: To Body",
+        "time": 20.477438499999998,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"pos\": [-1.45764, 12.87738, 3.2891], \"hpr\": [-122.74723, -0.00014, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.94352, 14.02993, 6.45862], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Yesman looks at Body",
+        "time": 21.7,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0.4, \"hpr\": [0.0, -29.99999, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Yesman steps back",
+        "time": 22.053,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": false, \"startTime\": 0, \"hasEndTime\": false, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 0.4, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"xyz\": [15.5, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [3] [YM]",
+        "time": 22.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 2.25, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cut to Battle",
+        "time": 26.069329299999936,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [9.60462, -13.15117, 8.18747], \"hpr\": [45.81423, -10.37278, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-1.45764, 12.87738, 3.2891], \"startHpr\": [0, 0, 0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 55.0, \"blendType\": \"easeInOut\", \"start\": 40.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Yesman Looks Up",
+        "time": 26.305,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0.3, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [4-6] [YM]",
+        "time": 26.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.25, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.75, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.25, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.25, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Yesman Turns to Toons",
+        "time": 26.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 1, \"point\": [0.0, 17.0, 0.0], \"duration\": 0.6, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Toons turn to Yesman",
+        "time": 27.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 6, \"duration\": 1.0, \"blendType\": \"easeIn\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Door SFX",
+        "time": 37.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 8, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 0.7, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Door Opens",
+        "time": 37.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.6, \"hpr\": [-110.00001, 0.0, 0.0], \"startHpr\": [-70.08475, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"duration\": 0.6, \"hpr\": [110.00001, 0.0, 0.0], \"startHpr\": [70.08475, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [7] [YM]",
+        "time": 38.551,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": true, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Suits Turn to Door",
+        "time": 39.045,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 1, \"point\": [20.0, 4.8, 0.0], \"duration\": 1.0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 2, \"point\": [15.5, 4.8, 0.0], \"duration\": 0.7, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 3, \"point\": [15.5, 4.8, 0.0], \"duration\": 0.7, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 4, \"point\": [15.5, 4.8, 0.0], \"duration\": 0.7, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 5, \"point\": [15.5, 4.8, 0.0], \"duration\": 0.7, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 6, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Yesman Walks Out",
+        "time": 40.94890349999997,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 5.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [50.0, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Suit 4 walks out",
+        "time": 41.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 5, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 5, \"duration\": 1.3, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [15.5, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 5, \"point\": [50.0, 4.8, 0.0], \"duration\": 0.3, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 5, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 5, \"duration\": 5.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [50.0, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            },
+            "5": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 5}"
+            }
+        }
+    },
+    {
+        "name": "Suit 3 walks out",
+        "time": 41.7,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 4, \"duration\": 1.7, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [15.5, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 4, \"point\": [50.0, 4.8, 0.0], \"duration\": 0.3, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 4, \"duration\": 5.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [50.0, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0, 0, 0]}"
+            },
+            "5": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 4}"
+            }
+        }
+    },
+    {
+        "name": "Suit 2 walks out",
+        "time": 42.3,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 2.1, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [15.5, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 3, \"point\": [50.0, 4.8, 0.0], \"duration\": 0.3, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 3, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 3.75, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [41.25, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 3}"
+            }
+        }
+    },
+    {
+        "name": "Suit 1 walks out",
+        "time": 42.9,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 2.5, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [15.5, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 2, \"point\": [50.0, 4.8, 0.0], \"duration\": 0.3, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 3.75, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [41.25, 4.8, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            }
+        }
+    },
+    {
+        "name": "Door Closes",
+        "time": 47.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.6, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-38.53929, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"duration\": 0.6, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [38.53927, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Door Close SFX",
+        "time": 47.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": true, \"nodeIndex\": 8, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 0.7, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Toons turn to Body",
+        "time": 47.55,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 5, \"duration\": 1.0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Cleanup",
+        "time": 49.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "stopMusic",
+                "kwargs": "{\"musicIndex\": 0}"
+            }
+        }
+    }
+]

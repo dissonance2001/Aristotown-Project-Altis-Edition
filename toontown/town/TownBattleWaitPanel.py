@@ -20,9 +20,9 @@ class TownBattleWaitPanel(StateData.StateData):
         self.invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
         self.status = loader.loadModel('phase_3.5/models/gui/status_effects')
         self.passIcon = self.rowModels.find('**/pass_icon')
-        self.fireIcon =  self.status.find('**/toon_accuracy_down_icon')
-        self.sueIcon =  self.status.find('**/sued_icon')
-        self.sosIcon =  self.status.find('**/toon_accuracy_up_icon')
+        self.fireIcon = self.status.find('**/pinkslip_icon')
+        self.sueIcon = self.status.find('**/sued_icon')
+        self.sosIcon = self.status.find('**/energized_icon')
         self.invModels = []
         for track in range(len(AvPropsNew)):
             itemList = []
@@ -38,7 +38,7 @@ class TownBattleWaitPanel(StateData.StateData):
             scale=0.425
         )
         self.frame.hide()
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(1, 1, 1, 1), text_font=getSignFont(), text_scale=0.1, pos=(0, 0, -0.325))
+        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), text_scale=0.1, pos=(0, 0, -0.325))
         self.gagEmblem = DirectFrame(
             parent=self.frame,
             image=self.rowModels.find('**/emblem_gag'),
@@ -71,7 +71,7 @@ class TownBattleWaitPanel(StateData.StateData):
         self.gagEmblemScrollIval.loop()
 
         self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(0, 0, -0.6),
-                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getSignFont(), command=self.__handleBack)
+                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), command=self.__handleBack)
         self.backButton.setBin('fixed', 0) 
         gui.removeNode()
 
@@ -170,7 +170,7 @@ class TownBattleWaitPanel(StateData.StateData):
             self.setGagEmblemOrganic(False)
 
         if numParticipants > 1:
-            self.textFrame['text'] = "Waiting..."
+            self.textFrame['text'] = "Locked In!"
         else:
             self.textFrame['text'] = "Please wait..."
 

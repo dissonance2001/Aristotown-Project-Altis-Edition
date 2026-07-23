@@ -335,7 +335,7 @@ def doDesperation2(attack):
     # for suit in battle.activeSuits:
     #     toonTracks.append(Func(suit.makeUnBattleSpeed))
     for t in battle.activeToons:
-        toonTrack = Parallel(Func(t.makeContentSync, 0), Func(t.makeUnGagBan))
+        toonTrack = Parallel(Func(t.clearToonStatusEffect, 'gagBan'))
         toonTracks.append(toonTrack)
     notifyTracks = Sequence(Func(theSuit.setChatAbsoluteSpecial, "", CFSpeech | CFTimeout))
     makeDamageUps = Parallel()
@@ -344,7 +344,7 @@ def doDesperation2(attack):
         notifyTrack = Sequence(Func(theSuit.showHpStringDesperationDamage))
     else:
         notifyTrack = Sequence(Func(theSuit.showHpStringDesperation))
-    makeDamageUp = Parallel(Func(theSuit.makeDesperation), Func(theSuit.checkDesperation, + 40))
+    makeDamageUp = Parallel(Func(theSuit.setSuitStatusEffect, 'desperation', modifier=40, mode='refreshModifier'))
     cameraTrack = Sequence(Wait(3.0))
     notifyTracks.append(Parallel(notifyTrack, cameraTrack))
     makeDamageUps.append(makeDamageUp)
@@ -404,9 +404,9 @@ def doRageBuilding(attack):
     dmg = attack['target'][0]['hp']
     suitResponseTrack = Parallel()
     if suit.dna.name == 'sgoat':
-        suitResponseTrack.append(Sequence(Func(suit.addRageBuilding, dmg)))
+        suitResponseTrack.append(Sequence(Func(suit.setSuitStatusEffect, 'rageBuilding', modifier=dmg)))
     if suit.dna.name == 'phouse':
-        suitResponseTrack.append(Sequence(Func(suit.addPowerhouseRotation, dmg)))
+        suitResponseTrack.append(Sequence(Func(suit.setSuitStatusEffect, 'toleranceBuilding', modifier=dmg)))
     return suitResponseTrack
 
 def doDamageMovie(attack):
@@ -436,30 +436,25 @@ def doAbsorbMovieLevel(attack):
     notifyTracks.append(Parallel(notifyTrack))
     return Sequence(notifyTracks)
 
+def doDrenchDecrement(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Parallel()
+    suitTrack.append(Sequence(Func(suit.showHpStringAbility, "-1 DRENCHED ROUND"), ActorInterval(suit, 'soak', startTime=3.5), Func(suit.setNeutralAnimationDrop)))
+    return Parallel(suitTrack)
+
 def doSoakRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    if suit.dna.name == 'safesupervis':
-        suitTrack.append(Sequence(Parallel(Func(suit.makeUnDamageDown), Func(suit.checkDamageDown, - 25), ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), 
-                                           Func(suit.makeUnSoaked)), Func(suit.setNeutralAnimationDrop)))
-    else:
-        suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), Func(suit.makeUnSoaked)), Func(suit.setNeutralAnimationDrop)))
-    # for suit in battle.activeSuits:
-    #     suitTrack.append(Func(suit.checkSoakRounds))
-    if suit.isVirtual and suit.dna.name == 'redd':
-        makeDamageUp = Parallel(Func(suit.makeDamageUp), Func(suit.checkDamageUp, - 50))
-    elif suit.dna.name == 'redd':
-        makeDamageUp = Parallel(Func(suit.makeUnDamageUp), Func(suit.checkDamageUp, - 50))
-    else:
-        makeDamageUp = Parallel()
+    suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), __soakRemoval(suit, 1)), Func(suit.clearSuitStatusEffect, 'soaked'), Func(suit.clearSuitStatusEffect, 'drenched')), Func(suit.setNeutralAnimationDrop)))
     return Parallel(suitTrack)
 
 def __createSuitResetPosTrack2(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveDist = Vec3(suit.getPos(battle) - resetPos).length()
     moveDuration = 0.5
-    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationAttack))
+    walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimation))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
 
@@ -467,14 +462,14 @@ def doLureRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suit.clearPendingQueuedLured()
-    suitTrack = Parallel(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.setDizzy, 0), Func(suit.makeUnLured))
+    suitTrack = Parallel(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.setDizzy, 0), Func(suit.clearSuitStatusEffect, 'lured'))
     return suitTrack
 
 def doMarkRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Parallel()
-    suitTrack.append(Sequence(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Sequence(Wait(1.0), Func(suit.splatSuit, 0, 1)), Func(suit.makeUnMarked)), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Sequence(Parallel(ActorInterval(attack['suit'], 'squirt-small-react', startTime=2.25), Sequence(Wait(1.0), Func(suit.splatSuit, 0, 1)), Func(suit.clearSuitStatusEffect, 'marked')), Func(suit.setNeutralAnimationDrop)))
     # for suit in battle.activeSuits:
     #     suitTrack.append(Func(suit.checkMarkRounds))
     return suitTrack
@@ -490,8 +485,7 @@ def doGovernaughtDeath(attack):
         dmg = t['hp']
         soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
         notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+%s" % dmg + "% Damage!", colorCode=1))
-        notifyTrack.append(Parallel(Func(toon.makeDamageUpGovernaught)))
-        notifyTrack.append(Parallel(Func(toon.checkDamageUpGovernaught, dmg)))
+        notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'damageUpGov', modifier=dmg, mode='refreshModifier')))
         soundTracks.append(soundTrack)
         notifyTracks.append(notifyTrack)
     return Parallel(notifyTracks, soundTracks, waitTrack)
@@ -500,7 +494,7 @@ def doSueRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
-    suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), Func(suit.setSued2, 0)), Func(battle.unSueSuit, suit)), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), Func(suit.clearSuitStatusEffect, 'sued')), Func(battle.unSueSuit, suit)), Func(suit.setNeutralAnimationDrop)))
     suitTrack.append(Func(suit.removeSued))
     return suitTrack
 
@@ -607,7 +601,7 @@ def doCourtCalculations(attack):
     calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
-    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
+    suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationAttack), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute, "Calculating costs of litigation fees... Price index raised to %s." % int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
@@ -625,7 +619,7 @@ def doCourtRecord(attack):
     toonTracks = Parallel()
     for t in targets:
         toon = t['toon']
-        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTrack = Parallel(Func(toon.setToonStatusEffect, 'gagBan'))
         toonTracks.append(toonTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(1.0))
@@ -639,7 +633,7 @@ def doCourtMandate(attack):
     toonTracks = Parallel()
     for t in targets:
         toon = t['toon']
-        toonTrack = Parallel(Func(toon.makeGagBan))
+        toonTrack = Parallel(Func(toon.setToonStatusEffect, 'gagBan'))
         toonTracks.append(toonTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=0.75))
     suitTrack.append(Wait(2.0))

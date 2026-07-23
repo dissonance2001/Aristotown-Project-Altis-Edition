@@ -587,8 +587,6 @@ class ToonBase(OTPBase.OTPBase):
             self.marginManager.addCell(0.1, -1.4, self.a2dTopLeft, 3)
         ]
         self.bottomCells = [
-            self.marginManager.addCell(-0.65, 0.12, self.a2dBottomCenter, 7),
-            self.marginManager.addCell(0.65, 0.12, self.a2dBottomCenter, 8)
         ]
         self.rightCells = [
             self.marginManager.addCell(-0.1, -0.6, self.a2dTopRight, 4),

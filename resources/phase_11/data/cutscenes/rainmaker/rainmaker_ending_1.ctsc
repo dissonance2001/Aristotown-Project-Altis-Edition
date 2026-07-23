@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 3.9, \"delay\": 0.0, \"pos\": [3.21332, 2.95628, 5.39843], \"hpr\": [117.99407, 0.0, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"noBlend\", \"startPos\": [2.57065, 3.34188, 5.39843], \"startHpr\": [124.93483, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #2",
+        "time": 0.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": true, \"xyz\": [0.0, 1.5424, 5.86129], \"scale\": 1.41773, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #3",
+        "time": 3.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.51413, 0.0, 6.68376], \"scale\": 1.41774, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 8.0, \"delay\": 0.0, \"pos\": [0.0, -20.14151, 2.31362], \"hpr\": [4e-05, 3.47037, 0.0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"noBlend\", \"startPos\": [-0.0, -29.75158, 2.31362], \"startHpr\": [4e-05, 3.47037, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Event #4",
+        "time": 7.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": true, \"xyz\": [0.77119, 0.0, 6.81228], \"scale\": 0.83933, \"hideNametag\": false, \"wantHeadAnim\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Event #5",
+        "time": 12.013499999999999,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": true}"
+            }
+        }
+    }
+]

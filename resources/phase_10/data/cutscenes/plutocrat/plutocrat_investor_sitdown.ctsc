@@ -1,0 +1,143 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-5.65547, 10.15417, 5.01282], \"hpr\": [-150.38472, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            }
+        }
+    },
+    {
+        "name": "worst anim ever!!",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"neutral\", \"toAnim\": \"sit-hungry-left\", \"continueToAnim\": false, \"duration\": 0.3, \"hasFromStartTime\": false, \"fromStartTime\": 0.3, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": false, \"toStartTime\": 0.3, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"sit-hungry-left\", \"loop\": 0, \"hasDuration\": true, \"duration\": 1.45, \"hasStartTime\": true, \"startTime\": 0.3, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"sit-hungry-left\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.35, \"hasFromStartTime\": true, \"fromStartTime\": 1.75, \"hasFromEndTime\": false, \"fromEndTime\": 0, \"hasToStartTime\": false, \"toStartTime\": 1.75, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Great Node Sequence!",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 3, \"targetIndex\": 5, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.3, \"pos\": [-0.51414, -2.55393, -1.12338], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.45}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.35, \"pos\": [0.0, 0.0, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 3, \"targetIndex\": 4, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Chair movement",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.3, \"pos\": [-0.35347, -3.21334, 3.08635], \"startPos\": [0.0, -5.49224, 1.801], \"useStartPos\": true, \"hpr\": [41.83027, 0.0, 0.0], \"startHpr\": [41.83027, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.45}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.45, \"pos\": [0.0, -11.03848, 1.80102], \"startPos\": [0.0, 0.0, 1.80102], \"useStartPos\": 0, \"hpr\": [143.79099, 0.0, 0.0], \"startHpr\": [143.79099, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "Chair visual",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            },
+            "1": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.3, \"colorScale\": [1, 1, 1, 1], \"startColorScale\": [1.0, 1.0, 1.0, 0.0], \"useStartColorScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "2": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.45}"
+            },
+            "3": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.55893, \"colorScale\": [1.0, 1.0, 1.0, 0.0], \"startColorScale\": [1.0, 1.0, 1.0, 1.0], \"useStartColorScale\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            }
+        }
+    },
+    {
+        "name": "Chair turn",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.3, \"hpr\": [143.79099, 0.0, 0.0], \"startHpr\": [41.83027, 0.0, 0.0], \"useStartHpr\": true, \"blendType\": \"easeOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 1.45}"
+            },
+            "2": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.76253, \"hpr\": [-122.97797, 0.0, 0.0], \"startHpr\": [128.00231, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 2.75,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            }
+        }
+    }
+]

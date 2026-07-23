@@ -56,38 +56,57 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             self.requestDelete()
         return
 
-    def setLevel(self, lvl = None):
-        attributes = SuitBattleGlobals.SuitAttributes[self.dna.name]
-        if attributes['level'] < 100:  # IF NORMAL COG
-            if lvl:
-                self.level = lvl - attributes['level'] - 1
-            else:
-                self.level = SuitBattleGlobals.pickFromFreqList(attributes['freq'])
-            if lvl > attributes['level'] + len(attributes['hp']):
-                self.level = len(attributes['hp']) - 1
-            self.notify.debug('Assigning level ' + str(lvl))
-            if hasattr(self, 'doId'):
-                self.d_setLevelDist(self.level)
-            hp = attributes['hp'][self.level]
-            self.maxHP = hp
-            self.currHP = hp
+    def setLevel(self, lvl=None, forceLevel=False):
+        name = self.dna.name
+        attributes = SuitBattleGlobals.SuitAttributes[name]
+
+        if lvl is None:
+            actualLevel = SuitBattleGlobals.getRandomSuitLevel(
+                name
+            )
+
+        elif forceLevel:
+            # Explicit spawn, boss, cheat, or special event.
+            actualLevel = max(1, int(lvl))
+
         else:
-            if self.dna.name == 'mes' or 'mad':
-                self.level = lvl
-            else:
-                self.level = attributes['level']  # don't subtract 1, assume the level is as-is from battleglobals
-            self.notify.debug('Assigning level to non-normal cog ' + str(self.level))
-            if hasattr(self, 'doId'):
-                self.d_setLevelDist(self.level)
-            if self.dna.name == 'mes' or 'mad':
-                if self.level > 99:
-                    hp = hp = attributes['hp'][49]
-                else:
-                    hp = attributes['hp'][self.level]
-            else:
-                hp = attributes['hp'][0]
-            self.maxHP = hp
-            self.currHP = hp
+            # Normal planner spawn.
+            actualLevel = (
+                SuitBattleGlobals.clampNaturalSuitLevel(
+                    name,
+                    lvl
+                )
+            )
+
+        relativeLevel = (
+            SuitBattleGlobals.getRelativeFromActualLevel(
+                name,
+                actualLevel
+            )
+        )
+
+        self.level = relativeLevel
+
+        vitals = SuitBattleGlobals.getSuitVitals(
+            name,
+            relativeLevel
+        )
+
+        self.maxHP = vitals['hp']
+        self.currHP = vitals['hp']
+
+        if hasattr(self, 'doId'):
+            self.d_setLevelDist(self.level)
+
+        self.notify.debug(
+            'Assigned %s actual=%s relative=%s forced=%s' %
+            (
+                name,
+                actualLevel,
+                relativeLevel,
+                forceLevel
+            )
+        )
 
     def getLevelDist(self):
         return self.getLevel()
@@ -111,12 +130,29 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
     def getElite(self):
         return self.isElite
 
-    def setupSuitDNA(self, level, type, track):
+    def setupSuitDNA(
+        self,
+        level,
+        type=None,
+        track=None,
+        suitName=None,
+        forceLevel=False):
+
         dna = SuitDNA.SuitDNA()
-        dna.newSuitRandom(type, track)
+
+        if suitName is not None:
+            dna.newSuit(suitName)
+            track = dna.dept
+        else:
+            dna.newSuitRandom(type, track)
+
         self.dna = dna
         self.track = track
-        self.setLevel(level)
+
+        self.setLevel(
+            level,
+            forceLevel=forceLevel
+        )
 
     def getDNAString(self):
         if self.dna:
@@ -162,6 +198,15 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             num = 0
         self.enraged = num
         return
+    
+    def getActualLevel(self):
+        if not self.dna:
+            return 0
+
+        return SuitBattleGlobals.getActualFromRelativeLevel(
+            self.dna.name,
+            self.level
+        )
 
     def b_setAbsorbingStatus(self, num):
         if num == None:
@@ -231,16 +276,19 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
             executive = 0
         self.executive = executive
         if self.dna.name == 'mh2':
-            self.maxHP = random.randint(200, 900)
+            self.maxHP = random.randint(150, 1000)
             self.currHP = self.maxHP
         if self.dna.name == 'std2':
-            self.maxHP = random.randint(100, 700)
+            self.maxHP = random.randint(150, 1000)
+            self.currHP = self.maxHP
+        if self.dna.name == 'cnd2':
+            self.maxHP = random.randint(150, 1000)
             self.currHP = self.maxHP
         if self.dna.name == 'autocad' or self.dna.name == 'watchm' \
                 or self.dna.name == 'ant' or self.dna.name == 'jls' or self.dna.name == 'chairp':
             self.maxHP = int(self.maxHP * random.uniform(.75, 1.25))
             self.currHP = self.maxHP
-        if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'std2' and not self.dna.name == 'autocad' and not self.dna.name == 'watchm'  \
+        if self.executive and not self.dna.name == 'mh2' and not self.dna.name == 'std2' and not self.dna.name == 'cnd2' and not self.dna.name == 'autocad' and not self.dna.name == 'watchm'  \
                 and not self.dna.name == 'ant' and not self.dna.name == 'jls' and not self.dna.name == 'chairp':
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.EXECUTIVE_HP_MULT)
             self.currHP = self.maxHP
@@ -261,7 +309,16 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI, SuitBase.Su
         if governaught == None:
             governaught = 0
         self.governaught = governaught
-        if self.governaught:
+        if self.dna.name == 'mh2':
+            self.maxHP = random.randint(150, 1000)
+            self.currHP = self.maxHP
+        if self.dna.name == 'std2':
+            self.maxHP = random.randint(150, 1000)
+            self.currHP = self.maxHP
+        if self.dna.name == 'cnd2':
+            self.maxHP = random.randint(150, 1000)
+            self.currHP = self.maxHP
+        if self.governaught and not self.dna.name in ['std2', 'mh2', 'cnd2']:
             self.maxHP = int(self.maxHP * ToontownBattleGlobals.GOVERNAUGHT_HP_MULT)
             self.currHP = self.maxHP
 

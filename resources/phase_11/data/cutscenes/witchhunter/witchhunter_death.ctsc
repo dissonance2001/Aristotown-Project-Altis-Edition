@@ -1,0 +1,487 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.051, 10.9, 7.806], \"blendType\": \"easeInOut\", \"startPos\": [3.036, 5.816, 0.0], \"useStartPos\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-180.0, -9.80377, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [-180.0, 0.0, 0.0], \"useStartHpr\": false}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": false}"
+            },
+            "4": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "7": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 0, \"locked\": true}"
+            },
+            "8": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 1, \"locked\": true}"
+            },
+            "9": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 2, \"locked\": true}"
+            },
+            "10": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 0}"
+            },
+            "11": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 1}"
+            },
+            "12": {
+                "eventDefEnum": "hideNametag",
+                "kwargs": "{\"actorIndex\": 2}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [1-2] [WH]",
+        "time": 0.25,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.75, \"duration\": 4.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "update camera",
+        "time": 2.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 1.25, \"delay\": 0.0, \"pos\": [9.46986, -15.12341, 7.806], \"blendType\": \"easeInOut\", \"startPos\": [-0.051, 10.9, 7.806], \"useStartPos\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.25, \"delay\": 0.0, \"hpr\": [38.5, -9.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false}"
+            }
+        }
+    },
+    {
+        "name": "OK He pull up",
+        "time": 2.4890417000000005,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, 0.0, 0.0], \"duration\": 0.3, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.3, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, -1.0, 0.0], \"duration\": 0.3, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "camera pan up",
+        "time": 7.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"hpr\": [60.00001, 20.00001, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [35.686, 0.0, 0.0], \"useStartHpr\": false}"
+            }
+        }
+    },
+    {
+        "name": "suits appear",
+        "time": 8.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "2": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0.0, \"destPos\": [-16.75, -3.0, 0.0], \"flyType\": 2, \"getPos\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0.0, \"destPos\": [-16.75, 3.0, 0.0], \"flyType\": 2, \"getPos\": 0}"
+            },
+            "4": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"hpr\": [-90.0, 0.0, 0.0], \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "5": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 0.0, \"delay\": 0.0, \"blendType\": \"easeInOut\", \"hpr\": [-90.0, 0.0, 0.0], \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Camera pan back down",
+        "time": 10.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"hpr\": [45.0, -9.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [52.00001, 0.0, 0.0], \"useStartHpr\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [3-4] [WH]",
+        "time": 10.681,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "toons turn",
+        "time": 12.041,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 5, \"duration\": 0.85, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "toons turn back to guy",
+        "time": 14.602,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 4, \"duration\": 1.0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "neutral suits",
+        "time": 14.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "he turn to them",
+        "time": 17.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 5, \"duration\": 1.0, \"blendType\": \"noBlend\", \"anim\": \"walk\", \"offset\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "toons turn to side",
+        "time": 17.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 5, \"duration\": 1.0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "he fail lol camera",
+        "time": 17.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [8.44147, -4.04857, 9.98464], \"blendType\": \"easeInOut\", \"startPos\": [18.911, -0.357, 7.806], \"useStartPos\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"hpr\": [76.73184, -17.42917, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [80.0, 0.0, 0.0], \"useStartHpr\": false}"
+            }
+        }
+    },
+    {
+        "name": "mob ment",
+        "time": 18.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mob-mentality\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.1, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [5]",
+        "time": 18.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.5, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "back neutral",
+        "time": 20.38,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "he do it again",
+        "time": 21.662,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"mob-mentality\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [6] [WH]",
+        "time": 21.662,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "camera zoom",
+        "time": 22.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.3, \"delay\": 0.0, \"end\": 40.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "back neutral again",
+        "time": 24.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Camera: Look at Cogs",
+        "time": 25.19,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"hpr\": [81.0891, -8.71443, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [76.73184, -17.42917, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [7] [Cog 1]",
+        "time": 25.19,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [8] [Cog 2]",
+        "time": 28.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 7, \"actorIndex\": 2, \"delay\": 0.0, \"duration\": 3.75, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [9] [Cog 1]",
+        "time": 32.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 8, \"actorIndex\": 1, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "camera pan back",
+        "time": 36.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [7.473, -19.092, 10.166], \"hpr\": [29.99999, -14.16133, 0.0], \"useStartPos\": false, \"useStartHpr\": false, \"blendType\": \"easeInOut\", \"startPos\": [6.384, -19.092, 5.446], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"end\": 42.291, \"blendType\": \"easeInOut\", \"start\": 40.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [10-12] [WH]",
+        "time": 36.435,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 9, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.75, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 10, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": false, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 11, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.5, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.0, \"hideNametag\": false, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "he turn",
+        "time": 41.812,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [0.0, -1.0, 0.0], \"duration\": 1.0, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "turn toons back",
+        "time": 42.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnToonsToNode",
+                "kwargs": "{\"target\": \"All\", \"nodeIndex\": 4, \"duration\": 1.0, \"blendType\": \"easeInOut\", \"hasAnim\": true, \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "fly away!!!!!",
+        "time": 45.34,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 1.0, \"destPos\": [-16.75, -3.0, 0.0], \"flyType\": 1, \"getPos\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 1.0, \"destPos\": [-16.75, 3.0, 0.0], \"flyType\": 1, \"getPos\": 0}"
+            }
+        }
+    },
+    {
+        "name": "clean up",
+        "time": 53.76,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 0, \"delay\": 0.0}"
+            },
+            "1": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 1, \"delay\": 0.0}"
+            },
+            "2": {
+                "eventDefEnum": "actorShutUp",
+                "kwargs": "{\"actorIndex\": 2, \"delay\": 0.0}"
+            },
+            "3": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 1, \"locked\": 0}"
+            },
+            "4": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 2, \"locked\": 0}"
+            },
+            "5": {
+                "eventDefEnum": "suitLockPropeller",
+                "kwargs": "{\"suitIndex\": 0, \"locked\": 0}"
+            },
+            "6": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 42.291, \"useStart\": false}"
+            }
+        }
+    }
+]

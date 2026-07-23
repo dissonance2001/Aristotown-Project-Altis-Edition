@@ -27,6 +27,7 @@ missSoundFiles = ('AA_squirt_flowersquirt_miss.ogg', 'AA_squirt_glasswater_miss.
 sprayScales = [0.2, 0.3, 0.3, 0.4, 0.6, 0.8, 1.0, 2.0]
 WaterSprayColor = Point4(0.75, 0.75, 1.0, 0.8)
 SoakColor = Point4(0.65, 0.65, 1.0, 1.0)
+DrenchColor = Point4(0.235, 0.235, 1, 1.0)
 pieFlyTaskName = 'MovieThrow-pieFly'
 
 def doSquirts(squirts):
@@ -246,7 +247,10 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             elif suitType == 'c':
                 animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.58))
             animTrack.append(Func(battle.unlureSuit, suit))
-            moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
+            if level != 5:
+                moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
+            else:
+                moveTrack = Sequence(LerpPosInterval(suit, 0.6, pos=suitPos, other=battle, blendType='easeOut'))
             sival = Parallel(animTrack, moveTrack)
         elif geyser:
             animTrack = Sequence()
@@ -285,51 +289,65 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
 
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage
-        if suit.dna.name == 'redd':
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
-        elif suit.isVirtual:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
-        elif suit.isSkeleton:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 3 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
-        else:
-            showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
         value = hp
         #if kbbonus > 0:
             #value += kbbonus
         #if hpbonus > 0:
             #value += hpbonus
         updateHealthBar = Func(suit.updateHealthBar, value)
-        if suit.dna.name == 'redd':
-            soakSuit = (Func(suit.makeSoaked, 1))
-        elif suit.isVirtual:
-            soakSuit = (Func(suit.makeSoaked, 1))
-        elif suit.isSkeleton:
-            soakSuit = (Func(suit.makeSoaked, 2))
-        else:
-            soakSuit = (Func(suit.makeSoaked, 3))
-        suitTrack.append(Func(suit.setSoaked, 1))
-        if suit.dna.name == 'sgoat' and suit.isShielding:
-            suitTrack.append(Func(suit.addRageBuilding, hp + 150))
-        if suit.dna.name == 'phouse':
-            suitTrack.append(Func(suit.addPowerhouseRotation, hp + 150))
-        if suit.dna.name == 'liquid' and suit.isStormCell:
-            suitTrack.append(Func(suit.addStormCellDamage))
-        if suit.isHeavyRain:
-            suitTrack.append(Func(suit.addHeavyRainDamage, hp))
-        if suit.isSued:
-            suitTrack.append(Func(suit.makeSued, 3))
+        if suit.hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
         suitTrack.append(Wait(tContact))
-        if suit.squirtRushJob:
-            suitTrack.append(Func(suit.makeUnSquirtRushJob))
-        suitTrack.append(__soakSuit(suit, tContact))
+        if suit.getSuitStatusModifier('rushJob') == 4:
+            suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
         suitIndex = battle.activeSuits.index(suit)
         soakTracks.append(Wait(tContact))
         if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
-            soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level))
-            soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level))
+            soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
+            soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
+            if suit.dna.name == 'phouse':
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=1)
+                suitTrack.append(Func(suit.soakSuit, 1))
+            elif suit.dna.name == 'redd':
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=2)
+                suitTrack.append(Func(suit.soakSuit, 1))
+            elif suit.isVirtual:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=2)
+                suitTrack.append(Func(suit.soakSuit, 1))
+            elif suit.isSkeleton:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 3 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=3)
+                suitTrack.append(Func(suit.soakSuit, 1))
+            else:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=4)
+                suitTrack.append(Func(suit.soakSuit, 1))
         else:
-            soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level))
-            soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level))
+            if suit.dna.name == 'phouse':
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=1)
+                suitTrack.append(Func(suit.soakSuit, 0))
+            elif suit.dna.name == 'redd':
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=2)
+                suitTrack.append(Func(suit.soakSuit, 0))
+            elif suit.isVirtual:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=2)
+                suitTrack.append(Func(suit.soakSuit, 0))
+            elif suit.isSkeleton:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 3 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=3)
+                suitTrack.append(Func(suit.soakSuit, 0))
+            else:
+                showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+                soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=4)
+                suitTrack.append(Func(suit.soakSuit, 0))
+            soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
+            soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(soakSuit)
@@ -370,9 +388,9 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitTrack.append(suit.makeDeathCheckInterval(0, battle))
@@ -404,75 +422,71 @@ def __ScapegoatAbsorbSplash(suitIndex, suits, hp, battle):
     else:
         return Sequence()
 
-def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
+def __soakNearby(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level=0, drench=0):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].hasSuitStatusEffect('immune') and not suits[suitIndex].hasSuitStatusEffect('videographerImmune') and not suits[suitIndex].hasSuitStatusEffect('silhouetteImmune') \
+    and not suits[suitIndex].hasSuitStatusEffect('oilRain') and not suits[suitIndex].hasSuitStatusEffect('highRollerImmune'):
         value = math.ceil(hp * 0.75)
+        suitTrack = Parallel()
+        if suits[suitIndex].getSuitStatusModifier('rushJob') == 4:
+            suitTrack.append(Func(suits[suitIndex].clearSuitStatusEffect, 'rushJob'))
+        if suits[suitIndex].hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suits[suitIndex].setSuitStatusEffect, 'sued', modifier=1, turns=4))
         return Sequence(
-            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            Wait(tContact), suitTrack, Func(suits[suitIndex].soakSuit, drench),
             suits[suitIndex].makeSplashAndDeathInterval(
-                tContact, value, battle, bonus, attackTrack, level=0
-            ),
-            Func(suits[suitIndex].setNeutralAnimationDrop),
-            Func(suits[suitIndex].addStormCellDamage)
-                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
-                else Wait(0),
-            Func(suits[suitIndex].addHeavyRainDamage, value)
-                if suits[suitIndex].isHeavyRain
-                else Wait(0)
+                tContact, value, battle, bonus, attackTrack, level, drench
+            )
         )
     return Sequence()
 
-def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
+def __soakNearby2(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level=0, drench=0):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].hasSuitStatusEffect('immune') and not suits[suitIndex].hasSuitStatusEffect('videographerImmune') and not suits[suitIndex].hasSuitStatusEffect('silhouetteImmune') \
+    and not suits[suitIndex].hasSuitStatusEffect('oilRain') and not suits[suitIndex].hasSuitStatusEffect('highRollerImmune'):
         value = math.ceil(hp * 0.75)
+        suitTrack = Parallel()
+        if suits[suitIndex].getSuitStatusModifier('rushJob') == 4:
+            suitTrack.append(Func(suits[suitIndex].clearSuitStatusEffect, 'rushJob'))
+        if suits[suitIndex].hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suits[suitIndex].setSuitStatusEffect, 'sued', modifier=1, turns=4))
         return Sequence(
-            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            Wait(tContact), suitTrack, Func(suits[suitIndex].soakSuit, drench),
             suits[suitIndex].makeSplashAndDeathInterval(
-                tContact, value, battle, bonus, attackTrack, level=0
-            ),
-            Func(suits[suitIndex].setNeutralAnimationDrop),
-            Func(suits[suitIndex].addStormCellDamage)
-                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
-                else Wait(0),
-            Func(suits[suitIndex].addHeavyRainDamage, value)
-                if suits[suitIndex].isHeavyRain
-                else Wait(0)
+                tContact, value, battle, bonus, attackTrack, level, drench
+            )
         )
     return Sequence()
 
-def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
+def __soakNearby3(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level=0, drench=0):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].hasSuitStatusEffect('immune') and not suits[suitIndex].hasSuitStatusEffect('videographerImmune') and not suits[suitIndex].hasSuitStatusEffect('silhouetteImmune') \
+    and not suits[suitIndex].hasSuitStatusEffect('oilRain') and not suits[suitIndex].hasSuitStatusEffect('highRollerImmune'):
         value = math.ceil(hp / 3)
+        suitTrack = Parallel()
+        if suits[suitIndex].getSuitStatusModifier('rushJob') == 4:
+            suitTrack.append(Func(suits[suitIndex].clearSuitStatusEffect, 'rushJob'))
+        if suits[suitIndex].hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suits[suitIndex].setSuitStatusEffect, 'sued', modifier=1, turns=4))
         return Sequence(
-            Wait(tContact),  __soakSuit(suits[suitIndex], tContact),
+            Wait(tContact), suitTrack,Func(suits[suitIndex].soakSuit, drench),
             suits[suitIndex].makeSplashAndDeathInterval(
-                tContact, value, battle, bonus, attackTrack, level=0
-            ),
-            Func(suits[suitIndex].setNeutralAnimationDrop),
-            Func(suits[suitIndex].addStormCellDamage)
-                if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
-                else Wait(0),
-            Func(suits[suitIndex].addHeavyRainDamage, value)
-                if suits[suitIndex].isHeavyRain
-                else Wait(0)
+                tContact, value, battle, bonus, attackTrack, level, drench
+            )
         )
     return Sequence()
 
-def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level):
-    if len(suits) > suitIndex >= 0 and not suits[suitIndex].isImmortal and not suits[suitIndex].isOilRain:
+def __soakNearby4(suit, suitIndex, suits, tContact, hp, died, battle, bonus, attackTrack, level=0, drench=0):
+    if len(suits) > suitIndex >= 0 and not suits[suitIndex].hasSuitStatusEffect('immune') and not suits[suitIndex].hasSuitStatusEffect('videographerImmune') and not suits[suitIndex].hasSuitStatusEffect('silhouetteImmune') \
+    and not suits[suitIndex].hasSuitStatusEffect('oilRain') and not suits[suitIndex].hasSuitStatusEffect('highRollerImmune'):
         value = math.ceil(hp / 3)
+        suitTrack = Parallel()
+        if suits[suitIndex].getSuitStatusModifier('rushJob') == 4:
+            suitTrack.append(Func(suits[suitIndex].clearSuitStatusEffect, 'rushJob'))
+        if suits[suitIndex].hasSuitStatusEffect('sued'):
+            suitTrack.append(Func(suits[suitIndex].setSuitStatusEffect, 'sued', modifier=1, turns=4))
         return Sequence(
-            Wait(tContact),             __soakSuit(suits[suitIndex], tContact),
+            Wait(tContact), suitTrack, Func(suits[suitIndex].soakSuit, drench),
             suits[suitIndex].makeSplashAndDeathInterval(
-                tContact, value, battle, bonus, attackTrack, level=0
-            ),
-            Func(suits[suitIndex].setNeutralAnimationDrop),
-            Func(suits[suitIndex].addStormCellDamage)
-            if suits[suitIndex].dna.name == 'liquid' and suits[suitIndex].isStormCell
-            else Wait(0),
-            Func(suits[suitIndex].addHeavyRainDamage, value)
-            if suits[suitIndex].isHeavyRain
-            else Wait(0)
+                tContact, value, battle, bonus, attackTrack, level, drench
+            )
         )
     return Sequence()
 
@@ -492,20 +506,15 @@ def __getSoundTrack(level, hitSuit, delay, node = None):
 def showSoakRounds(suit, level):
     suit.showHpTextWhite("SOAKED %i ROUNDS" % ToontownBattleGlobals.AvSoakRounds[level + 1])
 
-def __soakSuit(suit, tContact, remove=0):
-    if remove:
-        color = Point4(1.0, 1.0, 1.0, 1.0)
+def __soakSuit(suit, tContact, drench=0):
+    if drench:
+        color = DrenchColor
     else:
         color = SoakColor
-    if suit.isSkeleton:
-        suitBody = [suit]
-    else:
-        suitBody = [suit]
     suitInterval = Sequence()
     actorNode = suit.find('**/__Actor_modelRoot')
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
-    texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_soaked.png')
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
@@ -526,7 +535,6 @@ def __soakSuit(suit, tContact, remove=0):
         suitInterval.append(Func(suit.makeWetTreasurer))
     if suit.style.name == 'safesupervis' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
-        suitInterval.append(Parallel(Func(suit.makeDamageDown), Func(suit.checkDamageDown, + 25)))
     if suit.style.name == 'fires' and not suit.isSkeleton:
         suitInterval.append(Func(suit.makeWetFirestarter))
     return suitInterval

@@ -95,7 +95,7 @@ class BossSuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         d = p2 - p1
         biggest = max(d[0], d[1], d[2])
         s = 0.3 / biggest
-        self.head.setPosHprScale(0, 0, .0, -90, 0, 270, s, s, s)
+        self.head.setPosHprScale(0, 0, 0.05, -90, 0, 270, s, s, s)
         self.avatar = avatar
         if avatar.dna.dept == 't':
             nameText = "Chief Information Officer"

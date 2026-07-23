@@ -1,0 +1,151 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-10.277, -52.91965, 20.0], \"hpr\": [-8.62031, -13.11527, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.64266, \"delay\": 0.0, \"end\": 29.79456, \"blendType\": \"easeOut\", \"start\": 59.67864, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #2",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            }
+        }
+    },
+    {
+        "name": "suit 1",
+        "time": 0.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [8.0, 9.51151, 0.0], \"hpr\": [160.79598, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 0, \"fromAnim\": \"mob-mentality\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 0, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 2",
+        "time": 0.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [4.0, 9.51151, 0.0], \"hpr\": [-167.27517, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 1, \"fromAnim\": \"small-zap\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 1, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 3",
+        "time": 0.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [0.0, 9.51151, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 2, \"fromAnim\": \"reach\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.73907, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 2, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "suit 4",
+        "time": 1.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 3}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [-4.0, 9.51151, 0.0], \"hpr\": [-174.21592, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitBlendAnim",
+                "kwargs": "{\"suitIndex\": 3, \"fromAnim\": \"pie-small-react\", \"toAnim\": \"neutral\", \"continueToAnim\": true, \"duration\": 0.70694, \"hasFromStartTime\": true, \"fromStartTime\": 0.7712, \"hasFromEndTime\": 0, \"fromEndTime\": 0, \"hasToStartTime\": 0, \"toStartTime\": 0, \"hasToEndTime\": 0, \"toEndTime\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 3, \"delay\": 0.0, \"stagelightAlpha\": 0.98694, \"disableColorScale\": true, \"fadeawayDuration\": 0.54626, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "Event #8",
+        "time": 2.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.06427}"
+            }
+        }
+    }
+]

@@ -1,0 +1,246 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"pos\": [8.911, -22.149, 8.911], \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"hpr\": [18.509, -9.254, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": false}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.5, \"delay\": 0.0, \"end\": 47.236, \"blendType\": \"easeInOut\", \"start\": 31.5, \"useStart\": false}"
+            },
+            "4": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Suit Bar Shadow",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 6}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0.0, \"pos\": [0.0, 0.0, 0.0], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [0.001, 0.001, 0.001]}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0, \"pos\": [-0.257, 5.656, 0.01], \"startPos\": [0.257, -7.069, 0.0], \"useStartPos\": 0, \"hpr\": [-2.314, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 1.0, \"duration\": 0.61, \"scale\": [2.542, 1.0, 1.0], \"startScale\": [0.01, 0.01, 0.01], \"useStartScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 1.61, \"duration\": 0.2, \"pos\": [-0.257, 5.656, 0.01], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [23.136, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon Bar Shadow",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 7}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0.0, \"pos\": [0.0, 0.0, 0.0], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [0.001, 0.001, 0.001]}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0, \"pos\": [-0.257, -7.069, 0.01], \"startPos\": [0.386, -6.812, 0.0], \"useStartPos\": 0, \"hpr\": [4.627, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 1.1, \"duration\": 0.61, \"scale\": [2.542, 1.0, 1.0], \"startScale\": [0.01, 0.01, 0.01], \"useStartScale\": true, \"blendType\": \"easeIn\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 1.711, \"duration\": 0.2, \"pos\": [-0.257, -7.069, 0.01], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [4.627, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon Bar Init",
+        "time": 0.877,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 5}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0.0, \"pos\": [0.257, -7.069, 0.771], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [4.085, 4.342, 2.928]}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0.288, \"duration\": 0.546, \"pos\": [0.257, -7.069, 1.028], \"startPos\": [0.257, -7.069, 100.0], \"useStartPos\": true, \"hpr\": [93.47, 0.0, 0.0], \"startHpr\": [93.47, 5.784, 8.098], \"useStartHpr\": true, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.257, -7.069, 2.999], \"startPos\": [0.257, -7.069, 0.0], \"useStartPos\": 0, \"hpr\": [93.47, 4.627, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.257, -7.069, 1.028], \"startPos\": [0.257, -7.069, 1.028], \"useStartPos\": 0, \"hpr\": [93.47, 0.0, 0.0], \"startHpr\": [93.47, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "Suit Bar Init",
+        "time": 0.8775,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 4}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0.0, \"pos\": [0.0, 0.0, 0.0], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [4.085, 4.856, 2.799]}"
+            },
+            "2": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.739, \"pos\": [0.386, 5.526, 1.027], \"startPos\": [0.386, 5.526, 100.0], \"useStartPos\": true, \"hpr\": [86.53, 0.0, 0.0], \"startHpr\": [86.53, 3.47, -6.941], \"useStartHpr\": true, \"blendType\": \"easeIn\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.386, 5.526, 4.398], \"startPos\": [0.257, -7.069, 0.0], \"useStartPos\": 0, \"hpr\": [107.352, -6.941, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.386, 5.526, 1.027], \"startPos\": [0.257, -7.069, 0.0], \"useStartPos\": 0, \"hpr\": [114.293, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "Reshow Bar",
+        "time": 1.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showNode",
+                "kwargs": "{\"nodeIndex\": 5}"
+            }
+        }
+    },
+    {
+        "name": "Squish Suits",
+        "time": 1.45,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllSuits",
+                "kwargs": "{\"startAnim\": \"flatten\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "clearAllSuitChat",
+                "kwargs": "{}"
+            }
+        }
+    },
+    {
+        "name": "Squish Toons",
+        "time": 1.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setAllAnimStates",
+                "kwargs": "{\"delay\": 0, \"animState\": \"Squish\"}"
+            }
+        }
+    },
+    {
+        "name": "Bar Cleanup",
+        "time": 3.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"scale\": [0.001, 0.001, 0.001], \"startScale\": [1.0, 1.0, 1.0], \"useStartScale\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"duration\": 0.1, \"pos\": [0.386, 5.526, 0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [86.53, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "2": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.1, \"scale\": [0.001, 0.001, 0.001], \"startScale\": [1.0, 1.0, 1.0], \"useStartScale\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "3": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.1, \"scale\": [0.001, 0.001, 0.001], \"startScale\": [1.0, 1.0, 1.0], \"useStartScale\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "4": {
+                "eventDefEnum": "scaleNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0.1, \"scale\": [0.001, 0.001, 0.001], \"startScale\": [1.0, 1.0, 1.0], \"useStartScale\": 0, \"blendType\": \"noBlend\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon Getup",
+        "time": 4.35,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setAllAnimStates",
+                "kwargs": "{\"delay\": 0, \"animState\": \"Neutral\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon Neutral",
+        "time": 5.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 7.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.064}"
+            },
+            "1": {
+                "eventDefEnum": "animateAllSuits",
+                "kwargs": "{\"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 47.236, \"useStart\": false}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

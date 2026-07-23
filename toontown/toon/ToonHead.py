@@ -1489,8 +1489,8 @@ class ToonHead(Actor.Actor):
                 self.__lod500Eyes.setTexture(ToonHead.EyesSurprised, 1)
             if self.__lod250Eyes:
                 self.__lod250Eyes.setTexture(ToonHead.EyesSurprised, 1)
-            if self.__muzzle:
-                self.__muzzle.setTexture(ToonHead.MuzzleSurprised, 1)
+            # if self.__muzzle:
+            #     self.__muzzle.setTexture(ToonHead.MuzzleSurprised, 1)
             if self.__lpupil:
                 self.__lpupil.show()
                 self.__rpupil.show()
@@ -1502,8 +1502,9 @@ class ToonHead(Actor.Actor):
                 self.__lod250rPupil.show()
 
     def exitEyelidsSurprised(self):
-        if self.__muzzle:
-            self.__muzzle.setTexture(ToonHead.Muzzle, 1)
+        # if self.__muzzle:
+        #     self.__muzzle.setTexture(ToonHead.Muzzle, 1)
+        pass
 
     def setupMuzzles(self, style):
         self.__muzzle = self.find("**/1000/**/muzzle*")

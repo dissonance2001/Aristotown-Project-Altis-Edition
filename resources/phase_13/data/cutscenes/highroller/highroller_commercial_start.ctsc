@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 2.5, \"delay\": 0, \"pos\": [-0.30228, -14.57161, 18.91226], \"hpr\": [0.0, -10.23707, 0.0], \"useStartPos\": false, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [-9.92685, 20.0, 15.41244], \"startHpr\": [-18.8992, -10.23707, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "highRollerSpawnPodiums",
+                "kwargs": "{\"performSpawn\": false, \"performDespawn\": true, \"commercialPodium\": false}"
+            }
+        }
+    },
+    {
+        "name": "turn and walk",
+        "time": 0.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [12.89849, 15.26088, 0.0], \"duration\": 1.0, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"awalk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false, \"oldStyleEndAnim\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 2.3, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [16.77753, 26.03724, 4.0], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "turnSingleSuitToPoint",
+                "kwargs": "{\"suitIndex\": 0, \"point\": [-12.19318, -10.62514, 0.0], \"duration\": 1.0, \"blendType\": \"noBlend\", \"anim\": \"awalk\"}"
+            }
+        }
+    },
+    {
+        "name": "camera moves",
+        "time": 1.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSpawnPodiums",
+                "kwargs": "{\"performSpawn\": true, \"performDespawn\": false, \"commercialPodium\": true}"
+            }
+        }
+    },
+    {
+        "name": "cleanup",
+        "time": 4.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

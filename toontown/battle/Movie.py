@@ -439,8 +439,8 @@ class Movie(DirectObject.DirectObject):
         # for toon in self.battle.activeToons:
         #     if toon.getCooldownRounds() <= 1:
         #         ptrack.append(Func(toon.makeUnCooldown))
-        for s in self.battle.activeSuits:
-            ptrack.append(Func(self.__updateSuitRoundEffects, s))
+        # for s in self.battle.activeSuits:
+        #     ptrack.append(Func(self.__updateSuitRoundEffects, s))
         preSuitAttacks = []
         postSuitAttacks = []
 
@@ -472,12 +472,16 @@ class Movie(DirectObject.DirectObject):
             camtrack.append(scam)
         ptrack.append(Func(callback))
         for s in self.battle.activeSuits:
-            ptrack.append(Func(self.__cleanupSuitAfterMovie, s))
+            ptrack.append(Func(s.decrementStatusEffects))
+            s.battleTrapIsFresh = 0
+            s.clearPendingQueuedDamageAll()
+            s.clearPendingQueuedHealingAll()
+            s.setPendingQueuedDeath(False)
 
         for toon in self.battle.activeToons:
-            ptrack.append(Func(self.__updateToonRoundEffects, toon))
+            ptrack.append(Func(toon.decrementToonStatusEffects))
         for s in self.battle.activeSuits:
-            if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
+            if s.dna.name == 'hrollers' or s.dna.name == 'mh2' or s.dna.name == 'cnd2' or s.dna.name == 'std2' or s.dna.name == 'videog' or s.dna.name == 'bcaster' or s.dna.name == 'choreo' or s.dna.name == 'cinema' or s.dna.name == 'director' or s.dna.name == 'fmaker':
                 ptrack.append(Parallel(Func(s.setNeutralAnimationRolled), Func(s.setChatAbsoluteSpecial,
                                                                                '',
                                                                                CFSpeech | CFTimeout), Func(s.updateHealthBar, 0, forceUpdate=1)))
@@ -1287,13 +1291,14 @@ class Movie(DirectObject.DirectObject):
                     'ZapMovie',
                     'ErclaimHemmorage',
                     'SueDamage',
+                    'UnionBusterContractEnforcementHealing',
                     'SueApplication',
                     'AbilityQueuedPreToon',
                     'BookkeeperPaperCut',
+                    'AmbassadorAdvancement3',
                     'ContingencyMarkRevisedFiling',
                     'ContingencyRiskThresholdBreach50',
                     'ArbitratorPaperFiling',
-                    'HustlerCustomerRetention',
                     'RadiographerHotTake',
                     'SafetyHeatWaveCalculation',
                     'RecordkeeperRedlinedClauseMissedPayment',
@@ -1301,10 +1306,7 @@ class Movie(DirectObject.DirectObject):
                     'SafetyPromotion',
                     'AttorneyRemand',
                     'HighStakesHeal',
-                    'SafetyPromotion2',
-                    'SafetyPromotion3',
                     'ContingencySelfRepair',
-                    'SafetyPromotion4',
                     'PowerhouseBurnDamage',
                     'VideographerElectricShock',
                     'VideographerElectricShock2',
@@ -1320,7 +1322,6 @@ class Movie(DirectObject.DirectObject):
                     'MintLureResistance2',
                     'MintLureResistance',
                     'RecordkeeperRedlinedClause',
-                    'SafetyPromotion5',
                     'LureRemovalPreToon',
                 )
                 regularAttacks = [
@@ -1511,11 +1512,14 @@ class Movie(DirectObject.DirectObject):
         parallelGroupNames = {
             'ErfitProToonShake': 'ErfitPhaseCombo',
             'ErfitPhase2': 'ErfitPhaseCombo',
+            'SoakRemoval': 'soakremove',
+            'DrenchDecrement': 'soakremove',
         }
 
         parallelRemovalNames = (
             'MarkRemoval',
             'SoakRemoval',
+            'DrenchDecrement',
             'ZapMovie',
             'SueDamage',
             'SueApplication',

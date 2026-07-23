@@ -113,6 +113,176 @@ def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
     print 'APPLYING ACCESSORY OVERRIDE:', accessoryType, accessoryId, dnaKey, result
     return result
 
+TOON_STATUS_EFFECT_VISUALS = {
+    'zapped': {
+        'start': 'makeZapped',
+        'stop': 'makeUnZapped',
+        'passModifier': False,
+    },
+    'bound': {
+        'start': 'makeBound',
+        'stop': 'cleanupBound',
+        'passModifier': True,
+    },
+
+    'liquidated': {
+        'start': 'makeLiquidated',
+        'stop': 'makeUnLiquidated',
+        'passModifier': True,
+    },
+
+    'toonupBoost': {
+        'start': 'makeToonupGagBoost',
+        'stop': 'makeUnToonupGagBoost',
+        'passModifier': False,
+    },
+     'trapBoost': {
+        'start': 'makeTrapGagBoost',
+        'stop': 'makeUnTrapGagBoost',
+        'passModifier': False,
+    },
+     'lureBoost': {
+        'start': 'makeLureGagBoost',
+        'stop': 'makeUnLureGagBoost',
+        'passModifier': False,
+    },
+     'throwBoost': {
+        'start': 'makeThrowGagBoost',
+        'stop': 'makeUnThrowGagBoost',
+        'passModifier': False,
+    },
+     'squirtBoost': {
+        'start': 'makeSquirtGagBoost',
+        'stop': 'makeUnSquirtGagBoost',
+        'passModifier': False,
+    },
+     'zapBoost': {
+        'start': 'makeZapGagBoost',
+        'stop': 'makeUnZapGagBoost',
+        'passModifier': False,
+    },
+     'soundBoost': {
+        'start': 'makeSoundGagBoost',
+        'stop': 'makeUnSoundGagBoost',
+        'passModifier': False,
+    },
+     'dropBoost': {
+        'start': 'makeDropGagBoost',
+        'stop': 'makeUnDropGagBoost',
+        'passModifier': False,
+    },
+     'gagBoost': {
+        'start': 'makeGagBoost',
+        'stop': 'makeUnGagBoost',
+        'passModifier': False,
+    },
+    'hydrated': {
+        'start': 'makeHydration',
+        'stop': 'makeUnHydration',
+        'passModifier': True,
+    },
+    'cooldown': {
+        'start': 'makeCooldown',
+        'stop': 'makeUnCooldown',
+        'passModifier': True,
+    },
+    'confused': {
+        'start': 'makeConfusedStars',
+        'stop': 'cleanupConfusedStars',
+        'passModifier': True,
+    },
+    'mandatoryToll': {
+        'start': 'setMandatoryToll',
+        'stop': 'clearMandatoryToll',
+        'passModifier': False,
+    },
+    'cheer': {
+        'start': 'makeCheer',
+        'stop': 'makeUnCheer',
+        'passModifier': True,
+    },
+    'damageUp': {
+        'start': 'makeDamageUp',
+        'stop': 'makeUnDamageUp',
+        'passModifier': True,
+    },
+    'damageUpGov': {
+        'start': 'makeDamageUpGovernaught',
+        'stop': 'makeUnDamageUpGovernaught',
+        'passModifier': True,
+    },
+    'raisedAnte': {
+        'start': 'makeRaisedAnte',
+        'stop': 'makeUnRaisedAnte',
+        'passModifier': True,
+    },
+    'damageDown': {
+        'start': 'makeDamageDown',
+        'stop': 'makeUnDamageDown',
+        'passModifier': True,
+    },
+    'phantomEntry': {
+        'start': 'makeDamageDown',
+        'stop': 'makeUnDamageDown',
+        'passModifier': True,
+    },
+    'sanctioned': {
+        'start': 'makeDamageDown',
+        'stop': 'makeUnDamageDown',
+        'passModifier': True,
+    },
+    'breached': {
+        'start': 'makeDamageDown',
+        'stop': 'makeUnDamageDown',
+        'passModifier': True,
+    },
+    'contingencyMarked': {
+        'start': 'makeMarkedWood',
+        'stop': 'makeUnMarkedWood',
+        'passModifier': True,
+    },
+    'encore': {
+        'start': 'setEncore',
+        'stop': 'makeUnEncore',
+        'passModifier': False,
+    },
+    'winded': {
+        'start': 'makeWinded',
+        'stop': 'makeUnWinded',
+        'passModifier': True,
+    },
+    'burned': {
+        'start': 'makeBurned',
+        'stop': 'makeUnBurned',
+        'passModifier': True,
+    },
+    'hotShot': {
+        'start': 'makeBurned',
+        'stop': 'makeUnBurned',
+        'passModifier': True,
+    },
+     'marketMeltdown': {
+        'start': 'makeBurned',
+        'stop': 'makeUnBurned',
+        'passModifier': True,
+    },
+    'bombed': {
+        'start': 'makeBombed',
+        'stop': 'makeUnBombed',
+        'passModifier': True,
+    },
+    'snapped': {
+        'start': 'makeSnapped',
+        'stop': 'makeUnSnapped',
+        'passModifier': True,
+    },
+    'hemmorage': {
+        'start': 'makeVulnerable',
+        'stop': 'makeUnVulnerable',
+        'passModifier': True,
+    },
+
+}
 
 def teleportDebug(requestStatus, msg, onlyIfToAv = True):
     if teleportNotify.getDebug():
@@ -768,6 +938,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.startingPg = 0
         self.choiceAlpha = 2
         self.choiceBeta = 3
+        self.toonStatusEffects = {}
         self.defaultColorScale = None
         self.jar = None
         self.setBlend(frameBlend = base.wantSmoothAnims)
@@ -825,6 +996,158 @@ class Toon(Avatar.Avatar, ToonHead):
         animStateList = self.animFSM.getStates()
         self.animFSM.enterInitialState()
 
+    def setToonStatusEffect(self, name, modifier=1, turns=None, mode='setBoth'):
+        # Dried Out + Hydrated becomes Energized instead.
+        if name == 'driedOut' and self.hasToonStatusEffect('hydrated'):
+            self.clearToonStatusEffect('driedOut')
+
+            self.setToonStatusEffect(
+                'energized',
+                modifier=50,
+                turns=turns,
+                mode=mode
+            )
+            return
+
+        if turns == 0:
+            self.clearToonStatusEffect(name)
+            return
+
+        if name not in self.toonStatusEffects:
+            self.toonStatusEffects[name] = {
+                'modifier': modifier,
+                'turns': turns
+            }
+        else:
+            effect = self.toonStatusEffects[name]
+
+            if mode == 'setBoth':
+                effect['modifier'] = modifier
+                effect['turns'] = turns
+
+            elif mode == 'refreshTurns':
+                if effect['turns'] is None or turns is None:
+                    effect['turns'] = None
+                else:
+                    effect['turns'] += turns
+
+            elif mode == 'refreshModifier':
+                effect['modifier'] += modifier
+
+            elif mode == 'refreshBoth':
+                effect['modifier'] += modifier
+
+                if effect['turns'] is None or turns is None:
+                    effect['turns'] = None
+                else:
+                    effect['turns'] += turns
+
+            elif mode == 'keepHighest':
+                effect['modifier'] = max(effect['modifier'], modifier)
+
+                if effect['turns'] is None or turns is None:
+                    effect['turns'] = None
+                else:
+                    effect['turns'] = turns
+
+        self.__startToonStatusVisual(
+            name,
+            self.toonStatusEffects[name]['modifier']
+        )
+
+
+    def hasToonStatusEffect(self, name):
+        return name in self.toonStatusEffects
+
+
+    def getToonStatusModifier(self, name):
+        if name not in self.toonStatusEffects:
+            return 0
+
+        return self.toonStatusEffects[name].get('modifier', 0)
+
+
+    def getToonStatusTurns(self, name):
+        if name not in self.toonStatusEffects:
+            return 0
+
+        return self.toonStatusEffects[name].get('turns')
+
+
+    def getToonStatusEffects(self):
+        return self.toonStatusEffects
+
+
+    def decrementToonStatusEffects(self):
+        for name in list(self.toonStatusEffects.keys()):
+            effect = self.toonStatusEffects.get(name)
+
+            if effect is None:
+                continue
+
+            turns = effect.get('turns')
+
+            # None means permanent.
+            if turns is None:
+                continue
+
+            if turns > 0:
+                effect['turns'] -= 1
+
+            if effect['turns'] <= 0:
+                self.clearToonStatusEffect(name)
+
+
+    def clearToonStatusEffect(self, name):
+        if name in self.toonStatusEffects:
+            del self.toonStatusEffects[name]
+
+        self.__stopToonStatusVisual(name)
+
+
+    def __startToonStatusVisual(self, name, modifier):
+        info = TOON_STATUS_EFFECT_VISUALS.get(name)
+
+        if not info:
+            return
+
+        startFuncName = info.get('start')
+
+        if not startFuncName:
+            return
+
+        startFunc = getattr(self, startFuncName, None)
+
+        if not startFunc:
+            return
+
+        if info.get('passModifier', False):
+            startFunc()
+        else:
+            startFunc(modifier)
+
+
+    def __stopToonStatusVisual(self, name):
+        info = TOON_STATUS_EFFECT_VISUALS.get(name)
+
+        if not info:
+            return
+
+        stopFuncName = info.get('stop')
+
+        if not stopFuncName:
+            return
+
+        stopFunc = getattr(self, stopFuncName, None)
+
+        if stopFunc:
+            stopFunc()
+
+
+    def clearAllToonStatusEffects(self):
+        for name in list(self.toonStatusEffects.keys()):
+            self.clearToonStatusEffect(name)
+
     def makeDamageOvertime(self):
         self.damageOvertime = 1
 
@@ -836,6 +1159,23 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getDamageOvertimeRounds(self):
         return self.damageOvertimeRounds
+
+    def cleanupWoodAura(self):
+        if getattr(self, 'woodAuraTrack', None):
+            try:
+                self.woodAuraTrack.pause()
+                self.woodAuraTrack.finish()
+            except:
+                pass
+            self.woodAuraTrack = None
+
+        if getattr(self, 'woodAuraNode', None):
+            try:
+                if not self.woodAuraNode.isEmpty():
+                    self.woodAuraNode.removeNode()
+            except:
+                pass
+            self.woodAuraNode = None
 
     def cleanupShockAura(self):
         if getattr(self, 'shockAuraTrack', None):
@@ -990,6 +1330,89 @@ class Toon(Avatar.Avatar, ToonHead):
             ).find('**/minnieArrow').copyTo(self.shockAuraNode)
 
             texture = loader.loadTexture('phase_3.5/maps/phase_3.5_palette_2tlla_12.png')
+            spark.setTexture(texture, 1)
+            spark.setBillboardPointEye()
+            spark.setTransparency(1)
+            spark.setTwoSided(True)
+            spark.setLightOff(1)
+            spark.setDepthWrite(False)
+            spark.hide()
+            spark.setR(270)
+
+            oneSparkTrack = Sequence(
+                Wait(random.uniform(0.0, 0.5) + i * 0.05),
+                Func(resetSpark, spark),
+
+                Parallel(
+                    LerpHprInterval(
+                        spark,
+                        0.35,
+                        Vec3(0, 0, 90),
+                        startHpr=Vec3(0, 0, 270)
+                    ),
+
+                    Sequence(
+                        LerpFunctionInterval(
+                            spark.setAlphaScale,
+                            0.35,
+                            fromData=1,
+                            toData=0
+                        )
+                    )
+                ),
+
+                Func(spark.hide)
+            )
+
+            partTrack.append(oneSparkTrack)
+            sparks.append(spark)
+
+        loopTrack = Sequence(partTrack)
+        loopTrack.sparks = sparks
+        return loopTrack
+    
+    def makeLoopingWoodAura(self):
+        import random
+
+        self.cleanupWoodAura()
+
+        self.woodAuraNode = self.attachNewNode('woodAuraNode')
+
+        toonHeight = 4.0
+        try:
+            toonHeight = self.getHeight()
+        except:
+            if hasattr(self, 'height'):
+                toonHeight = self.height
+
+        sparks = []
+        partTrack = Parallel()
+
+        def resetSpark(spark):
+            if not spark or spark.isEmpty():
+                return
+
+            x = random.uniform(-1.2, 1.2)
+            y = random.uniform(-1.0, 1.0)
+            z = random.uniform(0.5, max(1.0, toonHeight + 0.5))
+
+            spark.show()
+            spark.setPos(x, y, z)
+            spark.setHpr(
+                random.uniform(0, 360),
+                random.uniform(-20, 20),
+                random.uniform(0, 360)
+            )
+            spark.setScale(random.uniform(0.6, 1.6))
+            spark.setAlphaScale(1)
+            spark.setColor(1, 0.988, 0.408, 1.0)
+
+        for i in xrange(12):
+            spark = loader.loadModel(
+                'phase_3.5/models/gui/matching_game_gui'
+            ).find('**/minnieArrow').copyTo(self.woodAuraNode)
+
+            texture = loader.loadTexture('phase_12/maps/woodchips.png')
             spark.setTexture(texture, 1)
             spark.setBillboardPointEye()
             spark.setTransparency(1)
@@ -1473,80 +1896,19 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeMarkedWood(self):
         self.markedWood = 1
-        if self.hp > 0:
-            if hasattr(self, "markedTrack") and self.markedTrack:
-                self.markedTrack.pause()
-                self.markedTrack.finish()
-                self.markedTrack = None
+        if getattr(self, 'isDead', False) or self.isEmpty():
+            return
 
-            if hasattr(self, "markedPivot") and self.markedPivot and not self.markedPivot.isEmpty():
-                self.markedPivot.removeNode()
-                self.markedPivot = None
+        if getattr(self, 'shockAuraTrack', None):
+            return
 
-            from math import pi, cos, sin
-
-            totalBills = 1
-            radius = 1.5
-            height = self.height - 1
-
-            self.markedProps = []
-
-            # Shared pivot
-            self.markedPivot = self.attachNewNode("markedPivot")
-            self.markedPivot.setZ(height)
-
-            markedIntervals = []
-
-            for i in range(totalBills):
-                bill = loader.loadModel('phase_5/models/props/ttr_m_prp_bat_dagger')
-                bill.setTwoSided(True)
-                bill.setScale(.5)
-                bill.reparentTo(self.markedPivot)
-
-                angle = (2 * pi / totalBills) * i
-                bill.setPos(cos(angle) * radius,
-                            sin(angle) * radius,
-                            0)
-
-                bill.lookAt(self.markedPivot)
-                bill.setP(270)
-                bill.setR(90)
-
-                self.markedProps.append(bill)
-
-            # Orbit pivot
-            orbit = LerpHprInterval(
-                self.markedPivot,
-                3.0,
-                VBase3(-360, 0, 0),
-                startHpr=VBase3(0, 0, 0)
-            )
-
-            self.markedTrack = Parallel(
-                orbit,
-                *markedIntervals
-            )
-
-            self.markedTrack.loop()
+        self.woodAuraTrack = self.makeLoopingWoodAura()
+        self.woodAuraTrack.loop()
 
     def makeUnMarkedWood(self):
         self.markedWood = 0
         self.markedWoodNumber = 0
-        if self.hp > 0:
-            if hasattr(self, "markedTrack") and self.markedTrack:
-                self.markedTrack.pause()
-                self.markedTrack.finish()
-                self.markedTrack = None
-
-            if hasattr(self, "markedProps"):
-                for bill in self.markedProps:
-                    if bill and not bill.isEmpty():
-                        MovieUtil.removeProp(bill)
-                self.markedProps = []
-
-            if hasattr(self, "markedPivot") and self.markedPivot and not self.markedPivot.isEmpty():
-                self.markedPivot.removeNode()
-                self.markedPivot = None
+        self.cleanupWoodAura()
 
     def setMarkedWood(self, num):
         self.markedWoodNumber = num
@@ -1653,6 +2015,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def makeConfusedStars(self):
         # Clean up any existing stars first
+        self.confused = 1
         if self.hp > 0:
             self.cleanupConfusedStars()
 
@@ -1669,6 +2032,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 pass
 
     def cleanupConfusedStars(self):
+        self.confused = 0
         if hasattr(self, 'confusedStars') and self.confusedStars:
             try:
                 self.confusedStars.stop()
@@ -2473,6 +2837,28 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getVulnerability(self):
         return self.vulnerability
+
+    def makeBound(self):
+        # Clean up any existing teeth first
+        self.cleanupBound()
+
+        self.tube = globalPropPool.getProp('redtape-tube')
+        self.tube.setColorScale(0.25, 0.25, 1.0, 1.0)
+        self.tube.reparentTo(self.rightHand)
+        self.tube.setPos(0.3, 0.04, 0)
+        self.tube.setHpr(0, 100, 90)
+        self.tube.setScale(0.3, 0.3, 0.09)
+
+    def cleanupBound(self):
+        if hasattr(self, 'tube') and self.tube:
+
+            try:
+                if not self.tube.isEmpty():
+                    MovieUtil.removeProp(self.tube)
+            except:
+                pass
+
+            self.tube = None
 
     def makeTeethProp(self):
         # Clean up any existing teeth first
@@ -3697,45 +4083,8 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def exitVictory(self):
         self.cleanupAllAuraTracks()
-        self.makeUnCooldown()
-        self.makeUnBurned()
         self.makeContentSync(0)
-        self.makeUnDamageOvertime()
-        self.makeUnEnergized()
-        self.makeUnDriedOut()
-        self.makeUnLiquidated()
-        self.makeUnGroupDamageDown()
-        self.makeUnGagBoost()
-        self.makeUnMarkedWood()
-        self.makeUnInkDrain()
-        self.makeUnHidden()
-        self.makeUnCollectCalled()
-        self.makeUnNoDodge()
-        self.makeUnHydration()
-        self.makeUnConfused()
-        self.makeUnMandatoryToll()
-        self.makeUnCheer()
-        self.makeUnDamageUp()
-        self.makeUnRaisedAnte()
-        self.makeUnDamageUpGovernaught()
-        self.makeUnDamageDown()
-        self.makeUnToonupGagBoost()
-        self.makeUnTrapGagBoost()
-        self.makeUnLureGagBoost()
-        self.makeUnThrowGagBoost()
-        self.makeUnSquirtGagBoost()
-        self.makeUnZapGagBoost()
-        self.makeUnSoundGagBoost()
-        self.makeUnDropGagBoost()
-        self.makeUnEncore()
-        self.makeUnWinded()
-        self.makeUnBombed()
-        self.makeUnFrozen()
-        self.makeUnViralSensation()
-        self.makeUnDancePartner()
-        self.makeUnGagBan()
-        self.makeUnVulnerable()
-        self.makeUnSnapped()
+        self.clearAllToonStatusEffects()
         self.stop()
 
     def enterHappy(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
@@ -3768,46 +4117,8 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def exitSad(self):
         self.cleanupAllAuraTracks()
-        self.makeUnCooldown()
-        self.makeUnBurned()
         self.makeContentSync(0)
-        self.makeUnDamageOvertime()
-        self.makeUnLiquidated()
-        self.makeUnGroupDamageDown()
-        self.makeUnEnergized()
-        self.makeUnDriedOut()
-        self.makeUnGagBoost()
-        self.makeUnCooldown()
-        self.makeUnMarkedWood()
-        self.makeUnInkDrain()
-        self.makeUnHydration()
-        self.makeUnHidden()
-        self.makeUnCollectCalled()
-        self.makeUnNoDodge()
-        self.makeUnConfused()
-        self.makeUnMandatoryToll()
-        self.makeUnCheer()
-        self.makeUnDamageUp()
-        self.makeUnRaisedAnte()
-        self.makeUnDamageUpGovernaught()
-        self.makeUnDamageDown()
-        self.makeUnEncore()
-        self.makeUnToonupGagBoost()
-        self.makeUnTrapGagBoost()
-        self.makeUnLureGagBoost()
-        self.makeUnThrowGagBoost()
-        self.makeUnSquirtGagBoost()
-        self.makeUnZapGagBoost()
-        self.makeUnSoundGagBoost()
-        self.makeUnDropGagBoost()
-        self.makeUnWinded()
-        self.makeUnBombed()
-        self.makeUnGagBan()
-        self.makeUnFrozen()
-        self.makeUnViralSensation()
-        self.makeUnDancePartner()
-        self.makeUnVulnerable()
-        self.makeUnSnapped()
+        self.clearAllToonStatusEffects()
         self.standWalkRunReverse = None
         self.stop()
         self.motion.exit()
@@ -7268,6 +7579,7 @@ class Toon(Avatar.Avatar, ToonHead):
         suit.setStyle(dna)
         suit.isDisguised = 1
         suit.generateSuit()
+        suit.getDialogueArray()
         suit.initializeDropShadow()
         suit.setPos(self.getPos())
         suit.setHpr(self.getHpr())
@@ -7331,6 +7643,48 @@ class Toon(Avatar.Avatar, ToonHead):
                  'dept': suitName,
                  'level': self.cogLevels[suitDept] + 1})
             self.nametag.setWordWrap(9.0)
+
+    def setChatAbsolute(
+        self,
+        chatString,
+        chatFlags,
+        dialogue=None,
+        interrupt=1):
+
+    # Run all normal Avatar chat handling first.
+        Avatar.Avatar.setChatAbsolute(
+            self,
+            chatString,
+            chatFlags,
+            dialogue,
+            interrupt
+        )
+
+        # Only Toons have disguise handling here.
+        if not self.isDisguised:
+            return
+
+        suit = getattr(self, 'suit', None)
+
+        if suit is None or suit.isEmpty():
+            return
+
+        animName = getattr(self, 'animHead', None)
+
+        if not animName:
+            return
+
+        for headPart in getattr(suit, 'animatedHeadParts', []):
+            if not headPart or headPart.isEmpty():
+                continue
+
+            if not headPart.getAnimControl(animName):
+                continue
+
+            Sequence(
+                ActorInterval(headPart, animName),
+                Func(headPart.loop, 'neutral')
+            ).start()
 
     def takeOffSuit(self):
         if not self.isDisguised:

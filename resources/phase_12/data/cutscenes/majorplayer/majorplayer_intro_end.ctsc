@@ -1,0 +1,390 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 42, \"useStart\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.0, 62.64705, 13.95454], \"hpr\": [0.0, -12.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [62.3722, 62.3722, 12.70827], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [1] [MP]",
+        "time": 0.25,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 4.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.5, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "MP Walks to Battle",
+        "time": 1.695,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"duration\": 2.0, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [180.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 4.0, \"delay\": 0.0, \"blendType\": \"noBlend\", \"xyz\": [-0.0, 125.0, 5.369], \"useStartPos\": 0, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"duration\": 2.0, \"hpr\": [180.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon 1 Go Up Stairs",
+        "time": 2.891,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 0, \"point\": [30.0, 85.0, 0.0], \"duration\": 0.8, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [30.0, 85.0, 0.0], \"duration\": 2.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 0, \"delay\": 0, \"duration\": 0.8, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-78.90628, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [30.0, 92.0, 0.0], \"duration\": 1.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 0, \"point\": [22.5, 98.5, 0.0], \"duration\": 0.5, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [22.5, 98.5, 5.1], \"duration\": 2.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 0, \"point\": [19.0, 103.0, -0.0], \"duration\": 0.3, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "7": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [19.0, 103.0, 5.1], \"duration\": 0.7, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon 4 Go Up Stairs",
+        "time": 2.891,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 3, \"point\": [-30.0, 85.0, 0.0], \"duration\": 0.8, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-30.0, 85.0, 0.0], \"duration\": 2.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 0, \"duration\": 0.8, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-78.90628, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-30.0, 92.0, 0.0], \"duration\": 1.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 3, \"point\": [-22.5, 98.5, 0.0], \"duration\": 0.5, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-22.5, 98.5, 5.1], \"duration\": 2.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 3, \"point\": [-19.0, 103.0, -0.0], \"duration\": 0.3, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "7": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [-19.0, 103.0, 5.1], \"duration\": 0.7, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Pan to Stairs",
+        "time": 4.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 2.0, \"delay\": 0.0, \"pos\": [32.97304, 71.0, 13.40989], \"hpr\": [20.00001, -25.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [62.64705, 62.64705, 13.95454], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Toon 2 Go Up Stairs",
+        "time": 4.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 1, \"point\": [30.0, 85.0, 0.0], \"duration\": 0.8, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [30.0, 85.0, 0.0], \"duration\": 2.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 1, \"delay\": 0, \"duration\": 0.8, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-78.90628, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [30.0, 92.0, 0.0], \"duration\": 1.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 1, \"point\": [22.5, 98.5, 0.0], \"duration\": 0.5, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [22.5, 98.5, 5.1], \"duration\": 2.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 1, \"point\": [21.0, 102.0, -0.0], \"duration\": 0.3, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "7": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [21.0, 102.0, 5.1], \"duration\": 0.7, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Toon 3 Go Up Stairs",
+        "time": 4.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 2, \"point\": [-30.0, 85.0, 0.0], \"duration\": 0.8, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-30.0, 85.0, 0.0], \"duration\": 2.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "2": {
+                "eventDefEnum": "turnSingleToonToHpr",
+                "kwargs": "{\"toonIndex\": 2, \"delay\": 0, \"duration\": 0.8, \"hpr\": [0.0, 0.0, 0.0], \"startHpr\": [-78.90628, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-30.0, 92.0, 0.0], \"duration\": 1.0, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "4": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 2, \"point\": [-22.5, 98.5, 0.0], \"duration\": 0.5, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "5": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-22.5, 98.5, 5.1], \"duration\": 2.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "6": {
+                "eventDefEnum": "turnSingleToonToPoint",
+                "kwargs": "{\"toonIndex\": 2, \"point\": [-21.0, 102.0, -0.0], \"duration\": 0.3, \"blendType\": \"noBlend\", \"hasAnim\": true, \"anim\": \"walk\"}"
+            },
+            "7": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [-21.0, 102.0, 5.1], \"duration\": 0.7, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "Suits Look at Toon",
+        "time": 5.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.2, \"hpr\": [45.0, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0.6, \"duration\": 0.2, \"hpr\": [45.0, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Turn to center",
+        "time": 8.27,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 2.5, \"delay\": 0.0, \"hpr\": [33.07198, -7.5707, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [20.00001, -25.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Suits Look Straight",
+        "time": 9.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0.3, \"duration\": 0.2, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.2, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Cut to Front",
+        "time": 11.147,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 50.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 10.0, \"delay\": 0.0, \"pos\": [0.0, 110.0, 13.40989], \"hpr\": [0, 0, 0], \"useStartPos\": true, \"useStartHpr\": true, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 68.0, 13.40989], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [2-4] [MP]",
+        "time": 12.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.5, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.5, \"hideNametag\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 2, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 5.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 10.5], \"scale\": 1.2, \"hideNametag\": true, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 3, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 10.5], \"scale\": 1.2, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Cut to Side",
+        "time": 21.77,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-9.04741, 107.24643, 10.65631], \"hpr\": [-37.03699, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [110.0, 110.0, 13.40989], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 40.0, \"blendType\": \"easeInOut\", \"start\": 50.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [5] [MP]",
+        "time": 21.77,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.25, \"moveNametag\": true, \"xyz\": [-4.47833, 0.0, 7.1411], \"scale\": 2.5, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "MP Song and Dance",
+        "time": 21.77,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"song-and-dance\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 1.84871, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"true-neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Cam: Cut to Battle",
+        "time": 25.08275,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 40.0, \"useStart\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.0, 107.24643, 16.10508], \"hpr\": [0.0, -19.60798, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [90.83784, 107.24643, 10.65631], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [6] [MP]",
+        "time": 25.66725,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.2, \"hideNametag\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Toons to Battle",
+        "time": 26.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"All\", \"pos\": [-0.0, 105.0, 5.369], \"duration\": 0, \"delay\": 0, \"hasAnim\": false, \"anim\": \"walk\", \"shape\": \"Line\", \"radius\": 3.0, \"h\": 180.0}"
+            },
+            "1": {
+                "eventDefEnum": "moveToonsToBattlePos",
+                "kwargs": "{\"duration\": 1.25, \"hasAnim\": true, \"anim\": \"run\", \"delay\": 0, \"battleNodeIndex\": 3, \"flipY\": 0, \"xyzOffset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Dialogue [7] [MP]",
+        "time": 28.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0, 0, 0], \"scale\": 1.2, \"hideNametag\": false, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    }
+]

@@ -116,7 +116,8 @@ def __doSuitThrows(throws, npcs):
         else:
             break
 
-    for throw in throws:
+    for throwIndex, throw in enumerate(throws):
+        throw['lastThrow'] = throwIndex == len(throws) - 1
         tracks = __throwPie(throw, delay, hitCount, npcs)
         if tracks:
             for track in tracks:
@@ -341,6 +342,7 @@ def __throwPie(throw, delay, hitCount, npcs):
     target = throw['target']
     suit = target['suit']
     hp = target['hp']
+    lastThrow = throw["lastThrow"]
     kbbonus = target['kbbonus']
     sidestep = throw['sidestep']
     died = target['died']
@@ -448,10 +450,14 @@ def __throwPie(throw, delay, hitCount, npcs):
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             suitType = getSuitBodyType(suit.getStyleName())
             animTrack = Sequence()
-            if level <= 5:
-                animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
+            if level > 5:
+                moveWaitDuration = 0.0
+                moveBlend = 'easeOut'
+                #animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
             elif level <= 5:
-                pass
+                moveWaitDuration = 0.2
+                moveBlend = 'noBlend'
+                animTrack.append(ActorInterval(suit, 'pie-small-react', duration=0.2))
             if suitType == 'a' and level <= 5:
                 animTrack.append(ActorInterval(suit, 'slip-forward', startTime=2.43))
             elif suitType == 'a':
@@ -465,23 +471,29 @@ def __throwPie(throw, delay, hitCount, npcs):
             elif suitType == 'c':
                 animTrack.append(ActorInterval(suit, 'pie-large-lured', startTime=0))
             animTrack.append(Func(battle.unlureSuit, suit))
-            moveTrack = Sequence(Wait(0.2), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle))
+            moveTrack = Sequence(Wait(moveWaitDuration), LerpPosInterval(suit, 0.6, pos=suitPos, other=battle, blendType=moveBlend))
             sival = Parallel(animTrack, moveTrack)
         elif hitCount == 1 and level <= 5:
             sival = Parallel(ActorInterval(suit, 'pie-small-react'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         elif hitCount == 1:
             sival = Parallel(ActorInterval(suit, 'pie-large'), MovieUtil.createSuitStunInterval(suit, 0.3, 1.3))
         else:
-            sival = ActorInterval(suit, 'pie-small-react')
+            if level <= 5:
+                sival = ActorInterval(suit, 'pie-small-react')
+            else:
+                if lastThrow:
+                    sival = ActorInterval(suit, 'pie-large')
+                else:
+                    sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
         if suit.throwRushJob:
             suitResponseTrack.append(Func(suit.makeUnThrowRushJob))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:
-            suitResponseTrack.append(Func(suit.makeMarked, 2))
+            suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'marked', modifier=1, turns=2))
         else:
-            suitResponseTrack.append(Func(suit.makeMarked, 1))
+            suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'marked', modifier=1, turns=1))
         suitResponseTrack.append(sival)
         #suitResponseTrack.append(Wait(0))
         #suitResponseTrack.append(markDamage)
@@ -518,27 +530,19 @@ def __throwPie(throw, delay, hitCount, npcs):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual:
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suit.isOverpressured:
+        elif died != 0 and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitResponseTrack.append(Func(suit.setNeutralAnimation))
         suitIndex = battle.activeSuits.index(suit)
-        if suit.dna.name == 'sgoat' and suit.isShielding:
-            suitResponseTrack.append(Func(suit.addRageBuilding, hp))
-        if suit.dna.name == 'phouse':
-            suitResponseTrack.append(Func(suit.addPowerhouseRotation, hp))
-        if suit.dna.name == 'liquid' and suit.isStormCell:
-            suitResponseTrack.append(Func(suit.addStormCellDamage))
-        if suit.isHeavyRain:
-            suitResponseTrack.append(Func(suit.addHeavyRainDamage, hp))
-        if suit.isSued:
-            suitResponseTrack.append(Func(suit.makeSued, 3))
+        if suit.hasSuitStatusEffect('sued'):
+            suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
         suitResponseTrack = Parallel(suitResponseTrack, bonusTrack)
     else:
         suitResponseTrack = MovieUtil.createSuitDodgeMultitrack(battle, delay + tSuitDodges, suit, leftSuits, rightSuits)
@@ -730,8 +734,8 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
             else:
                 sival = ActorInterval(suit, 'pie-small-react')
             singleSuitResponseTrack.append(Wait(delay + tPieHitsSuit))
-            if suit.throwRushJob:
-                singleSuitResponseTrack.append(Func(suit.makeUnThrowRushJob))
+            if suit.getSuitStatusModifier('rushJob') == 3:
+                suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
             singleSuitResponseTrack.append(showDamage)
             singleSuitResponseTrack.append(updateHealthBar)
             singleSuitResponseTrack.append(sival)

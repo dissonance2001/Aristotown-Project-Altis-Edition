@@ -46,6 +46,42 @@ class SuitInvasionManagerAI(DirectObject):
 
     def getInvadingCog(self):
         return (self.suitDeptIndex, self.suitTypeIndex, self.flags)
+    
+    def startInvasionByName(self, suitName, flags=0,
+                        type=INVASION_TYPE_NORMAL):
+        dept = SuitDNA.getSuitDept(suitName)
+
+        if dept is None:
+            self.notify.warning(
+                'Cannot invade with unknown Cog: %s' % suitName
+            )
+            return False
+
+        if dept not in SuitDNA.suitDepts:
+            self.notify.warning(
+                'Cog %s has invalid department %s'
+                % (suitName, dept)
+            )
+            return False
+
+        roster = SuitDNA.suitDeptCogs.get(dept, ())
+
+        if suitName not in roster:
+            self.notify.warning(
+                'Cog %s is not in normal invasion roster for %s'
+                % (suitName, dept)
+            )
+            return False
+
+        deptIndex = SuitDNA.suitDepts.index(dept)
+        typeIndex = roster.index(suitName)
+
+        return self.startInvasion(
+            deptIndex,
+            typeIndex,
+            flags,
+            type
+        )
 
     def startInvasion(self, suitDeptIndex=None, suitTypeIndex=None, flags=0,
                       type=INVASION_TYPE_NORMAL):
@@ -66,13 +102,23 @@ class SuitInvasionManagerAI(DirectObject):
             # The provided flag combination is not possible.
             return False
 
-        if (suitDeptIndex is not None) and (suitDeptIndex >= len(SuitDNA.suitDepts)):
-            # Invalid suit department.
-            return False
+        if suitDeptIndex is not None:
+            if suitDeptIndex < 0 or suitDeptIndex >= len(SuitDNA.suitDepts):
+                self.notify.warning(
+                    'Invalid invasion department index: %s' % suitDeptIndex
+                )
+                return False
 
-        if (suitTypeIndex is not None) and (suitTypeIndex >= SuitDNA.suitsPerDept):
-            # Invalid suit type.
-            return False
+        if suitTypeIndex is not None:
+            dept = SuitDNA.suitDepts[suitDeptIndex]
+            roster = SuitDNA.suitDeptCogs.get(dept, ())
+
+            if suitTypeIndex < 0 or suitTypeIndex >= len(roster):
+                self.notify.warning(
+                    'Invalid invasion type index %s for department %s; roster size is %s'
+                    % (suitTypeIndex, dept, len(roster))
+                )
+                return False
 
         if type not in (INVASION_TYPE_NORMAL, INVASION_TYPE_MEGA):
             # Invalid invasion type.
@@ -98,11 +144,19 @@ class SuitInvasionManagerAI(DirectObject):
 
         # Update the invasion tracker on the districts page in the Shticker Book:
         if self.suitDeptIndex is not None:
-            self.air.districtStats.b_setInvasionStatus(self.suitDeptIndex + 1)
-            self.air.districtStats.setInvasionType(suitTypeIndex + 1)
+            self.air.districtStats.b_setInvasionStatus(
+                self.suitDeptIndex + 1
+            )
+
+            if self.suitTypeIndex is not None:
+                self.air.districtStats.setInvasionType(
+                    self.suitTypeIndex + 1
+                )
+            else:
+                self.air.districtStats.setInvasionType(0)
         else:
             self.air.districtStats.b_setInvasionStatus(5)
-            self.air.districtStats.setInvasionType(suitTypeIndex + 1)
+            self.air.districtStats.setInvasionType(0)
 
         # If this is a normal invasion, and the players take too long to defeat
         # all of the Cogs, we'll want the invasion to timeout:
@@ -140,13 +194,42 @@ class SuitInvasionManagerAI(DirectObject):
         return True
 
     def getSuitName(self):
-        if self.suitDeptIndex is not None:
-            if self.suitTypeIndex is not None:
-                return SuitDNA.getSuitName(self.suitDeptIndex, self.suitTypeIndex)
-            else:
-                return SuitDNA.suitDepts[self.suitDeptIndex]
-        else:
+        if self.suitDeptIndex is None:
             return SuitDNA.suitHeadTypes[0]
+
+        if (
+            self.suitDeptIndex < 0 or
+            self.suitDeptIndex >= len(SuitDNA.suitDepts)
+        ):
+            self.notify.warning(
+                'Invalid stored invasion department index: %s'
+                % self.suitDeptIndex
+            )
+            return SuitDNA.suitHeadTypes[0]
+
+        dept = SuitDNA.suitDepts[self.suitDeptIndex]
+
+        # Department-wide invasion.
+        if self.suitTypeIndex is None:
+            return dept
+
+        roster = SuitDNA.suitDeptCogs.get(dept, ())
+
+        if (
+            self.suitTypeIndex < 0 or
+            self.suitTypeIndex >= len(roster)
+        ):
+            self.notify.warning(
+                'Invalid stored invasion type index %s for %s'
+                % (self.suitTypeIndex, dept)
+            )
+
+            if roster:
+                return roster[0]
+
+            return SuitDNA.suitHeadTypes[0]
+
+        return roster[self.suitTypeIndex]
 
     def notifyInvasionStarted(self):
         msgType = ToontownGlobals.SuitInvasionBegin

@@ -18,7 +18,7 @@ class SuitPlannerInteriorAI:
         self.dbg_1SuitPerFloor = config.GetBool('1-suit-per-floor', 0)
         self.zoneId = zone
         self.numFloors = numFloors
-        self.respectInvasions = 1
+        self.respectInvasions = 0
         dbg_defaultSuitName = simbase.config.GetString('suit-type', 'random')
         if dbg_defaultSuitName == 'random':
             self.dbg_defaultSuitType = None
@@ -94,6 +94,21 @@ class SuitPlannerInteriorAI:
         if self.dbg_defaultSuitType != None:
             return self.dbg_defaultSuitType
         return SuitDNA.getRandomSuitType(lvl)
+    
+    def __suitTierFromLevel(self, level):
+        possibleTiers = []
+
+        for tier in range(1, 8 + 1):
+            minLevel = self.MIN_LEVEL_BY_TIER.get(tier, tier)
+            maxLevel = self.MAX_LEVEL_BY_TIER.get(tier, tier + 4)
+
+            if minLevel <= level <= maxLevel:
+                possibleTiers.append(tier)
+
+        if not possibleTiers:
+            return 8
+
+        return random.choice(possibleTiers)
 
     def __genLevelList(self, bldgLevel, currFloor, numFloors):
         bldgInfo = SuitBuildingGlobals.SuitBuildingInfo[bldgLevel]
@@ -127,20 +142,66 @@ class SuitPlannerInteriorAI:
         lvlList.sort(cmp)
         self.notify.debug('LevelList: ' + repr(lvlList))
         return lvlList
+    
+    def __genRandomUncappedSuit(
+            self,
+            minLevel,
+            maxLevel,
+            bldgTrack=None,
+            revives=0):
 
-    def __setupSuitInfo(self, suit, bldgTrack, suitLevel, suitType):
+        if bldgTrack is None:
+            bldgTrack = random.choice(SuitDNA.suitDepts)
+
+        suitLevel = random.randint(
+            minLevel,
+            maxLevel
+        )
+
+        # suitTier must still be a valid tier from 1 through 8.
+        suitTier = random.randint(1, 8)
+
+        return self.__genSuitObject(
+            self.zoneId,
+            suitTier,
+            bldgTrack,
+            suitLevel,
+            revives
+        )
+
+    def __setupSuitInfo(
+        self,
+        suit,
+        bldgTrack,
+        suitLevel,
+        suitType=None,
+        suitName=None,
+        forceLevel=False):
         suitDeptIndex, suitTypeIndex, flags = simbase.air.suitInvasionManager.getInvadingCog()
         if self.respectInvasions:
             if suitDeptIndex is not None:
                 bldgTrack = SuitDNA.suitDepts[suitDeptIndex]
             if suitTypeIndex is not None:
-                suitName = SuitDNA.getSuitName(suitDeptIndex, suitTypeIndex)
-                suitType = SuitDNA.getSuitType(suitName)
-                suitLevel = min(max(suitLevel, suitType), suitType + 4)
+                suitName = SuitDNA.getSuitName(
+                    suitDeptIndex,
+                    suitTypeIndex
+                )
+
+                suitType = SuitDNA.getSuitType(
+                    suitName
+                )
+
+    # Do not alter suitLevel here.
         dna = SuitDNA.SuitDNA()
-        dna.newSuitRandom(suitType, bldgTrack)
+        if suitName is not None:
+            dna.newSuit(suitName)
+        else:
+            dna.newSuitRandom(suitType, bldgTrack)
         suit.dna = dna
-        suit.setLevel(suitLevel)
+        suit.setLevel(
+            suitLevel,
+            forceLevel=forceLevel
+        )
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.isSkeleton:
@@ -156,20 +217,40 @@ class SuitPlannerInteriorAI:
         if suit.dna.name == 'ant':
             suit.setExecutive(1)
         if suit.dna.name == 'mh2':
-            suit.setExecutive(1)
+            suit.setGovernaught(1)
         if suit.dna.name == 'std2':
+            suit.setGovernaught(1)
+        if suit.dna.name == 'cnd2':
+            suit.setGovernaught(1)
+        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager()  and not suit.dna.name == 'std2' and not suit.dna.name == 'cnd2' and not suit.dna.name == 'mh2' and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
-            suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
+        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'cnd2' and not suit.dna.name == 'std2' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'chairp' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
             suit.setGovernaught(1)
         suit.setCog(1)
         return flags
 
-    def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0, skelecogChance=0, revivesTwoChance=0, revivesThreeChance=0, forceExecutive=0):
+    def __genSuitObject(
+        self,
+        suitZone,
+        suitType=None,
+        bldgTrack=None,
+        suitLevel=1,
+        revives=0,
+        skelecogChance=0,
+        revivesTwoChance=0,
+        revivesThreeChance=0,
+        forceExecutive=0,
+        suitName=None,
+        forceLevel=False):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
-        #skel, exe = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
-        flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
+        flags = self.__setupSuitInfo(
+            newSuit,
+            bldgTrack,
+            suitLevel,
+            suitType=suitType,
+            suitName=suitName,
+            forceLevel=forceLevel
+        )
         newSuit.setSkeleRevives(revives)
         # if forceExecutive > 0:
         #     newSuit.setExecutive(1)
@@ -258,7 +339,7 @@ class SuitPlannerInteriorAI:
         def suitKindFromLevel(level):
             possibleTypes = []
 
-            for suitType in range(1, 15):
+            for suitType in range(1, 19):
                 minLevel = MIN_LEVEL_BY_TYPE.get(suitType, suitType)
                 maxLevel = MAX_LEVEL_BY_TYPE.get(suitType, suitType + 4)
 
@@ -266,228 +347,590 @@ class SuitPlannerInteriorAI:
                     possibleTypes.append(suitType)
 
             if not possibleTypes:
-                return 14
+                return 8
 
             return random.choice(possibleTypes)
 
 
         suitLevel = random.randint(15, 20)
-        suitKind = suitKindFromLevel(suitLevel)
+        suitKind = self.__genNormalSuitType(suitLevel)
         if specialCode == 'ffm':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)
-            activeSuits.append(random.choice((miniboss, miniboss3)))
-            activeSuits.append(random.choice((miniboss2, miniboss4)))
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
+            activeSuits.append(miniboss)
         elif specialCode == 'stenog':
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
-            activeSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='stenog'
+            )
+            activeSuits.append(miniboss)
         elif specialCode == 'lgator':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=40,
+                revives=0,
+                suitName='lgator'
+            )
             activeSuits.append(miniboss)
         elif specialCode == 'caseman':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)
-            activeSuits.append(miniboss3)
-        elif specialCode == 'sgoat':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
-            activeSuits.append(miniboss4)
-        elif specialCode == 'lit':
-            pair1 = []
-            pair2 = []
-            pair3 = []
-            pair4 = []
-            pair5 = []
-            pair6 = []
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0) # Litigator
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0) # Stenographer
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0) # Case Manager
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0) # Scapegoat
-            pair1.append(miniboss)
-            pair1.append(miniboss2)
-            pair2.append(miniboss4)
-            pair2.append(miniboss3)
-            pair3.append(miniboss)
-            pair3.append(miniboss3)
-            pair4.append(miniboss4)
-            pair4.append(miniboss2)
-            pair5.append(miniboss)
-            pair5.append(miniboss4)
-            pair6.append(miniboss2)
-            pair6.append(miniboss3)
-            activeSuits.append(random.choice((pair1, pair2, pair3, pair4, pair5, pair6)))
-        elif specialCode == 'erclaimerfit':
-            miniboss = self.__genSuitObject(self.zoneId, 26, 'm', 26, 1) # Count Erfit
-            miniboss2 = self.__genSuitObject(self.zoneId, 22, 'l', 22, 1) # Count Erclaim
-            suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
-            suit2 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
-            suit3 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
-            suit4 = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0, 0, 0, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='caseman'
+            )
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss2)
-            activeSuits.append(suit)
-            activeSuits.append(suit2)
+        elif specialCode == 'sgoat':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=30,
+                revives=0,
+                suitName='sgoat'
+            )
+            activeSuits.append(miniboss)
+        elif specialCode == 'lit':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
+            activeSuits.append(miniboss)
+        elif specialCode == 'erclaimerfit':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=20,
+                revives=1,
+                suitName='erfit'
+            )
+
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=20,
+                revives=1,
+                suitName='erclaim'
+            )
+
+            suitLevel = random.randint(15, 20)
+            suitType = SuitDNA.getSuitType(suitLevel)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')),
+                suitLevel=suitLevel,
+                revives=0
+            )
+
+            suitLevel2 = random.randint(15, 20)
+            suitType2 = SuitDNA.getSuitType(suitLevel2)
+
+            suit2 = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType2,
+                bldgTrack=random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')),
+                suitLevel=suitLevel2,
+                revives=0
+            )
+
+            activeSuits.extend((
+                miniboss,
+                miniboss2,
+                suit,
+                suit2
+            ))
         elif specialCode == 'litpair1':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0) # Litigator
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0) # Stenographer
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=40,
+                revives=0,
+                suitName='lgator'
+            ) # Litigator
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='stenog'
+            ) # Stenographer
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'litpair2':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss4)
-        elif specialCode == 'litpair3':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)  # Litigator
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=40,
+                revives=0,
+                suitName='lgator'
+            ) # Litigator
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='caseman'
+            ) # Case Manager
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'litpair3':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=40,
+                revives=0,
+                suitName='lgator'
+            ) # Litigator
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=30,
+                revives=0,
+                suitName='sgoat'
+            ) # Scapegoat
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'litpair4':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)  # Stenographer
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='caseman'
+            ) # Case Manager
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='stenog'
+            ) # Stenographer
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'litpair5':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)  # Scapegoat
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)  # Stenographer
-            activeSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='caseman'
+            ) # Case Manager
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=30,
+                revives=0,
+                suitName='sgoat'
+            ) # Scapegoat
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'litpair6':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)  # Case Manager
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)  # Litigator
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=30,
+                revives=0,
+                suitName='sgoat'
+            ) # Scapegoat
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='stenog'
+            ) # Stenographer
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'blitpair1':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0) # Ambassador
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0) # Wiretapper
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=48,
+                revives=0,
+                suitName='ambass'
+            ) # Ambassador
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='wtapper'
+            ) # Wiretapper
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'blitpair2':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss4)
-        elif specialCode == 'blitpair3':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)  # Ambassador
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=48,
+                revives=0,
+                suitName='ambass'
+            ) # Ambassador
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='bkeeper'
+            ) # Commissioner
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'blitpair3':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=48,
+                revives=0,
+                suitName='ambass'
+            ) # Ambassador
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=38,
+                revives=0,
+                suitName='phouse'
+            ) # Powerhouse
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'blitpair4':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)  # Wiretapper
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='wtapper'
+            ) # Wiretapper
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='bkeeper'
+            ) # Commissioner
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'blitpair5':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)  # Powerhouse
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)  # Wiretapper
-            activeSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='wtapper'
+            ) # Wiretapper
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=38,
+                revives=0,
+                suitName='phouse'
+            ) # Powerhouse
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'blitpair6':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)  # Bookkeeper
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)  # Ambassador
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=38,
+                revives=0,
+                suitName='phouse'
+            ) # Powerhouse
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='bkeeper'
+            ) # Commissioner
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'slitpair1':
-            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
-            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=45,
+                revives=0,
+                suitName='safesupervis'
+            ) # Pressurizer
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='ubuster'
+            ) # Union Buster
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair2':
-            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
-            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss4)
-        elif specialCode == 'slitpair3':
-            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
-            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=45,
+                revives=0,
+                suitName='safesupervis'
+            ) # Pressurizer
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='hustle'
+            ) # Traffic Manager
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'slitpair3':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=45,
+                revives=0,
+                suitName='safesupervis'
+            ) # Pressurizer
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=35,
+                revives=0,
+                suitName='radiog'
+            ) # Radiographer
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'slitpair4':
-            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
-            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='hustle'
+            ) # Traffic Manager
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=35,
+                revives=0,
+                suitName='radiog'
+            ) # Radiographer
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair5':
-            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)  # Radiographer
-            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)  # Union Buster
-            activeSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='hustle'
+            ) # Traffic Manager
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='ubuster'
+            ) # Union Buster
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'slitpair6':
-            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)  # Racketeer
-            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)  # Pressurizer
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='ubuster'
+            ) # Union Buster
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=35,
+                revives=0,
+                suitName='radiog'
+            ) # Radiographer
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair1':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)  # Contingency Director
-            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=66,
+                revives=0,
+                suitName='cdirector'
+            ) # Contingency Director
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='rkeeper'
+            ) # Recordkeeper
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair2':
-            miniboss3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)  # Recordkeeper
-            miniboss4 = self.__genSuitObject(self.zoneId, 21, 'g', 21, 0)  # Liquidator
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss4)
-        elif specialCode == 'bdlitpair3':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)  # Contingency Director
-            miniboss4 = self.__genSuitObject(self.zoneId, 21, 'g', 21, 0)  # Liquidator
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=66,
+                revives=0,
+                suitName='cdirector'
+            ) # Contingency Director
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='dking'
+            ) # Dividend King
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss4)
+            activeSuits.append(miniboss2)
+        elif specialCode == 'bdlitpair3':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=56,
+                revives=0,
+                suitName='liquid'
+            ) # Tollmaster
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='rkeeper'
+            ) # Recordkeeper
+            activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair4':
-            miniboss3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)  # Recordkeeper
-            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='dking'
+            ) # Dividend King
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='rkeeper'
+            ) # Recordkeeper
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair5':
-            miniboss4 = self.__genSuitObject(self.zoneId, 21, 'g', 21, 0)  # Liquidator
-            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)  # Dividend King
-            activeSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=56,
+                revives=0,
+                suitName='liquid'
+            ) # Tollmaster
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='dking'
+            ) # Dividend King
+            activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'bdlitpair6':
-            miniboss3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)  # Recordkeeper
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)  # Contingency Director
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=56,
+                revives=0,
+                suitName='liquid'
+            ) # Tollmaster
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=66,
+                revives=0,
+                suitName='cdirector'
+            ) # Contingency Director
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
         elif specialCode == 'ambassador':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss2)
-            activeSuits.append(miniboss4)
-            activeSuits.append(miniboss3)
         elif specialCode == 'directors':
-            miniboss = self.__genSuitObject(self.zoneId, 17, 's', 17, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 19, 'g', 19, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 17, 'c', 17, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
             activeSuits.append(miniboss)
-            activeSuits.append(miniboss2)
-            activeSuits.append(miniboss3)
         elif specialCode == 'lit2':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'l', 24, 1)
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'l', 23, 1)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=50,
+                revives=1,
+                suitName='wsi'
+            ) # Witness Stand-In
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=20,
+                revives=1,
+                suitName='redd'
+            ) # Redd Heir Wing
             activeSuits.append(miniboss)
             activeSuits.append(miniboss2)
         elif specialCode == 'oclo1':
-            miniboss = self.__genSuitObject(self.zoneId, 14, 'l', 22, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 12, 'l', 22, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 12, 'l', 23, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 14, 'l', 24, 0)
-            miniboss5 = self.__genSuitObject(self.zoneId, 12, 'l', 17, 0)
-            miniboss6 = self.__genSuitObject(self.zoneId, 14, 'l', 18, 0)
-            activeSuits.append(random.choice((miniboss, miniboss2)))
-            reserveSuits.append(random.choice((miniboss3, miniboss4, miniboss5, miniboss6)))
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
+            activeSuits.append(miniboss)
         elif specialCode == 'ffm2':
-            miniboss2 = self.__genSuitObject(self.zoneId, 19, 's', 19, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 21, 's', 21, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 22, 's', 22, 0)
-            activeSuits.append(miniboss4)
-            activeSuits.append(random.choice((miniboss3, miniboss2)))
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
+            activeSuits.append(miniboss)
         elif specialCode == 'crf1':
-            miniboss = self.__genSuitObject(self.zoneId, 25, 'm', 25, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=100,
+                revives=0,
+                suitName='hroller'
+            )
             activeSuits.append(miniboss)
         elif specialCode == 'crf2':
-            miniboss = self.__genSuitObject(self.zoneId, 1, 'm', 1, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
             activeSuits.append(miniboss)
         elif specialCode == 'videog':
             miniboss = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
@@ -501,12 +944,14 @@ class SuitPlannerInteriorAI:
             activeSuits.append(miniboss4)
             activeSuits.append(miniboss5)
         elif specialCode == 'gtk':
-            miniboss1 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
-            activeSuits.append(miniboss1)
-            activeSuits.append(miniboss2)
-            activeSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=50,
+                revives=0,
+                suitName='f'
+            ) # Placeholder
+            activeSuits.append(miniboss)
         suitHandles['activeSuits'] = activeSuits
         suitHandles['reserveSuits'] = reserveSuits
         return suitHandles
@@ -598,25 +1043,95 @@ class SuitPlannerInteriorAI:
         suitLevelErclaim2 = random.randint(15, 20)
         suitKindErclaim2 = suitKindFromLevel(suitLevelErclaim)
         if specialCode == 'erfit1':
-            suit = self.__genSuitObject(self.zoneId, suitKindErfit1, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit1, 0, 100, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(10, 14)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erfit2':
-            suit = self.__genSuitObject(self.zoneId, suitKindErfit2, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit2, 0, 100, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(12, 16)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erfit3':
-            suit = self.__genSuitObject(self.zoneId, suitKindErfit3, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit3, 0, 100, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(14, 18)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erfit4':
-            suit = self.__genSuitObject(self.zoneId, suitKindErfit4, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit4, 0, 100, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(16, 20)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erfit5':
-            suit = self.__genSuitObject(self.zoneId, suitKindErfit5, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErfit5, 0, 100, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(20, 30)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erclaim':
-            suit = self.__genSuitObject(self.zoneId, suitKindErclaim, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErclaim, 0, 100, 0, 0, 1)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(10, 15)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'erclaim2':
-            suit = self.__genSuitObject(self.zoneId, suitKindErclaim2, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelErclaim2, 0, 100, 0, 0, 1)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(15, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'crf':
             # generate random cashbot from lv 12 to 20
@@ -626,177 +1141,544 @@ class SuitPlannerInteriorAI:
             reserveSuits.append(random.choice((suit, suit2, suit3)))
         if specialCode == 'lit':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'l', suitLevel, 0, 15, 0, 0)
+            suitLevel = random.randint(10, 20)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'l')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='l',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'litDesperation':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'l', suitLevelDesperation, 0, 15, 0, 0)
+            suitLevel = random.randint(15, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'l')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='l',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'amb':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'c', suitLevel, 0, 15, 0, 0)
+            suitLevel = random.randint(10, 20)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'c')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='c',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'ambDesperation':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'c', suitLevelDesperation, 0, 15, 0, 0)
+            suitLevel = random.randint(15, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'c')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='c',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'pres':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0, 15, 0, 0)
+            suitLevel = random.randint(10, 20)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 's')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='s',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'presDesperation':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 's', suitLevelDesperation, 0, 15, 0, 0)
+            suitLevel = random.randint(15, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 's')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='s',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'bdlit':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKind, 'g', suitLevel, 0, 15, 0, 0)
+            suitLevel = random.randint(10, 20)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'g')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='g',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'bdlitDesperation':
             # litigation
-            suit = self.__genSuitObject(self.zoneId, suitKindDesperation, 'g', suitLevelDesperation, 0, 15, 0, 0)
+            suitLevel = random.randint(15, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'g')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack='g',
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'lit2':
             # witness stand-in
-            suit = self.__genSuitObject(self.zoneId, suitKindWSI, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelWSI, 0, 15, 0, 0)
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(10, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'phantom':
-            miniboss2 = self.__genSuitObject(self.zoneId, 23, 'g', 23, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=30,
+                revives=0,
+                suitName='cbutcher'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'dking':
-            miniboss2 = self.__genSuitObject(self.zoneId, 25, 'g', 25, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='dking'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'cdirector':
-            miniboss = self.__genSuitObject(self.zoneId, 24, 'g', 24, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=66,
+                revives=0,
+                suitName='cdirector'
+            )
             reserveSuits.append(miniboss)
         if specialCode == 'rkeeper':
-            miniboss3 = self.__genSuitObject(self.zoneId, 22, 'g', 22, 0)
-            reserveSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=60,
+                revives=0,
+                suitName='rkeeper'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'liquid':
-            miniboss4 = self.__genSuitObject(self.zoneId, 21, 'g', 21, 0)
-            reserveSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=56,
+                revives=0,
+                suitName='liquid'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'ubuster':
-            miniboss2 = self.__genSuitObject(self.zoneId, 26, 's', 26, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='ubuster'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'safesupervis':
-            miniboss = self.__genSuitObject(self.zoneId, 27, 's', 27, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=45,
+                revives=0,
+                suitName='safesupervis'
+            )
             reserveSuits.append(miniboss)
         if specialCode == 'racket':
-            miniboss3 = self.__genSuitObject(self.zoneId, 25, 's', 25, 0)
-            reserveSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=40,
+                revives=0,
+                suitName='hustle'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'radiog':
-            miniboss4 = self.__genSuitObject(self.zoneId, 24, 's', 24, 0)
-            reserveSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=35,
+                revives=0,
+                suitName='radiog'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'wtapper':
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'c', 27, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='wtapper'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'ambass':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'c', 28, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=48,
+                revives=0,
+                suitName='ambass'
+            )
             reserveSuits.append(miniboss)
         if specialCode == 'bkeeper':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'c', 26, 0)
-            reserveSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=44,
+                revives=0,
+                suitName='bkeeper'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'phouse':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'c', 25, 0)
-            reserveSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=38,
+                revives=0,
+                suitName='phouse'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'stenog':
-            miniboss2 = self.__genSuitObject(self.zoneId, 27, 'l', 27, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='stenog'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'lgator':
-            miniboss = self.__genSuitObject(self.zoneId, 28, 'l', 28, 0)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=40,
+                revives=0,
+                suitName='lgator'
+            )
             reserveSuits.append(miniboss)
         if specialCode == 'caseman':
-            miniboss3 = self.__genSuitObject(self.zoneId, 26, 'l', 26, 0)
-            reserveSuits.append(miniboss3)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=35,
+                revives=0,
+                suitName='caseman'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'sgoat':
-            miniboss4 = self.__genSuitObject(self.zoneId, 25, 'l', 25, 0)
-            reserveSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=30,
+                revives=0,
+                suitName='sgoat'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'hrollerPhase3':
-            miniboss4 = self.__genSuitObject(self.zoneId, 28, 'm', 28, 0)
-            reserveSuits.append(miniboss4)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=100,
+                revives=0,
+                suitName='hroller2'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'videogPhase2':
-            miniboss2 = self.__genSuitObject(self.zoneId, 20, 'p', 20, 0)
-            reserveSuits.append(miniboss2)
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='t',
+                suitLevel=99,
+                revives=0,
+                suitName='videog'
+            )
+            reserveSuits.append(miniboss)
         if specialCode == 'std':
-            miniboss2 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
-            reserveSuits.append(miniboss2)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='std2'
+            )
+            reserveSuits.append(suit)
         if specialCode == 'mh':
-            miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            reserveSuits.append(miniboss2)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='mh2'
+            )
+            reserveSuits.append(suit)
+        if specialCode == 'cnd':
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='cnd2'
+            )
+            reserveSuits.append(suit)
         if specialCode == 'ffm2':
-            # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 17, 't', random.randint(17, 20), 0)
             reserveSuits.append(suit)
         if specialCode == 'ffm':
-            # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0)
             reserveSuits.append(suit)
         if specialCode == 'crf1':
-            # generate random cashbot from lv 12 to 20
-            suit = self.__genSuitObject(self.zoneId, suitKindHighRoller, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevelHighRoller, 0)
+            suit = self.__genRandomUncappedSuit(
+                1,
+                35,
+                bldgTrack=random.choice(('c', 'm', 'l', 'p', 't', 'g', 's')),
+                revives=0
+            )
+            reserveSuits.append(suit)
+        if specialCode == 'crfMinigame':
+            suit = self.__genRandomUncappedSuit(
+                1,
+                20,
+                bldgTrack=random.choice(('c', 'm', 'l', 'p', 't', 'g', 's')),
+                revives=0
+            )
             reserveSuits.append(suit)
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
             reserveSuits.append(suit)
         if specialCode == 'sil1':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=25,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil2':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 28, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=26,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil3':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 29, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=27,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil4':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 30, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=28,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil5':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 31, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=29,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil6':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 32, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=30,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil7':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 33, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=31,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil8':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 34, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=32,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil9':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 35, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=33,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil10':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 36, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=34,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil11':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 37, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=35,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'sil12':
-            suit = self.__genSuitObject(self.zoneId, 27, 'm', 38, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=36,
+                revives=0,
+                suitName='hrollers'
+            )
             reserveSuits.append(suit)
         if specialCode == 'videog':
-            suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
-            reserveSuits.append(random.choice((suit, suit4)))
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='std2'
+            )
+            suit2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='cnd2'
+            )
+            suit3 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='mh2'
+            )
+            reserveSuits.append(random.choice((suit, suit2, suit3)))
         if specialCode == 'videog4':
-            suit = self.__genSuitObject(self.zoneId, 18, 'p', 18, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='t',
+                suitLevel=33,
+                revives=0,
+                suitName='bcaster'
+            )
             reserveSuits.append(suit)
         if specialCode == 'choreo':
-            suit = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=26,
+                revives=0,
+                suitName='choreo'
+            )
             reserveSuits.append(suit)
         if specialCode == 'cinema':
-            suit = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=26,
+                revives=0,
+                suitName='cinema'
+            )
             reserveSuits.append(suit)
         if specialCode == 'fmaker':
-            suit = self.__genSuitObject(self.zoneId, 27, 'g', 27, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=26,
+                revives=0,
+                suitName='fmaker'
+            )
             reserveSuits.append(suit)
         if specialCode == 'director':
-            suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='p',
+                suitLevel=30,
+                revives=0,
+                suitName='director'
+            )
             reserveSuits.append(suit)
         if specialCode == 'videog2':
-            suit = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            suit4 = self.__genSuitObject(self.zoneId, 19, 'p', 19, 0)
-            reserveSuits.append(random.choice((suit, suit4)))
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='std2'
+            )
+            suit2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='cnd2'
+            )
+            suit3 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=25,
+                revives=0,
+                suitName='mh2'
+            )
+            reserveSuits.append(random.choice((suit, suit2, suit3)))
         if specialCode == 'videog3':
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 19, 't', 19, 0)

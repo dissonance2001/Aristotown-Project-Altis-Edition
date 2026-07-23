@@ -532,7 +532,7 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         noUnites = False
         if 'noUnites' in base.localAvatar.battleConditions:
             noUnites = True
-        if base.localAvatar.cooldown:
+        if base.localAvatar.hasToonStatusEffect('cooldown'):
             noUnites = True
         if not noUnites:
             self.chatMgr.sendSCResistanceChatMessage(textId)

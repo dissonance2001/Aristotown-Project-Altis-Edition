@@ -98,7 +98,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         suitDNA.newSuit('ubuster')
         self.unionbuster.setDNA(suitDNA)
         self.unionbuster.setPickable(0)
-        self.unionbuster.setDisplayName('Traffic Manager\nSellbot\nLevel 40.mgr')
+        self.unionbuster.setDisplayName('Union Buster\nSellbot\nLevel 40.mgr')
         self.unionbuster.doId = 0
         self.unionbuster.loop('sit-exec')
 
@@ -107,7 +107,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         suitDNA.newSuit('hustle')
         self.racketeer.setDNA(suitDNA)
         self.racketeer.setPickable(0)
-        self.racketeer.setDisplayName('Hustler\nSellbot\nLevel 40.mgr')
+        self.racketeer.setDisplayName('Traffic Manager\nSellbot\nLevel 40.mgr')
         self.racketeer.doId = 0
         self.racketeer.loop('sit-exec')
 
@@ -447,13 +447,13 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          Func(self.pressurizer.setChatAbsolute, "They never realize how visible they are.", CFSpeech | CFTimeout),
                          Wait(4.0),
                          Parallel(LerpPosInterval(camera, 2, getCamBossPosRackteer), LerpHprInterval(camera, 2, racketeerNode.getHpr), Sequence(Wait(2),
-                        Func(self.racketeer.setChatAbsolute, "That's because they think they're clever.", CFSpeech | CFTimeout))),
+                        Func(self.racketeer.setChatAbsolute, "That's because they never follow directions.", CFSpeech | CFTimeout))),
                          Wait(4.0),
-                         Func(self.racketeer.setChatAbsolute, "Break a few operations... knock over a few Cogs...", CFSpeech | CFTimeout),
+                         Func(self.racketeer.setChatAbsolute, "One closed road... one wrong turn... and the whole operations comes to a standstill", CFSpeech | CFTimeout),
                          Wait(4.0),
-                         Func(self.racketeer.setChatAbsolute, "Suddenly they think they're running the place.", CFSpeech | CFTimeout),
+                         Func(self.racketeer.setChatAbsolute, "By the time they find another route... we're already waiting.", CFSpeech | CFTimeout),
                          Wait(4.0),
-                         Func(self.racketeer.setChatAbsolute, "Heh, I can't wait to collect on that mistake!", CFSpeech | CFTimeout),
+                         Func(self.racketeer.setChatAbsolute, "Looks like traffic's about to get a whole lot heavier!", CFSpeech | CFTimeout),
                          Wait(4.0),
                          Parallel(LerpPosInterval(camera, 2, getCamBossPosUnionBuster), LerpHprInterval(camera, 2, unionbusterNode.getHpr), Sequence(Wait(2),
                            Func(self.unionbuster.setChatAbsolute, "Teamwork.",  CFSpeech | CFTimeout))),
@@ -477,8 +477,8 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          Func(self.setChatAbsolute, "That's exactly why the Pressure Division exists.", CFSpeech), Wait(4.0),
                          Func(self.pelvis.setH, 180),
                          Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Radiographer... You watch them.", CFSpeech)),
-                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Hustler... You squeeze them.", CFSpeech)),
-                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Traffic Manager... You fracture their cooperation.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Traffic Manager... You reroute them.", CFSpeech)),
+                         Parallel(ActorInterval(self, 'Ff_speech'), Func(self.setChatAbsolute, "Union Buster... You fracture their cooperation.", CFSpeech)),
                          Parallel(Func(self.pelvis.setH, 180), Parallel(ActorInterval(self, 'Ff_lookLt'), Func(self.loop, 'Ff_neutral')), Func(self.setChatAbsolute, "And you Pressurizer...", CFSpeech),),
                                   Func(self.setChatAbsolute, "", CFSpeech),
                     Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Wait(2),
@@ -512,7 +512,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
                          Wait(4.0),
                          Func(self.pressurizer.setChatAbsolute, "Now let's see how long you last!", CFSpeech | CFTimeout), Wait(3.0),
                                   Parallel(LerpPosInterval(camera, 2, getCamBossPosRackteer), LerpHprInterval(camera, 2, racketeerNode.getHpr), Sequence(Wait(2),
-                                Func(self.racketeer.setChatAbsolute,  "Sounds like a profitable evening.",  CFSpeech | CFTimeout))),
+                                Func(self.racketeer.setChatAbsolute,  "Looks like rush hour came early.",  CFSpeech | CFTimeout))),
                                   Wait(3.0),
                                   Parallel(LerpPosInterval(camera, 2, getCamBossPosRadiographer), LerpHprInterval(camera, 2, radiographerNode.getHpr), Sequence(Wait(2),
                                            Func(self.radiographer.setChatAbsolute, "I've already started recording.", CFSpeech | CFTimeout))), Wait(3.0),

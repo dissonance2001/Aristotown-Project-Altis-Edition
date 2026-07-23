@@ -3329,7 +3329,16 @@ MeritsPerLevel = ((1, 1, 1, 1, 1), # Flunky
                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
                   ) # 40-50
 suitTypes = PythonUtil.Enum(('NoSuit', 'NoMerits', 'FullSuit'))
-
+DEFAULT_DISGUISE_TYPE = 13
+DefaultDisguiseCogs = (
+    'tbc',  # Bossbot
+    'bw',   # Lawbot
+    'rb',   # Cashbot
+    'mh',   # Sellbot
+    'hho',  # Boardbot
+    'rus',  # Techbot
+    'anc',  # Pressbot
+)
 def getNextPart(parts, partIndex, dept):
     dept = dept2deptIndex(dept)
     if dept == 5:
@@ -3375,18 +3384,7 @@ def isPaidSuitComplete(av, parts, dept):
 
 
 def getTotalMerits(toon, index):
-    from toontown.battle import SuitBattleGlobals
-    if index == 5:
-        return 0
-    if index == 6:
-        return 0
-    cogIndex = toon.cogTypes[index] + SuitDNA.suitsPerDept * index
-    cogTypeStr = SuitDNA.suitHeadTypes[cogIndex]
-    cogBaseLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
-    cogLevel = toon.cogLevels[index] - cogBaseLevel
-    cogLevel = max(min(cogLevel, len(MeritsPerLevel[cogIndex]) - 1), 0)
-    return MeritsPerLevel[cogIndex][cogLevel]
-
+    return 0
 
 def getTotalParts(bitString, shiftWidth = 40):
     sum = 0

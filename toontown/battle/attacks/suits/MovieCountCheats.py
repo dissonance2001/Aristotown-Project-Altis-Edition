@@ -197,6 +197,7 @@ def doHydrationCheck(attack):
     toonPosTracks = Parallel()
     toonTracks = Parallel()
     toonTracks2 = getToonTracksCheat(attack, 2.3, ['slip-backward'], 2.3, ['nothing'])
+    BattleParticles.loadParticles()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -205,7 +206,6 @@ def doHydrationCheck(attack):
         y = origPos.getY()
         z = origPos.getZ()
         risePoint = Point3(x, y, z - 50)
-        BattleParticles.loadParticles()
         freezeEffect = BattleParticles.createParticleEffect(file="demotionUnFreeze")
         BattleParticles.setEffectTexture(freezeEffect, "snow-particle")
         facePoint = __toonFacePoint(toon)
@@ -273,7 +273,7 @@ def doHydrationCheck(attack):
         missPoint.setX(missPoint.getX() - 1.1)
         soundTrack = getSoundTrack('SA_hydrate.ogg', node=suit)
         propTrack.append(Parallel(soundTrack, getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle, target=t)))
-        propTrack.append(Parallel(Func(toon.makeHydration), Func(toon.addHydrationRounds, 3)))
+        propTrack.append(Parallel(Func(toon.setToonStatusEffect, 'hydrated', turns=3)))
         if dmg > 0:
             toonTrack = Sequence(
                 Wait(2.3), sfx,
@@ -325,7 +325,7 @@ def doWringOut(attack):
             
             shakeTrack.append(LerpPosInterval(toon, 0.15, groundPoint))
             shakeTracks.append(shakeTrack)
-            shakeTracks.append(Parallel(Func(toon.makeDriedOut), Func(toon.addDriedOutRounds, 3)))
+            shakeTracks.append(Parallel(Func(toon.setToonStatusEffect, 'driedOut', modifier=1, turns=3)))
             initialScale = toon.getScale()
             xScale, yScale, zScale = initialScale
             squeezeTrack = Sequence(
@@ -427,9 +427,8 @@ def doHemmorage(attack):
             suitTrack.append(Func(suit.headsUp, battle, targetPos))
             origPos, origHpr = battle.getActorPosHpr(suit)
             suitTrack.append(Func(suit.setHpr, battle, origHpr))
-            notifyTrack = Sequence(Wait(3.1), Func(toon.makeVulnerable), Func(toon.addVulnerabilityRounds, 1), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
+            notifyTrack = Sequence(Wait(3.1), Func(toon.setToonStatusEffect, 'hemmorage', modifier=25, turns=1), Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=1))
             notifyTracks.append(notifyTrack)
-            notifyTracks.append(Parallel(Func(toon.checkVulnerabilityUp, 25)))
             x = toon.getX(battle)
             y = toon.getY(battle)
             z = toon.getZ(battle)
@@ -577,8 +576,8 @@ def doGainsFromTheScrap(attack):
     for s in battle.activeSuits:
         if s and s != targetSuit:
             managerHealTracks.append(Sequence(Wait(3.55), Func(targetSuit.erclaimSacrifice, s, battle)))
-    suitTrack = Parallel(getSuitAnimTrack(attack), Func(suit.makeRippedUp), Sequence(Wait(5.55), Func(suit.showHpTextNew, 0, text="RIPPED!", colorCode=1)), 
-                                       Func(suit.checkRippedUp, + 5))
+    suitTrack = Parallel(getSuitAnimTrack(attack),  Sequence(Wait(5.55), Func(suit.showHpTextNew, 0, text="RIPPED!", colorCode=1)), 
+                                       Func(suit.setSuitStatusEffect, 'ripped', modifier=5, mode='refreshModifier'))
     soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.55, node=suit)
     return Parallel(suitTrack, soundTrack2, headTrack, smokeTracks, moveTracks, animTracks, cagePropTracks, soundTrack, managerHealTracks)
@@ -622,8 +621,8 @@ def doSacrifice(attack):
     moveTracks.append(moveTrack)
     puddleTracks.append(puddleTrack)
 
-    suitTrack = Parallel(Sequence(Wait(1.8), Func(targetSuit.erclaimSacrifice, suit, battle)), getSuitAnimTrack(attack), Func(suit.makeDamageUp),
-                                       Func(suit.checkDamageUp, + 5))
+    suitTrack = Parallel(Sequence(Wait(1.8), Func(targetSuit.erclaimSacrifice, suit, battle)), getSuitAnimTrack(attack),
+                                       Func(suit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'))
     soundTrack = getSoundTrack('SA_sacrifice.ogg', delay=1.0)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.8)
     return Parallel(suitTrack, soundTrack2, speechTrack, moveTracks, animTracks, soundTrack, puddleTracks)
@@ -760,5 +759,5 @@ def doScopeCreep(attack):
     )
 
     suitTrack = Sequence(suitTrack)
-    suitTrack.append(Sequence(Parallel(Func(theSuit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(theSuit.makeDamageReduction), Func(theSuit.checkDamageReduction, + 5)))
+    suitTrack.append(Sequence(Parallel(Func(theSuit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(suit.setSuitStatusEffect, 'scopeCreep', modifier=5, mode='refreshModifier')))
     return Parallel(suitTrack, darkenTrack, redTrack, sfx, sfx2)

@@ -1,0 +1,339 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.75, \"delay\": 0.0, \"pos\": [0.0, -13.71825, 6.06766], \"hpr\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Initialize Facing Node",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 6, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0.0, 1.0, 0.0], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Turn duck",
+        "time": 0.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 4, \"duration\": 0.87, \"blendType\": \"easeInOut\", \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Spawn TV",
+        "time": 1.7,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.75, \"delay\": 0.0, \"pos\": [-6.03946, -3.48, 17.94655], \"hpr\": [74.25, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0.0, -16.35635, 8.57389], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "highRollerDropTelevisionSet",
+                "kwargs": "{\"doSpawn\": true, \"doDespawn\": false, \"dropDuration\": 0.5, \"holdDuration\": 1.0, \"backDuration\": 0.75, \"spawnDistance\": 30.0, \"despawnDistance\": 30.0, \"overrideString\": 0, \"useOverrideString\": false, \"showGraphic\": false}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick Initial",
+        "time": 1.25,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 1, \"pulseAmt\": 1.0, \"pulseDuration\": 0.1}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 1",
+        "time": 1.75,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 2, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 2",
+        "time": 1.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 3, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 2, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 3",
+        "time": 2.05,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 4, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 3, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 4",
+        "time": 2.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 5, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 4, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 5",
+        "time": 2.35,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 6, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 6",
+        "time": 2.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 7, \"pulseAmt\": 1.2, \"pulseDuration\": 0.1}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 2, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 7",
+        "time": 2.65,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 8, \"pulseAmt\": 1.3, \"pulseDuration\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 3, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 8",
+        "time": 2.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 9, \"pulseAmt\": 1.3, \"pulseDuration\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 4, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 9",
+        "time": 3.15,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 10, \"pulseAmt\": 1.3, \"pulseDuration\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 10",
+        "time": 3.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 11, \"pulseAmt\": 1.3, \"pulseDuration\": 0.2}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 2, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick 11",
+        "time": 3.65,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 12, \"pulseAmt\": 1.4, \"pulseDuration\": 0.3}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 3, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.16, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Dice Pick Final",
+        "time": 4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerSetTelevisionDice",
+                "kwargs": "{\"argumentIndex\": 13, \"pulseAmt\": 1.5, \"pulseDuration\": 0.5}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Nuffin'!!",
+        "time": 4.85,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.75, \"delay\": 0.0, \"pos\": [0.0, -16.32378, 3.1628], \"hpr\": [0.0, 3.26792, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [9.5839, -8.24723, 17.17071], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 1, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 2.0, \"moveNametag\": true, \"xyz\": [0.0, 0.0, 9.36534], \"scale\": 1.0, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false, \"bindToHead\": false}"
+            }
+        }
+    },
+    {
+        "name": "Despawn TV",
+        "time": 4.85,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "highRollerDropTelevisionSet",
+                "kwargs": "{\"doSpawn\": false, \"doDespawn\": true, \"dropDuration\": 1.0, \"holdDuration\": 0, \"backDuration\": 1.0, \"spawnDistance\": 30.0, \"despawnDistance\": 30.0, \"overrideString\": 0, \"useOverrideString\": false, \"showGraphic\": false}"
+            }
+        }
+    },
+    {
+        "name": "Start Dice Drop",
+        "time": 4.9,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 5, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Turn Duckie Back",
+        "time": 5.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToNode",
+                "kwargs": "{\"suitIndex\": 0, \"nodeIndex\": 5, \"duration\": 0.5, \"blendType\": \"easeInOut\", \"anim\": \"walk\", \"offset\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Thud",
+        "time": 6.34,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 6, \"hasNode\": false, \"nodeIndex\": 0, \"loop\": false, \"hasDuration\": true, \"duration\": 0.7, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "clearAllSuitChat",
+                "kwargs": "{}"
+            },
+            "2": {
+                "eventDefEnum": "setAllAnimStates",
+                "kwargs": "{\"delay\": 0, \"animState\": \"Squish\"}"
+            }
+        }
+    },
+    {
+        "name": "Dice disappear",
+        "time": 7.3,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 1, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": 0, \"returnsInterval\": true}"
+            }
+        }
+    }
+]

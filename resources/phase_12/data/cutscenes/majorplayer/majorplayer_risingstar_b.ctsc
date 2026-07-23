@@ -1,0 +1,55 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.54241, \"delay\": 0.0, \"pos\": [1.08265, -17.83493, 4.48582], \"hpr\": [31.23364, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-124.99997, -124.99997, -5.351], \"startHpr\": [0, 0, 0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.51027, \"delay\": 0.0, \"end\": 52.60931, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "POOF!",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 5, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [-18.01018, 0.43574, 0.0], \"hpr\": [-109.80392, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "2": {
+                "eventDefEnum": "dustcloudNode",
+                "kwargs": "{\"nodeIndex\": 4, \"posOffset\": [0.0, 0.0, 5.75963], \"scale\": 0.7268, \"delay\": 0.0, \"rate\": 24, \"reattachToRender\": true, \"fBillboard\": false, \"wantSound\": true}"
+            }
+        }
+    },
+    {
+        "name": "Suit Appear",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 5, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": false, \"xyz\": [0.0, 0.0, 0.0], \"scale\": 1.0, \"hideNametag\": false, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 5, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    }
+]

@@ -1,0 +1,247 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "cameraToElevator",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "tpToonsToElevator",
+                "kwargs": "{\"target\": \"Players\", \"elevatorModelIndex\": 0, \"isBig\": false}"
+            },
+            "2": {
+                "eventDefEnum": "moveToonsInBlock",
+                "kwargs": "{\"target\": \"All\", \"pos\": [0.0, -28.997, 0.0], \"duration\": 1.35, \"delay\": 0.0, \"anim\": \"walk\", \"shape\": \"Elevator\", \"radius\": 2.56}"
+            },
+            "3": {
+                "eventDefEnum": "hideSuits",
+                "kwargs": "{}"
+            },
+            "4": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "5": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"hpr\": [180.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "6": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 2.667, \"delay\": 0.0, \"pos\": [0.0, -15.563, 7.342], \"blendType\": \"easeInOut\", \"useStartPos\": false, \"startPos\": [0.0, 14.0, 4.0]}"
+            },
+            "7": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [180.0, 2.314, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [180.0, 0.0, 0.0]}"
+            },
+            "8": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.0, \"delay\": 0.0, \"xyz\": [0.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartPos\": false, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "9": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"anim\": \"neutral\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #1",
+        "time": 2.0279999999999996,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 4, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #2",
+        "time": 6.02475,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 5, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #3",
+        "time": 10.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-17.609, -17.62, 8.242], \"hpr\": [224.42, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartPos\": false, \"useStartHpr\": false, \"startPos\": [0.0, -15.563, 7.342], \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 33.003, \"blendType\": \"easeInOut\", \"useStart\": false, \"start\": 42}"
+            },
+            "2": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 6, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "move erfit",
+        "time": 11.1285,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 1.125, \"delay\": 0.0, \"xyz\": [6.041, 2.057, 0.0], \"blendType\": \"noBlend\", \"useStartPos\": true, \"startPos\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0, \"delay\": 0.0, \"hpr\": [-74.035, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": true, \"hasDuration\": true, \"duration\": 1.703, \"anim\": \"walk\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 1.221, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "erfit move end",
+        "time": 12.29,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 0, \"duration\": 0.578, \"delay\": 0.0, \"hpr\": [-201.593, 0.0, 0.0], \"blendType\": \"noBlend\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"anim\": \"neutral\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "2": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 2, \"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-126.092, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            },
+            "3": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 1, \"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-158.482, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Summon Suit A",
+        "time": 13.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "summonSuitErfit",
+                "kwargs": "{\"suitIndex\": 3, \"destPos\": [-7.712, -3.085, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "init suit placements",
+        "time": 13.377,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnActor",
+                "kwargs": "{\"actorIndex\": 3, \"duration\": 0.0, \"delay\": 0.0, \"hpr\": [-107.583, 0.0, 0.0], \"blendType\": \"easeInOut\", \"useStartHpr\": false, \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Summon Suit B",
+        "time": 13.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "summonSuitErfit",
+                "kwargs": "{\"suitIndex\": 2, \"destPos\": [-6.555, 2.313, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #4",
+        "time": 13.996500000000001,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 7, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "Summon Suit C",
+        "time": 14.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "summonSuitErfit",
+                "kwargs": "{\"suitIndex\": 1, \"destPos\": [-2.7, 5.27, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #5",
+        "time": 18.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 8, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 8.676, \"delay\": 0.0, \"pos\": [9.64, -4.638, 7.085], \"hpr\": [157.325, 0.579, 0.0], \"blendType\": \"easeInOut\", \"useStartPos\": true, \"useStartHpr\": true, \"startPos\": [9.64, -4.638, 5.928], \"startHpr\": [157.325, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "moveToonsToBattlePos",
+                "kwargs": "{\"duration\": 1.755, \"delay\": 0, \"anim\": \"run\", \"battleNodeIndex\": 0, \"flipY\": 0, \"xyzOffset\": [0.0, -4.627, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Erfit #6",
+        "time": 22.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 9, \"actorIndex\": 0, \"delay\": 0.0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": 0, \"hasDuration\": 0, \"duration\": 1.03, \"anim\": \"soak\", \"hasStartTime\": true, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 1.03, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "reverse soak",
+        "time": 23.03475,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": false, \"hasDuration\": true, \"duration\": 1.03, \"anim\": \"soak\", \"hasStartTime\": true, \"startTime\": 1.03, \"hasEndTime\": true, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "Cutscene End Padding",
+        "time": 26.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.129}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"anim\": \"neutral\", \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.0, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    }
+]

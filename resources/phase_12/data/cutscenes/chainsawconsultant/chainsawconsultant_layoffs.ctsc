@@ -1,0 +1,366 @@
+[
+    {
+        "name": "meow meow meow :3",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, 11.25636, 7.26215], \"hpr\": [180.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0, 0, 0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw's ford f150 appears in the window",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"layoffs\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 1, \"endTime\": 3.6, \"playRate\": 0.5, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "actorDialogue",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.0, \"duration\": 3.0, \"moveNametag\": true, \"xyz\": [-2.17864, 0.0, 7.69789], \"scale\": 2.06194, \"hideNametag\": false, \"wantHeadAnim\": true, \"wantSound\": true, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "enter the vehicle",
+        "time": 0.48,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 0, \"wrt\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [15.7952, 20.0, 11.07478], \"hpr\": [135.88255, -9.80387, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-4.1501, 16.77752, 7.26215], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "multislacker is in the ford f150. bhe's Really hungyr so hungry",
+        "time": 0.48,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 4, \"delay\": 0, \"resetDelay\": 0, \"cogCannon\": true, \"aimAtPoint\": false, \"aimAtNode\": true, \"point\": [0, 0, 0], \"nodeIndex\": 8, \"fireDelay\": 2.8, \"unemployment\": true}"
+            },
+            "1": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 3, \"delay\": 0.2, \"resetDelay\": 0, \"cogCannon\": true, \"aimAtPoint\": false, \"aimAtNode\": true, \"point\": [0, 0, 0], \"nodeIndex\": 7, \"fireDelay\": 2.6, \"unemployment\": true}"
+            },
+            "2": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0.4, \"resetDelay\": 0, \"cogCannon\": true, \"aimAtPoint\": false, \"aimAtNode\": true, \"point\": [0, 0, 0], \"nodeIndex\": 6, \"fireDelay\": 2.4, \"unemployment\": true}"
+            },
+            "3": {
+                "eventDefEnum": "suitFireFromCannon",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0.6, \"resetDelay\": 0, \"cogCannon\": true, \"aimAtPoint\": false, \"aimAtNode\": true, \"point\": [0, 0, 0], \"nodeIndex\": 5, \"fireDelay\": 2.2, \"unemployment\": true}"
+            }
+        }
+    },
+    {
+        "name": "pan to the Arby's outside of the map",
+        "time": 0.5002499999999999,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 4.84, \"delay\": 0.0, \"end\": 75.0, \"blendType\": \"easeInOut\", \"start\": 60.0, \"useStart\": 0}"
+            }
+        }
+    },
+    {
+        "name": "the toons are jealous. hunrgy fiends.",
+        "time": 3.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.67088, \"delay\": 0.0, \"pos\": [20.0, -0.51562, 11.07478], \"hpr\": [49.28134, -9.80387, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [15.7952, 20.0, 11.07478], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "the suits are displeased. they begin to duel.",
+        "time": 3.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 8, \"targetIndex\": 12, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 3, \"toonEyes\": \"surprise\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [0.0, -5.65, 0.0], \"duration\": 1.3, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw and multislacker have a calm happy conversation.",
+        "time": 3.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 11, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 2, \"toonEyes\": \"surprise\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [0.0, -5.65, 0.0], \"duration\": 1.3, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "???? i dont remember what this did",
+        "time": 3.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 10, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 1, \"toonEyes\": \"surprise\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [0.0, -5.65, 0.0], \"duration\": 1.3, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw drives his ford f150 back to the battle",
+        "time": 3.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 9, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 0, \"toonEyes\": \"surprise\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [0.0, -5.65, 0.0], \"duration\": 1.3, \"delay\": 0, \"hasAnim\": true, \"anim\": \"walk\"}"
+            }
+        }
+    },
+    {
+        "name": "the room is on fire",
+        "time": 4.5,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"layoffs\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 1.8, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "What.",
+        "time": 4.854,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"conked\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.59, \"hasEndTime\": true, \"endTime\": 1.86, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 1, \"hasNode\": true, \"nodeIndex\": 5, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            },
+            "2": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 0, \"toonExpression\": \"surprise\"}"
+            },
+            "3": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 1, \"toonExpression\": \"surprise\"}"
+            },
+            "4": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 2, \"toonExpression\": \"surprise\"}"
+            },
+            "5": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 3, \"toonExpression\": \"surprise\"}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw enters phase 5",
+        "time": 5.35,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateAllToons",
+                "kwargs": "{\"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": true, \"endAnim\": \"neutral\", \"isInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "createExplosion",
+                "kwargs": "{\"nodeIndex\": 5, \"scale\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "createExplosion",
+                "kwargs": "{\"nodeIndex\": 6, \"scale\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "createExplosion",
+                "kwargs": "{\"nodeIndex\": 7, \"scale\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "createExplosion",
+                "kwargs": "{\"nodeIndex\": 8, \"scale\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "playSoundEffect",
+                "kwargs": "{\"sfxIndex\": 0, \"hasNode\": true, \"nodeIndex\": 5, \"loop\": false, \"hasDuration\": false, \"duration\": 0.0, \"volume\": 1.0, \"startTime\": 0.0, \"isInterval\": true}"
+            }
+        }
+    },
+    {
+        "name": "show all of the cool buffs he just got from powering up",
+        "time": 5.35,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.2, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 75.0, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "replace the present cogs with level 50 executives",
+        "time": 5.3542499999999995,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "2": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 3}"
+            },
+            "3": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 4}"
+            }
+        }
+    },
+    {
+        "name": "turn the toons into 1 laff ubers",
+        "time": 6.1875,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+            }
+        }
+    },
+    {
+        "name": "Why.",
+        "time": 7.69,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"pos\": [0, 0, 0], \"duration\": 0.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 1, \"pos\": [0, 0, 0], \"duration\": 0.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"pos\": [0, 0, 0], \"duration\": 0.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            },
+            "3": {
+                "eventDefEnum": "moveSingleToon",
+                "kwargs": "{\"toonIndex\": 3, \"pos\": [0, 0, 0], \"duration\": 0.5, \"delay\": 0, \"hasAnim\": true, \"anim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "they're really mad",
+        "time": 7.69,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 0, \"toonEyes\": \"normal\"}"
+            },
+            "1": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 1, \"toonEyes\": \"normal\"}"
+            },
+            "2": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 2, \"toonEyes\": \"normal\"}"
+            },
+            "3": {
+                "eventDefEnum": "setToonEyes",
+                "kwargs": "{\"toonIndex\": 3, \"toonEyes\": \"normal\"}"
+            }
+        }
+    },
+    {
+        "name": "chainsaw's pet Goon comes into the room",
+        "time": 7.69,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 0, \"toonExpression\": \"normal\"}"
+            },
+            "1": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 1, \"toonExpression\": \"normal\"}"
+            },
+            "2": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 2, \"toonExpression\": \"normal\"}"
+            },
+            "3": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 3, \"toonExpression\": \"normal\"}"
+            }
+        }
+    },
+    {
+        "name": "he's a s-silly guy",
+        "time": 8.271,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    }
+]

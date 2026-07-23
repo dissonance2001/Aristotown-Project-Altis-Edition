@@ -151,7 +151,7 @@ class DisguisePage(ShtikerPage.ShtikerPage):
         self.activeTab = index
         self.bkgd.setColor(DeptColors[index])
         self.deptLabel['text'] = (SuitDNA.suitDeptFullnames[SuitDNA.suitDepts[index]],)
-        cogIndex = base.localAvatar.cogTypes[index] + SuitDNA.suitsPerDept * index
+        cogIndex = base.localAvatar.cogTypes[index] * index
         cog = SuitDNA.suitHeadTypes[cogIndex]
         self.progressTitle.hide()
         if SuitDNA.suitDepts[index] == 'm':

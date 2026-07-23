@@ -1,0 +1,176 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 0, \"wrt\": true, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 4, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 4, \"wrt\": 0, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 4, \"wrt\": 0, \"disable\": false}"
+            },
+            "4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 8, \"targetIndex\": 4, \"wrt\": 0, \"disable\": false}"
+            },
+            "5": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.0, \"pos\": [-10.7529, 8.0323, -0.2], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [-23.31973, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "6": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"duration\": 0.0, \"pos\": [5.70033, 5.05255, -0.2], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [-32.64742, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "7": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"duration\": 0.0, \"pos\": [13.99172, -2.7206, -0.2], \"startPos\": [0.0, 2.33196, 0.0], \"useStartPos\": 0, \"hpr\": [-86.28227, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "8": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"duration\": 0.0, \"pos\": [-3.36839, -0.64775, -0.2], \"startPos\": [0.0, -1.55464, 0.0], \"useStartPos\": 0, \"hpr\": [195.88404, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "camera cut",
+        "time": 0.3959999999999997,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 4, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-9.62238, -16.70297, 4.7204], \"hpr\": [-19.60788, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [0, 0, 0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "camera move",
+        "time": 1.1683377999999607,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.5, \"delay\": 0.0, \"pos\": [-10.78835, -3.74766, 8.60698], \"hpr\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-9.62238, -16.70297, 4.7204], \"startHpr\": [0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "foreman turn around",
+        "time": 1.8510000000000002,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"duration\": 1.4, \"hpr\": [179.56046, 0.0, 0.0], \"startHpr\": [-23.31973, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "actorChat",
+                "kwargs": "{\"messageIndex\": 0, \"actorIndex\": 0, \"delay\": 0.5, \"disable\": false}"
+            }
+        }
+    },
+    {
+        "name": "camera back",
+        "time": 4.610821800000011,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 0.0, \"pos\": [-9.62238, -16.70297, 4.7204], \"hpr\": [-19.60788, 0.0, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-9.62238, -16.70297, 4.7204], \"startHpr\": [-19.60788, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "1 fly away",
+        "time": 5.151000000000001,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 0, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "2 fly away",
+        "time": 5.151000000000001,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0, \"duration\": 1.5, \"hpr\": [142.2493, 0.0, 0.0], \"startHpr\": [179.56046, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 1, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "3 fly away",
+        "time": 5.21025,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "turnSingleSuitToHpr",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0, \"duration\": 1.0, \"hpr\": [-214.0, 0.0, 0.0], \"startHpr\": [132.92131, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"anim\": \"walk\"}"
+            },
+            "1": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 2, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"getPos\": 1}"
+            }
+        }
+    },
+    {
+        "name": "4 fly away",
+        "time": 5.21025,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitSupaFly",
+                "kwargs": "{\"suitIndex\": 3, \"delay\": 0, \"destPos\": [0, 0, 0], \"flyType\": 1, \"getPos\": 1}"
+            }
+        }
+    },
+	{
+        "name": "cleanup",
+        "time": 13.17,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 5, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 6, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 7, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "3": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 8, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+			"4": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 4, \"targetIndex\": 1, \"wrt\": true, \"disable\": false}"
+            }
+        }
+    }
+]

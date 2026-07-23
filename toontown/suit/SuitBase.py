@@ -54,6 +54,15 @@ class SuitBase:
 
     def getLevel(self):
         return self.level
+    
+    def getActualLevel(self):
+        if not self.dna:
+            return 0
+
+        return SuitBattleGlobals.getDisplayLevelFromRelative(
+            self.dna.name,
+            self.level
+        )
 
     def setLevel(self, level):
         self.level = level
@@ -62,7 +71,11 @@ class SuitBase:
          'level': self.getActualLevel()}
         self.setDisplayName(nameWLevel)
         attributes = SuitBattleGlobals.SuitAttributes[self.dna.name]
-        self.maxHP = attributes['hp'][self.level]
+        self.maxHP = SuitBattleGlobals.getSuitHP(
+            self.dna.name,
+            self.getActualLevel(),
+            self.level
+        )
         self.currHP = self.maxHP
 
     def getSkelecog(self):
@@ -122,11 +135,11 @@ class SuitBase:
     def getSoakedStatus(self):
         return self.isSoaked
 
-    def getActualLevel(self):
-        if hasattr(self, 'dna'):
-            return SuitBattleGlobals.getActualFromRelativeLevel(self.getStyleName(), self.level) + 1
-        else:
-            return 1
+    # def getActualLevel(self):
+    #     if hasattr(self, 'dna'):
+    #         return SuitBattleGlobals.getActualFromRelativeLevel(self.getStyleName(), self.level) + 1
+    #     else:
+    #         return 1
 
     def setPath(self, path):
         self.path = path

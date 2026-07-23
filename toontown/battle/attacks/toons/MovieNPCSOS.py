@@ -117,7 +117,7 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     h = Func(npc.loop, 'neutral')
     seq = Sequence(a, b, c, d, e, ee, f, g, h)
     seq.append(Func(npc.clearChat))
-    seq.append(Parallel(Func(attack['toon'].makeCooldown), Func(attack['toon'].addCooldownRounds, 2)))
+    seq.append(Parallel(Func(attack['toon'].setToonStatusEffect, 'cooldown', turns=2)))
     if npc.getName() == 'Prince Frizzy':
         princeFrizzyTrack = Sequence()
         princeFrizzyTrack.append(Func(npc.setChatAbsolute, "Start Dancing! I got this covered!", CFSpeech | CFTimeout))
@@ -310,41 +310,23 @@ def __doSmooch(attack, level, hp = 0):
         buffTrack = Sequence(Wait(delay))
 
         if level == ToontownBattleGlobals.HEAL_TRACK:
-            buffTrack.append(Func(target.makeToonupGagBoost, 1))
-            buffTrack.append(Func(target.addToonupGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkToonupGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'toonupBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.TRAP_TRACK:
-            buffTrack.append(Func(target.makeTrapGagBoost, 2))
-            buffTrack.append(Func(target.addTrapGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkTrapGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'trapBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.LURE_TRACK:
-            buffTrack.append(Func(target.makeLureGagBoost, 3))
-            buffTrack.append(Func(target.addLureGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkLureGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'lureBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.THROW_TRACK:
-            buffTrack.append(Func(target.makeThrowGagBoost, 4))
-            buffTrack.append(Func(target.addThrowGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkThrowGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'throwBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.SQUIRT_TRACK:
-            buffTrack.append(Func(target.makeSquirtGagBoost, 5))
-            buffTrack.append(Func(target.addSquirtGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkSquirtGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'squirtBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.ZAP_TRACK:
-            buffTrack.append(Func(target.makeZapGagBoost, 6))
-            buffTrack.append(Func(target.addZapGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkZapGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'zapBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.SOUND_TRACK:
-            buffTrack.append(Func(target.makeSoundGagBoost, 7))
-            buffTrack.append(Func(target.addSoundGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkSoundGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'soundBoost', modifier=hp, turns=3)))
         elif level == ToontownBattleGlobals.DROP_TRACK:
-            buffTrack.append(Func(target.makeDropGagBoost, 8))
-            buffTrack.append(Func(target.addDropGagBoostRounds, 3))
-            buffTrack.append(Func(target.checkDropGagBoost, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'dropBoost', modifier=hp, turns=3)))
         elif level == 8:
-            buffTrack.append(Func(target.makeDamageUp))
-            buffTrack.append(Func(target.addDamageUpRounds, 3))
-            buffTrack.append(Func(target.checkDamageUp, hp))
+            buffTrack.append(Parallel(Func(target.setToonStatusEffect, 'damageUp', modifier=hp, turns=3)))
 
         mtrack = Parallel(
             lipstickTrack,
