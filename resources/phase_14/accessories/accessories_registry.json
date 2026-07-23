@@ -48,6 +48,24 @@
             "native_id": 61, 
             "style": "custom_hat_61_hat_rainmaker", 
             "type": "hat"
+        }, 
+        "tt_m_chr_avt_acc_hat_cake.bam": {
+            "display_name": "Clash Bash 1st Anniversary", 
+            "id": 63, 
+            "model": "phase_14/accessories/tt_m_chr_avt_acc_hat_cake", 
+            "name": "tt_m_chr_avt_acc_hat_cake", 
+            "native_id": 63, 
+            "style": "custom_hat_63_tt_m_chr_avt_acc_hat_cake", 
+            "type": "hat"
+        }, 
+        "ttr_m_chr_avt_acc_hat_birthdayBashPublic.bam": {
+            "display_name": "Hat Cake Gibus", 
+            "id": 62, 
+            "model": "phase_14/accessories/ttr_m_chr_avt_acc_hat_birthdayBashPublic", 
+            "name": "ttr_m_chr_avt_acc_hat_birthdayBashPublic", 
+            "native_id": 62, 
+            "style": "custom_hat_62_ttr_m_chr_avt_acc_hat_birthdaybashpublic", 
+            "type": "hat"
         }
     }, 
     "version": 2
