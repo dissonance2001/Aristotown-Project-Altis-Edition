@@ -86,6 +86,7 @@ class SafeZoneLoader(StateData.StateData):
             self.geom = hidden.attachNewNode(node)
         self.makeDictionaries(self.hood.dnaStore)
         self.createAnimatedProps(self.nodeList)
+        self.createKudosBoard()
         self.holidayPropTransforms = {}
         npl = self.geom.findAllMatches('**/=DNARoot=holiday_prop')
         for i in xrange(npl.getNumPaths()):
@@ -96,6 +97,40 @@ class SafeZoneLoader(StateData.StateData):
         if gsg:
             self.geom.prepareScene(gsg)
         self.geom.flattenMedium()
+
+    def createKudosBoard(self):
+        placements = {
+            ToontownCentral: ((27.704, -42.685, 4.025), (134.023, 0.0, 0.0), 'ttcc_ext_ttc_kudosboard.png'),
+            DonaldsDock: ((2.691, 178.833, 3.281), (-19.623, 0.0, 0.0), 'ttcc_ext_bb_kudosboard.png'),
+            YeOlde: ((32.270, 44.393, -6.974), (-63.965, 0.0, 0.0), 'ttcc_ext_yott_kudosboard.png'),
+            DaisyGardens: ((-19.239, 82.249, 0.025), (-24.761, 0.0, 0.0), 'ttcc_ext_dg_kudosboard.png'),
+            MinniesMelodyland: ((71.344, 33.380, -14.498), (-66.793, 0.0, 0.0), 'ttcc_ext_mml_kudosboard.png'),
+            TheBrrrgh: ((-148.572, -74.862, 6.175), (109.773, 0.0, 0.0), 'ttcc_ext_tb_kudosboard.png'),
+            OutdoorZone: ((-7.216, -171.365, -0.143), (227.297, 0.0, 0.0), 'ttcc_ext_aa_kudosboard.png'),
+            DonaldsDreamland: ((-44.987, -33.449, -15.688), (98.051, 0.0, 0.0), 'ttcc_ext_ddl_kudosboard.png')
+        }
+        placement = placements.get(self.hood.hoodId)
+        if placement is None:
+            self.kudosBoard = None
+            return
+        self.kudosBoard = loader.loadModel('phase_4/models/props/ttcc_ext_kudosboard')
+        if self.kudosBoard.isEmpty():
+            self.notify.warning('Could not load Kudo Board model')
+            self.kudosBoard = None
+            return
+        texture = loader.loadTexture('phase_4/maps/kudos/' + placement[2])
+        if texture:
+            boardNodes = self.kudosBoard.findAllMatches('**/board')
+            if boardNodes.getNumPaths() == 0:
+                self.notify.warning('Could not find Kudo Board texture node: board')
+            else:
+                for i in xrange(boardNodes.getNumPaths()):
+                    boardNodes.getPath(i).setTexture(texture, 1)
+        else:
+            self.notify.warning('Could not load Kudo Board texture: %s' % placement[2])
+        self.kudosBoard.reparentTo(self.geom)
+        self.kudosBoard.setPos(*placement[0])
+        self.kudosBoard.setHpr(*placement[1])
 
     def makeDictionaries(self, dnaStore):
         self.nodeList = []
