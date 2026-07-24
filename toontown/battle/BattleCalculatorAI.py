@@ -483,9 +483,10 @@ class BattleCalculatorAI:
         '''
         Return a list of all status effects that match and inherit the condition type.
 
-        :param avId: The ID of who is being checked.
-        :param conditionType: The type of the effect that is being searched, as well as any effects that inherit it (e.g. Snapped will be included if checking for DefenseModifier, but not vice versa)
-        :param toon: Whether or not the avatar is a Toon, which determines which dict we check from.
+        Parameters:
+            avId: The ID of who is being checked.
+            conditionType (type): The type of the effect that is being searched, as well as any effects that inherit it (e.g. Snapped will be included if checking for DefenseModifier, but not vice versa)
+            toon (bool): Whether or not the avatar is a Toon, which determines which dict we check from.
         '''
         conditions = []
 
@@ -711,6 +712,9 @@ class BattleCalculatorAI:
 
         if self.toonHasCondition(toonId, 'hydrated'):
             acc += 50
+        
+        for effect in self.getAllRelevantEffects(toonId, StatusEffects.AccuracyModifier, toon=True): # Sift through all accuracy-modifying effects.
+            acc += effect.accuracyMod # Change the accuracy according to the effect's modifier.
 
         if atkTrack not in (LURE, HEAL, SOUND):
             if atkTrack != DROP:
@@ -1307,6 +1311,11 @@ class BattleCalculatorAI:
 
             if rushCond and self.suitHasCondition(targetId, rushCond):
                 self.setSuitCondition(targetId, rushCond, 0, 0, 'setBoth')
+            
+            # Use the new status effect system to get rid of completed Rush Jobs.
+            for i in range(len(self.suitStatusConditionsNew[targetId]) - 1, -1, -1): # Sift through all of the target Cog's status effects.
+                if isinstance(self.suitStatusConditionsNew[targetId][i], StatusEffects.RushJob) and self.suitStatusConditionsNew[targetId][i].trackToUse == atkTrack: # Check to see if the status effect is a Rush Job and if the track that is required to use is used by the Toon.
+                    del self.suitStatusConditionsNew[targetId][i] # Remove the effect.
 
         if not self.suitHasCondition(targetId, 'alreadyTargeted'):
             self.setSuitCondition(targetId, 'alreadyTargeted', 1, 1, 'setBoth')
@@ -1662,6 +1671,11 @@ class BattleCalculatorAI:
 
         if self.suitHasCondition(suitId, 'zapRushJob') and atkTrack != ZAP:
             mult *= 0.6
+        
+        for effect in self.getAllRelevantConditions(suitId, StatusEffects.RushJob, toon=False): # Get all Rush Job status effects from the Cog.
+            if atkTrack != effect.trackToUse: # Is the track different from what the Rush Job is calling for?
+                mult *= effect.defenseMod # Apply the damage reduction.
+                break # We'll break because we probably do not want repeated damage reduction if, for some reason, two or more Rush Jobs are placed on the same Cog.
 
         if self.suitHasCondition(suitId, 'damageReduction'):
             mult *= 0.7
@@ -1712,6 +1726,10 @@ class BattleCalculatorAI:
 
         if self.suitHasCondition(suitId, 'vulnerablevideographer'):
             mult *= self.getSuitConditionModifier(suitId, 'vulnerablevideographer')
+        
+        for effect in self.getAllRelevantConditions(suitId, StatusEffects.DefenseModifier, toon=False): # Find all DefenseModifier effects.
+            if isinstance(effect.defenseMod, float): # Check all decimal damage reductions.  TODO: Flat damage modification.
+                mult *= effect.defenseMod
 
         return damage * mult
 
@@ -1966,6 +1984,14 @@ class BattleCalculatorAI:
                                     rounds = 1
                                 elif self.suitHasCondition(targetId, 'contracted2'):
                                     rounds = 1
+                                elif len(self.getAllRelevantConditions(targetId, StatusEffects.LureResistance, toon=False)) > 0: # Check for the new Lure Resistance status effect.
+                                    rounds = self.NumRoundsLured[atkLevel] # Set up the normal rounds a Cog is Lured for.
+
+                                    # Pick the one with the lowest rounds.
+                                    for effect in self.getAllRelevantConditions(targetId, StatusEffects.LureResistance, toon=False): # Sift through all existing Lure Resistance effects.
+                                        if effect.maxLureRounds < rounds: # Is the effect's Lure-round limit less that that of the current rounds we want to Lure for?
+                                            rounds = effect.maxLureRounds # Set it.
+
                                 elif theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                                     rounds = 1
                                 elif theSuit.getVirtual() > 0:
@@ -8879,6 +8905,12 @@ class BattleCalculatorAI:
                     if any(self.suitHasCondition(suit.doId, cond)
                         for cond in rushJobConditions) and suit.currHP > 0:
                         doHurrySickness = 1
+
+                    # TODO: Replace old system with new status effect system.  Slowly, but surely...
+                    if len(self.getAllRelevantConditions(suit.doId, StatusEffects.RushJob, toon=False)) > 0: # Are there any existing Rush Jobs?
+                        doHurrySickness = 1 # We want Hurry Sickness.  Personally, I don't think this is ideal, but it can stay for now.
+                        break # We've checked all that we need.
+
                 if doHurrySickness:
                     result = 35
                     self.setToonCondition(toon.doId, 'allGagBoost', -40, 2, 'setBoth')

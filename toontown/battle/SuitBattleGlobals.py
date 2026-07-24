@@ -566,20 +566,24 @@ class SuitAttack:
     In this manner, we can have somewhat more organized attacks and more freedom with how we handle them.
     '''
     
-    def __init__(self, name, hp, acc, freq, groupStatus = None):
+    def __init__(self, name, hp, acc, freq, groupStatus = None, effect = None):
         '''
         Instantiate the Cog's attack data.
-        name: The name of the Cog attack that will be used.
-        hp: A tuple of attack HPs.
-        acc: A tuple of Cog accuracies.
-        freq: A tuple of Cog frequencies.
-        groupStatus: An optional parameter that determines if there is a specific targeting that should be performed.  If nothing is given, check for the default targeting from SuitAttacks.
+
+        Parameters:
+            name (str): The name of the Cog attack that will be used.
+            hp (tuple): A tuple of attack HPs.
+            acc (tuple): A tuple of Cog accuracies.
+            freq (tuple): A tuple of Cog frequencies.
+            groupStatus (Targeting|int): An optional parameter that determines if there is a specific targeting that should be performed.  If nothing is given, check for the default targeting from SuitAttacks.
+            effect (StatusEffect|None): Some attacks, like the Powerhouse's Burn and Count Erfit's Wring Out, will add status effects to Toons.  Preferably, we wish to use the new status effect system.
         '''
         self.name = name
         self.hp = hp
         self.acc = acc
         self.freq = freq
         self.groupStatus = groupStatus
+        self.effect = effect
 
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
@@ -6547,7 +6551,7 @@ SuitAttacks = {
  'DiskScratch': ('hold-eraser', ATK_TGT_GROUP),
  'DoubleCross': ('glower', ATK_TGT_SINGLE),
  'DoubleTalk': ('speak', ATK_TGT_SINGLE),
- 'DoubleWindsor': ('throw-paper', ATK_TGT_SINGLE),
+ 'DoubleWindsor': ('throw-object', ATK_TGT_SINGLE),
  'Downsize': ('magic2', ATK_TGT_SINGLE),
  'ElectrostaticEnergy': ('glower', ATK_TGT_GROUP),
  'Embezzle': ('pickpocket', ATK_TGT_SINGLE),

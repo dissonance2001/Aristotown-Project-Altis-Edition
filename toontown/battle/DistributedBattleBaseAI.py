@@ -533,9 +533,14 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return fieldList
 
     def addSuit(self, suit):
+        from copy import copy # Copying the initial effects is necessary; otherwise we run into problems.
         self.newSuits.append(suit)
         self.suits.append(suit)
-        self.battleCalc.suitStatusConditionsNew[suit.doId] = SuitBattleGlobals.SuitAttributes[suit.getStyleName()].get('initEffects', []) # Add a Cog's initial status effects, if there are any.
+        # Add a Cog's initial status effects, if there are any.
+        if 'initEffects' in SuitBattleGlobals.SuitAttributes[suit.getStyleName()].keys():
+            self.battleCalc.suitStatusConditionsNew[suit.doId] = copy(SuitBattleGlobals.SuitAttributes[suit.getStyleName()]['initEffects'])
+        else:
+            self.battleCalc.suitStatusConditionsNew[suit.doId] = []
         suit.battleTrap = NO_TRAP
         self.numSuitsEver += 1
 
