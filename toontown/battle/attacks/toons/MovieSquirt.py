@@ -386,7 +386,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
@@ -518,7 +518,7 @@ def __soakSuit(suit, tContact, drench=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
+            if suit.dna.name != 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, color))
     if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')

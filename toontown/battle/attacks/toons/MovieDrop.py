@@ -511,7 +511,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -536,11 +536,11 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
     elif revived != 0 and suit.isSkeleton:
         suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-    elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+    elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
     elif visualDied != 0 and suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    elif visualDied != 0 and (suit.dna.name == 'erfit' or suit.dna.name == 'erclaim'):
+    elif visualDied != 0 and suit.dna.name in ('erfit', 'erclaim'):
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
     elif visualDied != 0 and not suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))

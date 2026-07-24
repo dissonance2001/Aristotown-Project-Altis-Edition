@@ -755,7 +755,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BlueChip':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'FallingKnife':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=3, attackDuration=3), motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 3)))
+        camTrack.append(Sequence(defaultCamera(attackDuration=3.0, openShotDuration=3.0), heldRelativeShot(target[0]['toon'], 2.5, 10, 1, 165, 25, 0, attackDuration - 3.0)))
     elif name == 'GuiltTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Embezzle':
@@ -2671,7 +2671,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrackUnionBuster = defaultCamera(openShotDuration=0.75)
         camTrackContingnency = Sequence(defaultCamera(openShotDuration=0, attackDuration=3), defaultCamera(openShotDuration=1.5, attackDuration=attackDuration-3))
         if attackDuration > 2:
-            if suit.dna.name == 'caseman' or suit.dna.name == 'stenog':
+            if suit.dna.name in ('caseman', 'stenog'):
                 return Parallel(pbpTrackStenoCase, pbpDescStenoCase, camTrack2)
             elif suit.dna.name == 'wtapper':
                 return Parallel(pbpTrackWiretapper, pbpDescWiretapper, camTrack3)

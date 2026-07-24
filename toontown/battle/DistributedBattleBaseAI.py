@@ -147,7 +147,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         toonsCopy = self.toons[:]
         for toonId in toonsCopy:
             self.__removeToon(toonId)
-            if self.fsm.getCurrentState().getName() == 'PlayMovie' or self.fsm.getCurrentState().getName() == 'MakeMovie':
+            if self.fsm.getCurrentState().getName() in ('PlayMovie', 'MakeMovie'):
                 self.exitedToons.append(toonId)
 
         self.d_setMembers()

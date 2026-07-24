@@ -284,7 +284,7 @@ def doDonation2(attack):
         headTracks.append(headTrack)
     soundTrack = getSoundTrack('mus_dialup_0.ogg')
     for s in battle.activeSuits:
-        if s.dna.name == 'videog' and not suit.dna.name == 'videog':
+        if s.dna.name == 'videog' and suit.dna.name != 'videog':
             theSuit = s
             textureGlitch = loader.loadTexture('phase_9/maps/ttcc_ene_videographer4.png')
             texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
@@ -332,7 +332,7 @@ def doDonationFail(attack):
         headTracks.append(headTrack)
     soundTrack = getSoundTrack('mus_dialup_0_fail.ogg')
     for s in battle.activeSuits:
-        if s.dna.name == 'videog' and not suit.dna.name == 'videog':
+        if s.dna.name == 'videog' and suit.dna.name != 'videog':
             theSuit = s
             textureGlitch = loader.loadTexture('phase_9/maps/ttcc_ene_videographer4.png')
             texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer5.png')
@@ -412,7 +412,7 @@ def doVideographerDeath(attack):
                 Wait(1.5),
                 LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
             ))
-        if not suit.dna.name == 'hroller2' and not suit.dna.name == 'videog' and not suit.dna.name == 'hroller':
+        if suit.dna.name not in ('hroller2', 'videog', 'hroller'):
             selfDamageTracks.append(selfDamageTrack)
             smokeTracks.append(smokeTrack)
             propTracks.append(propTrack)
@@ -905,7 +905,7 @@ def doDirectorCuts(attack):
                 Wait(1.5),
                 LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
             ))
-        if not suit.dna.name == 'hroller2' and not suit.dna.name == 'videog' and not suit.dna.name == 'hroller':
+        if suit.dna.name not in ('hroller2', 'videog', 'hroller'):
             selfDamageTracks.append(selfDamageTrack)
             smokeTracks.append(smokeTrack)
             propTracks.append(propTrack)
@@ -1163,7 +1163,7 @@ def doVideoStatic(attack):
     soundTrack2 = getSoundTrack('tv_static.ogg', delay=2.5, node=suit)
     soundTrack4 = getSoundTrack('SA_hit.ogg', node=suit)
     for s in battle.activeSuits:
-        if s.dna.name == 'videog' and not suit.dna.name == 'videog':
+        if s.dna.name == 'videog' and suit.dna.name != 'videog':
             theSuit = s
             texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer4.png')
             texture3 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
@@ -1264,7 +1264,7 @@ def doNoAttack(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-    if suit.hasSuitStatusEffect('silhouetteImmune') and not suit.dna.name == 'hroller' and not suit.dna.name == 'videog' and suit.hasSuitStatusEffect('highRollerPhase3'):
+    if suit.hasSuitStatusEffect('silhouetteImmune') suit.dna.name not in ('hroller', 'videog') and suit.hasSuitStatusEffect('highRollerPhase3'):
         suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.nametag3d.show), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'silhouetteImmune'))
         suitTrack.append(Func(suit.setSuitStatusEffect, 'silhouetteShielding', modifier=1))
@@ -2586,7 +2586,7 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
+            if suit.dna.name != 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
     if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')
@@ -3318,7 +3318,7 @@ def doWheelSpin(attack):
         if isinstance(obj, DistributedCashbotBoss):
             musicIntroTrack.append(Func(obj.makeHighRollerWheelSpin, duration=4.0, spinCount=20))
     suitTrack = Sequence(MovieUtil.createSuitLaughInterval(suit))
-    if not suit.dna.name == 'hroller2':
+    if suit.dna.name != 'hroller2':
         suitTrack.append(Func(suit.setSuitStatusEffect, 'highRollerImmune', modifier=1))
     soundTrack1 = getSoundTrack('ttcc_ene_hroller_laugh.ogg')
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=7.0, node=suit)
@@ -3887,7 +3887,7 @@ def doCommercialBreak(attack):
     soundTrack = getSoundTrack('SA_bash.ogg')
     for suit in battle.activeSuits:
         suitTrack = Sequence()
-        if not suit.dna.name == 'hroller':
+        if suit.dna.name != 'hroller':
             suitTrack.append(Wait(1.0))
             suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
         suitTracks.append(suitTrack)
@@ -3904,7 +3904,7 @@ def doCommercialBreak2(attack):
     soundTrack = getSoundTrack('SA_bash.ogg')
     for suit in battle.activeSuits:
         suitTrack = Sequence()
-        if not suit.dna.name == 'hroller':
+        if suit.dna.name != 'hroller':
             suitTrack.append(Wait(1.0))
             suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
         suitTracks.append(suitTrack)

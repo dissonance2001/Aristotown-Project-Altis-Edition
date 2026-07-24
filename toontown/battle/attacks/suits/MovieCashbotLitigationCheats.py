@@ -173,7 +173,7 @@ def doPayrollProcessing(attack):
         suitTrack.append(Wait(4))
         suitTrack.append(Func(suit.checkPayrollProcessing))
         suitTracks.append(suitTrack)
-        if not suit.dna.name == 'payman':
+        if suit.dna.name != 'payman':
             suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
         suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5)))

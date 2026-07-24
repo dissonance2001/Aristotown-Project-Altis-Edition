@@ -44,29 +44,29 @@ def doLures(lures):
 def showLureRounds(suit, battle, level):
     trapProp = suit.battleTrapProp
     currentBossHealth = -1
-    if suit.dna.name in ['hroller2', 'videog', 'bcaster', 'hroller', 'fires', 'fbed', 'mouthp', 'rainmake', 
-                         'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep', 'director'] and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.hasSuitStatusEffect('desperation') and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.isAngry and not trapProp and not suit.dna.name == 'cbutcher' and not suit.dna.name == 'wtapper' and not suit.dna.name == 'liquid':
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.hasSuitStatusEffect('closedSession') and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.getManager() and not trapProp:
-        suit.showHpStringGreen("LURED 2 ROUNDS")
-    elif suit.getGovernaught() and not trapProp:
-        suit.showHpStringGreen("LURED 2 ROUNDS")
-    elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
-        suit.showHpStringGreen("LURED 2 ROUNDS")
-    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
-        suit.showHpStringGreen("LURED 2 ROUNDS")
-    elif suit.isSkeleton and suit.currHP > (suit.maxHP * 1.5) and not trapProp:
-        suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
-        suit.showHpStringGreen("LURED 2 ROUNDS")
-    elif trapProp:
+    if trapProp:
         suit.showHpStringRed("TRAPPED")
+    elif suit.dna.name in ['hroller2', 'videog', 'bcaster', 'hroller', 'fires', 'fbed', 'mouthp', 'rainmake', 
+                         'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep', 'director']:
+        suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.hasSuitStatusEffect('desperation'):
+        suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.isAngry and suit.dna.name not in ('cbutcher', 'wtapper', 'liquid'):
+        suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.hasSuitStatusEffect('closedSession'):
+        suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.getManager():
+        suit.showHpStringGreen("LURED 2 ROUNDS")
+    elif suit.getGovernaught():
+        suit.showHpStringGreen("LURED 2 ROUNDS")
+    elif suit.hasSuitStatusEffect('lureResist'):
+        suit.showHpStringGreen("LURED 2 ROUNDS")
+    elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2'):
+        suit.showHpStringGreen("LURED 2 ROUNDS")
+    elif suit.isSkeleton and suit.currHP > (suit.maxHP * 1.5):
+        suit.showHpStringGreen("LURED 1 ROUND")
+    elif suit.currHP > (suit.maxHP * 1.5):
+        suit.showHpStringGreen("LURED 2 ROUNDS")
     elif suit.isVirtual:
         suit.showHpStringGreen("LURED %i ROUNDS" % (ToontownBattleGlobals.AvLureRounds[level] - 1))
     elif suit.isSkeleton:
@@ -176,7 +176,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name in ('hrollers', 'mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'director', 'fmaker', 'cinema', 'choreo'):
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.clearSuitStatusEffect, 'trapped'))
                 else:
@@ -289,7 +289,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 shakeTotalDuration = 0.8
                 shakeDuration = shakeTotalDuration / float(numShakes)
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name in ('hrollers', 'mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'director', 'fmaker', 'cinema', 'choreo'):
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:
@@ -401,7 +401,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name in ('hrollers', 'mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'director', 'fmaker', 'cinema', 'choreo'):
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:
@@ -648,7 +648,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -688,7 +688,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(1.1))
         soundTrack = Sequence(Wait(1.25),
                               SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -722,7 +722,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'lured', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -765,7 +765,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setY(sinkPos.getY() + 12.5)
         dropPos.setZ(dropPos.getZ() + 40)
         #landPos.setY(dropPos.getY() + 4)
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -834,7 +834,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                  ActorInterval(suit, 'flail', startTime=0.9),
                  LerpPosInterval(suit, 0.3, flyPos),
                  ))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'erfit' and not suit.dna.name == 'erclaim':
+        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -900,7 +900,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createErfitReviveTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             result.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
@@ -1189,7 +1189,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 reachDist = MovieUtil.SUIT_LURE_DISTANCE
                 reachPos = Point3(opos[0], opos[1] - reachDist, opos[2])
                 suit.setPendingQueuedLured(True)
-                if suit.dna.name == 'hrollers' or suit.dna.name == 'mh2' or suit.dna.name == 'std2' or suit.dna.name == 'cnd2' or suit.dna.name == 'videog' or suit.dna.name == 'bcaster' or suit.dna.name == 'director' or suit.dna.name == 'fmaker' or suit.dna.name == 'cinema' or suit.dna.name == 'choreo':
+                if suit.dna.name in ('hrollers', 'mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'director', 'fmaker', 'cinema', 'choreo'):
                     suitTrack.append(Func(suit.setNeutralAnimationRolled))
                     suitTrack.append(Func(suit.makeUnTrapped))
                 else:

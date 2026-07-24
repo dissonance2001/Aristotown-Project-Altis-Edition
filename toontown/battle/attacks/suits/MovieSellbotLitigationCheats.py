@@ -194,7 +194,7 @@ def doHighPressure(attack):
     suitTracks = Parallel()
     for suit in battle.activeSuits:
         suitTrack = Sequence(Parallel(Wait(4.0), getSuitAnimTrackAttack(attack, playRate=2.0)))
-        if not suit.dna.name == 'cdirector':
+        if suit.dna.name != 'cdirector':
             suitTrack.append(Func(suit.showHpTextNew, - int(50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))))
             suitTrack.append(Func(suit.updateHealthBar, 0))
@@ -2994,7 +2994,7 @@ def doCompensation(attack):
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:
         suitTrack = Parallel()
-        if not suit.dna.name == 'racket':
+        if suit.dna.name != 'racket':
             suitTrack.append(Parallel(suit.makeCompensationInterval()))
             suitTrack.append(healSound)
             suitTracks2.append(suitTrack)

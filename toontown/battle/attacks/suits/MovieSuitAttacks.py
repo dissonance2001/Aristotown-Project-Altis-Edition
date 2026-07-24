@@ -1741,7 +1741,7 @@ def doSuitAttack(attack):
         'GagBanRetaliationSound',
         'GagBanRetaliationDrop'
     ):
-        if suit.dna.name == 'stenog' or suit.dna.name == 'caseman':
+        if suit.dna.name in ('stenog', 'caseman'):
             suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
         elif suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
@@ -1800,7 +1800,7 @@ def doUnderPressure(attack):
     battle = attack['battle']
     targets = attack['target']
     propDelay = 0.7
-    suitTrack = getSuitTrack(attack, animNames=['effort'])
+    suitTrack = getSuitTrack(attack)
     propTracks = Parallel()
     pressTracks = Parallel()
     soundTracks = Parallel()

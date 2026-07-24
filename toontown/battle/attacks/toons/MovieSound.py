@@ -275,7 +275,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             suit.setPendingQueuedLured(False)
             tracks.append(MovieUtil.createSuitTeaseMultiTrackSound(suit, battle, tSuitReact))
             #tracks.append(Func(suit.setNeutralAnimationTrap))
-        elif totalDamage[targetIndex] <= 0 and (suit.hasSuitStatusEffect('immune') or suit.hasSuitStatusEffect('soundImmune')) and not suit.dna.name == 'hroller':
+        elif totalDamage[targetIndex] <= 0 and (suit.hasSuitStatusEffect('immune') or suit.hasSuitStatusEffect('soundImmune')) and suit.dna.name != 'hroller':
             suit.setPendingQueuedLured(False)
             # tracks.append(Func(suit.showHpTextNew, 0, text='Immune!', colorCode=1))
 
@@ -296,7 +296,7 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.createErfitReviveTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
@@ -307,7 +307,7 @@ def __getSuitDeathTracks(sound):
         elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
-            if sound['level'] < 7:
+            else:
                 deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             deathTracks.append(Func(suit.setNeutralAnimation))

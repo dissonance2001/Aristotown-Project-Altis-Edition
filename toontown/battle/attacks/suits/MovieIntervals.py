@@ -835,7 +835,7 @@ def getToonTrackCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodge
         if attack['name'] == 'ContingencyOperationalFreeze':
             for t in battle.activeToons:
                 animTrack.append(Func(t.headsUp, battle, suitPos))
-        if attack['name'] == 'VideographerHardCut' or attack['name'] == 'MintMovingGoalposts' or attack['name'] == 'HighRollerDamageReduction' or attack['name'] == 'HustlerBaitAndSwitch' or attack['name'] == 'ContingencyOperationalFreeze':
+        if attack['name'] in ('VideographerHardCut', 'MintMovingGoalposts', 'HighRollerDamageReduction', 'HustlerBaitAndSwitch', 'ContingencyOperationalFreeze'):
             animTrack.append(getToonDodgeTrackCheat2(attack, target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))
         else:
             animTrack.append(getToonDodgeTrackCheat(target, dodgeDelay, dodgeAnimNames, splicedDodgeAnims, showMissedExtraTime))

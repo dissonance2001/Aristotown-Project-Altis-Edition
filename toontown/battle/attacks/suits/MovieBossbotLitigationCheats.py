@@ -454,7 +454,7 @@ def __soakSuit(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher':
+            if suit.dna.name != 'cbutcher':
                 suitInterval.append(Func(thing.setColor, color))
     if not suit.isSkeleton:
         hands = suit.find('**/hands')
@@ -496,7 +496,7 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
+            if suit.dna.name != 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
     if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')
@@ -1205,7 +1205,7 @@ def doRefinement(attack):
         # else:
         #     suitTrack.append(Func(suit.checkRefinement))
         suitTrack.append(Func(battle.unSueSuit, suit))
-        if not suit.dna.name == 'ambass':
+        if suit.dna.name != 'ambass':
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1286,7 +1286,7 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'ambass':
+            if suit.dna.name != 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1315,7 +1315,7 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'ambass':
+            if suit.dna.name != 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1344,7 +1344,7 @@ def doRefinementManager(attack):
                     suitTrack.append(Func(suit.showHpTextNew, 200, text="REFINED!", colorCode=1))
                     suitTrack.append(Func(suit.setHealthForMe, 200))
             suitTrack.append(Func(suit.updateHealthBar, 0))
-            if not suit.dna.name == 'ambass':
+            if suit.dna.name != 'ambass':
                 suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
@@ -1372,7 +1372,7 @@ def doRefinementManager(attack):
         Parallel(LerpPosInterval(can, 1, VBase3(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ() - 10)), Sequence(Wait(0.25), LerpScaleInterval(can, 0.5, VBase3(0, 0, 0)))),
             Func(MovieUtil.removeProp, can)
         )
-        if suit.dna.name == 'bkeeper' or suit.dna.name == 'wtapper' or suit.dna.name == 'phouse':
+        if suit.dna.name in ('bkeeper', 'wtapper', 'phouse'):
             knifeTracks.append(knifeTrack)
     makeUnVulnerable = Func(theSuit.makeUnVulnerable)
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
@@ -3100,7 +3100,7 @@ def doOverseer(attack):
         suitTrack = Sequence()
         suitTrack.append(Wait(4))
         suitTracks.append(suitTrack)
-        if not suit.dna.name == 'bkeeper':
+        if suit.dna.name != 'bkeeper':
             suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
                                            CFSpeech | CFTimeout)))
         suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5)))

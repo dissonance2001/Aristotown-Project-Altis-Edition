@@ -310,7 +310,7 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         else:
             #suitTrack.append(__createSuitResetPosTrack(suit, battle))

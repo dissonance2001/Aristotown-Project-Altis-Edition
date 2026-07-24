@@ -204,27 +204,17 @@ class SuitPlannerInteriorAI:
         )
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
-        #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.isSkeleton:
+        #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and suit.dna.name != 'cg' and not suit.isSkeleton:
           #  suit.setSkeleRevives(random.choice((1, 2)))
         #if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and suit.isSkeleton:
            # suit.setSkeleRevives(1)
-        if suit.dna.name == 'autocad':
+        if suit.dna.name in ('autocad', 'chairp', 'watchm', 'ant'):
             suit.setExecutive(1)
-        if suit.dna.name == 'chairp':
-            suit.setExecutive(1)
-        if suit.dna.name == 'watchm':
-            suit.setExecutive(1)
-        if suit.dna.name == 'ant':
-            suit.setExecutive(1)
-        if suit.dna.name == 'mh2':
+        elif suit.dna.name in ('mh2', 'std2', 'cnd2'):
             suit.setGovernaught(1)
-        if suit.dna.name == 'std2':
-            suit.setGovernaught(1)
-        if suit.dna.name == 'cnd2':
-            suit.setGovernaught(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager()  and not suit.dna.name == 'std2' and not suit.dna.name == 'cnd2' and not suit.dna.name == 'mh2' and not suit.dna.name == 'autocad' and not suit.dna.name == 'ant' and not suit.dna.name == 'chairp' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and suit.dna.name != 'ovt':
             suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'cnd2' and not suit.dna.name == 'std2' and not suit.dna.name == 'mh2' and not suit.dna.name == 'ant' and not suit.dna.name == 'djockey' and not suit.dna.name == 'autocad' and not suit.dna.name == 'chairp' and not suit.dna.name == 'ovt' and not suit.dna.name == 'watchm':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and suit.dna.name not in ('djockey', 'ovt'):
             suit.setGovernaught(1)
         suit.setCog(1)
         return flags

@@ -698,7 +698,7 @@ def createSuitReviveTrack(suit, battle):
             for headPart in suit.animatedHeadParts:
                 hasAnimatedHead = True
             if hasAnimatedHead:
-                if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+                if suit.dna.name in ('treasure', 'lgator'):
                     for headPart in suit.headParts:
                         headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
                 else:
@@ -1062,7 +1062,7 @@ def createSuitReviveRedd(suit, battle):
     for headPart in suit.animatedHeadParts:
         hasAnimatedHead = True
     if hasAnimatedHead:
-        if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+        if suit.dna.name in ('treasure', 'lgator'):
             for headPart in suit.headParts:
                 headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         else:
@@ -1297,7 +1297,7 @@ def createSuitReviveTrackVirtual(suit, battle):
     for headPart in suit.animatedHeadParts:
         hasAnimatedHead = True
     if hasAnimatedHead:
-        if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+        if suit.dna.name in ('treasure', 'lgator'):
             for headPart in suit.headParts:
                 headInterval = Sequence(ActorInterval(headPart, 'death'), Func(headPart.loop, 'neutral'))
         else:
@@ -1524,7 +1524,7 @@ def createVirtualSuitDeathTrack(suit, battle):
     for headPart in suit.animatedHeadParts:
         hasAnimatedHead = True
     if hasAnimatedHead:
-        if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+        if suit.dna.name in ('treasure', 'lgator'):
             for headPart in suit.headParts:
                 headInterval.append(ActorInterval(headPart, 'death', duration=2))
         else:
@@ -1552,7 +1552,7 @@ def createVirtualSuitDeathTrack(suit, battle):
                                                          blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
         suitTrack.append(Func(suit.cleanupAllBattleEffects))
         suitTrack.append(Func(suit.clearAllSuitStatusEffects))
-    elif suit.style.name == 'hrollers' or suit.style.name == 'bcaster':
+    elif suit.style.name in ('hrollers', 'bcaster'):
         deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
@@ -1573,7 +1573,7 @@ def createVirtualSuitDeathTrack(suit, battle):
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
     if hasAnimatedHead:
-        if not suit.style.name == 'wsi' and not suit.style.name == 'bcaster' and not suit.style.name == 'hrollers':
+        if suit.style.name not in ('wsi', 'bcaster', 'hrollers'):
             returnval.append(headInterval)
     return multiTrack
 
@@ -1610,7 +1610,7 @@ def createSuitDeathTrack(suit, battle):
         for headPart in suit.animatedHeadParts:
             hasAnimatedHead = True
         if hasAnimatedHead:
-            if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+            if suit.dna.name in ('treasure', 'lgator'):
                 for headPart in suit.headParts:
                     headInterval = Sequence(ActorInterval(headPart, 'death'))
             else:
@@ -3020,7 +3020,7 @@ def createSuitHeadHonchoCigarSmokeInterval(suit):
     head.calcTightBounds(p1, p2)
     stunInterval = Func(suit.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
     hasAnimatedHead = False
-    if suit.style.name in ['hho', 'payman', 'cinema', 'fmaker', 'choreo']:
+    if suit.style.name in ('hho', 'payman', 'cinema', 'fmaker', 'choreo'):
         #suitInterval = ActorInterval(suit, 'headhoncho-cigar-smoke')
         for headPart in suit.animatedHeadParts:
             headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke'), Func(headPart.loop,
@@ -3086,7 +3086,7 @@ def startSuitStunHeadInterval(suit):
         suit.stunIntervalHead.finish()
         suit.stunIntervalHead = None
 
-    if suit.dna.name == 'treasure' or suit.dna.name == 'lgator':
+    if suit.dna.name in ('treasure', 'lgator'):
         for headPart in suit.headParts:
             suit.stunIntervalHead = ActorInterval(headPart, 'stun')
             suit.stunIntervalHead.loop()
@@ -3250,7 +3250,7 @@ def zapCog(suit, anim, before, after, battle, died):
         suitBody = [suit.find('**/body')]
     zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
     # for bodyPart in suitBody:
-    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #     if bodyPart and not suit.isShadow and suit.dna.name != 'cbutcher':
     #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
@@ -3284,7 +3284,7 @@ def zapCogPowerhouseZap(suit, anim, before, after, battle):
         suitBody = [suit.find('**/body')]
     zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
     # for bodyPart in suitBody:
-    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #     if bodyPart and not suit.isShadow and suit.dna.name != 'cbutcher':
     #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
@@ -3314,7 +3314,7 @@ def zapCogPowerhouseSquirt(suit, anim, before, after, battle):
         suitBody = [suit.find('**/body')]
     zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
     # for bodyPart in suitBody:
-    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #     if bodyPart and not suit.isShadow and suit.dna.name != 'cbutcher':
     #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
@@ -3344,7 +3344,7 @@ def zapCogPowerhouse(suit, anim, before, after, battle):
         suitBody = [suit.find('**/body')]
     zapTrack = Sequence(SoundInterval(zapSfx, volume=0.6))
     # for bodyPart in suitBody:
-    #     if bodyPart and not suit.isShadow and not suit.dna.name == 'cbutcher':
+    #     if bodyPart and not suit.isShadow and suit.dna.name != 'cbutcher':
     #         flashTrack.append(Sequence(Wait(before), Func(bodyPart.setColorScale, (0, 0, 0, 1)),
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),

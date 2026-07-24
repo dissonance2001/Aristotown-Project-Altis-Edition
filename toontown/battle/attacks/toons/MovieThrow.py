@@ -526,7 +526,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and not suit.dna.name == 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
@@ -777,7 +777,7 @@ def __splatSuitWedding1(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     #for headPart in suit.headParts:
-        #if not suit.dna.name == 'lit':
+        #if suit.dna.name != 'lit':
             #headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -818,7 +818,7 @@ def __splatSuitFruit1(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -859,7 +859,7 @@ def __splatSuitCake1(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -900,7 +900,7 @@ def __splatSuitCream1(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -940,7 +940,7 @@ def __splatSuitWedding2(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     #for headPart in suit.headParts:
-        #if not suit.dna.name == 'lit':
+        #if suit.dna.name != 'lit':
             #headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -981,7 +981,7 @@ def __splatSuitFruit2(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1022,7 +1022,7 @@ def __splatSuitCake2(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1063,7 +1063,7 @@ def __splatSuitCream2(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1103,7 +1103,7 @@ def __splatSuitWedding3(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     #for headPart in suit.headParts:
-        #if not suit.dna.name == 'lit':
+        #if suit.dna.name != 'lit':
             #headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1144,7 +1144,7 @@ def __splatSuitFruit3(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1185,7 +1185,7 @@ def __splatSuitCake3(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1226,7 +1226,7 @@ def __splatSuitCream3(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1266,7 +1266,7 @@ def __splatSuitWedding4(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     #for headPart in suit.headParts:
-        #if not suit.dna.name == 'lit':
+        #if suit.dna.name != 'lit':
             #headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1307,7 +1307,7 @@ def __splatSuitFruit4(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1348,7 +1348,7 @@ def __splatSuitCake4(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)
@@ -1389,7 +1389,7 @@ def __splatSuitCream4(suit, level):
     splat.setMode(TextureStage.MDecal)
    # splat.setSavedResult(False)
     # for headPart in suit.headParts:
-    # if not suit.dna.name == 'lit':
+    # if suit.dna.name != 'lit':
     # headPart.setTexture(splat, splatTex)
     if suit.dna.name == 'dsf':
         suit.find('**/highroller_body').setTexture(splat, splatTex)

@@ -792,7 +792,7 @@ def doShatteringClarity(attack):
     soundTrack = getSoundTrack('SA_personal_trainer.ogg', delay=1)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     for suit in battle.activeSuits:
-        if not suit.dna.name == 'crystal':
+        if suit.dna.name != 'crystal':
             suitHealTrack = Sequence(Wait(3.0), (Func(suit.checkCompensation)))
     moveTrack = Sequence(LerpPosInterval(theSuit, 0, sinkPos, other=battle), Wait(theSuit.getDuration('shot5')), LerpPosInterval(theSuit, 0, resetPos, other=battle), Func(theSuit.setPos, battle, resetPos))
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 2, (0, 0, 0, 0)),

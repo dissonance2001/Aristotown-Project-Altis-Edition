@@ -314,7 +314,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     else:
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
                 continue
-            elif suit.dna.name == 'hrollers' or suit.dna.name == 'bcaster':
+            elif suit.dna.name in ('hrollers', 'bcaster'):
                 suit.setState('Battle')
                 suitTrack = Sequence()
                 if suit in self.joiningSuits:
@@ -330,11 +330,12 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 self.notify.debug('startPos for %s = %s' % (suit, startPos))
                 suitTrack.append(Func(suit.reparentTo, self))
                 suitTrack.append(Func(suit.headsUp, self))
-                suitTrack.append(LerpPosInterval(suit, 0, startPos))
-                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-                suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
-                suitTrack.append(Sequence(ActorInterval(suit, 'shot5', startTime=3, endTime=3), Parallel(Wait(3.0), LerpColorScaleInterval(suit, 3, (1, 1, 1, 1)))))
-                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTrack.append(Func(suit.setPos, startPos))
+                suitTrack.append(Func(suit.setHpr, Vec3(180, 0, 0)))
+                suitTrack.append(Func(suit.setColorScale, (0, 0, 0, 0)))
+                suitTrack.append(ActorInterval(suit, 'shot5', startTime=3, endTime=3))
+                suitTrack.append(LerpColorScaleInterval(suit, 3.0, (1, 1, 1, 1)))
+                suitTrack.append(Func(suit.setPos, startPos2))
                 suitTracks.append(suitTrack)
                 # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
@@ -377,17 +378,20 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suitTrack.append(Func(suit.hide))
                 suitTrack.append(Wait(delay))
                 suitTrack.append(Func(suit.show))
-                suitTrack.append(LerpPosInterval(suit, 0, startPos))
-                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
-                suitTrack.append(Parallel(Sequence(Wait(.5), LerpColorScaleInterval(stagelight, .5, VBase4(0, 0, 0, 0))), SoundInterval(sfx, node=suit), random.choice((ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1),
-                                                ActorInterval(suit, 'small-zap', startTime=suit.getDuration('small-zap') - .75),
-                                                ActorInterval(suit, 'slip-backward', startTime=suit.getDuration('slip-backward') - .75),
-                                                ActorInterval(suit, 'pie-small-react', startTime=suit.getDuration('pie-small-react') - .75),
-                                                ActorInterval(suit, 'rake-react', startTime=suit.getDuration('rake-react') - .75),
-                                                ActorInterval(suit, 'finger-wag', startTime=suit.getDuration('finger-wag') - .75)))))
+                suitTrack.append(Func(suit.setPos, startPos))
+                suitTrack.append(Func(suit.setHpr, Vec3(180, 0, 0)))
+                animName, timeFromEnd = random.choice((('mob-mentality', 1.0), ('small-zap', 0.75), ('slip-backward', 0.75), ('pie-small-react', 0.75), ('rake-react', 0.75), ('finger-wag', 0.75)))
+                suitTrack.append(Parallel(
+                    Sequence(
+                        Wait(.5),
+                        LerpColorScaleInterval(stagelight, .5, VBase4(0, 0, 0, 0))
+                    ),
+                    SoundInterval(sfx, node=suit),
+                    ActorInterval(suit, animName, startTime=suit.getDuration(animName) - timeFromEnd)
+                ))
                 suitTrack.append(Func(suit.loop, 'neutral'))
                 suitTrack.append(Func(stagelight.removeNode))
-                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTrack.append(Func(suit.setPos, startPos2))
                 suitTracks.append(suitTrack)
                 # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
@@ -420,7 +424,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suit.headsUp(self)
                 flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
                 taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-                if not suit.dna.name == 'hroller2':
+                if suit.dna.name != 'hroller2':
                     suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
                 else:
                     suitTrack.append(Track((delay, Sequence(Parallel(flyIval), Func(suit.loop, 'neutral')))))

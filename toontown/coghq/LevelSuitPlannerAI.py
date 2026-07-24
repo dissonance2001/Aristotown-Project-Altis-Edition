@@ -87,25 +87,13 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         suit.setLevel(suitDict['level'])
         if suit.dna.name in SuitBattleGlobals.SpecialCogDict:
             suit.setManager(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg':
+        if random.randint(0, 100) <= ToontownBattleGlobals.V2_BASE_CHANCE and not suit.getManager() and suit.dna.name != 'cg':
             suit.setSkeleRevives(random.choice((1, 2)))
-        if suit.dna.name == 'cg':
+        if suit.dna.name in ('cg', 'jdg', 'gkp', 'fas', 'csh', 'ant', 'jb'):
             suit.setExecutive(1)
-        if suit.dna.name == 'jdg':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager():
             suit.setExecutive(1)
-        if suit.dna.name == 'gkp':
-            suit.setExecutive(1)
-        if suit.dna.name == 'fas':
-            suit.setExecutive(1)
-        if suit.dna.name == 'csh':
-            suit.setExecutive(1)
-        if suit.dna.name == 'ant':
-            suit.setExecutive(1)
-        if suit.dna.name == 'jb':
-            suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.EXECUTIVE_BASE_CHANCE and not suit.getManager() and not suit.dna.name == 'cg' and not suit.dna.name == 'ant' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
-            suit.setExecutive(1)
-        if random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and not suit.getExecutive() and not suit.dna.name == 'ant' and not suit.dna.name == 'yuh' and not suit.dna.name == 'cg' and not suit.dna.name == 'jdg' and not suit.dna.name == 'gkp' and not suit.dna.name == 'jb' and not suit.dna.name == 'csh' and not suit.dna.name == 'fas':
+        elif random.randint(0, 100) <= ToontownBattleGlobals.GOVERNAUGHT_BASE_CHANCE and not suit.getManager() and suit.dna.name != 'yuh':
             suit.setGovernaught(1)
         suit.setSkeleRevives(suitDict.get('revives'))
         suit.setLevelDoId(self.level.doId)

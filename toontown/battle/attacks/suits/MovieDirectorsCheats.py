@@ -164,7 +164,7 @@ def doRefinementDerrickMan(attack):
         suitTrack.append(Wait(4.5))
         suitTrack.append(Func(suit.checkRefinementDerrickMan))
         suitTrack.append(Func(battle.unSueSuit, suit))
-        if not suit.dna.name == 'derrman':
+        if suit.dna.name != 'derrman':
             suitTrack.append(Parallel(Sequence(Wait(3)),
                                           Func(suit.setChatAbsolute,
                                                random.choice(OTPLocalizerEnglish.SuitHealingPhrases),

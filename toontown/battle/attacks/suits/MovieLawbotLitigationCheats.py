@@ -952,7 +952,7 @@ def __soakRemoval(suit, remove=0):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
-            if not suit.dna.name == 'cbutcher' and not suit.isShadow:
+            if suit.dna.name != 'cbutcher' and not suit.isShadow:
                 suitInterval.append(Func(thing.setColor, Point4(1.0, 1.0, 1.0, 1.0)))
     if not suit.isSkeleton and not suit.isShadow:
         hands = suit.find('**/hands')
@@ -1443,7 +1443,7 @@ def doCompensation(attack):
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     for suit in battle.activeSuits:
         suitTrack = Parallel()
-        if not suit.dna.name == 'whistleb':
+        if suit.dna.name != 'whistleb':
             suitTrack.append(Sequence(Parallel(Func(suit.checkCompensation), healSound)))
             suitTracks.append(suitTrack)
     return Parallel(suitTracks, soundTrack)
@@ -1582,7 +1582,7 @@ def doCaseInsurancePlanInsuranceScapegoat(attack, ind, ind2, ind3):
         suitTrack = Sequence()
         suitTrack.append(Wait(5.2))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'caseman':
+        if suit.dna.name != 'caseman':
             suitTrack.append(Func(suit.checkHealingPhrases, 0))
         suitTrack.append(Func(suit.showHpTextNew, 0, text="INSURANCE!", colorCode=1))
         #suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1675,7 +1675,7 @@ def doCaseInsurancePlanInsurance(attack, ind, ind2, ind3):
         suitTrack = Sequence()
         suitTrack.append(Wait(5.2))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'caseman':
+        if suit.dna.name != 'caseman':
             suitTrack.append(Func(suit.checkHealingPhrases, 0))
         suitTrack.append(Func(suit.showHpTextNew, 0, text="INSURANCE!", colorCode=1))
         #suitTrack.append(Func(suit.setNeutralAnimation))
@@ -1749,7 +1749,7 @@ def doCaseInsurancePlanInsurance2(attack):
         suitTrack = Sequence()
         suitTrack.append(Wait(5.2))
         suitTrack.append(Func(suit.updateHealthBar, 0))
-        if not suit.dna.name == 'caseman':
+        if suit.dna.name != 'caseman':
             suitTrack.append(Func(suit.checkHealingPhrases, 0))
         # suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(battle.unSueSuit, suit))
