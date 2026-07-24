@@ -79,9 +79,9 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             self.zoneId
         )
 
-        self.paceCat.b_setBackpack(1, 0, 0)
-        self.paceCat.b_setHat(59, 0, 0)
-        self.paceCat.b_setGlasses(22, 0, 0)
+        self.paceCat.b_setBackpack(111, 0, 0)
+        self.paceCat.b_setHat(136, 0, 0)
+        self.paceCat.b_setGlasses(50, 0, 0)
 
         self.paceCat.setPosHpr(
             -34.937,
