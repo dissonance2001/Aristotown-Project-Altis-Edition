@@ -44,7 +44,7 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         npcId = 91999
         bodyColor = (0.298039, 0.298039, 0.349020, 1.0)
         white = (1.0, 1.0, 1.0, 1.0)
-        gloves = (133.0/255.0, 26.0/255.0, 94.0/255.0, 1.0)
+        gloves = white
 
         dna = (
             'css',
