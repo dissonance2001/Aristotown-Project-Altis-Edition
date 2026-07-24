@@ -1927,6 +1927,16 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         questClass = Quests.getQuestClass(questId)
         if not questClass:
             return False
+        hoodId = ZoneUtil.getHoodId(self.zoneId)
+        if hoodId in (
+            ToontownGlobals.ToontownCentral,
+            ToontownGlobals.DonaldsDock,
+            ToontownGlobals.YeOlde
+        ) and questClass == Quests.SkelecogQuest:
+            return False
+        if hoodId == ToontownGlobals.ToontownCentral:
+            if questClass == Quests.BuildingQuest:
+                return False
         allowedQuestClasses = (
             Quests.CogQuest,
             Quests.CogTrackQuest,

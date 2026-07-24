@@ -3371,7 +3371,11 @@ for _kudosTier, _kudosHood in enumerate(_kudosBoardHoods):
      (BuildingQuest, Anywhere, _kudosBuildingCount + 1, Any, _kudosFloors),
      (TrolleyQuest, _kudosTrolleyCount),
      (DeliverGagQuest, _kudosGagLevel + 2, 4, _kudosGagLevel),
-     (DeliverGagQuest, _kudosGagLevel + 3, 5, _kudosGagLevel))
+     (DeliverGagQuest, _kudosGagLevel + 3, 5, _kudosGagLevel),
+     (CogQuest, Anywhere, _kudosCogCount + 10, Any),
+     (CogTrackQuest, Anywhere, _kudosCogCount + 5, 'c'),
+     (CogLevelQuest, Anywhere, max(4, _kudosCogCount / 2), _kudosCogLevel),
+     (TrolleyQuest, _kudosTrolleyCount + 2))
     _kudosPool = []
     for _kudosOffset, _kudosEntry in enumerate(_kudosEntries):
         _kudosQuestId = _kudosBaseId + _kudosOffset
