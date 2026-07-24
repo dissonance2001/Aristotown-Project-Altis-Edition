@@ -44,7 +44,7 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         npcId = 91999
         bodyColor = (0.298039, 0.298039, 0.349020, 1.0)
         white = (1.0, 1.0, 1.0, 1.0)
-        gloves = (133.0/255.0, 26.0/255.0, 94.0/255.0, 1.0)
+        gloves = white
 
         dna = (
             'css',
@@ -79,9 +79,9 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             self.zoneId
         )
 
-        self.paceCat.b_setBackpack(1, 0, 0)
-        self.paceCat.b_setHat(59, 0, 0)
-        self.paceCat.b_setGlasses(22, 0, 0)
+        self.paceCat.b_setBackpack(111, 0, 0)
+        self.paceCat.b_setHat(136, 0, 0)
+        self.paceCat.b_setGlasses(50, 0, 0)
 
         self.paceCat.setPosHpr(
             -34.937,

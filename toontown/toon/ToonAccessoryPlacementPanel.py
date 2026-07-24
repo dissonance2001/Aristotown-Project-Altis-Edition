@@ -647,16 +647,26 @@ class ToonAccessoryPlacementPanel(object):
             custom = _getCustomAccessories('backpack')
 
         customStyleNames = set()
+        customIds = set()
+
         for customName, customId, customStyle, customDisplayName in custom:
             if customStyle:
                 customStyleNames.add(customStyle)
+            if isinstance(customId, int):
+                customIds.add(customId)
 
         for name in names:
             if name == 'none':
                 continue
 
+            style = styles.get(name)
+
             if name in customStyleNames:
                 continue
+
+            if isinstance(style, (list, tuple)) and style:
+                if style[0] in customIds:
+                    continue
 
             realName = self.getRealName(name)
             if searchText:
@@ -737,6 +747,69 @@ class ToonAccessoryPlacementPanel(object):
     def clearSearch(self):
         self.searchEntry.set('')
         self.populateList('')
+
+    def _saveEquippedAccessories(self):
+        avatar = getattr(base, 'localAvatar', None)
+        if avatar is None:
+            return False
+
+        try:
+            distributedAvatar = base.cr.doId2do.get(avatar.doId)
+            if distributedAvatar is not None:
+                avatar = distributedAvatar
+        except:
+            pass
+
+        def normalizeAccessory(value):
+            try:
+                return (
+                    int(value[0]),
+                    int(value[1]),
+                    int(value[2])
+                )
+            except:
+                return (0, 0, 0)
+
+        try:
+            hatValue = avatar.getHat()
+        except:
+            hatValue = getattr(avatar, 'hat', (0, 0, 0))
+
+        try:
+            glassesValue = avatar.getGlasses()
+        except:
+            glassesValue = getattr(avatar, 'glasses', (0, 0, 0))
+
+        try:
+            backpackValue = avatar.getBackpack()
+        except:
+            backpackValue = getattr(avatar, 'backpack', (0, 0, 0))
+
+        try:
+            shoesValue = avatar.getShoes()
+        except:
+            shoesValue = getattr(avatar, 'shoes', (0, 0, 0))
+
+        hat = normalizeAccessory(hatValue)
+        glasses = normalizeAccessory(glassesValue)
+        backpack = normalizeAccessory(backpackValue)
+        shoes = normalizeAccessory(shoesValue)
+
+        try:
+            avatar.sendUpdate(
+                'requestSetAccessories',
+                [
+                    hat[0], hat[1], hat[2],
+                    glasses[0], glasses[1], glasses[2],
+                    backpack[0], backpack[1], backpack[2],
+                    shoes[0], shoes[1], shoes[2]
+                ]
+            )
+            print 'Accessory editor save request sent:', hat, glasses, backpack, shoes
+            return True
+        except Exception as error:
+            print 'Accessory editor could not save equipped accessories:', error
+            return False
 
     def selectAccessory(self, name, isCustom=False):
         self.selectedName = name
@@ -823,6 +896,7 @@ class ToonAccessoryPlacementPanel(object):
             except Exception as error:
                 print 'Accessory editor could not equip custom accessory:', error
 
+            self._saveEquippedAccessories()
             self.refreshPreviewAccessory()
             self.info['text'] = '[Custom] %s (ID %s)' % (name, self.selectedId)
             self.syncControlsFromPlacement()
@@ -842,6 +916,7 @@ class ToonAccessoryPlacementPanel(object):
             self.selectedId = style[0]
             base.localAvatar.setBackpack(*style)
 
+        self._saveEquippedAccessories()
         self.currentPlacement = copy.deepcopy(self.getPlacement())
 
         placementData = _loadAccessoryPlacements()
@@ -1085,6 +1160,7 @@ class ToonAccessoryPlacementPanel(object):
             print 'ID:', self.selectedId
             print 'DNA key:', key
             print 'Placement:', repr(self.currentPlacement)
+            self._saveEquippedAccessories()
             self.info['text'] = 'Saved %s' % self.selectedName
         except Exception as error:
             try:

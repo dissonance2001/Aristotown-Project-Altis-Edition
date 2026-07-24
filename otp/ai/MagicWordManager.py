@@ -20,6 +20,19 @@ class MagicWordManager(DistributedObject.DistributedObject):
 
     def handleMagicWord(self, magicWord):
         if magicWord.lower() == '~acc':
+            localAvatar = getattr(base, 'localAvatar', None)
+            if localAvatar is None or getattr(localAvatar, 'controlManager', None) is None:
+                print 'Accessory editor: load a Toon before using ~acc.'
+                if localAvatar is not None:
+                    try:
+                        localAvatar.setSystemMessage(
+                            0,
+                            'Load a Toon before using ~acc.'
+                        )
+                    except:
+                        pass
+                return
+
             if hasattr(base, 'apPanel') and getattr(base, 'apPanel', None):
                 try:
                     base.apPanel.destroy()

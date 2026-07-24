@@ -449,6 +449,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if accessoryData.get('id') == idx:
                 return True
 
+            if accessoryData.get('native_id') == idx:
+                return True
+
         return False
 
     def checkAccessorySanity(self, accessoryType, idx, textureIdx, colorIdx):
@@ -457,6 +460,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         if self._isCustomAccessory(accessoryType, idx, textureIdx, colorIdx):
             return 1
+
         if accessoryType == ToonDNA.HAT:
             stylesDict = ToonDNA.HatStyles
             accessoryTypeStr = 'Hat'
@@ -471,20 +475,22 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             accessoryTypeStr = 'Shoes'
         else:
             return 0
+
+        requestedStyle = [idx, textureIdx, colorIdx]
+
         try:
-            styleStr = stylesDict.keys()[stylesDict.values().index([idx, textureIdx, colorIdx])]
-            accessoryItemId = 0
-            for itemId in CatalogAccessoryItem.AccessoryTypes.keys():
-                if styleStr == CatalogAccessoryItem.AccessoryTypes[itemId][CatalogAccessoryItem.ATString]:
-                    accessoryItemId = itemId
-                    break
-            if accessoryItemId == 0:
-                self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to wear invalid %s %d %d %d' % (accessoryTypeStr, idx, textureIdx, colorIdx))
-                return 0
-            return 1
+            if requestedStyle in stylesDict.values():
+                return 1
         except:
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to wear invalid %s %d %d %d' % (accessoryTypeStr, idx, textureIdx, colorIdx))
-            return 0
+            pass
+
+        self.air.writeServerEvent(
+            'suspicious',
+            self.doId,
+            'Toon tried to wear invalid %s %d %d %d' %
+            (accessoryTypeStr, idx, textureIdx, colorIdx)
+        )
+        return 0
 
     def b_setHat(self, idx, textureIdx, colorIdx):
         self.d_setHat(idx, textureIdx, colorIdx)
@@ -646,20 +652,43 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             return
 
         values = (
-            (ToonDNA.HAT, hatIdx, hatTexture, hatColor),
-            (ToonDNA.GLASSES, glassesIdx, glassesTexture, glassesColor),
-            (ToonDNA.BACKPACK, backpackIdx, backpackTexture, backpackColor),
-            (ToonDNA.SHOES, shoesIdx, shoesTexture, shoesColor),
+            (
+                ToonDNA.HAT,
+                hatIdx,
+                hatTexture,
+                hatColor,
+                self.b_setHat
+            ),
+            (
+                ToonDNA.GLASSES,
+                glassesIdx,
+                glassesTexture,
+                glassesColor,
+                self.b_setGlasses
+            ),
+            (
+                ToonDNA.BACKPACK,
+                backpackIdx,
+                backpackTexture,
+                backpackColor,
+                self.b_setBackpack
+            ),
+            (
+                ToonDNA.SHOES,
+                shoesIdx,
+                shoesTexture,
+                shoesColor,
+                self.b_setShoes
+            ),
         )
 
-        for accessoryType, idx, textureIdx, colorIdx in values:
-            if not self.checkAccessorySanity(accessoryType, idx, textureIdx, colorIdx):
-                return
-
-        self.b_setHat(hatIdx, hatTexture, hatColor)
-        self.b_setGlasses(glassesIdx, glassesTexture, glassesColor)
-        self.b_setBackpack(backpackIdx, backpackTexture, backpackColor)
-        self.b_setShoes(shoesIdx, shoesTexture, shoesColor)
+        for accessoryType, idx, textureIdx, colorIdx, setter in values:
+            if self.checkAccessorySanity(
+                    accessoryType,
+                    idx,
+                    textureIdx,
+                    colorIdx):
+                setter(idx, textureIdx, colorIdx)
 
     def b_setExperience(self, experience):
         self.d_setExperience(experience)
