@@ -1937,6 +1937,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if hoodId == ToontownGlobals.ToontownCentral:
             if questClass == Quests.BuildingQuest:
                 return False
+        if hoodId in (
+            ToontownGlobals.DaisyGardens,
+            ToontownGlobals.MinniesMelodyland,
+            ToontownGlobals.TheBrrrgh,
+            ToontownGlobals.OutdoorZone,
+            ToontownGlobals.DonaldsDreamland
+        ) and questClass == Quests.DeliverGagQuest:
+            return False
         allowedQuestClasses = (
             Quests.CogQuest,
             Quests.CogTrackQuest,
