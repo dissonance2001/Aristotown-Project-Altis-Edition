@@ -22,6 +22,8 @@ class KudosBoardGui(DirectFrame):
         self.cards = []
         self.offers = offers or []
         self.refreshTaskName = 'kudos-board-refresh-%s' % id(self)
+        self.timerTaskName = 'kudos-board-timer-%s' % id(self)
+        self.refreshDeadline = globalClock.getFrameTime() + 10.0
 
         self.boardModel = loader.loadModel(
             'phase_3.5/models/gui/kudos/kudos_board'
@@ -58,6 +60,16 @@ class KudosBoardGui(DirectFrame):
             pos=(0, 0, -0.88)
         )
 
+        self.resetTimerLabel = DirectLabel(
+            parent=self,
+            relief=None,
+            text='Resets in: 0:10',
+            text_font=ToontownGlobals.getToonFont(),
+            text_scale=0.045,
+            text_fg=(0.18, 0.08, 0.02, 1),
+            pos=(0, 0, -0.95)
+        )
+
         self._makeCards()
         self._makeExitButton()
 
@@ -67,6 +79,7 @@ class KudosBoardGui(DirectFrame):
             self._refreshOffers,
             self.refreshTaskName
         )
+        taskMgr.add(self._updateResetTimer, self.timerTaskName)
 
         base.setCellsActive(base.leftCells, 0)
         if hasattr(base, 'bottomCells') and base.bottomCells:
@@ -78,6 +91,19 @@ class KudosBoardGui(DirectFrame):
             if getattr(base.localAvatar, 'kudosBoardGui', None) is self:
                 base.localAvatar.requestKudosBoard()
         return task.done
+
+    def _updateResetTimer(self, task):
+        remaining = int(max(
+            0,
+            self.refreshDeadline - globalClock.getFrameTime() + 0.999
+        ))
+        minutes = remaining / 60
+        seconds = remaining % 60
+        self.resetTimerLabel['text'] = 'Resets in: %d:%02d' % (
+            minutes,
+            seconds
+        )
+        return task.cont
 
     def _makeCards(self):
         xPositions = (-0.93, -0.31, 0.31, 0.93)
@@ -188,6 +214,10 @@ class KudosBoardGui(DirectFrame):
             taskMgr.remove(self.refreshTaskName)
             self.refreshTaskName = None
 
+        if getattr(self, 'timerTaskName', None):
+            taskMgr.remove(self.timerTaskName)
+            self.timerTaskName = None
+
         base.setCellsActive(base.leftCells, 1)
         if hasattr(base, 'bottomCells') and base.bottomCells:
             base.setCellsActive(base.bottomCells[:2], 1)
@@ -203,6 +233,10 @@ class KudosBoardGui(DirectFrame):
         if hasattr(self, 'statusLabel') and self.statusLabel:
             self.statusLabel.destroy()
             self.statusLabel = None
+
+        if hasattr(self, 'resetTimerLabel') and self.resetTimerLabel:
+            self.resetTimerLabel.destroy()
+            self.resetTimerLabel = None
 
         if hasattr(self, 'boardModel') and self.boardModel:
             self.boardModel.removeNode()
