@@ -686,14 +686,121 @@ def doHighStakesContingency(attack):
         gavelPos = Point3(toonPos.getX(), y, 30)
         soundTrack2 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, duration=2.0, node=suit)
         propTrack = Sequence(
-            getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
-                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
-            LerpPosInterval(gavel, 0.25, Point3(toonPos.getX(), y, 1)),
-            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 2)),
-            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 1)), Sequence(
-                Wait(1.5),
-                LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
-            ))
+        
+                    getPropAppearTrack(
+                        gavel,
+                        parent=battle,
+                        posPoints=[
+                            gavelPos,
+                            VBase3(0, 0, 0)
+                        ],
+                        appearDelay=0.0,
+                        scaleUpPoint=Point3(1.5),
+                        scaleUpTime=1.5
+                    ),
+        
+                    # Drop while rotating.
+                    Parallel(
+                        LerpPosInterval(
+                            gavel,
+                            0.25,
+                            Point3(toonPos.getX(), y, 1.5),
+                            blendType='easeIn'
+                        ),
+                        LerpHprInterval(
+                            gavel,
+                            0.25,
+                            Vec3(25, 0, 18),
+                            blendType='easeIn'
+                        )
+                    ),
+        
+                    # First bounce.
+                    Parallel(
+                        LerpPosInterval(
+                            gavel,
+                            0.1,
+                            Point3(toonPos.getX() - 0.05, y, 2.5),
+                            blendType='easeOut'
+                        ),
+                        LerpHprInterval(
+                            gavel,
+                            0.1,
+                            Vec3(-15, 18, -12),
+                            blendType='easeOut'
+                        ),
+                        LerpScaleInterval(
+                            gavel,
+                            0.1,
+                            Vec3(1.46, 1.46, 1.58),
+                            blendType='easeOut'
+                        )
+                    ),
+        
+                    # First landing.
+                    Parallel(
+                        LerpPosInterval(
+                            gavel,
+                            0.1,
+                            Point3(toonPos.getX() - 0.02, y, 1.5),
+                            blendType='easeIn'
+                        ),
+                        LerpHprInterval(
+                            gavel,
+                            0.1,
+                            Vec3(10, -6, 8),
+                            blendType='easeIn'
+                        ),
+                        LerpScaleInterval(
+                            gavel,
+                            0.1,
+                            Vec3(1.5, 1.5, 1.5),
+                            blendType='easeIn'
+                        )
+                    ),
+        
+                    # Smaller bounce.
+                    Parallel(
+                        LerpPosInterval(
+                            gavel,
+                            0.1,
+                            Point3(toonPos.getX() + 0.015, y, 2.35),
+                            blendType='easeOut'
+                        ),
+                        LerpHprInterval(
+                            gavel,
+                            0.1,
+                            Vec3(-6, 4, -5),
+                            blendType='easeOut'
+                        )
+                    ),
+        
+                    # Final settle.
+                    Parallel(
+                        LerpPosInterval(
+                            gavel,
+                            0.10,
+                            Point3(toonPos.getX(), y, 1.5),
+                            blendType='easeIn'
+                        ),
+                        LerpHprInterval(
+                            gavel,
+                            0.12,
+                            Vec3(0, 0, 0),
+                            blendType='easeOut'
+                        )
+                    ),
+        
+                    Wait(0.5),
+        
+                    LerpScaleInterval(
+                        gavel,
+                        0.25,
+                        MovieUtil.PNT3_ZERO
+                    ),
+        
+                    Func(gavel.removeNode)
+                )
         propTracks.append(Parallel(propTrack, soundTrack2))
         toonTrack = Sequence(
         Wait(1.75),

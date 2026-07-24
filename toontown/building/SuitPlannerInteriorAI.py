@@ -685,7 +685,7 @@ class SuitPlannerInteriorAI:
             miniboss2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=40,
+                suitLevel=35,
                 revives=0,
                 suitName='hustle'
             ) # Traffic Manager
@@ -702,7 +702,7 @@ class SuitPlannerInteriorAI:
             miniboss2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=35,
+                suitLevel=40,
                 revives=0,
                 suitName='radiog'
             ) # Radiographer
@@ -712,14 +712,14 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=40,
+                suitLevel=35,
                 revives=0,
                 suitName='hustle'
             ) # Traffic Manager
             miniboss2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=35,
+                suitLevel=40,
                 revives=0,
                 suitName='radiog'
             ) # Radiographer
@@ -729,7 +729,7 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=40,
+                suitLevel=35,
                 revives=0,
                 suitName='hustle'
             ) # Traffic Manager
@@ -753,7 +753,7 @@ class SuitPlannerInteriorAI:
             miniboss2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=35,
+                suitLevel=40,
                 revives=0,
                 suitName='radiog'
             ) # Radiographer
@@ -1324,7 +1324,7 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=40,
+                suitLevel=35,
                 revives=0,
                 suitName='hustle'
             )
@@ -1333,7 +1333,7 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='s',
-                suitLevel=35,
+                suitLevel=40,
                 revives=0,
                 suitName='radiog'
             )

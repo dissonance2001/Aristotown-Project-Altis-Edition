@@ -598,7 +598,7 @@ def doCeaseAndDesist(attack):
     notifyTrack = Parallel()
     for t in targets:
         toon = t['toon']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(3.0))
     for suit in battle.activeSuits:
         suitTrack.append(Func(suit.checkCogLured, battle))
         suitTrack.append(Func(battle.unlureSuit, suit))
@@ -610,14 +610,14 @@ def doCeaseAndDesist(attack):
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'dazed'))
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'marked'))
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'soaked'))
-        suitTrack.append(Func(suit.makeDeepFrozen, 2))
+        suitTrack.append(Func(suit.setSuitStatusEffect, 'attackFirst', modifier=1, turns=2))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=theSuit))
     return Parallel(suitTrack, notifyTrack, soundTrack)
 
 def doJuryNotice(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     suitTrack.append(Wait(1.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_jury_notice.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)

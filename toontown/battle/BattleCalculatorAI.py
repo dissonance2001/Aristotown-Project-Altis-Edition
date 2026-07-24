@@ -209,6 +209,7 @@ class BattleCalculatorAI:
         self.objectionDamage = 0
         self.comboDamage = 0
         self.knockbackDamage = 0
+        self.contingencyThresholds = 0
 
         # a dictionary of each toon's status conditions
         #
@@ -5131,13 +5132,15 @@ class BattleCalculatorAI:
 
                                     break
             elif atkType['name'] == 'ErfitPersonalTrainer':
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 1, 'setBoth')
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 if theSuit.currHP > 0:
-                        if (theSuit.currHP - (theSuit.maxHP * .1)) <= 0:
-                            theSuit.setHP(1)
-                        else:
-                            theSuit.setHP(theSuit.currHP - (theSuit.maxHP * .1))
+                    if (theSuit.currHP - (theSuit.maxHP * .1)) <= 0:
+                        theSuit.setHP(1)
+                    else:
+                        theSuit.setHP(theSuit.currHP - (theSuit.maxHP * .1))
                 from toontown.suit.DistributedCountErclaimBossAI import DistributedCountErclaimBossAI
 
                 boss = None
@@ -5187,7 +5190,7 @@ class BattleCalculatorAI:
                             if s in do.activeSuits:
                                 if s.dna.name == 'erclaim':
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
-                                    spawnAmount = min(2, 7 - aliveCount)
+                                    spawnAmount = min(4, 7 - aliveCount)
 
                                     if spawnAmount > 0:
                                         for i in xrange(spawnAmount):
@@ -7290,9 +7293,9 @@ class BattleCalculatorAI:
             elif atkType['name'] == 'RecordkeeperPhantomEntrySpawn':
                 self.setSuitCondition(theSuit.doId, 'directorDamageReduction', .5, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phantomEntrycalculator', 0, 0, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    if not self.TurnsElapsed == 0:
-                        self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 1, 'setBoth')
+                # for suit in self.battle.activeSuits:
+                #     if not self.TurnsElapsed == 0:
+                #         self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 1, 'setBoth')
                 if not self.suitHasCondition(theSuit.doId, 'phase3'):
                     self.setSuitCondition(theSuit.doId, 'phase3', 1, -1, 'setBoth')
                     self.setToonCondition(toon.doId, 'phantomDeath', 1, -1, 'setBoth')
@@ -7486,11 +7489,22 @@ class BattleCalculatorAI:
                 else:
                     self.setSuitCondition(theSuit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(theSuit.doId, 'directorDamageReduction') - .05), -1, 'setBoth')
             elif atkType['name'] == 'ContingencyRiskThresholdBreach':
-                result = 0
+                result = self.contingencyThresholds
                 attack[SUIT_HP_COL][targetIndex] = result
-                for s in self.battle.suits:
-                    if s.dna.name == 'rkeeper':
-                        self.setSuitCondition(s.doId, 'contingencyminutestaken', 1, 1, 'setBoth')
+            elif atkType['name'] == 'ContingencyRiskThresholdBreach25':
+                if self.toonHasCondition(toon.doId, 'contingencyMarked') and self.toonHasCondition(toon.doId, 'contingencyHit'):
+                    self.setToonCondition(toon.doId, 'contingencyHit', 0, 0, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
+                    result = 25
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'ContingencyMarkLiquidated':
+                self.setSuitCondition(theSuit.doId, 'markedcalculator2', 0, 0, 'setBoth')
+                self.setToonCondition(toon.doId, 'contingencyMarked', 1, 3, 'setBoth')
+                result = 5
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'ContingencyMarkRevisedFiling':
                 condition = random.choice(self.unusedConditions)
                 if condition == 1:
                     self.unusedConditions.remove(condition)
@@ -7545,23 +7559,6 @@ class BattleCalculatorAI:
                 elif self.suitHasCondition(theSuit.doId, 'risk8'):
                     self.setSuitCondition(theSuit.doId, 'alreadyRisk8', 1, -1, 'setBoth')
                     self.setSuitCondition(theSuit.doId, 'risk8', 0, 0, 'setBoth')
-            elif atkType['name'] == 'ContingencyRiskThresholdBreach25':
-                if self.toonHasCondition(toon.doId, 'contingencyMarked') and self.toonHasCondition(toon.doId, 'contingencyHit'):
-                    self.setToonCondition(toon.doId, 'contingencyHit', 0, 0, 'setBoth')
-                    self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                    result = 25
-                else:
-                    result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType['name'] == 'ContingencyMarkLiquidated':
-                self.setSuitCondition(theSuit.doId, 'markedcalculator2', 0, 0, 'setBoth')
-                self.setToonCondition(toon.doId, 'contingencyMarked', 1, 3, 'setBoth')
-                result = 5
-                attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType['name'] == 'ContingencyMarkRevisedFiling':
-                #self.setToonCondition(toon.doId, 'governaughtBoost', (self.getToonConditionModifier(toonId, 'governaughtBoost') + 150), -1, 'setBoth')
-                for suit in self.battle.activeSuits:
-                    self.setSuitCondition(suit.doId, 'boardbotLit', 1, -1, 'setBoth')
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'ContingencyRiskThresholdBreach50':
@@ -11683,6 +11680,7 @@ class BattleCalculatorAI:
                     'ScapegoatRageBuilding',
                     'ArbitratorThrowBook',
                     'PresidentExtraTip',
+                    'ContingencyRiskThresholdBreach',
                     'ErclaimSacrifice',
                     'ErfitGainsFromTheScrap',
                     'PresidentSensational',
@@ -12768,306 +12766,687 @@ class BattleCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
-            if self.battle.activeSuits[i].dna.name == 'stenog':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+            # if self.battle.activeSuits[i].dna.name == 'stenog':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedLawbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'stenog':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            if self.battle.activeSuits[i].dna.name == 'caseman':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedLawbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'stenog':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            # if self.battle.activeSuits[i].dna.name == 'caseman':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedLawbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'caseman':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            if self.battle.activeSuits[i].dna.name == 'sgoat':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedLawbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'caseman':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            # if self.battle.activeSuits[i].dna.name == 'sgoat':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedLawbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'sgoat':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'lit')
-            if self.battle.activeSuits[i].dna.name == 'phouse': #powerhouse
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedLawbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'sgoat':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+            # if self.battle.activeSuits[i].dna.name == 'phouse': #powerhouse
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedDirectorsAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'phouse':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'amb')
-            if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedDirectorsAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'phouse':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'amb')
+            # if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedDirectorsAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'bkeeper':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'amb')
-            if self.battle.activeSuits[i].dna.name == 'wtapper':  # wiretapper
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedDirectorsAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'bkeeper':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'amb')
+            # if self.battle.activeSuits[i].dna.name == 'wtapper':  # wiretapper
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedDirectorsAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'wtapper':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'amb')
-            if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedDirectorsAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'wtapper':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'amb')
+            # if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedDirectorsAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'ambass':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'amb')
-            if self.battle.activeSuits[i].dna.name == 'safesupervis': #safety supervisor
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedDirectorsAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'ambass':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'ambDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'amb')
+            # if self.battle.activeSuits[i].dna.name == 'safesupervis': #safety supervisor
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'safesupervis':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-            if self.battle.activeSuits[i].dna.name == 'ubuster': #union buster
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedSellbotBossMiniAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'safesupervis':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+            # if self.battle.activeSuits[i].dna.name == 'ubuster': #union buster
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'ubuster':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-            if self.battle.activeSuits[i].dna.name == 'hustle': #hustler
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedSellbotBossMiniAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'ubuster':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+            # if self.battle.activeSuits[i].dna.name == 'hustle': #hustler
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'hustle':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-            if self.battle.activeSuits[i].dna.name == 'radiog': #radiographer
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedSellbotBossMiniAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'hustle':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+            # if self.battle.activeSuits[i].dna.name == 'radiog': #radiographer
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedSellbotBossMiniAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'radiog':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-            if self.battle.activeSuits[i].dna.name == 'rkeeper': #recordkeeper
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedSellbotBossMiniAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'radiog':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'presDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+            # if self.battle.activeSuits[i].dna.name == 'rkeeper': #recordkeeper
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedBoardbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'rkeeper':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
-            if self.battle.activeSuits[i].dna.name == 'cdirector':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedBoardbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'rkeeper':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
+            # if self.battle.activeSuits[i].dna.name == 'cdirector':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedBoardbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'cdirector':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
-            if self.battle.activeSuits[i].dna.name == 'liquid':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedBoardbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'cdirector':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
+            # if self.battle.activeSuits[i].dna.name == 'liquid':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedBoardbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
-                                    break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'liquid':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
-            if self.battle.activeSuits[i].dna.name == 'dking':
-                if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedBoardbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'liquid':
+            #                             if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 if self.suitHasCondition(suitId, 'desperation'):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                 else:
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
+            # if self.battle.activeSuits[i].dna.name == 'dking':
+            #     if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+            #         from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedBoardbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedBoardbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'dking':
+            #                             maxSuits = 6
+
+            #                             aliveCount = len(self.battle.activeSuits) - self.deadSuits
+            #                             spawnAmount = min(3, maxSuits - aliveCount)
+
+            #                             if spawnAmount > 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+            #                                 for i in xrange(spawnAmount):
+            #                                     if self.suitHasCondition(suitId, 'desperation'):
+            #                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
+            #                                     else:
+            #                                         boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
+            SPAWNER_DNAS_BOARD = (
+                'dking',
+                'rkeeper',
+                'cdirector',
+                'dking',
+            )
+
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_BOARD:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_BOARD
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedBoardbotBossAI import (
+                                DistributedBoardbotBossAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedBoardbotBossAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
                                     break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'dking':
-                                        if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                                            if self.suitHasCondition(suitId, 'desperation'):
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlitDesperation')
-                                            else:
-                                                boss.appendSuitsToBattle(boss.battleNumber, 'bdlit')
+
+                            if boss:
+                                maxSuits = 6
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    if self.suitHasCondition(
+                                            spawnerId,
+                                            'desperation'):
+                                        spawnCode = 'bdlitDesperation'
+                                    else:
+                                        spawnCode = 'bdlit'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
+            SPAWNER_DNAS_BOSS = (
+                                        'ambass',
+                                        'phouse',
+                                        'wtapper',
+                                        'bkeeper',
+                                    )
+                        
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_BOSS:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_BOSS
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedDirectorsAI import (
+                                DistributedDirectorsAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedDirectorsAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
+                                    break
+
+                            if boss:
+                                maxSuits = 6
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    if self.suitHasCondition(
+                                            spawnerId,
+                                            'desperation'):
+                                        spawnCode = 'ambDesperation'
+                                    else:
+                                        spawnCode = 'amb'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
+            SPAWNER_DNAS_SELL = (
+                            'ubuster',
+                            'hustle',
+                            'radiog',
+                            'safesupervis',
+                        )
+            
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_SELL:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_SELL
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedSellbotBossMiniAI import (
+                                DistributedSellbotBossMiniAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedSellbotBossMiniAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
+                                    break
+
+                            if boss:
+                                maxSuits = 6
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    if self.suitHasCondition(
+                                            spawnerId,
+                                            'desperation'):
+                                        spawnCode = 'presDesperation'
+                                    else:
+                                        spawnCode = 'pres'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
+            SPAWNER_DNAS_LAW = (
+                            'stenog',
+                            'lgator',
+                            'sgoat',
+                            'caseman',
+                        )
+            
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_LAW:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_LAW
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedLawbotBossAI import (
+                                DistributedLawbotBossAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedLawbotBossAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
+                                    break
+
+                            if boss:
+                                maxSuits = 6
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    if self.suitHasCondition(
+                                            spawnerId,
+                                            'desperation'):
+                                        spawnCode = 'litDesperation'
+                                    else:
+                                        spawnCode = 'lit'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
                 #if self.battle.activeSuits[i].dna.name == 'racket': #racketeer
                     # if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
                     #     from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
@@ -13088,28 +13467,120 @@ class BattleCalculatorAI:
                     #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
                     #                             else:
                     #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-            if self.battle.activeSuits[i].dna.name == 'redd':
-                currentBossHealth = -1
-                for s in self.battle.suits:
-                    if s.dna.name == 'wsi':
-                        currentBossHealth = s.currHP
-                if currentBossHealth == -1 and not self.suitHasCondition(theSuit.doId, 'desperation'):
-                    from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+            SPAWNER_DNAS_REDD = (
+                                       'redd'
+                                    )
+                        
+            currentSuit = self.battle.activeSuits[i]
 
-                    boss = None
-                    for do in simbase.air.doId2do.values():
-                        if isinstance(do, DistributedLawbotBossAI):
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    boss = do
+            if currentSuit.dna.name in SPAWNER_DNAS_REDD:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_REDD
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedLawbotBossAI import (
+                                DistributedLawbotBossAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedLawbotBossAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
                                     break
-                            for s in self.battle.activeSuits:
-                                if s in do.activeSuits:
-                                    if s.dna.name == 'redd':
-                                        if len(self.battle.activeSuits) < 6:
-                                            boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
-                                            boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
-                                            boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
+
+                            if boss:
+                                maxSuits = 6
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    spawnCode = 'lit2'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
+            # if self.battle.activeSuits[i].dna.name == 'redd':
+            #     currentBossHealth = -1
+            #     for s in self.battle.suits:
+            #         if s.dna.name == 'wsi':
+            #             currentBossHealth = s.currHP
+            #     if currentBossHealth == -1:
+            #         from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
+
+            #         boss = None
+            #         for do in simbase.air.doId2do.values():
+            #             if isinstance(do, DistributedLawbotBossAI):
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         boss = do
+            #                         break
+            #                 for s in self.battle.activeSuits:
+            #                     if s in do.activeSuits:
+            #                         if s.dna.name == 'redd':
+            #                             maxSuits = 7
+    
+            #                             aliveCount = len(self.battle.activeSuits) - self.deadSuits
+            #                             spawnAmount = maxSuits - aliveCount
+    
+            #                             if spawnAmount > 0:
+            #                                 for i in xrange(spawnAmount):
+            #                                     boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
+    
+            #                             break
 
     def __calculateSuitConditions(self):
         for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
@@ -13462,8 +13933,10 @@ class BattleCalculatorAI:
                     'LureRemovalPreToon',
                     'Desperation',
                     'Desperation2',
+                    'ContingencyMarkRevisedFiling',
                     'LureRemovalHeal',
                     'CalculatingFees',
+                    'ContingencyRiskThresholdBreach',
                     'OilRemoval',
                     'MarkRemoval',
                     'LureRemovalTrap',
@@ -13616,7 +14089,7 @@ class BattleCalculatorAI:
                             if queueCondition:
                                 self.setSuitCondition(suit.doId, queueCondition, 1, 2, 'setBoth')
 
-                                if suit.currHP > 0 and not canAttack:
+                                if suit.currHP > 0 and not canAttack and not suit.dna.name == 'hrollers':
                                     attack = self.__getAbilityQueued(suit.doId)
                                     if attack[SUIT_ATK_COL]:
                                         self.battle.suitAttacks.append(attack)
@@ -18316,12 +18789,15 @@ class BattleCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erclaim':
-                if self.deadSuits > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and len(self.battle.activeSuits) < 7:
+                if self.deadSuits > 0 and not self.suitHasCondition(suitId, 'sounded') and not self.suitHasCondition(suitId, 'alreadyCogSpawn') and self.suitHasCondition(suitId, 'unlureSuit') and len(self.battle.activeSuits) < 7:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0 and len(self.battle.activeSuits) < 7:
+                if self.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn') and len(self.battle.activeSuits) < 7:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'ErclaimRiseFromTheScrap',  # Extra Tip
                                                                 'animName': 'effort',
@@ -19185,20 +19661,28 @@ class BattleCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'cdirector':
                 if self.battle.activeSuits[i].currHP < 13000 and not self.suitHasCondition(suitId, 'alreadyRisk1'):
                     self.setSuitCondition(suitId, 'risk1', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 12000 and not self.suitHasCondition(suitId, 'alreadyRisk2'):
                     self.setSuitCondition(suitId, 'risk2', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 11000 and not self.suitHasCondition(suitId, 'alreadyRisk3'):
                     self.setSuitCondition(suitId, 'risk3', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 10000 and not self.suitHasCondition(suitId, 'alreadyRisk4'):
                     self.setSuitCondition(suitId, 'risk4', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 9000 and not self.suitHasCondition(suitId, 'alreadyRisk5'):
                     self.setSuitCondition(suitId, 'risk5', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 8000 and not self.suitHasCondition(suitId, 'alreadyRisk6'):
                     self.setSuitCondition(suitId, 'risk6', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 7000 and not self.suitHasCondition(suitId, 'alreadyRisk7'):
                     self.setSuitCondition(suitId, 'risk7', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 if self.battle.activeSuits[i].currHP <= 6000 and not self.suitHasCondition(suitId, 'alreadyRisk8'):
                     self.setSuitCondition(suitId, 'risk8', 1, 10, 'setBoth')
+                    self.contingencyThresholds += 1
                 # if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
                 #     attack = self.__getLureRemoval(suitId)
                 #     if attack[SUIT_ATK_COL]:
@@ -19218,9 +19702,19 @@ class BattleCalculatorAI:
                 #                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                 #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
+                if self.contingencyThresholds > 0 and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                     'name': 'ContingencyRiskThresholdBreach',
+                                    'animName': 'revvedup',
+                                     'hp': 0,
+                                     'acc': 100,
+                                     'freq': 0,
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk1') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19230,7 +19724,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk2') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19240,7 +19734,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk3') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19250,7 +19744,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk4') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                     'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19260,7 +19754,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk5') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19270,7 +19764,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk6') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19280,7 +19774,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk7') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                      'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -19290,7 +19784,7 @@ class BattleCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk8') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyRiskThresholdBreach',
+                     'name': 'ContingencyMarkRevisedFiling',
                     'animName': 'revvedup',
                      'hp': 0,
                      'acc': 100,
@@ -21418,6 +21912,7 @@ class BattleCalculatorAI:
         # self.printSuitLevelPool('ovt')
         self.hustlerHits *= 0
         self.deadSuits *= 0
+        self.contingencyThresholds *= 0
         self.governaughtCogs *= 0
         self.countErclaimHP *= 0
         self.countErfitHP *= 0

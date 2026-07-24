@@ -270,6 +270,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                    # return Parallel(suitTrack, trapTrack)
                     suitTracks.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
                     suitTracks.append(Parallel(suitTrack, trapTrack))
+                continue
             elif suit.dna.name == 'cbutcher':
                 suit.setState('Battle')
                 suitTrack = Sequence()
@@ -299,7 +300,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suitTrack.append(LerpPosInterval(suit, 0, startPos))
                 suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
                 suitTrack.append(Func(getDustCloudIval().start))
-                suitTrack.append(Sequence(ActorInterval(suit, 'mob-mentality', startTime=suit.getDuration('mob-mentality') - 1)))
+                suitTrack.append(Sequence(ActorInterval(suit, 'cease', startTime=1, endTime=0)))
                 suitTrack.append(Func(suit.loop, 'neutral'))
                 suitTrack.append(LerpPosInterval(suit, 0, startPos2))
                 suitTracks.append(suitTrack)
@@ -312,6 +313,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     else:
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
+                continue
             elif suit.dna.name == 'hrollers' or suit.dna.name == 'bcaster':
                 suit.setState('Battle')
                 suitTrack = Sequence()

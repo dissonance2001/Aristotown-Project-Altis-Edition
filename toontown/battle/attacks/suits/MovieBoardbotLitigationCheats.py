@@ -2755,7 +2755,7 @@ def doShadowToon(attack):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveUp = Sequence(Parallel(LerpPosHprInterval(suit, duration=1.0, pos=(oldPos), hpr=(resetHpr), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
-    notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DEBUFF!", colorCode=1))
+    notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DOWN!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'phantomDebuff', modifier=50, turns=3)))
     toonTrack = getToonTrackCheat(attack, tPieHitsSuit, ['slip-backward'], tSuitDodges, ['sidestep'])
     return Sequence(suitTrack, Parallel(evilToonTrack, pieTrack, notifyTrack, soundTrack, toonTrack), moveUp)
@@ -3772,6 +3772,8 @@ def doRiskThresholdBreach(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
     node = suit.getGeomNode().getChild(0)
     headTrack = Sequence()
 
@@ -3808,7 +3810,10 @@ def doRiskThresholdBreach(attack):
     LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
                            blendType='easeInOut')
                               )
-    moveTrack = Parallel(Func(suit.setSuitStatusEffect, 'contingencyAbilities', modifier=1, mode='refreshModifier'), Func(suit.showHpTextNew, 0, text="+1 Ability!", colorCode=1))
+    if dmg > 1:
+        moveTrack = Parallel(Func(suit.setSuitStatusEffect, 'contingencyAbilities', modifier=dmg, mode='refreshModifier'), Func(suit.showHpTextNew, 0, text="+%s Abilities!" % dmg, colorCode=1))
+    else:
+        moveTrack = Parallel(Func(suit.setSuitStatusEffect, 'contingencyAbilities', modifier=dmg, mode='refreshModifier'), Func(suit.showHpTextNew, 0, text="+1 Ability!", colorCode=1))
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack2 = getSoundTrack('SA_revving_up.ogg')
     return Parallel(suitTrack, suitColorTrack, headTrack, moveTrack, soundTrack2)

@@ -3998,40 +3998,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def setNeutralAnimation(self):
         if self.getDizzy():
-            if self.currHP > 0:
-                Sequence(
-                # Let the damage/reaction animation reach its ending pose.
-                ActorInterval(
-                    self,
-                    'neutral',
-                    endTime=0
-                ),
-
-                Func(self.enableBlend),
-
-                # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral'),
-                Func(self.loop, 'lured'),
-
-                Parallel(LerpAnimInterval(
-                    self,
-                    duration=0.25,
-                    startAnim='neutral',
-                    endAnim='lured',
-                    startWeight=0.0,
-                    endWeight=1.0,
-                    blendType='easeInOut'
-                ), ActorInterval(
-                    self,
-                    'lured',
-                    startTime=0, endTime=0
-                )),
-
-                Func(self.disableBlend),
-
-                # Ensure the intended neutral animation remains playing.
-                Func(self.loopSyncedLuredAnimations)
-            ).start()
+            self.loopSyncedLuredAnimations()
         elif self.dna.name == 'clerk' and (self.getActualLevel() in [24, 25]):
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'pace'), Func(self.loop, 'pace')
                      ).start()
@@ -4060,40 +4027,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def setNeutralAnimationAdjustInterval(self):
         if self.getDizzy():
-            if self.currHP > 0:
-                Sequence(
-                # Let the damage/reaction animation reach its ending pose.
-                ActorInterval(
-                    self,
-                    'neutral',
-                    endTime=0
-                ),
-
-                Func(self.enableBlend),
-
-                # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral'),
-                Func(self.loop, 'lured'),
-
-                Parallel(LerpAnimInterval(
-                    self,
-                    duration=0.25,
-                    startAnim='neutral',
-                    endAnim='lured',
-                    startWeight=0.0,
-                    endWeight=1.0,
-                    blendType='easeInOut'
-                ), ActorInterval(
-                    self,
-                    'lured',
-                    startTime=0, endTime=0
-                )),
-
-                Func(self.disableBlend),
-
-                # Ensure the intended neutral animation remains playing.
-                Func(self.loopSyncedLuredAnimations)
-            ).start()
+            self.loopSyncedLuredAnimations()
         elif self.style.name == 'mh2':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'rolled'), Func(self.loop, 'rolled')
                      ).start()
@@ -4154,14 +4088,14 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 # Let the damage/reaction animation reach its ending pose.
                 ActorInterval(
                     self,
-                    'neutral',
+                    'neutral2',
                     endTime=0
                 ),
 
                 Func(self.enableBlend),
 
                 # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral'),
+                Func(self.loop, 'neutral2'),
                 Func(self.loop, 'lured'),
 
                 Parallel(LerpAnimInterval(
@@ -4196,13 +4130,13 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 Func(self.enableBlend),
 
                 # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral'),
+                Func(self.loop, 'neutral2'),
                 Func(self.loop, 'lured'),
 
                 Parallel(LerpAnimInterval(
                     self,
                     duration=0.25,
-                    startAnim='neutral',
+                    startAnim='neutral2',
                     endAnim='lured',
                     startWeight=0.0,
                     endWeight=1.0,
@@ -4241,40 +4175,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def setNeutralAnimationRolled(self):
         if self.getDizzy():
-            if self.currHP > 0:
-                Sequence(
-                # Let the damage/reaction animation reach its ending pose.
-                ActorInterval(
-                    self,
-                    'neutral',
-                    endTime=0
-                ),
-
-                Func(self.enableBlend),
-
-                # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral'),
-                Func(self.loop, 'lured'),
-
-                Parallel(LerpAnimInterval(
-                    self,
-                    duration=0.25,
-                    startAnim='neutral',
-                    endAnim='lured',
-                    startWeight=0.0,
-                    endWeight=1.0,
-                    blendType='easeInOut'
-                ), ActorInterval(
-                    self,
-                    'lured',
-                    startTime=0, endTime=0
-                )),
-
-                Func(self.disableBlend),
-
-                # Ensure the intended neutral animation remains playing.
-                Func(self.loopSyncedLuredAnimations)
-            ).start()
+            self.loopSyncedLuredAnimations()
         else:
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'rolled'), Func(self.loop, 'rolled')
             ).start()

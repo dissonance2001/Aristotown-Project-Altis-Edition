@@ -3312,7 +3312,7 @@ def doOvermodulated(attack, ind):
             __createSuitResetPosTrackOvermodulated(targetSuit, battle),
             Func(targetSuit.clearSuitStatusEffect, 'lured'),
             Func(targetSuit.showHpString, "+1 ATTACK!"),
-            Func(suit.setSuitStatusEffect, 'extraAttacks', modifier=1, mode='refreshModifier')
+            Func(targetSuit.setSuitStatusEffect, 'extraAttacks', modifier=1, mode='refreshModifier')
         ),
         Func(targetSuit.setNeutralAnimationDrop)
     )

@@ -961,7 +961,7 @@ def doSuitAttack(attack):
     elif name == 'ContingencyMarkLiquidated':
         suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack)
     elif name == 'ContingencyMarkRevisedFiling':
-        suitTrack = MovieBoardbotLitigationCheats.doOversightDirective(attack)
+        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
         # dividend king
     elif name == 'DividendAccountRollover':
         suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
@@ -4256,8 +4256,8 @@ def doGlowerPower(attack):
             [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
         ),
         "hustle": (
-            [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
-            [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
+            [Point3(0.6, 5.3, 5.0), MovieUtil.PNT3_ZERO],
+            [Point3(-0.1, 5.3, 5.0), MovieUtil.PNT3_ZERO],
         ),
         "autocad": (
             [Point3(0.4, 3.8, 3.7), MovieUtil.PNT3_ZERO],

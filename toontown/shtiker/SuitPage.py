@@ -177,8 +177,8 @@ CogNameAbbreviations = {
 CogIndexDepartments = {
     'c': ['f', 'p', 'stg', 'ym', 'enf', 'psh', 'mm', 'ds', 'blh', 'stck', 'hh', 'bsht', 'ppg', 'mldr', 'cr', 'wnk', 'drk', 'ksp', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'fires', 'fbed', 'mplayer', 'chainsaw',
           'choreo', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'ceo'],
-    's': ['cc', 'tm', 'sbg', 'nd', 'dc', 'gh', 'mad', 'ms', 'lvw', 'bam', 'tf', 'fcs', 'ppl', 'm', 'cnd', 'std', 'mh', 'foreman', 'dopr', 'dopa', 'bellring', 'prethink', 'mslacker', 'psetter', 'cinema', 'radiog',
-          'hustle', 'ubuster', 'safesupervis', 'vp'],
+    's': ['cc', 'tm', 'sbg', 'nd', 'dc', 'gh', 'mad', 'ms', 'lvw', 'bam', 'tf', 'fcs', 'ppl', 'm', 'cnd', 'std', 'mh', 'foreman', 'dopr', 'dopa', 'bellring', 'prethink', 'mslacker', 'psetter', 'cinema', 'hustle', 
+    'radiog', 'ubuster', 'safesupervis', 'vp'],
     'l': ['bf', 'bf2', 'b', 'b2', 'bsd', 'pf', 'dt', 'dt2', 'nn', 'dcr', 'cv', 'ac', 'ac2', 'bs', 'bs2', 'ad', 'dcw', 'bck', 'sd', 'sd2', 'sh', 'surg', 'rat', 'le', 'le2', 'magi', 'whistleb', 'br', 'bw', 'bw2',
           'clerk', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator', 'cj', 'clo'],
     'm': ['sc', 'pp', 'nb', 'qc', 'shy', 'tw', 'trs', 'pwn', 'bc', 'nc', 'cow', 'brck', 'mb', 'aud', 'ls', 'gld', 'fct', 'bfh', 'rb', 'supervis', 'duckshfl', 'treek', 'pcrat', 'erfit', 'hroller', 'bookkeep', 'racket',

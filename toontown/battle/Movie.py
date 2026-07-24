@@ -1436,7 +1436,7 @@ class Movie(DirectObject.DirectObject):
                     adict['phase'] = phaseByName[adict['name']]
                 elif suit and adict['name'] in PRE_TOON_ATTACKS:
                     adict['phase'] = 'preToon'
-                elif suit and adict['name'] in regularAttacks and suit.isDeepFrozen:
+                elif suit and adict['name'] in regularAttacks and suit.hasSuitStatusEffect('attackFirst'):
                     adict['phase'] = 'preToon'
                 else:
                     adict['phase'] = 'postToon'

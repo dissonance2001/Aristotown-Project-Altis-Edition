@@ -688,7 +688,7 @@ class TownBattleToonPanel(DirectFrame):
         self.passIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choicePanelModels.find('**/pass_icon'), pos=(0.21, 0, 0.075), scale=.25)
         self.fireIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/pinkslip_icon'), pos=(0.21, 0, 0.075), scale=.25)
         self.sueIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/sued_icon'), pos=(0.21, 0, 0.05), scale=.25)
-        self.sosIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/toon_accuracy_up_icon'), pos=(0.21, 0, 0.075), scale=.25)
+        self.sosIcon = DirectFrame(parent=self.choiceRoot, relief=None, image=self.choiceStatusModels.find('**/energized_icon'), pos=(0.21, 0, 0.075), scale=.25)
         self.undecidedIcon.show()
         self.undecidedIcon.setBin('fixed', 0)
         for icon in (self.passIcon, self.fireIcon, self.sueIcon, self.sosIcon):
@@ -817,9 +817,16 @@ class TownBattleToonPanel(DirectFrame):
 
         slot['bg'].setColor(*slotColor)
         slot['bg'].setColorScale(1, 1, 1, 1)
-        slot['bg'].show()
+        slotIndex = self.toonStatusSlots.index(slot)
 
-        slot['iconRoot'].show()
+        if slotIndex < 4:
+            slot['bg'].show()
+            slot['iconRoot'].show()
+            slot['hoverButton'].show()
+        else:
+            slot['bg'].hide()
+            slot['iconRoot'].hide()
+            slot['hoverButton'].hide()
 
         iconNode.reparentTo(slot['iconRoot'])
         iconNode.setPosHprScale(
@@ -991,8 +998,8 @@ class TownBattleToonPanel(DirectFrame):
         self.statusEffects += 1
 
         if self.statusEffects > 4:
-            slot['bg'].show()
-            slot['iconRoot'].show()
+            slot['bg'].hide()
+            slot['iconRoot'].hide()
 
         return slot
 
@@ -1478,87 +1485,162 @@ class TownBattleToonPanel(DirectFrame):
         if avatar.hasToonStatusEffect('throwBoost'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             self.statusIcon = status.find('**/inventory_cake')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('throwBoost'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            iconRoot = NodePath('hydratedIconRoot')
+
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
+
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('throwBoost'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.statusIcon, 
-                                   slot, 
-                                   tooltipTitle='Throw Boost', 
-                                   tooltipDescription="This Toon's THROW Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('throwBoost'),  
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Throw Boost', 
+                tooltipDescription="This Toon's THROW Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('throwBoost'),  
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
         if avatar.hasToonStatusEffect('squirtBoost'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             self.statusIcon = status.find('**/inventory_storm_cloud')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('squirtBoost'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            iconRoot = NodePath('hydratedIconRoot')
+            
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
+
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('squirtBoost'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.statusIcon, 
-                                   slot, 
-                                   tooltipTitle='Squirt Boost', 
-                                   tooltipDescription="This Toon's SQUIRT Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('squirtBoost'),  
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Squirt Boost', 
+                tooltipDescription="This Toon's SQUIRT Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('squirtBoost'),  
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
         if avatar.hasToonStatusEffect('zapBoost'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             self.statusIcon = status.find('**/inventory_tesla_coil')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('zapBoost'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            iconRoot = NodePath('hydratedIconRoot')
+                        
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
+
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('zapBoost'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.statusIcon, 
-                                   slot, 
-                                   tooltipTitle='Zap Boost', 
-                                   tooltipDescription="This Toon's ZAP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('zapBoost'),  
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Zap Boost', 
+                tooltipDescription="This Toon's ZAP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('zapBoost'),  
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
         if avatar.hasToonStatusEffect('soundBoost'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             self.statusIcon = status.find('**/inventory_fog_horn')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('soundBoost'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            iconRoot = NodePath('hydratedIconRoot')
+                                    
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
+
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('soundBoost'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.statusIcon, 
-                                   slot, 
-                                   tooltipTitle='Sound Boost', 
-                                   tooltipDescription="This Toon's SOUND Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('soundBoost'),  
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Sound Boost', 
+                tooltipDescription="This Toon's SOUND Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('soundBoost'),   
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
         if avatar.hasToonStatusEffect('dropBoost'):
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             self.statusIcon = status.find('**/inventory_boulder')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('dropBoost'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            iconRoot = NodePath('hydratedIconRoot')
+                                                
+            self.statusIcon.reparentTo(iconRoot)
+            self.statusIcon.setScale(5.5)
+
+            self.extraText = DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text="%s" % avatar.getToonStatusTurns('dropBoost'),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+
             slot = self._claimNextToonStatusSlot()
-            self._attachToonStatusIcon(self.statusIcon, 
-                                   slot, 
-                                   tooltipTitle='Drop Boost', 
-                                   tooltipDescription="This Toon's DROP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('dropBoost'),  
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1), scale=(5.5, 5.5, 5.5))
+
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Drop Boost', 
+                tooltipDescription="This Toon's DROP Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('dropBoost'),  
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1),
+                scale=(1, 1, 1)
+            )
 
         if avatar.hasToonStatusEffect('cheer'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')

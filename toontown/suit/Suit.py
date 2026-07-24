@@ -3077,7 +3077,7 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(10.15)
         elif dna.name == 'radiog':
-            self.scale = 6.8 / aSize
+            self.scale = 7.1 / aSize
             self.handColor = VBase4(0.612, 0.376, 0.608, 1)
             self.generateMajorPlayerBody()
             self.makeExecutive()
@@ -3086,21 +3086,21 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead3('dopa', animated=True)
-            self.setHeight(9.5)
+            self.setHeight(9.6)
           #  self.setTransparency(1)
         elif dna.name == 'hustle':
-            self.scale = 7.0 / aSize
-            self.handColor = VBase4(1, 0.486, 0, 1)
+            self.scale = 5.0 / aSize
+            self.handColor = VBase4(0.486, 0.447, 0.42, 1)
             self.generateBody()
-            self.generateHead3('dold', animated=True)
-            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold.png')
+            self.generateHead3('dola', animated=True)
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_dola.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.makeExecutive()
-            self.setHeight(9.7)
+            self.setHeight(7.25)
           #  self.setTransparency(1)
         elif dna.name == 'ubuster':
-            self.scale = 7.2 / aSize
+            self.scale = 7.1 / aSize
             self.handColor = VBase4(0.604, 0.463, 0.62, 1)
             self.generateBody()
             self.generateHead2('skeleskull_A')
@@ -3893,7 +3893,7 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1)
         if self.style.body == 'a' and self.style.name == 'radiog':
             self.generateHead3('dopa', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
                 headPart.setZ(0)
@@ -3935,7 +3935,7 @@ class Suit(Avatar.Avatar):
                 #headModel.find('**/head').setTexture(texture, 1)
         if self.style.body == 'a' and self.style.name == 'ubuster':
             self.generateHead3('dopr', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ubuster.png')
             for headPart in self.headParts:
                 headPart.setZ(0)
                 headPart.setTexture(texture, 1)
@@ -4243,6 +4243,8 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/necktie-w').setTexture(texture, 1)
         if self.style.name == 'wsi':
             modelRoot.find('**/necktie-w').show()
+            textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         if self.style.name == 'ovt':
             modelRoot.find('**/bowtie').show()
         modelRoot.find('**/bowtie').setTexture(texture, 1)
@@ -4564,6 +4566,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-w').show()
+            textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
@@ -5004,14 +5008,15 @@ class Suit(Avatar.Avatar):
                 headModel.setScale(.8)
             elif headType == 'witchhunter':
                 headModel.setScale(1.3)
-            elif headType == 'dola' and self.style.name == 'phouse':
+            elif headType == 'dola' and self.style.name == 'hustle':
                 headModel.setZ(-.1)
                 headModel.setY(-.1)
+                headModel.setScale(1.1)
             elif headType == 'dopr' and self.style.name == 'ubuster' and not self.isSkeleton:
                 headModel.setScale(1.3)
                 headModel.setZ(.25)
                 headModel.setY(-.2)
-                texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+                texture = loader.loadTexture('phase_9/maps/ttcc_ene_ubuster.png')
                 headModel.setTexture(texture, 1)
             elif headType == 'dopa' and self.style.name == 'radiog' and not self.isSkeleton:
                 headModel.setScale(1.2)
@@ -7219,7 +7224,7 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a' and self.style.name == 'radiog':
             self.zapActorHeadParts = []
             self.generateHeadZap('dopa', animated=True, targetActor=self.zapActor)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
                 headPart.setZ(0)
@@ -7264,7 +7269,7 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a' and self.style.name == 'ubuster':
             self.zapActorHeadParts = []
             self.generateHeadZap('dopr', animated=True, targetActor=self.zapActor)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ubuster.png')
             for headPart in self.zapActorHeadParts:
                 headPart.setZ(0)
                 headPart.setTexture(texture, 1)
@@ -7392,10 +7397,10 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+        elif self.isExecutive and not self.isWaiter:
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
-        elif self.getExecutive() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.style.name == 'dold':
@@ -7424,6 +7429,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-w').show()
+            textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
@@ -7512,7 +7519,9 @@ class Suit(Avatar.Avatar):
         textureDerrick = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
-        textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
+        textureRadio = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
+        textureUnion = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
+        textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_ubuster.png')
         textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
@@ -7523,11 +7532,11 @@ class Suit(Avatar.Avatar):
             if self.style.name == 'derrhand':
                 headPart.setTexture(textureDerrick, 1)
             elif self.style.name == 'ubuster':
-                headPart.setTexture(textureDopr, 1)
+                headPart.setTexture(textureUnion, 1)
             elif self.style.name == 'dold':
                 headPart.setTexture(textureDold, 1)
             elif self.style.name == 'radiog':
-                headPart.setTexture(textureDopa, 1)
+                headPart.setTexture(textureRadio, 1)
             elif self.style.name == 'cdirector':
                 headPart.setTexture(textureDirector, 1)
             elif self.style.name == 'dopa':
@@ -7795,6 +7804,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-w').show()
+            textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
@@ -8124,6 +8135,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'wsi':
             modelRoot.find('**/bowtie').hide()
             modelRoot.find('**/necktie-w').show()
+            textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+            modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
             modelRoot.setColor((0.729, 0.729, 0.729, 1))
@@ -8265,7 +8278,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.getExecutive() and not self.isWaiter:
+        elif self.isExecutive and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
@@ -8387,7 +8400,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.getExecutive() and not self.isWaiter:
+        elif self.isExecutive and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
@@ -10150,7 +10163,11 @@ class Suit(Avatar.Avatar):
                     headPart.setTexture(texture, 1)
                 modelRoot.find('**/body').setTexture(texture, 1)
                 modelRoot.find('**/necktie-s').setTexture(texture, 1)
-                modelRoot.find('**/necktie-w').setTexture(texture, 1)
+                textureWSI = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
+                if self.style.name == 'wsi':
+                    modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
+                else:
+                    modelRoot.find('**/necktie-w').setTexture(texture, 1)
                 modelRoot.find('**/bowtie').setTexture(texture, 1)
             if self.style.body == 'b' and not self.style.name == 'charon' and not self.style.name == 'hydra' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'styx':
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' %
@@ -10564,7 +10581,7 @@ class Suit(Avatar.Avatar):
         self.isGovernaught = 1
         if self.isSkeleton:
             self.setSuitClothesSkeleton()
-            if self.style.body == 'a':
+            if self.style.body == 'a' and not self.dna.name in ['mh2', 'cnd2', 'std2']:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
                 for headPart in self.headParts:
                     headPart.setTexture(texture, 1)
@@ -11946,7 +11963,7 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'dold' and not self.isSkeleton:
             return loadDialogArray(DOLDDialogArray, DOLDDialogFiles)
         elif self.style.name == 'hustle' and not self.isSkeleton:
-            return loadDialogArray(DOLDDialogArray, DOLDDialogFiles)
+            return loadDialogArray(DOLADialogArray, DOLADialogFiles)
         elif self.style.name == 'dold' and self.isSkeleton:
             return loadDialogArray(DOLDSkeleDialogArray, DOLDSkeleDialogFiles)
         elif self.style.name == 'dking' and not self.isSkeleton:

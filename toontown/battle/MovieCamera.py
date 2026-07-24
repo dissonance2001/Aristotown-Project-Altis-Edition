@@ -1763,6 +1763,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyFailsafeProtocol':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyRiskThresholdBreach':
+        dmg = attack['target'][0]['hp']
+        if dmg > 1:
+            banDesc = 'The Contingency Director has gained %s new abilities!' % dmg
+        else:
+            banDesc = 'The Contingency Director has gained 1 new ability!'
+
+        camTrack2 = Sequence(motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, 0, suit), Wait(attackDuration))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc(banDesc, attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Risk Threshold Breach!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
         camTrack.append(Sequence(motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'ContingencyRiskThresholdBreach75':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
@@ -1771,7 +1784,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ContingencyRiskThresholdBreach50':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ContingencyMarkRevisedFiling':
-        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack2 = defaultCamera(openShotDuration=0)
+        return camTrack2
     elif name == 'ContingencyRiskThresholdBreach25':
         if attackDuration > 2:
             camTrack2 = defaultCamera(openShotDuration=0.75)

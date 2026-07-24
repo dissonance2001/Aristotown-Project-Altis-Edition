@@ -336,11 +336,13 @@ def doDesperation2(attack):
     #     toonTracks.append(Func(suit.makeUnBattleSpeed))
     for t in battle.activeToons:
         toonTrack = Parallel(Func(t.clearToonStatusEffect, 'gagBan'))
+        if theSuit.dna.name != 'cdirector':
+            toonTrack.append(Func(t.clearToonStatusEffect, 'highStakes'))
         toonTracks.append(toonTrack)
     notifyTracks = Sequence(Func(theSuit.setChatAbsoluteSpecial, "", CFSpeech | CFTimeout))
     makeDamageUps = Parallel()
     theSuit.setPendingQueuedDesperation(True)
-    if theSuit.isDesperation:
+    if theSuit.hasSuitStatusEffect('desperation'):
         notifyTrack = Sequence(Func(theSuit.showHpStringDesperationDamage))
     else:
         notifyTrack = Sequence(Func(theSuit.showHpStringDesperation))
