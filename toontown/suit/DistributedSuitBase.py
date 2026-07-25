@@ -3955,6 +3955,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         elif projectedHP >= float(self.maxHP * 1.5):
             targetAnim = 'neutral-unstable'
+        elif self.hasSuitStatusEffect('brokenConnection'):
+            targetAnim = 'neutral-unstable'
 
         else:
             return Func(self.setNeutralAnimationDrop)
@@ -4014,6 +4016,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
+        elif self.hasSuitStatusEffect('brokenConnection'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('zapped'):
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
@@ -4073,6 +4078,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('zapped'):
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
+        elif self.hasSuitStatusEffect('brokenConnection'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                         ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5) and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers']:
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
@@ -4152,6 +4160,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 # Ensure the intended neutral animation remains playing.
                 Func(self.loopSyncedLuredAnimations)
             ).start()
+        elif self.hasSuitStatusEffect('brokenConnection'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                         ).start()
         elif self.dna.name == 'clerk' and (self.getActualLevel() in [24, 25]):
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'pace'), Func(self.loop, 'pace')
                      ).start()
@@ -4195,6 +4206,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
+        elif self.hasSuitStatusEffect('brokenConnection'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                         ).start()
         elif self.hasSuitStatusEffect('zapped'):
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()

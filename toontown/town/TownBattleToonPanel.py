@@ -1798,7 +1798,7 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hot Take', 
-                                   tooltipDescription="If this Toon takes damage from any Cog attack this turn, they will receive a dangerous vulnerability and a Gag damage boost.", 
+                                   tooltipDescription="If this Toon takes damage from any Cog attack this turn, they will receive a dangerous vulnerability.", 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -1827,7 +1827,7 @@ class TownBattleToonPanel(DirectFrame):
                 self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Wiretapped', 
-                                   tooltipDescription="This Toon is dealing -%s%% less damage this round." % avatar.getToonStatusModifier('wiretapped'), 
+                                   tooltipDescription="This Toon is dealing %s%% less damage this round." % avatar.getToonStatusModifier('wiretapped'), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2489,6 +2489,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('energized'):
                 damage *= 1.5
                 lureValue *= 1.5
+            if self.avatar.hasToonStatusEffect('commissionerMarked'):
+                damage *= 1.25
+                lureValue *= 1.25
             if self.avatar.hasToonStatusEffect('groupDamageDown') and ((track == LURE_TRACK and level == 1) or (track == LURE_TRACK and level == 3) or (track == LURE_TRACK and level == 5) or (track == LURE_TRACK and level == 7) or (track == SOUND_TRACK)\
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)

@@ -1619,6 +1619,9 @@ class BattleCalculatorAI:
             elif atkTrack == HEAL and atkLevel in (1, 3, 5, 7):
                 mult *= 0.5
 
+        if self.suitHasCondition(suitId, 'oilRain') and atkTrack == SQUIRT:
+            return 0
+
         if self.toonHasCondition(toonId, 'noDamage'):
             return 0
 
@@ -14083,6 +14086,12 @@ class BattleCalculatorAI:
                         if suit.dna.name not in rule.get('suitNames', []):
                             continue
 
+                        requiredLevel = rule.get('actualLevel')
+
+                        if requiredLevel is not None:
+                            if suit.getActualLevel() != requiredLevel:
+                                continue
+
                         canAttack = self.__suitCanAttack(suit.doId)
 
                         if canAttack or suit.dna.name in ('wtapper', 'safesupervis') and suit.currHP > 0:
@@ -15445,7 +15454,7 @@ class BattleCalculatorAI:
                          'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    if self.sacrificedCogs > 0:
+                    if self.sacrificedCogs > 0 and self.battle.activeSuits[i].currHP > 0:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                           'name': 'AmbassadorHeadRoller', # Damage Up 1
                          'animName': 'summon',
@@ -15606,7 +15615,7 @@ class BattleCalculatorAI:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'voicemailcalculator') and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'voicemailcalculator') and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'WiretapperVoicemail', # Voicemail Damage Reduction
                      'animName': 'phone',
@@ -15663,7 +15672,7 @@ class BattleCalculatorAI:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'brokenconnectioncalculator') and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'brokenconnectioncalculator') and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'WiretapperBrokenConnection', # Broken Connection
                      'animName': 'pie-small-react',
@@ -15686,16 +15695,6 @@ class BattleCalculatorAI:
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionTurns(suitId, 'ambassadorOverconfidence') == 1 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorPhase2', # 'Phase 2'
-                     'animName': 'frustrated',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if (self.suitHasCondition(suitId, 'damageupcalculator1') and self.__suitCanAttack(suitId)) or (self.suitHasCondition(suitId, 'damageupcalculator2') and self.__suitCanAttack(suitId)):
@@ -15747,6 +15746,16 @@ class BattleCalculatorAI:
                                                             'acc': 100,
                                                             'freq': 0,
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.getSuitConditionTurns(suitId, 'ambassadorOverconfidence') == 1 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorPhase2', # 'Phase 2'
+                     'animName': 'frustrated',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -21455,6 +21464,7 @@ class BattleCalculatorAI:
                         retaliations=[
                             {
                                 'suitNames': ['hrollers'],
+                                'actualLevel': 30,
                                 'movie': 'HighRollerSplashback',
                                 'animName': 'throw-object',
                                 'hp': 0,

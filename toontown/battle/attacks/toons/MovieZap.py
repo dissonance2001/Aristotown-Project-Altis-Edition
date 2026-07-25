@@ -277,7 +277,7 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
         if lastZap:
-            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
         else:
             suitTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
         bonusTrack = Sequence(Wait(tContact))

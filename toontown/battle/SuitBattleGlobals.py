@@ -6371,7 +6371,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                            hp=(32,),
                            acc=(80,),
                            freq=(20,)),
-                SuitAttack('SmokeAndMirrors',
+                SuitAttack('CigarSmoke',
                            hp=(34,),
                            acc=(85,),
                            freq=(10,)),

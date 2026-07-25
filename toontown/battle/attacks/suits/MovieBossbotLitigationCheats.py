@@ -586,12 +586,13 @@ def doOilRainHeal(attack):
             animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75), 
                              ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
                              ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25),  Func(s.soakSuit, 0, 1), Func(s.setPos, puddle, Point3(0, 0, 0)), Func(s.clearSuitStatusEffect, 'soaked'), 
+                             Func(s.clearSuitStatusEffect, 'drenched'), 
                              ActorInterval(s, 'reanimated'), Func(s.setSuitStatusEffect, 'oilRain', modifier=1, turns=3),  Func(s.setNeutralAnimationDrop))
             animTracks.append(animTrack)
             moveTracks.append(moveTrack)
             puddleTracks.append(puddleTrack)
 
-    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(.5), Func(suit.setSuitStatusEffect, 'oilRain', modifier=1, turns=3), 
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(.5), Func(suit.clearSuitStatusEffect, 'drenched'),  Func(suit.setSuitStatusEffect, 'oilRain', modifier=1, turns=3), 
                          Func(suit.clearSuitStatusEffect, 'soaked'), Func(suit.soakSuit, 0, 1),  ActorInterval(suit, 'summon-cog'), Func(suit.setNeutralAnimationDrop))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     soundTrack4 = getSoundTrack('SA_liquidate.ogg', node=suit)
@@ -867,6 +868,9 @@ def doBrokenConnection(attack):
     suitTrack.append(Wait(3.0))
     makeImmune = Parallel(Func(suit.setSuitStatusEffect, 'brokenConnection', modifier=30, turns=3))
     selfDamageTrack = Func(suit.showHpText, "CONNECTION DROPPED!", 2, openEnded=0)
+    for headPart in suit.animatedHeadParts:
+        makeImmune.append(Func(suit.setupHeadFreakout, headPart))
+        makeImmune.append(Func(suit.startHeadFreakout))
     return Parallel(suitTrack, makeImmune, selfDamageTrack)
 
 def doVoicemail(attack):
@@ -1120,14 +1124,15 @@ def doWiretapped(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    dmg = attack['target'][0]['hp']
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
     suitTrack = Sequence(getSuitAnimTrackAttack(attack, playRate=1.25))
     suitName = suit.getStyleName()
     toonTracksReal = Parallel()
-    for toon in battle.activeToons:
-        toonTracks = Sequence(Wait(2.8), Func(toon.setToonStatusEffect, 'wiretapped', modifer=dmg, turns=2), ActorInterval(toon, 'slip-backward'))
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        toonTracks = Sequence(Wait(2.8), Func(toon.setToonStatusEffect, 'wiretapped', modifier=dmg, turns=2), ActorInterval(toon, 'slip-backward'))
         toonTracksReal.append(toonTracks)
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
@@ -1169,6 +1174,7 @@ def doWiretapped(attack):
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.8)
     makeNotImmune = Func(suit.clearSuitStatusEffect, 'immune')
     makeNotImmune2 = Func(suit.clearSuitStatusEffect, 'brokenConnection')
+    propTrack.append(Func(suit.stopHeadFreakout))
     return Parallel(suitTrack, propTrack, soundTrack, soundTrack1, toonTracksReal, makeNotImmune, makeNotImmune2, explodeTracks, explosionTrack)
 
 def doManagerialProtectionImmunity(attack):
@@ -1495,8 +1501,7 @@ def doGhostMentality(attack):
 
         suitTrack2 = Sequence(
             Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5),
-            Func(targetSuit.showHpString, "+50% Damage!"),
-            Func(targetSuit.checkDamageUp, 50)
+            Func(targetSuit.showHpString, "+50% Damage!"), Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier'),
         )
 
         suitTrack.append(Func(battle.unSueSuit, targetSuit))

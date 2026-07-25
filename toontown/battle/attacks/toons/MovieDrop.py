@@ -485,16 +485,20 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         anim = 'flatten'
     else:
         anim = 'drop-react'
-    if visualDied and majorObject and not suit.isVirtual and not suit.isOverpressured and not revived and not suit.dna.name in ['erclaim', 'erfit']:
+    if visualDied and (suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ('erclaim', 'erfit')):
+        suitReact = ActorInterval(suit, anim)
+
+    elif visualDied and majorObject \
+            and not suit.hasSuitStatusEffect('overpressured') \
+            and suit.dna.name not in ('erclaim', 'erfit'):
+
         suitReact = ActorInterval(suit, anim, endTime=0.55)
 
     elif not lastDropInSet:
         suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
 
     else:
-        suitReact = Sequence(
-            ActorInterval(suit, anim)
-        )
+        suitReact = ActorInterval(suit, anim)
     suitTrack.append(Wait(delay + tObjectAppears))
     if suit.getSuitStatusModifier('rushJob') == 7:
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))

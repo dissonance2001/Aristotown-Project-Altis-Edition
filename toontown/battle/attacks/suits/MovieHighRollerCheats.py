@@ -562,6 +562,7 @@ def doCut(attack):
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
+    targets = attack['target']
     sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
     sprayEffect.setDepthWrite(0)
     sprayEffect.setDepthTest(0)
@@ -569,15 +570,45 @@ def doCut(attack):
     sprayTrack = Sequence()
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
     sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
+    rightKnives = []
+    partTracks = Parallel()
+    rightKnifeTracks = Parallel()
+    sparkEffect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
+    sparks = sparkEffect.getParticlesNamed('particles-1')
+    rightPosPoints = [Point3(0, 0, 0), VBase3(0, -90, 0)]
+    if sparks:
+        sparks.setPoolSize(10)
+        sparks.setLitterSize(10)
+        sparks.renderer.setEdgeColor(Vec4(1.0, 0.0, 0.0, 1.0))
+    partTracks.append(Sequence(
+        Wait(0.8),
+        Parallel(
+            ParticleInterval(sparkEffect, toon, worldRelative=0, duration=3.0, cleanup=True),
+            autoFinish=1
+        )
+    ))
+    for i in xrange(0, 3):
+        rightKnives.append(globalPropPool.getProp('dagger'))
+    for t in targets:
+        for i in xrange(0, 3):
+            knifeDelay = 0.11
+            rightTrack = Sequence()
+            rightTrack.append(Wait(0.5))
+            rightTrack.append(Wait(i * knifeDelay))
+            rightTrack.append(getPropAppearTrack(rightKnives[i], suit.getRightHand(), rightPosPoints, 1e-06, Point3(.375, .375, .375), scaleUpTime=0.1))
+            rightTrack.append(getPropThrowTrack(attack, rightKnives[i], hitPointNames=['face'], missPointNames=['face'], hitDuration=0.25, missDuration=0.25, target=t))
+            rightKnifeTracks.append(rightTrack)
     can = loader.loadModel('phase_5/models/props/megaphone')
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
-    toonTrack = getToonTrackCheat(attack, 4.0, ['cringe'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(4.0), Func(toon.showHpTextNew, -int(dmg), text="DAMAGE CUT!", colorCode=3))
+    toonTrack = getToonTrackCheat(attack, .8, ['cringe'], 0, ['duck'])
+    notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="DAMAGE CUT!", colorCode=3))
     notifyTrack.append(Func(toon.setToonStatusEffect, 'damageDown', modifier=50, turns=2, mode='keepHighest'))
-    return Parallel(suitTrack, toonTrack, notifyTrack, throwTrack, suitTrack2, sprayTrack)
+    soundTrack = getSoundTrack('SA_glower_power.ogg', delay=0.5, node=suit)
+    soundTrack2 = getSoundTrack('tt_s_ara_cmg_toonHit.ogg', delay=.8, node=suit)
+    return Parallel(soundTrack2, soundTrack, suitTrack, partTracks, rightKnifeTracks, toonTrack, notifyTrack, throwTrack, suitTrack2, sprayTrack)
 
 def doLureResistance(attack, ind, ind2, ind3):
     suit = attack['suit']
@@ -1896,11 +1927,10 @@ def doSyphon(attack):
     for t in targets:
         dmg = t['hp']
     suitTrack = Sequence(getSuitAnimTrackAttack(attack))
-    suitTrack.append(Func(suit.setHealthForMe, + ((dmg * 4) * len(battle.activeToons))))
     suitTrack.append(Wait(2.0))
     toonTrack = getToonTracks(attack, 0.6, ['slip-forward'], 0.01, ['applause'])
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=0.2, node=suit)
-    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpTextNew,  +((dmg * 4) * len(battle.activeToons)), text="SYPHONED!", colorCode=1), Func(suit.updateHealthBar, 0), soundTrack2)
+    selfDamageTrack = Sequence(Wait(2), Func(suit.showHpTextNew,  +((dmg * 4) * len(battle.activeToons)), text="SYPHONED!", colorCode=1), Func(suit.setHealthForMe, + ((dmg * 4) * len(battle.activeToons))), Func(suit.updateHealthBar, 0), soundTrack2)
     multiTrackList = Parallel(suitTrack, toonTrack, selfDamageTrack)
     if dmg > 0:
         soundTrack = getSoundTrack('AA_drop_safe_miss.ogg', delay=0.2, node=suit)
@@ -2253,7 +2283,8 @@ def doBar(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        toonTrack2 = Sequence(
+        origPos, origHpr = battle.getActorPosHpr(toon)
+        toonTrack2 = Sequence(Func(toon.setHpr, battle, origHpr),
         Wait(2.75),
         Parallel(
             Func(toon.enterFlattened),
@@ -2380,8 +2411,9 @@ def doFreeCruise(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        origPos, origHpr = battle.getActorPosHpr(toon)
         if dmg > 0:
-            toonTrack2 = Sequence(
+            toonTrack2 = Sequence(Func(toon.setHpr, battle, origHpr),
             Wait(2.86 + freeCruiseDelay),
             Parallel(
                 Func(toon.enterFlattened),
@@ -2402,7 +2434,7 @@ def doFreeCruise(attack):
             )
         )
         else:
-            toonTrack2 = Sequence()
+            toonTrack2 = Sequence(Func(toon.setHpr, battle, origHpr))
         toonTracks.append(toonTrack2)
     soundTrack = getSoundTrack('AA_drop_boat%s.ogg' % ('' if hitAtleastOneToon else '_miss'),
                                delay=(0.9 if targets[0]['hp'] == 0 else 1.0) + freeCruiseDelay, node=suit)

@@ -5294,7 +5294,7 @@ def doCigarSmoke(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name in ['cinema', 'choreo', 'fmaker'] and not suit.isSkeleton:
+    if suit.dna.name in ['cinema', 'choreo', 'fmaker', 'director'] and not suit.isSkeleton:
         return doSmokeAndMirrors(attack)
     elif suit.dna.name == 'hho' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)

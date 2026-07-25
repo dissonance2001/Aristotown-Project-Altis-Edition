@@ -2143,7 +2143,7 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.hasSuitStatusEffect('immune') and not self.cog.dna.name == 'hroller2':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
-            texture = loader.loadTexture('phase_5/maps/effects/embezzler.png')
+            texture = loader.loadTexture('phase_5/maps/effects/mental_math.png')
             self.statusIcon.setTexture(texture, 1)
             iconRoot = NodePath('immuneIcon')
             self.statusIcon.reparentTo(iconRoot)
@@ -2200,7 +2200,7 @@ class TownBattleCogPanel(DirectFrame):
             texture = loader.loadTexture('phase_5/maps/effects/leverage.png')
             self.statusIcon2.setTexture(texture, 1)
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcons([self.statusIcon, iconRoot], 
+            self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Leverage', 
                                    tooltipDescription="The Ambassador has had enough of the Toon's antics and has blown right through his suit! " \
@@ -2494,7 +2494,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Closed Session', 
-                                   tooltipDescription="The Commissioner is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a 10% attack damage boost.", 
+                                   tooltipDescription="The Commissioner is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a +10% attack damage boost.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
@@ -2543,7 +2543,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                    slot, 
                                    tooltipTitle='Videographer Hijinks', 
-                                   tooltipDescription="Defeating this Cog will grant Toons with a 5% Gag damage boost for the duration of the battle.", 
+                                   tooltipDescription="Defeating this Cog will grant Toons with a +5% Gag damage boost for the duration of the battle.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),
                                    layerSettings=[
@@ -2738,7 +2738,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Prestige Polish', 
-                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they will be entire immune to SQUIRT and ZAP Gags, and will deal and take 10% less damage.", 
+                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they will be entire immune to SQUIRT and ZAP Gags, and will deal and take -10% less damage.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2832,7 +2832,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcons([self.statusIcon2, self.statusIcon], 
                                    slot, 
                                    tooltipTitle='Damage Boost', 
-                                   tooltipDescription='Attacks from this Cog will be %s%% more powerful.' % self.cog.getSuitStatusModifier('damageUp'), 
+                                   tooltipDescription='Attacks from this Cog will be +%s%% more powerful.' % self.cog.getSuitStatusModifier('damageUp'), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2843,7 +2843,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Ripped', 
-                                   tooltipDescription='Count Erfit is getting ripped! All of his attacks will deal %s%% more damage.' % self.cog.getSuitStatusModifier('ripped'), 
+                                   tooltipDescription='Count Erfit is getting ripped! All of his attacks will deal +%s%% more damage.' % self.cog.getSuitStatusModifier('ripped'), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2865,7 +2865,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Scope Creep', 
-                                   tooltipDescription="The Count's damage resistance is creeping up, taking %s%% less damage." % self.cog.getSuitStatusModifier('ripped'),  
+                                   tooltipDescription="The Count's damage resistance is creeping up, taking -%s%% less damage." % self.cog.getSuitStatusModifier('ripped'),  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3271,7 +3271,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Burnt Out', 
-                                   tooltipDescription='While the Pressurizer is soaked, he will deal 25% less damage and gain an extra attack.', 
+                                   tooltipDescription='While the Pressurizer is soaked, he will deal -25% less damage and gain an extra attack.', 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1),
                                     layerSettings=[

@@ -941,8 +941,8 @@ def createAmbassadorReviveTrack(suit, battle):
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.setSuitStatusEffect, 'ambassadorPhase', modifier=1))
     suitTrack.append(Func(suit.makeRevive))
-    suitTrack.append(LerpColorScaleInterval(suit.getGeomNode(), 0.5, (1, .2, .2, 1), blendType='easeIn'))
     suitTrack.append(ActorInterval(suit, 'pie-small-react'))
+    suitTrack.append(LerpColorScaleInterval(suit.getGeomNode(), 0.5, (1, .2, .2, 1), blendType='easeIn'))
     suitTrack.append(Func(suit.setNeutralAnimation))
     deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
@@ -3211,7 +3211,7 @@ def startZapCogNeutral(suit, anim):
         suit.zapNeutralLoop.finish()
         suit.zapNeutralLoop = None
 
-    suit.zapNeutralLoop = ActorInterval(suit, anim, startTime=0, endTime=0.75)
+    suit.zapNeutralLoop = ActorInterval(suit, anim, startFrame=0, endFrame=19)
     suit.zapNeutralLoop.loop()
 
 def stopZapCogNeutral(suit):
@@ -3235,7 +3235,7 @@ def zapCogNeutral(suit, anim, before, after, battle):
         flashTrack = Sequence(Func(suit.setColorScale, (1,1,0,1)), Wait(.2), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack))
 
-def zapCog(suit, anim, before, after, battle, died):
+def zapCog(suit, anim, before, after, battle, died, level):
     zapSuit = suit.getZapActor()
     zapSuit.setBlend(frameBlend = base.wantSmoothAnims)
     suitPos = suit.getPos(battle)
@@ -3257,12 +3257,12 @@ def zapCog(suit, anim, before, after, battle, died):
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    if not died or suit.isVirtual or suit.isOverpressured or suit.dna.name in ['erclaim', 'erfit', 'wsi', 'redd']:
+    if not died or suit.isVirtual or suit.isOverpressured or suit.dna.name in ['erclaim', 'erfit', 'wsi', 'redd'] or level <= 3:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0), suit.makeCogStepBackDeathInterval(battle))
-        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.75), Wait(after))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     else:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), Func(startZapCogNeutral, suit, anim))
-        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.75), Wait(after))
+        spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     if suit.isShadow or suit.dna.name == 'cbutcher':
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
     else:
@@ -3296,7 +3296,7 @@ def zapCogPowerhouseZap(suit, anim, before, after, battle):
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Wait(after))
     else:
         flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
-    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
 def zapCogPowerhouseSquirt(suit, anim, before, after, battle):
@@ -3326,7 +3326,7 @@ def zapCogPowerhouseSquirt(suit, anim, before, after, battle):
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Wait(after))
     else:
         flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
-    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
 def zapCogPowerhouse(suit, anim, before, after, battle):
@@ -3356,7 +3356,7 @@ def zapCogPowerhouse(suit, anim, before, after, battle):
         flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Wait(after))
     else:
         flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
-    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startTime=0, endTime=0.8), Wait(after))
+    spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
 def spawnHeadExplosion(suit, battle):
