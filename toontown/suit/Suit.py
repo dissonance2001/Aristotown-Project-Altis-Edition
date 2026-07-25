@@ -2172,7 +2172,7 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.generateHead2('conveyancer_belt')
-            self.setHeight(6.71)
+            self.setHeight(6.25)
         elif dna.name == 'ac':
             self.scale = 4.35 / bSize
             self.handColor = VBase4(0.714, 0.714, 0.808, 1)
@@ -2600,7 +2600,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.773, 0.843, 0.82, 1)
             self.generateBody()
             self.generateHead2('pawnbroker')
-            self.setHeight(6.25)
+            self.setHeight(6.0)
         elif dna.name == 'bc':
             self.scale = 4.4 / bSize
             self.handColor = VBase4(0.671, 0.722, 0.682, 1.0)
@@ -5607,6 +5607,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_3.5/models/char/bricks-pushover')
         if headType == 'root' and self.style.name == 'bsht':
             headModel = loader.loadModel('phase_14/models/char/yesman')
+        if headType == 'installer-wizard':
+            headModel = loader.loadModel('phase_14/models/char/installer-wizard_head')
         if headType == 'root' and self.style.name == 'whistleb':
             headModel = loader.loadModel('phase_14/models/char/whistleblower')
         if headType == 'root' and self.style.name == 'ksp':

@@ -969,11 +969,11 @@ def getPropTrack(prop, parent, posPoints, appearDelay, remainDelay, scaleUpPoint
     return track
 
 
-def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None, blendType='noBlend'):
     propTrack = Sequence(Wait(appearDelay), Func(__showProp, prop, parent, *posPoints))
     if poseExtraArgs:
         propTrack.append(Func(prop.pose, *poseExtraArgs))
-    propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale))
+    propTrack.append(LerpScaleInterval(prop, scaleUpTime, scaleUpPoint, startScale=startScale, blendType=blendType))
     return propTrack
 
 

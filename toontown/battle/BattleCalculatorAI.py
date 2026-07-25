@@ -713,7 +713,7 @@ class BattleCalculatorAI:
         if self.toonHasCondition(toonId, 'hydrated'):
             acc += 50
         
-        for effect in self.getAllRelevantEffects(toonId, StatusEffects.AccuracyModifier, toon=True): # Sift through all accuracy-modifying effects.
+        for effect in self.getAllRelevantConditions(toonId, StatusEffects.AccuracyModifier, toon=True): # Sift through all accuracy-modifying effects.
             acc += effect.accuracyMod # Change the accuracy according to the effect's modifier.
 
         if atkTrack not in (LURE, HEAL, SOUND):
@@ -17963,16 +17963,16 @@ class BattleCalculatorAI:
                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE}]))
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if not self.TurnsElapsed % 3 == 0 and not self.TurnsElapsed == 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'HighRollerGameTimeSpawn',  # Spawn After Puzzle
-                                            'animName': 'snap',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+                # if not self.TurnsElapsed % 3 == 0 and not self.TurnsElapsed == 0 and self.__suitCanAttack(suitId):
+                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                #                             'name': 'HighRollerGameTimeSpawn',  # Spawn After Puzzle
+                #                             'animName': 'snap',
+                #                             'hp': 0,
+                #                             'acc': 100,
+                #                             'freq': 0,
+                #                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                #     if attack[SUIT_ATK_COL]:
+                #         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'gametimecalculator'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'TargetCheck',  # Checks for Alive Cogs to use Game Time on

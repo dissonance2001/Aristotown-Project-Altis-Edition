@@ -160,8 +160,8 @@ def getAllyToonsDodgeParallel(target):
 def getPropTrack(prop, parent, posPoints, appearDelay, remainDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, scaleDownTime = 0.5, startScale = Point3(0.01), anim = 0, propName = 'none', animDuration = 0.0, animStartTime = 0.0):
     return MovieIntervals.getPropTrack(prop, parent, posPoints, appearDelay, remainDelay, scaleUpPoint, scaleUpTime, scaleDownTime, startScale, anim, propName, animDuration, animStartTime)
 
-def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None):
-    return MovieIntervals.getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint, scaleUpTime, startScale, poseExtraArgs)
+def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Point3(1), scaleUpTime = 0.5, startScale = Point3(0.01), poseExtraArgs = None, blendType='noBlend'):
+    return MovieIntervals.getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint, scaleUpTime, startScale, poseExtraArgs, blendType)
 
 def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration = 0.25, missDuration = 0.25, hitPointNames = 'none', missPointNames = 'none', lookAt = 'none', groundPointOffSet = 0, missScaleDown = None, parent = render, target = None):
     return MovieIntervals.getPropThrowTrack(attack, prop, hitPoints, missPoints, hitDuration, missDuration, hitPointNames, missPointNames, lookAt, groundPointOffSet, missScaleDown, parent, target)
@@ -454,6 +454,8 @@ def doSuitAttack(attack):
         suitTrack = doCigarSmoke(attack)
     elif name == 'SmokeAndMirrors':
         suitTrack = doCigarSmoke(attack)
+    elif name == 'StolenScene':
+            suitTrack = doStolenScene(attack)
     elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
     elif name == 'Crunch':
@@ -2113,67 +2115,78 @@ def doGoldRush(attack):
 def doClipOnTie(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    tie = globalPropPool.getProp('clip-on-tie')
+    targets = attack['target']
     suitType = getSuitBodyType(attack['suitName'])
-    throwDelay = 1.25
-    damageDelay = 2
-    dodgeDelay = 1
+    throwDelay = 1.0
+    damageDelay = throwDelay + 1.23
+    dodgeDelay = damageDelay - 0.20
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(-0.21707670043415206, 0, 0.30390738060781786), VBase3(236.00578871201162, 74.24023154848047, 128.68306801736617)]
+        posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
         scale = Point3(1.0, 1.0, 1.0)
     else:
-        posPoints = [Point3(-0.24657534246575352, 0.7397260273972606, -0.08219178082191902), VBase3(-28.60273972602738, -26.13698630136986, 6.904109589041127)]
+        posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
         scale = Point3(1.0, 1.0, 1.0)
-    splatName = 'dust'
-    splat = globalPropPool.getProp('dust')
-    hitPoint = toon.getPos(battle)
-    hitPoint.setX(hitPoint.getX() + 1.5)
-    hitPoint.setY(hitPoint.getY() + 1.5)
-    hitPoint.setZ(hitPoint.getZ() + .75)
-    missPoint2 = toon.getPos(battle)
-    missPoint2.setX(hitPoint.getX() + 1.5)
-    missPoint2.setY(hitPoint.getY() - 7)
-    missPoint = Point3(missPoint2.getX(), missPoint2.getY(), missPoint2.getZ())
-    explode = globalPropPool.getProp('dust')
-    explode.setTwoSided(True)
-    explode.setBillboardPointWorld(2)
-    explodeTrack = Sequence()
-    if dmg > 0:
-        explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
+    tiePropTracks = Parallel()
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tie = globalPropPool.getProp('clip-on-tie')
         tiePropTrack = Sequence(
-            getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, scale, scaleUpTime=0.25))
-        tiePropTrack.append(ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1))
-        tiePropTrack.append(Func(tie.setBillboardPointEye))
+                        getPropAppearTrack(
+                            tie,
+                            suit.getRightHand(),
+                            posPoints,
+                            0.25,
+                            scale,
+                            scaleUpTime=0.25,
+                            poseExtraArgs=['clip-on-tie', 0],
+                            blendType='easeIn',
+                        )
+                    )
         tiePropTrack.append(
-            getPropThrowTrack(attack, tie, [__toonFacePoint(toon)], [__toonGroundPoint(attack, toon, 0.1)],
-                              hitDuration=0.25, missDuration=0.8))
-        explodeTrack.append(
-            getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-    else:
-        explodePosPoints = [Point3(0, -7, 0), MovieUtil.PNT3_ZERO]
-        tiePropTrack = Sequence(
-            getPropAppearTrack(tie, suit.getRightHand(), posPoints, 0.5, Point3(1.5, 1.5, 1.5), scaleUpTime=0.25))
-        tiePropTrack.append(ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1))
-        tiePropTrack.append(getThrowTrack(tie, missPoint2, duration=0.5, parent=battle, gravity=-300))
-        #tiePropTrack.append(LerpHprInterval(tie, 0, VBase3(0, 90, 0)))
-        explodeTrack.append(
-            getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(2, 2, 2), scaleUpTime=0))
-        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        tiePropTrack.append(Wait(0.6))
-        tiePropTrack.append(LerpPosInterval(tie, 0.4, missPoint))
-        tiePropTrack.append(LerpScaleInterval(tie, 0.1, MovieUtil.PNT3_NEARZERO))
+                            ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1)
+                        )
+        tiePropTrack.append(Wait(0.50))
+        tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
+        tiePropTrack.append(Func(tie.wrtReparentTo, render))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        if dmg > 0:
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
+                ),
+                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+            ))
+        else:
+            startH, endH = 180, 280
+            yoffset = random.randint(0, 20) / 10.0
+            xoffset = random.randint(-7, 7) / 10.0
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                ),
+                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+            ))
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                ),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                Wait(0.60),
+            ))
+            tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
         tiePropTrack.append(Func(tie.removeNode))
+        tiePropTracks.append(tiePropTrack)
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    tiePropTrack.append(Parallel(explodeTrack, soundTrack))
-    toonTrack = getToonTrack(attack, damageDelay, ['conked'], dodgeDelay, ['duck'])
-    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + .5, node=suit)
-    return Parallel(suitTrack, toonTrack, tiePropTrack, throwSound)
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 1.05, node=suit)
+    return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
 
 
 def doSandTrap(attack):
@@ -4316,8 +4329,85 @@ def doGlowerPower(attack):
     soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, leftKnifeTracks, rightKnifeTracks)
 
-
 def doHalfWindsor(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitType = getSuitBodyType(attack['suitName'])
+    throwDelay = 1.0
+    damageDelay = throwDelay + 1.23
+    dodgeDelay = damageDelay - 0.20
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'c':
+        posPoints = [Point3(-0.04341534008683112, -1.0853835021707674, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
+    elif suitType == 'b':
+        posPoints = [Point3(-0.04341534008683112, -1.0853835021707674, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
+    else:
+        posPoints = [Point3(-0.13024602026049337, -1.2590448625180883, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
+    tiePropTracks = Parallel()
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tie = globalPropPool.getProp('half-windsor')
+        tiePropTrack = Sequence(
+                        getPropAppearTrack(
+                            tie,
+                            suit.getRightHand(),
+                            posPoints,
+                            0.25,
+                            Vec3(7, 7, 7),
+                            scaleUpTime=0.25,
+                            blendType='easeIn',
+                        )
+                    )
+        tiePropTrack.append(Wait(throwDelay))
+        tiePropTrack.append(Wait(0.50))
+        tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
+        tiePropTrack.append(Func(tie.wrtReparentTo, render))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        if dmg > 0:
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
+                ),
+                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+            ))
+        else:
+            startH, endH = -180, -280
+            yoffset = random.randint(0, 20) / 10.0
+            xoffset = random.randint(-7, 7) / 10.0
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                ),
+                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+            ))
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                ),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                Wait(0.60),
+            ))
+            tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
+        tiePropTrack.append(Func(tie.removeNode))
+        tiePropTracks.append(tiePropTrack)
+    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit)
+    if hitAtleastOneToon:
+        hitSound = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
+        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
+    else:
+        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
+
+
+def doHalfWindsorOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -4709,8 +4799,85 @@ def doPlayHardball(attack):
     soundTrack = getSoundTrack('SA_hardball%s.ogg' % ('_impact_only' if hitAtleastOneToon else ''), delay=1.8, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
 
-
 def doPowerTie(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    suitType = getSuitBodyType(attack['suitName'])
+    throwDelay = 1.0
+    damageDelay = throwDelay + 1.23
+    dodgeDelay = damageDelay - 0.20
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
+    suitType = getSuitBodyType(attack['suitName'])
+    if suitType == 'a':
+        posPoints = [Point3(0.10380622837370268, 0.7266435986159152, -1.0380622837370233), VBase3(90, -6.228373702422147, 0)]
+    elif suitType == 'b':
+        posPoints = [Point3(-0.04341534008683112, 0.6512301013024597, -0.9117221418234465), VBase3(90, 0, 0)]
+    else:
+        posPoints = [Point3(-0.13024602026049337, 0.5643994211287975, -0.9985528219971052), VBase3(90, 11.201157742402302, 0)]
+    tiePropTracks = Parallel()
+    hitAtleastOneToon = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        tie = globalPropPool.getProp('power-tie')
+        tiePropTrack = Sequence(
+                        getPropAppearTrack(
+                            tie,
+                            suit.getRightHand(),
+                            posPoints,
+                            0.25,
+                            Vec3(3.5, 3.5, 3.5),
+                            scaleUpTime=0.25,
+                            blendType='easeIn',
+                        )
+                    )
+        tiePropTrack.append(Wait(throwDelay))
+        tiePropTrack.append(Wait(0.50))
+        tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
+        tiePropTrack.append(Func(tie.wrtReparentTo, render))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        if dmg > 0:
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
+                ),
+                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+            ))
+        else:
+            startH, endH = 180, 240
+            yoffset = random.randint(0, 20) / 10.0
+            xoffset = random.randint(-7, 7) / 10.0
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                ),
+                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+            ))
+            tiePropTrack.append(Parallel(
+                ProjectileInterval(
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                ),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                Wait(0.60),
+            ))
+            tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
+        tiePropTrack.append(Func(tie.removeNode))
+        tiePropTracks.append(tiePropTrack)
+    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit)
+    if hitAtleastOneToon:
+        hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
+        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
+    else:
+        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
+
+
+def doPowerTieOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -5024,6 +5191,24 @@ def doHotAir(attack):
             colorTracks.append(colorTrack)
 
     return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
+
+def doStolenScene(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    dmg = target[0]['hp']
+    bill = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
+    suitTrack = getSuitTrack(attack)
+    suitTrack.append(Wait(1.0))
+    billPosPoints = [Point3(-0.564399421128801, 0, -0.6512301013024597), VBase3(90, 45, 0)]
+    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(.5, .5, .5))
+    toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
+    multiTrackList = Parallel(suitTrack, toonTrack)
+    if dmg > 0:
+        soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
+        multiTrackList.append(billPropTrack)
+        multiTrackList.append(soundTrack)
+    return multiTrackList
 
 
 def doPickPocket(attack):
@@ -7201,15 +7386,16 @@ def doSmokeAndMirrors(attack):
     hitSuit = dmg > 0
     particles = []
     particleTracks = Parallel()
-    if hitSuit:
-        hitPoint = lambda toon = toon: __toonFacePoint(toon)
-    else:
-        hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
     for i in xrange(0, 5):
         particleEffect = BattleParticles.createParticleEffect('Smile')
         particleEffect.setZ(suit.height - 1)
         particleEffect.setScale(2)
         particles.append(particleEffect)
+
+    if hitSuit:
+        hitPoint = lambda toon = toon: __toonFacePoint(toon)
+    else:
+        hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
 
     for i in xrange(0, 5):
         particleTrack = Parallel()

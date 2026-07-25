@@ -3,7 +3,7 @@ Use this file to hold all status effect data.
 '''
 from toontown.toonbase.ToonPythonUtil import getBase
 from toontown.toonbase.ToontownBattleGlobals import HEAL_TRACK, TRAP_TRACK, LURE_TRACK, THROW_TRACK, SQUIRT_TRACK, ZAP_TRACK, SOUND_TRACK, DROP_TRACK, AvPropsNew, AvPropStrings
-DEFAULT_STATUS_ICON_PATH = 'phase_3.5/models/gui/status_effects'
+DEFAULT_STATUS_ICON_PATH = 'phase_3.5/models/gui/battlegui/status_effects.bam'
 TRACK_2_CONSTANT = {HEAL_TRACK: 'Toon-up',
  TRAP_TRACK: 'Trap',
  LURE_TRACK: 'Lure',
@@ -21,8 +21,11 @@ def isTrack(variable):
     '''
     return variable is HEAL_TRACK or variable is TRAP_TRACK or variable is LURE_TRACK or variable is THROW_TRACK or variable is SQUIRT_TRACK or variable is ZAP_TRACK or variable is SOUND_TRACK or variable is DROP_TRACK
 
+# def getIcon(node, fromPath = DEFAULT_STATUS_ICON_PATH):
+#     return base.loader.loadModel(fromPath).find('**/' + node)
+
 def getIcon(node, fromPath = DEFAULT_STATUS_ICON_PATH):
-    return base.loader.loadModel(fromPath).find('**/' + node)
+    pass
 
 def makePercent(number):
     '''

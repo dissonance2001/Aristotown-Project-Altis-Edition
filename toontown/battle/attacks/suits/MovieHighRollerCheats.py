@@ -1264,7 +1264,7 @@ def doNoAttack(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-    if suit.hasSuitStatusEffect('silhouetteImmune') suit.dna.name not in ('hroller', 'videog') and suit.hasSuitStatusEffect('highRollerPhase3'):
+    if suit.hasSuitStatusEffect('silhouetteImmune') and suit.dna.name not in ('hroller', 'videog') and suit.hasSuitStatusEffect('highRollerPhase3'):
         suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.nametag3d.show), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'silhouetteImmune'))
         suitTrack.append(Func(suit.setSuitStatusEffect, 'silhouetteShielding', modifier=1))
