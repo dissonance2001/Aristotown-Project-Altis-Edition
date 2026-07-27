@@ -759,5 +759,5 @@ def doScopeCreep(attack):
     )
 
     suitTrack = Sequence(suitTrack)
-    suitTrack.append(Sequence(Parallel(Func(theSuit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(suit.setSuitStatusEffect, 'scopeCreep', modifier=5, mode='refreshModifier')))
+    suitTrack.append(Sequence(Parallel(Func(theSuit.showHpTextNew, 0, text="+5% Defense!", colorCode=1)), Func(theSuit.setSuitStatusEffect, 'scopeCreep', modifier=5, mode='refreshModifier')))
     return Parallel(suitTrack, darkenTrack, redTrack, sfx, sfx2)

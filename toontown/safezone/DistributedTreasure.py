@@ -21,6 +21,7 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         self.fly = 1
         self.zOffset = 0.0
         self.billboard = 0
+        self.bounceSequence = None
         self.treasureType = None
 
     def disable(self):
@@ -139,10 +140,12 @@ class DistributedTreasure(DistributedObject.DistributedObject):
             self.treasureFlyTrack = Sequence(HideInterval(self.dropShadow), track, ShowInterval(self.dropShadow), name=self.uniqueName('treasureFlyTrack'))
         else:
             self.treasureFlyTrack = Sequence(track, name=self.uniqueName('treasureFlyTrack'))
+        self.stopAnimation()
         self.treasureFlyTrack.start()
 
     def handleUnexpectedExit(self):
         self.notify.warning('While getting treasure, ' + str(self.avId) + ' disconnected.')
+        self.stopAnimation()
         if self.treasureFlyTrack:
             self.treasureFlyTrack.finish()
             self.treasureFlyTrack = None
@@ -151,8 +154,23 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         return (self.nodePath, Point3())
 
     def startAnimation(self):
-        throbInIval = Sequence(LerpHprInterval(self.treasure, 4, (360, 0, 0)))
-        throbOutIval = Sequence(LerpPosInterval(self.treasure, 1.5, (0, 0, .5), blendType='easeIn'), LerpPosInterval(self.treasure, 1.5, (0, 0, 0), blendType='easeIn'))
-        self.heartThrobIval = Parallel(throbInIval, throbOutIval)
-        throbInIval.loop()
-        throbOutIval.loop()
+        # Most treasures don't have default animations
+        # Estate flying treasures might, so add this base class function
+        if not self.bounceSequence:
+            self.bounceSequence = Sequence(
+                Parallel(
+                    Sequence(
+                        self.treasure.posInterval(1, (0, 0, 0.5), blendType = "easeInOut"),
+                        self.treasure.posInterval(1, (0, 0, 0), blendType = "easeInOut"),
+                        self.treasure.posInterval(1, (0, 0, 0.5), blendType = "easeInOut"),
+                        self.treasure.posInterval(1, (0, 0, 0), blendType = "easeInOut"),
+                    ),
+                    self.treasure.hprInterval(4, (360, 0, 0))
+                ),
+            )
+        self.bounceSequence.loop()
+
+    def stopAnimation(self):
+        if self.bounceSequence:
+            self.bounceSequence.finish()
+            self.bounceSequence = None

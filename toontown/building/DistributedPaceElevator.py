@@ -6,6 +6,7 @@ from toontown.building import DistributedBossElevator
 from toontown.building.ElevatorConstants import *
 from toontown.building.ElevatorUtils import getCloseInterval
 from toontown.toonbase import TTLocalizer
+from toontown.toonbase import ToontownGlobals
 
 
 class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
@@ -105,11 +106,52 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
         return
 
     def enterClosed(self, ts):
+        DistributedBossElevator.DistributedBossElevator.enterClosed(
+            self,
+            ts
+        )
+
         self.forceDoorsClosed()
         self.startRide(ts)
 
     def exitClosed(self):
         pass
+
+    def __goToBossOffice(self, zoneId):
+        self.stopRide()
+        camera.wrtReparentTo(render)
+
+        playGame = self.cr.playGame
+
+        if not playGame:
+            self.notify.warning(
+                'Cannot enter Pace boss zone %s: PlayGame unavailable.' % zoneId
+            )
+            return
+
+        requestStatus = {
+            'loader': 'cogHQLoader',
+            'where': 'cogHQBossBattle',
+            'how': 'teleportIn',
+            'hoodId': ToontownGlobals.LawbotHQ,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1
+        }
+
+        playGame.fsm.request(
+            'quietZone',
+            [requestStatus]
+        )
+
+
+    def setBossOfficeZone(self, zoneId):
+        if self.localToonOnBoard:
+            self.__goToBossOffice(zoneId)
+
+
+    def setBossOfficeZoneForce(self, zoneId):
+        self.__goToBossOffice(zoneId)
 
     def startRide(self, ts=0):
         self.stopRide()
@@ -251,22 +293,6 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
         camera.wrtReparentTo(render)
         self.restoreRideScene()
         return task.done
-
-    def setBossOfficeZone(self, zoneId):
-        self.stopRide()
-        camera.wrtReparentTo(render)
-        DistributedBossElevator.DistributedBossElevator.setBossOfficeZone(
-            self,
-            zoneId
-        )
-
-    def setBossOfficeZoneForce(self, zoneId):
-        self.stopRide()
-        camera.wrtReparentTo(render)
-        DistributedBossElevator.DistributedBossElevator.setBossOfficeZoneForce(
-            self,
-            zoneId
-        )
 
     def disable(self):
         taskMgr.remove(self.uniqueName('paceRideCleanup'))

@@ -1042,7 +1042,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erfit2':
@@ -1055,7 +1056,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erfit3':
@@ -1068,7 +1070,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erfit4':
@@ -1081,7 +1084,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erfit5':
@@ -1094,7 +1098,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erclaim':
@@ -1107,7 +1112,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'erclaim2':
@@ -1120,7 +1126,8 @@ class SuitPlannerInteriorAI:
                 suitType=suitType,
                 bldgTrack=dept,
                 suitLevel=suitLevel,
-                revives=0
+                revives=0,
+            skelecogChance=100
             )
             reserveSuits.append(suit)
         if specialCode == 'crf':

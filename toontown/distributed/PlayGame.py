@@ -204,26 +204,62 @@ class PlayGame(StateData.StateData):
         pass
 
     def handleHoodDone(self):
+        # Ignore delayed hood-done messages while PlayGame is already
+        # transitioning through the quiet zone.
+        currentState = self.fsm.getCurrentState()
+
+        if currentState and currentState.getName() == 'quietZone':
+            self.notify.warning(
+                'Ignoring stale hoodDone event while entering quietZone.'
+            )
+            return
+
         doneStatus = self.hood.getDoneStatus()
-        shardId = doneStatus['shardId']
-        if shardId != None:
+
+        # Ignore the empty/default status generated when a Toon interior
+        # is unloaded during a custom boss transition.
+        if (
+            doneStatus.get('hoodId', 0) == 0 and
+            doneStatus.get('zoneId', 0) == 0 and
+            doneStatus.get('where') == 'suitInterior'
+        ):
+            self.notify.warning(
+                'Ignoring empty suitInterior hood status: %r' % doneStatus
+            )
+            return
+
+        shardId = doneStatus.get('shardId')
+
+        if shardId is not None:
             self.doneStatus = doneStatus
             messenger.send(self.doneEvent)
             base.transitions.fadeOut(0)
             return
-        if doneStatus['where'] == 'party':
-            self.getPartyZoneAndGoToParty(doneStatus['avId'], doneStatus['zoneId'])
+
+        if doneStatus.get('where') == 'party':
+            self.getPartyZoneAndGoToParty(
+                doneStatus.get('avId', -1),
+                doneStatus['zoneId']
+            )
             return
-        how = doneStatus['how']
-        if how in ['tunnelIn',
-         'teleportIn',
-         'doorIn',
-         'elevatorIn']:
+
+        how = doneStatus.get('how')
+
+        if how in (
+            'tunnelIn',
+            'teleportIn',
+            'doorIn',
+            'elevatorIn'
+        ):
             self.fsm.request('quietZone', [doneStatus])
         else:
-            self.notify.error('Exited hood with unexpected mode %s' % how)
+            self.notify.error(
+                'Exited hood with unexpected mode %r; status=%r' %
+                (how, doneStatus)
+            )
 
     def _destroyHood(self):
+        self.ignore(self.hoodDoneEvent)
         self.unload()
 
     def enterQuietZone(self, requestStatus):

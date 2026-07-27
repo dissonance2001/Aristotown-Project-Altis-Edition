@@ -41,21 +41,30 @@ class DistributedPaceElevatorAI(
     def finishPaceRide(self, task):
         try:
             bossZone = self.bldg.createBossOffice(self.seats)
-        except AttributeError:
+        except Exception as error:
             self.notify.warning(
-                'Pace ride finished but the Pace destination is not ready.'
+                'Pace ride could not create boss destination: %s' % error
+            )
+            self.fsm.request('opening')
+            return Task.done
+
+        if not bossZone:
+            self.notify.warning(
+                'Pace boss manager returned an invalid zone.'
             )
             self.fsm.request('opening')
             return Task.done
 
         for seatIndex in xrange(len(self.seats)):
             avId = self.seats[seatIndex]
+
             if avId:
                 self.sendUpdateToAvatarId(
                     avId,
-                    'setBossOfficeZone',
+                    'setBossOfficeZoneForce',
                     [bossZone]
                 )
+
                 self.clearFullNow(seatIndex)
 
         return Task.done

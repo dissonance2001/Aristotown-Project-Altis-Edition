@@ -1,6 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedPaceElevatorAI import DistributedPaceElevatorAI
+from toontown.coghq.LobbyManagerAI import LobbyManagerAI
+from toontown.suit import DistributedCountErclaimBossAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 
@@ -18,24 +20,36 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             zoneId,
             building
         )
+
         self.paceElevator = None
         self.paceCat = None
+        self.createdPaceLobbyManager = False
+
+        # Only create one manager.
+        self.paceLobbyManager = getattr(
+            self.air,
+            'paceLobbyManager',
+            None
+        )
+
+        if self.paceLobbyManager is None:
+            self.paceLobbyManager = LobbyManagerAI(
+                self.air,
+                DistributedCountErclaimBossAI.DistributedCountErclaimBossAI,
+                ToontownGlobals.PacesetterLobby
+            )
+
+            self.paceLobbyManager.generateWithRequired(
+                ToontownGlobals.PacesetterLobby
+            )
+
+            self.air.paceLobbyManager = self.paceLobbyManager
+            self.createdPaceLobbyManager = True
 
     def generate(self):
         DistributedToonInteriorAI.generate(self)
         self.createPaceElevator()
         self.createPaceCat()
-
-    def createPaceElevator(self):
-        if self.paceElevator:
-            return
-
-        self.paceElevator = DistributedPaceElevatorAI(
-            self.air,
-            self,
-            ToontownGlobals.PacesetterLobby
-        )
-        self.paceElevator.generateWithRequired(self.zoneId)
 
     def createPaceCat(self):
         if self.paceCat:
@@ -102,8 +116,26 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
                 0
             )
 
+    def createPaceElevator(self):
+        if self.paceElevator:
+            return
+
+        self.paceElevator = DistributedPaceElevatorAI(
+            self.air,
+            self,
+            ToontownGlobals.PacesetterLobby
+        )
+
+        self.paceElevator.generateWithRequired(self.zoneId)
+
     def createBossOffice(self, avIdList):
-        return self.building.createBossOffice(avIdList)
+        if not self.paceLobbyManager:
+            self.notify.warning(
+                'createBossOffice: paceLobbyManager does not exist.'
+            )
+            return 0
+
+        return self.paceLobbyManager.createBossOffice(avIdList)
 
     def delete(self):
         if self.paceCat:
@@ -113,5 +145,13 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         if self.paceElevator:
             self.paceElevator.requestDelete()
             self.paceElevator = None
+
+        if self.createdPaceLobbyManager and self.paceLobbyManager:
+            self.paceLobbyManager.requestDelete()
+
+            if getattr(self.air, 'paceLobbyManager', None) is self.paceLobbyManager:
+                del self.air.paceLobbyManager
+
+            self.paceLobbyManager = None
 
         DistributedToonInteriorAI.delete(self)
