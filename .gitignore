@@ -36,3 +36,10 @@ toontown/town/status icons.py
 
 #python being python
 PYTHON_PATH
+/resources/contentpacks
+toontown.zip
+resources/contentpacks/pack-load-order.yaml
+resources/contentpacks/pack-load-order.yaml
+resources/contentpacks/pack-load-order.yaml
+*.yaml
+resources/contentpacks/pack-load-order.yaml

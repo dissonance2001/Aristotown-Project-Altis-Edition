@@ -21,8 +21,8 @@ import StringIO
 vfs = VirtualFileSystem.getGlobalPtr()
 import glob
 
-# Mount content packs before importing OTP/Toontown modules or loading
-# the default phase archives. Fonts and GUI assets can be cached very early.
+# Content packs must be mounted before any Toontown code or default phases
+# have a chance to load and cache assets.
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.settings.Settings import Settings
@@ -57,19 +57,12 @@ vfs = VirtualFileSystem.getGlobalPtr()
 DefaultPhases = (3, 3.5, 4, 5, 5.5, 6, 7, 8, 9, 10, 11, 12, 13)
 import glob
 notify.info("Loading Default Pack...")
-__builtin__.defaultPhaseMultifiles = []
 for file in glob.glob('resources/default/*.mf'):
     if float(file.replace('.mf', '').replace('resources/default\phase_', '')) in DefaultPhases:
         mf = Multifile()
-        phaseFilename = Filename.fromOsSpecific(os.path.abspath(file))
-        if not mf.openRead(phaseFilename):
-            notify.warning('Failed to open default phase: ' + file)
-            continue
-        if not vfs.mount(mf, Filename('/'), VirtualFileSystem.MFReadOnly):
-            notify.warning('Failed to mount default phase: ' + file)
-            mf.close()
-            continue
-        defaultPhaseMultifiles.append(mf)
+        mf.openReadWrite(Filename(file))
+        names = mf.getSubfileNames()
+        vfs.mount(mf, Filename('/'), 0)
         notify.info('Successfully Mounted:' + file)
 notify.info("Default Pack Loaded!")
 from toontown.toonbase.ContentPackManager import ContentPackManager

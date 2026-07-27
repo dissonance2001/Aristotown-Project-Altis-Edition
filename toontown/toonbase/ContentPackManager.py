@@ -3,14 +3,12 @@ Created on Feb 19, 2017
 
 @author: Drew
 '''
-# this is like the 6th time im doing this pls
 from direct.directnotify.DirectNotifyGlobal import directNotify
-from panda3d.core import Multifile, Filename, VirtualFileSystem
-import fnmatch, os
+from panda3d.core import Multifile, Filename, VirtualFileSystem, getModelPath
+import fnmatch
+import os
 from toontown.pandautils import yaml
 
-SupportedExtensions = ('.jpg', '.png', '.rgb', '.rgba', '.ogg', '.ttf')
-DefaultPhases = (3, 3.5, 4, 5, 5.5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
 
 class ContentPackManager:
     notify = directNotify.newCategory('ContentPackManager')
@@ -19,59 +17,118 @@ class ContentPackManager:
         self.packPath = 'resources/contentpacks/'
         if not os.path.exists(self.packPath):
             os.makedirs(self.packPath)
-        self.sortFile = os.path.join(self.packPath, "pack-load-order.yaml") # Use this to change the order in which packs are loaded
+
+        self.sortFile = os.path.join(
+            self.packPath,
+            'pack-load-order.yaml'
+        )
         if not os.path.exists(self.sortFile):
             open(self.sortFile, 'a').close()
 
-        self.mountPoint = '/'
-
         self.vfSys = VirtualFileSystem.getGlobalPtr()
+        self.modelPath = getModelPath()
 
         self.sort = []
+        self.mountedPacks = []
+        self.mountPoints = []
+        self.mountIndex = 0
 
     def loadAll(self):
-        with open(self.sortFile, 'r') as f:
-            self.sort = yaml.load(f) or []
+        with open(self.sortFile, 'r') as sortFile:
+            self.sort = yaml.load(sortFile) or []
+
+        loadedCount = 0
+
         for filename in self.sort[:]:
-            if self.isValid(filename):
-                self.applyFile(filename)
-            else:
-                self.notify.warning('Removing %s...' % filename)
+            if not self.isValid(filename):
+                self.notify.warning(
+                    'Removing missing content pack from load order: %s' %
+                    filename
+                )
                 self.sort.remove(filename)
+                continue
+
+            if self.applyFile(filename):
+                loadedCount += 1
+
         for root, _, filenames in os.walk(self.packPath):
-            root = root[len(self.packPath):]
+            relativeRoot = root[len(self.packPath):]
+
             for filename in filenames:
-                filename = os.path.join(root, filename).replace('\\', '/')
+                filename = os.path.join(
+                    relativeRoot,
+                    filename
+                ).replace('\\', '/')
+
                 if filename in self.sort:
                     continue
+
                 if not self.isValid(filename):
                     continue
-                self.applyFile(filename)
-                self.sort.append(filename)
 
-        with open(self.sortFile, 'w') as f:
+                if self.applyFile(filename):
+                    self.sort.append(filename)
+                    loadedCount += 1
+
+        with open(self.sortFile, 'w') as sortFile:
             for filename in self.sort:
-                f.write('- %s\n' % filename)
+                sortFile.write('- %s\n' % filename)
+
+        print('Loaded %s content pack(s).' % loadedCount)
+        print('Content pack model path: %s' % self.modelPath)
 
     def isValid(self, filename):
-        if not os.path.exists(os.path.join(self.packPath, filename)):
+        fullPath = os.path.join(self.packPath, filename)
+        if not os.path.isfile(fullPath):
             return False
-        basename = os.path.basename(filename)
-        if fnmatch.fnmatch(basename, '*.mf'):
-            return True
 
-        return False
+        return fnmatch.fnmatch(
+            os.path.basename(filename).lower(),
+            '*.mf'
+        )
 
     def applyFile(self, filename):
-        mf = Multifile()
-        mf.openReadWrite(Filename(os.path.join(self.packPath, filename)))
+        fullPath = os.path.abspath(
+            os.path.join(self.packPath, filename)
+        )
+        packFilename = Filename.fromOsSpecific(fullPath)
 
-        # Remvoe anything thats not allowed
-        for subfilename in mf.getSubfileNames():
-            if os.path.splitext(subfilename)[1] not in SupportedExtensions:
-                mf.removeSubfile(subfilename)
-                print("Removing a file that is not allowed: %s" % str(subfilename))
+        multifile = Multifile()
+        if not multifile.openRead(packFilename):
+            self.notify.warning(
+                'Failed to open content pack: %s' % filename
+            )
+            return False
 
-        self.vfSys.mount(mf, self.mountPoint, 0)
-        print('Successfully Mounted: ' + str(filename))
+        # Give every pack its own root. This avoids Panda's ambiguous
+        # duplicate-file behaviour when many Multifiles share one mount point.
+        mountPoint = Filename(
+            '/__contentpacks__/%04d' % self.mountIndex
+        )
+        self.mountIndex += 1
 
+        if not self.vfSys.mount(
+                multifile,
+                mountPoint,
+                VirtualFileSystem.MFReadOnly):
+            self.notify.warning(
+                'Failed to mount content pack: %s' % filename
+            )
+            multifile.close()
+            return False
+
+        # prependDirectory means packs loaded later take priority.
+        self.modelPath.prependDirectory(mountPoint)
+
+        self.mountedPacks.append(multifile)
+        self.mountPoints.append(mountPoint)
+
+        print(
+            'Successfully Mounted Content Pack: %s '
+            '(%s files at %s)' % (
+                filename,
+                multifile.getNumSubfiles(),
+                mountPoint
+            )
+        )
+        return True
