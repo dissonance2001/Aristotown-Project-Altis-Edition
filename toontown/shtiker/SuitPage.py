@@ -169,7 +169,7 @@ CogNameAbbreviations = {
     'clo': 'C.L.O.',
     'vp': 'Senior V.P.',
     'cio': 'C.I.O.',
-    'hocn': 'H.O.C.N.',
+    'hocn': 'C.C.O.',
     'cfo': 'C.F.O.',
     'chairman': 'Chairman',
     'ottoman': 'C.O.O.',

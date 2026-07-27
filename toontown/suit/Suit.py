@@ -3468,9 +3468,12 @@ class Suit(Avatar.Avatar):
             self.setHeight(5.1)
         elif dna.name == 'cmk':
             self.scale = 4.25 / cSize
-            self.handColor = VBase4(0.871, 0.722, 0.882, 1)
+            self.handColor = VBase4(0.263, 0.208, 0.173, 1)
             self.generateBody()
-            self.generateHead2('codeMonkey')
+            self.generateHead2('gladhander')
+            texture = loader.loadTexture('phase_3.5/maps/code_monkey.jpg')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(5.63)
         elif dna.name == 'dhr':
             self.scale = 4.5 / cSize
@@ -3768,7 +3771,7 @@ class Suit(Avatar.Avatar):
             self.handColor = VBase4(0.341, 0.341, 0.341, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead2('techbotBoss-head-zero')
+            self.generateHead2('Vert')
             self.setHeight(9.05)
         elif dna.name == 'hocn':
             self.scale = 7.0 / aSize
@@ -5662,8 +5665,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_3.5/models/char/propagandist')
         if headType == 'sellbotBoss-head-zero' and self.style.name == 'hocn':
             headModel = loader.loadModel('phase_14/models/char/pressbotBoss-head-zero')
-        if headType == 'techbotBoss-head-zero' and self.style.name == 'cio':
-            headModel = loader.loadModel('phase_15/models/char/techbotBoss-head-zero')
+        if headType == 'Vert' and self.style.name == 'cio':
+            headModel = loader.loadModel('phase_14/models/char/cio-techbot-new')
         if headType == 'bossCog-head' and self.style.name == 'cj':
             headModel = loader.loadModel('phase_14/models/char/pressbot2Boss-head-zero')
         if headType == 'root' and self.style.name == 'dc':
@@ -5893,7 +5896,7 @@ class Suit(Avatar.Avatar):
             headModel.setZ(-.4)
             headModel.setScale(.7)
             headModel.setH(180)
-        if self.style.name in ['cj', 'cio', 'hocn']:
+        if self.style.name in ['cj', 'hocn']:
             headModel.setZ(-.2)
             headModel.setY(-.2)
             headModel.setX(0)
@@ -5931,7 +5934,7 @@ class Suit(Avatar.Avatar):
                 textureGlass = loader.loadTexture(
                     'phase_4/maps/apriltoons/accessories/cc_t_acc_hat_goon_patrol_purple.png')
                 headPart.setTexture(textureGlass, 1)
-            if self.style.name in ['cj', 'cio', 'hocn']:
+            if self.style.name in ['cj', 'hocn']:
                 headPart.setZ(-.2)
                 headPart.setY(-.2)
                 headPart.setX(0)
