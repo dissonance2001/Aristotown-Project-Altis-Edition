@@ -1,8 +1,8 @@
 import TTLocalizer
 from otp.otpbase.OTPGlobals import *
 from toontown.toonbase.ToonPythonUtil import Enum, invertDict
-from pandac.PandaModules import BitMask32, Vec4, Filename, VirtualFileSystem
-import __builtin__
+from pandac.PandaModules import BitMask32, Vec4
+from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 MapHotkeyOn = 'alt'
 MapHotkeyOff = 'alt-up'
 MapHotkey = 'alt'
@@ -163,53 +163,13 @@ BucketCosts = {20: 0,
  80: 6000,
  90: 7000,
  100: 8000}
-def _resolveContentPackFont(fontPath):
-    requestedPath = str(fontPath).replace('\\', '/').lstrip('/')
-
-    clashFontMap = {
-        'phase_3/models/fonts/ImpressBT.ttf':
-            'phase_3/fonts/ImpressBT.ttf',
-        'phase_3/models/fonts/MinnieFont':
-            'phase_3/fonts/MinnieFont.ttf',
-        'phase_3/models/fonts/MinnieFont.ttf':
-            'phase_3/fonts/MinnieFont.ttf'
-    }
-
-    replacementPath = clashFontMap.get(requestedPath)
-    if not replacementPath:
-        return fontPath
-
-    try:
-        manager = __builtin__.ContentPackMgr
-        mountPoints = manager.mountPoints
-    except Exception:
-        return fontPath
-
-    vfs = VirtualFileSystem.getGlobalPtr()
-
-    for mountPoint in reversed(mountPoints):
-        candidate = Filename(
-            '%s/%s' % (
-                str(mountPoint).rstrip('/'),
-                replacementPath
-            )
-        )
-
-        if vfs.exists(candidate):
-            resolvedPath = str(candidate)
-            print 'CONTENT PACK: Registered font override:', resolvedPath
-            return resolvedPath
-
-    return fontPath
-
-
-TTLocalizer.InterfaceFont = _resolveContentPackFont(
+TTLocalizer.InterfaceFont = ContentPackCompatibility.resolveFontPath(
     TTLocalizer.InterfaceFont
 )
-TTLocalizer.ToonFont = _resolveContentPackFont(
+TTLocalizer.ToonFont = ContentPackCompatibility.resolveFontPath(
     TTLocalizer.ToonFont
 )
-TTLocalizer.MinnieFont = _resolveContentPackFont(
+TTLocalizer.MinnieFont = ContentPackCompatibility.resolveFontPath(
     TTLocalizer.MinnieFont
 )
 
