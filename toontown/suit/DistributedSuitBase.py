@@ -1791,9 +1791,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             6: 'splat_cake',
             7: 'splat_wedding'
         }
-        return 'phase_5/maps/%s_%s.png' % (
-            splatDict[level],
-            random.choice((1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
+        return 'phase_5/maps/%s.png' % (
+            splatDict[level]
         )
 
     def _getSplatParts(self):
@@ -1806,7 +1805,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         for i in xrange(actorCollection.getNumPaths()):
             thing = actorCollection[i]
-            if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
+            if thing.getName() not in ('joint_Rhold', 'joint_Lhold', 'joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                 self._splatParts.append(thing)
 
         return self._splatParts
@@ -1840,11 +1839,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         self._splatTexture = Texture('composite-splat')
         self._splatTexture.load(self._splatImage)
-        self._splatTexture.setWrapU(Texture.WMBorderColor)
-        self._splatTexture.setWrapV(Texture.WMBorderColor)
-        self._splatTexture.setBorderColor((0, 0, 0, 0))
-        self._splatTexture.setMinfilter(Texture.FTLinear)
-        self._splatTexture.setMagfilter(Texture.FTLinear)
+        self._splatTexture.setWrapU(Texture.WMClamp)
+        self._splatTexture.setWrapV(Texture.WMClamp)
+
+        self._splatTexture.setMinfilter(Texture.FTNearest)
+        self._splatTexture.setMagfilter(Texture.FTNearest)
 
         self._splatStage = TextureStage('compositeSplat')
         self._splatStage.setMode(TextureStage.MDecal)
@@ -1862,44 +1861,92 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         splatTex = loader.loadTexture(filename)
         if not splatTex:
-            print
-            'Failed to load splat texture:', filename
+            print 'Failed to load splat texture:', filename
             return
 
         splatImage = PNMImage()
         splatTex.store(splatImage)
 
         if splatImage.getNumChannels() < 1:
-            print
-            'Invalid splat image:', filename
+            print 'Invalid splat image:', filename
             return
 
-        if splatImage.getXSize() != self._splatImage.getXSize() or splatImage.getYSize() != self._splatImage.getYSize():
-            print
-            'Splat size mismatch:', filename
+        compositeWidth = self._splatImage.getXSize()
+        compositeHeight = self._splatImage.getYSize()
+
+        if (
+            splatImage.getXSize() != compositeWidth or
+            splatImage.getYSize() != compositeHeight
+        ):
+            print 'Splat size mismatch:', filename
             return
 
-        # Blend the new splat over the old composite
-        self._splatImage.blendSubImage(splatImage, 0, 0, 0, 0)
+        # Randomly shift the splat within the composite texture.
+        #
+        # Increase these values for more movement.
+        # Decrease them if splats get clipped too heavily.
+        maxShiftX = int(compositeWidth * 0.25)
+        maxShiftY = int(compositeHeight * 0.25)
 
-        # Push updated pixels back into the same texture
+        offsetX = random.randint(-maxShiftX, maxShiftX)
+        offsetY = random.randint(-maxShiftY, maxShiftY)
+
+        # Determine the source and destination regions so that the shifted
+        # image remains inside the composite texture.
+        if offsetX >= 0:
+            sourceX = 0
+            destinationX = offsetX
+            copyWidth = compositeWidth - offsetX
+        else:
+            sourceX = -offsetX
+            destinationX = 0
+            copyWidth = compositeWidth + offsetX
+
+        if offsetY >= 0:
+            sourceY = 0
+            destinationY = offsetY
+            copyHeight = compositeHeight - offsetY
+        else:
+            sourceY = -offsetY
+            destinationY = 0
+            copyHeight = compositeHeight + offsetY
+
+        if copyWidth <= 0 or copyHeight <= 0:
+            return
+
+        self._splatImage.blendSubImage(
+            splatImage,
+            destinationX,
+            destinationY,
+            sourceX,
+            sourceY,
+            copyWidth,
+            copyHeight
+        )
+
+        # Update the existing composite texture.
         self._splatTexture.load(self._splatImage)
 
     def _clearCompositeSplat(self):
         if not hasattr(self, '_splatImage'):
             return
 
-        self._splatImage.fill(1.0, 1.0, 1.0)
+        self._splatImage.fill(0.0, 0.0, 0.0)
         self._splatImage.alphaFill(0.0)
         self._splatTexture.load(self._splatImage)
 
-    def splatSuit(self, level, clear):
+    def splatSuit(self, level, clear=False):
         if clear:
             self._clearCompositeSplat()
             return
 
-        filename = self._getSplatFilename(level)
-        self._addSplatToComposite(filename)
+        # Add the normal splat.
+        largeFilename = self._getSplatFilename(level)
+        self._addSplatToComposite(largeFilename)
+
+        # Add the tiny splat too.
+        tinyFilename = self._getSplatFilename2(level)
+        self._addSplatToComposite(tinyFilename)
 
     def splatClear(self):
         stages = self.findAllTextureStages()
@@ -1909,7 +1956,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             parts = ()
             for thingIndex in xrange(0, actorCollection.getNumPaths()):
                 thing = actorCollection[thingIndex]
-                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
+                if thing.getName() not in ('joint_Rhold', 'joint_Lhold', 'joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
                     if stage.getName().startswith('splat_wedding'):
                         thing.clearTexture(stage)
                     if stage.getName().startswith('splat_cream'):

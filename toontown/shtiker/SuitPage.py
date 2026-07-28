@@ -181,11 +181,12 @@ CogIndexDepartments = {
     'radiog', 'ubuster', 'safesupervis', 'vp'],
     'l': ['bf', 'bf2', 'b', 'b2', 'bsd', 'pf', 'dt', 'dt2', 'nn', 'dcr', 'cv', 'ac', 'ac2', 'bs', 'bs2', 'ad', 'dcw', 'bck', 'sd', 'sd2', 'sh', 'surg', 'rat', 'le', 'le2', 'magi', 'whistleb', 'br', 'bw', 'bw2',
           'clerk', 'judy', 'mouthp', 'rainmake', 'whunter', 'erclaim', 'redd', 'wsi', 'sgoat', 'caseman', 'stenog', 'lgator', 'cj', 'clo'],
-    'm': ['sc', 'pp', 'nb', 'qc', 'shy', 'tw', 'trs', 'pwn', 'bc', 'nc', 'cow', 'brck', 'mb', 'aud', 'ls', 'gld', 'fct', 'bfh', 'rb', 'supervis', 'duckshfl', 'treek', 'pcrat', 'erfit', 'hroller', 'bookkeep', 'racket',
+    'm': ['sc', 'pp', 'nb', 'qc', 'shy', 'tw', 'trs', 'pwn', 'bc', 'nc', 'cow', 'brck', 'mb', 'aud', 'ls', 'gld', 'fct', 'bfh', 'timer', 'rb', 'supervis', 'duckshfl', 'treek', 'pcrat', 'erfit', 'hroller', 'bookkeep', 'racket',
           'liquidr', 'treasure', 'cfo'],
-    'g': ['bgh', 'ca', 'pph', 'cn', 'ins', 'sw', 'cbr', 'mdm', 'shrp', 'dl', 'txm', 'neg', 'shw', 'rng', 'cor', 'sab', 'mg', 'bfh2', 'chw', 'ang', 'hho', 'dola', 'dold', 'ddiver', 'gatekeep', 'fmaker', 'liquid',
+    'g': ['bgh', 'ca', 'pph', 'cn', 'ins', 'sw', 'cbr', 'mdm', 'dl', 'txm', 'cor', 'neg', 'sab', 'shw', 'rng', 'vul', 'stol', 'mg', 'bfh2', 'chw', 'ang', 'hho', 'dola', 'dold', 'ddiver', 'gatekeep', 'fmaker', 'liquid',
         'rkeeper', 'dking', 'cdirector', 'ottoman', 'chairman'],  # boardbots
-    't': ['skd', 'cmk', 'dhr', 'vpr', 'brn', 'sdb', 'key', 'kbc', 'blk', 'sfs', 'pyc', 'inw', 'itn', 'rus', 'djockey', 'videog', 'cio'],  # techbots
+    't': ['skd', 'skd2', 'cmk', 'cmk2', 'vpr', 'vpr2', 'pdx', 'dhr', 'brn', 'sdb', 'kbc', 'blk', 'key', 'phis', 'sfs', 'oilg', 'shrp', 'pyc', 
+          'inw', 'inw2', 'cpu', 'itn', 'asm', 'chg', 'rus', 'rus2', 'djockey', 'videog', 'cio'],  # techbots
     'p': ['ppb', 'shb', 'gms', 'hck', 'ghw', 'gzt', 'nsh', 'anc', 'director', 'hocn'],  # pressbots
 }
 PANEL_COLORS = (VBase4(0.839, 0.808, 0.769, 1.0),

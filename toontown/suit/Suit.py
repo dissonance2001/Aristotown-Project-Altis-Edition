@@ -478,6 +478,7 @@ shy = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 tw = (('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
 aud = (('glower', 'glower', 4), ('finger-wag', 'finger-wag', 4))
 sw = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
+timer = (('finger-wag', 'finger-wag', 4), ('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4), ('frustrated', 'frustrated', 4), ('objection', 'objection', 4))
 bc = (('hold-pencil', 'hold-pencil', 4), ('pickpocket', 'pickpocket', 4))
 fct = (('watercooler', 'watercooler', 4), ('finger-wag', 'finger-wag', 4))
 nc = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -528,6 +529,7 @@ txm =  (('pen-squirt', 'fountain-pen', 4), ('glower', 'glower', 4))
 dl = (('glower', 'glower', 4), ('short-squeeze', 'short-squeeze', 4))
 ang = (('speak', 'speak', 4), ('smile', 'smile', 4))
 shw = (('watercooler', 'watercooler', 4), ('glower', 'glower', 4))
+vul = (('pickpocket', 'pickpocket', 4), ('cigar-smoke', 'cigar-smoke', 4), ('effort', 'effort', 4))
 bfh2 = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 mg = (('golf-club-swing', 'golf-club-swing', 4), ('pen-squirt', 'fountain-pen', 4))
 chw = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -535,14 +537,16 @@ hho = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4), ('cigar-smoke', 
 sab = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 cor = (('golf-club-swing', 'golf-club-swing', 4), ('pen-squirt', 'fountain-pen', 4))
 neg = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
-shrp = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4), ('cigar-smoke', 'cigar-smoke', 4))
 rng = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4), ('cigar-smoke', 'cigar-smoke', 4))
 
     # Techbots
 skd = (('speak', 'speak', 4), ('shredder', 'shredder', 4))
 cmk = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
+skd2 = (('speak', 'speak', 4), ('shredder', 'shredder', 4))
+cmk2 = (('speak', 'speak', 4), ('pen-squirt', 'fountain-pen', 4))
 dhr = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 vpr = (('pickpocket', 'pickpocket', 4), ('speak', 'speak', 4))
+vpr2 = (('pickpocket', 'pickpocket', 4), ('speak', 'speak', 4))
 brn = (('effort', 'effort', 4), ('finger-wag', 'finger-wag', 4), ('speak', 'speak', 4))
 sdb = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4))
 key = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4))
@@ -551,8 +555,13 @@ blk = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4))
 sfs = (('glower', 'glower', 4), ('pen-squirt', 'fountain-pen', 4))
 pyc = (('finger-wag', 'finger-wag', 4), ('glower', 'glower', 4))
 inw = (('speak', 'speak', 4), ('hold-eraser', 'hold-eraser', 4), ('pickpocket', 'pickpocket', 4))
+inw2 = (('speak', 'speak', 4), ('hold-eraser', 'hold-eraser', 4), ('pickpocket', 'pickpocket', 4))
+cpu = (('speak', 'speak', 4), ('hold-eraser', 'hold-eraser', 4), ('pickpocket', 'pickpocket', 4))
 itn = (('cigar-smoke', 'cigar-smoke', 4), ('glower', 'glower', 4), ('speak', 'speak', 4))
+asm = (('effort', 'effort', 4), ('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 rus = (('glower', 'glower', 4), ('pen-squirt', 'fountain-pen', 4))
+rus2 = (('glower', 'glower', 4), ('pen-squirt', 'fountain-pen', 4))
+shrp = (('headhoncho-cigar-smoke', 'headhoncho-cigar-smoke', 4), ('cigar-smoke', 'cigar-smoke', 4))
 djockey = (('pen-squirt', 'fountain-pen', 4), ('shredder', 'shredder', 4))
 ptjockey = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 
@@ -1593,6 +1602,7 @@ class Suit(Avatar.Avatar):
         self.leftHand = None
         self.rightHand = None
         self.shadowJoint = None
+        self.splatCount = 0
         self.nametagJoint = None
         # self.headParts = []
         # self.animatedHeadParts = []
@@ -2685,6 +2695,12 @@ class Suit(Avatar.Avatar):
             self.generateFemaleBody()
             self.generateHead2('bigfish')
             self.setHeight(10.7)
+        elif dna.name == 'timer':
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.318, 0.318, 0.318, 1)
+            self.generateBody()
+            self.generateHead2('overtime')
+            self.setHeight(8.0)
         elif dna.name == 'rb':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.902, 0.949, 0.933, 1)
@@ -3202,15 +3218,6 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.3)
-        elif dna.name == 'shrp':
-            self.scale = 5.0 / bSize
-            self.handColor = VBase4(0.557, 0.541, 0.537, 1)
-            self.generateBody()
-            self.generateHead2('telemarketer')
-            texture = loader.loadTexture('phase_3.5/maps/sharpseer_board.png')
-            for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.setHeight(7.3)
         elif dna.name == 'txm':
             self.scale = 5.0 / cSize
             self.handColor = VBase4(0.769, 0.694, 0.314, 1)
@@ -3248,29 +3255,47 @@ class Suit(Avatar.Avatar):
             self.scale = 6.5 / aSize
             self.handColor = VBase4(0.047, 0.051, 0.055, 1.0)
             self.generateBody()
-            self.generateHead2('legaleagle')
-            texture = loader.loadTexture('phase_4/maps/magnate.png')
+            self.generateHead2('magnate')
+            texture = loader.loadTexture('phase_14/maps/ttcc_ene_magnate.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.45)
         elif dna.name == 'cor':
-            self.scale = 6.25 / aSize
+            self.scale = 5.75 / aSize
             self.handColor = VBase4(0.459, 0.447, 0.439, 1)
             self.generateBody()
             self.generateHead2('yesman')
             texture = loader.loadTexture('phase_4/maps/middleman_custom.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.0)
+            self.setHeight(7.5)
         elif dna.name == 'sab':
-            self.scale = 6.25 / aSize
+            self.scale = 5.75 / aSize
             self.handColor = VBase4(0.459, 0.447, 0.439, 1)
             self.generateBody()
             self.generateHead2('yesman')
             texture = loader.loadTexture('phase_4/maps/middleman_custom1.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
+            self.setHeight(7.5)
+        elif dna.name == 'vul':
+            self.scale = 6.0 / bSize
+            self.handColor = VBase4(0.733, 0.49, 0.49, 1)
+            self.generateFemaleBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/VultureCapitalistEdit.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(8.0)
+        elif dna.name == 'stol':
+            self.scale = 6.5 / aSize
+            self.handColor = VBase4(0.263, 0.278, 0.31, 1.0)
+            self.generateBody()
+            self.generateHead2('legaleagle')
+            texture = loader.loadTexture('phase_4/maps/stool_pigeon.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.45)
         elif dna.name == 'mg':
             self.scale = 6.8 / aSize
             self.handColor = VBase4(0.169, 0.169, 0.169, 1)
@@ -3466,6 +3491,12 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.1)
+        elif dna.name == 'skd2':
+            self.scale = 4.0 / cSize
+            self.handColor = VBase4(0.941, 0.831, 0.914, 1)
+            self.generateBody()
+            self.generateHead2('scriptKiddie')
+            self.setHeight(5.1)
         elif dna.name == 'cmk':
             self.scale = 4.25 / cSize
             self.handColor = VBase4(0.263, 0.208, 0.173, 1)
@@ -3475,26 +3506,62 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.63)
+        elif dna.name == 'cmk2':
+            self.scale = 4.25 / cSize
+            self.handColor = VBase4(0.863, 0.718, 0.875, 1)
+            self.generateBody()
+            self.generateHead2('codeMonkey')
+            self.setHeight(5.63)
         elif dna.name == 'dhr':
             self.scale = 4.5 / cSize
             self.handColor = VBase4(0.929, 0.835, 0.961, 1)
             self.generateFemaleBody()
             self.generateHead2('dataHoarder')
             self.setHeight(6.5)
+        elif dna.name == 'shrp':
+            self.scale = 5.5 / bSize
+            self.handColor = VBase4(0.792, 0.561, 0.529, 1)
+            self.generateBody()
+            self.generateHead2('telemarketer')
+            texture = loader.loadTexture('phase_3.5/maps/sharpseer.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.8)
         elif dna.name == 'vpr':
             self.scale = 4.25 / aSize
-            self.handColor = VBase4(0.596, 0.529, 0.216, 1)
+            self.handColor = VBase4(0.796, 0.706, 0.29, 1)
             self.generateBody()
             self.generateHead2('yesman')
             texture = loader.loadTexture('phase_3.5/maps/voodoo_programmer.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.63)
+        elif dna.name == 'pdx':
+            self.scale = 4.25 / bSize
+            self.handColor = VBase4(0.886, 0.757, 0.843, 1)
+            self.generateBody()
+            self.generateHead2('pointDexter')
+            self.setHeight(5.63)
+        elif dna.name == 'vpr2':
+            self.scale = 4.25 / aSize
+            self.handColor = VBase4(0.596, 0.529, 0.216, 1)
+            self.generateBody()
+            self.generateHead2('voodoo')
+            self.setHeight(5.63)
         elif dna.name == 'brn':
             self.scale = 5.25 / aSize
             self.handColor = VBase4(0.984, 0.827, 0.922, 1)
             self.generateBody()
             self.generateHead2('brainiac')
+            self.setHeight(7.0)
+        elif dna.name == 'phis':
+            self.scale = 5.25 / aSize
+            self.handColor = VBase4(0.996, 0.839, 0.643, 1)
+            self.generateFemaleBody()
+            self.generateHead2('numbercruncher')
+            texture = loader.loadTexture('phase_3.5/maps/voodoo-programmer.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
             self.setHeight(7.0)
         elif dna.name == 'sdb':
             self.scale = 5.0 / cSize
@@ -3506,14 +3573,14 @@ class Suit(Avatar.Avatar):
                 headPart.setTexture(texture, 1)
             self.setHeight(8.0)
         elif dna.name == 'key':
-            self.scale = 4.5 / aSize
+            self.scale = 5.5 / aSize
             self.handColor = VBase4(0.345, 0.345, 0.345, 1)
             self.generateBody()
             self.generateHead2('root')
             texture = loader.loadTexture('phase_14/maps/Material.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(7.0)
+            self.setHeight(8.0)
         elif dna.name == 'kbc':
             self.scale = 5.2 / bSize
             self.handColor = VBase4(0.682, 0.682, 0.675, 1)
@@ -3538,6 +3605,15 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(7.8)
+        elif dna.name == 'oilg':
+            self.scale = 6.0 / aSize
+            self.handColor = VBase4(0.929, 0.929, 0.929, 1)
+            self.generateBody()
+            self.generateHead2('root')
+            texture = loader.loadTexture('phase_14/maps/Data-Ogligarch.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(7.8)
         elif dna.name == 'pyc':
             self.scale = 6.0 / aSize
             self.handColor = VBase4(0.447, 0.302, 0.471, 1)
@@ -3550,20 +3626,47 @@ class Suit(Avatar.Avatar):
                 headPart.setTransparency(1)
             self.setHeight(8.1)
         elif dna.name == 'inw':
-            self.scale = 7.0 / aSize
+            self.scale = 6.5 / bSize
             self.handColor = VBase4(0.843, 0.753, 0.929, 1)
             self.generateBody()
             self.generateHead2('movershaker')
             texture = loader.loadTexture('phase_3.5/maps/installation-wizard.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
-            self.setHeight(8.55)
+            self.setHeight(8.95)
+        elif dna.name == 'inw2':
+            self.scale = 6.5 / bSize
+            self.handColor = VBase4(0.643, 0.533, 0.651, 1)
+            self.generateBody()
+            self.generateHead2('installer-wizard')
+            self.setHeight(8.95)
+        elif dna.name == 'chg':
+            self.scale = 6.5 / bSize
+            self.handColor = VBase4(0.643, 0.533, 0.651, 1)
+            self.generateFemaleBody()
+            self.generateHead2('Change Agent head')
+            self.setHeight(9.0)
+        elif dna.name == 'cpu':
+            self.scale = 6.5 / bSize
+            self.handColor = VBase4(0.941, 0.859, 0.941, 1)
+            self.generateBody()
+            self.generateHead2('computerWizard')
+            self.setHeight(8.95)
         elif dna.name == 'itn':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.882, 0.839, 0.929, 1)
             self.generateBody()
             self.generateHead2('industryTitan')
             self.setHeight(9.0)
+        elif dna.name == 'asm':
+            self.scale = 6.5 / cSize
+            self.handColor = VBase4(0.843, 0.525, 0.518, 1)
+            self.generateBody()
+            self.generateHead2('flunky')
+            texture = loader.loadTexture('phase_3.5/maps/mademan.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.setHeight(8.1)
         elif dna.name == 'rus':
             self.scale = 7.0 / aSize
             self.handColor = VBase4(0.525, 0.455, 0.369, 1)
@@ -3573,6 +3676,12 @@ class Suit(Avatar.Avatar):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.0)
+        elif dna.name == 'rus2':
+            self.scale = 7.0 / aSize
+            self.handColor = VBase4(0.357, 0.243, 0.141, 1)
+            self.generateBody()
+            self.generateHead2('root_user')
+            self.setHeight(9.5)
         elif dna.name == 'djockey':
             self.scale = 4.0 / cSize
             self.handColor = VBase4(0.882, 0.847, 0.784, 1)
@@ -4549,7 +4658,7 @@ class Suit(Avatar.Avatar):
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.isExecutive and not self.isManager and not self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
+        elif self.isExecutive and not self.isWaiter or self.isManager:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'charon' and not self.style.name == 'hydra'\
                 and not self.style.name == 'radiog' and not self.style.name == 'kerberos' and not self.style.name == 'nix' and not self.style.name == 'ubuster' and not self.style.name == 'styx' and not self.isWaiter and not self.style.name == 'cdirector':
@@ -5639,10 +5748,14 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_3.5/models/char/bricks-pushover')
         if headType == 'goldbricks':
             headModel = loader.loadModel('phase_3.5/models/char/bricks-pushover')
-        if headType == 'root' and self.style.name == 'bsht':
+        if headType == 'root' and self.style.name == 'oilg':
             headModel = loader.loadModel('phase_14/models/char/yesman')
-        if headType == 'installer-wizard':
-            headModel = loader.loadModel('phase_14/models/char/installer-wizard_head')
+        if headType == 'Change Agent head':
+            headModel = loader.loadModel('phase_14/models/char/change-agent')
+        if headType == 'root_user':
+            headModel = loader.loadModel('phase_14/models/char/root-user_head')
+        if headType == 'voodoo':
+            headModel = loader.loadModel('phase_14/models/char/voodoo-programmer_head')
         if headType == 'root' and self.style.name == 'whistleb':
             headModel = loader.loadModel('phase_14/models/char/whistleblower')
         if headType == 'root' and self.style.name == 'ksp':
@@ -5685,6 +5798,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_14/models/char/backseat')
         if headType == 'root' and self.style.name == 'gld':
             headModel = loader.loadModel('phase_14/models/char/GoldenGoose')
+        if headType == 'root' and self.style.name == 'vul':
+            headModel = loader.loadModel('phase_14/models/char/GoldenGoose')
         if headType == 'root' and self.style.name == 'bck':
             headModel = loader.loadModel('phase_14/models/char/backstabber')
         if headType == 'root' and self.style.name == 'wnk':
@@ -5703,6 +5818,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_14/models/char/python-charmer_head')
         if headType == 'root' and self.style.name == 'sdb':
             headModel = loader.loadModel('phase_14/models/char/shotgun-debugger_head')
+        if headType == 'magnate' and self.style.name == 'rng':
+            headModel = loader.loadModel('phase_14/models/char/ttcc_ene_magnate')
         if headType == 'root' and self.style.name == 'shy':
             headModel = loader.loadModel('phase_14/models/char/shylock')
         if headType == 'root' and self.style.name == 'cow':
@@ -5712,6 +5829,10 @@ class Suit(Avatar.Avatar):
         if headType == 'Blowhard' and self.style.name == 'blh':
                 headModel = loader.loadModel('phase_3.5/models/char/ttrm_m_ene_head_blowhard')
         if headType == 'industryTitan':
+                headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
+        if headType == 'pointDexter':
+                headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
+        if headType == 'scriptKiddie':
                 headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
         if headType == 'blackHat':
                 headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
@@ -5723,6 +5844,8 @@ class Suit(Avatar.Avatar):
             headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
         if headType == 'computerWizard':
             headModel = loader.loadModel('phase_3.5/models/char/ttrpg_tech-heads')
+        if headType == 'installer-wizard':
+            headModel = loader.loadModel('phase_14/models/char/installer-wizard_head')
         if headType == 'connoisseur_hat' and self.style.name == 'cn':
                 headModel = loader.loadModel('phase_14/models/char/ttcc_ene_connoisseur')
         if headType == 'connoisseur_head' and self.style.name == 'cn':
@@ -5991,7 +6114,9 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1.05)
             if self.style.name == 'gld':
                 headPart.setScale(0.8)
-            if self.style.name == 'watchm':
+            if self.style.name == 'vul':
+                headPart.setScale(0.8)
+            if self.style.name == 'timer':
                 headPart.setY(-.2)
                 headPart.setScale(1.05)
             if self.style.name == 'blk':
@@ -6049,6 +6174,8 @@ class Suit(Avatar.Avatar):
                 headPart.setY(-.1)
                 headPart.setScale(1.05)
                 headPart.setH(0)
+            if self.style.name == 'chg':
+                headPart.setScale(0.75)
             if self.headTexture:
                 headTex = loader.loadTexture('phase_' + str(phase) + '/maps/' + self.headTexture)
                 headPart.setTexture(headTex, 1)
@@ -7431,13 +7558,13 @@ class Suit(Avatar.Avatar):
 
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
-        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
+        elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
-        elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
+        elif self.isManager and not self.isWaiter and self.style.name != 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
@@ -8327,11 +8454,11 @@ class Suit(Avatar.Avatar):
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
-        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
+        elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
+        elif self.isManager and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
@@ -8449,11 +8576,11 @@ class Suit(Avatar.Avatar):
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
-        elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
+        elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
-        elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
+        elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
-        elif self.getManager() and not self.isWaiter and not self.style.name == 'dold':
+        elif self.isManager and not self.isWaiter and not self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.style.name == 'dold':
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
@@ -8870,6 +8997,72 @@ class Suit(Avatar.Avatar):
     def makeMarked(self, num):
         self.actuallyMarked = 1
         self.isMarked = num
+
+    def applySplat(self, splat, actor=None):
+        if actor is None:
+            actor = self
+        if type(splat[0]) == TextureStage:
+            splat = splat[1]
+        pieName = splat[0]
+        partName = splat[1]
+        u = splat[2]
+        v = splat[3]
+        if pieName == 'cupcake' or pieName == 'wedding-cake':
+            torsoTex = loader.loadTexture('phase_5/maps/splat_wedding.png')
+            armTex = loader.loadTexture('phase_5/maps/tiny_splat_wedding.png')
+        elif pieName == 'birthday-cake-slice' or pieName == 'birthday-cake':
+            torsoTex = loader.loadTexture('phase_5/maps/splat_cake.png')
+            armTex = loader.loadTexture('phase_5/maps/tiny_splat_cake.png')
+        elif pieName == 'fruitpie-slice' or pieName == 'fruitpie':
+            torsoTex = loader.loadTexture('phase_5/maps/splat_fruit.png')
+            armTex = loader.loadTexture('phase_5/maps/tiny_splat_fruit.png')
+        elif pieName == 'creampie-slice' or pieName == 'creampie':
+            torsoTex = loader.loadTexture('phase_5/maps/splat_cream.png')
+            armTex = loader.loadTexture('phase_5/maps/tiny_splat_cream.png')
+        else:
+            torsoTex = loader.loadTexture('phase_5/maps/splat_cream.png')
+            armTex = loader.loadTexture('phase_5/maps/tiny_splat_cream.png')
+        ts = TextureStage('pieSplat')
+        ts.setMode(TextureStage.MDecal)
+        ts.setSort(3)
+        self.splats.append((ts, splat))
+        try:
+            actor.find('**/' + partName).setTexOffset(ts, u, v)
+            if partName != 'arms':
+                actor.find('**/' + partName).setTexture(ts, torsoTex)
+            else:
+                actor.find('**/' + partName).setTexture(ts, armTex)
+        except:  # Can't find torso? It's a skelecog
+            actorNode = actor.find('**/__Actor_modelRoot')
+            actorCollection = actorNode.findAllMatches('*')
+            for thing in actorCollection:
+                if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'joint_Rhold', 'joint_Lhold', 'joint_shadow'):
+                    thing.setTexOffset(ts, u, v)
+                    thing.setTexture(ts, torsoTex)
+
+    def clearSplats(self, actor=None):
+        if actor is None:
+            actor = self
+        for splat in self.splats:
+            partName = splat[1][1]
+            ts = splat[0]
+            try:
+                actor.find('**/' + partName).clearTexture(ts)
+            except:  # Can't find torso? It's a skelecog
+                try:
+                    actorNode = actor.find('**/__Actor_modelRoot')
+                    actorCollection = actorNode.findAllMatches('*')
+                    for thing in actorCollection:
+                        if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'joint_Rhold', 'joint_Lhold', 'joint_shadow'):
+                            thing.clearTexture(ts)
+                except AssertionError:
+                    # Can't find ACTOR AGAIN??? Bruh.
+                    break
+        self.splats = []
+        self.splatCount = 0
+
+    def hasSplats(self):
+        return bool(self.splats)
 
     def makeUnMarked(self, elite=False):
         self.actuallyMarked = 0

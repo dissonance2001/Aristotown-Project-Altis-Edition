@@ -25,7 +25,7 @@ suitDeptCogs = {
 
     'm': [
         'sc', 'pp',  'tw', 'bc', 'nc', 'mb', 'ls', 'rb',
-        'shy', 'fct', 'gld', 'trs', 'bfh', 'nb', 'qc', 'aud', 'pwn', 'cow', 'brck',
+        'shy', 'fct', 'gld', 'trs', 'bfh', 'nb', 'qc', 'aud', 'pwn', 'cow', 'brck', 'timer',
         # Regular Cashbots...
     ],
 
@@ -37,13 +37,13 @@ suitDeptCogs = {
 
     'g': [
         'bgh', 'pph', 'ins', 'cbr', 'dl', 'shw', 'mg', 'hho',
-        'ca', 'mdm', 'txm', 'ang', 'bfh2', 'chw', 'cor', 'sab', 'shrp', 'cn', 'sw', 'rng', 'neg',
+        'ca', 'mdm', 'txm', 'ang', 'bfh2', 'chw', 'cor', 'sab', 'cn', 'sw', 'rng', 'neg', 'vul', 'stol',
         # Regular Boardbots...
     ],
 
     't': [
-        'skd', 'cmk', 'vpr', 'sdb', 'kbc', 'sfs', 'inw', 'rus',
-        'dhr', 'brn', 'key', 'blk', 'pyc', 'itn',  
+        'skd', 'cmk', 'vpr', 'sdb', 'shrp', 'kbc', 'sfs', 'inw', 'rus',
+        'dhr', 'brn', 'key', 'blk', 'pyc', 'itn', 'skd2', 'cmk2', 'pdx', 'phis', 'inw2', 'rus2', 'asm', 'cpu', 'vpr2', 'oilg', 'chg',
         # Regular Techbots...
     ],
 
@@ -142,9 +142,9 @@ suitBTypes = [
     # Sellbots
 'tm', 'cn', 'ms', 'bam', 'bellring', 'prethink', 'psetter',
     # Boardbots
-'pph', 'ins', 'ang', 'dola', 'ottoman', 'shrp',
+'pph', 'ins', 'ang', 'dola', 'ottoman', 'vul',
     # Techbots
-'kbc', 'blk', 'inw', 'ant',
+'kbc', 'blk', 'inw', 'ant', 'shrp', 'pdx', 'cpu', 'chg', 'inw2',
     # Pressbots
 'ppb', 'hck', 'ath', 'jls',
 ]
@@ -158,9 +158,9 @@ suitCTypes = [
     # Sellbots
 'cc', 'gh', 'mad', 'asm', 'dopr', 'dopa', 'mslacker',
     # Boardbots
-'bgh', 'ca', 'txm', 'dl', 'shw', 'bfh2', 'ddiver',
+'bgh', 'ca', 'txm', 'dl', 'shw', 'bfh2', 'ddiver', 
     # Techbots
-'skd', 'cmk', 'dhr', 'sdb', 'djockey', 'ptjockey',
+'skd', 'cmk', 'dhr', 'sdb', 'djockey', 'ptjockey', 'asm', 'cmk2', 'skd2', 
     # Pressbots
 'shb', 'gms', 'sbg',
 ]
@@ -255,7 +255,7 @@ suitTierPools = {
         4: ['bc'],
         5: ['nc', 'cow', 'brck'],
         6: ['mb', 'aud'],
-        7: ['ls', 'bfh', 'gld', 'fct'],
+        7: ['ls', 'bfh', 'gld', 'fct', 'timer'],
         8: ['rb'],
     },
 
@@ -274,22 +274,22 @@ suitTierPools = {
         1: ['bgh', 'ca'],
         2: ['pph', 'cn'],
         3: ['ins', 'sw'],
-        4: ['cbr', 'mdm', 'shrp'],
-        5: ['dl', 'txm', 'neg'],
-        6: ['shw', 'rng', 'cor', 'sab'],
+        4: ['cbr', 'mdm'],
+        5: ['dl', 'txm', 'neg', 'cor', 'sab'],
+        6: ['shw', 'rng', 'vul', 'stol'],
         7: ['mg', 'chw', 'bfh2', 'ang'],
         8: ['hho'],
     },
 
     't': {
-        1: ['skd'],
-        2: ['cmk', 'dhr'],
-        3: ['vpr', 'key'],
+        1: ['skd', 'skd2'],
+        2: ['cmk', 'dhr', 'cmk2'],
+        3: ['vpr', 'key', 'vpr2', 'pdx'],
         4: ['sdb', 'brn'],
-        5: ['kbc', 'blk'],
-        6: ['sfs', 'pyc'],
-        7: ['inw', 'itn'],
-        8: ['rus'],
+        5: ['kbc', 'blk', 'phis'],
+        6: ['sfs', 'pyc', 'shrp', 'oilg'],
+        7: ['inw', 'itn', 'asm', 'inw2', 'cpu', 'chg'],
+        8: ['rus', 'rus2'],
     },
 
     'p': {
