@@ -468,9 +468,9 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         # display is collapsed, the menu sits below the small quick controls.
         chatLog = getattr(getattr(base, 'cr', None), 'chatLog', None)
         if chatLog is not None and not getattr(chatLog, 'isHidden', True):
-            self.speedChat.setPos(0.015, 0, -0.655)
+            self.speedChat.setPos(0.03, 0, -0.58)
         else:
-            self.speedChat.setPos(0.015, 0, -0.18)
+            self.speedChat.setPos(0.03, 0, -0.184)
         if not self.firstTime:
             self.speedChat.setPos(-99, -99, -99)
             self.firstTime = 1

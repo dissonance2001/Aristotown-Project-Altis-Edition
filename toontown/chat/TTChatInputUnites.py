@@ -96,9 +96,9 @@ class TTChatInputUnites(DirectObject.DirectObject):
         # slightly to the right so the two shortcut menus have distinct anchors.
         chatLog = getattr(getattr(base, 'cr', None), 'chatLog', None)
         if chatLog is not None and not getattr(chatLog, 'isHidden', True):
-            self.uniteMenu.setPos(0.075, 0, -0.655)
+            self.uniteMenu.setPos(0.1675, 0, -0.58)
         else:
-            self.uniteMenu.setPos(0.075, 0, -0.18)
+            self.uniteMenu.setPos(0.275, 0, -0.184)
         self.uniteMenu.show()
         self.uniteMenu.enter()
 

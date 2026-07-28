@@ -283,8 +283,7 @@ class ChatLog(DirectFrame, DirectObject):
             relief=None,
             frameColor=(0, 0, 0, 0),
             pos=(0, 0, 0),
-            scale=0.0354,
-            width=16.5,
+            width=500,
             numLines=1,
             cursorKeys=1,
             focus=0,
@@ -292,10 +291,18 @@ class ChatLog(DirectFrame, DirectObject):
             suppressMouse=1,
             text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
+            text_scale=0.8,
             entryFont=ToontownGlobals.getInterfaceFont(),
             command=self.sendCurrentMessage,
             focusInCommand=self._focusIn,
             focusOutCommand=self._focusOut,
+        )
+        self.entryScroll = DirectEntryScroll(
+            self.entry,
+            parent=self.entryFrame,
+            relief=None,
+            clipSize=(0, 13.4, -1, 1),
+            scale=0.04425,
         )
         self.entry.bind(DGG.TYPE, self._entryChanged)
         self.entry.bind(DGG.ERASE, self._entryChanged)
