@@ -4,7 +4,7 @@ from toontown.pgui.DirectGui import *
 from toontown.pgui import DirectGuiGlobals as DGG
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import Sequence, Parallel, LerpPosInterval, LerpScaleInterval
-from pandac.PandaModules import TextNode, Vec4, Point3
+from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager
 from toontown.toonbase import ToontownGlobals
 
 
@@ -21,6 +21,14 @@ class ChatLog(DirectFrame, DirectObject):
     def __init__(self):
         DirectFrame.__init__(self, parent=base.a2dTopLeft, relief=None, sortOrder=500)
         DirectObject.__init__(self)
+
+        # Corporate Clash draws the tab images one layer behind the main panel,
+        # while keeping their text above it.  Ensure Altis has the same fixed
+        # GUI bin available before assigning those layers.
+        cbm = CullBinManager.getGlobalPtr()
+        if cbm.findBin('sorted-gui-popup') < 0:
+            cbm.addBin('sorted-gui-popup', CullBinManager.BTFixed, 70)
+        self.setBin('sorted-gui-popup', 1000)
 
         self.assets = loader.loadModel('phase_3.5/models/gui/chat/chat_panel')
         self.openSfx = loader.loadSfx('phase_3.5/audio/sfx/UI_chat_button_open.ogg')
@@ -84,11 +92,16 @@ class ChatLog(DirectFrame, DirectObject):
             scale=0.5,
         )
 
+        # Match Corporate Clash's exact four-button quick-menu layout.
+        quickButtonScale = 0.247875
+        quickButtonZ = -0.025
+        quickButtonPositions = (-0.325, -0.0583333333, 0.2083333333, 0.475)
+
         self.quickSpeedChatButton = DirectButton(
             parent=self.quickFrame,
             relief=None,
-            pos=(-0.075, 0, -0.025),
-            scale=0.247875,
+            pos=(quickButtonPositions[0], 0, quickButtonZ),
+            scale=quickButtonScale,
             image=self._images('Circle_Lightning_', 'N', 'P', 'H'),
             image_scale=(1, 1, 62.0 / 61.0),
             text=('', 'SpeedChat', 'SpeedChat', ''),
@@ -100,11 +113,43 @@ class ChatLog(DirectFrame, DirectObject):
             pressEffect=0,
         )
 
+        self.quickStickerButton = DirectButton(
+            parent=self.quickFrame,
+            relief=None,
+            pos=(quickButtonPositions[1], 0, quickButtonZ),
+            scale=quickButtonScale,
+            image=self._images('Circle_Star_', 'N', 'P', 'H'),
+            image_scale=(1, 1, 62.0 / 61.0),
+            text=('', 'Stickers', 'Stickers', ''),
+            text_pos=(0, -0.93),
+            text_scale=0.55,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            command=self._showStickerUnavailable,
+            pressEffect=0,
+        )
+
+        self.quickUniteButton = DirectButton(
+            parent=self.quickFrame,
+            relief=None,
+            pos=(quickButtonPositions[2], 0, quickButtonZ),
+            scale=quickButtonScale,
+            image=self._images('Circle_Fist_', 'N', 'P', 'H'),
+            image_scale=(1, 1, 62.0 / 61.0),
+            text=('', 'Unites', 'Unites', ''),
+            text_pos=(0, -0.93),
+            text_scale=0.55,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            command=self.openUnites,
+            pressEffect=0,
+        )
+
         self.quickChatButton = DirectButton(
             parent=self.quickFrame,
             relief=None,
-            pos=(0.325, 0, -0.025),
-            scale=0.247875,
+            pos=(quickButtonPositions[3], 0, quickButtonZ),
+            scale=quickButtonScale,
             image=self._images('Circle_Chat_', 'N', 'P', 'H'),
             image_scale=(1, 1, 62.0 / 61.0),
             text=('', 'Open Chat', 'Open Chat', ''),
@@ -191,6 +236,15 @@ class ChatLog(DirectFrame, DirectObject):
                 extraArgs=[tab],
                 pressEffect=0,
             )
+            # The graphic stays behind the main panel, exactly like Clash.
+            # Its label remains above the panel so every tab name is readable.
+            button.setBin('sorted-gui-popup', 999)
+            for stateIndex in range(4):
+                try:
+                    button.component('text%s' % stateIndex).setBin('sorted-gui-popup', 1001)
+                except:
+                    pass
+
             notification = DirectFrame(
                 parent=button,
                 relief=None,
@@ -199,6 +253,7 @@ class ChatLog(DirectFrame, DirectObject):
                 image=self.assets.find('**/Chat-Panel-Notification'),
                 image_scale=(0.06, 1, (66.0 / 26.0) * 0.06),
             )
+            notification.setBin('sorted-gui-popup', 1002)
             button.notification = notification
             if tab == self.TAB_CLUBS and not getattr(base.localAvatar, 'guildId', 0):
                 button['state'] = DGG.DISABLED
@@ -504,6 +559,10 @@ class ChatLog(DirectFrame, DirectObject):
                 chatList.hide()
         for tabName, button in self.tabButtons.items():
             button['image_color'] = (1, 1, 1, 1) if tabName == tab else (0.74, 0.74, 0.74, 1)
+            # Each unselected tab image remains tucked behind the main frame.
+            # The selected tab image is hidden so the matching coloured panel's
+            # complete integrated tab shape is shown in front, as in Clash.
+            button['image_pos'] = (0, 0, 10) if tabName == tab else (0, 0, 0)
 
         panelName = {
             self.TAB_MAIN: 'Panel_Green',
@@ -733,6 +792,47 @@ class ChatLog(DirectFrame, DirectObject):
         except:
             return text
 
+    def _wrapLongDisplayWords(self, text, maxRun=50):
+        """Break long unspaced runs so the scrolled frame cannot clip them."""
+        if not text:
+            return text
+
+        result = []
+        visibleRun = 0
+        propertyOpen = False
+        index = 0
+        textLength = len(text)
+        while index < textLength:
+            character = text[index]
+
+            # Panda text properties use \1PROPERTY\1 ... \2.  Copy the
+            # property markers without counting them as visible characters.
+            if character == '\x01':
+                propertyEnd = text.find('\x01', index + 1)
+                if propertyEnd != -1:
+                    result.append(text[index:propertyEnd + 1])
+                    propertyOpen = True
+                    index = propertyEnd + 1
+                    continue
+            elif character == '\x02':
+                result.append(character)
+                propertyOpen = False
+                index += 1
+                continue
+
+            if character in (' ', '\t', '\n'):
+                visibleRun = 0
+            else:
+                if visibleRun >= maxRun:
+                    result.append('\n')
+                    visibleRun = 0
+                visibleRun += 1
+
+            result.append(character)
+            index += 1
+
+        return ''.join(result)
+
     def _estimateLineCount(self, text):
         text = self._stripTextProperties(text)
         totalLines = 0
@@ -756,12 +856,13 @@ class ChatLog(DirectFrame, DirectObject):
     def _addMessageItem(self, tab, msg, avId=0, textColor=None, tutorial=False):
         if tab not in self.lists:
             return
+        displayMsg = self._wrapLongDisplayWords(msg)
         options = {
             'parent': self.lists[tab].getCanvas(),
             'relief': None,
             'frameColor': (0, 0, 0, 0),
             'frameSize': (-0.85, 0.85, -0.05, 0.05),
-            'text': msg,
+            'text': displayMsg,
             'text_scale': 0.064,
             'text_pos': (-0.84, 0),
             'text_style': 3,
@@ -776,7 +877,7 @@ class ChatLog(DirectFrame, DirectObject):
             options['command'] = self.buttonizeIt
             options['extraArgs'] = [avId]
         item = DirectButton(**options)
-        item._chatHeight = 0.069 * self._estimateLineCount(msg)
+        item._chatHeight = 0.069 * self._estimateLineCount(displayMsg)
         item._chatTutorial = bool(tutorial)
         self.listItems[tab].append(item)
 
@@ -869,6 +970,8 @@ class ChatLog(DirectFrame, DirectObject):
         self.obscuredSpeedChat = bool(speedChat)
         self.obscuredLog = bool(chatLog)
         self.quickSpeedChatButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
+        self.quickStickerButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
+        self.quickUniteButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self.quickChatButton['state'] = DGG.DISABLED if self.obscuredLog else DGG.NORMAL
         self.displaySpeedChatButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self._updateEntryState()

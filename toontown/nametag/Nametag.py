@@ -227,8 +227,46 @@ class Nametag:
     def getText(self):
         return self.textNode.getText()
 
+    def _wrapLongChatWords(self, chatText, maxRun=24):
+        """Force long unspaced text onto multiple balloon lines."""
+        if not chatText:
+            return chatText
+
+        result = []
+        visibleRun = 0
+        index = 0
+        textLength = len(chatText)
+        while index < textLength:
+            character = chatText[index]
+
+            # Preserve Panda3D text-property sequences while counting only
+            # characters that are actually visible in the speech balloon.
+            if character == '\x01':
+                propertyEnd = chatText.find('\x01', index + 1)
+                if propertyEnd != -1:
+                    result.append(chatText[index:propertyEnd + 1])
+                    index = propertyEnd + 1
+                    continue
+            elif character == '\x02':
+                result.append(character)
+                index += 1
+                continue
+
+            if character in (' ', '\t', '\n'):
+                visibleRun = 0
+            else:
+                if visibleRun >= maxRun:
+                    result.append('\n')
+                    visibleRun = 0
+                visibleRun += 1
+
+            result.append(character)
+            index += 1
+
+        return ''.join(result)
+
     def setChatText(self, chatText):
-        self.chatTextNode.setText(chatText)
+        self.chatTextNode.setText(self._wrapLongChatWords(chatText))
 
     def getChatText(self):
         return self.chatTextNode.getText()

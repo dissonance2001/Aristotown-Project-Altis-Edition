@@ -148,8 +148,10 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
             # We can't draw this without a font.
             return
 
-        # Prefix the nametag text:
-        self.chatTextNode.setText(self.getText() + ': ' + self.actualChatText)
+        # Prefix the nametag text, then force-wrap any long unspaced run
+        # so the complete 100-character message remains on-screen.
+        combinedText = self.getText() + ': ' + self.actualChatText
+        self.chatTextNode.setText(self._wrapLongChatWords(combinedText))
 
         # Set our priority in the margin system:
         self.setPriority(MarginGlobals.MP_normal)
