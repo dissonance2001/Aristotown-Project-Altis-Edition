@@ -1167,6 +1167,7 @@ dclass DistributedToon : DistributedPlayer {
   setCeaseAndDesists(uint16 = 0) required ownrecv db;
   setNametagStyle(uint8 = 1) required broadcast ownrecv db;
   setNametagStyles(uint8[] = [0]) required broadcast ownrecv db;
+  setToonProfile(uint8 pose = 0, uint16 nameplate = 101, uint16 background = 0) required broadcast ownrecv db;
   setMail(simpleMail []) ownrecv airecv ram;
   setNumMailItems(uint32) airecv;
   setSimpleMailNotify(uint8) ownrecv airecv;
@@ -1193,6 +1194,7 @@ dclass DistributedToon : DistributedPlayer {
   magicTeleportInitiate(uint32 hoodId, uint32 zoneId) ownrecv;
   notifyExpReward(int32 level, uint8 type) broadcast ownrecv;
   requestNametagStyle(uint8) airecv ownsend;
+  requestToonProfile(uint8 pose, uint16 nameplate, uint16 background) airecv ownsend;
   requestFishingRod(uint8) airecv ownsend;
   requestCheesyEffects(uint8) airecv ownsend;
   setWarningCount(uint8) ownrecv db;

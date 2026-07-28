@@ -11,6 +11,8 @@ from toontown.toonbase import ToontownGlobals
 
 if not hasattr(TTLocalizer, 'SpellbookPageTitle'):
     TTLocalizer.SpellbookPageTitle = 'Customize'
+if not hasattr(TTLocalizer, 'ToonProfilePageTitle'):
+    TTLocalizer.ToonProfilePageTitle = 'Toon Profile'
 
 class ShtikerBook(DirectFrame, StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('ShtikerBook')
@@ -56,6 +58,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
          TTLocalizer.EventsPageName,
          TTLocalizer.AchievementsPageTitle,
          TTLocalizer.SpellbookPageTitle,
+         TTLocalizer.ToonProfilePageTitle,
          TTLocalizer.NewsPageName]
         return
 
@@ -314,6 +317,13 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             iconGeom.setPos(0, 0, -0.2)
             iconImage = None
             iconScale = (2.5, 2.5, 2.5)
+        elif pageName == TTLocalizer.ToonProfilePageTitle:
+            iconModels = loader.loadModel('phase_3.5/models/gui/profile/nameplates')
+            iconGeom = iconModels.find('**/default_med_blue')
+            if iconGeom.isEmpty():
+                iconGeom = iconModels
+            iconScale = 0.8
+            iconModels.detachNode()
         elif pageName == TTLocalizer.PhotoPageTitle:
             iconGeom = iconModels = loader.loadModel('phase_4/models/minigames/photogame_filmroll')
             iconScale = (1.9, 1.5, 1.5)

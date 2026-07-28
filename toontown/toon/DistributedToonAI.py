@@ -50,6 +50,7 @@ from toontown.shtiker import CogPageGlobals
 from toontown.suit.SuitInvasionGlobals import *
 from toontown.suit import SuitDNA
 from toontown.toon import NPCToons
+from toontown.toon import ToonProfileGlobals as TPG
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownAccessAI
 from toontown.toonbase import ToontownBattleGlobals
@@ -113,6 +114,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.questHistory = []
         self.kudosBoardOffers = []
         self.achievements = []
+        self.profilePose = TPG.DEFAULT_POSE
+        self.profileNameplate = TPG.DEFAULT_NAMEPLATE
+        self.profileBackground = TPG.DEFAULT_BACKGROUND
         self.cogs = []
         self.cogCounts = []
         self.cogSummonsEarned = []
@@ -4395,6 +4399,43 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             return
 
         self.b_setNametagStyle(nametagStyle)
+
+    def b_setToonProfile(self, pose, nameplate, background):
+        self.d_setToonProfile(pose, nameplate, background)
+        self.setToonProfile(pose, nameplate, background)
+
+    def d_setToonProfile(self, pose, nameplate, background):
+        self.sendUpdate('setToonProfile', [pose, nameplate, background])
+
+    def setToonProfile(self, pose=TPG.DEFAULT_POSE, nameplate=TPG.DEFAULT_NAMEPLATE, background=TPG.DEFAULT_BACKGROUND):
+        self.profilePose = TPG.normalisePoseId(pose)
+        self.profileNameplate = TPG.normaliseNameplateId(nameplate)
+        self.profileBackground = TPG.normaliseBackgroundId(background)
+
+    def getToonProfile(self):
+        return (self.profilePose, self.profileNameplate, self.profileBackground)
+
+    def getProfilePose(self):
+        return self.profilePose
+
+    def getProfileNameplate(self):
+        return self.profileNameplate
+
+    def getProfileBackground(self):
+        return self.profileBackground
+
+    def requestToonProfile(self, pose, nameplate, background):
+        avId = self.air.getAvatarIdFromSender()
+        if avId != self.doId:
+            self.notify.warning('Avatar %s tried to change Toon Profile for %s.' % (avId, self.doId))
+            return
+        if pose not in TPG.POSE_BY_ID:
+            pose = TPG.DEFAULT_POSE
+        if nameplate not in TPG.NAMEPLATE_BY_ID:
+            nameplate = TPG.normaliseNameplateId(nameplate)
+        if background not in TPG.BACKGROUND_BY_ID:
+            background = TPG.DEFAULT_BACKGROUND
+        self.b_setToonProfile(pose, nameplate, background)
 
     def b_setFishingRods(self, rods):
         self.d_setFishingRods(rods)

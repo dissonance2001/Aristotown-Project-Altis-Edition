@@ -55,6 +55,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.LaffMeter import LaffMeter
 from toontown.toon import GMUtils
+from toontown.toon import ToonProfileGlobals as TPG
 
 if base.wantKarts:
     from toontown.racing.KartDNA import *
@@ -193,6 +194,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmNameTagColor = 'whiteGM'
         self.gmNameTagString = ''
         self.achievements = []
+        self.profilePose = TPG.DEFAULT_POSE
+        self.profileNameplate = TPG.DEFAULT_NAMEPLATE
+        self.profileBackground = TPG.DEFAULT_BACKGROUND
         self.canEarnAchievements = False
         self.promotionStatus = [0, 0, 0, 0, 0, 0, 0]
         self.buffs = []
@@ -2958,6 +2962,31 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return
         
         self.sendUpdate('requestNametagStyle', [nametagStyle])
+
+    def setToonProfile(self, pose=TPG.DEFAULT_POSE, nameplate=TPG.DEFAULT_NAMEPLATE, background=TPG.DEFAULT_BACKGROUND):
+        self.profilePose = TPG.normalisePoseId(pose)
+        self.profileNameplate = TPG.normaliseNameplateId(nameplate)
+        self.profileBackground = TPG.normaliseBackgroundId(background)
+        messenger.send(self.uniqueName('toonProfileChange'), [
+            self.profilePose, self.profileNameplate, self.profileBackground])
+
+    def getToonProfile(self):
+        return (self.profilePose, self.profileNameplate, self.profileBackground)
+
+    def getProfilePose(self):
+        return self.profilePose
+
+    def getProfileNameplate(self):
+        return self.profileNameplate
+
+    def getProfileBackground(self):
+        return self.profileBackground
+
+    def requestToonProfile(self, pose, nameplate, background):
+        pose = TPG.normalisePoseId(pose)
+        nameplate = TPG.normaliseNameplateId(nameplate)
+        background = TPG.normaliseBackgroundId(background)
+        self.sendUpdate('requestToonProfile', [pose, nameplate, background])
 
     def getFishingRods(self):
         return self.fishingRods

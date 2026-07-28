@@ -58,6 +58,7 @@ from toontown.shtiker import ItemsPage
 from toontown.shtiker import CodePage
 from toontown.shtiker import CertPage
 from toontown.shtiker import WordPage
+from toontown.shtiker import ToonProfilePage
 from toontown.toon import ElevatorNotifier
 from toontown.toon import ToonDNA
 import StreamerMode, ChatLog
@@ -379,6 +380,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.book.unload()
         del self.optionsPage
         del self.wordPage
+        del self.profilePage
         del self.shardPage
         del self.mapPage
         del self.invPage
@@ -459,6 +461,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.wordPage = WordPage.WordPage()
         self.wordPage.load()
         self.book.addPage(self.wordPage, pageName=TTLocalizer.SpellbookPageTitle)
+        self.profilePage = ToonProfilePage.ToonProfilePage()
+        self.profilePage.load()
+        self.book.addPage(self.profilePage, pageName=TTLocalizer.ToonProfilePageTitle)
         self.codePage = CodePage.CodePage()
         self.codePage.load()
         self.book.addPage(self.codePage, pageName=TTLocalizer.CodePageTitle)
