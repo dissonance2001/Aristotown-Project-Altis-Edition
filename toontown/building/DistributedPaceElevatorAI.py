@@ -24,11 +24,12 @@ class DistributedPaceElevatorAI(
 
     def elevatorClosed(self):
         if self.countFullSeats() <= 0:
-            self.fsm.request('closed')
+            self.fsm.request('opening')
             return
 
         self.fsm.request('closed')
 
+        taskMgr.remove(self.uniqueName('pace-ride'))
         taskMgr.doMethodLater(
             self.RideDuration,
             self.finishPaceRide,
@@ -67,6 +68,7 @@ class DistributedPaceElevatorAI(
 
                 self.clearFullNow(seatIndex)
 
+        self.fsm.request('opening')
         return Task.done
 
     def delete(self):
