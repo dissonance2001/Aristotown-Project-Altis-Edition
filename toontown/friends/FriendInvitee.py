@@ -54,20 +54,20 @@ class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
         if self.context != None:
             base.cr.friendManager.up_inviteeFriendResponse(2, self.context)
             self.context = None
-        if base.friendMode == 1:
+        if base.friendMode == 1 and hasattr(base.cr.friendManager, 'executeGameSpecificFunction'):
             base.cr.friendManager.executeGameSpecificFunction()
         return
 
     def __handleButton(self, value):
-        if value == DGG.DIALOG_OK:
-            if base.friendMode == 0:
+        if self.context != None:
+            if value == DGG.DIALOG_OK:
                 base.cr.friendManager.up_inviteeFriendResponse(1, self.context)
-            elif base.friendMode == 1:
-                print 'sending Request Invite'
-                base.cr.avatarFriendsManager.sendRequestInvite(self.avId)
-        elif base.friendMode == 0:
-            base.cr.friendManager.up_inviteeFriendResponse(0, self.context)
-        elif base.friendMode == 1:
+            else:
+                base.cr.friendManager.up_inviteeFriendResponse(0, self.context)
+        elif value == DGG.DIALOG_OK:
+            print 'sending Request Invite'
+            base.cr.avatarFriendsManager.sendRequestInvite(self.avId)
+        else:
             base.cr.avatarFriendsManager.sendRequestRemove(self.avId)
         self.context = None
         self.cleanup()

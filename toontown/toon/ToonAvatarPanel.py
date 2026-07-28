@@ -1,573 +1,1138 @@
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
-from direct.showbase import DirectObject
-from toontown.toon import ToonHead
-from toontown.friends import FriendHandle
-from toontown.toon import LaffMeter
-from otp.avatar import Avatar
-from direct.distributed import DistributedObject
+from direct.gui import DirectGuiGlobals as DGG
 from direct.directnotify import DirectNotifyGlobal
+
+from toontown.toon import AvatarPanelBase
+from toontown.toon import DistributedToon
+from toontown.toon import Toon
+from toontown.toon import ToonAvatarPanelGlobals as TAPG
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from toontown.friends import ToontownFriendSecret
-from toontown.toon import ToonAvatarDetailPanel
-from toontown.toon import AvatarPanelBase
-from toontown.toontowngui import TTDialog
-from otp.otpbase import OTPGlobals
+from toontown.toonbase.ToontownBattleGlobals import Tracks, Levels
+from toontown.hood import ZoneUtil
+from toontown.suit import SuitDNA
+from toontown.suit import Suit
+from toontown.battle import SuitBattleGlobals
+from toontown.coghq import CogDisguiseGlobals
+from toontown.quest import QuestBookPoster
+
+
+IGNORE_SCALE = 0.06
+STOP_IGNORE_SCALE = 0.04
+
+
+NAMEPLATE_ID_TO_NODE = {
+    0: 'default_med_blue',
+    1: 'default_green',
+    2: 'default_purple',
+    3: 'default_red',
+    4: 'default_yellow',
+    5: 'default_orange',
+    6: 'default_blue',
+    7: 'default_dark_blue',
+    8: 'default_dark_green',
+    9: 'hidden_stars',
+    10: 'hidden_pg_dg',
+    11: 'hidden_pg_ddl',
+    12: 'hidden_underwater',
+    13: 'event_tinsel',
+    14: 'event_candy',
+    15: 'event_wrapping',
+    16: 'event_nightlights',
+    17: 'event_2019_fireworks',
+    18: 'event_skyclan',
+    19: 'hidden_banana',
+    20: 'hidden_pg_ttc',
+    21: 'event_outback',
+    22: 'hidden_golfing',
+    23: 'hidden_trolley',
+    24: 'hidden_racing',
+    25: 'hidden_pg_bb',
+    26: 'hidden_pg_yott',
+    27: 'hidden_pg_mml',
+    28: 'hidden_pg_tb',
+    29: 'hidden_pg_aa',
+    30: 'event_lazy',
+    31: 'event_2019_thanksgiving',
+    32: 'event_2020_newyears',
+    33: 'event_btl',
+    34: 'event_easter2020',
+    35: 'event_standin',
+    36: 'firework_nameplate',
+    37: 'hidden_maxevidence',
+    38: 'event_halloween_candy_blue',
+    39: 'event_halloween_candy_green',
+    40: 'event_halloween_candy_magenta',
+    41: 'event_halloween_candy_purple',
+    42: 'event_halloween_candy_red',
+    43: 'event_halloween_bat',
+    44: 'sidetask_judy',
+    45: 'hidden_steve',
+    46: 'hidden_ocftf',
+    47: 'kudos_ttc',
+    48: 'kudos_bb',
+    49: 'kudos_yott',
+    50: 'kudos_dg',
+    51: 'kudos_mml',
+    52: 'kudos_tb',
+    53: 'kudos_aa',
+    54: 'kudos_ddl',
+    55: 'event_electric',
+    56: 'event_halloween_witch',
+    101: 'default_med_blue',
+    102: 'default_green',
+    103: 'default_purple',
+    104: 'default_red',
+    105: 'default_yellow',
+    106: 'default_orange',
+    107: 'default_blue',
+    108: 'default_dark_blue',
+    109: 'default_dark_green',
+    200: 'hidden_pg_ttc',
+    201: 'hidden_pg_bb',
+    202: 'hidden_pg_yott',
+    203: 'hidden_pg_dg',
+    204: 'hidden_pg_mml',
+    205: 'hidden_pg_tb',
+    206: 'hidden_pg_aa',
+    207: 'hidden_pg_ddl',
+    300: 'hidden_golfing',
+    301: 'hidden_trolley',
+    302: 'hidden_racing',
+    400: 'sidetask_judy',
+    500: 'hidden_stars',
+    501: 'hidden_underwater',
+    502: 'hidden_banana',
+    503: 'hidden_maxevidence',
+    504: 'hidden_steve',
+    505: 'hidden_ocftf',
+    600: 'event_tinsel',
+    601: 'event_candy',
+    602: 'event_wrapping',
+    603: 'event_nightlights',
+    604: 'event_2019_fireworks',
+    605: 'event_skyclan',
+    606: 'event_outback',
+    607: 'event_lazy',
+    608: 'event_2019_thanksgiving',
+    609: 'event_2020_newyears',
+    610: 'event_btl',
+    611: 'event_easter2020',
+    612: 'event_standin',
+    613: 'firework_nameplate',
+    614: 'event_electric',
+    615: 'event_highroller',
+    700: 'event_halloween_candy_blue',
+    701: 'event_halloween_candy_green',
+    702: 'event_halloween_candy_magenta',
+    703: 'event_halloween_candy_purple',
+    704: 'event_halloween_candy_red',
+    705: 'event_halloween_bat',
+    800: 'kudos_ttc',
+    801: 'kudos_bb',
+    802: 'kudos_yott',
+    803: 'kudos_dg',
+    804: 'kudos_mml',
+    805: 'kudos_tb',
+    806: 'kudos_aa',
+    807: 'kudos_ddl',
+}
+
+
+NAMEPLATE_NAME_TO_NODE = {
+    'candy': 'event_candy',
+    'dreams come true': 'event_skyclan',
+    'dreamscometrue': 'event_skyclan',
+    'skyclan': 'event_skyclan',
+    'default': 'default_med_blue',
+    'default blue': 'default_med_blue',
+    'blue': 'default_med_blue',
+    'green': 'default_green',
+    'purple': 'default_purple',
+    'red': 'default_red',
+    'yellow': 'default_yellow',
+    'orange': 'default_orange',
+}
+
 
 class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonAvatarPanel')
 
-    def __init__(self, avatar, playerId = None):
+    ToonClipPlaneValues = {
+        0: ((1, 0, 0), (-0.2425, 0, 0)),
+        1: ((-1, 0, 0), (0.2425, 0, 0)),
+        2: ((0, 0, 1), (0, 0, -0.135)),
+        3: ((0, 0, -1), (0, 0, 0.135)),
+    }
+
+    def __init__(self, avatar, playerId=None, openStats=False, requestFriend=False):
         from toontown.friends import FriendsListPanel
 
-        if base.cr.doId2do.get(avatar.getDoId()):
-            avatar = base.cr.doId2do.get(avatar.getDoId())
-        
+        actualAvatar = None
+        try:
+            actualAvatar = base.cr.doId2do.get(avatar.getDoId())
+        except:
+            actualAvatar = None
+        if actualAvatar:
+            avatar = actualAvatar
+
         AvatarPanelBase.AvatarPanelBase.__init__(self, avatar, FriendsListPanel=FriendsListPanel)
 
-        self.notify.debug('Opening toon panel, avId=%d' % self.avId)
         self.playerId = playerId
+        self.openStats = openStats
+        self.requestFriend = requestFriend
+        self.sourceAvatar = avatar
+        self.lookupAvatar = None
+        self.createdAvatar = False
+        self.waitingForDetails = False
+        self.isLoaded = False
+        self.detailOpened = False
+        self.dCurrentPage = -1
+        self.gui = None
+        self.detailsGui = None
+        self.profileBackgroundModel = None
+        self.profileNameplateModel = None
+        self.toon = None
+        self.toonClippingPlanes = []
+        self.dInfoFrame = None
+        self.dGagsFrame = None
+        self.dSuitsFrame = None
+        self.dQuestsFrame = None
+        self.dClubFrame = None
+        self.dSuits = []
+        self.questFrames = []
+        self.managedGuiElement = None
+        self.dialog = None
+        self.avDisableName = avatar.uniqueName('disable') if hasattr(avatar, 'uniqueName') else None
 
-        if not self.playerId:
-            av = base.cr.doId2do.get(self.avId)
-            if av:
-                self.playerId = avatar.DISLid
-            else:
-                self.playerId = 0
-
-        self.playerInfo = None
-        if self.playerId:
-            self.playerInfo = base.cr.playerFriendsManager.playerId2Info.get(playerId)
-
-        self.laffMeter = None
-        wantsLaffMeter = hasattr(avatar, 'hp')
-
-        if not hasattr(avatar, 'style'):
-            self.notify.warning("Avatar has no 'style'. Abort initialization.")
-            AvatarPanelBase.AvatarPanelBase.cleanup(self)
+        if not hasattr(avatar, 'style') and not hasattr(avatar, 'getStyle'):
+            self.notify.warning("Avatar has no style; cannot open ToonAvatarPanel.")
+            self.cleanup()
             return
 
         base.localAvatar.obscureFriendsListButton(1)
+        self.accept('AvatarIgnoreChange', self.refreshIgnoreButton)
 
-        gui = loader.loadModel('phase_3.5/models/gui/avatar_panel_gui')
-        self.frame = DirectFrame(
-                                 image=gui.find('**/avatar_panel'),
-                                 relief=None,
-                                 pos=(-0.22, 0, -0.47),
-                                 parent=base.a2dTopRight)
-        self.disabledImageColor = Vec4(1, 1, 1, 0.4)
-        self.text0Color = Vec4(1, 1, 1, 1)
-        self.text1Color = Vec4(0.5, 1, 0.5, 1)
-        self.text2Color = Vec4(1, 1, 0.5, 1)
-        self.text3Color = Vec4(0.6, 0.6, 0.6, 1)
+        if actualAvatar or avatar == base.localAvatar or hasattr(avatar, 'inventory'):
+            self.avatar = avatar
+            self.openAvatarPanel()
+        else:
+            self.waitingForDetails = True
+            self.lookupAvatar = DistributedToon.DistributedToon(base.cr)
+            self.lookupAvatar.doId = self.avId
+            self.lookupAvatar.forceAllowDelayDelete()
+            self.createdAvatar = True
+            base.cr.getAvatarDetails(self.lookupAvatar, self.__handleAvatarDetails, 'DistributedToon')
 
-        self.head = self.frame.attachNewNode('head')
-        self.head.setPos(0.02, 0, 0.31)
-        self.headModel = ToonHead.ToonHead()
-        self.headModel.setupHead(avatar.style, forGui=1)
-        self.headModel.fitAndCenterHead(0.175, forGui=1)
-        self.headModel.reparentTo(self.head)
+    def __handleAvatarDetails(self, gotData, avatar, dclass):
+        if not self.waitingForDetails:
+            return
+        self.waitingForDetails = False
+        if gotData:
+            self.avatar = avatar
+        else:
+            self.avatar = self.sourceAvatar
+        self.openAvatarPanel()
 
-        self.headModel.startBlink()
-        self.headModel.startLookAround()
+    def openAvatarPanel(self):
+        if self.isLoaded:
+            return
 
-        self.healthText = DirectLabel(
-            parent=self.frame,
-            text='',
-            pos=(0.06, 0, 0.2),
-            text_pos=(0, 0),
-            text_scale=0.05)
+        cbm = CullBinManager.getGlobalPtr()
+        if cbm.findBin('sorted-gui-popup') < 0:
+            cbm.addBin('sorted-gui-popup', CullBinManager.BTFixed, 70)
 
-        self.healthText.hide()
+        self.gui = loader.loadModel('phase_3.5/models/gui/friendsPanel')
+        self.detailsGui = loader.loadModel('phase_3.5/models/gui/avatarPanelDetails')
+        self.profileBackgroundModel = loader.loadModel('phase_3.5/models/gui/profile/background')
+        self.profileNameplateModel = loader.loadModel('phase_3.5/models/gui/profile/nameplates')
 
-        self.nameLabel = DirectLabel(
-            parent=self.frame,
-            pos=(0.0125, 0, 0.4),
+        self.managedGuiElement = DirectFrame(parent=base.a2dTopRight, relief=None)
+
+        background = self.getAvatarBackground()
+        self.tapBackground = DirectFrame(
+            parent=self.managedGuiElement,
+            image=background,
             relief=None,
-            text=self.avName,
-            text_font=avatar.getFont(),
-            text_fg=Vec4(0, 0, 0, 1),
-            text_pos=(0, 0),
-            text_scale=0.042,
-            text_wordwrap=7.5,
-            text_shadow=(1, 1, 1, 1))
+            pos=(-0.28, 0, -0.178),
+            image_scale=0.485,
+            sortOrder=50)
+        self.tapBackground.setBin('sorted-gui-popup', 800)
 
-        self.closeButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/CloseBtn_UP'),
-                gui.find('**/CloseBtn_DN'),
-                gui.find('**/CloseBtn_Rllvr'),
-                gui.find('**/CloseBtn_UP')),
+        self.toon = self.generateToon()
+        if self.toon:
+            self.toon.reparentTo(self.tapBackground)
+            self.toon.setPos(0, 0, -0.05)
+            for i in range(4):
+                clipData = self.ToonClipPlaneValues[i]
+                planeNode = PlaneNode('toon-clippingPlane')
+                planeNode.setPlane(Plane(Vec3(*clipData[0]), Point3(*clipData[1])))
+                clipNP = self.tapBackground.attachNewNode(planeNode)
+                self.toon.setClipPlane(clipNP)
+                self.toonClippingPlanes.append(clipNP)
+
+        self.dMainFrame = DirectFrame(
+            parent=self.tapBackground,
+            image=self.detailsGui.find('**/details_panel'),
             relief=None,
-            pos=(0.157644, 0, -0.379167),
-            command=self.__handleClose)
+            scale=(-1.3, 1.3, 1.3),
+            pos=(-0.8, 0, -0.275),
+            sortOrder=40)
+        self.dMainFrame.setBin('sorted-gui-popup', 790)
+        self.dMainFrame.hide()
 
-        self.friendButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/Frnds_Btn_UP'),
-                gui.find('**/Frnds_Btn_DN'),
-                gui.find('**/Frnds_Btn_RLVR'),
-                gui.find('**/Frnds_Btn_UP')),
-            image3_color=self.disabledImageColor,
-            image_scale=0.9,
+        shadowModel = loader.loadModel('phase_3.5/models/gui/socialpanel/ttcc_avatar_panel_shadows')
+        self.dMainShadow = DirectFrame(
+            parent=self.dMainFrame,
+            image=shadowModel.find('**/panel_detail_shadow'),
             relief=None,
-            text=TTLocalizer.AvatarPanelFriends,
-            text_scale=0.06,
-            pos=(-0.103, 0, 0.133),
-            text0_fg=self.text0Color,
-            text1_fg=self.text1Color,
-            text2_fg=self.text2Color,
-            text3_fg=self.text3Color,
-            text_pos=(0.06, -0.02),
-            text_align=TextNode.ALeft,
-            command=self.__handleFriend)
+            image_pos=(0.02417, 0, -0.01115),
+            image_scale=(1.06854, 1.0, 0.77213),
+            sortOrder=20)
+        self.dMainShadow.setBin('sorted-gui-popup', 789)
+        self.dMainShadow.setTransparency(TransparencyAttrib.MDual)
 
-        if base.cr.playerFriendsManager.askTransientFriend(self.avId) and self.avId not in base.cr.doId2do:
-            self.friendButton['state'] = DGG.DISABLED
-
-        if base.cr.avatarFriendsManager.checkIgnored(self.avId):
-            self.friendButton['state'] = DGG.DISABLED
-
-        self.goToButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/Go2_Btn_UP'),
-                gui.find('**/Go2_Btn_DN'),
-                gui.find('**/Go2_Btn_RLVR'),
-                gui.find('**/Go2_Btn_UP')),
-            image3_color=self.disabledImageColor,
-            image_scale=0.9,
+        self.tapMainFrame = DirectFrame(
+            parent=self.tapBackground,
+            image=self.gui.find('**/friends_panel'),
             relief=None,
-            pos=(-0.103, 0, 0.045),
-            text=TTLocalizer.AvatarPanelGoTo,
-            text0_fg=self.text0Color,
-            text1_fg=self.text1Color,
-            text2_fg=self.text2Color,
-            text3_fg=self.text3Color,
-            text_scale=0.06,
-            text_pos=(0.06, -0.015),
-            text_align=TextNode.ALeft,
-            command=self.__handleGoto)
+            pos=(0, 0, -0.326),
+            sortOrder=45)
+        self.tapMainFrame.setBin('sorted-gui-popup', 799)
 
-        if base.cr.avatarFriendsManager.checkIgnored(self.avId):
-            self.goToButton['state'] = DGG.DISABLED
-
-        self.whisperButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/ChtBx_ChtBtn_UP'),
-                gui.find('**/ChtBx_ChtBtn_DN'),
-                gui.find('**/ChtBx_ChtBtn_RLVR'),
-                gui.find('**/ChtBx_ChtBtn_UP')),
-            image3_color=self.disabledImageColor,
-            image_scale=0.9,
+        self.tapMainShadow = DirectFrame(
+            parent=self.tapMainFrame,
+            image=shadowModel.find('**/panel_shadow'),
+            image_scale=(0.6435, 1.0, 1.10175),
+            image_pos=(0, 0, -0.005),
             relief=None,
-            pos=(-0.103, 0, -0.0375),
-            text=TTLocalizer.AvatarPanelWhisper,
-            text0_fg=self.text0Color,
-            text1_fg=self.text1Color,
-            text2_fg=self.text2Color,
-            text3_fg=self.text3Color,
-            text_scale=TTLocalizer.TAPwhisperButton,
-            text_pos=(0.06, -0.0125),
-            text_align=TextNode.ALeft,
-            command=self.__handleWhisper)
+            sortOrder=-20)
+        self.tapMainShadow.setBin('sorted-gui-popup', 797)
+        shadowModel.removeNode()
 
-        if base.cr.avatarFriendsManager.checkIgnored(self.avId):
-            self.whisperButton['state'] = DGG.DISABLED
-
-        self.secretsButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/Amuse_Btn_UP'),
-                gui.find('**/Amuse_Btn_DN'),
-                gui.find('**/Amuse_Btn_RLVR'),
-                gui.find('**/Amuse_Btn_UP')),
-            image3_color=self.disabledImageColor,
-            image_scale=0.9,
+        nameplate, nameplatePos, nameplateScale = self.getAvatarNameplate()
+        self.tapNameplate = DirectFrame(
+            parent=self.tapMainFrame,
+            image=nameplate,
             relief=None,
-            pos=(-0.103, 0, -0.13),
-            text='',
-            text0_fg=self.text0Color,
-            text1_fg=self.text1Color,
-            text2_fg=self.text2Color,
-            text3_fg=self.text3Color,
-            text_scale=TTLocalizer.TAPsecretsButton,
-            text_pos=(0.055, -0.01),
-            text_align=TextNode.ALeft,
-            command=self.__handleSecrets)
-        self.secretsButton['state'] = DGG.DISABLED
-
-        if base.cr.avatarFriendsManager.checkIgnored(self.avId):
-            self.secretsButton['state'] = DGG.DISABLED
-
-        from toontown.coghq import CogHQBossBattle
-        if isinstance(base.cr.playGame.getPlace(), CogHQBossBattle.CogHQBossBattle) and \
-                base.localAvatar.getGameAccess() != OTPGlobals.AccessFull:
-            self.secretsButton['state'] = DGG.DISABLED
+            pos=nameplatePos,
+            image_scale=(0.485 * nameplateScale[0], 0.485, 0.485 * nameplateScale[2]))
+        self.tapNameplate.setBin('sorted-gui-popup', 801)
+        self.generateNameText()
 
         ignoreStr, ignoreCmd, ignoreScale = self.getIgnoreButtonInfo()
+        reportStr = getattr(TTLocalizer, 'AvatarPanelReport', 'Report')
+        if base.localAvatar.doId == self.avId:
+            reportStr = ''
 
-        self.ignoreButton = DirectButton(
-            parent=self.frame,
+        self.tapFriendButton = self.__makeWideButton(
+            'friend', 0.004, getattr(TTLocalizer, 'AvatarPanelFriends', 'Friends'), self.onFriendButtonPressed)
+        self.tapTeleportButton = self.__makeWideButton(
+            'goto', -0.127, getattr(TTLocalizer, 'AvatarPanelGoTo', 'Go To'), self.onTeleportButtonPressed)
+        self.tapWhisperButton = self.__makeWideButton(
+            'talk', -0.258, getattr(TTLocalizer, 'AvatarPanelWhisper', 'Whisper'), self.onWhisperButtonPressed)
+
+        self.tapCloseButton = self.__makeSmallButton(
+            'close', (0.181, 0, -0.377), (-0.12, 0.12, 0.11),
+            getattr(TTLocalizer, 'AvatarPanelCogDetailClose', 'Close'), self.onCloseButtonPressed)
+        self.tapIgnoreButton = self.__makeSmallButton(
+            'block', (-0.059, 0, -0.381), (0.12, 0.12, 0.115),
+            ignoreStr, ignoreCmd, textMayChange=1)
+        self.tapReportButton = self.__makeSmallButton(
+            'report', (0.061, 0, -0.381), (0.12, 0.12, 0.115),
+            reportStr, self.onReportButtonPressed)
+        self.tapDetailsButton = self.__makeSmallButton(
+            'right', (-0.1795, 0, -0.377), (-0.12, 0.12, 0.11),
+            getattr(TTLocalizer, 'AvatarPanelDetail', 'Toon Details'), self.onDetailsButtonPressed)
+
+        self.__setupDetailsPanel()
+        self.__updateButtonStates()
+
+        self.isLoaded = True
+        self.frame = self.managedGuiElement
+        messenger.send('avPanelDone')
+        messenger.send('avPanelCreated', ['t'])
+
+        if self.openStats:
+            self.openStats = False
+            self.onDetailsButtonPressed()
+        if self.requestFriend:
+            self.requestFriend = False
+            self.onFriendButtonPressed()
+
+    def __makeWideButton(self, node, z, text, command):
+        return DirectButton(
+            parent=self.tapMainFrame,
             image=(
-                gui.find('**/Ignore_Btn_UP'),
-                gui.find('**/Ignore_Btn_DN'),
-                gui.find('**/Ignore_Btn_RLVR'),
-                gui.find('**/Ignore_Btn_UP')),
-            image3_color=self.disabledImageColor,
-            image_scale=0.9,
+                self.gui.find('**/%s_normal' % node),
+                self.gui.find('**/%s_pressed' % node),
+                self.gui.find('**/%s_hover' % node),
+                self.gui.find('**/%s_normal' % node)),
+            image3_color=TAPG.colors['disabledImageColor'],
+            image_scale=(0.48, 0.48, 0.13),
             relief=None,
-            pos=(-0.103697, 0, -0.21),
-            text=ignoreStr,
-            text0_fg=self.text0Color,
-            text1_fg=self.text1Color,
-            text2_fg=self.text2Color,
-            text3_fg=self.text3Color,
-            text_scale=ignoreScale,
-            text_pos=(0.06, -0.015),
+            text=text,
+            text_scale=0.07,
+            pos=(0, 0, z),
+            text0_fg=TAPG.colors['text0Color'],
+            text1_fg=TAPG.colors['text1Color'],
+            text2_fg=TAPG.colors['text2Color'],
+            text3_fg=TAPG.colors['text3Color'],
+            text_pos=(-0.07, -0.0253),
             text_align=TextNode.ALeft,
-            command=ignoreCmd)
+            text_shadow=Vec4(0.611, 0.364, 0.09, 1),
+            command=command)
 
-        if base.cr.productName not in ['JP', 'DE', 'BR', 'FR']:
-            self.reportButton = DirectButton(
-                parent=self.frame,
-                image=(
-                    gui.find('**/report_BtnUP'),
-                    gui.find('**/report_BtnDN'),
-                    gui.find('**/report_BtnRLVR'),
-                    gui.find('**/report_BtnUP')),
-                image3_color=self.disabledImageColor,
-                image_scale=0.65,
-                relief=None,
-                pos=(-0.103, 0, -0.29738),
-                text=TTLocalizer.AvatarPanelReport,
-                text0_fg=self.text0Color,
-                text1_fg=self.text1Color,
-                text2_fg=self.text2Color,
-                text3_fg=self.text3Color,
-                text_scale=0.06,
-                text_pos=(0.06, -0.015),
-                text_align=TextNode.ALeft,
-                command=self.handleReport)
+    def __makeSmallButton(self, node, pos, imageScale, text, command, textMayChange=0):
+        return DirectButton(
+            parent=self.tapMainFrame,
+            image=(
+                self.gui.find('**/%s_normal' % node),
+                self.gui.find('**/%s_pressed' % node),
+                self.gui.find('**/%s_hover' % node),
+                self.gui.find('**/%s_normal' % node)),
+            relief=None,
+            pos=pos,
+            image_scale=imageScale,
+            text=('', text, text),
+            textMayChange=textMayChange,
+            text0_fg=TAPG.colors['text0Color'],
+            text1_fg=TAPG.colors['text1Color'],
+            text2_fg=TAPG.colors['text2Color'],
+            text3_fg=TAPG.colors['text3Color'],
+            text_scale=0.06,
+            text_pos=(0, -0.1),
+            text_align=TextNode.ACenter,
+            command=command)
+
+    def __setupDetailsPanel(self):
+        buttonScale = (-0.156, 0.15, 0.11)
+        self.dTitle = DirectLabel(
+            parent=self.dMainFrame,
+            pos=(0.023, 0, 0.117),
+            scale=(-1, 1, 1),
+            relief=None,
+            text='Info',
+            text_fg=Vec4(1, 1, 1, 1),
+            text_scale=0.048,
+            text_wordwrap=7.5,
+            text_align=TextNode.ACenter)
+
+        self.dInfoButton = self.__makeDetailButton('info', (0.374, 0, 0.242), 0, buttonScale)
+        self.dGagsButton = self.__makeDetailButton('gags', (0.205, 0, 0.242), 1, buttonScale)
+        self.dSuitsButton = self.__makeDetailButton('disguise', (0.033, 0, 0.242), 2, buttonScale)
+        self.dQuestsButton = self.__makeDetailButton('quests', (-0.14, 0, 0.242), 3, buttonScale)
+        self.dClubButton = self.__makeDetailButton('doodle', (-0.311, 0, 0.242), 4, buttonScale)
+        self.dClubButton['state'] = DGG.DISABLED
+        self.dClubButton['image3_color'] = TAPG.colors['noPetImageColor']
+
+    def __makeDetailButton(self, node, pos, page, buttonScale):
+        return DirectButton(
+            parent=self.dMainFrame,
+            image=(
+                self.detailsGui.find('**/%s_normal' % node),
+                self.detailsGui.find('**/%s_pressed' % node),
+                self.detailsGui.find('**/%s_normal' % node),
+                self.detailsGui.find('**/%s_normal' % node)),
+            image3_color=TAPG.colors['disabledImageColor'],
+            image_scale=buttonScale,
+            relief=None,
+            text='',
+            pos=pos,
+            command=self.switchPage,
+            extraArgs=[page])
+
+    def __updateButtonStates(self):
+        isSelf = base.localAvatar.doId == self.avId
+        ignored = False
+        try:
+            ignored = base.cr.avatarFriendsManager.checkIgnored(self.avId)
+        except:
+            pass
+
+        if isSelf:
+            for button in (self.tapFriendButton, self.tapTeleportButton, self.tapWhisperButton,
+                           self.tapIgnoreButton, self.tapReportButton):
+                button['state'] = DGG.DISABLED
+            self.tapIgnoreButton['text'] = ''
+            self.tapReportButton['text'] = ''
+            self.tapIgnoreButton['image_color'] = Vec4(0.75, 0.75, 0.75, 1)
+            self.tapReportButton['image_color'] = Vec4(0.75, 0.75, 0.75, 1)
+        elif ignored:
+            self.tapFriendButton['state'] = DGG.DISABLED
+            self.tapTeleportButton['state'] = DGG.DISABLED
+            self.tapWhisperButton['state'] = DGG.DISABLED
 
         if not base.localAvatar.isTeleportAllowed():
-            self.goToButton['state'] = DGG.DISABLED
+            self.tapTeleportButton['state'] = DGG.DISABLED
 
-        self.detailButton = DirectButton(
-            parent=self.frame,
-            image=(
-                gui.find('**/ChtBx_BackBtn_UP'),
-                gui.find('**/ChtBx_BackBtn_DN'),
-                gui.find('**/ChtBx_BackBtn_Rllvr'),
-                gui.find('**/ChtBx_BackBtn_UP')),
-            relief=None,
-            text=('', TTLocalizer.AvatarPanelDetail,
-                  TTLocalizer.AvatarPanelDetail, ''),
-            text_fg=self.text2Color,
-            text_shadow=(0, 0, 0, 1),
-            text_scale=0.055,
-            text_pos=(-0.075, -0.01),
-            text_align=TextNode.ARight,
-            pos=(-0.133773, 0, -0.395),
-            command=self.__handleDetails)
+    def onCloseButtonPressed(self):
+        self.cleanup()
+        AvatarPanelBase.currentAvatarPanel = None
+        if getattr(self, 'friendsListShown', False):
+            self.FriendsListPanel.showFriendsList()
 
-        self.__makeBoardingGui()
-        self.__makePetGui(avatar)
-        self.__checkGroupStatus()
-        gui.removeNode()
+    def onReportButtonPressed(self):
+        self.handleReport()
 
-        if wantsLaffMeter:
-            self.__makeLaffMeter(avatar)
-            self.__updateHp(avatar.hp, avatar.maxHp)
-            self.healthText.show()
-            self.laffMeter.show()
+    def onFriendButtonPressed(self):
+        base.localAvatar.chatMgr.noWhisper()
+        messenger.send('friendAvatar', [self.avId, self.avName, self.avDisableName])
 
-        menuX = -0.05
-        menuScale = 0.064
-
-        if self.avGenerateName:
-            self.accept(self.avGenerateName, self.__handleGenerateAvatar)
-        if self.avHpChangeName:
-            self.accept(self.avHpChangeName, self.__updateHp)
-        
-        self.accept('updateLaffMeter', self.__updateLaffMeter)
-
-        self.accept('updateGroupStatus', self.__checkGroupStatus)
-
-        self.frame.show()
-        messenger.send('avPanelDone')
-
-    def disableAll(self):
-        self.detailButton['state'] = DGG.DISABLED
-        if base.cr.productName not in ['ES',
-         'JP',
-         'DE',
-         'BR',
-         'FR']:
-            self.reportButton['state'] = DGG.DISABLED
-        self.ignoreButton['state'] = DGG.DISABLED
-        self.goToButton['state'] = DGG.DISABLED
-        self.secretsButton['state'] = DGG.DISABLED
-        self.whisperButton['state'] = DGG.DISABLED
-        self.petButton['state'] = DGG.DISABLED
-        self.friendButton['state'] = DGG.DISABLED
-        self.closeButton['state'] = DGG.DISABLED
-        self.groupButton['state'] = DGG.DISABLED
-        self.boardingInfoButton['state'] = DGG.DISABLED
-
-    def cleanup(self):
-        if not hasattr(self, 'frame') or self.frame == None:
-            return
-        self.notify.debug('Clean up toon panel, avId=%d' % self.avId)
-        if self.frame:
-            self.frame.destroy()
-            del self.frame
-        self.frame = None
-        ToonAvatarDetailPanel.unloadAvatarDetail()
-        if self.groupButton:
-            self.groupButton.destroy()
-            del self.groupButton
-        self.groupButton = None
-        if self.boardingInfoButton:
-            self.boardingInfoButton.destroy()
-            del self.boardingInfoButton
-        self.boardingInfoButton = None
-        if self.boardingInfoText:
-            self.boardingInfoText.destroy()
-            del self.boardingInfoText
-        self.boardingInfoText = None
-        if self.groupFrame:
-            self.groupFrame.destroy()
-            del self.groupFrame
-        self.groupFrame = None
-        self.head.removeNode()
-        del self.head
-        self.headModel.stopBlink()
-        self.headModel.stopLookAroundNow()
-        self.headModel.delete()
-        del self.headModel
-        base.localAvatar.obscureFriendsListButton(-1)
-        self.laffMeter = None
-        self.ignore('updateLaffMeter')
-        self.ignoreAll()
-        if hasattr(self.avatar, 'bFake') and self.avatar.bFake:
-            self.avatar.delete()
-
-        base.setCellsActive([base.rightCells[0]], 1)
-        AvatarPanelBase.AvatarPanelBase.cleanup(self)
-
-    def __handleGoto(self):
+    def onTeleportButtonPressed(self):
         if base.localAvatar.isTeleportAllowed():
             base.localAvatar.chatMgr.noWhisper()
             messenger.send('gotoAvatar', [self.avId, self.avName, self.avDisableName])
 
-    def __handleToPet(self):
-        toonAvatar = self.avatar
-        if base.cr.doId2do.get(toonAvatar.getDoId()):
-            toonAvatar = base.cr.doId2do.get(toonAvatar.getDoId())
-        petAvatar = base.cr.doId2do.get(toonAvatar.getPetId())
-        self.disableAll()
-        from toontown.pets import PetDetail
-        PetDetail.PetDetail(toonAvatar.getPetId(), self.__petDetailsLoaded)
-
-    def __petDetailsLoaded(self, avatar):
-        self.cleanup()
-        if avatar:
-            self.notify.debug("Looking at someone's pet. pet doId = %s" % avatar.doId)
-            messenger.send('clickedNametag', [avatar])
-
-    def __handleWhisper(self):
+    def onWhisperButtonPressed(self):
         base.localAvatar.chatMgr.whisperTo(self.avName, self.avId, None)
 
-    def __handleSecrets(self):
-        base.localAvatar.chatMgr.noWhisper()
-        ToontownFriendSecret.showFriendSecret()
-
-    def __handleFriend(self):
-        base.localAvatar.chatMgr.noWhisper()
-        messenger.send('friendAvatar', [self.avId, self.avName, self.avDisableName])
-
-    def __handleDetails(self):
-        base.localAvatar.chatMgr.noWhisper()
-        messenger.send('avatarDetails', [self.avId, self.avName, self.playerId])
-
-    def __handleDisableAvatar(self):
-        if not base.cr.isFriend(self.avId):
-            self.cleanup()
-            AvatarPanelBase.currentAvatarPanel = None
+    def onDetailsButtonPressed(self):
+        if self.dMainFrame.isHidden():
+            self.openDetails()
+            self.tapDetailsButton['image'] = (
+                self.gui.find('**/left_normal'),
+                self.gui.find('**/left_pressed'),
+                self.gui.find('**/left_hover'),
+                self.gui.find('**/left_normal'))
         else:
-            self.healthText.hide()
-            if self.laffMeter != None:
-                self.laffMeter.stop()
-                self.laffMeter.destroy()
-                self.laffMeter = None
+            self.closeDetails()
+            self.tapDetailsButton['image'] = (
+                self.gui.find('**/right_normal'),
+                self.gui.find('**/right_pressed'),
+                self.gui.find('**/right_hover'),
+                self.gui.find('**/right_normal'))
 
-    def __handleGenerateAvatar(self, avatar):
-        newAvatar = base.cr.doId2do.get(self.avatar.doId)
-        if newAvatar:
-            self.avatar = newAvatar
-        self.__updateLaffMeter(avatar, avatar.hp, avatar.maxHp)
-        self.__checkGroupStatus()
+    def openDetails(self):
+        self.switchPage(0)
+        self.dMainFrame.show()
+        self.detailOpened = True
+        if hasattr(self.avatar, 'uniqueName'):
+            self.accept(self.avatar.uniqueName('hpChange'), self.updateInfoText)
 
-    def __updateLaffMeter(self, avatar, hp, maxHp):
-        if self.laffMeter == None:
-            self.__makeLaffMeter(avatar)
-        self.__updateHp(avatar.hp, avatar.maxHp)
-        self.laffMeter.show()
-        self.healthText.show()
+    def closeDetails(self):
+        self.dMainFrame.hide()
+        self.detailOpened = False
+        if hasattr(self.avatar, 'uniqueName'):
+            self.ignore(self.avatar.uniqueName('hpChange'))
 
-    def __makeLaffMeter(self, avatar):
-        self.laffMeter = LaffMeter.LaffMeter(avatar.style, avatar.hp, avatar.maxHp)
-        self.laffMeter.reparentTo(self.frame)
-        self.laffMeter.setPos(-0.1, 0, 0.24)
-        self.laffMeter.setScale(0.03)
+    def switchPage(self, page):
+        if page == 4:
+            return
+        if self.dCurrentPage >= 0:
+            self.__hidePage(self.dCurrentPage)
+        if page == 0:
+            self.dShowInfo()
+        elif page == 1:
+            self.dShowGags()
+        elif page == 2:
+            self.dShowSuits()
+        elif page == 3:
+            self.dShowQuests()
+        self.dCurrentPage = page
 
-    def __updateHp(self, hp, maxHp, quietly = 0):
-        if self.laffMeter != None and hp != None and maxHp != None:
-            self.laffMeter.adjustFace(hp, maxHp)
-            self.healthText['text'] = '%d / %d' % (hp, maxHp)
+    def __hidePage(self, page):
+        frames = (self.dInfoFrame, self.dGagsFrame, self.dSuitsFrame, self.dQuestsFrame)
+        buttons = (self.dInfoButton, self.dGagsButton, self.dSuitsButton, self.dQuestsButton)
+        if page < len(frames) and frames[page]:
+            frames[page].hide()
+        if page < len(buttons):
+            buttons[page]['state'] = DGG.NORMAL
 
-    def __handleClose(self):
-        self.cleanup()
-        AvatarPanelBase.currentAvatarPanel = None
-        if self.friendsListShown:
-            self.FriendsListPanel.showFriendsList()
+    def dShowInfo(self):
+        self.dInfoButton['state'] = DGG.DISABLED
+        status = 'Online' if self.isAvatarOnline() else 'Offline'
+        self.dTitle['text'] = 'Info - %s' % status
+        if not self.dInfoFrame:
+            self.dInfoFrame = DirectFrame(parent=self.dMainFrame, scale=(-1, 1, 1), relief=None)
+            self.detailsInfoText = DirectLabel(
+                parent=self.dInfoFrame,
+                pos=(-0.44, 0, 0.035),
+                relief=None,
+                text=self.generateInfoText(),
+                text_fg=Vec4(1, 1, 1, 1),
+                text_scale=0.05,
+                text_wordwrap=20,
+                text_align=TextNode.ALeft)
+        else:
+            self.detailsInfoText['text'] = self.generateInfoText()
+            self.dInfoFrame.show()
+
+    def dShowGags(self):
+        self.dGagsButton['state'] = DGG.DISABLED
+        self.dTitle['text'] = ''
+        if not self.dGagsFrame:
+            self.dGagsFrame = DirectFrame(
+                parent=self.dMainFrame,
+                scale=(-1.125, 1.125, 1.125),
+                relief=None)
+            self.dGagsFrame.setPos(0.01, 0, 0.05)
+            gagTracks = self.__generateGags()
+            gagTracks.reparentTo(self.dGagsFrame)
+            gagTracks.setPos(0, 0, -0.085)
+            gagTracks.setScale(0.77)
+        else:
+            self.dGagsFrame.show()
+
+    def __generateGags(self):
+        """Build the Corporate Clash avatar-panel gag display."""
+        tracksFrame = DirectFrame(relief=None)
+        inventory = getattr(self.avatar, 'inventory', None)
+        if not inventory or not hasattr(inventory, 'invModels'):
+            DirectLabel(
+                parent=tracksFrame,
+                relief=None,
+                text='Gag information unavailable.',
+                text_fg=(1, 1, 1, 1),
+                text_scale=0.05,
+                pos=(0, 0, 0))
+            return tracksFrame
+
+        gagSelectGui = loader.loadModel(
+            'phase_3.5/models/gui/battlegui/gag_selection_panels')
+        inventoryModels = loader.loadModel(
+            'phase_3.5/models/gui/inventory_gui')
+        buttonModel = inventoryModels.find('**/InventoryButtonUp')
+        prestigeStarFilled = gagSelectGui.find('**/prestige_star')
+        prestigeStarEmpty = gagSelectGui.find('**/prestige_star_empty')
+
+        gagButtonsXOffset = -0.22
+        gagButtonsXSpacing = 0.084
+        gagTracksZSeparation = 0.059
+        gagTrackOrder = (0, 1, 2, 3, 4, 5, 6, 7)
+
+        for index, trackIndex in enumerate(gagTrackOrder):
+            if trackIndex >= len(Tracks):
+                continue
+
+            trackName = Tracks[trackIndex]
+            rowZ = (7 - index * 2) * gagTracksZSeparation / 2.0
+
+            DirectFrame(
+                parent=tracksFrame,
+                relief=None,
+                image=gagSelectGui.find('**/track_' + trackName),
+                scale=(1, 1, 0.0625),
+                pos=(0, 0, rowZ))
+
+            DirectFrame(
+                parent=tracksFrame,
+                relief=None,
+                image=gagSelectGui.find('**/track_' + trackName + '_title'),
+                scale=(0.25 if trackName == 'toon-up' else 0.125,
+                       1, 0.0625),
+                pos=(-0.388, 0, rowZ))
+
+            DirectFrame(
+                parent=tracksFrame,
+                relief=None,
+                image=prestigeStarEmpty,
+                scale=0.04,
+                pos=(0.44, 0, rowZ))
+
+            prestigeStar = DirectFrame(
+                parent=tracksFrame,
+                relief=None,
+                image=prestigeStarFilled,
+                scale=0.0424,
+                pos=(0.44, 0, rowZ))
+            prestigeStar.hide()
+
+            try:
+                hasAccess = self.avatar.hasTrackAccess(trackIndex)
+            except:
+                hasAccess = False
+            if not hasAccess:
+                continue
+
+            prestiged = False
+            if hasattr(self.avatar, 'checkGagBonus'):
+                try:
+                    for gagLevel in range(len(Levels[trackIndex])):
+                        if self.avatar.checkGagBonus(trackIndex, gagLevel):
+                            prestiged = True
+                            break
+                except:
+                    prestiged = False
+            if prestiged:
+                prestigeStar.show()
+
+            try:
+                curExp, nextExp = inventory.getCurAndNextExpValues(trackIndex)
+            except:
+                curExp = 0
+
+            for item in range(len(Levels[trackIndex])):
+                if curExp < Levels[trackIndex][item]:
+                    break
+                try:
+                    numItems = inventory.numItem(trackIndex, item)
+                    gagGeom = inventory.invModels[trackIndex][item]
+                except:
+                    continue
+
+                try:
+                    organic = self.avatar.checkGagBonus(trackIndex, item)
+                except:
+                    organic = False
+
+                if numItems:
+                    if organic:
+                        imageColor = getattr(
+                            inventory, 'PressableOrganicColor',
+                            getattr(inventory, 'PressableImageColor',
+                                    Vec4(0, 0.6, 1, 1)))
+                    else:
+                        imageColor = getattr(
+                            inventory, 'PressableImageColor',
+                            Vec4(0, 0.6, 1, 1))
+                else:
+                    imageColor = getattr(
+                        inventory, 'UnpressableImageColor',
+                        Vec4(0.3, 0.3, 0.3, 0.8))
+
+                DirectLabel(
+                    parent=tracksFrame,
+                    image=buttonModel,
+                    image_color=imageColor,
+                    geom=gagGeom,
+                    geom_color=getattr(
+                        inventory, 'BookUnpressableGeomColor',
+                        Vec4(1, 1, 1, 1)),
+                    text=str(numItems),
+                    text_align=TextNode.ARight,
+                    geom_scale=0.7,
+                    geom_pos=(-0.01, -0.1, 0),
+                    text_font=ToontownGlobals.getBuildingNametagFont(),
+                    text_scale=0.075 if prestiged else 0.07,
+                    text_pos=(0.075, -0.05),
+                    text_fg=Vec4(1, 1, 1, 1),
+                    textMayChange=1,
+                    relief=None,
+                    pos=(gagButtonsXOffset + item * gagButtonsXSpacing,
+                         0, 0.0005 + rowZ),
+                    scale=0.48)
+
+        gagSelectGui.removeNode()
+        inventoryModels.removeNode()
+        return tracksFrame
+
+    def dShowSuits(self):
+        self.dSuitsButton['state'] = DGG.DISABLED
+        self.dTitle['text'] = ''
+        if not self.dSuitsFrame:
+            self.dSuitsFrame = DirectFrame(parent=self.dMainFrame, scale=(-1, 1, 1), relief=None)
+            # Display the five Altis disguise departments in Clash order:
+            # Sellbot, Cashbot, Lawbot, Bossbot, Boardbot.
+            for dept in ('s', 'm', 'l', 'c', 'g'):
+                suit = self.__generateSuit(dept, TAPG.disguiseSuitPos[dept])
+                if suit:
+                    self.dSuits.append(suit)
+        else:
+            self.dSuitsFrame.show()
+
+    def __generateSuit(self, suitKind, pos):
+        try:
+            deptIndex = ToontownGlobals.cogDept2index[suitKind]
+            cogTypes = (self.avatar.getCogTypes()
+                        if hasattr(self.avatar, 'getCogTypes')
+                        else self.avatar.cogTypes)
+            cogType = cogTypes[deptIndex]
+
+            # Altis adds many custom Cogs, so its departments no longer occupy
+            # fixed-size blocks inside suitHeadTypes. Resolve the disguise from
+            # the department's own regular-Cog list instead. This displays the
+            # exact Sellbot/Cashbot/Lawbot/Bossbot/Boardbot suit the Toon is wearing.
+            departmentSuits = SuitDNA.suitDeptCogs[suitKind]
+            if cogType < 0:
+                cogType = 0
+            elif cogType >= len(departmentSuits):
+                cogType = len(departmentSuits) - 1
+            cogIdentifier = departmentSuits[cogType]
+        except:
+            DirectLabel(parent=self.dSuitsFrame, relief=None, text='No data',
+                        text_scale=0.025, text_fg=(1, 1, 1, 1), pos=pos)
+            return None
+
+        try:
+            suit = Suit.Suit()
+            dna = SuitDNA.SuitDNA()
+            dna.newSuit(cogIdentifier)
+            suit.setDNA(dna)
+            suit.reparentTo(self.dSuitsFrame)
+            suit.setScale(0.03)
+            suit.setHpr(180, 0, 0)
+            suit.setPos(pos)
+            suit.getGeomNode().setDepthWrite(1)
+            suit.getGeomNode().setDepthTest(1)
+            suit.getGeomNode().setTwoSided(True)
+            suit.hideNametag3d()
+            suit.loop('neutral')
+        except:
+            return None
+
+        try:
+            suitName = SuitBattleGlobals.SuitAttributes[cogIdentifier]['name']
+        except:
+            suitName = cogIdentifier
+
+        try:
+            level = self.avatar.cogLevels[deptIndex]
+            parts = CogDisguiseGlobals.getTotalParts(self.avatar.cogParts[deptIndex])
+            partsRequired = CogDisguiseGlobals.PartsPerSuit[deptIndex]
+            if level > 0:
+                status = 'Level %s' % (level + 1)
+            else:
+                status = '%s/%s parts' % (parts, partsRequired)
+        except:
+            status = ''
+
+        DirectLabel(parent=self.dSuitsFrame, pos=TAPG.disguiseTextPos[suitKind],
+                    relief=None, text='%s\n%s' % (suitName, status),
+                    text_fg=Vec4(1, 1, 1, 1), text_scale=0.026,
+                    text_wordwrap=6, text_align=TextNode.ACenter)
+
+        try:
+            merits = self.avatar.cogMerits[deptIndex]
+            meritText = str(merits)
+        except:
+            meritText = '0'
+        DirectWaitBar(parent=self.dSuitsFrame, relief=DGG.SUNKEN,
+                      frameSize=(-0.8, 0.8, -0.2, 0.2), borderWidth=(0.02, 0.02),
+                      scale=0.1, text=meritText, text_scale=0.22,
+                      text_fg=(0, 0, 0, 1), text_align=TextNode.ACenter,
+                      text_pos=(0, -0.085), pos=TAPG.disguiseBarsPos[suitKind],
+                      frameColor=(0.35, 0.35, 0.35, 1),
+                      barColor=(0.75, 0.75, 0.75, 1), value=0, range=1)
+        return suit
+
+    def dShowQuests(self):
+        self.dQuestsButton['state'] = DGG.DISABLED
+        # Clash leaves the title blank on this page so it cannot overlap
+        # the top row of ToonTask posters.
+        self.dTitle['text'] = ''
+        if not self.dQuestsFrame:
+            self.dQuestsFrame = DirectFrame(
+                parent=self.dMainFrame,
+                scale=(-1.17, 1.17, 1.17),
+                relief=None)
+            # Centre the complete 2x2 poster grid inside the details panel.
+            self.dQuestsFrame.setPos(0.015, 0, 0.035)
+            self.__generateQuests()
+        else:
+            self.dQuestsFrame.show()
+
+    def __generateQuests(self):
+        quests = getattr(self.avatar, 'quests', [])
+        if not quests:
+            DirectLabel(parent=self.dQuestsFrame, relief=None, text='No active quests.',
+                        text_fg=(1, 1, 1, 1), text_scale=0.045, pos=(0, 0, 0))
+            return
+        maxQuests = min(4, len(quests))
+        questPositions = (
+            (-0.165, 0, 0.005, 0, 0, 0),
+            (0.165, 0, 0.005, 0, 0, 0),
+            (-0.165, 0, -0.185, 0, 0, 0),
+            (0.165, 0, -0.185, 0, 0, 0),
+        )
+        for i in range(maxQuests):
+            try:
+                frame = QuestBookPoster.QuestBookPoster(
+                    parent=self.dQuestsFrame, mapIndex=i + 1, reverse=i % 2)
+                frame.reparentTo(self.dQuestsFrame)
+                frame.setPosHpr(*questPositions[i])
+                frame.setScale(0.305)
+                frame.update(quests[i])
+                self.questFrames.append(frame)
+            except:
+                DirectLabel(parent=self.dQuestsFrame, relief=None,
+                            text='Quest %s' % (i + 1), text_fg=(1, 1, 1, 1),
+                            text_scale=0.04, pos=questPositions[i][:3])
+
+    def generateToon(self):
+        try:
+            style = self.avatar.style
+        except:
+            try:
+                style = self.avatar.getStyle()
+            except:
+                return None
+        toon = Toon.Toon()
+        toon.setDNAString(style.makeNetString())
+        toon.getGeomNode().setDepthWrite(1)
+        toon.getGeomNode().setDepthTest(1)
+        toon.getGeomNode().setTwoSided(True)
+        try:
+            toon.pose('neutral', 0)
+        except:
+            toon.loop('neutral')
+        self.fitGeometry(toon, 1)
+        return toon
+
+    def fitGeometry(self, geom, fFlip=0, dimension=0.4):
+        p1 = Point3()
+        p2 = Point3()
+        geom.calcTightBounds(p1, p2)
+        if fFlip:
+            t = p1[0]
+            p1.setX(-p2[0])
+            p2.setX(-t)
+        d = p2 - p1
+        biggest = max(d[0], d[2])
+        if biggest == 0:
+            return
+        scale = dimension / biggest
+        mid = (p1 + d / 2.0) * scale
+        geomXform = hidden.attachNewNode('geomXform')
+        for child in geom.getChildren():
+            child.reparentTo(geomXform)
+        geomXform.setPosHprScale(-mid[0], -mid[1] + 2, -mid[2] - 0.02,
+                                180, 0, 0, scale, scale, scale)
+        geomXform.reparentTo(geom)
+
+    def generateNameText(self):
+        self.tapNameLabel = TextNode('text')
+        self.tapNameLabel.setText(self.avName)
+        self.tapNameLabel.setAlign(TextNode.ACenter)
+        self.tapNameLabel.setWordwrap(10)
+        self.tapNameLabel.setTextColor(1, 1, 1, 1)
+        try:
+            self.tapNameLabel.setFont(self.avatar.getFont())
+        except:
+            self.tapNameLabel.setFont(ToontownGlobals.getToonFont())
+        self.tapNameLabel.setShadow(0.05, 0.05)
+        self.tapNameLabel.setShadowColor(0, 0, 0, 1)
+        self.tapNameNodePath = self.tapMainFrame.attachNewNode(self.tapNameLabel)
+        self.tapNameNodePath.setScale(0.042)
+        self.tapNameNodePath.setPos(0, 0, 0.12)
+        self.tapNameNodePath.setBin('sorted-gui-popup', 802)
+        if self.tapNameLabel.getNumRows() > 1:
+            self.tapNameNodePath.setPos(0, 0, 0.144)
+            self.tapNameNodePath.setScale(0.038)
+
+    def getAvatarBackground(self):
+        node = self.profileBackgroundModel.find('**/default')
+        if node.isEmpty():
+            return self.profileBackgroundModel
+        return node
+
+    def __getRawNameplateValue(self):
+        methodNames = (
+            'getEquippedNameplate', 'getProfileNameplate', 'getNameplate',
+            'getNameplateId', 'getNamePlate', 'getNamePlateId')
+        for name in methodNames:
+            if hasattr(self.avatar, name):
+                try:
+                    value = getattr(self.avatar, name)()
+                    if value is not None:
+                        return value
+                except:
+                    pass
+        attrNames = (
+            'equippedNameplate', 'profileNameplate', 'nameplate', 'nameplateId',
+            'namePlate', 'namePlateId', 'equippedNameplateId')
+        for name in attrNames:
+            if hasattr(self.avatar, name):
+                value = getattr(self.avatar, name)
+                if value is not None:
+                    return value
+        return None
+
+    def __normaliseNameplateNode(self, value):
+        if value is None:
+            return 'default_med_blue'
+        if hasattr(value, 'getItemSubtype'):
+            try:
+                value = value.getItemSubtype()
+            except:
+                pass
+        if isinstance(value, (list, tuple)):
+            if not value:
+                return 'default_med_blue'
+            value = value[0]
+        try:
+            intValue = int(value)
+            if intValue in NAMEPLATE_ID_TO_NODE:
+                return NAMEPLATE_ID_TO_NODE[intValue]
+        except:
+            pass
+        try:
+            text = str(value).strip().lower().replace('_', ' ')
+        except:
+            return 'default_med_blue'
+        if text.startswith('**/'):
+            text = text[3:]
+        if text in NAMEPLATE_NAME_TO_NODE:
+            return NAMEPLATE_NAME_TO_NODE[text]
+        compact = text.replace(' ', '')
+        if compact in NAMEPLATE_NAME_TO_NODE:
+            return NAMEPLATE_NAME_TO_NODE[compact]
+        if 'dream' in text or 'skyclan' in text:
+            return 'event_skyclan'
+        if text == 'candy' or text.endswith(' candy'):
+            return 'event_candy'
+        return text if text else 'default_med_blue'
+
+    def getAvatarNameplate(self):
+        nodeName = self.__normaliseNameplateNode(self.__getRawNameplateValue())
+        node = self.profileNameplateModel.find('**/%s' % nodeName)
+        if node.isEmpty():
+            node = self.profileNameplateModel.find('**/default_med_blue')
+        position = (0, 0, 0.13)
+        scale = (1, 1, 1)
+        if nodeName == 'sidetask_judy':
+            position = (0.008, 0, 0.138)
+        elif nodeName == 'event_electric':
+            scale = (1.08, 1, 1.08)
+        elif nodeName.startswith('event_halloween_candy_'):
+            scale = (1.125, 1, 0.95)
+        elif nodeName == 'event_halloween_bat':
+            position = (0, 0, 0.1325)
+            scale = (1.125, 1, 1)
+        return node, position, scale
+
+    def generateInfoText(self, hp=None, maxHp=None):
+        if hp is None:
+            hp = getattr(self.avatar, 'hp', 0)
+        if maxHp is None:
+            maxHp = getattr(self.avatar, 'maxHp', hp)
+        level = getattr(self.avatar, 'level', 0) + 1
+        toonId = 'TTPA-U-%s' % (self.avId - 100000000)
+        online = self.isAvatarOnline()
+
+        lines = ['Status: %s' % ('Online' if online else 'Offline'),
+                 'Laff: %s / %s' % (hp, maxHp),
+                 'Level: %s' % level,
+                 'Toon ID: %s' % toonId]
+
+        if online:
+            shardId = getattr(self.avatar, 'defaultShard', 0)
+            hoodId = getattr(self.avatar, 'lastHood', 0)
+            try:
+                shardName = base.cr.getShardName(shardId)
+            except:
+                shardName = 'Unknown District'
+            try:
+                hoodName = base.cr.hoodMgr.getFullnameFromId(hoodId)
+            except:
+                hoodName = 'Somewhere in Toontown'
+            if ZoneUtil.isWelcomeValley(hoodId):
+                try:
+                    hoodName = '%s (%s)' % (TTLocalizer.WelcomeValley[-1], hoodName)
+                except:
+                    pass
+            lines.insert(2, 'District: %s' % shardName)
+            lines.insert(3, 'Location: %s' % hoodName)
+        return '\n'.join(lines)
+
+    def updateInfoText(self, hp, maxHp, quietly=None):
+        if self.dInfoFrame and hasattr(self, 'detailsInfoText'):
+            self.detailsInfoText['text'] = self.generateInfoText(hp, maxHp)
+
+    def isAvatarOnline(self):
+        if self.avId == base.localAvatar.doId:
+            return True
+        if self.avId in base.cr.doId2do:
+            return True
+        try:
+            if base.cr.isFriend(self.avId):
+                return bool(base.cr.isFriendOnline(self.avId))
+        except:
+            pass
+        return False
+
+    def refreshIgnoreButton(self):
+        if not self.isLoaded or not hasattr(self, 'tapIgnoreButton'):
+            return
+        ignoreStr, ignoreCmd, ignoreScale = self.getIgnoreButtonInfo()
+        self.tapIgnoreButton['text'] = ('', ignoreStr, ignoreStr)
+        self.tapIgnoreButton['command'] = ignoreCmd
+        self.__updateButtonStates()
+
+    def cleanup(self):
+        if self.waitingForDetails and self.lookupAvatar:
+            try:
+                base.cr.cancelAvatarDetailsRequest(self.lookupAvatar)
+            except:
+                pass
+            self.waitingForDetails = False
+
+        self.ignoreAll()
+
+        for frame in self.questFrames:
+            try:
+                frame.destroy()
+            except:
+                pass
+        self.questFrames = []
+
+        for suit in self.dSuits:
+            try:
+                suit.delete()
+            except:
+                pass
+        self.dSuits = []
+
+        if self.toon:
+            for node in self.toonClippingPlanes:
+                try:
+                    self.toon.setClipPlaneOff(node)
+                    node.removeNode()
+                except:
+                    pass
+            self.toonClippingPlanes = []
+            try:
+                self.toon.delete()
+            except:
+                pass
+            self.toon = None
+
+        if self.managedGuiElement:
+            try:
+                self.managedGuiElement.destroy()
+            except:
+                pass
+            self.managedGuiElement = None
+
+        for modelName in ('gui', 'detailsGui', 'profileBackgroundModel', 'profileNameplateModel'):
+            model = getattr(self, modelName, None)
+            if model:
+                try:
+                    model.removeNode()
+                except:
+                    pass
+                setattr(self, modelName, None)
+
+        if self.createdAvatar and self.lookupAvatar:
+            try:
+                self.lookupAvatar.delete()
+            except:
+                pass
+            self.lookupAvatar = None
+
+        try:
+            base.localAvatar.obscureFriendsListButton(-1)
+        except:
+            pass
+
+        self.isLoaded = False
+        self.frame = None
+        try:
+            AvatarPanelBase.AvatarPanelBase.cleanup(self)
+        except:
+            pass
 
     def getAvId(self):
-        if hasattr(self, 'avatar'):
-            if self.avatar:
-                return self.avatar.doId
-        
-        return None
+        return getattr(self, 'avId', None)
 
     def getPlayerId(self):
-        if hasattr(self, 'playerId'):
-            return self.playerId
-        
-        return None
+        return self.playerId
 
     def isHidden(self):
-        if not hasattr(self, 'frame') or not self.frame:
+        if not self.managedGuiElement:
             return 1
-        
-        return self.frame.isHidden()
+        return self.managedGuiElement.isHidden()
 
     def getType(self):
         return 'toon'
-
-    def handleInvite(self):
-        if localAvatar.boardingParty.isInviteePanelUp():
-            localAvatar.boardingParty.showMe(TTLocalizer.BoardingPendingInvite, pos=(0, 0, 0))
-        else:
-            self.groupButton['state'] = DGG.DISABLED
-            localAvatar.boardingParty.requestInvite(self.avId)
-
-    def handleKick(self):
-        if not base.cr.playGame.getPlace().getState() == 'elevator':
-            self.confirmKickOutDialog = TTDialog.TTDialog(style=TTDialog.YesNo, text=TTLocalizer.BoardingKickOutConfirm % self.avName, command=self.__confirmKickOutCallback)
-            self.confirmKickOutDialog.show()
-
-    def __confirmKickOutCallback(self, value):
-        if self.confirmKickOutDialog:
-            self.confirmKickOutDialog.destroy()
-        self.confirmKickOutDialog = None
-        if value > 0:
-            if self.groupButton:
-                self.groupButton['state'] = DGG.DISABLED
-            localAvatar.boardingParty.requestKick(self.avId)
-
-    def __checkGroupStatus(self):
-        self.groupFrame.hide()
-        if hasattr(self, 'avatar'):
-            if self.avatar and hasattr(self.avatar, 'getZoneId') and localAvatar.getZoneId() == self.avatar.getZoneId():
-                if localAvatar.boardingParty:
-                    if self.avId in localAvatar.boardingParty.getGroupMemberList(localAvatar.doId):
-                        if localAvatar.boardingParty.getGroupLeader(localAvatar.doId) == localAvatar.doId:
-                            self.groupButton['text'] = ('', TTLocalizer.AvatarPanelGroupMemberKick, TTLocalizer.AvatarPanelGroupMemberKick)
-                            self.groupButton['image'] = self.kickOutImageList
-                            self.groupButton['command'] = self.handleKick
-                            self.groupButton['state'] = DGG.NORMAL
-                        else:
-                            self.groupButton['text'] = ('', TTLocalizer.AvatarPanelGroupMember, TTLocalizer.AvatarPanelGroupMember)
-                            self.groupButton['command'] = None
-                            self.groupButton['image'] = self.inviteImageDisabled
-                            self.groupButton['image_color'] = Vec4(1, 1, 1, 0.4)
-                            self.groupButton['state'] = DGG.NORMAL
-                    else:
-                        g1 = localAvatar.boardingParty.countInGroup(self.avId)
-                        g2 = localAvatar.boardingParty.countInGroup(localAvatar.doId)
-                        if (g1 + g2) > localAvatar.boardingParty.maxSize:
-                            self.groupButton['text'] = ('', TTLocalizer.AvatarPanelGroupMember, TTLocalizer.AvatarPanelGroupMember)
-                            self.groupButton['command'] = None
-                            self.groupButton['image'] = self.inviteImageDisabled
-                            self.groupButton['image_color'] = Vec4(1, 1, 1, 0.4)
-                        else:
-                            if g1 > 0 and g2 > 0:
-                                self.groupButton['text'] = ('', TTLocalizer.AvatarPanelGroupInvite, "%s %d"%(TTLocalizer.AvatarPanelGroupMerge, (g1+g2)))
-                                self.groupFrame['text']=TTLocalizer.BoardingPartyTitleMerge;
-                            else:
-                                self.groupButton['text'] = ('', TTLocalizer.AvatarPanelGroupInvite, TTLocalizer.AvatarPanelGroupInvite)
-                                self.groupFrame['text']=TTLocalizer.BoardingPartyTitle;
-                            self.groupButton['command'] = self.handleInvite
-                            self.groupButton['image'] = self.inviteImageList
-                        self.groupButton['state'] = DGG.NORMAL
-                    if base.config.GetBool('want-boarding-groups', 1):
-                        base.setCellsActive([base.rightCells[0]], 0)
-                        self.groupFrame.show()
-
-    def handleReadInfo(self, task = None):
-        self.boardingInfoButton['state'] = DGG.DISABLED
-        if self.boardingInfoText:
-            self.boardingInfoText.destroy()
-        self.boardingInfoText = TTDialog.TTDialog(style=TTDialog.Acknowledge, text=TTLocalizer.BoardingPartyInform % localAvatar.boardingParty.maxSize, command=self.handleCloseInfo)
-
-    def handleCloseInfo(self, *extraArgs):
-        self.boardingInfoButton['state'] = DGG.NORMAL
-        if self.boardingInfoText:
-            self.boardingInfoText.destroy()
-            del self.boardingInfoText
-        self.boardingInfoText = None
-
-    def __makePetGui(self, avatar):
-        petGui = loader.loadModel('phase_3.5/models/gui/PetControlPannel')
-        self.petButton = DirectButton(parent=self.frame, image=(petGui.find('**/PetControlToonButtonUp1'), petGui.find('**/PetControlToonButtonDown1'), petGui.find('**/PetControlToonButtonRollover1')), geom=petGui.find('**/PetBattleIcon'), geom3_color=self.disabledImageColor, relief=None, pos=(0.22, -0.2, -0.475), text=('',
-         TTLocalizer.AvatarPanelPet,
-         TTLocalizer.AvatarPanelPet,
-         ''), text_fg=self.text2Color, text_shadow=(0, 0, 0, 1), text_scale=0.325, text_pos=(-1.3, 0.05), text_align=TextNode.ACenter, command=self.__handleToPet)
-        self.petButton.setScale(0.15)
-        if not (base.wantPets and avatar.hasPet()):
-            self.petButton['state'] = DGG.DISABLED
-            self.petButton.hide()
-        petGui.removeNode()
-
-    def __makeBoardingGui(self):
-        self.confirmKickOutDialog = None
-        groupAvatarBgGui = loader.loadModel('phase_3.5/models/gui/tt_m_gui_brd_avatarPanelBg')
-        boardingGroupBGImage = groupAvatarBgGui.find('**/tt_t_gui_brd_avatar_panel_party')
-        self.groupFrame = DirectFrame(parent=self.frame, relief=None, image=boardingGroupBGImage, image_scale=(0.5, 1, 0.5), textMayChange=1, text=TTLocalizer.BoardingPartyTitle, text_wordwrap=16, text_scale=TTLocalizer.TAPgroupFrame, text_pos=(0.01, 0.08), pos=(0, 0, -0.61))
-        groupInviteGui = loader.loadModel('phase_3.5/models/gui/tt_m_gui_brd_inviteButton')
-        self.inviteImageList = (groupInviteGui.find('**/tt_t_gui_brd_inviteUp'),
-         groupInviteGui.find('**/tt_t_gui_brd_inviteDown'),
-         groupInviteGui.find('**/tt_t_gui_brd_inviteHover'),
-         groupInviteGui.find('**/tt_t_gui_brd_inviteUp'))
-        self.kickOutImageList = (groupInviteGui.find('**/tt_t_gui_brd_kickoutUp'),
-         groupInviteGui.find('**/tt_t_gui_brd_kickoutDown'),
-         groupInviteGui.find('**/tt_t_gui_brd_kickoutHover'),
-         groupInviteGui.find('**/tt_t_gui_brd_kickoutUp'))
-        self.inviteImageDisabled = groupInviteGui.find('**/tt_t_gui_brd_inviteDisabled')
-        self.groupButton = DirectButton(parent=self.groupFrame, image=self.inviteImageList, image3_color=self.disabledImageColor, image_scale=0.85, relief=None, text=('', TTLocalizer.AvatarPanelGroupInvite, TTLocalizer.AvatarPanelGroupInvite), text0_fg=self.text0Color, text1_fg=self.text1Color, text2_fg=self.text2Color, text3_fg=self.text3Color, text_scale=TTLocalizer.TAPgroupButton, text_pos=(-0.0, -0.1), text_align=TextNode.ACenter, command=self.handleInvite, pos=(0.01013, 0, -0.05464))
-        helpGui = loader.loadModel('phase_3.5/models/gui/tt_m_gui_brd_help')
-        helpImageList = (helpGui.find('**/tt_t_gui_brd_helpUp'),
-         helpGui.find('**/tt_t_gui_brd_helpDown'),
-         helpGui.find('**/tt_t_gui_brd_helpHover'),
-         helpGui.find('**/tt_t_gui_brd_helpDown'))
-        self.boardingInfoButton = DirectButton(parent=self.groupFrame, relief=None, text_pos=(-0.05, 0.05), text_scale=0.06, text_align=TextNode.ALeft, text_fg=Vec4(1, 1, 1, 1), text_shadow=Vec4(0, 0, 0, 1), image=helpImageList, image_scale=(0.5, 1, 0.5), image3_color=self.disabledImageColor, scale=1.05, command=self.handleReadInfo, pos=(0.1829, 0, 0.02405))
-        self.boardingInfoText = None
-        groupInviteGui.removeNode()
-        groupAvatarBgGui.removeNode()
-        helpGui.removeNode()

@@ -54,7 +54,8 @@ def compareFriends(f1, f2):
 def showFriendsList():
     global globalFriendsList
     if globalFriendsList == None:
-        globalFriendsList = FriendsListPanel()
+        from toontown.toon.socialpanel.SocialPanel import SocialPanel
+        globalFriendsList = SocialPanel()
     globalFriendsList.enter()
 
 def hideFriendsList():
@@ -64,7 +65,8 @@ def hideFriendsList():
 def showFriendsListTutorial():
     global globalFriendsList
     if globalFriendsList == None:
-        globalFriendsList = FriendsListPanel()
+        from toontown.toon.socialpanel.SocialPanel import SocialPanel
+        globalFriendsList = SocialPanel()
     globalFriendsList.enter()
     if not base.cr.isPaid():
         globalFriendsList.secrets['state'] = DGG.DISABLED

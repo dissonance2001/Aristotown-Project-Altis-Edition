@@ -34,7 +34,7 @@ class ExperienceBar(DirectFrame):
         self.load()
 
     def load(self):
-        if not self.isToon:
+        if self.isToon:
             self.barGeom = loader.loadModel('phase_3.5/models/gui/exp_bar')
             self.color = self.style.getHeadColor()
             self.bgBar = DirectFrame(relief=None, geom=self.barGeom, pos=(0.0, 0, -.95), geom_scale=(0.3, 0.25, 0.1), geom_color=self.color)
