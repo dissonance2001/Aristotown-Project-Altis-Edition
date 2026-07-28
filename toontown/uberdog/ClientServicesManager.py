@@ -92,7 +92,7 @@ class ClientServicesManager(DistributedObjectGlobal):
         whisper.manage(base.marginManager)
 
         if hasattr(base.cr, 'chatLog'):
-            base.cr.chatLog.addToLog("\1orangeText\1System Message: %s\2" %(message))
+            base.cr.chatLog.addToLog("\1orangeText\1System Message: %s\2" %(message), category=base.cr.chatLog.TAB_ALERTS)
 
         # play the system message sound effect
         base.playSfx(base.loader.loadSfx('phase_3/audio/sfx/clock03.ogg'))

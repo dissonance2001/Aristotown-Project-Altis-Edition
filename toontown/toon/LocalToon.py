@@ -558,8 +558,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.streamerMode = StreamerMode.StreamerMode()
         self.streamerMode.start()
         self.chatLog = ChatLog.ChatLog()
-        self.chatLog.reparentTo(base.a2dLeftCenter)
-        self.chatLog.setPos(-1, 0, 0.2)
                     
         taskMgr.remove('streamerUpdateDist')
         taskMgr.doMethodLater(2, self.updateDistrictName, 'streamerUpdateDist')

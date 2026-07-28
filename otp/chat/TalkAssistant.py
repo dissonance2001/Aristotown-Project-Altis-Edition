@@ -334,8 +334,6 @@ class TalkAssistant(DirectObject.DirectObject):
                 self.historyOpen.append(newMessage)
                 messenger.send('NewOpenMessage', [newMessage])
                 if hasattr(base.cr, 'chatLog'):
-                    if base.localAvatar.getAdminAccess() >= 375:
-                        avatarName = "\1WLEnter\1(%s)\2%s" %(accountId, avatarName)
                     if self.isThought(message):
                         base.cr.chatLog.addToLog("\1playerGreen\1%s thinks\2: %s" %(avatarName, message), senderAvId)
                     else:
@@ -366,10 +364,7 @@ class TalkAssistant(DirectObject.DirectObject):
             self.addToHistoryDISLId(newMessage, accountId)
         messenger.send('NewOpenMessage', [newMessage])
         if hasattr(base.cr, 'chatLog'):
-            if base.localAvatar.getAdminAccess() >= 375:
-                avatarName = "\1WLEnter\1(%s)\2%s" %(accountId, avatarName)
-
-            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" %(avatarName, message), avatarId)
+            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" %(avatarName, message), avatarId, category=base.cr.chatLog.TAB_WHISPERS)
         return error
 
     def receiveAccountTalk(self, avatarId, avatarName, accountId, accountName, toId, toName, message, scrubbed = 0):
@@ -387,6 +382,9 @@ class TalkAssistant(DirectObject.DirectObject):
         if accountId:
             self.addToHistoryDISLId(newMessage, accountId, scrubbed)
         messenger.send('NewOpenMessage', [newMessage])
+        if hasattr(base.cr, 'chatLog') and base.cr.chatLog:
+            displayName = avatarName or accountName or 'Player'
+            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" % (displayName, message), avatarId, category=base.cr.chatLog.TAB_WHISPERS)
         return error
 
     def receiveGuildTalk(self, senderAvId, fromAC, avatarName, message, scrubbed = 0):
@@ -403,6 +401,8 @@ class TalkAssistant(DirectObject.DirectObject):
                     self.historyComplete.append(newMessage)
                     self.historyGuild.append(newMessage)
                     messenger.send('NewOpenMessage', [newMessage])
+                    if hasattr(base.cr, 'chatLog') and base.cr.chatLog:
+                        base.cr.chatLog.addToLog("\1playerGreen\1%s\2: %s" % (avatarName, message), senderAvId, category=base.cr.chatLog.TAB_CLUBS)
                 if newMessage.getBody() == OTPLocalizer.AntiSpamInChat:
                     self.spamDictByDoId[senderAvId] = 1
                 else:
@@ -446,9 +446,6 @@ class TalkAssistant(DirectObject.DirectObject):
             self.historyOpen.append(newMessage)
             messenger.send('NewOpenMessage', [newMessage])
         if hasattr(base.cr, 'chatLog'):
-            if base.localAvatar.getAdminAccess() >= 375:
-                avatarName = "\1WLEnter\1(%s)\2%s" %(accountId, avatarName)
-
             base.cr.chatLog.addToLog("\1playerGreen\1%s thinks\2: %s" %(avatarName, message), avatarId)
         return error
 
@@ -489,6 +486,8 @@ class TalkAssistant(DirectObject.DirectObject):
             self.historyComplete.append(newMessage)
             self.historyGuild.append(newMessage)
         messenger.send('NewOpenMessage', [newMessage])
+        if hasattr(base.cr, 'chatLog') and base.cr.chatLog:
+            base.cr.chatLog.addToLog("\1playerGreen\1%s\2: %s" % (senderName, message), senderAvId, category=base.cr.chatLog.TAB_CLUBS)
         return error
 
     def receiveGuildUpdateMessage(self, message, senderId, senderName, receiverId, receiverName, extraInfo = None):
@@ -498,6 +497,8 @@ class TalkAssistant(DirectObject.DirectObject):
             self.historyComplete.append(newMessage)
             self.historyGuild.append(newMessage)
         messenger.send('NewOpenMessage', [newMessage])
+        if hasattr(base.cr, 'chatLog') and base.cr.chatLog:
+            base.cr.chatLog.addToLog("\1orangeText\1Club Update: %s\2" % message, category=base.cr.chatLog.TAB_CLUBS)
         return error
 
     def receiveFriendUpdate(self, friendId, friendName, isOnline):
@@ -554,9 +555,6 @@ class TalkAssistant(DirectObject.DirectObject):
         self.addToHistoryDoId(newMessage, senderAvId)
         messenger.send('NewOpenMessage', [newMessage])
         if hasattr(base.cr, 'chatLog'):
-            if base.localAvatar.getAdminAccess() >= 375:
-                name = "\1WLEnter\1(%s)\2%s" %(senderAvId, name)
-
             base.cr.chatLog.addToLog("\1playerGreen\1%s\2: %s" %(name, message), senderAvId)
         return error
 
@@ -576,9 +574,7 @@ class TalkAssistant(DirectObject.DirectObject):
         self.addToHistoryDoId(newMessage, senderAvId)
         messenger.send('NewOpenMessage', [newMessage])
         if hasattr(base.cr, 'chatLog'):
-            if base.localAvatar.getAdminAccess() >= 375:
-                name = "\1WLEnter\1(%s)\2%s" %(senderAvId, name)
-            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" %(name, message), senderAvId)
+            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" %(name, message), senderAvId, category=base.cr.chatLog.TAB_WHISPERS)
         return error
 
     def receivePlayerWhisperSpeedChat(self, type, messageIndex, senderAvId, name = None):
@@ -596,6 +592,8 @@ class TalkAssistant(DirectObject.DirectObject):
         self.historyOpen.append(newMessage)
         self.addToHistoryDISLId(newMessage, senderAvId)
         messenger.send('NewOpenMessage', [newMessage])
+        if hasattr(base.cr, 'chatLog') and base.cr.chatLog:
+            base.cr.chatLog.addToLog("\1playerGreen\1%s whispers\2: \1WLDisplay\1%s\2" % (name, message), category=base.cr.chatLog.TAB_WHISPERS)
         return error
 
     def sendOpenTalk(self, message):

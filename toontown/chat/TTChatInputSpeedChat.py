@@ -463,11 +463,17 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         if base.config.GetBool('want-sc-auto-hide', 1):
             self.accept(self.terminalSelectedEvent, selectionMade)
         self.speedChat.reparentTo(base.a2dpTopLeft, DGG.FOREGROUND_SORT_INDEX)
-        scZ = -0.04
-        self.speedChat.setPos(0.283, 0, scZ)
+        # Match Corporate Clash's two SpeedChat positions.  When the full chat
+        # display is open, the menu is stacked directly beneath it.  When the
+        # display is collapsed, the menu sits below the small quick controls.
+        chatLog = getattr(getattr(base, 'cr', None), 'chatLog', None)
+        if chatLog is not None and not getattr(chatLog, 'isHidden', True):
+            self.speedChat.setPos(0.015, 0, -0.655)
+        else:
+            self.speedChat.setPos(0.015, 0, -0.18)
         if not self.firstTime:
-			self.speedChat.setPos(-99, -99, -99)
-			self.firstTime = 1
+            self.speedChat.setPos(-99, -99, -99)
+            self.firstTime = 1
         self.speedChat.setWhisperMode(self.whisperAvatarId != None)
         self.speedChat.enter()
 

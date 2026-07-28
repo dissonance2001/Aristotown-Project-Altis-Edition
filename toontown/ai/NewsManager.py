@@ -67,7 +67,7 @@ class NewsManager(DistributedObject.DistributedObject):
 
     def sendSystemMessage(self, message, style):
         if hasattr(base.cr, 'chatLog'):
-            base.cr.chatLog.addToLog("\1orangeText\1System Message: %s\2" %(message))
+            base.cr.chatLog.addToLog("\1orangeText\1System Message: %s\2" %(message), category=base.cr.chatLog.TAB_ALERTS)
         base.localAvatar.setSystemMessage(style, message)
 
     def setInvasionStatus(self, msgType, suitType, remaining, flags):

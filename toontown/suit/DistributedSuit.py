@@ -780,7 +780,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         if hasattr(base.cr, 'chatLog') and chatString != "":
-            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString))
+            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString), category=base.cr.chatLog.TAB_NPC)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
         if self.animHead == None and (self.getDizzy() or self.isSleepy or self.isSued):
             if self.dna.name == 'hroller':
@@ -904,7 +904,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         if hasattr(base.cr, 'chatLog') and chatString != "":
-            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString))
+            base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString), category=base.cr.chatLog.TAB_NPC)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
     def playCurrentDialogue(self, dialogue, chatFlags, interrupt = 1):

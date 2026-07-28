@@ -4,12 +4,14 @@ from toontown.toonbase.ToonPythonUtil import traceFunctionCall
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
+from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TeaserPanel
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.chat import ChatManager
 from TTChatInputSpeedChat import TTChatInputSpeedChat
+from TTChatInputUnites import TTChatInputUnites
 from TTChatInputNormal import TTChatInputNormal
 from TTChatInputWhiteList import TTChatInputWhiteList
 
@@ -55,6 +57,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         ChatManager.ChatManager.__init__(self, cr, localAvatar)
         self.defaultToWhiteList = base.config.GetBool('white-list-is-default', 1)
         self.chatInputSpeedChat = TTChatInputSpeedChat(self)
+        self.chatInputUnites = TTChatInputUnites(self)
         self.normalPos = Vec3(0.25, 0, -0.196)
         self.whisperPos = Vec3(0, 0, -0.296)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
@@ -69,9 +72,22 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.chatInputWhiteList.setPos(self.speedChatPlusPos)
         self.chatInputWhiteList.reparentTo(base.a2dTopLeft)
         self.chatInputWhiteList.desc = 'chatInputWhiteList'
+
+        # Keep the legacy widgets alive for old quest/tutorial references, but
+        # parent them under hidden so no old Altis chat button or entry can
+        # reappear over the replacement panel.
+        self.normalButton.reparentTo(hidden)
+        self.scButton.reparentTo(hidden)
+        self.clButton.reparentTo(hidden)
+        self.whisperFrame.reparentTo(hidden)
+        self.chatInputWhiteList.reparentTo(hidden)
+        if self.chatInputNormal is not self.chatInputWhiteList:
+            self.chatInputNormal.reparentTo(hidden)
         return
 
     def delete(self):
+        self.chatInputUnites.delete()
+        del self.chatInputUnites
         ChatManager.ChatManager.delete(self)
         loader.unloadModel('phase_3.5/models/gui/chat_input_gui')
         self.normalButton.destroy()
@@ -128,22 +144,57 @@ class ToontownChatManager(ChatManager.ChatManager):
             DirectButton(self.openChatWarning, image=buttonImage, relief=None, text=OTPLocalizer.OpenChatWarningOK, text_scale=0.05, text_pos=(0.0, -0.1), textMayChange=0, pos=(0.0, 0.0, -0.55), command=self.__handleOpenChatWarningOK)
             buttons.removeNode()
         self.openChatWarning.show()
-        normObs, scObs = self.isObscured()
-        if not scObs:
-            self.scButton.show()
-        if not normObs:
-            self.normalButton.show()
-        if not clObs:
-            self.clButton.show()
+        # The replacement panel owns every visible chat control.  The classic
+        # buttons stay hidden while this account warning is displayed.
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
 
     def enterMainMenu(self):
-        self.chatInputNormal.setPos(self.normalPos)
-        self.chatInputNormal.reparentTo(base.a2dTopLeft)
-        if self.chatInputWhiteList.isActive():
-            self.notify.debug('enterMainMenu calling checkObscured')
-            ChatManager.ChatManager.checkObscurred(self)
-        else:
-            ChatManager.ChatManager.enterMainMenu(self)
+        # The three classic Altis buttons are retained only as hidden
+        # compatibility objects for quests and older code.  The visible
+        # interface is the Clash-style ChatLog replacement.
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
+        self.whisperFrame.hide()
+        self.chatInputNormal.deactivate()
+        self.chatInputNormal.chatEntry['backgroundFocus'] = 0
+        chatLog = self.__getChatLog()
+        if chatLog:
+            normal, speedChat, chatLogObscured = self.isObscured()
+            chatLog.setObscured(normal, speedChat, chatLogObscured)
+
+    def exitMainMenu(self):
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
+        self.ignore('enterNormalChat')
+        self.chatInputNormal.chatEntry['backgroundFocus'] = 0
+
+    def enterOff(self):
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
+        self.whisperFrame.hide()
+        self.ignoreAll()
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.disableInterface()
+
+    def obscure(self, normal, sc, cl=False):
+        ChatManager.ChatManager.obscure(self, normal, sc, cl)
+        chatLog = self.__getChatLog()
+        if chatLog:
+            normalState, speedChatState, chatLogState = self.isObscured()
+            chatLog.setObscured(normalState, speedChatState, chatLogState)
+
+    def __getChatLog(self):
+        if hasattr(base, 'localAvatar') and base.localAvatar:
+            chatLog = getattr(base.localAvatar, 'chatLog', None)
+            if chatLog:
+                return chatLog
+        return getattr(base.cr, 'chatLog', None)
 
     def exitOpenChatWarning(self):
         self.openChatWarning.hide()
@@ -191,13 +242,10 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.teaser = TeaserPanel.TeaserPanel('secretChat', self.__handleUnpaidChatWarningDone)
             if base.localAvatar.inTutorial:
                 self.teaser.hidePay()
-        normObs, scObs = self.isObscured()
-        if not scObs:
-            self.scButton.show()
-        if not normObs:
-            self.normalButton.show()
-        if not clObs:
-            self.clButton.show()
+        # Keep the replacement chat as the only visible chat interface.
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
 
     def exitUnpaidChatWarning(self):
         if self.unpaidChatWarning:
@@ -371,10 +419,10 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.problemActivatingChat.hide()
 
     def __normalButtonPressed(self):
-        if base.config.GetBool('want-qa-regression', 0):
-            self.notify.info('QA-REGRESSION: CHAT: Speedchat Plus')
         messenger.send('wakeup')
-        self.fsm.request('normalChat')
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.open(focus=True)
 
     def __scButtonPressed(self):
         if base.config.GetBool('want-qa-regression', 0):
@@ -384,6 +432,21 @@ class ToontownChatManager(ChatManager.ChatManager):
             self.fsm.request('mainMenu')
         else:
             self.fsm.request('speedChat')
+
+    def whisperTo(self, avatarName, avatarId, playerId=None):
+        messenger.send('wakeup')
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.setWhisperTarget(avatarName, avatarId, playerId or 0)
+            return
+        ChatManager.ChatManager.whisperTo(self, avatarName, avatarId, playerId)
+
+    def noWhisper(self):
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.clearWhisperTarget()
+        if self.fsm.getCurrentState().getName() != 'mainMenu':
+            self.fsm.request('mainMenu')
 
     def __whisperButtonPressed(self, avatarName, avatarId, playerId):
         messenger.send('wakeup')
@@ -398,28 +461,157 @@ class ToontownChatManager(ChatManager.ChatManager):
         if base.localAvatar.chatLog:
             base.localAvatar.chatLog.toggle()
 
-    def enterNormalChat(self):
-        result = ChatManager.ChatManager.enterNormalChat(self)
-        if result == None:
-            self.notify.warning('something went wrong in enterNormalChat, falling back to main menu')
+    def sendPanelMessage(self, message):
+        message = message.strip()
+        if not message:
+            return False
+        message = message[:100]
+        chatLog = self.__getChatLog()
+        targetName = None
+        targetAvatarId = 0
+        targetPlayerId = 0
+        activeTab = None
+        if chatLog:
+            targetName, targetAvatarId, targetPlayerId = chatLog.getWhisperTarget()
+            activeTab = chatLog.currentTab
+
+        # Magic words always use open chat, matching the original input box.
+        if len(message) > 0 and message[0] == ToontownGlobals.MagicWordInvokerPrefix:
+            base.talkAssistant.sendOpenTalk(message)
+        elif chatLog and activeTab == chatLog.TAB_WHISPERS and targetAvatarId:
+            check = getattr(base.talkAssistant, 'checkWhisperTypedChatAvatar', None)
+            if check and not check(targetAvatarId):
+                chatLog.addToLog('\1playerGreen\1System Message\2: Typed whispers are not available for that Toon.', category=chatLog.TAB_ALERTS)
+                return False
+            base.talkAssistant.sendWhisperTalk(message, targetAvatarId)
+        elif chatLog and activeTab == chatLog.TAB_WHISPERS and targetPlayerId:
+            check = getattr(base.talkAssistant, 'checkWhisperTypedChatPlayer', None)
+            if check and not check(targetPlayerId):
+                chatLog.addToLog('\1playerGreen\1System Message\2: Typed whispers are not available for that player.', category=chatLog.TAB_ALERTS)
+                return False
+            base.talkAssistant.sendAccountTalk(message, targetPlayerId)
+        elif chatLog and activeTab == chatLog.TAB_CLUBS:
+            check = getattr(base.talkAssistant, 'checkGuildTypedChat', None)
+            if check and not check():
+                chatLog.addToLog('\1playerGreen\1System Message\2: You are not in a Club.', category=chatLog.TAB_ALERTS)
+                return False
+            error = base.talkAssistant.sendGuildTalk(message)
+            if error:
+                chatLog.addToLog('\1playerGreen\1System Message\2: Club chat is not available.', category=chatLog.TAB_ALERTS)
+                return False
+        else:
+            check = getattr(base.talkAssistant, 'checkAnyTypedChat', None)
+            if check and not check():
+                if chatLog:
+                    chatLog.addToLog('\1playerGreen\1System Message\2: Typed chat is not available.', category=chatLog.TAB_ALERTS)
+                return False
+            base.talkAssistant.sendOpenTalk(message)
+
+        messenger.send('sentRegularChat')
+        self.messageSent()
+        return True
+
+    def openPanelSpeedChat(self):
+        messenger.send('wakeup')
+        self.chatInputUnites.hide()
+        chatLog = self.__getChatLog()
+        targetName = None
+        targetAvatarId = 0
+        targetPlayerId = 0
+        activeTab = None
+        if chatLog:
+            targetName, targetAvatarId, targetPlayerId = chatLog.getWhisperTarget()
+            activeTab = chatLog.currentTab
+        stateName = self.fsm.getCurrentState().getName()
+        if chatLog and activeTab == chatLog.TAB_WHISPERS and targetAvatarId:
+            if stateName == 'whisperSpeedChat':
+                self.fsm.request('mainMenu')
+            else:
+                self.fsm.request('whisperSpeedChat', [targetAvatarId])
+        elif chatLog and activeTab == chatLog.TAB_WHISPERS and targetPlayerId:
+            if stateName == 'whisperSpeedChatPlayer':
+                self.fsm.request('mainMenu')
+            else:
+                self.fsm.request('whisperSpeedChatPlayer', [targetPlayerId])
+        elif chatLog and activeTab == chatLog.TAB_CLUBS:
+            if chatLog:
+                chatLog.addToLog('\1playerGreen\1System Message\2: Club SpeedChat is not connected to this panel yet.', category=chatLog.TAB_ALERTS)
+        elif stateName == 'speedChat':
             self.fsm.request('mainMenu')
+        else:
+            self.fsm.request('speedChat')
+
+    def openPanelUnites(self):
+        messenger.send('wakeup')
+        stateName = self.fsm.getCurrentState().getName()
+        if stateName in ('speedChat', 'whisperSpeedChat', 'whisperSpeedChatPlayer'):
+            self.fsm.request('mainMenu')
+        self.chatInputUnites.show()
+
+    def closePanelMenus(self):
+        self.chatInputUnites.hide()
+        stateName = self.fsm.getCurrentState().getName()
+        if stateName in ('speedChat', 'whisperSpeedChat', 'whisperSpeedChatPlayer'):
+            self.fsm.request('mainMenu')
+
+    def enterSpeedChat(self):
+        messenger.send('enterSpeedChat')
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
+        self.whisperFrame.hide()
+        self.chatInputNormal.chatEntry['backgroundFocus'] = 0
+        self.chatInputSpeedChat.show()
+
+    def exitSpeedChat(self):
+        self.chatInputSpeedChat.hide()
+        self.normalButton.hide()
+        self.scButton.hide()
+        self.clButton.hide()
+
+    def enterWhisperSpeedChat(self, avatarId):
+        self.whisperFrame.hide()
+        self.chatInputNormal.chatEntry['backgroundFocus'] = 0
+        self.chatInputSpeedChat.show(avatarId)
+
+    def exitWhisperSpeedChat(self):
+        self.whisperFrame.hide()
+        self.chatInputSpeedChat.hide()
+
+    def enterWhisperSpeedChatPlayer(self, playerId):
+        self.whisperFrame.hide()
+        self.chatInputNormal.chatEntry['backgroundFocus'] = 0
+        self.chatInputSpeedChat.show(playerId, 1)
+
+    def exitWhisperSpeedChatPlayer(self):
+        self.whisperFrame.hide()
+        self.chatInputSpeedChat.hide()
+
+    def enterNormalChat(self):
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.open(focus=True)
+        return 1
+
+    def exitNormalChat(self):
         return
 
     def enterWhisperChatPlayer(self, avatarName, playerId):
-        result = ChatManager.ChatManager.enterWhisperChatPlayer(self, avatarName, playerId)
-        self.chatInputNormal.setPos(self.whisperPos)
-        if result == None:
-            self.notify.warning('something went wrong in enterWhisperChatPlayer, falling back to main menu')
-            self.fsm.request('mainMenu')
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.setWhisperTarget(avatarName, 0, playerId)
+        return 1
+
+    def exitWhisperChatPlayer(self):
         return
 
     def enterWhisperChat(self, avatarName, avatarId):
-        result = ChatManager.ChatManager.enterWhisperChat(self, avatarName, avatarId)
-        self.chatInputNormal.reparentTo(base.a2dTopCenter)
-        self.chatInputNormal.setPos(self.whisperPos)
-        if result == None:
-            self.notify.warning('something went wrong in enterWhisperChat, falling back to main menu')
-            self.fsm.request('mainMenu')
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.setWhisperTarget(avatarName, avatarId, 0)
+        return 1
+
+    def exitWhisperChat(self):
         return
 
     def enterNoSecretChatAtAllAndNoWhitelist(self):
@@ -567,7 +759,9 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.fsm.request('mainMenu')
 
     def messageSent(self):
-        pass
+        messenger.send('wakeup')
 
     def deactivateChat(self):
-        pass
+        chatLog = self.__getChatLog()
+        if chatLog:
+            chatLog.removeFocus()
