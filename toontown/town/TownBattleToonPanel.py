@@ -1930,6 +1930,40 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipDescription="This Toon's Gags are -%s%% less effective." % avatar.getToonStatusModifier('damageDown'), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('hurrySickness'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/hurry_sickness_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('hurrySickness'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hurry Sickness', 
+                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal -%s%% less damage." % avatar.getToonStatusModifier('hurrySickness'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('hurrySicknessBan'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/hurry_sickness_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('hurrySicknessBan'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hurry Sickness', 
+                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal -%s%% less damage." % avatar.getToonStatusModifier('hurrySicknessBan'), 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
             
         if avatar.hasToonStatusEffect('sanctioned'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -2473,7 +2507,7 @@ class TownBattleToonPanel(DirectFrame):
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('markedMeltdown') * 0.01)
             if self.avatar.hasToonStatusEffect('phantomDebuff'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-                lureValue *= (1.0 +-self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+                lureValue *= (1.0 -self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
             if self.avatar.hasToonStatusEffect('revisedFiling'):
                 damage *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
@@ -2483,6 +2517,12 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('inkDrain'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('inkDrain') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('inkDrain') * 0.01)
+            if self.avatar.hasToonStatusEffect('hurrySickness'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('hurrySickness') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('hurrySickness') * 0.01)
+            if self.avatar.hasToonStatusEffect('hurrySicknessBan'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('hurrySicknessBan') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('hurrySicknessBan') * 0.01)
             if self.avatar.hasToonStatusEffect('viralSensation'):
                 damage *= (1.0 + self.avatar.getToonStatusModifier('viralSensation') * 0.01)
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('viralSensation') * 0.01)

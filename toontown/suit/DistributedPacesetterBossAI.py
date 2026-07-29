@@ -26,16 +26,16 @@ from toontown.coghq import DistributedLawbotChairAI
 from toontown.toonbase import ToontownBattleGlobals
 import math
 
-class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountErclaimBossAI')
+class DistributedPacesetterBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPacesetterBossAI')
     limitHitCount = 6
     hitCountDamage = 35
     numPies = 10
     maxToonLevels = 77
 
     def __init__(self, air):
-        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 'l')
-        FSM.FSM.__init__(self, 'DistributedCountErclaimBossAI')
+        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 's')
+        FSM.FSM.__init__(self, 'DistributedPacesetterBossAI')
         self.lawyers = []
         self.cannons = None
         self.chairs = None
@@ -269,11 +269,11 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.CountErclaimBattleAPosHpr)
+        self.initializeBattles(1, ToontownGlobals.PacesetterBattleAPosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'erclaimerfit')
+            cogs = self.invokeEmptyPlanner(11, 'pace')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             #random.shuffle(activeSuits)
@@ -364,7 +364,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(2, ToontownGlobals.CountErclaimBattleAPosHpr)
+        self.initializeBattles(2, ToontownGlobals.PacesetterBattleAPosHpr)
 
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)
@@ -906,77 +906,3 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
         self.toonLevels = self.getToonDifficulty()
         self.b_setBattleDifficulty(self.toonLevels)
 
-
-@magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCount():
-    """
-    Skips to the final round of the CJ.
-    """
-    invoker = spellbook.getInvoker()
-    boss = None
-    for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedCountErclaimBossAI):
-            if invoker.doId in do.involvedToons:
-                boss = do
-                break
-    if not boss:
-        return "You aren't in a CJ!"
-    if boss.state in ('PrepareBattleThree', 'BattleThree'):
-        return "You can't skip this round."
-    boss.exitIntroduction()
-    boss.b_setState('RollToBattleTwo')
-
-@magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCount2():
-    """
-    Skips to the final round of the CJ.
-    """
-    invoker = spellbook.getInvoker()
-    boss = None
-    for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedCountErclaimBossAI):
-            if invoker.doId in do.involvedToons:
-                boss = do
-                break
-    if not boss:
-        return "You aren't in a CJ!"
-    if boss.state in ('PrepareBattleThree', 'BattleThree'):
-        return "You can't skip this round."
-    boss.exitIntroduction()
-    boss.b_setState('Frolic')
-
-
-@magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipCountFinal():
-    """
-    Kills the CJ.
-    """
-    invoker = spellbook.getInvoker()
-    boss = None
-    for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedCountErclaimBossAI):
-            if invoker.doId in do.involvedToons:
-                boss = do
-                break
-    if not boss:
-        return "You aren't in a CJ"
-    boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
-    return 'Skipped to CJ Final.'
-
-@magicWord(category=CATEGORY_ADMINISTRATOR)
-def killCount():
-    """
-    Kills the CJ.
-    """
-    invoker = spellbook.getInvoker()
-    boss = None
-    for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedCountErclaimBossAI):
-            if invoker.doId in do.involvedToons:
-                boss = do
-                break
-    if not boss:
-        return "You aren't in a CJ"
-    boss.b_setState('Victory')
-    return 'Killed CJ.'

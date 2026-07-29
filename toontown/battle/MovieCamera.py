@@ -2247,6 +2247,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AttorneyChrono':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+    elif name == 'PacesetterComeOn':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
     elif name == 'AttorneyRushJob':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
@@ -2265,6 +2268,25 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'PresidentMandatoryFiling':
         camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == 'PacesetterHurrySickness':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = Sequence(Wait(attackDuration))
+            return camTrack2
+    elif name == 'PacesetterHurrySicknessBan':
+        if attackDuration > 2:
+            camTrack.append(defaultCamera(openShotDuration=1.5))
+        else:
+            camTrack2 = Sequence(Wait(attackDuration))
+            return camTrack2
+    elif name == 'PacesetterContentSync':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'PacesetterMovingGoalposts':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'PacesetterOverclocked':
+        camTrack2 = defaultCamera(openShotDuration=6.75)
+        return camTrack2
     elif name in ('RushJobTrap'
             'RushJobLure'
             'RushJobThrow'

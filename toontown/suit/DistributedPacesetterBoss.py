@@ -43,14 +43,14 @@ MIN_CHASE_Y = 360
 MAX_CHASE_Y = 360
 
 
-class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountErclaimBoss')
+class DistributedPacesetterBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPacesetterBoss')
     debugPositions = False
 
     def __init__(self, cr):
         self.notify.debug('----- __init___')
         DistributedBossCog.DistributedBossCog.__init__(self, cr)
-        FSM.FSM.__init__(self, 'DistributedCountErclaimBoss')
+        FSM.FSM.__init__(self, 'DistributedPacesetterBoss')
         self.lawyers = []
         self.lawyerRequest = None
         self.bossDamage = 0
@@ -68,11 +68,11 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.onscreenMessage = None
         self.chaseTrack = None
         self.chaseTime = 0
-
+        self.setPhase1MusicRate = 1.0
         # Hacky fix for crashing when we run over a table.
         self.tableIndex = 15
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
-        self.elevatorType = ElevatorConstants.ELEVATOR_ERCLAIM
+        self.elevatorType = ElevatorConstants.ELEVATOR_PACE
         self.gavels = {}
         self.chairs = {}
         self.cannons = {}
@@ -154,7 +154,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         disk.reparentTo(self.pelvis)
         disk.setZ(0.8)
         self.loadEnvironment()
-        self.activateSky()
+        #self.activateSky()
         #self.__makeWitnessToon()
         #self.__loadMopaths()
         base.localAvatar.chatMgr.chatInputSpeedChat.addCJMenu()
@@ -197,6 +197,27 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         if OneBossCog == self:
             OneBossCog = None
         return
+
+    def stopPhaseOneMusic(self):
+        self.battleOneMusic.stop()
+        self.geom.setColorScale(0.3, 0.3, 0.3, 1)
+
+    def startPhaseTwoMusic(self):
+        self.phaseTwoMusic.play()
+        self.phaseTwoMusic.setLoop(True)
+
+    def setBattleMusicSpeed(self):
+        """
+        Sets the current battle music playback speed.
+
+        1.0 = normal
+        1.25 = 25% faster
+        1.5 = 50% faster
+        """
+        self.setPhase1MusicRate += .025
+
+        if self.battleOneMusic:
+            self.battleOneMusic.setPlayRate(self.setPhase1MusicRate)
 
     def delete(self):
         self.notify.debug('----- delete')
@@ -461,7 +482,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.notify.debug('----- loadEnvironment')
         self.hide()
         DistributedBossCog.DistributedBossCog.loadEnvironment(self)
-        self.geom = loader.loadModel('phase_13/models/events/halloween/erfit_bossRoom')
+        self.geom = loader.loadModel('phase_8/models/areas/ttcc_psetter_bossRoom')
         self.geom.setPos(0, 0, 0)
         self.geom.setScale(1.1)
         self.elevatorEntrance = self.geom.find('**/elevator_origin')
@@ -472,12 +493,19 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         # bossElevator.setH(180)
         # bossElevator.getChildren().detach()
         # bossElevator.setScale(1)
-        self.elevatorModel = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_csa_elevatorB')
+        self.elevatorModel = loader.loadModel('phase_8/models/modules/ttcc_psetter_elevator.bam')
         self.elevatorModel.reparentTo(self.elevatorEntrance)
         self.elevatorModel.setH(180)
         self.setupElevator(self.elevatorModel)
-        ElevatorUtils.closeDoors(self.elevatorModel.find('**/left_door'), self.elevatorModel.find('**/right_door'), self.elevatorType)
-        self.elevatorMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/elevator_countErfit_2.ogg')
+        self.leftDoor = self.elevatorModel.find('**/left_door')
+        if self.leftDoor.isEmpty():
+            self.leftDoor = self.elevatorModel.find('**/left-door')
+
+        self.rightDoor = self.elevatorModel.find('**/right_door')
+        if self.rightDoor.isEmpty():
+            self.rightDoor = self.elevatorModel.find('**/right-door')
+        ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, self.elevatorType)
+        self.elevatorMusic = base.loader.loadMusic('phase_9/audio/bgm/merc/instance_pacesetter_elevator.ogg')
         self.promotionMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_hard_boss_cutscene_1.ogg')
         self.betweenBattleMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_toon_winning.ogg')
         self.battleTwoMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation.ogg')
@@ -485,8 +513,8 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         self.litigatorMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
         self.caseMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
         self.goatMusic = base.loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
-        self.battleOneMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/encntr_countErfit.ogg')
-        self.phaseTwoMusic = base.loader.loadMusic('phase_13/audio/bgm/april_toons/erfit/GOLDENFLEX.ogg')
+        self.battleOneMusic = base.loader.loadMusic('phase_9/audio/bgm/merc/instance_pacesetter_battle.ogg')
+        self.phaseTwoMusic = base.loader.loadMusic('phase_9/audio/bgm/merc/OVERCLOCKED.ogg')
         # self.evFloor = self.replaceCollisionPolysWithPlanes(floor)
         # self.evFloor.setName('floor')
         # plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
@@ -537,20 +565,6 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
 
     # def openDoors(self):
     #     return Sequence()
-
-    def stopPhaseOneMusic(self):
-        self.battleOneMusic.stop()
-        self.phaseTwoMusic.play()
-        self.phaseTwoMusic.setLoop(True)
-
-    def erfitRevive(self):
-        self.geom.find('**/walls').hide()
-        self.geom.find('**/ceiling').hide()
-        self.geom.find('**/sky').hide()
-        self.geom.find('**/glass').hide()
-        self.geom.find('**/skylight').hide()
-        self.geom.find('**/floor').hide()
-        self.geom.find('**/decor_2').hide()
 
     def loadJuryBox(self):
         self.juryBox = self.geom.find('**/JuryBox')

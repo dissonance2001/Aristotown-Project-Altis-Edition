@@ -1704,6 +1704,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.invFrame.reparentTo(self)
         self.purchaseFrame.hide()
 
+    def isSpecificGagBanned(self, track, level):
+        return 'noGag_%s_%s' % (track, level) in base.localAvatar.battleConditions
+
     def battleActivateButtons(self):
         self.__applyBattleDetailLayout()
         self.applyDisplayTrackOrder()
@@ -1993,6 +1996,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                 (self.numItem(track,
                                               level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeRushJobPressable(button, track, level)
+                        if self.isSpecificGagBanned(track, level):
+                            self.makeBannablePressable(button, track, level)
                         if track == HEAL_TRACK and 'noToonUpGags' in base.localAvatar.battleConditions and not \
                                 (self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure):
                             self.makeBannablePressable(button, track, level)

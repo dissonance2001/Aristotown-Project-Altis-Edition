@@ -486,8 +486,8 @@ def __throwPie(throw, delay, hitCount, npcs):
                 else:
                     sival = ActorInterval(suit, 'pie-small-react')
         suitResponseTrack.append(Wait(delay + tPieHitsSuit))
-        if suit.throwRushJob:
-            suitResponseTrack.append(Func(suit.makeUnThrowRushJob))
+        if suit.getSuitStatusModifier('rushJob') == 3:
+            suitResponseTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
         suitResponseTrack.append(showDamage)
         suitResponseTrack.append(updateHealthBar)
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:

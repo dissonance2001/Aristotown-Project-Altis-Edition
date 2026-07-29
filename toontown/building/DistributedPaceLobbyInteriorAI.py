@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedPaceElevatorAI import DistributedPaceElevatorAI
 from toontown.coghq.LobbyManagerAI import LobbyManagerAI
-from toontown.suit import DistributedCountErclaimBossAI
+from toontown.suit import DistributedPacesetterBossAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 
@@ -35,7 +35,7 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         if self.paceLobbyManager is None:
             self.paceLobbyManager = LobbyManagerAI(
                 self.air,
-                DistributedCountErclaimBossAI.DistributedCountErclaimBossAI,
+                DistributedPacesetterBossAI.DistributedPacesetterBossAI,
                 ToontownGlobals.PacesetterLobby
             )
 

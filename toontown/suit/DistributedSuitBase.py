@@ -3977,6 +3977,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 and self.getActualLevel() in (24, 25)
         ):
             targetAnim = 'pace'
+        elif (
+                self.dna.name == 'psetter'
+        ):
+            targetAnim = 'pace'
 
         elif (
                 self.dna.name == 'sgoat'

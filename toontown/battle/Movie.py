@@ -430,6 +430,22 @@ class Movie(DirectObject.DirectObject):
 
     def play(self, ts, callback):
         self.hasBeenReset = 0
+
+        speedSuit = None
+
+        for s in self.battle.suits:
+            if s.battleSpeed > 0 and s.dna.name != 'hustle':
+                speedSuit = s
+                break
+
+        if speedSuit:
+            speed = float(speedSuit.getBattleSpeed())
+        else:
+            speed = 1.0
+
+        speed = max(0.1, speed)
+        self.currentBattleSpeed = speed
+
         ptrack = Sequence(Wait(1.0))
         camtrack = Sequence(Wait(1.0))
         if random.random() > 0.5:
@@ -508,23 +524,6 @@ class Movie(DirectObject.DirectObject):
 
         for toon in self.battle.toons:
             self.track.delayDeletes.append(DelayDelete.DelayDelete(toon, 'Movie.play'))
-
-        speedSuit = None
-
-        for s in self.battle.suits:
-            if s.battleSpeed > 0 and not s.dna.name == 'hustle':
-                speedSuit = s
-                break
-
-        if speedSuit:
-            for suit in self.battle.activeSuits:
-                if not suit.battleSpeed:
-                    suit.checkBattleSpeed(speedSuit, 0)
-                    break
-
-            speed = speedSuit.getBattleSpeed()
-        else:
-            speed = 1.0
 
         self.setTrackPlayRate(self.track, speed)
         self.track.start(ts, playRate=speed)
@@ -1509,6 +1508,10 @@ class Movie(DirectObject.DirectObject):
         track = Sequence(name=name)
         camTrack = Sequence(name=name + '-cam')
 
+        IGNORE_BATTLE_PLAYRATE = (
+            'PacesetterOverclocked',
+        )
+
         parallelGroupNames = {
             'ErfitProToonShake': 'ErfitPhaseCombo',
             'ErfitPhase2': 'ErfitPhaseCombo',
@@ -1582,6 +1585,15 @@ class Movie(DirectObject.DirectObject):
             ival, camIval = MovieSuitAttacks.doSuitAttack(a)
             if not ival:
                 continue
+
+            if attackName in IGNORE_BATTLE_PLAYRATE:
+                speed = getattr(self, 'currentBattleSpeed', 1.0)
+
+                if speed != 0:
+                    ival.setPlayRate(1.0 / speed)
+
+                    if camIval:
+                        camIval.setPlayRate(1.0 / speed)
 
             groupName = parallelGroupNames.get(attackName, attackName)
 

@@ -143,6 +143,7 @@ class BattleCalculatorAI:
         self.countErclaimHP = 0
         self.countErfitHP = 0
         self.absorbDamage = 0
+        self.hurrySicknessDamage = 25
         self.absorbDamageByTrack = {
             LURE: 0,
             THROW: 0,
@@ -1758,6 +1759,8 @@ class BattleCalculatorAI:
 
 
         banned = False
+        if self.toonUsedBannedGag(toonId, atkTrack, atkLevel):
+            self.setToonCondition(toonId, 'banned', 1, 1, 'setBoth')
 
         levelBanConds = {
             7: 'nolevel8s',
@@ -1944,6 +1947,8 @@ class BattleCalculatorAI:
                                 elif theSuit.dna.name == 'fires':
                                      rounds = 0
                                 elif theSuit.dna.name == 'fbed':
+                                     rounds = 0
+                                elif theSuit.dna.name == 'psetter':
                                      rounds = 0
                                 elif theSuit.dna.name == 'mouthp':
                                      rounds = 0
@@ -2287,6 +2292,8 @@ class BattleCalculatorAI:
                                 suit.setHP(suit.currHP + 1)
                                 attackDamage = 1
                 elif atkTrack == HEAL:
+                    if self.toonUsedBannedGag(toonId, atkTrack, attackLevel):
+                        self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         for suit in self.battle.activeSuits:
                             self.setSuitCondition(suit.doId, 'bannedGagUsed', 1, 1, 'setBoth')
@@ -4656,6 +4663,39 @@ class BattleCalculatorAI:
         if amount <= 0:
             return
         self.syphonHP[suitId] = self.syphonHP.get(suitId, 0) + amount
+
+    def toonUsedBannedGag(self, toonId, track, level):
+        conditionName = 'noGag_%s_%s' % (track, level)
+        return self.toonHasCondition(toonId, conditionName)
+
+    def getRandomSpecificGagBansForToon(
+            self,
+            toonId,
+            amount=3,
+            minLevel=3,
+            maxLevel=7):
+
+        possible = []
+        toon = self.battle.getToon(toonId)
+
+        for track in range(8):
+
+            if not toon.hasTrackAccess(track):
+                continue
+
+            for level in range(minLevel, maxLevel + 1):
+
+                if toon.inventory.numItem(track, level) <= 0:
+                    continue
+
+                possible.append((track, level))
+
+        if not possible:
+            return []
+
+        amount = min(amount, len(possible))
+
+        return random.sample(possible, amount)
 
 
     def __calcSuitAtkHpALT(self, attack):
@@ -8423,6 +8463,84 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'battleSpeed', 1.5, -1, 'setBoth')
                     else:
                         self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(theSuit.doId, 'battleSpeed') + .5), -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterContentSync':
+                result = random.randint(1, 8)
+
+                attack[SUIT_HP_COL][targetIndex] = result
+
+                syncCond = 'contentSync%s' % result
+
+                self.battle.nextContentSyncOrderCondition = syncCond
+
+                for t in self.battle.activeToons:
+
+                    for cond in CONTENT_SYNC_CONDITION_ORDERS.keys():
+                        self.setToonCondition(t, cond, 0, 0, 'setBoth')
+
+                    self.setToonCondition(t, syncCond, 1, -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterMovingGoalposts':
+                result = 0
+
+                attack[SUIT_HP_COL][targetIndex] = result
+
+                self.applyRandomSpecificGagBans(toonId, turns=2)
+                self.setSuitCondition(theSuit.doId, 'alreadyMoving', 1, -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterComeOn':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                for suit in self.battle.activeSuits:
+                    if not self.suitHasCondition(theSuit.doId, 'battleSpeed'):
+                        self.setSuitCondition(suit.doId, 'battleSpeed', 1.25, -1, 'setBoth')
+                    else:
+                        self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(theSuit.doId, 'battleSpeed') + .25), -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterOverclocked':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'overclocked', 1, -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterHurrySicknessBan':
+                if self.toonHasCondition(toon.doId, 'banned'):
+                    self.setToonCondition(toon.doId, 'allGagBoost', -40, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -40, 2, 'setBoth')
+                    if not self.suitHasCondition(theSuit.doId, 'alreadyHurrySickness'):
+                        self.hurrySicknessDamage += 10
+                    result = self.hurrySicknessDamage
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'PacesetterHurrySickness':
+                if self.suitHasCondition(theSuit.doId, 'alreadyMoving'):
+                    self.applyRandomSpecificGagBans(toon.doId, turns=2)
+                doHurrySickness = 0
+                for suit in self.battle.activeSuits:
+                    rushJobConditions = (
+                        'trapRushJob',
+                        'lureRushJob',
+                        'throwRushJob',
+                        'squirtRushJob',
+                        'zapRushJob',
+                        'soundRushJob',
+                        'dropRushJob',
+                    )
+                    if any(self.suitHasCondition(suit.doId, cond)
+                        for cond in rushJobConditions) and suit.currHP > 0:
+                        doHurrySickness = 1
+
+                    # # TODO: Replace old system with new status effect system.  Slowly, but surely...
+                    # if len(self.getAllRelevantConditions(suit.doId, StatusEffects.RushJob, toon=False)) > 0: # Are there any existing Rush Jobs?
+                    #     doHurrySickness = 1 # We want Hurry Sickness.  Personally, I don't think this is ideal, but it can stay for now.
+                    #     break # We've checked all that we need.
+
+                if doHurrySickness:
+                    if not self.suitHasCondition(theSuit.doId, 'alreadyHurrySickness'):
+                        self.hurrySicknessDamage += 10
+                    result = self.hurrySicknessDamage
+                    self.setToonCondition(toon.doId, 'allGagBoost', -40, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -40, 2, 'setBoth')
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'alreadyHurrySickness', 1, 1, 'setBoth')
             elif atkType['name'] == 'AttorneyShakedownCooldown':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -9052,6 +9170,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitRushJob(), 1, 'setBoth')
                 elif theSuit.dna.name == 'clerk':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
+                elif theSuit.dna.name == 'psetter':
+                    self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitRushJob(), 1, 'setBoth')
                 elif theSuit.dna.name == 'foreman':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
                 elif theSuit.dna.name == 'supervis':
@@ -11741,6 +11861,7 @@ class BattleCalculatorAI:
                     'AttorneyRemand',
                     'VideographerElectricShock',
                     'MintMovingGoalposts',
+                    'PacesetterContentSync',
                     'HighRollerDamageReduction',
                     'WiretapperWiretapped',
                     'TollmasterBalanceTheLedger',
@@ -12138,6 +12259,31 @@ class BattleCalculatorAI:
             return handle.maxHp
         else:
             return 0
+
+    def getRandomGagBanPerTrack(self, minLevel=3, maxLevel=7):
+        bans = []
+
+        for track in range(8):
+            level = random.randint(minLevel, maxLevel)
+            bans.append((track, level))
+
+        return bans
+
+    def applyRandomSpecificGagBans(self, toonId, turns=3):
+        bans = self.getRandomGagBanPerTrack()
+
+        for track, level in bans:
+            conditionName = 'noGag_%s_%s' % (track, level)
+
+            self.setToonCondition(
+                toonId,
+                conditionName,
+                1,
+                turns,
+                'setBoth'
+            )
+
+        return bans
 
     def __applySuitAttackDamages(self, attack, theSuit):
         if APPLY_HEALTH_ADJUSTMENTS:
@@ -13585,6 +13731,92 @@ class BattleCalculatorAI:
                                             boss.battleNumber,
                                             spawnCode
                                         )
+            SPAWNER_DNAS_PACE = (
+                                       'psetter'
+                                    )
+                        
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_PACE:
+                if x % 2 == 0 and currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_PACE
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedPacesetterBossAI import (
+                                DistributedPacesetterBossAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedPacesetterBossAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
+                                    break
+
+                            if boss:
+                                maxSuits = 7
+                                maxSpawnPerTurn = 3
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        not self.suitHasCondition(
+                                            spawnerId,
+                                            'alreadyCogSpawn'
+                                        )):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    spawnCode = 'paceGrunts'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
             # if self.battle.activeSuits[i].dna.name == 'redd':
             #     currentBossHealth = -1
             #     for s in self.battle.suits:
@@ -13948,6 +14180,8 @@ class BattleCalculatorAI:
                     'AbsorbMovieSound',
                     'AbsorbMovieDrop',
                     'AbsorbMovieLevelLure',
+                    'PacesetterComeOn',
+                    'PacesetterContentSync',
                     'AbsorbMovieLevelThrow',
                     'AbsorbMovieLevelSquirt',
                     'AbsorbMovieLevelZap',
@@ -21035,6 +21269,173 @@ class BattleCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
+    def __calculatePacesetterAttacks(self):
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'psetter': 
+                if self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'PacesetterHurrySickness',
+                                                            'animName': 'finger-wag',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'psetter': 
+                if self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'PacesetterHurrySicknessBan',
+                                                            'animName': 'finger-wag',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'psetter':
+                if self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'PresidentTargetCheck',  # Target Check
+                                                                'animName': 'nothing',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.battle.activeSuits[i].currHP > 0:
+                    if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
+                        attack = self.__getLureRemoval(suitId)
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': random.choice(('RushJobTrap',
+                                                                                            'RushJobLure',
+                                                                                            'RushJobThrow',
+                                                                                            'RushJobSquirt',
+                                                                                            'RushJobZap',
+                                                                                            'RushJobSound',
+                                                                                            'RushJobDrop')),
+                                                                'animName': 'rush-job',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+
+                roll = random.randint(0, 100)
+                if roll >= 25 and (self.battle.activeSuits[i].currHP < 8925 or self.suitHasCondition(suitId, 'overclocked')):
+                    if self.battle.activeSuits[i].currHP > 0:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PresidentTargetCheck',  # Target Check
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    if self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.battle.activeSuits[i].currHP > 0:
+                        if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
+                            attack = self.__getLureRemoval(suitId)
+                            if attack[SUIT_ATK_COL]:
+                                self.battle.suitAttacks.append(attack)
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': random.choice(('RushJobTrap',
+                                                                                                'RushJobLure',
+                                                                                                'RushJobThrow',
+                                                                                                'RushJobSquirt',
+                                                                                                'RushJobZap',
+                                                                                                'RushJobSound',
+                                                                                                'RushJobDrop')),
+                                                                    'animName': 'rush-job',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+
+                roll = random.randint(0, 100)
+                if roll >= 25 and self.battle.activeSuits[i].currHP < 3825:
+                    if self.battle.activeSuits[i].currHP > 0:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PresidentTargetCheck',  # Target Check
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': random.choice(('RushJobTrap',
+                                                                                                'RushJobLure',
+                                                                                                'RushJobThrow',
+                                                                                                'RushJobSquirt',
+                                                                                                'RushJobZap',
+                                                                                                'RushJobSound',
+                                                                                                'RushJobDrop')),
+                                                                    'animName': 'rush-job',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
+                if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 8415 and not self.getSuitConditionModifier(suitId, 'alreadyMoving'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'PacesetterMovingGoalposts',
+                                                            'animName': 'magic3',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 10200 and self.TurnsElapsed % 4 == 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'PacesetterContentSync',
+                                                            'animName': 'magic3',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].currHP > 0:
+                    if self.battle.activeSuits[i].currHP <= 5100 and not self.suitHasCondition(suitId, 'overclocked'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PacesetterOverclocked',
+                                                                    'animName': 'overclocked',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PacesetterComeOn',
+                                                                    'animName': 'come-on',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+
     def __queueAbsorbMovieForTrack(self, suit, trackName, trackConst):
         suitId = suit.doId
 
@@ -22255,6 +22656,7 @@ class BattleCalculatorAI:
         self.__calculateSuitAttacksCashbotLitigation()
         self.__calculateSuitAttacksWitnessStandIn()
         self.__calculateSuitAttacksLawbotLitigation()
+        self.__calculatePacesetterAttacks()
         self.__calculateSuitAttacksDirectors()
         self.__calculateSuitAttacksCounts()
         self.__calculateEndOfRoundAttacks()

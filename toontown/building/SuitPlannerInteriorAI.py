@@ -12,6 +12,27 @@ from toontown.toonbase import ToontownBattleGlobals
 
 class SuitPlannerInteriorAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitPlannerInteriorAI')
+    MIN_LEVEL_BY_TYPE = {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+    }
+
+    MAX_LEVEL_BY_TYPE = {
+        1: 5,
+        2: 6,
+        3: 7,
+        4: 12,
+        5: 15,
+        6: 15,
+        7: 20,
+        8: 50,
+    }
 
     def __init__(self, numFloors, bldgLevel, bldgTrack, zone):
         self.dbg_4SuitsPerFloor = config.GetBool('4-suits-per-floor', 0)
@@ -295,41 +316,29 @@ class SuitPlannerInteriorAI:
         activeSuits = []
         reserveSuits = []
         MIN_LEVEL_BY_TYPE = {
-            14: 8,   # Big Wig tier can spawn at level 8+
-            13: 7,
-            12: 7,
-            11: 6,
-            10: 6,
-            9: 5,
-            8: 5,
-            7: 3,
-            6: 4, 
-            5: 4,
-            4: 3, 
-            3: 2,
+            8: 8,
+            7: 7,
+            6: 6, 
+            5: 5,
+            4: 4, 
+            3: 3,
             2: 2, 
             1: 1,
         }
         MAX_LEVEL_BY_TYPE = {
             1: 5,
             2: 6,
-            3: 8,
-            4: 10,
-            5: 10,
-            6: 12,
-            7: 14,
-            8: 15,
-            9: 20,
-            10: 20,
-            11: 20,
-            12: 25,
-            13: 25,
-            14: 50,
+            3: 7,
+            4: 12,
+            5: 15,
+            6: 15,
+            7: 20,
+            8: 50,
         }
         def suitKindFromLevel(level):
             possibleTypes = []
 
-            for suitType in range(1, 19):
+            for suitType in range(1, 9):
                 minLevel = MIN_LEVEL_BY_TYPE.get(suitType, suitType)
                 maxLevel = MAX_LEVEL_BY_TYPE.get(suitType, suitType + 4)
 
@@ -913,6 +922,15 @@ class SuitPlannerInteriorAI:
                 suitName='hroller'
             )
             activeSuits.append(miniboss)
+        elif specialCode == 'pace':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=66,
+                revives=0,
+                suitName='psetter'
+            )
+            activeSuits.append(miniboss)
         elif specialCode == 'crf2':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1128,6 +1146,19 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0,
             skelecogChance=100
+            )
+            reserveSuits.append(suit)
+        if specialCode == 'paceGrunts':
+            dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
+            suitLevel = random.randint(10, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, dept)
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=dept,
+                suitLevel=suitLevel,
+                revives=0
             )
             reserveSuits.append(suit)
         if specialCode == 'crf':

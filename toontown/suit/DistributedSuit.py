@@ -948,11 +948,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
             length = 4
         self.playDialogue(type, length, delay)
 
-    def playDialogue(self, type, length, delay = 0.0):
+    def playDialogue(self, type, length, delay=0.0):
         dialogueArray = self.getDialogueArray()
-        if dialogueArray == None:
+        if dialogueArray is None:
             return
+
         sfxIndex = None
+
         if type == 'statementA' or type == 'statementB':
             if length == 1:
                 sfxIndex = 0
@@ -967,9 +969,32 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         elif type == 'special':
             sfxIndex = 1
         else:
-            notify.error('unrecognized dialogue type: ', type)
-        if sfxIndex != None and sfxIndex < len(dialogueArray) and dialogueArray[sfxIndex] != None:
-            soundSequence = Sequence(Wait(delay), SoundInterval(dialogueArray[sfxIndex], node=None, listenerNode=base.localAvatar, loop=0, volume=1.0))
+            notify.error('unrecognized dialogue type: %s' % type)
+            return
+
+        if (
+            sfxIndex is not None
+            and sfxIndex < len(dialogueArray)
+            and dialogueArray[sfxIndex] is not None
+        ):
+            sound = dialogueArray[sfxIndex]
+
+            battleSpeed = 1.0 + ((self.getBattleSpeed() - 1.0) * 0.1)
+            battleSpeed = max(1.0, battleSpeed)
+
+            sound.setPlayRate(battleSpeed)
+
+            soundSequence = Sequence(
+                Wait(delay / battleSpeed),
+                SoundInterval(
+                    sound,
+                    node=None,
+                    listenerNode=base.localAvatar,
+                    loop=0,
+                    volume=1.0
+                )
+            )
+
             self.soundSequenceList.append(soundSequence)
             soundSequence.start()
             self.cleanUpSoundList()

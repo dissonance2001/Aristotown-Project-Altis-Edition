@@ -933,46 +933,8 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         rToon.setPosHpr(*ToontownGlobals.CashbotRTBattleTwoStartPosHpr)
         self.__arrangeToonsAroundResistanceToon()
         base.playMusic(self.midCutsceneMusic, looping=1, volume=0)
-        track = Sequence(
-            # Func(base.camera.setPosHpr, 82, -219, 5, 267, 0, 0),
-            Func(base.camera.reparentTo, render),
-            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
-            Parallel(Func(self.highroller.show),
-                bossTrack,
-                Sequence(
-                    Wait(3),
-                    Func(rToon.clearChat),
-            # base.camera.posHprInterval(1, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
-            Func(self.highroller.setChatAbsolute, "WhAHAHAHAt a ffhow!", CFSpeech),
-            Wait(5),
-            Func(self.highroller.setChatAbsolute,
-                 "Oooo-hooo-hooo, ratingff are ffkyrocketing! Line goeff up, head turner! Keep thoffe cameraff rollin'!", CFSpeech),
-            Wait(5),
-            Func(self.highroller.setChatAbsolute,
-                 "Let'ff ffee the nefft big play for today!", CFSpeech),
-            Wait(5),
-            Func(base.camera.reparentTo, render),
-            Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
-            # Func(base.camera.setPosHpr, 93.3, -230, 0.7, -92.9, 39.7, 8.3),
-            # base.camera.posHprInterval(2, Point3(93.3, -230, 0.7), VBase3(268.9, 39.7, 8.3), blendType='easeInOut'),
-            Func(self.highroller.setChatAbsolute,
-                 "WHAT A TWIFFT, BUTTERCUP BLUE!", CFSpeech),
-            Wait(5),
-            Func(self.highroller.loop, 'rolled'), Func(self.mrhollywood.loop, 'rolled'), Func(self.director.loop, 'rolled'), Func(self.filmmaker.loop, 'rolled'), Func(self.videographer.loop, 'rolled'),
-                    Func(self.mrhollywood.show),  Func(self.filmmaker.show),  Func(self.director.show), Func(self.videographer.show),
-            Func(self.highroller.setChatAbsolute,
-                 "Give a warm, hot on the oven, flaff fire, round of applauffe for my ffecond favorite ffet of...", CFSpeech),
-            Wait(5),
-            Func(self.highroller.setChatAbsolute,
-                 "Ffcallywagff, clownff, quipffterff, harlequinff, buffoonff, wiffecrackerff, raffcalff, ne'er-do-wellff, lollyggaggerff, tomfoolerff, jokerff, hoaxerff, trickffterff, jokeffmithff, humoriftfth, rabbelroufferff, ffhenaiganifferff, goofffterff, merrymakerff, ruffianff, ffkylarkff, gooberff,", CFSpeech),
-            Wait(5),
-            Func(self.highroller.setChatAbsolute,
-                 "Have fun with thiff one, ffweetie pie!",
-                 CFSpeech),
-            Wait(5),
-            Func(self.highroller.setChatAbsolute, '', CFSpeech),
-                    Func(self.__showToons),
-        Func(self.mrhollywood.removeNode), Func(self.highroller.removeNode),  Func(self.videographer.removeNode), Func(self.director.removeNode),  Func(self.filmmaker.removeNode))))
+        self.phaseThreeMusic.stop()
+        track = Sequence()
         return track2
 		
     def createWalkInInterval(self):

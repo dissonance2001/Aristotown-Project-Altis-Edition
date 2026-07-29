@@ -46,7 +46,7 @@ def showLureRounds(suit, battle, level):
     currentBossHealth = -1
     if trapProp:
         suit.showHpStringRed("TRAPPED")
-    elif suit.dna.name in ['hroller2', 'videog', 'bcaster', 'hroller', 'fires', 'fbed', 'mouthp', 'rainmake', 
+    elif suit.dna.name in ['hroller2', 'videog', 'bcaster', 'hroller', 'fires', 'fbed', 'psetter', 'mouthp', 'rainmake', 
                          'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep', 'director']:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.hasSuitStatusEffect('desperation'):

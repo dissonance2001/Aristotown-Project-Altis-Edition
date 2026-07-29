@@ -740,6 +740,7 @@ from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliver
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
 from toontown.suit import DistributedLawbotBoss/AI
 from toontown.suit import DistributedCountErclaimBoss/AI
+from toontown.suit import DistributedPacesetterBoss/AI
 from toontown.coghq import DistributedLawbotBossGavel/AI
 from toontown.suit import DistributedLawbotBossSuit/AI
 from toontown.coghq import DistributedLawbotCannon/AI
@@ -3402,6 +3403,23 @@ dclass DistributedLawbotBoss : DistributedBossCog {
 };
 
 dclass DistributedCountErclaimBoss : DistributedBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  touchWitnessStand() airecv clsend;
+  hitBoss(uint8) airecv clsend;
+  healBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  hitDefensePan() airecv clsend;
+  hitProsecutionPan() airecv clsend;
+  hitChair(uint8, uint8) airecv clsend;
+  setLawyerIds(uint32[]) broadcast ram;
+  setTaunt(int8, int8) broadcast;
+  toonGotHealed(uint32) broadcast;
+  enteredBonusState() broadcast;
+  setBattleDifficulty(uint8) broadcast ram;
+};
+
+dclass DistributedPacesetterBoss : DistributedBossCog {
   setState(string) broadcast ram;
   setBossDamage(uint16, uint8, int16) broadcast ram;
   touchWitnessStand() airecv clsend;

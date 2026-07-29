@@ -44,6 +44,11 @@ SUIT_STATUS_EFFECT_VISUALS = {
         'start': 'makeSoaked',
         'stop': 'cleanupSoaked',
     },
+    'overclocked': {
+        'start': 'makeAfterImages',
+        'stop': 'removeAfterImages',
+        'passModifier': True,
+    },
     'marketMeltdown': {
         'start': 'makeFireEffect',
         'stop': 'makeUnAngry',
@@ -633,7 +638,7 @@ radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanc
 hustle = (('layoffs', 'layoffs', 4), ('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
 ubuster = (('snap', 'snap', 4), ('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
 safesupervis = (('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
-psetter = (('quick-jump', 'jump', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
+psetter = (('quick-jump', 'jump', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('rush-job', 'rush-job', 4), ('neutral-hurt', 'pace', 4), ('overclocked', 'overclocked', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
 
     # Boardbot
 ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))

@@ -194,6 +194,9 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0, dis
     elif attack['suitName'] in ['cinema', 'choreo', 'fmaker'] and attack['name'] == 'SmokeAndMirrors' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'psetter' and attack['name'] == 'PacesetterComeOn' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
     elif attack['suitName'] == 'fires' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
@@ -229,7 +232,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0, dis
     track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle))
     )
     if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
-            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+            if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
                 suit.makeBlendInterval(shuffleAnim))
@@ -316,6 +319,9 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'SafetyViolation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'psetter' and attack['name'] == 'PacesetterComeOn' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack['name'] == 'RacketeerPeckingOrderRetaliation':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
@@ -466,7 +472,7 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
             Func(suit.loop, 'neutral-enraged'))
     else:
         if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
-            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+            if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
                 suit.makeBlendInterval(shuffleAnim))
@@ -502,6 +508,9 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'erfit' and attack[
         'name'] == 'ErfitGainsFromTheScrap':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+        track.append(Func(suit.setChatAbsoluteSpecial, taunt,
+                          CFSpeech | CFTimeout))
+    elif attack['suitName'] == 'psetter' and attack['name'] == 'PacesetterComeOn' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['suitName'] == 'safesupervis' and attack[
@@ -689,7 +698,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
             Func(suit.loop, 'neutral-enraged'))
     else:
         if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
-            if not attack['animName'] == 'none' and not attack['animName'] == 'nothing':
+            if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
                 suit.makeBlendInterval('neutral'))

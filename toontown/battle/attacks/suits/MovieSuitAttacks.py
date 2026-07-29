@@ -4,6 +4,7 @@ from toontown.battle.attacks.suits import MovieBossbotLitigationCheats
 from toontown.battle.attacks.suits import MovieBoardbotLitigationCheats
 from toontown.battle.attacks.suits import MovieSellbotLitigationCheats
 from toontown.battle.attacks.suits import MovieCashbotLitigationCheats
+from toontown.battle.attacks.suits import MoviePacesetterCheats
 from toontown.battle.attacks.suits import MovieHighRollerCheats
 from toontown.battle.attacks.suits import MovieDirectorsCheats
 from toontown.battle.attacks.suits import MovieUniversalCheats
@@ -1227,6 +1228,18 @@ def doSuitAttack(attack):
     elif name == 'DOPRAmbushMarketing':
         suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
+    elif name == 'PacesetterComeOn':
+        suitTrack = MoviePacesetterCheats.doComeOn(attack)
+    elif name == 'PacesetterMovingGoalposts':
+        suitTrack = MoviePacesetterCheats.doMovingGoalposts(attack)
+    elif name == 'PacesetterContentSync':
+        suitTrack = MovieHighRollerCheats.doContentSync(attack)
+    elif name == 'PacesetterHurrySickness':
+        suitTrack = MoviePacesetterCheats.doHurrySickness(attack)
+    elif name == 'PacesetterHurrySicknessBan':
+        suitTrack = MoviePacesetterCheats.doHurrySicknessBan(attack)
+    elif name == 'PacesetterOverclocked':
+        suitTrack = MoviePacesetterCheats.doOverclocked(attack)
     elif name == 'ErclaimHemmorage':
         suitTrack = MovieCountCheats.doHemmorage(attack)
     elif name == 'ErclaimHemmorageHealing':

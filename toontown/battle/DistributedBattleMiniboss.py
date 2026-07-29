@@ -65,10 +65,37 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suit.setHpr(destHpr)
 
     def showSuitsFalling(self, suits, ts, name, callback):
-        if self.bossCog == None:
+        if self.bossCog is None:
             return
+
+        speed = 1.0
+
+        bossCog = getattr(self, 'bossCog', None)
+
+        if bossCog is not None:
+            try:
+                if bossCog.dna.name == 'psetter':
+                    speed = float(bossCog.getBattleSpeed()) * 0.1
+            except:
+                pass
+
+        if speed == 1.0:
+            for activeSuit in self.activeSuits:
+                if activeSuit.dna.name == 'psetter':
+                    speed = float(activeSuit.getBattleSpeed()) * 0.1
+                    break
+
+        speed = max(0.1, speed)
+
+        print 'SPAWN BATTLE SPEED:', speed
+
         suitTracks = Parallel()
         delay = 0
+
+        # Do not retrieve or overwrite speed again below this point.
+        for suit in self.activeSuits:
+            if suit.dna.name == 'psetter':
+                speed = suit.getBattleSpeed()
         for suit in suits:
             if suit.dna.name == 'cdirector':
                 for obj in base.cr.doId2do.values():
@@ -439,7 +466,8 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         done = Func(callback)
         track = Sequence(suitTracks, done, name=name)
-        track.start(ts)
+        #track.setPlayRate(speed)
+        track.start(ts, playRate=speed)
         self.storeInterval(track, name)
         return
 
@@ -492,6 +520,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 camera.setPosHpr(0, -10, 7, 0, 0, 0)
         done = Func(callback)
         track = Sequence(suitTracks, done, name=name)
+        track.setPlayRate(speed)
         track.start(ts)
         self.storeInterval(track, name)
         return

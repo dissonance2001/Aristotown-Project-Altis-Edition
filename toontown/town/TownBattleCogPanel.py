@@ -1786,7 +1786,7 @@ class TownBattleCogPanel(DirectFrame):
                                         },
                                     ])
                 self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
-            elif self.cog.hasSuitStatusEffect('desperation') or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
+            elif self.cog.hasSuitStatusEffect('desperation') or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'psetter', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
                     or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or self.cog.hasSuitStatusEffect('silhouetteShielding') or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat'):
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/lured_prestige_icon')
@@ -2750,7 +2750,30 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Mile-a-Minute', 
-                                   tooltipDescription='The battle is playing back at %sx speed.' % self.cog.getBattleSpeed(), 
+                                   tooltipDescription='The battle is playing back at %s.0x speed.' % self.cog.getBattleSpeed(), 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.battleSpeed and self.cog.dna.name == 'psetter':
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/mileaminute_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Mile-a-Minute', 
+                                   tooltipDescription='The battle is playing back at %s.0x speed.' % self.cog.getBattleSpeed(), 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.hasSuitStatusEffect('overclocked'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon2 = status.find('**/attack_icon')
+            self.statusIcon = status.find('**/toofast4you_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcons([self.statusIcon2, self.statusIcon], 
+                                   slot, 
+                                   tooltipTitle='Overclocked!', 
+                                   tooltipDescription="Reading this doesn't seem like the best use of your time.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 

@@ -133,7 +133,7 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
             'loader': 'cogHQLoader',
             'where': 'cogHQBossBattle',
             'how': 'teleportIn',
-            'hoodId': ToontownGlobals.LawbotHQ,
+            'hoodId': ToontownGlobals.SellbotHQ,
             'zoneId': zoneId,
             'shardId': None,
             'avId': -1
@@ -190,39 +190,39 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
 
         self.rideElevatorStartPos = self.rideRoot.getPos()
 
-        self.rideMusic.setLoop(False)
-        self.rideMusic.setVolume(1.0)
-        self.rideMusic.play()
+        # self.rideMusic.setLoop(False)
+        # self.rideMusic.setVolume(1.0)
+        # self.rideMusic.play()
 
         cameraMid = Point3(0.0, 12.0, 4.6)
         cameraMin = Point3(0.0, 12.0, 4.4)
         cameraMax = Point3(0.0, 12.0, 4.8)
 
-        self.rideTrack = Sequence(
-            Wait(0.5),
+        # self.rideTrack = Sequence(
+        #     Wait(0.5),
 
-            LerpPosInterval(camera,0.5,cameraMin,startPos=cameraMid,blendType='easeOut'),
-            LerpPosInterval(camera,0.5,cameraMid,startPos=cameraMin),
+        #     LerpPosInterval(camera,0.5,cameraMin,startPos=cameraMid,blendType='easeOut'),
+        #     LerpPosInterval(camera,0.5,cameraMid,startPos=cameraMin),
 
-            Wait(0.75),
+        #     Wait(0.75),
 
-            LerpPosInterval(camera,0.5,cameraMax,startPos=cameraMid,blendType='easeOut'),
-            LerpPosInterval(camera,0.75,cameraMid,startPos=cameraMax),
+        #     LerpPosInterval(camera,0.5,cameraMax,startPos=cameraMid,blendType='easeOut'),
+        #     LerpPosInterval(camera,0.75,cameraMid,startPos=cameraMax),
 
-            Wait(0.75),
+        #     Wait(0.75),
 
-            LerpPosInterval(camera,0.45,cameraMin,startPos=cameraMid,blendType='easeOut'),
-            LerpPosInterval(camera,0.45,cameraMid,startPos=cameraMin),
+        #     LerpPosInterval(camera,0.45,cameraMin,startPos=cameraMid,blendType='easeOut'),
+        #     LerpPosInterval(camera,0.45,cameraMid,startPos=cameraMin),
 
-            Wait(0.75),
+        #     Wait(0.75),
 
-            LerpPosInterval(camera,0.45,cameraMax,startPos=cameraMid,blendType='easeOut'),
-            LerpPosInterval(camera,0.75,cameraMid,startPos=cameraMax),
+        #     LerpPosInterval(camera,0.45,cameraMax,startPos=cameraMid,blendType='easeOut'),
+        #     LerpPosInterval(camera,0.75,cameraMid,startPos=cameraMax),
 
-            Wait(0.9),
-            Func(self.finishRide)
-        )
-        self.rideTrack.start(ts)
+        #     Wait(0.9),
+        #     Func(self.finishRide)
+        # )
+        # self.rideTrack.start(ts)
 
     def finishRide(self):
         if self.rideElevatorStartPos is not None:

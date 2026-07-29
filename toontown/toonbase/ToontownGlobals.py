@@ -989,6 +989,7 @@ BossCogNerfedDamageLevels = {BossCogElectricFence: 1,
  BossCogGearDirectedAttack: 8,
  BossCogOvertimeAttack: 10}
 CountErclaimBattleAPosHpr = (0, 55, 0, 180, 0, 0)
+PacesetterBattleAPosHpr = (0, 110, 0, 180, 0, 0)
 BossCogBattleAPosHpr = (0,
   60,
  0,
