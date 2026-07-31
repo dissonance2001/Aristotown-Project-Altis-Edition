@@ -8,6 +8,7 @@ from toontown.toontowngui import ToonHeadDialog
 from direct.gui.DirectGui import DGG
 from otp.otpbase import OTPGlobals
 
+
 class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
     notify = DirectNotifyGlobal.directNotify.newCategory('FriendInvitee')
 
@@ -16,9 +17,20 @@ class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
         self.avDNA = avDNA
         self.context = context
         self.avName = avName
+
         if len(base.localAvatar.friendsList) >= MaxFriends:
-            base.cr.friendManager.up_inviteeFriendResponse(3, self.context)
+            # Clear the context before sending a response.  The local friends
+            # manager can synchronously emit UI/friend events while handling
+            # this call; leaving the context set allowed cleanup() to send a
+            # second response (2 / "unable to answer") before the real reply.
+            responseContext = self.context
             self.context = None
+            if responseContext is not None:
+                base.cr.friendManager.up_inviteeFriendResponse(3, responseContext)
+            else:
+                avatarFriendsManager = getattr(base.cr, 'avatarFriendsManager', None)
+                if avatarFriendsManager is not None:
+                    avatarFriendsManager.sendRequestRemove(self.avId)
             text = OTPLocalizer.FriendInviteeTooManyFriends % self.avName
             style = TTDialog.Acknowledge
             buttonTextList = [OTPLocalizer.FriendInviteeOK]
@@ -28,6 +40,7 @@ class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
             style = TTDialog.TwoChoice
             buttonTextList = [OTPLocalizer.FriendInviteeOK, OTPLocalizer.FriendInviteeNo]
             command = self.__handleButton
+
         optiondefs = (('dialogName', 'FriendInvitee', None),
          ('text', text, None),
          ('style', style, None),
@@ -49,35 +62,52 @@ class FriendInvitee(ToonHeadDialog.ToonHeadDialog):
         return
 
     def cleanup(self):
+        # Take ownership of the pending context immediately.  This makes
+        # cleanup re-entry harmless and guarantees that only one response is
+        # ever sent for a legacy FriendManager request.
+        responseContext = self.context
+        self.context = None
+
         ToonHeadDialog.ToonHeadDialog.cleanup(self)
         self.ignore('cancelFriendInvitation')
-        if self.context != None:
-            base.cr.friendManager.up_inviteeFriendResponse(2, self.context)
-            self.context = None
+
+        if responseContext is not None:
+            base.cr.friendManager.up_inviteeFriendResponse(2, responseContext)
+
         if base.friendMode == 1 and hasattr(base.cr.friendManager, 'executeGameSpecificFunction'):
             base.cr.friendManager.executeGameSpecificFunction()
         return
 
     def __handleButton(self, value):
-        if self.context != None:
-            if value == DGG.DIALOG_OK:
-                base.cr.friendManager.up_inviteeFriendResponse(1, self.context)
-            else:
-                base.cr.friendManager.up_inviteeFriendResponse(0, self.context)
-        elif value == DGG.DIALOG_OK:
-            print 'sending Request Invite'
-            base.cr.avatarFriendsManager.sendRequestInvite(self.avId)
-        else:
-            base.cr.avatarFriendsManager.sendRequestRemove(self.avId)
+        # Clear the context before calling either backend.  Friend-list events
+        # can be emitted during the call on a local server, and those events
+        # may clean up this dialog.  Previously that cleanup sent response 2
+        # first, which made the inviter display "was unable to answer."
+        responseContext = self.context
         self.context = None
+
+        if responseContext is not None:
+            if value == DGG.DIALOG_OK:
+                response = 1
+            else:
+                response = 0
+            base.cr.friendManager.up_inviteeFriendResponse(response, responseContext)
+        else:
+            avatarFriendsManager = getattr(base.cr, 'avatarFriendsManager', None)
+            if avatarFriendsManager is not None:
+                if value == DGG.DIALOG_OK:
+                    avatarFriendsManager.sendRequestInvite(self.avId)
+                else:
+                    avatarFriendsManager.sendRequestRemove(self.avId)
+
         self.cleanup()
         return
 
     def __handleOhWell(self, value):
         self.cleanup()
 
-    def __handleCancelFromAbove(self, context = None):
-        if context == None or context == self.context:
+    def __handleCancelFromAbove(self, context=None):
+        if context is None or context == self.context:
             self.context = None
             self.cleanup()
         return

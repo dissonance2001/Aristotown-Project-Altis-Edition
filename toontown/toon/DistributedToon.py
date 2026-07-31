@@ -56,7 +56,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.LaffMeter import LaffMeter
 from toontown.toon import GMUtils
 from toontown.toon import ToonProfileGlobals as TPG
-from toontown.stickers import StickerGlobals
 
 if base.wantKarts:
     from toontown.racing.KartDNA import *
@@ -82,7 +81,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         Toon.Toon.__init__(self)
         DistributedSmoothNode.DistributedSmoothNode.__init__(self, cr)
         self.overheadMeter = None
-        self.stickerSequence = None
         self.bFake = bFake
         self.kart = None
         self._isGM = False
@@ -793,7 +791,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.damageInterval = Sequence(Wait(1.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout)).start()
 
     def disable(self):
-        self.stopStickerSequence()
+        taskMgr.remove(self._clubNametagPulseTaskName())
         for soundSequence in self.soundSequenceList:
             soundSequence.finish()
 
@@ -1106,60 +1104,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return Task.done
 
         return Task.cont
-
-    def d_requestSticker(self, stickerId):
-        try:
-            stickerId = int(stickerId)
-        except (TypeError, ValueError):
-            return
-        if not StickerGlobals.isValidSticker(stickerId):
-            return
-        self.sendUpdate('requestSticker', [stickerId])
-
-    def setSticker(self, stickerId, modifier=0):
-        try:
-            stickerId = int(stickerId)
-            modifier = int(modifier)
-        except (TypeError, ValueError):
-            return
-        if not StickerGlobals.isValidSticker(stickerId):
-            return
-
-        try:
-            if self.doId != base.localAvatar.doId and base.localAvatar.isToonIgnored(self.doId):
-                return
-        except:
-            pass
-
-        self.showSticker(stickerId, modifier)
-
-        chatLog = getattr(base.cr, 'chatLog', None)
-        if chatLog:
-            try:
-                toonName = self.getName()
-            except:
-                toonName = 'A Toon'
-            stickerName = StickerGlobals.getStickerName(stickerId, modifier)
-            chatLog.addToLog('%s sent a sticker: %s' % (toonName, stickerName), avId=self.doId)
-
-    def showSticker(self, stickerId, modifier=0):
-        self.stopStickerSequence()
-        try:
-            from toontown.stickers.StickerSequence import StickerSequence
-            self.stickerSequence = StickerSequence(self, stickerId, modifier)
-            if not self.stickerSequence.start():
-                self.stickerSequence = None
-        except Exception as error:
-            self.notify.warning('Could not display sticker %s: %s' % (stickerId, error))
-            self.stickerSequence = None
-
-    def stopStickerSequence(self):
-        if self.stickerSequence:
-            try:
-                self.stickerSequence.stop()
-            except:
-                pass
-            self.stickerSequence = None
 
     def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags):
         timestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())
@@ -3829,11 +3773,54 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         else:
             self._handleGMName()
             
-    def setToonTag(self, tag = ''):
-        DistributedPlayer.DistributedPlayer.setToonTag(self, tag)
+    def _clubNametagPulseTaskName(self):
+        return 'DistributedToon-clubNametagPulse-%s' % self.doId
 
+    def _getClubNametagThemeId(self, tag):
+        prefix = '\1AltisClubNametagColor-'
+        if not tag or prefix not in tag:
+            return None
+        start = tag.find(prefix) + len(prefix)
+        end = tag.find('\1', start)
+        if end < 0:
+            return None
+        try:
+            return int(tag[start:end])
+        except (TypeError, ValueError):
+            return None
+
+    def _prepareClubNametagColor(self, themeId):
+        if themeId is None:
+            return False
+        try:
+            from toontown.club.ClubIconGUI import ClubIconGUI
+            from pandac.PandaModules import TextProperties, TextPropertiesManager
+            propertyName = 'AltisClubNametagColor-%s' % themeId
+            properties = TextProperties()
+            properties.setTextColor(*ClubIconGUI.getColor(themeId))
+            TextPropertiesManager.getGlobalPtr().setProperties(
+                propertyName, properties)
+            return ClubIconGUI.isAnimatedColor(themeId)
+        except Exception:
+            return False
+
+    def _getVisibleToonTag(self, tag):
+        themeId = self._getClubNametagThemeId(tag)
+        if themeId is None or self is not getattr(base, 'localAvatar', None):
+            return tag
+        try:
+            from toontown.club import ClubGlobals
+            clubMgr = getattr(base.cr, 'clubMgr', None)
+            if clubMgr and not clubMgr.getPersonalSetting(
+                    ClubGlobals.SETTING_SHOW_NAMETAG):
+                return ''
+        except Exception:
+            pass
+        return tag
+
+    def _applyToonTagWordWrap(self, tag):
         # Toon tags are placed on their own explicit line beneath the Toon
-        # name.  A wide nametag font must not word-wrap a Club name into two
+        # name. A wide nametag font must not word-wrap a Club name into two
         # lines, so disable automatic wrapping while a Toon tag is present.
         try:
             if not hasattr(self, '_wordWrapBeforeToonTag'):
@@ -3844,6 +3831,30 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                 self.nametag.setWordWrap(self._wordWrapBeforeToonTag)
         except Exception:
             pass
+
+    def _updateClubNametagPulse(self, task):
+        tag = getattr(self, '_distributedClubNametag', '')
+        themeId = self._getClubNametagThemeId(tag)
+        if themeId is None or not self._prepareClubNametagColor(themeId):
+            return task.done
+        visibleTag = self._getVisibleToonTag(tag)
+        DistributedPlayer.DistributedPlayer.setToonTag(self, visibleTag)
+        self._applyToonTagWordWrap(visibleTag)
+        task.delayTime = 0.05
+        return task.again
+
+    def setToonTag(self, tag = ''):
+        taskMgr.remove(self._clubNametagPulseTaskName())
+        self._distributedClubNametag = tag
+        themeId = self._getClubNametagThemeId(tag)
+        isAnimated = self._prepareClubNametagColor(themeId)
+        visibleTag = self._getVisibleToonTag(tag)
+        DistributedPlayer.DistributedPlayer.setToonTag(self, visibleTag)
+        self._applyToonTagWordWrap(visibleTag)
+        if tag and isAnimated:
+            taskMgr.doMethodLater(
+                0.05, self._updateClubNametagPulse,
+                self._clubNametagPulseTaskName())
 
     def _handleGMName(self):
         name = self.name

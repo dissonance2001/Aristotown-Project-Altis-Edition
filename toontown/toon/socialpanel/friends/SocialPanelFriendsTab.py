@@ -58,6 +58,7 @@ class SocialPanelFriendsTab(DirectFrame):
         self.accept(OTPGlobals.AvatarFriendUpdateEvent, self.reload)
         self.accept(OTPGlobals.AvatarFriendRemoveEvent, self.reload)
         self.accept(OTPGlobals.AvatarNewFriendAddEvent, self.reload)
+        self.accept('FriendsListManagerAddEvent', self.reload)
         taskMgr.add(self._searchTask, self._searchTaskName)
 
     def load(self):
@@ -588,12 +589,19 @@ class SocialPanelFriendsTab(DirectFrame):
         friendPanel = self._singleContextSelected()
         if friendPanel is not None and friendPanel.avId != base.localAvatar.doId:
             disableName = 'disable-%s' % friendPanel.avId
-            try:
-                disableName = friendPanel.handle.uniqueName('disable')
-            except:
-                avatar = base.cr.doId2do.get(friendPanel.avId)
-                if avatar is not None and hasattr(avatar, 'uniqueName'):
-                    disableName = avatar.uniqueName('disable')
+
+            # Prefer the live DistributedToon's disable event.  A projected
+            # friend handle can have a different unique-name namespace and
+            # make FriendInviter think the Toon disappeared mid-request.
+            avatar = base.cr.doId2do.get(friendPanel.avId)
+            if avatar is not None and hasattr(avatar, 'uniqueName'):
+                disableName = avatar.uniqueName('disable')
+            else:
+                try:
+                    disableName = friendPanel.handle.uniqueName('disable')
+                except:
+                    pass
+
             messenger.send('friendAvatar', [friendPanel.avId,
                                             friendPanel.handle.getName(),
                                             disableName])

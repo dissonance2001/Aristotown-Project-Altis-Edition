@@ -163,6 +163,61 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
     def _notify(self, avId, notifyType, message):
         self.sendUpdateToAvatarId(int(avId), 'receiveNotification', [int(notifyType), str(message)])
 
+    def _makeClubNametag(self, club):
+        if not club:
+            return ''
+        name = str(club.get('name', '') or '')
+        if not name:
+            return ''
+        icon = club.get('icon', {}) or {}
+        try:
+            themeId = int(icon.get('themeId', 0) or 0)
+        except (TypeError, ValueError):
+            themeId = 0
+        return '\1AltisClubNametagColor-%s\1%s\2' % (themeId, name)
+
+    def _syncMemberNametag(self, avId):
+        """Persist and broadcast the member's current Club nametag."""
+        avId = int(avId)
+        if avId <= 0:
+            return
+
+        def queried(dclass, fields):
+            if not dclass:
+                self.notify.warning(
+                    'Could not find Toon %s while syncing Club nametag.' % avId)
+                return
+
+            # Resolve the Club again inside the asynchronous callback. This
+            # prevents a stale join/leave callback from restoring an old tag.
+            tag = self._makeClubNametag(self._clubForAv(avId))
+            updates = {'setToonTag': [tag]}
+            try:
+                self.air.dbInterface.updateObject(
+                    self.air.dbId, avId, dclass, updates)
+
+                # The field is required+broadcast. Sending the update through
+                # the live Toon object makes every client in its current zone
+                # receive it immediately; the DB write covers later generates.
+                dg = dclass.aiFormatUpdate(
+                    'setToonTag', avId, avId, self.air.ourChannel, [tag])
+                self.air.send(dg)
+            except Exception as error:
+                self.notify.warning(
+                    'Could not sync Club nametag for Toon %s: %s' %
+                    (avId, error))
+
+        try:
+            self.air.dbInterface.queryObject(self.air.dbId, avId, queried)
+        except Exception as error:
+            self.notify.warning(
+                'Could not query Toon %s for Club nametag: %s' %
+                (avId, error))
+
+    def _syncClubNametags(self, club):
+        for member in club.get('members', []):
+            self._syncMemberNametag(int(member.get('avId', 0)))
+
     def _sendState(self, avId):
         club = self._clubForAv(avId)
         if club:
@@ -380,6 +435,9 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
     # ------------------------------------------------------------------
     def requestState(self):
         avId = self._sender()
+        # Repairs existing Build 84/87 members as soon as they log in and also
+        # clears a stale DB tag from a Toon who is no longer in a Club.
+        self._syncMemberNametag(avId)
         self._sendState(avId)
         for invite in self.pendingInvites.get(str(avId), []):
             self.sendUpdateToAvatarId(avId, 'receiveInvite', [
@@ -441,6 +499,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             self.memberToClub[str(avId)] = str(clubId)
             self._log(club, 'creation', '%s created the Club.' % avName, avId)
             self._save()
+            self._syncMemberNametag(avId)
             self._sendState(avId)
             self._notify(avId, ClubGlobals.NOTIFY_SUCCESS, 'Club created successfully!')
         self._deductCreationCost(avId, finish)
@@ -507,6 +566,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         self.memberToClub[str(avId)] = str(int(clubId))
         self._log(club, 'member-joined', '%s joined the Club.' % avName, avId)
         self._save()
+        self._syncMemberNametag(avId)
         self._broadcastState(club)
         self._broadcastNotification(club, ClubGlobals.NOTIFY_MEMBER_JOINED,
                                     '%s joined the Club.' % avName)
@@ -537,6 +597,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
                           successor['avId'])
             self._log(club, 'member-left', '%s left the Club.' % name, avId)
         self._save()
+        self._syncMemberNametag(avId)
         self._sendState(avId)
         if club.get('members'):
             self._broadcastState(club)
@@ -562,6 +623,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         name = target.get('name', 'A Toon')
         self._log(club, 'member-kicked', '%s was removed from the Club.' % name, targetAvId)
         self._save()
+        self._syncMemberNametag(targetAvId)
         self._sendState(targetAvId)
         self._notify(targetAvId, ClubGlobals.NOTIFY_MEMBER_KICKED,
                      'You were removed from %s.' % club['name'])
@@ -664,6 +726,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         }
         self._log(club, 'customization', 'The Club appearance was updated.', avId)
         self._save()
+        self._syncClubNametags(club)
         self._broadcastState(club)
 
     def _sendDonationResult(self, avId, success, amount, message):
