@@ -492,7 +492,7 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
 
     def _showInviteDialog(self, invite):
         try:
-            from toontown.gui import TTDialog
+            from toontown.toontowngui import TTDialog
             text = '%s invited you to join\n%s.\n\nWould you like to join?' % (
                 invite['inviterName'], invite['clubName'])
             dialog = TTDialog.TTGlobalDialog(
@@ -501,10 +501,11 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
                 style=TTDialog.TwoChoice)
             dialog.show()
 
-            def done(value, dialog=dialog, invite=invite):
+            def done(dialog=dialog, invite=invite):
+                status = dialog.doneStatus
                 self.ignore('clubInviteDialogDone')
                 dialog.cleanup()
-                self.respondToInvite(invite['clubId'], value > 0)
+                self.respondToInvite(invite['clubId'], status == 'ok')
             self.acceptOnce('clubInviteDialogDone', done)
         except Exception as error:
             self.notify.warning('Could not open Club invite dialog: %s' % error)

@@ -1,4 +1,4 @@
-# Altis Clubs Build 69: Clash-style scrollable Club Members layout.
+# Altis Clubs Build 85: working Club invite selector for nearby Toons and friends.
 import time
 import textwrap
 
@@ -48,6 +48,8 @@ class SocialPanelClubsTab(DirectFrame):
         self.taskScrollMaxOffset = 0.0
         self.logsScroll = None
         self.membersScroll = None
+        self.inviteScroll = None
+        self.invitesSent = set()
         self.memberActionObjects = []
 
         # Source models used by the exact Clash main-tab status block. Keep
@@ -171,6 +173,7 @@ class SocialPanelClubsTab(DirectFrame):
         self.taskScrollMaxOffset = 0.0
         self.logsScroll = None
         self.membersScroll = None
+        self.inviteScroll = None
         self.memberActionObjects = []
         for obj in self.pageObjects:
             try:
@@ -749,7 +752,7 @@ class SocialPanelClubsTab(DirectFrame):
         ))
 
         helperData = (
-            ('Plus', 'Invite Member', self._openMembersPage),
+            ('Plus', 'Invite Member', self._openInvitePage),
             ('AddBeans', 'Donate Jellybeans', self._openJellybeanDonation),
             ('Exclaim', 'Club Shout', self._openClubChat),
             ('Megaphone', 'Club Info', self._showClubInfo),
@@ -926,8 +929,17 @@ class SocialPanelClubsTab(DirectFrame):
             pass
         self.manager.requestSetMotd(motd)
 
-    def _openMembersPage(self):
-        self.showPage('members')
+    def _openInvitePage(self):
+        if not self.manager.localAvHasPermission(ClubGlobals.PERMISSION_INVITE):
+            self._notification(
+                ClubGlobals.NOTIFY_ERROR,
+                'You do not have permission to invite Toons to this Club.')
+            return
+        if len(self.manager.getMembers()) >= ClubGlobals.CLUB_MAX_MEMBERS:
+            self._notification(ClubGlobals.NOTIFY_ERROR, 'Your Club is full.')
+            return
+        self.invitesSent = set()
+        self.showPage('invite')
 
     def _openClubChat(self):
         chatLog = getattr(base.cr, 'chatLog', None)
@@ -1305,6 +1317,412 @@ class SocialPanelClubsTab(DirectFrame):
 
     def _donationGuiClosed(self):
         self.donationGui = None
+
+    # ------------------------------------------------------------------
+    # Invite page
+    # ------------------------------------------------------------------
+    def _scrollClubInvites(self, direction):
+        if self.inviteScroll is None:
+            return
+        try:
+            scrollBar = self.inviteScroll.verticalScroll
+            try:
+                value = float(scrollBar.getValue())
+            except:
+                value = float(scrollBar['value'])
+            value += float(direction) * 0.13
+            value = max(0.0, min(1.0, value))
+            scrollBar.setValue(value)
+        except:
+            pass
+
+    def _isInviteToon(self, obj, toonDClass=None):
+        if obj is None or not hasattr(obj, 'getName'):
+            return False
+
+        # Prefer the exact DistributedToon dclass so NPC Toons and other
+        # Toon-shaped distributed objects never appear in the invite list.
+        if toonDClass is not None:
+            try:
+                if obj.dclass != toonDClass:
+                    return False
+                return not bool(getattr(obj, 'ghostMode', 0))
+            except:
+                pass
+
+        try:
+            className = obj.__class__.__name__
+        except:
+            return False
+        if className not in ('DistributedToon', 'LocalToon'):
+            return False
+        return not bool(getattr(obj, 'ghostMode', 0))
+
+    def _getInviteFriendAvIds(self):
+        result = []
+        for friend in getattr(base.localAvatar, 'friendsList', []):
+            try:
+                avId = int(friend[0])
+            except:
+                continue
+            if avId not in result:
+                result.append(avId)
+
+        avatarFriendsManager = getattr(base.cr, 'avatarFriendsManager', None)
+        if avatarFriendsManager is not None:
+            for avId in getattr(avatarFriendsManager, 'avatarFriendsList', []):
+                try:
+                    avId = int(avId)
+                except:
+                    continue
+                if avId not in result:
+                    result.append(avId)
+        return result
+
+    def _identifyInviteHandle(self, avId):
+        handle = None
+        try:
+            handle = base.cr.identifyFriend(avId)
+        except:
+            pass
+        if handle is None and hasattr(base.cr, 'playerFriendsManager'):
+            try:
+                handle = base.cr.playerFriendsManager.getAvHandleFromId(avId)
+            except:
+                handle = None
+        if handle is None:
+            avatar = base.cr.doId2do.get(avId)
+            if avatar is not None and hasattr(avatar, 'getName'):
+                handle = avatar
+        if handle is None and hasattr(base.cr, 'avatarFriendsManager'):
+            try:
+                handle = base.cr.avatarFriendsManager.getFriendInfo(avId)
+                if handle is not None and not hasattr(handle, 'doId'):
+                    handle.doId = avId
+            except:
+                handle = None
+        return handle
+
+    def _getClubInviteCandidates(self):
+        localAvId = int(getattr(base.localAvatar, 'doId', 0))
+        memberIds = set()
+        for member in self.manager.getMembers():
+            try:
+                memberIds.add(int(member.get('avId', 0)))
+            except:
+                pass
+
+        candidates = {}
+        toonDClass = None
+        try:
+            toonDClass = base.cr.dclassesByName.get('DistributedToon')
+        except:
+            pass
+
+        # Nearby Toons are shown first. This uses the same filtering as the
+        # Friends tab, but clicking a row sends the Club invite immediately.
+        for avId, obj in base.cr.doId2do.items():
+            try:
+                avId = int(avId)
+            except:
+                continue
+            if avId == localAvId or avId in memberIds:
+                continue
+            if not self._isInviteToon(obj, toonDClass):
+                continue
+            try:
+                name = str(obj.getName())
+            except:
+                continue
+            candidates[avId] = {
+                'avId': avId,
+                'name': name,
+                'nearby': True,
+                'online': True,
+            }
+
+        # Add friends that are not currently nearby. Offline invitations are
+        # retained by the Club UD and delivered when that Toon requests state.
+        for avId in self._getInviteFriendAvIds():
+            if avId == localAvId or avId in memberIds or avId in candidates:
+                continue
+            handle = self._identifyInviteHandle(avId)
+            if handle is None or not hasattr(handle, 'getName'):
+                continue
+            try:
+                online = bool(base.cr.isFriendOnline(avId))
+            except:
+                online = avId in base.cr.doId2do
+            try:
+                name = str(handle.getName())
+            except:
+                continue
+            candidates[avId] = {
+                'avId': avId,
+                'name': name,
+                'nearby': False,
+                'online': online,
+            }
+
+        result = candidates.values()
+        try:
+            result = list(result)
+        except:
+            pass
+        result.sort(key=lambda candidate: (
+            0 if candidate.get('nearby') else 1,
+            0 if candidate.get('online') else 1,
+            candidate.get('name', '').lower(),
+        ))
+        return result
+
+    def _makeInviteSectionHeader(self, parent, text, count, yPos):
+        DirectFrame(
+            parent=parent,
+            relief=DGG.FLAT,
+            frameSize=(-0.214, 0.218, -0.025, 0.025),
+            frameColor=(0.185, 0.365, 0.245, 0.92),
+            pos=(-0.010, 0, yPos),
+        )
+        DirectLabel(
+            parent=parent,
+            relief=None,
+            text='%s (%s)' % (text, count),
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_scale=0.026,
+            text_align=TextNode.ALeft,
+            text_pos=(-0.195, -0.009),
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            pos=(0, 0, yPos),
+        )
+        return yPos - 0.049
+
+    def _makeClubInviteRow(self, parent, candidate, index, yPos):
+        avId = int(candidate.get('avId', 0))
+        name = str(candidate.get('name', 'Toon'))
+        online = bool(candidate.get('online', False))
+        nearby = bool(candidate.get('nearby', False))
+        sent = avId in self.invitesSent
+
+        rowColor = ((0.075, 0.090, 0.125, 0.94) if index % 2 == 0 else
+                    (0.055, 0.066, 0.096, 0.94))
+        hoverColor = (0.120, 0.165, 0.215, 0.98)
+        row = DirectButton(
+            parent=parent,
+            relief=DGG.FLAT,
+            borderWidth=(0.002, 0.002),
+            frameSize=(-0.214, 0.218, -0.032, 0.032),
+            frameColor=(rowColor, rowColor, hoverColor, rowColor),
+            pos=(-0.010, 0, yPos),
+            command=self._sendClubInvite if not sent else None,
+            extraArgs=[avId, name],
+            pressEffect=0,
+            state=DGG.DISABLED if sent else DGG.NORMAL,
+        )
+
+        statusNode = self._findNode('WhiteCircle')
+        statusColor = ((0.38, 0.95, 0.48, 1) if online else
+                       (0.42, 0.45, 0.52, 1))
+        if statusNode is not None:
+            status = DirectFrame(
+                parent=row,
+                relief=None,
+                image=statusNode,
+                image_color=statusColor,
+                image_scale=(97.0 / 86.0, 1, 1),
+                pos=(-0.188, 0, 0.001),
+                scale=0.0125,
+            )
+            status.setTransparency(TransparencyAttrib.MAlpha)
+
+        DirectLabel(
+            parent=row,
+            relief=None,
+            text=name,
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_scale=0.027,
+            text_align=TextNode.ALeft,
+            text_pos=(-0.160, -0.007),
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            pos=(0, 0, 0.001),
+        )
+        if sent:
+            statusText = 'Invite Sent'
+        elif nearby:
+            statusText = 'Nearby'
+        elif online:
+            statusText = 'Online Friend'
+        else:
+            statusText = 'Offline Friend'
+        DirectLabel(
+            parent=row,
+            relief=None,
+            text=statusText,
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_scale=0.0205,
+            text_align=TextNode.ARight,
+            text_pos=(0.190, -0.007),
+            text_fg=((0.48, 1.0, 0.56, 1) if online or sent else
+                     (0.64, 0.67, 0.75, 1)),
+            text_shadow=(0, 0, 0, 1),
+            pos=(0, 0, 0.001),
+        )
+        return yPos - 0.070
+
+    def _sendClubInvite(self, avId, name):
+        avId = int(avId)
+        if avId == int(getattr(base.localAvatar, 'doId', 0)):
+            return
+        if not self.manager.isInClub():
+            self.showPage('main')
+            return
+        if not self.manager.localAvHasPermission(ClubGlobals.PERMISSION_INVITE):
+            self._notification(
+                ClubGlobals.NOTIFY_ERROR,
+                'You do not have permission to invite Toons to this Club.')
+            return
+        if self.manager.getMember(avId):
+            self._notification(
+                ClubGlobals.NOTIFY_ERROR,
+                'That Toon is already in your Club.')
+            self.showPage('invite')
+            return
+        if len(self.manager.getMembers()) >= ClubGlobals.CLUB_MAX_MEMBERS:
+            self._notification(ClubGlobals.NOTIFY_ERROR, 'Your Club is full.')
+            self.showPage('main')
+            return
+
+        self.invitesSent.add(avId)
+        self.manager.requestInvite(avId, name)
+        self.showPage('invite')
+
+    def _showInvite(self):
+        self._pageTitle('Invite a Toon')
+
+        backImages = self._buttonImages('Arrow')
+        if backImages is not None:
+            self._add(DirectButton(
+                parent=self,
+                relief=None,
+                pos=(-0.196, 0, 0.370),
+                scale=0.035,
+                image=backImages,
+                image_scale=(-30.0 / 35.0, 1, 1),
+                command=self.showPage,
+                extraArgs=['main'],
+                pressEffect=0,
+            ))
+        else:
+            self._add(self._makeSmallButton(
+                'Back', (-0.177, 0, 0.370), self.showPage, ['main'],
+                scale=0.82))
+
+        if not self.manager.localAvHasPermission(ClubGlobals.PERMISSION_INVITE):
+            self._add(DirectLabel(
+                parent=self,
+                relief=None,
+                text='You do not have permission to invite Toons.',
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_scale=0.029,
+                text_wordwrap=16,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                pos=(0, 0, 0.08),
+            ))
+            return
+
+        if len(self.manager.getMembers()) >= ClubGlobals.CLUB_MAX_MEMBERS:
+            self._add(DirectLabel(
+                parent=self,
+                relief=None,
+                text='Your Club is full.',
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_scale=0.032,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                pos=(0, 0, 0.08),
+            ))
+            return
+
+        candidates = self._getClubInviteCandidates()
+        nearby = [candidate for candidate in candidates if candidate.get('nearby')]
+        friends = [candidate for candidate in candidates if not candidate.get('nearby')]
+
+        self.inviteScroll = self._add(DirectScrolledFrame(
+            parent=self,
+            relief=None,
+            pos=(0.002, 0, 0),
+            frameSize=(-0.233, 0.233, -0.349, 0.329),
+            canvasSize=(-0.225, 0.183, -0.349, 0.309),
+            frameColor=(0, 0, 0, 0),
+            scrollBarWidth=0.05,
+            manageScrollBars=0,
+            autoHideScrollBars=0,
+
+            verticalScroll_relief=None,
+            verticalScroll_pos=(0.208, 0, 0),
+            verticalScroll_frameSize=(-0.025, 0.025, -0.346, 0.329),
+            verticalScroll_manageButtons=0,
+            verticalScroll_resizeThumb=0,
+            verticalScroll_image=sp_gui.find('**/ScrollBar_BAR'),
+            verticalScroll_image_scale=(0.057, 1.0, 0.678),
+            verticalScroll_image_pos=(0.0, 0.0, -0.010),
+
+            verticalScroll_thumb_relief=None,
+            verticalScroll_thumb_frameColor=(1, 1, 1, 0),
+            verticalScroll_thumb_frameSize=(-0.025, 0.025, -0.059, 0.118),
+            verticalScroll_thumb_image=sp_gui.find('**/ScrollBar'),
+            verticalScroll_thumb_image_scale=(0.053, 1.0, 0.181),
+            verticalScroll_thumb_image_pos=(0.0, 0.0, 0.029),
+        ))
+        self.inviteScroll.setTransparency(TransparencyAttrib.MAlpha)
+        self.inviteScroll.horizontalScroll.hide()
+        self.inviteScroll.verticalScroll.incButton.hide()
+        self.inviteScroll.verticalScroll.decButton.hide()
+        self.inviteScroll.verticalScroll.setValue(0)
+        canvas = self.inviteScroll.getCanvas()
+
+        yPos = 0.286
+        rowIndex = 0
+        if nearby:
+            yPos = self._makeInviteSectionHeader(
+                canvas, 'NEARBY TOONS', len(nearby), yPos)
+            for candidate in nearby:
+                yPos = self._makeClubInviteRow(
+                    canvas, candidate, rowIndex, yPos)
+                rowIndex += 1
+
+        if friends:
+            if nearby:
+                yPos -= 0.010
+            yPos = self._makeInviteSectionHeader(
+                canvas, 'FRIENDS', len(friends), yPos)
+            for candidate in friends:
+                yPos = self._makeClubInviteRow(
+                    canvas, candidate, rowIndex, yPos)
+                rowIndex += 1
+
+        if not candidates:
+            DirectLabel(
+                parent=canvas,
+                relief=None,
+                text='No eligible nearby Toons or friends were found.',
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_scale=0.028,
+                text_wordwrap=15,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                pos=(-0.010, 0, 0.10),
+            )
+
+        canvasBottom = min(-0.350, yPos - 0.025)
+        self.inviteScroll['canvasSize'] = (
+            -0.225, 0.183, canvasBottom, 0.309)
+        if canvasBottom < -0.360:
+            self.accept('wheel_up', self._scrollClubInvites, [-1])
+            self.accept('wheel_down', self._scrollClubInvites, [1])
 
     # ------------------------------------------------------------------
     # Members page
@@ -2059,7 +2477,7 @@ class SocialPanelClubsTab(DirectFrame):
                 pass
             return
         try:
-            from toontown.gui import TTDialog
+            from toontown.toontowngui import TTDialog
             self.leaveDialog = TTDialog.TTGlobalDialog(
                 doneEvent='clubLeaveDialogDone',
                 message='Are you sure you want to leave your Club?',
@@ -2069,13 +2487,17 @@ class SocialPanelClubsTab(DirectFrame):
         except:
             self.manager.requestLeave()
 
-    def _leaveDialogDone(self, value):
+    def _leaveDialogDone(self):
+        try:
+            status = self.leaveDialog.doneStatus
+        except:
+            status = None
         try:
             self.leaveDialog.cleanup()
             del self.leaveDialog
         except:
             pass
-        if value > 0:
+        if status == 'ok':
             self.manager.requestLeave()
 
     # ------------------------------------------------------------------
