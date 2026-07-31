@@ -65,8 +65,11 @@ class ChatLog(DirectFrame, DirectObject):
         self._closeDisplay(playSound=False, instant=True)
 
         self.accept(base.CHAT_HOTKEY, self.focusChat)
+        self.accept(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'), self.closeChatHotkey)
+        self.accept('mouse1', self._handleMouseClickFocus)
         self.accept('chat-panel-open', self.open)
         self.accept('chat-panel-close', self.close)
+        self.accept('club-state-updated', self._clubStateUpdated)
 
         base.cr.chatLog = self
         print('[ChatSystem] Clash-style chat interface loaded.')
@@ -83,6 +86,23 @@ class ChatLog(DirectFrame, DirectObject):
             self.assets.find('**/%s%s' % (prefix, hover)),
             self.assets.find('**/%s%s' % (prefix, normal)),
         )
+
+    def _clubStateUpdated(self, club):
+        self.setClubAvailable(bool(club))
+
+    def setClubAvailable(self, available):
+        try:
+            button = self.tabButtons.get(self.TAB_CLUBS)
+        except:
+            button = None
+        if button is not None:
+            button['state'] = DGG.NORMAL if available else DGG.DISABLED
+            alpha = 1.0 if available else 0.65
+            button['text_fg'] = (1, 1, 1, alpha)
+            button['text_shadow'] = (0, 0, 0, alpha)
+        if not available and self.currentTab == self.TAB_CLUBS:
+            self._selectTab(self.TAB_MAIN, playSound=False)
+        self._updateEntryState()
 
     def _makeQuickMenu(self):
         self.quickFrame = DirectFrame(
@@ -495,6 +515,13 @@ class ChatLog(DirectFrame, DirectObject):
         else:
             self.close()
 
+    def closeChatHotkey(self):
+        # Let DirectEntry keep the letter C while the player is typing.
+        if self._entryFocused:
+            return
+        if not self.isHidden:
+            self.close()
+
     def focusChat(self):
         if self.obscuredNormal:
             return
@@ -665,6 +692,26 @@ class ChatLog(DirectFrame, DirectObject):
             pass
         self._entryChanged(None)
 
+    def _handleMouseClickFocus(self):
+        # Clicking anywhere outside the actual text-entry bar removes focus,
+        # but leaves the Clash chat panel and any unsent message open.
+        if not self._entryFocused:
+            return
+        try:
+            if not base.mouseWatcherNode.hasMouse():
+                self.removeFocus()
+                return
+            mouse = base.mouseWatcherNode.getMouse()
+            point = self.entryScroll.getRelativePoint(
+                render2d, Point3(mouse.getX(), 0, mouse.getY()))
+            clipLeft, clipRight, clipBottom, clipTop = (0, 13.4, -1, 1)
+            insideEntry = (clipLeft <= point.getX() <= clipRight and
+                           clipBottom <= point.getZ() <= clipTop)
+        except:
+            insideEntry = False
+        if not insideEntry:
+            self.removeFocus()
+
     def removeFocus(self):
         try:
             self.entry['focus'] = 0
@@ -765,7 +812,7 @@ class ChatLog(DirectFrame, DirectObject):
             return self.TAB_WHISPERS
         return self.TAB_MAIN
 
-    def addToLog(self, msg, avId=0, category=None):
+    def addToLog(self, msg, avId=0, category=None, showNotification=True):
         if not msg:
             return
         msg = msg.replace('\r', ' ')
@@ -780,10 +827,11 @@ class ChatLog(DirectFrame, DirectObject):
         for targetTab in targetTabs:
             self._addMessageItem(targetTab, msg, avId)
 
-        if self.isHidden or self.currentTab != self.TAB_MAIN:
-            self._showNotification(self.TAB_MAIN)
-        if tab != self.TAB_MAIN and (self.isHidden or self.currentTab != tab):
-            self._showNotification(tab)
+        if showNotification:
+            if self.isHidden or self.currentTab != self.TAB_MAIN:
+                self._showNotification(self.TAB_MAIN)
+            if tab != self.TAB_MAIN and (self.isHidden or self.currentTab != tab):
+                self._showNotification(tab)
 
     def _stripTextProperties(self, text):
         try:

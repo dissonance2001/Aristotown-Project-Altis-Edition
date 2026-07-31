@@ -163,6 +163,11 @@ class DistributedFishingSpotAI(DistributedObjectAI):
         catch = self.air.fishManager.generateCatch(av, self.air.doId2do[self.pondDoId].getArea())
         
         self.lastFish = catch
+        if catch and catch[0] in (FishGlobals.FishItem, FishGlobals.FishItemNewEntry, FishGlobals.FishItemNewRecord):
+            clubManager = getattr(simbase.air, 'clubManager', None)
+            if clubManager:
+                clubManager.reportProgress(av.doId, 'fish', 1)
+                clubManager.reportClubCoins(av.doId, 1)
         
         self.d_setMovie(FishGlobals.PullInMovie, catch[0], catch[1], catch[2], catch[3], 0, 0)
         self.cast = False

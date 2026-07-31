@@ -3,6 +3,7 @@ from pandac.PandaModules import TextNode, VBase4
 from toontown.chat.ChatBalloon import ChatBalloon
 from toontown.nametag import NametagGlobals
 
+
 class Nametag:
     TEXT_WORD_WRAP = 10
     TEXT_Y_OFFSET = 3

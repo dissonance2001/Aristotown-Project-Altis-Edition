@@ -57,5 +57,10 @@ class ToontownUberRepository(ToontownInternalRepository):
         self.friendsManager = simbase.air.generateGlobalObject(OTP_DO_ID_TTA_FRIENDS_MANAGER, 'TTAFriendsManager')
         self.deliveryManager = simbase.air.generateGlobalObject(OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         self.codeRedemptionMgr = simbase.air.generateGlobalObject(OTP_DO_ID_TOONTOWN_CODE_REDEMPTION_MANAGER, 'TTCodeRedemptionMgr')
+        # DistributedToonClub is declared as an UberDOG in Astron's cluster
+        # configuration.  Generate the local UD perspective for that fixed
+        # global object, just like the other UberDOG services above.
+        self.clubManager = simbase.air.generateGlobalObject(
+            OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
         self.invasionMgr = SuitInvasionManagerUD(self)
         self.invasionMgr.startInitialInvasion()

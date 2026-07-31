@@ -24,12 +24,46 @@ class DistributedNPCToonBase(DistributedToon.DistributedToon):
         except:
             self.DistributedNPCToon_initialized = 1
         
+        # Prevent the virtual setPlayerType call made by Avatar.__init__
+        # from trying to recolour the nametag before initialization finishes.
+        self._npcNametagColorReady = 0
         DistributedToon.DistributedToon.__init__(self, cr)
+        self._npcNametagColorReady = 1
         self.__initCollisions()
         self.setPickable(0)
         self.setPlayerType(NametagGlobals.CCNonPlayer)
 
+    def applyNPCNametagColor(self):
+        # Same foreground-colour method already used successfully by Sakamoreo.
+        if not getattr(self, '_npcNametagColorReady', 0):
+            return
+        if not hasattr(self, 'nametag'):
+            return
+
+        currentColor = self.nametag.getNametagColor()
+        red = VBase4(1, 0, 0, 1)
+        redNametagColor = (
+            (red, currentColor[0][1]),
+            (red, currentColor[1][1]),
+            (red, currentColor[2][1]),
+            (red, currentColor[3][1]),
+            currentColor[4]
+        )
+        self.nametag.setNametagColor(redNametagColor)
+        self.nametag.updateAll()
+
+    def setPlayerType(self, playerType):
+        DistributedToon.DistributedToon.setPlayerType(self, playerType)
+        self.applyNPCNametagColor()
+
+    def __reapplyNPCNametagColor(self, task):
+        # Runs after subclass announceGenerate methods have finished, in case
+        # one of them rebuilt or refreshed the displayed NPC name.
+        self.applyNPCNametagColor()
+        return task.done
+
     def disable(self):
+        taskMgr.remove(self.uniqueName('applyNPCNametagColor'))
         self.ignore('enter' + self.cSphereNode.getName())
         DistributedToon.DistributedToon.disable(self)
 
@@ -71,6 +105,10 @@ class DistributedNPCToonBase(DistributedToon.DistributedToon):
     def announceGenerate(self):
         self.initToonState()
         DistributedToon.DistributedToon.announceGenerate(self)
+        self.applyNPCNametagColor()
+        taskMgr.remove(self.uniqueName('applyNPCNametagColor'))
+        taskMgr.doMethodLater(0.0, self.__reapplyNPCNametagColor,
+                              self.uniqueName('applyNPCNametagColor'))
 
     def initToonState(self):
         self.setAnimState('neutral', 0.9, None, None)

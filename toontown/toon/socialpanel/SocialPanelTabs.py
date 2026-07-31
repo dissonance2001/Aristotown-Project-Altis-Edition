@@ -59,8 +59,7 @@ class SocialPanelTabs(DirectFrame):
             image=(sp_gui.find('**/ClubButton_N'),
                    sp_gui.find('**/ClubButton_P'),
                    sp_gui.find('**/ClubButton_H')),
-            command=self.panel.unavailableTab,
-            extraArgs=[TAB_CLUBS],
+            command=self.panel.showClubsTab,
             text=('', 'Clubs', 'Clubs', ''),
             **textOptions
         )

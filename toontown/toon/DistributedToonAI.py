@@ -234,6 +234,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.announceGenerate(self)
 
         if self.isPlayerControlled():
+            if self.maxBankMoney != ToontownGlobals.DefaultMaxBankMoney:
+                self.b_setMaxBankMoney(ToontownGlobals.DefaultMaxBankMoney)
             messenger.send('avatarEntered', [self])
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
@@ -2963,6 +2965,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.money + self.bankMoney
         
     def b_setMaxBankMoney(self, maxMoney):
+        maxMoney = ToontownGlobals.DefaultMaxBankMoney
         self.d_setMaxBankMoney(maxMoney)
         self.setMaxBankMoney(maxMoney)
 
@@ -4366,36 +4369,51 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.gameAccess
 
     def b_setNametagStyle(self, nametagStyle):
-        self.d_setNametagStyle(nametagStyle)
         self.setNametagStyle(nametagStyle)
+        self.d_setNametagStyle(self.nametagStyle)
+
 
     def d_setNametagStyle(self, nametagStyle):
         self.sendUpdate('setNametagStyle', [nametagStyle])
 
     def setNametagStyle(self, nametagStyle):
+        try:
+            nametagStyle = int(nametagStyle)
+        except (TypeError, ValueError):
+            nametagStyle = 0
+        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
+            nametagStyle = 0
         self.nametagStyle = nametagStyle
 
     def getNametagStyle(self):
         return self.nametagStyle
 
     def b_setNametagStyles(self, nametagStyles):
-        self.d_setNametagStyles(nametagStyles)
         self.setNametagStyles(nametagStyles)
+        self.d_setNametagStyles(self.nametagStyles)
 
     def d_setNametagStyles(self, nametagStyles):
         self.sendUpdate('setNametagStyles', [nametagStyles])
 
     def setNametagStyles(self, nametagStyles):
-        self.nametagStyles = nametagStyles
-        if self.getNametagStyle() not in self.nametagStyles:
-            self.nametagStyles.append(self.getNametagStyle())
-            self.b_setNametagStyles(self.nametagStyles)
-            
+        # Every Project Altis Toon owns the complete Corporate Clash set.
+        # This also migrates old database records in memory when they log in.
+        self.nametagStyles = list(range(len(TTLocalizer.NametagFonts)))
+
+        if getattr(self, 'nametagStyle', 0) not in self.nametagStyles:
+            self.setNametagStyle(0)
+
     def getNametagStyles(self):
         return self.nametagStyles
-    
+
     def requestNametagStyle(self, nametagStyle):
+        try:
+            nametagStyle = int(nametagStyle)
+        except (TypeError, ValueError):
+            return
         if nametagStyle not in self.nametagStyles:
+            return
+        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
             return
 
         self.b_setNametagStyle(nametagStyle)

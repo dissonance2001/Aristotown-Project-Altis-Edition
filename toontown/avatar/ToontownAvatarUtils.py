@@ -33,7 +33,7 @@ def createUniqueToon(name, dna, hat, glasses, backpack, shoes, x = 0, y = 0, z =
     newToon.setName(name)
     newToon.setPickable(0)
     newToon.setPlayerType(colorType)
-    if nametagStyle == 100:
+    if nametagStyle == 100 or nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
         font = loader.loadFont('phase_3/models/fonts/ImpressBT.ttf')
     else:
         font = loader.loadFont(TTLocalizer.NametagFonts[nametagStyle])

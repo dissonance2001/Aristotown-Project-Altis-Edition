@@ -15,21 +15,30 @@ FancyFont = 'phase_3/models/fonts/Comedy'
 BuildingNametagFont = 'phase_3/models/fonts/MickeyFont'
 BuildingNametagShadow = None
 NametagFonts = (
-    'phase_3/models/fonts/ImpressBT.ttf',
-    'phase_3/models/fonts/AnimGothic.bam',
-    'phase_3/models/fonts/Aftershock.bam',
-    'phase_3/models/fonts/JiggeryPokery.bam',
-    'phase_3/models/fonts/Ironwork.bam',
-    'phase_3/models/fonts/HastyPudding.bam',
-    'phase_3/models/fonts/Comedy.bam',
-    'phase_3/models/fonts/Humanist.bam',
-    'phase_3/models/fonts/Portago.bam',
-    'phase_3/models/fonts/Musicals.bam',
-    'phase_3/models/fonts/Scurlock.bam',
-    'phase_3/models/fonts/Danger.bam',
-    'phase_3/models/fonts/Alie.bam',
-    'phase_3/models/fonts/OysterBar.bam',
-    'phase_3/models/fonts/RedDogSaloon.bam'
+    'phase_3/fonts/ImpressBT.ttf',
+    'phase_3/fonts/AnimGothic.ttf',
+    'phase_3/fonts/Aftershock.ttf',
+    'phase_3/fonts/JiggeryPokery.ttf',
+    'phase_3/fonts/Ironwork.ttf',
+    'phase_3/fonts/HastyPudding.ttf',
+    'phase_3/fonts/Comedy.ttf',
+    'phase_3/fonts/Humanist.ttf',
+    'phase_3/fonts/Portago.ttf',
+    'phase_3/fonts/Musicals.ttf',
+    'phase_3/fonts/Scurlock.ttf',
+    'phase_3/fonts/Danger.ttf',
+    'phase_3/fonts/Alie.ttf',
+    'phase_3/fonts/OysterBar.ttf',
+    'phase_3/fonts/RedDogSaloon.ttf',
+    'phase_3/fonts/Qdbettercomicsans.ttf',
+    'phase_3/fonts/Mabook.ttf',
+    'phase_3/fonts/Chelsea.ttf',
+    'phase_3/fonts/Enchanted_Land.ttf',
+    'phase_3/fonts/KaushanScript.ttf',
+    'phase_3/fonts/Bocah.ttf',
+    'phase_3/fonts/Comic.ttf',
+    'phase_3/fonts/Phattype.ttf',
+    'phase_3/fonts/BettyNoir.ttf'
 )
 NametagFontNames = (
     'Basic',
@@ -46,7 +55,16 @@ NametagFontNames = (
     'Action',
     'Poetic',
     'Boardwalk',
-    'Western'
+    'Western',
+    'Abstract',
+    'Ice Cream',
+    'Pirate',
+    'Medieval',
+    'Calligraphy',
+    'Playful',
+    'Comical',
+    'Arrogant',
+    'Cinema'
 )
 NametagLabel = ' Nametag'
 UnpaidNameTag = 'Basic'

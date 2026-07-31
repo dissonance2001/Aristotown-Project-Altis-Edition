@@ -544,6 +544,10 @@ class QuestManagerAI:
             questList.append(questDesc)
 
         av.b_setQuests(questList)
+        clubManager = getattr(simbase.air, 'clubManager', None)
+        if clubManager:
+            clubManager.reportProgress(av.doId, 'bosses', 1)
+            clubManager.reportClubCoins(av.doId, 25)
 
     def toonDefeatedBoardOffice(self, av, clubId, activeVictors):
         '''# Get the avatars current quests.

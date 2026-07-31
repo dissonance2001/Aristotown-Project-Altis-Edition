@@ -310,6 +310,52 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.glitchCount = 0
         return Task.cont
 
+    def _stopLegacySmartCamera(self):
+        """Ensure Altis's inherited smart-camera system is completely idle."""
+        taskMgr.remove(self.taskName('updateSmartCamera'))
+
+        if getattr(self, '_smartCamEnabled', False):
+            try:
+                LocalAvatar.LocalAvatar.stopUpdateSmartCamera(self)
+            except Exception:
+                # The inherited camera may already have had one of its
+                # colliders removed by a place transition.  The task still
+                # must not be allowed to keep controlling base.camera.
+                taskMgr.remove(self.taskName('updateSmartCamera'))
+                self._smartCamEnabled = False
+
+        try:
+            self.disableSmartCameraViews()
+        except Exception:
+            pass
+
+        self._smartCamEnabled = False
+
+    def _getOrbitalCamera(self):
+        orbitalCamera = getattr(self, 'orbitalCamera', None)
+        if orbitalCamera is None:
+            orbitalCamera = OrbitalCamera(self)
+            self.orbitalCamera = orbitalCamera
+        return orbitalCamera
+
+    def startUpdateSmartCamera(self, push = 1):
+        """Use the Clash orbital camera instead of LocalAvatar smart camera."""
+        self._stopLegacySmartCamera()
+        orbitalCamera = self._getOrbitalCamera()
+        if not orbitalCamera.isActive():
+            orbitalCamera.start()
+
+    def stopUpdateSmartCamera(self):
+        """Stop the Clash orbital camera during movies and place changes."""
+        self._stopLegacySmartCamera()
+        orbitalCamera = getattr(self, 'orbitalCamera', None)
+        if orbitalCamera is not None and orbitalCamera.isActive():
+            orbitalCamera.stop()
+
+    def updateSmartCamera(self, task):
+        # Safety net: an old LocalAvatar task must never update base.camera.
+        return Task.done
+
     def announceGenerate(self):
         self.startLookAround()
 
@@ -321,9 +367,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         DistributedToon.DistributedToon.announceGenerate(self)
 
-        # Orbit camera
-        self.orbitalCamera = OrbitalCamera(self)
-        self.orbitalCamera.start()
+        # Do not start the orbital camera here. The Toon has not completed
+        # its teleport-in placement yet; Place starts it at the proper time.
 
         #def __debugPositionTask(task):
             #pos = self.getPos(render)
@@ -364,6 +409,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.acceptingNonFriendWhispers = acceptingNonFriendWhispers[str(self.doId)]
 
     def disable(self):
+        self.stopUpdateSmartCamera()
         self.laffMeter.destroy()
         del self.laffMeter
         self.expBar.destroy()

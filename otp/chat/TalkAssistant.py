@@ -305,13 +305,13 @@ class TalkAssistant(DirectObject.DirectObject):
         return False
 
     def checkGuildTypedChat(self):
-        if localAvatar.guildId:
+        if getattr(localAvatar, 'guildId', 0):
             return True
         
         return False
 
     def checkGuildSpeedChat(self):
-        if localAvatar.guildId:
+        if getattr(localAvatar, 'guildId', 0):
             return True
         
         return False
@@ -646,7 +646,11 @@ class TalkAssistant(DirectObject.DirectObject):
     def sendGuildTalk(self, message):
         error = None
         if self.checkGuildTypedChat():
-            base.cr.guildManager.sendTalk(message)
+            clubMgr = getattr(base.cr, 'clubMgr', None)
+            if clubMgr:
+                clubMgr.sendClubChat(message)
+            else:
+                error = ERROR_NO_GUILD_CHAT
         else:
             print 'Guild chat error'
             error = ERROR_NO_GUILD_CHAT
@@ -715,7 +719,11 @@ class TalkAssistant(DirectObject.DirectObject):
     def sendGuildSpeedChat(self, type, msgIndex):
         error = None
         if self.checkGuildSpeedChat():
-            base.cr.guildManager.sendSC(msgIndex)
+            clubMgr = getattr(base.cr, 'clubMgr', None)
+            if clubMgr:
+                clubMgr.sendSC(msgIndex, type)
+            else:
+                error = ERROR_NO_GUILD_CHAT
         else:
             print 'Guild Speedchat error'
             error = ERROR_NO_GUILD_CHAT

@@ -522,6 +522,11 @@ class SocialPanelFriendsTab(DirectFrame):
 
         if one:
             self.contextMenu.addButton('Send Whisper', self.contextWhisper)
+            clubMgr = getattr(base.cr, 'clubMgr', None)
+            if clubMgr and clubMgr.isInClub() and clubMgr.localAvHasPermission('invite'):
+                target = selected[0]
+                if target.avId != base.localAvatar.doId and not clubMgr.getMember(target.avId):
+                    self.contextMenu.addButton('Invite to Club', self.contextInviteToClub)
             if not isLocalAvatar:
                 if isFriend:
                     favoriteText = 'Remove Favorite' if self._allSelectedAreFavorites() else 'Add Favorite'
@@ -564,6 +569,19 @@ class SocialPanelFriendsTab(DirectFrame):
         if friendPanel is not None:
             base.localAvatar.chatMgr.whisperTo(
                 friendPanel.handle.getName(), friendPanel.avId, None)
+        self._finishContextAction()
+
+    def contextInviteToClub(self):
+        panel = self._singleContextSelected()
+        if panel is None:
+            return
+        clubMgr = getattr(base.cr, 'clubMgr', None)
+        if clubMgr:
+            try:
+                name = panel.handle.getName()
+            except:
+                name = ''
+            clubMgr.requestInvite(panel.avId, name)
         self._finishContextAction()
 
     def contextAddFriend(self):

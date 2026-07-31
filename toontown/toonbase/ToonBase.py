@@ -331,6 +331,7 @@ class ToonBase(OTPBase.OTPBase):
             ToontownGlobals.OptionsPageHotkey = keymap.get('OPTIONS-PAGE', ToontownGlobals.OptionsPageHotkey)
         
         self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 't')
+        self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', 'c')
         
         self.accept(self.SCREENSHOT_KEY, self.takeScreenShot)
 
@@ -772,7 +773,8 @@ class ToonBase(OTPBase.OTPBase):
     def reloadControls(self):
         self.ignore(self.SCREENSHOT_KEY)
         keymap = settings.get('keymap', {})
-        self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 'r')
+        self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 't')
+        self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', 'c')
         if self.wantCustomControls:
             self.MOVE_UP = keymap.get('MOVE_UP', self.MOVE_UP)
             self.MOVE_DOWN = keymap.get('MOVE_DOWN', self.MOVE_DOWN)

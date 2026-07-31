@@ -731,7 +731,14 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.__camCollCanMove = 0
         self.__geom = render
         self.__disableSmartCam = 0
+
+        # Keep the legacy smart-camera API valid even when the orbital camera
+        # controls normal gameplay. NPC interactions still call posCamera().
+        self.__idealCameraPos = Point3(0.0, -10.0, 5.0)
+        self.__curLookAt = Point3(0.0, 0.0, 3.0)
+
         self.initializeSmartCameraCollisions()
+        self.updateSmartCameraCollisionLineSegment()
         self._smartCamEnabled = False
 
     def shutdownSmartCamera(self):

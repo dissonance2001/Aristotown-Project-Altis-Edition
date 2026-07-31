@@ -1,9 +1,12 @@
 from panda3d.core import BitMask32, CollisionHandlerFloor, CollisionHandlerQueue
 from panda3d.core import CollisionNode, CollisionRay, CollisionSegment
-from panda3d.core import CollisionTraverser, NodePath, Vec3, WindowProperties
+from panda3d.core import CollisionTraverser, NodePath, Point3, Vec3
+from panda3d.core import WindowProperties
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm.FSM import FSM
+from direct.interval.IntervalGlobal import LerpFunc, LerpFunctionInterval
+from direct.interval.IntervalGlobal import LerpPosHprInterval, Parallel
 from direct.showbase.InputStateGlobal import inputState
 from direct.task import Task
 from direct.task.TaskManagerGlobal import taskMgr
@@ -15,26 +18,46 @@ except ImportError:
 
 from otp.otpbase import OTPGlobals
 
+try:
+    from toontown.toonbase import ToontownGlobals
+except ImportError:
+    ToontownGlobals = None
+
 
 class OrbitalCamera(FSM, NodePath):
+    """Python 2-compatible Corporate Clash-style orbital camera for Altis.
+
+    This keeps Altis's FSM and RMB input interface while restoring the camera
+    behavior present in Corporate Clash: camera collision, moving-avatar
+    alignment, smooth presets, recentering, saved camera position, disguise /
+    first-person hiding, heading limits, and camera-facing helpers.
+    """
+
     notify = DirectNotifyGlobal.directNotify.newCategory('OrbitalCamera')
 
     UpdateTaskName = 'OrbitCamUpdateTask'
     ReadMouseTaskName = 'OrbitCamReadMouseTask'
     CollisionCheckTaskName = 'OrbitCamCollisionTask'
 
-    MinP = -70
-    MaxP = 55
+    RecenterOnReleaseEnabled = True
+
+    MinP = -50
+    MaxP = 20
 
     baseH = None
     minH = None
     maxH = None
 
-    presets = [
+    _fallbackPresets = [
         [-9, 0, 0],
         [-24, 0, -10],
         [-12, 0, -15]
     ]
+
+    if ToontownGlobals is not None and hasattr(ToontownGlobals, 'cameraPositions'):
+        presets = ToontownGlobals.cameraPositions
+    else:
+        presets = _fallbackPresets
 
     TopNodeName = 'OrbitCam'
 
@@ -43,7 +66,7 @@ class OrbitalCamera(FSM, NodePath):
         FSM.__init__(self, 'OrbitalCamera')
 
         self.subject = subject
-        self.camOffset = Vec3(0, -14, 5.5)
+        self.camOffset = Vec3(0, -9, 5.5)
 
         self.mouseControl = False
         self.mouseDelta = (0, 0)
@@ -56,16 +79,43 @@ class OrbitalCamera(FSM, NodePath):
 
         self.presetPos = 0
         self.collisionTaskCount = 0
-        self.firstPerson = False
         self.ignoreRMB = False
-        self.orbitH = 0.0
+
+        self.zIval = None
+        self.camIval = None
+        self.lerpSequence = None
+
+        self.forceMaxDistance = True
+        self.avFacingScreen = False
+        self.lastCameraPos = None
+
+        if self.presets:
+            self.lastCamY = self.presets[0][0]
+        else:
+            self.lastCamY = self.camOffset.getY()
 
         self._rmbToken = inputState.watchWithModifiers('RMB', 'mouse3')
 
         self.initializeCollisions()
         self.request('Off')
 
+    def getName(self):
+        return 'FPS'
+
+    def _getTopNodeName(self):
+        return self.TopNodeName
+
     def destroy(self):
+        if self.isActive():
+            self.request('Off')
+        else:
+            self._stopMouseControlTasks()
+            self._stopCollisionCheck()
+
+        self._finishInterval('lerpSequence')
+        self._finishInterval('zIval')
+        self._finishInterval('camIval')
+
         self.destroyCollisions()
 
         if self._rmbToken:
@@ -77,7 +127,18 @@ class OrbitalCamera(FSM, NodePath):
         FSM.cleanup(self)
         self.removeNode()
 
+    def _finishInterval(self, name):
+        interval = getattr(self, name, None)
+        if interval:
+            try:
+                interval.finish()
+            except Exception:
+                pass
+        setattr(self, name, None)
+
     def initializeCollisions(self):
+        # Retained from the original Altis camera for compatibility with any
+        # code that expects these floor-collision members to exist.
         self.cTravOnFloor = CollisionTraverser('CamMode.cTravOnFloor')
         self.camFloorRayNode = self.attachNewNode('camFloorRayNode')
 
@@ -108,6 +169,21 @@ class OrbitalCamera(FSM, NodePath):
         )
 
     def destroyCollisions(self):
+        if hasattr(self, 'cTravOnFloor') and hasattr(self, 'ccRay2NodePath'):
+            try:
+                self.cTravOnFloor.removeCollider(self.ccRay2NodePath)
+            except Exception:
+                pass
+
+        if hasattr(self, 'camFloorCollisionBroadcaster'):
+            try:
+                self.camFloorCollisionBroadcaster.removeCollider(
+                    self.ccRay2NodePath
+                )
+            except Exception:
+                pass
+            del self.camFloorCollisionBroadcaster
+
         if hasattr(self, 'cTravOnFloor'):
             del self.cTravOnFloor
 
@@ -132,95 +208,212 @@ class OrbitalCamera(FSM, NodePath):
     def enterActive(self):
         self.enableInput()
 
-        #base.camNode.setLodCenter(self.subject)
+        try:
+            base.camNode.setLodCenter(self.subject)
+        except Exception:
+            pass
 
         self._initMaxDistance()
         self._startCollisionCheck()
-
-        if not self.firstPerson:
-            self.acceptWheel()
-
+        self.acceptWheel()
         self.acceptTab()
 
         self.reparentTo(self.subject)
         base.camera.reparentTo(self)
 
         self.setPos(0, 0, self.subject.getHeight())
-        camera.setPosHpr(self.camOffset[0], self.camOffset[1], 10, 0, 0, 0)
+        camera.setPosHpr(
+            self.camOffset[0],
+            self.camOffset[1],
+            0,
+            0,
+            0,
+            0
+        )
+
+        place = None
+        try:
+            place = base.cr.playGame.getPlace()
+        except Exception:
+            pass
+
+        if place and place.getState() == 'walk':
+            self.loadLastCameraPos()
+        elif self.presets:
+            self.setPresetPos(self.presetPos, transition=False)
 
     def exitActive(self):
+        self.saveLastCameraPos()
+        self._finishInterval('camIval')
+
         self._stopCollisionCheck()
 
-        #base.camNode.setLodCenter(NodePath())
+        try:
+            base.camNode.setLodCenter(NodePath())
+        except Exception:
+            pass
 
         self.ignoreWheel()
         self.ignoreTab()
+        self.ignore('recenterCameraNow')
         self.disableInput()
 
     def _initMaxDistance(self):
         self._maxDistance = abs(self.camOffset[1])
 
-    def enableMouseControl(self, pressed):
-        if not pressed or self.ignoreRMB:
+    def _getSetting(self, names, default):
+        if not isinstance(names, (tuple, list)):
+            names = (names,)
+
+        settingObjects = []
+
+        if hasattr(base, 'settings'):
+            settingObjects.append(base.settings)
+
+        moduleSettings = globals().get('settings')
+        if moduleSettings is not None:
+            settingObjects.append(moduleSettings)
+
+        for settingObject in settingObjects:
+            for name in names:
+                try:
+                    if hasattr(settingObject, 'get'):
+                        marker = object()
+                        value = settingObject.get(name, marker)
+                        if value is not marker:
+                            return value
+                    else:
+                        return settingObject[name]
+                except Exception:
+                    try:
+                        return settingObject[name]
+                    except Exception:
+                        pass
+
+        return default
+
+    def _camToggleLock(self):
+        default = getattr(base, 'CAM_TOGGLE_LOCK', False)
+        return bool(self._getSetting(
+            ('cam-toggle-lock', 'camToggleLock'),
+            default
+        ))
+
+    def _recenterOnRelease(self):
+        return bool(self._getSetting(
+            ('cam-recenter-on-release', 'camRecenterOnRelease'),
+            False
+        ))
+
+    def _recenterOnMovement(self):
+        return bool(self._getSetting(
+            ('cam-recenter-on-movement', 'camRecenterOnMovement'),
+            False
+        ))
+
+    def _handleRMB(self, pressed):
+        if self.ignoreRMB:
             return
 
-        if not getattr(base, 'CAM_TOGGLE_LOCK', False):
-            self.ignore('InputState-RMB')
-            self.accept('InputState-RMB', self.disableMouseControl)
+        if self._camToggleLock():
+            if pressed:
+                if self.mouseControl:
+                    self.disableMouseControl(True)
+                else:
+                    self.enableMouseControl(True)
+        elif pressed:
+            self.enableMouseControl(True)
+        else:
+            self.disableMouseControl(False)
+
+    def enableMouseControl(self, pressed):
+        if pressed is False or self.ignoreRMB or self.mouseControl:
+            return
 
         if self.oobeEnabled():
             return
 
+        self._finishInterval('lerpSequence')
         self.mouseControl = True
 
         mouseData = base.win.getPointer(0)
         self.origMousePos = (mouseData.getX(), mouseData.getY())
 
-        base.win.movePointer(
-            0,
-            base.win.getXSize() // 2,
-            base.win.getYSize() // 2
-        )
-
-        self.lastMousePos = (
-            base.win.getXSize() / 2,
-            base.win.getYSize() / 2
-        )
+        centerX = base.win.getXSize() // 2
+        centerY = base.win.getYSize() // 2
+        base.win.movePointer(0, centerX, centerY)
+        self.lastMousePos = (centerX, centerY)
 
         if self.getCurrentOrNextState() == 'Active':
             self._startMouseControlTasks()
 
         self.setCursor(True)
+        self._setSubjectMouseControls(True)
+
+        if self._recenterOnMovement():
+            self.ignore('recenterCameraNow')
 
     def disableMouseControl(self, pressed, disabledByMouse=True):
-        self.ignore('InputState-RMB')
-        self.accept('InputState-RMB', self.enableMouseControl)
-
-        if self.oobeEnabled():
+        if self.oobeEnabled() or not self.mouseControl:
             return
 
-        if self.mouseControl:
-            self.mouseControl = False
-            self._stopMouseControlTasks()
+        self.mouseControl = False
+        self._stopMouseControlTasks()
 
+        try:
             base.win.movePointer(
                 0,
                 int(self.origMousePos[0]),
                 int(self.origMousePos[1])
             )
+        except Exception:
+            pass
 
-            self.setCursor(False)
+        self.setCursor(False)
+        self._setSubjectMouseControls(False)
 
-    def setCursor(self, cursor):
-        wp = WindowProperties()
-        wp.setCursorHidden(cursor)
-        base.win.requestProperties(wp)
+        if disabledByMouse:
+            if self._recenterOnRelease() and self.RecenterOnReleaseEnabled:
+                self.setPresetPos(self.presetPos, implicitY=True)
+
+            if self._recenterOnMovement() and not self.isSubjectMoving():
+                self.acceptOnce(
+                    'recenterCameraNow',
+                    self.setPresetPos,
+                    [self.presetPos, True]
+                )
+
+    def _setSubjectMouseControls(self, enabled):
+        controlManager = getattr(self.subject, 'controlManager', None)
+        if not controlManager:
+            return
+
+        try:
+            controlManager.setTurn(0 if enabled else 1)
+        except Exception:
+            pass
+
+        if enabled:
+            try:
+                controlManager.enableLMBForward()
+            except Exception:
+                pass
+        else:
+            try:
+                controlManager.disableLMBForward()
+            except Exception:
+                pass
+
+    def setCursor(self, hiddenCursor):
+        properties = WindowProperties()
+        properties.setCursorHidden(hiddenCursor)
+        base.win.requestProperties(properties)
 
     def enableInput(self):
         self.__inputEnabled = True
-        self.accept('InputState-RMB', self.enableMouseControl)
+        self.accept('InputState-RMB', self._handleRMB)
 
-        if inputState.isSet('RMB'):
+        if inputState.isSet('RMB') and not self._camToggleLock():
             self.enableMouseControl(True)
 
     def disableInput(self):
@@ -232,15 +425,32 @@ class OrbitalCamera(FSM, NodePath):
         return self.__inputEnabled
 
     def isSubjectMoving(self):
-        for movement in ('forward', 'reverse', 'turnRight', 'turnLeft', 'slideRight', 'slideLeft'):
+        for movement in (
+            'forward',
+            'reverse',
+            'turnRight',
+            'turnLeft',
+            'slideRight',
+            'slideLeft'
+        ):
             if inputState.isSet(movement):
                 return True
 
         return False
 
+    def _isAimingPie(self):
+        return bool(getattr(base.localAvatar, 'isAimingPie', False))
+
     def _avatarFacingTask(self, task):
-        if self.oobeEnabled():
+        if self.oobeEnabled() or self.avFacingScreen:
             return task.cont
+
+        if self.isSubjectMoving() or self._isAimingPie():
+            camH = self.getH(render)
+            subjectH = self.subject.getH(render)
+            if abs(camH - subjectH) > 0.01:
+                self.subject.setH(render, camH)
+                self.setH(0)
 
         return task.cont
 
@@ -248,33 +458,64 @@ class OrbitalCamera(FSM, NodePath):
         if self.oobeEnabled():
             return task.cont
 
+        subjectMoving = self.isSubjectMoving()
+        aimingPie = self._isAimingPie()
+
+        if subjectMoving or aimingPie:
+            hNode = self.subject
+        else:
+            hNode = self
+
         if self.mouseDelta[0] or self.mouseDelta[1]:
             dx, dy = self.mouseDelta
 
-            camSensitivityX = 0.31
-            camSensitivityY = 0.21
+            camSensitivityX = self._getSetting(
+                ('camSensitivityX', 'cam-sensitivity-x'),
+                0.31
+            )
+            camSensitivityY = self._getSetting(
+                ('camSensitivityY', 'cam-sensitivity-y'),
+                0.21
+            )
 
-            if hasattr(base, 'settings'):
-                camSensitivityX = base.settings.get('camSensitivityX', camSensitivityX)
-                camSensitivityY = base.settings.get('camSensitivityY', camSensitivityY)
+            options = getattr(base, 'options', None)
+            if options is not None and getattr(options, 'mouse_look', False):
+                dy = -dy
 
-            self.orbitH -= dx * camSensitivityX
-            self.setH(self.orbitH)
-
-            if self.isSubjectMoving():
-                self.subject.setH(self.subject, -dx * camSensitivityX)
+            hNode.setH(hNode, -dx * camSensitivityX)
 
             curP = self.getP()
             newP = curP + -dy * camSensitivityY
             newP = min(max(newP, self.MinP), self.MaxP)
             self.setP(newP)
 
-            if self.baseH:
-                self._checkHBounds(self)
+            if self.baseH is not None:
+                try:
+                    messenger.send('pistolMoved')
+                except Exception:
+                    pass
+                self._checkHBounds(hNode)
 
             self.setR(render, 0)
 
         return task.cont
+
+    def setHBounds(self, baseH, minH, maxH):
+        self.baseH = baseH
+        self.minH = minH
+        self.maxH = maxH
+
+        if self.isSubjectMoving() or self._isAimingPie():
+            hNode = self.subject
+        else:
+            hNode = self
+
+        hNode.setH(maxH)
+
+    def clearHBounds(self):
+        self.baseH = None
+        self.minH = None
+        self.maxH = None
 
     def _checkHBounds(self, hNode):
         currH = fitSrcAngle2Dest(hNode.getH(), 180)
@@ -298,29 +539,35 @@ class OrbitalCamera(FSM, NodePath):
         self.ignore('page_down')
         self._resetWheel()
 
+    def _getCameraPosHotkey(self):
+        if ToontownGlobals is not None and hasattr(
+            ToontownGlobals,
+            'NextCameraPosHotkey'
+        ):
+            return ToontownGlobals.NextCameraPosHotkey
+
+        return 'tab'
+
     def acceptTab(self):
-        self.accept('tab', self.toggleFirstPerson)
+        self.accept(self._getCameraPosHotkey(), self.nextCameraPos)
 
     def ignoreTab(self):
-        self.ignore('tab')
+        self.ignore(self._getCameraPosHotkey())
 
     def toggleFirstPerson(self):
-        self.presetPos += 1
-
-        if self.presetPos >= len(self.presets):
-            self.presetPos = 0
-
-        self.setPresetPos(self.presetPos)
+        # Kept as an alias because existing Altis code may still call it.
+        self.nextCameraPos()
 
     def _handleSetWheel(self, y):
-        self._collSolid.setPointB(0, y + 1, 0)
+        if hasattr(self, '_collSolid'):
+            self._collSolid.setPointB(0, y + 1, 0)
 
         self.camOffset.setY(y)
+        self.lastCamY = y
 
         t = (-14 - y) / -12
         height = self.subject.getHeight()
         z = lerp(height, height, t)
-
         self.setZ(z)
 
     def _handleWheelUp(self):
@@ -357,6 +604,8 @@ class OrbitalCamera(FSM, NodePath):
 
     def _setCamDistance(self, distance):
         offset = camera.getPos(self)
+        if offset.lengthSquared() == 0:
+            return
         offset.normalize()
         camera.setPos(self, offset * distance)
 
@@ -364,6 +613,8 @@ class OrbitalCamera(FSM, NodePath):
         return camera.getPos(self).length()
 
     def _startCollisionCheck(self):
+        self._stopCollisionCheck()
+
         self._collSolid = CollisionSegment(
             0,
             0,
@@ -381,7 +632,6 @@ class OrbitalCamera(FSM, NodePath):
             OTPGlobals.CameraTransparentBitmask |
             OTPGlobals.FloorBitmask
         )
-
         collSolidNode.setIntoCollideMask(BitMask32.allOff())
 
         self._collSolidNp = self.attachNewNode(collSolidNode)
@@ -396,14 +646,128 @@ class OrbitalCamera(FSM, NodePath):
             priority=45
         )
 
+    def _getSubjectGeomRoot(self):
+        if self.subject is None:
+            return None
+
+        if hasattr(self.subject, 'getGeom'):
+            try:
+                return self.subject.getGeom()
+            except Exception:
+                pass
+
+        if hasattr(self.subject, 'getGeomNode'):
+            try:
+                return self.subject.getGeomNode()
+            except Exception:
+                pass
+
+        return self.subject
+
+    def _getSubjectGeomNode(self):
+        if self.subject is None:
+            return None
+
+        if hasattr(self.subject, 'getGeomNode'):
+            try:
+                return self.subject.getGeomNode()
+            except Exception:
+                pass
+
+        if hasattr(self.subject, 'getGeom'):
+            try:
+                return self.subject.getGeom()
+            except Exception:
+                pass
+
+        return None
+
+    def _subjectIsDisguised(self):
+        for avatar in (self.subject, getattr(base, 'localAvatar', None)):
+            if avatar is None:
+                continue
+
+            value = getattr(avatar, 'isDisguised', False)
+            try:
+                if callable(value):
+                    value = value()
+            except Exception:
+                value = False
+
+            if value:
+                return True
+
+        return False
+
     def _collisionCheckTask(self, task):
+        if self.oobeEnabled():
+            return Task.cont
+
+        geomRoot = self._getSubjectGeomRoot()
+        if geomRoot is None:
+            return Task.cont
+
+        self._cTrav.traverse(geomRoot)
+
+        if self.firstPerson or self._subjectIsDisguised():
+            self._hideSubjectGeom()
+        else:
+            self._showSubjectGeom()
+
+        numEntries = self._cHandlerQueue.getNumEntries()
+        for index in range(numEntries):
+            if not self._cHandlerQueue.getEntry(index).hasSurfacePoint():
+                return Task.cont
+
+        self._cHandlerQueue.sortEntries()
+
+        collEntry = None
+        cNormal = Vec3(0, -1, 0)
+
+        if self._cHandlerQueue.getNumEntries() > 0:
+            collEntry = self._cHandlerQueue.getEntry(0)
+            cNormal = collEntry.getSurfaceNormal(self)
+
+        if not collEntry or not collEntry.hasSurfacePoint():
+            if self.forceMaxDistance:
+                camera.setPos(self.camOffset)
+                camera.setZ(0)
+
+            if not self.firstPerson:
+                if self._subjectIsDisguised():
+                    self._hideSubjectGeom()
+                else:
+                    self._showSubjectGeom()
+
+            return Task.cont
+
+        cPoint = collEntry.getSurfacePoint(self)
+        camera.setPos(cPoint + cNormal * 0.9)
+
+        if not self.firstPerson:
+            if camera.getDistance(self) < 1.8 or self._subjectIsDisguised():
+                self._hideSubjectGeom()
+            else:
+                self._showSubjectGeom()
+
+        localAvatar = getattr(base, 'localAvatar', None)
+        pusherTrav = getattr(localAvatar, 'ccPusherTrav', None)
+        if pusherTrav:
+            try:
+                pusherTrav.traverse(render)
+            except Exception:
+                pass
+
         return Task.cont
 
     def _stopCollisionCheck(self):
         taskMgr.remove(OrbitalCamera.CollisionCheckTaskName)
 
         if hasattr(self, '_cTrav') and hasattr(self, '_collSolidNp'):
-            self._cTrav.removeCollider(self._collSolidNp)
+            try:
+                self._cTrav.removeCollider(self._collSolidNp)
+            except Exception:
+                pass
 
         if hasattr(self, '_cHandlerQueue'):
             del self._cHandlerQueue
@@ -415,28 +779,90 @@ class OrbitalCamera(FSM, NodePath):
             self._collSolidNp.detachNode()
             del self._collSolidNp
 
+        if hasattr(self, '_collSolid'):
+            del self._collSolid
+
         if self.subject:
-            self._showSubjectGeom()
+            if self._subjectIsDisguised():
+                self._hideSubjectGeom()
+            else:
+                self._showSubjectGeom()
 
     def _hideSubjectGeom(self):
-        if hasattr(self.subject, 'getGeomNode'):
-            self.subject.getGeomNode().hide()
-        elif hasattr(self.subject, 'getGeom'):
-            self.subject.getGeom().hide()
+        geomNode = self._getSubjectGeomNode()
+        if geomNode:
+            geomNode.hide()
 
     def _showSubjectGeom(self):
-        if hasattr(self.subject, 'getGeomNode'):
-            self.subject.getGeomNode().show()
-        elif hasattr(self.subject, 'getGeom'):
-            self.subject.getGeom().show()
+        geomNode = self._getSubjectGeomNode()
+        if geomNode:
+            geomNode.show()
 
-    def setPresetPos(self, presetIndex, transition=True):
-        self.presetPos = presetIndex
+    def lerpFromZOffset(self, z=0.0, duration=1):
+        self._finishInterval('zIval')
+
+        self.zIval = LerpFunc(
+            self.setZ,
+            duration,
+            fromData=z + self.camOffset[2],
+            toData=self.camOffset[2]
+        )
+        self.zIval.start()
+        self.zIval.setT(0)
+
+    def avFaceCamera(self):
+        if not self.mouseControl or self.avFacingScreen:
+            self.avFacingScreen = False
+            camH = self.getH(render)
+            subjectH = self.subject.getH(render)
+            if abs(camH - subjectH) > 0.01:
+                self.subject.setH(render, camH)
+                self.setH(0)
+
+    def avFaceScreen(self):
+        if not self.mouseControl:
+            self.avFacingScreen = True
+            camH = self.getH(render)
+            self.subject.setH(render, camH - 180)
+            self.setH(180)
+
+    def isAvFacingScreen(self):
+        return self.avFacingScreen
+
+    def setForceMaxDistance(self, force):
+        self.forceMaxDistance = force
+
+    def nextCameraPos(self):
+        localAvatar = getattr(base, 'localAvatar', None)
+        if localAvatar and getattr(localAvatar, 'localToonTyping', False):
+            return
+
+        if not self.presets:
+            return
+
+        self.presetPos += 1
+        if self.presetPos >= len(self.presets):
+            self.presetPos = 0
+
+        self.setPresetPos(self.presetPos)
+        self.lastCamY = self.presets[self.presetPos][0]
+
+    def setPresetPos(self, presetIndex, implicitY=False, transition=True):
+        if not self.presets:
+            return
+
+        self.presetPos = presetIndex % len(self.presets)
+        preset = self.presets[self.presetPos]
+
+        if implicitY:
+            y = self.lastCamY
+        else:
+            y = preset[0]
 
         self.setCameraPos(
-            self.presets[self.presetPos][0],
-            self.presets[self.presetPos][1],
-            self.presets[self.presetPos][2],
+            y,
+            preset[1],
+            preset[2],
             transition=transition
         )
 
@@ -447,10 +873,49 @@ class OrbitalCamera(FSM, NodePath):
         if hasattr(self, '_collSolid'):
             self._collSolid.setPointB(0, y + 1, 0)
 
-        self.camOffset.setY(y)
+        self._finishInterval('lerpSequence')
 
-        self.setPos(self.getX(), self.getY(), z)
-        self.setHpr(h, p, 0)
+        if transition:
+            self.lerpSequence = Parallel(
+                LerpFunctionInterval(
+                    self.camOffset.setY,
+                    0.5,
+                    fromData=self.camOffset.getY(),
+                    toData=y,
+                    blendType='easeInOut'
+                ),
+                LerpPosHprInterval(
+                    self,
+                    0.5,
+                    Point3(self.getX(), self.getY(), z),
+                    Point3(h, p, 0),
+                    blendType='easeInOut'
+                )
+            )
+            self.lerpSequence.start()
+        else:
+            self.camOffset.setY(y)
+            self.setPos(self.getX(), self.getY(), z)
+            self.setHpr(h, p, 0)
+
+    def saveLastCameraPos(self):
+        h, p, unusedR = self.getHpr()
+        self.lastCameraPos = (self.camOffset[1], h, p)
+
+    def loadLastCameraPos(self):
+        if self.lastCameraPos:
+            self.setCameraPos(
+                self.lastCameraPos[0],
+                self.lastCameraPos[1],
+                self.lastCameraPos[2],
+                transition=False
+            )
+        else:
+            self.setPresetPos(self.presetPos)
+
+    @property
+    def firstPerson(self):
+        return self.camOffset.getY() == 0
 
     def _startMouseControlTasks(self):
         if self.mouseControl:
@@ -464,7 +929,10 @@ class OrbitalCamera(FSM, NodePath):
     def _stopMouseControlTasks(self):
         properties = WindowProperties()
         properties.setMouseMode(WindowProperties.MAbsolute)
-        base.win.requestProperties(properties)
+        try:
+            base.win.requestProperties(properties)
+        except Exception:
+            pass
 
         self._stopMouseReadTask()
         self._stopMouseUpdateTask()
@@ -482,21 +950,29 @@ class OrbitalCamera(FSM, NodePath):
         if self.oobeEnabled() or not base.mouseWatcherNode.hasMouse():
             self.mouseDelta = (0, 0)
         else:
-            winSize = (base.win.getXSize(), base.win.getYSize())
+            winWidth = base.win.getXSize()
+            winHeight = base.win.getYSize()
             mouseData = base.win.getPointer(0)
+            mouseX = mouseData.getX()
+            mouseY = mouseData.getY()
 
-            if mouseData.getX() > winSize[0] or mouseData.getY() > winSize[1]:
+            if (
+                mouseX < 0 or
+                mouseY < 0 or
+                mouseX >= winWidth or
+                mouseY >= winHeight
+            ):
                 self.mouseDelta = (0, 0)
             else:
                 self.mouseDelta = (
-                    mouseData.getX() - self.lastMousePos[0],
-                    mouseData.getY() - self.lastMousePos[1]
+                    mouseX - self.lastMousePos[0],
+                    mouseY - self.lastMousePos[1]
                 )
 
-                base.win.movePointer(0, winSize[0] // 2, winSize[1] // 2)
-
-                mouseData = base.win.getPointer(0)
-                self.lastMousePos = (mouseData.getX(), mouseData.getY())
+                centerX = winWidth // 2
+                centerY = winHeight // 2
+                base.win.movePointer(0, centerX, centerY)
+                self.lastMousePos = (centerX, centerY)
 
         return task.cont
 
@@ -531,7 +1007,7 @@ class OrbitalCamera(FSM, NodePath):
             self.request('Off')
 
             if self.subject and hasattr(self.subject, 'setSpeed'):
-                self.subject.setSpeed(0, 0, 0)
+                self.subject.setSpeed(0, 0)
 
     def isActive(self):
         return self.state == 'Active'

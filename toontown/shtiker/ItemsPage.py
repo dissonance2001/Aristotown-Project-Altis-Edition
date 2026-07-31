@@ -111,10 +111,31 @@ class ItemsPage(ShtikerPage.ShtikerPage):
         
     def enter(self):
         ShtikerPage.ShtikerPage.enter(self)
-        self.nametagStyle_index = settings.get('lastNametag', {})[str(base.localAvatar.doId)]
-        self.fishingRods_index = settings.get('lastRod', {})[str(base.localAvatar.doId)]
-        self.cheesyEffect_index = settings.get('lastEffect', {})[str(base.localAvatar.doId)]
-        
+
+        toonId = str(base.localAvatar.doId)
+        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
+        if not nametagStyles:
+            nametagStyles = [0]
+            base.localAvatar.nametagStyles = nametagStyles
+
+        currentStyle = base.localAvatar.getNametagStyle()
+        try:
+            currentIndex = nametagStyles.index(currentStyle)
+        except ValueError:
+            currentIndex = 0
+
+        savedNametagIndex = settings.get('lastNametag', {}).get(toonId, currentIndex)
+        try:
+            savedNametagIndex = int(savedNametagIndex)
+        except (TypeError, ValueError):
+            savedNametagIndex = currentIndex
+        if savedNametagIndex < 0 or savedNametagIndex >= len(nametagStyles):
+            savedNametagIndex = currentIndex
+        self.nametagStyle_index = savedNametagIndex
+
+        self.fishingRods_index = settings.get('lastRod', {}).get(toonId, 0)
+        self.cheesyEffect_index = settings.get('lastEffect', {}).get(toonId, 0)
+
         self.__updateNametagStyle()
         self.__updateFishingRods()
         self.__updateCheesyEffect()
@@ -122,48 +143,65 @@ class ItemsPage(ShtikerPage.ShtikerPage):
     def exit(self):
         ShtikerPage.ShtikerPage.exit(self)
 
-        nametagStyle_index = settings.get('lastNametag', {})
-        fishingRods_index = settings.get('lastRod', {})
-        cheesyEffect_index = settings.get('lastEffect', {})
-                
-        nametagStyle_index[str(base.localAvatar.doId)] = self.nametagStyle_index
-        settings['lastNametag'] = nametagStyle_index
-        
-        fishingRods_index[str(base.localAvatar.doId)] = self.fishingRods_index
-        settings['lastRod'] = fishingRods_index
-        
-        cheesyEffect_index[str(base.localAvatar.doId)] = self.cheesyEffect_index
-        settings['lastEffect'] = cheesyEffect_index
-        
-        if self.nametagStyle_index != -1 and self.nametagStyle_index != base.localAvatar.nametagStyles.index(base.localAvatar.getNametagStyle()):
-            base.localAvatar.requestNametagStyle(base.localAvatar.nametagStyles[self.nametagStyle_index])
+        toonId = str(base.localAvatar.doId)
+        nametagStyleIndexes = settings.get('lastNametag', {})
+        fishingRodIndexes = settings.get('lastRod', {})
+        cheesyEffectIndexes = settings.get('lastEffect', {})
+
+        nametagStyleIndexes[toonId] = self.nametagStyle_index
+        settings['lastNametag'] = nametagStyleIndexes
+
+        fishingRodIndexes[toonId] = self.fishingRods_index
+        settings['lastRod'] = fishingRodIndexes
+
+        cheesyEffectIndexes[toonId] = self.cheesyEffect_index
+        settings['lastEffect'] = cheesyEffectIndexes
+
+        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
+        if 0 <= self.nametagStyle_index < len(nametagStyles):
+            selectedStyle = nametagStyles[self.nametagStyle_index]
+            if selectedStyle != base.localAvatar.getNametagStyle():
+                base.localAvatar.requestNametagStyle(selectedStyle)
+
         if self.fishingRods_index != -1 and self.fishingRods_index != base.localAvatar.fishingRods.index(base.localAvatar.getFishingRod()):
             base.localAvatar.requestFishingRod(base.localAvatar.fishingRods[self.fishingRods_index])
         if self.cheesyEffect_index != -1 and self.cheesyEffect_index != base.localAvatar.cheesyEffects.index(base.localAvatar.savedCheesyEffect):
             base.localAvatar.requestCheesyEffects(base.localAvatar.cheesyEffects[self.cheesyEffect_index])
-    
+
     def __updateNametagStyle(self):
-        self.nametagStyle_preview['text_font'] = ToontownGlobals.getNametagFont(base.localAvatar.nametagStyles[self.nametagStyle_index])
-        self.nametagStyle_preview['text'] = TTLocalizer.NametagFontNames[base.localAvatar.nametagStyles[self.nametagStyle_index]]
-        nametagCount = len(base.localAvatar.nametagStyles)            
+        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
+        nametagCount = len(nametagStyles)
+
         if nametagCount == 0:
+            self.nametagStyle_index = -1
+            self.nametagStyle_preview['text_font'] = ToontownGlobals.getToonFont()
+            self.nametagStyle_preview['text'] = TTLocalizer.NametagFontNames[0]
             self.nametagStyle_rightButton.hide()
             self.nametagStyle_leftButton.hide()
-            
-        if self.nametagStyle_index >= (nametagCount - 1):
+            return
+
+        self.nametagStyle_index = max(0, min(self.nametagStyle_index, nametagCount - 1))
+        nametagStyle = nametagStyles[self.nametagStyle_index]
+        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
+            nametagStyle = 0
+
+        self.nametagStyle_preview['text_font'] = ToontownGlobals.getNametagFont(nametagStyle)
+        self.nametagStyle_preview['text'] = TTLocalizer.NametagFontNames[nametagStyle]
+
+        if self.nametagStyle_index >= nametagCount - 1:
             self.nametagStyle_rightButton.hide()
         else:
             self.nametagStyle_rightButton.show()
-        
+
         if self.nametagStyle_index <= 0:
             self.nametagStyle_leftButton.hide()
         else:
             self.nametagStyle_leftButton.show()
-    
+
     def __changeNametagStyle(self, val):
         self.nametagStyle_index += val
         self.__updateNametagStyle()
-        
+
     def __updateFishingRods(self):
         self.fishingRods_preview['text'] = TTLocalizer.FishingRodNameDict.get(base.localAvatar.fishingRods[self.fishingRods_index])
         rodPath = FishGlobals.RodFileDict.get(base.localAvatar.fishingRods[self.fishingRods_index])

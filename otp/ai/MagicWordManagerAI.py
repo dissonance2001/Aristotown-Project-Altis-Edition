@@ -120,3 +120,76 @@ def pace():
 
     toon.magicTeleportInitiate(teleportTargetId, 9000, 9613)
     return 'Teleporting to the Pacesetter Lobby.'
+
+def _getClubManagerAI():
+    manager = getattr(simbase.air, 'clubMgr', None)
+    if manager is not None:
+        return manager
+
+    # Fallback for repositories that generated the global object without
+    # assigning it to air.clubMgr.
+    for obj in simbase.air.doId2do.values():
+        if obj.__class__.__name__ == 'DistributedToonClubAI':
+            return obj
+    return None
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def jbs(amount):
+    """Give the targeted Toon Jellybeans, overflowing into the bank."""
+    toon = spellbook.getTarget()
+    amount = int(amount)
+    if amount <= 0:
+        return 'Amount must be greater than zero.'
+
+    before = int(toon.getTotalMoney())
+    toon.addMoney(amount)
+    after = int(toon.getTotalMoney())
+    awarded = max(0, after - before)
+
+    if awarded <= 0:
+        return 'That Toon cannot hold any more Jellybeans.'
+    if awarded < amount:
+        return 'Gave %s Jellybeans; the Toon bank is now full.' % (
+            format(awarded, ','))
+    return 'Gave %s Jellybeans.' % format(awarded, ',')
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def coin(amount):
+    """Give Club Coins to the targeted Toon's Club without adding Club XP."""
+    toon = spellbook.getTarget()
+    amount = int(amount)
+    if amount <= 0:
+        return 'Amount must be greater than zero.'
+    if amount > 0xFFFFFFFF:
+        return 'That Club Coin amount is too large.'
+
+    manager = _getClubManagerAI()
+    if manager is None:
+        return 'The Club manager is not available.'
+    if not manager.magicWordAddClubCoins(toon.doId, amount):
+        return 'Could not give Club Coins.'
+
+    return "Gave the targeted Toon's Club %s Club Coins." % (
+        format(amount, ','))
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def clublevel(level):
+    """Set the targeted Toon's Club to the beginning of an exact level."""
+    toon = spellbook.getTarget()
+    level = int(level)
+    if level < 1:
+        return 'Club level must be at least 1.'
+    if level > 10000:
+        return 'Club level cannot be higher than 10,000.'
+
+    manager = _getClubManagerAI()
+    if manager is None:
+        return 'The Club manager is not available.'
+    if not manager.magicWordSetClubLevel(toon.doId, level):
+        return 'Could not set the Club level.'
+
+    return "Set the targeted Toon's Club to level %s." % format(level, ',')
+

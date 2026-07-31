@@ -198,6 +198,11 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
                 toon.addStat(ToontownGlobals.STATS_ELITES, numElites)
                 simbase.air.achievementsManager.cogs(toon.doId)
                 simbase.air.questManager.toonCollectedExp(toon, expArray)
+                clubManager = getattr(simbase.air, 'clubManager', None)
+                cogCount = len(suitsKilled)
+                if clubManager and cogCount > 0:
+                    clubManager.reportProgress(toon.doId, 'cogs', cogCount)
+                    clubManager.reportClubCoins(toon.doId, cogCount)
 
             # Looks like the toon wasnt too helpful...
             else:
@@ -206,3 +211,8 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
             simbase.air.questManager.toonKilledCogs(toon, suitsKilled, zoneId, activeToonList)
             simbase.air.cogPageManager.toonKilledCogs(toon, suitsKilled, zoneId)
             simbase.air.questManager.toonCollectedExp(toon, expArray)
+            clubManager = getattr(simbase.air, 'clubManager', None)
+            cogCount = len(suitsKilled)
+            if clubManager and cogCount > 0:
+                clubManager.reportProgress(toon.doId, 'cogs', cogCount)
+                clubManager.reportClubCoins(toon.doId, cogCount)

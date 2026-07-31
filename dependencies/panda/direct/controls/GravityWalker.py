@@ -90,7 +90,9 @@ class GravityWalker(DirectObject.DirectObject):
     def setAvatar(self, avatar):
         self.avatar = avatar
         if avatar is not None:
-            pass # setup the avatar
+            # Toon.setSpeed reads this when LocalToon uses its legacy
+            # two-argument animation update.
+            avatar.strafeSpeed = 0.0
 
     def setupRay(self, bitmask, floorOffset, reach):
         assert self.notify.debugStateCall(self)
@@ -445,6 +447,11 @@ class GravityWalker(DirectObject.DirectObject):
             self.slideSpeed*=base.debugRunningMultiplier
             self.rotationSpeed*=1.25
 
+        # GravityWalker runs before LocalToon's animation task. Publish the
+        # final scaled slide speed so Toon.setSpeed can animate strafing.
+        if getattr(self, 'avatar', None) is not None:
+            self.avatar.strafeSpeed = self.slideSpeed
+
         if self.needToDeltaPos:
             self.setPriorParentVector()
             self.needToDeltaPos = 0
@@ -595,6 +602,12 @@ class GravityWalker(DirectObject.DirectObject):
         if self.jumpDelayTask:
             self.jumpDelayTask.remove()
             self.jumpDelayTask = None
+
+        self.speed = 0.0
+        self.rotationSpeed = 0.0
+        self.slideSpeed = 0.0
+        if getattr(self, 'avatar', None) is not None:
+            self.avatar.strafeSpeed = 0.0
 
         if __debug__:
             self.ignore("control-f3") #*#

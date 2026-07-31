@@ -445,6 +445,12 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
             if tuple:
                 savedBy.append([v, tuple[0], tuple[1]])
                 continue
+        clubManager = getattr(simbase.air, 'clubManager', None)
+        if clubManager:
+            for v in victors:
+                if v is not None and self.air.doId2do.get(v):
+                    clubManager.reportProgress(v, 'buildings', 1)
+                    clubManager.reportClubCoins(v, 10)
         self.bldg.fsm.request('waitForVictors', [victors, savedBy])
         self.d_setState('Reward')
 

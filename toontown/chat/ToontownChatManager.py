@@ -58,6 +58,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.defaultToWhiteList = base.config.GetBool('white-list-is-default', 1)
         self.chatInputSpeedChat = TTChatInputSpeedChat(self)
         self.chatInputUnites = TTChatInputUnites(self)
+        self.panelClubSpeedChat = False
         self.normalPos = Vec3(0.25, 0, -0.196)
         self.whisperPos = Vec3(0, 0, -0.296)
         self.speedChatPlusPos = Vec3(-0.35, 0, 0.71)
@@ -524,21 +525,29 @@ class ToontownChatManager(ChatManager.ChatManager):
             activeTab = chatLog.currentTab
         stateName = self.fsm.getCurrentState().getName()
         if chatLog and activeTab == chatLog.TAB_WHISPERS and targetAvatarId:
+            self.panelClubSpeedChat = False
             if stateName == 'whisperSpeedChat':
                 self.fsm.request('mainMenu')
             else:
                 self.fsm.request('whisperSpeedChat', [targetAvatarId])
         elif chatLog and activeTab == chatLog.TAB_WHISPERS and targetPlayerId:
+            self.panelClubSpeedChat = False
             if stateName == 'whisperSpeedChatPlayer':
                 self.fsm.request('mainMenu')
             else:
                 self.fsm.request('whisperSpeedChatPlayer', [targetPlayerId])
         elif chatLog and activeTab == chatLog.TAB_CLUBS:
-            if chatLog:
-                chatLog.addToLog('\1playerGreen\1System Message\2: Club SpeedChat is not connected to this panel yet.', category=chatLog.TAB_ALERTS)
+            if stateName == 'speedChat' and self.panelClubSpeedChat:
+                self.fsm.request('mainMenu')
+            else:
+                if stateName == 'speedChat':
+                    self.fsm.request('mainMenu')
+                self.panelClubSpeedChat = True
+                self.fsm.request('speedChat')
         elif stateName == 'speedChat':
             self.fsm.request('mainMenu')
         else:
+            self.panelClubSpeedChat = False
             self.fsm.request('speedChat')
 
     def openPanelUnites(self):
@@ -561,10 +570,11 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.clButton.hide()
         self.whisperFrame.hide()
         self.chatInputNormal.chatEntry['backgroundFocus'] = 0
-        self.chatInputSpeedChat.show()
+        self.chatInputSpeedChat.show(guildMode=self.panelClubSpeedChat)
 
     def exitSpeedChat(self):
         self.chatInputSpeedChat.hide()
+        self.panelClubSpeedChat = False
         self.normalButton.hide()
         self.scButton.hide()
         self.clButton.hide()

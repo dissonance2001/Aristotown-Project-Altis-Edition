@@ -73,6 +73,8 @@ NPC_SCIENTIST = 11
 NPC_LOOPY = 12
 NPC_INVISIBLE = 13
 NPC_RODCLERK = 14
+NPC_CLUB_CREATION = 15
+NPC_CLUB_SHOP = 16
 CLERK_COUNTDOWN_TIME = 120
 TAILOR_COUNTDOWN_TIME = 300
 RTDNAFile = '/RTDNAFile.txt'
@@ -131,6 +133,10 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
         npc = DistributedNPCInvisibleAI.DistributedNPCInvisibleAI(air, npcId)
     elif type == NPC_RODCLERK:
         npc = DistributedNPCRodClerkAI.DistributedNPCRodClerkAI(air, npcId)
+    elif type == NPC_CLUB_CREATION:
+        npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
+    elif type == NPC_CLUB_SHOP:
+        npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     else:
         print 'createNPC() error!!!'
     npc.setName(name)
@@ -13390,6 +13396,19 @@ else:
      'm',
      1,
      NPC_REGULAR)
+
+NPCToonDict[90051] = (2513,
+ 'Doe Vinci',
+ ('xls', 'ms', 'm', 'f', (1.0, 0.8431, 0.0, 1.0), 0,
+  (1.0, 0.8431, 0.0, 1.0), (1.0, 0.8431, 0.0, 1.0),
+  0, 0, 0, 0, 0, 0),
+ 'f', 1, NPC_CLUB_CREATION)
+NPCToonDict[90052] = (2513,
+ 'Bro Vinci',
+ ('xss', 'ms', 'm', 'm', (0.713726, 0.4, 0.2, 1.0), 0,
+  (0.713726, 0.4, 0.2, 1.0), (0.713726, 0.4, 0.2, 1.0),
+  0, 0, 0, 0, 0, 0),
+ 'm', 1, NPC_CLUB_SHOP)
 del lnames
 BlockerPositions = {TTLocalizer.Flippy: (Point3(207.4, 18.81, -0.475), 90.0)}
 zone2NpcDict = {}

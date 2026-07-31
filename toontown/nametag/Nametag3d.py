@@ -170,7 +170,7 @@ class Nametag3d(Nametag, Clickable3d):
 
         # Attach the TextNode:
         textNodePath = self.contents.attachNewNode(self.textNode, 1)
-        textNodePath.setTransparency(foreground[3] < 1)
+        textNodePath.setTransparency(True)
         textNodePath.setAttrib(DepthWriteAttrib.make(0))
         textNodePath.setY(-0.1)
 

@@ -28,6 +28,7 @@ class Hood(StateData.StateData):
         self.id = None
         self.hoodId = hoodId
         self.titleText = None
+        self.titleTextSequence = None
         self.titleColor = (1, 1, 1, 1)
         self.holidayStorageDNADict = {}
         self.spookySkyFile = None
@@ -59,21 +60,45 @@ class Hood(StateData.StateData):
         hoodText = self.getHoodText(zoneId)
         self.doSpawnTitleText(hoodText)
 
+    def _stopTitleTextSequence(self):
+        if self.titleTextSequence:
+            self.titleTextSequence.pause()
+            self.titleTextSequence = None
+
+    def _hideTitleTextNode(self):
+        if not self.titleText:
+            return
+        try:
+            if self.titleText.isEmpty():
+                return
+        except:
+            pass
+        self.titleText.hide()
+
     def doSpawnTitleText(self, text):
+        self._stopTitleTextSequence()
+        if not self.titleText:
+            return
         self.titleText.setText(text)
         self.titleText.show()
         self.titleText.setColor(Vec4(*self.titleColor))
         self.titleText.clearColorScale()
         self.titleText.setFg(self.titleColor)
-        seq = Sequence(Wait(0.1), Wait(6.0), self.titleText.colorScaleInterval(0.5, Vec4(1.0, 1.0, 1.0, 0.0)), Func(self.titleText.hide))
-        seq.start()
+        self.titleTextSequence = Sequence(
+            Wait(0.1),
+            Wait(6.0),
+            self.titleText.colorScaleInterval(
+                0.5, Vec4(1.0, 1.0, 1.0, 0.0)),
+            Func(self._hideTitleTextNode))
+        self.titleTextSequence.start()
 
     def hideTitleText(self):
-        if self.titleText:
-            self.titleText.hide()
+        self._stopTitleTextSequence()
+        self._hideTitleTextNode()
 
     def exit(self):
         taskMgr.remove('titleText')
+        self._stopTitleTextSequence()
         if self.titleText:
             self.titleText.cleanup()
             self.titleText = None

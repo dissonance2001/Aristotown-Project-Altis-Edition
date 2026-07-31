@@ -2,6 +2,7 @@ import random
 import types
 import json
 import os
+import math
 from toontown.toon import AccessoryGlobals
 from toontown.battle import BattleParticles
 from toontown.toon import Motion
@@ -774,6 +775,7 @@ class Toon(Avatar.Avatar, ToonHead):
         ToonHead.__init__(self)
         self.forwardSpeed = 0.0
         self.rotateSpeed = 0.0
+        self.strafeSpeed = 0.0
         self.avatarType = 'toon'
         self.motion = Motion.Motion(self)
         self.standWalkRunReverse = None
@@ -4035,16 +4037,114 @@ class Toon(Avatar.Avatar, ToonHead):
             self.jar.removeNode()
             self.jar = None
 
-    def setSpeed(self, forwardSpeed, rotateSpeed):
+    def _movementHeadingIsAirborne(self):
+        # Only the local Toon owns movement controls. Remote Toons keep the
+        # original immediate heading behavior used by network animation.
+        try:
+            controls = self.controlManager.currentControls
+            if controls is None:
+                return False
+
+            try:
+                return bool(controls.getIsAirborne())
+            except:
+                return bool(controls.isAirborne)
+        except:
+            return False
+
+    def _applyMovementGeomHeading(self, node, heading, smooth):
+        if node is None or node.isEmpty():
+            return
+
+        if not smooth:
+            node.setH(heading)
+            return
+
+        # Airborne direction keys can change the desired heading by 45, 90,
+        # or 180 degrees in one frame. Turn through the shortest angle at a
+        # limited rate instead of visibly snapping the Toon in mid-jump.
+        currentHeading = node.getH()
+        targetHeading = fitDestAngle2Src(currentHeading, heading)
+        headingDelta = targetHeading - currentHeading
+
+        dt = globalClock.getDt()
+        if dt < 0.0:
+            dt = 0.0
+        elif dt > 0.05:
+            dt = 0.05
+
+        maxHeadingStep = 720.0 * dt
+
+        if abs(headingDelta) <= maxHeadingStep:
+            newHeading = targetHeading
+        elif headingDelta > 0.0:
+            newHeading = currentHeading + maxHeadingStep
+        else:
+            newHeading = currentHeading - maxHeadingStep
+
+        node.setH(newHeading)
+
+    def _setMovementGeomHeading(self, heading):
+        # Rotate only the visible Toon geometry. The avatar node itself
+        # remains aligned with the orbital camera and movement controls.
+        smooth = self._movementHeadingIsAirborne()
+
+        try:
+            self._applyMovementGeomHeading(
+                self.getGeomNode(),
+                heading,
+                smooth
+            )
+        except:
+            pass
+
+        if self.isDisguised:
+            try:
+                self._applyMovementGeomHeading(
+                    self.suit.getGeomNode(),
+                    heading,
+                    smooth
+                )
+            except:
+                pass
+
+    def setSpeed(self, forwardSpeed, rotateSpeed, slideSpeed = None):
+        # The legacy LocalToon animation task calls this with only forward
+        # and rotation speed. GravityWalker publishes the current strafe
+        # speed directly on the Toon, so both call signatures still work.
+        if slideSpeed is None:
+            slideSpeed = getattr(self, 'strafeSpeed', 0.0)
+        else:
+            self.strafeSpeed = slideSpeed
+
         self.forwardSpeed = forwardSpeed
         self.rotateSpeed = rotateSpeed
+
+        # Face the visible Toon in the real movement direction. This gives
+        # pure strafing a 90-degree heading and diagonal strafing a natural
+        # 45-degree heading without rotating the camera anchor.
+        if abs(slideSpeed) > ToontownGlobals.WalkCutOff and forwardSpeed >= -ToontownGlobals.WalkCutOff:
+            movementHeading = math.degrees(math.atan2(-slideSpeed, forwardSpeed))
+            self._setMovementGeomHeading(movementHeading)
+        else:
+            # Preserve the normal backwards-walk behavior instead of
+            # turning the visible Toon around by 180 degrees.
+            self._setMovementGeomHeading(0.0)
+
+        # Pure strafe movement has a forward speed of zero. Use the slide
+        # magnitude only for selecting a walk/run animation; physics still
+        # moves the Toon sideways through GravityWalker.
+        animationSpeed = forwardSpeed
+        if abs(animationSpeed) <= ToontownGlobals.WalkCutOff and abs(slideSpeed) > ToontownGlobals.WalkCutOff:
+            animationSpeed = abs(slideSpeed)
+
         action = None
         if self.standWalkRunReverse != None:
-            if forwardSpeed >= ToontownGlobals.RunCutOff:
+            if animationSpeed >= ToontownGlobals.RunCutOff:
                 action = OTPGlobals.RUN_INDEX
-            elif forwardSpeed > ToontownGlobals.WalkCutOff:
+            elif animationSpeed > ToontownGlobals.WalkCutOff:
                 action = OTPGlobals.WALK_INDEX
-            elif forwardSpeed < -ToontownGlobals.WalkCutOff:
+            elif animationSpeed < -ToontownGlobals.WalkCutOff:
                 action = OTPGlobals.REVERSE_INDEX
             elif rotateSpeed != 0.0:
                 action = OTPGlobals.WALK_INDEX
@@ -4076,7 +4176,8 @@ class Toon(Avatar.Avatar, ToonHead):
                 else:
                     self.suit.setPlayRate(rate, anim)
             showWake, wakeWaterHeight = ZoneUtil.getWakeInfo()
-            if showWake and self.getZ(render) < wakeWaterHeight and abs(forwardSpeed) > ToontownGlobals.WalkCutOff:
+            movementMagnitude = max(abs(forwardSpeed), abs(slideSpeed))
+            if showWake and self.getZ(render) < wakeWaterHeight and movementMagnitude > ToontownGlobals.WalkCutOff:
                 currT = globalClock.getFrameTime()
                 deltaT = currT - self.lastWakeTime
                 if action == OTPGlobals.RUN_INDEX and deltaT > ToontownGlobals.WakeRunDelta or deltaT > ToontownGlobals.WakeWalkDelta:

@@ -4,6 +4,7 @@ from otp.speedchat.SpeedChatTypes import *
 from toontown.speedchat.TTSpeedChatTypes import *
 from otp.speedchat.SpeedChat import SpeedChat
 from otp.speedchat import SpeedChatGlobals
+from otp.chat.ChatGlobals import SPEEDCHAT_NORMAL, SPEEDCHAT_CUSTOM, SPEEDCHAT_EMOTE
 from toontown.speedchat import TTSpeedChatGlobals
 from toontown.speedchat import TTSCSingingTerminal
 from toontown.speedchat import TTSCIndexedTerminal
@@ -359,6 +360,7 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         self.firstTime = 0
         self.whisperAvatarId = None
         self.toPlayer = 0
+        self.guildMode = False
         buttons = loader.loadModel('phase_3/models/gui/dialog_box_buttons_gui')
         okButtonImage = (buttons.find('**/ChtBx_OKBtn_UP'), buttons.find('**/ChtBx_OKBtn_DN'), buttons.find('**/ChtBx_OKBtn_Rllvr'))
         self.emoteNoAccessPanel = DirectFrame(parent=hidden, relief=None, state='normal', text=OTPLocalizer.SCEmoteNoAccessMsg, frameSize=(-1, 1, -1, 1), geom=DGG.getDefaultDialogGeom(), geom_color=OTPGlobals.GlobalDialogColor, geom_scale=(0.92, 1, 0.6), geom_pos=(0, 0, -.08), text_scale=0.08)
@@ -421,9 +423,10 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         del self.fsm
         del self.chatMgr
 
-    def show(self, whisperAvatarId = None, toPlayer = 0):
+    def show(self, whisperAvatarId = None, toPlayer = 0, guildMode = False):
         self.whisperAvatarId = whisperAvatarId
         self.toPlayer = toPlayer
+        self.guildMode = bool(guildMode)
         self.fsm.request('active')
 
     def hide(self):
@@ -490,7 +493,9 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
             lt.b_setEmoteState(emoteId, animMultiplier=lt.animMultiplier)
 
     def handleStaticTextMsg(self, textId):
-        if self.whisperAvatarId is None:
+        if self.guildMode:
+            base.talkAssistant.sendGuildSpeedChat(SPEEDCHAT_NORMAL, textId)
+        elif self.whisperAvatarId is None:
             self.chatMgr.sendSCChatMessage(textId)
         else:
             self.chatMgr.sendSCWhisperMessage(textId, self.whisperAvatarId, self.toPlayer)
@@ -504,14 +509,18 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         self.toPlayer = 0
 
     def handleCustomMsg(self, textId):
-        if self.whisperAvatarId is None:
+        if self.guildMode:
+            base.talkAssistant.sendGuildSpeedChat(SPEEDCHAT_CUSTOM, textId)
+        elif self.whisperAvatarId is None:
             self.chatMgr.sendSCCustomChatMessage(textId)
         else:
             self.chatMgr.sendSCCustomWhisperMessage(textId, self.whisperAvatarId, self.toPlayer)
         self.toPlayer = 0
 
     def handleEmoteMsg(self, emoteId):
-        if self.whisperAvatarId is None:
+        if self.guildMode:
+            base.talkAssistant.sendGuildSpeedChat(SPEEDCHAT_EMOTE, emoteId)
+        elif self.whisperAvatarId is None:
             self.chatMgr.sendSCEmoteChatMessage(emoteId)
         else:
             self.chatMgr.sendSCEmoteWhisperMessage(emoteId, self.whisperAvatarId, self.toPlayer)

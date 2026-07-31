@@ -185,6 +185,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.codeRedemptionMgr = TTCodeRedemptionMgrAI(self)
         self.codeRedemptionMgr.generateWithRequired(2)
         self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
+        self.clubManager = self.generateGlobalObject(OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
 
     def createSafeZones(self):
         NPCToons.generateZone2NpcDict()

@@ -259,7 +259,10 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             self.__hideCastGui()
             if base.wantBingo:
                 self.pond.setLocalToonSpot()
-            base.setCellsActive([base.bottomCells[1], base.bottomCells[2]], 1)
+            bottomCells = getattr(base, 'bottomCells', [])
+            cellsToActivate = bottomCells[1:3]
+            if cellsToActivate:
+                base.setCellsActive(cellsToActivate, 1)
             base.setCellsActive(base.rightCells, 1)
             place = base.cr.playGame.getPlace()
             if place:

@@ -11,6 +11,9 @@ class ToontownControlManager(ControlManager.ControlManager):
         self.passMessagesThrough = passMessagesThrough
         self.inputStateTokens = []
         self.WASDTurnTokens = []
+        self.NormalTurnTokens = []
+        self.LMBForwardToken = None
+        self.__turn = True
         self.controls = {}
         self.currentControls = None
         self.currentControlsName = None
@@ -46,16 +49,16 @@ class ToontownControlManager(ControlManager.ControlManager):
                 inputState.watchWithModifiers('jump', keymap.get('JUMP', base.JUMP))
             ))
 
-            self.setWASDTurn(True)
+            self.setWASDTurn(self.__turn)
 
         else:
             self.istNormal.extend((
                 inputState.watchWithModifiers('forward', base.MOVE_UP, inputSource=inputState.ArrowKeys),
                 inputState.watchWithModifiers('reverse', base.MOVE_DOWN, inputSource=inputState.ArrowKeys),
-                inputState.watchWithModifiers('turnLeft', base.MOVE_LEFT, inputSource=inputState.ArrowKeys),
-                inputState.watchWithModifiers('turnRight', base.MOVE_RIGHT, inputSource=inputState.ArrowKeys),
                 inputState.watch('jump', base.JUMP, base.JUMP + '-up')
             ))
+
+            self.setTurn(self.__turn)
             
             self.istNormal.extend((
                 inputState.watch('turnLeft', 'mouse-look_left', 'mouse-look_left-done'),
@@ -109,6 +112,94 @@ class ToontownControlManager(ControlManager.ControlManager):
             inputState.set("turnLeft", False, inputSource=inputState.WASD)
             inputState.set("turnRight", False, inputSource=inputState.WASD)
 
+    def setTurn(self, turn):
+        """Switch left/right movement between turning and strafing.
+
+        Corporate Clash disables normal keyboard turning while RMB camera
+        control is active. Altis already has the same state conversion in
+        setWASDTurn(); this method exposes it under Clash's API and provides
+        the equivalent behavior for the classic arrow-key control scheme.
+        """
+        turn = bool(turn)
+        self.__turn = turn
+
+        if self.wantWASD:
+            self.setWASDTurn(turn)
+            return
+
+        if not self.isEnabled:
+            return
+
+        turnLeftSet = inputState.isSet(
+            'turnLeft', inputSource=inputState.ArrowKeys)
+        turnRightSet = inputState.isSet(
+            'turnRight', inputSource=inputState.ArrowKeys)
+        slideLeftSet = inputState.isSet(
+            'slideLeft', inputSource=inputState.ArrowKeys)
+        slideRightSet = inputState.isSet(
+            'slideRight', inputSource=inputState.ArrowKeys)
+
+        for token in self.NormalTurnTokens:
+            token.release()
+        self.NormalTurnTokens = []
+
+        if turn:
+            self.NormalTurnTokens = [
+                inputState.watchWithModifiers(
+                    'turnLeft', base.MOVE_LEFT,
+                    inputSource=inputState.ArrowKeys),
+                inputState.watchWithModifiers(
+                    'turnRight', base.MOVE_RIGHT,
+                    inputSource=inputState.ArrowKeys)
+            ]
+
+            inputState.set(
+                'turnLeft', slideLeftSet,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'turnRight', slideRightSet,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'slideLeft', False,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'slideRight', False,
+                inputSource=inputState.ArrowKeys)
+        else:
+            self.NormalTurnTokens = [
+                inputState.watchWithModifiers(
+                    'slideLeft', base.MOVE_LEFT,
+                    inputSource=inputState.ArrowKeys),
+                inputState.watchWithModifiers(
+                    'slideRight', base.MOVE_RIGHT,
+                    inputSource=inputState.ArrowKeys)
+            ]
+
+            inputState.set(
+                'slideLeft', turnLeftSet,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'slideRight', turnRightSet,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'turnLeft', False,
+                inputSource=inputState.ArrowKeys)
+            inputState.set(
+                'turnRight', False,
+                inputSource=inputState.ArrowKeys)
+
+    def enableLMBForward(self):
+        """Make holding the left mouse button move the Toon forward."""
+        if self.LMBForwardToken is None:
+            self.LMBForwardToken = inputState.watchWithModifiers(
+                'forward', 'mouse1')
+
+    def disableLMBForward(self):
+        """Remove the temporary left-mouse forward binding."""
+        if self.LMBForwardToken is not None:
+            self.LMBForwardToken.release()
+            self.LMBForwardToken = None
+
     def disable(self):
         self.isEnabled = 0
 
@@ -127,6 +218,13 @@ class ToontownControlManager(ControlManager.ControlManager):
         for token in self.WASDTurnTokens:
             token.release()
         self.WASDTurnTokens = []
+
+        for token in self.NormalTurnTokens:
+            token.release()
+        self.NormalTurnTokens = []
+
+        self.disableLMBForward()
+
         if self.currentControls:
             self.currentControls.disableAvatarControls()
         keymap = settings.get('keymap', {})

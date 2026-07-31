@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
+from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 import os
 
 class BattleSounds:
@@ -33,6 +34,24 @@ class BattleSounds:
 
     def getSound(self, name):
         if self.isValid:
+            normalizedName = str(name).replace('\\', '/').lstrip('/')
+
+            contentPackCandidates = [normalizedName]
+            if '/' not in normalizedName:
+                contentPackCandidates.extend([
+                    'phase_3/audio/sfx/' + normalizedName,
+                    'phase_3.5/audio/sfx/' + normalizedName,
+                    'phase_4/audio/sfx/' + normalizedName,
+                    'phase_5/audio/sfx/' + normalizedName
+                ])
+
+            for candidate in contentPackCandidates:
+                resolvedPath = ContentPackCompatibility.resolveMountedFile(
+                    candidate
+                )
+                if resolvedPath:
+                    return self.mgr.getSound(resolvedPath)
+
             filename = Filename(name)
             found = vfs.resolveFilename(filename, self.sfxSearchPath)
             if not found:

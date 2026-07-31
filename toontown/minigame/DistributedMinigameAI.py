@@ -177,11 +177,26 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
     def gameOver(self):
         self.notify.debug('BASE: gameOver')
 
+        completedAvIds = []
+        for avId in self.avIdList:
+            if self.stateDict.get(avId) == EXITED:
+                continue
+            if self.air.doId2do.get(avId):
+                completedAvIds.append(avId)
+
         if simbase.air.wantAchievements:
-            for avId in self.avIdList:
+            for avId in completedAvIds:
                 av = self.air.doId2do.get(avId)
+                if not av:
+                    continue
                 av.addStat(ToontownGlobals.STATS_TROLLEY)
                 self.air.achievementsManager.rideTrolley(av)
+
+        clubManager = getattr(simbase.air, 'clubManager', None)
+        if clubManager:
+            for avId in completedAvIds:
+                clubManager.reportProgress(avId, 'trolley', 1)
+                clubManager.reportClubCoins(avId, 2)
 
         self.frameworkFSM.request('frameworkWaitClientsExit')
 

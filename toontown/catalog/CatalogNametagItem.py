@@ -36,29 +36,29 @@ class CatalogNametagItem(CatalogItem.CatalogItem):
     def getName(self):
         if self.nametagStyle == 100:
             name = TTLocalizer.UnpaidNameTag
-        else:
+        elif 0 <= self.nametagStyle < len(TTLocalizer.NametagFontNames):
             name = TTLocalizer.NametagFontNames[self.nametagStyle]
+        else:
+            name = TTLocalizer.NametagFontNames[0]
         if TTLocalizer.NametagReverse:
             name = TTLocalizer.NametagLabel + name
         else:
             name = name + TTLocalizer.NametagLabel
         return name
-        if self.nametagStyle == 0:
-            name = TTLocalizer.NametagPaid
-        elif self.nametagStyle == 1:
-            name = TTLocalizer.NametagAction
-        elif self.nametagStyle == 2:
-            name = TTLocalizer.NametagFrilly
 
     def recordPurchase(self, avatar, optional):
-        if avatar:
-            avatar.nametagStyles.append(self.nametagStyle)
+        if avatar and 0 <= self.nametagStyle < len(TTLocalizer.NametagFonts):
+            nametagStyles = list(getattr(avatar, 'nametagStyles', []))
+            if self.nametagStyle not in nametagStyles:
+                nametagStyles.append(self.nametagStyle)
+                nametagStyles.sort()
+                avatar.b_setNametagStyles(nametagStyles)
             avatar.b_setNametagStyle(self.nametagStyle)
         return ToontownGlobals.P_ItemAvailable
 
     def getPicture(self, avatar):
         frame = self.makeFrame()
-        if self.nametagStyle == 100:
+        if self.nametagStyle == 100 or self.nametagStyle < 0 or self.nametagStyle >= len(TTLocalizer.NametagFonts):
             inFont = ToontownGlobals.getToonFont()
         else:
             inFont = ToontownGlobals.getNametagFont(self.nametagStyle)

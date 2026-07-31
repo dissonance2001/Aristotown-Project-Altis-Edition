@@ -10,6 +10,7 @@ from toontown.quest import QuestParser
 from toontown.quest import TrackChoiceGui
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
+from toontown.toon import ToonHead
 
 ChoiceTimeout = 20
 AVAILABLE_QUEST = 0
@@ -26,12 +27,222 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.questChoiceGui = None
         self.trackChoiceGui = None
         self.icon = None
+        self.clubGui = None
+        self._clubAccessoryNodes = []
         self.npcType = 'Shopkeeper'
         self.questNotifyTypes = [base.loader.loadModel('phase_3/models/gui/quest_exclaim.bam'), base.loader.loadModel('phase_3/models/gui/quest_exclaim_silver.bam'), base.loader.loadModel('phase_3/models/gui/quest_question.bam'), base.loader.loadModel('phase_3/models/gui/quest_question_silver.bam')]
         for icon in self.questNotifyTypes:
             icon.setScale(4)
             icon.setZ(3)
         self.beginCheckTask()
+
+
+    def _getClubVinciData(self):
+        name = getattr(self, 'name', '')
+        if name == 'Doe Vinci':
+            return {
+                'kind': 'creation',
+                'headPrefix': '/models/char/toons/head/doevinci-heads-',
+                'position': (-0.0291, -3.376, 1.0),
+                'heading': 180.0,
+                'shirt': 'cosmetics/clothing/maps/cc_t_clth_shirt_npc_doe.png',
+                'sleeve': 'cosmetics/clothing/maps/cc_t_clth_shirt_npc_doe_sleeve.png',
+                'bottom': 'cosmetics/clothing/maps/cc_t_clth_skirt_npc_doe.png',
+                'accessories': (
+                    ('cosmetics/hat/models/cc_m_acc_hat_beanie_doe.bam',
+                     'cosmetics/hat/maps/cc_t_acc_hat_beanie_doe_yellow.png',
+                     'head', (0.0, -0.119, 0.37), (0.0, 10.0, 0.0),
+                     (1.0, 1.0, 1.0)),
+                    ('cosmetics/neck/models/cc_m_acc_nec_bandana_doe.bam',
+                     'cosmetics/neck/maps/cc_t_acc_nec_bandana_doe_1.png',
+                     'body', (0.39, -0.713, 0.595),
+                     (337.368, 5.39, -0.418), (1.22, 1.189, 1.183)),
+                ),
+            }
+        if name == 'Bro Vinci':
+            return {
+                'kind': 'shop',
+                'headPrefix': '/models/char/toons/head/brovinci-heads-',
+                'position': (-0.0707, 3.2519, 1.0),
+                'heading': -4.9358,
+                'shirt': 'cosmetics/clothing/maps/cc_t_clth_shirt_npc_bro.png',
+                'sleeve': 'cosmetics/clothing/maps/cc_t_clth_shirt_npc_bro_sleeve.png',
+                'bottom': 'cosmetics/clothing/maps/cc_t_clth_shorts_npc_bro.png',
+                'accessories': (
+                    ('cosmetics/hat/models/cc_m_acc_hat_hair_bro.bam',
+                     'cosmetics/hat/maps/cc_t_acc_hat_hair_bro_brown.png',
+                     'head', (0.0, -0.00119, 0.0285),
+                     (0.0, 365.17827, 0.0),
+                     (1.02956, 1.05154, 0.96088)),
+                    ('cosmetics/face/models/cc_m_acc_face_gl_bro.bam',
+                     'cosmetics/face/maps/cc_t_acc_face_gl_bro_black.png',
+                     'head', (0.0, 0.10827, 0.00746),
+                     (0.0, 3.918, 0.0),
+                     (0.98433, 0.87821, 0.89471)),
+                    ('cosmetics/neck/models/cc_m_acc_nec_necklace_brovinci.bam',
+                     'cosmetics/neck/maps/cc_t_acc_nec_necklace_bro_green.png',
+                     'body', (0.21805, -0.52942, 0.37327),
+                     (365.82687, 356.50393, 360.10788),
+                     (1.07851, 1.07625, 1.08305)),
+                ),
+            }
+        return None
+
+    def _isClubVinci(self):
+        return self._getClubVinciData() is not None
+
+    def generateToonHead(self, copy=1):
+        data = self._getClubVinciData()
+        if not data:
+            return DistributedNPCToonBase.generateToonHead(self, copy)
+
+        oldPrefix = ToonHead.HeadDict.get('x')
+        prefix = data['headPrefix']
+        ToonHead.HeadDict['x'] = prefix
+        try:
+            sourcePath = 'phase_3' + prefix + '1000'
+            sourceModel = ToonHead.PreloadHeads.get(sourcePath)
+            if sourceModel is None:
+                sourceModel = loader.loadModel(sourcePath, okMissing=True)
+                if sourceModel:
+                    sourceModel.flattenMedium()
+                    ToonHead.PreloadHeads[sourcePath] = sourceModel
+
+            if sourceModel:
+                # The supplied Vinci heads have one model. Reuse it for all
+                # three Altis LOD slots so ToonHead never requests missing files.
+                for lod in ('500', '250'):
+                    ToonHead.PreloadHeads['phase_3' + prefix + lod] = sourceModel
+
+            return DistributedNPCToonBase.generateToonHead(self, copy)
+        finally:
+            ToonHead.HeadDict['x'] = oldPrefix
+
+    def initToonState(self):
+        data = self._getClubVinciData()
+        if not data:
+            return DistributedNPCToonBase.initToonState(self)
+        self.reparentTo(render)
+        self.setPos(*data['position'])
+        self.setH(data['heading'])
+        self.setAnimState('neutral', 0.9, None, None)
+
+    def _loadClubTexture(self, path):
+        texture = loader.loadTexture(path, okMissing=True)
+        if texture:
+            texture.setMinfilter(Texture.FTLinearMipmapLinear)
+            texture.setMagfilter(Texture.FTLinear)
+        return texture
+
+    def _clearClubAccessories(self):
+        for node in self._clubAccessoryNodes:
+            if node and not node.isEmpty():
+                node.removeNode()
+        self._clubAccessoryNodes = []
+
+    def _attachClubAccessory(self, modelPath, texturePath, target, pos, hpr, scale):
+        model = loader.loadModel(modelPath, okMissing=True)
+        if not model:
+            return
+        texture = self._loadClubTexture(texturePath) if texturePath else None
+        if texture:
+            model.setTexture(texture, 1)
+        model.setPos(*pos)
+        model.setHpr(*hpr)
+        model.setScale(*scale)
+        model.setTwoSided(True)
+        if target == 'head':
+            targets = self.findAllMatches('**/__Actor_head')
+        else:
+            targets = self.findAllMatches('**/def_joint_attachFlower')
+        for targetNode in targets:
+            holder = targetNode.attachNewNode('clubVinciAccessory')
+            model.instanceTo(holder)
+            self._clubAccessoryNodes.append(holder)
+
+    def _applyClubVinciAppearance(self):
+        data = self._getClubVinciData()
+        if not data:
+            return
+        shirt = self._loadClubTexture(data['shirt'])
+        sleeve = self._loadClubTexture(data['sleeve'])
+        bottom = self._loadClubTexture(data['bottom'])
+        for lod in ('1000', '500', '250'):
+            torso = self.getPart('torso', lod)
+            if torso:
+                top = torso.find('**/torso-top')
+                if shirt and not top.isEmpty():
+                    top.setTexture(shirt, 1)
+                sleeves = torso.find('**/sleeves')
+                if sleeve and not sleeves.isEmpty():
+                    sleeves.setTexture(sleeve, 1)
+                if bottom:
+                    for geom in torso.findAllMatches('**/torso-bot'):
+                        geom.setTexture(bottom, 1)
+        self._clearClubAccessories()
+        for definition in data['accessories']:
+            self._attachClubAccessory(*definition)
+
+    def _prepareClubInteraction(self):
+        try:
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.fsm.request('stopped')
+        except:
+            pass
+        try:
+            base.localAvatar.stopLookAround()
+            self.stopLookAround()
+            base.localAvatar.lookAt(self)
+            self.lookAt(base.localAvatar)
+        except:
+            pass
+
+    def _restoreClubInteraction(self, *args):
+        self.clubGui = None
+        try:
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.fsm.request('walk')
+        except:
+            pass
+        try:
+            base.localAvatar.startLookAround()
+            self.startLookAround()
+        except:
+            pass
+
+    def _closeClubGui(self):
+        if self.clubGui:
+            try:
+                self.clubGui.destroy()
+            except:
+                pass
+            self.clubGui = None
+
+    def _handleClubVinciInteraction(self):
+        data = self._getClubVinciData()
+        manager = getattr(base.cr, 'clubMgr', None)
+        if not manager:
+            self.setChatAbsolute('The Club system is currently unavailable.', CFSpeech | CFTimeout)
+            return
+
+        if data['kind'] == 'creation':
+            if manager.isInClub():
+                self.setChatAbsolute('You are already a member of a Club!', CFSpeech | CFTimeout)
+                manager.openClubPanel()
+                return
+            self._prepareClubInteraction()
+            self.acceptOnce('club-creation-gui-done', self._restoreClubInteraction)
+            self.clubGui = manager.openCreationGui(self)
+            return
+
+        if not manager.isInClub():
+            self.setChatAbsolute('Come back after you have joined or created a Club!', CFSpeech | CFTimeout)
+            return
+        self._prepareClubInteraction()
+        self.acceptOnce('club-shop-gui-done', self._restoreClubInteraction)
+        self.clubGui = manager.openShopGui(self)
 
     def applySakamoreoNametagColor(self):
         if self.getName() != 'Sakamoreo':
@@ -53,9 +264,11 @@ class DistributedNPCToon(DistributedNPCToonBase):
 
     def announceGenerate(self):
         DistributedNPCToonBase.announceGenerate(self)
-        if self.getName() == 'Sakamoreo':
+        if self.getName() == 'Sakamoreo' or self._isClubVinci():
             self.npcType = ''
             self.setDisplayName(self.getName())
+        if self._isClubVinci():
+            self._applyClubVinciAppearance()
         self.applySakamoreoNametagColor()
 
     def setPlayerType(self, playerType):
@@ -75,6 +288,8 @@ class DistributedNPCToon(DistributedNPCToonBase):
             curQuestMovie.cleanup()
 
     def disable(self):
+        self._closeClubGui()
+        self._clearClubAccessories()
         self.cleanupMovie()
         taskMgr.remove('update-quests')
 
@@ -96,6 +311,9 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.trackChoiceGui = None
 
     def handleCollisionSphereEnter(self, collEntry):
+        if self._isClubVinci():
+            self._handleClubVinciInteraction()
+            return
         base.cr.playGame.getPlace().fsm.request('quest', [self])
         self.sendUpdate('avatarEnter', [])
 
@@ -276,6 +494,9 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.sendUpdate('chooseTrack', [trackId])
 		
     def checkQuestStatus(self):
+        if self._isClubVinci():
+            self.setQuestNotify(None)
+            return
         av = base.localAvatar
         retVal = self.hasQuests()
         if retVal is not None:

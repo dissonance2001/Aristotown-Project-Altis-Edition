@@ -835,7 +835,7 @@ from toontown.betaevent import DistributedBetaEvent/AI
 from toontown.betaevent import DistributedBetaEventTTC/AI
 from toontown.weather import DistributedWeatherCycle/AI
 from toontown.weather import DistributedWeatherStorm/AI
-from toontown.club import DistributedToonClub/AI
+from toontown.club import DistributedToonClub/AI/UD
 from toontown.environment import DistributedDayTimeManager/AI
 from toontown.environment import DistributedRainManager/AI
 from toontown.environment import DistributedWeatherMGR/AI
@@ -1143,8 +1143,8 @@ dclass DistributedToon : DistributedPlayer {
   logMessage(char [0-1024]) ownsend airecv;
   forceLogoutWithNotify() ownrecv;
   setPinkSlips(uint8 = 0) required ownrecv db;
-  setNametagStyle(uint8 = 1) required broadcast ownrecv db;
-  setNametagStyles(uint8[] = [0]) required broadcast ownrecv db;
+  setNametagStyle(uint8 = 0) required broadcast ownrecv db;
+  setNametagStyles(uint8[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]) required broadcast ownrecv db;
   setMail(simpleMail []) ownrecv airecv ram;
   setNumMailItems(uint32) airecv;
   setSimpleMailNotify(uint8) ownrecv airecv;
@@ -4011,15 +4011,30 @@ dclass DistributedWeatherStorm : DistributedObject {
   setDuration(int32) broadcast ram;
 };
 
-struct Member {
-  uint32 doId;
-}
-
 dclass DistributedToonClub : DistributedObjectGlobal {
-  requestStats() clsend;
-  addMember(uint32) clsend;
-  removeMember(uint32);
-  setMembers(Member []);
+  requestState() clsend;
+  requestCreateClub(string(0-64), uint16, uint16, uint16, uint16, string(0-64)) clsend;
+  requestInvite(uint32, string(0-64)) clsend;
+  respondToInvite(uint32, uint8, string(0-64)) clsend;
+  requestLeave() clsend;
+  requestKick(uint32) clsend;
+  requestSetRank(uint32, uint8) clsend;
+  requestTransferOwner(uint32) clsend;
+  requestSetMotd(string(0-256)) clsend;
+  requestSetPermission(uint8, uint8, uint8) clsend;
+  requestUpdateIcon(uint16, uint16, uint16, uint16) clsend;
+  requestPurchaseItem(uint16) clsend;
+  requestStartTask(uint16) clsend;
+  requestRerollTask(uint8) clsend;
+  requestLogs(uint16) clsend;
+  sendClubChat(string(0-256)) clsend;
+  receiveState(string(0-65535));
+  receiveInvite(uint32, string(0-64), uint32, string(0-64));
+  receiveNotification(uint8, string(0-256));
+  receiveClubChat(uint32, string(0-64), string(0-256));
+  receiveLogs(string(0-65535));
+  reportProgressAI(uint32, string(0-32), uint32);
+  reportClubCoinsAI(uint32, uint32);
 };
 
 dclass DistributedWeatherMGR : DistributedObject {

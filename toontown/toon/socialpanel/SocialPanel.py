@@ -3,6 +3,7 @@ from direct.gui import DirectGuiGlobals as DGG
 from toontown.toon.socialpanel.SocialPanelGlobals import *
 from toontown.toon.socialpanel.SocialPanelTabs import SocialPanelTabs
 from toontown.toon.socialpanel.friends.SocialPanelFriendsTab import SocialPanelFriendsTab
+from toontown.toon.socialpanel.clubs.SocialPanelClubsTab import SocialPanelClubsTab
 
 
 class SocialPanel(DirectFrame):
@@ -61,6 +62,12 @@ class SocialPanel(DirectFrame):
         if self.currentTab is not None:
             self.currentTab.destroy()
         self.currentTab = SocialPanelFriendsTab(self)
+        self.currentTab.setPos(-0.26, 0, -0.5)
+
+    def showClubsTab(self):
+        if self.currentTab is not None:
+            self.currentTab.destroy()
+        self.currentTab = SocialPanelClubsTab(self)
         self.currentTab.setPos(-0.26, 0, -0.5)
 
     def unavailableTab(self, tabId):

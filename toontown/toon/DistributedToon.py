@@ -2941,26 +2941,40 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if hasattr(self, 'nametagStyle'):
             return self.nametagStyle
 
-        return 1
+        return 0
 
     def setNametagStyle(self, nametagStyle):
         if hasattr(self, 'gmToonLockStyle') and self.gmToonLockStyle:
             return
+        try:
+            nametagStyle = int(nametagStyle)
+        except (TypeError, ValueError):
+            nametagStyle = 0
         if base.config.GetBool('want-nametag-avids', 0):
+            nametagStyle = 0
+        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
             nametagStyle = 0
         self.nametagStyle = nametagStyle
         self.setDisplayName(self.getName())
 
     def getNametagStyles(self):
-        return self.nametagStyles
-        
+        return getattr(self, 'nametagStyles', [0])
+
     def setNametagStyles(self, nametagStyles):
-        self.nametagStyles = nametagStyles
-    
+        # All Project Altis Toons own the complete Corporate Clash style set.
+        # Ignoring an older saved list here also migrates existing Toons safely.
+        self.nametagStyles = list(range(len(TTLocalizer.NametagFonts)))
+
     def requestNametagStyle(self, nametagStyle):
+        try:
+            nametagStyle = int(nametagStyle)
+        except (TypeError, ValueError):
+            return
         if nametagStyle not in self.nametagStyles:
             return
-        
+        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
+            return
+
         self.sendUpdate('requestNametagStyle', [nametagStyle])
 
     def setToonProfile(self, pose=TPG.DEFAULT_POSE, nameplate=TPG.DEFAULT_NAMEPLATE, background=TPG.DEFAULT_BACKGROUND):
@@ -3760,6 +3774,19 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             
     def setToonTag(self, tag = ''):
         DistributedPlayer.DistributedPlayer.setToonTag(self, tag)
+
+        # Toon tags are placed on their own explicit line beneath the Toon
+        # name.  A wide nametag font must not word-wrap a Club name into two
+        # lines, so disable automatic wrapping while a Toon tag is present.
+        try:
+            if not hasattr(self, '_wordWrapBeforeToonTag'):
+                self._wordWrapBeforeToonTag = self.nametag.getWordWrap()
+            if tag:
+                self.nametag.setWordWrap(1000.0)
+            else:
+                self.nametag.setWordWrap(self._wordWrapBeforeToonTag)
+        except Exception:
+            pass
 
     def _handleGMName(self):
         name = self.name
