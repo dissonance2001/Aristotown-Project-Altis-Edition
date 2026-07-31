@@ -74,7 +74,7 @@ class StickerMenu(DirectFrame, DirectObject):
         self.lastSendTime = 0.0
         self.buttons = []
         self.panelNode = None
-        self.wheelCapture = None
+        self.wheelCaptureFrames = []
         self.wheelWidgets = []
 
         self.scrollTaskName = 'StickerMenuSmoothScroll-%s' % id(self)
@@ -110,18 +110,34 @@ class StickerMenu(DirectFrame, DirectObject):
                 sortOrder=-20,
             )
 
-        # Transparent native DirectGUI region covering all otherwise-empty
-        # parts of the green panel.  It sits behind the sticker buttons and
-        # scrollbar, which each receive their own wheel bindings below.
-        self.wheelCapture = DirectFrame(
-            parent=self,
-            relief=DGG.FLAT,
-            frameColor=(0, 0, 0, 0),
-            frameSize=self.PANEL_BOUNDS,
-            state=DGG.NORMAL,
-            sortOrder=1,
+        # Do not place one mouse-active DirectFrame across the whole menu.
+        # That invisible region can win Panda's mouse-region sort and swallow
+        # mouse1 before the sticker DirectButtons receive it. The scroll frame
+        # and every sticker button are bound separately below; these four thin
+        # regions cover only the outer panel border, so scrolling still works
+        # anywhere without blocking sticker clicks.
+        left, right, bottom, top = self.PANEL_BOUNDS
+        scrollLeft = -0.475
+        scrollRight = 0.478
+        scrollBottom = -0.44
+        scrollTop = 0.44
+        borderRegions = (
+            (left, scrollLeft, bottom, top),
+            (scrollRight, right, bottom, top),
+            (scrollLeft, scrollRight, scrollTop, top),
+            (scrollLeft, scrollRight, bottom, scrollBottom),
         )
-        self._bindWheelWidget(self.wheelCapture)
+        for frameSize in borderRegions:
+            capture = DirectFrame(
+                parent=self,
+                relief=DGG.FLAT,
+                frameColor=(0, 0, 0, 0),
+                frameSize=frameSize,
+                state=DGG.NORMAL,
+                sortOrder=-100,
+            )
+            self._bindWheelWidget(capture)
+            self.wheelCaptureFrames.append(capture)
 
         self.stickerModel = loader.loadModel(
             'phase_3.5/models/gui/stickers')
@@ -580,12 +596,12 @@ class StickerMenu(DirectFrame, DirectObject):
                 pass
             self.scroll = None
 
-        if getattr(self, 'wheelCapture', None):
+        for capture in getattr(self, 'wheelCaptureFrames', []):
             try:
-                self.wheelCapture.destroy()
+                capture.destroy()
             except:
                 pass
-            self.wheelCapture = None
+        self.wheelCaptureFrames = []
 
         if getattr(self, 'panelNode', None):
             try:

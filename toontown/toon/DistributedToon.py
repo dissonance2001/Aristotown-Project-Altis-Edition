@@ -56,6 +56,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.LaffMeter import LaffMeter
 from toontown.toon import GMUtils
 from toontown.toon import ToonProfileGlobals as TPG
+from toontown.stickers import StickerGlobals
 
 if base.wantKarts:
     from toontown.racing.KartDNA import *
@@ -81,6 +82,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         Toon.Toon.__init__(self)
         DistributedSmoothNode.DistributedSmoothNode.__init__(self, cr)
         self.overheadMeter = None
+        self.stickerSequence = None
         self.bFake = bFake
         self.kart = None
         self._isGM = False
@@ -792,6 +794,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def disable(self):
         taskMgr.remove(self._clubNametagPulseTaskName())
+        self.stopStickerSequence()
         for soundSequence in self.soundSequenceList:
             soundSequence.finish()
 
@@ -1104,6 +1107,63 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return Task.done
 
         return Task.cont
+
+    def d_requestSticker(self, stickerId):
+        try:
+            stickerId = int(stickerId)
+        except (TypeError, ValueError):
+            return
+        if not StickerGlobals.isValidSticker(stickerId):
+            return
+        self.sendUpdate('requestSticker', [stickerId])
+
+    def setSticker(self, stickerId, modifier=0):
+        try:
+            stickerId = int(stickerId)
+            modifier = int(modifier)
+        except (TypeError, ValueError):
+            return
+        if not StickerGlobals.isValidSticker(stickerId):
+            return
+
+        try:
+            if self.doId != base.localAvatar.doId and base.localAvatar.isToonIgnored(self.doId):
+                return
+        except:
+            pass
+
+        self.showSticker(stickerId, modifier)
+
+        chatLog = getattr(base.localAvatar, 'chatLog', None)
+        if chatLog:
+            try:
+                toonName = self.getName()
+            except:
+                toonName = 'A Toon'
+            stickerName = StickerGlobals.getStickerName(stickerId, modifier)
+            try:
+                chatLog.addToLog('%s sent a sticker: %s' % (toonName, stickerName), avId=self.doId)
+            except:
+                pass
+
+    def showSticker(self, stickerId, modifier=0):
+        self.stopStickerSequence()
+        try:
+            from toontown.stickers.StickerSequence import StickerSequence
+            self.stickerSequence = StickerSequence(self, stickerId, modifier)
+            if not self.stickerSequence.start():
+                self.stickerSequence = None
+        except Exception as error:
+            self.notify.warning('Could not display sticker %s: %s' % (stickerId, error))
+            self.stickerSequence = None
+
+    def stopStickerSequence(self):
+        if self.stickerSequence:
+            try:
+                self.stickerSequence.stop()
+            except:
+                pass
+            self.stickerSequence = None
 
     def setTalk(self, fromAV, fromAC, avatarName, chat, mods, flags):
         timestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())

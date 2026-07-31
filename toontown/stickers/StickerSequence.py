@@ -58,12 +58,10 @@ class StickerSequence(DirectObject):
             self.cleanup()
             return False
 
-        soundPath = StickerGlobals.getStickerSfxPath(self.stickerId)
-        if soundPath:
-            try:
-                self.stickerSfx = loader.loadSfx(soundPath)
-            except:
-                self.stickerSfx = None
+        # Sound loading is deliberately deferred until the sticker animation
+        # has already started. A missing, malformed, or unsupported audio file
+        # must never prevent the sticker itself from appearing.
+        self.stickerSfx = None
 
         if self.stickerId == StickerGlobals.DICE_ROLL:
             self.stickerTrack = self._makeDiceStickerTrack()
@@ -326,8 +324,28 @@ class StickerSequence(DirectObject):
         self.toonTrack = None
 
     def _playStickerSfx(self):
+        # Keep the sound path completely optional and isolated from the
+        # animation path. This is intentionally broad because Project Altis
+        # may use older Panda audio backends that reject individual OGG files.
+        try:
+            getPath = getattr(StickerGlobals, 'getStickerSfxPath', None)
+            soundPath = getPath(self.stickerId) if getPath else None
+        except:
+            soundPath = None
+
+        if not soundPath:
+            return
+
+        try:
+            if not self.stickerSfx:
+                self.stickerSfx = loader.loadSfx(soundPath)
+        except:
+            self.stickerSfx = None
+            return
+
         if not self.stickerSfx:
             return
+
         try:
             base.playSfx(self.stickerSfx, looping=0)
         except:
