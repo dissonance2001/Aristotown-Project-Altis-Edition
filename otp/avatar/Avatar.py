@@ -274,7 +274,37 @@ class Avatar(Actor, ShadowCaster):
     def setNametagWithTag(self, name = None):
         if not name:
             name = self.name
-            
+
+        # A disguised Toon needs four persistent nametag lines:
+        # Toon name, Cog suit name, Cog suit level, and Club name.
+        # This is composed here instead of only in Toon.putOnSuit(),
+        # because Club/tag refreshes also pass through this function.
+        if getattr(self, 'isDisguised', 0):
+            try:
+                from toontown.battle import SuitBattleGlobals
+
+                toonName = self.name
+                if (hasattr(base, 'idTags') and base.idTags and
+                        hasattr(self, 'getAvIdName')):
+                    toonName = self.getAvIdName()
+
+                suitType = self.suit.style.name
+                suitName = SuitBattleGlobals.SuitAttributes[suitType]['name']
+                suitDept = SuitDNA.suitDepts.index(
+                    SuitDNA.getSuitDept(suitType)
+                )
+                suitLevel = self.cogLevels[suitDept] + 1
+
+                name = '%s\n%s\nLevel %s' % (
+                    toonName,
+                    suitName,
+                    suitLevel
+                )
+            except Exception:
+                # Keep the normal name instead of breaking nametags if
+                # disguise data has not finished arriving yet.
+                pass
+
         if self.npcType:
             name += ('\n\1textShadow\1%s\2' % self.getToonTag())
         self.nametag.setText(name)

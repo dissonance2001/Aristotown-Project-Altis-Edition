@@ -7763,18 +7763,10 @@ class Toon(Avatar.Avatar, ToonHead):
                 name = self.getAvIdName()
             else:
                 name = self.getName()
-            suitDept = SuitDNA.suitDepts.index(SuitDNA.getSuitDept(suitType))
-            suitName = SuitBattleGlobals.SuitAttributes[suitType]['name']
-            print self.cogLevels
-            if self.cogReviveLevels[suitDept] == -1:
-                self.nametag.setText(TTLocalizer.SuitBaseNameWithLevel % {'name': name,
-                 'dept': suitName,
-                 'level': self.cogLevels[suitDept] + 1})
-            else:
-                self.nametag.setText(TTLocalizer.SuitBaseNameWithLevel % {'name': name,
-                 'dept': suitName,
-                 'level': self.cogLevels[suitDept] + 1})
-            self.nametag.setWordWrap(9.0)
+            # Avatar.setNametagWithTag() now owns the complete disguise
+            # layout so Club/tag refreshes cannot erase the Cog lines.
+            self.setDisplayName(name)
+            self.nametag.setWordWrap(12.0)
 
     def setChatAbsolute(
         self,
