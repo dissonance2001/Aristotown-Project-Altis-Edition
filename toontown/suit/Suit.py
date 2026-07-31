@@ -4278,7 +4278,12 @@ class Suit(Avatar.Avatar):
         animDict = {}
         filePrefix, bodyPhase = ModelDict[self.style.body]
         for anim in AllSuits:
-            animDict[anim[0]] = 'phase_' + str(bodyPhase) + filePrefix + anim[1]
+            # Clash stores the Cog sticker presentation animation in phase 5
+            # for every body type, rather than beside each suit's base anims.
+            if anim[0] == 'sticker':
+                animDict[anim[0]] = 'phase_5/models/char/suit%s-sticker' % self.style.body.upper()
+            else:
+                animDict[anim[0]] = 'phase_' + str(bodyPhase) + filePrefix + anim[1]
 
         for anim in AllSuitsMinigame:
             animDict[anim[0]] = 'phase_4' + filePrefix + anim[1]

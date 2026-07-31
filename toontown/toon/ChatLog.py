@@ -6,6 +6,7 @@ from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import Sequence, Parallel, LerpPosInterval, LerpScaleInterval
 from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager
 from toontown.toonbase import ToontownGlobals
+from toontown.stickers import StickerMenu
 
 
 class ChatLog(DirectFrame, DirectObject):
@@ -60,6 +61,7 @@ class ChatLog(DirectFrame, DirectObject):
 
         self._makeQuickMenu()
         self._makeDisplay()
+        self.stickerMenu = StickerMenu.StickerMenu(self, self.assets)
         self._addTutorialMessages()
         self._selectTab(self.TAB_MAIN, playSound=False)
         self._closeDisplay(playSound=False, instant=True)
@@ -145,7 +147,7 @@ class ChatLog(DirectFrame, DirectObject):
             text_scale=0.55,
             text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
-            command=self._showStickerUnavailable,
+            command=self.openStickers,
             pressEffect=0,
         )
 
@@ -441,7 +443,7 @@ class ChatLog(DirectFrame, DirectObject):
             text_scale=0.65,
             text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
-            command=self._showStickerUnavailable,
+            command=self.openStickers,
             pressEffect=0,
         )
         self.uniteButton = DirectButton(
@@ -507,6 +509,8 @@ class ChatLog(DirectFrame, DirectObject):
             self.entry['focus'] = 1
 
     def close(self):
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
         self._closeDisplay(playSound=not self.isHidden)
 
     def toggle(self):
@@ -765,6 +769,8 @@ class ChatLog(DirectFrame, DirectObject):
     def openSpeedChat(self):
         if self.obscuredSpeedChat:
             return
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
         chatMgr = getattr(base.localAvatar, 'chatMgr', None)
         if chatMgr and hasattr(chatMgr, 'openPanelSpeedChat'):
             chatMgr.openPanelSpeedChat()
@@ -772,6 +778,8 @@ class ChatLog(DirectFrame, DirectObject):
     def openUnites(self):
         if self.obscuredSpeedChat:
             return
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
         chatMgr = getattr(base.localAvatar, 'chatMgr', None)
         if chatMgr and hasattr(chatMgr, 'openPanelUnites'):
             chatMgr.openPanelUnites()
@@ -975,6 +983,8 @@ class ChatLog(DirectFrame, DirectObject):
             self._addMessageItem(tab, text, textColor=tutorialColour, tutorial=True)
 
     def _scrollCurrent(self, amount):
+        if getattr(self, 'stickerMenu', None) and self.stickerMenu.isOpen:
+            return
         if self.isHidden or self.currentTab not in self.lists:
             return
         try:
@@ -983,14 +993,14 @@ class ChatLog(DirectFrame, DirectObject):
         except:
             pass
 
-    def _showStickerUnavailable(self):
-        if getattr(self, '_stickerNoticeShown', False):
+    def openStickers(self):
+        if self.obscuredSpeedChat or not self.interfaceEnabled:
             return
-        self._stickerNoticeShown = True
-        self.addToLog(
-            '\1orangeText\1System Message: Stickers are not enabled in this Altis build.\2',
-            category=self.TAB_ALERTS,
-        )
+        chatMgr = getattr(base.localAvatar, 'chatMgr', None)
+        if chatMgr and hasattr(chatMgr, 'closePanelMenus'):
+            chatMgr.closePanelMenus()
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.toggleMenu()
 
     def _showNotification(self, tab):
         self.notifications[tab] = True
@@ -1017,6 +1027,8 @@ class ChatLog(DirectFrame, DirectObject):
         self.obscuredNormal = bool(normal)
         self.obscuredSpeedChat = bool(speedChat)
         self.obscuredLog = bool(chatLog)
+        if self.obscuredSpeedChat and getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
         self.quickSpeedChatButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self.quickStickerButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self.quickUniteButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
@@ -1031,6 +1043,8 @@ class ChatLog(DirectFrame, DirectObject):
     def disableInterface(self):
         self.interfaceEnabled = False
         self.removeFocus()
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
         self.quickFrame.hide()
         self.displayFrame.hide()
 
@@ -1063,6 +1077,9 @@ class ChatLog(DirectFrame, DirectObject):
 
     def stop(self):
         self.ignoreAll()
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.destroy()
+            self.stickerMenu = None
         self._displaySequence.pause()
         self._notificationSequence.pause()
         self.removeFocus()

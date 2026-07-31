@@ -51,6 +51,7 @@ from toontown.suit.SuitInvasionGlobals import *
 from toontown.suit import SuitDNA
 from toontown.toon import NPCToons
 from toontown.toon import ToonProfileGlobals as TPG
+from toontown.stickers import StickerGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownAccessAI
 from toontown.toonbase import ToontownBattleGlobals
@@ -101,6 +102,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             PetLookerAI.PetLookerAI.__init__(self)
 
         self.air = air
+        self._lastStickerTime = 0.0
         self.dna = ToonDNA.ToonDNA()
         self.magicWordDNABackups = {}
         self.inventory = None
@@ -589,6 +591,28 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getChatMode(self):
         return self.chatMode
+
+    def requestSticker(self, stickerId):
+        senderId = self.air.getAvatarIdFromSender()
+        if senderId != self.doId:
+            self.air.writeServerEvent('suspicious', senderId, 'Tried to send a sticker as Toon %s.' % self.doId)
+            return
+
+        try:
+            stickerId = int(stickerId)
+        except (TypeError, ValueError):
+            return
+        if not StickerGlobals.isValidSticker(stickerId):
+            self.air.writeServerEvent('suspicious', senderId, 'Sent invalid sticker id %s.' % stickerId)
+            return
+
+        now = time.time()
+        if now - self._lastStickerTime < 2.0:
+            return
+        self._lastStickerTime = now
+
+        modifier = random.randint(1, 6) if stickerId == StickerGlobals.DICE_ROLL else 0
+        self.sendUpdate('setSticker', [stickerId, modifier])
 
     def requestSetClothing(self, dnaString):
         avId = self.air.getAvatarIdFromSender()

@@ -70,15 +70,18 @@ class ChatBalloon(NodePath):
         self.center = self.balloon.getBounds().getCenter()
         self.textNodePath.setPos(self.center)
         self.textNodePath.setY(self.TEXT_Y_OFFSET)
-        self.textNodePath.setX(self.textNodePath, -(self.textWidth/2))
-        if self.textWidth == self.TEXT_MIN_WIDTH:
-            centerX = (self.TEXT_MIN_WIDTH-self.textNode.getWidth()) / 2.0
-            self.textNodePath.setX(self.textNodePath, centerX)
+
+        # Center the actual rendered text bounds inside the balloon.  The old
+        # code performed several self-relative setX calls; for very short text,
+        # those offsets left the glyph noticeably shifted to the right.
+        textCenterX = (self.textNode.getLeft() + self.textNode.getRight()) / 2.0
+        self.textNodePath.setX(
+            self.center.getX() - textCenterX + self.TEXT_X_OFFSET)
+
         self.textNodePath.setZ(top, -self.BALLOON_Z_PADDING + self.TEXT_Z_OFFSET)
         if self.textHeight == self.TEXT_MIN_HEIGHT:
             centerZ = (ChatBalloon.TEXT_MIN_HEIGHT-self.textNode.getHeight()) / 2.0
             self.textNodePath.setZ(self.textNodePath, -centerZ)
-        self.textNodePath.setX(self.textNodePath, self.TEXT_X_OFFSET)
 
         # Add a button if one is given:
         if self.button is not None:
