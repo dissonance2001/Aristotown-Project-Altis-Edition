@@ -392,7 +392,7 @@ def doSyphonMovie(attack):
     dmg = attack['target'][0]['hp']
     #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
                            #  Func(theSuit.updateHealthBar, 0))
-    notifyTrack = Sequence(Func(theSuit.checkSyphonHP, dmg))
+    notifyTrack = Sequence(theSuit.checkSyphonHP(dmg))
     healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
     cameraTrack = Wait(3.0)
     notifyTracks.append(Parallel(notifyTrack, healSound))

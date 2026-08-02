@@ -291,21 +291,13 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
             bonusTrack.append(updateHealthBar)
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        elif died != 0 and suit.dna.name == 'erfit':
-            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
-            suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        elif died != 0 and suit.dna.name == 'erclaim':
-            suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
-            suitTrack.append(MovieUtil.makeErclaimDeath(suit, battle))
-        elif suit.dna.name == 'erfit' and revived != 0:
-            suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and suit.isVirtual:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level > 3 and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and not suit.isVirtual and level > 3:
             deathTracks.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level <= 3 and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and not suit.isVirtual and level <= 3:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:

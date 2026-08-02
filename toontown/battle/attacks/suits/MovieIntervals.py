@@ -231,7 +231,7 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0, dis
         shuffleAnim = 'shuffle-left'
     track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle))
     )
-    if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
+    if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'ScapegoatShieldsUp' and not attack['name'] == 'AmbassadorHeadRollerGroup':
             if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
@@ -471,7 +471,7 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
         track.append(
             Func(suit.loop, 'neutral-enraged'))
     else:
-        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
+        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatShieldsUp' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
             if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
@@ -697,7 +697,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
         track.append(
             Func(suit.loop, 'neutral-enraged'))
     else:
-        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
+        if not attack['name'] == 'BroadcasterDonation' and not attack['name'] == 'ScapegoatShieldsUp' and not attack['name'] == 'ScapegoatEnraged' and not attack['name'] == 'AmbassadorHeadRollerGroup':
             if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
@@ -1074,7 +1074,7 @@ def getToonTakeDamageTrack(attack, toon, died, dmg, delay, damageAnimNames = Non
         for d in damageAnimNames:
             toonTrack.append(ActorInterval(toon, d))
 
-        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died))
+        indicatorTrack = Sequence(Wait(delay + showDamageExtraTime), Func(__doDamage, toon, dmg, died), Func(toon.checkCogDeath, suit))
     else:
         splicedAnims = getSplicedAnimsTrack(splicedDamageAnims, actor=toon)
         toonTrack.append(splicedAnims)

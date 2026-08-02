@@ -440,6 +440,8 @@ class Movie(DirectObject.DirectObject):
 
         if speedSuit:
             speed = float(speedSuit.getBattleSpeed())
+            for suit in self.battle.activeSuits:
+                Func(suit.checkBattleSpeed2, speedSuit)
         else:
             speed = 1.0
 
@@ -1291,6 +1293,7 @@ class Movie(DirectObject.DirectObject):
                     'ErclaimHemmorage',
                     'SueDamage',
                     'UnionBusterContractEnforcementHealing',
+                    'HustlerCustomerRetention',
                     'SueApplication',
                     'AbilityQueuedPreToon',
                     'BookkeeperPaperCut',

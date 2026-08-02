@@ -355,7 +355,7 @@ def doProToonShake(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack2 = getSoundTrack('SA_protoon_shake.ogg', delay=0.5, node=suit)
     suitAnimTrack = Sequence(Parallel(ActorInterval(suit, 'quick-jump', duration=1.3)),
-                             Parallel(Sequence(Wait(0.5), Func(suit.checkProToonShakeErfit, dmg, battle)), ActorInterval(suit, 'slip-forward')), Func(suit.setNeutralAnimationDrop))
+                             Parallel(Sequence(Wait(0.5), suit.checkProToonShakeErfit(dmg, battle)), ActorInterval(suit, 'slip-forward')), Func(suit.setNeutralAnimationDrop))
     toonTrack = Parallel()
     for toon in battle.activeToons:
         # Toon Reaction
@@ -376,9 +376,9 @@ def doProToonShakeDamage(attack):
     dmg = attack['target'][0]['hp']
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.8, node=suit)
     if suit.dna.name == 'erfit':
-        suitAnimTrack = Sequence(Wait(1.8), Func(suit.checkProToonShake, dmg * 2, battle))
+        suitAnimTrack = Sequence(Wait(1.8), suit.checkProToonShake(dmg * 2, battle))
     else:
-        suitAnimTrack = Sequence(Wait(1.8), Func(suit.checkProToonShake, dmg, battle))
+        suitAnimTrack = Sequence(Wait(1.8), suit.checkProToonShake(dmg, battle))
     return Parallel(suitAnimTrack, soundTrack2)
 
 def doHemmorageHealing(attack):
@@ -391,7 +391,7 @@ def doHemmorageHealing(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        suitAnimTrack = Sequence(Func(suit.checkProToonShake, dmg, battle))
+        suitAnimTrack = Sequence(suit.checkProToonShake(dmg, battle))
         if dmg > 0:
             suitAnimTracks.append(suitAnimTrack)
     return Parallel(suitAnimTrack, soundTrack2)
@@ -504,7 +504,7 @@ def doLaffSteal(attack):
     return Parallel(
         Sequence(
             Wait(2.0),
-            Parallel(Func(theSuit.checkSyphonHPErclaim, dmg),
+            Parallel(theSuit.checkSyphonHPErclaim(dmg),
             SoundInterval(healSfx, node=theSuit)),
         ),
         suitTrack,

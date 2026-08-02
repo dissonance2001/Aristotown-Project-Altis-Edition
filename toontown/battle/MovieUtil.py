@@ -1517,6 +1517,8 @@ def createSuitReviveTrackVirtual(suit, battle):
 
 def createVirtualSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
+    if suit.hasSuitStatusEffect('overpressured'):
+        return Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     deathSuit = suit
     headInterval = Sequence()
@@ -1581,6 +1583,8 @@ def createVirtualSuitDeathTrack(suit, battle):
 def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
+    if suit.hasSuitStatusEffect('overpressured'):
+        return Sequence()
     if suit.style.name == 'erclaim':
         return makeErclaimDeath(suit, battle)
     if suit.style.name == 'erfit':
@@ -1914,6 +1918,8 @@ def __KnockbackSilhouette(suitIndex, suits, hp, battle):
         return Sequence()
 
 def createSuitHeadlessDeathTrack(suit, battle):
+    if suit.hasSuitStatusEffect('overpressured'):
+        return Sequence()
     suitTrack = Sequence()
     if suit.style.name == 'erclaim':
         return makeErclaimDeath(suit, battle)
@@ -1966,7 +1972,7 @@ def createSuitWreckingDeathTrack(suit, battle):
 def createSuitCrashTrack(suit, battle, level):
     suitScale = suit.getGeomNode().getScale()
     fallSound = globalBattleSoundCache.getSound('cogbldg_land.ogg')
-    crushSound = globalBattleSoundCache.getSound('TL_train_cog.ogg')
+    crushSound = base.loader.loadSfx('phase_5/audio/sfx/TL_train_cog.ogg')
 
     # To make it match up a little better, make the squish sound start a little sooner for these gags.
     times = {4: 1.25, 5: 0.7, 6: 0.65, 7: 0.0}
@@ -2187,6 +2193,8 @@ def makeZapDeathScorch(pos, parent=render):
     return scorch
 
 def shortCircuitTrack(suit, battle=None):
+    if suit.hasSuitStatusEffect('overpressured'):
+        return Sequence()
     # Make a clip plane to erase the cog as we vaporize it
     
     plane = Plane(0, 0, 1, 0)  # Create the plane with a surface normal facing straight up, origin at 0
@@ -3257,7 +3265,7 @@ def zapCog(suit, anim, before, after, battle, died, level):
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    if not died or suit.isVirtual or suit.isOverpressured or suit.dna.name in ['erclaim', 'erfit', 'wsi', 'redd'] or level <= 3:
+    if not died or suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ['erclaim', 'erfit', 'wsi', 'redd'] or level <= 3:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0), suit.makeCogStepBackDeathInterval(battle))
         spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     else:

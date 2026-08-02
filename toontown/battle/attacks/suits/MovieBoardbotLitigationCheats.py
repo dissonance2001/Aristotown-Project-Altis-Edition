@@ -3841,7 +3841,7 @@ def doRedundantAuthority(attack):
     selfDamageTracks = Parallel()
     for s in battle.activeSuits:
         if not s.dna.name == 'cdirector':
-            selfDamageTrack = Sequence(Wait(2.0), Parallel(Func(s.checkRedundant), Func(s.checkHealingPhrases, 0)))
+            selfDamageTrack = Sequence(Wait(2.0), Parallel(s.checkRedundant()), Func(s.checkHealingPhrases, 0))
             selfDamageTracks.append(selfDamageTrack)
     moveTrack = Parallel(Func(suit.setHealthForMe, - 1000), Func(suit.showHpTextNew, - 1000), Func(suit.updateHealthBar, 0))
     suitTrack = Sequence(getSuitAnimTrack(attack), suit.makeRedundantAuthorityInterval(battle))
@@ -3858,7 +3858,7 @@ def doRedundantAuthority(attack):
             endAnim='neutral',
             startWeight=0.0,
             endWeight=1.0,
-            blendType='easeInOut'
+            blendType='easeInOut',
         )
     ))
         headTrack.append(Func(headPart.disableBlend))
@@ -3869,11 +3869,56 @@ def doRedundantAuthority(attack):
 
 def doRushHour(attack):
     suit = attack['suit']
+    manager = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=.75), Func(suit.makeAngry, 2))
+    suitTrack = Sequence(Func(suit.setSuitStatusEffect, 'rushHour', turns=3),
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
     suitTrack.append(Wait(3.0))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_rush_job_target.ogg'), node=suit))
+    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_sanction.ogg'), node=suit))
     return Parallel(suitTrack, soundTrack)
 
 def doRiskThresholdBreach25(attack):
@@ -5027,7 +5072,7 @@ def doScabbard(attack):
     for s in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.5))
-        suitTrack.append(Func(s.checkScabbard))
+        suitTrack.append(s.checkScabbard())
         if not s.dna.name == 'phouse':
             suitTrack.append(MovieUtil.zapCogPowerhouse(s, 'large-zap', .5, 2.0, battle))
             suitTrack.append(Func(s.setNeutralAnimationDrop))
@@ -5355,11 +5400,62 @@ def doMandatoryToll(attack):
         makeDanceSession = Sequence(Wait(2.0), Func(toon.showHpTextNew, 0, text="+%s Toll!" % dmg, colorCode=1), Func(toon.setToonStatusEffect, 'mandatoryToll', modifier=dmg, mode='refreshModifier'), ActorInterval(toon, 'confused'), Func(toon.loop, 'neutral'))
         if dmg > 0:
             makeDanceSessions.append(makeDanceSession)
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
-    suitTrack2 = Parallel(getSuitAnimTrack(attack), Func(suit.createSuitBellInterval))
+    particleFrames = [
+        13,
+        26,
+        46,
+        66,
+        82,
+    ]
+    particleTrack = Parallel()
+    for frameNum in particleFrames:
+        ringEffect = BattleParticles.createParticleEffect(
+            file="healingBellRingWave"
+        )
+        ringEffect.setDepthWrite(0)
+        ringEffect.setDepthTest(0)
+        ringEffect.setTwoSided(1)
+
+        particleSeq = Sequence(
+            Func(
+                ringEffect.setPos,
+                suit,
+                Point3(0, 0, suit.getHeight() - 1),
+            ),
+            Wait(frameNum / 24.0),
+            getPartTrack(
+                ringEffect,
+                0,
+                3.0,
+                [ringEffect, suit, 0],
+                softStop=-2.85,
+            ),
+        )
+        particleTrack.append(particleSeq)
+    suitTrack3 = Sequence(Parallel(
+    getSuitAnimTrack(attack),
+
+    ActorInterval(suit, 'wheelspin', startTime=2.25, endTime=3)),
+
+    Parallel(Func(suit.enableBlend),
+        ActorInterval(suit, 'neutral', loop=1),
+        LerpAnimInterval(
+            suit,
+            duration=.5,
+            startAnim='wheelspin',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(suit.disableBlend),
+    Func(suit.setNeutralAnimationDrop)
+)
+    suitTrack2 = Parallel(Func(suit.createSuitBellInterval))
     soundTrack = getSoundTrack('SA_healing_bell.ogg')
-    return Parallel(suitTrack2, soundTrack, makeDanceSessions, sprayTrack)
+    return Parallel(suitTrack2, suitTrack3, soundTrack, makeDanceSessions, particleTrack)
 
 def doLedgerOfSoundOLD(attack):
     suit = attack['suit']
@@ -5373,11 +5469,41 @@ def doLedgerOfSoundOLD(attack):
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence(Wait(0.5))
     makeDanceSessions = Parallel()
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
+    particleFrames = [
+        13,
+        26,
+        46,
+        66,
+        82,
+    ]
+    particleTrack = Parallel()
+    for frameNum in particleFrames:
+        ringEffect = BattleParticles.createParticleEffect(
+            file="healingBellRingWave"
+        )
+        ringEffect.setDepthWrite(0)
+        ringEffect.setDepthTest(0)
+        ringEffect.setTwoSided(1)
+
+        particleSeq = Sequence(
+            Func(
+                ringEffect.setPos,
+                suit,
+                Point3(0, 0, suit.getHeight() - 1),
+            ),
+            Wait(frameNum / 24.0),
+            getPartTrack(
+                ringEffect,
+                0,
+                3.0,
+                [ringEffect, suit, 0],
+                softStop=-2.85,
+            ),
+        )
+        particleTrack.append(particleSeq)
     suitTrack2 = Parallel(getSuitAnimTrack(attack), Func(suit.createSuitBellInterval), Func(suit.showHpTextNew, 0, text="+5% Damage!", colorCode=1), Func(suit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'))
     soundTrack = getSoundTrack('SA_healing_bell.ogg')
-    return Parallel(suitTrack2, soundTrack, sprayTrack)
+    return Parallel(suitTrack2, particleTrack, soundTrack)
 
 def donothing(attack):
     suit = attack['suit']
@@ -5448,7 +5574,7 @@ def doMandatoryTollFinal(attack):
     sprayEffect.setDepthWrite(0)
     sprayEffect.setDepthTest(0)
     sprayEffect.setTwoSided(1)
-    sprayTrack = Sequence(Wait(0.5))
+    sprayTrack = Sequence(Wait(6.0))
     makeDanceSessions = Parallel()
     targets = attack['target']
     for t in targets:
@@ -5457,12 +5583,63 @@ def doMandatoryTollFinal(attack):
         makeDanceSession = Sequence(Wait(2.0), Func(toon.showHpTextNew, 0, text="+8 Toll!", colorCode=1), Func(toon.setToonStatusEffect, 'mandatoryToll', modifier=8, mode='refreshModifier'), ActorInterval(toon, 'confused'), Func(toon.loop, 'neutral'))
         if dmg > 0:
             makeDanceSessions.append(makeDanceSession)
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
+        particleFrames = [
+        13,
+        26,
+        46,
+        66,
+        82,
+    ]
+    particleTrack = Parallel()
+    for frameNum in particleFrames:
+        ringEffect = BattleParticles.createParticleEffect(
+            file="healingBellRingWave"
+        )
+        ringEffect.setDepthWrite(0)
+        ringEffect.setDepthTest(0)
+        ringEffect.setTwoSided(1)
+
+        particleSeq = Sequence(
+            Func(
+                ringEffect.setPos,
+                suit,
+                Point3(0, 0, suit.getHeight() - 1),
+            ),
+            Wait(frameNum / 24.0),
+            getPartTrack(
+                ringEffect,
+                0,
+                3.0,
+                [ringEffect, suit, 0],
+                softStop=-2.85,
+            ),
+        )
+        particleTrack.append(particleSeq)
     sprayTrack.append(doMandatoryTollFinal2(attack))
-    suitTrack2 = Parallel(getSuitAnimTrack(attack), Func(suit.createSuitBellInterval))
+    suitTrack3 = Sequence(Parallel(
+    getSuitAnimTrack(attack),
+
+    ActorInterval(suit, 'wheelspin', startTime=2.25, endTime=3)),
+
+    Parallel(Func(suit.enableBlend),
+        ActorInterval(suit, 'neutral', loop=1),
+        LerpAnimInterval(
+            suit,
+            duration=.5,
+            startAnim='wheelspin',
+            endAnim='neutral',
+            startWeight=0.0,
+            endWeight=1.0,
+            blendType='easeInOut'
+        )
+    ),
+
+    Func(suit.disableBlend),
+    Func(suit.setNeutralAnimationDrop)
+)
+    suitTrack2 = Parallel(Func(suit.createSuitBellInterval))
     soundTrack = Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/LB_bell_long.ogg'), node=suit)
-    return Parallel(suitTrack2, soundTrack, sprayTrack)
+    return Parallel(suitTrack2, suitTrack3, soundTrack, sprayTrack, particleTrack)
 
 def doMandatoryTollFinal2(attack):
     suit = attack['suit']
@@ -5829,8 +6006,38 @@ def doBalanceTheLedger(attack):
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence(Wait(0.5))
     makeDanceSessions = Parallel()
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, theSuit, Point3(0, 1.6, theSuit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, theSuit, 0], softStop=-3.5))
+    particleFrames = [
+        13,
+        26,
+        46,
+        66,
+        82,
+    ]
+    particleTrack = Parallel()
+    for frameNum in particleFrames:
+        ringEffect = BattleParticles.createParticleEffect(
+            file="healingBellRingWave"
+        )
+        ringEffect.setDepthWrite(0)
+        ringEffect.setDepthTest(0)
+        ringEffect.setTwoSided(1)
+
+        particleSeq = Sequence(
+            Func(
+                ringEffect.setPos,
+                suit,
+                Point3(0, 0, suit.getHeight() - 1),
+            ),
+            Wait(frameNum / 24.0),
+            getPartTrack(
+                ringEffect,
+                0,
+                3.0,
+                [ringEffect, suit, 0],
+                softStop=-2.85,
+            ),
+        )
+        particleTrack.append(particleSeq)
     suitTrack3 = Parallel(getSuitAnimTrack(attack), Func(theSuit.createSuitBellInterval))
     suitTrack2 = Sequence(Parallel(
     getSuitAnimTrack(attack),
@@ -5855,7 +6062,7 @@ def doBalanceTheLedger(attack):
 )
     soundTrack = getSoundTrack('SA_healing_bell.ogg')
     soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=theSuit)
-    return Parallel(suitTrack2, suitTracks, suitTrack3, soundTrack, soundTrack2, sprayTrack)
+    return Parallel(suitTrack2, suitTracks, suitTrack3, soundTrack, soundTrack2, particleTrack)
 
 def doBalanceTheLedger2(attack):
     theSuit = attack['suit']

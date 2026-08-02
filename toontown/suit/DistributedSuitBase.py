@@ -360,24 +360,22 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.syphonHP  = 0
 
     def checkSyphonHP(self, syphonHp):
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, 0, text="SYPHONED!", colorCode=1),
-                         Func(self.setHealthForMe, + 0),
-                         Func(self.updateHealthBar, 0))).start()
-        elif self.currHP + syphonHp > (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + x, text="SYPHONED!", colorCode=1),
-                         Func(self.setHealthForMe, + x),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(x)
-        else:
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + syphonHp, text="SYPHONED!", colorCode=1),
-                         Func(self.setHealthForMe, + syphonHp),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(syphonHp)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(syphonHp, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount, text="SYPHONED!", colorCode=1),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def personalTrainer(self):
         x = int(self.maxHP * .1)
@@ -388,24 +386,22 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.addPendingQueuedDamage(self.maxHP * .1)
 
     def checkSyphonHPErclaim(self, syphonHp):
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, 0),
-                         Func(self.setHealthForMe, + 0),
-                         Func(self.updateHealthBar, 0))).start()
-        elif self.currHP + syphonHp > (self.maxHP * self.hardMaxHP) and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt' and not self.dna.name == 'supervis' and not self.dna.name == 'foreman' and not self.dna.name == 'clubpres':
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + x),
-                         Func(self.setHealthForMe, + x),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(x)
-        else:
-            self.absorbInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + syphonHp),
-                         Func(self.setHealthForMe, + syphonHp),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(syphonHp)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(syphonHp, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedDamage(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, - healAmount),
+                Func(self.setHealthForMe, - healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def addLevelDamage(self, absorbingCog, damage):
         absorbingCog.levelDamage += damage
@@ -640,9 +636,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.dna.name == 'redd' and not self.isVirtual:
             suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
             suitTrack.append(Func(self.makeDead))
-        elif self.dna.name == 'erfit' and revives >= 1:
-            suitTrack.append(Func(self.makeDead))
-            suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
         elif self.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
             suitTrack.append(Func(self.makeDead))
@@ -680,7 +673,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
         if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
@@ -707,7 +700,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
         if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
@@ -718,9 +711,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -766,7 +756,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         if drench:
             if self.dna.name == 'redd':
@@ -838,10 +828,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
-            elif self.isVirtual and not self.hasSuitStatusEffect('overpressured'):
+            elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
             elif not self.isSkeleton and revives >= 2:
@@ -856,7 +843,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             elif not self.isSkeleton and revives >= 1:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
-            elif not self.isVirtual and not self.hasSuitStatusEffect('overpressured'):
+            elif not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitDeathTrack(self, battle))
         else:
@@ -1332,9 +1319,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
-
-        self.addPendingQueuedHealing(dmg)
+        self.addPendingQueuedDamage(dmg)
 
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
         if not crossedZeroThisCall:
@@ -1348,10 +1333,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             #    suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
-            elif self.dna.name == 'erfit' and revives >= 1:
-            #    suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
             #    suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1405,9 +1386,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
-
-        self.addPendingQueuedHealing(dmg)
+        self.addPendingQueuedDamage(dmg)
 
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
@@ -1418,10 +1397,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1475,9 +1450,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
-
-        self.addPendingQueuedHealing(dmg)
+        self.addPendingQueuedDamage(dmg)
 
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
         if not crossedZeroThisCall:
@@ -1491,10 +1464,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -1539,7 +1508,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         newPending = oldPending + dmg
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle, 7), Func(self.showHpTextNew, -dmg, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
@@ -1576,7 +1545,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Sequence(
             ActorInterval(self, 'soak', duration=2.0),
@@ -1704,7 +1673,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.damageInterval.finish()
             self.damageInterval = None
         x = int(self.currHP)
-        if self.currHP > 0 and not self.getManager() and not self.isDead and not self.isContracted and not self.isContracted2 and not self.hasSuitStatusEffect('overpressured'):
+        if self.currHP > 0 and not self.getManager() and not self.isDead and not self.isContracted and not self.isContracted2:
             self.damageInterval = Sequence(Wait(2), Parallel(ActorInterval(self, 'flatten', duration = .55), MovieUtil.createSuitCrashTrack(self, battle, 7), Func(self.showHpTextNew, -self.currHP, text="BUSTED!", colorCode=3),
                                    Func(self.setHealthForMe, - self.currHP),
                                    Func(self.updateHealthBar, 0))).start()
@@ -2072,10 +2041,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
                 suitTrack.append(Func(self.makeDead))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
                 suitTrack.append(Func(self.makeDead))
@@ -2216,7 +2181,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         if self.dna.name == 'hroller':
             if float(self.currHP) < levelDamage:
@@ -2256,10 +2221,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2301,7 +2262,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         if self.dna.name == 'safesupervis':
             showDamage = Sequence(
@@ -2334,10 +2295,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2379,7 +2336,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Sequence(
                 Parallel(
@@ -2401,10 +2358,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            elif self.dna.name == 'erfit' and revives >= 1:
-                # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
-                suitTrack.append(Func(self.makeDead))
-                suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(self, battle))
@@ -2446,7 +2399,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         if self.dna.name == 'sgoat':
             showDamage = Sequence(
@@ -2530,7 +2483,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Sequence(
             Parallel(
@@ -2605,7 +2558,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Sequence(
             Parallel(
@@ -2678,7 +2631,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         showDamage = Parallel(
             ActorInterval(self, 'small-zap'),
@@ -2701,9 +2654,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             if self.dna.name == 'redd' and not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveRedd(self, battle))
-            # elif self.dna.name == 'erfit' and revives >= 1:
-            #     suitTrack.append(Func(self.makeDead))
-            #     suitTrack.append(MovieUtil.createSuitReviveErfit(self, battle))
             elif self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(self, battle))
@@ -2719,7 +2669,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             elif not self.isSkeleton and revives >= 1:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitReviveTrack(self, battle))
-            elif not self.isVirtual and not self.hasSuitStatusEffect('overpressured'):
+            elif not self.isVirtual:
                 suitTrack.append(Func(self.makeDead))
                 suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(self, battle))
         return suitTrack
@@ -2871,7 +2821,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         damageTrack = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
                                                    Func(self.showHpText, -dmg),
@@ -2939,7 +2889,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         damageTrack = Sequence(
             ActorInterval(self, 'mob-mentality', endTime=1),
@@ -3016,7 +2966,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         # damageTrack = Sequence(Func(self.showHpText, -dmg),
         #     Func(self.setHealthForMe, -dmg),
@@ -3082,7 +3032,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         suitTrack.append(Func(self.setNeutralAnimationDrop))
 
@@ -3141,7 +3091,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
         hpAfterThisCall = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage)) - newPending
 
-        self._pendingQueuedDamage = newPending
+        self.addPendingQueuedDamage(dmg)
 
         damageTrack = Sequence(
             ActorInterval(self, 'mob-mentality', endTime=1),
@@ -3267,43 +3217,40 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         # videog.addPendingQueuedHealing(x)
 
     def checkProToonShake(self, dmg, battle):
-        if self.damageInterval:
-            self.damageInterval.finish()
-            self.damageInterval = None
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP):
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, 0),
-                         Func(self.setHealthForMe, + 0),
-                         Func(self.updateHealthBar, 0))).start()
-        elif self.currHP + dmg > (self.maxHP * self.hardMaxHP):
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + x),
-                         Func(self.setHealthForMe, + x),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(x)
-        else:
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + dmg),
-                         Func(self.setHealthForMe, + dmg),
-                         Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(dmg)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(dmg, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def checkProToonShakeErfit(self, dmg, battle):
-        if self.damageInterval:
-            self.damageInterval.finish()
-            self.damageInterval = None
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int(self.currHP)
-        self.damageInterval = Sequence(Parallel(Func(self.showHpText, -dmg),
-                                                  Func(self.setHealthForMe, -dmg),
-                                                  Func(self.updateHealthBar, 0))).start()
-        self.addPendingQueuedDamage(dmg)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = dmg
+
+        if healAmount > 0:
+            self.addPendingQueuedDamage(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, - healAmount),
+                Func(self.setHealthForMe, - healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
 
     def makeSyphonInterval(self):
@@ -3333,27 +3280,22 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return suitTrack
     
     def checkCustomerRetention(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP > (self.maxHP * self.hardMaxHP):
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, 0),
-                        Func(self.setHealthForMe, + 0),
-                        Func(self.updateHealthBar, 0))).start()
-        elif self.currHP + 275 > (self.maxHP * self.hardMaxHP):
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + x),
-                        Func(self.setHealthForMe, + x),
-                        Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(x)
-        else:
-            self.damageInterval = Sequence(
-                Parallel(Func(self.showHpTextNew, + 275),
-                        Func(self.setHealthForMe, + 275),
-                        Func(self.updateHealthBar, 0))).start()
-            self.addPendingQueuedHealing(275)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(275, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def makeCompensationInterval(self):
         suitTrack = Sequence()
@@ -3442,35 +3384,25 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             pass
 
     def checkScabbard(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP > 0:
-            if not self.getManager():
-                if self.currHP >= (self.maxHP * self.hardMaxHP):
-                    self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
-                                                 Func(self.updateHealthBar, 0)).start()
-                elif self.currHP > self.maxHP:
-                    self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
-                                                 Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                    self.addPendingQueuedHealing(x)
-                else:
-                    self.healInterval = Parallel(Func(self.showHpTextNew, self.maxHP, text="CHARGED!", colorCode=5),
-                                                 Func(self.setHealthForMe, self.maxHP), Func(self.updateHealthBar, 0)).start()
-                    self.addPendingQueuedHealing(self.maxHP)
-            else:
-                if self.currHP >= (self.maxHP * self.hardMaxHP):
-                    self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="CHARGED!", colorCode=5),
-                                                 Func(self.updateHealthBar, 0)).start()
-                elif self.currHP + 200 > (self.maxHP * self.hardMaxHP):
-                    self.healInterval = Parallel(Func(self.showHpTextNew, x, text="CHARGED!", colorCode=5),
-                                                 Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                    self.addPendingQueuedHealing(x)
-                else:
-                    self.healInterval = Parallel(Func(self.showHpTextNew, 200, text="CHARGED!", colorCode=5),
-                                                 Func(self.setHealthForMe, 200), Func(self.updateHealthBar, 0)).start()
-                    self.addPendingQueuedHealing(200)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        if not self.getManager():
+            healAmount = min(self.maxHP, max(0, hpCap - projectedHP))
+        else:
+            healAmount = min(200, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def checkLimitedTimeOffer(self):
         if self.healInterval:
@@ -3567,39 +3499,40 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.addPendingQueuedHealing(95)
 
     def checkInsuranceScapegoatHP(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP >= (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, 0),
-                                         Func(self.updateHealthBar, 0)).start()
-        elif self.currHP + 85 > (self.maxHP * self.hardMaxHP):
-            self.healInterval = Parallel(Func(self.showHpTextNew, x),
-                                         Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-            self.addPendingQueuedHealing(x)
-        else:
-            self.healInterval = Parallel(Func(self.showHpTextNew, 85),
-                                         Func(self.setHealthForMe, 85), Func(self.updateHealthBar, 0)).start()
-            self.addPendingQueuedHealing(85)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(85, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def checkRedundant(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP > 0:
-            if self.currHP >= (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, 0, colorCode=1),
-                                             Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 325 > (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, x),
-                                             Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(x)
-            else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 325),
-                                             Func(self.setHealthForMe, 325), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(325)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(325, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def checkOilRain(self):
         if self.healInterval:
@@ -3620,61 +3553,68 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.addPendingQueuedHealing(100)
 
     def checkInsuranceHP(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP > 0:
-            if self.currHP >= (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, 0), Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 50 > (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, x), Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(x)
-            else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 50), Func(self.setHealthForMe, 50), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(50)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(50, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
     def checkExtraTip(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int((self.maxHP * self.hardMaxHP) - self.currHP)
-        if self.currHP > 0:
-            if self.currHP >= (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+10% Damage!", colorCode=1), Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 225 > (self.maxHP * self.hardMaxHP) and not self.dna.name == 'supervis' and not self.dna.name == 'clubpres' and not self.dna.name == 'foreman' and not self.dna.name == 'clerk' and not self.dna.name == 'ovt':
-                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+10% Damage!", colorCode=1), Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(x)
-            else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+10% Damage!", colorCode=1), Func(self.setHealthForMe, 225), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(225)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(225, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
+        return Sequence(
+            Parallel(
+                Func(self.showHpTextNew, healAmount, text="+10% Damage!", colorCode=1),
+                Func(self.setHealthForMe, healAmount),
+                Func(self.updateHealthBar, 0)
+            )
+        )
 
 
     def checkLifeInsurance(self):
-        if self.healInterval:
-            self.healInterval.finish()
-            self.healInterval = None
-        x = int(self.maxHP - self.currHP)
+        hpCap = int(self.maxHP * self.hardMaxHP)
+
+        projectedHP = self.getQueuedProjectedHPFull()
+
+        healAmount = min(225, max(0, hpCap - projectedHP))
+
+        if healAmount > 0:
+            self.addPendingQueuedHealing(healAmount)
+
         if self.getActualLevel() == 25:
-            if self.currHP >= (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+10% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'), Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 225 > self.maxHP:
-                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+10% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'), Func(self.setHealthForMe, x), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(x)
-            else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+10% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'), Func(self.setHealthForMe, 225), Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(225)
+            return Sequence(
+                Parallel(Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'),
+                    Func(self.showHpTextNew, healAmount, text="+10% Damage!", colorCode=1),
+                    Func(self.setHealthForMe, healAmount),
+                    Func(self.updateHealthBar, 0)
+                )
+            )
         else:
-            if self.currHP >= (self.maxHP * self.hardMaxHP):
-                self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+5% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.updateHealthBar, 0)).start()
-            elif self.currHP + 225 > self.maxHP:
-                self.healInterval = Parallel(Func(self.showHpTextNew, x, text="+5% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.setHealthForMe, x),
-                                             Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(x)
-            else:
-                self.healInterval = Parallel(Func(self.showHpTextNew, 225, text="+5% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.setHealthForMe, 225),
-                                             Func(self.updateHealthBar, 0)).start()
-                self.addPendingQueuedHealing(225)
+            return Sequence(
+                Parallel(Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'),
+                    Func(self.showHpTextNew, healAmount, text="+5% Damage!", colorCode=1),
+                    Func(self.setHealthForMe, healAmount),
+                    Func(self.updateHealthBar, 0)
+                )
+            )
 
     def checkCompensationDividend(self):
         if self.healInterval:
@@ -4070,7 +4010,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('brokenConnection'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
-        elif self.hasSuitStatusEffect('zapped'):
+        elif self.hasSuitStatusEffect('zapped') and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers', 'psetter']:
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5) and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers']:
@@ -4126,7 +4066,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
-        elif self.hasSuitStatusEffect('zapped'):
+        elif self.hasSuitStatusEffect('zapped') and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers', 'psetter']:
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
         elif self.hasSuitStatusEffect('brokenConnection'):
@@ -4260,7 +4200,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('brokenConnection'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                          ).start()
-        elif self.hasSuitStatusEffect('zapped'):
+        elif self.hasSuitStatusEffect('zapped') and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers', 'psetter']:
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
         elif float(self.currHP) > float(self.maxHP * 1.5) and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers']:

@@ -110,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
-                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name in ['erfit', 'erclaim', 'redd', 'wsi']:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -298,11 +298,11 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             deathTracks.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and suit.isVirtual:
             deathTracks.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and suit.dna.name == 'erfit':
+        elif died and suit.dna.name == 'erfit':
             deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        elif died != 0 and suit.dna.name == 'erclaim':
+        elif died and suit.dna.name == 'erclaim':
             deathTracks.append(MovieUtil.makeErclaimDeath(suit, battle))
         elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if sound['level'] >= 7:

@@ -45,22 +45,42 @@ class CogHQLobby(Place.Place):
         self.zoneId = requestStatus['zoneId']
         Place.Place.enter(self)
         self.fsm.enterInitialState()
-        base.playMusic(self.loader.music, looping=1, volume=0.8)
+
+        lobbyMusic = getattr(self.loader, 'lobbyMusic', None)
+
+        if lobbyMusic:
+            base.playMusic(lobbyMusic, looping=1, volume=0.8)
+        elif getattr(self.loader, 'music', None):
+            base.playMusic(self.loader.music, looping=1, volume=0.8)
+
         self.loader.geom.reparentTo(render)
         self.accept('doorDoneEvent', self.handleDoorDoneEvent)
         self.accept('DistributedDoor_doorTrigger', self.handleDoorTrigger)
+
         how = requestStatus['how']
         self.fsm.request(how, [requestStatus])
-        self._telemLimiter = TLGatherAllAvs('CogHQLobby', RotationLimitToH)
+        self._telemLimiter = TLGatherAllAvs(
+            'CogHQLobby',
+            RotationLimitToH
+        )
+        return
 
     def exit(self):
         self._telemLimiter.destroy()
         del self._telemLimiter
         self.fsm.requestFinalState()
         self.ignoreAll()
-        self.loader.music.stop()
+
+        lobbyMusic = getattr(self.loader, 'lobbyMusic', None)
+
+        if lobbyMusic:
+            lobbyMusic.stop()
+        elif getattr(self.loader, 'music', None):
+            self.loader.music.stop()
+
         if self.loader.geom != None:
             self.loader.geom.reparentTo(hidden)
+
         Place.Place.exit(self)
         return
 

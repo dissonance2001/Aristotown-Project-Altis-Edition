@@ -330,7 +330,8 @@ def doComeOn(attack):
     Func(theSuit.disableBlend),
     Func(theSuit.setNeutralAnimationDrop), Wait(2.0)
 )
-    speedTrack.append(Func(theSuit.checkBattleSpeed2, theSuit, + .25))
+    for suit in battle.activeSuits:
+        speedTrack.append(Func(suit.checkBattleSpeed2, theSuit, + .25))
     return Parallel(speedTrack, timerTrack, musicTrack, suitTrack)
 
 def doHurrySickness(attack):

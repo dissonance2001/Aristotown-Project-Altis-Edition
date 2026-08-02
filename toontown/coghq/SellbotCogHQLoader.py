@@ -35,6 +35,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryInterior')
 
         self.musicFile = 'phase_9/audio/bgm/SB_courtyard.ogg'
+        self.lobbyMusicFile = 'phase_9/audio/bgm/SB_boss_lobby.ogg'
         self.battleMusic = 'phase_9/audio/bgm/SB_courtyard_encntnr.ogg'
         self.cogHQExteriorModelPath = 'phase_9/models/cogHQ/SellbotHQExterior'
         self.cogHQLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby'

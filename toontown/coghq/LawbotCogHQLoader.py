@@ -30,6 +30,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryExterior')
 
         self.musicFile = 'phase_11/audio/bgm/LB_courtyard.ogg'
+        self.lobbyMusicFile = 'phase_11/audio/bgm/LB_boss_lobby.ogg'
         self.battleMusic = 'phase_11/audio/bgm/LB_courtyard_encntr.ogg'
         self.cogHQExteriorModelPath = 'phase_11/models/lawbotHQ/LB_courtyard'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_lawfice_Lobby'

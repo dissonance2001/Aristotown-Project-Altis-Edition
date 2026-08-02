@@ -816,7 +816,6 @@ def doAdvancement(attack):
     battle = attack['battle']
     suitTracks = Parallel()
     liftTracks = Parallel()
-    suitTrack3 = getSuitAnimTrack(attack)
     suitTrack2 = Sequence(Parallel(
     getSuitAnimTrack(attack),
 
@@ -1609,7 +1608,7 @@ def doCollectCallDues(attack):
                     ))
         tornadoTrack.append(Parallel(
                         Sequence(Func(whirlSfx.play), Func(tornadoNode.wrtReparentTo, render), tornadoNode.posInterval(0.5, toon.getPos()),
-                            Wait(6.25), Func(whirlSfx.stop), Func(tornadoNode.removeNode)
+                            Wait(6.75), Func(whirlSfx.stop), Func(tornadoNode.removeNode)
                         )
                     ))
 

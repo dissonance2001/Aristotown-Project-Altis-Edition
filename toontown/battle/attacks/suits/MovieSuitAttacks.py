@@ -1100,7 +1100,7 @@ def doSuitAttack(attack):
     elif name == 'HustlerSalesPitch':
         suitTrack = MovieSellbotLitigationCheats.doSalesPitch(attack)
     elif name == 'HustlerCustomerRetention':
-        suitTrack = MovieSellbotLitigationCheats.doCustomerRetention(attack)
+        suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
     elif name == 'HustlerClosingTime':
         suitTrack = MovieSellbotLitigationCheats.doClosingTime(attack)
     elif name == 'HustlerBaitAndSwitch':
@@ -5114,7 +5114,7 @@ def doFreezeAssets(attack):
       0.4,
       0.8], ['duck', 0.01, 1.6]]
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.2)
-    soundTrack = getSoundTrack('SA_brainstorm.ogg', delay=2.3, node=suit)
+    soundTrack = getSoundTrack('SA_brainstorm.ogg', delay=1.3, node=suit)
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
 
@@ -5838,7 +5838,7 @@ def doParadigmShift(attack):
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
     sprayTrack = getPartTrack(sprayEffect, 1.0, 2.9, [sprayEffect, suit, 0], softStop=-1)
     liftTracks = Parallel()
     toonRiseTracks = Parallel()
@@ -5930,17 +5930,17 @@ def doPowerTrip(attack):
     suitName = suit.getStyleName()
     if suitName == 'mh':
         waterfallEffect.setPos(0, 4, 3.6)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
 
     def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(1.0), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
     partTrack1 = getPowerTrack(powerBar1)
     partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 2.3, [waterfallEffect, suit, 0], softStop=-1)
-    toonTracks = getToonTracks(attack, 1.8, ['slip-forward'], 1.29, ['jump'])
-    soundTrack = getSoundTrack('SA_powertrip.ogg', delay=1.8, node=suit)
+    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 1.6, [waterfallEffect, suit, 0], softStop=-1)
+    toonTracks = getToonTracks(attack, 1.5, ['slip-forward'], 0.86, ['jump'])
+    soundTrack = getSoundTrack('SA_powertrip.ogg', delay=1.1, node=suit)
     return Parallel(suitTrack, partTrack1, partTrack2, waterfallTrack, soundTrack, toonTracks)
 
 
@@ -8202,7 +8202,7 @@ def doGuiltTrip(attack):
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
     waterfallParticles.renderer.setCenterColor(centerColor)
     waterfallParticles.renderer.setEdgeColor(edgeColor)
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
+    suitTrack = Sequence(getSuitAnimTrack(attack))
 
     def getPowerTrack(effect, suit = suit, battle = battle):
         partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))

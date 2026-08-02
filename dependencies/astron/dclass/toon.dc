@@ -654,6 +654,7 @@ from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
+from toontown.suit import DistributedPacesetterBoss/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
 from toontown.building import DistributedPaceElevator/AI

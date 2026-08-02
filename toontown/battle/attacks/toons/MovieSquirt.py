@@ -382,15 +382,13 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         #suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        elif suit.dna.name == 'erfit' and revived != 0:
-            suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and suit.isVirtual:
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and not suit.isVirtual:
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitTrack.append(suit.makeDeathCheckInterval(0, battle))

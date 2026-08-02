@@ -4962,7 +4962,7 @@ SuitCheatDescription = {
 'HustlerLimitedTimeOfferApprove': "The Hustler provides a damage buff to Toons when limited time offers are fulfilled!",
 'HustlerLimitedTimeOfferDenied': "Cogs with unfulfilled limited-time offers are healed!",
 'HustlerSalesPitch': "Toons are chosen at random to deal less damage to the Hustler!",
-'HustlerCustomerRetention': "The Traffic Manager strengthens damaged cogs!",
+'HustlerCustomerRetention': "The Traffic Manager heals cogs!",
 'HustlerClosingTime': "The Hustler gets stronger every turn while under half health!",
 'HustlerBaitAndSwitch': "The Hustler switches the gag order!",
 'HustlerExclusiveOffer': "The Hustler pairs himself up with a Toon!",
@@ -4993,8 +4993,8 @@ SuitCheatDescription = {
 'UnionBusterBreachOfContract2': "The Union Buster retaliates against Toons who used contaminated gags!",
 'UnionBusterBreachOfContract3': "The Union Buster retaliates against Toons with existing vulnerabilities!",
 'UnionBusterBreachOfContract4': "The Traffic Manager retaliates against Toons who chose banned gags!",
-'UnionBusterContractEnforcement': "The Pressurizer contaminates employed Toons!",
-'UnionBusterContractEnforcement2': "The Radiographer puts employed Toons in the hot seat!",
+'UnionBusterContractEnforcement': "The Pressurizer contaminates unemployed Toons!",
+'UnionBusterContractEnforcement2': "The Radiographer puts unemployed Toons in the hot seat!",
     # Racketeer Cheats
 'RacketeerOverextendedLeverage': "The Racket's value has changed!",
 'RacketeerOverextendedLeverage2': "The Racketeer obtains an vulnerability when the Racket overinflates!",
@@ -5013,7 +5013,7 @@ SuitCheatDescription = {
     # Radiographer Cheats
 'RadiographerRadioInfrequency': "All multi-target gags are now less effective!",
 'RadiographerHotTake': "The Radiographer puts a Toon in the Hot Seat!",
-'RadiographerHotTakeRetaliation': "The Pressurizer creates an evil Toon to infect your gags!",
+'RadiographerHotTakeRetaliation': "The Pressurizer creates an evil Toon to contaminate your gags!",
 'RadiographerHotTakeDamage': "Bombed Toons that are attacked will deal and take more damage!",
 'RadiographerOvermodulated': "The Radiographer unlures a cog and gives them an extra attack!",
 'RadiographerOvermodulated2': "The Radiographer unlures a cog and gives them an extra attack!",

@@ -2499,6 +2499,17 @@ class TownBattleCogPanel(DirectFrame):
                                    slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
 
+        if self.cog.hasSuitStatusEffect('rushHour'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/counterfeit_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Rush Hour', 
+                                   tooltipDescription="The Tollmaster has doubled the entry fee! Attacking the Tollmaster while in this phase will increase your Toll by +16.", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
         # if self.cog.getGovernaught():
         #     status = loader.loadModel('phase_3.5/models/gui/status_effects')
         #     self.statusIcon = status.find('**/tie_icon')
@@ -2750,7 +2761,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Mile-a-Minute', 
-                                   tooltipDescription='The battle is playing back at %s.0x speed.' % self.cog.getBattleSpeed(), 
+                                   tooltipDescription='The battle is playing back at %sx speed.' % self.cog.getBattleSpeed(), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2761,7 +2772,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Mile-a-Minute', 
-                                   tooltipDescription='The battle is playing back at %s.0x speed.' % self.cog.getBattleSpeed(), 
+                                   tooltipDescription='The battle is playing back at %sx speed.' % self.cog.getBattleSpeed(), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2913,7 +2924,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use TRAP on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if TRAP is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -2936,7 +2947,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use LURE on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if LURE is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -2959,7 +2970,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use THROW on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if THROW is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -2982,7 +2993,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2],  
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use SQUIRT on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if SQUIRT is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -3005,7 +3016,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use ZAP on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if ZAP is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -3028,7 +3039,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use SOUND on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if SOUND is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
@@ -3051,7 +3062,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="The Head Attorney will punish ALL Toons if you do not use DROP on this Cog!! " \
+                                    tooltipDescription="ALL Toons will be punished if DROP is not used on this Cog!!" \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 

@@ -635,7 +635,7 @@ bellring = (('roll-o-dex', 'roll-o-dex', 4), ('quick-jump', 'jump', 4))
 prethink = (('effort', 'effort', 4), ('speak', 'speak', 4))
 mslacker = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
 radiog = (('glower', 'glower', 4), ('quick-jump', 'jump', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('smile', 'smile', 4))
-hustle = (('layoffs', 'layoffs', 4), ('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
+hustle = (('layoffs', 'layoffs', 4), ('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction3', 4))
 ubuster = (('snap', 'snap', 4), ('taunt', 'taunt', 4), ('cease', 'cease2', 4), ('snap', 'snap2', 4), ('summon', 'summon', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('glower', 'glower', 4), ('sanction', 'sanction', 4))
 safesupervis = (('summon', 'summon', 4), ('cigar-smoke', 'cigar-smoke', 4), ('firestarter-cigar-smoke', 'firestarter-cigar-smoke', 4), ('cease', 'cease', 4), ('snap', 'snap2', 4), ('finger-wag', 'finger-wag', 4), ('magic3-alt', 'magic3-alt', 4))
 psetter = (('quick-jump', 'jump', 4), ('come-on', 'come-on', 4), ('pace', 'pace', 4), ('rush-job', 'rush-job', 4), ('neutral-hurt', 'pace', 4), ('overclocked', 'overclocked', 4), ('magic1', 'magic1', 4), ('speak', 'speak', 4), ('smile', 'smile', 4), ('neutral', 'pace', 4), ('neutral2', 'neutral', 4))
@@ -645,7 +645,7 @@ ddiver = (('watercooler', 'watercooler', 4), ('pen-squirt', 'fountain-pen', 4))
 gatekeep = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
 dola = (('quick-jump', 'jump', 4), ('stomp', 'stomp', 4), ('effort', 'effort', 4))
 dold = (('quick-jump', 'jump', 4), ('pen-squirt', 'fountain-pen', 4))
-liquid = (('taunt', 'taunt', 4), ('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('snap', 'snap2', 4), ('sanction', 'sanction', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
+liquid = (('wheelspin', 'wheelspin', 4), ('sanction', 'sanction3', 4), ('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('snap', 'snap2', 4), ('speak', 'speak', 4), ('transformation', 'transformation', 4), ('stomp', 'stomp', 4), ('objection', 'objection', 4), ('effort', 'effort', 4))
 rkeeper = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cbutcher = (('snap', 'snap2', 4), ('cease', 'cease3', 4), ('effort', 'effort', 4), ('sanction', 'sanction3', 4), ('pen-squirt', 'fountain-pen', 4), ('rubber-stamp', 'rubber-stamp', 4))
 cdirector = (('sparkplug', 'sparkplug', 4), ('revvedup', 'revvedup', 4), ('scabbard', 'scabbard', 4), ('rubber-stamp', 'rubber-stamp', 4), ('finger-wag', 'fingerwag', 4), ('frustrated-f', 'frustrated-f', 4), ('sanction', 'sanction3', 4), ('cease', 'cease3', 4), ('defense', 'defense', 4), ('effort', 'effort', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('pen-squirt', 'fountain-pen', 4))
@@ -2080,7 +2080,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeChainsaw()
             self.generateHead3('chainsaw', animated=True)
-            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_a.png')
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(10.2)
@@ -2125,7 +2125,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.makeExecutive()
             self.generateHead3('prethinker', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(9.1)
@@ -3073,7 +3073,7 @@ class Suit(Avatar.Avatar):
             self.generateBody()
             self.generateHead3('prethinker', animated=True)
             self.makePrethinker()
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker3.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.2)
@@ -3367,14 +3367,14 @@ class Suit(Avatar.Avatar):
             self.scale = 6.75 / bSize
             self.handColor = VBase4(0.486, 0.447, 0.42, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('dola', animated=True)
             self.setHeight(9.9)
         elif dna.name == 'dold':
             self.scale = 7.5 / aSize
             self.handColor = VBase4(1, 0.486, 0, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('dold', animated=True)
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_dold.png')
             for headPart in self.headParts:
@@ -3385,7 +3385,7 @@ class Suit(Avatar.Avatar):
             self.scale = 6.25 / aSize
             self.handColor = VBase4(0.498, 0.635, 0.655, 1.0)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('bellringer', animated=True)
             texture = loader.loadTexture('phase_9/maps/ttcc_ene_bellringer_board.png')
             for headPart in self.headParts:
@@ -3398,7 +3398,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.1 / aSize
             self.handColor = VBase4(0.341, 0.341, 0.341, 1)
             self.generateFemaleBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('stenographer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot.png')
             for headPart in self.headParts:
@@ -3412,7 +3412,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.1 / aSize
             self.handColor = VBase4(0, 0, 0, 1)
             self.generateFemaleBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('stenographer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot_phantom.png')
             for headPart in self.headParts:
@@ -3428,7 +3428,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.25 / aSize
             self.handColor = VBase4(0.478, 0.478, 0.486, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('chainsaw_c', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
             for headPart in self.headParts:
@@ -3443,7 +3443,7 @@ class Suit(Avatar.Avatar):
             self.scale = 6.75 / aSize
             self.handColor = VBase4(0.173, 0.173, 0.173, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('redd', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_dking.png')
             for headPart in self.headParts:
@@ -3457,7 +3457,7 @@ class Suit(Avatar.Avatar):
             self.scale = 6.0 / bSize
             self.handColor = VBase4(0.302, 0.255, 0.196, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('ottoman', animated=True)
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_ottoman.png')
             for headPart in self.headParts:
@@ -3478,7 +3478,7 @@ class Suit(Avatar.Avatar):
             self.scale = 7.5 / aSize
             self.handColor = VBase4(0.396, 0.373, 0.322, 1)
             self.generateBody()
-            self.makeBoardbotManager()
+            self.makeExecutive()
             self.generateHead3('chairman', animated=True)
             texture = loader.loadTexture('phase_14/maps/ttcc_ene_chairman.png')
             for headPart in self.headParts:
@@ -4064,12 +4064,12 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1.3)
         if self.style.body == 'a' and self.style.name == 'ambass':
             self.generateHead3('prethinker2', animated=True)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
         if self.style.body == 'a' and not self.style.name == 'autocad' and not self.style.name == 'dold' and not self.style.name == 'ubuster' and not self.style.name == 'derrhand' and not self.style.name == 'ambass' and not self.style.name == 'cdirector' and not self.style.name == 'clubpres' and not self.style.name == 'radiog':
             self.generateHead3('skullA', animated=True)
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                          self.style.dept)
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
@@ -4081,7 +4081,7 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1)
         if self.style.body == 'b':
             self.generateHead3('skullB', animated=True)
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                          self.style.dept)
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
@@ -4115,7 +4115,7 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1)
         if self.style.body == 'c' and not self.style.name == 'dopa' and not self.style.name == 'dopr':
             self.generateHead3('skullC', animated=True)
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                 self.style.dept)
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
@@ -4623,7 +4623,7 @@ class Suit(Avatar.Avatar):
         dept = self.style.dept
         phase = 3.5
         texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit.png')
-        texture2 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body2.png')
+        texture2 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body.png')
         texture3 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body3.png')
         texture4 = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body3.png')
         modelRoot.find('**/hands').setColor(self.handColor)
@@ -4667,7 +4667,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.isExecutive and not self.isManager and not self.isGovernaught and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.isManager:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.style.name == 'charon' and not self.style.name == 'hydra'\
@@ -4996,7 +4996,7 @@ class Suit(Avatar.Avatar):
             if headType == 'prethinker2' and self.style.name == 'ambass':
                 textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
                 headModel.find('**/glass').setTexture(textureGlass, 1)
-                texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+                texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
                 headModel.setTexture(texture, 1)
                 headModel.setScale(1)
                 headModel.setZ(-.3)
@@ -7454,7 +7454,7 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a' and self.style.name == 'ambass':
             self.zapActorHeadParts = []
             self.generateHeadZap('prethinker2', animated=True, targetActor=self.zapActor)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
                 textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
@@ -7472,7 +7472,7 @@ class Suit(Avatar.Avatar):
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' %
                                         self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                         self.style.dept)
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7492,7 +7492,7 @@ class Suit(Avatar.Avatar):
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' %
                                         self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                         self.style.dept)
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7536,7 +7536,7 @@ class Suit(Avatar.Avatar):
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' %
                                         self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' %
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' %
                                         self.style.dept)
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7569,7 +7569,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getGovernaught() and not self.isWaiter:
@@ -7700,7 +7700,7 @@ class Suit(Avatar.Avatar):
         textureRadio = loader.loadTexture('phase_9/maps/ttcc_ene_radiog.png')
         textureUnion = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_ubuster.png')
-        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = self.zapActor.findAllMatches('**/joint_head*')
@@ -7851,7 +7851,7 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a' and self.style.name == 'ambass':
             resetPowerhouseHeadParts()
             self.generateHeadZap('prethinker2', animated=True, targetActor=self.zapActorPowerhouse)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
             textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
 
             for headPart in self.zapActorHeadParts:
@@ -7873,7 +7873,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7888,7 +7888,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7921,7 +7921,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -7946,7 +7946,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
@@ -8027,7 +8027,7 @@ class Suit(Avatar.Avatar):
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = self.zapActorPowerhouse.findAllMatches('**/joint_head*')
@@ -8187,7 +8187,7 @@ class Suit(Avatar.Avatar):
         if self.style.body == 'a' and self.style.name == 'ambass':
             resetPowerhouseHeadParts()
             self.generateHeadZap('prethinker2', animated=True, targetActor=zapActor)
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
             textureGlass = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker_glass.png')
 
             for headPart in self.zapActorHeadParts:
@@ -8209,7 +8209,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -8224,7 +8224,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -8257,7 +8257,7 @@ class Suit(Avatar.Avatar):
             elif self.isGovernaught:
                 texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_gov.png' % self.style.dept)
             else:
-                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+                texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
 
             for headPart in self.zapActorHeadParts:
                 headPart.setTexture(texture, 1)
@@ -8282,7 +8282,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.getManager() and not self.getGovernaught() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.getManager() or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.getManager() and not self.isWaiter and self.style.name != 'dold':
@@ -8363,7 +8363,7 @@ class Suit(Avatar.Avatar):
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = zapActor.findAllMatches('**/joint_head*')
@@ -8465,7 +8465,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.isWaiter and not self.style.name == 'dold':
@@ -8480,7 +8480,7 @@ class Suit(Avatar.Avatar):
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         for headPart in self.headParts:
@@ -8587,7 +8587,7 @@ class Suit(Avatar.Avatar):
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
         elif self.style.dept == 'c' and not self.getExecutive() and not self.isManager and not self.getGovernaught() and not self.isWaiter:
-            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s2.png' % self.style.dept)
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.isManager or self.getExecutive():
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s_exe.png' % self.style.dept)
         elif self.isManager and not self.isWaiter and not self.style.name == 'dold':
@@ -8602,7 +8602,7 @@ class Suit(Avatar.Avatar):
         textureDopa = loader.loadTexture('phase_9/maps/ttcc_ene_dopa.png')
         textureDold = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_dold.png')
         textureDopr = loader.loadTexture('phase_9/maps/ttcc_ene_dopr.png')
-        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        textureAmbassador = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         for headPart in self.headParts:
@@ -9433,7 +9433,7 @@ class Suit(Avatar.Avatar):
             headPart.removeNode()
         self.headParts = []
         self.generateHead3('prethinker2', animated=True)
-        texture = loader.loadTexture('phase_9/maps/ttcc_ene_prethinker.png')
+        texture = loader.loadTexture('phase_9/maps/ttcc_ene_ambassador.png')
         for headPart in self.headParts:
             headPart.setTexture(texture, 1)
 
@@ -10536,7 +10536,7 @@ class Suit(Avatar.Avatar):
             modelRoot = self
         self.isManager = 1
         try:
-            texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_psetter.png')
+            texture = loader.loadTexture('phase_9/maps/ttcc_ene_suittex_pacesetter.png')
         except:  # Not sure when or if you'll need this, but just in case the above fails, this should work as a fail-safe.
             texture = loader.loadTexture(
                 'phase_3.5/maps/ttcc_ene_suittex_unemployed.png')

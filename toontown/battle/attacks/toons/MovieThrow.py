@@ -518,10 +518,6 @@ def __throwPie(throw, delay, hitCount, npcs):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        elif suit.dna.name == 'erfit' and revived != 0:
-            if level > 5:
-                suitResponseTrack.append(Wait(1.0))
-            suitResponseTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
@@ -530,11 +526,11 @@ def __throwPie(throw, delay, hitCount, npcs):
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and suit.isVirtual:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and not suit.isVirtual:
             if level > 5:
                 suitResponseTrack.append(Wait(1.0))
             suitResponseTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))

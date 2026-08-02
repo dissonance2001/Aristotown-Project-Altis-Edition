@@ -48,6 +48,13 @@ class TownLoader(StateData.StateData):
          State.State('final', self.enterFinal, self.exitFinal, ['start'])], 'start', 'final')
         self.branchZone = None
         self.canonicalBranchZone = None
+        self.musicFile = None
+        self.lobbyMusicFile = None
+        self.activityMusicFile = None
+
+        self.music = None
+        self.lobbyMusic = None
+        self.activityMusic = None
         self.placeDoneEvent = 'placeDone'
         self.townBattleDoneEvent = 'town-battle-done'
 
@@ -64,6 +71,19 @@ class TownLoader(StateData.StateData):
         self.branchZone = ZoneUtil.getBranchZone(zoneId)
         self.canonicalBranchZone = ZoneUtil.getCanonicalBranchZone(zoneId)
         self.music = base.loader.loadMusic(self.musicFile)
+
+        lobbyMusicFile = getattr(self, 'lobbyMusicFile', None)
+
+        if lobbyMusicFile:
+            self.lobbyMusic = base.loader.loadMusic(lobbyMusicFile)
+        else:
+            self.lobbyMusic = base.loader.loadMusic(self.musicFile)
+
+        if not self.lobbyMusic:
+            self.notify.warning(
+                'Unable to load lobby music: %s' %
+                (lobbyMusicFile or self.musicFile)
+            )
         self.activityMusic = base.loader.loadMusic(self.activityMusicFile)
         self.battleMusic = base.loadMusic(
             self.zone2music.get(ZoneUtil.getHoodId(zoneId), 'phase_3.5/audio/bgm/encntr_general_bg.ogg'))
@@ -96,6 +116,7 @@ class TownLoader(StateData.StateData):
         del self.townBattle
         del self.battleMusic
         del self.music
+        del self.lobbyMusic
         del self.activityMusic
         del self.holidayPropTransforms
         self.deleteAnimatedProps()

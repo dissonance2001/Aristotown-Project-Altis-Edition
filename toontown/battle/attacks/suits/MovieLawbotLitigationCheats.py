@@ -370,14 +370,14 @@ def doWhirlwind(attack):
     if dmg == 0:
         y -= 5
     cagePos = [Point3(suitPos.getX(), y + 15, suitPos.getZ()), toon.getHpr(battle)]
-    spinTrack = Sequence(Func(whirlSfx.play), LerpHprInterval(cage, 5.5, Point3(-10800, 0, 0)), Func(whirlSfx.stop))
+    spinTrack = Sequence(Func(whirlSfx.play), LerpHprInterval(cage, 5.5, Point3(-10800, 0, 0)))
     cagePropTrack = Sequence(
         Parallel(cagePosition),
         Parallel(getPropAppearTrack(cage, battle, cagePos, 0.25, scaleUpPoint=Point3(2.0), scaleUpTime=1.0),
             cage.posInterval(0.75, Point3(toonPos.getX(), y, 0.1), blendType='easeIn'),
-            SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_toonInWhirlwind.ogg'), duration=0.75, node=cage), spinTrack,
+            SoundInterval(base.loader.loadSfx('phase_5/audio/sfx/tt_s_ara_cfg_toonInWhirlwind.ogg'), node=cage), spinTrack,
         ),
-        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5),
+        LerpFunctionInterval(cage.setAlphaScale, fromData=.5, toData=0, duration=0.5), Func(whirlSfx.stop),
         Func(cage.removeNode)
     )
     cagePropTracks.append(cagePropTrack)
@@ -1462,7 +1462,7 @@ def doCaseInsurance(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         if suit.hasSuitStatusEffect('insured'):
-            suitTrack.append(Func(suit.checkInsuranceHP))
+            suitTrack.append(suit.checkInsuranceHP())
             suitTracks.append(suitTrack)
             healSounds.append(healSound)
     return Parallel(suitTracks, healSounds)
@@ -1479,7 +1479,7 @@ def doCaseInsuranceScapegoat(attack):
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         if suit.hasSuitStatusEffect('insured2'):
-            suitTrack.append(Func(suit.checkInsuranceScapegoatHP))
+            suitTrack.append(suit.checkInsuranceScapegoatHP())
             suitTracks.append(suitTrack)
             healSounds.append(healSound)
     return Parallel(suitTracks, healSounds)

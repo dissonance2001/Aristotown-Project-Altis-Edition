@@ -30,6 +30,7 @@ class BoardbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryExterior')
 
         self.musicFile = 'phase_14/audio/bgm/CN_SZ.ogg'
+        self.lobbyMusicFile = 'phase_14/audio/bgm/CN_SZ.ogg'
         self.cogHQExteriorModelPath = 'phase_14/models/neighborhoods/CogNation'
         self.factoryExteriorModelPath = 'phase_14/models/boardbotHQ/boardbot_factory_exterior'
         self.cogHQLobbyModelPath = 'phase_14/models/modules/ExecutiveLobby'

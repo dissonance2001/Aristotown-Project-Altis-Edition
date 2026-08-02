@@ -133,7 +133,7 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
             'loader': 'cogHQLoader',
             'where': 'cogHQBossBattle',
             'how': 'teleportIn',
-            'hoodId': ToontownGlobals.SellbotHQ,
+            'hoodId': ToontownGlobals.LawbotHQ,
             'zoneId': zoneId,
             'shardId': None,
             'avId': -1

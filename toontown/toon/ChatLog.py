@@ -67,7 +67,7 @@ class ChatLog(DirectFrame, DirectObject):
         self._closeDisplay(playSound=False, instant=True)
 
         self.accept(base.CHAT_HOTKEY, self.focusChat)
-        self.accept(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'), self.closeChatHotkey)
+        self.accept('c', self.chatHotkey)
         self.accept('mouse1', self._handleMouseClickFocus)
         self.accept('chat-panel-open', self.open)
         self.accept('chat-panel-close', self.close)
@@ -492,6 +492,29 @@ class ChatLog(DirectFrame, DirectObject):
             pressEffect=0,
         )
 
+    def disableUniteButtons(self):
+        self.uniteButton['state'] = DGG.DISABLED
+        self.quickUniteButton['state'] = DGG.DISABLED
+
+        disabledColor = VBase4(0.3, 0.3, 0.3, 1)
+        self.uniteButton['image_color'] = disabledColor
+        self.quickUniteButton['image_color'] = disabledColor
+
+    def updateUniteButtons(self):
+        disabled = (
+            self.obscuredSpeedChat or
+            base.localAvatar.hasToonStatusEffect('cooldown') or
+            'noUnites' in base.localAvatar.battleConditions
+        )
+
+        state = DGG.DISABLED if disabled else DGG.NORMAL
+        color = VBase4(0.3, 0.3, 0.3, 1) if disabled else Vec4(1, 1, 1, 1)
+
+        self.uniteButton['state'] = state
+        self.quickUniteButton['state'] = state
+        self.uniteButton['image_color'] = color
+        self.quickUniteButton['image_color'] = color
+
     def _playSfx(self, sound):
         try:
             base.playSfx(sound)
@@ -514,6 +537,16 @@ class ChatLog(DirectFrame, DirectObject):
         self._closeDisplay(playSound=not self.isHidden)
 
     def toggle(self):
+        if self.isHidden:
+            self.open()
+        else:
+            self.close()
+
+    def chatHotkey(self):
+        # Let the player type "c" normally in the text box.
+        if self._entryFocused:
+            return
+
         if self.isHidden:
             self.open()
         else:
@@ -670,9 +703,11 @@ class ChatLog(DirectFrame, DirectObject):
 
     def _focusIn(self):
         self._entryFocused = True
+        self.updateUniteButtons()
         self.entry.accept('escape', self.removeFocus)
         self.entry.accept('arrow_up', self._historyUp)
         self.entry.accept('arrow_down', self._historyDown)
+        self.ignore(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'))
         try:
             if base.wantCustomControls:
                 base.localAvatar.controlManager.disableWASD()
@@ -684,9 +719,11 @@ class ChatLog(DirectFrame, DirectObject):
 
     def _focusOut(self):
         self._entryFocused = False
+        self.updateUniteButtons()
         self.entry.ignore('escape')
         self.entry.ignore('arrow_up')
         self.entry.ignore('arrow_down')
+        self.accept('c', self.chatHotkey)
         try:
             if base.wantCustomControls:
                 base.localAvatar.controlManager.enableWASD()
@@ -699,6 +736,7 @@ class ChatLog(DirectFrame, DirectObject):
     def _handleMouseClickFocus(self):
         # Clicking anywhere outside the actual text-entry bar removes focus,
         # but leaves the Clash chat panel and any unsent message open.
+        self.updateUniteButtons()
         if not self._entryFocused:
             return
         try:
@@ -776,7 +814,8 @@ class ChatLog(DirectFrame, DirectObject):
             chatMgr.openPanelSpeedChat()
 
     def openUnites(self):
-        if self.obscuredSpeedChat:
+        self.updateUniteButtons()
+        if self.obscuredSpeedChat or base.localAvatar.hasToonStatusEffect('cooldown') or 'noUnites' in base.localAvatar.battleConditions:
             return
         if getattr(self, 'stickerMenu', None):
             self.stickerMenu.hideMenu()
@@ -1031,7 +1070,7 @@ class ChatLog(DirectFrame, DirectObject):
             self.stickerMenu.hideMenu()
         self.quickSpeedChatButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self.quickStickerButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
-        self.quickUniteButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
+        self.updateUniteButtons()
         self.quickChatButton['state'] = DGG.DISABLED if self.obscuredLog else DGG.NORMAL
         self.displaySpeedChatButton['state'] = DGG.DISABLED if self.obscuredSpeedChat else DGG.NORMAL
         self._updateEntryState()

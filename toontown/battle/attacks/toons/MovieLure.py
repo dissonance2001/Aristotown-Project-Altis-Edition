@@ -795,7 +795,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             animTrack.append(Func(suit.setNeutralAnimationTrap))
             suit.setPendingQueuedLured(False)
             damageTrack = Sequence(Wait(2.5), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
-            soundTrack.append(Wait(0.6))
+            soundTrack.append(Wait(1))
             soundTrack.append(SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
             result.append(Parallel(trapTrack, moveTrack, animTrack, damageTrack, soundTrack, ballPropTrack))
     elif trapName == 'tnt':

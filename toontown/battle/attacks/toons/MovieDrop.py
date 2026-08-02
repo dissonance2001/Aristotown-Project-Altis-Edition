@@ -536,8 +536,6 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         bonusTrack = Sequence(Wait(delay + tObjectAppears + 1), Func(suit.showHpText, -hpbonus, 1), Func(suit.updateHealthBar, hpbonus))
     if suit.dna.name == 'redd' and revived != 0:
         suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-    elif suit.dna.name == 'erfit' and revived != 0:
-        suitTrack.append(MovieUtil.createErfitReviveTrack(suit, battle))
     elif revived != 0 and suit.isSkeleton:
         suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
     elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':

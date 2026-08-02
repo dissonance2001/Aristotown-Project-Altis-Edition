@@ -1294,7 +1294,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HustlerBaitAndSwitch':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'HustlerCustomerRetention':
-        camTrack.append(Sequence(heldShot(0, 15, 20, -180, -20, 0, attackDuration)))
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
+        #camTrack.append(Sequence(heldShot(0, 15, 20, -180, -20, 0, attackDuration)))
     elif name == 'HustlerExclusiveOfferRetaliation':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HustlerExclusiveOffer':
@@ -1307,8 +1308,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TrafficCongestionPricing':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'TrafficRedLight':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TrafficRedLightRetaliation':
         if attackDuration > 2:
             camTrack.append(defaultCamera(openShotDuration=0.5))

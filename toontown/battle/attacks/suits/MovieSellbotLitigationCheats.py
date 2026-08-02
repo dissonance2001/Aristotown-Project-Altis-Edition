@@ -1061,7 +1061,7 @@ def doUnionCalculator(attack):
     soundTrack = getSoundTrack('SA_calculating_costs.ogg')
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
-def doContractEnforcementHealing(attack):
+def doContractEnforcementHealingOLD(attack):
     manager = attack['suit']
     battle = attack['battle']
     suitTracks = Parallel()
@@ -1077,7 +1077,7 @@ def doContractEnforcementHealing(attack):
         soundTracks.append(getSoundTrack('LB_camera_shutter_2.ogg', delay=1, node=manager))
         soundTracks.append(getSoundTrack('LB_toonup.ogg', delay=1, node=manager))
     for targetSuit in battle.activeSuits:
-        selfDamageTrack = Sequence(Wait(1.0), Func(targetSuit.checkCustomerRetention))
+        selfDamageTrack = Sequence(Wait(1.0), targetSuit.checkCustomerRetention())
         cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
         cage.find('**/geo_hole_01').hide()
         platform = cage.find('**/geo_gearLift_01')
@@ -2355,6 +2355,7 @@ def doClosingTime(attack):
 
 def doGreenLight(attack):
     suit = attack['suit']
+    manager = attack['suit']
     battle = attack['battle']
     target = attack['target']
     node = suit.getGeomNode().getChild(0)
@@ -2375,20 +2376,109 @@ def doGreenLight(attack):
     LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
                            blendType='easeInOut')
                               )
-    suitTrack = Sequence(Parallel(Sequence(ActorInterval(suit, 'taunt'), Func(suit.setNeutralAnimationDrop)), getSuitAnimTrack(attack, playRate=.75)), Wait(2.0))
-    soundTrack2 = getSoundTrack('SA_rush_job_target.ogg')
+    suitTrack = Sequence(
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
+    soundTrack2 = getSoundTrack('SA_sanction.ogg')
     suitTrack.append(Func(suit.setSuitStatusEffect, 'greenLight', modifier=1, turns=2))
     return Parallel(suitTrack, suitColorTrack, soundTrack2)
 
 def doContingencyClauseRetaliation(attack):
     suit = attack['suit']
+    manager = attack['suit']
     battle = attack['battle']
     targets = attack['target']
     hitAtleastOneToon = 0
     for t in targets:
         if t['hp'] > 0:
             hitAtleastOneToon = 1
-    suitTrack = Sequence(getSuitAnimTrackAttack(attack))
+    suitTrack = Sequence(
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
     propTracks = Parallel()
     toonTracks = Parallel()
     notifyTracks = Parallel()
@@ -2445,15 +2535,79 @@ def doContingencyClauseRetaliation(attack):
             toonTracks.append(toonTrack)
             smokeTracks.append(smokeTrack)
             propTracks.append(Parallel(propTrack2, soundTrack4))
-    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
+    soundTrack = getSoundTrack('SA_sanction.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, .5, ['nothing'], 0, ['neutral'])
     if hitAtleastOneToon:
         return Parallel(suitTrack, toonDamageTrack, notifyTracks, smokeTracks, toonTracks, soundTrack, propTracks)
     else:
         return Parallel()
 
+def doContractEnforcementHealing(attack):
+    manager = attack['suit']
+    battle = attack['battle']
+    suitTracks = Parallel()
+    selfDamageTracks = Parallel()
+    suitTrack = getSuitAnimTrack(attack)
+    cagePropTracks = Parallel()
+    hitAtleastOneSuit = 0
+    suitTrack = Sequence(
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
+    soundTrack2 = getSoundTrack('SA_sanction.ogg')
+    for targetSuit in battle.activeSuits:
+        hitAtleastOneSuit = 1
+    if hitAtleastOneSuit > 0:
+        soundTrack2.append(getSoundTrack('LB_toonup.ogg', node=manager))
+    for targetSuit in battle.activeSuits:
+        selfDamageTrack = Sequence(Wait(1.0), targetSuit.checkCustomerRetention())
+        selfDamageTracks.append(selfDamageTrack)
+    return Parallel(suitTracks, suitTrack, soundTrack2, selfDamageTracks)
+
 def doRedLight(attack):
     suit = attack['suit']
+    manager = attack['suit']
     battle = attack['battle']
     target = attack['target']
     node = suit.getGeomNode().getChild(0)
@@ -2474,8 +2628,52 @@ def doRedLight(attack):
     LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
                            blendType='easeInOut')
                               )
-    suitTrack = Sequence(Parallel(Sequence(ActorInterval(suit, 'cease'), Func(suit.setNeutralAnimationDrop)), getSuitAnimTrack(attack, playRate=.75)), Wait(2.0))
-    soundTrack2 = getSoundTrack('SA_cease_and_desist.ogg')
+    suitTrack = Sequence(
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
+    soundTrack2 = getSoundTrack('SA_sanction.ogg')
     suitTrack.append(Func(suit.setSuitStatusEffect, 'redLight', modifier=1, turns=2))
     return Parallel(suitTrack, suitColorTrack, soundTrack2)
 

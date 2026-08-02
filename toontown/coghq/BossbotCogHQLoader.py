@@ -26,6 +26,7 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('countryClubInterior')
 
         self.musicFile = random.choice(['phase_12/audio/bgm/BB_courtyard.ogg', 'phase_12/audio/bgm/BB_courtyard_2.ogg'])
+        self.lobbyMusicFile = 'phase_12/audio/bgm/BB_boss_lobby.ogg'
         self.battleMusic = 'phase_12/audio/bgm/BB_courtyard_encntr.ogg'
         self.cogHQExteriorModelPath = 'phase_12/models/bossbotHQ/ttr_m_ara_bhq_bossbotCourtyard'
         self.factoryExteriorModelPath = 'phase_11/models/lawbotHQ/LB_DA_Lobby'

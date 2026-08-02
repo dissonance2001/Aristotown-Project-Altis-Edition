@@ -447,7 +447,7 @@ def doExtraTip(attack, ind):
     suitTracks = Parallel()
     suitTrack = Sequence()
     suitTrack.append(Wait(4.0))
-    suitTrack.append(Func(targetSuit.checkExtraTip))
+    suitTrack.append(targetSuit.checkExtraTip())
     suitTrack.append(Parallel(Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier')))
     suitTrack.append(Func(targetSuit.updateHealthBar, 0))
     suitTrack.append(Func(targetSuit.setDizzy, 0))
@@ -983,7 +983,7 @@ def doLifeInsurance(attack):
     suit = attack['suit']
     healSound = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_loop.ogg'), SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_register.ogg'))))
     suitTrack = Parallel(getSuitAnimTrack(attack), Wait(5.0))
-    suitTrack.append(Sequence(Func(suit.checkLifeInsurance), healSound))
+    suitTrack.append(Sequence(suit.checkLifeInsurance()), healSound)
     return Parallel(suitTrack)
 
 def doDrainingPower(attack):
