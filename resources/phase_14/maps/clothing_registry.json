@@ -1,5 +1,4245 @@
 {
     "outfits": {
+        "alchemist_outfit": {
+            "folder": "alchemist_outfit", 
+            "shirt": "phase_14/maps/clothing/alchemist_outfit/tt_t_chr_avt_shirt_alchemist_male.png", 
+            "shirt_id": 168, 
+            "shorts": "phase_14/maps/clothing/alchemist_outfit/tt_t_chr_avt_shorts_alchemist.png", 
+            "shorts_id": 75, 
+            "skirt": "phase_14/maps/clothing/alchemist_outfit/tt_t_chr_avt_skirt_alchemist.png", 
+            "skirt_id": 78, 
+            "sleeves": "phase_14/maps/clothing/alchemist_outfit/tt_t_chr_avt_sleeve_alchemist.png", 
+            "sleeves_id": 159, 
+            "source": "phase_14"
+        }, 
+        "burger": {
+            "folder": "burger", 
+            "shirt": "phase_14/maps/clothing/burger/tt_t_chr_avt_shirt_burger.png", 
+            "shirt_id": 162, 
+            "sleeves": "phase_14/maps/clothing/burger/tt_t_chr_avt_sleeve_burger.png", 
+            "sleeves_id": 153, 
+            "source": "phase_14"
+        }, 
+        "cards": {
+            "folder": "cards", 
+            "shirt": "phase_14/maps/clothing/cards/tt_t_chr_avt_shirt_cardsF.png", 
+            "shirt_id": 167, 
+            "shorts": "phase_14/maps/clothing/cards/tt_t_chr_avt_shorts_cards.png", 
+            "shorts_id": 74, 
+            "skirt": "phase_14/maps/clothing/cards/tt_t_chr_avt_skirt_cards.png", 
+            "skirt_id": 77, 
+            "sleeves": "phase_14/maps/clothing/cards/tt_t_chr_avt_sleeve_cardsF.png", 
+            "sleeves_id": 158, 
+            "source": "phase_14"
+        }, 
+        "chairman": {
+            "folder": "chairman", 
+            "shirt": "phase_14/maps/clothing/chairman/cc_t_clth_shirt_promo_chairman_exec.png", 
+            "shirt_id": 528, 
+            "shorts": "phase_14/maps/clothing/chairman/cc_t_clth_shorts_promo_chairman_exec.png", 
+            "shorts_id": 297, 
+            "sleeves": "phase_14/maps/clothing/chairman/cc_t_clth_shirt_promo_chairman_sleeve.png", 
+            "sleeves_id": 504, 
+            "source": "phase_14"
+        }, 
+        "chairman_exec": {
+            "folder": "chairman_exec", 
+            "shirt": "phase_14/maps/clothing/chairman_exec/cc_t_clth_shirt_promo_chairman_exec.png", 
+            "shirt_id": 529, 
+            "shorts": "phase_14/maps/clothing/chairman_exec/cc_t_clth_shorts_promo_chairman_exec.png", 
+            "shorts_id": 298, 
+            "sleeves": "phase_14/maps/clothing/chairman_exec/cc_t_clth_shirt_promo_chairman_exec_sleeve.png", 
+            "sleeves_id": 505, 
+            "source": "phase_14"
+        }, 
+        "duck_shuffler": {
+            "folder": "duck_shuffler", 
+            "shirt": "phase_14/maps/clothing/duck_shuffler/cc_t_clth_shirt_suit_gambler_green.png", 
+            "shirt_id": 161, 
+            "shorts": "phase_14/maps/clothing/duck_shuffler/cc_t_clth_shorts_suit_gambler_green.png", 
+            "shorts_id": 69, 
+            "skirt": "phase_14/maps/clothing/duck_shuffler/cc_t_clth_skirt_suit_gambler_green.png", 
+            "skirt_id": 74, 
+            "sleeves": "phase_14/maps/clothing/duck_shuffler/cc_t_clth_shirt_suit_gambler_green_sleeve.png", 
+            "sleeves_id": 152, 
+            "source": "phase_14"
+        }, 
+        "future_outfit": {
+            "folder": "future_outfit", 
+            "shirt": "phase_14/maps/clothing/future_outfit/future_top.png", 
+            "shirt_id": 163, 
+            "shorts": "phase_14/maps/clothing/future_outfit/future_bot.png", 
+            "shorts_id": 70, 
+            "skirt": "phase_14/maps/clothing/future_outfit/future_skirt.png", 
+            "skirt_id": 75, 
+            "sleeves": "phase_14/maps/clothing/future_outfit/future_sleeve.png", 
+            "sleeves_id": 154, 
+            "source": "phase_14"
+        }, 
+        "halloweentown_outfit": {
+            "folder": "halloweentown_outfit", 
+            "shirt": "phase_14/maps/clothing/halloweentown_outfit/hwtown_top.png", 
+            "shirt_id": 166, 
+            "shorts": "phase_14/maps/clothing/halloweentown_outfit/hwtown_bot.png", 
+            "shorts_id": 73, 
+            "sleeves": "phase_14/maps/clothing/halloweentown_outfit/hwtown_sleeve.png", 
+            "sleeves_id": 157, 
+            "source": "phase_14"
+        }, 
+        "humble": {
+            "folder": "humble", 
+            "shirt": "phase_14/maps/clothing/humble/tt_t_chr_avt_shirt_ragdoll_humble.png", 
+            "shirt_id": 170, 
+            "shorts": "phase_14/maps/clothing/humble/tt_t_chr_avt_shorts_ragdoll_humble.png", 
+            "shorts_id": 76, 
+            "sleeves": "phase_14/maps/clothing/humble/tt_t_chr_avt_sleeve_ragdoll_humble.png", 
+            "sleeves_id": 161, 
+            "source": "phase_14"
+        }, 
+        "new_years_2026": {
+            "folder": "new_years_2026", 
+            "shirt": "phase_14/maps/clothing/new_years_2026/cc_t_clth_shirt_new_years_2026.png", 
+            "shirt_id": 164, 
+            "shorts": "phase_14/maps/clothing/new_years_2026/cc_t_clth_shorts_new_years_2026.png", 
+            "shorts_id": 71, 
+            "skirt": "phase_14/maps/clothing/new_years_2026/cc_t_clth_skirt_new_years_2026_variant.png", 
+            "skirt_id": 76, 
+            "sleeves": "phase_14/maps/clothing/new_years_2026/cc_t_clth_shirt_new_years_2026_sleeve.png", 
+            "sleeves_id": 155, 
+            "source": "phase_14"
+        }, 
+        "ottoman_sweater": {
+            "folder": "ottoman_sweater", 
+            "shirt": "phase_14/maps/clothing/ottoman_sweater/cc_t_clth_shirt_ottoman_sweater.png", 
+            "shirt_id": 169, 
+            "sleeves": "phase_14/maps/clothing/ottoman_sweater/cc_t_clth_sleeve_ottoman_sleeve.png", 
+            "sleeves_id": 160, 
+            "source": "phase_14"
+        }, 
+        "pax": {
+            "folder": "pax", 
+            "shirt": "phase_14/maps/clothing/pax/cc_t_clth_shirt_pax_2026.png", 
+            "shirt_id": 171, 
+            "shorts": "phase_14/maps/clothing/pax/cc_t_clth_shorts_pax_2026.png", 
+            "shorts_id": 77, 
+            "skirt": "phase_14/maps/clothing/pax/cc_t_clth_skirt_pax_2026.png", 
+            "skirt_id": 79, 
+            "sleeves": "phase_14/maps/clothing/pax/cc_t_clth_shirt_pax_2026_sleeve.png", 
+            "sleeves_id": 162, 
+            "source": "phase_14"
+        }, 
+        "phantoon": {
+            "folder": "phantoon", 
+            "shirt": "phase_14/maps/clothing/phantoon/phantoon_top.png", 
+            "shirt_id": 165, 
+            "shorts": "phase_14/maps/clothing/phantoon/phantoon_shorts.png", 
+            "shorts_id": 72, 
+            "sleeves": "phase_14/maps/clothing/phantoon/phantoon_sleeve.png", 
+            "sleeves_id": 156, 
+            "source": "phase_14"
+        }, 
+        "phase_4:1": {
+            "folder": "", 
+            "shorts": "phase_4/maps/shorts1.jpg", 
+            "shorts_id": 94, 
+            "source": "phase_4"
+        }, 
+        "phase_4:1med": {
+            "folder": "", 
+            "skirt": "phase_4/maps/skirt1Med.png", 
+            "skirt_id": 88, 
+            "source": "phase_4"
+        }, 
+        "phase_4:2med": {
+            "folder": "", 
+            "skirt": "phase_4/maps/skirt2Med.png", 
+            "skirt_id": 89, 
+            "source": "phase_4"
+        }, 
+        "phase_4:3med": {
+            "folder": "", 
+            "skirt": "phase_4/maps/skirt3Med.png", 
+            "skirt_id": 90, 
+            "source": "phase_4"
+        }, 
+        "phase_4:4": {
+            "folder": "", 
+            "shorts": "phase_4/maps/shorts4.jpg", 
+            "shorts_id": 95, 
+            "source": "phase_4"
+        }, 
+        "phase_4:4thjuly_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/4thJulyShirt1.jpg", 
+            "shirt_id": 174, 
+            "shorts": "phase_4/maps/4thJulyShorts1.jpg", 
+            "shorts_id": 79, 
+            "skirt": "phase_4/maps/4thJulySkirt1.jpg", 
+            "skirt_id": 81, 
+            "sleeves": "phase_4/maps/4thJulySleeve1.jpg", 
+            "sleeves_id": 165, 
+            "source": "phase_4"
+        }, 
+        "phase_4:4thjuly_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/4thJulyShirt2.jpg", 
+            "shirt_id": 175, 
+            "sleeves": "phase_4/maps/4thJulySleeve2.jpg", 
+            "sleeves_id": 166, 
+            "source": "phase_4"
+        }, 
+        "phase_4:5": {
+            "folder": "", 
+            "shorts": "phase_4/maps/shorts5.jpg", 
+            "shorts_id": 96, 
+            "source": "phase_4"
+        }, 
+        "phase_4:6new": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt6New.jpg", 
+            "shirt_id": 214, 
+            "sleeves": "phase_4/maps/sleeve6New.jpg", 
+            "sleeves_id": 215, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/aviator_outfit/tt_t_chr_avt_aviator": {
+            "folder": "apriltoons/aviator_outfit", 
+            "shirt": "phase_4/maps/apriltoons/aviator_outfit/tt_t_chr_avt_shirt_aviator_top.png", 
+            "shirt_id": 406, 
+            "shorts": "phase_4/maps/apriltoons/aviator_outfit/tt_t_chr_avt_shorts_aviator_bot.png", 
+            "shorts_id": 210, 
+            "sleeves": "phase_4/maps/apriltoons/aviator_outfit/tt_t_chr_avt_sleeve_aviator_sleeve.png", 
+            "sleeves_id": 391, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/high_roller_outfit/cc_t_clth_high_roller": {
+            "folder": "apriltoons/high_roller_outfit", 
+            "shirt": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_shirt_high_roller.png", 
+            "shirt_id": 407, 
+            "shorts": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_shorts_high_roller.png", 
+            "shorts_id": 211, 
+            "sleeves": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_sleeve_high_roller.png", 
+            "sleeves_id": 392, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/high_roller_outfit/cc_t_clth_high_roller_black": {
+            "folder": "apriltoons/high_roller_outfit", 
+            "shirt": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_shirt_high_roller_black.png", 
+            "shirt_id": 408, 
+            "shorts": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_shorts_high_roller_black.png", 
+            "shorts_id": 212, 
+            "sleeves": "phase_4/maps/apriltoons/high_roller_outfit/cc_t_clth_sleeve_high_roller_black.png", 
+            "sleeves_id": 393, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/npc_lynn_outfit/lynn": {
+            "folder": "apriltoons/npc_lynn_outfit", 
+            "shirt": "phase_4/maps/apriltoons/npc_lynn_outfit/lynn_shirt.png", 
+            "shirt_id": 409, 
+            "shorts": "phase_4/maps/apriltoons/npc_lynn_outfit/lynn_shorts.png", 
+            "shorts_id": 213, 
+            "sleeves": "phase_4/maps/apriltoons/npc_lynn_outfit/lynn_sleeve.png", 
+            "sleeves_id": 394, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/ottoman_sweater/cc_t_clth_ottoman": {
+            "folder": "apriltoons/ottoman_sweater", 
+            "sleeves": "phase_4/maps/apriltoons/ottoman_sweater/cc_t_clth_sleeve_ottoman_sleeve.png", 
+            "sleeves_id": 395, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/ottoman_sweater/cc_t_clth_ottoman_sweater": {
+            "folder": "apriltoons/ottoman_sweater", 
+            "shirt": "phase_4/maps/apriltoons/ottoman_sweater/cc_t_clth_shirt_ottoman_sweater.png", 
+            "shirt_id": 410, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/wing_motif_shirt/tt_t_chr_avt_angel_wings": {
+            "folder": "apriltoons/wing_motif_shirt", 
+            "shirt": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_shirt_angel_wings.png", 
+            "shirt_id": 411, 
+            "sleeves": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_sleeve_angel_wings.png", 
+            "sleeves_id": 396, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/wing_motif_shirt/tt_t_chr_avt_chibi_wings": {
+            "folder": "apriltoons/wing_motif_shirt", 
+            "shirt": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_shirt_chibi_wings.png", 
+            "shirt_id": 412, 
+            "sleeves": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_sleeve_chibi_wings.png", 
+            "sleeves_id": 397, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/wing_motif_shirt/tt_t_chr_avt_dragon_wings": {
+            "folder": "apriltoons/wing_motif_shirt", 
+            "shirt": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_shirt_dragon_wings.png", 
+            "shirt_id": 413, 
+            "sleeves": "phase_4/maps/apriltoons/wing_motif_shirt/tt_t_chr_avt_sleeve_dragon_wings.png", 
+            "sleeves_id": 398, 
+            "source": "phase_4"
+        }, 
+        "phase_4:apriltoons/wingsuit_outfit/tt_t_chr_avt_wingsuit": {
+            "folder": "apriltoons/wingsuit_outfit", 
+            "shirt": "phase_4/maps/apriltoons/wingsuit_outfit/tt_t_chr_avt_shirt_wingsuit.png", 
+            "shirt_id": 414, 
+            "shorts": "phase_4/maps/apriltoons/wingsuit_outfit/tt_t_chr_avt_shorts_wingsuit.png", 
+            "shorts_id": 214, 
+            "sleeves": "phase_4/maps/apriltoons/wingsuit_outfit/tt_t_chr_avt_sleeve_wingsuit.png", 
+            "sleeves_id": 399, 
+            "source": "phase_4"
+        }, 
+        "phase_4:beta_old": {
+            "folder": "", 
+            "shorts": "phase_4/maps/BetaShortsOLD.jpg", 
+            "shorts_id": 81, 
+            "sleeves": "phase_4/maps/BetaSleeveOLD.jpg", 
+            "sleeves_id": 168, 
+            "source": "phase_4"
+        }, 
+        "phase_4:beta_topold": {
+            "folder": "", 
+            "shirt": "phase_4/maps/BetaShirtTopOLD.jpg", 
+            "shirt_id": 177, 
+            "source": "phase_4"
+        }, 
+        "phase_4:betaoverall": {
+            "folder": "", 
+            "shirt": "phase_4/maps/BetaOverallShirt.jpg", 
+            "shirt_id": 176, 
+            "shorts": "phase_4/maps/BetaOverallShorts.jpg", 
+            "shorts_id": 80, 
+            "sleeves": "phase_4/maps/BetaOverallSleeve.jpg", 
+            "sleeves_id": 167, 
+            "source": "phase_4"
+        }, 
+        "phase_4:blue_1": {
+            "folder": "", 
+            "shorts": "phase_4/maps/Blue_shorts_1.jpg", 
+            "shorts_id": 82, 
+            "source": "phase_4"
+        }, 
+        "phase_4:boardbot": {
+            "folder": "", 
+            "shirt": "phase_4/maps/boardbot_top.png", 
+            "shirt_id": 194, 
+            "source": "phase_4"
+        }, 
+        "phase_4:bossbot": {
+            "folder": "", 
+            "shirt": "phase_4/maps/BossbotShirt.jpg", 
+            "shirt_id": 178, 
+            "shorts": "phase_4/maps/BossbotShorts.jpg", 
+            "shorts_id": 83, 
+            "sleeves": "phase_4/maps/BossbotSleeve.jpg", 
+            "sleeves_id": 169, 
+            "source": "phase_4"
+        }, 
+        "phase_4:bosses/tt_t_chr_avt_armor": {
+            "folder": "bosses", 
+            "shirt": "phase_4/maps/bosses/tt_t_chr_avt_shirt_armor.png", 
+            "shirt_id": 415, 
+            "shorts": "phase_4/maps/bosses/tt_t_chr_avt_shorts_armor.png", 
+            "shorts_id": 215, 
+            "skirt": "phase_4/maps/bosses/tt_t_chr_avt_skirt_armor.png", 
+            "skirt_id": 173, 
+            "sleeves": "phase_4/maps/bosses/tt_t_chr_avt_sleeve_armor.png", 
+            "sleeves_id": 400, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/alien": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/alien_top.png", 
+            "shirt_id": 531, 
+            "shorts": "phase_4/maps/btl/alien_bot.png", 
+            "shorts_id": 300, 
+            "sleeves": "phase_4/maps/btl/alien_sleeve.png", 
+            "sleeves_id": 507, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/candycorn": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/candycorn_top.png", 
+            "shirt_id": 532, 
+            "shorts": "phase_4/maps/btl/candycorn_bot.png", 
+            "shorts_id": 301, 
+            "sleeves": "phase_4/maps/btl/candycorn_sleeves.png", 
+            "sleeves_id": 508, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/jail": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/jail_top.png", 
+            "shirt_id": 533, 
+            "sleeves": "phase_4/maps/btl/jail_sleeve.png", 
+            "sleeves_id": 509, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/l_resist": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/l_resist_top.png", 
+            "shirt_id": 534, 
+            "shorts": "phase_4/maps/btl/l_resist_bot.png", 
+            "shorts_id": 302, 
+            "skirt": "phase_4/maps/btl/l_resist_skirt.png", 
+            "skirt_id": 225, 
+            "sleeves": "phase_4/maps/btl/l_resist_sleeve.png", 
+            "sleeves_id": 510, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/lawsuit": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/lawsuit_top.png", 
+            "shirt_id": 535, 
+            "shorts": "phase_4/maps/btl/lawsuit_bot.png", 
+            "shorts_id": 303, 
+            "sleeves": "phase_4/maps/btl/lawsuit_sleeve.png", 
+            "sleeves_id": 511, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/nurse": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/nurse_top.png", 
+            "shirt_id": 536, 
+            "shorts": "phase_4/maps/btl/nurse_bot.png", 
+            "shorts_id": 304, 
+            "skirt": "phase_4/maps/btl/nurse_skirt.png", 
+            "skirt_id": 226, 
+            "sleeves": "phase_4/maps/btl/nurse_sleeve.png", 
+            "sleeves_id": 512, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/retrobot": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/retrobot_top.png", 
+            "shirt_id": 537, 
+            "shorts": "phase_4/maps/btl/retrobot_bot.png", 
+            "shorts_id": 305, 
+            "sleeves": "phase_4/maps/btl/retrobot_sleeve.png", 
+            "sleeves_id": 513, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_black": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_black.png", 
+            "shirt_id": 540, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_black.png", 
+            "shorts_id": 306, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_black.png", 
+            "skirt_id": 228, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_black.png", 
+            "sleeves_id": 516, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_blue": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_blue.png", 
+            "shirt_id": 541, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_blue.png", 
+            "shorts_id": 307, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_blue.png", 
+            "skirt_id": 229, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_blue.png", 
+            "sleeves_id": 517, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_black": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_black.png", 
+            "shirt_id": 542, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_blue": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_blue.png", 
+            "shirt_id": 543, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_cyan": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_cyan.png", 
+            "shirt_id": 544, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_green": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_green.png", 
+            "shirt_id": 545, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_orange": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_orange.png", 
+            "shirt_id": 546, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_pink": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_pink.png", 
+            "shirt_id": 547, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_purple": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_purple.png", 
+            "shirt_id": 548, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_red": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_red.png", 
+            "shirt_id": 549, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_white": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_white.png", 
+            "shirt_id": 550, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_button_yellow": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_button_yellow.png", 
+            "shirt_id": 551, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_cyan": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_cyan.png", 
+            "shirt_id": 552, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_cyan.png", 
+            "shorts_id": 308, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_cyan.png", 
+            "skirt_id": 230, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_cyan.png", 
+            "sleeves_id": 518, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_green": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_green.png", 
+            "shirt_id": 553, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_green.png", 
+            "shorts_id": 309, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_green.png", 
+            "skirt_id": 231, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_green.png", 
+            "sleeves_id": 519, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_orange": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_orange.png", 
+            "shirt_id": 554, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_orange.png", 
+            "shorts_id": 310, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_orange.png", 
+            "skirt_id": 232, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_orange.png", 
+            "sleeves_id": 520, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_pink": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_pink.png", 
+            "shirt_id": 555, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_pink.png", 
+            "shorts_id": 311, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_pink.png", 
+            "skirt_id": 233, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_pink.png", 
+            "sleeves_id": 521, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_purple": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_purple.png", 
+            "shirt_id": 556, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_purple.png", 
+            "shorts_id": 312, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_purple.png", 
+            "skirt_id": 234, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_purple.png", 
+            "sleeves_id": 522, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_red": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_red.png", 
+            "shirt_id": 557, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_red.png", 
+            "shorts_id": 313, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_red.png", 
+            "skirt_id": 235, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_red.png", 
+            "sleeves_id": 523, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_white": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_white.png", 
+            "shirt_id": 558, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_white.png", 
+            "shorts_id": 314, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_white.png", 
+            "skirt_id": 236, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_white.png", 
+            "sleeves_id": 524, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/sailor/sailor_yellow": {
+            "folder": "btl/sailor", 
+            "shirt": "phase_4/maps/btl/sailor/sailor_top_yellow.png", 
+            "shirt_id": 559, 
+            "shorts": "phase_4/maps/btl/sailor/sailor_bot_yellow.png", 
+            "shorts_id": 315, 
+            "skirt": "phase_4/maps/btl/sailor/sailor_skirt_yellow.png", 
+            "skirt_id": 237, 
+            "sleeves": "phase_4/maps/btl/sailor/sailor_sleeve_yellow.png", 
+            "sleeves_id": 525, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/seven": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/seven_shirt.png", 
+            "shirt_id": 538, 
+            "skirt": "phase_4/maps/btl/seven_skirt.png", 
+            "skirt_id": 227, 
+            "sleeves": "phase_4/maps/btl/seven_sleeve.png", 
+            "sleeves_id": 514, 
+            "source": "phase_4"
+        }, 
+        "phase_4:btl/v_resist": {
+            "folder": "btl", 
+            "shirt": "phase_4/maps/btl/v_resist_shirt.png", 
+            "shirt_id": 539, 
+            "sleeves": "phase_4/maps/btl/v_resist_sleeve.png", 
+            "sleeves_id": 515, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cat7_01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt_Cat7_01.jpg", 
+            "shirt_id": 218, 
+            "shorts": "phase_4/maps/shortsCat7_01.jpg", 
+            "shorts_id": 97, 
+            "skirt": "phase_4/maps/skirtCat7_01.jpg", 
+            "skirt_id": 91, 
+            "sleeves": "phase_4/maps/shirt_sleeveCat7_01.jpg", 
+            "sleeves_id": 213, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cat7_02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt_Cat7_02.jpg", 
+            "shirt_id": 219, 
+            "sleeves": "phase_4/maps/shirt_sleeveCat7_02.jpg", 
+            "sleeves_id": 214, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contest_backpack": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/contest_backpack_sleeve.jpg", 
+            "sleeves_id": 190, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contest_leder": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/Contest_leder_sleeve.jpg", 
+            "sleeves_id": 172, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contest_mellon_2": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/contest_mellon_sleeve2.jpg", 
+            "sleeves_id": 191, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contest_race": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/contest_race_sleeve.jpg", 
+            "sleeves_id": 192, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contestfishingvest_1": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ContestfishingVestSleeve1.jpg", 
+            "sleeves_id": 173, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contestfishingvest_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ContestfishingVestShirt2.jpg", 
+            "shirt_id": 181, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contestfishtank_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ContestFishtankShirt1.jpg", 
+            "shirt_id": 179, 
+            "sleeves": "phase_4/maps/ContestFishtankSleeve1.jpg", 
+            "sleeves_id": 170, 
+            "source": "phase_4"
+        }, 
+        "phase_4:contestpaw_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ContestPawShirt1.jpg", 
+            "shirt_id": 180, 
+            "sleeves": "phase_4/maps/ContestPawSleeve1.jpg", 
+            "sleeves_id": 171, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt1.jpg", 
+            "shirt_id": 182, 
+            "shorts": "phase_4/maps/CowboyShorts1.jpg", 
+            "shorts_id": 84, 
+            "skirt": "phase_4/maps/CowboySkirt1.jpg", 
+            "skirt_id": 82, 
+            "sleeves": "phase_4/maps/CowboySleeve1.jpg", 
+            "sleeves_id": 174, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt2.jpg", 
+            "shirt_id": 183, 
+            "shorts": "phase_4/maps/CowboyShorts2.jpg", 
+            "shorts_id": 85, 
+            "skirt": "phase_4/maps/CowboySkirt2.jpg", 
+            "skirt_id": 83, 
+            "sleeves": "phase_4/maps/CowboySleeve2.jpg", 
+            "sleeves_id": 175, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt3.jpg", 
+            "shirt_id": 184, 
+            "sleeves": "phase_4/maps/CowboySleeve3.jpg", 
+            "sleeves_id": 176, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt4.jpg", 
+            "shirt_id": 185, 
+            "sleeves": "phase_4/maps/CowboySleeve4.jpg", 
+            "sleeves_id": 177, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_5": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt5.jpg", 
+            "shirt_id": 186, 
+            "sleeves": "phase_4/maps/CowboySleeve5.jpg", 
+            "sleeves_id": 178, 
+            "source": "phase_4"
+        }, 
+        "phase_4:cowboy_6": {
+            "folder": "", 
+            "shirt": "phase_4/maps/CowboyShirt6.jpg", 
+            "shirt_id": 187, 
+            "sleeves": "phase_4/maps/CowboySleeve6.jpg", 
+            "sleeves_id": 179, 
+            "source": "phase_4"
+        }, 
+        "phase_4:dept_uniforms/bossbotuniform": {
+            "folder": "dept_uniforms", 
+            "shirt": "phase_4/maps/dept_uniforms/bossbotuniform_top.png", 
+            "shirt_id": 416, 
+            "shorts": "phase_4/maps/dept_uniforms/bossbotuniform_bot.png", 
+            "shorts_id": 216, 
+            "skirt": "phase_4/maps/dept_uniforms/bossbotuniform_skirt.png", 
+            "skirt_id": 174, 
+            "sleeves": "phase_4/maps/dept_uniforms/bossbotuniform_sleeve.png", 
+            "sleeves_id": 401, 
+            "source": "phase_4"
+        }, 
+        "phase_4:dept_uniforms/cashbotuniform": {
+            "folder": "dept_uniforms", 
+            "shirt": "phase_4/maps/dept_uniforms/cashbotuniform_top.png", 
+            "shirt_id": 417, 
+            "shorts": "phase_4/maps/dept_uniforms/cashbotuniform_bot.png", 
+            "shorts_id": 217, 
+            "skirt": "phase_4/maps/dept_uniforms/cashbotuniform_skirt.png", 
+            "skirt_id": 175, 
+            "sleeves": "phase_4/maps/dept_uniforms/cashbotuniform_sleeve.png", 
+            "sleeves_id": 402, 
+            "source": "phase_4"
+        }, 
+        "phase_4:dept_uniforms/lawbotuniform": {
+            "folder": "dept_uniforms", 
+            "shirt": "phase_4/maps/dept_uniforms/lawbotuniform_top.png", 
+            "shirt_id": 418, 
+            "shorts": "phase_4/maps/dept_uniforms/lawbotuniform_bot.png", 
+            "shorts_id": 218, 
+            "skirt": "phase_4/maps/dept_uniforms/lawbotuniform_skirt.png", 
+            "skirt_id": 176, 
+            "sleeves": "phase_4/maps/dept_uniforms/lawbotuniform_sleeve.png", 
+            "sleeves_id": 403, 
+            "source": "phase_4"
+        }, 
+        "phase_4:dept_uniforms/sellbotuniform": {
+            "folder": "dept_uniforms", 
+            "shirt": "phase_4/maps/dept_uniforms/sellbotuniform_top.png", 
+            "shirt_id": 419, 
+            "shorts": "phase_4/maps/dept_uniforms/sellbotuniform_bot.png", 
+            "shorts_id": 219, 
+            "skirt": "phase_4/maps/dept_uniforms/sellbotuniform_skirt.png", 
+            "skirt_id": 177, 
+            "sleeves": "phase_4/maps/dept_uniforms/sellbotuniform_sleeve.png", 
+            "sleeves_id": 404, 
+            "source": "phase_4"
+        }, 
+        "phase_4:desat_10": {
+            "folder": "", 
+            "shorts": "phase_4/maps/desat_shorts_10.jpg", 
+            "shorts_id": 89, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_1": {
+            "folder": "", 
+            "skirt": "phase_4/maps/female_skirt1.jpg", 
+            "skirt_id": 85, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_1b": {
+            "folder": "", 
+            "shirt": "phase_4/maps/female_shirt1b.jpg", 
+            "shirt_id": 196, 
+            "sleeves": "phase_4/maps/female_sleeve1b.jpg", 
+            "sleeves_id": 193, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/female_shirt2.jpg", 
+            "shirt_id": 197, 
+            "skirt": "phase_4/maps/female_skirt2.jpg", 
+            "skirt_id": 86, 
+            "sleeves": "phase_4/maps/female_sleeve2.jpg", 
+            "sleeves_id": 194, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/female_shirt3.jpg", 
+            "shirt_id": 198, 
+            "skirt": "phase_4/maps/female_skirt3.jpg", 
+            "skirt_id": 87, 
+            "sleeves": "phase_4/maps/female_sleeve3.jpg", 
+            "sleeves_id": 195, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_5new": {
+            "folder": "", 
+            "shirt": "phase_4/maps/female_shirt5New.jpg", 
+            "shirt_id": 199, 
+            "sleeves": "phase_4/maps/female_sleeve5New.jpg", 
+            "sleeves_id": 196, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_9new": {
+            "folder": "", 
+            "shirt": "phase_4/maps/female_shirt9New.png", 
+            "shirt_id": 200, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_new6": {
+            "folder": "", 
+            "shirt": "phase_4/maps/femaleShirtNew6.jpg", 
+            "shirt_id": 195, 
+            "sleeves": "phase_4/maps/female_sleeveNew6.jpg", 
+            "sleeves_id": 197, 
+            "source": "phase_4"
+        }, 
+        "phase_4:female_new9": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/female_sleeveNew9.png", 
+            "sleeves_id": 198, 
+            "source": "phase_4"
+        }, 
+        "phase_4:flannel_red": {
+            "folder": "", 
+            "shirt": "phase_4/maps/flannelshirt_red.jpg", 
+            "shirt_id": 201, 
+            "sleeves": "phase_4/maps/flannelsleeve_red.jpg", 
+            "sleeves_id": 199, 
+            "source": "phase_4"
+        }, 
+        "phase_4:frog": {
+            "folder": "", 
+            "shirt": "phase_4/maps/frog_top.png", 
+            "shirt_id": 202, 
+            "sleeves": "phase_4/maps/frog_sleeve.png", 
+            "sleeves_id": 200, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ghost": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt_ghost.jpg", 
+            "shirt_id": 220, 
+            "sleeves": "phase_4/maps/shirt_Sleeve_ghost.jpg", 
+            "sleeves_id": 211, 
+            "source": "phase_4"
+        }, 
+        "phase_4:gyro": {
+            "folder": "", 
+            "shirt": "phase_4/maps/gyro-shirt.png", 
+            "shirt_id": 203, 
+            "shorts": "phase_4/maps/gyro-shorts.png", 
+            "shorts_id": 90, 
+            "sleeves": "phase_4/maps/gyro-sleeve.png", 
+            "sleeves_id": 201, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/alchemist_outfit/tt_t_chr_avt_alchemist": {
+            "folder": "halloween/alchemist_outfit", 
+            "shorts": "phase_4/maps/halloween/alchemist_outfit/tt_t_chr_avt_shorts_alchemist.png", 
+            "shorts_id": 220, 
+            "skirt": "phase_4/maps/halloween/alchemist_outfit/tt_t_chr_avt_skirt_alchemist.png", 
+            "skirt_id": 178, 
+            "sleeves": "phase_4/maps/halloween/alchemist_outfit/tt_t_chr_avt_sleeve_alchemist.png", 
+            "sleeves_id": 405, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/alchemist_outfit/tt_t_chr_avt_alchemist_female": {
+            "folder": "halloween/alchemist_outfit", 
+            "shirt": "phase_4/maps/halloween/alchemist_outfit/tt_t_chr_avt_shirt_alchemist_female.png", 
+            "shirt_id": 420, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/alchemist_outfit/tt_t_chr_avt_alchemist_male": {
+            "folder": "halloween/alchemist_outfit", 
+            "shirt": "phase_4/maps/halloween/alchemist_outfit/tt_t_chr_avt_shirt_alchemist_male.png", 
+            "shirt_id": 421, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/bat_shirt/cc_t_clth_bats_purple": {
+            "folder": "halloween/bat_shirt", 
+            "shirt": "phase_4/maps/halloween/bat_shirt/cc_t_clth_shirt_bats_purple.png", 
+            "shirt_id": 422, 
+            "sleeves": "phase_4/maps/halloween/bat_shirt/cc_t_clth_shirt_bats_purple_sleeve.png", 
+            "sleeves_id": 406, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/bat_shirt/tt_t_chr_avt_halloween07": {
+            "folder": "halloween/bat_shirt", 
+            "shirt": "phase_4/maps/halloween/bat_shirt/tt_t_chr_avt_shirt_halloween07.png", 
+            "shirt_id": 423, 
+            "sleeves": "phase_4/maps/halloween/bat_shirt/tt_t_chr_avt_shirtSleeve_halloween07.png", 
+            "sleeves_id": 407, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/chup_outfit/tt_t_chr_chup": {
+            "folder": "halloween/chup_outfit", 
+            "shirt": "phase_4/maps/halloween/chup_outfit/tt_t_chr_shirt_chup.png", 
+            "shirt_id": 424, 
+            "shorts": "phase_4/maps/halloween/chup_outfit/tt_t_chr_shorts_chup.png", 
+            "shorts_id": 221, 
+            "skirt": "phase_4/maps/halloween/chup_outfit/tt_t_chr_skirt_chup.png", 
+            "skirt_id": 179, 
+            "sleeves": "phase_4/maps/halloween/chup_outfit/tt_t_chr_sleeve_chup.png", 
+            "sleeves_id": 408, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/clothing/cc_t_clth_pirate_ghost_green": {
+            "folder": "halloween/clothing", 
+            "shirt": "phase_4/maps/halloween/clothing/cc_t_clth_shirt_pirate_ghost_green.png", 
+            "shirt_id": 425, 
+            "shorts": "phase_4/maps/halloween/clothing/cc_t_clth_shorts_pirate_ghost_green.png", 
+            "shorts_id": 222, 
+            "skirt": "phase_4/maps/halloween/clothing/cc_t_clth_skirt_pirate_ghost_green.png", 
+            "skirt_id": 180, 
+            "sleeves": "phase_4/maps/halloween/clothing/cc_t_clth_shirt_pirate_ghost_green_sleeve.png", 
+            "sleeves_id": 409, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/clothing/cc_t_clth_spy_purple": {
+            "folder": "halloween/clothing", 
+            "shirt": "phase_4/maps/halloween/clothing/cc_t_clth_shirt_spy_purple.png", 
+            "shirt_id": 426, 
+            "shorts": "phase_4/maps/halloween/clothing/cc_t_clth_shorts_spy_purple.png", 
+            "shorts_id": 223, 
+            "skirt": "phase_4/maps/halloween/clothing/cc_t_clth_skirt_spy_purple.png", 
+            "skirt_id": 181, 
+            "sleeves": "phase_4/maps/halloween/clothing/cc_t_clth_shirt_spy_purple_sleeve.png", 
+            "sleeves_id": 410, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/clown_outfit/tt_t_chr_avt_clown": {
+            "folder": "halloween/clown_outfit", 
+            "shirt": "phase_4/maps/halloween/clown_outfit/tt_t_chr_avt_shirt_clown.png", 
+            "shirt_id": 427, 
+            "shorts": "phase_4/maps/halloween/clown_outfit/tt_t_chr_avt_shorts_clown.png", 
+            "shorts_id": 224, 
+            "skirt": "phase_4/maps/halloween/clown_outfit/tt_t_chr_avt_skirt_clown.png", 
+            "skirt_id": 182, 
+            "sleeves": "phase_4/maps/halloween/clown_outfit/tt_t_chr_avt_sleeve_clown.png", 
+            "sleeves_id": 411, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/detective_outfit/mystery": {
+            "folder": "halloween/detective_outfit", 
+            "shirt": "phase_4/maps/halloween/detective_outfit/mystery_top.png", 
+            "shirt_id": 428, 
+            "shorts": "phase_4/maps/halloween/detective_outfit/mystery_bot.png", 
+            "shorts_id": 225, 
+            "sleeves": "phase_4/maps/halloween/detective_outfit/mystery_sleeve.png", 
+            "sleeves_id": 412, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/dracula_outfit/tt_t_chr_avt_vampire": {
+            "folder": "halloween/dracula_outfit", 
+            "shirt": "phase_4/maps/halloween/dracula_outfit/tt_t_chr_avt_shirt_vampire.png", 
+            "shirt_id": 429, 
+            "shorts": "phase_4/maps/halloween/dracula_outfit/tt_t_chr_avt_shorts_vampire.png", 
+            "shorts_id": 226, 
+            "sleeves": "phase_4/maps/halloween/dracula_outfit/tt_t_chr_avt_shirtSleeve_vampire.png", 
+            "sleeves_id": 413, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/frankenstein_outfit/tt_t_chr_avt_frankenstien": {
+            "folder": "halloween/frankenstein_outfit", 
+            "shirt": "phase_4/maps/halloween/frankenstein_outfit/tt_t_chr_avt_shirt_frankenstien.png", 
+            "shirt_id": 430, 
+            "shorts": "phase_4/maps/halloween/frankenstein_outfit/tt_t_chr_avt_shorts_frankenstien.png", 
+            "shorts_id": 227, 
+            "sleeves": "phase_4/maps/halloween/frankenstein_outfit/tt_t_chr_avt_sleeve_frankenstien.png", 
+            "sleeves_id": 414, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/ghost_shirt/ghost": {
+            "folder": "halloween/ghost_shirt", 
+            "shirt": "phase_4/maps/halloween/ghost_shirt/shirt_ghost.png", 
+            "shirt_id": 431, 
+            "sleeves": "phase_4/maps/halloween/ghost_shirt/shirt_Sleeve_ghost.png", 
+            "sleeves_id": 415, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/gym_bat_outfit/cc_t_clth_tracksuit_gymbat": {
+            "folder": "halloween/gym_bat_outfit", 
+            "shirt": "phase_4/maps/halloween/gym_bat_outfit/cc_t_clth_shirt_tracksuit_gymbat.png", 
+            "shirt_id": 432, 
+            "shorts": "phase_4/maps/halloween/gym_bat_outfit/cc_t_clth_shorts_tracksuit_gymbat.png", 
+            "shorts_id": 228, 
+            "sleeves": "phase_4/maps/halloween/gym_bat_outfit/cc_t_clth_shirt_tracksuit_gymbat_sleeve.png", 
+            "sleeves_id": 416, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/halloweentown_outfit/hwtown": {
+            "folder": "halloween/halloweentown_outfit", 
+            "shirt": "phase_4/maps/halloween/halloweentown_outfit/hwtown_top.png", 
+            "shirt_id": 433, 
+            "shorts": "phase_4/maps/halloween/halloweentown_outfit/hwtown_bot.png", 
+            "shorts_id": 229, 
+            "sleeves": "phase_4/maps/halloween/halloweentown_outfit/hwtown_sleeve.png", 
+            "sleeves_id": 417, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/lazy_bones_outfit/lazy_bones": {
+            "folder": "halloween/lazy_bones_outfit", 
+            "shirt": "phase_4/maps/halloween/lazy_bones_outfit/lazy_bones_top.png", 
+            "shirt_id": 434, 
+            "shorts": "phase_4/maps/halloween/lazy_bones_outfit/lazy_bones_bot.png", 
+            "shorts_id": 230, 
+            "sleeves": "phase_4/maps/halloween/lazy_bones_outfit/lazy_bones_sleeve.png", 
+            "sleeves_id": 418, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/lynn_outfit/cc_t_clth_npc_lynn_hw": {
+            "folder": "halloween/lynn_outfit", 
+            "shirt": "phase_4/maps/halloween/lynn_outfit/cc_t_clth_shirt_npc_lynn_hw.png", 
+            "shirt_id": 435, 
+            "shorts": "phase_4/maps/halloween/lynn_outfit/cc_t_clth_shorts_npc_lynn_hw.png", 
+            "shorts_id": 231, 
+            "sleeves": "phase_4/maps/halloween/lynn_outfit/cc_t_clth_shirt_npc_lynn_hw_sleeve.png", 
+            "sleeves_id": 419, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/matriarchal_monarch_outfit/cc_t_clth_matrmonarch": {
+            "folder": "halloween/matriarchal_monarch_outfit", 
+            "shirt": "phase_4/maps/halloween/matriarchal_monarch_outfit/cc_t_clth_shirt_matrmonarch.png", 
+            "shirt_id": 436, 
+            "shorts": "phase_4/maps/halloween/matriarchal_monarch_outfit/cc_t_clth_shorts_matrmonarch.png", 
+            "shorts_id": 232, 
+            "sleeves": "phase_4/maps/halloween/matriarchal_monarch_outfit/cc_t_clth_shirt_matrmonarch_sleeve.png", 
+            "sleeves_id": 420, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/mertoon_outfit/cc_t_clth_mertoon_blue": {
+            "folder": "halloween/mertoon_outfit", 
+            "shirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_blue.png", 
+            "shirt_id": 437, 
+            "shorts": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shorts_mertoon_blue.png", 
+            "shorts_id": 233, 
+            "skirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_skirt_mertoon_blue.png", 
+            "skirt_id": 183, 
+            "sleeves": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_blue_sleeve.png", 
+            "sleeves_id": 421, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/mertoon_outfit/cc_t_clth_mertoon_green": {
+            "folder": "halloween/mertoon_outfit", 
+            "shirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_green.png", 
+            "shirt_id": 438, 
+            "shorts": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shorts_mertoon_green.png", 
+            "shorts_id": 234, 
+            "skirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_skirt_mertoon_green.png", 
+            "skirt_id": 184, 
+            "sleeves": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_green_sleeve.png", 
+            "sleeves_id": 422, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/mertoon_outfit/cc_t_clth_mertoon_purple": {
+            "folder": "halloween/mertoon_outfit", 
+            "shirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_purple.png", 
+            "shirt_id": 439, 
+            "shorts": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shorts_mertoon_purple.png", 
+            "shorts_id": 235, 
+            "skirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_skirt_mertoon_purple.png", 
+            "skirt_id": 185, 
+            "sleeves": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_purple_sleeve.png", 
+            "sleeves_id": 423, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/mertoon_outfit/cc_t_clth_mertoon_yellow": {
+            "folder": "halloween/mertoon_outfit", 
+            "shirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_yellow.png", 
+            "shirt_id": 440, 
+            "shorts": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shorts_mertoon_yellow.png", 
+            "shorts_id": 236, 
+            "skirt": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_skirt_mertoon_yellow.png", 
+            "skirt_id": 186, 
+            "sleeves": "phase_4/maps/halloween/mertoon_outfit/cc_t_clth_shirt_mertoon_yellow_sleeve.png", 
+            "sleeves_id": 424, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/misc_outfit/cargo": {
+            "folder": "halloween/misc_outfit", 
+            "shirt": "phase_4/maps/halloween/misc_outfit/cargo_top.png", 
+            "shirt_id": 441, 
+            "sleeves": "phase_4/maps/halloween/misc_outfit/cargo_sleeve.png", 
+            "sleeves_id": 425, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/misc_outfit/flannel": {
+            "folder": "halloween/misc_outfit", 
+            "shirt": "phase_4/maps/halloween/misc_outfit/flannel_top.png", 
+            "shirt_id": 442, 
+            "sleeves": "phase_4/maps/halloween/misc_outfit/flannel_sleeve.png", 
+            "sleeves_id": 426, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/misc_outfit/floral": {
+            "folder": "halloween/misc_outfit", 
+            "shorts": "phase_4/maps/halloween/misc_outfit/floral_bot.png", 
+            "shorts_id": 237, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/moonsuit_outfit/tt_t_chr_avt_moonsuit": {
+            "folder": "halloween/moonsuit_outfit", 
+            "shirt": "phase_4/maps/halloween/moonsuit_outfit/tt_t_chr_avt_shirt_moonsuit.png", 
+            "shirt_id": 443, 
+            "shorts": "phase_4/maps/halloween/moonsuit_outfit/tt_t_chr_avt_shorts_moonsuit.png", 
+            "shorts_id": 238, 
+            "sleeves": "phase_4/maps/halloween/moonsuit_outfit/tt_t_chr_avt_sleeve_moonsuit.png", 
+            "sleeves_id": 427, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/npc_lynn_hw_outfit/cc_t_clth_npc_lynn_hw": {
+            "folder": "halloween/npc_lynn_hw_outfit", 
+            "shirt": "phase_4/maps/halloween/npc_lynn_hw_outfit/cc_t_clth_shirt_npc_lynn_hw.png", 
+            "shirt_id": 444, 
+            "shorts": "phase_4/maps/halloween/npc_lynn_hw_outfit/cc_t_clth_shorts_npc_lynn_hw.png", 
+            "shorts_id": 239, 
+            "sleeves": "phase_4/maps/halloween/npc_lynn_hw_outfit/cc_t_clth_shirt_npc_lynn_hw_sleeve.png", 
+            "sleeves_id": 428, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/npc_reid_hw_outfit/cc_t_clth_npc_reid_hw": {
+            "folder": "halloween/npc_reid_hw_outfit", 
+            "shirt": "phase_4/maps/halloween/npc_reid_hw_outfit/cc_t_clth_shirt_npc_reid_hw.png", 
+            "shirt_id": 445, 
+            "skirt": "phase_4/maps/halloween/npc_reid_hw_outfit/cc_t_clth_skirt_npc_reid_hw.png", 
+            "skirt_id": 187, 
+            "sleeves": "phase_4/maps/halloween/npc_reid_hw_outfit/cc_t_clth_shirt_npc_reid_hw_sleeve.png", 
+            "sleeves_id": 429, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/press_expr_outfit/cc_t_clth_press_expr": {
+            "folder": "halloween/press_expr_outfit", 
+            "shirt": "phase_4/maps/halloween/press_expr_outfit/cc_t_clth_shirt_press_expr.png", 
+            "shirt_id": 446, 
+            "shorts": "phase_4/maps/halloween/press_expr_outfit/cc_t_clth_shorts_press_expr.png", 
+            "shorts_id": 240, 
+            "sleeves": "phase_4/maps/halloween/press_expr_outfit/cc_t_clth_shirt_press_expr_sleeve.png", 
+            "sleeves_id": 430, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/press_eyes_outfit/cc_t_clth_press_eyes": {
+            "folder": "halloween/press_eyes_outfit", 
+            "shirt": "phase_4/maps/halloween/press_eyes_outfit/cc_t_clth_shirt_press_eyes.png", 
+            "shirt_id": 447, 
+            "shorts": "phase_4/maps/halloween/press_eyes_outfit/cc_t_clth_shorts_press_eyes.png", 
+            "shorts_id": 241, 
+            "sleeves": "phase_4/maps/halloween/press_eyes_outfit/cc_t_clth_shirt_press_eyes_sleeve.png", 
+            "sleeves_id": 431, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/press_painter_outfit/cc_t_clth_press_painter": {
+            "folder": "halloween/press_painter_outfit", 
+            "shirt": "phase_4/maps/halloween/press_painter_outfit/cc_t_clth_shirt_press_painter.png", 
+            "shirt_id": 448, 
+            "shorts": "phase_4/maps/halloween/press_painter_outfit/cc_t_clth_shorts_press_painter.png", 
+            "shorts_id": 242, 
+            "skirt": "phase_4/maps/halloween/press_painter_outfit/cc_t_clth_skirt_press_painter.png", 
+            "skirt_id": 188, 
+            "sleeves": "phase_4/maps/halloween/press_painter_outfit/cc_t_clth_shirt_press_painter_sleeve.png", 
+            "sleeves_id": 432, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/press_seb_outfit/cc_t_clth_press_seb": {
+            "folder": "halloween/press_seb_outfit", 
+            "shirt": "phase_4/maps/halloween/press_seb_outfit/cc_t_clth_shirt_press_seb.png", 
+            "shirt_id": 449, 
+            "shorts": "phase_4/maps/halloween/press_seb_outfit/cc_t_clth_shorts_press_seb.png", 
+            "shorts_id": 243, 
+            "sleeves": "phase_4/maps/halloween/press_seb_outfit/cc_t_clth_shirt_press_seb_sleeve.png", 
+            "sleeves_id": 433, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/princess_outfit/cc_t_clth_princess_hd": {
+            "folder": "halloween/princess_outfit", 
+            "shirt": "phase_4/maps/halloween/princess_outfit/cc_t_clth_shirt_princess_hd.png", 
+            "shirt_id": 450, 
+            "shorts": "phase_4/maps/halloween/princess_outfit/cc_t_clth_shorts_princess_hd.png", 
+            "shorts_id": 244, 
+            "skirt": "phase_4/maps/halloween/princess_outfit/cc_t_clth_skirt_princess_hd.png", 
+            "skirt_id": 189, 
+            "sleeves": "phase_4/maps/halloween/princess_outfit/cc_t_clth_shirt_princess_hd_sleeve.png", 
+            "sleeves_id": 434, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/pumkin_shirt/pumkin": {
+            "folder": "halloween/pumkin_shirt", 
+            "shirt": "phase_4/maps/halloween/pumkin_shirt/shirt_pumkin.png", 
+            "shirt_id": 451, 
+            "sleeves": "phase_4/maps/halloween/pumkin_shirt/shirt_Sleeve_pumkin.png", 
+            "sleeves_id": 435, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/reid_outfit/cc_t_clth_npc_reid_hw": {
+            "folder": "halloween/reid_outfit", 
+            "shirt": "phase_4/maps/halloween/reid_outfit/cc_t_clth_shirt_npc_reid_hw.png", 
+            "shirt_id": 452, 
+            "skirt": "phase_4/maps/halloween/reid_outfit/cc_t_clth_skirt_npc_reid_hw.png", 
+            "skirt_id": 190, 
+            "sleeves": "phase_4/maps/halloween/reid_outfit/cc_t_clth_shirt_npc_reid_hw_sleeve.png", 
+            "sleeves_id": 436, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/scarecrow_outfit/tt_t_chr_avt_scarecrow": {
+            "folder": "halloween/scarecrow_outfit", 
+            "shorts": "phase_4/maps/halloween/scarecrow_outfit/tt_t_chr_avt_shorts_scarecrow.png", 
+            "shorts_id": 245, 
+            "skirt": "phase_4/maps/halloween/scarecrow_outfit/tt_t_chr_avt_skirt_scarecrow.png", 
+            "skirt_id": 191, 
+            "sleeves": "phase_4/maps/halloween/scarecrow_outfit/tt_t_chr_avt_sleeve_scarecrow.png", 
+            "sleeves_id": 437, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/scarecrow_outfit/tt_t_chr_avt_scarecrow_female": {
+            "folder": "halloween/scarecrow_outfit", 
+            "shirt": "phase_4/maps/halloween/scarecrow_outfit/tt_t_chr_avt_shirt_scarecrow_female.png", 
+            "shirt_id": 453, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/scarecrow_outfit/tt_t_chr_avt_scarecrow_male": {
+            "folder": "halloween/scarecrow_outfit", 
+            "shirt": "phase_4/maps/halloween/scarecrow_outfit/tt_t_chr_avt_shirt_scarecrow_male.png", 
+            "shirt_id": 454, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/scientistd_outfit/tt_t_chr_avt_scientistd": {
+            "folder": "halloween/scientistD_outfit", 
+            "shirt": "phase_4/maps/halloween/scientistD_outfit/tt_t_chr_avt_shirt_scientistd.png", 
+            "shirt_id": 455, 
+            "shorts": "phase_4/maps/halloween/scientistD_outfit/tt_t_chr_avt_shorts_scientistd.png", 
+            "shorts_id": 246, 
+            "sleeves": "phase_4/maps/halloween/scientistD_outfit/tt_t_chr_avt_sleeve_scientistd.png", 
+            "sleeves_id": 438, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/skele_orange_outfit/cc_t_clth_skeleton_orange": {
+            "folder": "halloween/skele_orange_outfit", 
+            "shirt": "phase_4/maps/halloween/skele_orange_outfit/cc_t_clth_shirt_skeleton_orange.png", 
+            "shirt_id": 456, 
+            "shorts": "phase_4/maps/halloween/skele_orange_outfit/cc_t_clth_shorts_skeleton_orange.png", 
+            "shorts_id": 247, 
+            "sleeves": "phase_4/maps/halloween/skele_orange_outfit/cc_t_clth_shirt_skeleton_orange_sleeve.png", 
+            "sleeves_id": 439, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/skeleton_outfit/tt_t_chr_avt_halloween3": {
+            "folder": "halloween/skeleton_outfit", 
+            "shirt": "phase_4/maps/halloween/skeleton_outfit/tt_t_chr_avt_shirt_halloween3.png", 
+            "shirt_id": 457, 
+            "shorts": "phase_4/maps/halloween/skeleton_outfit/tt_t_chr_avt_shorts_halloween3.png", 
+            "shorts_id": 248, 
+            "skirt": "phase_4/maps/halloween/skeleton_outfit/tt_t_chr_avt_skirt_halloween3.png", 
+            "skirt_id": 192, 
+            "sleeves": "phase_4/maps/halloween/skeleton_outfit/tt_t_chr_avt_shirtSleeve_halloween3.png", 
+            "sleeves_id": 440, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/spider_outfit/tt_t_chr_avt_halloween4": {
+            "folder": "halloween/spider_outfit", 
+            "shirt": "phase_4/maps/halloween/spider_outfit/tt_t_chr_avt_shirt_halloween4.png", 
+            "shirt_id": 458, 
+            "shorts": "phase_4/maps/halloween/spider_outfit/tt_t_chr_avt_shorts_halloween4.png", 
+            "shorts_id": 249, 
+            "skirt": "phase_4/maps/halloween/spider_outfit/tt_t_chr_avt_skirt_halloween4.png", 
+            "skirt_id": 193, 
+            "sleeves": "phase_4/maps/halloween/spider_outfit/tt_t_chr_avt_shirtSleeve_halloween4.png", 
+            "sleeves_id": 441, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/supertoon_outfit/tt_t_chr_avt_halloween2": {
+            "folder": "halloween/supertoon_outfit", 
+            "skirt": "phase_4/maps/halloween/supertoon_outfit/tt_t_chr_avt_skirt_halloween2.png", 
+            "skirt_id": 194, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/supertoon_outfit/tt_t_chr_avt_supertoon": {
+            "folder": "halloween/supertoon_outfit", 
+            "shirt": "phase_4/maps/halloween/supertoon_outfit/tt_t_chr_avt_shirt_supertoon.png", 
+            "shirt_id": 459, 
+            "shorts": "phase_4/maps/halloween/supertoon_outfit/tt_t_chr_avt_shorts_supertoon.png", 
+            "shorts_id": 250, 
+            "sleeves": "phase_4/maps/halloween/supertoon_outfit/tt_t_chr_avt_shirtSleeve_supertoon.png", 
+            "sleeves_id": 442, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/sus_salesman_outfit/cc_t_clth_sus_salesman": {
+            "folder": "halloween/sus_salesman_outfit", 
+            "shirt": "phase_4/maps/halloween/sus_salesman_outfit/cc_t_clth_shirt_sus_salesman.png", 
+            "shirt_id": 460, 
+            "shorts": "phase_4/maps/halloween/sus_salesman_outfit/cc_t_clth_shorts_sus_salesman.png", 
+            "shorts_id": 251, 
+            "sleeves": "phase_4/maps/halloween/sus_salesman_outfit/cc_t_clth_shirt_sus_salesman_sleeve.png", 
+            "sleeves_id": 443, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/tenacious_tv_outfit/cc_t_clth_tenacioustv_red": {
+            "folder": "halloween/tenacious_tv_outfit", 
+            "shirt": "phase_4/maps/halloween/tenacious_tv_outfit/cc_t_clth_shirt_tenacioustv_red.png", 
+            "shirt_id": 461, 
+            "shorts": "phase_4/maps/halloween/tenacious_tv_outfit/cc_t_clth_shorts_tenacioustv_red.png", 
+            "shorts_id": 252, 
+            "sleeves": "phase_4/maps/halloween/tenacious_tv_outfit/cc_t_clth_shirt_tenacioustv_red_sleeve.png", 
+            "sleeves_id": 444, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/vrbys_outfit/cc_t_clth_vrbys": {
+            "folder": "halloween/vrbys_outfit", 
+            "shirt": "phase_4/maps/halloween/vrbys_outfit/cc_t_clth_shirt_vrbys.png", 
+            "shirt_id": 462, 
+            "shorts": "phase_4/maps/halloween/vrbys_outfit/cc_t_clth_shorts_vrbys.png", 
+            "shorts_id": 253, 
+            "skirt": "phase_4/maps/halloween/vrbys_outfit/cc_t_clth_skirt_vrbys.png", 
+            "skirt_id": 195, 
+            "sleeves": "phase_4/maps/halloween/vrbys_outfit/cc_t_clth_shirt_vrbys_sleeve.png", 
+            "sleeves_id": 445, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/witch_outfit/tt_t_chr_avt_witch": {
+            "folder": "halloween/witch_outfit", 
+            "shirt": "phase_4/maps/halloween/witch_outfit/tt_t_chr_avt_shirt_witch.png", 
+            "shirt_id": 463, 
+            "shorts": "phase_4/maps/halloween/witch_outfit/tt_t_chr_avt_shorts_witch.png", 
+            "shorts_id": 254, 
+            "skirt": "phase_4/maps/halloween/witch_outfit/tt_t_chr_avt_skirt_witch.png", 
+            "skirt_id": 196, 
+            "sleeves": "phase_4/maps/halloween/witch_outfit/tt_t_chr_avt_sleeve_witch.png", 
+            "sleeves_id": 446, 
+            "source": "phase_4"
+        }, 
+        "phase_4:halloween/witch_shirt/cc_t_clth_witch_blue": {
+            "folder": "halloween/witch_shirt", 
+            "shirt": "phase_4/maps/halloween/witch_shirt/cc_t_clth_shirt_witch_blue.png", 
+            "shirt_id": 464, 
+            "sleeves": "phase_4/maps/halloween/witch_shirt/cc_t_clth_shirt_witch_blue_sleeve.png", 
+            "sleeves_id": 447, 
+            "source": "phase_4"
+        }, 
+        "phase_4:holiday_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/holiday_shirt1.jpg", 
+            "shirt_id": 206, 
+            "sleeves": "phase_4/maps/holidaySleeve1.jpg", 
+            "sleeves_id": 202, 
+            "source": "phase_4"
+        }, 
+        "phase_4:holiday_2b": {
+            "folder": "", 
+            "shirt": "phase_4/maps/holiday_shirt2b.jpg", 
+            "shirt_id": 207, 
+            "source": "phase_4"
+        }, 
+        "phase_4:holiday_3": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/holidaySleeve3.jpg", 
+            "sleeves_id": 203, 
+            "source": "phase_4"
+        }, 
+        "phase_4:holiday_3b": {
+            "folder": "", 
+            "shirt": "phase_4/maps/holidayShirt3b.jpg", 
+            "shirt_id": 204, 
+            "source": "phase_4"
+        }, 
+        "phase_4:holiday_4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/holidayShirt4.jpg", 
+            "shirt_id": 205, 
+            "source": "phase_4"
+        }, 
+        "phase_4:i60": {
+            "folder": "", 
+            "shirt": "phase_4/maps/i60_shirt.jpg", 
+            "shirt_id": 208, 
+            "shorts": "phase_4/maps/i60_shorts.jpg", 
+            "shorts_id": 91, 
+            "sleeves": "phase_4/maps/i60_sleeves.jpg", 
+            "sleeves_id": 204, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male4b": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirtMale4B.jpg", 
+            "shirt_id": 215, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/male_shirt1.jpg", 
+            "shirt_id": 209, 
+            "sleeves": "phase_4/maps/male_sleeve1.jpg", 
+            "sleeves_id": 205, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male_2_palm": {
+            "folder": "", 
+            "shirt": "phase_4/maps/male_shirt2_palm.jpg", 
+            "shirt_id": 210, 
+            "sleeves": "phase_4/maps/male_sleeve2_palm.jpg", 
+            "sleeves_id": 206, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male_3c": {
+            "folder": "", 
+            "shirt": "phase_4/maps/male_shirt3c.jpg", 
+            "shirt_id": 211, 
+            "sleeves": "phase_4/maps/male_sleeve3c.jpg", 
+            "sleeves_id": 207, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male_4new": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/male_sleeve4New.jpg", 
+            "sleeves_id": 208, 
+            "source": "phase_4"
+        }, 
+        "phase_4:male_new12": {
+            "folder": "", 
+            "shirt": "phase_4/maps/male_shirtNew12.png", 
+            "shirt_id": 212, 
+            "sleeves": "phase_4/maps/male_sleeveNew12.png", 
+            "sleeves_id": 209, 
+            "source": "phase_4"
+        }, 
+        "phase_4:malenew7": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirtMaleNew7.jpg", 
+            "shirt_id": 216, 
+            "sleeves": "phase_4/maps/SleeveMaleNew7.jpg", 
+            "sleeves_id": 183, 
+            "source": "phase_4"
+        }, 
+        "phase_4:new5": {
+            "folder": "", 
+            "skirt": "phase_4/maps/skirtNew5.jpg", 
+            "skirt_id": 92, 
+            "source": "phase_4"
+        }, 
+        "phase_4:new6": {
+            "folder": "", 
+            "skirt": "phase_4/maps/skirtNew6.png", 
+            "skirt_id": 93, 
+            "source": "phase_4"
+        }, 
+        "phase_4:outback/tt_t_chr_avt_outback": {
+            "folder": "outback", 
+            "shirt": "phase_4/maps/outback/tt_t_chr_avt_shirt_outback_shirt.png", 
+            "shirt_id": 465, 
+            "sleeves": "phase_4/maps/outback/tt_t_chr_avt_sleeve_outback_shirt.png", 
+            "sleeves_id": 448, 
+            "source": "phase_4"
+        }, 
+        "phase_4:outback/tt_t_chr_avt_outback_uniform": {
+            "folder": "outback", 
+            "shirt": "phase_4/maps/outback/tt_t_chr_avt_shirt_outback_uniform.png", 
+            "shirt_id": 466, 
+            "shorts": "phase_4/maps/outback/tt_t_chr_avt_shorts_outback_uniform.png", 
+            "shorts_id": 255, 
+            "skirt": "phase_4/maps/outback/tt_t_chr_avt_skirt_outback_uniform.png", 
+            "skirt_id": 197, 
+            "sleeves": "phase_4/maps/outback/tt_t_chr_avt_sleeve_outback_uniform.png", 
+            "sleeves_id": 449, 
+            "source": "phase_4"
+        }, 
+        "phase_4:pj_blue": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/PJSleeveBlue.jpg", 
+            "sleeves_id": 180, 
+            "source": "phase_4"
+        }, 
+        "phase_4:pj_purple": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/PJSleevePurple.jpg", 
+            "sleeves_id": 181, 
+            "source": "phase_4"
+        }, 
+        "phase_4:pj_red": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/PJSleeveRed.jpg", 
+            "sleeves_id": 182, 
+            "source": "phase_4"
+        }, 
+        "phase_4:pumkin": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt_pumkin.jpg", 
+            "shirt_id": 221, 
+            "sleeves": "phase_4/maps/shirt_Sleeve_pumkin.jpg", 
+            "sleeves_id": 212, 
+            "source": "phase_4"
+        }, 
+        "phase_4:pumpkin": {
+            "folder": "", 
+            "shorts": "phase_4/maps/pumpkin_short.png", 
+            "shorts_id": 92, 
+            "source": "phase_4"
+        }, 
+        "phase_4:purple_1": {
+            "folder": "", 
+            "shorts": "phase_4/maps/Purple_shorts_1.jpg", 
+            "shorts_id": 86, 
+            "source": "phase_4"
+        }, 
+        "phase_4:red_1": {
+            "folder": "", 
+            "shorts": "phase_4/maps/Red_shorts_1.jpg", 
+            "shorts_id": 87, 
+            "source": "phase_4"
+        }, 
+        "phase_4:scrooge": {
+            "folder": "", 
+            "shirt": "phase_4/maps/scrooge-shirt.png", 
+            "shirt_id": 213, 
+            "shorts": "phase_4/maps/scrooge-shorts.png", 
+            "shorts_id": 93, 
+            "sleeves": "phase_4/maps/scrooge-sleeve.png", 
+            "sleeves_id": 210, 
+            "source": "phase_4"
+        }, 
+        "phase_4:skrt1": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/sleeve_skrt1.png", 
+            "sleeves_id": 217, 
+            "source": "phase_4"
+        }, 
+        "phase_4:skrt2": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/sleeve_skrt2.png", 
+            "sleeves_id": 218, 
+            "source": "phase_4"
+        }, 
+        "phase_4:skrt3": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/sleeve_skrt3.png", 
+            "sleeves_id": 219, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/bro/tt_t_chr_avt_bro": {
+            "folder": "social/bro", 
+            "shirt": "phase_4/maps/social/bro/tt_t_chr_avt_shirt_bro.png", 
+            "shirt_id": 467, 
+            "shorts": "phase_4/maps/social/bro/tt_t_chr_avt_shorts_bro.png", 
+            "shorts_id": 256, 
+            "sleeves": "phase_4/maps/social/bro/tt_t_chr_avt_sleeve_bro.png", 
+            "sleeves_id": 450, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/cyberpunk/cc_t_clth_cyberpunk": {
+            "folder": "social/cyberpunk", 
+            "shirt": "phase_4/maps/social/cyberpunk/cc_t_clth_shirt_cyberpunk.png", 
+            "shirt_id": 468, 
+            "shorts": "phase_4/maps/social/cyberpunk/cc_t_clth_shorts_cyberpunk.png", 
+            "shorts_id": 257, 
+            "skirt": "phase_4/maps/social/cyberpunk/cc_t_clth_skirt_cyberpunk.png", 
+            "skirt_id": 198, 
+            "sleeves": "phase_4/maps/social/cyberpunk/cc_t_clth_sleeve_cyberpunk.png", 
+            "sleeves_id": 451, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/discord/cc_t_clth_promo_chairman": {
+            "folder": "social/discord", 
+            "shirt": "phase_4/maps/social/discord/cc_t_clth_shirt_promo_chairman.png", 
+            "shirt_id": 469, 
+            "shorts": "phase_4/maps/social/discord/cc_t_clth_shorts_promo_chairman.png", 
+            "shorts_id": 258, 
+            "sleeves": "phase_4/maps/social/discord/cc_t_clth_shirt_promo_chairman_sleeve.png", 
+            "sleeves_id": 453, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/discord/cc_t_clth_promo_chairman_exec": {
+            "folder": "social/discord", 
+            "shirt": "phase_4/maps/social/discord/cc_t_clth_shirt_promo_chairman_exec.png", 
+            "shirt_id": 470, 
+            "shorts": "phase_4/maps/social/discord/cc_t_clth_shorts_promo_chairman_exec.png", 
+            "shorts_id": 259, 
+            "sleeves": "phase_4/maps/social/discord/cc_t_clth_shirt_promo_chairman_exec_sleeve.png", 
+            "sleeves_id": 452, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/doctor_toon/tt_t_chr_avt_doctortoon": {
+            "folder": "social/doctor_toon", 
+            "shirt": "phase_4/maps/social/doctor_toon/tt_t_chr_avt_shirt_doctortoon.png", 
+            "shirt_id": 471, 
+            "shorts": "phase_4/maps/social/doctor_toon/tt_t_chr_avt_shorts_doctortoon.png", 
+            "shorts_id": 260, 
+            "skirt": "phase_4/maps/social/doctor_toon/tt_t_chr_avt_skirt_doctortoon.png", 
+            "skirt_id": 199, 
+            "sleeves": "phase_4/maps/social/doctor_toon/tt_t_chr_avt_sleeve_doctortoon.png", 
+            "sleeves_id": 454, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/doe/tt_t_chr_avt_doe": {
+            "folder": "social/doe", 
+            "shirt": "phase_4/maps/social/doe/tt_t_chr_avt_shirt_doe.png", 
+            "shirt_id": 472, 
+            "skirt": "phase_4/maps/social/doe/tt_t_chr_avt_skirt_doe.png", 
+            "skirt_id": 200, 
+            "sleeves": "phase_4/maps/social/doe/tt_t_chr_avt_sleeve_doe.png", 
+            "sleeves_id": 455, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_artistic": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_artistic.png", 
+            "shirt_id": 473, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_artistic.png", 
+            "sleeves_id": 456, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_cardsf": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_cardsF.png", 
+            "shirt_id": 474, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_chef": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_chef.png", 
+            "shirt_id": 475, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_chef.png", 
+            "shorts_id": 261, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_chef.png", 
+            "skirt_id": 201, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_chef.png", 
+            "sleeves_id": 457, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_donutblue": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_donutblue.png", 
+            "shirt_id": 476, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_donutblue.png", 
+            "sleeves_id": 458, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_donutchocolate": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_donutchocolate.png", 
+            "shirt_id": 477, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_donutchocolate.png", 
+            "sleeves_id": 459, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_donutlemon": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_donutlemon.png", 
+            "shirt_id": 478, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_donutlemon.png", 
+            "sleeves_id": 460, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_donutpink": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_donutpink.png", 
+            "shirt_id": 479, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_donutpink.png", 
+            "sleeves_id": 461, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_donutvanilla": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_donutvanilla.png", 
+            "shirt_id": 480, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_donutvanilla.png", 
+            "sleeves_id": 462, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_engineer": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_engineer.png", 
+            "shirt_id": 481, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_engineer.png", 
+            "shorts_id": 262, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_engineer.png", 
+            "skirt_id": 202, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_engineer.png", 
+            "sleeves_id": 463, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_flannel": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_flannel.png", 
+            "shirt_id": 482, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_flannel.png", 
+            "sleeves_id": 464, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_fruitpie": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_fruitpie.png", 
+            "shirt_id": 483, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_fruitpie.png", 
+            "shorts_id": 263, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_fruitpie.png", 
+            "skirt_id": 203, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_fruitpie.png", 
+            "sleeves_id": 465, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_gumball": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_gumball.png", 
+            "shirt_id": 484, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_gumball.png", 
+            "shorts_id": 264, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_gumball.png", 
+            "skirt_id": 204, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_gumball.png", 
+            "sleeves_id": 466, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_moon": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_moon.png", 
+            "shirt_id": 485, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_moon.png", 
+            "shorts_id": 265, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_moon.png", 
+            "skirt_id": 205, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_moon.png", 
+            "sleeves_id": 467, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_painter": {
+            "folder": "social/gumball", 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_painter.png", 
+            "shorts_id": 266, 
+            "skirt": "phase_4/maps/social/gumball/tt_t_chr_avt_skirt_painter.png", 
+            "skirt_id": 206, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_painter_blue": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_painter_blue.png", 
+            "shirt_id": 486, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_painter_blue.png", 
+            "sleeves_id": 468, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_painter_green": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_painter_green.png", 
+            "shirt_id": 487, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_painter_green.png", 
+            "sleeves_id": 469, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_painter_red": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_painter_red.png", 
+            "shirt_id": 488, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_painter_red.png", 
+            "sleeves_id": 470, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_painter_yellow": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_painter_yellow.png", 
+            "shirt_id": 489, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_painter_yellow.png", 
+            "sleeves_id": 471, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/gumball/tt_t_chr_avt_sleepwalker": {
+            "folder": "social/gumball", 
+            "shirt": "phase_4/maps/social/gumball/tt_t_chr_avt_shirt_sleepwalker.png", 
+            "shirt_id": 490, 
+            "shorts": "phase_4/maps/social/gumball/tt_t_chr_avt_shorts_sleepwalker.png", 
+            "shorts_id": 267, 
+            "sleeves": "phase_4/maps/social/gumball/tt_t_chr_avt_sleeve_sleepwalker.png", 
+            "sleeves_id": 472, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/makeship/cc_t_clth_suit_gambler_green": {
+            "folder": "social/makeship", 
+            "shirt": "phase_4/maps/social/makeship/cc_t_clth_shirt_suit_gambler_green.png", 
+            "shirt_id": 491, 
+            "shorts": "phase_4/maps/social/makeship/cc_t_clth_shorts_suit_gambler_green.png", 
+            "shorts_id": 268, 
+            "skirt": "phase_4/maps/social/makeship/cc_t_clth_skirt_suit_gambler_green.png", 
+            "skirt_id": 207, 
+            "sleeves": "phase_4/maps/social/makeship/cc_t_clth_shirt_suit_gambler_green_sleeve.png", 
+            "sleeves_id": 473, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/newstoon_blue/newstoon_blue": {
+            "folder": "social/newstoon_blue", 
+            "shirt": "phase_4/maps/social/newstoon_blue/newstoon-blue_top.png", 
+            "shirt_id": 492, 
+            "shorts": "phase_4/maps/social/newstoon_blue/newstoon-blue_bot.png", 
+            "shorts_id": 269, 
+            "skirt": "phase_4/maps/social/newstoon_blue/newstoon-blue_skirt.png", 
+            "skirt_id": 208, 
+            "sleeves": "phase_4/maps/social/newstoon_blue/newstoon-blue_sleeve.png", 
+            "sleeves_id": 474, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/newstoon_gray/newstoon_gray": {
+            "folder": "social/newstoon_gray", 
+            "shirt": "phase_4/maps/social/newstoon_gray/newstoon-gray_top.png", 
+            "shirt_id": 493, 
+            "shorts": "phase_4/maps/social/newstoon_gray/newstoon-gray_bot.png", 
+            "shorts_id": 270, 
+            "skirt": "phase_4/maps/social/newstoon_gray/newstoon-gray_skirt.png", 
+            "skirt_id": 209, 
+            "sleeves": "phase_4/maps/social/newstoon_gray/newstoon-gray_sleeve.png", 
+            "sleeves_id": 475, 
+            "source": "phase_4"
+        }, 
+        "phase_4:social/webster/tt_t_chr_avt_webster": {
+            "folder": "social/webster", 
+            "shirt": "phase_4/maps/social/webster/tt_t_chr_avt_shirt_webster.png", 
+            "shirt_id": 494, 
+            "shorts": "phase_4/maps/social/webster/tt_t_chr_avt_shorts_webster.png", 
+            "shorts_id": 271, 
+            "sleeves": "phase_4/maps/social/webster/tt_t_chr_avt_sleeve_webster.png", 
+            "sleeves_id": 476, 
+            "source": "phase_4"
+        }, 
+        "phase_4:stpats": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/StPats_sleeve.jpg", 
+            "sleeves_id": 184, 
+            "source": "phase_4"
+        }, 
+        "phase_4:stpats_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/StPats_shirt1.jpg", 
+            "shirt_id": 188, 
+            "source": "phase_4"
+        }, 
+        "phase_4:stpats_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/StPats_shirt2.jpg", 
+            "shirt_id": 189, 
+            "sleeves": "phase_4/maps/StPats_sleeve2.jpg", 
+            "sleeves_id": 185, 
+            "source": "phase_4"
+        }, 
+        "phase_4:team_trees": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirt_team_trees.png", 
+            "shirt_id": 222, 
+            "shorts": "phase_4/maps/shorts_team_trees.png", 
+            "shorts_id": 98, 
+            "sleeves": "phase_4/maps/sleeve_team_trees.png", 
+            "sleeves_id": 220, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tiedye": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/sleeveTieDye.jpg", 
+            "sleeves_id": 216, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tiedyenew": {
+            "folder": "", 
+            "shirt": "phase_4/maps/shirtTieDyeNew.jpg", 
+            "shirt_id": 217, 
+            "source": "phase_4"
+        }, 
+        "phase_4:track_er": {
+            "folder": "", 
+            "shorts": "phase_4/maps/track_shorter.png", 
+            "shorts_id": 99, 
+            "source": "phase_4"
+        }, 
+        "phase_4:track_er_a": {
+            "folder": "", 
+            "shorts": "phase_4/maps/track_shorter_a.rgb", 
+            "shorts_id": 100, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_2019": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_2019_dress.jpg", 
+            "shirt_id": 223, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_2019_dress.jpg", 
+            "skirt_id": 95, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_2019_dress.jpg", 
+            "sleeves_id": 337, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_2019_suit": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_2019_suit.jpg", 
+            "shirt_id": 224, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_2019_suit.jpg", 
+            "shorts_id": 101, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_2019_suit.jpg", 
+            "sleeves_id": 338, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_anniversary": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_anniversary.jpg", 
+            "shirt_id": 226, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_anniversary.jpg", 
+            "sleeves_id": 221, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_band": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_band.png", 
+            "shirt_id": 227, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_band.png", 
+            "shorts_id": 103, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_band.png", 
+            "sleeves_id": 222, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_barnyard": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_barnyard.png", 
+            "shirt_id": 228, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_barnyard.png", 
+            "shorts_id": 104, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_barnyard.png", 
+            "skirt_id": 97, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_barnyard.png", 
+            "sleeves_id": 223, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_barnyard_victory": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_barnyard_victory.png", 
+            "shirt_id": 229, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_barnyard_victory.png", 
+            "sleeves_id": 340, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_bee": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_bee.jpg", 
+            "shirt_id": 230, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_bee.jpg", 
+            "shorts_id": 105, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_bee.jpg", 
+            "sleeves_id": 224, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_beta": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_betaShirt.png", 
+            "shirt_id": 231, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_betaShorts.png", 
+            "shorts_id": 106, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_beta.png", 
+            "skirt_id": 98, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirt_sleeve_beta.png", 
+            "sleeves_id": 226, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_betabughunter": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_betaBugHunter.jpg", 
+            "shirt_id": 232, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_betaBugHunter.jpg", 
+            "shorts_id": 107, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_betaBugHunter.jpg", 
+            "skirt_id": 99, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_betaBugHunter.jpg", 
+            "sleeves_id": 225, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_bossbotcrusher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_bossbotCrusher.png", 
+            "shirt_id": 233, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_bossbotCrusher.png", 
+            "shorts_id": 108, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_bossbotCrusher.png", 
+            "sleeves_id": 227, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_brrrgh": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_brrrgh.png", 
+            "shirt_id": 234, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_brrrgh.png", 
+            "shorts_id": 109, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_brrrgh.png", 
+            "skirt_id": 100, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_brrrgh.png", 
+            "sleeves_id": 341, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_cashbotcrusher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_cashbotCrusher.png", 
+            "shirt_id": 235, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_cashbotCrusher.png", 
+            "shorts_id": 110, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_cashbotCrusher.png", 
+            "sleeves_id": 228, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_cogbuster": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_cogbuster.jpg", 
+            "shirt_id": 236, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_cogbuster.jpg", 
+            "shorts_id": 111, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_cogbuster.jpg", 
+            "sleeves_id": 229, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_desat4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_desat4.jpg", 
+            "shirt_id": 237, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_desat4.jpg", 
+            "sleeves_id": 230, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_dinosaur": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_dinosaur.jpg", 
+            "shirt_id": 238, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_dinosaur.jpg", 
+            "shorts_id": 112, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_dinosaur.jpg", 
+            "sleeves_id": 231, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_doodle": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_doodle.jpg", 
+            "shirt_id": 239, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_doodle.jpg", 
+            "sleeves_id": 232, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_electionflippy": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_electionFlippy.jpg", 
+            "shirt_id": 240, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_electionFlippy.jpg", 
+            "sleeves_id": 233, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_electionslappy": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_electionSlappy.jpg", 
+            "shirt_id": 241, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_electionSlappy.jpg", 
+            "sleeves_id": 234, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fire": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fire.png", 
+            "shirt_id": 242, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_fire.png", 
+            "shorts_id": 113, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_fire.png", 
+            "skirt_id": 101, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fire.png", 
+            "sleeves_id": 235, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing04.jpg", 
+            "shirt_id": 243, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing04.jpg", 
+            "sleeves_id": 236, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing05.jpg", 
+            "shirt_id": 244, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing05.jpg", 
+            "sleeves_id": 237, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing06": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing06.jpg", 
+            "shirt_id": 245, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing06.jpg", 
+            "sleeves_id": 238, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing07": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing07.jpg", 
+            "shirt_id": 246, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing07.jpg", 
+            "sleeves_id": 239, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing1.jpg", 
+            "shirt_id": 247, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_fishing1.jpg", 
+            "shorts_id": 114, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_fishing1.jpg", 
+            "skirt_id": 102, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing1.jpg", 
+            "sleeves_id": 240, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_fishing2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_fishing2.jpg", 
+            "shirt_id": 248, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_fishing2.jpg", 
+            "sleeves_id": 241, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_garden": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_garden.png", 
+            "shirt_id": 249, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_garden.png", 
+            "shorts_id": 115, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_garden.png", 
+            "skirt_id": 103, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_garden.png", 
+            "sleeves_id": 242, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_gardening1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_gardening1.jpg", 
+            "shirt_id": 250, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_gardening1.jpg", 
+            "shorts_id": 116, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_gardening1.jpg", 
+            "skirt_id": 104, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_gardening1.jpg", 
+            "sleeves_id": 243, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_gardening2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_gardening2.jpg", 
+            "shirt_id": 251, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_gardening2.jpg", 
+            "sleeves_id": 244, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_gardening2_a": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_gardening2_a.rgb", 
+            "sleeves_id": 245, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_getconnectedmovershaker": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_getConnectedMoverShaker.jpg", 
+            "shirt_id": 252, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_getConnectedMoverShaker.jpg", 
+            "sleeves_id": 246, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf02": {
+            "folder": "", 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_golf02.jpg", 
+            "skirt_id": 105, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_golf03.jpg", 
+            "shirt_id": 253, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_golf03.jpg", 
+            "shorts_id": 117, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_golf03.jpg", 
+            "skirt_id": 106, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_golf03.jpg", 
+            "sleeves_id": 247, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_golf04.jpg", 
+            "shirt_id": 254, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_golf04.jpg", 
+            "shorts_id": 118, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_golf04.jpg", 
+            "skirt_id": 107, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_golf04.jpg", 
+            "sleeves_id": 248, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_golf05.jpg", 
+            "shirt_id": 255, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_golf05.jpg", 
+            "shorts_id": 119, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_golf05.jpg", 
+            "sleeves_id": 249, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_golf1.jpg", 
+            "shirt_id": 256, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_golf1.jpg", 
+            "shorts_id": 120, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_golf1.jpg", 
+            "skirt_id": 108, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_golf1.jpg", 
+            "sleeves_id": 250, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_golf2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_golf2.jpg", 
+            "shirt_id": 257, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_golf2.jpg", 
+            "sleeves_id": 251, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_greentoon1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_greentoon1.jpg", 
+            "shirt_id": 258, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_greentoon1.jpg", 
+            "shorts_id": 121, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_greentoon1.jpg", 
+            "skirt_id": 109, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_greentoon1.jpg", 
+            "sleeves_id": 252, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween06": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween06.jpg", 
+            "shirt_id": 259, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween06.jpg", 
+            "sleeves_id": 253, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween07": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween07.jpg", 
+            "shirt_id": 260, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween07.jpg", 
+            "sleeves_id": 254, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween1.jpg", 
+            "shirt_id": 261, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloween1.jpg", 
+            "shorts_id": 122, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_halloween1.jpg", 
+            "skirt_id": 110, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween1.jpg", 
+            "sleeves_id": 255, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween2.jpg", 
+            "shirt_id": 262, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloween2.jpg", 
+            "shorts_id": 123, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_halloween2.jpg", 
+            "skirt_id": 111, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween2.jpg", 
+            "sleeves_id": 256, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween3.jpg", 
+            "shirt_id": 263, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloween3.jpg", 
+            "shorts_id": 124, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_halloween3.jpg", 
+            "skirt_id": 112, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween3.jpg", 
+            "sleeves_id": 257, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween4.jpg", 
+            "shirt_id": 264, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloween4.jpg", 
+            "shorts_id": 125, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_halloween4.jpg", 
+            "skirt_id": 113, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween4.jpg", 
+            "sleeves_id": 258, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloween5": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloween5.jpg", 
+            "shirt_id": 265, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloween5.jpg", 
+            "shorts_id": 126, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloween5.jpg", 
+            "sleeves_id": 259, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloweenjester": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloweenJester.jpg", 
+            "shirt_id": 266, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloweenJester.jpg", 
+            "shorts_id": 127, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloweenJester.jpg", 
+            "sleeves_id": 260, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloweenturtle": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloweenTurtle.jpg", 
+            "shirt_id": 267, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_halloweenTurtle.jpg", 
+            "shorts_id": 128, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloweenTurtle.jpg", 
+            "sleeves_id": 261, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_halloweenwitch": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_halloweenWitch.jpg", 
+            "shirt_id": 268, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_halloweenWitch.jpg", 
+            "skirt_id": 114, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_halloweenWitch.jpg", 
+            "sleeves_id": 262, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_hydrant": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_hydrant.jpg", 
+            "shirt_id": 269, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_hydrant.jpg", 
+            "sleeves_id": 263, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_jellybeans": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_jellyBeans.jpg", 
+            "shirt_id": 270, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_jellyBeans.jpg", 
+            "sleeves_id": 264, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_jokey": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_jokey.jpg", 
+            "shirt_id": 271, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_jokey.jpg", 
+            "sleeves_id": 265, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_lawbotcrusher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_lawbotCrusher.png", 
+            "shirt_id": 272, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_lawbotCrusher.png", 
+            "shorts_id": 129, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_lawbotCrusher.png", 
+            "sleeves_id": 266, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_long_desat1": {
+            "folder": "", 
+            "skirt": "phase_4/maps/tt_t_chr_avt_longSkirt_desat1.png", 
+            "skirt_id": 94, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_loonylabs": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_loonyLabs.jpg", 
+            "shirt_id": 273, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_loonyLabs.jpg", 
+            "sleeves_id": 267, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_loopysballs": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_loopysballs.png", 
+            "shirt_id": 274, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_loopysballs.png", 
+            "shorts_id": 130, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_loopysballs.png", 
+            "sleeves_id": 268, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_mailbox": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_mailbox.jpg", 
+            "shirt_id": 275, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_mailbox.jpg", 
+            "sleeves_id": 269, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_marathon1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_marathon1.jpg", 
+            "shirt_id": 276, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_marathon1.jpg", 
+            "sleeves_id": 270, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_meatballs": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_meatballs.png", 
+            "shirt_id": 277, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_meatballs.png", 
+            "shorts_id": 131, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_meatballs.png", 
+            "sleeves_id": 271, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_mostcogsdefeated01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_mostCogsDefeated01.jpg", 
+            "shirt_id": 278, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_mostCogsDefeated01.jpg", 
+            "sleeves_id": 272, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_mostcogsdefeated02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_mostCogsDefeated02.jpg", 
+            "shirt_id": 279, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_mostCogsDefeated02.jpg", 
+            "sleeves_id": 273, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_mostcogsdefeated03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_mostCogsDefeated03.jpg", 
+            "shirt_id": 280, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_mostCogsDefeated03.jpg", 
+            "sleeves_id": 274, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_mostcogsdefeated04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_mostCogsDefeated04.jpg", 
+            "shirt_id": 281, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_mostCogsDefeated04.jpg", 
+            "sleeves_id": 275, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_npcriggy1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_npcRiggy1.jpg", 
+            "shirt_id": 282, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_npcRiggy1.jpg", 
+            "shorts_id": 132, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_npcRiggy1.jpg", 
+            "sleeves_id": 276, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_outback": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_outback.png", 
+            "shirt_id": 283, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_outback.png", 
+            "shorts_id": 133, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_outback.png", 
+            "skirt_id": 115, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_outback.png", 
+            "sleeves_id": 277, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_outback_victory": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_outback_victory.png", 
+            "shirt_id": 284, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_outback_victory.png", 
+            "sleeves_id": 342, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_park_ranger": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_park_ranger.png", 
+            "shirt_id": 285, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_park_ranger.png", 
+            "shorts_id": 134, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_park_ranger.png", 
+            "sleeves_id": 343, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_party1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_party1.jpg", 
+            "shirt_id": 286, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_party1.jpg", 
+            "shorts_id": 135, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_party1.jpg", 
+            "skirt_id": 116, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_party1.jpg", 
+            "sleeves_id": 278, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_party2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_party2.jpg", 
+            "shirt_id": 287, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_party2.jpg", 
+            "sleeves_id": 279, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_pirate": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_pirate.jpg", 
+            "shirt_id": 288, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_pirate.jpg", 
+            "shorts_id": 136, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_pirate.jpg", 
+            "skirt_id": 117, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_pirate.jpg", 
+            "sleeves_id": 280, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_playtime": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_playTime.jpg", 
+            "shirt_id": 289, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_playTime.jpg", 
+            "shorts_id": 137, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_playTime.jpg", 
+            "skirt_id": 118, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_playTime.jpg", 
+            "sleeves_id": 281, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_quizmaster": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_quizmaster.jpg", 
+            "shirt_id": 290, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_quizmaster.jpg", 
+            "shorts_id": 138, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_quizmaster.jpg", 
+            "sleeves_id": 282, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racing03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racing03.jpg", 
+            "shirt_id": 291, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_racing03.jpg", 
+            "shorts_id": 139, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_racing03.jpg", 
+            "skirt_id": 119, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racing03.jpg", 
+            "sleeves_id": 283, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racing04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racing04.jpg", 
+            "shirt_id": 292, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_racing04.jpg", 
+            "shorts_id": 140, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_racing04.jpg", 
+            "skirt_id": 120, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racing04.jpg", 
+            "sleeves_id": 284, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racing05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racing05.jpg", 
+            "shirt_id": 293, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_racing05.jpg", 
+            "shorts_id": 141, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_racing05.jpg", 
+            "skirt_id": 121, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racing05.jpg", 
+            "sleeves_id": 285, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racing1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racing1.jpg", 
+            "shirt_id": 294, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_racing1.jpg", 
+            "shorts_id": 142, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_racing1.jpg", 
+            "skirt_id": 122, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racing1.jpg", 
+            "sleeves_id": 286, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racing2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racing2.jpg", 
+            "shirt_id": 295, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racing2.jpg", 
+            "sleeves_id": 287, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_racinggrandprix": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_racingGrandPrix.jpg", 
+            "shirt_id": 296, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_racingGrandPrix.jpg", 
+            "shorts_id": 143, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_racingGrandPrix.jpg", 
+            "skirt_id": 123, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_racingGrandPrix.jpg", 
+            "sleeves_id": 288, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sail": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sail.png", 
+            "shirt_id": 297, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_sail.png", 
+            "shorts_id": 144, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_sail.png", 
+            "skirt_id": 124, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirt_sleeve_sail.png", 
+            "sleeves_id": 335, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_savebuilding05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_saveBuilding05.jpg", 
+            "shirt_id": 298, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding05.jpg", 
+            "sleeves_id": 289, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_savebuilding1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_saveBuilding1.jpg", 
+            "shirt_id": 299, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_saveBuilding1.jpg", 
+            "shorts_id": 145, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_saveBuilding1.jpg", 
+            "skirt_id": 125, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding1.jpg", 
+            "sleeves_id": 290, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_savebuilding2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_saveBuilding2.jpg", 
+            "shirt_id": 300, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding2.jpg", 
+            "sleeves_id": 291, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_savebuilding3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_saveBuilding3.jpg", 
+            "shirt_id": 301, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding3.jpg", 
+            "sleeves_id": 292, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_savebuilding4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_saveBuilding4.jpg", 
+            "shirt_id": 302, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_saveBuilding4.jpg", 
+            "sleeves_id": 293, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sellbotcrusher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sellbotCrusher.jpg", 
+            "shirt_id": 303, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_sellbotCrusher.jpg", 
+            "shorts_id": 146, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_sellbotCrusher.jpg", 
+            "skirt_id": 126, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotCrusher.jpg", 
+            "sleeves_id": 294, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sellboticon": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sellbotIcon.jpg", 
+            "shirt_id": 304, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotIcon.jpg", 
+            "sleeves_id": 295, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sellbotrental": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sellbotRental.jpg", 
+            "shirt_id": 305, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_sellbotRental.jpg", 
+            "shorts_id": 147, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_sellbotRental.jpg", 
+            "skirt_id": 127, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotRental.jpg", 
+            "sleeves_id": 296, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sellbotvpicon": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sellbotVPIcon.jpg", 
+            "shirt_id": 306, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_sellbotVPIcon.jpg", 
+            "sleeves_id": 297, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_slappy": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_slappy.jpg", 
+            "shirt_id": 307, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_slappy.jpg", 
+            "shorts_id": 148, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_slappy.jpg", 
+            "sleeves_id": 298, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_sora": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_sora.jpg", 
+            "shirt_id": 308, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_sora.jpg", 
+            "shorts_id": 149, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_sora.jpg", 
+            "sleeves_id": 299, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_summer1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_summer1.jpg", 
+            "shirt_id": 309, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_summer1.jpg", 
+            "shorts_id": 150, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_summer1.jpg", 
+            "skirt_id": 128, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_summer1.jpg", 
+            "sleeves_id": 300, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_summer2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_summer2.jpg", 
+            "shirt_id": 310, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_summer2.jpg", 
+            "sleeves_id": 301, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_supertoon": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_supertoon.jpg", 
+            "shirt_id": 311, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_supertoon.jpg", 
+            "shorts_id": 151, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_supertoon.jpg", 
+            "sleeves_id": 302, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_tasktaker": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_taskTaker.jpg", 
+            "shirt_id": 312, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_taskTaker.jpg", 
+            "shorts_id": 152, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_taskTaker.jpg", 
+            "sleeves_id": 303, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_tokentaker": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_tokenTaker.jpg", 
+            "shirt_id": 313, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_tokenTaker.jpg", 
+            "shorts_id": 153, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_tokenTaker.jpg", 
+            "sleeves_id": 304, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toonfest2014": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_toonFest2014.jpg", 
+            "shirt_id": 314, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_toonFest2014.jpg", 
+            "shorts_id": 154, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_toonFest2014.jpg", 
+            "skirt_id": 129, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_toonFest2014.jpg", 
+            "sleeves_id": 305, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toonfest_1": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_toonfest_1.jpg", 
+            "shorts_id": 155, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_toonfest_1.jpg", 
+            "skirt_id": 130, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toonfest_1f": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_toonfest_1f.jpg", 
+            "shirt_id": 317, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_toonfest_1f.jpg", 
+            "sleeves_id": 308, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toonfest_1m": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_toonfest_1m.jpg", 
+            "shirt_id": 318, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_toonfest_1m.jpg", 
+            "sleeves_id": 309, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toontask1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_toonTask1.jpg", 
+            "shirt_id": 315, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_toonTask1.jpg", 
+            "sleeves_id": 306, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_toontask2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_toonTask2.jpg", 
+            "shirt_id": 316, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_toonTask2.jpg", 
+            "sleeves_id": 307, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trashcan": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trashcan.jpg", 
+            "shirt_id": 319, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trashcan.jpg", 
+            "sleeves_id": 310, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trashcat": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trashcat.png", 
+            "shirt_id": 320, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_trashcat.png", 
+            "shorts_id": 156, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trashcat.png", 
+            "sleeves_id": 311, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trolley03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trolley03.jpg", 
+            "shirt_id": 321, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trolley03.jpg", 
+            "sleeves_id": 312, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trolley04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trolley04.jpg", 
+            "shirt_id": 322, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trolley04.jpg", 
+            "sleeves_id": 313, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trolley05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trolley05.jpg", 
+            "shirt_id": 323, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trolley05.jpg", 
+            "sleeves_id": 314, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trolley1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trolley1.jpg", 
+            "shirt_id": 324, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_trolley1.jpg", 
+            "shorts_id": 157, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_trolley1.jpg", 
+            "skirt_id": 131, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trolley1.jpg", 
+            "sleeves_id": 315, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_trolley2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_trolley2.jpg", 
+            "shirt_id": 325, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_trolley2.jpg", 
+            "sleeves_id": 316, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_valentine1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_valentine1.jpg", 
+            "shirt_id": 326, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_valentine1.jpg", 
+            "shorts_id": 158, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_valentine1.jpg", 
+            "skirt_id": 132, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_valentine1.jpg", 
+            "sleeves_id": 317, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_valentine2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_valentine2.jpg", 
+            "shirt_id": 327, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_valentine2.jpg", 
+            "shorts_id": 159, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_valentine2.jpg", 
+            "skirt_id": 133, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_valentine2.jpg", 
+            "sleeves_id": 318, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_valentine3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_valentine3.jpg", 
+            "shirt_id": 328, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_valentine3.jpg", 
+            "sleeves_id": 319, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_vampire": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_vampire.jpg", 
+            "shirt_id": 329, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_vampire.jpg", 
+            "shorts_id": 160, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_vampire.jpg", 
+            "sleeves_id": 320, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_victoryparty01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_victoryParty01.jpg", 
+            "shirt_id": 330, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_victoryParty01.jpg", 
+            "sleeves_id": 321, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_victoryparty02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_victoryParty02.jpg", 
+            "shirt_id": 331, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_victoryParty02.jpg", 
+            "sleeves_id": 322, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_whistle": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_whistle.jpg", 
+            "shirt_id": 332, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_whistle.jpg", 
+            "sleeves_id": 323, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter02.jpg", 
+            "shirt_id": 333, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter02.jpg", 
+            "sleeves_id": 324, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter03.jpg", 
+            "shirt_id": 334, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter03.jpg", 
+            "sleeves_id": 325, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter1.jpg", 
+            "shirt_id": 335, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter1.jpg", 
+            "shorts_id": 161, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter1.jpg", 
+            "skirt_id": 134, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter1.jpg", 
+            "sleeves_id": 326, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter2": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter2.jpg", 
+            "shorts_id": 162, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter2.jpg", 
+            "skirt_id": 135, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter3": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter3.jpg", 
+            "shorts_id": 163, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter3.jpg", 
+            "skirt_id": 136, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter4": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter4.jpg", 
+            "shorts_id": 164, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter4.jpg", 
+            "skirt_id": 137, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_1": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_1.jpg", 
+            "shirt_id": 336, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter_14_1.jpg", 
+            "shorts_id": 165, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter_14_1.jpg", 
+            "skirt_id": 138, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_1.jpg", 
+            "sleeves_id": 327, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_2.jpg", 
+            "shirt_id": 337, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter_14_2.jpg", 
+            "shorts_id": 166, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter_14_2.jpg", 
+            "skirt_id": 139, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_2.jpg", 
+            "sleeves_id": 328, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_3": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_3.jpg", 
+            "shirt_id": 338, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter_14_3.jpg", 
+            "shorts_id": 167, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter_14_3.jpg", 
+            "skirt_id": 140, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_3.jpg", 
+            "sleeves_id": 329, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_4.jpg", 
+            "shirt_id": 339, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter_14_4.jpg", 
+            "shorts_id": 168, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter_14_4.jpg", 
+            "skirt_id": 141, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_4.jpg", 
+            "sleeves_id": 330, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_5": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_5.jpg", 
+            "shirt_id": 340, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_5.jpg", 
+            "sleeves_id": 331, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_6": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_6.jpg", 
+            "shirt_id": 341, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_6.jpg", 
+            "sleeves_id": 332, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_7": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_7.jpg", 
+            "shirt_id": 342, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_7.jpg", 
+            "sleeves_id": 333, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_8": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_winter_14_8.jpg", 
+            "shorts_id": 169, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_winter_14_8.jpg", 
+            "skirt_id": 142, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirtSleeve_winter_14_8.jpg", 
+            "sleeves_id": 334, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_8f": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_8f.jpg", 
+            "shirt_id": 343, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_winter_14_8m": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_winter_14_8m.jpg", 
+            "shirt_id": 344, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_yott": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_yott.png", 
+            "shirt_id": 345, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_yott.png", 
+            "shorts_id": 170, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_yott.png", 
+            "skirt_id": 143, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_shirt_sleeve_yott.png", 
+            "sleeves_id": 336, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_avt_zzz": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_avt_shirt_ZZZ.png", 
+            "shirt_id": 225, 
+            "shorts": "phase_4/maps/tt_t_chr_avt_shorts_ZZZ.png", 
+            "shorts_id": 102, 
+            "skirt": "phase_4/maps/tt_t_chr_avt_skirt_ZZZ.png", 
+            "skirt_id": 96, 
+            "sleeves": "phase_4/maps/tt_t_chr_avt_sleeve_ZZZ.png", 
+            "sleeves_id": 339, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_scientist": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/tt_t_chr_shirtSleeve_scientist.jpg", 
+            "sleeves_id": 344, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_scientista": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_shirt_scientistA.jpg", 
+            "shirt_id": 346, 
+            "shorts": "phase_4/maps/tt_t_chr_shorts_scientistA.jpg", 
+            "shorts_id": 171, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_scientistb": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_shirt_scientistB.jpg", 
+            "shirt_id": 347, 
+            "shorts": "phase_4/maps/tt_t_chr_shorts_scientistB.jpg", 
+            "shorts_id": 172, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_scientistc": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_shirt_scientistC.jpg", 
+            "shirt_id": 348, 
+            "shorts": "phase_4/maps/tt_t_chr_shorts_scientistC.jpg", 
+            "shorts_id": 173, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_chr_scientistd": {
+            "folder": "", 
+            "shirt": "phase_4/maps/tt_t_chr_shirt_scientistD.jpg", 
+            "shirt_id": 349, 
+            "shorts": "phase_4/maps/tt_t_chr_shorts_scientistD.jpg", 
+            "shorts_id": 174, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tt_t_efx_snowmanhead": {
+            "folder": "", 
+            "shorts": "phase_4/maps/tt_t_efx_snowmanHead_short.png", 
+            "shorts_id": 175, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttcc_ene_feeder": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttcc_ene_bottom_feeder.png", 
+            "shorts_id": 176, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_beta": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_betaShorts.jpg", 
+            "shorts_id": 177, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_betaSkirt.jpg", 
+            "skirt_id": 144, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_betaSleeve.jpg", 
+            "sleeves_id": 345, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_beta_2": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_betaShorts2.jpg", 
+            "shorts_id": 178, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_betaSkirt2.jpg", 
+            "skirt_id": 145, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_betaoutfit": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_betaOutfit.jpg", 
+            "shirt_id": 350, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_betaoutfit2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_betaOutfit2.jpg", 
+            "shirt_id": 351, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_birthdaybash20th": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_birthdayBash20th.jpg", 
+            "shirt_id": 352, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_birthdayBash20th.jpg", 
+            "shorts_id": 179, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_birthdayBash20th.jpg", 
+            "skirt_id": 146, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_birthdayBash20th.jpg", 
+            "sleeves_id": 346, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_birthdayten": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_birthdayTen.jpg", 
+            "shirt_id": 353, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_birthdayTen.jpg", 
+            "sleeves_id": 347, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_bronze": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_bronze.jpg", 
+            "sleeves_id": 348, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_bronzecroc": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_bronzeCroc.jpg", 
+            "shirt_id": 354, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_bronzedeer": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_bronzeDeer.jpg", 
+            "shirt_id": 355, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_cashbotcfoicon": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_cashbotCFOIcon.jpg", 
+            "shirt_id": 356, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_cashbotCFOIcon.jpg", 
+            "sleeves_id": 349, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_cashbotcrusher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_cashbotCrusher.jpg", 
+            "shirt_id": 357, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_cashbotCrusher.jpg", 
+            "shorts_id": 180, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_cashbotCrusher.jpg", 
+            "skirt_id": 147, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_cashbotCrusher.jpg", 
+            "sleeves_id": 350, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_cashboticon": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_cashbotIcon.jpg", 
+            "shirt_id": 358, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_cashbotIcon.jpg", 
+            "sleeves_id": 351, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_cashbotrental": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_cashbotRental.jpg", 
+            "shirt_id": 359, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_cashbotRental.jpg", 
+            "shorts_id": 181, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_cashbotRental.jpg", 
+            "skirt_id": 148, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_cashbotRental.jpg", 
+            "sleeves_id": 352, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_con17blue": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_con17blue.jpg", 
+            "shirt_id": 360, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_con17blue.jpg", 
+            "sleeves_id": 353, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_con17pink": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_con17pink.jpg", 
+            "shirt_id": 361, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_con17pink.jpg", 
+            "sleeves_id": 354, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_con18blue": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_con18blue.jpg", 
+            "shorts_id": 182, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_con18blue.jpg", 
+            "skirt_id": 149, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_con18pink": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_con18pink.jpg", 
+            "shorts_id": 183, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_con18pink.jpg", 
+            "skirt_id": 150, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_detective": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_detective.jpg", 
+            "shirt_id": 362, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_detective.jpg", 
+            "skirt_id": 151, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_detective.jpg", 
+            "sleeves_id": 355, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_fishing01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_fishing01.jpg", 
+            "shirt_id": 363, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_fishing01.jpg", 
+            "sleeves_id": 356, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_fishing02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_fishing02.jpg", 
+            "shirt_id": 364, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_fishing02.jpg", 
+            "sleeves_id": 357, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_fishing03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_fishing03.jpg", 
+            "shirt_id": 365, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_fishing03.jpg", 
+            "sleeves_id": 358, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_fishing04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_fishing04.jpg", 
+            "shirt_id": 366, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_fishing04.jpg", 
+            "sleeves_id": 359, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_fishingmax": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_fishingMax.jpg", 
+            "shirt_id": 367, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_fishingMax.jpg", 
+            "shorts_id": 184, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_fishingMax.jpg", 
+            "skirt_id": 152, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_fishingMax.jpg", 
+            "sleeves_id": 360, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_gardeningmax": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_gardeningMax.jpg", 
+            "shirt_id": 368, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_gardeningMax.jpg", 
+            "shorts_id": 185, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_gardeningMax.jpg", 
+            "skirt_id": 153, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_gardeningMax.jpg", 
+            "sleeves_id": 361, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_gold": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_gold.jpg", 
+            "sleeves_id": 362, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_goldcroc": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_goldCroc.jpg", 
+            "shirt_id": 369, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golddeer": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_goldDeer.jpg", 
+            "shirt_id": 370, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golfing01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_golfing01.jpg", 
+            "shirt_id": 371, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_golfing01.jpg", 
+            "shorts_id": 186, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_golfing01.jpg", 
+            "skirt_id": 154, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_golfing01.jpg", 
+            "sleeves_id": 363, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golfing02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_golfing02.jpg", 
+            "shirt_id": 372, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_golfing02.jpg", 
+            "shorts_id": 187, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_golfing02.jpg", 
+            "skirt_id": 155, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_golfing02.jpg", 
+            "sleeves_id": 364, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golfing03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_golfing03.jpg", 
+            "shirt_id": 373, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_golfing03.jpg", 
+            "shorts_id": 188, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_golfing03.jpg", 
+            "skirt_id": 156, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_golfing03.jpg", 
+            "sleeves_id": 365, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golfing04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_golfing04.jpg", 
+            "shirt_id": 374, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_golfing04.jpg", 
+            "sleeves_id": 366, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_golfingmax": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_golfingMax.jpg", 
+            "shirt_id": 375, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_golfingMax.jpg", 
+            "shorts_id": 189, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_golfingMax.jpg", 
+            "skirt_id": 157, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_golfingMax.jpg", 
+            "sleeves_id": 367, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_jellybean": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_jellybeanSleeve.jpg", 
+            "sleeves_id": 368, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_jellybeanoutfit": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_jellybeanOutfit.jpg", 
+            "shirt_id": 376, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_kong": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_kong.jpg", 
+            "shirt_id": 377, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_kong.jpg", 
+            "sleeves_id": 369, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_lympicbronze19": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_lympicBronze19.jpg", 
+            "shirt_id": 378, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_lympicBronze19.jpg", 
+            "sleeves_id": 370, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_lympicgold19": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_lympicGold19.jpg", 
+            "shirt_id": 379, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_lympicGold19.jpg", 
+            "sleeves_id": 371, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_lympicsilver19": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_lympicSilver19.jpg", 
+            "shirt_id": 380, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_lympicSilver19.jpg", 
+            "sleeves_id": 372, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_newdenim": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_newDenim.jpg", 
+            "shorts_id": 190, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_newDenim.jpg", 
+            "skirt_id": 158, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_newstripes": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_newStripes.jpg", 
+            "shirt_id": 381, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_newStripes.jpg", 
+            "sleeves_id": 373, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_oilspill": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_oilSpill.jpg", 
+            "shirt_id": 382, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_oilSpill.jpg", 
+            "shorts_id": 191, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_oilSpill.jpg", 
+            "sleeves_id": 374, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_plaid": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_plaid.jpg", 
+            "shirt_id": 383, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_plaid.jpg", 
+            "shorts_id": 192, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_plaid.jpg", 
+            "skirt_id": 159, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_plaid.jpg", 
+            "sleeves_id": 375, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_pub17blue": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_pub17blue.jpg", 
+            "shirt_id": 384, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_pub17blue.jpg", 
+            "sleeves_id": 376, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_pub17pink": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_pub17pink.jpg", 
+            "shirt_id": 385, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_pub17pink.jpg", 
+            "sleeves_id": 377, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_pub18blue": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_pub18blue.jpg", 
+            "shorts_id": 193, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_pub18blue.jpg", 
+            "skirt_id": 160, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_pub18pink": {
+            "folder": "", 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_pub18pink.jpg", 
+            "shorts_id": 194, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_pub18pink.jpg", 
+            "skirt_id": 161, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racing01": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racing01.jpg", 
+            "shirt_id": 386, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racing01.jpg", 
+            "shorts_id": 195, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racing01.jpg", 
+            "skirt_id": 162, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racing01.jpg", 
+            "sleeves_id": 378, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racing02": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racing02.jpg", 
+            "shirt_id": 387, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racing02.jpg", 
+            "shorts_id": 196, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racing02.jpg", 
+            "skirt_id": 163, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racing02.jpg", 
+            "sleeves_id": 379, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racing03": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racing03.jpg", 
+            "shirt_id": 388, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racing03.jpg", 
+            "shorts_id": 197, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racing03.jpg", 
+            "skirt_id": 164, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racing03.jpg", 
+            "sleeves_id": 380, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racing04": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racing04.jpg", 
+            "shirt_id": 389, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racing04.jpg", 
+            "shorts_id": 198, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racing04.jpg", 
+            "skirt_id": 165, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racing04.jpg", 
+            "sleeves_id": 381, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racing05": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racing05.jpg", 
+            "shirt_id": 390, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racing05.jpg", 
+            "shorts_id": 199, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racing05.jpg", 
+            "skirt_id": 166, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racing05.jpg", 
+            "sleeves_id": 382, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_racingmax": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_racingMax.jpg", 
+            "shirt_id": 391, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_racingMax.jpg", 
+            "shorts_id": 200, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_racingMax.jpg", 
+            "skirt_id": 167, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_racingMax.jpg", 
+            "sleeves_id": 383, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_sellbotcrusheroil": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_sellbotCrusherOil.jpg", 
+            "shirt_id": 392, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_sellbotCrusherOil.jpg", 
+            "shorts_id": 201, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_sellbotCrusherOil.jpg", 
+            "skirt_id": 168, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_sellbotcrusheroil2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_sellbotCrusherOil2.jpg", 
+            "shirt_id": 393, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_sillymetermaxing": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_sillyMeterMaxing.jpg", 
+            "shirt_id": 394, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_sillyMeterMaxing.jpg", 
+            "sleeves_id": 384, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_silver": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_silver.jpg", 
+            "sleeves_id": 385, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_silvercroc": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_silverCroc.jpg", 
+            "shirt_id": 395, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_silverdeer": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_silverDeer.jpg", 
+            "shirt_id": 396, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforce": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_taskForce.jpg", 
+            "sleeves_id": 386, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforceexplorer": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_taskForceExplorer.jpg", 
+            "shirt_id": 397, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_taskForceExplorer.jpg", 
+            "shorts_id": 202, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_taskForceExplorer.jpg", 
+            "skirt_id": 169, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforcesleuth": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_taskForceSleuth.jpg", 
+            "shirt_id": 398, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_taskForceSleuth.jpg", 
+            "shorts_id": 203, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_taskForceSleuth.jpg", 
+            "skirt_id": 170, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforcesleuth2": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_taskForceSleuth2.jpg", 
+            "shirt_id": 399, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforcesmasher": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_taskForceSmasher.jpg", 
+            "shirt_id": 400, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_taskForceSmasher.jpg", 
+            "shorts_id": 204, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_taskForceSmasher.jpg", 
+            "skirt_id": 171, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_taskforcetrainee": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_taskForceTrainee.jpg", 
+            "shirt_id": 401, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_taskForceTrainee.jpg", 
+            "shorts_id": 205, 
+            "skirt": "phase_4/maps/ttr_t_chr_avt_skirt_taskForceTrainee.jpg", 
+            "skirt_id": 172, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_trackblue": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_trackBlue.jpg", 
+            "shirt_id": 402, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_trackBlue.jpg", 
+            "shorts_id": 206, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_trackBlue.jpg", 
+            "sleeves_id": 387, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_trackred": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_trackRed.jpg", 
+            "shirt_id": 403, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_trackRed.jpg", 
+            "shorts_id": 207, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_trackRed.jpg", 
+            "sleeves_id": 388, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_trackyellow": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_trackYellow.jpg", 
+            "shirt_id": 404, 
+            "shorts": "phase_4/maps/ttr_t_chr_avt_shorts_trackYellow.jpg", 
+            "shorts_id": 208, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_trackYellow.jpg", 
+            "sleeves_id": 389, 
+            "source": "phase_4"
+        }, 
+        "phase_4:ttr_t_chr_avt_victorsvarsity": {
+            "folder": "", 
+            "shirt": "phase_4/maps/ttr_t_chr_avt_shirt_victorsVarsity.jpg", 
+            "shirt_id": 405, 
+            "sleeves": "phase_4/maps/ttr_t_chr_avt_shirtSleeve_victorsVarsity.jpg", 
+            "sleeves_id": 390, 
+            "source": "phase_4"
+        }, 
+        "phase_4:tumbles/tumbles": {
+            "folder": "tumbles", 
+            "shirt": "phase_4/maps/tumbles/tumbles_shirt.png", 
+            "shirt_id": 495, 
+            "shorts": "phase_4/maps/tumbles/tumbles_shorts.png", 
+            "shorts_id": 272, 
+            "sleeves": "phase_4/maps/tumbles/tumbles_sleeve.png", 
+            "sleeves_id": 477, 
+            "source": "phase_4"
+        }, 
+        "phase_4:valentoon/strawberry": {
+            "folder": "valentoon", 
+            "shirt": "phase_4/maps/valentoon/strawberry_top.png", 
+            "shirt_id": 496, 
+            "sleeves": "phase_4/maps/valentoon/strawberry_sleeve.png", 
+            "sleeves_id": 478, 
+            "source": "phase_4"
+        }, 
+        "phase_4:valentoon/tt_t_chr_avt_cupid": {
+            "folder": "valentoon", 
+            "shirt": "phase_4/maps/valentoon/tt_t_chr_avt_shirt_cupid.png", 
+            "shirt_id": 497, 
+            "shorts": "phase_4/maps/valentoon/tt_t_chr_avt_shorts_cupid.png", 
+            "shorts_id": 273, 
+            "skirt": "phase_4/maps/valentoon/tt_t_chr_avt_skirt_cupid.png", 
+            "skirt_id": 210, 
+            "sleeves": "phase_4/maps/valentoon/tt_t_chr_avt_sleeve_cupid.png", 
+            "sleeves_id": 479, 
+            "source": "phase_4"
+        }, 
+        "phase_4:valentoon/val": {
+            "folder": "valentoon", 
+            "shirt": "phase_4/maps/valentoon/val_shirt.png", 
+            "shirt_id": 499, 
+            "sleeves": "phase_4/maps/valentoon/val_sleeve.png", 
+            "sleeves_id": 481, 
+            "source": "phase_4"
+        }, 
+        "phase_4:valentoon/val2022": {
+            "folder": "valentoon", 
+            "shirt": "phase_4/maps/valentoon/val2022_top.png", 
+            "shirt_id": 498, 
+            "sleeves": "phase_4/maps/valentoon/val2022_sleeve.png", 
+            "sleeves_id": 480, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vda6": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/Vda6Sleeve.jpg", 
+            "sleeves_id": 186, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday1_4": {
+            "folder": "", 
+            "shirt": "phase_4/maps/Vday1Shirt4.jpg", 
+            "shirt_id": 190, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday1_5": {
+            "folder": "", 
+            "shirt": "phase_4/maps/Vday1Shirt5.jpg", 
+            "shirt_id": 191, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday1_6shd": {
+            "folder": "", 
+            "shirt": "phase_4/maps/Vday1Shirt6SHD.jpg", 
+            "shirt_id": 192, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday2c": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/Vday2cSleeve.jpg", 
+            "sleeves_id": 187, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday5": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/Vday5Sleeve.jpg", 
+            "sleeves_id": 188, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday_1": {
+            "folder": "", 
+            "skirt": "phase_4/maps/VdaySkirt1.jpg", 
+            "skirt_id": 84, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday_2": {
+            "folder": "", 
+            "shorts": "phase_4/maps/VdayShorts2.jpg", 
+            "shorts_id": 88, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday_2c": {
+            "folder": "", 
+            "shirt": "phase_4/maps/Vday_shirt2c.jpg", 
+            "shirt_id": 193, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vday_4": {
+            "folder": "", 
+            "sleeves": "phase_4/maps/Vday_shirt4sleeve.jpg", 
+            "sleeves_id": 189, 
+            "source": "phase_4"
+        }, 
+        "phase_4:vfx_spark": {
+            "folder": "", 
+            "shorts": "phase_4/maps/vfx_short_spark.png", 
+            "shorts_id": 209, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2019_outfit/tt_t_chr_avt_2019_suit": {
+            "folder": "winter/2019_outfit", 
+            "shirt": "phase_4/maps/winter/2019_outfit/tt_t_chr_avt_shirt_2019_suit.png", 
+            "shirt_id": 500, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2020_outfit/2020suit": {
+            "folder": "winter/2020_outfit", 
+            "shirt": "phase_4/maps/winter/2020_outfit/2020suit_top.png", 
+            "shirt_id": 501, 
+            "shorts": "phase_4/maps/winter/2020_outfit/2020suit_bot.png", 
+            "shorts_id": 274, 
+            "skirt": "phase_4/maps/winter/2020_outfit/2020suit_skirt.png", 
+            "skirt_id": 211, 
+            "sleeves": "phase_4/maps/winter/2020_outfit/2020suit_sleeve.png", 
+            "sleeves_id": 482, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2021_outfit/fireworks": {
+            "folder": "winter/2021_outfit", 
+            "shirt": "phase_4/maps/winter/2021_outfit/fireworks_top.png", 
+            "shirt_id": 502, 
+            "shorts": "phase_4/maps/winter/2021_outfit/fireworks_bot.png", 
+            "shorts_id": 275, 
+            "skirt": "phase_4/maps/winter/2021_outfit/fireworks_skirt.png", 
+            "skirt_id": 212, 
+            "sleeves": "phase_4/maps/winter/2021_outfit/fireworks_sleeve.png", 
+            "sleeves_id": 483, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2022_outfit/2022": {
+            "folder": "winter/2022_outfit", 
+            "shirt": "phase_4/maps/winter/2022_outfit/2022_top.png", 
+            "shirt_id": 503, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2023_outfit/2023": {
+            "folder": "winter/2023_outfit", 
+            "shirt": "phase_4/maps/winter/2023_outfit/2023_top.png", 
+            "shirt_id": 504, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/2025_outfit/cc_t_clth_nye_25": {
+            "folder": "winter/2025_outfit", 
+            "shirt": "phase_4/maps/winter/2025_outfit/cc_t_clth_shirt_nye_25.png", 
+            "shirt_id": 505, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/clothing/cc_t_clth_elf_green": {
+            "folder": "winter/clothing", 
+            "shirt": "phase_4/maps/winter/clothing/cc_t_clth_shirt_elf_green.png", 
+            "shirt_id": 506, 
+            "shorts": "phase_4/maps/winter/clothing/cc_t_clth_shorts_elf_green.png", 
+            "shorts_id": 276, 
+            "skirt": "phase_4/maps/winter/clothing/cc_t_clth_skirt_elf_green.png", 
+            "skirt_id": 213, 
+            "sleeves": "phase_4/maps/winter/clothing/cc_t_clth_shirt_elf_green_sleeve.png", 
+            "sleeves_id": 484, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/clothing/cc_t_clth_elf_red": {
+            "folder": "winter/clothing", 
+            "shirt": "phase_4/maps/winter/clothing/cc_t_clth_shirt_elf_red.png", 
+            "shirt_id": 507, 
+            "shorts": "phase_4/maps/winter/clothing/cc_t_clth_shorts_elf_red.png", 
+            "shorts_id": 277, 
+            "skirt": "phase_4/maps/winter/clothing/cc_t_clth_skirt_elf_red.png", 
+            "skirt_id": 214, 
+            "sleeves": "phase_4/maps/winter/clothing/cc_t_clth_shirt_elf_red_sleeve.png", 
+            "sleeves_id": 485, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/clothing/cc_t_clth_nye_24": {
+            "folder": "winter/clothing", 
+            "shirt": "phase_4/maps/winter/clothing/cc_t_clth_shirt_nye_24.png", 
+            "shirt_id": 508, 
+            "shorts": "phase_4/maps/winter/clothing/cc_t_clth_shorts_nye_24.png", 
+            "shorts_id": 278, 
+            "skirt": "phase_4/maps/winter/clothing/cc_t_clth_skirt_nye_24.png", 
+            "skirt_id": 215, 
+            "sleeves": "phase_4/maps/winter/clothing/cc_t_clth_shirt_nye_24_sleeve.png", 
+            "sleeves_id": 486, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/clothing/cc_t_clth_sweater_clowndeer_blue": {
+            "folder": "winter/clothing", 
+            "shirt": "phase_4/maps/winter/clothing/cc_t_clth_shirt_sweater_clowndeer_blue.png", 
+            "shirt_id": 509, 
+            "sleeves": "phase_4/maps/winter/clothing/cc_t_clth_shirt_sweater_clowndeer_blue_sleeve.png", 
+            "sleeves_id": 487, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/clothing/cc_t_clth_sweater_xmasdeer_green": {
+            "folder": "winter/clothing", 
+            "shirt": "phase_4/maps/winter/clothing/cc_t_clth_shirt_sweater_xmasdeer_green.png", 
+            "shirt_id": 510, 
+            "sleeves": "phase_4/maps/winter/clothing/cc_t_clth_shirt_sweater_xmasdeer_green_sleeve.png", 
+            "sleeves_id": 488, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/gingerbread_outfit/tt_t_chr_avt_gingerbread": {
+            "folder": "winter/gingerbread_outfit", 
+            "shorts": "phase_4/maps/winter/gingerbread_outfit/tt_t_chr_avt_shorts_gingerbread.png", 
+            "shorts_id": 279, 
+            "skirt": "phase_4/maps/winter/gingerbread_outfit/tt_t_chr_avt_skirt_gingerbread.png", 
+            "skirt_id": 216, 
+            "sleeves": "phase_4/maps/winter/gingerbread_outfit/tt_t_chr_avt_sleeve_gingerbread.png", 
+            "sleeves_id": 489, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/gingerbread_outfit/tt_t_chr_avt_gingerbread_female": {
+            "folder": "winter/gingerbread_outfit", 
+            "shirt": "phase_4/maps/winter/gingerbread_outfit/tt_t_chr_avt_shirt_gingerbread_female.png", 
+            "shirt_id": 511, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/gingerbread_outfit/tt_t_chr_avt_gingerbread_male": {
+            "folder": "winter/gingerbread_outfit", 
+            "shirt": "phase_4/maps/winter/gingerbread_outfit/tt_t_chr_avt_shirt_gingerbread_male.png", 
+            "shirt_id": 512, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/homemade_ragdoll/ragdoll_homemade": {
+            "folder": "winter/homemade_ragdoll", 
+            "shirt": "phase_4/maps/winter/homemade_ragdoll/ragdoll_homemade_top.png", 
+            "shirt_id": 513, 
+            "shorts": "phase_4/maps/winter/homemade_ragdoll/ragdoll_homemade_bot.png", 
+            "shorts_id": 280, 
+            "skirt": "phase_4/maps/winter/homemade_ragdoll/ragdoll_homemade_skirt.png", 
+            "skirt_id": 217, 
+            "sleeves": "phase_4/maps/winter/homemade_ragdoll/ragdoll_homemade_sleeve.png", 
+            "sleeves_id": 490, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/homemade_tin_soldier/soldier_homemade": {
+            "folder": "winter/homemade_tin_soldier", 
+            "shirt": "phase_4/maps/winter/homemade_tin_soldier/soldier_homemade_top.png", 
+            "shirt_id": 514, 
+            "shorts": "phase_4/maps/winter/homemade_tin_soldier/soldier_homemade_bot.png", 
+            "shorts_id": 281, 
+            "sleeves": "phase_4/maps/winter/homemade_tin_soldier/soldier_homemade_sleeve.png", 
+            "sleeves_id": 491, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/past_outfit/past": {
+            "folder": "winter/past_outfit", 
+            "shirt": "phase_4/maps/winter/past_outfit/past_top.png", 
+            "shirt_id": 515, 
+            "shorts": "phase_4/maps/winter/past_outfit/past_bot.png", 
+            "shorts_id": 282, 
+            "skirt": "phase_4/maps/winter/past_outfit/past_skirt.png", 
+            "skirt_id": 218, 
+            "sleeves": "phase_4/maps/winter/past_outfit/past_sleeve.png", 
+            "sleeves_id": 492, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/present_delivery_uniform_outfit/tt_t_chr_avt_pdu": {
+            "folder": "winter/present_delivery_uniform_outfit", 
+            "shirt": "phase_4/maps/winter/present_delivery_uniform_outfit/tt_t_chr_avt_shirt_pdu.png", 
+            "shirt_id": 516, 
+            "shorts": "phase_4/maps/winter/present_delivery_uniform_outfit/tt_t_chr_avt_shorts_pdu.png", 
+            "shorts_id": 283, 
+            "skirt": "phase_4/maps/winter/present_delivery_uniform_outfit/tt_t_chr_avt_skirt_pdu.png", 
+            "skirt_id": 219, 
+            "sleeves": "phase_4/maps/winter/present_delivery_uniform_outfit/tt_t_chr_avt_sleeve_pdu.png", 
+            "sleeves_id": 493, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/present_outfit/present": {
+            "folder": "winter/present_outfit", 
+            "shirt": "phase_4/maps/winter/present_outfit/present_top.png", 
+            "shirt_id": 517, 
+            "shorts": "phase_4/maps/winter/present_outfit/present_bot.png", 
+            "shorts_id": 284, 
+            "skirt": "phase_4/maps/winter/present_outfit/present_skirt.png", 
+            "skirt_id": 220, 
+            "sleeves": "phase_4/maps/winter/present_outfit/present_sleeve.png", 
+            "sleeves_id": 494, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/ragdoll_outfits/male_shorts/humble_ragdoll": {
+            "folder": "winter/ragdoll_outfits/male_shorts", 
+            "shorts": "phase_4/maps/winter/ragdoll_outfits/male_shorts/humble-ragdoll-bot.png", 
+            "shorts_id": 285, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/ragdoll_outfits/male_shorts/regal_ragdoll": {
+            "folder": "winter/ragdoll_outfits/male_shorts", 
+            "shorts": "phase_4/maps/winter/ragdoll_outfits/male_shorts/regal-ragdoll-bot.png", 
+            "shorts_id": 286, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/ragdoll_outfits/male_shorts/tradi_ragdoll": {
+            "folder": "winter/ragdoll_outfits/male_shorts", 
+            "shorts": "phase_4/maps/winter/ragdoll_outfits/male_shorts/tradi-ragdoll-bot.png", 
+            "shorts_id": 287, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/ragdoll_outfits/regal/tt_t_chr_avt_ragdoll_regal": {
+            "folder": "winter/ragdoll_outfits/regal", 
+            "shirt": "phase_4/maps/winter/ragdoll_outfits/regal/tt_t_chr_avt_shirt_ragdoll_regal.png", 
+            "shirt_id": 518, 
+            "shorts": "phase_4/maps/winter/ragdoll_outfits/regal/tt_t_chr_avt_shorts_ragdoll_regal.png", 
+            "shorts_id": 288, 
+            "sleeves": "phase_4/maps/winter/ragdoll_outfits/regal/tt_t_chr_avt_sleeve_ragdoll_regal.png", 
+            "sleeves_id": 495, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/ragdoll_outfits/traditional/tt_t_chr_avt_ragdoll_traditional": {
+            "folder": "winter/ragdoll_outfits/traditional", 
+            "shirt": "phase_4/maps/winter/ragdoll_outfits/traditional/tt_t_chr_avt_shirt_ragdoll_traditional.png", 
+            "shirt_id": 519, 
+            "shorts": "phase_4/maps/winter/ragdoll_outfits/traditional/tt_t_chr_avt_shorts_ragdoll_traditional.png", 
+            "shorts_id": 289, 
+            "sleeves": "phase_4/maps/winter/ragdoll_outfits/traditional/tt_t_chr_avt_sleeve_ragdoll_traditional.png", 
+            "sleeves_id": 496, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/reindeer_outfit/tt_t_chr_avt_reindeer": {
+            "folder": "winter/reindeer_outfit", 
+            "shirt": "phase_4/maps/winter/reindeer_outfit/tt_t_chr_avt_shirt_reindeer.png", 
+            "shirt_id": 520, 
+            "shorts": "phase_4/maps/winter/reindeer_outfit/tt_t_chr_avt_shorts_reindeer.png", 
+            "shorts_id": 290, 
+            "skirt": "phase_4/maps/winter/reindeer_outfit/tt_t_chr_avt_skirt_reindeer.png", 
+            "skirt_id": 221, 
+            "sleeves": "phase_4/maps/winter/reindeer_outfit/tt_t_chr_avt_sleeve_reindeer.png", 
+            "sleeves_id": 497, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/retro_winterwear/winter": {
+            "folder": "winter/retro_winterwear", 
+            "shirt": "phase_4/maps/winter/retro_winterwear/winterdress_top.png", 
+            "shirt_id": 521, 
+            "skirt": "phase_4/maps/winter/retro_winterwear/winterdress_skirt.png", 
+            "skirt_id": 223, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/retro_winterwear/winter_shoes": {
+            "folder": "winter/retro_winterwear", 
+            "skirt": "phase_4/maps/winter/retro_winterwear/winterdress_shoes.png", 
+            "skirt_id": 222, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/retro_winterwear/wintersuit": {
+            "folder": "winter/retro_winterwear", 
+            "shirt": "phase_4/maps/winter/retro_winterwear/wintersuit_top.png", 
+            "shirt_id": 522, 
+            "shorts": "phase_4/maps/winter/retro_winterwear/wintersuit_bot.png", 
+            "shorts_id": 291, 
+            "sleeves": "phase_4/maps/winter/retro_winterwear/wintersuit_sleeve.png", 
+            "sleeves_id": 498, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/snowman_outfit/snowman": {
+            "folder": "winter/snowman_outfit", 
+            "shirt": "phase_4/maps/winter/snowman_outfit/snowman_top.png", 
+            "shirt_id": 523, 
+            "shorts": "phase_4/maps/winter/snowman_outfit/snowman_bot.png", 
+            "shorts_id": 292, 
+            "sleeves": "phase_4/maps/winter/snowman_outfit/snowman_sleeve.png", 
+            "sleeves_id": 499, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/tin_soldier_outfits/humble/tt_t_chr_avt_tin_soldier_humble": {
+            "folder": "winter/tin_soldier_outfits/humble", 
+            "shirt": "phase_4/maps/winter/tin_soldier_outfits/humble/tt_t_chr_avt_shirt_tin_soldier_humble.png", 
+            "shirt_id": 524, 
+            "shorts": "phase_4/maps/winter/tin_soldier_outfits/humble/tt_t_chr_avt_shorts_tin_soldier_humble.png", 
+            "shorts_id": 293, 
+            "sleeves": "phase_4/maps/winter/tin_soldier_outfits/humble/tt_t_chr_avt_sleeve_tin_soldier_humble.png", 
+            "sleeves_id": 500, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/tin_soldier_outfits/regal/tt_t_chr_avt_tin_soldier_regal": {
+            "folder": "winter/tin_soldier_outfits/regal", 
+            "shirt": "phase_4/maps/winter/tin_soldier_outfits/regal/tt_t_chr_avt_shirt_tin_soldier_regal.png", 
+            "shirt_id": 525, 
+            "shorts": "phase_4/maps/winter/tin_soldier_outfits/regal/tt_t_chr_avt_shorts_tin_soldier_regal.png", 
+            "shorts_id": 294, 
+            "sleeves": "phase_4/maps/winter/tin_soldier_outfits/regal/tt_t_chr_avt_sleeve_tin_soldier_regal.png", 
+            "sleeves_id": 501, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/tin_soldier_outfits/traditional/tt_t_chr_avt_tin_soldier_traditional": {
+            "folder": "winter/tin_soldier_outfits/traditional", 
+            "shirt": "phase_4/maps/winter/tin_soldier_outfits/traditional/tt_t_chr_avt_shirt_tin_soldier_traditional.png", 
+            "shirt_id": 526, 
+            "shorts": "phase_4/maps/winter/tin_soldier_outfits/traditional/tt_t_chr_avt_shorts_tin_soldier_traditional.png", 
+            "shorts_id": 295, 
+            "sleeves": "phase_4/maps/winter/tin_soldier_outfits/traditional/tt_t_chr_avt_sleeve_tin_soldier_traditional.png", 
+            "sleeves_id": 502, 
+            "source": "phase_4"
+        }, 
+        "phase_4:winter/vintage_snow_outfit/tt_t_chr_avt_vintage_snow": {
+            "folder": "winter/vintage_snow_outfit", 
+            "shirt": "phase_4/maps/winter/vintage_snow_outfit/tt_t_chr_avt_shirt_vintage_snow.png", 
+            "shirt_id": 527, 
+            "shorts": "phase_4/maps/winter/vintage_snow_outfit/tt_t_chr_avt_shorts_vintage_snow.png", 
+            "shorts_id": 296, 
+            "sleeves": "phase_4/maps/winter/vintage_snow_outfit/tt_t_chr_avt_sleeve_vintage_snow.png", 
+            "sleeves_id": 503, 
+            "source": "phase_4"
+        }, 
+        "press_painter": {
+            "folder": "press_painter", 
+            "shirt": "phase_14/maps/clothing/press_painter/cc_t_clth_shirt_press_painter.png", 
+            "shirt_id": 530, 
+            "shorts": "phase_14/maps/clothing/press_painter/cc_t_clth_shorts_press_painter.png", 
+            "shorts_id": 299, 
+            "skirt": "phase_14/maps/clothing/press_painter/cc_t_clth_skirt_press_painter.png", 
+            "skirt_id": 224, 
+            "sleeves": "phase_14/maps/clothing/press_painter/cc_t_clth_shirt_press_painter_sleeve.png", 
+            "sleeves_id": 506, 
+            "source": "phase_14"
+        }, 
         "reaper_outfit": {
             "folder": "reaper_outfit", 
             "shirt": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_shirt_reaper.png", 
@@ -9,7 +4249,28 @@
             "skirt": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_skirt_reaper.png", 
             "skirt_id": 72, 
             "sleeves": "phase_14/maps/clothing/reaper_outfit/tt_t_chr_avt_sleeve_reaper.png", 
-            "sleeves_id": 150
+            "sleeves_id": 150, 
+            "source": "phase_14"
+        }, 
+        "riding_hood": {
+            "folder": "riding_hood", 
+            "shirt": "phase_14/maps/clothing/riding_hood/ridinghood_top.png", 
+            "shirt_id": 172, 
+            "shorts": "phase_14/maps/clothing/riding_hood/ridinghood_bot.png", 
+            "shorts_id": 78, 
+            "skirt": "phase_14/maps/clothing/riding_hood/ridinghood_skirt.png", 
+            "skirt_id": 80, 
+            "sleeves": "phase_14/maps/clothing/riding_hood/ridinghood_sleeve.png", 
+            "sleeves_id": 163, 
+            "source": "phase_14"
+        }, 
+        "schoolhouse_flannel": {
+            "folder": "schoolhouse_flannel", 
+            "shirt": "phase_14/maps/clothing/schoolhouse_flannel/tt_t_chr_avt_shirt_flannel.png", 
+            "shirt_id": 173, 
+            "sleeves": "phase_14/maps/clothing/schoolhouse_flannel/tt_t_chr_avt_sleeve_flannel.png", 
+            "sleeves_id": 164, 
+            "source": "phase_14"
         }, 
         "toons_in_wonderland_outfit": {
             "folder": "toons_in_wonderland_outfit", 
@@ -20,7 +4281,8 @@
             "skirt": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_skirt_tiw.png", 
             "skirt_id": 73, 
             "sleeves": "phase_14/maps/clothing/toons_in_wonderland_outfit/tt_t_chr_avt_sleeve_tiw.png", 
-            "sleeves_id": 151
+            "sleeves_id": 151, 
+            "source": "phase_14"
         }
     }, 
     "version": 1

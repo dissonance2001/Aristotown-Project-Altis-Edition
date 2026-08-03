@@ -356,6 +356,17 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         # Safety net: an old LocalAvatar task must never update base.camera.
         return Task.done
 
+    def resetCameraPosition(self):
+        """Ignore the unused legacy camera preset list.
+
+        Place interiors still call this inherited LocalAvatar hook while they
+        are being disabled.  The Clash-style OrbitalCamera owns the camera
+        now, so moving base.camera here can briefly put it at ground level.
+        Keep the legacy index valid and let OrbitalCamera restore its own
+        saved position when the next walk state starts.
+        """
+        self.cameraIndex = 0
+
     def announceGenerate(self):
         self.startLookAround()
 

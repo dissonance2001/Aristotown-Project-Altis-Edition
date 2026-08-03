@@ -1,72 +1,448 @@
 {
     "accessories": {
+        "cc_m_acc_hat_pax_2026.bam": {
+            "display_name": "Cc M Acc Pax 2026 Hat", 
+            "fingerprint": "dde98fcaf5cb983232a5c85b41ab14efeb0d6545", 
+            "id": 207, 
+            "model": "phase_14/accessories/cc_m_acc_hat_pax_2026", 
+            "name": "cc_m_acc_hat_pax_2026", 
+            "native_id": 207, 
+            "style": "custom_hat_207_cc_m_acc_hat_pax_2026", 
+            "type": "hat"
+        }, 
+        "cc_m_acc_hat_press_painter.bam": {
+            "display_name": "Cc M Acc Press Painter Hat", 
+            "fingerprint": "92a2ee6f1102ebe27d82b30cc790c58b198a4d92", 
+            "id": 208, 
+            "model": "phase_14/accessories/cc_m_acc_hat_press_painter", 
+            "name": "cc_m_acc_hat_press_painter", 
+            "native_id": 208, 
+            "style": "custom_hat_208_cc_m_acc_hat_press_painter", 
+            "type": "hat"
+        }, 
         "glasses_majorplayer_rose.bam": {
-            "display_name": "Solemn Rose",
-            "folder": "",
-            "id": 53,
-            "model": "phase_14/accessories/glasses_majorplayer_rose",
-            "name": "glasses_majorplayer_rose",
-            "native_id": 53,
-            "style": "custom_glasses_53_glasses_majorplayer_rose",
+            "display_name": "Solemn Rose", 
+            "fingerprint": "35f58a130eddf143b42c9e77244b88375f7735ad", 
+            "id": 98, 
+            "model": "phase_14/accessories/glasses_majorplayer_rose", 
+            "name": "glasses_majorplayer_rose", 
+            "native_id": 98, 
+            "style": "custom_glasses_98_glasses_majorplayer_rose", 
             "type": "glasses"
-        },
+        }, 
         "glasses_pacesetter.bam": {
-            "display_name": "Pacesetter's Glasses",
-            "folder": "",
-            "id": 50,
-            "model": "phase_14/accessories/glasses_pacesetter",
-            "name": "glasses_pacesetter",
-            "native_id": 50,
-            "style": "custom_glasses_50_glasses_pacesetter",
+            "display_name": "Pacesetter's Glasses", 
+            "fingerprint": "a10403625955a2b9d6e7c68c1fbbc087ff740aee", 
+            "id": 99, 
+            "model": "phase_14/accessories/glasses_pacesetter", 
+            "name": "glasses_pacesetter", 
+            "native_id": 99, 
+            "style": "custom_glasses_99_glasses_pacesetter", 
             "type": "glasses"
-        },
+        }, 
         "hat_icecube.bam": {
-            "display_name": "Brain Freeze",
-            "folder": "",
-            "id": 60,
-            "model": "phase_14/accessories/hat_icecube",
-            "name": "hat_icecube",
-            "native_id": 60,
-            "style": "custom_hat_60_hat_icecube",
+            "display_name": "Icecube Hat", 
+            "fingerprint": "046e89a02208a883ddf8ce5c6947b905401ec10a", 
+            "id": 209, 
+            "model": "phase_14/accessories/hat_icecube", 
+            "name": "hat_icecube", 
+            "native_id": 209, 
+            "style": "custom_hat_209_hat_icecube", 
             "type": "hat"
-        },
+        }, 
         "hat_multislacker.bam": {
-            "display_name": "Multislacker's Hat",
-            "folder": "",
-            "id": 59,
-            "model": "phase_14/accessories/hat_multislacker",
-            "name": "hat_multislacker",
-            "native_id": 59,
-            "style": "custom_hat_59_hat_multislacker",
+            "display_name": "Multislacker Hat", 
+            "fingerprint": "521ff39474cb656489c0685a984b1afd1de01a76", 
+            "id": 210, 
+            "model": "phase_14/accessories/hat_multislacker", 
+            "name": "hat_multislacker", 
+            "native_id": 210, 
+            "style": "custom_hat_210_hat_multislacker", 
             "type": "hat"
-        },
+        }, 
         "hat_rainmaker.bam": {
-            "display_name": "Storm Cloud Hat",
-            "id": 61,
-            "model": "phase_14/accessories/hat_rainmaker",
-            "name": "hat_rainmaker",
-            "native_id": 61,
-            "style": "custom_hat_61_hat_rainmaker",
+            "display_name": "Rainmaker Hat", 
+            "fingerprint": "fd69e5cace1ed7a7fba632c15da4cb6046813cd5", 
+            "id": 211, 
+            "model": "phase_14/accessories/hat_rainmaker", 
+            "name": "hat_rainmaker", 
+            "native_id": 211, 
+            "style": "custom_hat_211_hat_rainmaker", 
             "type": "hat"
-        },
+        }, 
         "tt_m_chr_avt_acc_hat_cake.bam": {
-            "display_name": "Clash Bash 1st Anniversary",
-            "id": 63,
-            "model": "phase_14/accessories/tt_m_chr_avt_acc_hat_cake",
-            "name": "tt_m_chr_avt_acc_hat_cake",
-            "native_id": 63,
-            "style": "custom_hat_63_tt_m_chr_avt_acc_hat_cake",
+            "display_name": "Tt M Chr Avt Acc Cake Hat", 
+            "fingerprint": "f7f4dcf66887167bf4fb74b2902611341137cda0", 
+            "id": 212, 
+            "model": "phase_14/accessories/tt_m_chr_avt_acc_hat_cake", 
+            "name": "tt_m_chr_avt_acc_hat_cake", 
+            "native_id": 212, 
+            "style": "custom_hat_212_tt_m_chr_avt_acc_hat_cake", 
             "type": "hat"
-        },
+        }, 
         "ttr_m_chr_avt_acc_hat_birthdayBashPublic.bam": {
-            "display_name": "Hat Cake Gibus",
-            "id": 62,
-            "model": "phase_14/accessories/ttr_m_chr_avt_acc_hat_birthdayBashPublic",
-            "name": "ttr_m_chr_avt_acc_hat_birthdayBashPublic",
-            "native_id": 62,
-            "style": "custom_hat_62_ttr_m_chr_avt_acc_hat_birthdaybashpublic",
+            "display_name": "Ttr M Chr Avt Acc Birthdaybashpublic Hat", 
+            "fingerprint": "765e47cb08d5957f31ad2735983ebc28adb4c7a5", 
+            "id": 213, 
+            "model": "phase_14/accessories/ttr_m_chr_avt_acc_hat_birthdayBashPublic", 
+            "name": "ttr_m_chr_avt_acc_hat_birthdayBashPublic", 
+            "native_id": 213, 
+            "style": "custom_hat_213_ttr_m_chr_avt_acc_hat_birthdaybashpublic", 
             "type": "hat"
         }
-    },
-    "version": 2
+    }, 
+    "textures": {
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_adhd.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Adhd", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_adhd.png", 
+            "texture_id": 99, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_agender.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Agender", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_agender.png", 
+            "texture_id": 100, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_aroace.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Aroace", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_aroace.png", 
+            "texture_id": 101, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_disability.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Disability", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_disability.png", 
+            "texture_id": 102, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_intersex.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Intersex", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_intersex.png", 
+            "texture_id": 103, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_queer.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Queer", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_queer.png", 
+            "texture_id": 104, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_twospirit.png": {
+            "display_name": "Cc T Acc Bp Cape Classic Pride Twospirit", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_bp_cape_classic_pride_twospirit.png", 
+            "texture_id": 105, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_adhd.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Adhd", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_adhd.png", 
+            "texture_id": 106, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_agender.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Agender", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_agender.png", 
+            "texture_id": 107, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_aroace.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Aroace", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_aroace.png", 
+            "texture_id": 108, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_disability.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Disability", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_disability.png", 
+            "texture_id": 109, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_intersex.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Intersex", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_intersex.png", 
+            "texture_id": 110, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_queer.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Queer", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_queer.png", 
+            "texture_id": 111, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_twospirit.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Twospirit", 
+            "model_ids": [
+                73
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_twospirit.png", 
+            "texture_id": 112, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_ace.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Ace", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_ace.png", 
+            "texture_id": 113, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_adhd.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Adhd", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_adhd.png", 
+            "texture_id": 114, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_agender.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Agender", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_agender.png", 
+            "texture_id": 115, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_aro.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Aro", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_aro.png", 
+            "texture_id": 116, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_aroace.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Aroace", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_aroace.png", 
+            "texture_id": 117, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_bi.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Bi", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_bi.png", 
+            "texture_id": 118, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_disability.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Disability", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_disability.png", 
+            "texture_id": 119, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_gay.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Gay", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_gay.png", 
+            "texture_id": 120, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_gfld.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Gfld", 
+            "model_ids": [
+                144
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_gfld.png", 
+            "texture_id": 121, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_intersex.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Intersex", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_intersex.png", 
+            "texture_id": 122, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_lsbn.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Lsbn", 
+            "model_ids": [
+                144
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_lsbn.png", 
+            "texture_id": 123, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_nb.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Nb", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_nb.png", 
+            "texture_id": 124, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_pan.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Pan", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_pan.png", 
+            "texture_id": 125, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_queer.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Queer", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_queer.png", 
+            "texture_id": 126, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_rainbow.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Rainbow", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_rainbow.png", 
+            "texture_id": 127, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_trans.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Trans", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_trans.png", 
+            "texture_id": 128, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_twospirit.png": {
+            "display_name": "Cc T Acc Nec Scarf Inf Pride Twospirit", 
+            "model_ids": [
+                146
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_scarf_inf_pride_twospirit.png", 
+            "texture_id": 129, 
+            "type": "backpack"
+        }, 
+        "backpack:phase_4/maps/pride/ttcc_acc_bp_capepride_1.png": {
+            "display_name": "Ttcc Acc Bp Capepride 1", 
+            "model_ids": [
+                94
+            ], 
+            "texture": "phase_4/maps/pride/ttcc_acc_bp_capePride_1.png", 
+            "texture_id": 130, 
+            "type": "backpack"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_adhd.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Adhd", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_adhd.png", 
+            "texture_id": 112, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_agender.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Agender", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_agender.png", 
+            "texture_id": 113, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_aroace.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Aroace", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_aroace.png", 
+            "texture_id": 114, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_disability.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Disability", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_disability.png", 
+            "texture_id": 115, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_intersex.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Intersex", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_intersex.png", 
+            "texture_id": 116, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_queer.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Queer", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_queer.png", 
+            "texture_id": 117, 
+            "type": "hat"
+        }, 
+        "hat:phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_twospirit.png": {
+            "display_name": "Cc T Acc Nec Bowtie Fancy Pride Twospirit", 
+            "model_ids": [
+                120
+            ], 
+            "texture": "phase_4/maps/pride/cc_t_acc_nec_bowtie_fancy_pride_twospirit.png", 
+            "texture_id": 118, 
+            "type": "hat"
+        }
+    }, 
+    "version": 3
 }

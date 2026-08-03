@@ -1,6 +1,7 @@
 from direct.gui import DirectGuiGlobals
 import json
 import os
+import re
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -420,6 +421,10 @@ class ClothingTabPage(DirectFrame):
         self.girlPantTypes = []
         self.colorList = []
         self.colorIDs = []
+        self.shirtSearchData = []
+        self.sleeveSearchData = []
+        self.boyPantSearchData = []
+        self.girlPantSearchData = []
         av = base.cr.doId2do.get(base.localAvatar.doId)
         self.shirt = av.style.topTex
         self.shirtColor = av.style.topTexColor
@@ -444,9 +449,67 @@ class ClothingTabPage(DirectFrame):
         self.rainbowEffect = Sequence()
 
         self.makeScrollLists()
+        self.makeSearchBar()
         self.createModel()
         self.makeButtons()
 
+
+    def makeSearchBar(self):
+        self.searchLabel = DirectLabel(parent=self, relief=None, text='Search:',
+                                      text_align=TextNode.ARight, text_scale=0.04,
+                                      pos=(-0.64, 0, 0.69))
+        self.searchBarEntry = DirectEntry(parent=self, relief=DGG.SUNKEN,
+                                          frameColor=(0.85, 0.95, 1, 1),
+                                          borderWidth=(0.01, 0.01),
+                                          text_scale=0.04, width=10.5,
+                                          textMayChange=1, pos=(-0.60, 0, 0.675),
+                                          text_align=TextNode.ALeft,
+                                          backgroundFocus=0,
+                                          focusInCommand=self.toggleSearchFocus)
+        self.searchBarEntry.bind(DGG.TYPE, self.updateClothingSearch)
+        self.searchBarEntry.bind(DGG.ERASE, self.updateClothingSearch)
+
+    def toggleSearchFocus(self, lose=False):
+        if lose:
+            self.searchBarEntry['focus'] = 0
+            base.localAvatar.chatMgr.fsm.request('mainMenu')
+            messenger.send('enable-hotkeys')
+        else:
+            base.localAvatar.chatMgr.fsm.request('otherDialog')
+            messenger.send('disable-hotkeys')
+
+    def _matchesClothingSearch(self, itemId, displayName, assetPath, searchTerm):
+        if not searchTerm:
+            return True
+        if searchTerm.isdigit():
+            return int(searchTerm) == itemId
+        searchable = ('%s %s %s' % (itemId, displayName, assetPath)).lower()
+        for term in searchTerm.split():
+            if term not in searchable:
+                return False
+        return True
+
+    def _filterClothingList(self, searchData, scrollList, slider):
+        searchTerm = self.searchBarEntry.get().strip().lower()
+        visibleItems = []
+        for button, itemId, displayName, assetPath in searchData:
+            if self._matchesClothingSearch(itemId, displayName, assetPath, searchTerm):
+                button.show()
+                visibleItems.append(button)
+            else:
+                button.hide()
+
+        scrollList['items'] = visibleItems
+        itemCount = max(len(visibleItems), 1)
+        slider['range'] = (itemCount, 0)
+        slider['value'] = 0
+        scrollList.scrollTo(0)
+
+    def updateClothingSearch(self, extraArgs=None):
+        self._filterClothingList(self.shirtSearchData, self.shirtScrollList, self.shirtslider)
+        self._filterClothingList(self.sleeveSearchData, self.sleeveScrollList, self.sleeveslider)
+        self._filterClothingList(self.boyPantSearchData, self.pantScrollList1, self.pantslider1)
+        self._filterClothingList(self.girlPantSearchData, self.pantScrollList2, self.pantslider2)
 
     def scrollListTo(self, scrollList, slider):
         if slider == 'shirt':
@@ -461,49 +524,93 @@ class ClothingTabPage(DirectFrame):
             slider = self.colorslider
         scrollList.scrollTo(int(slider['value']))
 
+    def _getClothingDisplayName(self, assetPath):
+        normalized = assetPath.replace('\\', '/')
+        fileName = os.path.splitext(os.path.basename(normalized))[0]
+        parentName = os.path.basename(os.path.dirname(normalized))
+        lowerParent = parentName.lower()
+        lowerPath = normalized.lower()
+
+        # Outfit folders usually give a much cleaner label than their texture filenames.
+        if ('/maps/clothing/' in lowerPath or
+                re.search(r'(outfit|wear|costume|uniform|ensemble|set)', lowerParent)):
+            simpleName = parentName
+        else:
+            simpleName = fileName
+
+        technicalPrefixes = (
+            'tt_t_chr_avt_', 'tt_t_chr_', 'cc_t_clth_', 'tt_t_clth_',
+            'toontown_', 'texture_'
+        )
+        lowerName = simpleName.lower()
+        prefixRemoved = True
+        while prefixRemoved:
+            prefixRemoved = False
+            for prefix in technicalPrefixes:
+                if lowerName.startswith(prefix):
+                    simpleName = simpleName[len(prefix):]
+                    lowerName = simpleName.lower()
+                    prefixRemoved = True
+                    break
+
+        # Make snake_case, kebab-case and camelCase texture names readable.
+        simpleName = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', simpleName)
+        simpleName = simpleName.replace('_', ' ').replace('-', ' ')
+        simpleName = re.sub(r'(?<=[A-Za-z])(?=[0-9])', ' ', simpleName)
+        simpleName = re.sub(r'(?<=[0-9])(?=[A-Za-z])', ' ', simpleName)
+        simpleName = re.sub(r'\s+', ' ', simpleName).strip()
+
+        if not simpleName:
+            simpleName = fileName
+        return simpleName.title()
+
+    def _makeClothingListButton(self, itemId, assetPath, clothType):
+        displayName = self._getClothingDisplayName(assetPath)
+        button = DirectButton(parent=self, relief=None,
+                              text=str(itemId) + ' - ' + displayName,
+                              text_align=TextNode.ALeft, text_scale=0.05,
+                              text1_bg=self.textDownColor,
+                              text2_bg=self.textRolloverColor,
+                              text3_fg=self.textDisabledColor,
+                              textMayChange=1, command=self.showWordInfo,
+                              extraArgs=[itemId, self.word1Desc, clothType])
+        return button, displayName
+
     def makeList(self):
         for x in range(len(ToonDNA.Shirts)):
-            self.l['self.shirts' + str(x)] = DirectButton(parent=self, relief=None, text=str(x) + " - " + ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", ""), text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=1, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'shirt'])
+            assetPath = ToonDNA.Shirts[x]
+            button, displayName = self._makeClothingListButton(x, assetPath, 'shirt')
+            self.l['self.shirts' + str(x)] = button
+            self.shirtList.append(button)
+            self.shirtIDs.append(x)
+            self.shirtSearchData.append((button, x, displayName, assetPath))
 
-            if ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('apparel/') or ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tiers/'):
-                self.l['self.shirts' + str(x)]["text"] = str(x) + " - " + ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", "")
-            elif ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tt_t_chr_'):
-                self.l['self.shirts' + str(x)]["text"] = str(x) + " - " + ToonDNA.Shirts[x].split('/', 1)[-1].split('/', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].replace(".jpg", "")
-
-            self.shirtList.append(self.l['self.shirts' + str(x)])
-            self.shirtIDs.append( x )
         for x in range(len(ToonDNA.Sleeves)):
-            self.l['self.sleeves' + str(x)] = DirectButton(parent=self, relief=None, text=str(x) + " - " + ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", ""), text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=1, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'sleeve'])
+            assetPath = ToonDNA.Sleeves[x]
+            button, displayName = self._makeClothingListButton(x, assetPath, 'sleeve')
+            self.l['self.sleeves' + str(x)] = button
+            self.sleeveList.append(button)
+            self.sleeveIDs.append(x)
+            self.sleeveSearchData.append((button, x, displayName, assetPath))
 
-            if ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].startswith('apparel/') or ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tiers/'):
-                self.l['self.sleeves' + str(x)]["text"] = str(x) + " - " + ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", "")
-            elif ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tt_t_chr_'):
-                self.l['self.sleeves' + str(x)]["text"] = str(x) + " - " + ToonDNA.Sleeves[x].split('/', 1)[-1].split('/', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].replace(".jpg", "")
-
-            self.sleeveList.append(self.l['self.sleeves' + str(x)])
-            self.sleeveIDs.append( x )
         for x in range(len(ToonDNA.BoyShorts)):
-            self.l['self.boypants' + str(x)] = DirectButton(parent=self, relief=None, text=str(x) + " - " + ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", ""), text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=1, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'pants'])
+            assetPath = ToonDNA.BoyShorts[x]
+            button, displayName = self._makeClothingListButton(x, assetPath, 'pants')
+            self.l['self.boypants' + str(x)] = button
+            self.boyPantList.append(button)
+            self.boyPantIDs.append(x)
+            self.boyPantSearchData.append((button, x, displayName, assetPath))
 
-            if ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('apparel/') or ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tiers/'):
-                self.l['self.boypants' + str(x)]["text"] = str(x) + " - " + ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", "")
-            elif ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].startswith('tt_t_chr_'):
-                self.l['self.boypants' + str(x)]["text"] = str(x) + " - " + ToonDNA.BoyShorts[x].split('/', 1)[-1].split('/', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].replace(".jpg", "")
-
-            self.boyPantList.append(self.l['self.boypants' + str(x)])
-            self.boyPantIDs.append( x )
         for x in range(len(ToonDNA.GirlBottoms)):
             pantsTypes = ['s', 'd']
-            self.l['self.girlpants' + str(x)] = DirectButton(parent=self, relief=None, text=str(x) + " - " + ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", ""), text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=1, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'pants'])
-
-            if ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].startswith('apparel/') or ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].startswith('tiers/'):
-                self.l['self.girlpants' + str(x)]["text"] = str(x) + " - " + ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].split('/', 1)[-1].replace(".jpg", "")
-            elif ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].startswith('tt_t_chr_'):
-                self.l['self.girlpants' + str(x)]["text"] = str(x) + " - " + ToonDNA.GirlBottoms[x][0].split('/', 1)[-1].split('/', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].split('_', 1)[-1].replace(".jpg", "")
-
-            self.girlPantList.append(self.l['self.girlpants' + str(x)])
-            self.girlPantIDs.append( x )
+            assetPath = ToonDNA.GirlBottoms[x][0]
+            button, displayName = self._makeClothingListButton(x, assetPath, 'pants')
+            self.l['self.girlpants' + str(x)] = button
+            self.girlPantList.append(button)
+            self.girlPantIDs.append(x)
             self.girlPantTypes.append(pantsTypes[ToonDNA.GirlBottoms[x][1]])
+            self.girlPantSearchData.append((button, x, displayName, assetPath))
+
         for x in range(len(ToonDNA.allColorsList)):
             self.l['self.colors' + str(x)] = DirectButton(parent=self, relief=None, text=str(x), text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=0, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'color'])
             self.colorList.append(self.l['self.colors' + str(x)])
@@ -559,6 +666,11 @@ class ClothingTabPage(DirectFrame):
             self.freakSeq.finish()
         del self.nakedLabel
 
+        self.searchLabel.destroy()
+        del self.searchLabel
+        self.searchBarEntry.destroy()
+        del self.searchBarEntry
+
         self.shirtScrollList.destroy()
         del self.shirtScrollList
         self.sleeveScrollList.destroy()
@@ -607,10 +719,15 @@ class ClothingTabPage(DirectFrame):
 
     def exit(self):
         self.ignore('confirmDone')
+        self.ignore('mouse1')
+        self.toggleSearchFocus(True)
+        self.searchBarEntry.set('')
+        self.updateClothingSearch()
         self.hide()
 
     def enter(self):
         self.ignore('confirmDone')
+        self.accept('mouse1', self.toggleSearchFocus, extraArgs=[True])
         self.show()
 
     def createModel(self):
@@ -1064,6 +1181,10 @@ class AccTabPage1(DirectFrame):
         self.glassesIDs = []
         self.glassesTexList = []
         self.glassesTexIDs = []
+        self.hatSearchData = []
+        self.hatTexSearchData = []
+        self.glassesSearchData = []
+        self.glassesTexSearchData = []
         av = base.cr.doId2do.get(base.localAvatar.doId)
         currentHat = av.getHat()
         currentGlasses = av.getGlasses()
@@ -1082,9 +1203,67 @@ class AccTabPage1(DirectFrame):
         self.glassesTexWords = list(self.glassesTexList)
 
         self.makeScrollLists()
+        self.makeSearchBar()
         self.createModel()
         self.makeButtons()
 
+
+    def makeSearchBar(self):
+        self.searchLabel = DirectLabel(parent=self, relief=None, text='Search:',
+                                      text_align=TextNode.ARight, text_scale=0.04,
+                                      pos=(-0.64, 0, 0.69))
+        self.searchBarEntry = DirectEntry(parent=self, relief=DGG.SUNKEN,
+                                          frameColor=(0.85, 0.95, 1, 1),
+                                          borderWidth=(0.01, 0.01),
+                                          text_scale=0.04, width=10.5,
+                                          textMayChange=1, pos=(-0.60, 0, 0.675),
+                                          text_align=TextNode.ALeft,
+                                          backgroundFocus=0,
+                                          focusInCommand=self.toggleSearchFocus)
+        self.searchBarEntry.bind(DGG.TYPE, self.updateAccessorySearch)
+        self.searchBarEntry.bind(DGG.ERASE, self.updateAccessorySearch)
+
+    def toggleSearchFocus(self, lose=False):
+        if lose:
+            self.searchBarEntry['focus'] = 0
+            base.localAvatar.chatMgr.fsm.request('mainMenu')
+            messenger.send('enable-hotkeys')
+        else:
+            base.localAvatar.chatMgr.fsm.request('otherDialog')
+            messenger.send('disable-hotkeys')
+
+    def _matchesAccessorySearch(self, itemId, displayText, assetPath, searchTerm):
+        if not searchTerm:
+            return True
+        if searchTerm.isdigit():
+            return int(searchTerm) == itemId
+        searchable = ('%s %s %s' % (itemId, displayText, assetPath)).lower()
+        for term in searchTerm.split():
+            if term not in searchable:
+                return False
+        return True
+
+    def _filterAccessoryList(self, searchData, scrollList, slider):
+        searchTerm = self.searchBarEntry.get().strip().lower()
+        visibleItems = []
+        for button, itemId, displayText, assetPath in searchData:
+            if self._matchesAccessorySearch(itemId, displayText, assetPath, searchTerm):
+                button.show()
+                visibleItems.append(button)
+            else:
+                button.hide()
+
+        scrollList['items'] = visibleItems
+        itemCount = max(len(visibleItems), 1)
+        slider['range'] = (itemCount, 0)
+        slider['value'] = 0
+        scrollList.scrollTo(0)
+
+    def updateAccessorySearch(self, extraArgs=None):
+        self._filterAccessoryList(self.hatSearchData, self.hatScrollList, self.hatslider)
+        self._filterAccessoryList(self.hatTexSearchData, self.hatTexScrollList, self.hattexslider)
+        self._filterAccessoryList(self.glassesSearchData, self.glassesScrollList, self.glassesslider)
+        self._filterAccessoryList(self.glassesTexSearchData, self.glassesTexScrollList, self.glassestexslider)
 
     def scrollListTo(self, scrollList, slider):
         if slider == 'hat':
@@ -1103,8 +1282,10 @@ class AccTabPage1(DirectFrame):
 
     def makeList(self):
         for x in range(len(ToonDNA.HatModels)):
+            if ToonDNA.HatModels[x] is None and x != 0:
+                continue
             text = str(x) + " - "
-            if ToonDNA.HatModels[x] == None:
+            if ToonDNA.HatModels[x] is None:
                 text += "No Hat"
             else:
                 text += self.makeSplit(ToonDNA.HatModels[x])
@@ -1115,6 +1296,7 @@ class AccTabPage1(DirectFrame):
 
             self.hatList.append(self.l['self.hats' + str(x)])
             self.hatIDs.append(x)
+            self.hatSearchData.append((self.l['self.hats' + str(x)], x, text, ToonDNA.HatModels[x]))
         for x in range(len(ToonDNA.HatTextures)):
             text = str(x) + " - "
             if ToonDNA.HatTextures[x] == None:
@@ -1128,9 +1310,12 @@ class AccTabPage1(DirectFrame):
 
             self.hatTexList.append(self.l['self.hatTexs' + str(x)])
             self.hatTexIDs.append(x)
+            self.hatTexSearchData.append((self.l['self.hatTexs' + str(x)], x, text, ToonDNA.HatTextures[x]))
         for x in range(len(ToonDNA.GlassesModels)):
+            if ToonDNA.GlassesModels[x] is None and x != 0:
+                continue
             text = str(x) + " - "
-            if ToonDNA.GlassesModels[x] == None:
+            if ToonDNA.GlassesModels[x] is None:
                 text += "No Glasses"
             else:
                 text += self.makeSplit(ToonDNA.GlassesModels[x])
@@ -1141,6 +1326,7 @@ class AccTabPage1(DirectFrame):
 
             self.glassesList.append(self.l['self.glass' + str(x)])
             self.glassesIDs.append(x)
+            self.glassesSearchData.append((self.l['self.glass' + str(x)], x, text, ToonDNA.GlassesModels[x]))
         for x in range(len(ToonDNA.GlassesTextures)):
             text = str(x) + " - "
             if ToonDNA.GlassesTextures[x] == None:
@@ -1155,6 +1341,7 @@ class AccTabPage1(DirectFrame):
 
             self.glassesTexList.append(self.l['self.glassTexs' + str(x)])
             self.glassesTexIDs.append(x)
+            self.glassesTexSearchData.append((self.l['self.glassTexs' + str(x)], x, text, ToonDNA.GlassesTextures[x]))
 
         self.hatLabel = DirectLabel(parent=self, relief=None,
                                      text="Hat ID: (" + str(self.hat) + ', ' + str(self.hatTex) + ", 0)",
@@ -1166,16 +1353,21 @@ class AccTabPage1(DirectFrame):
 
 
     def unload(self):
-        for x in range(len(ToonDNA.HatModels)):
+        for x in self.hatIDs:
             del self.l['self.hats' + str(x)]
         for x in range(len(ToonDNA.HatTextures)):
             del self.l['self.hatTexs' + str(x)]
-        for x in range(len(ToonDNA.GlassesModels)):
+        for x in self.glassesIDs:
             del self.l['self.glass' + str(x)]
         for x in range(len(ToonDNA.GlassesTextures)):
             del self.l['self.glassTexs' + str(x)]
         del self.hatLabel
         del self.glassesLabel
+
+        self.searchLabel.destroy()
+        del self.searchLabel
+        self.searchBarEntry.destroy()
+        del self.searchBarEntry
 
         self.hatScrollList.destroy()
         del self.hatScrollList
@@ -1210,10 +1402,15 @@ class AccTabPage1(DirectFrame):
 
     def exit(self):
         self.ignore('confirmDone')
+        self.ignore('mouse1')
+        self.toggleSearchFocus(True)
+        self.searchBarEntry.set('')
+        self.updateAccessorySearch()
         self.hide()
 
     def enter(self):
         self.ignore('confirmDone')
+        self.accept('mouse1', self.toggleSearchFocus, extraArgs=[True])
         self.show()
 
     def createModel(self):
@@ -1293,30 +1490,52 @@ class AccTabPage1(DirectFrame):
             self.toggleBody['text'] = 'Toggle Head (%s)' % self.headName
         self.createModel()
 
+    def _getDefaultAccessoryTexture(self, styleDict, modelId):
+        validTextures = []
+        for style in styleDict.values():
+            if (isinstance(style, (list, tuple)) and len(style) >= 2 and
+                    style[0] == modelId and isinstance(style[1], int)):
+                validTextures.append(style[1])
+        if validTextures:
+            return min(validTextures)
+        return 0
+
     def showWordInfo(self, wordNum, desc, clothType):
-        listNum = wordNum
         if clothType == 'hat':
             clothList = self.hatList
+            buttonKey = 'self.hats' + str(wordNum)
         elif clothType == 'hatTex':
             clothList = self.hatTexList
+            buttonKey = 'self.hatTexs' + str(wordNum)
         elif clothType == 'glasses':
             clothList = self.glassesList
+            buttonKey = 'self.glass' + str(wordNum)
         elif clothType == 'glassesTex':
             clothList = self.glassesTexList
+            buttonKey = 'self.glassTexs' + str(wordNum)
 
         for word in clothList:
             if word['state'] != DGG.NORMAL:
                 word['state'] = DGG.NORMAL
 
-        wordName = clothList[wordNum]
-        wordName['state'] = DGG.DISABLED
+        wordName = self.l.get(buttonKey)
+        if wordName is not None:
+            wordName['state'] = DGG.DISABLED
 
         if clothType == 'hat':
             self.hat = wordNum
+            self.hatTex = self._getDefaultAccessoryTexture(
+                ToonDNA.HatStyles,
+                wordNum
+            )
         elif clothType == 'hatTex':
             self.hatTex = wordNum
         elif clothType == 'glasses':
             self.glasses = wordNum
+            self.glassesTex = self._getDefaultAccessoryTexture(
+                ToonDNA.GlassesStyles,
+                wordNum
+            )
         elif clothType == 'glassesTex':
             self.glassesTex = wordNum
 
@@ -1438,6 +1657,10 @@ class AccTabPage2(DirectFrame):
         self.shoesIDs = []
         self.shoesTexList = []
         self.shoesTexIDs = []
+        self.backpackSearchData = []
+        self.backpackTexSearchData = []
+        self.shoesSearchData = []
+        self.shoesTexSearchData = []
         self.backpack = 0
         self.backpackTex = 0
         self.shoes = 0
@@ -1462,9 +1685,67 @@ class AccTabPage2(DirectFrame):
         self.shoesTexWords = list(self.shoesTexList)
 
         self.makeScrollLists()
+        self.makeSearchBar()
         self.createModel()
         self.makeButtons()
 
+
+    def makeSearchBar(self):
+        self.searchLabel = DirectLabel(parent=self, relief=None, text='Search:',
+                                      text_align=TextNode.ARight, text_scale=0.04,
+                                      pos=(-0.64, 0, 0.69))
+        self.searchBarEntry = DirectEntry(parent=self, relief=DGG.SUNKEN,
+                                          frameColor=(0.85, 0.95, 1, 1),
+                                          borderWidth=(0.01, 0.01),
+                                          text_scale=0.04, width=10.5,
+                                          textMayChange=1, pos=(-0.60, 0, 0.675),
+                                          text_align=TextNode.ALeft,
+                                          backgroundFocus=0,
+                                          focusInCommand=self.toggleSearchFocus)
+        self.searchBarEntry.bind(DGG.TYPE, self.updateAccessorySearch)
+        self.searchBarEntry.bind(DGG.ERASE, self.updateAccessorySearch)
+
+    def toggleSearchFocus(self, lose=False):
+        if lose:
+            self.searchBarEntry['focus'] = 0
+            base.localAvatar.chatMgr.fsm.request('mainMenu')
+            messenger.send('enable-hotkeys')
+        else:
+            base.localAvatar.chatMgr.fsm.request('otherDialog')
+            messenger.send('disable-hotkeys')
+
+    def _matchesAccessorySearch(self, itemId, displayText, assetPath, searchTerm):
+        if not searchTerm:
+            return True
+        if searchTerm.isdigit():
+            return int(searchTerm) == itemId
+        searchable = ('%s %s %s' % (itemId, displayText, assetPath)).lower()
+        for term in searchTerm.split():
+            if term not in searchable:
+                return False
+        return True
+
+    def _filterAccessoryList(self, searchData, scrollList, slider):
+        searchTerm = self.searchBarEntry.get().strip().lower()
+        visibleItems = []
+        for button, itemId, displayText, assetPath in searchData:
+            if self._matchesAccessorySearch(itemId, displayText, assetPath, searchTerm):
+                button.show()
+                visibleItems.append(button)
+            else:
+                button.hide()
+
+        scrollList['items'] = visibleItems
+        itemCount = max(len(visibleItems), 1)
+        slider['range'] = (itemCount, 0)
+        slider['value'] = 0
+        scrollList.scrollTo(0)
+
+    def updateAccessorySearch(self, extraArgs=None):
+        self._filterAccessoryList(self.backpackSearchData, self.backpackScrollList, self.backpackslider)
+        self._filterAccessoryList(self.backpackTexSearchData, self.backpackTexScrollList, self.backpacktexslider)
+        self._filterAccessoryList(self.shoesSearchData, self.shoesScrollList, self.shoesslider)
+        self._filterAccessoryList(self.shoesTexSearchData, self.shoesTexScrollList, self.shoestexslider)
 
     def scrollListTo(self, scrollList, slider):
         if slider == 'backpack':
@@ -1483,8 +1764,10 @@ class AccTabPage2(DirectFrame):
 
     def makeList(self):
         for x in range(len(ToonDNA.BackpackModels)):
+            if ToonDNA.BackpackModels[x] is None and x != 0:
+                continue
             text = str(x) + " - "
-            if ToonDNA.BackpackModels[x] == None:
+            if ToonDNA.BackpackModels[x] is None:
                 text += "No Backpack"
             else:
                 text += self.makeSplit(ToonDNA.BackpackModels[x])
@@ -1495,6 +1778,7 @@ class AccTabPage2(DirectFrame):
 
             self.backpackList.append(self.l['self.backpacks' + str(x)])
             self.backpackIDs.append(x)
+            self.backpackSearchData.append((self.l['self.backpacks' + str(x)], x, text, ToonDNA.BackpackModels[x]))
         for x in range(len(ToonDNA.BackpackTextures)):
             text = str(x) + " - "
             if ToonDNA.BackpackTextures[x] == None:
@@ -1508,12 +1792,15 @@ class AccTabPage2(DirectFrame):
 
             self.backpackTexList.append(self.l['self.backpackTexs' + str(x)])
             self.backpackTexIDs.append(x)
+            self.backpackTexSearchData.append((self.l['self.backpackTexs' + str(x)], x, text, ToonDNA.BackpackTextures[x]))
         for x in range(len(ToonDNA.ShoesModels)):
+            if ToonDNA.ShoesModels[x] is None and x != 0:
+                continue
             text = str(x) + " - "
-            if ToonDNA.ShoesModels[x] == None:
-                text += "FuckerA"
+            if ToonDNA.ShoesModels[x] is None:
+                text += "No Shoes"
             else:
-                text += ToonDNA.ShoesModels[x]
+                text += self.makeSplit(ToonDNA.ShoesModels[x])
 
             self.l['self.shoe' + str(x)] = DirectButton(parent=self, relief=None, text=text, text_align=TextNode.ALeft, text_scale=0.05, text1_bg=self.textDownColor, text2_bg=self.textRolloverColor, text3_fg=self.textDisabledColor, textMayChange=1, command=self.showWordInfo, extraArgs=[x, self.word1Desc, 'shoes'])
 
@@ -1521,10 +1808,11 @@ class AccTabPage2(DirectFrame):
 
             self.shoesList.append(self.l['self.shoe' + str(x)])
             self.shoesIDs.append(x)
+            self.shoesSearchData.append((self.l['self.shoe' + str(x)], x, text, ToonDNA.ShoesModels[x]))
         for x in range(len(ToonDNA.ShoesTextures)):
             text = str(x) + " - "
-            if ToonDNA.ShoesTextures[x] == None:
-                text += "FuckerB"
+            if ToonDNA.ShoesTextures[x] is None:
+                text += "Normal Texture"
             else:
                 text += self.makeSplit(ToonDNA.ShoesTextures[x].replace(".jpg", ""))
 
@@ -1535,6 +1823,7 @@ class AccTabPage2(DirectFrame):
 
             self.shoesTexList.append(self.l['self.shoeTexs' + str(x)])
             self.shoesTexIDs.append(x)
+            self.shoesTexSearchData.append((self.l['self.shoeTexs' + str(x)], x, text, ToonDNA.ShoesTextures[x]))
 
         self.backpackLabel = DirectLabel(parent=self, relief=None,
                                      text="Backpack ID: (" + str(self.backpack) + ', ' + str(self.backpackTex) + ", 0)",
@@ -1546,16 +1835,21 @@ class AccTabPage2(DirectFrame):
 
 
     def unload(self):
-        for x in range(len(ToonDNA.BackpackModels)):
+        for x in self.backpackIDs:
             del self.l['self.backpacks' + str(x)]
         for x in range(len(ToonDNA.BackpackTextures)):
             del self.l['self.backpackTexs' + str(x)]
-        for x in range(len(ToonDNA.ShoesModels)):
+        for x in self.shoesIDs:
             del self.l['self.shoe' + str(x)]
         for x in range(len(ToonDNA.ShoesTextures)):
             del self.l['self.shoeTexs' + str(x)]
         del self.backpackLabel
         del self.shoesLabel
+
+        self.searchLabel.destroy()
+        del self.searchLabel
+        self.searchBarEntry.destroy()
+        del self.searchBarEntry
 
         self.backpackScrollList.destroy()
         del self.backpackScrollList
@@ -1590,10 +1884,15 @@ class AccTabPage2(DirectFrame):
 
     def exit(self):
         self.ignore('confirmDone')
+        self.ignore('mouse1')
+        self.toggleSearchFocus(True)
+        self.searchBarEntry.set('')
+        self.updateAccessorySearch()
         self.hide()
 
     def enter(self):
         self.ignore('confirmDone')
+        self.accept('mouse1', self.toggleSearchFocus, extraArgs=[True])
         self.show()
 
     def createModel(self):
@@ -1695,34 +1994,57 @@ class AccTabPage2(DirectFrame):
                 self.toggleBody['text'] = 'Toggle Body (Med)'
         self.createModel()
 
+    def _getDefaultAccessoryTexture(self, styleDict, modelId):
+        validTextures = []
+        for style in styleDict.values():
+            if (isinstance(style, (list, tuple)) and len(style) >= 2 and
+                    style[0] == modelId and isinstance(style[1], int)):
+                validTextures.append(style[1])
+        if validTextures:
+            return min(validTextures)
+        return 0
+
     def showWordInfo(self, wordNum, desc, clothType):
         if clothType == 'backpack':
             clothList = self.backpackList
+            buttonKey = 'self.backpacks' + str(wordNum)
         elif clothType == 'backpackTex':
             clothList = self.backpackTexList
+            buttonKey = 'self.backpackTexs' + str(wordNum)
         elif clothType == 'shoes':
             clothList = self.shoesList
+            buttonKey = 'self.shoe' + str(wordNum)
         elif clothType == 'shoesTex':
             clothList = self.shoesTexList
+            buttonKey = 'self.shoeTexs' + str(wordNum)
 
         for word in clothList:
             if word['state'] != DGG.NORMAL:
                 word['state'] = DGG.NORMAL
 
-        wordName = clothList[wordNum]
-        wordName['state'] = DGG.DISABLED
+        wordName = self.l.get(buttonKey)
+        if wordName is not None:
+            wordName['state'] = DGG.DISABLED
 
         if clothType == 'backpack':
             self.backpack = wordNum
+            self.backpackTex = self._getDefaultAccessoryTexture(
+                ToonDNA.BackpackStyles,
+                wordNum
+            )
         elif clothType == 'backpackTex':
             self.backpackTex = wordNum
         elif clothType == 'shoes':
             self.shoes = wordNum
+            self.shoesTex = self._getDefaultAccessoryTexture(
+                ToonDNA.ShoesStyles,
+                wordNum
+            )
         elif clothType == 'shoesTex':
             self.shoesTex = wordNum
 
         self.backpackLabel['text'] = "Backpack ID: (" + str(self.backpack) + ', ' + str(self.backpackTex) + ", 0)"
-        self.shoesLabel['text'] = "shoes ID: (" + str(self.shoes) + ', ' + str(self.shoesTex) + ", 0)"
+        self.shoesLabel['text'] = "Shoes ID: (" + str(self.shoes) + ', ' + str(self.shoesTex) + ", 0)"
         self.createModel()
 
     def makeScrollLists(self):

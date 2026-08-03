@@ -1,12 +1,22 @@
 from toontown.building.DistributedToonInteriorAI import *
 from toontown.toonbase import ToontownGlobals
+from toontown.toon import ToonHallCustomNPCs
 
 class DistributedToonHallInteriorAI(DistributedToonInteriorAI):
 
     def __init__(self, block, air, zoneId, building):
+        self.customToonHallNPCs = []
         DistributedToonInteriorAI.__init__(self, block, air, zoneId, building)
         self.accept('ToonEnteredZone', self.logToonEntered)
         self.accept('ToonLeftZone', self.logToonLeft)
+
+    def generate(self):
+        DistributedToonInteriorAI.generate(self)
+        if not self.customToonHallNPCs:
+            self.customToonHallNPCs = ToonHallCustomNPCs.createNPCs(
+                self.air,
+                self.zoneId
+            )
 
     def logToonEntered(self, avId, zoneId):
         result = self.getCurPhase()
@@ -41,4 +51,6 @@ class DistributedToonHallInteriorAI(DistributedToonInteriorAI):
 
     def delete(self):
         self.ignoreAll()
+        ToonHallCustomNPCs.deleteNPCs(self.customToonHallNPCs)
+        self.customToonHallNPCs = []
         DistributedToonInteriorAI.delete(self)

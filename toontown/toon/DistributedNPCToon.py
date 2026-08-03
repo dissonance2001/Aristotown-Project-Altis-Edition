@@ -11,6 +11,7 @@ from toontown.quest import TrackChoiceGui
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 from toontown.toon import ToonHead
+from toontown.toon import ToonHallCustomNPCs
 
 ChoiceTimeout = 20
 AVAILABLE_QUEST = 0
@@ -118,7 +119,192 @@ class DistributedNPCToon(DistributedNPCToonBase):
         finally:
             ToonHead.HeadDict['x'] = oldPrefix
 
+    def setNpcId(self, npcId):
+        try:
+            DistributedNPCToonBase.setNpcId(self, npcId)
+        except AttributeError:
+            self.npcId = npcId
+
+        if ToonHallCustomNPCs.getDataForNPC(self):
+            self.__startToonHallCustomNPCPositioning()
+
+    def _loadToonHallClothingTexture(self, texturePath):
+        texture = loader.loadTexture(texturePath, okMissing=True)
+        if texture:
+            texture.setMinfilter(Texture.FTLinearMipmapLinear)
+            texture.setMagfilter(Texture.FTLinear)
+        return texture
+
+    def _applyToonHallExtendedClothing(self):
+        # The legacy Toon DNA packet stores shirt, sleeve and bottom texture
+        # IDs as uint8. Custom registry IDs can exceed 255, so the AI sends
+        # safe zero placeholders and the client applies the real textures here.
+        data = ToonHallCustomNPCs.getDataForNPC(self)
+        if not data:
+            return False
+
+        dna = data.get('dna')
+        if not dna or len(dna) < 14:
+            return False
+
+        try:
+            shirtId = int(dna[8])
+            shirtColorId = int(dna[9])
+            sleeveId = int(dna[10])
+            sleeveColorId = int(dna[11])
+            bottomId = int(dna[12])
+            bottomColorId = int(dna[13])
+        except:
+            return False
+
+        # Leave ordinary uint8-compatible NPC clothing to the normal Toon
+        # renderer and the existing special-case Toon Hall appearance helpers.
+        if (0 <= shirtId <= 255 and
+                0 <= sleeveId <= 255 and
+                0 <= bottomId <= 255):
+            return True
+
+        try:
+            from toontown.toon import ToonDNA
+
+            shirtTexture = None
+            sleeveTexture = None
+            bottomTexture = None
+
+            if 0 <= shirtId < len(ToonDNA.Shirts):
+                shirtTexture = self._loadToonHallClothingTexture(
+                    ToonDNA.Shirts[shirtId]
+                )
+            else:
+                self.notify.warning(
+                    'Custom NPC shirt texture ID %s is unavailable for %s.' %
+                    (shirtId, data.get('name', 'unknown NPC'))
+                )
+
+            if 0 <= sleeveId < len(ToonDNA.Sleeves):
+                sleeveTexture = self._loadToonHallClothingTexture(
+                    ToonDNA.Sleeves[sleeveId]
+                )
+            else:
+                self.notify.warning(
+                    'Custom NPC sleeve texture ID %s is unavailable for %s.' %
+                    (sleeveId, data.get('name', 'unknown NPC'))
+                )
+
+            useGirlBottom = data.get('gender', dna[3]) == 'f'
+            explicitGirlSkirt = data.get('girlSkirt')
+            explicitBoyShorts = data.get('boyShorts')
+
+            if explicitGirlSkirt:
+                bottomId = int(explicitGirlSkirt[0])
+                bottomColorId = int(explicitGirlSkirt[1])
+                useGirlBottom = True
+            elif explicitBoyShorts:
+                bottomId = int(explicitBoyShorts[0])
+                bottomColorId = int(explicitBoyShorts[1])
+                useGirlBottom = False
+
+            if useGirlBottom:
+                if 0 <= bottomId < len(ToonDNA.GirlBottoms):
+                    bottomPath = ToonDNA.GirlBottoms[bottomId][0]
+                    bottomTexture = self._loadToonHallClothingTexture(
+                        bottomPath
+                    )
+                else:
+                    self.notify.warning(
+                        'Custom NPC girl bottom texture ID %s is unavailable '
+                        'for %s.' %
+                        (bottomId, data.get('name', 'unknown NPC'))
+                    )
+            else:
+                if 0 <= bottomId < len(ToonDNA.BoyShorts):
+                    bottomTexture = self._loadToonHallClothingTexture(
+                        ToonDNA.BoyShorts[bottomId]
+                    )
+                else:
+                    self.notify.warning(
+                        'Custom NPC shorts texture ID %s is unavailable for %s.' %
+                        (bottomId, data.get('name', 'unknown NPC'))
+                    )
+
+            white = VBase4(1.0, 1.0, 1.0, 1.0)
+            if 0 <= shirtColorId < len(ToonDNA.ClothesColors):
+                shirtColor = ToonDNA.ClothesColors[shirtColorId]
+            else:
+                shirtColor = white
+            if 0 <= sleeveColorId < len(ToonDNA.ClothesColors):
+                sleeveColor = ToonDNA.ClothesColors[sleeveColorId]
+            else:
+                sleeveColor = white
+            if 0 <= bottomColorId < len(ToonDNA.ClothesColors):
+                bottomColor = ToonDNA.ClothesColors[bottomColorId]
+            else:
+                bottomColor = white
+
+            darkBottomColor = bottomColor * 0.5
+            darkBottomColor.setW(1.0)
+            applied = False
+
+            for lodName in self.getLODNames():
+                torso = self.getPart('torso', lodName)
+                if not torso:
+                    continue
+
+                top = torso.find('**/torso-top')
+                if shirtTexture and not top.isEmpty():
+                    top.setTexture(shirtTexture, 1)
+                    top.setColor(shirtColor)
+                    applied = True
+
+                sleeves = torso.find('**/sleeves')
+                if sleeveTexture and not sleeves.isEmpty():
+                    sleeves.setTexture(sleeveTexture, 1)
+                    sleeves.setColor(sleeveColor)
+                    applied = True
+
+                bottoms = torso.findAllMatches('**/torso-bot')
+                for index in range(bottoms.getNumPaths()):
+                    bottom = bottoms.getPath(index)
+                    if bottomTexture:
+                        bottom.setTexture(bottomTexture, 1)
+                    bottom.setColor(bottomColor)
+                    applied = True
+
+                caps = torso.findAllMatches('**/torso-bot-cap')
+                for index in range(caps.getNumPaths()):
+                    caps.getPath(index).setColor(darkBottomColor)
+
+            return applied
+        except Exception, error:
+            self.notify.warning(
+                'Could not apply extended custom NPC clothing for %s: %s' %
+                (data.get('name', 'unknown NPC'), error)
+            )
+            return False
+
+    def __startToonHallCustomNPCPositioning(self):
+        taskName = self.uniqueName('positionToonHallCustomNPC')
+        taskMgr.remove(taskName)
+
+        if ToonHallCustomNPCs.positionClientNPC(self):
+            self._applyToonHallExtendedClothing()
+            self.setAnimState('neutral', 0.9, None, None)
+            return
+
+        # The distributed NPC can generate before the Toon Hall model. Retry
+        # only until the interior exists, then stop permanently.
+        taskMgr.doMethodLater(
+            0.1,
+            self.__positionToonHallCustomNPC,
+            taskName
+        )
+
     def initToonState(self):
+        customData = ToonHallCustomNPCs.getDataForNPC(self)
+        if customData:
+            self.__startToonHallCustomNPCPositioning()
+            return
+
         data = self._getClubVinciData()
         if not data:
             return DistributedNPCToonBase.initToonState(self)
@@ -126,6 +312,15 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.setPos(*data['position'])
         self.setH(data['heading'])
         self.setAnimState('neutral', 0.9, None, None)
+
+    def __positionToonHallCustomNPC(self, task):
+        if ToonHallCustomNPCs.positionClientNPC(self):
+            self._applyToonHallExtendedClothing()
+            self.setAnimState('neutral', 0.9, None, None)
+            return Task.done
+
+        task.delayTime = 0.1
+        return task.again
 
     def _loadClubTexture(self, path):
         texture = loader.loadTexture(path, okMissing=True)
@@ -262,17 +457,23 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.nametag.setNametagColor(redNametagColor)
         self.nametag.updateAll()
 
-    def announceGenerate(self):
-        DistributedNPCToonBase.announceGenerate(self)
-        if self.getName() == 'Sakamoreo' or self._isClubVinci():
+    def _applyCustomNPCDisplayName(self):
+        if ToonHallCustomNPCs.isCustomNPC(self) or self._isClubVinci():
             self.npcType = ''
             self.setDisplayName(self.getName())
+
+    def announceGenerate(self):
+        DistributedNPCToonBase.announceGenerate(self)
+        if ToonHallCustomNPCs.getDataForNPC(self):
+            self.__startToonHallCustomNPCPositioning()
+        self._applyCustomNPCDisplayName()
         if self._isClubVinci():
             self._applyClubVinciAppearance()
         self.applySakamoreoNametagColor()
 
     def setPlayerType(self, playerType):
         DistributedNPCToonBase.setPlayerType(self, playerType)
+        self._applyCustomNPCDisplayName()
         self.applySakamoreoNametagColor()
 
     def allowedToTalk(self):
@@ -292,6 +493,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self._clearClubAccessories()
         self.cleanupMovie()
         taskMgr.remove('update-quests')
+        taskMgr.remove(self.uniqueName('positionToonHallCustomNPC'))
 
         DistributedNPCToonBase.disable(self)
 
@@ -310,11 +512,50 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.trackChoiceGui.destroy()
             self.trackChoiceGui = None
 
+    def _getCurrentPlace(self):
+        playGame = getattr(base.cr, 'playGame', None)
+        if playGame is None:
+            return None
+        try:
+            return playGame.getPlace()
+        except AttributeError:
+            return None
+
+    def _requestWalkState(self, expectedPlace=None):
+        place = self._getCurrentPlace()
+        if place is None:
+            return False
+
+        # A delayed callback from an NPC in the previous place must never
+        # change the state of a newly loaded place.
+        if expectedPlace is not None and place is not expectedPlace:
+            return False
+
+        try:
+            place.setState('walk')
+        except AttributeError:
+            fsm = getattr(place, 'fsm', None)
+            if fsm is None:
+                return False
+            fsm.request('walk')
+        return True
+
     def handleCollisionSphereEnter(self, collEntry):
+        customPhrase = ToonHallCustomNPCs.getPhraseForNPC(self)
+        if customPhrase is not None:
+            self.clearChat()
+            self.lookAt(base.localAvatar)
+            ToonHallCustomNPCs.playInteractionAnimation(self)
+            self.setChatAbsolute(customPhrase, CFSpeech | CFTimeout)
+            return
+
         if self._isClubVinci():
             self._handleClubVinciInteraction()
             return
-        base.cr.playGame.getPlace().fsm.request('quest', [self])
+        place = self._getCurrentPlace()
+        if place is None:
+            return
+        place.fsm.request('quest', [self])
         self.sendUpdate('avatarEnter', [])
 
     def handleOkTeaser(self):
@@ -343,8 +584,11 @@ class DistributedNPCToon(DistributedNPCToonBase):
         scaleFactor = avHeight * 0.3333333333
         camera.wrtReparentTo(base.localAvatar)
         camera.posQuatInterval(1, (0, -9 * scaleFactor, avHeight), (0, 0, 0), other=base.localAvatar, blendType='easeInOut').start()
+        expectedPlace = self._getCurrentPlace()
+
         def walk():
-            base.cr.playGame.getPlace().setState('walk')
+            self._requestWalkState(expectedPlace)
+
         Sequence(Wait(1), Func(walk)).start()
         
     def setupCamera(self, mode):
@@ -380,7 +624,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.setChatAbsolute(rejectString, CFSpeech | CFTimeout)
             if isLocalToon:
                 base.localAvatar.posCamera(0, 0)
-                base.cr.playGame.getPlace().setState('walk')
+                self._requestWalkState()
             return
         if mode == NPCToons.QUEST_MOVIE_TIER_NOT_DONE:
             rejectString = Quests.chooseQuestDialogTierNotDone()
@@ -388,7 +632,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.setChatAbsolute(rejectString, CFSpeech | CFTimeout)
             if isLocalToon:
                 base.localAvatar.posCamera(0, 0)
-                base.cr.playGame.getPlace().setState('walk')
+                self._requestWalkState()
             return
         self.setupAvatars(av)
         fullString = ''
@@ -494,7 +738,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.sendUpdate('chooseTrack', [trackId])
 		
     def checkQuestStatus(self):
-        if self._isClubVinci():
+        if self._isClubVinci() or ToonHallCustomNPCs.isCustomNPC(self):
             self.setQuestNotify(None)
             return
         av = base.localAvatar

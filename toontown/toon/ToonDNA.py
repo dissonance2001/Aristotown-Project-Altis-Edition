@@ -3,7 +3,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from panda3d.core import *
 from panda3d.direct import *
-import ast, colorsys, json, os, random
+import ast, colorsys, hashlib, json, os, random
 from otp.avatar import AvatarDNA
 
 notify = directNotify.newCategory('ToonDNA')
@@ -719,6 +719,10 @@ GirlBottoms = [('phase_3/maps/desat_skirt_1.png', SKIRT),
                ]
 
 CUSTOM_CLOTHING_DIRECTORY = 'resources/phase_14/maps/clothing'
+CUSTOM_CLOTHING_DIRECTORIES = (
+    ('phase_14', CUSTOM_CLOTHING_DIRECTORY),
+    ('phase_4', 'resources/phase_4/maps'),
+)
 CUSTOM_CLOTHING_REGISTRY = 'resources/phase_14/maps/clothing_registry.json'
 CUSTOM_CLOTHING_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.rgb', '.rgba', '.tga')
 
@@ -740,6 +744,36 @@ def _getCustomClothingAssetPath(fullPath):
     if normalized.lower().startswith('resources/'):
         return normalized[len('resources/'):]
     return normalized
+
+
+def _normalizeClothingAssetPath(assetPath):
+    return assetPath.replace('\\', '/').lower()
+
+
+def _getKnownClothingPaths():
+    knownPaths = {
+        'shirt': set(),
+        'sleeves': set(),
+        'shorts': set(),
+        'skirt': set(),
+    }
+    for assetPath in Shirts:
+        if isinstance(assetPath, basestring):
+            knownPaths['shirt'].add(_normalizeClothingAssetPath(assetPath))
+    for assetPath in Sleeves:
+        if isinstance(assetPath, basestring):
+            knownPaths['sleeves'].add(_normalizeClothingAssetPath(assetPath))
+    for assetPath in BoyShorts:
+        if isinstance(assetPath, basestring):
+            knownPaths['shorts'].add(_normalizeClothingAssetPath(assetPath))
+    for bottomData in GirlBottoms:
+        if isinstance(bottomData, tuple) and bottomData and isinstance(bottomData[0], basestring):
+            if len(bottomData) > 1 and bottomData[1] == SKIRT:
+                pieceName = 'skirt'
+            else:
+                pieceName = 'shorts'
+            knownPaths[pieceName].add(_normalizeClothingAssetPath(bottomData[0]))
+    return knownPaths
 
 
 def _loadClothingRegistry(registryPath):
@@ -774,26 +808,58 @@ def _saveClothingRegistry(registryPath, registry):
         registryFile.close()
 
 
+def _getClothingPieceName(fileName):
+    lowerName = fileName.lower()
+    extension = os.path.splitext(lowerName)[1]
+    if extension not in CUSTOM_CLOTHING_EXTENSIONS:
+        return None
+    fileStem = os.path.splitext(lowerName)[0]
+    tokenName = fileStem.replace('-', '_').replace(' ', '_').replace('.', '_')
+    nameTokens = [token for token in tokenName.split('_') if token]
+    if 'sleeve' in lowerName:
+        return 'sleeves'
+    if 'shirt' in lowerName or 'top' in nameTokens:
+        return 'shirt'
+    if 'skirt' in lowerName or 'dress' in lowerName:
+        return 'skirt'
+    if ('short' in lowerName or 'bottom' in nameTokens or
+            'bot' in nameTokens):
+        return 'shorts'
+    return None
+
+
 def _findOutfitPieces(outfitDirectory):
     pieces = {}
     for fileName in sorted(os.listdir(outfitDirectory)):
         fullPath = os.path.join(outfitDirectory, fileName)
         if not os.path.isfile(fullPath):
             continue
-        lowerName = fileName.lower()
-        extension = os.path.splitext(lowerName)[1]
-        if extension not in CUSTOM_CLOTHING_EXTENSIONS:
-            continue
-        assetPath = _getCustomClothingAssetPath(fullPath)
-        if 'sleeve' in lowerName:
-            pieces['sleeves'] = assetPath
-        elif 'shirt' in lowerName or 'top' in lowerName:
-            pieces['shirt'] = assetPath
-        elif 'skirt' in lowerName or 'dress' in lowerName:
-            pieces['skirt'] = assetPath
-        elif 'short' in lowerName or 'bottom' in lowerName or 'bot' in lowerName:
-            pieces['shorts'] = assetPath
+        pieceName = _getClothingPieceName(fileName)
+        if pieceName is not None:
+            pieces[pieceName] = _getCustomClothingAssetPath(fullPath)
     return pieces
+
+
+def _getPhase4OutfitKey(clothingRoot, fullPath):
+    relativePath = os.path.relpath(fullPath, clothingRoot).replace('\\', '/')
+    directoryName = os.path.dirname(relativePath).replace('\\', '/')
+    fileStem = os.path.splitext(os.path.basename(relativePath))[0].lower()
+    outfitStem = fileStem
+    for token in ('shirtsleeve', 'sleeves', 'sleeve', 'shirt', 'shorts',
+                  'short', 'skirt', 'bottom', 'dress'):
+        outfitStem = outfitStem.replace(token, '_')
+    tokenName = outfitStem.replace('-', '_').replace(' ', '_').replace('.', '_')
+    outfitTokens = [token for token in tokenName.split('_')
+                    if token and token not in ('top', 'bot')]
+    outfitStem = '_'.join(outfitTokens)
+    while '__' in outfitStem:
+        outfitStem = outfitStem.replace('__', '_')
+    outfitStem = outfitStem.strip('_-. ')
+    if not outfitStem:
+        outfitStem = fileStem
+    if directoryName:
+        return 'phase_4:%s/%s' % (directoryName.lower(), outfitStem)
+    return 'phase_4:%s' % outfitStem
 
 
 def _nextRegistryId(registry, idName, minimumId):
@@ -814,59 +880,125 @@ def _setListItemAtId(targetList, itemId, value, fallbackValue):
     targetList[itemId] = value
 
 
-def loadCustomClothing():
-    clothingRoot = _getExistingPath(CUSTOM_CLOTHING_DIRECTORY)
-    registryPath = _getExistingPath(CUSTOM_CLOTHING_REGISTRY)
-    if not os.path.isdir(clothingRoot):
-        notify.info('Custom clothing directory not found: %s' % CUSTOM_CLOTHING_DIRECTORY)
-        return
-    registry = _loadClothingRegistry(registryPath)
+def _registerClothingPiece(registry, outfitData, pieceName, assetPath, minimumIds):
+    registryChanged = False
+    idName = pieceName + '_id'
+    if outfitData.get(pieceName) != assetPath:
+        outfitData[pieceName] = assetPath
+        registryChanged = True
+    if not isinstance(outfitData.get(idName), int):
+        outfitData[idName] = _nextRegistryId(registry, idName, minimumIds[pieceName])
+        registryChanged = True
+    return registryChanged
+
+
+def _scanPhase14Clothing(clothingRoot, registry, minimumIds):
     outfits = registry['outfits']
     registryChanged = False
-    baseShirtId = len(Shirts)
-    baseSleeveId = len(Sleeves)
-    baseShortsId = len(BoyShorts)
-    baseGirlBottomId = len(GirlBottoms)
-    folderNames = []
+    discoveredCount = 0
     for folderName in sorted(os.listdir(clothingRoot)):
         outfitDirectory = os.path.join(clothingRoot, folderName)
-        if os.path.isdir(outfitDirectory):
-            folderNames.append(folderName)
-    for folderName in folderNames:
-        outfitDirectory = os.path.join(clothingRoot, folderName)
+        if not os.path.isdir(outfitDirectory):
+            continue
         pieces = _findOutfitPieces(outfitDirectory)
         if not pieces:
             continue
+        discoveredCount += 1
         outfitData = outfits.get(folderName)
         if not isinstance(outfitData, dict):
             outfitData = {}
             outfits[folderName] = outfitData
             registryChanged = True
-        outfitData['folder'] = folderName
+        if outfitData.get('folder') != folderName:
+            outfitData['folder'] = folderName
+            registryChanged = True
+        if outfitData.get('source') != 'phase_14':
+            outfitData['source'] = 'phase_14'
+            registryChanged = True
         for pieceName in ('shirt', 'sleeves', 'shorts', 'skirt'):
-            idName = pieceName + '_id'
             assetPath = pieces.get(pieceName)
-            if assetPath is not None and outfitData.get(pieceName) != assetPath:
-                outfitData[pieceName] = assetPath
-                registryChanged = True
-            if assetPath is None:
+            if assetPath is not None:
+                if _registerClothingPiece(registry, outfitData, pieceName,
+                                          assetPath, minimumIds):
+                    registryChanged = True
+    return registryChanged, discoveredCount
+
+
+def _scanPhase4Clothing(clothingRoot, registry, minimumIds, knownPaths):
+    outfits = registry['outfits']
+    registryChanged = False
+    discoveredCount = 0
+    for directoryName, childDirectories, fileNames in os.walk(clothingRoot):
+        childDirectories.sort()
+        fileNames.sort()
+        for fileName in fileNames:
+            pieceName = _getClothingPieceName(fileName)
+            if pieceName is None:
                 continue
-            if not isinstance(outfitData.get(idName), int):
-                if pieceName == 'shirt':
-                    outfitData[idName] = _nextRegistryId(registry, idName, baseShirtId)
-                elif pieceName == 'sleeves':
-                    outfitData[idName] = _nextRegistryId(registry, idName, baseSleeveId)
-                elif pieceName == 'shorts':
-                    outfitData[idName] = _nextRegistryId(registry, idName, baseShortsId)
-                else:
-                    outfitData[idName] = _nextRegistryId(registry, idName, baseGirlBottomId)
+            fullPath = os.path.join(directoryName, fileName)
+            assetPath = _getCustomClothingAssetPath(fullPath)
+            normalizedPath = _normalizeClothingAssetPath(assetPath)
+            if normalizedPath in knownPaths[pieceName]:
+                continue
+            registryKey = _getPhase4OutfitKey(clothingRoot, fullPath)
+            outfitData = outfits.get(registryKey)
+            if not isinstance(outfitData, dict):
+                outfitData = {}
+                outfits[registryKey] = outfitData
                 registryChanged = True
+            relativeDirectory = os.path.relpath(directoryName, clothingRoot).replace('\\', '/')
+            if relativeDirectory == '.':
+                relativeDirectory = ''
+            if outfitData.get('folder') != relativeDirectory:
+                outfitData['folder'] = relativeDirectory
+                registryChanged = True
+            if outfitData.get('source') != 'phase_4':
+                outfitData['source'] = 'phase_4'
+                registryChanged = True
+            if _registerClothingPiece(registry, outfitData, pieceName,
+                                      assetPath, minimumIds):
+                registryChanged = True
+            knownPaths[pieceName].add(normalizedPath)
+            discoveredCount += 1
+    return registryChanged, discoveredCount
+
+
+def loadCustomClothing():
+    registryPath = _getExistingPath(CUSTOM_CLOTHING_REGISTRY)
+    registry = _loadClothingRegistry(registryPath)
+    minimumIds = {
+        'shirt': len(Shirts),
+        'sleeves': len(Sleeves),
+        'shorts': len(BoyShorts),
+        'skirt': len(GirlBottoms),
+    }
+    knownPaths = _getKnownClothingPaths()
+    registryChanged = False
+    discoveredCount = 0
+    foundClothingRoot = False
+    for sourceName, clothingDirectory in CUSTOM_CLOTHING_DIRECTORIES:
+        clothingRoot = _getExistingPath(clothingDirectory)
+        if not os.path.isdir(clothingRoot):
+            notify.info('Custom clothing directory not found: %s' % clothingDirectory)
+            continue
+        foundClothingRoot = True
+        if sourceName == 'phase_14':
+            sourceChanged, sourceCount = _scanPhase14Clothing(
+                clothingRoot, registry, minimumIds)
+        else:
+            sourceChanged, sourceCount = _scanPhase4Clothing(
+                clothingRoot, registry, minimumIds, knownPaths)
+        if sourceChanged:
+            registryChanged = True
+        discoveredCount += sourceCount
+    if not foundClothingRoot:
+        return
     defaultShirt = Shirts[0]
     defaultSleeves = Sleeves[0]
     defaultShorts = BoyShorts[0]
     defaultGirlBottom = GirlBottoms[0]
-    for folderName in sorted(outfits.keys()):
-        outfitData = outfits[folderName]
+    for folderName in sorted(registry['outfits'].keys()):
+        outfitData = registry['outfits'][folderName]
         if not isinstance(outfitData, dict):
             continue
         shirtPath = outfitData.get('shirt')
@@ -887,11 +1019,12 @@ def loadCustomClothing():
             _setListItemAtId(GirlBottoms, skirtId, (skirtPath, SKIRT), defaultGirlBottom)
     if registryChanged or not os.path.isfile(registryPath):
         _saveClothingRegistry(registryPath, registry)
-    notify.info('Loaded %s custom clothing outfit folder(s).' % len(folderNames))
+    notify.info('Loaded %s custom clothing item(s) from the clothing registry.' % discoveredCount)
 
 
 
 loadCustomClothing()
+
 
 
 ClothesColors = [VBase4(1, 1, 1, 1.0),
@@ -3818,11 +3951,147 @@ ShoesStyles = {
     'shoes_spy': [2, 85, 0],
  }
 
+# Manually register only the requested queer/ADHD pride accessory textures.
+# This intentionally avoids the broad automatic texture scanner so existing
+# accessory texture IDs are never cleared or renumbered.
+MANUAL_PRIDE_TEXTURE_DIRECTORY = 'resources/phase_4/maps/pride'
+MANUAL_PRIDE_TEXTURE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.rgb', '.rgba', '.tga')
+
+
+def _appendManualAccessoryTexture(textureList, texturePath):
+    normalizedPath = texturePath.replace('\\', '/').lower()
+
+    for textureId, existingPath in enumerate(textureList):
+        if (isinstance(existingPath, basestring) and
+                existingPath.replace('\\', '/').lower() == normalizedPath):
+            return textureId
+
+    if len(textureList) >= 256:
+        notify.warning(
+            'Cannot manually register accessory texture %s because texture IDs are limited to 255.' %
+            texturePath
+        )
+        return None
+
+    textureList.append(texturePath)
+    return len(textureList) - 1
+
+
+def _registerManualAccessoryStyle(styleDict, styleName, modelId, textureId):
+    if textureId is None:
+        return
+    styleDict[styleName] = [modelId, textureId, 0]
+
+
+def registerManualPrideAccessoryTextures():
+    prideDirectory = _getExistingPath(MANUAL_PRIDE_TEXTURE_DIRECTORY)
+    if not os.path.isdir(prideDirectory):
+        notify.info('Manual pride texture directory not found: %s' % MANUAL_PRIDE_TEXTURE_DIRECTORY)
+        return
+
+    registeredCount = 0
+
+    try:
+        fileNames = sorted(os.listdir(prideDirectory))
+    except Exception:
+        notify.warning('Could not read manual pride texture directory: %s' % prideDirectory)
+        return
+
+    for fileName in fileNames:
+        fullPath = os.path.join(prideDirectory, fileName)
+        if not os.path.isfile(fullPath):
+            continue
+
+        lowerName = fileName.lower()
+        if os.path.splitext(lowerName)[1] not in MANUAL_PRIDE_TEXTURE_EXTENSIONS:
+            continue
+
+        if 'queer' in lowerName:
+            variantName = 'queer'
+        elif 'adhd' in lowerName:
+            variantName = 'adhd'
+        else:
+            continue
+
+        texturePath = _getCustomClothingAssetPath(fullPath).replace('\\', '/')
+
+        if 'bowtie' in lowerName:
+            # The same bowtie is available in both Head Accessories and
+            # Body Accessories, so add the texture to both independent lists.
+            hatTextureId = _appendManualAccessoryTexture(HatTextures, texturePath)
+            backpackTextureId = _appendManualAccessoryTexture(BackpackTextures, texturePath)
+
+            _registerManualAccessoryStyle(
+                HatStyles,
+                'manual_pride_bowtie_%s_hat' % variantName,
+                120,
+                hatTextureId
+            )
+            _registerManualAccessoryStyle(
+                BackpackStyles,
+                'manual_pride_bowtie_%s_body' % variantName,
+                73,
+                backpackTextureId
+            )
+            registeredCount += 1
+
+        elif 'cape' in lowerName:
+            textureId = _appendManualAccessoryTexture(BackpackTextures, texturePath)
+            _registerManualAccessoryStyle(
+                BackpackStyles,
+                'manual_pride_cape_%s' % variantName,
+                94,
+                textureId
+            )
+            registeredCount += 1
+
+        elif 'scarf' in lowerName:
+            textureId = _appendManualAccessoryTexture(BackpackTextures, texturePath)
+            _registerManualAccessoryStyle(
+                BackpackStyles,
+                'manual_pride_scarf_%s' % variantName,
+                40,
+                textureId
+            )
+            registeredCount += 1
+
+    notify.info('Manually registered %d queer/ADHD pride accessory texture file(s).' % registeredCount)
+
+
+registerManualPrideAccessoryTextures()
+
+
 
 
 CUSTOM_ACCESSORY_DIRECTORY = 'resources/phase_14/accessories'
 CUSTOM_ACCESSORY_REGISTRY = 'resources/phase_14/accessories/accessories_registry.json'
 CUSTOM_ACCESSORY_EXTENSIONS = ('.bam',)
+CUSTOM_ACCESSORY_REGISTRY_VERSION = 3
+CUSTOM_ACCESSORY_MAX_ID = 255
+
+# Capture the first free native IDs before any custom BAMs are appended to the
+# model tables. Using len(HatModels), etc. inside every rescan made the minimum
+# increase after each call, so every search in the placement editor assigned a
+# fresh set of IDs.
+_CUSTOM_ACCESSORY_NATIVE_MINIMUM_IDS = {
+    'hat': len(HatModels),
+    'glasses': len(GlassesModels),
+    'backpack': len(BackpackModels),
+    'shoes': len(ShoesModels)
+}
+
+
+def _clearRegisteredCustomAccessoryStyles():
+    for accessoryType in ('hat', 'glasses', 'backpack', 'shoes'):
+        unusedModels, styleDict, prefix = _getNativeAccessoryTables(
+            accessoryType
+        )
+        if styleDict is None:
+            continue
+
+        for styleName in list(styleDict.keys()):
+            if styleName.startswith(prefix):
+                del styleDict[styleName]
 
 
 def _findCustomAccessoryRoot():
@@ -3860,7 +4129,10 @@ def _findCustomAccessoryRoot():
 
 def _loadNativeAccessoryRegistry(registryPath):
     if not os.path.isfile(registryPath):
-        return {'version': 2, 'accessories': {}}
+        return {
+            'version': CUSTOM_ACCESSORY_REGISTRY_VERSION,
+            'accessories': {}
+        }
 
     try:
         registryFile = open(registryPath, 'r')
@@ -3870,7 +4142,10 @@ def _loadNativeAccessoryRegistry(registryPath):
             registryFile.close()
     except Exception:
         notify.warning('Could not read accessory registry. A new registry will be created.')
-        return {'version': 2, 'accessories': {}}
+        return {
+            'version': CUSTOM_ACCESSORY_REGISTRY_VERSION,
+            'accessories': {}
+        }
 
     if not isinstance(registry, dict):
         registry = {}
@@ -3878,7 +4153,7 @@ def _loadNativeAccessoryRegistry(registryPath):
     if not isinstance(registry.get('accessories'), dict):
         registry['accessories'] = {}
 
-    registry['version'] = 2
+    registry['version'] = CUSTOM_ACCESSORY_REGISTRY_VERSION
     return registry
 
 
@@ -3900,12 +4175,15 @@ def _getAccessoryTypeFromName(fileName):
 
     if 'glasses' in lowerName or 'glass' in lowerName:
         return 'glasses'
-    if 'backpack' in lowerName or 'pack' in lowerName:
-        return 'backpack'
-    if 'shoes' in lowerName or 'shoe' in lowerName:
+    if 'shoes' in lowerName or 'shoe' in lowerName or '_sho_' in lowerName:
         return 'shoes'
     if 'hat' in lowerName:
         return 'hat'
+    if ('backpack' in lowerName or 'pack' in lowerName or
+            'cape' in lowerName or 'scarf' in lowerName or
+            'bowtie' in lowerName or 'neck' in lowerName or
+            '_nec_' in lowerName):
+        return 'backpack'
 
     return None
 
@@ -3930,8 +4208,8 @@ def _setAccessoryModelAtId(modelList, accessoryId, modelPath):
     modelList[accessoryId] = modelPath
 
 
-def _nextNativeAccessoryId(modelList, usedIds):
-    accessoryId = len(modelList)
+def _nextNativeAccessoryId(minimumId, usedIds):
+    accessoryId = minimumId
 
     while accessoryId in usedIds:
         accessoryId += 1
@@ -3990,6 +4268,91 @@ def _makeCustomAccessoryKey(accessoryType, accessoryId, registryKey):
     )
 
 
+def _getCustomAccessoryFingerprint(fullPath):
+    try:
+        digest = hashlib.sha1()
+        accessoryFile = open(fullPath, 'rb')
+        try:
+            while True:
+                chunk = accessoryFile.read(1024 * 1024)
+                if not chunk:
+                    break
+                digest.update(chunk)
+        finally:
+            accessoryFile.close()
+        return digest.hexdigest()
+    except Exception:
+        notify.warning('Could not fingerprint custom accessory: %s' % fullPath)
+        return None
+
+
+def _getCustomAccessoryCandidateSortKey(candidate):
+    registryKey = candidate['registry_key']
+    # If the same BAM exists loose and inside a named folder, keep the folder copy.
+    inSubfolder = '/' in registryKey
+    return (
+        0 if inSubfolder else 1,
+        registryKey.count('/'),
+        len(registryKey),
+        registryKey.lower()
+    )
+
+
+def _getRegistryCandidateIds(oldAccessories, group, minimumId):
+    candidateIds = []
+    groupKeys = set(candidate['registry_key'] for candidate in group['candidates'])
+    groupNames = set(
+        os.path.splitext(os.path.basename(candidate['registry_key']))[0].lower()
+        for candidate in group['candidates']
+    )
+
+    for registryKey, accessoryData in oldAccessories.items():
+        if not isinstance(accessoryData, dict):
+            continue
+        if accessoryData.get('type') != group['type']:
+            continue
+
+        matches = registryKey in groupKeys
+        if not matches and group['fingerprint'] is not None:
+            matches = accessoryData.get('fingerprint') == group['fingerprint']
+        if not matches:
+            oldName = accessoryData.get('name')
+            if isinstance(oldName, basestring):
+                matches = oldName.lower() in groupNames
+        if not matches:
+            oldBaseName = os.path.splitext(os.path.basename(registryKey))[0].lower()
+            matches = oldBaseName in groupNames
+
+        if matches:
+            nativeId = accessoryData.get('native_id')
+            if (isinstance(nativeId, int) and nativeId >= minimumId and
+                    nativeId <= CUSTOM_ACCESSORY_MAX_ID):
+                candidateIds.append(nativeId)
+
+    return sorted(set(candidateIds))
+
+
+def _getPreservedAccessoryDisplayName(oldAccessories, group):
+    groupKeys = set(candidate['registry_key'] for candidate in group['candidates'])
+
+    for registryKey, accessoryData in oldAccessories.items():
+        if not isinstance(accessoryData, dict):
+            continue
+        if accessoryData.get('type') != group['type']:
+            continue
+
+        matches = registryKey in groupKeys
+        if not matches and group['fingerprint'] is not None:
+            matches = accessoryData.get('fingerprint') == group['fingerprint']
+
+        if matches:
+            displayName = accessoryData.get('display_name')
+            if isinstance(displayName, basestring) and displayName.strip():
+                return displayName.strip()
+
+    return None
+
+
 def registerCustomAccessoriesAsNative():
     accessoryRoot = _findCustomAccessoryRoot()
 
@@ -4002,9 +4365,17 @@ def registerCustomAccessoriesAsNative():
 
     registryPath = os.path.join(accessoryRoot, 'accessories_registry.json')
     registry = _loadNativeAccessoryRegistry(registryPath)
-    accessories = registry['accessories']
-    registryChanged = False
-    discovered = []
+    oldAccessories = registry['accessories']
+
+    # Remove generated style aliases from an earlier registration pass before
+    # rebuilding the clean registry-backed set. The model lists may remain
+    # extended in memory, but no stale alias points at those abandoned slots.
+    _clearRegisteredCustomAccessoryStyles()
+
+    minimumIdsByType = dict(_CUSTOM_ACCESSORY_NATIVE_MINIMUM_IDS)
+
+    groupsByFingerprint = {}
+    discoveredFileCount = 0
 
     for currentRoot, directoryNames, fileNames in os.walk(accessoryRoot):
         directoryNames.sort()
@@ -4019,16 +4390,44 @@ def registerCustomAccessoriesAsNative():
                 continue
 
             fullPath = os.path.join(currentRoot, fileName)
-            relativeToAccessoryRoot = os.path.relpath(
+            registryKey = os.path.relpath(
                 fullPath,
                 accessoryRoot
             ).replace('\\', '/')
+            fingerprint = _getCustomAccessoryFingerprint(fullPath)
 
-            discovered.append((
-                relativeToAccessoryRoot,
-                accessoryType,
-                fullPath
-            ))
+            if fingerprint is None:
+                groupIdentity = (
+                    accessoryType,
+                    'path:%s' % registryKey.lower()
+                )
+            else:
+                groupIdentity = (accessoryType, fingerprint)
+
+            group = groupsByFingerprint.get(groupIdentity)
+            if group is None:
+                group = {
+                    'type': accessoryType,
+                    'fingerprint': fingerprint,
+                    'candidates': []
+                }
+                groupsByFingerprint[groupIdentity] = group
+
+            group['candidates'].append({
+                'registry_key': registryKey,
+                'full_path': fullPath
+            })
+            discoveredFileCount += 1
+
+    groups = list(groupsByFingerprint.values())
+    for group in groups:
+        group['candidates'].sort(key=_getCustomAccessoryCandidateSortKey)
+        group['canonical'] = group['candidates'][0]
+
+    groups.sort(key=lambda group: (
+        group['type'],
+        group['canonical']['registry_key'].lower()
+    ))
 
     usedIdsByType = {
         'hat': set(),
@@ -4036,100 +4435,95 @@ def registerCustomAccessoriesAsNative():
         'backpack': set(),
         'shoes': set()
     }
+    cleanAccessories = {}
+    registeredCount = 0
 
-    for accessoryData in accessories.values():
-        if not isinstance(accessoryData, dict):
-            continue
+    for group in groups:
+        accessoryType = group['type']
+        canonical = group['canonical']
+        registryKey = canonical['registry_key']
+        fullPath = canonical['full_path']
+        minimumId = minimumIdsByType[accessoryType]
 
-        accessoryType = accessoryData.get('type')
-        nativeId = accessoryData.get('native_id')
+        nativeId = None
+        for candidateId in _getRegistryCandidateIds(
+                oldAccessories, group, minimumId):
+            if candidateId not in usedIdsByType[accessoryType]:
+                nativeId = candidateId
+                break
 
-        if accessoryType in usedIdsByType and isinstance(nativeId, int):
-            usedIdsByType[accessoryType].add(nativeId)
-
-    for registryKey, accessoryType, fullPath in discovered:
-        modelList, styleDict, unusedPrefix = _getNativeAccessoryTables(
-            accessoryType
-        )
-
-        if modelList is None:
-            continue
-
-        accessoryData = accessories.get(registryKey)
-        if not isinstance(accessoryData, dict):
-            accessoryData = {}
-            accessories[registryKey] = accessoryData
-            registryChanged = True
-
-        nativeId = accessoryData.get('native_id')
-
-        if not isinstance(nativeId, int) or nativeId < 0 or nativeId >= 256:
+        if nativeId is None:
             nativeId = _nextNativeAccessoryId(
-                modelList,
+                minimumId,
                 usedIdsByType[accessoryType]
             )
 
-            if nativeId >= 256:
-                notify.warning(
-                    'Cannot register %s because native accessory IDs are limited to 255.' %
-                    registryKey
-                )
-                continue
-
-            accessoryData['native_id'] = nativeId
-            registryChanged = True
+        if nativeId > CUSTOM_ACCESSORY_MAX_ID:
+            notify.warning(
+                'Cannot register %s because native accessory IDs are limited to 255.' %
+                registryKey
+            )
+            continue
 
         usedIdsByType[accessoryType].add(nativeId)
+
+        modelList, styleDict, unusedPrefix = _getNativeAccessoryTables(
+            accessoryType
+        )
+        if modelList is None:
+            continue
 
         assetPath = _getCustomClothingAssetPath(fullPath)
         if assetPath.lower().endswith('.bam'):
             assetPath = assetPath[:-4]
-
-        if accessoryData.get('type') != accessoryType:
-            accessoryData['type'] = accessoryType
-            registryChanged = True
-
-        if accessoryData.get('model') != assetPath:
-            accessoryData['model'] = assetPath
-            registryChanged = True
+        assetPath = assetPath.replace('\\', '/')
 
         internalName = os.path.splitext(os.path.basename(fullPath))[0]
-        if accessoryData.get('name') != internalName:
-            accessoryData['name'] = internalName
-            registryChanged = True
-
-        displayName = accessoryData.get('display_name')
-        if not isinstance(displayName, basestring) or not displayName.strip():
-            accessoryData['display_name'] = _makeDefaultAccessoryDisplayName(
+        displayName = _getPreservedAccessoryDisplayName(
+            oldAccessories,
+            group
+        )
+        if not displayName:
+            displayName = _makeDefaultAccessoryDisplayName(
                 fullPath,
                 accessoryType
             )
-            registryChanged = True
 
-        if accessoryData.get('id') != nativeId:
-            accessoryData['id'] = nativeId
-            registryChanged = True
+        styleKey = _makeCustomAccessoryKey(
+            accessoryType,
+            nativeId,
+            registryKey
+        )
 
+        accessoryData = {
+            'type': accessoryType,
+            'native_id': nativeId,
+            'id': nativeId,
+            'model': assetPath,
+            'name': internalName,
+            'display_name': displayName,
+            'style': styleKey
+        }
+        if group['fingerprint'] is not None:
+            accessoryData['fingerprint'] = group['fingerprint']
+
+        cleanAccessories[registryKey] = accessoryData
         _setAccessoryModelAtId(modelList, nativeId, assetPath)
-
-        styleKey = accessoryData.get('style')
-        if not isinstance(styleKey, basestring) or not styleKey:
-            styleKey = _makeCustomAccessoryKey(
-                accessoryType,
-                nativeId,
-                registryKey
-            )
-            accessoryData['style'] = styleKey
-            registryChanged = True
-
         styleDict[styleKey] = [nativeId, 0, 0]
+        registeredCount += 1
 
-    if registryChanged or not os.path.isfile(registryPath):
+    duplicateFileCount = discoveredFileCount - len(groups)
+    removedRegistryCount = max(len(oldAccessories) - len(cleanAccessories), 0)
+
+    registry['version'] = CUSTOM_ACCESSORY_REGISTRY_VERSION
+    registry['accessories'] = cleanAccessories
+    if (oldAccessories != cleanAccessories or
+            not os.path.isfile(registryPath)):
         _saveNativeAccessoryRegistry(registryPath, registry)
 
     notify.info(
-        'Registered %d custom accessory model(s) as native accessories.' %
-        len(discovered)
+        'Registered %d unique custom accessory model(s); cleaned %d duplicate file(s) and %d stale registry entry/entries.' %
+        (registeredCount, duplicateFileCount, removedRegistryCount)
     )
 
 

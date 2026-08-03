@@ -918,6 +918,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.__pieModelType = None
         self.pieScale = 1.0
         self.hatNodes = []
+        self._highRollerHatActors = []
+        self._highRollerDuckOrbits = []
         self.glassesNodes = []
         self.backpackNodes = []
         self.shoesNodes = []
@@ -2962,6 +2964,7 @@ class Toon(Avatar.Avatar, ToonHead):
             self.Toon_deleted = 1
             
         self.stopAnimations()
+        self._cleanupHighRollerDuckOrbit()
         self.rightHands = None
         self.rightHand = None
         self.leftHands = None
@@ -3636,11 +3639,170 @@ class Toon(Avatar.Avatar, ToonHead):
             return Task.done
         return Task.cont
 
+    def _getSafeAccessoryTextureName(self, accessoryType, modelIdx,
+                                         textureIdx, colorIdx):
+        if textureIdx == 0:
+            return None
+
+        textureTables = {
+            'hat': (ToonDNA.HatTextures, ToonDNA.HatStyles),
+            'glasses': (ToonDNA.GlassesTextures, ToonDNA.GlassesStyles),
+            'backpack': (ToonDNA.BackpackTextures, ToonDNA.BackpackStyles),
+            'shoes': (ToonDNA.ShoesTextures, ToonDNA.ShoesStyles)
+        }
+        textureList, styleDict = textureTables[accessoryType]
+
+        if (not isinstance(textureIdx, int) or textureIdx < 0 or
+                textureIdx >= len(textureList)):
+            self.notify.warning(
+                'Ignoring stale %s texture ID %s for model %s; '
+                'the registry no longer contains that ID.' %
+                (accessoryType, textureIdx, modelIdx)
+            )
+            return None
+
+        textureName = textureList[textureIdx]
+        if not isinstance(textureName, basestring) or not textureName:
+            self.notify.warning(
+                'Ignoring empty %s texture ID %s for model %s.' %
+                (accessoryType, textureIdx, modelIdx)
+            )
+            return None
+
+        # A texture ID is only safe when the currently loaded style tables
+        # explicitly associate it with this model. This prevents a stale ID
+        # from applying an unrelated texture after a registry rebuild.
+        compatible = False
+        for style in styleDict.values():
+            if (isinstance(style, (list, tuple)) and len(style) >= 2 and
+                    style[0] == modelIdx and style[1] == textureIdx):
+                compatible = True
+                break
+
+        if not compatible:
+            self.notify.warning(
+                'Ignoring incompatible %s texture ID %s for model %s.' %
+                (accessoryType, textureIdx, modelIdx)
+            )
+            return None
+
+        return textureName
+
+    def _cleanupHighRollerDuckOrbit(self):
+        taskMgr.remove('highRollerDuckOrbit-%s' % id(self))
+
+        for hatActor in getattr(self, '_highRollerHatActors', []):
+            try:
+                hatActor.stop()
+            except Exception:
+                pass
+            try:
+                hatActor.cleanup()
+            except Exception:
+                try:
+                    hatActor.removeNode()
+                except Exception:
+                    pass
+
+        self._highRollerHatActors = []
+        self._highRollerDuckOrbits = []
+
+    def _setupHighRollerDuckOrbit(self, hatActor):
+        # Capture the authored joint transforms before controlJoint takes
+        # ownership of DucksALL.
+        rootJoint = hatActor.exposeJoint(None, 'modelRoot', 'Root')
+        ducksJoint = hatActor.exposeJoint(None, 'modelRoot', 'DucksALL')
+
+        if (rootJoint is None or rootJoint.isEmpty() or
+                ducksJoint is None or ducksJoint.isEmpty()):
+            self.notify.warning(
+                'High Roller hat is missing Root or DucksALL.'
+            )
+            return False
+
+        rootModelMat = rootJoint.getMat(hatActor)
+        ducksModelMat = ducksJoint.getMat(hatActor)
+
+        ducksControl = hatActor.controlJoint(
+            None,
+            'modelRoot',
+            'DucksALL'
+        )
+        if ducksControl is None or ducksControl.isEmpty():
+            self.notify.warning(
+                'Could not control the High Roller DucksALL joint.'
+            )
+            return False
+
+        # rootReference stores Root's authored transform in model space.
+        # orbitPivot rotates around the model's vertical Z axis.
+        # orbitMarker stores DucksALL's authored model-space transform.
+        rootReference = hatActor.attachNewNode(
+            'highRollerRootReference'
+        )
+        rootReference.setMat(rootModelMat)
+
+        orbitPivot = hatActor.attachNewNode(
+            'highRollerDuckOrbitPivot'
+        )
+        orbitMarker = orbitPivot.attachNewNode(
+            'highRollerDuckOrbitMarker'
+        )
+        orbitMarker.setMat(ducksModelMat)
+
+        # At zero degrees this reproduces the exact authored local
+        # DucksALL transform relative to Root.
+        ducksControl.setMat(
+            orbitMarker.getMat(rootReference)
+        )
+
+        self._highRollerDuckOrbits.append((
+            hatActor,
+            ducksControl,
+            rootReference,
+            orbitPivot,
+            orbitMarker
+        ))
+        return True
+
+    def _highRollerDuckOrbitTask(self, task):
+        validOrbits = []
+        heading = (task.time * 120.0) % 360.0
+
+        for orbitData in self._highRollerDuckOrbits:
+            try:
+                hatActor, ducksControl, rootReference, orbitPivot, orbitMarker = orbitData
+            except Exception:
+                continue
+
+            if (hatActor is None or hatActor.isEmpty() or
+                    ducksControl is None or ducksControl.isEmpty() or
+                    rootReference is None or rootReference.isEmpty() or
+                    orbitPivot is None or orbitPivot.isEmpty() or
+                    orbitMarker is None or orbitMarker.isEmpty()):
+                continue
+
+            # Rotate the complete authored DucksALL transform horizontally
+            # in model space, then convert it back into the local transform
+            # expected beneath the authored Root joint.
+            orbitPivot.setH(heading)
+            ducksControl.setMat(
+                orbitMarker.getMat(rootReference)
+            )
+            validOrbits.append(orbitData)
+
+        self._highRollerDuckOrbits = validOrbits
+        if not validOrbits:
+            return Task.done
+        return Task.cont
+
     def generateHat(self, fromRTM = False):
+        self._cleanupHighRollerDuckOrbit()
         taskMgr.remove('cakeHatSpin-%s' % id(self))
         self._cakeHatSpinNodes = []
         hat = self.getHat()
-        if hat[0] >= len(ToonDNA.HatModels):
+        if (hat[0] < 0 or hat[0] >= len(ToonDNA.HatModels) or
+                ToonDNA.HatModels[hat[0]] is None):
             self.sendLogSuspiciousEvent('tried to put a wrong hat idx %d' % hat[0])
             return
         if len(self.hatNodes) > 0:
@@ -3652,17 +3814,22 @@ class Toon(Avatar.Avatar, ToonHead):
         if hat[0] != 0:
             hatGeom = loader.loadModel(ToonDNA.HatModels[hat[0]], okMissing=True)
             if hatGeom:
+                hatTexture = None
                 if hat[0] == 54:
                     self.hideEars()
                 if hat[1] != 0:
-                    texName = ToonDNA.HatTextures[hat[1]]
-                    tex = loader.loadTexture(texName, okMissing=True)
-                    if tex is None:
-                        self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
-                    else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
-                        hatGeom.setTexture(tex, 1)
+                    texName = self._getSafeAccessoryTextureName(
+                        'hat', hat[0], hat[1], hat[2]
+                    )
+                    if texName is not None:
+                        tex = loader.loadTexture(texName, okMissing=True)
+                        if tex is None:
+                            self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
+                        else:
+                            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                            tex.setMagfilter(Texture.FTLinear)
+                            hatTexture = tex
+                            hatGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
                 headKey = self.style.head[:2]
@@ -3702,17 +3869,65 @@ class Toon(Avatar.Avatar, ToonHead):
                     if self._cakeHatSpinNodes:
                         taskMgr.add(self._spinCakeHatTask, 'cakeHatSpin-%s' % id(self))
                 else:
-                    hatGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
-                    hatGeom.setHpr(transOffset[1][0], transOffset[1][1], transOffset[1][2])
-                    hatGeom.setScale(transOffset[2][0], transOffset[2][1], transOffset[2][2])
-                    for headNode in headNodes:
-                        hatNode = headNode.attachNewNode('hatNode')
-                        self.hatNodes.append(hatNode)
-                        hatGeom.instanceTo(hatNode)
+                    if hat[0] == 154:
+                        for headNode in headNodes:
+                            hatNode = headNode.attachNewNode('hatNode')
+                            hatNode.setPos(
+                                transOffset[0][0],
+                                transOffset[0][1],
+                                transOffset[0][2]
+                            )
+                            hatNode.setHpr(
+                                transOffset[1][0],
+                                transOffset[1][1],
+                                transOffset[1][2]
+                            )
+                            hatNode.setScale(
+                                transOffset[2][0],
+                                transOffset[2][1],
+                                transOffset[2][2]
+                            )
+
+                            highRollerActor = Actor.Actor(
+                                ToonDNA.HatModels[hat[0]]
+                            )
+                            highRollerActor.reparentTo(hatNode)
+                            highRollerActor.setPos(0, 0, 0)
+                            highRollerActor.setHpr(0, 0, 0)
+                            highRollerActor.setScale(1, 1, 1)
+
+                            if hatTexture is not None:
+                                highRollerActor.setTexture(
+                                    hatTexture,
+                                    1
+                                )
+
+                            self._highRollerHatActors.append(
+                                highRollerActor
+                            )
+                            self._setupHighRollerDuckOrbit(
+                                highRollerActor
+                            )
+                            self.hatNodes.append(hatNode)
+
+                        if self._highRollerDuckOrbits:
+                            taskMgr.add(
+                                self._highRollerDuckOrbitTask,
+                                'highRollerDuckOrbit-%s' % id(self)
+                            )
+                    else:
+                        hatGeom.setPos(transOffset[0][0], transOffset[0][1], transOffset[0][2])
+                        hatGeom.setHpr(transOffset[1][0], transOffset[1][1], transOffset[1][2])
+                        hatGeom.setScale(transOffset[2][0], transOffset[2][1], transOffset[2][2])
+                        for headNode in headNodes:
+                            hatNode = headNode.attachNewNode('hatNode')
+                            self.hatNodes.append(hatNode)
+                            hatGeom.instanceTo(hatNode)
 
     def generateGlasses(self, fromRTM = False):
         glasses = self.getGlasses()
-        if glasses[0] >= len(ToonDNA.GlassesModels):
+        if (glasses[0] < 0 or glasses[0] >= len(ToonDNA.GlassesModels) or
+                ToonDNA.GlassesModels[glasses[0]] is None):
             self.sendLogSuspiciousEvent('tried to put a wrong glasses idx %d' % glasses[0])
             return
         if len(self.glassesNodes) > 0:
@@ -3727,14 +3942,17 @@ class Toon(Avatar.Avatar, ToonHead):
                 if glasses[0] in [15, 16]:
                     self.hideEyelashes()
                 if glasses[1] != 0:
-                    texName = ToonDNA.GlassesTextures[glasses[1]]
-                    tex = loader.loadTexture(texName, okMissing=True)
-                    if tex is None:
-                        self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
-                    else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
-                        glassesGeom.setTexture(tex, 1)
+                    texName = self._getSafeAccessoryTextureName(
+                        'glasses', glasses[0], glasses[1], glasses[2]
+                    )
+                    if texName is not None:
+                        tex = loader.loadTexture(texName, okMissing=True)
+                        if tex is None:
+                            self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
+                        else:
+                            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                            tex.setMagfilter(Texture.FTLinear)
+                            glassesGeom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
                 headKey = self.style.head[:2]
@@ -3770,7 +3988,8 @@ class Toon(Avatar.Avatar, ToonHead):
         backpack = self.getBackpack()
         if self._generateCustomAccessory('backpack', backpack[0]):
             return
-        if backpack[0] >= len(ToonDNA.BackpackModels):
+        if (backpack[0] < 0 or backpack[0] >= len(ToonDNA.BackpackModels) or
+                ToonDNA.BackpackModels[backpack[0]] is None):
             self.sendLogSuspiciousEvent('tried to put a wrong backpack idx %d' % backpack[0])
             return
         if len(self.backpackNodes) > 0:
@@ -3782,14 +4001,17 @@ class Toon(Avatar.Avatar, ToonHead):
             geom = loader.loadModel(ToonDNA.BackpackModels[backpack[0]], okMissing=True)
             if geom:
                 if backpack[1] != 0:
-                    texName = ToonDNA.BackpackTextures[backpack[1]]
-                    tex = loader.loadTexture(texName, okMissing=True)
-                    if tex is None:
-                        self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
-                    else:
-                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                        tex.setMagfilter(Texture.FTLinear)
-                        geom.setTexture(tex, 1)
+                    texName = self._getSafeAccessoryTextureName(
+                        'backpack', backpack[0], backpack[1], backpack[2]
+                    )
+                    if texName is not None:
+                        tex = loader.loadTexture(texName, okMissing=True)
+                        if tex is None:
+                            self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
+                        else:
+                            tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                            tex.setMagfilter(Texture.FTLinear)
+                            geom.setTexture(tex, 1)
                 if fromRTM:
                     reload(AccessoryGlobals)
                 transOffset = None
@@ -3813,7 +4035,8 @@ class Toon(Avatar.Avatar, ToonHead):
         if self._generateCustomAccessory('shoes', shoes[0]):
             return
         self._clearCustomAccessoryNodes('shoesNodes')
-        if shoes[0] >= len(ToonDNA.ShoesModels):
+        if (shoes[0] < 0 or shoes[0] >= len(ToonDNA.ShoesModels) or
+                ToonDNA.ShoesModels[shoes[0]] is None):
             self.sendLogSuspiciousEvent('tried to put a wrong shoes idx %d' % shoes[0])
             return
         self.findAllMatches('**/feet;+s').stash()
@@ -3825,17 +4048,20 @@ class Toon(Avatar.Avatar, ToonHead):
             geom.unstash()
 
         if shoes[0] != 0:
-            for geom in geoms:
-                texName = ToonDNA.ShoesTextures[shoes[1]]
+            texName = self._getSafeAccessoryTextureName(
+                'shoes', shoes[0], shoes[1], shoes[2]
+            )
+            if texName is not None:
                 if self.style.legs == 'l' and shoes[0] == 3:
                     texName = texName[:-4] + 'LL.jpg'
-                tex = loader.loadTexture(texName, okMissing=True)
-                if tex is None:
-                    self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
-                else:
-                    tex.setMinfilter(Texture.FTLinearMipmapLinear)
-                    tex.setMagfilter(Texture.FTLinear)
-                    geom.setTexture(tex, 1)
+                for geom in geoms:
+                    tex = loader.loadTexture(texName, okMissing=True)
+                    if tex is None:
+                        self.sendLogSuspiciousEvent('failed to load texture %s' % texName)
+                    else:
+                        tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                        tex.setMagfilter(Texture.FTLinear)
+                        geom.setTexture(tex, 1)
 
     def generateToonAccessories(self):
         self.generateHat()

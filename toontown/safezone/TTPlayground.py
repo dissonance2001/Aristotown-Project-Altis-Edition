@@ -5,6 +5,7 @@ from toontown.safezone import Playground
 from toontown.toonbase import TTLocalizer
 
 class TTPlayground(Playground.Playground):
+
     
     def enter(self, requestStatus):
         Playground.Playground.enter(self, requestStatus)
