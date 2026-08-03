@@ -81,7 +81,7 @@ class AttackHPCalculatorAI(object):
         return self.calculator.getLureRemovalDrop(suitId)
 
     def __addsyphonHP(self, suitId, amount):
-        return self.calculator.addsyphonHP(suitId, amount)
+        return self.calculator.addSyphonHP(suitId, amount)
 
     def __createSuitTargetList(self, attack):
         return self.calculator.createSuitTargetList(attack)
@@ -170,7 +170,7 @@ class AttackHPCalculatorAI(object):
 
 
     def __addsyphonHP(self, suitId, amount):
-        return self.calculator.addsyphonHP(suitId, amount)
+        return self.calculator.addSyphonHP(suitId, amount)
 
     def calcSuitAtkHpALT(self, attack):
         '''
@@ -7679,7 +7679,7 @@ class AttackHPCalculatorAI(object):
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                     if result > 0 and self.__suitAtkHit(attack[SUIT_ID_COL], attack[SUIT_ATK_COL]):
                         if theSuit.dna.name in ('erfit', 'erclaim') and atkType['name'] == 'Quake':
-                            self.calculator.__addsyphonHP(theSuit.doId, result)
+                            self.__addsyphonHP(theSuit.doId, result)
                     if atkType['name'] == 'RacketeerExtortion':
                         self.calculator.syphonHP[theSuit.doId] = self.calculator.syphonHP.get(theSuit.doId, 0) + math.ceil(result * 2)
                     if atkType['name'] == 'ForemanExtortion':
@@ -7736,7 +7736,7 @@ class AttackHPCalculatorAI(object):
                     result *= 1.5
                 if result > 0 and self.__suitAtkHit(attack[SUIT_ID_COL], attack[SUIT_ATK_COL]):
                     if theSuit.dna.name in ('erfit', 'erclaim'):
-                        self.calculator.__addsyphonHP(theSuit.doId, result)
+                        self.__addsyphonHP(theSuit.doId, result)
                 attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
 
     def calcSuitAtkHp(self, attack):
@@ -7897,10 +7897,10 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(theSuit.doId, 'guestVerseComplete', 1, 1, 'setBoth')
                     if result > 0 and self.__suitAtkHit(attack[SUIT_ID_COL], attack[SUIT_ATK_COL]):
                         if self.suitHasCondition(theSuit.doId, 'syphon'):
-                            self.calculator.__addsyphonHP(theSuit.doId, result)
+                            self.__addsyphonHP(theSuit.doId, result)
 
                         if theSuit.dna.name in ('erfit', 'erclaim'):
-                            self.calculator.__addsyphonHP(theSuit.doId, result)
+                            self.__addsyphonHP(theSuit.doId, result)
                         #theSuit.setHP(theSuit.currHP + math.ceil(result))
                     #if theSuit.dna.name == 'supervis' and theSuit.getActualLevel() == 25 and self.__attackHasHit(attack):
                         #self.setSuitCondition(theSuit.doId, 'fraudulentDamage', result, 1, 'setBoth')

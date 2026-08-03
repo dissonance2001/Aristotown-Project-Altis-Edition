@@ -202,6 +202,7 @@ class BattleCalculatorAI:
         self.fraudulentDamage = 0
         self.levelDamage = 0
         self.traps = {}
+        self.instakillTraps = {}
         self.npcTraps = {}
         self.suitAtkStats = {}
         self.unusedConditions = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -888,25 +889,31 @@ class BattleCalculatorAI:
     def addTrainTrapForJoiningSuit(self, suitId):
         self.notify.debug('addTrainTrapForJoiningSuit suit=%d self.traps=%s' % (suitId, self.traps))
         trapInfoToUse = None
-        for trapInfo in self.traps.values():
+        trapInstakillDamage = 0
+        for trapSuitId, trapInfo in self.traps.items():
             if trapInfo[0] == UBER_GAG_LEVEL_INDEX:
                 trapInfoToUse = trapInfo
+                trapInstakillDamage = self.instakillTraps.get(trapSuitId, 0)
                 break
 
         if trapInfoToUse:
             self.traps[suitId] = trapInfoToUse
+            if trapInstakillDamage:
+                self.instakillTraps[suitId] = trapInstakillDamage
         else:
             self.notify.warning('huh we did not find a train trap?')
 
     def __addSuitGroupTrap(self, suitId, trapLvl, attackerId, allSuits, npcDamage = 0):
         if npcDamage == 0:
             if suitId in self.traps:
+                self.instakillTraps.pop(suitId, None)
                 if self.traps[suitId][0] == TRAP_CONFLICT:
                     pass
                 else:
                     self.traps[suitId][0] = TRAP_CONFLICT
                 for suit in allSuits:
                     id = suit.doId
+                    self.instakillTraps.pop(id, None)
                     if id in self.traps:
                         self.traps[id][0] = TRAP_CONFLICT
                     else:
@@ -1046,7 +1053,10 @@ class BattleCalculatorAI:
                         #self.absorbDamage += int((damage * .425))
                 instakillDamage = self.__getInstakillDamage(attackerId)
                 if instakillDamage:
-                    damage = instakillDamage
+                    self.instakillTraps[suitId] = instakillDamage
+                    damage = min(instakillDamage, 32767)
+                else:
+                    self.instakillTraps.pop(suitId, None)
                 if self.itemIsCredit(TRAP, trapLvl):
                     self.traps[suitId] = [trapLvl, attackerId, damage]
                 else:
@@ -1055,10 +1065,12 @@ class BattleCalculatorAI:
         else:
             if suitId in self.traps:
                 if self.traps[suitId][0] == self.TRAP_CONFLICT:
+                    self.instakillTraps.pop(suitId, None)
                     self.traps[suitId] = [
                         trapLvl, 0, npcDamage]
             else:
                 if not self.__suitIsLured(suitId):
+                    self.instakillTraps.pop(suitId, None)
                     self.traps[suitId] = [
                         trapLvl, 0, npcDamage]
 
@@ -1068,6 +1080,7 @@ class BattleCalculatorAI:
     def __addSuitTrap(self, suitId, trapLvl, attackerId, npcDamage=0):
         if npcDamage == 0:
             if suitId in self.traps:
+                self.instakillTraps.pop(suitId, None)
                 if self.traps[suitId][0] == self.TRAP_CONFLICT:
                     pass
                 else:
@@ -1195,7 +1208,10 @@ class BattleCalculatorAI:
                        # self.absorbDamage += int((damage * .425))
                 instakillDamage = self.__getInstakillDamage(attackerId)
                 if instakillDamage:
-                    damage = instakillDamage
+                    self.instakillTraps[suitId] = instakillDamage
+                    damage = min(instakillDamage, 32767)
+                else:
+                    self.instakillTraps.pop(suitId, None)
                 if self.itemIsCredit(TRAP, trapLvl):
                     self.traps[suitId] = [
                         trapLvl, attackerId, damage]
@@ -1204,10 +1220,12 @@ class BattleCalculatorAI:
         else:
             if suitId in self.traps:
                 if self.traps[suitId][0] == self.TRAP_CONFLICT:
+                    self.instakillTraps.pop(suitId, None)
                     self.traps[suitId] = [
                         trapLvl, 0, npcDamage]
             else:
                 if not self.__suitIsLured(suitId):
+                    self.instakillTraps.pop(suitId, None)
                     self.traps[suitId] = [
                         trapLvl, 0, npcDamage]
 
@@ -1643,9 +1661,6 @@ class BattleCalculatorAI:
                 'setBoth'
             )
 
-        instakillDamage = self.__getInstakillDamage(toonId)
-        if instakillDamage and atkTrack in (TRAP, SOUND, THROW, SQUIRT, ZAP, DROP):
-            return instakillDamage
         return attackDamage
 
     def applyToonGagDamageMultipliers(self, damage, toonId, suitId, atkTrack, atkLevel, organicBonus=False):
@@ -2205,6 +2220,9 @@ class BattleCalculatorAI:
                                 targetId,
                                 LURE
                             )
+                            trapInstakillDamage = self.instakillTraps.get(targetId, 0)
+                            if trapInstakillDamage:
+                                attackDamage = min(trapInstakillDamage, 32767)
                         if trapCreatorId > 0:
                             self.notify.debug('Giving trap EXP to toon ' + str(trapCreatorId))
                             self.__addAttackExp(attack, track=TRAP, level=attackLevel, attackerId=trapCreatorId)
@@ -2782,9 +2800,6 @@ class BattleCalculatorAI:
                 #                 atkLevel,
                 #                 attackDamage
                 #             )
-                instakillDamage = self.__getInstakillDamage(toonId)
-                if instakillDamage and atkHit and atkTrack in (SOUND, THROW, SQUIRT, ZAP, DROP):
-                    attackDamage = instakillDamage
                 attackDamage = math.ceil(attackDamage)
                 if atkTrack == TRAP:
                     for suit in self.battle.activeSuits:
@@ -2813,6 +2828,9 @@ class BattleCalculatorAI:
                 #         result = 0
             else:
                 result = 0
+            instakillDamage = self.__getInstakillDamage(toonId)
+            if instakillDamage and result > 0 and atkTrack in (SOUND, THROW, SQUIRT, ZAP, DROP):
+                result = min(instakillDamage, 32767)
             if result != 0 or atkTrack == PETSOS:
                 targets = self.__getToonTargets(attack)
                 if targetList[currTarget] not in targets:
@@ -3262,6 +3280,9 @@ class BattleCalculatorAI:
             return totalDamages
         attack = self.battle.toonAttacks[toonId]
         track = self.__getActualTrack(attack)
+        directInstakillDamage = self.__getInstakillDamage(toonId)
+        if directInstakillDamage and (hpbonus or kbbonus):
+            return totalDamages
         if track != NO_ATTACK and track != SOS and track != TRAP and track != NPCSOS:
             targets = self.__getToonTargets(attack)
             for position in xrange(len(targets)):
@@ -3283,6 +3304,16 @@ class BattleCalculatorAI:
                     damageDone = 0
                 else:
                     damageDone = attack[TOON_HP_COL][position]
+                trapInstakillDamage = 0
+                if not hpbonus and not kbbonus and track == LURE and damageDone > 0:
+                    trapInstakillDamage = self.instakillTraps.pop(currTarget.doId, 0)
+                fixedDamage = 0
+                if directInstakillDamage and track in (SOUND, THROW, SQUIRT, ZAP, DROP):
+                    fixedDamage = directInstakillDamage
+                elif trapInstakillDamage:
+                    fixedDamage = trapInstakillDamage
+                if fixedDamage and damageDone > 0:
+                    damageDone = fixedDamage
                 if damageDone <= 0 or self.immortalSuits:
                     continue
                 if track == HEAL or track == PETSOS:
@@ -3303,7 +3334,9 @@ class BattleCalculatorAI:
                 elif self.suitHasCondition(currTarget, 'immune'):
                     currTarget.setHP(currTarget.getHP())
                 else:
-                    if track == SQUIRT and kbbonus == 0 and hpbonus == 0:
+                    if fixedDamage:
+                        currTarget.setHP(max(0, currTarget.getHP() - damageDone))
+                    elif track == SQUIRT and kbbonus == 0 and hpbonus == 0:
                         toon = self.battle.getToon(toonId)
                         attack = self.battle.toonAttacks[toonId]
                         atkTrack, atkLevel, atkHp = self.__getActualTrackLevelHp(attack)
@@ -4640,9 +4673,6 @@ class BattleCalculatorAI:
 
     def addSyphonHP(self, suitId, amount):
         return self.__addSyphonHP(suitId, amount)
-
-    def addSyphonHP(self, suitId, amount):
-        return self.__addSyphonHP(self, suitId, amount)
 
     def __addSyphonHP(self, suitId, amount):
         amount = int(math.ceil(amount))
