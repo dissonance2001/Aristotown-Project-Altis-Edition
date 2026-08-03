@@ -288,6 +288,27 @@ HATS = 0
 GLASSES = 1
 BACKPACKS = 2
 
+# ToonDNA already registers custom accessories during module import. The editor
+# may perform one additional refresh when it first opens, but searching,
+# clearing the search box, or changing tabs must never register the same BAMs
+# again. Re-registering on every list rebuild made the native IDs climb by the
+# number of custom models each time.
+_EDITOR_CUSTOM_ACCESSORIES_REGISTERED = False
+
+
+def _registerCustomAccessoriesForEditorOnce():
+    global _EDITOR_CUSTOM_ACCESSORIES_REGISTERED
+
+    if _EDITOR_CUSTOM_ACCESSORIES_REGISTERED:
+        return
+
+    try:
+        ToonDNA.registerCustomAccessoriesAsNative()
+        _EDITOR_CUSTOM_ACCESSORIES_REGISTERED = True
+    except Exception as error:
+        print 'Accessory editor native rescan failed:', error
+
+
 
 class ToonAccessoryPlacementPanel(object):
 
@@ -303,6 +324,8 @@ class ToonAccessoryPlacementPanel(object):
         self.sliderEntries = []
         self.destroyed = False
         self.previewToon = None
+        self.toonRotationSlider = None
+        self.toonRotationLabel = None
 
         self.dialogGeom = DGG.getDefaultDialogGeom()
         self.buttonGui = loader.loadModel('phase_3/models/gui/pick_a_toon_gui')
@@ -415,8 +438,60 @@ class ToonAccessoryPlacementPanel(object):
         self.pasteButton = self._makeButton('Paste', (0.90, 0, -0.83), self.pastePlacement)
         self.closeButton = self._makeButton('Close', (0.86, 0, 0.76), self.destroy)
 
+        self._buildToonRotationControl()
         self.populateList()
         self.createPreviewToon()
+
+    def _buildToonRotationControl(self):
+        self.toonRotationLabel = DirectLabel(
+            parent=self.root,
+            relief=None,
+            text='Rotate Toon: 0 degrees',
+            text_scale=0.042,
+            text_fg=(0.25, 0.12, 0.02, 1),
+            text_shadow=(1, 0.92, 0.68, 1),
+            pos=(1.40, 0, -0.705)
+        )
+
+        self.toonRotationSlider = DirectSlider(
+            parent=self.root,
+            range=(-180.0, 180.0),
+            value=0.0,
+            pageSize=1.0,
+            scale=(0.30, 0.35, 0.35),
+            pos=(1.40, 0, -0.785),
+            thumb_geom=(
+                self.sliderGui.find('**/QuitBtn_UP'),
+                self.sliderGui.find('**/QuitBtn_DN'),
+                self.sliderGui.find('**/QuitBtn_RLVR'),
+                self.sliderGui.find('**/QuitBtn_UP')
+            ),
+            thumb_relief=None,
+            thumb_geom_hpr=(0, 0, -90),
+            thumb_geom_scale=(0.35, 1, 0.65),
+            frameColor=(0.55, 0.34, 0.12, 1),
+            command=self.onToonRotationChanged
+        )
+
+    def onToonRotationChanged(self):
+        angle = 0.0
+
+        if self.toonRotationSlider is not None:
+            try:
+                angle = float(self.toonRotationSlider['value'])
+            except:
+                angle = 0.0
+
+        if self.toonRotationLabel is not None:
+            self.toonRotationLabel['text'] = 'Rotate Toon: %d degrees' % int(round(angle))
+
+        if self.previewToon is not None:
+            try:
+                # 180 degrees is the editor's original front-facing heading.
+                # The slider rotates only the preview Toon, not accessory H/P/R.
+                self.previewToon.setH(180.0 + angle)
+            except:
+                pass
 
     def createPreviewToon(self):
         if self.previewToon is not None:
@@ -442,6 +517,7 @@ class ToonAccessoryPlacementPanel(object):
             self.previewToon.setPos(1.40, 0, -0.42)
             self.previewToon.setScale(0.18)
             self.previewToon.setH(180)
+            self.onToonRotationChanged()
             self.previewToon.setDepthTest(True)
             self.previewToon.setDepthWrite(True)
             self.previewToon.setBin('fixed', 20)
@@ -621,10 +697,7 @@ class ToonAccessoryPlacementPanel(object):
     def populateList(self, searchText=''):
         self.clearAccessoryButtons()
 
-        try:
-            ToonDNA.registerCustomAccessoriesAsNative()
-        except Exception as error:
-            print 'Accessory editor native rescan failed:', error
+        _registerCustomAccessoriesForEditorOnce()
 
         searchText = searchText.lower().replace(' ', '')
 
@@ -657,6 +730,16 @@ class ToonAccessoryPlacementPanel(object):
 
         for name in names:
             if name == 'none':
+                continue
+
+            # Custom registry accessories are added below with their friendly
+            # display names. Never expose generated native alias keys such as
+            # custom_hat_200_... in the editor list, including stale aliases
+            # left in memory by an older build.
+            if (name.startswith('custom_hat_') or
+                    name.startswith('custom_glasses_') or
+                    name.startswith('custom_backpack_') or
+                    name.startswith('custom_shoes_')):
                 continue
 
             style = styles.get(name)
@@ -815,6 +898,9 @@ class ToonAccessoryPlacementPanel(object):
         self.selectedName = name
         self.isCustom=isCustom
         if isCustom:
+            # Do not retain the ID of the previously selected custom item if a
+            # registry lookup fails or the registry was refreshed.
+            self.selectedId = None
             path = _findAccessoryRegistryPath()
             savedPlacement = None
 

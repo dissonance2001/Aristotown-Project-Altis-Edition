@@ -170,7 +170,23 @@ def createNPC(air, npcId, desc, zoneId, posIndex = 0, questCallback = None):
             rtDnaFile = open(RTDNAFile, 'w')
             rtDnaFile.writelines(rtDNA)
         rtDnaFile.close()
-    dna.newToonFromProperties(*dnaList)
+    # Toon DNA's clothing texture fields are still serialized as uint8.
+    # Custom Toon Hall NPCs may use clothing-registry IDs above 255, so send
+    # safe placeholder clothing through the legacy DNA packet. The client
+    # reapplies the real high-ID textures from ToonHallCustomNPCs.py after the
+    # NPC model has generated. This keeps the network format unchanged.
+    networkDnaList = dnaList
+    if 93000 <= npcId < 94000:
+        try:
+            networkDnaList = list(dnaList)
+            for clothingIndex in (8, 10, 12):
+                clothingId = networkDnaList[clothingIndex]
+                if clothingId < 0 or clothingId > 255:
+                    networkDnaList[clothingIndex] = 0
+        except:
+            networkDnaList = dnaList
+
+    dna.newToonFromProperties(*networkDnaList)
     npc.setDNAString(dna.makeNetString())
     npc.setHp(15)
     npc.setMaxHp(15)
