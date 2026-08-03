@@ -7,10 +7,11 @@ from direct.interval.IntervalGlobal import Sequence, Parallel, LerpPosInterval, 
 from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager
 from toontown.toonbase import ToontownGlobals
 from toontown.stickers import StickerMenu
+from toontown.toon.AltisCommandShortcuts import getCommandShortcuts
 
 
 class ChatLog(DirectFrame, DirectObject):
-    """Clash-style chat display backed by Altis's existing chat network."""
+    """Aristotown-style chat display backed by Aristotown's existing chat network."""
 
     TAB_MAIN = 'main'
     TAB_WHISPERS = 'whispers'
@@ -24,7 +25,7 @@ class ChatLog(DirectFrame, DirectObject):
         DirectObject.__init__(self)
 
         # Corporate Clash draws the tab images one layer behind the main panel,
-        # while keeping their text above it.  Ensure Altis has the same fixed
+        # while keeping their text above it.  Ensure Aristotown has the same fixed
         # GUI bin available before assigning those layers.
         cbm = CullBinManager.getGlobalPtr()
         if cbm.findBin('sorted-gui-popup') < 0:
@@ -74,7 +75,7 @@ class ChatLog(DirectFrame, DirectObject):
         self.accept('club-state-updated', self._clubStateUpdated)
 
         base.cr.chatLog = self
-        print('[ChatSystem] Clash-style chat interface loaded.')
+        print('[ChatSystem] Aristotown chat interface loaded.')
         try:
             if base.localAvatar.chatMgr.fsm.getCurrentState().getName() == 'off':
                 self.disableInterface()
@@ -229,6 +230,7 @@ class ChatLog(DirectFrame, DirectObject):
         self._makeLists()
         self._makeWhisperTarget()
         self._makeEntry()
+        self._makeCommandShortcuts()
         self._makeDisplayButtons()
 
     def _makeTabs(self):
@@ -413,6 +415,533 @@ class ChatLog(DirectFrame, DirectObject):
         self.historyIndex = -1
         self.unsentHistoryText = ''
 
+    def _makeCommandShortcuts(self):
+        self.commandShortcuts = getCommandShortcuts(getattr(base, 'localAvatar', None))
+        self._commandLookup = {}
+        for command in self.commandShortcuts:
+            for invokeWord in (command['name'],) + tuple(command.get('aliases', ())):
+                self._commandLookup[invokeWord.lower()] = command
+
+        self._commandMode = 'hidden'
+        self._commandMatches = []
+        self._commandSelectionIndex = -1
+        self._commandVisibleStart = 0
+        self._commandSelectionKind = 'command'
+        self._commandInvokeWord = ''
+        self._commandTargetBase = ''
+        self._commandExact = None
+
+        self.commandFrame = DirectFrame(
+            parent=self.displayFrame,
+            relief=None,
+            pos=(0.118, 0, -0.37),
+            scale=0.76,
+        )
+        self.commandFrame.setBin('sorted-gui-popup', 1004)
+
+        self.commandTint = DirectFrame(
+            parent=self.commandFrame,
+            relief=None,
+            pos=(-0.032, 0, 0),
+            scale=(0.905, 1, 0.57),
+            image=self.assets.find('**/Chat-Panel-Tint-Rounded'),
+            image_scale=(1, 1, 339.0 / 849.0),
+        )
+
+        shortcutImage = self.assets.find('**/Shortcut_Gray')
+        if shortcutImage.isEmpty():
+            shortcutImage = self.assets.find('**/Chat-Panel-Tint-Rounded')
+        self.commandBackground = DirectFrame(
+            parent=self.commandFrame,
+            relief=None,
+            image=shortcutImage,
+            image_scale=(1, 1, 188.0 / 709.0),
+        )
+
+        self.commandScrollBar = DirectFrame(
+            parent=self.commandFrame,
+            relief=None,
+            pos=(0.456, 0, 0),
+            scale=(0.024, 1, 0.23),
+            image=self.assets.find('**/Scrollbar'),
+        )
+        self.commandScrollThumb = DirectFrame(
+            parent=self.commandFrame,
+            relief=None,
+            pos=(0.456, 0, 0.07),
+            scale=(0.052, 1, 0.062),
+            image=self.assets.find('**/Scrollblock'),
+        )
+
+        self.commandSelectionFrame = DirectFrame(parent=self.commandFrame, relief=None)
+        self.commandRows = []
+        for visibleIndex, zPos in enumerate((0.058, -0.058)):
+            row = DirectButton(
+                parent=self.commandSelectionFrame,
+                relief=None,
+                pos=(-0.032, 0, zPos),
+                scale=0.45,
+                frameSize=(-0.99, 0.98, -0.12, 0.12),
+                frameColor=(0.203, 0.501, 0.921, 0.4),
+                command=self._chooseVisibleCommand,
+                extraArgs=[visibleIndex],
+                pressEffect=0,
+            )
+            title = DirectLabel(
+                parent=row,
+                relief=None,
+                scale=0.1,
+                pos=(-0.95, 0, 0.01),
+                text='',
+                text_align=TextNode.ALeft,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                textMayChange=1,
+            )
+            description = DirectLabel(
+                parent=row,
+                relief=None,
+                scale=0.05,
+                pos=(0.95, 0, -0.08),
+                text='',
+                text_align=TextNode.ARight,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_wordwrap=19,
+                textMayChange=1,
+            )
+            autofill = DirectLabel(
+                parent=row,
+                relief=None,
+                scale=0.05,
+                pos=(-0.95, 0, -0.08),
+                text='Press "TAB" to select',
+                text_align=TextNode.ALeft,
+                text_fg=(0.843, 0.855, 0.404, 1),
+                text_shadow=(0, 0, 0, 1),
+            )
+            row.bind(DGG.WITHIN, self._hoverVisibleCommand, [visibleIndex])
+            row._commandTitle = title
+            row._commandDescription = description
+            row._commandAutofill = autofill
+            row._commandValue = None
+            self.commandRows.append(row)
+
+        self.commandInformationFrame = DirectFrame(parent=self.commandFrame, relief=None)
+        self.commandInvokeText = DirectLabel(
+            parent=self.commandInformationFrame,
+            relief=None,
+            pos=(-0.46, 0, 0.046),
+            scale=0.05,
+            text='',
+            text_align=TextNode.ALeft,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            textMayChange=1,
+        )
+        self.commandDescriptionText = DirectLabel(
+            parent=self.commandInformationFrame,
+            relief=None,
+            pos=(0.39, 0, 0.07),
+            scale=0.025,
+            text='',
+            text_align=TextNode.ARight,
+            text_wordwrap=18,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            textMayChange=1,
+        )
+        self.commandParametersText = DirectLabel(
+            parent=self.commandInformationFrame,
+            relief=None,
+            pos=(-0.46, 0, 0),
+            scale=0.03,
+            text='',
+            text_align=TextNode.ALeft,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            textMayChange=1,
+        )
+        self.commandAliasesText = DirectLabel(
+            parent=self.commandInformationFrame,
+            relief=None,
+            pos=(-0.46, 0, -0.04),
+            scale=0.03,
+            text='',
+            text_align=TextNode.ALeft,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            textMayChange=1,
+        )
+        self.commandHintText = DirectLabel(
+            parent=self.commandInformationFrame,
+            relief=None,
+            pos=(0.39, 0, -0.08),
+            scale=0.025,
+            text='',
+            text_align=TextNode.ARight,
+            text_wordwrap=18,
+            text_fg=(1, 1, 1, 0.6),
+            text_shadow=(0, 0, 0, 1),
+            textMayChange=1,
+        )
+
+        self.commandSelectionFrame.hide()
+        self.commandInformationFrame.hide()
+        self.commandScrollBar.hide()
+        self.commandScrollThumb.hide()
+        self.commandFrame.hide()
+
+    def _updateCommandPanelColour(self, colourName, scrollColour):
+        if not hasattr(self, 'commandBackground'):
+            return
+        image = self.assets.find('**/Shortcut_%s' % colourName)
+        if image.isEmpty():
+            image = self.assets.find('**/Shortcut_Gray')
+        if not image.isEmpty():
+            self.commandBackground['image'] = image
+        self.commandScrollBar['image_color'] = scrollColour
+        self.commandScrollThumb['image_color'] = scrollColour
+
+    def _getNearbyCommandTargets(self):
+        targets = []
+        seen = set()
+        try:
+            from toontown.toon.DistributedToon import DistributedToon
+            try:
+                objects = base.cr.getObjectsOfExactClass(DistributedToon)
+                try:
+                    iterator = objects.itervalues()
+                except:
+                    iterator = objects.values()
+            except:
+                try:
+                    iterator = base.cr.doId2do.itervalues()
+                except:
+                    iterator = base.cr.doId2do.values()
+
+            for toon in iterator:
+                if toon is None or toon is getattr(base, 'localAvatar', None):
+                    continue
+                if toon.__class__ is not DistributedToon:
+                    continue
+                try:
+                    doId = toon.getDoId()
+                except:
+                    doId = getattr(toon, 'doId', 0)
+                if not doId or doId in seen:
+                    continue
+                try:
+                    name = toon.getName().strip()
+                except:
+                    name = ''
+                if not name:
+                    continue
+                seen.add(doId)
+                targets.append({
+                    'kind': 'target',
+                    'name': name,
+                    'nameLower': name.lower(),
+                    'description': 'Target this nearby Toon.  Toon ID: %s' % doId,
+                    'doId': doId,
+                    'toon': toon,
+                    'searchTerms': (name.lower(), str(doId)),
+                })
+        except:
+            pass
+
+        targets.sort(key=lambda item: item['nameLower'])
+        return targets
+
+    def _formatCommandTargetName(self, name):
+        return name
+
+    def _extractCompletedCommandTarget(self, argumentText, targets):
+        text = argumentText.lstrip()
+        if not text:
+            return (None, text)
+
+        lowered = text.lower()
+        orderedTargets = sorted(targets, key=lambda item: len(item['name']), reverse=True)
+        for target in orderedTargets:
+            name = target['name']
+            loweredName = target['nameLower']
+            if lowered == loweredName:
+                return (target, '')
+            if lowered.startswith(loweredName) and len(text) > len(name) and text[len(name)].isspace():
+                return (target, text[len(name):].lstrip())
+        return (None, text)
+
+    def _filterCommandTargets(self, targets, enteredText):
+        query = enteredText.strip().lower()
+        strong = []
+        weak = []
+        for target in targets:
+            terms = target.get('searchTerms', (target['nameLower'],))
+            if not query or any(term.startswith(query) for term in terms):
+                strong.append(target)
+            elif any(query in term for term in terms):
+                weak.append(target)
+        return strong + weak
+
+    def _updateCommandShortcuts(self, text):
+        if (not self._entryFocused or not text.startswith('/') or
+                self.currentTab in (self.TAB_ALERTS, self.TAB_NPC)):
+            self._hideCommandShortcuts()
+            return
+
+        self.commandFrame.show()
+        if text.startswith('//'):
+            self._showEmptyCommandInformation(text,
+                'Use /command ToonName instead of //command.')
+            return
+
+        entered = text[1:]
+        commandMatch = re.match(r'^\s*(\S+)', entered)
+        commandWord = commandMatch.group(1).lower() if commandMatch else ''
+        exact = self._commandLookup.get(commandWord)
+
+        if exact is not None:
+            self._commandExact = exact
+            self._commandSelectionKind = 'command'
+            self._commandTargetBase = ''
+            self._commandInvokeWord = commandMatch.group(1)
+            remainder = entered[commandMatch.end():]
+            targetMode = exact.get('targetMode', 'optional')
+            targets = self._getNearbyCommandTargets() if targetMode != 'none' else []
+
+            if remainder and targetMode != 'none':
+                argumentText = remainder.lstrip()
+                completedTarget, remainingArguments = self._extractCompletedCommandTarget(argumentText, targets)
+                if completedTarget is not None:
+                    self._showCommandInformation(exact, completedTarget)
+                    return
+
+                targetMatches = self._filterCommandTargets(targets, argumentText)
+                if targetMatches:
+                    self._commandMode = 'selection'
+                    self._commandSelectionKind = 'target'
+                    self._commandTargetBase = '/' + self._commandInvokeWord + ' '
+                    self._commandMatches = targetMatches
+                    self._commandSelectionIndex = 0
+                    self._commandVisibleStart = 0
+                    self.commandInformationFrame.hide()
+                    self.commandSelectionFrame.show()
+                    self._refreshCommandRows()
+                    return
+
+            self._showCommandInformation(exact)
+            return
+
+        self._commandExact = None
+        self._commandMode = 'selection'
+        self._commandSelectionKind = 'command'
+        self._commandInvokeWord = ''
+        self._commandTargetBase = ''
+        query = commandWord
+        strong = []
+        weak = []
+        for command in self.commandShortcuts:
+            terms = command.get('searchTerms', (command['name'],))
+            if not query or any(term.startswith(query) for term in terms):
+                strong.append(command)
+            elif any(query in term for term in terms):
+                weak.append(command)
+        self._commandMatches = strong + weak
+        self._commandSelectionIndex = 0 if self._commandMatches else -1
+        self._commandVisibleStart = 0
+
+        if not self._commandMatches:
+            self._showEmptyCommandInformation(text)
+            return
+
+        self.commandInformationFrame.hide()
+        self.commandSelectionFrame.show()
+        self._refreshCommandRows()
+
+    def _hideCommandShortcuts(self):
+        if not hasattr(self, 'commandFrame'):
+            return
+        self._commandMode = 'hidden'
+        self._commandSelectionKind = 'command'
+        self._commandMatches = []
+        self._commandSelectionIndex = -1
+        self._commandExact = None
+        self._commandInvokeWord = ''
+        self._commandTargetBase = ''
+        self.commandFrame.hide()
+
+    def _showCommandInformation(self, command, target=None):
+        self._commandMode = 'information'
+        self._commandExact = command
+        self._commandMatches = []
+        self._commandSelectionIndex = -1
+        self.commandSelectionFrame.hide()
+        self.commandScrollBar.hide()
+        self.commandScrollThumb.hide()
+        self.commandInformationFrame.show()
+
+        invokeWord = self._commandInvokeWord or command['name']
+        syntax = '/' + invokeWord
+        targetMode = command.get('targetMode', 'optional')
+        if target is not None:
+            syntax += ' ' + self._formatCommandTargetName(target['name'])
+        elif targetMode == 'required':
+            syntax += ' <nearby Toon name>'
+        elif targetMode == 'optional':
+            syntax += ' [nearby Toon name]'
+        if command.get('usage'):
+            syntax += ' ' + command['usage']
+        self.commandInvokeText['text'] = syntax
+        self.commandDescriptionText['text'] = command.get('description') or 'No description is available for this command.'
+        self.commandParametersText['text'] = ('Parameters: %s' % command['usage']) if command.get('usage') else ''
+        aliases = command.get('aliases', ())
+        self.commandAliasesText['text'] = ('Aliases: %s' % ', '.join(aliases)) if aliases else ''
+        if target is not None:
+            self.commandHintText['text'] = 'Target: %s. Press ENTER to run it.' % target['name']
+        elif targetMode == 'required':
+            self.commandHintText['text'] = 'Type a nearby Toon name and press TAB.'
+        elif targetMode == 'optional':
+            self.commandHintText['text'] = 'Optional: type a nearby Toon name and press TAB. Without a matched name, the command runs on yourself.'
+        else:
+            self.commandHintText['text'] = 'This command runs on your client or your own Toon.'
+
+    def _showEmptyCommandInformation(self, text, hint=None):
+        self._commandMode = 'empty'
+        self.commandSelectionFrame.hide()
+        self.commandScrollBar.hide()
+        self.commandScrollThumb.hide()
+        self.commandInformationFrame.show()
+        self.commandInvokeText['text'] = text
+        self.commandDescriptionText['text'] = 'No matching commands were found.'
+        self.commandParametersText['text'] = ''
+        self.commandAliasesText['text'] = ''
+        self.commandHintText['text'] = hint or 'Keep typing or erase part of the command.'
+
+    def _refreshCommandRows(self):
+        if self._commandMode != 'selection':
+            return
+
+        if self._commandSelectionIndex < self._commandVisibleStart:
+            self._commandVisibleStart = self._commandSelectionIndex
+        elif self._commandSelectionIndex >= self._commandVisibleStart + len(self.commandRows):
+            self._commandVisibleStart = self._commandSelectionIndex - len(self.commandRows) + 1
+
+        maximumStart = max(0, len(self._commandMatches) - len(self.commandRows))
+        self._commandVisibleStart = max(0, min(self._commandVisibleStart, maximumStart))
+
+        for visibleIndex, row in enumerate(self.commandRows):
+            absoluteIndex = self._commandVisibleStart + visibleIndex
+            if absoluteIndex >= len(self._commandMatches):
+                row._commandValue = None
+                row.hide()
+                continue
+
+            item = self._commandMatches[absoluteIndex]
+            row._commandValue = item
+            row._commandTitle['text'] = item['name']
+            row._commandDescription['text'] = item.get('description', '')
+            if absoluteIndex == self._commandSelectionIndex:
+                row['relief'] = DGG.FLAT
+                row._commandAutofill.show()
+            else:
+                row['relief'] = None
+                row._commandAutofill.hide()
+            row.show()
+
+        if len(self._commandMatches) > len(self.commandRows):
+            self.commandScrollBar.show()
+            self.commandScrollThumb.show()
+            denominator = float(max(1, len(self._commandMatches) - 1))
+            ratio = self._commandSelectionIndex / denominator
+            self.commandScrollThumb.setZ(0.075 - (ratio * 0.15))
+        else:
+            self.commandScrollBar.hide()
+            self.commandScrollThumb.hide()
+
+    def _hoverVisibleCommand(self, visibleIndex, unused=None):
+        if self._commandMode != 'selection':
+            return
+        absoluteIndex = self._commandVisibleStart + visibleIndex
+        if absoluteIndex < len(self._commandMatches):
+            self._commandSelectionIndex = absoluteIndex
+            self._refreshCommandRows()
+
+    def _chooseVisibleCommand(self, visibleIndex):
+        if self._commandMode != 'selection':
+            return
+        absoluteIndex = self._commandVisibleStart + visibleIndex
+        if absoluteIndex >= len(self._commandMatches):
+            return
+        self._commandSelectionIndex = absoluteIndex
+        self._completeSelectedCommand()
+
+    def _completeSelectedCommand(self):
+        item = None
+        if self._commandMode == 'selection':
+            if 0 <= self._commandSelectionIndex < len(self._commandMatches):
+                item = self._commandMatches[self._commandSelectionIndex]
+        elif self._commandMode == 'information':
+            try:
+                currentText = self.entry.get(plain=True)
+            except:
+                currentText = self.entry.get()
+            entered = currentText[1:]
+            if re.search(r'\s', entered):
+                return
+            item = self._commandExact
+
+        if item is None:
+            return
+
+        if self._commandSelectionKind == 'target' or item.get('kind') == 'target':
+            newText = self._commandTargetBase + self._formatCommandTargetName(item['name']) + ' '
+        else:
+            newText = '/' + item['name'] + ' '
+        self.entry.set(newText)
+        self.entry.setCursorPosition(len(newText))
+        self._entryChanged(None)
+
+    def _commandSelectionUp(self):
+        if self._commandMode != 'selection' or not self._commandMatches:
+            return
+        self._commandSelectionIndex = max(0, self._commandSelectionIndex - 1)
+        self._refreshCommandRows()
+
+    def _commandSelectionDown(self):
+        if self._commandMode != 'selection' or not self._commandMatches:
+            return
+        self._commandSelectionIndex = min(len(self._commandMatches) - 1, self._commandSelectionIndex + 1)
+        self._refreshCommandRows()
+
+    def _entryUp(self):
+        try:
+            text = self.entry.get(plain=True)
+        except:
+            text = self.entry.get()
+        if text.startswith('/'):
+            self._commandSelectionUp()
+        else:
+            self._historyUp()
+
+    def _entryDown(self):
+        try:
+            text = self.entry.get(plain=True)
+        except:
+            text = self.entry.get()
+        if text.startswith('/'):
+            self._commandSelectionDown()
+        else:
+            self._historyDown()
+
+    def _entryTab(self):
+        try:
+            text = self.entry.get(plain=True)
+        except:
+            text = self.entry.get()
+        if text.startswith('/'):
+            self._completeSelectedCommand()
+
     def _makeDisplayButtons(self):
         xBase = -0.4485
         xIncrement = 0.06146
@@ -593,6 +1122,7 @@ class ChatLog(DirectFrame, DirectObject):
         self.ignore('wheel_up')
         self.ignore('wheel_down')
         self.removeFocus()
+        self._hideCommandShortcuts()
         try:
             chatMgr = base.localAvatar.chatMgr
             if hasattr(chatMgr, 'closePanelMenus'):
@@ -644,6 +1174,7 @@ class ChatLog(DirectFrame, DirectObject):
         }[tab]
         self.colourPanel['image'] = self.assets.find('**/%s' % panelName)
         self.lists[tab].verticalScroll['geom_color'] = scrollColour
+        self._updateCommandPanelColour(panelName.split('_')[-1], scrollColour)
         self._clearNotification(tab)
         self._updateEntryState()
         if playSound:
@@ -700,13 +1231,17 @@ class ChatLog(DirectFrame, DirectObject):
             self.entryHint.hide()
         else:
             self.entryHint.show()
+        self._updateCommandShortcuts(text)
 
     def _focusIn(self):
         self._entryFocused = True
         self.updateUniteButtons()
         self.entry.accept('escape', self.removeFocus)
-        self.entry.accept('arrow_up', self._historyUp)
-        self.entry.accept('arrow_down', self._historyDown)
+        self.entry.accept('arrow_up', self._entryUp)
+        self.entry.accept('arrow_up-repeat', self._entryUp)
+        self.entry.accept('arrow_down', self._entryDown)
+        self.entry.accept('arrow_down-repeat', self._entryDown)
+        self.entry.accept('tab', self._entryTab)
         self.ignore(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'))
         try:
             if base.wantCustomControls:
@@ -722,7 +1257,10 @@ class ChatLog(DirectFrame, DirectObject):
         self.updateUniteButtons()
         self.entry.ignore('escape')
         self.entry.ignore('arrow_up')
+        self.entry.ignore('arrow_up-repeat')
         self.entry.ignore('arrow_down')
+        self.entry.ignore('arrow_down-repeat')
+        self.entry.ignore('tab')
         self.accept('c', self.chatHotkey)
         try:
             if base.wantCustomControls:
@@ -749,9 +1287,17 @@ class ChatLog(DirectFrame, DirectObject):
             clipLeft, clipRight, clipBottom, clipTop = (0, 13.4, -1, 1)
             insideEntry = (clipLeft <= point.getX() <= clipRight and
                            clipBottom <= point.getZ() <= clipTop)
+
+            insideCommands = False
+            if hasattr(self, 'commandFrame') and not self.commandFrame.isHidden():
+                commandPoint = self.commandFrame.getRelativePoint(
+                    render2d, Point3(mouse.getX(), 0, mouse.getY()))
+                insideCommands = (-0.53 <= commandPoint.getX() <= 0.53 and
+                                  -0.16 <= commandPoint.getZ() <= 0.16)
         except:
             insideEntry = False
-        if not insideEntry:
+            insideCommands = False
+        if not insideEntry and not insideCommands:
             self.removeFocus()
 
     def removeFocus(self):
@@ -1012,7 +1558,7 @@ class ChatLog(DirectFrame, DirectObject):
     def _addTutorialMessages(self):
         tutorialColour = (0.72, 0.72, 0.72, 0.95)
         tutorials = {
-            self.TAB_MAIN: "World messages are shown here. Messages from the\nWhispers, Alerts, NPC and Clubs tabs are also shown here.\nMain combines every supported Altis chat channel.",
+            self.TAB_MAIN: "World messages are shown here. Messages from the\nWhispers, Alerts, NPC and Clubs tabs are also shown here.\nMain combines every supported Aristotown chat channel.",
             self.TAB_WHISPERS: 'Whispers sent to and received from other Toons are shown here.',
             self.TAB_ALERTS: 'System alerts and announcements are shown here.',
             self.TAB_NPC: 'Cog and NPC dialogue is shown here.',

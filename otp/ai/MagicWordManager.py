@@ -3,6 +3,7 @@ from direct.distributed import DistributedObject
 from otp.ai.MagicWordGlobal import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.ToonAccessoryPlacementPanel import ToonAccessoryPlacementPanel
+from toontown.toon import ClashClientMagicWords
 
 lastClickedNametag = None
 

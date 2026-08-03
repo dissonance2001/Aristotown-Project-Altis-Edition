@@ -14,6 +14,7 @@ from TTChatInputSpeedChat import TTChatInputSpeedChat
 from TTChatInputUnites import TTChatInputUnites
 from TTChatInputNormal import TTChatInputNormal
 from TTChatInputWhiteList import TTChatInputWhiteList
+from toontown.toon.AltisCommandShortcuts import translateCommandText
 
 class HackedDirectRadioButton(DirectCheckButton):
 
@@ -37,6 +38,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.normalButton = DirectButton(image=(gui.find('**/ChtBx_ChtBtn_UP'), gui.find('**/ChtBx_ChtBtn_DN'), gui.find('**/ChtBx_ChtBtn_RLVR')), pos=(0.0683, 0, -0.072), parent=base.a2dTopLeft, scale=1.179, relief=None, image_color=Vec4(1, 1, 1, 1), text=('', OTPLocalizer.ChatManagerChat, OTPLocalizer.ChatManagerChat), text_align=TextNode.ALeft, text_scale=TTLocalizer.TCMnormalButton, text_fg=Vec4(1, 1, 1, 1), text_shadow=Vec4(0, 0, 0, 1), text_pos=(-0.0525, -0.09), textMayChange=0, sortOrder=DGG.FOREGROUND_SORT_INDEX, command=self.__normalButtonPressed)
         self.normalButton.hide()
         self.openScSfx = loader.loadSfx('phase_3.5/audio/sfx/GUI_quicktalker.ogg')
+        self.magicWordSfx = loader.loadSfx('phase_3/audio/sfx/clock03.ogg')
         self.openScSfx.setVolume(0.6)
         self.scButton = DirectButton(image=(gui.find('**/ChtBx_ChtBtn_UP'), gui.find('**/ChtBx_ChtBtn_DN'), gui.find('**/ChtBx_ChtBtn_RLVR')), pos=TTLocalizer.TCMscButtonPos, parent=base.a2dTopLeft, scale=1.179, relief=None, image_color=Vec4(0.75, 1, 0.6, 1), text=('', OTPLocalizer.GlobalSpeedChatName, OTPLocalizer.GlobalSpeedChatName), text_scale=TTLocalizer.TCMscButton, text_fg=Vec4(1, 1, 1, 1), text_shadow=Vec4(0, 0, 0, 1), text_pos=(0, -0.09), textMayChange=0, sortOrder=DGG.FOREGROUND_SORT_INDEX, command=self.__scButtonPressed, clickSound=self.openScSfx)
         self.scButton.hide()
@@ -98,6 +100,7 @@ class ToontownChatManager(ChatManager.ChatManager):
         self.clButton.destroy()
         del self.clButton
         del self.openScSfx
+        del self.magicWordSfx
         self.whisperFrame.destroy()
         del self.whisperFrame
         self.whisperButton.destroy()
@@ -462,6 +465,201 @@ class ToontownChatManager(ChatManager.ChatManager):
         if base.localAvatar.chatLog:
             base.localAvatar.chatLog.toggle()
 
+    def __getNamedMagicWordTargets(self):
+        targets = []
+        seen = set()
+        try:
+            from toontown.toon.DistributedToon import DistributedToon
+            try:
+                objects = base.cr.getObjectsOfExactClass(DistributedToon)
+                try:
+                    iterator = objects.itervalues()
+                except:
+                    iterator = objects.values()
+            except:
+                try:
+                    iterator = base.cr.doId2do.itervalues()
+                except:
+                    iterator = base.cr.doId2do.values()
+
+            for toon in iterator:
+                if toon is None or toon is getattr(base, 'localAvatar', None):
+                    continue
+                if toon.__class__ is not DistributedToon:
+                    continue
+                try:
+                    doId = toon.getDoId()
+                except:
+                    doId = getattr(toon, 'doId', 0)
+                if not doId or doId in seen:
+                    continue
+                try:
+                    name = toon.getName().strip()
+                except:
+                    name = ''
+                if not name:
+                    continue
+                seen.add(doId)
+                targets.append((name, toon))
+        except:
+            pass
+        targets.sort(key=lambda item: len(item[0]), reverse=True)
+        return targets
+
+    def __extractNamedMagicWordTarget(self, commandText):
+        splitCommand = commandText.split(None, 1)
+        if len(splitCommand) < 2:
+            return (None, commandText)
+
+        invokeWord = splitCommand[0]
+        enteredArguments = splitCommand[1].lstrip()
+        if not enteredArguments:
+            return (None, commandText)
+
+        targetToon = None
+        remainingArguments = ''
+        loweredArguments = enteredArguments.lower()
+
+        for name, toon in self.__getNamedMagicWordTargets():
+            loweredName = name.lower()
+            if loweredArguments == loweredName:
+                targetToon = toon
+                remainingArguments = ''
+                break
+            if (loweredArguments.startswith(loweredName) and
+                    len(enteredArguments) > len(name) and
+                    enteredArguments[len(name)].isspace()):
+                targetToon = toon
+                remainingArguments = enteredArguments[len(name):].lstrip()
+                break
+
+        if targetToon is None:
+            return (None, commandText)
+
+        strippedCommand = invokeWord
+        if remainingArguments:
+            strippedCommand += ' ' + remainingArguments
+        return (targetToon, strippedCommand)
+
+    def __sendNamedTargetMagicWord(self, targetToon, targetPrefix, commandText):
+        try:
+            from otp.ai import MagicWordManager as MagicWordManagerModule
+            previousTarget = getattr(MagicWordManagerModule, 'lastClickedNametag', None)
+            MagicWordManagerModule.lastClickedNametag = targetToon
+            try:
+                base.talkAssistant.sendOpenTalk(targetPrefix + commandText)
+            finally:
+                MagicWordManagerModule.lastClickedNametag = previousTarget
+        except:
+            oldPrefix = getattr(ToontownGlobals, 'MagicWordInvokerPrefix', '~')
+            base.talkAssistant.sendOpenTalk(oldPrefix + commandText)
+
+    def __addShortcutError(self, chatLog, message):
+        if chatLog:
+            chatLog.addToLog('\1playerGreen\1System Message\2: ' + message, category=chatLog.TAB_ALERTS)
+
+    def __handleClashLocalShortcut(self, commandText, targetToon, chatLog):
+        pieces = commandText.split(None, 1)
+        if not pieces:
+            return None
+        command = pieces[0].lower()
+        arguments = pieces[1].strip() if len(pieces) > 1 else ''
+
+        if command == 'friend':
+            if targetToon is None:
+                self.__addShortcutError(chatLog, 'Choose a nearby Toon: /friend ToonName')
+                return False
+            try:
+                name = targetToon.getName()
+                messenger.send('friendAvatar', [targetToon.doId, name, name])
+                return True
+            except:
+                self.__addShortcutError(chatLog, 'That Toon is no longer nearby.')
+                return False
+
+        if command == 'ftp':
+            if targetToon is None:
+                self.__addShortcutError(chatLog, 'Choose a nearby Toon: /ftp ToonName')
+                return False
+            if not base.localAvatar.isTeleportAllowed():
+                self.__addShortcutError(chatLog, 'Teleporting is not available right now.')
+                return False
+            try:
+                name = targetToon.getName()
+                messenger.send('gotoAvatar', [targetToon.doId, name, name])
+                return True
+            except:
+                self.__addShortcutError(chatLog, 'That Toon is no longer nearby.')
+                return False
+
+        if command == 'whisper':
+            if targetToon is None:
+                self.__addShortcutError(chatLog, 'Choose a nearby Toon: /whisper ToonName message')
+                return False
+            if not arguments:
+                self.__addShortcutError(chatLog, 'Enter a message after the Toon name.')
+                return False
+            try:
+                check = getattr(base.talkAssistant, 'checkWhisperTypedChatAvatar', None)
+                if check and not check(targetToon.doId):
+                    self.__addShortcutError(chatLog, 'Typed whispers are not available for that Toon.')
+                    return False
+                base.talkAssistant.sendWhisperTalk(arguments, targetToon.doId)
+                return True
+            except:
+                self.__addShortcutError(chatLog, 'That Toon is no longer nearby.')
+                return False
+
+        if command == 'reply':
+            if targetToon is not None:
+                self.__addShortcutError(chatLog, '/reply does not use a Toon target.')
+                return False
+            if not arguments:
+                self.__addShortcutError(chatLog, 'Enter a message after /reply.')
+                return False
+            try:
+                replyId, toPlayer = base.talkAssistant.getWhisperReplyId()
+            except:
+                replyId, toPlayer = (0, 0)
+            if not replyId:
+                self.__addShortcutError(chatLog, 'There is no whisper to reply to.')
+                return False
+            try:
+                if toPlayer:
+                    check = getattr(base.talkAssistant, 'checkWhisperTypedChatPlayer', None)
+                    if check and not check(replyId):
+                        self.__addShortcutError(chatLog, 'Typed replies are not available for that player.')
+                        return False
+                    base.talkAssistant.sendAccountTalk(arguments, replyId)
+                else:
+                    check = getattr(base.talkAssistant, 'checkWhisperTypedChatAvatar', None)
+                    if check and not check(replyId):
+                        self.__addShortcutError(chatLog, 'Typed replies are not available for that Toon.')
+                        return False
+                    base.talkAssistant.sendWhisperTalk(arguments, replyId)
+                return True
+            except:
+                self.__addShortcutError(chatLog, 'The previous whisper target is no longer available.')
+                return False
+
+        if command == 'emote':
+            if targetToon is not None:
+                self.__addShortcutError(chatLog, '/emote does not use a Toon target.')
+                return False
+            try:
+                emoteId = int(arguments)
+            except:
+                self.__addShortcutError(chatLog, 'Use /emote followed by an emote ID.')
+                return False
+            try:
+                self.sendSCEmoteChatMessage(emoteId)
+                return True
+            except:
+                self.__addShortcutError(chatLog, 'That emote is not available.')
+                return False
+
+        return None
+
     def sendPanelMessage(self, message):
         message = message.strip()
         if not message:
@@ -476,9 +674,40 @@ class ToontownChatManager(ChatManager.ChatManager):
             targetName, targetAvatarId, targetPlayerId = chatLog.getWhisperTarget()
             activeTab = chatLog.currentTab
 
-        # Magic words always use open chat, matching the original input box.
-        if len(message) > 0 and message[0] == ToontownGlobals.MagicWordInvokerPrefix:
-            base.talkAssistant.sendOpenTalk(message)
+        oldPrefix = getattr(ToontownGlobals, 'MagicWordInvokerPrefix', '~')
+        targetPrefix = getattr(ToontownGlobals, 'MagicWordTargetPrefix', '~~')
+        if message.startswith('/'):
+            try:
+                base.playSfx(self.magicWordSfx)
+            except:
+                try:
+                    self.magicWordSfx.play()
+                except:
+                    pass
+        if message.startswith(oldPrefix):
+            if chatLog:
+                chatLog.addToLog('\1playerGreen\1System Message\2: Use /command instead of ~command.', category=chatLog.TAB_ALERTS)
+            return False
+        elif message.startswith('//'):
+            if chatLog:
+                chatLog.addToLog('\1playerGreen\1System Message\2: Use /command ToonName instead of //command.', category=chatLog.TAB_ALERTS)
+            return False
+        elif message.startswith('/'):
+            commandText = message[1:].strip()
+            if not commandText:
+                if chatLog:
+                    chatLog.addToLog('\1playerGreen\1System Message\2: Select a command before sending it.', category=chatLog.TAB_ALERTS)
+                return False
+            commandText = translateCommandText(commandText)
+            targetToon, translatedCommand = self.__extractNamedMagicWordTarget(commandText)
+            handled = self.__handleClashLocalShortcut(translatedCommand, targetToon, chatLog)
+            if handled is False:
+                return False
+            if handled is None:
+                if targetToon is not None:
+                    self.__sendNamedTargetMagicWord(targetToon, targetPrefix, translatedCommand)
+                else:
+                    base.talkAssistant.sendOpenTalk(oldPrefix + translatedCommand)
         elif chatLog and activeTab == chatLog.TAB_WHISPERS and targetAvatarId:
             check = getattr(base.talkAssistant, 'checkWhisperTypedChatAvatar', None)
             if check and not check(targetAvatarId):

@@ -4,6 +4,7 @@ from otp.ai.MagicWordGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from toontown.toon.DistributedToonAI import DistributedToonAI
+from toontown.toon import ClashAIMagicWords
 import time
 import datetime
 import os
