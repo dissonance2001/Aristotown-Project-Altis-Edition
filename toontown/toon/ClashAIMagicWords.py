@@ -99,6 +99,19 @@ def clashClearDisguise(deptName):
     return 'Cleared the %s disguise.' % SuitDNA.suitDeptFullnames[dept]
 
 
+@magicWord(name='instakill', category=CATEGORY_PROGRAMMER, types=[int])
+def clashInstakill(damage):
+    """Sets fixed damage for the target Toon's damaging gags. Use 0 to disable."""
+    damage = int(damage)
+    if damage < 0 or damage > 60000:
+        return 'Damage must be between 0 and 60,000.'
+    target = spellbook.getTarget()
+    target.instakillDamage = damage
+    if damage == 0:
+        return 'Disabled fixed gag damage.'
+    return 'Set fixed gag damage to %s.' % format(damage, ',')
+
+
 @magicWord(name='dance', category=CATEGORY_PROGRAMMER, types=[])
 def clashDance():
     """Makes every Toon in your current zone dance."""

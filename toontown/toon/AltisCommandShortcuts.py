@@ -10,6 +10,7 @@ COMMANDS = (
     {'name': 'jbs', 'usage': '<amount>', 'description': 'Gives Jellybeans to the target Toon.', 'aliases': (), 'access': 400},
     {'name': 'coin', 'usage': '<amount>', 'description': "Gives Club Coins to the target Toon's Club.", 'aliases': (), 'access': 400},
     {'name': 'clublevel', 'usage': '<level>', 'description': "Sets the target Toon's Club level.", 'aliases': (), 'access': 400},
+    {'name': 'instakill', 'usage': '<damage 0-60000>', 'description': "Sets fixed damage for the target Toon's damaging gags; 0 disables it.", 'aliases': (), 'access': 400},
     {'name': 'pos', 'dispatch': 'xyz', 'usage': '<x> <y> <z>', 'description': 'Sets your Toon position.', 'aliases': (), 'access': 300},
     {'name': 'wireframe', 'dispatch': 'wire', 'usage': '', 'description': 'Toggles wireframe rendering.', 'aliases': (), 'access': 300},
     {'name': 'freecam', 'dispatch': 'oobe', 'usage': '', 'description': 'Toggles the out-of-body camera.', 'aliases': (), 'access': 300},

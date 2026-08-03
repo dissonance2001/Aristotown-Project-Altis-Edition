@@ -858,6 +858,18 @@ class BattleCalculatorAI:
             else:
                 return NO_ATTACK
 
+    def __getInstakillDamage(self, toonId):
+        toon = self.battle.getToon(toonId)
+        if toon is None:
+            return 0
+        try:
+            damage = int(getattr(toon, 'instakillDamage', 0))
+        except:
+            return 0
+        if damage < 1:
+            return 0
+        return min(damage, 60000)
+
     def getSuitTrapType(self, suitId):
         if suitId in self.traps:
             if self.traps[suitId][0] == TRAP_CONFLICT:
@@ -1032,6 +1044,9 @@ class BattleCalculatorAI:
                   #  if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(suitId, 'shielding'):
                     #    damage *= .7
                         #self.absorbDamage += int((damage * .425))
+                instakillDamage = self.__getInstakillDamage(attackerId)
+                if instakillDamage:
+                    damage = instakillDamage
                 if self.itemIsCredit(TRAP, trapLvl):
                     self.traps[suitId] = [trapLvl, attackerId, damage]
                 else:
@@ -1178,6 +1193,9 @@ class BattleCalculatorAI:
                    # if self.suitHasCondition(s.doId, 'shielding') and not self.suitHasCondition(suitId, 'shielding'):
                       #  damage *= .7
                        # self.absorbDamage += int((damage * .425))
+                instakillDamage = self.__getInstakillDamage(attackerId)
+                if instakillDamage:
+                    damage = instakillDamage
                 if self.itemIsCredit(TRAP, trapLvl):
                     self.traps[suitId] = [
                         trapLvl, attackerId, damage]
@@ -1625,6 +1643,9 @@ class BattleCalculatorAI:
                 'setBoth'
             )
 
+        instakillDamage = self.__getInstakillDamage(toonId)
+        if instakillDamage and atkTrack in (TRAP, SOUND, THROW, SQUIRT, ZAP, DROP):
+            return instakillDamage
         return attackDamage
 
     def applyToonGagDamageMultipliers(self, damage, toonId, suitId, atkTrack, atkLevel, organicBonus=False):
@@ -2761,6 +2782,9 @@ class BattleCalculatorAI:
                 #                 atkLevel,
                 #                 attackDamage
                 #             )
+                instakillDamage = self.__getInstakillDamage(toonId)
+                if instakillDamage and atkHit and atkTrack in (SOUND, THROW, SQUIRT, ZAP, DROP):
+                    attackDamage = instakillDamage
                 attackDamage = math.ceil(attackDamage)
                 if atkTrack == TRAP:
                     for suit in self.battle.activeSuits:
