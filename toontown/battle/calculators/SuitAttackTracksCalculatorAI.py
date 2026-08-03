@@ -110,7 +110,7 @@ class SuitAttackTracksCalculatorAI:
                 self.battle.suitAttacks.append(attack)
             queuedAbsorb = True
 
-        if self.levelDamage > 0 and suit.currHP > 1 and suit.dna.name == 'hroller':
+        if levelDamage > 0 and suit.currHP > 1 and suit.dna.name == 'hroller':
             attack = self.__getCheatAttack(suitId, {
                 'suitName': suit.dna.name,
                 'name': 'AbsorbMovieLevel%s' % trackName,

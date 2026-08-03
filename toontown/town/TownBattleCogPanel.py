@@ -1056,7 +1056,7 @@ class TownBattleCogPanel(DirectFrame):
                 'positive': True,
             })
 
-        if not self.cog.getExecutive() and not self.cog.getSkeleRevives() > 1 and not self.cog.getManager() and not self.cog.getGovernaught():
+        if not self.cog.getExecutive() and not self.cog.getSkeleRevives() > 1 and not self.cog.getManager() and not self.cog.getGovernaught() and not hpType == 'operations' and not hpType == 'field':
             modifiers.append({
                 'title': 'Employee',
                 'value': '',
@@ -1762,7 +1762,7 @@ class TownBattleCogPanel(DirectFrame):
                                    slotColor=(0.722, 0.722, 0.722, 1))
 
         if self.cog.getManager() or self.cog.getGovernaught() or self.cog.hasSuitStatusEffect('lureResist') or self.cog.hasSuitStatusEffect('insured') or self.cog.hasSuitStatusEffect('insured2') or self.cog.healthCondition == 13:
-            if (self.cog.isDesperation and (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat')) or self.cog.hasSuitStatusEffect('videographerImmune') or self.cog.hasSuitStatusEffect('silhouetteImmune') or self.cog.hasSuitStatusEffect('lureImmune') or self.cog.dna.name == 'hroller' or self.cog.hasSuitStatusEffect('immune') or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.hasSuitStatusEffect('lureResist'):
+            if (self.cog.isDesperation and (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat')) or self.cog.hasSuitStatusEffect('videographerImmune') or self.cog.hasSuitStatusEffect('silhouetteImmune') or self.cog.hasSuitStatusEffect('lureImmune') or self.cog.hasSuitStatusEffect('highRollerImmune') or self.cog.hasSuitStatusEffect('immune') or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.hasSuitStatusEffect('lureResist'):
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/lured_prestige_icon')
                 status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
@@ -1864,7 +1864,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Minigame Host', 
-                                tooltipDescription="The High Roller is entirely immune to all Gags! Destroy Cogs to damage him.", 
+                                tooltipDescription="The High Roller is entirely immune to all Gags! Destroy his contestants to damage him.", 
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
             
@@ -2069,7 +2069,7 @@ class TownBattleCogPanel(DirectFrame):
                 slot = self._claimNextStatusSlot()
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
-                                    tooltipTitle="S1NG1N' BLU35", 
+                                    tooltipTitle="F1ZZL3", 
                                     tooltipDescription="This Silhouette wore a rubber suit to work today! It will reduce your Zap damage by a lot.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1))
@@ -2924,7 +2924,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if TRAP is not used on this Cog!!" \
+                                    tooltipDescription="ALL Toons will be punished if TRAP is not used on this Cog!! " \
                                     "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 

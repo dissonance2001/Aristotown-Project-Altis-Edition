@@ -555,7 +555,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     if bonusTrack != None:
         suitTrack = Parallel(suitTrack, bonusTrack)
     else:
-        if not hp > 0 and not visualDied and not alreadyTeased and not alreadyDodged:
+        if not hp > 0 and not visualDied and not alreadyTeased and not alreadyDodged and not alreadyHit:
             suitTrack = MovieUtil.createSuitTeaseMultiTrack(suit, battle, delay=delay + tObjectAppears)
         elif not hp > 0 and not visualDied and lastDropInSet and alreadyHit:
             if majorObject:

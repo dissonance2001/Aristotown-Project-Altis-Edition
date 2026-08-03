@@ -268,7 +268,8 @@ class HighRollerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.battle.activeSuits[i].getActualLevel() == 36 and self.__suitCanAttack(suitId):
+                
+                if self.battle.activeSuits[i].getActualLevel() == 36:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'HighRollerDamageReduction',  # Red Silhouette
                                             'animName': 'snap',

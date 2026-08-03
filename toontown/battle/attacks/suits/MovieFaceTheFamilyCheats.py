@@ -17,12 +17,15 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import BattleProps
 from toontown.suit import Suit
 from toontown.nametag import NametagGlobals
+from toontown.toonbase.ToontownTimer import ToontownTimer
 from toontown.nametag.NametagGlobals import *
 from toontown.suit.SuitDNA import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits import MovieIntervals
+from direct.gui.OnscreenText import OnscreenText
+from direct.showbase.PythonUtil import lerp
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -851,32 +854,132 @@ def doHighStakes(attack):
                                        LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
                               Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                               Func(MovieUtil.removeProp, smoke))
-        piano = globalPropPool.getProp('piano')
-        safe = globalPropPool.getProp('safe')
-        boulder = globalPropPool.getProp('boulder')
         gavel = loader.loadModel('phase_5/models/props/cc_m_bat_prp_dice')
         toonPos = toon.getPos(battle)
-        toonHpr = battle.getActorPosHpr(toon)
         y = toonPos.getY()
-        propPos = Point3(toonPos.getX(), y, 30)
         gavelPos = Point3(toonPos.getX(), y, 30)
         soundTrack2 = getSoundTrack('AA_drop_bigweight.ogg', delay=1.75, duration=2.0, node=suit)
         propTrack = Sequence(
-            getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
-                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
-            LerpPosInterval(gavel, 0.25, Point3(toonPos.getX(), y, 1)),
-            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 2)),
-            LerpPosInterval(gavel, 0.1, Point3(toonPos.getX(), y, 1)), Sequence(
-                Wait(1.5),
-                LerpScaleInterval(gavel, .25, MovieUtil.PNT3_ZERO)
-            ))
-        propTracks.append(Parallel(propTrack, soundTrack2))
+
+            getPropAppearTrack(
+                gavel,
+                parent=battle,
+                posPoints=[
+                    gavelPos,
+                    VBase3(0, 0, 0)
+                ],
+                appearDelay=0.0,
+                scaleUpPoint=Point3(1.5),
+                scaleUpTime=1.5
+            ),
+
+            # Drop while rotating.
+            Parallel(
+                LerpPosInterval(
+                    gavel,
+                    0.25,
+                    Point3(toonPos.getX(), y, 1.5),
+                    blendType='easeIn'
+                ),
+                LerpHprInterval(
+                    gavel,
+                    0.25,
+                    Vec3(25, 0, 18),
+                    blendType='easeIn'
+                )
+            ),
+
+            # First bounce.
+            Parallel(
+                LerpPosInterval(
+                    gavel,
+                    0.1,
+                    Point3(toonPos.getX() - 0.05, y, 2.5),
+                    blendType='easeOut'
+                ),
+                LerpHprInterval(
+                    gavel,
+                    0.1,
+                    Vec3(-15, 18, -12),
+                    blendType='easeOut'
+                ),
+                LerpScaleInterval(
+                    gavel,
+                    0.1,
+                    Vec3(1.46, 1.46, 1.58),
+                    blendType='easeOut'
+                )
+            ),
+
+            # First landing.
+            Parallel(
+                LerpPosInterval(
+                    gavel,
+                    0.1,
+                    Point3(toonPos.getX() - 0.02, y, 1.5),
+                    blendType='easeIn'
+                ),
+                LerpHprInterval(
+                    gavel,
+                    0.1,
+                    Vec3(10, -6, 8),
+                    blendType='easeIn'
+                ),
+                LerpScaleInterval(
+                    gavel,
+                    0.1,
+                    Vec3(1.5, 1.5, 1.5),
+                    blendType='easeIn'
+                )
+            ),
+
+            # Smaller bounce.
+            Parallel(
+                LerpPosInterval(
+                    gavel,
+                    0.1,
+                    Point3(toonPos.getX() + 0.015, y, 2.35),
+                    blendType='easeOut'
+                ),
+                LerpHprInterval(
+                    gavel,
+                    0.1,
+                    Vec3(-6, 4, -5),
+                    blendType='easeOut'
+                )
+            ),
+
+            # Final settle.
+            Parallel(
+                LerpPosInterval(
+                    gavel,
+                    0.10,
+                    Point3(toonPos.getX(), y, 1.5),
+                    blendType='easeIn'
+                ),
+                LerpHprInterval(
+                    gavel,
+                    0.12,
+                    Vec3(0, 0, 0),
+                    blendType='easeOut'
+                )
+            ),
+
+            Wait(0.5),
+
+            LerpScaleInterval(
+                gavel,
+                0.25,
+                MovieUtil.PNT3_ZERO
+            ),
+
+            Func(gavel.removeNode)
+        )
         toonTrack = Sequence(
         Wait(1.75),
         Parallel(
             Func(toon.enterFlattened),
             Func(toon.showHpTextNew, 0, text="?!", colorCode=1),
-            #Func(__doDamageCheat, toon, dmg, t['died'])
         ),
         Wait(1.75),
         Parallel(
@@ -891,6 +994,7 @@ def doHighStakes(attack):
             )
         )
         )
+        propTracks.append(Parallel(soundTrack2, propTrack))
         toonTracks.append(toonTrack)
         smokeTracks.append(smokeTrack)
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
@@ -983,7 +1087,7 @@ def doLifeInsurance(attack):
     suit = attack['suit']
     healSound = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_loop.ogg'), SoundInterval(globalBattleSoundCache.getSound('SA_life_insurance_register.ogg'))))
     suitTrack = Parallel(getSuitAnimTrack(attack), Wait(5.0))
-    suitTrack.append(Sequence(suit.checkLifeInsurance()), healSound)
+    suitTrack.append(Sequence(suit.checkLifeInsurance(), healSound))
     return Parallel(suitTrack)
 
 def doDrainingPower(attack):
@@ -1616,9 +1720,59 @@ def doObjectionSustained(attack):
 def doComeOn(attack):
     theSuit = attack['suit']
     battle = attack['battle']
+    musicTrack = Parallel()
+    suitTrack = Sequence()
     speedTrack = Parallel()
+    if not theSuit.battleSpeed > 0:
+        startScale = 1 + (theSuit.getBattleSpeed())
+        endScale = 1 + (theSuit.getBattleSpeed() + .5)
+    else:
+        startScale = (theSuit.getBattleSpeed())
+        endScale = (theSuit.getBattleSpeed() + .5)
+    timer = ToontownTimer()
+    timer.setScale(.5)
+    timer.hide()
+    OnscreenText(
+        parent=timer,
+        text='Battle Speed',
+        scale=0.27,
+        pos=(0, -0.55),
+        fg=(1, 1, 1, 1),
+        font=ToontownGlobals.getSignFont(),
+    )
+
+    def setTime(time):
+        if timer:
+            timer.setTimeStr('x{:.2f}'.format(time), scale=0.145)
+    setTime(startScale)
+
+    def lerpTimerText(t):
+        setTime(lerp(startScale, endScale, t))
+
+    # Make our sequence.
+    timerTrack = Sequence(
+        # Enter Interval
+        Func(timer.show),
+        LerpPosInterval(
+            timer, .25,
+            pos=(0, 0, 0), startPos=(0, 0, 2.0),
+            blendType='easeOut',
+        ),
+        # Hold Interval
+        LerpFunctionInterval(
+            lerpTimerText, duration=theSuit.getDuration('come-on'), blendType='easeInOut',
+        ),
+        # Leave Interval
+        LerpPosInterval(
+            timer, .25,
+            pos=(0, 0, -2.0), startPos=(0, 0, 0),
+            blendType='easeIn',
+        ),
+        # Cleanup
+        Func(timer.destroy),
+    )
     suitTrack = Sequence(Parallel(
-    getSuitAnimTrack(attack, disrespectBlend=True)),
+    getSuitAnimTrack(attack)),
     Parallel(Func(theSuit.enableBlend), 
         ActorInterval(theSuit, 'pace', loop=1),
         LerpAnimInterval(
@@ -1637,7 +1791,7 @@ def doComeOn(attack):
 )
     for suit in battle.activeSuits:
         speedTrack.append(Func(suit.checkBattleSpeed, theSuit, + .5))
-    return Parallel(speedTrack, suitTrack)
+    return Parallel(speedTrack, timerTrack, musicTrack, suitTrack)
 
 def doViralSensation(attack):
     suit = attack['suit']

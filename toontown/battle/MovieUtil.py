@@ -3272,9 +3272,9 @@ def zapCog(suit, anim, before, after, battle, died, level):
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), Func(startZapCogNeutral, suit, anim))
         spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     if suit.isShadow or suit.dna.name == 'cbutcher':
-        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Wait(after))
     else:
-        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuit, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
 def zapCogPowerhouseZap(suit, anim, before, after, battle):
@@ -3301,9 +3301,9 @@ def zapCogPowerhouseZap(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
     spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
     if suit.isShadow or suit.dna.name == 'cbutcher':
-        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Wait(after))
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Wait(after))
     else:
-        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseZap, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
@@ -3331,9 +3331,9 @@ def zapCogPowerhouseSquirt(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
     spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
     if suit.isShadow or suit.dna.name == 'cbutcher':
-        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Wait(after))
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Wait(after))
     else:
-        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouseSquirt, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 
@@ -3361,9 +3361,9 @@ def zapCogPowerhouse(suit, anim, before, after, battle):
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
     spazzTrack = Sequence(ActorInterval(suit, anim, startTime=0))
     if suit.isShadow or suit.dna.name == 'cbutcher':
-        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Wait(after))
+        flashTrack = Sequence(Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Wait(after))
     else:
-        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, battle, suitPos, suitHpr), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
+        flashTrack = Sequence(Func(suit.setColorScale, (0,0,0,1)), Func(insertZapSuit, suit, zapSuit, suit, Point3(0, 0, 0), Point3(0, 0, 0)), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,0,1)), Wait(.2), Func(zapSuit.setColorScale, (1,1,1,1)), Wait(.2), Func(removeZapSuitPowerhouse, suit, zapSuit), Func(suit.setColorScale, (1,1,1,1)), Wait(after))
     spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     return Sequence(Parallel(zapTrack, flashTrack, spazzTrack2, spazzTrack))
 

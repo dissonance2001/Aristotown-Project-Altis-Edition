@@ -8,6 +8,15 @@ import math
 
 class BaseSuitAttackCalculatorAI:
 
+    LEVEL_MOVIE_BY_TRACK = {
+    LURE: 'AbsorbMovieLevelLure',
+    THROW: 'AbsorbMovieLevelThrow',
+    SQUIRT: 'AbsorbMovieLevelSquirt',
+    ZAP: 'AbsorbMovieLevelZap',
+    SOUND: 'AbsorbMovieLevelSound',
+    DROP: 'AbsorbMovieLevelDrop'
+}
+
     def __init__(self, calculator):
         self.calculator = calculator
         self.battle = calculator.battle
@@ -149,7 +158,7 @@ class BaseSuitAttackCalculatorAI:
                 for suit in self.battle.activeSuits:
                     if suit.getGovernaught():
                         if suit.currHP <= 0:
-                            self.governaughtCogs += 1
+                            self.calculator.governaughtCogs += 1
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                         'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
                                         'animName': 'nothing',
@@ -163,7 +172,7 @@ class BaseSuitAttackCalculatorAI:
                 for suit in self.battle.activeSuits:
                     if suit.getGovernaught():
                         if suit.currHP <= 0:
-                            self.governaughtCogs += 1
+                            self.calculator.governaughtCogs += 1
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                         'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
                                         'animName': 'nothing',
@@ -177,7 +186,7 @@ class BaseSuitAttackCalculatorAI:
                 for suit in self.battle.activeSuits:
                     if suit.getGovernaught():
                         if suit.currHP <= 0:
-                            self.governaughtCogs += 1
+                            self.calculator.governaughtCogs += 1
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                         'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
                                         'animName': 'nothing',
@@ -191,7 +200,7 @@ class BaseSuitAttackCalculatorAI:
                 for suit in self.battle.activeSuits:
                     if suit.getGovernaught():
                         if suit.currHP <= 0:
-                            self.governaughtCogs += 1
+                            self.calculator.governaughtCogs += 1
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                         'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
                                         'animName': 'nothing',

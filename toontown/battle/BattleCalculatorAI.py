@@ -114,6 +114,8 @@ CONTENT_SYNC_CONDITION_ORDERS = {
 }
 
 class BattleCalculatorAI:
+    CONTENT_SYNC_ORDERS = CONTENT_SYNC_ORDERS
+    CONTENT_SYNC_CONDITION_ORDERS = CONTENT_SYNC_CONDITION_ORDERS
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleCalculatorAI')
     notify.setDebug(False)
     AccuracyBonuses = [0, 20, 40, 60]
@@ -1527,11 +1529,23 @@ class BattleCalculatorAI:
 
         return self.absorbDamageByTrack.get(track, 0)
 
-    def __addLevelDamage(self, atkTrack, amount):
+    def addLevelDamage(self, amount, atkTrack=None):
+        amount = int(math.ceil(amount))
+
         self.levelDamage += amount
 
         if atkTrack in self.levelDamageByTrack:
             self.levelDamageByTrack[atkTrack] += amount
+        else:
+            self.levelDamageByTrack[LURE] += amount
+
+    def __addLevelDamage(self, amount, atkTrack=None):
+        self.levelDamage += amount
+
+        if atkTrack in self.levelDamageByTrack:
+            self.levelDamageByTrack[atkTrack] += amount
+        else:
+            self.levelDamageByTrack[LURE] += amount
 
 
     def getLevelDamageForTrackName(self, name):
@@ -3370,12 +3384,12 @@ class BattleCalculatorAI:
                                                             self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
                                             self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
                                             self.deadSuits += 1
-                                            if target2.getExecutive():
-                                                self.levelDamage += (target2.getActualLevel() * 9)
-                                            elif target2.getGovernaught():
-                                                self.levelDamage += (target2.getActualLevel() * 9)
+                                            if target2.getExecutive() or target2.getGovernaught():
+                                                levelAmount = target2.getActualLevel() * 9
                                             else:
-                                                self.levelDamage += (target2.getActualLevel() * 5)
+                                                levelAmount = target2.getActualLevel() * 5
+
+                                            self.addLevelDamage(levelAmount, atkTrack)
                             else:
                                 if not self.suitHasCondition(target2.doId, 'immune'):
                                     target2.setHP(target2.getHP() - math.ceil(damageDone / 3))
@@ -3413,12 +3427,12 @@ class BattleCalculatorAI:
                                                             self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
                                             self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
                                             self.deadSuits += 1
-                                            if target2.getExecutive():
-                                                self.levelDamage += (target2.getActualLevel() * 9)
-                                            elif target2.getGovernaught():
-                                                self.levelDamage += (target2.getActualLevel() * 9)
+                                            if target2.getExecutive() or target2.getGovernaught():
+                                                levelAmount = target2.getActualLevel() * 9
                                             else:
-                                                self.levelDamage += (target2.getActualLevel() * 5)
+                                                levelAmount = target2.getActualLevel() * 5
+
+                                            self.addLevelDamage(levelAmount, atkTrack)
                         if suitIndex + 1 < len(activeSuits):
                             target3 = activeSuits[suitIndex + 1]
                             organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
@@ -3459,12 +3473,12 @@ class BattleCalculatorAI:
                                                             self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
                                             self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
                                             self.deadSuits += 1
-                                            if target3.getExecutive():
-                                                self.levelDamage += (target3.getActualLevel() * 9)
-                                            elif target3.getGovernaught():
-                                                self.levelDamage += (target3.getActualLevel() * 9)
+                                            if target3.getExecutive() or target3.getGovernaught():
+                                                levelAmount = target3.getActualLevel() * 9
                                             else:
-                                                self.levelDamage += (target3.getActualLevel() * 5)
+                                                levelAmount = target3.getActualLevel() * 5
+
+                                            self.addLevelDamage(levelAmount, atkTrack)
                             else:
                                 if not self.suitHasCondition(target3.doId, 'immune'):
                                     target3.setHP(target3.getHP() - math.ceil(damageDone / 3))
@@ -3502,16 +3516,17 @@ class BattleCalculatorAI:
                                                             self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
                                             self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
                                             self.deadSuits += 1
-                                            if target3.getExecutive():
-                                                self.levelDamage += (target3.getActualLevel() * 9)
-                                            elif target3.getGovernaught():
-                                                self.levelDamage += (target3.getActualLevel() * 9)
+                                            if target3.getExecutive() or target3.getGovernaught():
+                                                levelAmount = target3.getActualLevel() * 9
                                             else:
-                                                self.levelDamage += (target3.getActualLevel() * 5)
+                                                levelAmount = target3.getActualLevel() * 5
+
+                                            self.addLevelDamage(levelAmount, atkTrack)
                     else:
                         currTarget.setHP(currTarget.getHP() - damageDone)
                 targetId = currTarget.getDoId()
                 totalDamages = totalDamages + damageDone
+                atkTrack, atkLevel, atkHp = self.__getActualTrackLevelHp(attack)
                 if currTarget.getHP() <= 0:
                     if currTarget.getSkeleRevives() >= 1:
                         currTarget.useSkeleRevive()
@@ -3537,12 +3552,12 @@ class BattleCalculatorAI:
                                             self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
                             self.setSuitCondition(currTarget.doId, 'dead', 1, 2, 'setBoth')
                             self.deadSuits += 1
-                            if currTarget.getExecutive():
-                                self.levelDamage += (currTarget.getActualLevel() * 9)
-                            elif currTarget.getGovernaught():
-                                self.levelDamage += (currTarget.getActualLevel() * 9)
+                            if currTarget.getExecutive() or currTarget.getGovernaught():
+                                levelAmount = currTarget.getActualLevel() * 9
                             else:
-                                self.levelDamage += (currTarget.getActualLevel() * 5)
+                                levelAmount = currTarget.getActualLevel() * 5
+
+                            self.addLevelDamage(levelAmount, atkTrack)
                         self.suitLeftBattle(targetId)
                         attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
                         if self.notify.getDebug():
@@ -5940,8 +5955,11 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                 if suit.dna.name == 'hroller':
                     #suit.setHP(1)
-                    self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
-                    self.setSuitCondition(suit.doId, 'absorbingHR', 1, -1, 'setBoth')
+                    if self.TurnsElapsed == 0:
+                        self.setSuitCondition(suit.doId, 'directorDamageReduction', .05, -1, 'setBoth')
+                    else:
+                        self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'absorbingHR', 1, -1, 'setBoth')
                 if suit.dna.name == 'hroller2' and not self.suitHasCondition(suit.doId, 'phase3'):
                     self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
                 if suit.dna.name == 'videog' and len(self.battle.activeSuits) == 2:

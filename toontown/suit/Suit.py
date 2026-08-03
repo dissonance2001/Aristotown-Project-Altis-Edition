@@ -2814,7 +2814,6 @@ class Suit(Avatar.Avatar):
             self.setHeight(10.0)
            # self.setTransparency(1)
            # self.makeImmortal()
-            self.setSuitStatusEffect('highRollerImmune')
         elif dna.name == 'erfit':
             self.scale = 7.35 / aSize
             self.handColor = VBase4(1, 1, 1, 1.0)
