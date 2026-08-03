@@ -429,6 +429,7 @@ class ChatLog(DirectFrame, DirectObject):
         self._commandSelectionKind = 'command'
         self._commandInvokeWord = ''
         self._commandTargetBase = ''
+        self._commandPrefix = '/'
         self._commandExact = None
 
         self.commandFrame = DirectFrame(
@@ -684,19 +685,32 @@ class ChatLog(DirectFrame, DirectObject):
                 weak.append(target)
         return strong + weak
 
+    def _getCommandPrefix(self, text):
+        if not text:
+            return None
+        oldPrefix = getattr(ToontownGlobals, 'MagicWordInvokerPrefix', '~')
+        if text.startswith('/'):
+            return '/'
+        if oldPrefix and text.startswith(oldPrefix):
+            return oldPrefix
+        return None
+
     def _updateCommandShortcuts(self, text):
-        if (not self._entryFocused or not text.startswith('/') or
+        commandPrefix = self._getCommandPrefix(text)
+        if (not self._entryFocused or commandPrefix is None or
                 self.currentTab in (self.TAB_ALERTS, self.TAB_NPC)):
             self._hideCommandShortcuts()
             return
 
+        self._commandPrefix = commandPrefix
         self.commandFrame.show()
-        if text.startswith('//'):
+        if text.startswith(commandPrefix + commandPrefix):
             self._showEmptyCommandInformation(text,
-                'Use /command ToonName instead of //command.')
+                'Use %scommand ToonName instead of %s%scommand.' %
+                (commandPrefix, commandPrefix, commandPrefix))
             return
 
-        entered = text[1:]
+        entered = text[len(commandPrefix):]
         commandMatch = re.match(r'^\s*(\S+)', entered)
         commandWord = commandMatch.group(1).lower() if commandMatch else ''
         exact = self._commandLookup.get(commandWord)
@@ -721,7 +735,7 @@ class ChatLog(DirectFrame, DirectObject):
                 if targetMatches:
                     self._commandMode = 'selection'
                     self._commandSelectionKind = 'target'
-                    self._commandTargetBase = '/' + self._commandInvokeWord + ' '
+                    self._commandTargetBase = self._commandPrefix + self._commandInvokeWord + ' '
                     self._commandMatches = targetMatches
                     self._commandSelectionIndex = 0
                     self._commandVisibleStart = 0
@@ -782,7 +796,7 @@ class ChatLog(DirectFrame, DirectObject):
         self.commandInformationFrame.show()
 
         invokeWord = self._commandInvokeWord or command['name']
-        syntax = '/' + invokeWord
+        syntax = self._commandPrefix + invokeWord
         targetMode = command.get('targetMode', 'optional')
         if target is not None:
             syntax += ' ' + self._formatCommandTargetName(target['name'])
@@ -886,7 +900,8 @@ class ChatLog(DirectFrame, DirectObject):
                 currentText = self.entry.get(plain=True)
             except:
                 currentText = self.entry.get()
-            entered = currentText[1:]
+            commandPrefix = self._getCommandPrefix(currentText) or self._commandPrefix
+            entered = currentText[len(commandPrefix):]
             if re.search(r'\s', entered):
                 return
             item = self._commandExact
@@ -897,7 +912,7 @@ class ChatLog(DirectFrame, DirectObject):
         if self._commandSelectionKind == 'target' or item.get('kind') == 'target':
             newText = self._commandTargetBase + self._formatCommandTargetName(item['name']) + ' '
         else:
-            newText = '/' + item['name'] + ' '
+            newText = self._commandPrefix + item['name'] + ' '
         self.entry.set(newText)
         self.entry.setCursorPosition(len(newText))
         self._entryChanged(None)
@@ -919,7 +934,7 @@ class ChatLog(DirectFrame, DirectObject):
             text = self.entry.get(plain=True)
         except:
             text = self.entry.get()
-        if text.startswith('/'):
+        if self._getCommandPrefix(text) is not None:
             self._commandSelectionUp()
         else:
             self._historyUp()
@@ -929,7 +944,7 @@ class ChatLog(DirectFrame, DirectObject):
             text = self.entry.get(plain=True)
         except:
             text = self.entry.get()
-        if text.startswith('/'):
+        if self._getCommandPrefix(text) is not None:
             self._commandSelectionDown()
         else:
             self._historyDown()
@@ -939,7 +954,7 @@ class ChatLog(DirectFrame, DirectObject):
             text = self.entry.get(plain=True)
         except:
             text = self.entry.get()
-        if text.startswith('/'):
+        if self._getCommandPrefix(text) is not None:
             self._completeSelectedCommand()
 
     def _makeDisplayButtons(self):

@@ -676,7 +676,13 @@ class ToontownChatManager(ChatManager.ChatManager):
 
         oldPrefix = getattr(ToontownGlobals, 'MagicWordInvokerPrefix', '~')
         targetPrefix = getattr(ToontownGlobals, 'MagicWordTargetPrefix', '~~')
+        commandPrefix = None
         if message.startswith('/'):
+            commandPrefix = '/'
+        elif oldPrefix and message.startswith(oldPrefix):
+            commandPrefix = oldPrefix
+
+        if commandPrefix is not None:
             try:
                 base.playSfx(self.magicWordSfx)
             except:
@@ -684,16 +690,14 @@ class ToontownChatManager(ChatManager.ChatManager):
                     self.magicWordSfx.play()
                 except:
                     pass
-        if message.startswith(oldPrefix):
+
+        if commandPrefix is not None and message.startswith(commandPrefix + commandPrefix):
             if chatLog:
-                chatLog.addToLog('\1playerGreen\1System Message\2: Use /command instead of ~command.', category=chatLog.TAB_ALERTS)
+                chatLog.addToLog('\1playerGreen\1System Message\2: Use %scommand ToonName instead of %s%scommand.' %
+                    (commandPrefix, commandPrefix, commandPrefix), category=chatLog.TAB_ALERTS)
             return False
-        elif message.startswith('//'):
-            if chatLog:
-                chatLog.addToLog('\1playerGreen\1System Message\2: Use /command ToonName instead of //command.', category=chatLog.TAB_ALERTS)
-            return False
-        elif message.startswith('/'):
-            commandText = message[1:].strip()
+        elif commandPrefix is not None:
+            commandText = message[len(commandPrefix):].strip()
             if not commandText:
                 if chatLog:
                     chatLog.addToLog('\1playerGreen\1System Message\2: Select a command before sending it.', category=chatLog.TAB_ALERTS)
