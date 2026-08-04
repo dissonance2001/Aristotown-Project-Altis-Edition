@@ -10,6 +10,7 @@ from direct.directnotify import DirectNotifyGlobal
 
 class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevatorExtAI')
+    ExitTime = TOON_EXIT_ELEVATOR_TIME
 
     def __init__(self, air, bldg, numSeats = 4, antiShuffle = 0, minLaff = 0):
         DistributedElevatorAI.DistributedElevatorAI.__init__(self, air, bldg, numSeats, antiShuffle=antiShuffle, minLaff=minLaff)
@@ -79,7 +80,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
                  timeToSend])
             if self.countFullSeats() == 0:
                 self.fsm.request('waitEmpty')
-            taskMgr.doMethodLater(TOON_EXIT_ELEVATOR_TIME, self.clearEmptyNow, self.uniqueName('clearEmpty-%s' % seatIndex), extraArgs=(seatIndex,))
+            taskMgr.doMethodLater(self.ExitTime, self.clearEmptyNow, self.uniqueName('clearEmpty-%s' % seatIndex), extraArgs=(seatIndex,))
 
     def enterOpening(self):
         DistributedElevatorAI.DistributedElevatorAI.enterOpening(self)

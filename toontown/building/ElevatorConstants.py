@@ -17,6 +17,7 @@ ELEVATOR_CM = 10
 ELEVATOR_CBM = 11
 ELEVATOR_PACE = 12
 ELEVATOR_ERFIT = 13
+ELEVATOR_SIGIL = 45
 REJECT_NOREASON = 0
 REJECT_SHUFFLE = 1
 REJECT_MINLAFF = 2
@@ -141,9 +142,16 @@ ELEVATOR_PACE: {'openTime': 2.0,
                    'width': 6.3,
                    'countdown': bboard.get('elevatorCountdown', 5.0),
                    'sfxVolume': 0.7,
-                   'collRadius': 7.5}}
+                   'collRadius': 7.5},
+ ELEVATOR_SIGIL: {'openTime': 2.0,
+                  'closeTime': 2.0,
+                  'width': 3.5,
+                  'countdown': bboard.get('elevatorCountdown', 5.0),
+                  'sfxVolume': 1.0,
+                  'collRadius': 3.6}}
 TOON_BOARD_ELEVATOR_TIME = 1.0
 TOON_EXIT_ELEVATOR_TIME = 1.0
+TOON_EXIT_SIGIL_TIME = 0.8
 TOON_VICTORY_EXIT_TIME = 1.0
 SUIT_HOLD_ELEVATOR_TIME = 1.0
 SUIT_LEAVE_ELEVATOR_TIME = 2.0
@@ -166,6 +174,23 @@ JumpOutOffsets = [[-1.5, -5, -0],
  [3.5, -5, -0],
  [-4, -7, -0],
  [4, -7, -0]]
+
+SigilXFar = 4.61058
+SigilXMid = 1.57209
+SigilYFar = 0.257611
+SigilYMid = -0.432654
+SigilZ = 0.05
+SigilHopoffYAmount = 6.0
+SigilYFarHopoff = SigilYFar - SigilHopoffYAmount
+SigilYMidHopoff = SigilYMid - SigilHopoffYAmount
+SigilvatorPoints = [[-SigilXFar, SigilYFar, SigilZ],
+ [ -SigilXMid, SigilYMid, SigilZ],
+ [ SigilXMid, SigilYMid, SigilZ],
+ [ SigilXFar, SigilYFar, SigilZ]]
+SigilJumpOutOffsets = [[-SigilXFar, SigilYFarHopoff, SigilZ],
+ [ -SigilXMid, SigilYMidHopoff, SigilZ],
+ [ SigilXMid, SigilYMidHopoff, SigilZ],
+ [ SigilXFar, SigilYFarHopoff, SigilZ]]
 BigElevatorPoints = [[-2.5, 9, 0.1],
  [2.5, 9, 0.1],
  [-8.0, 9, 0.1],

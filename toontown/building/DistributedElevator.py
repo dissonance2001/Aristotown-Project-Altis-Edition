@@ -18,6 +18,9 @@ from toontown.building import BoardingGroupShow
 class DistributedElevator(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevator')
     JumpOutOffsets = JumpOutOffsets
+    JumpOutAnim = 'run'
+    ExitTime = TOON_EXIT_ELEVATOR_TIME
+    BoardH = 180
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
@@ -226,7 +229,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
                 animInFunc = Sequence(Func(toon.setAnimState, 'run', 1.0))
                 animFunc = Func(toon.setAnimState, 'neutral', 1.0)
             toon.headsUp(self.getElevatorModel(), apply(Point3, self.elevatorPoints[index]))
-            track = Sequence(animInFunc, LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75, apply(Point3, self.elevatorPoints[index]), other=self.getElevatorModel()), LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25, Point3(180, 0, 0), other=self.getElevatorModel()), Func(self.clearToonTrack, avId), animFunc, name=toon.uniqueName('fillElevator'), autoPause=1)
+            track = Sequence(animInFunc, LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75, apply(Point3, self.elevatorPoints[index]), other=self.getElevatorModel()), LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25, Point3(self.BoardH, 0, 0), other=self.getElevatorModel()), Func(self.clearToonTrack, avId), animFunc, name=toon.uniqueName('fillElevator'), autoPause=1)
             if wantBoardingShow:
                 boardingTrack, boardingTrackType = self.getBoardingTrack(toon, index, False)
                 track = Sequence(boardingTrack, track)
@@ -245,7 +248,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
             self.storeToonTrack(avId, track)
             track.start()
             self.fillSlotTrack = track
-            self.boardedAvIds[avId] = None
+            self.addToonToSlot(avId, index)
         return
 
     def emptySlot0(self, avId, bailFlag, timestamp, time):
@@ -271,6 +274,17 @@ class DistributedElevator(DistributedObject.DistributedObject):
 
     def emptySlot7(self, avId, bailFlag, timestamp, time):
         self.emptySlot(7, avId, bailFlag, timestamp, time)
+
+
+    def addToonToSlot(self, avId, index):
+        self.boardedAvIds[avId] = index
+
+    def clearToonFromSlot(self, avId, index):
+        if avId in self.boardedAvIds:
+            del self.boardedAvIds[avId]
+
+    def countFullSeats(self):
+        return len(self.boardedAvIds)
 
     def notifyToonOffElevator(self, toon):
         toon.setAnimState('neutral', 1.0)
@@ -312,9 +326,9 @@ class DistributedElevator(DistributedObject.DistributedObject):
                     toon.suit.loop('walk')
                     animFunc = Func(toon.suit.loop, 'neutral')
                 else:
-                    toon.setAnimState('run', 1.0)
+                    toon.setAnimState(self.JumpOutAnim, 1.0)
                     animFunc = Func(toon.setAnimState, 'neutral', 1.0)
-                track = Sequence(LerpPosInterval(toon, TOON_EXIT_ELEVATOR_TIME, Point3(*self.JumpOutOffsets[index]), other=self.getElevatorModel()), animFunc, Func(self.notifyToonOffElevator, toon), Func(self.clearToonTrack, avId), name=toon.uniqueName('emptyElevator'), autoPause=1)
+                track = Sequence(LerpPosInterval(toon, self.ExitTime, Point3(*self.JumpOutOffsets[index]), other=self.getElevatorModel()), animFunc, Func(self.notifyToonOffElevator, toon), Func(self.clearToonTrack, avId), name=toon.uniqueName('emptyElevator'), autoPause=1)
                 if self.canHideBoardingQuitBtn(avId):
                     track.append(Func(localAvatar.boardingParty.groupPanel.enableQuitButton))
                     track.append(Func(localAvatar.boardingParty.enableGoButton))
@@ -323,8 +337,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
                 track.start()
                 if avId == base.localAvatar.getDoId():
                     messenger.send('exitElevator')
-                if avId in self.boardedAvIds:
-                    del self.boardedAvIds[avId]
+                self.clearToonFromSlot(avId, index)
             else:
                 self.notify.warning('toon: ' + str(avId) + " doesn't exist, and" + ' cannot exit the elevator!')
         return

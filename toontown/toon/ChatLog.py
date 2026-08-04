@@ -4,7 +4,7 @@ from toontown.pgui.DirectGui import *
 from toontown.pgui import DirectGuiGlobals as DGG
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import Sequence, Parallel, LerpPosInterval, LerpScaleInterval
-from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager
+from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager, KeyboardButton
 from toontown.toonbase import ToontownGlobals
 from toontown.stickers import StickerMenu
 from toontown.toon.AltisCommandShortcuts import getCommandShortcuts
@@ -685,6 +685,30 @@ class ChatLog(DirectFrame, DirectObject):
                 weak.append(target)
         return strong + weak
 
+    def _getCommandMatchRank(self, command, query):
+        name = command.get('name', '').lower()
+        aliases = tuple(alias.lower() for alias in command.get('aliases', ()) or ())
+        if not query:
+            return (0, len(name), name)
+        if name.startswith(query):
+            return (0, len(name) - len(query), len(name), name)
+        aliasPrefixes = [alias for alias in aliases if alias.startswith(query)]
+        if aliasPrefixes:
+            shortestAlias = min(aliasPrefixes, key=len)
+            return (1, len(shortestAlias) - len(query), len(shortestAlias), name)
+        namePosition = name.find(query)
+        if namePosition >= 0:
+            return (2, namePosition, len(name), name)
+        aliasPositions = []
+        for alias in aliases:
+            position = alias.find(query)
+            if position >= 0:
+                aliasPositions.append((position, len(alias)))
+        if aliasPositions:
+            position, aliasLength = min(aliasPositions)
+            return (3, position, aliasLength, name)
+        return None
+
     def _getCommandPrefix(self, text):
         if not text:
             return None
@@ -753,15 +777,13 @@ class ChatLog(DirectFrame, DirectObject):
         self._commandInvokeWord = ''
         self._commandTargetBase = ''
         query = commandWord
-        strong = []
-        weak = []
+        rankedMatches = []
         for command in self.commandShortcuts:
-            terms = command.get('searchTerms', (command['name'],))
-            if not query or any(term.startswith(query) for term in terms):
-                strong.append(command)
-            elif any(query in term for term in terms):
-                weak.append(command)
-        self._commandMatches = strong + weak
+            rank = self._getCommandMatchRank(command, query)
+            if rank is not None:
+                rankedMatches.append((rank, command))
+        rankedMatches.sort(key=lambda item: item[0])
+        self._commandMatches = [item[1] for item in rankedMatches]
         self._commandSelectionIndex = 0 if self._commandMatches else -1
         self._commandVisibleStart = 0
 
@@ -929,7 +951,7 @@ class ChatLog(DirectFrame, DirectObject):
         self._commandSelectionIndex = min(len(self._commandMatches) - 1, self._commandSelectionIndex + 1)
         self._refreshCommandRows()
 
-    def _entryUp(self):
+    def _entryUp(self, unused=None):
         try:
             text = self.entry.get(plain=True)
         except:
@@ -939,7 +961,7 @@ class ChatLog(DirectFrame, DirectObject):
         else:
             self._historyUp()
 
-    def _entryDown(self):
+    def _entryDown(self, unused=None):
         try:
             text = self.entry.get(plain=True)
         except:
@@ -949,7 +971,7 @@ class ChatLog(DirectFrame, DirectObject):
         else:
             self._historyDown()
 
-    def _entryTab(self):
+    def _entryTab(self, unused=None):
         try:
             text = self.entry.get(plain=True)
         except:
@@ -1252,11 +1274,11 @@ class ChatLog(DirectFrame, DirectObject):
         self._entryFocused = True
         self.updateUniteButtons()
         self.entry.accept('escape', self.removeFocus)
-        self.entry.accept('arrow_up', self._entryUp)
-        self.entry.accept('arrow_up-repeat', self._entryUp)
-        self.entry.accept('arrow_down', self._entryDown)
-        self.entry.accept('arrow_down-repeat', self._entryDown)
-        self.entry.accept('tab', self._entryTab)
+        self.entry.accept(self.entry.guiItem.getPressEvent(KeyboardButton.up()), self._entryUp)
+        self.entry.accept(self.entry.guiItem.getRepeatEvent(KeyboardButton.up()), self._entryUp)
+        self.entry.accept(self.entry.guiItem.getPressEvent(KeyboardButton.down()), self._entryDown)
+        self.entry.accept(self.entry.guiItem.getRepeatEvent(KeyboardButton.down()), self._entryDown)
+        self.entry.accept(self.entry.guiItem.getPressEvent(KeyboardButton.tab()), self._entryTab)
         self.ignore(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'))
         try:
             if base.wantCustomControls:
@@ -1271,11 +1293,11 @@ class ChatLog(DirectFrame, DirectObject):
         self._entryFocused = False
         self.updateUniteButtons()
         self.entry.ignore('escape')
-        self.entry.ignore('arrow_up')
-        self.entry.ignore('arrow_up-repeat')
-        self.entry.ignore('arrow_down')
-        self.entry.ignore('arrow_down-repeat')
-        self.entry.ignore('tab')
+        self.entry.ignore(self.entry.guiItem.getPressEvent(KeyboardButton.up()))
+        self.entry.ignore(self.entry.guiItem.getRepeatEvent(KeyboardButton.up()))
+        self.entry.ignore(self.entry.guiItem.getPressEvent(KeyboardButton.down()))
+        self.entry.ignore(self.entry.guiItem.getRepeatEvent(KeyboardButton.down()))
+        self.entry.ignore(self.entry.guiItem.getPressEvent(KeyboardButton.tab()))
         self.accept('c', self.chatHotkey)
         try:
             if base.wantCustomControls:

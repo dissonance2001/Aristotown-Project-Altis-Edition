@@ -647,6 +647,8 @@ from toontown.coghq import DistributedLawOfficeElevatorExt/AI
 from toontown.coghq import DistributedLawOfficeElevatorInt/AI
 from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
+from toontown.building import DistributedSigilvator/AI
+from toontown.building import DistributedHighRollerSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
 from toontown.building import DistributedCountErfitElevator/AI
@@ -2309,18 +2311,6 @@ dclass DistributedDungeonInterior : DistributedToonInterior {
 };
 
 dclass DistributedMajorPlayerInterior : DistributedToonInterior {
-  fillSlot0(uint32, uint8) broadcast ram;
-  fillSlot1(uint32, uint8) broadcast ram;
-  fillSlot2(uint32, uint8) broadcast ram;
-  fillSlot3(uint32, uint8) broadcast ram;
-  emptySlot0(uint32, int8, int16, int16) broadcast ram;
-  emptySlot1(uint32, int8, int16, int16) broadcast ram;
-  emptySlot2(uint32, int8, int16, int16) broadcast ram;
-  emptySlot3(uint32, int8, int16, int16) broadcast ram;
-  requestBoard() airecv clsend;
-  rejectBoard(uint32, uint8);
-  requestExit() airecv clsend;
-  setBoardingState(string, int16) broadcast ram;
 };
 
 dclass DistributedChainsawInterior : DistributedToonInterior {
@@ -2748,6 +2738,14 @@ dclass DistributedCogdoElevatorInt : DistributedElevatorInt {
 dclass DistributedBossElevator : DistributedElevatorExt {
   setBossOfficeZone(uint32);
   setBossOfficeZoneForce(uint32);
+};
+
+dclass DistributedSigilvator : DistributedElevatorExt {
+  setBossOfficeZone(uint32);
+  setBossOfficeZoneForce(uint32);
+};
+
+dclass DistributedHighRollerSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedVPElevator : DistributedBossElevator {
