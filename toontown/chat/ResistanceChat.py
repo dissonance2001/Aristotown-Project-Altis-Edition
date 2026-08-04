@@ -25,12 +25,12 @@ if config.GetBool('want-resistance-toonup', True):
     allowedResistanceMessages.append(RESISTANCE_TOONUP)
 if config.GetBool('want-resistance-restock', True):
     allowedResistanceMessages.append(RESISTANCE_RESTOCK)
-if config.GetBool('want-resistance-promotion', True):
-    allowedResistanceMessages.append(RESISTANCE_PROMOTION)
+# Promotion Fill is obsolete and must not be generated or shown in the
+# Resistance Unite menu.  RESISTANCE_PROMOTION and its dictionary entry are
+# retained below only so old Toon saves containing message ID 300 remain safe.
 
 resistanceMenu = [
-    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY,
-    RESISTANCE_PROMOTION
+    RESISTANCE_TOONUP, RESISTANCE_RESTOCK, RESISTANCE_MONEY
 ]
 resistanceDict = {
     RESISTANCE_TOONUP: {

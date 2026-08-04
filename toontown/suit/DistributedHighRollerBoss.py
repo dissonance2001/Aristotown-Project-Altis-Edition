@@ -23,6 +23,7 @@ from otp.otpbase import OTPGlobals
 from toontown.battle import MovieToonVictory
 from toontown.battle import MovieUtil
 from toontown.friends import FriendsListManager
+from toontown.hood import ZoneUtil
 from toontown.battle import RewardPanel
 from toontown.suit import DistributedSuitBase
 from toontown.suit import Suit
@@ -1475,6 +1476,9 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def exitBattleOne(self):
         DistributedBossCog.DistributedBossCog.exitBattleOne(self)
+        # BattleOne now transitions straight to Reward, so there is no
+        # RollToBattleTwo state available to stop this music for us.
+        self.battleOneMusic.stop()
         
     def enterRollToBattleTwo(self):
         pass
@@ -1663,13 +1667,13 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         ival.delayDeletes = delayDeletes
         ival.start()
         self.storeInterval(ival, intervalName)
-        if self.oldState != 'Victory':
-            self.__playHighRollerMusic(
-                self.phaseThreeMusic, looping=1, volume=0.9)
+        # The normal fight now ends after BattleOne, so do not start the
+        # removed crane-round music during the reward movie.
 
     def __doneReward(self):
+        # The server will move directly into Epilogue after every Toon finishes
+        # the reward movie.  Do not request walk mode inside the boss arena.
         self.doneBarrier('Reward')
-        self.toWalkMode()
 
     def exitReward(self):
         intervalName = 'RewardMovie'
@@ -1722,69 +1726,42 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return
 
     def enterEpilogue(self):
+        # High Roller is not a CFO battle.  Skip Mata Hairy, Resistance Unite
+        # dialogue, and ResistanceChat.doEffect entirely.  Epilogue is now only
+        # a brief transition from the completed reward movie back to MML.
         self.cleanupIntervals()
         self.clearChat()
-        self.resistanceToon.clearChat()
+        if self.resistanceToon:
+            self.resistanceToon.clearChat()
+        self.__hideResistanceToon()
         self.stash()
         self.stopAnimate()
         self.controlToons()
-        self.__showResistanceToon(False)
-        self.resistanceToon.setPosHpr(*ToontownGlobals.HighRollerBossBattleThreePosHpr)
-        self.resistanceToon.loop('neutral')
-        self.__arrangeToonsAroundResistanceToon()
-        base.camera.reparentTo(render)
-        base.camera.setPos(self.resistanceToon, -9, 12, 6)
-        base.camera.lookAt(self.resistanceToon, 0, 0, 3)
-        intervalName = 'EpilogueMovie'
-        text = ResistanceChat.getChatText(self.rewardId)
-        menuIndex, itemIndex = ResistanceChat.decodeId(self.rewardId)
-        value = ResistanceChat.getItemValue(self.rewardId)
-        if menuIndex == ResistanceChat.RESISTANCE_TOONUP:
-            if value == -1:
-                instructions = TTLocalizer.ResistanceToonToonupAllInstructions
-            else:
-                instructions = TTLocalizer.ResistanceToonToonupInstructions % value
-        elif menuIndex == ResistanceChat.RESISTANCE_MONEY:
-            if value == -1:
-                instructions = TTLocalizer.ResistanceToonMoneyAllInstructions
-            else:
-                instructions = TTLocalizer.ResistanceToonMoneyInstructions % value
-        elif menuIndex == ResistanceChat.RESISTANCE_RESTOCK:
-            if value == -1:
-                instructions = TTLocalizer.ResistanceToonRestockAllInstructions
-            else:
-                trackName = TTLocalizer.BattleGlobalTracks[value]
-                instructions = TTLocalizer.ResistanceToonRestockInstructions % trackName
-        speech = TTLocalizer.ResistanceToonCongratulations % (text, instructions)
-        speech = self.__talkAboutPromotion(speech)
-        self.resistanceToon.setLocalPageChat(speech, 0)
-        self.accept('nextChatPage', self.__epilogueChatNext)
-        self.accept('doneChatPage', self.__epilogueChatDone)
-        base.playMusic(self.epilogueMusic, looping=1, volume=0.9)
+        taskMgr.remove(self.uniqueName('returnToMezzoMelodyland'))
+        taskMgr.doMethodLater(0.1, self.__returnToMezzoMelodyland,
+                              self.uniqueName('returnToMezzoMelodyland'))
 
-    def __epilogueChatNext(self, pageNumber, elapsed):
-        if pageNumber == 1:
-            toon = self.resistanceToon
-            playRate = 0.75
-            track = Sequence(ActorInterval(toon, 'victory', playRate=playRate, startFrame=0, endFrame=9), ActorInterval(toon, 'victory', playRate=playRate, startFrame=9, endFrame=0), Func(self.resistanceToon.loop, 'neutral'))
-            intervalName = 'EpilogueMovieToonAnim'
-            self.storeInterval(track, intervalName)
-            track.start()
-        elif pageNumber == 3:
-            self.d_applyReward()
-            ResistanceChat.doEffect(self.rewardId, self.resistanceToon, self.involvedToons)
+    def __returnToMezzoMelodyland(self, task):
+        if not self.hasLocalToon():
+            return Task.done
 
-    def __epilogueChatDone(self, elapsed):
-        self.resistanceToon.setChatAbsolute(TTLocalizer.CagedToonGoodbye, CFSpeech)
-        self.ignore('nextChatPage')
-        self.ignore('doneChatPage')
-        intervalName = 'EpilogueMovieToonAnim'
-        self.clearInterval(intervalName)
-        track = Parallel(Sequence(ActorInterval(self.resistanceToon, 'wave'), Func(self.resistanceToon.loop, 'neutral')), Sequence(Wait(0.5), Func(self.localToonToSafeZone)))
-        self.storeInterval(track, intervalName)
-        track.start()
+        targetZone = ToontownGlobals.MinniesMelodyland
+        place = self.cr.playGame.getPlace()
+        if place and hasattr(place, 'fsm'):
+            place.fsm.request('teleportOut', [{
+                'loader': ZoneUtil.getLoaderName(targetZone),
+                'where': ZoneUtil.getWhereName(targetZone, 1),
+                'how': 'teleportIn',
+                'hoodId': targetZone,
+                'zoneId': targetZone,
+                'shardId': None,
+                'avId': -1,
+                'battle': 1
+            }])
+        return Task.done
 
     def exitEpilogue(self):
+        taskMgr.remove(self.uniqueName('returnToMezzoMelodyland'))
         self.clearInterval('EpilogueMovieToonAnim')
         self.unstash()
         self.epilogueMusic.stop()

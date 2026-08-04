@@ -36,7 +36,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.goonMinStrength = 7
         self.goonMaxStrength = 30
         self.healAmount = 0
-        self.rewardId = ResistanceChat.getRandomId()
+        self.rewardId = self.__chooseResistanceRewardId()
         self.rewardedToons = []
         self.scene = NodePath('scene')
         self.reparentTo(self.scene)
@@ -52,6 +52,11 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage
+        # The custom High Roller instance ends after the High Roller Cog battle.
+        # These guards keep the normal reward bookkeeping from running twice
+        # if an administrator still forces the legacy Victory state.
+        self.highRollerBossKillRecorded = False
+        self.highRollerRewardsGranted = False
 
     def enterWaitForToons(self):
         # The Major Player sigils already provide the boarding/teleport movie,
@@ -76,6 +81,45 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         # This is a temporary Major Player room hosted under MML, not a Cog HQ.
         return ToontownGlobals.MinniesMelodyland
 
+    def __chooseResistanceRewardId(self):
+        """Return a valid ResistanceChat ID even on Altis builds where
+        ResistanceChat.getRandomId() is intentionally left empty.
+        """
+        promotionMenu = getattr(ResistanceChat, 'RESISTANCE_PROMOTION', None)
+
+        try:
+            rewardId = ResistanceChat.getRandomId()
+            if rewardId is not None and ResistanceChat.validateId(rewardId):
+                menuIndex, itemIndex = ResistanceChat.decodeId(rewardId)
+                if menuIndex != promotionMenu:
+                    return rewardId
+        except Exception:
+            pass
+
+        try:
+            allowedMenus = list(getattr(ResistanceChat,
+                                        'allowedResistanceMessages', []))
+            allowedMenus = [menuIndex for menuIndex in allowedMenus
+                            if menuIndex != promotionMenu]
+            if not allowedMenus:
+                allowedMenus = [ResistanceChat.RESISTANCE_TOONUP]
+            menuIndex = random.choice(allowedMenus)
+            items = ResistanceChat.getItems(menuIndex)
+            if not items:
+                raise ValueError('Resistance reward menu has no items')
+            itemIndex = random.randrange(len(items))
+            rewardId = ResistanceChat.encodeId(menuIndex, itemIndex)
+            if ResistanceChat.validateId(rewardId):
+                return rewardId
+        except Exception as error:
+            self.notify.warning(
+                'Unable to choose configured resistance reward: %s' % error)
+
+        # ID 0 is the first Toon-Up unite and is valid in the stock Altis
+        # ResistanceChat table.  This final fallback must never be None,
+        # because resistance messages are packed as integers in the DC file.
+        return ResistanceChat.encodeId(ResistanceChat.RESISTANCE_TOONUP, 0)
+
     def formatReward(self):
         return str(self.rewardId)
 
@@ -86,7 +130,10 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         return ToontownGlobals.HighRollerBossCogBattleBPosHpr
 
     def makeBattleOneBattles(self):
-        self.postBattleState = 'RollToBattleTwo'
+        # The High Roller Cog battle is the only battle in this instance.
+        # Skip the old crf2 placeholder Flunky battle and continue directly
+        # into the normal reward sequence when BattleOne finishes.
+        self.postBattleState = 'Reward'
         self.initializeBattles(1, ToontownGlobals.HighRollerBossBattleOnePosHpr)
 
     def generateSuits(self, battleNumber):
@@ -486,6 +533,8 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
     def enterOff(self):
         DistributedMinibossAI.DistributedMinibossAI.enterOff(self)
         self.rewardedToons = []
+        self.highRollerBossKillRecorded = False
+        self.highRollerRewardsGranted = False
 
     def exitOff(self):
         DistributedMinibossAI.DistributedMinibossAI.exitOff(self)
@@ -501,7 +550,9 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.__deleteBattleThreeObjects()
         
     def makeBattleTwoBattles(self):
-        self.postBattleState = 'PrepareBattleThree'
+        # This instance is battle-only.  Finishing the second Cog battle goes
+        # straight to Reward instead of spawning the legacy CFO crane round.
+        self.postBattleState = 'Reward'
         self.initializeBattles(2, ToontownGlobals.HighRollerBossBattleOnePosHpr)
         
     def enterPrepareBattleTwo(self):
@@ -642,8 +693,10 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.stopHelmets()
         self.heldObject = None
 
-    def enterVictory(self):
-        self.resetBattles()
+    def __recordHighRollerBossKill(self):
+        if self.highRollerBossKillRecorded:
+            return
+        self.highRollerBossKillRecorded = True
         self.suitsKilled.append({'type': None,
          'level': None,
          'track': self.dna.dept,
@@ -654,29 +707,50 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
          'isVirtual': 0,
          'isElite': 0,
          'activeToons': self.involvedToons[:]})
-        self.barrier = self.beginBarrier('Victory', self.involvedToons, 30, self.__doneVictory)
 
-    def __doneVictory(self, avIds):
+    def __grantHighRollerRewards(self):
+        if self.highRollerRewardsGranted:
+            return
+        self.highRollerRewardsGranted = True
+        self.__recordHighRollerBossKill()
         self.d_setBattleExperience()
-        self.b_setState('Reward')
         BattleExperienceAI.assignRewards(self.involvedToons, self.toonSkillPtsGained, self.suitsKilled, ToontownGlobals.dept2cogHQ(self.dept), self.helpfulToons)
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
-                toon.addResistanceMessage(self.rewardId)
-                if self.bonusUnites:
-                    for x in xrange(self.bonusUnites):
-                        toon.addResistanceMessage(ResistanceChat.getRandomId())
+                # High Roller is not a CFO battle.  Preserve battle XP,
+                # promotion, statistics, and quest credit, but do not award
+                # Resistance Unites or bonus unite messages.
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CFO)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
+
+    def enterReward(self):
+        # Normal High Roller completion arrives here directly from BattleOne.
+        # Grant the standard battle bookkeeping, then show only the ordinary
+        # reward movie.  High Roller does not award Resistance Unites.
+        self.resetBattles()
+        self.__grantHighRollerRewards()
+        DistributedMinibossAI.DistributedMinibossAI.enterReward(self)
+
+    def enterVictory(self):
+        # Retained for administrator magic words and old clients, but normal
+        # gameplay no longer enters this crane-round state.
+        self.resetBattles()
+        self.__recordHighRollerBossKill()
+        self.barrier = self.beginBarrier('Victory', self.involvedToons, 30, self.__doneVictory)
+
+    def __doneVictory(self, avIds):
+        self.__grantHighRollerRewards()
+        self.b_setState('Reward')
 
     def exitVictory(self):
         self.__deleteBattleThreeObjects()
 
     def enterEpilogue(self):
+        # The client uses this state only as a direct return-to-MML transition.
+        # There is no Mata Hairy dialogue or Resistance Unite sequence.
         DistributedMinibossAI.DistributedMinibossAI.enterEpilogue(self)
-        self.d_setRewardId(self.rewardId)
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
