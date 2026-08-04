@@ -373,6 +373,12 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         averageTier = math.floor(totalCogSuitTier / totalToons) + 1
         return int(averageTier)
 
+    def getBattleAPosHpr(self):
+        return ToontownGlobals.BossCogBattleAPosHpr
+
+    def getBattleBPosHpr(self):
+        return ToontownGlobals.BossCogBattleBPosHpr
+
     def initializeBattles(self, battleNumber, bossCogPosHpr):
         self.resetBattles()
         if not self.involvedToons:
@@ -388,7 +394,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         self.activeSuitsB = self.suitsB[:]
         self.reserveSuits += suitHandles['reserveSuits']
         if self.toonsA:
-            self.battleA = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleAPosHpr, self.handleRoundADone, self.handleBattleADone, battleNumber, 0)
+            self.battleA = self.makeBattle(bossCogPosHpr, self.getBattleAPosHpr(), self.handleRoundADone, self.handleBattleADone, battleNumber, 0)
             self.battleAId = self.battleA.doId
         else:
             self.moveSuits(self.activeSuitsA)
@@ -397,7 +403,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
             if self.arenaSide == None:
                 self.b_setArenaSide(0)
         if self.toonsB:
-            self.battleB = self.makeBattle(bossCogPosHpr, ToontownGlobals.BossCogBattleBPosHpr, self.handleRoundBDone, self.handleBattleBDone, battleNumber, 1)
+            self.battleB = self.makeBattle(bossCogPosHpr, self.getBattleBPosHpr(), self.handleRoundBDone, self.handleBattleBDone, battleNumber, 1)
             self.battleBId = self.battleB.doId
         else:
             self.moveSuits(self.activeSuitsB)

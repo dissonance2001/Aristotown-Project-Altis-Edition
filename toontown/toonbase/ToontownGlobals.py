@@ -424,6 +424,10 @@ BoardOfficeIntC = 19700
 TechbotHQ = 21000
 TechbotLobby = 21100
 
+# Dedicated client hood used only by the dynamically allocated High Roller
+# instance.  It deliberately does not share CashbotHQ's loader or title.
+HighRollerHQ = 14000
+
 Tutorial = 15000
 MyEstate = 16000
 GolfZone = 17000
@@ -445,8 +449,9 @@ HQToSafezone = {SellbotHQ: DaisyGardens,
  LawbotHQ: TheBrrrgh,
  BossbotHQ: OutdoorZone,
  BoardbotHQ: DonaldsDreamland,
-                TechbotHQ: DonaldsDreamland
-                }
+ TechbotHQ: DonaldsDreamland,
+ HighRollerHQ: MinniesMelodyland
+ }
 CogDeptNames = [TTLocalizer.Bossbot,
  TTLocalizer.Lawbot,
  TTLocalizer.Cashbot,
@@ -681,6 +686,7 @@ phaseMap = {Tutorial: 4,
  LawbotHQ: 11,
  BoardbotHQ: 14,
  TechbotHQ: 11,
+ HighRollerHQ: 13,
  GolfZone: 6,
  PartyHood: 13}
 streetPhaseMap = {
@@ -703,6 +709,7 @@ streetPhaseMap = {
  LawbotHQ: 11,
  BoardbotHQ: 14,
  TechbotHQ: 11,
+ HighRollerHQ: 13,
  PartyHood: 13}
 dnaMap = {Tutorial: 'toontown_central',
  ToontownCentral: 'toontown_central',
@@ -721,6 +728,7 @@ dnaMap = {Tutorial: 'toontown_central',
  LawbotHQ: 'cog_hq_lawbot',
  BoardbotHQ: 'cog_hq_boardbot',
  TechbotHQ: 'cog_hq_boardbot',
+ HighRollerHQ: 'cog_hq_cashbot',
  GolfZone: 'golf_zone',
  Toonseltown: 'toonseltown',
  SkyClan: 'skyclan'} 
@@ -743,6 +751,7 @@ hoodNameMap = {DonaldsDock: TTLocalizer.DonaldsDock,
  LawbotHQ: TTLocalizer.LawbotHQ,
  BoardbotHQ: TTLocalizer.BoardbotHQ,
  TechbotHQ: TTLocalizer.TechbotHQ,
+ HighRollerHQ: ('The High Roller', 'The High Roller'),
  Tutorial: TTLocalizer.Tutorial,
  MyEstate: TTLocalizer.MyEstate,
  GolfZone: TTLocalizer.GolfZone,
@@ -812,6 +821,7 @@ hoodCountMap = {MyEstate: 2,
  LawbotHQ: 2,
  BoardbotHQ: 2,
  TechbotHQ: 1,
+ HighRollerHQ: 2,
  GolfZone: 2,
  PartyHood: 2}
 TrophyStarLevels = (10,
@@ -990,13 +1000,46 @@ BossCogNerfedDamageLevels = {BossCogElectricFence: 1,
  BossCogOvertimeAttack: 10}
 CountErclaimBattleAPosHpr = (0, 55, 0, 180, 0, 0)
 PacesetterBattleAPosHpr = (0, 110, 0, 180, 0, 0)
+# Shared boss-battle offsets used by the existing custom boss fights.
+# Keep these at their pre-CFO-split values so custom encounters retain their
+# original positioning.
 BossCogBattleAPosHpr = (0,
-  60,
+ 60,
  0,
  180,
  0,
  0)
 BossCogBattleBPosHpr = (0,
+ 60,
+ 0,
+ 0,
+ 0,
+ 0)
+
+# The regular CFO uses stock-style left/right battle offsets.  These are
+# intentionally CFO-only and must not replace BossCogBattleA/B globally.
+CashbotBossCogBattleAPosHpr = (0,
+ -25,
+ 0,
+ 0,
+ 0,
+ 0)
+CashbotBossCogBattleBPosHpr = (0,
+ 25,
+ 0,
+ 180,
+ 0,
+ 0)
+
+# The standalone High Roller arena uses its own battle offsets.  Keep them
+# separate so changing the High Roller instance cannot move the VP/CFO/CJ/CEO.
+HighRollerBossCogBattleAPosHpr = (0,
+ 60,
+ 0,
+ 180,
+ 0,
+ 0)
+HighRollerBossCogBattleBPosHpr = (0,
  60,
  0,
  0,
@@ -1044,154 +1087,132 @@ SellbotBossTopRampTurnPosB = (80, 10, 18)
 SellbotBossP3PosB = (50, 60, 18)
 CashbotBossMaxDamage = 1500
 CashbotBossOffstagePosHpr = (120,
- - 195,
+ -195,
  0,
  0,
  0,
  0)
-CashbotBossBattleOnePosHpr = (0,
- - 130,
-0,
- 180,
+CashbotBossBattleOnePosHpr = (120,
+ -230,
+ 0,
+ 90,
  0,
  0)
 CashbotBossBattleTwoPosHpr = (120,
- - 285,
+ -315,
  0,
  180,
  0,
  0)
 CashbotRTBattleOneStartPosHpr = (94,
- - 220,
+ -220,
  0,
  110,
  0,
  0)
-CashbotRTBattleTwoStartPosHpr = (94,
- - 220,
+CashbotRTBattleTwoStartPosHpr = (120,
+ -260,
+ 0.025,
  0,
- 110,
  0,
  0)
 CashbotRTBattleTwoEndPosHpr = (120,
- - 290,
+ -290,
  0.025,
  0,
  0,
  0)
 CashbotBossBattleThreePosHpr = (120,
- - 315,
+ -315,
  0,
  180,
  0,
  0)
 CashbotToonsBattleThreeStartPosHpr = [(105,
-  - 285,
+  -285,
   0,
   208,
   0,
   0),
  (136,
-  - 342,
+  -342,
   0,
   398,
   0,
   0),
  (105,
-  - 342,
+  -342,
   0,
   333,
   0,
   0),
  (135,
-  - 292,
+  -292,
   0,
   146,
   0,
   0),
  (93,
-  - 303,
+  -303,
   0,
   242,
   0,
   0),
  (144,
-  - 327,
+  -327,
   0,
   64,
   0,
   0),
  (145,
-  - 302,
+  -302,
   0,
   117,
   0,
   0),
  (93,
-  - 327,
+  -327,
   0,
-  - 65,
+  -65,
   0,
   0)]
 CashbotBossSafePosHprs = [(120, -315, 30, 0, 0, 0),
-    (77.1, -302.7, 0, -90, 0, 0),  # 1R
-    (165.7, -326.4, 0, 90, 0, 0),  # 2R
-                          (134.2, -274.7, 0, 180, 0, 0),  # 4R
-                          (107.8, -359.1, 0, 0, 0, 0),  # 3R
-                          (107.0, -274.7, 0, 180, 0, 0),  # 1L
-                          (133.9, -359.1, 0, 0, 0, 0),  # 2L
-                          (165.5, -302.4, 0, 90, 0, 0),  # 4L
-                          (77.2, -329.3, 0, -90, 0, 0),  # 3L
-                         ]
-CashbotBossCranePosHprs = [(97.4, -337.6, 0, - 45, 0, 0),
-    (97.4, -292.4, 0, - 135, 0, 0),
-    (142.6, -292.4, 0, 135, 0, 0),
-    (142.6, -337.6, 0, 45, 0, 0),
-                           (81, -315, 0, -90, 0, 0),
-                           (160, -315, 0, 90, 0, 0)
-                           ]
-FourBossesBossBattleOnePosHpr = (0,
- 0,
- 0,
- 0,
- 0,
- 0)
-FourBossesBossBattleFourPosHpr = (0,
- 0,
- 0,
- 0,
- 0,
- 0)
-FourBossCogBattleAPosHpr = (0,
- 100,
- 21.869,
- -180,
- 0,
- 0)
-FourBossCogBattleBPosHpr = (15,
- 40,
- 21.869,
- -46.5,
- 0,
- 0)
-FourBossRankedBattleAPosHpr = (-112,
- -23,
- 0.025,
- 90,
- 0,
- 0)
-FourBossRankedBattleBPosHpr = (-112,
- 23,
- 0.025,
- 90,
- 0,
- 0)
-FourBossRankedBattleCPosHpr = (-112,
- 0.0,
- 0.025,
- 90,
- 0,
- 0)
+ (77.2, -329.3, 0, -90, 0, 0),
+ (77.1, -302.7, 0, -90, 0, 0),
+ (165.7, -326.4, 0, 90, 0, 0),
+ (165.5, -302.4, 0, 90, 0, 0),
+ (107.8, -359.1, 0, 0, 0, 0),
+ (133.9, -359.1, 0, 0, 0, 0),
+ (107.0, -274.7, 0, 180, 0, 0),
+ (134.2, -274.7, 0, 180, 0, 0)]
+CashbotBossCranePosHprs = [(97.4, -337.6, 0, -45, 0, 0),
+ (97.4, -292.4, 0, -135, 0, 0),
+ (142.6, -292.4, 0, 135, 0, 0),
+ (142.6, -337.6, 0, 45, 0, 0),
+ (81, -315, 0, -90, 0, 0),
+ (160, -315, 0, 90, 0, 0)]
+
+# Standalone High Roller coordinates preserved from the working custom fight.
+# The High Roller classes use only these names; regular CFO code uses the
+# CashbotBoss... values above.
+HighRollerBossOffstagePosHpr = (120, -195, 0, 0, 0, 0)
+HighRollerBossBattleOnePosHpr = (0, -130, 0, 180, 0, 0)
+HighRollerBossBattleTwoPosHpr = (120, -285, 0, 180, 0, 0)
+HighRollerRTBattleOneStartPosHpr = (94, -220, 0, 110, 0, 0)
+HighRollerRTBattleTwoStartPosHpr = (94, -220, 0, 110, 0, 0)
+HighRollerRTBattleTwoEndPosHpr = (120, -290, 0.025, 0, 0, 0)
+HighRollerBossBattleThreePosHpr = (120, -315, 0, 180, 0, 0)
+HighRollerToonsBattleThreeStartPosHpr = CashbotToonsBattleThreeStartPosHpr[:]
+HighRollerBossSafePosHprs = [(120, -315, 30, 0, 0, 0),
+ (77.1, -302.7, 0, -90, 0, 0),
+ (165.7, -326.4, 0, 90, 0, 0),
+ (134.2, -274.7, 0, 180, 0, 0),
+ (107.8, -359.1, 0, 0, 0, 0),
+ (107.0, -274.7, 0, 180, 0, 0),
+ (133.9, -359.1, 0, 0, 0, 0),
+ (165.5, -302.4, 0, 90, 0, 0),
+ (77.2, -329.3, 0, -90, 0, 0)]
+HighRollerBossCranePosHprs = CashbotBossCranePosHprs[:]
 CashbotBossToMagnetTime = 0.2
 CashbotBossFromMagnetTime = 1
 CashbotBossSafeKnockImpact = 0.5

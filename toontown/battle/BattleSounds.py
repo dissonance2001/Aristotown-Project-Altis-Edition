@@ -3,6 +3,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
 from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 import os
+import __builtin__
 
 class BattleSounds:
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleSounds')
@@ -46,9 +47,26 @@ class BattleSounds:
                 ])
 
             for candidate in contentPackCandidates:
-                resolvedPath = ContentPackCompatibility.resolveMountedFile(
-                    candidate
-                )
+                resolvedPath = None
+
+                try:
+                    manager = __builtin__.ContentPackMgr
+                except Exception:
+                    manager = None
+
+                if manager and hasattr(manager, 'resolveFile'):
+                    try:
+                        selectedPath = manager.resolveFile(candidate, 'sfx')
+                        if str(selectedPath) != str(candidate):
+                            resolvedPath = selectedPath
+                    except Exception as error:
+                        print 'CONTENT PACK BATTLE SFX RESOLVE ERROR:', error
+
+                if not resolvedPath:
+                    resolvedPath = ContentPackCompatibility.resolveMountedFile(
+                        candidate
+                    )
+
                 if resolvedPath:
                     return self.mgr.getSound(resolvedPath)
 

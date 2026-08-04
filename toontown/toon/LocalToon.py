@@ -338,9 +338,23 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.orbitalCamera = orbitalCamera
         return orbitalCamera
 
+    def _refreshLegacyCameraPositions(self):
+        """Keep Altis boss movies compatible with the orbital camera port.
+
+        LocalAvatar normally builds cameraPositions when its smart camera
+        starts.  The orbital camera override intentionally skips that legacy
+        startup path, but many boss and elevator movies still read entries
+        such as cameraPositions[0][0].  Rebuild the legacy metadata without
+        allowing the old smart camera to control base.camera.
+        """
+        LocalAvatar.LocalAvatar.initCameraPositions(self)
+        if self.cameraIndex < 0 or self.cameraIndex >= len(self.cameraPositions):
+            self.cameraIndex = 0
+
     def startUpdateSmartCamera(self, push = 1):
         """Use the Clash orbital camera instead of LocalAvatar smart camera."""
         self._stopLegacySmartCamera()
+        self._refreshLegacyCameraPositions()
         orbitalCamera = self._getOrbitalCamera()
         if not orbitalCamera.isActive():
             orbitalCamera.start()
@@ -357,14 +371,15 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         return Task.done
 
     def resetCameraPosition(self):
-        """Ignore the unused legacy camera preset list.
+        """Reset compatibility metadata without moving the orbital camera.
 
         Place interiors still call this inherited LocalAvatar hook while they
-        are being disabled.  The Clash-style OrbitalCamera owns the camera
-        now, so moving base.camera here can briefly put it at ground level.
-        Keep the legacy index valid and let OrbitalCamera restore its own
-        saved position when the next walk state starts.
+        are being disabled.  The Clash-style OrbitalCamera owns base.camera,
+        but legacy boss movies still require a populated cameraPositions list.
+        Refresh that list and reset its index without applying the old smart
+        camera position.
         """
+        self._refreshLegacyCameraPositions()
         self.cameraIndex = 0
 
     def announceGenerate(self):
@@ -377,6 +392,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.nametag.unmanage(base.marginManager)
 
         DistributedToon.DistributedToon.announceGenerate(self)
+        self._refreshLegacyCameraPositions()
 
         # Do not start the orbital camera here. The Toon has not completed
         # its teleport-in placement yet; Place starts it at the proper time.

@@ -2,6 +2,7 @@ from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
 from toontown.building.DistributedToonInterior import DistributedToonInterior
 from toontown.building import ToonInteriorColors
+from toontown.building import MajorPlayerInstanceGlobals
 from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 import random
@@ -15,6 +16,7 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
         self.majorPlayerMusicFile = None
         self.majorPlayerMusicTaskName = 'majorPlayerLobbyMusic-%s' % id(self)
         self.sigilvatorOrigin = None
+        self.sigilvatorOrigins = {}
 
     def setup(self):
         self.dnaStore = base.cr.playGame.dnaStore
@@ -63,6 +65,8 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
             'major_player_sigilvator_origin')
         self.sigilvatorOrigin.setPos(1.5, -70.75, -15.97)
         self.sigilvatorOrigin.setHpr(0, 0, 0)
+        self.sigilvatorOrigins[
+            MajorPlayerInstanceGlobals.HIGH_ROLLER] = self.sigilvatorOrigin
 
         del self.colors
         del self.dnaStore
@@ -103,6 +107,7 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
     def disable(self):
         self.__stopMajorPlayerMusic()
         self.sigilvatorOrigin = None
+        self.sigilvatorOrigins = {}
         self.enterOff()
         DistributedToonInterior.disable(self)
 

@@ -728,10 +728,50 @@ CUSTOM_CLOTHING_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.rgb', '.rgba', '.tga')
 
 
 def _getExistingPath(path):
-    candidates = [path, os.path.join(os.getcwd(), path)]
+    # Client, AI and UberDOG launchers do not always use the project root as
+    # their working directory.  Search upward from both the working directory
+    # and this source file so every process loads the same clothing registry.
+    candidates = []
+
+    def addCandidate(candidate):
+        candidate = os.path.normpath(candidate)
+        if candidate not in candidates:
+            candidates.append(candidate)
+
+    addCandidate(path)
+    addCandidate(os.path.join(os.getcwd(), path))
+
+    currentDirectory = os.path.abspath(os.getcwd())
+    while True:
+        addCandidate(os.path.join(currentDirectory, path))
+        parentDirectory = os.path.dirname(currentDirectory)
+        if parentDirectory == currentDirectory:
+            break
+        currentDirectory = parentDirectory
+
+    try:
+        currentDirectory = os.path.dirname(os.path.abspath(__file__))
+        while True:
+            addCandidate(os.path.join(currentDirectory, path))
+            parentDirectory = os.path.dirname(currentDirectory)
+            if parentDirectory == currentDirectory:
+                break
+            currentDirectory = parentDirectory
+    except Exception:
+        pass
+
     for candidate in candidates:
         if os.path.exists(candidate):
             return candidate
+
+    # When a registry does not exist yet, prefer a candidate whose parent
+    # directory does exist.  This prevents AI/UberDOG from creating a second
+    # registry in their launcher directory.
+    for candidate in candidates:
+        parentDirectory = os.path.dirname(candidate)
+        if parentDirectory and os.path.isdir(parentDirectory):
+            return candidate
+
     return candidates[0]
 
 
@@ -991,8 +1031,9 @@ def loadCustomClothing():
         if sourceChanged:
             registryChanged = True
         discoveredCount += sourceCount
-    if not foundClothingRoot:
-        return
+    # The AI may not mount or scan texture directories, but it still needs to
+    # apply IDs already stored in clothing_registry.json so requestSetClothing
+    # validates the same IDs as the client.
     defaultShirt = Shirts[0]
     defaultSleeves = Sleeves[0]
     defaultShorts = BoyShorts[0]
@@ -4626,12 +4667,27 @@ class ToonDNA(AvatarDNA.AvatarDNA):
                 dg.addUint8(1)
             else:
                 dg.addUint8(0)
-            dg.addUint8(self.topTex)
-            dg.addUint8(self.topTexColor)
-            dg.addUint8(self.sleeveTex)
-            dg.addUint8(self.sleeveTexColor)
-            dg.addUint8(self.botTex)
-            dg.addUint8(self.botTexColor)
+            # Preserve the original compact DNA format whenever all clothing
+            # texture IDs fit in a byte.  Only outfits using IDs above 255 use
+            # the extended format, where the three texture IDs are Uint16.
+            # Texture color IDs remain Uint8.
+            useExtendedClothing = (self.topTex > 255 or
+                                   self.sleeveTex > 255 or
+                                   self.botTex > 255)
+            if useExtendedClothing:
+                dg.addUint16(self.topTex)
+                dg.addUint8(self.topTexColor)
+                dg.addUint16(self.sleeveTex)
+                dg.addUint8(self.sleeveTexColor)
+                dg.addUint16(self.botTex)
+                dg.addUint8(self.botTexColor)
+            else:
+                dg.addUint8(self.topTex)
+                dg.addUint8(self.topTexColor)
+                dg.addUint8(self.sleeveTex)
+                dg.addUint8(self.sleeveTexColor)
+                dg.addUint8(self.botTex)
+                dg.addUint8(self.botTexColor)
             self.armColor = self.checkIsDefaultColor(self.armColor)
             self.gloveColor = self.checkIsDefaultColor(self.gloveColor)
             self.legColor = self.checkIsDefaultColor(self.legColor)
@@ -4665,12 +4721,23 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             gender = 'm'
         else:
             gender = 'f'
-        topTex = dgi.getUint8()
-        topTexColor = dgi.getUint8()
-        sleeveTex = dgi.getUint8()
-        sleeveTexColor = dgi.getUint8()
-        botTex = dgi.getUint8()
-        botTexColor = dgi.getUint8()
+        # Current float-color Toon DNA is 107 bytes in the legacy format and
+        # 110 bytes when its three clothing texture IDs are widened to Uint16.
+        useExtendedClothing = len(string) == 110
+        if useExtendedClothing:
+            topTex = dgi.getUint16()
+            topTexColor = dgi.getUint8()
+            sleeveTex = dgi.getUint16()
+            sleeveTexColor = dgi.getUint8()
+            botTex = dgi.getUint16()
+            botTexColor = dgi.getUint8()
+        else:
+            topTex = dgi.getUint8()
+            topTexColor = dgi.getUint8()
+            sleeveTex = dgi.getUint8()
+            sleeveTexColor = dgi.getUint8()
+            botTex = dgi.getUint8()
+            botTexColor = dgi.getUint8()
         armColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
         gloveColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
         legColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
@@ -4724,12 +4791,23 @@ class ToonDNA(AvatarDNA.AvatarDNA):
                 self.gender = 'm'
             else:
                 self.gender = 'f'
-            self.topTex = dgi.getUint8()
-            self.topTexColor = dgi.getUint8()
-            self.sleeveTex = dgi.getUint8()
-            self.sleeveTexColor = dgi.getUint8()
-            self.botTex = dgi.getUint8()
-            self.botTexColor = dgi.getUint8()
+            # Read both the original 8-bit clothing format and the extended
+            # format produced when any texture ID is above 255.
+            useExtendedClothing = len(string) == 110
+            if useExtendedClothing:
+                self.topTex = dgi.getUint16()
+                self.topTexColor = dgi.getUint8()
+                self.sleeveTex = dgi.getUint16()
+                self.sleeveTexColor = dgi.getUint8()
+                self.botTex = dgi.getUint16()
+                self.botTexColor = dgi.getUint8()
+            else:
+                self.topTex = dgi.getUint8()
+                self.topTexColor = dgi.getUint8()
+                self.sleeveTex = dgi.getUint8()
+                self.sleeveTexColor = dgi.getUint8()
+                self.botTex = dgi.getUint8()
+                self.botTexColor = dgi.getUint8()
             try:
                 self.armColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
                 self.gloveColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)

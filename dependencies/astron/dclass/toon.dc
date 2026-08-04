@@ -543,6 +543,7 @@ from toontown.suit import DistributedStageSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedSellbotBossMini/AI
 from toontown.suit import DistributedCashbotBoss/AI
+from toontown.suit import DistributedHighRollerBoss/AI
 from toontown.suit import DistributedCashbotBossMini/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
 from toontown.coghq import DistributedCashbotBossCrane/AI
@@ -555,6 +556,7 @@ from toontown.battle import DistributedBattleBldg/AI
 from toontown.tutorial import DistributedBattleTutorial/AI
 from toontown.coghq import DistributedBattleFactory/AI
 from toontown.battle import DistributedBattleFinal/AI
+from toontown.battle import DistributedCashbotBattleFinal/AI
 from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
@@ -1428,6 +1430,11 @@ dclass DistributedCashbotBoss : DistributedBossCog {
   setBonusUnites(uint8) broadcast ram;
 };
 
+// Dedicated Major Player sigil instance.  It inherits the current High Roller
+// fields from DistributedCashbotBoss while using its own client and AI class.
+dclass DistributedHighRollerBoss : DistributedCashbotBoss {
+};
+
 struct LinkPosition {
   int16/100 x;
   int16/100 y;
@@ -1621,6 +1628,9 @@ dclass DistributedBattleFinal : DistributedBattleBase {
   setBossCogId(uint32) required broadcast ram;
   setBattleNumber(uint8) required broadcast ram;
   setBattleSide(uint8) required broadcast ram;
+};
+
+dclass DistributedCashbotBattleFinal : DistributedBattleFinal {
 };
 
 dclass DistributedBoat : DistributedObject {

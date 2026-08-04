@@ -25,6 +25,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.friends import FriendsListManager
 from direct.controls.ControlManager import CollisionHandlerRayStart
 from toontown.toonbase import ToonPythonUtil as PythonUtil
+from toontown.suit import BossCutsceneSkip
 import random
 from toontown.nametag import NametagGlobals
 
@@ -63,6 +64,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.battleANode.setPosHpr(*ToontownGlobals.BossCogBattleAPosHpr)
         self.battleBNode.setPosHpr(*ToontownGlobals.BossCogBattleBPosHpr)
         self.activeIntervals = {}
+        self.cutsceneSkip = BossCutsceneSkip.BossCutsceneSkip(self)
         self.flashInterval = None
         self.elevatorType = ElevatorConstants.ELEVATOR_VP
 
@@ -182,6 +184,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.swingClubSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_frisbee_gears.ogg')
 
     def disable(self):
+        self.cutsceneSkip.cleanup()
         DistributedAvatar.DistributedAvatar.disable(self)
         self.battleAId = None
         self.battleBId = None
@@ -204,6 +207,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         except:
             self.DistributedBossCog_deleted = 1
         
+        self.cutsceneSkip.delete()
         self.ignoreAll()
         DistributedAvatar.DistributedAvatar.delete(self)
         BossCog.BossCog.delete(self)
@@ -238,8 +242,10 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             if hasattr(ival, 'delayDelete') or hasattr(ival, 'delayDeletes'):
                 self.clearInterval(name, finish=1)
         self.activeIntervals[name] = interval
+        self.cutsceneSkip.intervalStored(name, interval)
 
     def cleanupIntervals(self):
+        self.cutsceneSkip.intervalsCleaned()
         for interval in self.activeIntervals.values():
             interval.finish()
             DelayDelete.cleanupDelayDeletes(interval)
@@ -258,6 +264,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
                 del self.activeIntervals[name]
         else:
             self.notify.debug('interval: %s already cleared' % name)
+        self.cutsceneSkip.intervalCleared(name)
 
     def finishInterval(self, name):
         if name in self.activeIntervals:
@@ -381,6 +388,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.arenaSide = arenaSide
 
     def setState(self, state):
+        self.cutsceneSkip.stateChanged(state)
         self.request(state)
 
     def gotToon(self, toon):

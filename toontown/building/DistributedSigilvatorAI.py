@@ -19,6 +19,9 @@ class DistributedSigilvatorAI(
         self.type = ELEVATOR_SIGIL
         self.countdownTime = ElevatorData[self.type]['countdown']
 
+    def getInstanceId(self):
+        return None
+
     @property
     def closeTime(self):
         return ElevatorData[self.type]['closeTime']
@@ -45,10 +48,11 @@ class DistributedSigilvatorAI(
 
     def elevatorClosed(self):
         if self.countFullSeats() > 0:
-            bossZone = self.bldg.createBossOffice(self.seats)
+            bossZone = self.bldg.createBossOffice(
+                self.seats, self.getInstanceId())
             if not bossZone:
                 self.notify.warning(
-                    'Unable to create the High Roller destination zone.')
+                    'Unable to create the Major Player miniboss destination zone.')
                 self.fsm.request('closed')
                 return
             for seatIndex in xrange(len(self.seats)):
@@ -64,7 +68,8 @@ class DistributedSigilvatorAI(
     def sendAvatarsToDestination(self, avIdList):
         if not avIdList:
             return
-        bossZone = self.bldg.createBossOffice(avIdList)
+        bossZone = self.bldg.createBossOffice(
+            avIdList, self.getInstanceId())
         if not bossZone:
             return
         for avId in avIdList:

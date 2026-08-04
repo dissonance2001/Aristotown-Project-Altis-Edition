@@ -1,8 +1,19 @@
 from pandac.PandaModules import *
 import __builtin__
+import json
+import random
 
 
 class ContentPackCompatibility:
+    _musicJsonCache = {}
+
+    _hqLobbyMusicKeys = {
+        'phase_9/audio/bgm/sb_boss_lobby.ogg': 'sellbot_lobby',
+        'phase_10/audio/bgm/cb_boss_lobby.ogg': 'cashbot_lobby',
+        'phase_11/audio/bgm/lb_boss_lobby.ogg': 'lawbot_lobby',
+        'phase_12/audio/bgm/bb_boss_lobby.ogg': 'bossbot_lobby'
+    }
+
     @staticmethod
     def getManager():
         try:
@@ -66,6 +77,220 @@ class ContentPackCompatibility:
                 return resolvedPath
 
         return fontPath
+
+    @staticmethod
+    def _getMountPoints():
+        manager = ContentPackCompatibility.getManager()
+        if not manager:
+            return []
+
+        try:
+            return list(manager.mountPoints)
+        except Exception:
+            return []
+
+    @staticmethod
+    def _loadMusicJsonForMount(mountPoint):
+        cacheKey = str(mountPoint)
+        if cacheKey in ContentPackCompatibility._musicJsonCache:
+            return ContentPackCompatibility._musicJsonCache[cacheKey]
+
+        vfs = VirtualFileSystem.getGlobalPtr()
+        musicData = None
+
+        jsonPaths = (
+            'audio/music.json',
+            'phase_3/audio/music.json',
+            'music.json'
+        )
+
+        for jsonPath in jsonPaths:
+            candidate = Filename(
+                '%s/%s' % (
+                    str(mountPoint).rstrip('/'),
+                    jsonPath
+                )
+            )
+
+            if not vfs.exists(candidate):
+                continue
+
+            try:
+                rawData = vfs.readFile(candidate, True)
+                parsedData = json.loads(rawData)
+
+                if isinstance(parsedData, dict):
+                    musicData = parsedData
+                    print 'CONTENT PACK: Loaded music mappings from %s' % (
+                        candidate
+                    )
+                    break
+
+                print 'CONTENT PACK ERROR: %s is not a JSON object' % (
+                    candidate
+                )
+            except Exception as error:
+                print 'CONTENT PACK ERROR: Failed to read %s: %s' % (
+                    candidate,
+                    error
+                )
+
+        ContentPackCompatibility._musicJsonCache[cacheKey] = musicData
+        return musicData
+
+    @staticmethod
+    def _getActiveMusicSeasons():
+        seasons = []
+
+        try:
+            season = str(base.currHoliday)
+            if season and season != 'None':
+                seasons.append(season)
+        except Exception:
+            pass
+
+        if 'default' not in seasons:
+            seasons.append('default')
+
+        return seasons
+
+    @staticmethod
+    def _getMusicMappingValue(musicData, musicKey):
+        if not isinstance(musicData, dict):
+            return None
+
+        for season in ContentPackCompatibility._getActiveMusicSeasons():
+            seasonData = musicData.get(season)
+            if isinstance(seasonData, dict) and musicKey in seasonData:
+                return seasonData[musicKey]
+
+        # Keep compatibility with older/simple packs that put keys at root.
+        if musicKey in musicData:
+            return musicData[musicKey]
+
+        return None
+
+    @staticmethod
+    def _getPackLabel(mountPoint):
+        manager = ContentPackCompatibility.getManager()
+        if not manager:
+            return str(mountPoint)
+
+        try:
+            index = list(manager.mountPoints).index(mountPoint)
+        except Exception:
+            return str(mountPoint)
+
+        try:
+            if index < len(manager.sort):
+                return str(manager.sort[index])
+        except Exception:
+            pass
+
+        return str(mountPoint)
+
+    @staticmethod
+    def _chooseMusicPath(value):
+        if isinstance(value, basestring):
+            return value
+
+        if isinstance(value, (list, tuple)):
+            choices = [
+                item for item in value
+                if isinstance(item, basestring) and item
+            ]
+            if choices:
+                return random.choice(choices)
+            return None
+
+        # Some packs use a small object for a default/non-holiday track.
+        if isinstance(value, dict):
+            for key in ('default', 'normal', 'path', 'file', 'music'):
+                if key in value:
+                    return ContentPackCompatibility._chooseMusicPath(
+                        value[key]
+                    )
+
+        return None
+
+    @staticmethod
+    def _resolvePathInsideMount(mountPoint, relativePath):
+        requestedPath = str(relativePath).replace('\\', '/').lstrip('/')
+        if requestedPath.startswith('./'):
+            requestedPath = requestedPath[2:]
+
+        searchPaths = [requestedPath]
+
+        # A bare filename is treated as being next to audio/music.json.
+        if '/' not in requestedPath:
+            searchPaths.insert(0, 'audio/' + requestedPath)
+
+        vfs = VirtualFileSystem.getGlobalPtr()
+
+        for searchPath in searchPaths:
+            candidate = Filename(
+                '%s/%s' % (
+                    str(mountPoint).rstrip('/'),
+                    searchPath
+                )
+            )
+
+            if vfs.exists(candidate):
+                return str(candidate)
+
+        return None
+
+    @staticmethod
+    def resolveAudioPath(audioPath):
+        requestedPath = str(audioPath).replace('\\', '/').lstrip('/')
+        normalizedPath = requestedPath.lower()
+
+        musicKey = ContentPackCompatibility._hqLobbyMusicKeys.get(
+            normalizedPath
+        )
+        mountPoints = ContentPackCompatibility._getMountPoints()
+        vfs = VirtualFileSystem.getGlobalPtr()
+
+        # Check each enabled pack as one priority unit. No pack names are
+        # hard-coded. Later YAML entries have higher priority.
+        for mountPoint in reversed(mountPoints):
+            packLabel = ContentPackCompatibility._getPackLabel(mountPoint)
+
+            if musicKey:
+                musicData = (
+                    ContentPackCompatibility
+                    ._loadMusicJsonForMount(mountPoint)
+                )
+                mappingValue = (
+                    ContentPackCompatibility._getMusicMappingValue(
+                        musicData,
+                        musicKey
+                    )
+                )
+
+                if mappingValue is not None:
+                    musicPath = ContentPackCompatibility._chooseMusicPath(
+                        mappingValue
+                    )
+                    if musicPath == 'None':
+                        return musicPath
+                    if musicPath:
+                        resolvedMusicPath = (
+                            ContentPackCompatibility
+                            ._resolvePathInsideMount(mountPoint, musicPath)
+                        )
+                        if resolvedMusicPath:
+                            return resolvedMusicPath
+                        return musicPath
+
+            directCandidate = Filename('%s/%s' % (
+                str(mountPoint).rstrip('/'),
+                requestedPath
+            ))
+            if vfs.exists(directCandidate):
+                return str(directCandidate)
+
+        return audioPath
 
     @staticmethod
     def _loadClashGagAtlases():
@@ -295,4 +520,3 @@ class ContentPackCompatibility:
                 'CONTENT PACK: Replaced %s status effect atlas texture(s)' %
                 replaced
             )
-

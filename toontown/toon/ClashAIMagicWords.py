@@ -112,6 +112,14 @@ def clashInstakill(damage):
     return 'Set fixed gag damage to %s.' % format(damage, ',')
 
 
+@magicWord(name='instakillreset', category=CATEGORY_PROGRAMMER, types=[])
+def clashInstakillReset():
+    """Restores normal gag damage for the target Toon."""
+    target = spellbook.getTarget()
+    target.instakillDamage = 0
+    return 'Restored normal gag damage.'
+
+
 @magicWord(name='dance', category=CATEGORY_PROGRAMMER, types=[])
 def clashDance():
     """Makes every Toon in your current zone dance."""

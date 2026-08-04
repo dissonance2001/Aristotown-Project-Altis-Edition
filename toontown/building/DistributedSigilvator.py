@@ -384,21 +384,74 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
     def getZoneId(self):
         return self.zoneId
 
+    def getInstanceId(self):
+        """Return the Major Player miniboss identifier for this sigil set."""
+        return None
+
+    def getDestinationWhere(self):
+        from toontown.building import MajorPlayerInstanceGlobals
+        return MajorPlayerInstanceGlobals.BOSS_BATTLE_STATE
+
+    def _restoreFailedInstanceTransition(self):
+        try:
+            base.transitions.fadeIn(0.5)
+        except:
+            pass
+        if hasattr(self, 'restoreTeleportTargets'):
+            self.restoreTeleportTargets()
+
     def __goToBossOffice(self, zoneId):
+        from toontown.building import MajorPlayerInstanceGlobals
+
         playGame = self.cr.playGame
         if not playGame:
             self.notify.warning(
-                'Cannot enter High Roller zone %s: PlayGame unavailable.' %
+                'Cannot enter Major Player instance %s: PlayGame unavailable.' %
                 zoneId)
+            self._restoreFailedInstanceTransition()
             return
-        requestStatus = {'loader': 'cogHQLoader',
-                         'where': 'cogHQBossBattle',
-                         'how': 'teleportIn',
-                         'hoodId': ToontownGlobals.CashbotHQ,
-                         'zoneId': zoneId,
-                         'shardId': None,
-                         'avId': -1}
-        playGame.fsm.request('quietZone', [requestStatus])
+
+        instanceId = self.getInstanceId()
+        if not instanceId:
+            self.notify.warning(
+                'Cannot enter Major Player instance %s: no miniboss id.' %
+                zoneId)
+            self._restoreFailedInstanceTransition()
+            return
+
+        # A Major Player fight is a temporary room attached to the currently
+        # loaded MML town loader.  It is not a hood and it is not a Cog HQ.
+        # Using the town loader's quiet-zone state keeps the MML hood, DNA
+        # store, sky, and cached resources alive while the dynamic zone syncs.
+        hood = getattr(playGame, 'hood', None)
+        townLoader = getattr(hood, 'loader', None)
+        if (hood is None or
+                getattr(hood, 'hoodId', None) !=
+                ToontownGlobals.MinniesMelodyland or
+                townLoader is None or
+                not hasattr(townLoader, 'fsm')):
+            self.notify.warning(
+                'Cannot enter Major Player miniboss %s outside the MML '
+                'town loader.' % instanceId)
+            self._restoreFailedInstanceTransition()
+            return
+
+        requestStatus = {
+            'loader': MajorPlayerInstanceGlobals.INSTANCE_LOADER,
+            'where': self.getDestinationWhere(),
+            'how': 'teleportIn',
+            'hoodId': ToontownGlobals.MinniesMelodyland,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1,
+            'minibossId': instanceId,
+            'majorPlayerInstance': 1,
+        }
+        if not townLoader.fsm.request('quietZone', [requestStatus]):
+            self.notify.warning(
+                'MML town loader rejected Major Player miniboss %s.' %
+                instanceId)
+            self._restoreFailedInstanceTransition()
 
     def setBossOfficeZone(self, zoneId):
         if self.localToonOnBoard:

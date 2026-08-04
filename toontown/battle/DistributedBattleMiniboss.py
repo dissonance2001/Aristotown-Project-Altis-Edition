@@ -19,7 +19,7 @@ from toontown.suit.DistributedDirectors import DistributedDirectors
 from toontown.suit.DistributedBoardbotBoss import DistributedBoardbotBoss
 from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
 from toontown.suit.DistributedLawbotBoss import DistributedLawbotBoss
-from toontown.suit.DistributedCashbotBoss import DistributedCashbotBoss
+from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
@@ -376,7 +376,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
                 continue
             boss = next((obj for obj in base.cr.doId2do.values()
-            if isinstance(obj, DistributedCashbotBoss)), None)
+            if isinstance(obj, DistributedHighRollerBoss)), None)
             if boss and not suit.dna.name in ['bcaster', 'hrollers', 'hroller2', 'hroller']:
                 suit.setState('Battle')
                 suitTrack = Sequence()

@@ -333,7 +333,7 @@ class PlayGame(StateData.StateData):
         self.hood = hoodClass(self.fsm, self.hoodDoneEvent, self.dnaStore, hoodId)
         self.hood.load()
         self.hood.loadLoader(requestStatus)
-        if not base.placeBeforeObjects:
+        if not base.placeBeforeObjects and loader.inBulkBlock:
             loader.endBulkLoad('hood')
 
     def handleLeftQuietZone(self):
@@ -347,7 +347,8 @@ class PlayGame(StateData.StateData):
             self.quietZoneStateData.exit()
             self.quietZoneStateData.unload()
             self.quietZoneStateData = None
-            loader.endBulkLoad('hood')
+            if loader.inBulkBlock:
+                loader.endBulkLoad('hood')
         else:
             self.handleLeftQuietZone()
 

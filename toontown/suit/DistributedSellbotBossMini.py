@@ -577,6 +577,15 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         name = self.uniqueName('CageDrop')
         seq = Sequence(name=name)
         seq.append(Func(self.cage.setPos, self.cagePos[self.cageIndex]))
+        endCameraPos = None
+        if hasLocalToon:
+            cameraPositions = getattr(localAvatar, 'cameraPositions', None)
+            if cameraPositions and cameraPositions[0]:
+                endCameraPos = Point3(cameraPositions[0][0])
+            else:
+                # Custom battles may not save a camera position. Keep the
+                # current world-space camera view when parenting it to the Toon.
+                endCameraPos = Point3(base.camera.getPos(localAvatar))
         if hasLocalToon:
             seq += [Func(camera.wrtReparentTo, render),
              base.camera.posHprInterval(1, Point3(0, -50, 0), Point3(0, 0, 0), blendType = 'easeInOut', other = self.cage),
@@ -592,7 +601,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         if hasLocalToon:
             seq += [Func(self.show),
              Func(camera.wrtReparentTo, localAvatar),
-             base.camera.posHprInterval(1, Point3(localAvatar.cameraPositions[0][0]), Point3(0, 0, 0), blendType = 'easeInOut')]
+             base.camera.posHprInterval(1, endCameraPos, Point3(0, 0, 0), blendType = 'easeInOut')]
         self.cageIndex += 1
         return seq
 

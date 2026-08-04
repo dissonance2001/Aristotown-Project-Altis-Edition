@@ -11,6 +11,7 @@ COMMANDS = (
     {'name': 'coin', 'usage': '<amount>', 'description': "Gives Club Coins to the target Toon's Club.", 'aliases': (), 'access': 400},
     {'name': 'clublevel', 'usage': '<level>', 'description': "Sets the target Toon's Club level.", 'aliases': (), 'access': 400},
     {'name': 'instakill', 'usage': '<damage 0-60000>', 'description': "Sets fixed damage for the target Toon's damaging gags; 0 disables it.", 'aliases': (), 'access': 400},
+    {'name': 'instakillreset', 'usage': '', 'description': 'Restores normal gag damage for the target Toon.', 'aliases': ('resetinstakill',), 'access': 400, 'targetMode': 'optional'},
     {'name': 'unlimitedgags', 'usage': '', 'description': "Toggles automatic gag restocking at the start of each battle round.", 'aliases': (), 'access': 390, 'targetMode': 'optional'},
     {'name': 'maxtoon', 'usage': '[missingTrack]', 'description': "Maxes your Toon's stats for end-level gameplay.", 'aliases': (), 'access': 375, 'targetMode': 'none'},
     {'name': 'pos', 'dispatch': 'xyz', 'usage': '<x> <y> <z>', 'description': 'Sets your Toon position.', 'aliases': (), 'access': 300},

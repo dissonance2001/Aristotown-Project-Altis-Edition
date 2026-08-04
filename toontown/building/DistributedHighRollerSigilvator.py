@@ -10,6 +10,10 @@ class DistributedHighRollerSigilvator(DistributedSigilvator):
     notify = DirectNotifyGlobal.directNotify.newCategory(
         'DistributedHighRollerSigilvator')
 
+    def getInstanceId(self):
+        from toontown.building import MajorPlayerInstanceGlobals
+        return MajorPlayerInstanceGlobals.HIGH_ROLLER
+
     def __init__(self, cr):
         DistributedSigilvator.__init__(self, cr)
         self.stageLightSfx = loader.loadSfx(
