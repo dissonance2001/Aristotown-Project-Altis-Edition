@@ -24,7 +24,7 @@ class NotificationRibbon(DirectButton):
         optiondefs = kwargsToOptionDefs(
             relief=None,
             pos=(self.xpos, 0, self.zpos_closed),
-            scale=1.2,
+            scale=1.0,
             frameSize=(-0.075, 0.075, -0.38, 0),
             text='',
             text_fg=(1, 1, 1, 1),
