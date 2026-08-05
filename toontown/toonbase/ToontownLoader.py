@@ -34,6 +34,7 @@ class ToontownLoader(nLoader.Loader):
         self.inBulkBlock = 1
         self._lastTickT = globalClock.getRealTime()
         self.blockName = name
+        messenger.send('altis-bulk-load-begin')
         self.loadingScreen.begin(range, label, gui, tipCategory, zoneId)
          
     def endBulkLoad(self, name):
@@ -47,6 +48,7 @@ class ToontownLoader(nLoader.Loader):
         
         self.inBulkBlock = None
         expectedCount, loadedCount = self.loadingScreen.end()
+        messenger.send('altis-bulk-load-end')
         now = globalClock.getRealTime()
         nLoader.Loader.notify.info("At end of block '%s', expected %s, loaded %s, duration=%s" % (self.blockName,
          expectedCount,
@@ -58,6 +60,7 @@ class ToontownLoader(nLoader.Loader):
             nLoader.Loader.notify.info("Aborting block ('%s')" % self.blockName)
             self.inBulkBlock = None
             self.loadingScreen.abort()
+            messenger.send('altis-bulk-load-end')
 
     def tick(self):
         if self.inBulkBlock:

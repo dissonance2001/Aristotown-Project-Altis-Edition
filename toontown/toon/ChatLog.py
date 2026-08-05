@@ -1458,10 +1458,41 @@ class ChatLog(DirectFrame, DirectObject):
             self._addMessageItem(targetTab, msg, avId)
 
         if showNotification:
-            if self.isHidden or self.currentTab != self.TAB_MAIN:
-                self._showNotification(self.TAB_MAIN)
-            if tab != self.TAB_MAIN and (self.isHidden or self.currentTab != tab):
-                self._showNotification(tab)
+            if tab == self.TAB_ALERTS:
+                try:
+                    self._showClashAlert(msg)
+                except Exception as error:
+                    print('[ChatLog] Could not show Clash alert: %s' % error)
+                    if self.isHidden or self.currentTab != self.TAB_MAIN:
+                        self._showNotification(self.TAB_MAIN)
+                    if self.isHidden or self.currentTab != self.TAB_ALERTS:
+                        self._showNotification(self.TAB_ALERTS)
+            else:
+                if self.isHidden or self.currentTab != self.TAB_MAIN:
+                    self._showNotification(self.TAB_MAIN)
+                if tab != self.TAB_MAIN and (self.isHidden or self.currentTab != tab):
+                    self._showNotification(tab)
+
+    def _showClashAlert(self, message):
+        from toontown.notifications.NotificationManager import getNotificationManager
+        from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification
+
+        text = self._stripTextProperties(str(message)).strip()
+        title = 'System Alert'
+        prefixes = (
+            'System Message:',
+            'Game Message:',
+            'Toon HQ:',
+        )
+        for prefix in prefixes:
+            if text.lower().startswith(prefix.lower()):
+                text = text[len(prefix):].strip()
+                title = prefix[:-1]
+                break
+
+        getNotificationManager().addNotification(GenericTextNotification(
+            title=title,
+            subtitle=text))
 
     def _stripTextProperties(self, text):
         try:
@@ -1707,6 +1738,10 @@ class ChatLog(DirectFrame, DirectObject):
         self.removeFocus()
         if getattr(base.cr, 'chatLog', None) is self:
             base.cr.chatLog = None
+        notificationManager = getattr(base, 'altisNotificationManager', None)
+        if notificationManager is not None:
+            notificationManager.destroy()
+            base.altisNotificationManager = None
         try:
             self.assets.removeNode()
         except:

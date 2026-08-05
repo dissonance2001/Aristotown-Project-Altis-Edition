@@ -468,10 +468,21 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
 
     def _showClubPopup(self, message):
         try:
-            from toontown.chat.ChatGlobals import WTSystem
-            base.localAvatar.displayWhisper(0, str(message), WTSystem)
-        except:
-            pass
+            from toontown.notifications.NotificationManager import getNotificationManager
+            from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification
+            text = str(message)
+            if text.startswith('Club Update: '):
+                text = text[len('Club Update: '):]
+            getNotificationManager().addNotification(GenericTextNotification(
+                title='Club Update',
+                subtitle=text))
+        except Exception as error:
+            self.notify.warning('Could not open Club notification alert: %s' % error)
+            try:
+                from toontown.chat.ChatGlobals import WTSystem
+                base.localAvatar.displayWhisper(0, str(message), WTSystem)
+            except:
+                pass
 
     def openClubPanel(self):
         try:
@@ -492,20 +503,24 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
 
     def _showInviteDialog(self, invite):
         try:
-            from toontown.toontowngui import TTDialog
-            text = '%s invited you to join\n%s.\n\nWould you like to join?' % (
-                invite['inviterName'], invite['clubName'])
-            dialog = TTDialog.TTGlobalDialog(
-                doneEvent='clubInviteDialogDone',
-                message=text,
-                style=TTDialog.TwoChoice)
-            dialog.show()
+            from toontown.notifications.NotificationManager import getNotificationManager
+            from toontown.notifications.notificationData.GenericYesNoNotification import GenericYesNoNotification
 
-            def done(dialog=dialog, invite=invite):
-                status = dialog.doneStatus
-                self.ignore('clubInviteDialogDone')
-                dialog.cleanup()
-                self.respondToInvite(invite['clubId'], status == 'ok')
-            self.acceptOnce('clubInviteDialogDone', done)
+            def acceptInvite(invite=invite):
+                self.respondToInvite(invite['clubId'], True)
+
+            def rejectInvite(invite=invite):
+                self.respondToInvite(invite['clubId'], False)
+
+            text = '%s invited you to join\n%s.' % (
+                invite['inviterName'], invite['clubName'])
+            notification = GenericYesNoNotification(
+                title='Club Invitation',
+                subtitle=text,
+                onYes=acceptInvite,
+                onNo=rejectInvite,
+                onDismiss=rejectInvite,
+                dedupeKey=('club-invite', int(invite['clubId'])))
+            getNotificationManager().addNotification(notification)
         except Exception as error:
-            self.notify.warning('Could not open Club invite dialog: %s' % error)
+            self.notify.warning('Could not open Club invite alert: %s' % error)

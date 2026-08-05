@@ -132,6 +132,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.furnitureDirector = None
         self.gotCatalogNotify = 0
         self.__catalogNotifyDialog = None
+        self.notificationManager = None
         self.accept('phaseComplete-5.5', self.loadPhase55Stuff)
         Toon.loadDialog()
         self.isIt = 0
@@ -500,6 +501,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             del self.streamerMode
         if self.chatLog:
             self.chatLog.stop()
+        notificationManager = getattr(self, 'notificationManager', None)
+        if notificationManager is not None:
+            if getattr(base, 'altisNotificationManager', None) is notificationManager:
+                notificationManager.destroy()
+                base.altisNotificationManager = None
+            self.notificationManager = None
         taskMgr.remove('unlockGardenButtons')
         if self.__lerpFurnitureButton:
             self.__lerpFurnitureButton.finish()
@@ -631,6 +638,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.streamerMode = StreamerMode.StreamerMode()
         self.streamerMode.start()
         self.chatLog = ChatLog.ChatLog()
+        # Clash creates the panel with the normal game interface, but its
+        # visibility is controlled by refreshOnscreenButtons.
+        from toontown.notifications.NotificationManager import getNotificationManager
+        self.notificationManager = getNotificationManager(self)
+        self.notificationManager.setInterfaceVisible(
+            self.friendsListButtonActive)
                     
         taskMgr.remove('streamerUpdateDist')
         taskMgr.doMethodLater(2, self.updateDistrictName, 'streamerUpdateDist')
@@ -1378,30 +1391,28 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def refreshOnscreenButtons(self):
         self.bFriendsList.hide()
         self.hideFurnitureGui()
+        # The old circular Clarabelle/New Cattlelog alert is replaced by the
+        # Clash notification ribbon, so it must never be shown as a duplicate.
         self.hideClarabelleGui()
-        clarabelleHidden = 1
         self.ignore(ToontownGlobals.FriendsListHotkey)
         if self.friendsListButtonActive and self.friendsListButtonObscured <= 0:
             self.bFriendsList.show()
-            self.accept(ToontownGlobals.FriendsListHotkey, self.sendFriendsListEvent)
-            if self.clarabelleButtonObscured <= 0 and self.isTeleportAllowed():
-                if self.catalogNotify == ToontownGlobals.NewItems or self.mailboxNotify == ToontownGlobals.NewItems or self.simpleMailNotify == ToontownGlobals.NewItems or self.inviteMailNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems:
-                    showClarabelle = not launcher or launcher.getPhaseComplete(5.5)
-                    for quest in self.quests:
-                        if quest[0] in Quests.PreClarabelleQuestIds and self.mailboxNotify != ToontownGlobals.NewItems and self.awardNotify != ToontownGlobals.NewItems:
-                            showClarabelle = 0
+            self.accept(ToontownGlobals.FriendsListHotkey,
+                        self.sendFriendsListEvent)
 
+        # Clash shows/hides its notification panel with the social interface.
+        # This also prevents it from appearing over Altis loading screens.
+        if self.notificationManager is not None:
+            self.notificationManager.setInterfaceVisible(
+                self.friendsListButtonActive)
 
-                    if showClarabelle:
-                        newItemsInMailbox = self.mailboxNotify == ToontownGlobals.NewItems or self.awardNotify == ToontownGlobals.NewItems
-                        self.showClarabelleGui(newItemsInMailbox)
-                        clarabelleHidden = 0
-        if clarabelleHidden:
-            if self.__catalogNotifyDialog:
-                self.__catalogNotifyDialog.cleanup()
-                self.__catalogNotifyDialog = None
-        else:
-            self.newCatalogNotify()
+        if self.__catalogNotifyDialog:
+            self.__catalogNotifyDialog.cleanup()
+            self.__catalogNotifyDialog = None
+
+        # Queue catalog/mail alerts independently of the friends-list button.
+        self.newCatalogNotify()
+
         if self.moveFurnitureButtonObscured <= 0:
             if self.furnitureManager != None and self.furnitureDirector == self.doId:
                 self.loadFurnitureGui()
@@ -1427,10 +1438,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def newCatalogNotify(self):
         if not self.gotCatalogNotify:
             return
+        # Catalog fields are received before initInterface during login.  Keep
+        # the flag pending instead of creating any notification GUI or sound
+        # inside the loading screen.
+        if self.notificationManager is None:
+            return
         hasPhase = not launcher or launcher.getPhaseComplete(5.5)
         if not hasPhase:
-            return
-        if not self.friendsListButtonActive or self.friendsListButtonObscured > 0:
             return
         self.gotCatalogNotify = 0
         currentWeek = self.catalogScheduleCurrentWeek - 1
@@ -1447,7 +1461,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.mailboxNotify == ToontownGlobals.NoItems:
             if self.catalogNotify == ToontownGlobals.NewItems:
                 if self.catalogScheduleCurrentWeek == 1:
-                    message = (TTLocalizer.CatalogNotifyFirstCatalog, TTLocalizer.CatalogNotifyInstructions)
+                    message = (TTLocalizer.CatalogNotifyFirstCatalog,
+                               TTLocalizer.CatalogNotifyInstructions)
                 else:
                     message = (TTLocalizer.CatalogNotifyNewCatalog % weekNumber,)
         elif self.mailboxNotify == ToontownGlobals.NewItems:
@@ -1482,10 +1497,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             message = (oldStr,)
         if message == None:
             return
-        if self.__catalogNotifyDialog:
-            self.__catalogNotifyDialog.cleanup()
-        self.__catalogNotifyDialog = CatalogNotifyDialog.CatalogNotifyDialog(message)
-        base.playSfx(self.soundPhoneRing)
+
+        from toontown.notifications.notificationData.CatalogNotification import CatalogNotification
+        self.hideClarabelleGui()
+        notificationText = '\n\n'.join(message)
+        self.notificationManager.addNotification(
+            CatalogNotification(notificationText))
 
     def allowHardLand(self):
         retval = LocalAvatar.LocalAvatar.allowHardLand(self)
