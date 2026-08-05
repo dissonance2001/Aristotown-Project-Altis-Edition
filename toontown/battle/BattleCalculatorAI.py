@@ -171,6 +171,7 @@ class BattleCalculatorAI:
         self.currentlyAbsorbingSuits = {}
         self.successfulLures = {}
         self.toonAtkOrder = []
+        self.unionSacrifices = 0
         self.toonHPAdjusts = {}
         self.toonSkillPtsGained = {}
         self.syphonedHP = 0
@@ -1998,7 +1999,7 @@ class BattleCalculatorAI:
                                     validTargetAvail = 1
                                 theSuit = self.battle.findSuit(targetId)
                                 suit = self.battle.findSuit(targetId)
-                                if (theSuit.getManager() > 0) and self.suitHasCondition(targetId, 'desperation'):
+                                if (theSuit.getManager() > 0) and (self.suitHasCondition(targetId, 'desperation') and not self.suitHasCondition(targetId, 'cantAttack')):
                                     rounds = 0
                                 elif self.getSuitConditionTurns(targetId, 'damageReduction') == 1 and self.suitHasCondition(targetId, 'damageReduction'):
                                     rounds = 0
@@ -4775,7 +4776,7 @@ class BattleCalculatorAI:
 
     def __suitCanAttack(self, suitId):
         theSuit = self.battle.findSuit(suitId)
-        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId):
+        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'cantAttack'):
             return 0
         elif theSuit.dna.name == 'hroller' and theSuit.currHP == 1:
             return 0

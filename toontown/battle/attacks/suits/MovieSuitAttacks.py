@@ -278,6 +278,7 @@ suitTrack2ResetNames = [
     'UnionBusterUnionBusterDamage',
     'DividendZapRetaliation',
     'AmbassadorMulligan',
+    'UnionBusterCompensationClaims',
     'ArbitratorObjection',
     'AbsorbMovie',
     'TargetCheck',
@@ -1131,6 +1132,8 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doYield(attack)
     elif name == 'UnionBusterBreachOfContract':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack) # YIELD VARIATIONS
+    elif name == 'UnionBusterCompensationClaims':
+        suitTrack = MovieSellbotLitigationCheats.doCompensationClaims(attack)
     elif name == 'UnionBusterBreachOfContract2':
         suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
     elif name == 'UnionBusterBreachOfContract3':
@@ -1241,6 +1244,12 @@ def doSuitAttack(attack):
         suitTrack = MoviePacesetterCheats.doHurrySicknessBan(attack)
     elif name == 'PacesetterOverclocked':
         suitTrack = MoviePacesetterCheats.doOverclocked(attack)
+    elif name == 'PacesetterTurn1':
+        suitTrack = MoviePacesetterCheats.doTurn1(attack)
+    elif name == 'PacesetterTurn2':
+        suitTrack = MoviePacesetterCheats.doTurn2(attack)
+    elif name == 'PacesetterEarlyOverclocked':
+        suitTrack = MoviePacesetterCheats.doEarlyOverclocked(attack)
     elif name == 'ErclaimHemmorage':
         suitTrack = MovieCountCheats.doHemmorage(attack)
     elif name == 'ErclaimHemmorageHealing':

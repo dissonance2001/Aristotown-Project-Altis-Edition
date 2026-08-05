@@ -2353,6 +2353,47 @@ def doClosingTime(attack):
 #     notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
 #     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
+def doCompensationClaims(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+    target = attack['target']
+    suitTrack = Sequence(ActorInterval(suit, 'soak', duration=2.0), Parallel(Func(suit.setSuitStatusEffect, 'compensationClaims', modifier=15, mode='refreshModifier'), Func(suit.setDizzy3, 1), 
+                                                                             Func(suit.setSuitStatusEffect, 'unionBusterNoAttack', turns=2), 
+                                                                             Func(suit.showHpTextNew, 0, text="+15% Vulnerable!", colorCode=4), ActorInterval(suit, 'flatten')), Func(suit.setNeutralAnimationDrop))
+    propTracks = Parallel()
+    toonTracks = Parallel()
+    smokeTracks = Parallel()
+    paper2 = loader.loadModel('phase_11/models/lawbotHQ/LB_paper_twist_stacks')
+    paper = paper2.find('**/paper_stack_1')
+    toonPos = suit.getPos(battle)
+    gavelPos = Point3(0, 0, 30)
+    smoke = loader.loadModel('phase_4/models/props/test_clouds')
+    smoke.setColor(0.8, 0.7, 0.5, 1)
+    smoke.setBillboardPointEye()
+    toonHpr = battle.getActorPosHpr(suit)
+    y = toonPos.getY()
+    propPos = Point3(toonPos.getX(), y, 30)
+    smokeTrack = Sequence(Wait(2.25), Func(smoke.reparentTo, suit),
+                            Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
+                            Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
+                            Func(MovieUtil.removeProp, smoke))
+    propTrack = Sequence(Func(paper.reparentTo, battle),
+    getPropAppearTrack(paper, parent=battle, posPoints=[propPos, VBase3(0, 0, 0)], appearDelay=0.0,
+                        scaleUpPoint=Point3(4), scaleUpTime=2.0),
+    LerpPosInterval(paper, 0.25, Point3(toonPos.getX(), y, 1)),
+    LerpPosInterval(paper, 0.1, Point3(toonPos.getX(), y, 2)),
+    LerpPosInterval(paper, 0.1, Point3(toonPos.getX(), y, 1)), Sequence(
+        Wait(1.5),
+        LerpScaleInterval(paper, .25, MovieUtil.PNT3_ZERO)
+    ))
+    propTracks.append(propTrack)
+    smokeTracks.append(smokeTrack)
+    soundTrack = getSoundTrack('AA_drop_bigweight_miss.ogg', delay=2.25, node=suit)
+    soundTrack2 = getSoundTrack('incoming_whistleALT.ogg', node=suit)
+    return Parallel(suitTrack, soundTrack2, smokeTracks, toonTracks, propTracks, soundTrack)
+
 def doGreenLight(attack):
     suit = attack['suit']
     manager = attack['suit']

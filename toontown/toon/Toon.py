@@ -4436,6 +4436,8 @@ class Toon(Avatar.Avatar, ToonHead):
         self.pose(anim, frame)
         self.loop('victory', restart=0)
         self.setPlayRate(animMultiplier, 'victory')
+        self.clearAllToonStatusEffects()
+        self.makeContentSync(0)
         self.playingAnim = anim
         self.setActiveShadow(0)
 
@@ -4463,6 +4465,8 @@ class Toon(Avatar.Avatar, ToonHead):
     def enterSad(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
         self.playingAnim = 'sad'
         self.playingRate = None
+        self.clearAllToonStatusEffects()
+        self.makeContentSync(0)
         self.standWalkRunReverse = (('sad-neutral', 1.0),
          ('sad-walk', 1.2),
          ('sad-walk', 1.2),

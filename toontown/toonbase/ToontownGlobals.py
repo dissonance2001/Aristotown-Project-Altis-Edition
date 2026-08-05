@@ -922,9 +922,9 @@ suitIndex = {
 'bfh' : 38,
 'hho' : 39
 }
-BossCogRollSpeed = 25.5
-BossCogTurnSpeed = 40
-BossCogTreadSpeed = 15.5
+BossCogRollSpeed = 7.5
+BossCogTurnSpeed = 20
+BossCogTreadSpeed = 3.5
 BossCogDizzy = 0
 BossCogElectricFence = 1
 BossCogSwatLeft = 2
@@ -1000,6 +1000,7 @@ BossCogNerfedDamageLevels = {BossCogElectricFence: 1,
  BossCogOvertimeAttack: 10}
 CountErclaimBattleAPosHpr = (0, 55, 0, 180, 0, 0)
 PacesetterBattleAPosHpr = (0, 110, 0, 180, 0, 0)
+DirectorsBattleAPosHpr = (0, 150, 0, 180, 0, 0)
 # Shared boss-battle offsets used by the existing custom boss fights.
 # Keep these at their pre-CFO-split values so custom encounters retain their
 # original positioning.

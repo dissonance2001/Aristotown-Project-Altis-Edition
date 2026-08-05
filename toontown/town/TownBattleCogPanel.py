@@ -2109,7 +2109,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcons([self.statusIcon, iconRoot], 
                                     slot, 
                                     tooltipTitle='Collection Agent', 
-                                   tooltipDescription="The Union Buster is after his long overdue bonus! He will collect Union Dues everytime he is attacked.", 
+                                   tooltipDescription="The Union Buster is after his long overdue bonus! He will collect Union Dues every round he is attacked.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),
                                     layerSettings=[
@@ -3088,6 +3088,34 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipDescription='Attacks from this Cog will be -%s%% less powerful!' % self.cog.getSuitStatusModifier('damagedown'), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
+
+        if self.cog.hasSuitStatusEffect('unionBusterNoAttack'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/hands_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('unionBusterNoAttack'),
+                                        text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Under Investigation', 
+                                   tooltipDescription='The Union Buster is under investigation, and as such, he will not be able to attack this turn!', 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if self.cog.hasSuitStatusEffect('compensationClaims'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/worker_management_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Compensation Claims', 
+                                   tooltipDescription="The Union Buster has been punished for cutting off too many of his employees! He is now taking +%s%% more damage as a result." % self.cog.getSuitStatusModifier('compensationClaims'), 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
 
         if self.cog.hasSuitStatusEffect('vulnerable') and not self.cog.dna.name == 'hroller2':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')

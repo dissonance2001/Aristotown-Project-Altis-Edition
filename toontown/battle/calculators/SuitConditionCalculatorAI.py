@@ -206,7 +206,7 @@ class SuitConditionCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'hustle': # traffic manager
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'breachcalculator', 1, 10, 'setBoth')
-                if x % 4 == 0:
+                if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'contractenforcementcalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'lightcalculator', 1, 10, 'setBoth')
@@ -215,8 +215,10 @@ class SuitConditionCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'ubuster': #union buster
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'breachcalculator', 1, 10, 'setBoth')
-                if (x + 1) % 2 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'unionbustcalculator', 1, 10, 'setBoth')
+                if (x + 2) % 3 == 0 and self.battle.activeSuits[i].currHP < 2000:
+                    self.setSuitCondition(suitId, 'unionbustcalculator2', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'unionbustercalculator', 1, 10, 'setBoth')
                 if (x + 1) % 4 == 0:

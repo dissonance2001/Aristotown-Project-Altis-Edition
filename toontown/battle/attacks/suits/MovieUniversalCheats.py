@@ -480,17 +480,15 @@ def doGovernaughtDeath(attack):
     battle = attack['battle']
     targets = attack['target']
     notifyTracks = Parallel()
-    soundTracks = Parallel()
+    soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
     waitTrack = Sequence(Wait(3.0))
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
         notifyTrack = Sequence(Func(toon.showHpTextNew, 0, text="+%s" % dmg + "% Damage!", colorCode=1))
         notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'damageUpGov', modifier=dmg, mode='refreshModifier')))
-        soundTracks.append(soundTrack)
         notifyTracks.append(notifyTrack)
-    return Parallel(notifyTracks, soundTracks, waitTrack)
+    return Parallel(notifyTracks, soundTrack, waitTrack)
 
 def doSueRemoval(attack):
     suit = attack['suit']

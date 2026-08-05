@@ -164,6 +164,47 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             if suit.dna.name == 'hroller':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suit, ts, name, callback)
+            if suit.dna.name == 'hroller2':
+                suit.setPos(0, 0, 50)
+                return self.showSuitsFallingHighRollerPhase2(suit, ts, name, callback)
+            noFlySuits = []
+            if suit.dna.name in ['psetter', 'dold', 'derrhand', 'dopa']:
+                if self.bossCog == None:
+                    return
+                suitTracks = Parallel()
+                delay = 0
+                suit.setState('Battle')
+                suitTrack = Sequence()
+                if suit in self.joiningSuits:
+                    i = self._getPendingPreviewIndex(suit)
+                    destPos, h = self.suitPendingPointsSilhouettes[i]
+                    destHpr = VBase3(h, 0, 0)
+                else:
+                    destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                startPos = destPos + Point3(0, 0, 0)
+                startPos2 = destPos + Point3(0, 0, 0)
+                self.notify.debug('startPos for %s = %s' % (suit, startPos))
+                suitTrack.append(Func(suit.reparentTo, self))
+                suitTrack.append(Func(suit.headsUp, self))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos))
+                suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+                suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+                suitTracks.append(suitTrack)
+                #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+                delay += 0
+
+                if self.hasLocalToon():
+                    camera.reparentTo(self)
+                    if random.choice([0, 1]):
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                    else:
+                        camera.setPosHpr(0, -10, 7, 0, 0, 0)
+                done = Func(callback)
+                track = Sequence(suitTracks, done, name=name)
+                track.start(ts)
+                self.storeInterval(track, name)
+                continue
             boss = next((obj for obj in base.cr.doId2do.values()
             if isinstance(obj, DistributedCountErclaimBoss)), None)
             if boss:
@@ -555,6 +596,83 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             # flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
             suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
             delay += 0
+
+        if self.hasLocalToon():
+            camera.reparentTo(self)
+            if random.choice([0, 1]):
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+            else:
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+        done = Func(callback)
+        track = Sequence(suitTracks, done, name=name)
+        track.start(ts)
+        self.storeInterval(track, name)
+        return
+
+    def showSuitsFallingNoFly(self, suit, ts, name, callback):
+        if self.bossCog == None:
+            return
+        suitTracks = Parallel()
+        delay = 0
+        suit.setState('Battle')
+        suitTrack = Sequence()
+        if suit in self.joiningSuits:
+            i = self._getPendingPreviewIndex(suit)
+            destPos, h = self.suitPendingPointsSilhouettes[i]
+            destHpr = VBase3(h, 0, 0)
+        else:
+            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+        startPos = destPos + Point3(0, 0, 0)
+        startPos2 = destPos + Point3(0, 0, 0)
+        self.notify.debug('startPos for %s = %s' % (suit, startPos))
+        suitTrack.append(Func(suit.reparentTo, self))
+        suitTrack.append(Func(suit.headsUp, self))
+        suitTrack.append(LerpPosInterval(suit, 0, startPos))
+        suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+        suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+        suitTracks.append(suitTrack)
+        #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+        suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+        delay += 0
+
+        if self.hasLocalToon():
+            camera.reparentTo(self)
+            if random.choice([0, 1]):
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+            else:
+                camera.setPosHpr(0, -10, 7, 0, 0, 0)
+        done = Func(callback)
+        track = Sequence(suitTracks, done, name=name)
+        track.start(ts)
+        self.storeInterval(track, name)
+        return
+
+    def showSuitsFallingHighRollerPhase2(self, suit, ts, name, callback):
+        if self.bossCog == None:
+            return
+        suitTracks = Parallel()
+        suit.hide()
+        delay = 0
+        suit.setState('Battle')
+        suitTrack = Sequence()
+        if suit in self.joiningSuits:
+            i = self._getPendingPreviewIndex(suit)
+            destPos, h = self.suitPendingPointsSilhouettes[i]
+            destHpr = VBase3(h, 0, 0)
+        else:
+            destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+        startPos = destPos + Point3(0, 0, 0)
+        startPos2 = destPos + Point3(0, 0, 0)
+        self.notify.debug('startPos for %s = %s' % (suit, startPos))
+        suitTrack.append(Func(suit.reparentTo, self))
+        suitTrack.append(Func(suit.headsUp, self))
+        suitTrack.append(LerpPosInterval(suit, 0, startPos))
+        suitTrack.append(LerpHprInterval(suit, 0, Vec3(180, 0, 0)))
+        suitTrack.append(LerpPosInterval(suit, 0, startPos2))
+        suitTracks.append(suitTrack)
+        #flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+        suitTrack.append(Track((delay, Sequence(Func(suit.loop, 'neutral')))))
+        delay += 0
 
         if self.hasLocalToon():
             camera.reparentTo(self)

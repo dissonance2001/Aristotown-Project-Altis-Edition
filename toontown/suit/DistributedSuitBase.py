@@ -87,6 +87,11 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         #self.stars.loop('stun')
         self.stars.setBlend(frameBlend=base.wantSmoothAnims)
         self.stars.adjustAllPriorities(100)
+        self.stars3 = BattleProps.globalPropPool.getProp('stun')
+        self.stars3.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
+        #self.stars.loop('stun')
+        self.stars3.setBlend(frameBlend=base.wantSmoothAnims)
+        self.stars3.adjustAllPriorities(100)
         texture = loader.loadTexture('phase_5/maps/battle/ttcc_fx_battleParticles_palette_2.png')
         self.suedstars = BattleProps.globalPropPool.getProp('stun')
         self.suedstars.setPosHprScale(0, 0, .75, 0, 0, 0, 1, 1, 1)
@@ -393,12 +398,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         healAmount = min(syphonHp, max(0, hpCap - projectedHP))
 
         if healAmount > 0:
-            self.addPendingQueuedDamage(healAmount)
+            self.addPendingQueuedHealing(healAmount)
 
         return Sequence(
             Parallel(
-                Func(self.showHpTextNew, - healAmount),
-                Func(self.setHealthForMe, - healAmount),
+                Func(self.showHpTextNew, + healAmount),
+                Func(self.setHealthForMe, + healAmount),
                 Func(self.updateHealthBar, 0)
             )
         )
@@ -651,6 +656,18 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             suitTrack.append(MovieUtil.createSuitDeathTrack(self, battle))
             suitTrack.append(Func(self.makeDead))
 
+    def makeCommercialBreakInterval(self, battle):
+        suitTrack = Sequence()
+
+        if self.currHP <= 0 or self.isDead:
+            return suitTrack
+
+        if not self._pendingQueuedDeath and not self.isDead:
+            self._pendingQueuedDeath = True
+            suitTrack.append(MovieUtil.shortCircuitTrack(self, battle))
+            suitTrack.append(Func(self.makeDead))
+        return suitTrack
+
     def makeHighPressureDeathMovie(self, hp, battle):
         suitTrack = Sequence()
 
@@ -821,7 +838,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
-        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
+        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead and not self.hasSuitStatusEffect('overpressured'):
             self._pendingQueuedDeath = True
             revives = self.getSkeleRevives()
 
@@ -3828,7 +3845,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         track.start()
 
     def setNeutralAnimationHead(self):
-        if self.getDizzy() or self.hasSuitStatusEffect('sleepy') or self.hasSuitStatusEffect('sued'):
+        if self.getDizzy() or self.getDizzy3() or self.hasSuitStatusEffect('sleepy') or self.hasSuitStatusEffect('sued'):
             self.loopSyncedLuredAnimations()
         else:
             if self.dna.name == 'hroller' and (float(self.currHP) / float(self.maxHP) <= 0.25):
@@ -3990,7 +4007,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.setNeutralAnimationDrop()
 
     def setNeutralAnimation(self):
-        if self.getDizzy():
+        if self.getDizzy() or self.getDizzy3():
             self.loopSyncedLuredAnimations()
         elif self.dna.name == 'clerk' and (self.getActualLevel() in [24, 25]):
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'pace'), Func(self.loop, 'pace')
@@ -4022,7 +4039,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.setNeutralAnimationHead()
 
     def setNeutralAnimationAdjustInterval(self):
-        if self.getDizzy():
+        if self.getDizzy() or self.getDizzy3():
             self.loopSyncedLuredAnimations()
         elif self.style.name == 'mh2':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'rolled'), Func(self.loop, 'rolled')
@@ -4116,7 +4133,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 # Ensure the intended neutral animation remains playing.
                 Func(self.loopSyncedLuredAnimations)
             ).start()
-        elif self.getDizzy():
+        elif self.getDizzy() or self.getDizzy3():
             if self.currHP > 0:
                 Sequence(
                 # Let the damage/reaction animation reach its ending pose.
@@ -4176,7 +4193,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                      ).start()
 
     def setNeutralAnimationRolled(self):
-        if self.getDizzy():
+        if self.getDizzy() or self.getDizzy3():
             self.loopSyncedLuredAnimations()
         else:
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'rolled'), Func(self.loop, 'rolled')
@@ -4408,7 +4425,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
-                 'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5',
+                 'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5', 'mouth-drop',
                  'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
                  'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust', 
                  'emergeHead', 'exitWater', 'underwaterHit', 'gamble', 'cigar-smoke', 'gsnap', 'overclocked',
@@ -4449,6 +4466,35 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def getVulnerabilityMultiplier(self):
         return self.vulnerabilityMult
+
+    def setDizzy3(self, dizzy):
+        p1 = Point3(0)
+        p2 = Point3(0)
+        #head = self.find('**/to_head')
+        self.dizzy = dizzy
+        if dizzy:
+            if self.isSkeleton:
+                actorNode = self.find('**/__Actor_modelRoot')
+                head = actorNode.find('**/joint_head')
+                if self.style.body == 'a':
+                    zVal = max(0.0, p2[2] + 0.8)
+                else:
+                    zVal = max(0.0, p2[2])
+            else:
+                head = self.find('**/joint_head')
+                if self.style.body == 'c':
+                    zVal = max(0.0, p2[2] + 0.4)
+                else:
+                    zVal = max(0.0, p2[2] + 0.8)
+            head.calcTightBounds(p1, p2)
+            self.stars3.reparentTo(head)
+            self.stars3.loop('stun')
+        else:
+           self.stars3.detachNode()
+           self.stars3.loop('nothing')
+
+    def getDizzy3(self):
+        return self.dizzy
 
     def setDizzy(self, dizzy):
         p1 = Point3(0)

@@ -864,7 +864,7 @@ class SuitPlannerInteriorAI:
             miniboss = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='c',
-                suitLevel=50,
+                suitLevel=48,
                 revives=0,
                 suitName='f'
             ) # Placeholder
@@ -872,12 +872,28 @@ class SuitPlannerInteriorAI:
         elif specialCode == 'directors':
             miniboss = self.__genSuitObject(
                 self.zoneId,
-                bldgTrack='c',
-                suitLevel=50,
-                revives=0,
-                suitName='f'
-            ) # Placeholder
+                bldgTrack='g',
+                suitLevel=25,
+                revives=1,
+                suitName='derrhand'
+            ) # Derrick Hand
+            miniboss2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=30,
+                revives=1,
+                suitName='dopa'
+            ) # DOPA
+            miniboss3 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=25,
+                revives=1,
+                suitName='dold'
+            ) # DOLD
             activeSuits.append(miniboss)
+            activeSuits.append(miniboss2)
+            activeSuits.append(miniboss3)
         elif specialCode == 'lit2':
             miniboss = self.__genSuitObject(
                 self.zoneId,

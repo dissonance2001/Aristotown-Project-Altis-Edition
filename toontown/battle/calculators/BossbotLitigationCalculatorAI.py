@@ -143,6 +143,8 @@ class BossbotLitigationCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
             # Gag Ban Retaliations & DOT
             if self.battle.activeSuits[i].dna.name == 'ambass':
                 if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -772,7 +774,7 @@ class BossbotLitigationCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                          'name': 'BanLevel%s' % random.randint(4, 8),
+                     'name': 'BanLevel%s' % random.randint(4, 8),
                      'animName': 'sanction',
                      'hp': 0,
                      'acc': 100,
@@ -834,6 +836,25 @@ class BossbotLitigationCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            # Gag Ban Retaliations & DOT
+            if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
+                if self.suitHasCondition(suitId, 'filingcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueuedPreToon(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'filingcalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperMandatoryFiling', # Paper Rain
+                     'animName': 'glower',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId

@@ -3921,7 +3921,7 @@ def doCommercialBreak(attack):
         suitTrack = Sequence()
         if suit.dna.name != 'hroller':
             suitTrack.append(Wait(1.0))
-            suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
+            suitTrack.append(suit.makeCommercialBreakInterval(battle))
         suitTracks.append(suitTrack)
     return Parallel(suitTracks, suitTrack2, soundTrack, suitTrackHighRoller)
 
@@ -3938,7 +3938,7 @@ def doCommercialBreak2(attack):
         suitTrack = Sequence()
         if suit.dna.name != 'hroller':
             suitTrack.append(Wait(1.0))
-            suitTrack.append(MovieUtil.shortCircuitTrack(suit, battle))
+            suitTrack.append(suit.makeCommercialBreakInterval(battle))
         suitTracks.append(suitTrack)
     return Parallel(suitTracks, suitTrack2, soundTrack, suitTrackHighRoller)
 

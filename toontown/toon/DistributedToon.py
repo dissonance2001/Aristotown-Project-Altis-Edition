@@ -1434,6 +1434,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return self.hp < self.maxHp
             
     def died(self):
+        self.makeContentSync(0)
+        self.clearAllToonStatusEffects()
         messenger.send(self.uniqueName('died'))
         if self.isLocal():
             self.battleConditions = {}
@@ -1573,6 +1575,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def enterTeleportOut(self, *args, **kw):
         Toon.Toon.enterTeleportOut(self, *args, **kw)
+        self.clearAllToonStatusEffects()
+        self.makeContentSync(0)
         if self.track:
             self.track.delayDelete = DelayDelete.DelayDelete(self, 'enterTeleportOut')
 

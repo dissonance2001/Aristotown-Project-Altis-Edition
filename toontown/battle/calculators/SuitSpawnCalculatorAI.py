@@ -836,7 +836,7 @@ class SuitSpawnCalculatorAI:
             currentSuit = self.battle.activeSuits[i]
 
             if currentSuit.dna.name in SPAWNER_DNAS_PACE:
-                if x % 2 == 0 and currentSuit.currHP > 0:
+                if x % 2 == 0 and currentSuit.currHP > 0 and currentSuit.currHP < 12750:
                     # Find all living Cogs that are capable of spawning.
                     eligibleSpawners = [
                         suit for suit in self.battle.activeSuits

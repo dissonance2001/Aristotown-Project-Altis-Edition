@@ -4704,6 +4704,7 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
 'UnionBusterUnionCalculator',
 'UnionBusterUnionBust',
 'UnionBusterUnionBuster',
+'UnionBusterCompensationClaims',
 'UnionBusterUnionBusterDamage',
 'UnionBusterUnionWages',
 'UnionBusterUnionWages2',
@@ -4980,6 +4981,7 @@ SuitCheatDescription = {
 'UnionBusterUnionDues': "The Union Buster collects his dues when attacked!",
 'UnionBusterUnionCalculator': "The Union Buster increases the amount of overtime hours when cogs are sacrificed!",
 'UnionBusterUnionBust': "The Union Buster sacrifices cogs for his benefit!",
+'UnionBusterCompensationClaims': "The Union Buster receives backlash for sacrificing too many of his employees!",
 'UnionBusterUnionBuster': "The Union Buster employs a Toon at random!",
 'UnionBusterUnionBusterDamage': "Employed toons are forced to take damage every round!",
 'UnionBusterContractEnforcementHealing': "The Union Buster gives all cogs a health bonus!",
@@ -5693,6 +5695,7 @@ SuitAttackNames = {
 'TrafficGreenLightRetaliation': "Green Light!",
 'TrafficYield': "Yield!",
     # Union Buster Cheats
+    'UnionBusterCompensationClaims': "Compensation Claims!",
     'UnionBusterUnionDues': "Union Dues!",
     'UnionBusterUnionCalculator': "Calculating Overtime!",
     'UnionBusterUnionBust': "Union Bust!",
@@ -10181,7 +10184,24 @@ SuitAttackTaunts = {
                         "Time's up!",
                         "You managed to make me disappointed.",
                         "I am barely breaking a sweat."],
+'PacesetterTurn1': ["What? Came to admire my looks? I'm flattered.",
+                        "Rocked by my pace already? This is only the beginning.",
+                        "What are you, my food deliverer?",
+                        "Hello? Are you alive?",
+                        "Psst! This is the part where you start moving!",
+                        "Strike one!"],
+'PacesetterTurn2': ["Only one person can stop this battle and he ain't here! Nice try!",
+                        "Get ready to be under a lot of pressure, bucko!",
+                        "Hey, I know I'm good looking, but enough, I don't have time to spare!",
+                        "Okay, I'm done here. You have officially ruined my day.",
+                        "First you waltz into my place and NOW you waste my time. Congratulations! You've made me lose my patience.",
+                        "Strike two!"],
 'PacesetterOverclocked': ["I am just going to be runnning round and round you rodents!",
+                        "Your time is running out!",
+                        "Let's see how fast you move!",
+                        "Pump up those reflexes!",
+                        "I REFUSE to wait any longer!"],
+'PacesetterEarlyOverclocked': ["I am just going to be runnning round and round you rodents!",
                         "Your time is running out!",
                         "Let's see how fast you move!",
                         "Pump up those reflexes!",
@@ -11171,7 +11191,46 @@ SuitAttackTaunts = {
     ],
     None: ["Improper Drop usage has been recorded."]
 },
-                    }
+                  }
+DirectorsCEODialogOne = '...Meddlesome Toons, always ruining my banquets...'
+DirectorsCEODialogTwo = '...One of these days I\'m gonna-'
+DirectorsCEODialogThree = 'Well, looks like you are on time. In that case, let\'s get down to business.'
+DirectorsCEODialogFour = "The three of you have been brought in as replacements for existing employees whose performances have not been to our liking."
+DirectorsCEODialogFive = "Because of this, all of you have been assigned to very specific roles."
+DirectorsCEODialogSix = 'It is ALSO because of this that we had your appearances modified to correspond with your roles.'
+DirectorsCEODialogSeven = 'Your predecessors proved to be quite incompetent. I trust that you will be better.'
+DirectorsCEODialogEight = 'Mr. Derrick Hand, your job is to scout the town for any inland oil reserves.'
+DerrickHandResponse = 'I have reasonable certainty in my capabilities for this job, Mr. Oilcan.'
+DirectorsCEODialogNine = 'Very good. Next, as the Director of Land Development, your job is to capture any oil rich areas that Mr. Hand finds.'
+LandDevelopmentResponse = 'Boss, ya can set store by my ability to shake and swinge those Toons right from these lands.'
+DirectorsCEODialogTen = 'Great to hear. Finally, as the Director of Public Affairs, your job is to schmooze the Toons into submission.'
+PublicAffairsResponse = 'Sounds easy enough. Would you like a seltzer, sir?'
+DirectorsCEODialogEleven = '...Normally I would, but this isn\'t exactly the best time for pleasantries.'
+DirectorsCEODialogTwelve = 'This company has put a lot of time and money into your hiring. It is imperative that your performance is-'
+DirectorsCEODialogTwelvea = 'Mr. Cyger! What are you doing here?'
+DirectorsChairmanDialogOnea = 'I thought I would extend a warning to my new employees.'
+DirectorsChairmanDialogOne = 'Your performance better be exemplary, or I will personally demote you to a level so incognoscible...'
+DirectorsChairmanDialogTwo = '...not down to a Flunky, or a Bagholder, or a Cold Caller, not even down to a goon.'
+DirectorsChairmanDialogFour = "If you screw this one up, that's exactly what you will be."
+DirectorsChairmanDialogFive = "A PILE OF SCREWS."
+DirectorsChairmanDialogSix = "Craig, why is your office door open again?! You know a Toon could just walk in and-"
+DirectorsChairmanDialogSeven = "NOOOO!"
+DirectorsChairmanDialogEight = "WHY WOULD YOU LEAVE YOUR OFFICE DOOR UNLOCKED?!"
+DirectorsChairmanDialogNine = "NOW YOU'VE COMPLETELY JEOPARDIZED THE ENTIRE OPERATION!!!"
+DirectorsCEODialogThirteen = "I- uh- please sir! I can explain-"
+DirectorsChairmanDialogNinea = "I DON'T WANT TO HEAR IT!"
+DirectorsChairmanDialogNineb = "I'll deal with you as soon as my new employees are done dealing with these Toons! "
+DirectorsChairmanDialogNinec = "Now get out of my sight!"
+DirectorsCEODialogThirteena = 'Y- yes, sir.'
+DirectorsChairmanDialogTen = "...I swear, a calculator has more processing ability than him sometimes."
+DirectorsChairmanDialogEleven = "WELL, WHAT ARE YOU STANDING AROUND FOR? GET THEM!"
+DirectorsChairmanDialogTwelve = "I don't have time for this..."
+DirectorsCEODialogFourteen = "I hope he's gone now, I really wanted that seltzer."
+DirectorsCEODialogFourteena = "Where are the Cogs?"
+DirectorsCEODialogFifteen = "Oh..."
+DirectorsCEODialogSixteen = "Oh no."
+DirectorsCEODialogSeventeen = "Well, it's been nice seeing you Toons, but uh, I gotta go!"
+DirectorsCEODialogEighteen = "The, uh... the banquet, it might be in jeopardy!"
 BuildingWaitingForVictors = ('Waiting for other toons...',)
 ElevatorHopOff = 'Hop off'
 ElevatorStayOff = "If you hop off, you'll need to wait\nfor the elevator to leave or empty."

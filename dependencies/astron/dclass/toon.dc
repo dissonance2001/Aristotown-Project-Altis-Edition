@@ -544,6 +544,7 @@ from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedSellbotBossMini/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.suit import DistributedHighRollerBoss/AI
+from toontown.suit import DistributedDirectorsMiniboss/AI
 from toontown.suit import DistributedCashbotBossMini/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
 from toontown.coghq import DistributedCashbotBossCrane/AI
@@ -3473,6 +3474,23 @@ dclass DistributedCountErclaimBoss : DistributedBossCog {
 };
 
 dclass DistributedPacesetterBoss : DistributedBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  touchWitnessStand() airecv clsend;
+  hitBoss(uint8) airecv clsend;
+  healBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  hitDefensePan() airecv clsend;
+  hitProsecutionPan() airecv clsend;
+  hitChair(uint8, uint8) airecv clsend;
+  setLawyerIds(uint32[]) broadcast ram;
+  setTaunt(int8, int8) broadcast;
+  toonGotHealed(uint32) broadcast;
+  enteredBonusState() broadcast;
+  setBattleDifficulty(uint8) broadcast ram;
+};
+
+dclass DistributedDirectorsMiniboss : DistributedBossCog {
   setState(string) broadcast ram;
   setBossDamage(uint16, uint8, int16) broadcast ram;
   touchWitnessStand() airecv clsend;

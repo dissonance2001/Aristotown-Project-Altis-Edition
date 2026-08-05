@@ -5,6 +5,7 @@ from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPart
 from toontown.coghq import DistributedCogKartAI
 from toontown.hood import CogHQAI
 from toontown.suit import DistributedBossbotBossAI
+from toontown.suit import DistributedDirectorsMinibossAI
 from toontown.suit import DistributedDirectorsAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
@@ -19,7 +20,7 @@ class BossbotHQAI(CogHQAI.CogHQAI):
             DistributedDirectorsElevatorAI.DistributedDirectorsElevatorAI,
             DistributedDirectorsAI.DistributedDirectorsAI,
             DistributedBBElevatorAI.DistributedBBElevatorAI,
-            DistributedBossbotBossAI.DistributedBossbotBossAI,
+            DistributedDirectorsMinibossAI.DistributedDirectorsMinibossAI,
             ToontownGlobals.ZoneIdrCEO)
 
         self.cogKarts = []

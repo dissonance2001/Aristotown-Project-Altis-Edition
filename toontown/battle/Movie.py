@@ -1304,7 +1304,6 @@ class Movie(DirectObject.DirectObject):
                     'RadiographerHotTake',
                     'SafetyHeatWaveCalculation',
                     'RecordkeeperRedlinedClauseMissedPayment',
-                    'BookkeeperMandatoryFiling',
                     'SafetyPromotion',
                     'AttorneyRemand',
                     'HighStakesHeal',

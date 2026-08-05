@@ -34,7 +34,7 @@ class DistributedDirectorsMinibossAI(DistributedMinibossAI.DistributedMinibossAI
     maxToonLevels = 77
 
     def __init__(self, air):
-        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 's')
+        DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 'c')
         FSM.FSM.__init__(self, 'DistributedDirectorsMinibossAI')
         self.lawyers = []
         self.cannons = None
@@ -269,7 +269,7 @@ class DistributedDirectorsMinibossAI(DistributedMinibossAI.DistributedMinibossAI
 
     def makeBattleOneBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(1, ToontownGlobals.PacesetterBattleAPosHpr)
+        self.initializeBattles(1, ToontownGlobals.DirectorsBattleAPosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
@@ -364,7 +364,7 @@ class DistributedDirectorsMinibossAI(DistributedMinibossAI.DistributedMinibossAI
 
     def makeBattleTwoBattles(self):
         self.postBattleState = 'RollToBattleTwo'
-        self.initializeBattles(2, ToontownGlobals.PacesetterBattleAPosHpr)
+        self.initializeBattles(2, ToontownGlobals.DirectorsBattleAPosHpr)
 
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 45, self.__donePrepareBattleTwo)

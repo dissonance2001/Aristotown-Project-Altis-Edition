@@ -2373,7 +2373,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
              'singularname': 'a Union Buster',
              'pluralname': 'Union Busters',
              'level': 39,
-             'hp':(4275,),
+             'hp':(4475,),
              'def':(60,),
              'freq':(0,),
              'acc':(75,),

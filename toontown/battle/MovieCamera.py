@@ -1326,6 +1326,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TrafficYield':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     # union buster cheats
+    elif name == 'UnionBusterCompensationClaims':
+        camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'UnionBusterContractEnforcementHealing':
         camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
@@ -2268,6 +2270,17 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'PresidentMandatoryFiling':
         camTrack.append(defaultCamera(openShotDuration=0.75))
+    elif name == 'PacesetterTurn1':
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'PacesetterTurn2':
+        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
+        return camTrack2
+    elif name == 'PacesetterEarlyOverclocked':
+        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, 3), randomActorShot(suit, battle, 3, 'suit'),
+                                      defaultCamera(openShotDuration=0, attackDuration=attackDuration - 6))
+        return camTrack2
     elif name == 'PacesetterHurrySickness':
         if attackDuration > 2:
             camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -2285,7 +2298,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PacesetterMovingGoalposts':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'PacesetterOverclocked':
-        camTrack2 = defaultCamera(openShotDuration=6.75)
+        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, 3), randomActorShot(suit, battle, 3, 'suit'),
+                                      defaultCamera(openShotDuration=0, attackDuration=attackDuration - 6))
         return camTrack2
     elif name in ('RushJobTrap'
             'RushJobLure'
@@ -2716,12 +2731,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         if name in (
             'ForemanRedTape',
             'ForemanBurning',
-            'RacketeerPeckingOrderRetaliationSoak',
             'MintCompoundingInterest',
             'ErfitWringOut',
             'PresidentDriver',
             'PowerhouseSnipeSoaked',
-            'UnionBusterUnionDues',
         ):
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = suit.makePlayByPlayTextCheatInterval(pbpText, displayName, attackDuration - 2)

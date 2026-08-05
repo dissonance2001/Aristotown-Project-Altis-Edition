@@ -67,7 +67,7 @@ class PacesetterCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':
-                if self.battle.activeSuits[i].currHP > 0:
+                if self.battle.activeSuits[i].currHP > 0 and not self.battle.activeSuits[i].currHP >= 12750:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PresidentTargetCheck',  # Target Check
                                                                 'animName': 'nothing',
@@ -184,6 +184,38 @@ class PacesetterCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP > 0:
+                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PacesetterTurn2',
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                            self.setSuitCondition(suitId, 'turn2', 1, -1, 'setBoth')
+                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn1'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PacesetterTurn1',
+                                                                    'animName': 'nothing',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                            self.setSuitCondition(suitId, 'turn1', 1, -1, 'setBoth')
+                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                    'name': 'PacesetterEarlyOverclocked',
+                                                                    'animName': 'overclocked',
+                                                                    'hp': 0,
+                                                                    'acc': 100,
+                                                                    'freq': 0,
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
                     if self.battle.activeSuits[i].currHP <= 5100 and not self.suitHasCondition(suitId, 'overclocked'):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterOverclocked',
@@ -194,7 +226,7 @@ class PacesetterCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked'):
+                    if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked') and not self.battle.activeSuits[i].currHP >= 12750:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterComeOn',
                                                                     'animName': 'come-on',

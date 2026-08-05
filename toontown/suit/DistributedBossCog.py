@@ -946,6 +946,32 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
         return ival
 
+    def loseCogSuitsNoCamera(self, toons, arrayOfObjs = False):
+        seq = Sequence()
+        if not toons:
+            return seq
+        suitsOff = Parallel()
+        if arrayOfObjs:
+            toonArray = toons
+        else:
+            toonArray = []
+            for toonId in toons:
+                toon = base.cr.doId2do.get(toonId)
+                if toon:
+                    toonArray.append(toon)
+
+        for toon in toonArray:
+            dustCloud = DustCloud.DustCloud()
+            dustCloud.setPos(0, 2, 3)
+            dustCloud.setScale(0.5)
+            dustCloud.setDepthWrite(0)
+            dustCloud.setBin('fixed', 0)
+            dustCloud.createTrack()
+            suitsOff.append(Sequence(Func(dustCloud.reparentTo, toon), Parallel(dustCloud.track, Sequence(Wait(0.3), Func(toon.takeOffSuit), Func(toon.sadEyes), Func(toon.blinkEyes), Func(toon.play, 'slip-backward'), Wait(0.7))), Func(dustCloud.detachNode), Func(dustCloud.destroy)))
+
+        seq.append(suitsOff)
+        return seq
+
     def loseCogSuits(self, toons, battleNode, camLoc, arrayOfObjs = False):
         seq = Sequence()
         if not toons:

@@ -5913,8 +5913,8 @@ def inventory(a, b=None, c=None):
         invoker.b_setInventory(inventory.makeNetString())
         return 'Restored %d Gags to: %d, %d' % (c, targetTrack, maxLevelIndex)
 
-@magicWord(category =  CATEGORY_CREATIVE, types = [str, int, int, int])
-def color(part, r, g, b):
+@magicWord(category =  CATEGORY_CREATIVE, types = [int, int, int, str])
+def color(r, g, b, part=None):
     invoker = spellbook.getTarget()
 
     dna = ToonDNA.ToonDNA()
@@ -5929,6 +5929,14 @@ def color(part, r, g, b):
     b = b/255.0
     
     value = (r, g, b, 1.0)
+
+    if part == None:
+        dna.headColor = value
+        dna.armColor = value
+        dna.legColor = value
+        invoker.b_setDNAString(dna.makeNetString())
+        return 'Color index set to: ' + str(dna.headColor)
+
 
     if part == 'head':
         dna.headColor = value
@@ -5945,12 +5953,6 @@ def color(part, r, g, b):
         invoker.b_setDNAString(dna.makeNetString())
         return 'Leg color index set to: ' + str(dna.legColor)
 
-    if part == 'color':
-        dna.headColor = value
-        dna.armColor = value
-        dna.legColor = value
-        invoker.b_setDNAString(dna.makeNetString())
-        return 'Color index set to: ' + str(dna.headColor)
 
     if part == 'gloves':
         dna.gloveColor = value
@@ -5986,10 +5988,6 @@ def dna(part, value):
             value = ToonDNA.toonSpeciesTypes[speciesIndex]
         if value not in ToonDNA.toonSpeciesTypes:
             return 'Invalid species: ' + value
-        if (dna.headColor == 0x1a) and (value == 'c'):
-            return 'Invalid species for color: black'
-        if (dna.headColor == 0x00) and (value == 'b'):
-            return 'Invalid species for color: white'
         dna.head = value + dna.head[1:3]
         invoker.b_setDNAString(dna.makeNetString())
         return 'Species set to: ' + dna.head[0]

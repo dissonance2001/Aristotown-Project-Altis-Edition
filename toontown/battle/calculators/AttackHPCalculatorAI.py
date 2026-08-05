@@ -1868,6 +1868,11 @@ class AttackHPCalculatorAI(object):
                 result = 50
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bannedGagUsed', 0, 0, 'setBoth')
+            elif atkType['name'] == 'UnionBusterCompensationClaims':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'cantAttack', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') or 1) * 1.15, -1, 'setBoth')
             elif atkType['name'] == 'UnionBusterUnionDues':
                 result = self.calculator.unionDues
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -1925,6 +1930,7 @@ class AttackHPCalculatorAI(object):
                 self.setToonCondition(toon.doId, 'markedforsanction', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'hottakecalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'UnionBusterUnionBust':
+                self.calculator.unionSacrifices += 1
                 self.setSuitCondition(theSuit.doId, 'unionbustcalculator', 0, 0, 'setBoth')
                 result = self.getSuitConditionModifier(theSuit.doId, 'targetCheckCondition')
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -2402,7 +2408,7 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'RacketeerOverextendedLeverage2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1.1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') or 1) * 1.1, -1, 'setBoth')
             elif atkType['name'] == 'RacketeerExtortion2':
                 result = self.calculator.costsMultiplier
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3976,6 +3982,10 @@ class AttackHPCalculatorAI(object):
                     else:
                         self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(theSuit.doId, 'battleSpeed') + .25), -1, 'setBoth')
             elif atkType['name'] == 'PacesetterOverclocked':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'overclocked', 1, -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterEarlyOverclocked':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'overclocked', 1, -1, 'setBoth')

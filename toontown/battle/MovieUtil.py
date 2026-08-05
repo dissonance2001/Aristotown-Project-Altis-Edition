@@ -1517,6 +1517,7 @@ def createSuitReviveTrackVirtual(suit, battle):
 
 def createVirtualSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
+    suit._pendingQueuedDeath = True
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
@@ -1582,6 +1583,7 @@ def createVirtualSuitDeathTrack(suit, battle):
 
 def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
+    suit._pendingQueuedDeath = True
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
@@ -1801,6 +1803,7 @@ def getPropAppearTrack(prop, parent, posPoints, appearDelay, scaleUpPoint = Poin
 
 def createSuitDeathTrackExplosiveForeman(suit, battle):
     suitTrack = Sequence()
+    suit._pendingQueuedDeath = True
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
@@ -1918,6 +1921,7 @@ def __KnockbackSilhouette(suitIndex, suits, hp, battle):
         return Sequence()
 
 def createSuitHeadlessDeathTrack(suit, battle):
+    suit._pendingQueuedDeath = True
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
     suitTrack = Sequence()
@@ -1971,6 +1975,7 @@ def createSuitWreckingDeathTrack(suit, battle):
 
 def createSuitCrashTrack(suit, battle, level):
     suitScale = suit.getGeomNode().getScale()
+    suit._pendingQueuedDeath = True
     fallSound = globalBattleSoundCache.getSound('cogbldg_land.ogg')
     crushSound = base.loader.loadSfx('phase_5/audio/sfx/TL_train_cog.ogg')
 
@@ -2057,6 +2062,7 @@ def createSuitCrashTrackOLD(suit, battle):
 
 def midairSuitExplodeTrack(suit, battle):
     suitTrack = Sequence()
+    suit._pendingQueuedDeath = True
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     #suitPos.setZ(suitPos.getZ() + 17)
     #suitTrack.append(Wait(0.15))
@@ -2193,6 +2199,7 @@ def makeZapDeathScorch(pos, parent=render):
     return scorch
 
 def shortCircuitTrack(suit, battle=None):
+    suit._pendingQueuedDeath = True
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
     # Make a clip plane to erase the cog as we vaporize it
