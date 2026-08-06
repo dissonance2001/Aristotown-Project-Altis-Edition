@@ -1,5 +1,10 @@
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import Filename
+
+try:
+    import __builtin__ as _builtins
+except ImportError:
+    import builtins as _builtins
 try:
     from pandac.PandaModules import PStatClient
 except:
@@ -41,22 +46,62 @@ def clashDistrict(shardId):
     return 'Switching to district %d.' % shardId
 
 
+def _getSettingsStore():
+    # Some Altis launch paths expose the preferences object through Python 2's
+    # builtins, while others do not.  Fall back to a small session store so
+    # audio commands always work instead of raising NameError.
+    store = getattr(_builtins, 'settings', None)
+    if store is None:
+        store = getattr(base, 'settings', None)
+    if store is None:
+        store = getattr(base, '_clashMagicWordSettings', None)
+        if store is None:
+            store = {}
+            base._clashMagicWordSettings = store
+    return store
+
+
+def _rememberVolume(name, volume):
+    try:
+        _getSettingsStore()[name] = volume
+    except:
+        pass
+
+
+def _readVolume(name, manager, default=1.0):
+    store = _getSettingsStore()
+    try:
+        if name in store:
+            return float(store[name])
+    except:
+        try:
+            value = store.get(name)
+            if value is not None:
+                return float(value)
+        except:
+            pass
+    try:
+        return float(manager.getVolume())
+    except:
+        return float(default)
+
+
 def _setMusicVolume(value):
     value = max(0, min(100, int(value)))
     volume = value / 100.0
-    settings['musicVol'] = volume
     base.musicManager.setVolume(volume)
     base.musicActive = volume > 0.0
+    _rememberVolume('musicVol', volume)
     return value
 
 
 def _setSfxVolume(value):
     value = max(0, min(100, int(value)))
     volume = value / 100.0
-    settings['sfxVol'] = volume
     for manager in base.sfxManagerList:
         manager.setVolume(volume)
     base.sfxActive = volume > 0.0
+    _rememberVolume('sfxVol', volume)
     return value
 
 
@@ -83,9 +128,13 @@ def clashVolume(volume):
 @magicWord(name='currentvolume', category=CATEGORY_COMMUNITY_MANAGER, types=[])
 def clashCurrentVolume():
     """Shows the current music and sound-effect volumes."""
+    musicVolume = _readVolume('musicVol', base.musicManager)
+    sfxManagers = getattr(base, 'sfxManagerList', [])
+    sfxManager = sfxManagers[0] if sfxManagers else None
+    sfxVolume = _readVolume('sfxVol', sfxManager)
     return 'Music: %d%%, SFX: %d%%.' % (
-        int(round(settings['musicVol'] * 100)),
-        int(round(settings['sfxVol'] * 100)))
+        int(round(musicVolume * 100)),
+        int(round(sfxVolume * 100)))
 
 
 @magicWord(name='toggle', category=CATEGORY_COMMUNITY_MANAGER, types=[])

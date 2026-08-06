@@ -58,11 +58,20 @@ class MagicWordManager(DistributedObject.DistributedObject):
             magicWord = magicWord[1:]
 
         targetId = target.doId
-        self.sendUpdate('sendMagicWord', [magicWord, targetId])
+
+        # ClashClientMagicWords registers commands that must execute on the
+        # client, such as tp, music, and sfx.  Do not also send a successfully
+        # matched client command to the AI: the AI may return another response
+        # (including a fuzzy suggestion for short words such as tp), which
+        # creates a second Spellbook alert and notification sound.
         if target == base.localAvatar:
             response = spellbook.process(base.localAvatar, target, magicWord)
-            if response:
+            if response is not None:
                 self.sendMagicWordResponse(response)
+                return
+
+        # Commands not registered on the client still run on the AI normally.
+        self.sendUpdate('sendMagicWord', [magicWord, targetId])
 
     def sendMagicWordResponse(self, response):
         self.notify.info(response)
