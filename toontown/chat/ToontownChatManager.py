@@ -682,15 +682,6 @@ class ToontownChatManager(ChatManager.ChatManager):
         elif oldPrefix and message.startswith(oldPrefix):
             commandPrefix = oldPrefix
 
-        if commandPrefix is not None:
-            try:
-                base.playSfx(self.magicWordSfx)
-            except:
-                try:
-                    self.magicWordSfx.play()
-                except:
-                    pass
-
         if commandPrefix is not None and message.startswith(commandPrefix + commandPrefix):
             if chatLog:
                 chatLog.addToLog('\1playerGreen\1System Message\2: Use %scommand ToonName instead of %s%scommand.' %
@@ -707,6 +698,16 @@ class ToontownChatManager(ChatManager.ChatManager):
             handled = self.__handleClashLocalShortcut(translatedCommand, targetToon, chatLog)
             if handled is False:
                 return False
+            if handled is True:
+                # These are local panel shortcuts, not Spellbook magic words,
+                # so they do not receive the normal system-message sound.
+                try:
+                    base.playSfx(self.magicWordSfx)
+                except:
+                    try:
+                        self.magicWordSfx.play()
+                    except:
+                        pass
             if handled is None:
                 if targetToon is not None:
                     self.__sendNamedTargetMagicWord(targetToon, targetPrefix, translatedCommand)
