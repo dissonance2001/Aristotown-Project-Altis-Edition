@@ -16,6 +16,15 @@ from toontown.toonbase import ToontownBattleGlobals
 from otp.otpbase import OTPGlobals
 from toontown.toontowngui import TTDialog
 
+# Corporate Clash inventory reward text colours.
+_rewardTextPropertiesManager = TextPropertiesManager.getGlobalPtr()
+_deepBlueRewardText = TextProperties()
+_deepBlueRewardText.setTextColor(0, 0, 0.25, 1)
+_rewardTextPropertiesManager.setProperties('deepBlue', _deepBlueRewardText)
+_deepRedRewardText = TextProperties()
+_deepRedRewardText.setTextColor(0.45, 0, 0, 1)
+_rewardTextPropertiesManager.setProperties('deepRed', _deepRedRewardText)
+
 DISPLAY_CONTENT_SYNC_ORDERS = {
     'contentSync1': [DROP_TRACK, SQUIRT_TRACK, ZAP_TRACK, TRAP_TRACK, THROW_TRACK, LURE_TRACK, SOUND_TRACK, HEAL_TRACK],
     'contentSync2': [SOUND_TRACK, DROP_TRACK, SQUIRT_TRACK, HEAL_TRACK, ZAP_TRACK, TRAP_TRACK, LURE_TRACK, THROW_TRACK],
@@ -147,15 +156,22 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         DirectFrame.hide(self)
 
     def updateTotalPropsText(self):
+        # Use Clash's reward order and colours, while letting the active
+        # Altis layout choose the correct position and scale.
         textTotal = TTLocalizer.InventoryTotalGags % (self.totalProps, self.toon.getMaxCarry())
-        if localAvatar.getPinkSlips() > 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlips % localAvatar.getPinkSlips()
-        if localAvatar.getPinkSlips() == 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlip
-        if localAvatar.getCeaseAndDesists() > 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyCeaseAndDesists % localAvatar.getCeaseAndDesists()
-        if localAvatar.getCeaseAndDesists() == 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyCeaseAndDesist
+        rewardLines = []
+
+        ceaseAndDesists = localAvatar.getCeaseAndDesists()
+        pinkSlips = localAvatar.getPinkSlips()
+
+        if ceaseAndDesists > 0:
+            rewardLines.append(TTLocalizer.InventoryRewardStrings[0] % ceaseAndDesists)
+        if pinkSlips > 0:
+            rewardLines.append(TTLocalizer.InventoryRewardStrings[1] % pinkSlips)
+
+        if rewardLines:
+            textTotal += '\n\n' + '\n'.join(rewardLines)
+
         self.totalLabel['text'] = textTotal
 
     def makeGagEmblemScroll(self):
@@ -427,7 +443,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             relief=None
         )
         self.detailCreditLabel.hide()
-        self.totalLabel = DirectLabel(text='', parent=self.detailFrame, pos=(0.0, 0, -0.12), scale=0.075, text_fg=(0, 0, 0, 1), text_align=TextNode.ACenter, text_wordwrap=16, text_font=getInterfaceFont(), relief=None)
+        self.totalLabel = DirectLabel(text='', parent=self.detailFrame, pos=(0.0, 0, -0.08), scale=0.07, text_align=TextNode.ACenter, text_wordwrap=0, text_font=getInterfaceFont(), relief=None)
         self.dialog = None
         self.updateTotalPropsText()
         self.trackRows = []
@@ -1229,9 +1245,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.detailCreditLabel['text_wordwrap'] = 18
 
         self.totalLabel.setPos(0.0, 0, -0.12)
-        self.totalLabel.setScale(0.075)
+        self.totalLabel.setScale(0.09)
         self.totalLabel['text_align'] = TextNode.ACenter
-        self.totalLabel['text_wordwrap'] = 16
+        self.totalLabel['text_wordwrap'] = 0
 
     def __applyBattleDetailLayout(self):
                                                                           
@@ -1259,13 +1275,14 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.detailCreditLabel['text_align'] = TextNode.ALeft
         self.detailCreditLabel['text_wordwrap'] = 0
 
-        self.totalLabel.setPos(-.0475, 0, -.25)
-        self.totalLabel.setScale(0.06)
+        self.totalLabel.setPos(-.0475, 0, -0.23)
+        self.totalLabel.setScale(0.07)
         self.totalLabel['text_align'] = TextNode.ACenter
         self.totalLabel['text_wordwrap'] = 0
 
     def bookActivateButtons(self):
         self.__applyBookDetailLayout()
+        self.updateTotalPropsText()
         self.setPos(0.1, 0, 0.52)
         self.setScale(0.8)
 

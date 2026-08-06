@@ -13,6 +13,15 @@ from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from toontown.toontowngui import TTDialog
 
+# Corporate Clash inventory reward text colours.
+_rewardTextPropertiesManager = TextPropertiesManager.getGlobalPtr()
+_deepBlueRewardText = TextProperties()
+_deepBlueRewardText.setTextColor(0, 0, 0.25, 1)
+_rewardTextPropertiesManager.setProperties('deepBlue', _deepBlueRewardText)
+_deepRedRewardText = TextProperties()
+_deepRedRewardText.setTextColor(0.45, 0, 0, 1)
+_rewardTextPropertiesManager.setProperties('deepRed', _deepRedRewardText)
+
 class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('InventoryNew')
     PressableTextColor = Vec4(1, 1, 1, 1)
@@ -133,12 +142,24 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         DirectFrame.hide(self)
 
     def updateTotalPropsText(self):
+        # Keep the original Altis battle text size, but place the complete
+        # Clash-style block below the question emblem.
         textTotal = TTLocalizer.InventoryTotalGags % (self.totalProps, self.toon.getMaxCarry())
-        if localAvatar.getPinkSlips() > 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlips % localAvatar.getPinkSlips()
-        elif localAvatar.getPinkSlips() == 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlip
+        rewardLines = []
+
+        ceaseAndDesists = localAvatar.getCeaseAndDesists()
+        pinkSlips = localAvatar.getPinkSlips()
+
+        if ceaseAndDesists > 0:
+            rewardLines.append(TTLocalizer.InventoryRewardStrings[0] % ceaseAndDesists)
+        if pinkSlips > 0:
+            rewardLines.append(TTLocalizer.InventoryRewardStrings[1] % pinkSlips)
+
+        if rewardLines:
+            textTotal += '\n\n' + '\n'.join(rewardLines)
+
         self.totalLabel['text'] = textTotal
+        self.totalLabel.setPos(0.02, 0, -0.23)
 
     def unload(self):
         self.notify.debug('Unloading Inventory for %d' % self.toon.doId)
@@ -284,7 +305,7 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         self.detailDataLabel = DirectLabel(parent=self.circleFrame, text='', text_fg=(0.05, 0.14, 0.4, 1), scale=0.03, pos=(0, 0, -0.1), text_font=getInterfaceFont(), text_align=TextNode.ACenter, relief=None)
         self.detailCreditLabel = DirectLabel(parent=self.circleFrame, text=TTLocalizer.InventorySkillCreditNone, text_fg=(0.05, -0.14, -0.2, 1), scale=0.04, pos=(0, 0, 0.05), text_font=getInterfaceFont(), text_align=TextNode.ACenter, relief=None)
         self.detailCreditLabel.hide()
-        self.totalLabel = DirectLabel(text='', parent=self.circleFrame, pos=(0, 0, 0.02), scale=0.05, text_fg=(0.05, 0.14, 0.4, 1), text_font=getInterfaceFont(), relief=None)
+        self.totalLabel = DirectLabel(text='', parent=self.circleFrame, pos=(0.02, 0, -0.23), scale=0.07, text_align=TextNode.ACenter, text_wordwrap=0, text_font=getInterfaceFont(), relief=None)
         self.dialog = None
         self.updateTotalPropsText()
         self.detailFrame.setBin('gui-popup', 50)

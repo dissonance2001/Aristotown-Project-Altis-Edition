@@ -9,6 +9,15 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 
+# Corporate Clash inventory reward text colours.
+_rewardTextPropertiesManager = TextPropertiesManager.getGlobalPtr()
+_deepBlueRewardText = TextProperties()
+_deepBlueRewardText.setTextColor(0, 0, 0.25, 1)
+_rewardTextPropertiesManager.setProperties('deepBlue', _deepBlueRewardText)
+_deepRedRewardText = TextProperties()
+_deepRedRewardText.setTextColor(0.45, 0, 0, 1)
+_rewardTextPropertiesManager.setProperties('deepRed', _deepRedRewardText)
+
 class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('InventoryNew')
     PressableTextColor = Vec4(1, 1, 1, 1)
@@ -126,12 +135,26 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         DirectFrame.hide(self)
 
     def updateTotalPropsText(self):
+        # Match Corporate Clash's reward order, spacing and vertical placement.
+        finalZ = -0.08
+        zOffsetPerLine = 0.03
         textTotal = TTLocalizer.InventoryTotalGags % (self.totalProps, self.toon.getMaxCarry())
-        if localAvatar.getPinkSlips() > 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlips % localAvatar.getPinkSlips()
-        elif localAvatar.getPinkSlips() == 1:
-            textTotal = textTotal + '\n\n' + TTLocalizer.InventroyPinkSlip
+        textTotal += '\n'
+
+        ceaseAndDesists = localAvatar.getCeaseAndDesists()
+        pinkSlips = localAvatar.getPinkSlips()
+        rewardList = [ceaseAndDesists, pinkSlips]
+        rewardsWithAmount = [rewardType for rewardType in range(2) if rewardList[rewardType] > 0]
+
+        for rewardType, rewardAmt in enumerate(rewardList):
+            if rewardAmt > 0:
+                if rewardType != rewardsWithAmount[-1]:
+                    finalZ += zOffsetPerLine * 2
+                textTotal += '\n'
+                textTotal += TTLocalizer.InventoryRewardStrings[rewardType] % rewardAmt
+
         self.totalLabel['text'] = textTotal
+        self.totalLabel.setZ(finalZ)
 
     def unload(self):
         self.notify.debug('Unloading Inventory for %d' % self.toon.doId)
@@ -207,7 +230,7 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
         self.detailDataLabel = DirectLabel(parent=self.detailFrame, text='', text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(-0.22, 0, -0.24), text_font=getInterfaceFont(), text_align=TextNode.ALeft, relief=None)
         self.detailCreditLabel = DirectLabel(parent=self.detailFrame, text=TTLocalizer.InventorySkillCreditNone, text_fg=(0.05, 0.14, 0.4, 1), scale=0.04, pos=(-0.22, 0, -0.365), text_font=getInterfaceFont(), text_align=TextNode.ALeft, relief=None)
         self.detailCreditLabel.hide()
-        self.totalLabel = DirectLabel(text='', parent=self.detailFrame, pos=(0, 0, -0.095), scale=0.05, text_fg=(0.05, 0.14, 0.4, 1), text_font=getInterfaceFont(), relief=None)
+        self.totalLabel = DirectLabel(text='', parent=self.detailFrame, pos=(0.02, 0, -0.08), scale=0.07, text_font=getInterfaceFont(), relief=None)
         self.updateTotalPropsText()
         self.trackRows = []
         self.trackNameLabels = []

@@ -13333,6 +13333,10 @@ SuitBaseNameWithLevelExe = '%(name)s\n%(dept)s\nLevel %(level)s' + ExecutivePost
 SuitBaseNameWithLevelMgr = '%(name)s\n%(dept)s\nLevel %(level)s' + ManagerPostFix
 HealthForceAcknowledgeMessage = 'You cannot leave the playground until your Laff meter is smiling!'
 InventoryTotalGags = 'Total Gags:\n%d / %d'
+InventoryRewardStrings = {
+    0: '%s \1deepBlue\1C&Ds\2',
+    1: '%s \1deepRed\1Pink Slips\2'
+}
 InventroyPinkSlips = '%s Pink Slips'
 InventroyPinkSlip = '1 Pink Slip'
 InventroyCeaseAndDesists = "%s C & D ' s"
