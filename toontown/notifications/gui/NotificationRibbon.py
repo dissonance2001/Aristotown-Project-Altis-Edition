@@ -12,7 +12,7 @@ class NotificationRibbon(DirectButton):
     off_geom = NotifWindowBase.gui.find('**/notification_exclamation_off')
 
     xpos = -0.19
-    zpos_closed = 0
+    zpos_closed = 0.0
     zpos_opened = 0.0
 
     shadow_image_ratio = 139.0 / 306.0
