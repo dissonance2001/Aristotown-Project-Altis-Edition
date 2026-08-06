@@ -89,6 +89,11 @@ class OrbitalCamera(FSM, NodePath):
         self.avFacingScreen = False
         self.lastCameraPos = None
 
+        # Updated at the beginning of each frame from the final position
+        # left by the previous frame's movement and collision resolution.
+        self._subjectMotionPos = None
+        self._subjectActuallyMoving = False
+
         if self.presets:
             self.lastCamY = self.presets[0][0]
         else:
@@ -111,6 +116,7 @@ class OrbitalCamera(FSM, NodePath):
         else:
             self._stopMouseControlTasks()
             self._stopCollisionCheck()
+            self._stopSubjectMotionTask()
 
         self._finishInterval('lerpSequence')
         self._finishInterval('zIval')
@@ -215,6 +221,8 @@ class OrbitalCamera(FSM, NodePath):
 
         self._initMaxDistance()
         self._startCollisionCheck()
+        self._resetSubjectMotion()
+        self._startSubjectMotionTask()
         self.acceptWheel()
         self.acceptTab()
 
@@ -247,6 +255,8 @@ class OrbitalCamera(FSM, NodePath):
         self._finishInterval('camIval')
 
         self._stopCollisionCheck()
+        self._stopSubjectMotionTask()
+        self._resetSubjectMotion()
 
         try:
             base.camNode.setLodCenter(NodePath())
@@ -424,19 +434,143 @@ class OrbitalCamera(FSM, NodePath):
     def isInputEnabled(self):
         return self.__inputEnabled
 
-    def isSubjectMoving(self):
-        for movement in (
-            'forward',
-            'reverse',
-            'turnRight',
-            'turnLeft',
-            'slideRight',
-            'slideLeft'
-        ):
-            if inputState.isSet(movement):
-                return True
+    def _getSubjectControlSpeeds(self):
+        controlManager = getattr(self.subject, 'controlManager', None)
+        if controlManager is None:
+            return (0.0, 0.0, 0.0)
 
-        return False
+        if not getattr(self.subject, 'avatarControlsEnabled', False):
+            return (0.0, 0.0, 0.0)
+
+        if not getattr(controlManager, 'isEnabled', False):
+            return (0.0, 0.0, 0.0)
+
+        try:
+            speeds = controlManager.getSpeeds()
+        except Exception:
+            speeds = None
+
+        if not speeds or len(speeds) < 3:
+            return (0.0, 0.0, 0.0)
+
+        result = []
+        for speed in speeds[:3]:
+            try:
+                result.append(float(speed))
+            except (TypeError, ValueError):
+                result.append(0.0)
+
+        return tuple(result)
+
+    def _repairSubjectControls(self):
+        # The Altis teleport path can leave ControlManager.isEnabled true
+        # after GravityWalker.controlsTask was removed. In that state key
+        # input is visible, but getSpeeds() stays at zero until another
+        # teleport happens. Restore only that inconsistent state.
+        if self.subject is None:
+            return
+
+        if not getattr(self.subject, 'avatarControlsEnabled', False):
+            return
+
+        controlManager = getattr(self.subject, 'controlManager', None)
+        if controlManager is None or not getattr(
+                controlManager, 'isEnabled', False):
+            return
+
+        controls = getattr(controlManager, 'currentControls', None)
+        if controls is None:
+            return
+
+        if not getattr(controls, 'collisionsActive', False):
+            return
+
+        if hasattr(controls, 'controlsTask') and controls.controlsTask is None:
+            try:
+                controls.enableAvatarControls()
+            except Exception:
+                pass
+
+    def _resetSubjectMotion(self):
+        self._subjectActuallyMoving = False
+        self._subjectMotionPos = None
+
+        if self.subject is not None:
+            try:
+                self._subjectMotionPos = Point3(self.subject.getPos(render))
+            except Exception:
+                pass
+
+    def _startSubjectMotionTask(self):
+        self._stopSubjectMotionTask()
+        taskMgr.add(
+            self._subjectMotionTask,
+            self.TopNodeName + '-SubjectMotion',
+            priority=22
+        )
+
+    def _stopSubjectMotionTask(self):
+        taskMgr.remove(self.TopNodeName + '-SubjectMotion')
+
+    def _subjectMotionTask(self, task):
+        # This task runs immediately before the RMB avatar-facing task. The
+        # position delta therefore represents the previous frame after the
+        # world collision traversers and pushers finished correcting it.
+        self._repairSubjectControls()
+
+        if self.subject is None:
+            self._subjectActuallyMoving = False
+            return task.cont
+
+        try:
+            currentPos = Point3(self.subject.getPos(render))
+        except Exception:
+            self._subjectMotionPos = None
+            self._subjectActuallyMoving = False
+            return task.cont
+
+        previousPos = self._subjectMotionPos
+        self._subjectMotionPos = currentPos
+
+        if previousPos is None:
+            self._subjectActuallyMoving = False
+            return task.cont
+
+        forwardSpeed, unusedRotateSpeed, strafeSpeed = \
+            self._getSubjectControlSpeeds()
+
+        requestedSpeed = (
+            (forwardSpeed * forwardSpeed) +
+            (strafeSpeed * strafeSpeed)
+        ) ** 0.5
+
+        dx = currentPos.getX() - previousPos.getX()
+        dy = currentPos.getY() - previousPos.getY()
+        actualDistance = ((dx * dx) + (dy * dy)) ** 0.5
+
+        try:
+            dt = globalClock.getDt()
+        except Exception:
+            dt = 0.0
+
+        if dt < 0.0:
+            dt = 0.0
+        elif dt > 0.1:
+            dt = 0.1
+
+        # Require a useful fraction of the movement requested by the active
+        # walker. A wall/boss pusher may produce tiny position jitter, but it
+        # must not let RMB rotate the Toon in a stationary circle.
+        minimumDistance = max(0.002, requestedSpeed * dt * 0.15)
+        self._subjectActuallyMoving = bool(
+            requestedSpeed > 0.0001 and
+            actualDistance >= minimumDistance
+        )
+
+        return task.cont
+
+    def isSubjectMoving(self):
+        return self._subjectActuallyMoving
 
     def _isAimingPie(self):
         return bool(getattr(base.localAvatar, 'isAimingPie', False))

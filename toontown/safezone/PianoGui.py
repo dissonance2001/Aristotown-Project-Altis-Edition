@@ -19,6 +19,7 @@ class PianoSoundBank(object):
         self.voiceIndexes = {}
         self.playRates = {}
         self.activeVoices = {}
+        self.releaseTasks = {}
         self.masterVolume = 1.0
         self.__load()
     def __sampleForNote(self, note):
@@ -65,6 +66,9 @@ class PianoSoundBank(object):
         self.voiceIndexes[note] = index + 1
         sound = voices[index]
         active = self.activeVoices.get(note, [])
+        taskName = self.releaseTasks.pop(sound, None)
+        if taskName:
+            taskMgr.remove(taskName)
         if sound in active:
             try:
                 sound.stop()
@@ -87,19 +91,48 @@ class PianoSoundBank(object):
             base.playSfx(sound, volume=volume)
         active.append(sound)
         self.activeVoices[note] = active
-    def stop(self, note):
+    def __releaseTaskName(self, sound):
+        return 'PianoSoundBank-release-%s-%s' % (id(self), id(sound))
+    def __releaseTask(self, sound, startVolume, duration, task):
+        amount = min(1.0, max(0.0, task.time / duration))
+        volume = startVolume * ((1.0 - amount) ** 2)
+        try:
+            sound.setVolume(volume)
+        except:
+            pass
+        if amount >= 1.0:
+            try:
+                sound.stop()
+            except:
+                pass
+            self.releaseTasks.pop(sound, None)
+            return Task.done
+        return Task.cont
+    def stop(self, note, duration=0.28):
         active = self.activeVoices.get(note, [])
         if not active:
             return False
         sound = active.pop(0)
+        taskName = self.__releaseTaskName(sound)
+        taskMgr.remove(taskName)
         try:
-            sound.stop()
+            startVolume = sound.getVolume()
         except:
-            pass
+            startVolume = self.masterVolume
+        try:
+            duration = max(0.08, min(1.2, float(duration)))
+        except (TypeError, ValueError):
+            duration = 0.28
+        self.releaseTasks[sound] = taskName
+        taskMgr.add(self.__releaseTask, taskName,
+                    extraArgs=[sound, startVolume, duration], appendTask=True)
         return True
     def isPlaying(self, note):
         return bool(self.activeVoices.get(note, []))
     def stopAll(self):
+        for taskName in self.releaseTasks.values():
+            taskMgr.remove(taskName)
+        self.releaseTasks = {}
         for note, voices in self.voices.items():
             for sound in voices:
                 try:
@@ -113,6 +146,7 @@ class PianoSoundBank(object):
         self.voiceIndexes = {}
         self.playRates = {}
         self.activeVoices = {}
+        self.releaseTasks = {}
 class PianoGui(DirectFrame):
     MIN_NOTE = 21
     MAX_NOTE = 108
@@ -741,7 +775,8 @@ class PianoGui(DirectFrame):
         if note < self.MIN_NOTE or note > self.MAX_NOTE:
             return
         if fromMidi and int(velocity) <= 0:
-            self.soundBank.stop(note)
+            releaseTime = 0.82 if int(velocity) < 0 else 0.28
+            self.soundBank.stop(note, releaseTime)
             count = self.activeMidiNotes.get(note, 0)
             if count <= 1:
                 self.activeMidiNotes.pop(note, None)

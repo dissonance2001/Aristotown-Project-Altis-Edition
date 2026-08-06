@@ -16,7 +16,6 @@ from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
 from toontown.battle import BattleParticles
 from direct.particles import ParticleEffect
-from toontown.suit import DistributedCashbotBossGoon
 from toontown.suit import SuitDNA
 from toontown.battle.BattleProps import *
 from otp.otpbase import OTPGlobals
@@ -30,14 +29,11 @@ from toontown.suit import Suit
 from toontown.battle import SuitBattleGlobals
 from toontown.building import ElevatorConstants
 from toontown.building import ElevatorUtils
-from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGlobals import *
-from toontown.toon import Toon
-from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 
@@ -48,7 +44,7 @@ TTL = TTLocalizer
 
 class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedHighRollerBoss')
-    numFakeGoons = 3
+    numFakeGoons = 0
 
     SUIT_SPAWN_LOCATIONS = [
         ('mplayer', (-43.380, -34.408, 19.124, -31.372, 0.0, 0.0, 1.0, 1.0, 1.0)),
@@ -95,6 +91,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         FSM.FSM.__init__(self, 'DistributedHighRollerBoss')
         self.resistanceToon = None
         self.resistanceToonOnstage = 0
+        self.fakeGoons = []
         self.cranes = {}
         self.safes = {}
         self.goons = []
@@ -103,11 +100,12 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.geomFlashInterval = None
         self.bonusUnites = 0
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
-        self.elevatorType = ElevatorConstants.ELEVATOR_CFO
+        self.elevatorType = ElevatorConstants.ELEVATOR_SIGIL
         base.boss = self
         self.currHP = 0
         self.maxHP = self.bossMaxDamage
         self.__sequences = []
+        self._highRollerIntroSetup = None
         self.highroller = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')
@@ -137,8 +135,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def announceGenerate(self):
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
         base.cr.forbidCheesyEffects(1)
-        nameInfo = TTLocalizer.BossCogNameWithDept % {'name': TTLocalizer.CashbotBossName,
-         'dept': SuitDNA.getDeptFullname(self.style.dept)}
+        nameInfo = 'High Roller'
         self.setName(nameInfo)
         self.setDisplayName(nameInfo)
         target = CollisionSphere(2, 0, 0, 3)
@@ -156,7 +153,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.bossDamage = 0
         self.currHP = self.bossDamage
         self.loadEnvironment()
-        self.__makeResistanceToon()
         self.physicsMgr = PhysicsManager()
         integrator = LinearEulerIntegrator()
         self.physicsMgr.attachLinearIntegrator(integrator)
@@ -165,8 +161,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         gravity = LinearVectorForce(0, 0, -32)
         fn.addForce(gravity)
         self.physicsMgr.addLinearForce(gravity)
-        base.localAvatar.chatMgr.chatInputSpeedChat.addCFOMenu()
-        self.titleText = OnscreenText('Cashbot Vault\nThe High Roller', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
+        self.titleText = OnscreenText('Major Player Place\nThe High Roller', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
         self.titleText.hide()
         global OneBossCog
         if OneBossCog != None:
@@ -187,7 +182,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         removeTint = Sequence(LerpColorScaleInterval(render, 0.1, Vec4(1, 1, 1, 1)))
         removeTint.start()
         self.epilogueMusic.stop()
-        base.localAvatar.chatMgr.chatInputSpeedChat.removeCFOMenu()
         if OneBossCog == self:
             OneBossCog = None
         return
@@ -196,74 +190,65 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.bonusUnites = unites
 
     def __makeResistanceToon(self):
-        if self.resistanceToon:
-            return
-        npc = Toon.Toon()
-        npc.setPickable(0)
-        npc.setPlayerType(NametagGlobals.CCNonPlayer)
-        dna = ToonDNA.ToonDNA()
-        dna.newToonRandom(11237, 'f', 1)
-        dna.head = 'pls'
-        npc.setDNAString(dna.makeNetString())
-        npc.animFSM.request('neutral')
-        self.resistanceToon = npc
-        self.resistanceToon.setPosHpr(*ToontownGlobals.HighRollerRTBattleOneStartPosHpr)
-        state = random.getstate()
-        random.seed(self.doId)
-        self.resistanceToon.suitType = SuitDNA.getRandomSuitByDept('m')
-        self.resistanceToon.setName(TTLocalizer.ResistanceToonName)
-        self.resistanceToon.setDisplayName(TTLocalizer.ResistanceToonName)
-        random.setstate(state)
+        # High Roller is a standalone miniboss.  Never construct Mata Hairy or
+        # the three local CFO goon actors that accompanied her.
+        self.resistanceToon = None
+        self.resistanceToonOnstage = 0
         self.fakeGoons = []
-        for i in xrange(self.numFakeGoons):
-            goon = DistributedCashbotBossGoon.DistributedCashbotBossGoon(base.cr)
-            goon.doId = -1 - i
-            goon.setBossCogId(self.doId)
-            goon.generate()
-            goon.announceGenerate()
-            self.fakeGoons.append(goon)
-
-        self.__hideFakeGoons()
 
     def __cleanupResistanceToon(self):
-        self.__hideResistanceToon()
-        if self.resistanceToon:
-            self.resistanceToon.removeActive()
-            self.resistanceToon.delete()
-            self.resistanceToon = None
-            for i in xrange(self.numFakeGoons):
-                self.fakeGoons[i].disable()
-                self.fakeGoons[i].delete()
-                self.fakeGoons[i] = None
-
-        return
+        # Defensive cleanup for a mixed/stale client that created one before
+        # this class was reloaded; normal execution has no Resistance Toon.
+        toon = self.resistanceToon
+        self.resistanceToon = None
+        self.resistanceToonOnstage = 0
+        if toon:
+            try:
+                toon.removeActive()
+            except:
+                pass
+            try:
+                toon.detachNode()
+            except:
+                pass
+            try:
+                toon.delete()
+            except:
+                pass
+        for goon in getattr(self, 'fakeGoons', []):
+            try:
+                goon.disable()
+                goon.delete()
+            except:
+                pass
+        self.fakeGoons = []
 
     def __showResistanceToon(self, withSuit):
-        if not self.resistanceToonOnstage:
-            self.resistanceToon.addActive()
-            self.resistanceToon.reparentTo(self.geom)
-            self.resistanceToonOnstage = 1
-        if withSuit:
-            suit = self.resistanceToon.suitType
-            self.resistanceToon.putOnSuit(suit, False)
-        else:
-            self.resistanceToon.takeOffSuit()
+        # Intentionally absent from this miniboss instance.
+        self.resistanceToonOnstage = 0
 
     def __hideResistanceToon(self):
-        if self.resistanceToonOnstage:
-            self.resistanceToon.removeActive()
-            self.resistanceToon.detachNode()
-            self.resistanceToonOnstage = 0
+        toon = self.resistanceToon
+        self.resistanceToonOnstage = 0
+        if toon:
+            try:
+                toon.removeActive()
+            except:
+                pass
+            try:
+                toon.detachNode()
+            except:
+                pass
+            try:
+                toon.hide()
+            except:
+                pass
 
     def __hideFakeGoons(self):
-        if self.fakeGoons:
-            for goon in self.fakeGoons:
-                goon.request('Off')
+        self.fakeGoons = []
 
     def __showFakeGoons(self, state):
-        if self.fakeGoons:
-            for goon in self.fakeGoons:
-                goon.request(state)
+        self.fakeGoons = []
 
     def startHighRollerParticles(self):
         self.stopHighRollerParticles()
@@ -423,27 +408,24 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highRollerWheel2 = globalPropPool.getProp('wheel2')
         self.highRollerWheel2.setScale(6)
 
-        # These are prop resources used by inherited High Roller mechanics.
-        # They do not contain or display the CFO vault environment.
-        self.lightning = loader.loadModel('phase_10/models/cogHQ/CBLightning.bam')
-        self.magnet = loader.loadModel('phase_10/models/cogHQ/CBMagnetBlue.bam')
-        self.sideMagnet = loader.loadModel('phase_10/models/cogHQ/CBMagnetRed.bam')
-        self.craneArm = loader.loadModel('phase_10/models/cogHQ/CBCraneArm.bam')
-        self.controls = loader.loadModel('phase_10/models/cogHQ/CBCraneControls.bam')
-        self.stick = loader.loadModel('phase_10/models/cogHQ/CBCraneStick.bam')
-        self.safe = loader.loadModel('phase_10/models/cogHQ/CBSafe.bam')
-        self.safe2 = loader.loadModel('phase_10/models/cogHQ/CBSafe.bam')
-        self.eyes = loader.loadModel('phase_10/models/cogHQ/CashBotBossEyes.bam')
-        self.cableTex = self.craneArm.findTexture('MagnetControl')
-        self.eyes.setPosHprScale(4.5, 0, -2.5, 90, 90, 0, 0.4, 0.4, 0.4)
-        self.safe2.setPosHprScale(0, 0, 0, -90, -90, 0, 1, 1, 1)
+        # Do not load any Cashbot CFO crane-round models.  Empty compatibility
+        # nodes keep inherited cleanup methods harmless without adding visible
+        # cranes, magnets, safes, controls, lightning or CFO eyes to the scene.
+        compatibilityProps = self.geom.attachNewNode(
+            'highRoller-disabled-legacy-props')
+        compatibilityProps.hide()
+        self.lightning = compatibilityProps.attachNewNode('lightning-disabled')
+        self.magnet = compatibilityProps.attachNewNode('magnet-disabled')
+        self.sideMagnet = compatibilityProps.attachNewNode('side-magnet-disabled')
+        self.craneArm = compatibilityProps.attachNewNode('crane-arm-disabled')
+        self.controls = compatibilityProps.attachNewNode('controls-disabled')
+        self.stick = compatibilityProps.attachNewNode('stick-disabled')
+        self.safe = compatibilityProps.attachNewNode('safe-disabled')
+        self.safe2 = compatibilityProps.attachNewNode('safe2-disabled')
+        self.eyes = compatibilityProps.attachNewNode('eyes-disabled')
+        self.cableTex = None
 
         self.__setupStagelights()
-        for headPart in self.animatedHeadParts:
-            self.eyes.reparentTo(headPart)
-            self.safe2.reparentTo(headPart)
-        self.eyes.hide()
-        self.safe2.hide()
 
         self.colorScaleOffNodes = []
         self.hide()
@@ -504,22 +486,23 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         self.introduction = base.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn.ogg')
-        self.elevatorMusic = base.loader.loadMusic('phase_10/audio/bgm/cb_elevator.ogg')
+        # Compatibility aliases only; no CFO elevator/crane music is loaded.
+        self.elevatorMusic = self.introduction
         self.battleOneMusic = base.loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
-        self.midCutsceneMusic = base.loadMusic('phase_10/audio/bgm/CB_boss_cutscene.ogg')
-        self.battleThreeMusic = base.loadMusic('phase_10/audio/bgm/encntr_cfo_crane.ogg')
+        self.midCutsceneMusic = self.battleOneMusic
+        self.battleThreeMusic = self.battleOneMusic
         self.phaseOneMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_2.ogg')
         self.shuffleMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_shuffle.ogg')
         self.puzzleMusic = loader.loadMusic(
-            'phase_13/audio/bgm/apriltoons/highroller/cc_s_bgm_ara_hroller_int_puzzle.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_puzzle.ogg')
         self.triviaMusic = loader.loadMusic(
-            'phase_13/audio/bgm/apriltoons/highroller/cc_s_bgm_ara_hroller_int_trivia.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_trivia.ogg')
         self.stingerMusic = loader.loadMusic(
-            'phase_13/audio/bgm/apriltoons/highroller/cc_s_bgm_ara_hroller_int_stinger.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_stinger.ogg')
         self.phaseTwoCutsceneMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_2.ogg')
         self.phaseTwoMusic = loader.loadMusic(
@@ -787,182 +770,12 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return NodePath(newCollisionNode)
 
     def __makeGoonMovieForIntro(self):
-        goonTrack = Parallel()
-        goon = self.fakeGoons[0]
-        goonTrack.append(Sequence(
-            goon.posHprInterval(0, Point3(111, -287, 0), VBase3(165, 0, 0)),
-            goon.posHprInterval(9, Point3(101, -323, 0), VBase3(165, 0, 0)),
-            goon.hprInterval(1, VBase3(345, 0, 0)),
-            goon.posHprInterval(9, Point3(111, -287, 0), VBase3(345, 0, 0)),
-            goon.hprInterval(1, VBase3(165, 0, 0)),
-            goon.posHprInterval(9.5, Point3(104, -316, 0), VBase3(165, 0, 0)),
-            Func(goon.request, 'Stunned'),
-            Wait(1)))
-        goon = self.fakeGoons[1]
-        goonTrack.append(Sequence(
-            goon.posHprInterval(0, Point3(119, -315, 0), VBase3(357, 0, 0)),
-            goon.posHprInterval(9, Point3(121, -280, 0), VBase3(357, 0, 0)),
-            goon.hprInterval(.5, VBase3(-345, 145, 345)),
-            goon.hprInterval(1, VBase3(177, 0, 0)),
-            goon.posHprInterval(9, Point3(119, -315, 0), VBase3(177, 0, 0)),
-            goon.hprInterval(1, VBase3(357, 0, 0)),
-            goon.posHprInterval(9, Point3(121, -280, 0), VBase3(357, 0, 0))))
-        goon = self.fakeGoons[2]
-        goonTrack.append(Sequence(
-            goon.posHprInterval(0, Point3(102, -320, 0), VBase3(231, 0, 0)),
-            goon.posHprInterval(9, Point3(127, -337, 0), VBase3(231, 0, 0)),
-            goon.hprInterval(1, VBase3(51, 0, 0)),
-            goon.posHprInterval(9, Point3(102, -320, 0), VBase3(51, 0, 0)),
-            goon.hprInterval(1, VBase3(231, 0, 0)),
-            goon.posHprInterval(9, Point3(127, -337, 0), VBase3(231, 0, 0))))
-        return Sequence(Func(self.__showFakeGoons, 'Walk'), goonTrack, Func(self.__hideFakeGoons))
+        return Sequence()
 
     def makeIntroductionMovie(self, delayDeletes):
-        self.hide()
-        for toonId in self.involvedToons:
-            toon = self.cr.doId2do.get(toonId)
-            if toon:
-                delayDeletes.append(DelayDelete.DelayDelete(toon, 'CashbotBoss.makeIntroductionMovie'))
-
-        rtTrack = Sequence()
-        startPos = Point3(ToontownGlobals.HighRollerBossOffstagePosHpr[0], ToontownGlobals.HighRollerBossOffstagePosHpr[1], ToontownGlobals.HighRollerBossOffstagePosHpr[2])
-        battlePos = Point3(ToontownGlobals.HighRollerBossBattleOnePosHpr[0], ToontownGlobals.HighRollerBossBattleOnePosHpr[1], ToontownGlobals.HighRollerBossBattleOnePosHpr[2])
-        battleHpr = VBase3(ToontownGlobals.HighRollerBossBattleOnePosHpr[3], ToontownGlobals.HighRollerBossBattleOnePosHpr[4], ToontownGlobals.HighRollerBossBattleOnePosHpr[5])
-        bossTrack = Sequence()
-        bossTrack.append(Func(self.reparentTo, render))
-        bossTrack.append(Func(self.getGeomNode().setH, 180))
-        bossTrack.append(Func(self.pelvis.setHpr, self.pelvisForwardHpr))
-        bossTrack.append(Func(self.loop, 'Ff_neutral'))
-        track, hpr = self.rollBossToPoint(battlePos, None, battlePos, None, 0)
-        bossTrack.append(track)
-        track, hpr = self.rollBossToPoint(battlePos, hpr, battlePos, battleHpr, 0)
-        bossTrack.append(track)
-        bossTrack.append(Func(self.getGeomNode().setH, 0))
-        bossTrack.append(Func(self.pelvis.setHpr, self.pelvisReversedHpr))
-        goonTrack = self.__makeGoonMovieForIntro()
-        attackToons = TTL.CashbotBossCogAttack
-        self.titleSeq = Sequence(Func(self.titleText.show), Wait(5), LerpColorScaleInterval(self.titleText, 1, VBase4(1, 1, 1, 0)))  
-
-
-        rToon = self.resistanceToon
-        rToon.setPosHpr(*ToontownGlobals.HighRollerRTBattleOneStartPosHpr)
-        track = Sequence(Func(base.camera.reparentTo, render),
-                        Func(base.camera.setPosHpr, 0, - 240, 10, 0, 0, 0),
-                        Parallel(
-                            bossTrack,
-                            Sequence(Func(self.majorplayer2.setChatAbsolute, "How's the hoop skip out there toe-taps, can't thank ya enough for these claps!", CFSpeech),
-                             Wait(4),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "The due morning dew duet is a pitch perfect harp strum for this singing stringer's symphonic set-strike solicitations!",
-                                          CFSpeech),   Wait(4),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "Takes two to tango, babe, and I am proud and poppin' to introduce today's special guest!",
-                                          CFSpeech), Func(self.majorplayer2.loop, 'neutral'),
-                                     Wait(3),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "The Casino Cardshaper...",
-                                          CFSpeech), Wait(2.0),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "The Roulette Rockabilly...",
-                                          CFSpeech), Wait(2.0),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "The Quartet Quack Attacker...",
-                                          CFSpeech), Wait(2.0),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "The Spinning Wheel...",
-                                          CFSpeech), Wait(5.0),
-                                     Func(self.duckshuffler2.show), ActorInterval(self.duckshuffler2, 'slip-forward'), Func(self.duckshuffler2.loop, 'neutral'),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "Buck Ruffler: The Duck Shuffler!",
-                                          CFSpeech), Func(self.duckshuffler2.setChatAbsolute,
-                                          "Oh my Cogth thath me",
-                                          CFSpeech), Wait(1.5), Func(self.duckshuffler2.setChatAbsolute,
-                                                          "Waith I needth to thay it too",
-                                          CFSpeech), Wait(2.5), Func(self.duckshuffler2.setChatAbsolute,
-                                                          "Buck Ruffler: The Duck Thuffler!",
-                                          CFSpeech),
-                                     Wait(3),
-                                     Func(self.duckshuffler2.setChatAbsolute,
-                                          "HAHAHALRIGHT! Let'th thake thome dithe!",
-                                          CFSpeech),
-                                     Wait(3),
-                                     Func(self.duckshuffler2.setChatAbsolute,
-                                          "THE TABLE ITH HOT AND I'M ON TOP! Let'th play!!",
-                                          CFSpeech),
-                                     Wait(3.0),
-                                    Parallel(Func(self.majorplayer2.setChatAbsolute,
-                                          "Oooh, but that's no high class brass, looks like we got some surprise guests!",
-                                          CFSpeech), Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_dlg_ene_duckshfl_normal_dialog.ogg')), LerpHprInterval(self.duckshuffler2, 1, (3780, 0, 0))),
-                                     Wait(3),
-                                     Func(self.majorplayer2.setChatAbsolute,
-                                          "Baby Blue, ya knew my words were true-I told ya we'd meet again!",
-                                          CFSpeech),
-                                     Wait(3),
-                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
-                                          "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
-                                          CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'flail', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
-                                     Wait(.25),
-                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
-                                                   "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
-                                                   CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'magic3', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
-                                     Wait(.25),
-                                     Parallel(Func(self.duckshuffler2.setChatAbsolute,
-                                                   "HHAHAHHAHAHAHA DBSEHIFWEIUABYUEYKTRARTXRVEWIAYRVAESLKUSNARETSYREOYOXMROTEBURASXAEWRNEWIORVUE4OIBRUOEWUPMXAWOTBRUPOE!",
-                                                   CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'slip-backward', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
-                                     Wait(.25),
-                                     Func(self.duckshuffler2.setChatAbsolute,
-                                          "!",
-                                          CFSpeech),
-                                     Wait(.25),
-                                     Func(self.duckshuffler2.setChatAbsolute,
-                                          "!",
-                                          CFSpeech),
-                                     Wait(.25),
-                                     Func(self.duckshuffler2.setChatAbsolute,
-                                          "!",
-                                          CFSpeech),
-                                     Wait(.25),
-                                          Parallel(Func(self.duckshuffler2.setChatAbsolute,
-                                          "I gueth we'll have to give em tha thpecial thow though! Come on mic thpam!",
-                                          CFSpeech), Sequence(ActorInterval(self.duckshuffler2, 'slip-forward', playRate=3), Func(self.duckshuffler2.loop, 'neutral'))),
-                                     Wait(3),
-                                          Func(self.majorplayer2.setChatAbsolute,
-                                               "Hachahoo hooi-didibadoo! Here's a special shabaadoopdaa-show from we to you!",
-                                               CFSpeech),
-                                          Wait(3),
-                                     Parallel(Func(self.duckshuffler2.setPos, (-15, -182.5, -3.75)), Func(self.duckshuffler2.setHpr, (180, 0, 0)),  Func(self.majorplayer2.setHpr, (180, 0, 0)), Func(self.majorplayer2.setPos, (15, -182.5, -3.75))),
-                                          Parallel(MovieUtil.createShot1(self.duckshuffler2), MovieUtil.createShot1(self.majorplayer2)),
-                                          Parallel(MovieUtil.createShot2(self.duckshuffler2), MovieUtil.createShot2(self.majorplayer2)),
-                                          Parallel(MovieUtil.createShot3(self.duckshuffler2), MovieUtil.createShot3(self.majorplayer2)),
-                                          Parallel(MovieUtil.createShot4(self.duckshuffler2), MovieUtil.createShot4(self.majorplayer2)),
-                                     Func(self.majorplayer2.removeNode), Func(self.duckshuffler2.removeNode),
-                                Func(rToon.clearChat),
-                                Func(self.highroller.show),
-                                     Parallel(Func(self.highroller.setPos, (0, -183.5, -4.5)), Func(self.highroller.setHpr, (180, 0, 0)), MovieUtil.createShot5(self.highroller)),
-                                     Parallel(Func(self.highroller.setPos, (0, -200, 0)), Func(self.highroller.setHpr, (180, 0, 0)), Func(self.highroller.loop, 'neutral')),
-                                     Wait(3.0),
-                            Parallel(Func(self.highroller.nametag3d.setScale, 3), Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_dlg_ene_hroller_good_morning_clash_general.ogg')), Func(self.highroller.setChatAbsolute, "GOOD MOOORNING TOONTOOOOWN!!!!", CFSpeech)),
-                             Wait(4),
-                                     Func(self.highroller.nametag3d.setScale, 1),
-                            Func(self.highroller.setChatAbsolute, "What'ya waitin' for, babe? Hop on fftage! let'ff get hoppin' and boppin', jumpin' and jinglin', ffingin' and ffwingin'!", CFSpeech),
-                            Wait(4),
-                            Parallel(Func(self.highroller.setChatAbsolute,
-                                                   "Ohoho-no-no, takeff a party to partiffipate and play, and I ffay play!!",
-                                                   CFSpeech), Sequence(ActorInterval(self.highroller, 'taunt'), Func(self.highroller.loop, 'neutral'))),
-                            Wait(4),
-                                     Parallel(ActorInterval(self.highRollerWheel2, 'wheel2'), Func(base.playSfx, base.loader.loadSfx('phase_5/audio/sfx/SA_bash.ogg')),
-                                              Func(base.playSfx, base.loader.loadSfx('phase_13/audio/sfx/april_toons/highroller/cc_s_sfx_ara_wheel_summon.ogg')),
-                                              Func(self.highRollerWheel2.show), Func(self.highroller.setChatAbsolute,
-                                                   "Here'ff a ffpinnin wheel I know ya can get behaHAHAHA-hind!",
-                                                   CFSpeech), Sequence(ActorInterval(self.highroller, 'snap'), Func(self.highroller.loop, 'neutral'))),
-                                     Parallel(Func(self.highRollerWheel.show), Func(self.highRollerWheel2.hide)),
-                                     Wait(4),
-                                     Func(self.highroller.setChatAbsolute,
-                                          "Get ready for the ffho-ho-how of a lifetime, Bobby Dazzler!",
-                                          CFSpeech),
-            Wait(4), Func(self.highroller.hide),
-            Func(self.highroller.setChatAbsolute, '', CFSpeech))))
-        return Sequence(Func(base.camera.reparentTo, render), track)
+        # The choreography comes exclusively from Clash's unchanged CTSC.
+        from toontown.cutscene.HighRollerIntroCutscene import makeHighRollerIntroduction
+        return makeHighRollerIntroduction(self, delayDeletes)
 
     def makePrepareBattleTwoMovie(self, delayDeletes):
         self.hide()
@@ -1334,8 +1147,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def enterOff(self):
         DistributedBossCog.DistributedBossCog.enterOff(self)
-        if self.resistanceToon:
-            self.resistanceToon.clearChat()
 
     def enterWaitForToons(self):
         # A sigil trip enters this instance through quietZone/teleportIn, not
@@ -1359,7 +1170,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         self.detachNode()
         self.geom.hide()
-        self.resistanceToon.removeActive()
 
     def __waitForHighRollerInstanceReady(self, task):
         if not self.gotAllToons:
@@ -1387,20 +1197,15 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         taskMgr.remove(self.uniqueName('highRollerInstanceReady'))
         DistributedBossCog.DistributedBossCog.exitWaitForToons(self)
         self.geom.show()
-        self.resistanceToon.addActive()
 
     def enterElevator(self):
         DistributedBossCog.DistributedBossCog.enterElevator(self)
         self.detachNode()
-        self.resistanceToon.removeActive()
         self.endVault.stash()
         self.midVault.unstash()
-        self.__showResistanceToon(True)
-        base.camLens.setMinFov(ToontownGlobals.CFOElevatorFov/(4./3.))
 
     def exitElevator(self):
         DistributedBossCog.DistributedBossCog.exitElevator(self)
-        self.resistanceToon.addActive()
 
     def enterIntroduction(self):
         self.detachNode()
@@ -1408,8 +1213,9 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.endVault.unstash()
         self.evWalls.stash()
         self.midVault.unstash()
-        self.__showResistanceToon(True)
-        base.playMusic(self.introduction, looping=1, volume=0.9)
+        # Clash's original intro does not include Mata Hairy.  The provider
+        # starts the music at the exact CTSC offset.
+        self.introduction.stop()
 
         # The sigils already completed transport.  Do not call the CFO base
         # introduction, because it opens leftDoor/rightDoor from a CFO
@@ -1434,6 +1240,9 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def __finishHighRollerIntroduction(self):
         intervalName = 'IntroductionMovie'
         self.clearInterval(intervalName)
+        setup = getattr(self, '_highRollerIntroSetup', None)
+        if setup:
+            setup.cleanup()
         self.doneBarrier('Introduction')
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
@@ -1445,6 +1254,9 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def exitIntroduction(self):
         intervalName = 'IntroductionMovie'
         self.clearInterval(intervalName)
+        setup = getattr(self, '_highRollerIntroSetup', None)
+        if setup:
+            setup.cleanup()
         self.unstickToons()
         self.releaseToons()
         NametagGlobals.setWant2dNametags(False)
@@ -1511,7 +1323,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.unstickToons()
         self.releaseToons()
         NametagGlobals.setWant2dNametags(True)
-        ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
+        ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_SIGIL)
     
     def enterBattleTwo(self):
         self.reparentTo(render)
@@ -1536,21 +1348,9 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doneBarrier('PrepareBattleTwo')
 
     def enterPrepareBattleThree(self):
-        self.controlToons()
-        NametagGlobals.setWant2dNametags(True)
-        NametagGlobals.setWantActiveNametags(True)
-        base.localAvatar.setFriendsListButtonActive(1)
-        intervalName = 'PrepareBattleThreeMovie'
-        delayDeletes = []
-        self.movieCrane = self.cranes[0]
-        self.movieSafe = self.safes[1]
-        self.movieCrane.request('Movie')
-        seq = Sequence(self.makePrepareBattleThreeMovie(delayDeletes, self.movieCrane, self.movieSafe), Func(self.__beginBattleThree), name=intervalName)
-        seq.delayDeletes = delayDeletes
-        seq.start()
-        self.storeInterval(seq, intervalName)
-        self.__showResistanceToon(False)
-        taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=50)
+        self.cleanupIntervals()
+        self.__hideResistanceToon()
+        self.stash()
 
     def __beginBattleThree(self):
         intervalName = 'PrepareBattleThreeMovie'
@@ -1558,98 +1358,35 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.doneBarrier('PrepareBattleThree')
 
     def exitPrepareBattleThree(self):
-        intervalName = 'PrepareBattleThreeMovie'
-        self.clearInterval(intervalName)
-        self.unstickToons()
-        self.releaseToons()
-        if self.newState == 'BattleThree':
-            self.movieCrane.request('Free')
-            self.movieSafe.request('Initial')
-        NametagGlobals.setWant2dNametags(True)
-        ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_CFO)
-        taskMgr.remove(self.uniqueName('physics'))
-		
+        self.cleanupIntervals()
+
     def setBattleDifficulty(self, diff):
         self.notify.debug('battleDifficulty = %d' % diff)
         self.battleDifficulty = diff
 
     def enterBattleThree(self):
-        DistributedBossCog.DistributedBossCog.enterBattleThree(self)
-        self.clearChat()
-        self.resistanceToon.clearChat()
-        self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.HighRollerBossBattleThreePosHpr)
-        self.happy = 1
-        self.raised = 1
-        self.forward = 1
-        self.doAnimate()
-        self.endVault.unstash()
-        self.evWalls.unstash()
-        self.midVault.stash()
+        self.cleanupIntervals()
         self.__hideResistanceToon()
-        localAvatar.setCameraFov(ToontownGlobals.BossBattleCameraFov)
-        self.generateHealthBar()
-        self.updateHealthBar()
-        self.__playHighRollerMusic(
-            self.phaseThreeMusic, looping=1, volume=0.9)
-        taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=25)
+        self.stash()
 
     def exitBattleThree(self):
-        DistributedBossCog.DistributedBossCog.exitBattleThree(self)
-        bossDoneEventName = self.uniqueName('DestroyedBoss')
-        self.ignore(bossDoneEventName)
-        self.stopAnimate()
-        self.cleanupAttacks()
-        self.setDizzy(0)
-        self.removeHealthBar()
-        localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
-        if self.newState != 'Victory':
-            self.phaseThreeMusic.stop()
-        taskMgr.remove(self.uniqueName('physics'))
+        self.cleanupIntervals()
 
     def enterVictory(self):
         self.cleanupIntervals()
-        self.reparentTo(render)
-        self.setPosHpr(*ToontownGlobals.HighRollerBossBattleThreePosHpr)
-        self.stopAnimate()
-        self.endVault.unstash()
-        self.evWalls.unstash()
-        self.midVault.unstash()
         self.__hideResistanceToon()
-        self.__hideToons()
-        self.clearChat()
-        self.resistanceToon.clearChat()
-        self.deactivateCranes()
-        if self.cranes:
-            self.cranes[1].demand('Off')
-        self.releaseToons(finalBattle=1)
-        if self.hasLocalToon():
-            self.toMovieMode()
-        intervalName = 'VictoryMovie'
-        seq = Sequence(self.makeBossFleeMovie(), Func(self.__continueVictory), name=intervalName)
-        seq.start()
-        self.storeInterval(seq, intervalName)
-        if self.oldState != 'BattleThree':
-            self.__playHighRollerMusic(
-                self.phaseThreeMusic, looping=1, volume=0.9)
+        self.stash()
+        self.doneBarrier('Victory')
 
     def __continueVictory(self):
         self.doneBarrier('Victory')
 
     def exitVictory(self):
         self.cleanupIntervals()
-        if self.newState != 'Reward':
-            if self.hasLocalToon():
-                self.toWalkMode()
-        self.__showToons()
-        self.door3.setPos(0, 0, 0)
-        if self.newState != 'Reward':
-            self.phaseThreeMusic.stop()
 
     def enterReward(self):
         self.cleanupIntervals()
         self.clearChat()
-        self.resistanceToon.clearChat()
         self.stash()
         self.stopAnimate()
         self.controlToons()
@@ -1694,7 +1431,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         elif attackCode == ToontownGlobals.BossCogAreaAttack:
             self.doAnimate('areaAttack', now=1)
             siren = base.loader.loadSfx('phase_9/audio/sfx/CHQ_GOON_tractor_beam_alarmed.ogg')
-            seq = Sequence(Func(self.setChatAbsolute, 'I told you Toons to get away from those cranes!', CFSpeech),
+            seq = Sequence(Func(self.setChatAbsolute, 'Back away, Toons!', CFSpeech),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)), Wait(1),
                            Parallel(SoundInterval(siren), Func(self.geomFlashRed, self.geom)))
@@ -1732,8 +1469,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.cleanupIntervals()
         self.clearChat()
         if self.resistanceToon:
-            self.resistanceToon.clearChat()
-        self.__hideResistanceToon()
+            self.__hideResistanceToon()
         self.stash()
         self.stopAnimate()
         self.controlToons()

@@ -96,7 +96,7 @@ class PianoMidiFile(object):
                              (self.__byteValue(payload[1]) << 8) |
                              self.__byteValue(payload[2]))
                     parsed.append((tick, 0, trackIndex, sequence,
-                                   'tempo', tempo, 0))
+                                   'tempo', -1, tempo, 0))
                     sequence += 1
                 elif metaType == 0x2f:
                     break
@@ -130,11 +130,15 @@ class PianoMidiFile(object):
                 continue
             if eventType == 0x90 and values[1] > 0:
                 parsed.append((tick, 2, trackIndex, sequence,
-                               'on', values[0], values[1]))
+                               'on', channel, values[0], values[1]))
                 sequence += 1
             elif eventType == 0x80 or (eventType == 0x90 and values[1] == 0):
                 parsed.append((tick, 1, trackIndex, sequence,
-                               'off', values[0], 0))
+                               'off', channel, values[0], 0))
+                sequence += 1
+            elif eventType == 0xb0 and values[0] == 64:
+                parsed.append((tick, 1, trackIndex, sequence,
+                               'sustain', channel, values[1], 0))
                 sequence += 1
 
         return parsed
@@ -184,10 +188,11 @@ class PianoMidiFile(object):
         currentSeconds = 0.0
         timedEvents = []
         activeStarts = {}
+        sustainDown = {}
         eventSequence = 0
         noteCount = 0
 
-        for tick, priority, trackIndex, sequence, kind, valueA, valueB in rawEvents:
+        for tick, priority, trackIndex, sequence, kind, channel, valueA, valueB in rawEvents:
             deltaTicks = tick - lastTick
             if deltaTicks:
                 currentSeconds += (float(deltaTicks) * float(tempo) /
@@ -196,22 +201,37 @@ class PianoMidiFile(object):
 
             if kind == 'tempo':
                 tempo = valueA
+            elif kind == 'sustain':
+                sustainDown[(trackIndex, channel)] = valueA >= 64
             elif kind == 'on':
-                activeStarts.setdefault(valueA, []).append(currentSeconds)
+                key = (trackIndex, channel, valueA)
+                activeStarts.setdefault(key, []).append(currentSeconds)
                 timedEvents.append((currentSeconds, 1, eventSequence,
-                                    kind, valueA, valueB))
+                                    'on', valueA, valueB))
                 eventSequence += 1
                 noteCount += 1
             else:
-                starts = activeStarts.get(valueA, [])
+                key = (trackIndex, channel, valueA)
+                starts = activeStarts.get(key, [])
                 if starts:
                     startTime = starts.pop(0)
-                    eventTime = max(currentSeconds,
-                                    startTime + self.MIN_NOTE_SECONDS)
                 else:
-                    eventTime = currentSeconds
+                    startTime = currentSeconds
+                eventTime = max(currentSeconds,
+                                startTime + self.MIN_NOTE_SECONDS)
+                offKind = 'off_sustain' if sustainDown.get(
+                    (trackIndex, channel), False) else 'off'
                 timedEvents.append((eventTime, 0, eventSequence,
-                                    kind, valueA, valueB))
+                                    offKind, valueA, 0))
+                eventSequence += 1
+
+        for key, starts in activeStarts.items():
+            note = key[2]
+            for startTime in starts:
+                eventTime = max(currentSeconds,
+                                startTime + self.MIN_NOTE_SECONDS)
+                timedEvents.append((eventTime, 0, eventSequence,
+                                    'off', note, 0))
                 eventSequence += 1
 
         timedEvents.sort(key=lambda item: (item[0], item[1], item[2]))
@@ -349,6 +369,8 @@ class PianoMidiPlayer(object):
             if mappedNote is not None:
                 if kind == 'on':
                     self.noteCallback(mappedNote, velocity, True)
+                elif kind == 'off_sustain':
+                    self.noteCallback(mappedNote, -1, True)
                 else:
                     self.noteCallback(mappedNote, 0, True)
             self.index += 1
