@@ -480,7 +480,7 @@ def doGovernaughtDeath(attack):
     battle = attack['battle']
     targets = attack['target']
     notifyTracks = Parallel()
-    soundTrack = getSoundTrack('LB_toonup.ogg', node=toon)
+    soundTrack = getSoundTrack('LB_toonup.ogg')
     waitTrack = Sequence(Wait(3.0))
     for t in targets:
         toon = t['toon']
