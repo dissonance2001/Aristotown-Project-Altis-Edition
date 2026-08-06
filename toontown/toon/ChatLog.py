@@ -21,7 +21,13 @@ class ChatLog(DirectFrame, DirectObject):
     MAX_MESSAGE_LENGTH = 100
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=base.a2dTopLeft, relief=None, sortOrder=500)
+        # Build the complete chat interface beneath ``hidden``.  LocalToon can
+        # create ChatLog while ToontownLoader is still drawing a loading frame;
+        # constructing it directly below a2dTopLeft makes the four quick-menu
+        # buttons briefly appear over that loading screen.
+        self._interfaceParent = base.a2dTopLeft
+        self._bulkLoading = bool(getattr(loader, 'inBulkBlock', None))
+        DirectFrame.__init__(self, parent=hidden, relief=None, sortOrder=500)
         DirectObject.__init__(self)
 
         # Corporate Clash draws the tab images one layer behind the main panel,
@@ -73,6 +79,8 @@ class ChatLog(DirectFrame, DirectObject):
         self.accept('chat-panel-open', self.open)
         self.accept('chat-panel-close', self.close)
         self.accept('club-state-updated', self._clubStateUpdated)
+        self.accept('altis-bulk-load-begin', self._handleBulkLoadBegin)
+        self.accept('altis-bulk-load-end', self._handleBulkLoadEnd)
 
         base.cr.chatLog = self
         print('[ChatSystem] Aristotown chat interface loaded.')
@@ -81,6 +89,41 @@ class ChatLog(DirectFrame, DirectObject):
                 self.disableInterface()
         except:
             pass
+        self._refreshInterfaceVisibility()
+
+    def _handleBulkLoadBegin(self):
+        self._bulkLoading = True
+        self.removeFocus()
+        if getattr(self, 'stickerMenu', None):
+            self.stickerMenu.hideMenu()
+        try:
+            chatMgr = base.localAvatar.chatMgr
+            if hasattr(chatMgr, 'closePanelMenus'):
+                chatMgr.closePanelMenus()
+        except:
+            pass
+        self.reparentTo(hidden)
+
+    def _handleBulkLoadEnd(self):
+        # ToontownLoader emits this after ToontownLoadingScreen.end() has hidden
+        # the loading GUI, so the normal chat HUD can safely return now.
+        self._bulkLoading = False
+        self._refreshInterfaceVisibility()
+
+    def _refreshInterfaceVisibility(self):
+        if not self.interfaceEnabled or self._bulkLoading:
+            self.reparentTo(hidden)
+            return
+
+        self.reparentTo(self._interfaceParent)
+        self.quickFrame.show()
+        self.displayFrame.show()
+        if self.isHidden:
+            self.displayFrame.setPos(-0.55, 0, -0.275)
+            self.quickFrame.setPos(0.25, 0, -0.077)
+        else:
+            self.displayFrame.setPos(0.51, 0, -0.275)
+            self.quickFrame.setPos(0.25, 0, 0.08)
 
     def _images(self, prefix, normal='Normal', pressed='Pressed', hover='Hover'):
         return (
@@ -1700,17 +1743,11 @@ class ChatLog(DirectFrame, DirectObject):
             self.stickerMenu.hideMenu()
         self.quickFrame.hide()
         self.displayFrame.hide()
+        self.reparentTo(hidden)
 
     def enableInterface(self):
         self.interfaceEnabled = True
-        self.quickFrame.show()
-        self.displayFrame.show()
-        if self.isHidden:
-            self.displayFrame.setPos(-0.55, 0, -0.275)
-            self.quickFrame.setPos(0.25, 0, -0.077)
-        else:
-            self.displayFrame.setPos(0.51, 0, -0.275)
-            self.quickFrame.setPos(0.25, 0, 0.08)
+        self._refreshInterfaceVisibility()
 
     def updateTransparency(self, transparency):
         alpha = max(0.0, min(1.0, transparency))

@@ -9,9 +9,8 @@ class MidiParseError(Exception):
 
 
 class PianoMidiFile(object):
-    """Small Standard MIDI File parser compatible with Python 2 and 3."""
-
     DEFAULT_TEMPO = 500000
+    MIN_NOTE_SECONDS = 0.04
 
     def __init__(self, filename):
         self.filename = filename
@@ -19,6 +18,7 @@ class PianoMidiFile(object):
         self.trackCount = 0
         self.division = 480
         self.events = []
+        self.noteCount = 0
         self.duration = 0.0
         self.__parse()
 
@@ -126,11 +126,15 @@ class PianoMidiFile(object):
                 values.append(self.__byteValue(data[offset]))
                 offset += 1
 
-            # Channel 10 is normally percussion.  A piano should not translate
-            # drum hits into random pitched notes.
-            if eventType == 0x90 and values[1] > 0 and channel != 9:
+            if channel == 9:
+                continue
+            if eventType == 0x90 and values[1] > 0:
+                parsed.append((tick, 2, trackIndex, sequence,
+                               'on', values[0], values[1]))
+                sequence += 1
+            elif eventType == 0x80 or (eventType == 0x90 and values[1] == 0):
                 parsed.append((tick, 1, trackIndex, sequence,
-                               'note', values[0], values[1]))
+                               'off', values[0], 0))
                 sequence += 1
 
         return parsed
@@ -178,7 +182,10 @@ class PianoMidiFile(object):
         tempo = self.DEFAULT_TEMPO
         lastTick = 0
         currentSeconds = 0.0
-        noteEvents = []
+        timedEvents = []
+        activeStarts = {}
+        eventSequence = 0
+        noteCount = 0
 
         for tick, priority, trackIndex, sequence, kind, valueA, valueB in rawEvents:
             deltaTicks = tick - lastTick
@@ -189,23 +196,42 @@ class PianoMidiFile(object):
 
             if kind == 'tempo':
                 tempo = valueA
-            elif kind == 'note':
-                noteEvents.append((currentSeconds, valueA, valueB))
+            elif kind == 'on':
+                activeStarts.setdefault(valueA, []).append(currentSeconds)
+                timedEvents.append((currentSeconds, 1, eventSequence,
+                                    kind, valueA, valueB))
+                eventSequence += 1
+                noteCount += 1
+            else:
+                starts = activeStarts.get(valueA, [])
+                if starts:
+                    startTime = starts.pop(0)
+                    eventTime = max(currentSeconds,
+                                    startTime + self.MIN_NOTE_SECONDS)
+                else:
+                    eventTime = currentSeconds
+                timedEvents.append((eventTime, 0, eventSequence,
+                                    kind, valueA, valueB))
+                eventSequence += 1
 
-        self.events = noteEvents
-        if noteEvents:
-            self.duration = noteEvents[-1][0]
+        timedEvents.sort(key=lambda item: (item[0], item[1], item[2]))
+        self.events = [(time, kind, note, velocity)
+                       for time, priority, sequence, kind, note, velocity
+                       in timedEvents]
+        self.noteCount = noteCount
+        if self.events:
+            self.duration = self.events[-1][0]
 
 
 class PianoMidiPlayer(object):
-    # Full five-C range used by the GUI and MIDI playback.
-    MIN_NOTE = 36  # C2
-    MAX_NOTE = 84  # C6
+    MIN_NOTE = 21
+    MAX_NOTE = 108
 
     def __init__(self, noteCallback, statusCallback=None):
         self.noteCallback = noteCallback
         self.statusCallback = statusCallback
         self.events = []
+        self.noteCount = 0
         self.duration = 0.0
         self.filename = None
         self.index = 0
@@ -248,13 +274,14 @@ class PianoMidiPlayer(object):
         midi = PianoMidiFile(filename)
         self.filename = filename
         self.events = midi.events
+        self.noteCount = midi.noteCount
         self.duration = midi.duration
         self.index = 0
         self.playhead = 0.0
         self.__status('Loaded %s (%d piano notes, %s)' % (
-            os.path.basename(filename), len(self.events),
+            os.path.basename(filename), self.noteCount,
             self.formatTime(self.duration)))
-        return len(self.events)
+        return self.noteCount
 
     def play(self):
         if not self.events:
@@ -302,10 +329,8 @@ class PianoMidiPlayer(object):
 
     def __mapNote(self, note):
         note += self.transpose
-        while note < self.MIN_NOTE:
-            note += 12
-        while note > self.MAX_NOTE:
-            note -= 12
+        if note < self.MIN_NOTE or note > self.MAX_NOTE:
+            return None
         return note
 
     def __playTask(self, task):
@@ -319,8 +344,13 @@ class PianoMidiPlayer(object):
 
         eventCount = len(self.events)
         while self.index < eventCount and self.events[self.index][0] <= self.playhead:
-            unusedTime, note, velocity = self.events[self.index]
-            self.noteCallback(self.__mapNote(note), velocity, True)
+            unusedTime, kind, note, velocity = self.events[self.index]
+            mappedNote = self.__mapNote(note)
+            if mappedNote is not None:
+                if kind == 'on':
+                    self.noteCallback(mappedNote, velocity, True)
+                else:
+                    self.noteCallback(mappedNote, 0, True)
             self.index += 1
 
         if self.index >= eventCount:

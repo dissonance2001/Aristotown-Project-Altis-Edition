@@ -10,14 +10,15 @@ from toontown.toonbase import ToontownGlobals
 class PianoSoundBank(object):
     SOURCE_MIN_NOTE = 41
     SOURCE_MAX_NOTE = 64
-    MIN_NOTE = 36
-    MAX_NOTE = 84
+    MIN_NOTE = 21
+    MAX_NOTE = 108
     VOICES_PER_NOTE = 3
     def __init__(self, audioDirectory):
         self.audioDirectory = audioDirectory
         self.voices = {}
         self.voiceIndexes = {}
         self.playRates = {}
+        self.activeVoices = {}
         self.masterVolume = 1.0
         self.__load()
     def __sampleForNote(self, note):
@@ -49,6 +50,7 @@ class PianoSoundBank(object):
             self.voices[note] = noteVoices
             self.voiceIndexes[note] = 0
             self.playRates[note] = playRate
+            self.activeVoices[note] = []
     def setMasterVolume(self, volume):
         try:
             volume = float(volume)
@@ -62,6 +64,13 @@ class PianoSoundBank(object):
         index = self.voiceIndexes[note] % len(voices)
         self.voiceIndexes[note] = index + 1
         sound = voices[index]
+        active = self.activeVoices.get(note, [])
+        if sound in active:
+            try:
+                sound.stop()
+            except:
+                pass
+            active.remove(sound)
         try:
             velocity = max(1, min(127, int(velocity)))
         except (TypeError, ValueError):
@@ -76,22 +85,38 @@ class PianoSoundBank(object):
             sound.play()
         except:
             base.playSfx(sound, volume=volume)
+        active.append(sound)
+        self.activeVoices[note] = active
+    def stop(self, note):
+        active = self.activeVoices.get(note, [])
+        if not active:
+            return False
+        sound = active.pop(0)
+        try:
+            sound.stop()
+        except:
+            pass
+        return True
+    def isPlaying(self, note):
+        return bool(self.activeVoices.get(note, []))
     def stopAll(self):
-        for voices in self.voices.values():
+        for note, voices in self.voices.items():
             for sound in voices:
                 try:
                     sound.stop()
                 except:
                     pass
+            self.activeVoices[note] = []
     def destroy(self):
         self.stopAll()
         self.voices = {}
         self.voiceIndexes = {}
         self.playRates = {}
+        self.activeVoices = {}
 class PianoGui(DirectFrame):
-    MIN_NOTE = 36
-    MAX_NOTE = 84
-    WINDOW_STARTS = (36, 48, 60)
+    MIN_NOTE = 21
+    MAX_NOTE = 108
+    WINDOW_STARTS = (21, 33, 45, 57, 69, 81, 84)
     WINDOW_SIZE = 25
     NOTE_NAMES = ('C', 'C#', 'D', 'D#', 'E', 'F',
                   'F#', 'G', 'G#', 'A', 'A#', 'B')
@@ -134,6 +159,8 @@ class PianoGui(DirectFrame):
         self.heldKeys = {}
         self.useRawKeyboard = self.__rawKeyboardAvailable()
         self.keyboardLayout = self.__detectKeyboardLayout()
+        self.windowIndex = 2
+        self.windowStartNote = self.WINDOW_STARTS[self.windowIndex]
         self.slotKeyLabels, self.keyEventBindings = self.__makeKeyboardLayout()
         self.keyboardEventNames = []
         self.orangeButtonGeom = (sp_gui.find('**/OrangeButton_N'),
@@ -147,8 +174,6 @@ class PianoGui(DirectFrame):
                                 (0.42, 0.08, 0.12, 1.0),
                                 (0.82, 0.25, 0.29, 1.0),
                                 (0.28, 0.12, 0.14, 0.78))
-        self.windowIndex = 1
-        self.windowStartNote = self.WINDOW_STARTS[self.windowIndex]
         self.songFiles = []
         self.selectedSong = None
         self.selectedSongIndex = -1
@@ -157,6 +182,7 @@ class PianoGui(DirectFrame):
         self.speedIndex = 1
         self.transposeValue = 0
         self.pendingMidiNotes = []
+        self.activeMidiNotes = {}
         self.midiFollowScheduled = False
         self.midiFollowTaskName = 'PianoGui-midiFollow-%s' % id(self)
         self.__makeHeader()
@@ -181,12 +207,10 @@ class PianoGui(DirectFrame):
         button['geom1_color'] = colors[1]
         button['geom2_color'] = colors[2]
         button['geom3_color'] = colors[3]
-        button['pressEffect'] = 0
         button['text_align'] = TextNode.ACenter
         button['text_pos'] = (0, -0.012)
         button['text_fg'] = (1.0, 1.0, 1.0, 1.0)
         button['text_shadow'] = (0.0, 0.0, 0.0, 1.0)
-        button['text_shadowOffset'] = (0.015, 0.015)
         button['text_font'] = ToontownGlobals.getInterfaceFont()
         return button
     def __styleSlider(self, slider):
@@ -198,7 +222,6 @@ class PianoGui(DirectFrame):
             thumb['relief'] = None
             thumb['frameColor'] = (0, 0, 0, 0)
             thumb['frameSize'] = (-0.06, 0.06, -0.22, 0.22)
-            thumb['pressEffect'] = 0
         except:
             pass
         marker = DirectFrame(
@@ -238,7 +261,7 @@ class PianoGui(DirectFrame):
         self.subtitle = DirectLabel(
             parent=self,
             relief=None,
-            text='49-note range: C2-C6',
+            text='88-key range: A0-C8',
             text_scale=0.038,
             text_fg=(0.92, 0.92, 0.92, 1.0),
             pos=(0, 0, 0.665),
@@ -262,7 +285,6 @@ class PianoGui(DirectFrame):
             frameSize=(-0.17, 0.17, -0.052, 0.052),
             pos=(-1.03, 0, 0.75),
             command=self.__toggleKeyboardLayout,
-            pressEffect=0,
         )
         self.__styleButton(self.layoutButton)
         self.accept('escape', self.__requestClose)
@@ -275,7 +297,6 @@ class PianoGui(DirectFrame):
             frameSize=(-0.16, 0.16, -0.055, 0.055),
             pos=(-1.02, 0, 0.565),
             command=self.__toggleMidi,
-            pressEffect=0,
         )
         self.__styleButton(self.midiToggleButton)
         self.octaveDownButton = DirectButton(
@@ -287,7 +308,6 @@ class PianoGui(DirectFrame):
             pos=(-0.62, 0, 0.565),
             command=self.__changeWindow,
             extraArgs=[-1],
-            pressEffect=0,
         )
         self.__styleButton(self.octaveDownButton)
         self.rangeLabel = DirectLabel(
@@ -307,7 +327,6 @@ class PianoGui(DirectFrame):
             pos=(-0.09, 0, 0.565),
             command=self.__changeWindow,
             extraArgs=[1],
-            pressEffect=0,
         )
         self.__styleButton(self.octaveUpButton)
         self.volumeLabel = DirectLabel(
@@ -336,7 +355,6 @@ class PianoGui(DirectFrame):
             frameSize=(-0.11, 0.11, -0.05, 0.05),
             pos=(1.10, 0, 0.565),
             command=self.__toggleMute,
-            pressEffect=0,
         )
         self.__styleButton(self.muteButton)
     def __makeMidiControls(self):
@@ -358,7 +376,7 @@ class PianoGui(DirectFrame):
             text='<', text_scale=0.045,
             frameSize=(-0.07, 0.07, -0.048, 0.048),
             pos=(-0.84, 0, 0.145), command=self.__changeSong,
-            extraArgs=[-1], pressEffect=0)
+            extraArgs=[-1])
         self.__styleButton(self.previousSongButton)
         self.songNameLabel = DirectLabel(
             parent=self.midiPanel, relief=DGG.SUNKEN,
@@ -373,7 +391,7 @@ class PianoGui(DirectFrame):
             text='>', text_scale=0.045,
             frameSize=(-0.07, 0.07, -0.048, 0.048),
             pos=(0.61, 0, 0.145), command=self.__changeSong,
-            extraArgs=[1], pressEffect=0)
+            extraArgs=[1])
         self.__styleButton(self.nextSongButton)
         self.songCounterLabel = DirectLabel(
             parent=self.midiPanel, relief=None, text='0 / 0',
@@ -383,26 +401,25 @@ class PianoGui(DirectFrame):
             parent=self.midiPanel, relief=DGG.RAISED,
             text='Refresh', text_scale=0.035,
             frameSize=(-0.105, 0.105, -0.048, 0.048),
-            pos=(1.04, 0, 0.145), command=self.refreshMidiFiles,
-            pressEffect=0)
+            pos=(1.04, 0, 0.145), command=self.refreshMidiFiles)
         self.__styleButton(self.refreshButton)
         self.playButton = DirectButton(
             parent=self.midiPanel, relief=DGG.RAISED,
             text='Play', text_scale=0.041,
             frameSize=(-0.115, 0.115, -0.05, 0.05),
-            pos=(-0.91, 0, 0.015), command=self.__playMidi, pressEffect=0)
+            pos=(-0.91, 0, 0.015), command=self.__playMidi)
         self.__styleButton(self.playButton)
         self.pauseButton = DirectButton(
             parent=self.midiPanel, relief=DGG.RAISED,
             text='Pause', text_scale=0.041,
             frameSize=(-0.115, 0.115, -0.05, 0.05),
-            pos=(-0.63, 0, 0.015), command=self.midiPlayer.pause, pressEffect=0)
+            pos=(-0.63, 0, 0.015), command=self.__pauseMidi)
         self.__styleButton(self.pauseButton)
         self.stopButton = DirectButton(
             parent=self.midiPanel, relief=DGG.RAISED,
             text='Stop', text_scale=0.041,
             frameSize=(-0.115, 0.115, -0.05, 0.05),
-            pos=(-0.35, 0, 0.015), command=self.__stopMidi, pressEffect=0)
+            pos=(-0.35, 0, 0.015), command=self.__stopMidi)
         self.__styleButton(self.stopButton)
         self.speedLabel = DirectLabel(
             parent=self.midiPanel, relief=None, text='Speed:',
@@ -412,8 +429,7 @@ class PianoGui(DirectFrame):
             parent=self.midiPanel, relief=DGG.RAISED,
             text='1.00x', text_scale=0.037,
             frameSize=(-0.13, 0.13, -0.045, 0.045),
-            pos=(0.22, 0, 0.015), command=self.__cycleSpeed,
-            pressEffect=0)
+            pos=(0.22, 0, 0.015), command=self.__cycleSpeed)
         self.__styleButton(self.speedButton)
         self.transposeLabel = DirectLabel(
             parent=self.midiPanel, relief=None,
@@ -424,14 +440,14 @@ class PianoGui(DirectFrame):
             text='-', text_scale=0.045,
             frameSize=(-0.055, 0.055, -0.045, 0.045),
             pos=(0.91, 0, 0.015), command=self.__changeTranspose,
-            extraArgs=[-1], pressEffect=0)
+            extraArgs=[-1])
         self.__styleButton(self.transposeDownButton)
         self.transposeUpButton = DirectButton(
             parent=self.midiPanel, relief=DGG.RAISED,
             text='+', text_scale=0.045,
             frameSize=(-0.055, 0.055, -0.045, 0.045),
             pos=(1.08, 0, 0.015), command=self.__changeTranspose,
-            extraArgs=[1], pressEffect=0)
+            extraArgs=[1])
         self.__styleButton(self.transposeUpButton)
         self.statusLabel = DirectLabel(
             parent=self.midiPanel,
@@ -449,11 +465,29 @@ class PianoGui(DirectFrame):
             frameSize=(-1.2, 1.2, -0.38, 0.38),
             pos=(0, 0, -0.22),
         )
+        self.keyboardHelp = DirectLabel(
+            parent=self,
+            relief=None,
+            text='%s layout.  Left / Right changes range.' % self.keyboardLayout.upper(),
+            text_scale=0.030,
+            text_fg=(0.85, 0.85, 0.85, 1.0),
+            pos=(0, 0, -0.79),
+        )
+        self.__rebuildKeyboard()
+    def __rebuildKeyboard(self):
+        for button in self.keyButtons:
+            try:
+                button.destroy()
+            except:
+                pass
+        self.keyButtons = []
+        self.keyBaseColors = []
         startX = -1.04
         spacing = 0.148
         whiteIndex = 0
         for slot in xrange(self.WINDOW_SIZE):
-            pitchClass = slot % 12
+            note = self.windowStartNote + slot
+            pitchClass = note % 12
             keyName = self.slotKeyLabels.get(slot, '')
             if pitchClass in self.WHITE_CLASSES:
                 x = startX + whiteIndex * spacing
@@ -462,7 +496,6 @@ class PianoGui(DirectFrame):
                 button = DirectButton(
                     parent=self.keyboardHolder,
                     relief=DGG.FLAT,
-                    pressEffect=0,
                     frameSize=(-0.069, 0.069, -0.33, 0.33),
                     frameColor=color,
                     borderWidth=(0.007, 0.007),
@@ -480,7 +513,6 @@ class PianoGui(DirectFrame):
                 button = DirectButton(
                     parent=self.keyboardHolder,
                     relief=DGG.FLAT,
-                    pressEffect=0,
                     frameSize=(-0.044, 0.044, -0.20, 0.20),
                     frameColor=color,
                     borderWidth=(0.005, 0.005),
@@ -495,14 +527,6 @@ class PianoGui(DirectFrame):
                 button.setBin('sorted-gui-popup', 702)
             self.keyButtons.append(button)
             self.keyBaseColors.append(color)
-        self.keyboardHelp = DirectLabel(
-            parent=self,
-            relief=None,
-            text='%s layout.  Left / Right changes octave.' % self.keyboardLayout.upper(),
-            text_scale=0.030,
-            text_fg=(0.85, 0.85, 0.85, 1.0),
-            pos=(0, 0, -0.79),
-        )
     def __rawKeyboardAvailable(self):
         try:
             if base.win is None:
@@ -557,9 +581,9 @@ class PianoGui(DirectFrame):
         return 'azerty'
     def __makeKeyboardLayout(self):
         whiteSlots = [slot for slot in xrange(self.WINDOW_SIZE)
-                      if slot % 12 in self.WHITE_CLASSES]
+                      if (self.windowStartNote + slot) % 12 in self.WHITE_CLASSES]
         blackSlots = [slot for slot in xrange(self.WINDOW_SIZE)
-                      if slot % 12 not in self.WHITE_CLASSES]
+                      if (self.windowStartNote + slot) % 12 not in self.WHITE_CLASSES]
         mainWhiteSlots = whiteSlots[2:-2]
         extraWhiteSlots = whiteSlots[:2] + whiteSlots[-2:]
         if self.keyboardLayout == 'azerty':
@@ -600,6 +624,8 @@ class PianoGui(DirectFrame):
         self.keyboardEventNames = []
         self.heldKeys = {}
     def __bindKeyboard(self):
+        self.ignore('arrow_left')
+        self.ignore('arrow_right')
         self.accept('arrow_left', self.__changeWindow, [-1])
         self.accept('arrow_right', self.__changeWindow, [1])
         self.__unbindKeyboardNotes()
@@ -620,7 +646,7 @@ class PianoGui(DirectFrame):
         self.__bindKeyboard()
         self.__refreshKeyboardLabels()
         self.layoutButton['text'] = self.keyboardLayout.upper()
-        self.keyboardHelp['text'] = '%s layout.  Left / Right changes octave.' % self.keyboardLayout.upper()
+        self.keyboardHelp['text'] = '%s layout.  Left / Right changes range.' % self.keyboardLayout.upper()
     def __noteName(self, note):
         octave = note // 12 - 1
         return '%s%d' % (self.NOTE_NAMES[note % 12], octave)
@@ -655,6 +681,9 @@ class PianoGui(DirectFrame):
             self.heldKeys = {}
         self.windowIndex = newIndex
         self.windowStartNote = self.WINDOW_STARTS[newIndex]
+        self.slotKeyLabels, self.keyEventBindings = self.__makeKeyboardLayout()
+        self.__rebuildKeyboard()
+        self.__bindKeyboard()
         self.__refreshKeyboardLabels()
         return True
     def __changeWindow(self, direction):
@@ -690,7 +719,8 @@ class PianoGui(DirectFrame):
         targetNote = max(notes)
         self.__setWindowIndex(self.__bestWindowForNote(targetNote), False)
         for note in notes:
-            self.__flashKey(note)
+            if self.activeMidiNotes.get(note, 0) > 0:
+                self.__setKeyHighlighted(note, True)
         return Task.done
     def __mouseNote(self, slot):
         self.playNote(self.__currentNote(slot), 112, False)
@@ -710,8 +740,19 @@ class PianoGui(DirectFrame):
             return
         if note < self.MIN_NOTE or note > self.MAX_NOTE:
             return
+        if fromMidi and int(velocity) <= 0:
+            self.soundBank.stop(note)
+            count = self.activeMidiNotes.get(note, 0)
+            if count <= 1:
+                self.activeMidiNotes.pop(note, None)
+                if note not in self.heldKeys.values():
+                    self.__setKeyHighlighted(note, False)
+            else:
+                self.activeMidiNotes[note] = count - 1
+            return
         self.soundBank.play(note, velocity)
         if fromMidi:
+            self.activeMidiNotes[note] = self.activeMidiNotes.get(note, 0) + 1
             self.__queueMidiWindowFollow(note)
         else:
             self.__flashKey(note)
@@ -830,9 +871,19 @@ class PianoGui(DirectFrame):
                                  (self.selectedSong, error))
                 return
         self.midiPlayer.play()
+    def __clearMidiNotes(self):
+        self.activeMidiNotes = {}
+        self.pendingMidiNotes = []
+        self.soundBank.stopAll()
+        for slot, color in enumerate(self.keyBaseColors):
+            if slot < len(self.keyButtons):
+                self.keyButtons[slot]['frameColor'] = color
+    def __pauseMidi(self):
+        self.midiPlayer.pause()
+        self.__clearMidiNotes()
     def __stopMidi(self):
         self.midiPlayer.stop()
-        self.soundBank.stopAll()
+        self.__clearMidiNotes()
     def __cycleSpeed(self):
         self.speedIndex = (self.speedIndex + 1) % len(self.SPEED_VALUES)
         speed = self.SPEED_VALUES[self.speedIndex]
@@ -857,6 +908,7 @@ class PianoGui(DirectFrame):
         self.ignoreAll()
         taskMgr.remove(self.midiFollowTaskName)
         self.pendingMidiNotes = []
+        self.activeMidiNotes = {}
         self.midiFollowScheduled = False
         for note in xrange(self.MIN_NOTE, self.MAX_NOTE + 1):
             taskMgr.remove('PianoGui-keyFlash-%s-%s' % (id(self), note))

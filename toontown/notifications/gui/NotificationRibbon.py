@@ -53,6 +53,7 @@ class NotificationRibbon(DirectButton):
 
         self.highlighted = False
         self.moveSeq = None
+        self.loadingHidden = bool(getattr(loader, 'inBulkBlock', None))
 
         self.shadow = DirectFrame(
             parent=self,
@@ -67,6 +68,19 @@ class NotificationRibbon(DirectButton):
         self.shadow.setBin('sorted-gui-popup', 898)
         self.shadow.setDepthTest(False)
         self.shadow.setDepthWrite(False)
+
+        if self.loadingHidden:
+            DirectButton.hide(self)
+
+    def setLoadingHidden(self, hiddenState):
+        # The ribbon is independently guarded as well as being parented beneath
+        # NotificationContainer, preventing it from flashing on a loading frame.
+        self.loadingHidden = bool(hiddenState)
+        if self.loadingHidden:
+            self.endMovement()
+            DirectButton.hide(self)
+        else:
+            DirectButton.show(self)
 
     def destroy(self):
         self.endMovement()

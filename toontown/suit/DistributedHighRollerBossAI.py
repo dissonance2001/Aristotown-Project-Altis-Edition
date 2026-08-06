@@ -1,15 +1,10 @@
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
-from toontown.coghq import DistributedCashbotBossCraneAI
-from toontown.coghq import DistributedCashbotBossSafeAI
-from toontown.suit import DistributedCashbotBossGoonAI
 from toontown.battle import DistributedBattleMinibossAI
-from toontown.coghq import DistributedCashbotBossTreasureAI
 from toontown.suit import DistributedMinibossAI
 from toontown.building import SuitPlannerInteriorAI
 from toontown.battle import BattleExperienceAI
-from toontown.chat import ResistanceChat
 from direct.fsm import FSM
 from toontown.suit import DistributedBossCogAI
 from otp.avatar import DistributedAvatarAI
@@ -26,9 +21,9 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
     def __init__(self, air):
         DistributedMinibossAI.DistributedMinibossAI.__init__(self, air, 'm')
         FSM.FSM.__init__(self, 'DistributedHighRollerBossAI')
-        self.cranes = None
-        self.safes = None
-        self.goons = None
+        self.cranes = []
+        self.safes = []
+        self.goons = []
         self.treasures = {}
         self.grabbingTreasures = {}
         self.recycledTreasures = []
@@ -36,7 +31,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.goonMinStrength = 7
         self.goonMaxStrength = 30
         self.healAmount = 0
-        self.rewardId = self.__chooseResistanceRewardId()
+        self.rewardId = 0
         self.rewardedToons = []
         self.scene = NodePath('scene')
         self.reparentTo(self.scene)
@@ -82,43 +77,8 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         return ToontownGlobals.MinniesMelodyland
 
     def __chooseResistanceRewardId(self):
-        """Return a valid ResistanceChat ID even on Altis builds where
-        ResistanceChat.getRandomId() is intentionally left empty.
-        """
-        promotionMenu = getattr(ResistanceChat, 'RESISTANCE_PROMOTION', None)
-
-        try:
-            rewardId = ResistanceChat.getRandomId()
-            if rewardId is not None and ResistanceChat.validateId(rewardId):
-                menuIndex, itemIndex = ResistanceChat.decodeId(rewardId)
-                if menuIndex != promotionMenu:
-                    return rewardId
-        except Exception:
-            pass
-
-        try:
-            allowedMenus = list(getattr(ResistanceChat,
-                                        'allowedResistanceMessages', []))
-            allowedMenus = [menuIndex for menuIndex in allowedMenus
-                            if menuIndex != promotionMenu]
-            if not allowedMenus:
-                allowedMenus = [ResistanceChat.RESISTANCE_TOONUP]
-            menuIndex = random.choice(allowedMenus)
-            items = ResistanceChat.getItems(menuIndex)
-            if not items:
-                raise ValueError('Resistance reward menu has no items')
-            itemIndex = random.randrange(len(items))
-            rewardId = ResistanceChat.encodeId(menuIndex, itemIndex)
-            if ResistanceChat.validateId(rewardId):
-                return rewardId
-        except Exception as error:
-            self.notify.warning(
-                'Unable to choose configured resistance reward: %s' % error)
-
-        # ID 0 is the first Toon-Up unite and is valid in the stock Altis
-        # ResistanceChat table.  This final fallback must never be None,
-        # because resistance messages are packed as integers in the DC file.
-        return ResistanceChat.encodeId(ResistanceChat.RESISTANCE_TOONUP, 0)
+        # Retained only for DC/API compatibility.  High Roller grants no Unite.
+        return 0
 
     def formatReward(self):
         return str(self.rewardId)
@@ -204,51 +164,32 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         DistributedMinibossAI.DistributedMinibossAI.removeToon(self, avId)
 
     def __makeBattleThreeObjects(self):
-        if self.cranes == None:
-            self.cranes = []
-            for index in xrange(len(ToontownGlobals.HighRollerBossCranePosHprs)):
-                crane = DistributedCashbotBossCraneAI.DistributedCashbotBossCraneAI(self.air, self, index)
-                crane.generateWithRequired(self.zoneId)
-                self.cranes.append(crane)
-
-        if self.safes == None:
-            self.safes = []
-            for index in xrange(len(ToontownGlobals.HighRollerBossSafePosHprs)):
-                safe = DistributedCashbotBossSafeAI.DistributedCashbotBossSafeAI(self.air, self, index)
-                safe.generateWithRequired(self.zoneId)
-                self.safes.append(safe)
-
-        if self.goons == None:
-            self.goons = []
+        # The standalone High Roller instance has no CFO crane-round objects.
+        self.cranes = []
+        self.safes = []
+        self.goons = []
 
     def __resetBattleThreeObjects(self):
-        if self.cranes != None:
-            for crane in self.cranes:
-                crane.request('Free')
-
-        if self.safes != None:
-            for safe in self.safes:
-                safe.request('Initial')
+        self.cranes = []
+        self.safes = []
+        self.goons = []
 
     def __deleteBattleThreeObjects(self):
-        if self.cranes != None:
-            for crane in self.cranes:
-                crane.request('Off')
-                crane.requestDelete()
-
-            self.cranes = None
-        if self.safes != None:
-            for safe in self.safes:
-                safe.request('Off')
-                safe.requestDelete()
-
-            self.safes = None
-        if self.goons != None:
-            for goon in self.goons:
-                goon.request('Off')
-                goon.requestDelete()
-
-            self.goons = None
+        # Delete any stale objects received from a mixed server, then keep the
+        # collections empty for the lifetime of this miniboss.
+        for objects in (self.cranes, self.safes, self.goons):
+            for obj in objects or []:
+                try:
+                    obj.request('Off')
+                except:
+                    pass
+                try:
+                    obj.requestDelete()
+                except:
+                    pass
+        self.cranes = []
+        self.safes = []
+        self.goons = []
 
     def doNextAttack(self, task):
         if self.attackCode == ToontownGlobals.BossCogDizzyNow:
@@ -297,39 +238,8 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             self.toonsToAttack.append(avId)
 
     def makeTreasure(self, goon):
-        if self.state != 'BattleThree':
-            return
-        pos = goon.getPos(self)
-        v = Vec3(pos[0], pos[1], 0.0)
-        if not v.normalize():
-            v = Vec3(1, 0, 0)
-        v = v * 27
-        angle = random.uniform(0.0, 2.0 * math.pi)
-        radius = 10
-        dx = radius * math.cos(angle)
-        dy = radius * math.sin(angle)
-        fpos = self.scene.getRelativePoint(self, Point3(v[0] + dx, v[1] + dy, 0))
-        if goon.strength <= 10:
-            style = random.choice([ToontownGlobals.ToontownCentral, ToontownGlobals.DonaldsDock, ToontownGlobals.DaisyGardens, ToontownGlobals.MinniesMelodyland])
-            healAmount = 4
-        elif goon.strength <= 15:
-            style = random.choice([ToontownGlobals.DonaldsDock, ToontownGlobals.DaisyGardens, ToontownGlobals.MinniesMelodyland])
-            healAmount = 10
-        else:
-            style = random.choice([ToontownGlobals.TheBrrrgh, ToontownGlobals.DonaldsDreamland])
-            healAmount = 12
-        if self.recycledTreasures:
-            treasure = self.recycledTreasures.pop(0)
-            treasure.d_setGrab(0)
-            treasure.b_setGoonId(goon.doId)
-            treasure.b_setStyle(style)
-            treasure.b_setPosition(pos[0], pos[1], 0)
-            treasure.b_setFinalPosition(fpos[0], fpos[1], 0)
-        else:
-            treasure = DistributedCashbotBossTreasureAI.DistributedCashbotBossTreasureAI(self.air, self, goon, style, fpos[0], fpos[1], 0)  
-            treasure.generateWithRequired(self.zoneId)
-        treasure.healAmount = healAmount
-        self.treasures[treasure.doId] = treasure
+        # No CFO goons or crane-round treasures exist in this instance.
+        return
 
     def grabAttempt(self, avId, treasureId):
         av = self.air.doId2do.get(avId)
@@ -380,22 +290,9 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         else:
             return self.maxGoons + 8
 
-    def makeGoon(self, side = None):
-        if side == None:
-            side = random.choice(['EmergeA', 'EmergeB'])
-        goon = DistributedCashbotBossGoonAI.DistributedCashbotBossGoonAI(self.air, self)
-        if goon != None:
-            if len(self.goons) >= self.getMaxGoons():
-                return
-            goon.generateWithRequired(self.zoneId)
-            self.goons.append(goon)
-        if self.getBattleThreeTime() > 1.0:
-            goon.STUN_TIME = 4
-            goon.b_setupGoon(velocity=8, hFov=90, attackRadius=20, strength=self.goonMaxStrength, scale=2.0)
-        else:
-            goon.STUN_TIME = self.progressValue(30, 8)
-            goon.b_setupGoon(velocity=self.progressRandomValue(3, 7), hFov=self.progressRandomValue(70, 80), attackRadius=self.progressRandomValue(6, 15), strength=int(self.progressRandomValue(self.goonMinStrength, self.goonMaxStrength)), scale=self.progressRandomValue(self.goonMinScale, self.goonMaxScale))
-        goon.request(side)
+    def makeGoon(self, side=None):
+        # No distributed CFO goons may be generated for High Roller.
+        return None
 
     def __chooseOldGoon(self):
         for goon in self.goons:
@@ -508,27 +405,11 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.sendUpdate('setRewardId', [rewardId])
 
     def applyReward(self):
+        # No ResistanceChat effect, promotion unite, or CFO staff event belongs
+        # to the High Roller miniboss.  Acknowledge once for old clients only.
         avId = self.air.getAvatarIdFromSender()
         if avId in self.involvedToons and avId not in self.rewardedToons:
             self.rewardedToons.append(avId)
-            toon = self.air.doId2do.get(avId)
-            if toon:
-                toon.doResistanceEffect(self.rewardId)
-
-            if simbase.config.GetBool('cfo-staff-event', False):
-
-                withStaff = False
-                for avId in self.involvedToons:
-                    av = self.air.doId2do.get(avId)
-                    if av:
-                        if av.adminAccess > 100:
-                            withStaff = True
-
-                if withStaff:
-                    participants = simbase.backups.load('cfo-staff-event', ('participants',), default={'doIds': []})
-                    if avId not in participants['doIds']:
-                        participants['doIds'].append(toon.doId)
-                    simbase.backups.save('cfo-staff-event', ('participants',), participants)
 
     def enterOff(self):
         DistributedMinibossAI.DistributedMinibossAI.enterOff(self)
@@ -541,14 +422,11 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
 
     def enterIntroduction(self):
         DistributedMinibossAI.DistributedMinibossAI.enterIntroduction(self)
-        self.__makeBattleThreeObjects()
-        self.__resetBattleThreeObjects()
         self.calcAndSetBattleDifficulty()
 
     def exitIntroduction(self):
         DistributedMinibossAI.DistributedMinibossAI.exitIntroduction(self)
-        self.__deleteBattleThreeObjects()
-        
+
     def makeBattleTwoBattles(self):
         # This instance is battle-only.  Finishing the second Cog battle goes
         # straight to Reward instead of spawning the legacy CFO crane round.
@@ -559,8 +437,6 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 350, self.__donePrepareBattleTwo)
         self.divideToons()
         self.makeBattleTwoBattles()
-        self.__makeBattleThreeObjects()
-        self.__resetBattleThreeObjects()
         self.calcAndSetBattleDifficulty()
         
     def __donePrepareBattleTwo(self, avIds):
@@ -587,38 +463,34 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.resetBattles()
 
     def enterPrepareBattleThree(self):
+        # Redirect any stale/forced crane-round request to the normal reward.
         self.resetBattles()
-        self.__makeBattleThreeObjects()
-        self.__resetBattleThreeObjects()
-        self.calcAndSetBattleDifficulty()
-        self.barrier = self.beginBarrier('PrepareBattleThree', self.involvedToons, 55, self.__donePrepareBattleThree)
+        taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
+        taskMgr.doMethodLater(
+            0.0, self.__redirectRemovedBattleThree,
+            self.uniqueName('removedHighRollerCraneRound'))
 
     def __donePrepareBattleThree(self, avIds):
         self.b_setState('BattleThree')
 
     def exitPrepareBattleThree(self):
-        if self.newState != 'BattleThree':
-            self.__deleteBattleThreeObjects()
-        self.ignoreBarrier(self.barrier)
+        taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
 
     def enterBattleThree(self):
-        self.setPosHpr(*ToontownGlobals.HighRollerBossBattleThreePosHpr)
-        self.__makeBattleThreeObjects()
-        self.__resetBattleThreeObjects()
-        self.reportToonHealth()
-        self.toonsToAttack = self.involvedToons[:]
-        random.shuffle(self.toonsToAttack)
-        self.b_setBossDamage(0)
-        self.battleThreeStart = globalClock.getFrameTime()
+        # This state is retained in the DC/FSM contract only.  It creates no
+        # cranes, safes, helmets, goons or attacks and immediately redirects.
         self.resetBattles()
-        self.waitForNextAttack(15)
-        self.waitForNextHelmet()
-        self.makeGoon(side='EmergeA')
-        self.makeGoon(side='EmergeB')
-        taskName = self.uniqueName('NextGoon')
-        taskMgr.remove(taskName)
-        taskMgr.doMethodLater(2, self.__doInitialGoons, taskName)
-		
+        self.__deleteBattleThreeObjects()
+        taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
+        taskMgr.doMethodLater(
+            0.0, self.__redirectRemovedBattleThree,
+            self.uniqueName('removedHighRollerCraneRound'))
+
+    def __redirectRemovedBattleThree(self, task):
+        if self.state in ('PrepareBattleThree', 'BattleThree'):
+            self.b_setState('Reward')
+        return task.done
+
     def getToonDifficulty(self):
         totalCogSuitTier = 0
         totalToons = 0
@@ -683,10 +555,8 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.waitForNextGoon(10)
 
     def exitBattleThree(self):
-        helmetName = self.uniqueName('helmet')
-        taskMgr.remove(helmetName)
-        if self.newState != 'Victory':
-            self.__deleteBattleThreeObjects()
+        taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
+        self.__deleteBattleThreeObjects()
         self.deleteAllTreasures()
         self.stopAttacks()
         self.stopGoons()
@@ -722,7 +592,6 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
                 # promotion, statistics, and quest credit, but do not award
                 # Resistance Unites or bonus unite messages.
                 toon.b_promote(self.deptIndex)
-                toon.addStat(ToontownGlobals.STATS_CFO)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
 
     def enterReward(self):
@@ -767,16 +636,14 @@ def restartHighRollerRound():
                 break
     if not boss:
         return "You aren't in the High Roller fight!"
-    boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
-    boss.b_setState('BattleThree')
-    return 'Restarting the crane round...'
+    boss.b_setState('Reward')
+    return 'The High Roller has no crane round; moving to rewards.'
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def skipHighRoller():
     """
-    Skips to the final round of the High Roller fight.
+    Skips to the reward state of the High Roller fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
@@ -787,11 +654,8 @@ def skipHighRoller():
                 break
     if not boss:
         return "You aren't in the High Roller fight!"
-    if boss.state in ('PrepareBattleThree', 'BattleThree'):
-        return "You can't skip this round."
-    boss.exitIntroduction()
-    boss.b_setState('PrepareBattleThree')
-    return 'Skipping the first round...'
+    boss.b_setState('Reward')
+    return 'Skipping to High Roller rewards...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def highRoller2():

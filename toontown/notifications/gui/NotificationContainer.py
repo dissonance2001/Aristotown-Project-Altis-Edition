@@ -41,11 +41,14 @@ class NotificationContainer(DirectFrame, FSM):
             parent = base.a2dTopRight
         FSM.__init__(self, 'notification-container')
         self.manager = manager
+        self.gui_parent = parent
 
-        # This is the node Clash's GUIPositionManager leaves the container on.
-        # Do not put the panel under Clash's temporary +0.175 scale node.
+        # Build the complete alert panel beneath ``hidden``.  Its constructor
+        # loads GUI models and may allow an intermediate loading frame to draw;
+        # parenting it to a2dTopRight here would expose both the panel and ribbon
+        # before NotificationManager gets its first chance to call hide().
         self.managed_node = DirectGuiWidget(
-            parent,
+            hidden,
             pos=self.managed_anchor_pos,
             relief=None,
         )
@@ -104,10 +107,28 @@ class NotificationContainer(DirectFrame, FSM):
         self.updateWindowVisibility()
 
     def show(self):
+        # Refuse to expose the alert panel or ribbon while a loader bulk block
+        # is active, even if another caller requests visibility too early.
+        if bool(getattr(loader, 'inBulkBlock', None)):
+            if self.ribbon:
+                self.ribbon.setLoadingHidden(True)
+            DirectFrame.hide(self)
+            if self.managed_node is not None:
+                self.managed_node.reparentTo(hidden)
+            return
+
+        if self.managed_node is not None:
+            self.managed_node.reparentTo(self.gui_parent)
+        if self.ribbon:
+            self.ribbon.setLoadingHidden(False)
         DirectFrame.show(self)
 
     def hide(self):
         DirectFrame.hide(self)
+        if self.ribbon:
+            self.ribbon.setLoadingHidden(True)
+        if self.managed_node is not None:
+            self.managed_node.reparentTo(hidden)
         if self.state != self.state_close:
             self.request(self.state_close)
         if self.moveSeq:
