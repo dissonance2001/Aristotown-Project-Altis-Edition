@@ -3169,7 +3169,7 @@ def doForecastCollapse(attack):
     origPos, origHpr = battle.getActorPosHpr(suit)
     origPos2 = suit.getPos(battle)
 
-    walkDur = suit.getDuration('walk')
+    walkDur = 1.5
 
     walkOutPos = Point3(origPos)
     walkOutPos.setY(walkOutPos.getY() - 10.5)
@@ -3187,7 +3187,7 @@ def doForecastCollapse(attack):
     suit.setHpr(battle, origHpr)
 
     walkOutTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpPosInterval(
             suit,
             walkDur,
@@ -3205,7 +3205,7 @@ def doForecastCollapse(attack):
     )
 
     walkBackTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpPosInterval(
             suit,
             walkDur,

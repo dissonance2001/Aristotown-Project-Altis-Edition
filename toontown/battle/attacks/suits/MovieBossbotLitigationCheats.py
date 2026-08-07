@@ -1452,14 +1452,14 @@ def doGhostMentality(attack):
         moveTrack = Sequence(
             Parallel(LerpHprInterval(
                 suit,
-                suit.getDuration('walk'),
+                1.5,
                 targetHpr,
                 startHpr=origHpr,
                 other=battle
             ),
                 LerpPosInterval(
                     suit,
-                    suit.getDuration('walk'),
+                    1.5,
                     walkOutPos,
                     startPos=origPos,
                     other=battle
@@ -1467,14 +1467,14 @@ def doGhostMentality(attack):
             Wait(suit.getDuration('deadwood')),
             Parallel(LerpHprInterval(
                 suit,
-                suit.getDuration('walk'),
+               1.5,
                 origHpr,
                 startHpr=targetHpr,
                 other=battle
             ),
                 LerpPosInterval(
                     suit,
-                    suit.getDuration('walk'),
+                    1.5,
                     origPos,
                     startPos=walkOutPos,
                     other=battle
@@ -1484,9 +1484,9 @@ def doGhostMentality(attack):
         )
 
         managerTrack = Sequence(
-            ActorInterval(manager, 'walk'),
+            ActorInterval(manager, 'walk', duration=1.5),
             Parallel(getSuitAnimTrack(attack), Wait(manager.getDuration('deadwood'))),
-            ActorInterval(manager, 'walk'),
+            ActorInterval(manager, 'walk', duration=1.5),
             Func(manager.setNeutralAnimation)
         )
 
@@ -1494,12 +1494,12 @@ def doGhostMentality(attack):
         moveTracks.append(moveTrack)
 
         suitTrack = Sequence(
-            Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5),
+            Wait(manager.getDuration('deadwood') + 1.5 - 1.5),
             MovieUtil.createGhostMentalityTrack(targetSuit, battle)
         )
 
         suitTrack2 = Sequence(
-            Wait(manager.getDuration('deadwood') + manager.getDuration('walk') - 1.5),
+            Wait(manager.getDuration('deadwood') + 1.5 - 1.5),
             Func(targetSuit.showHpString, "+50% Damage!"), Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier'),
         )
 
@@ -1514,7 +1514,7 @@ def doGhostMentality(attack):
                 suitTracks.append(suitTrack2)
 
     soundTrack = Sequence(
-        Wait((manager.getDuration('walk'))),
+        Wait(1.5),
         SoundInterval(globalBattleSoundCache.getSound('SA_deadwood.ogg'), node=manager)
     )
 

@@ -854,7 +854,7 @@ def doPromotion(attack, ind):
     origPos, origHpr = battle.getActorPosHpr(suit)
     origPos2 = suit.getPos(battle)
 
-    walkDur = suit.getDuration('walk')
+    walkDur = 1.5
     attackDur = suit.getDuration('magic3')
 
     walkOutPos = Point3(origPos)
@@ -874,7 +874,7 @@ def doPromotion(attack, ind):
 
 
     walkOutTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpPosInterval(
             suit,
             walkDur,
@@ -892,7 +892,7 @@ def doPromotion(attack, ind):
     )
 
     turnBackTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpHprInterval(
             suit,
             walkDur,
@@ -3504,14 +3504,14 @@ def doOvermodulated(attack, ind):
     moveTrack = Sequence(
         Parallel(LerpHprInterval(
         suit,
-        suit.getDuration('walk'),
+        1.5,
         targetHpr,
         startHpr=origHpr,
         other=battle
     ),
             LerpPosInterval(
             suit,
-            suit.getDuration('walk'),
+            1.5,
             walkOutPos,
             startPos=origPos,
             other=battle
@@ -3519,14 +3519,14 @@ def doOvermodulated(attack, ind):
         Wait(suit.getDuration('sanction')),
         Parallel(LerpHprInterval(
             suit,
-            suit.getDuration('walk'),
+            1.5,
             origHpr,
             startHpr=targetHpr,
             other=battle
         ),
             LerpPosInterval(
             suit,
-            suit.getDuration('walk'),
+            1.5,
             origPos,
             startPos=walkOutPos,
             other=battle
@@ -3536,14 +3536,14 @@ def doOvermodulated(attack, ind):
     )
 
     suitTrack = Sequence(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         Parallel(getSuitAnimTrack(attack)),
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         Func(suit.setNeutralAnimationDrop)
     )
 
     selfDamageTrack = Sequence(
-        Wait((suit.getDuration('walk')) + 0.5),
+        Wait((1.5) + 0.5),
         Parallel(
             ActorInterval(targetSuit, 'pie-large-lured'),
             Func(battle.unlureSuit, targetSuit),
@@ -3556,8 +3556,8 @@ def doOvermodulated(attack, ind):
         Func(targetSuit.setNeutralAnimationDrop)
     )
 
-    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=(suit.getDuration('walk')) + 0.5)
-    soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=(suit.getDuration('walk')), node=suit)
+    soundTrack = getSoundTrack('SA_haymaker.ogg', delay=(1.5) + 0.5)
+    soundTrack1 = getSoundTrack('SA_sanction.ogg', delay=(1.5), node=suit)
 
     return Parallel(suitTrack, moveTrack, selfDamageTrack, soundTrack, soundTrack1)
 

@@ -1008,7 +1008,7 @@ def doElectricShock(attack, ind):
     origPos, origHpr = battle.getActorPosHpr(suit)
     origPos2 = suit.getPos(battle)
 
-    walkDur = suit.getDuration('walk')
+    walkDur = 1.5
     attackDur = suit.getDuration('magic3')
 
     walkOutPos = Point3(origPos)
@@ -1027,7 +1027,7 @@ def doElectricShock(attack, ind):
     suit.setHpr(battle, origHpr)
 
     walkOutTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpPosInterval(
             suit,
             walkDur,
@@ -1045,7 +1045,7 @@ def doElectricShock(attack, ind):
     )
 
     turnBackTrack = Parallel(
-        ActorInterval(suit, 'walk'),
+        ActorInterval(suit, 'walk', duration=1.5),
         LerpHprInterval(
             suit,
             walkDur,
@@ -1104,17 +1104,17 @@ def doElectricShock(attack, ind):
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
-    smokeTrack = Sequence(Wait(suit.getDuration('walk') + 1), Func(smoke.reparentTo, targetSuit),
+    smokeTrack = Sequence(Wait(1.5 + 1), Func(smoke.reparentTo, targetSuit),
                           Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
                           Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale),
                           Func(MovieUtil.removeProp, smoke))
-    cagePropTrack = Sequence(Wait(suit.getDuration('walk') + 1), 
+    cagePropTrack = Sequence(Wait(1.5 + 1), 
         getCloudTrack(lightning, targetSuit)
     )
     cagePropTracks.append(cagePropTrack)
     targetSuit.addPendingQueuedHealing((targetSuit.maxHP * 2) - targetSuit.currHP)
-    selfDamageTrack = Sequence(Wait(suit.getDuration('walk') + 1), Parallel(MovieUtil.zapCogPowerhouse(targetSuit, 'large-zap', .5, 2.0, battle), Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP, int(targetSuit.maxHP * 2)),
+    selfDamageTrack = Sequence(Wait(1.5 + 1), Parallel(MovieUtil.zapCogPowerhouse(targetSuit, 'large-zap', .5, 2.0, battle), Func(targetSuit.setHealthForMe, int(targetSuit.maxHP)), Func(targetSuit.setHP, int(targetSuit.maxHP * 2)),
             Func(targetSuit.showHpTextNew, 0, text="OVERCHARGED!", colorCode=5), Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation))
     return Parallel(suitTrack, cagePropTracks, smokeTrack, selfDamageTrack)
@@ -1961,7 +1961,7 @@ def doDonation(attack):
     sinkPos2.setY(sinkPos.getY() - 22.5)
     moveTrack = Sequence(LerpPosInterval(suit, 1.5, sinkPos2, other=battle), LerpPosInterval(suit, 0, sinkPos, other=battle), Wait(3.9), LerpPosInterval(suit, 0, sinkPos2, other=battle), LerpPosInterval(suit, 1.5, resetPos, other=battle), Func(suit.setPos, battle, resetPos))
 
-    suitTrack = Sequence(ActorInterval(suit, 'walk'), getSuitAnimTrack(attack, disrespectBlend=True), ActorInterval(suit, 'walk'), Func(suit.setNeutralAnimationDrop))
+    suitTrack = Sequence(ActorInterval(suit, 'walk', duration=1.5), getSuitAnimTrack(attack, disrespectBlend=True), ActorInterval(suit, 'walk', duration=1.5), Func(suit.setNeutralAnimationDrop))
     selfDamageTrack = Sequence(Wait(4.0), Func(suit.checkHighRollerDonation, theSuit, battle), suit.makeSilhouetteDonation(theSuit, battle))
     managerHealTrack = Sequence(Wait(4.0), Func(theSuit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHighRollerPhrases),
                                      CFSpeech | CFTimeout),
