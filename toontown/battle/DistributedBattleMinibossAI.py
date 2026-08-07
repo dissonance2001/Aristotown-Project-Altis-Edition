@@ -27,6 +27,7 @@ class DistributedBattleMinibossAI(DistributedBattleFinalAI.DistributedBattleFina
         self.elevatorPos = Point3(0, 0, 0)
         self.pos = Point3(0, 30, 0)
         self.resumeNeedUpdate = 0
+        self.pacesetterExplicitPassToons = set()
         self.fsm.addState(
             State.State('ReservesJoining', self.enterReservesJoining, self.exitReservesJoining, ['WaitForJoin']))
         offState = self.fsm.getStateNamed('Off')
@@ -35,6 +36,24 @@ class DistributedBattleMinibossAI(DistributedBattleFinalAI.DistributedBattleFina
         waitForJoinState.addTransition('ReservesJoining')
         playMovieState = self.fsm.getStateNamed('PlayMovie')
         playMovieState.addTransition('ReservesJoining')
+
+
+    def enterWaitForInput(self):
+        # Keep explicit Pass distinct from a timeout/automatic NO_ATTACK.
+        # DistributedBattleBaseAI converts PASS to NO_ATTACK before the
+        # calculator runs, so Pacesetter needs this side-channel to know
+        # whether the Toon really pressed Pass.
+        self.pacesetterExplicitPassToons.clear()
+        return DistributedBattleFinalAI.DistributedBattleFinalAI.enterWaitForInput(self)
+
+    def requestAttack(self, track, level, av):
+        toonId = self.air.getAvatarIdFromSender()
+        if track == PASS:
+            self.pacesetterExplicitPassToons.add(toonId)
+        else:
+            self.pacesetterExplicitPassToons.discard(toonId)
+        return DistributedBattleFinalAI.DistributedBattleFinalAI.requestAttack(
+            self, track, level, av)
 
 
     def getBossCogId(self):
@@ -79,7 +98,11 @@ class DistributedBattleMinibossAI(DistributedBattleFinalAI.DistributedBattleFina
 
             self.d_setMembers()
             self.d_setBattleExperience()
-            self.b_setState('Reward')
+            # Pacesetter has its own controller Reward state, which plays the
+            # actual reward-screen Toon victory.  Skipping this battle-level
+            # Reward prevents DistributedBattleFinal from playing its separate
+            # floor-reward victory dance first.
+            self.b_setState('Resume')
         else:
             if self.resumeNeedUpdate == 1:
                 self.d_setMembers()

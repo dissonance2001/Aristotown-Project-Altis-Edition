@@ -125,6 +125,57 @@ class AttackHPCalculatorAI(object):
     def __getRandomValidTargetSuitDigitRushJob(self):
         return self.calculator.getRandomValidTargetSuitDigitRushJob()
 
+    def __getPacesetterRushJobTarget(self):
+        # Clash does not allow two Rush Jobs to select the same Cog in one
+        # round. Altis normally relies on the Rush Job condition being
+        # applied before the next target check; keep an explicit per-round
+        # reservation as well so Pacesetter's second/third jobs can never
+        # reuse the same target (including Pacesetter himself).
+        turn = self.TurnsElapsed
+        reservationTurn = getattr(
+            self.calculator,
+            '_pacesetterRushJobReservationTurn',
+            None
+        )
+        if reservationTurn != turn:
+            self.calculator._pacesetterRushJobReservationTurn = turn
+            self.calculator._pacesetterRushJobReservedTargets = set()
+
+        reserved = getattr(
+            self.calculator,
+            '_pacesetterRushJobReservedTargets',
+            set()
+        )
+
+        rushJobConditions = (
+            'trapRushJob',
+            'lureRushJob',
+            'throwRushJob',
+            'squirtRushJob',
+            'zapRushJob',
+            'soundRushJob',
+            'dropRushJob',
+        )
+
+        validTargets = []
+        for index, suit in enumerate(self.battle.activeSuits):
+            if suit is None or suit.getHP() <= 0:
+                continue
+            if suit.doId in reserved:
+                continue
+            if any(self.suitHasCondition(suit.doId, cond)
+                    for cond in rushJobConditions):
+                continue
+            validTargets.append(index)
+
+        if not validTargets:
+            return -1
+
+        targetIndex = random.choice(validTargets)
+        reserved.add(self.battle.activeSuits[targetIndex].doId)
+        self.calculator._pacesetterRushJobReservedTargets = reserved
+        return targetIndex
+
 
     def __getRandomValidTargetSuitDigitAttorney(
             self,
@@ -4663,7 +4714,13 @@ class AttackHPCalculatorAI(object):
                 elif theSuit.dna.name == 'clerk':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
                 elif theSuit.dna.name == 'psetter':
-                    self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitRushJob(), 1, 'setBoth')
+                    self.setSuitCondition(
+                        theSuit.doId,
+                        'targetCheckCondition',
+                        self.__getPacesetterRushJobTarget(),
+                        1,
+                        'setBoth'
+                    )
                 elif theSuit.dna.name == 'foreman':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
                 elif theSuit.dna.name == 'supervis':

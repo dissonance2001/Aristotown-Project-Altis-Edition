@@ -9,6 +9,7 @@ class SuitSpawnCalculatorAI:
     def __init__(self, calculator):
         self.calculator = calculator
         self.battle = calculator.battle
+        self._pacesetterSpawnCycleRounds = {}
 
     def __getattr__(self, name):
         return getattr(self.calculator, name)
@@ -836,7 +837,7 @@ class SuitSpawnCalculatorAI:
             currentSuit = self.battle.activeSuits[i]
 
             if currentSuit.dna.name in SPAWNER_DNAS_PACE:
-                if x % 2 == 0 and currentSuit.currHP > 0 and currentSuit.currHP < 12750:
+                if currentSuit.currHP > 0:
                     # Find all living Cogs that are capable of spawning.
                     eligibleSpawners = [
                         suit for suit in self.battle.activeSuits
@@ -844,13 +845,13 @@ class SuitSpawnCalculatorAI:
                     ]
 
                     if eligibleSpawners:
-                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        # The oldest/lowest-doId Pacesetter becomes the only spawner.
                         designatedSpawner = min(
                             eligibleSpawners,
                             key=lambda suit: suit.doId
                         )
 
-                        # Only the designated Cog is allowed to continue.
+                        # Only the designated Pacesetter is allowed to continue.
                         if currentSuit.doId == designatedSpawner.doId:
                             from toontown.suit.DistributedPacesetterBossAI import (
                                 DistributedPacesetterBossAI
@@ -872,49 +873,106 @@ class SuitSpawnCalculatorAI:
                                     break
 
                             if boss:
-                                maxSuits = 7
-                                maxSpawnPerTurn = 3
-
-                                # Count only living Cogs.
-                                aliveCount = sum(
-                                    1 for suit in self.battle.activeSuits
-                                    if suit.currHP > 0
-                                )
-
-                                availableSlots = maxSuits - aliveCount
-
-                                # Never summon more than three at once.
-                                spawnAmount = min(
-                                    maxSpawnPerTurn,
-                                    availableSlots
-                                )
-
                                 spawnerId = designatedSpawner.doId
 
-                                if (
-                                        spawnAmount > 0 and
-                                        not self.suitHasCondition(
-                                            spawnerId,
-                                            'alreadyCogSpawn'
-                                        )):
+                                # Clash gates Pacesetter's natural reserves on whether
+                                # his normal attack generation is active, not on HP.
+                                # Altis represents the opening challenge with turn1 /
+                                # turn2 plus openingChallengeCancelled.
+                                openingChallengeCancelled = self.suitHasCondition(
+                                    spawnerId,
+                                    'openingChallengeCancelled'
+                                )
 
-                                    # Mark the designated Cog immediately so this block
-                                    # cannot run again during the same spawning window.
-                                    self.setSuitCondition(
-                                        spawnerId,
-                                        'alreadyCogSpawn',
-                                        1,
-                                        1,
-                                        'setBoth'
+                                # Detect the exact round that Early Overclocked is
+                                # being queued.  This round must remain spawn-free;
+                                # Clash's first post-challenge reserve wave is the
+                                # following round.
+                                earlyOverclockTriggeredThisRound = False
+                                for suitAttack in self.battle.suitAttacks:
+                                    if suitAttack[SUIT_ID_COL] != spawnerId:
+                                        continue
+                                    attackInfo = suitAttack[SUIT_ATK_COL]
+                                    if (
+                                            isinstance(attackInfo, dict) and
+                                            attackInfo.get('name') ==
+                                            'PacesetterEarlyOverclocked'):
+                                        earlyOverclockTriggeredThisRound = True
+                                        break
+
+                                earlyOverclockActive = (
+                                    self.suitHasCondition(spawnerId, 'overclocked') and
+                                    self.suitHasCondition(spawnerId, 'turn1') and
+                                    self.suitHasCondition(spawnerId, 'turn2')
+                                )
+
+                                normalFightActive = (
+                                    openingChallengeCancelled or
+                                    (
+                                        earlyOverclockActive and
+                                        not earlyOverclockTriggeredThisRound
+                                    )
+                                )
+
+                                if normalFightActive:
+                                    # Match Clash: only eligible normal-fight rounds
+                                    # advance the natural-spawn cycle.  Challenge
+                                    # Pass/timeout rounds do not consume spawn turns.
+                                    spawnCycleRound = (
+                                        self._pacesetterSpawnCycleRounds.get(
+                                            spawnerId,
+                                            0
+                                        ) + 1
+                                    )
+                                    self._pacesetterSpawnCycleRounds[spawnerId] = (
+                                        spawnCycleRound
                                     )
 
-                                    spawnCode = 'paceGrunts'
+                                    # Clash spawns on odd eligible cycles: 1, 3, 5...
+                                    spawnThisRound = (spawnCycleRound % 2 == 1)
 
-                                    for spawnIndex in xrange(spawnAmount):
-                                        boss.appendSuitsToBattle(
-                                            boss.battleNumber,
-                                            spawnCode
+                                    if spawnThisRound:
+                                        maxSuits = 7
+                                        maxSpawnPerTurn = 3
+
+                                        # Count only living Cogs.
+                                        aliveCount = sum(
+                                            1 for suit in self.battle.activeSuits
+                                            if suit.currHP > 0
                                         )
+
+                                        availableSlots = maxSuits - aliveCount
+
+                                        # Never summon more than three at once.
+                                        spawnAmount = min(
+                                            maxSpawnPerTurn,
+                                            availableSlots
+                                        )
+
+                                        if (
+                                                spawnAmount > 0 and
+                                                not self.suitHasCondition(
+                                                    spawnerId,
+                                                    'alreadyCogSpawn'
+                                                )):
+
+                                            # Prevent a duplicate call in the same
+                                            # spawning window.
+                                            self.setSuitCondition(
+                                                spawnerId,
+                                                'alreadyCogSpawn',
+                                                1,
+                                                1,
+                                                'setBoth'
+                                            )
+
+                                            spawnCode = 'paceGrunts'
+
+                                            for spawnIndex in xrange(spawnAmount):
+                                                boss.appendSuitsToBattle(
+                                                    boss.battleNumber,
+                                                    spawnCode
+                                                )
             # if self.battle.activeSuits[i].dna.name == 'redd':
             #     currentBossHealth = -1
             #     for s in self.battle.suits:

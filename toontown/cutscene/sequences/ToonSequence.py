@@ -271,13 +271,18 @@ def seq_turnSingleToonToHpr(toonIndex=0, delay=0, duration=0, hpr=(0, 0, 0), sta
         return Sequence(Wait(delay), Func(toon.setHpr, destination))
     start = LVecBase3f(*startHpr) if useStartHpr else None
     animation = _loopToonForDuration(toon, anim, duration) if hasAnim else Wait(duration)
+    # Pacesetter's first tackle deliberately continues slip-backward in the
+    # next CTSC sub-event from startTime=1.0.  Do not insert Altis's normal
+    # one-frame neutral between those two authored animation segments.
+    continueSameSlip = bool(hasAnim and anim == 'slip-backward')
     return Sequence(
         Wait(delay),
         Parallel(animation, LerpHprInterval(
             toon, duration, destination, startHpr=start,
             blendType=blendType)),
-        Wait(0.01),
-        Func(_directNeutralToon, toon) if hasAnim else Wait(0.0),
+        Wait(0.0 if continueSameSlip else 0.01),
+        Wait(0.0) if continueSameSlip else
+        (Func(_directNeutralToon, toon) if hasAnim else Wait(0.0)),
     )
 
 @cutsceneSequence(name='Toon: Turn All to HPR', enum=EDE.turnToonsToHpr)
@@ -373,6 +378,23 @@ def seq_singleToonDoAnim(toonIndex=0, startAnim='neutral', loop=0, hasDuration=0
         if endAnim:
             return Sequence(track, Func(_directLoopToon, toon, endAnim, 1.0))
         return track
+
+    # Clash's ``isInterval`` path uses ActorInterval, which does not finish
+    # until the requested animation segment has actually played.  Altis must
+    # drive multipart Toon controls manually, but it still has to preserve the
+    # same interval duration.  Without this wait, a following CTSC sub-event
+    # (usually ``neutral``) runs on the same frame and cancels slip-backward.
+    # Pacesetter's intro contains two such slip events.
+    if isInterval:
+        animDuration, animFrameCount = _getMultipartToonAnimMetrics(
+            toon, startAnim)
+        if animDuration is not None:
+            segmentStart = float(startTime) if startTime is not None else 0.0
+            segmentEnd = float(endTime) if endTime is not None else float(animDuration)
+            segmentDuration = max(segmentEnd - segmentStart, 0.0)
+            segmentDuration /= max(abs(float(playRate)), 0.0001)
+            return Sequence(primary, Wait(segmentDuration))
+
     if endAnim:
         return Sequence(primary, Func(_directLoopToon, toon, endAnim, 1.0))
     return Sequence(primary)

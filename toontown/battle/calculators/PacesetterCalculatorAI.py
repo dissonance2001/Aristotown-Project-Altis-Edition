@@ -22,6 +22,9 @@ class PacesetterCalculatorAI:
             attackInfo
         )
 
+    def __getGenericSuitAttack(self, suitId):
+        return self.calculator.getGenericSuitAttack(suitId)
+
     def __getLureRemoval(self, suitId):
         return self.calculator.getLureRemoval(suitId)
 
@@ -37,6 +40,72 @@ class PacesetterCalculatorAI:
             *args,
             **kwargs
         )
+
+    def __openingChallengeHasRealAction(self):
+        # DistributedBattleBaseAI has already converted PASS and UN_ATTACK
+        # into the same NO_ATTACK entry used by a timer expiry before the
+        # calculator runs.  That is exactly what Clash wants here: both a
+        # deliberate Pass and doing nothing for the whole timer count as one
+        # empty challenge round.  Any remaining attack entry (gag, IOU/NPCSOS,
+        # Cog reward, SOS, etc.) is a real Toon action and cancels the opening
+        # challenge.
+        for toonId in self.battle.activeToons:
+            attack = self.battle.toonAttacks.get(toonId)
+            if attack and attack[TOON_TRACK_COL] != NO_ATTACK:
+                return True
+        return False
+
+    def __chooseRushJobAttack(self, suitId):
+        choices = [
+            'RushJobTrap',
+            'RushJobLure',
+            'RushJobThrow',
+            'RushJobSquirt',
+            'RushJobZap',
+            'RushJobSound',
+            'RushJobDrop',
+        ]
+
+        targetIndex = self.getSuitConditionModifier(
+            suitId, 'targetCheckCondition')
+        if (targetIndex is not None and
+                targetIndex >= 0 and
+                targetIndex < len(self.battle.activeSuits)):
+            targetSuit = self.battle.activeSuits[targetIndex]
+            if targetSuit is not None:
+                # Match Clash: Trap is not a legal Rush Job track when the
+                # selected Cog already has an active trap.  Pacesetter is
+                # intentionally included in the same check.
+                try:
+                    trapped = (
+                        self.calculator.getSuitTrapType(targetSuit.doId)
+                        != NO_TRAP
+                    )
+                except:
+                    trapped = targetSuit.doId in getattr(
+                        self.calculator, 'traps', {})
+
+                if trapped and 'RushJobTrap' in choices:
+                    choices.remove('RushJobTrap')
+
+        return random.choice(choices)
+
+    def __cancelOpeningChallengeIfNeeded(self, suitId):
+        if self.suitHasCondition(suitId, 'openingChallengeCancelled'):
+            return False
+        if self.suitHasCondition(suitId, 'overclocked'):
+            return False
+        if self.suitHasCondition(suitId, 'turn2'):
+            return False
+
+        # Clash challenge rule:
+        #   empty round (Pass OR timeout) -> keep the challenge alive
+        #   any real Toon action -> permanently cancel the challenge
+        if self.__openingChallengeHasRealAction():
+            self.setSuitCondition(
+                suitId, 'openingChallengeCancelled', 1, -1, 'setBoth')
+            return True
+        return False
 
     def calculatePacesetterAttacks(self):
         for i in xrange(len(self.battle.activeSuits)):
@@ -83,13 +152,7 @@ class PacesetterCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': random.choice(('RushJobTrap',
-                                                                                            'RushJobLure',
-                                                                                            'RushJobThrow',
-                                                                                            'RushJobSquirt',
-                                                                                            'RushJobZap',
-                                                                                            'RushJobSound',
-                                                                                            'RushJobDrop')),
+                                                                'name': self.__chooseRushJobAttack(suitId),
                                                                 'animName': 'rush-job',
                                                                 'hp': 0,
                                                                 'acc': 100,
@@ -116,13 +179,7 @@ class PacesetterCalculatorAI:
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': random.choice(('RushJobTrap',
-                                                                                                'RushJobLure',
-                                                                                                'RushJobThrow',
-                                                                                                'RushJobSquirt',
-                                                                                                'RushJobZap',
-                                                                                                'RushJobSound',
-                                                                                                'RushJobDrop')),
+                                                                    'name': self.__chooseRushJobAttack(suitId),
                                                                     'animName': 'rush-job',
                                                                     'hp': 0,
                                                                     'acc': 100,
@@ -143,26 +200,46 @@ class PacesetterCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': random.choice(('RushJobTrap',
-                                                                                                'RushJobLure',
-                                                                                                'RushJobThrow',
-                                                                                                'RushJobSquirt',
-                                                                                                'RushJobZap',
-                                                                                                'RushJobSound',
-                                                                                                'RushJobDrop')),
-                                                                    'animName': 'rush-job',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
+                        if (self.suitHasCondition(suitId, 'targetCheckCondition') and
+                                self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1):
+                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                        'name': self.__chooseRushJobAttack(suitId),
+                                                                        'animName': 'rush-job',
+                                                                        'hp': 0,
+                                                                        'acc': 100,
+                                                                        'freq': 0,
+                                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                            if attack[SUIT_ATK_COL]:
+                                self.battle.suitAttacks.append(attack)
 
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
+                self.__cancelOpeningChallengeIfNeeded(suitId)
+                openingChallengeCancelled = self.suitHasCondition(
+                    suitId, 'openingChallengeCancelled')
+
+                # Pacesetter is in Altis' SpecialCogDict, so the normal generic
+                # Suit attack loop deliberately skips him.  Clash still gives
+                # Pacesetter one regular random Cog attack every round whenever
+                # his opening challenge is no longer suppressing attack
+                # generation.  Add that attack explicitly here.  This is also
+                # what makes a timer expiry during the normal/Overclocked fight
+                # still result in Pace attacking after Hurry Sickness/Rush Job
+                # handling.
+                challengeStillRunning = (
+                    self.battle.activeSuits[i].currHP >= 12750 and
+                    not openingChallengeCancelled and
+                    not self.suitHasCondition(suitId, 'overclocked'))
+
+                if (not challengeStillRunning and
+                        self.battle.activeSuits[i].currHP > 0 and
+                        self.__suitCanAttack(suitId)):
+                    normalAttack = self.__getGenericSuitAttack(suitId)
+                    if normalAttack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(normalAttack)
+
                 if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 8415 and not self.getSuitConditionModifier(suitId, 'alreadyMoving'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'PacesetterMovingGoalposts',
@@ -184,7 +261,7 @@ class PacesetterCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP > 0:
-                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
+                    if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterTurn2',
                                                                     'animName': 'nothing',
@@ -195,7 +272,7 @@ class PacesetterCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                             self.setSuitCondition(suitId, 'turn2', 1, -1, 'setBoth')
-                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn1'):
+                    if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and not self.suitHasCondition(suitId, 'turn1'):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterTurn1',
                                                                     'animName': 'nothing',
@@ -206,7 +283,7 @@ class PacesetterCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                             self.setSuitCondition(suitId, 'turn1', 1, -1, 'setBoth')
-                    if self.battle.activeSuits[i].currHP >= 12750 and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
+                    if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterEarlyOverclocked',
                                                                     'animName': 'overclocked',

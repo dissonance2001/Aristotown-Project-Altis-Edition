@@ -320,3 +320,42 @@ def removeAnimationLoopGuard(actor, originalLoop):
         actor.loop = originalLoop
     except:
         pass
+
+
+def _normalizeVisualEffectName(effect):
+    """Return a stable lowercase key for Clash visual-effect enums/tokens."""
+    name = getattr(effect, 'name', effect)
+    try:
+        name = str(name)
+    except:
+        name = '%s' % name
+    if '.' in name:
+        name = name.rsplit('.', 1)[-1]
+    return name.replace('_', '').replace('-', '').lower()
+
+
+def applySuitVisualEffect(suit, effect):
+    """Apply a Clash CTSC visual effect supported by the Altis Suit runtime.
+
+    Keep this helper deliberately small: only effects proven to have an Altis
+    equivalent belong here.  Pacesetter's AFTERIMAGE maps directly to the
+    existing Suit.makeAfterImages implementation.
+    """
+    key = _normalizeVisualEffectName(effect)
+    if key == 'afterimage':
+        suit.makeAfterImages()
+        return
+    raise RuntimeError(
+        '%s Unsupported suit visual effect: %r' %
+        (DEFAULT_LOG_PREFIX, effect))
+
+
+def unapplySuitVisualEffect(suit, effect):
+    """Undo a Clash CTSC visual effect supported by the Altis Suit runtime."""
+    key = _normalizeVisualEffectName(effect)
+    if key == 'afterimage':
+        suit.removeAfterImages()
+        return
+    raise RuntimeError(
+        '%s Unsupported suit visual effect: %r' %
+        (DEFAULT_LOG_PREFIX, effect))

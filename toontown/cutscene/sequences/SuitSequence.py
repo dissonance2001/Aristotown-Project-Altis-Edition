@@ -9,6 +9,8 @@ from panda3d.core import Point3, LVecBase3f, LVecBase4f
 from toontown.cutscene.ResolvedActorInterval import (
     ResolvedActorInterval, ResolvedLerpAnimInterval,
     getControlMetadata, resolveControl)
+from toontown.cutscene.AltisCutsceneCompat import (
+    applySuitVisualEffect, unapplySuitVisualEffect)
 from direct.interval.IntervalGlobal import *
 from toontown.effects import DustCloud
 '\nMethods to help generate positions/etc for sequences.\n'
@@ -498,7 +500,7 @@ def seq_suitApplyVisualEffect(suitIndex=0, vfxIndex=0, delay=0.0, cutsceneDict=N
     if not suit:
         return Sequence()
     effect = cutsceneDict['visualEffects'][vfxIndex]
-    return Sequence(Wait(delay), Func(MovieUtil.applyVisualEffect, suit, effect))
+    return Sequence(Wait(delay), Func(applySuitVisualEffect, suit, effect))
 
 @cutsceneSequence(name='Suit: Unapply Visual Effect', enum=EDE.suitUnapplyVisualEffect)
 def seq_suitUnapplyVisualEffect(suitIndex=0, vfxIndex=0, delay=0.0, cutsceneDict=None):
@@ -507,7 +509,7 @@ def seq_suitUnapplyVisualEffect(suitIndex=0, vfxIndex=0, delay=0.0, cutsceneDict
     if not suit:
         return Sequence()
     effect = cutsceneDict['visualEffects'][vfxIndex]
-    return Sequence(Wait(delay), Func(MovieUtil.unapplyVisualEffect, suit, effect))
+    return Sequence(Wait(delay), Func(unapplySuitVisualEffect, suit, effect))
 
 @cutsceneSequence(name='Suit: Unchat All', enum=EDE.clearAllSuitChat)
 def seq_allSuitsClearChat(cutsceneDict=None):

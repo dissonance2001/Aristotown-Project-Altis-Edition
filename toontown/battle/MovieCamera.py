@@ -1426,9 +1426,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RadiographerHotTakeRetaliation':
         camTrack.append(defaultCamera(openShotDuration=6.75))
     elif name == 'RadiographerOvermodulated':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 0, 'suit'),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 2.5),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2.5)))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3)))
     elif name == 'RadiographerOvermodulated2':
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.5, 'suit'),
                                  moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
@@ -2277,10 +2277,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
         return camTrack2
     elif name == 'PacesetterEarlyOverclocked':
-        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, 3), randomActorShot(suit, battle, 3, 'suit'),
-                                      defaultCamera(openShotDuration=0, attackDuration=attackDuration - 6))
-        return camTrack2
+        # Same as Clash's normal OVERCLOCKED attack: the guitar-solo CTSC
+        # owns the camera for the entire transition.
+        return Sequence(Wait(attackDuration))
     elif name == 'PacesetterHurrySickness':
         if attackDuration > 2:
             camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -2298,10 +2297,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PacesetterMovingGoalposts':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'PacesetterOverclocked':
-        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, 3), randomActorShot(suit, battle, 3, 'suit'),
-                                      defaultCamera(openShotDuration=0, attackDuration=attackDuration - 6))
-        return camTrack2
+        # The original Clash guitar-solo CTSC owns the camera for the whole
+        # Overclocked transition.
+        return Sequence(Wait(attackDuration))
     elif name in ('RushJobTrap'
             'RushJobLure'
             'RushJobThrow'

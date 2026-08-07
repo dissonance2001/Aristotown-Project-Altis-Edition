@@ -27,49 +27,36 @@ class DistributedPaceElevatorAI(
             self.fsm.request('opening')
             return
 
-        self.fsm.request('closed')
-
-        taskMgr.remove(self.uniqueName('pace-ride'))
-        taskMgr.doMethodLater(
-            self.RideDuration,
-            self.finishPaceRide,
-            self.uniqueName('pace-ride')
-        )
-
-    def enterClosed(self):
-        DistributedElevatorExtAI.DistributedElevatorExtAI.enterClosed(self)
-
-    def finishPaceRide(self, task):
         try:
             bossZone = self.bldg.createBossOffice(self.seats)
         except Exception as error:
             self.notify.warning(
-                'Pace ride could not create boss destination: %s' % error
-            )
+                'Pacesetter elevator could not create boss destination: %s' %
+                error)
             self.fsm.request('opening')
-            return Task.done
+            return
 
         if not bossZone:
             self.notify.warning(
-                'Pace boss manager returned an invalid zone.'
-            )
+                'Pacesetter boss manager returned an invalid zone.')
             self.fsm.request('opening')
-            return Task.done
+            return
 
         for seatIndex in xrange(len(self.seats)):
             avId = self.seats[seatIndex]
-
             if avId:
                 self.sendUpdateToAvatarId(
                     avId,
                     'setBossOfficeZoneForce',
                     [bossZone]
                 )
-
                 self.clearFullNow(seatIndex)
 
+        self.fsm.request('closed')
+
+    def enterClosed(self):
+        DistributedElevatorExtAI.DistributedElevatorExtAI.enterClosed(self)
         self.fsm.request('opening')
-        return Task.done
 
     def delete(self):
         taskMgr.remove(self.uniqueName('pace-ride'))

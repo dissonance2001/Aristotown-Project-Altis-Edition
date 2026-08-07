@@ -1584,6 +1584,12 @@ def createVirtualSuitDeathTrack(suit, battle):
 def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
     suit._pendingQueuedDeath = True
+
+    # Corporate Clash Pacesetter special death.  Choose it here before
+    # Altis constructs the normal Cog lose / gear-explosion track.
+    if suit.style.name == 'psetter':
+        from toontown.cutscene.PacesetterDeathCutscene import makePacesetterDeath
+        return makePacesetterDeath(suit, battle)
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()

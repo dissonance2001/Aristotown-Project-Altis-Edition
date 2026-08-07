@@ -1,12 +1,15 @@
 import random
 import math
 from direct.gui.DirectFrame import DirectFrame
+from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.PythonUtil import lerp
 from direct.gui import DirectGuiGlobals as DGG
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence
 from direct.interval.IntervalGlobal import *
+from toontown.toonbase import ToontownGlobals
+from toontown.toonbase.ToontownTimer import ToontownTimer
 
 @cutsceneSequence(name='Screen: Fade Color', enum=EDE.doScreenFade)
 def seq_fadeColor(delay=0, color=(0, 0, 0), fadeInDuration=1.0, fadeInBlendType='noBlend', holdDuration=1.0, fadeOutDuration=1.0, fadeOutBlendType='noBlend', cutsceneDict=None):
@@ -56,3 +59,43 @@ def seq_basicLabel(nodeIndex=0, useRender2d=False, messageIndex=0, delay=0.0, du
             label.destroy()
 
     return Sequence(Wait(delay), Func(doShow), Wait(duration), Func(cleanup))
+
+
+@cutsceneSequence(name='Timescale: Show Change', enum=EDE.showTimescaleChange)
+def seq_timescaleChange(enterDuration=1.0, holdDuration=1.0, exitDuration=1.0, timerScale=1.0, cutsceneDict=None):
+    startScale, endScale = cutsceneDict['arguments'][:2]
+    timer = ToontownTimer()
+    timer.setScale(timerScale)
+    timer.hide()
+    OnscreenText(
+        parent=timer,
+        text='Battle Speed',
+        scale=0.27,
+        pos=(0, -0.55),
+        fg=(1, 1, 1, 1),
+        font=ToontownGlobals.getSignFont(),
+    )
+
+    def setTime(value):
+        if timer:
+            timer.setTimeStr('x%.2f' % value, scale=0.145)
+
+    setTime(startScale)
+
+    def lerpTimerText(t):
+        setTime(lerp(startScale, endScale, t))
+
+    return Sequence(
+        Func(timer.show),
+        LerpPosInterval(
+            timer, enterDuration,
+            pos=(0, 0, 0), startPos=(0, 0, 2.0),
+            blendType='easeOut'),
+        LerpFunctionInterval(
+            lerpTimerText, duration=holdDuration, blendType='easeInOut'),
+        LerpPosInterval(
+            timer, exitDuration,
+            pos=(0, 0, -2.0), startPos=(0, 0, 0),
+            blendType='easeIn'),
+        Func(timer.destroy),
+    )

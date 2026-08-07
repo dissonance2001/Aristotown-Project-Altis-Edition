@@ -93,6 +93,11 @@ def _setActorDialogue(actor, message, wantHeadAnim=True, wantSound=True):
 DETACHED_DIALOGUE_MESSAGES = (
     'The Spinning Wheel...',
     "Welcome back to the Tooniverffe'ff favorite ffhow!",
+    # Pacesetter: Altis can lose this native Nametag3d bubble after the
+    # "Hold on a sec..." camera transition.  Keep the original dialogue and
+    # voice, but render the standard Cog balloon through the proven projected
+    # compatibility path.
+    'FINALLY! Entertainment at last! I was feeling myself rust!',
 )
 
 # Per-line screen-space offsets for the two projected CTSC bubbles.
@@ -102,12 +107,18 @@ DETACHED_DIALOGUE_SCREEN_OFFSETS = {
     'The Spinning Wheel...': (0.55, 0.40),
     # High Roller keeps the previously approved placement.
     "Welcome back to the Tooniverffe'ff favorite ffhow!": (0.82, 0.18),
+    # Pacesetter is near the center of this shot; keep the bubble centered over
+    # his projected position instead of applying High Roller's large X offset.
+    'FINALLY! Entertainment at last! I was feeling myself rust!': (0.42, -0.08),
 }
 
 # Per-line size multipliers for projected CTSC bubbles.
 # High Roller's bubble remains at the default size.
 DETACHED_DIALOGUE_SCREEN_SCALES = {
     'The Spinning Wheel...': 0.75,
+    # Pacesetter's long line needs a smaller balloon than the generic projected
+    # Cog bubble so it stays clear of his body and the right side of the shot.
+    'FINALLY! Entertainment at last! I was feeling myself rust!': 0.70,
 }
 
 

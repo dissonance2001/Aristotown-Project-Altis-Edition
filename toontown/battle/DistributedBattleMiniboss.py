@@ -6,6 +6,9 @@ from toontown.battle import DistributedBattleFinal
 from toontown.effects import DustCloud
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import ToontownBattleGlobals
+from toontown.toon import NPCToons
+from toontown.battle.BattleBase import PASS, NPCSOS
 from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *
 from toontown.battle import BattleProps
@@ -36,6 +39,132 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         DistributedBattleFinal.DistributedBattleFinal.announceGenerate(self)
         self.moveSuitsToInitialPos()
 
+    def _getPacesetterController(self):
+        try:
+            from toontown.suit import DistributedPacesetterBoss
+            controller = DistributedPacesetterBoss.OnePacesetterController
+            if controller is None:
+                return None
+            if getattr(controller, 'battle', None) is self:
+                return controller
+            if getattr(controller, 'battleId', 0) == self.doId:
+                return controller
+        except:
+            pass
+        return None
+
+    def _isPacesetterTarget(self, targetId):
+        controller = self._getPacesetterController()
+        if controller is not None and targetId == getattr(controller, 'pacesetterSuitId', 0):
+            return True
+        try:
+            suit = self.findSuit(targetId)
+            return suit is not None and suit.dna.name == 'psetter'
+        except:
+            return False
+
+    def _iouAffectsPacesetter(self, npcId):
+        try:
+            npcTrack, npcLevel, npcHp, npcRarity = NPCToons.getNPCTrackLevelHpRarity(npcId)
+        except:
+            return False
+        return npcTrack in (
+            ToontownBattleGlobals.TRAP_TRACK,
+            ToontownBattleGlobals.LURE_TRACK,
+            ToontownBattleGlobals.THROW_TRACK,
+            ToontownBattleGlobals.SQUIRT_TRACK,
+            ToontownBattleGlobals.ZAP_TRACK,
+            ToontownBattleGlobals.SOUND_TRACK,
+            ToontownBattleGlobals.DROP_TRACK,
+        )
+
+    def _movieConfirmsPacesetterDeath(self):
+        # setMovie() has already expanded the server-finalized attack data at
+        # this point.  A non-zero ``died`` flag is therefore the earliest
+        # client-side confirmation that the selected actions will kill
+        # Pacesetter, before Movie.play() snapshots the x6/x8 timescale.
+        try:
+            attackDicts = self.movie.toonAttackDicts
+        except:
+            return False
+
+        for attack in attackDicts:
+            target = attack.get('target')
+            if isinstance(target, dict):
+                targets = [target]
+            elif isinstance(target, (list, tuple)):
+                targets = target
+            else:
+                continue
+
+            for targetInfo in targets:
+                if not isinstance(targetInfo, dict):
+                    continue
+                suit = targetInfo.get('suit')
+                if suit is None:
+                    continue
+                try:
+                    if suit.dna.name == 'psetter' and targetInfo.get('died', 0):
+                        return True
+                except:
+                    pass
+        return False
+
+    def _resetPacesetterBattleSpeedBeforeLethalMovie(self):
+        # Reserve Cogs inherit Pacesetter's battleSpeed in this port.  Reset
+        # every battle Suit, not just Pacesetter, so Movie.play() cannot find
+        # another x6/x8 Suit and accelerate the lethal movie anyway.
+        checked = []
+        for suitList in (self.suits, self.activeSuits):
+            for suit in suitList:
+                if suit in checked:
+                    continue
+                checked.append(suit)
+                try:
+                    suit.makeUnBattleSpeed()
+                except:
+                    try:
+                        suit.battleSpeed = 0
+                    except:
+                        pass
+
+        print '[Pacesetter] Finalized lethal round confirmed before Movie.play(): forcing x1'
+
+    def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks):
+        result = DistributedBattleFinal.DistributedBattleFinal.setMovie(
+            self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks)
+
+        if int(movieHasBeenMade) == 1 and self._getPacesetterController() is not None:
+            if self._movieConfirmsPacesetterDeath():
+                self._resetPacesetterBattleSpeedBeforeLethalMovie()
+
+        return result
+
+    def setChosenToonAttacks(self, ids, tracks, levels, targets):
+        # Clash resumes Pacesetter's theme when the challenge is cancelled.
+        # In this Altis port, resume it as soon as the local Toon chooses an
+        # action that affects Pacesetter (normal gag, Cog reward, or IOU).
+        try:
+            localId = base.localAvatar.doId
+            for i in range(len(ids)):
+                if ids[i] != localId:
+                    continue
+                track = tracks[i]
+                target = targets[i]
+                if track != PASS:
+                    affectsPacesetter = self._isPacesetterTarget(target)
+                    if track == NPCSOS and self._iouAffectsPacesetter(target):
+                        affectsPacesetter = True
+                    if affectsPacesetter:
+                        controller = self._getPacesetterController()
+                        if controller is not None:
+                            controller.restartPacesetterBattleMusic()
+                break
+        except:
+            pass
+        return DistributedBattleFinal.DistributedBattleFinal.setChosenToonAttacks(
+            self, ids, tracks, levels, targets)
+
     def showSuitsJoining(self, suits, ts, name, callback):
         if len(suits) == 0 and not self.initialReservesJoiningDone:
             self.initialReservesJoiningDone = True
@@ -52,7 +181,19 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 camera.setPosHpr(20, -4, 7, 60, 0, 0)
             else:
                 camera.setPosHpr(-20, -4, 7, -60, 0, 0)
-        track = Sequence(Wait(0.5), done, name=name)
+        # Pacesetter is already staged by its standalone intro.  Keep the
+        # normal ReservesJoining path because it establishes the battle camera
+        # and member bookkeeping, but remove the visible half-second pause.
+        initialJoinDelay = 0.5
+        for suit in list(self.suits) + list(self.activeSuits):
+            try:
+                if suit.dna.name == 'psetter':
+                    initialJoinDelay = 0.05
+                    break
+            except:
+                pass
+
+        track = Sequence(Wait(initialJoinDelay), done, name=name)
         track.start(ts)
         self.storeInterval(track, name)
 
@@ -64,38 +205,65 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             suit.setPos(destPos)
             suit.setHpr(destHpr)
 
+    def _getPacesetterTimescale(self):
+        # Corporate Clash drives reserve arrivals from the instance battle's
+        # current timescale.  Altis stores that value on the Pacesetter Suit.
+        # Scan the complete battle member list instead of bossCog: the new
+        # standalone Pacesetter controller intentionally has no Suit/BossCog DNA.
+        checked = []
+        for suitList in (self.suits, self.activeSuits):
+            for suit in suitList:
+                if suit in checked:
+                    continue
+                checked.append(suit)
+                try:
+                    if suit.dna.name != 'psetter':
+                        continue
+                    speed = float(suit.getBattleSpeed())
+                    if speed <= 0.0:
+                        return 1.0
+                    return max(1.0, speed)
+                except:
+                    pass
+        return None
+
+    def createAdjustInterval(self, av, destPos, destHpr, toon=0, run=0):
+        # Altis normally runs the pending-to-active Cog walk at 1x even while
+        # Pacesetter has accelerated the rest of the battle.  Only scale Suit
+        # adjustments in the Pacesetter battle; Toon movement and every other
+        # miniboss keep the original DistributedBattleBase behavior.
+        pacesetterTimescale = self._getPacesetterTimescale()
+        if toon or pacesetterTimescale is None or pacesetterTimescale <= 1.0:
+            return DistributedBattleFinal.DistributedBattleFinal.createAdjustInterval(
+                self, av, destPos, destHpr, toon, run)
+
+        adjustTime = self.calcSuitMoveTime(destPos, av.getPos(self)) / pacesetterTimescale
+        self.notify.debug('creating Pacesetter timescaled adjust interval for: %d at x%s' %
+                          (av.doId, pacesetterTimescale))
+
+        adjustTrack = Sequence()
+        adjustTrack.append(Func(av.setPlayRate, pacesetterTimescale, 'walk'))
+        adjustTrack.append(Func(av.loop, 'walk'))
+        adjustTrack.append(Func(av.headsUp, self, destPos))
+        adjustTrack.append(LerpPosInterval(av, adjustTime, destPos, other=self))
+        adjustTrack.append(Func(av.setHpr, self, destHpr))
+        adjustTrack.append(Func(av.setPlayRate, 1.0, 'walk'))
+        adjustTrack.append(Func(av.setNeutralAnimationAdjustInterval))
+        return adjustTrack
+
     def showSuitsFalling(self, suits, ts, name, callback):
         if self.bossCog is None:
             return
 
-        speed = 1.0
-
-        bossCog = getattr(self, 'bossCog', None)
-
-        if bossCog is not None:
-            try:
-                if bossCog.dna.name == 'psetter':
-                    speed = float(bossCog.getBattleSpeed()) * 0.1
-            except:
-                pass
-
-        if speed == 1.0:
-            for activeSuit in self.activeSuits:
-                if activeSuit.dna.name == 'psetter':
-                    speed = float(activeSuit.getBattleSpeed()) * 0.1
-                    break
-
-        speed = max(0.1, speed)
-
-        print 'SPAWN BATTLE SPEED:', speed
+        pacesetterTimescale = self._getPacesetterTimescale()
+        if pacesetterTimescale is None:
+            speed = 1.0
+        else:
+            speed = pacesetterTimescale
+            print '[Pacesetter] Reserve Cog arrival timescale: x%s' % speed
 
         suitTracks = Parallel()
         delay = 0
-
-        # Do not retrieve or overwrite speed again below this point.
-        for suit in self.activeSuits:
-            if suit.dna.name == 'psetter':
-                speed = suit.getBattleSpeed()
         for suit in suits:
             if suit.dna.name == 'cdirector':
                 for obj in base.cr.doId2do.values():
@@ -475,7 +643,11 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if suit.dna.name == 'hroller2':
                     suit.hide()
                 suit.setState('Battle')
-                if suit.dna.dept == 'l':
+                if suit.dna.dept == 'l' and pacesetterTimescale is None:
+                    # Legacy Altis Lawbot minibosses parent reserve Cogs to their
+                    # visual BossCog before staging them.  The standalone Pacesetter
+                    # controller is intentionally nonvisual, so it is not a NodePath.
+                    # Pacesetter reserves stay parented to the battle node below.
                     suit.reparentTo(self.bossCog)
                     suit.setPos(0, 0, 0)
                 if suit in self.joiningSuits:
@@ -491,6 +663,19 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 suit.setPos(startPos)
                 suit.headsUp(self)
                 flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
+                if pacesetterTimescale is not None:
+                    # Clash gives incoming instance Cogs a 1.5x fly-in on top
+                    # of the battle timescale.  Parenting this interval under
+                    # the outer x-timescale track makes the effective arrival
+                    # speed 1.5 * current Pacesetter speed.
+                    try:
+                        flyIval.setPlayRate(1.5)
+                    except:
+                        pass
+                    try:
+                        suit.makeBattleSpeed(speed)
+                    except:
+                        pass
                 taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
                 if suit.dna.name != 'hroller2':
                     suitTrack.append(Track((delay, Sequence(Parallel(Func(suit.show), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), flyIval), Func(suit.loop, 'neutral')))))
@@ -507,7 +692,8 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                         camera.setPosHpr(-20, -4, 7, -60, 0, 0)
         done = Func(callback)
         track = Sequence(suitTracks, done, name=name)
-        #track.setPlayRate(speed)
+        # Match Clash: reserve joining, inter-Cog delay, landing animation,
+        # and propeller movement all advance at the current battle timescale.
         track.start(ts, playRate=speed)
         self.storeInterval(track, name)
         return

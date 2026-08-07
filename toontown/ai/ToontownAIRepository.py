@@ -63,6 +63,7 @@ from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
 from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
+from toontown.instances.InstanceZoneManagerAI import InstanceZoneManagerAI
 from toontown.pets import DistributedPublicPetMgrAI
 
 import atexit
@@ -86,6 +87,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.lawOfficeMgr = None
         self.countryClubMgr = None
         self.boardofficeMgr = None
+        self.instanceZoneManager = None
         self.startTime = startTime
         import pymongo
         self.isRaining = False
@@ -184,6 +186,9 @@ class ToontownAIRepository(ToontownInternalRepository):
 
         self.codeRedemptionMgr = TTCodeRedemptionMgrAI(self)
         self.codeRedemptionMgr.generateWithRequired(2)
+        # Shared manager for temporary custom/Kudos boss instances.
+        # It is server-side only; the boss object itself is the distributed DO.
+        self.instanceZoneManager = InstanceZoneManagerAI(self)
         self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         self.clubManager = self.generateGlobalObject(OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
 

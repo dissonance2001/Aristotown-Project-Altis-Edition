@@ -165,7 +165,34 @@ def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
 def doTurn1(attack):
     suit = attack['suit']
     suitTrack = Sequence(getSuitAnimTrack(attack), Wait(3.0))
-    return Parallel(suitTrack)
+
+    # Corporate Clash Pacesetter challenge behavior: the first passed-round
+    # warning owns the music stop.  Fade the currently active Pacesetter
+    # battle theme, then stop it.  If the Toon attacks Pacesetter next round,
+    # DistributedBattleMiniboss's target hook can start it again.
+    musicTrack = Parallel()
+    try:
+        from toontown.suit import DistributedPacesetterBoss
+        controller = DistributedPacesetterBoss.OnePacesetterController
+        if controller is not None:
+            music = controller.getActivePacesetterBattleMusic()
+            if music is not None:
+                try:
+                    startVolume = float(music.getVolume())
+                except:
+                    startVolume = 0.9
+                musicTrack.append(Sequence(
+                    LerpFunctionInterval(
+                        music.setVolume, duration=2.0, blendType='easeIn',
+                        fromData=startVolume, toData=0.0),
+                    Wait(2.0),
+                    Func(controller.stopPacesetterBattleMusic),
+                    Func(music.setVolume, startVolume)
+                ))
+    except:
+        pass
+
+    return Parallel(suitTrack, musicTrack)
 
 def doTurn2(attack):
     suit = attack['suit']
@@ -173,184 +200,12 @@ def doTurn2(attack):
     return Parallel(suitTrack)
 
 def doEarlyOverclocked(attack):
-    theSuit = attack['suit']
-    battle = attack['battle']
-    from toontown.suit.DistributedPacesetterBoss import DistributedPacesetterBoss
-    musicTrack = Sequence()
-    for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedPacesetterBoss):
-            musicTrack.append(Func(obj.stopPhaseOneMusic))
-            musicTrack.append(Parallel(Wait(6.75), getSoundTrack('SA_overclocked.ogg', node=theSuit)))
-            musicTrack.append(Func(obj.startPhaseTwoMusic))
-    speedTrack = Parallel()
-    startScale = 1.0
-    endScale = 999.99
-    timer = ToontownTimer()
-    timer.setScale(.5)
-    timer.hide()
-    OnscreenText(
-        parent=timer,
-        text='Battle Speed',
-        scale=0.27,
-        pos=(0, -0.55),
-        fg=(1, 1, 1, 1),
-        font=ToontownGlobals.getSignFont(),
-    )
-
-    def setTime(time):
-        if timer:
-            timer.setTimeStr('x{:.2f}'.format(time), scale=0.145)
-    setTime(startScale)
-
-    def lerpTimerText(t):
-        setTime(lerp(startScale, endScale, t))
-    shredder = globalPropPool.getProp('backpack_pacesetter')
-    paperPosPoints = [Point3(0.04341534008683112, 0, 0.21707670043415206), VBase3(0, 20.057887120115794, 90)]
-    shredderPropTrack = Sequence(getPropTrack(shredder, theSuit.getLeftHand(), paperPosPoints, 0, 7, scaleUpTime=0))
-    shredderPropTrack.append(Wait(6.75))
-    shredderPropTrack.append(Func(shredder.removeNode))
-    toonPos = theSuit.getPos(battle)
-    gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + theSuit.height - 0.2)
-    explosionTrack = Sequence()
-    explosionTrack.append(Wait(6.75))
-    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=6.75)
-    # Make our sequence.
-    timerTrack = Sequence(Wait(6.75),
-        # Enter Interval
-        Func(timer.show),
-        LerpPosInterval(
-            timer, .25,
-            pos=(0, 0, 0), startPos=(0, 0, 2.0),
-            blendType='easeOut',
-        ),
-        # Hold Interval
-        LerpFunctionInterval(
-            lerpTimerText, duration=theSuit.getDuration('come-on'), blendType='easeInOut',
-        ),
-        # Leave Interval
-        LerpPosInterval(
-            timer, .25,
-            pos=(0, 0, -2.0), startPos=(0, 0, 0),
-            blendType='easeIn',
-        ),
-        # Cleanup
-        Func(timer.destroy),
-    )
-    for headPart in theSuit.animatedHeadParts:
-        speedTrack.append(Sequence(ActorInterval(headPart, 'overclocked'), Func(theSuit.setNeutralAnimationHead)))
-    suitTrack = Sequence(Parallel(
-    getSuitAnimTrack(attack)),
-    Parallel(Func(theSuit.enableBlend), 
-        ActorInterval(theSuit, 'neutral', loop=1),
-        LerpAnimInterval(
-            theSuit,
-            duration=.25,
-            startAnim='overclocked',
-            endAnim='neutral',
-            startWeight=0.0,
-            endWeight=1.0,
-            blendType='easeInOut'
-        )
-    ),
-
-    Func(theSuit.disableBlend),
-    Func(theSuit.setNeutralAnimationDrop), Wait(2.0)
-)
-    speedTrack.append(Func(theSuit.makeBattleSpeed, 8))
-    speedTrack.append(LerpColorScaleInterval(theSuit.getGeomNode(), 0.5, (0.808, 0.682, 0.82, 1), blendType='easeIn'))
-    speedTrack.append(Func(theSuit.setSuitStatusEffect, 'overclocked'))
-    return Parallel(speedTrack, soundTrack, shredderPropTrack, timerTrack, musicTrack, suitTrack)
+    from toontown.cutscene.PacesetterOverclockedCutscene import makePacesetterOverclocked
+    return makePacesetterOverclocked(attack, battleSpeed=8)
 
 def doOverclocked(attack):
-    theSuit = attack['suit']
-    battle = attack['battle']
-    from toontown.suit.DistributedPacesetterBoss import DistributedPacesetterBoss
-    musicTrack = Sequence()
-    for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedPacesetterBoss):
-            musicTrack.append(Func(obj.stopPhaseOneMusic))
-            musicTrack.append(Parallel(Wait(6.75), getSoundTrack('SA_overclocked.ogg', node=theSuit)))
-            musicTrack.append(Func(obj.startPhaseTwoMusic))
-    speedTrack = Parallel()
-    startScale = 1.0
-    endScale = 999.99
-    timer = ToontownTimer()
-    timer.setScale(.5)
-    timer.hide()
-    OnscreenText(
-        parent=timer,
-        text='Battle Speed',
-        scale=0.27,
-        pos=(0, -0.55),
-        fg=(1, 1, 1, 1),
-        font=ToontownGlobals.getSignFont(),
-    )
-
-    def setTime(time):
-        if timer:
-            timer.setTimeStr('x{:.2f}'.format(time), scale=0.145)
-    setTime(startScale)
-
-    def lerpTimerText(t):
-        setTime(lerp(startScale, endScale, t))
-    shredder = globalPropPool.getProp('backpack_pacesetter')
-    paperPosPoints = [Point3(0.04341534008683112, 0, 0.21707670043415206), VBase3(0, 20.057887120115794, 90)]
-    shredderPropTrack = Sequence(getPropTrack(shredder, theSuit.getLeftHand(), paperPosPoints, 0, 7, scaleUpTime=0))
-    shredderPropTrack.append(Wait(6.75))
-    shredderPropTrack.append(Func(shredder.removeNode))
-    toonPos = theSuit.getPos(battle)
-    gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + theSuit.height - 0.2)
-    explosionTrack = Sequence()
-    explosionTrack.append(Wait(6.75))
-    explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-    soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=6.75)
-    # Make our sequence.
-    timerTrack = Sequence(Wait(6.75),
-        # Enter Interval
-        Func(timer.show),
-        LerpPosInterval(
-            timer, .25,
-            pos=(0, 0, 0), startPos=(0, 0, 2.0),
-            blendType='easeOut',
-        ),
-        # Hold Interval
-        LerpFunctionInterval(
-            lerpTimerText, duration=theSuit.getDuration('come-on'), blendType='easeInOut',
-        ),
-        # Leave Interval
-        LerpPosInterval(
-            timer, .25,
-            pos=(0, 0, -2.0), startPos=(0, 0, 0),
-            blendType='easeIn',
-        ),
-        # Cleanup
-        Func(timer.destroy),
-    )
-    for headPart in theSuit.animatedHeadParts:
-        speedTrack.append(Sequence(ActorInterval(headPart, 'overclocked'), Func(theSuit.setNeutralAnimationHead)))
-    suitTrack = Sequence(Parallel(
-    getSuitAnimTrack(attack)),
-    Parallel(Func(theSuit.enableBlend), 
-        ActorInterval(theSuit, 'neutral', loop=1),
-        LerpAnimInterval(
-            theSuit,
-            duration=.25,
-            startAnim='overclocked',
-            endAnim='neutral',
-            startWeight=0.0,
-            endWeight=1.0,
-            blendType='easeInOut'
-        )
-    ),
-
-    Func(theSuit.disableBlend),
-    Func(theSuit.setNeutralAnimationDrop), Wait(2.0)
-)
-    speedTrack.append(Func(theSuit.makeBattleSpeed, 6))
-    speedTrack.append(LerpColorScaleInterval(theSuit.getGeomNode(), 0.5, (0.808, 0.682, 0.82, 1), blendType='easeIn'))
-    speedTrack.append(Func(theSuit.setSuitStatusEffect, 'overclocked'))
-    return Parallel(speedTrack, soundTrack, shredderPropTrack, timerTrack, musicTrack, suitTrack)
+    from toontown.cutscene.PacesetterOverclockedCutscene import makePacesetterOverclocked
+    return makePacesetterOverclocked(attack, battleSpeed=6)
 
 def doComeOn(attack):
     theSuit = attack['suit']

@@ -660,6 +660,7 @@ from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
 from toontown.suit import DistributedPacesetterBoss/AI
+from toontown.instances import DistributedCutsceneSkipButton/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
 from toontown.building import DistributedPaceElevator/AI
@@ -3473,21 +3474,24 @@ dclass DistributedCountErclaimBoss : DistributedBossCog {
   setBattleDifficulty(uint8) broadcast ram;
 };
 
-dclass DistributedPacesetterBoss : DistributedBossCog {
+dclass DistributedPacesetterBoss : DistributedObject {
+  // Standalone Pacesetter instance controller. The visible/fighting boss is
+  // a normal DistributedSuit with DNA name "psetter".
   setState(string) broadcast ram;
-  setBossDamage(uint16, uint8, int16) broadcast ram;
-  touchWitnessStand() airecv clsend;
-  hitBoss(uint8) airecv clsend;
-  healBoss(uint8) airecv clsend;
-  hitToon(uint32) airecv clsend;
-  hitDefensePan() airecv clsend;
-  hitProsecutionPan() airecv clsend;
-  hitChair(uint8, uint8) airecv clsend;
-  setLawyerIds(uint32[]) broadcast ram;
-  setTaunt(int8, int8) broadcast;
-  toonGotHealed(uint32) broadcast;
-  enteredBonusState() broadcast;
-  setBattleDifficulty(uint8) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setPacesetterSuitId(uint32) broadcast ram;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+};
+
+dclass DistributedCutsceneSkipButton : DistributedObject {
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(int8, uint8) broadcast;
 };
 
 dclass DistributedDirectorsMiniboss : DistributedBossCog {

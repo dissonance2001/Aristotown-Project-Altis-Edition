@@ -7,6 +7,7 @@ from toontown.building.ElevatorConstants import *
 from toontown.building.ElevatorUtils import getCloseInterval
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from toontown.building import PacesetterInstanceGlobals
 
 
 class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
@@ -39,6 +40,7 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
         self.finalOpenSfx = None
         self.finalCloseSfx = None
         self.rideTrack = None
+        self.irisTrack = None
         self.rideHiddenGeom = None
         self.previousMinFov = None
         self.rideElevatorStartPos = None
@@ -105,44 +107,72 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
     def onDoorCloseFinish(self):
         return
 
+    def enterClosing(self, ts):
+        # Match Corporate Clash: the lobby elevator only closes and fades out.
+        # The actual Pacesetter ride is played inside the loaded boss room.
+        DistributedBossElevator.DistributedBossElevator.enterClosing(self, ts)
+        if self.localToonOnBoard:
+            if self.irisTrack:
+                self.irisTrack.pause()
+            self.irisTrack = Sequence(
+                Wait(1.0),
+                Func(base.transitions.fadeOut, 0.8)
+            )
+            self.irisTrack.start()
+
     def enterClosed(self, ts):
         DistributedBossElevator.DistributedBossElevator.enterClosed(
             self,
             ts
         )
-
         self.forceDoorsClosed()
-        self.startRide(ts)
 
     def exitClosed(self):
         pass
 
     def __goToBossOffice(self, zoneId):
-        self.stopRide()
         camera.wrtReparentTo(render)
 
         playGame = self.cr.playGame
-
         if not playGame:
             self.notify.warning(
-                'Cannot enter Pace boss zone %s: PlayGame unavailable.' % zoneId
-            )
+                'Cannot enter Pace boss zone %s: PlayGame unavailable.' %
+                zoneId)
+            return
+
+        # Keep the currently loaded Donald's Dreamland town loader alive.
+        # Requesting PlayGame's quietZone would unload DLTownLoader and then
+        # recreate it with the allocated boss zone (for example 61000), which
+        # makes DLTownLoader look for a nonexistent street DNA file such as
+        # donalds_dreamland_61000.pdna.  Pacesetter is a temporary room owned
+        # by this loader, just like High Roller is owned by MMTownLoader.
+        hood = getattr(playGame, 'hood', None)
+        townLoader = getattr(hood, 'loader', None)
+        if (hood is None or
+                getattr(hood, 'hoodId', None) !=
+                ToontownGlobals.DonaldsDreamland or
+                townLoader is None or
+                not hasattr(townLoader, 'fsm')):
+            self.notify.warning(
+                'Cannot enter Pacesetter instance %s outside the Donalds '
+                'Dreamland town loader.' % zoneId)
             return
 
         requestStatus = {
-            'loader': 'cogHQLoader',
-            'where': 'cogHQBossBattle',
+            'loader': PacesetterInstanceGlobals.INSTANCE_LOADER,
+            'where': PacesetterInstanceGlobals.BOSS_BATTLE_STATE,
             'how': 'teleportIn',
-            'hoodId': ToontownGlobals.LawbotHQ,
+            'hoodId': ToontownGlobals.DonaldsDreamland,
             'zoneId': zoneId,
             'shardId': None,
-            'avId': -1
+            'avId': -1,
+            'pacesetterInstance': 1
         }
 
-        playGame.fsm.request(
-            'quietZone',
-            [requestStatus]
-        )
+        if not townLoader.fsm.request('quietZone', [requestStatus]):
+            self.notify.warning(
+                'Donalds Dreamland town loader rejected Pacesetter zone %s.' %
+                zoneId)
 
 
     def setBossOfficeZone(self, zoneId):
@@ -269,21 +299,6 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
 
 
     def enterOpening(self, ts):
-        if self.rideTrack:
-            self.rideTrack.pause()
-            self.rideTrack = None
-
-        if self.rideHiddenGeom:
-            self.rideHiddenGeom.show()
-            self.rideHiddenGeom = None
-
-        taskMgr.remove(self.uniqueName('paceRideCleanup'))
-        taskMgr.doMethodLater(
-            ElevatorData[self.type]['openTime'],
-            self.__finishRideCleanup,
-            self.uniqueName('paceRideCleanup')
-        )
-
         DistributedBossElevator.DistributedBossElevator.enterOpening(self, ts)
 
     def __stopPaceRideMusic(self, task):
@@ -295,6 +310,9 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
         return task.done
 
     def disable(self):
+        if self.irisTrack:
+            self.irisTrack.pause()
+            self.irisTrack = None
         taskMgr.remove(self.uniqueName('paceRideCleanup'))
         taskMgr.remove(self.uniqueName('stopPaceRideMusic'))
         if self.rideMusic:
@@ -304,6 +322,9 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
         DistributedBossElevator.DistributedBossElevator.disable(self)
 
     def delete(self):
+        if self.irisTrack:
+            self.irisTrack.pause()
+            self.irisTrack = None
         taskMgr.remove(self.uniqueName('paceRideCleanup'))
         taskMgr.remove(self.uniqueName('stopPaceRideMusic'))
         if self.rideMusic:

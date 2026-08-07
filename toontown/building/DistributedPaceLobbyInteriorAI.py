@@ -1,10 +1,9 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedPaceElevatorAI import DistributedPaceElevatorAI
-from toontown.coghq.LobbyManagerAI import LobbyManagerAI
-from toontown.suit import DistributedPacesetterBossAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
+from toontown.instances import InstanceGlobals
 
 
 class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
@@ -23,28 +22,10 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
 
         self.paceElevator = None
         self.paceCat = None
-        self.createdPaceLobbyManager = False
-
-        # Only create one manager.
+        # Temporary Pacesetter zones are owned by the global
+        # InstanceZoneManagerAI, not by a lobby-local manager.
         self.paceLobbyManager = getattr(
-            self.air,
-            'paceLobbyManager',
-            None
-        )
-
-        if self.paceLobbyManager is None:
-            self.paceLobbyManager = LobbyManagerAI(
-                self.air,
-                DistributedPacesetterBossAI.DistributedPacesetterBossAI,
-                ToontownGlobals.PacesetterLobby
-            )
-
-            self.paceLobbyManager.generateWithRequired(
-                ToontownGlobals.PacesetterLobby
-            )
-
-            self.air.paceLobbyManager = self.paceLobbyManager
-            self.createdPaceLobbyManager = True
+            self.air, 'instanceZoneManager', None)
 
     def generate(self):
         DistributedToonInteriorAI.generate(self)
@@ -129,13 +110,15 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         self.paceElevator.generateWithRequired(self.zoneId)
 
     def createBossOffice(self, avIdList):
-        if not self.paceLobbyManager:
+        manager = getattr(self.air, 'instanceZoneManager', None)
+        if manager is None:
             self.notify.warning(
-                'createBossOffice: paceLobbyManager does not exist.'
+                'createBossOffice: InstanceZoneManagerAI is unavailable.'
             )
             return 0
 
-        return self.paceLobbyManager.createBossOffice(avIdList)
+        return manager.createInstance(
+            avIdList, InstanceGlobals.PACESETTER)
 
     def delete(self):
         if self.paceCat:
@@ -146,12 +129,6 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             self.paceElevator.requestDelete()
             self.paceElevator = None
 
-        if self.createdPaceLobbyManager and self.paceLobbyManager:
-            self.paceLobbyManager.requestDelete()
-
-            if getattr(self.air, 'paceLobbyManager', None) is self.paceLobbyManager:
-                del self.air.paceLobbyManager
-
-            self.paceLobbyManager = None
-
+        # The global manager outlives this lobby; do not delete it here.
+        self.paceLobbyManager = None
         DistributedToonInteriorAI.delete(self)
