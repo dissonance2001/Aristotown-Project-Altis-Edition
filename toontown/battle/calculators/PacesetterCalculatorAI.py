@@ -220,26 +220,6 @@ class PacesetterCalculatorAI:
                 openingChallengeCancelled = self.suitHasCondition(
                     suitId, 'openingChallengeCancelled')
 
-                # Pacesetter is in Altis' SpecialCogDict, so the normal generic
-                # Suit attack loop deliberately skips him.  Clash still gives
-                # Pacesetter one regular random Cog attack every round whenever
-                # his opening challenge is no longer suppressing attack
-                # generation.  Add that attack explicitly here.  This is also
-                # what makes a timer expiry during the normal/Overclocked fight
-                # still result in Pace attacking after Hurry Sickness/Rush Job
-                # handling.
-                challengeStillRunning = (
-                    self.battle.activeSuits[i].currHP >= 12750 and
-                    not openingChallengeCancelled and
-                    not self.suitHasCondition(suitId, 'overclocked'))
-
-                if (not challengeStillRunning and
-                        self.battle.activeSuits[i].currHP > 0 and
-                        self.__suitCanAttack(suitId)):
-                    normalAttack = self.__getGenericSuitAttack(suitId)
-                    if normalAttack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(normalAttack)
-
                 if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 8415 and not self.getSuitConditionModifier(suitId, 'alreadyMoving'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'PacesetterMovingGoalposts',

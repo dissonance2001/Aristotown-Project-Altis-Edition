@@ -700,7 +700,20 @@ class BaseSuitAttackCalculatorAI:
                 attack = self.__getLureRemoval(suitId)
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not (self.battle.activeSuits[i].dna.name and self.battle.activeSuits[i].currHP >= 12750) and not self.suitHasCondition(suitId, 'deepfreeze') and self.__suitCanAttack(suitId) and not self.battle.activeSuits[i].dna.name == 'erfit' and not (self.battle.activeSuits[i].dna.name == 'videog' and self.suitHasCondition(suitId, 'immune')) and not self.battle.activeSuits[i].dna.name == 'hrollers' and not self.battle.activeSuits[i].dna.name == 'phouse':
+            specialCogCanUseRegularAttack = not (self.battle.activeSuits[i].dna.name and self.battle.activeSuits[i].currHP >= 12750)
+            if self.battle.activeSuits[i].dna.name == 'psetter':
+                pacesetterHasRealToonAction = False
+                for toonId in self.battle.activeToons:
+                    toonAttack = self.battle.toonAttacks.get(toonId)
+                    if toonAttack and toonAttack[TOON_TRACK_COL] != NO_ATTACK:
+                        pacesetterHasRealToonAction = True
+                        break
+                specialCogCanUseRegularAttack = (
+                    self.battle.activeSuits[i].currHP < 12750 or
+                    self.suitHasCondition(suitId, 'openingChallengeCancelled') or
+                    self.suitHasCondition(suitId, 'overclocked') or
+                    pacesetterHasRealToonAction)
+            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and specialCogCanUseRegularAttack and not self.suitHasCondition(suitId, 'deepfreeze') and self.__suitCanAttack(suitId) and not self.battle.activeSuits[i].dna.name == 'erfit' and not (self.battle.activeSuits[i].dna.name == 'videog' and self.suitHasCondition(suitId, 'immune')) and not self.battle.activeSuits[i].dna.name == 'hrollers' and not self.battle.activeSuits[i].dna.name == 'phouse':
                 attack = self.__getGenericSuitAttack(suitId)
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
