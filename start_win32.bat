@@ -22,7 +22,7 @@ echo = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 echo. 
 echo #1 - Locally Host a Server
 echo #2 - Connect to an Existing Server
-echo #3 - Connect to Zen's server
+echo #3 - Connect to Diss's server
 echo #4 - Connect to Localhost Server
 echo #5 - Go Back
 echo.
@@ -93,7 +93,7 @@ set /P TT_GAMESERVER="Server IP: "
 goto game
 
 :awsserver
-set TT_GAMESERVER=82.5.38.255
+set TT_GAMESERVER=73.187.108.196:7198
 
 :localhost
 set TT_GAMESERVER=127.0.0.1
