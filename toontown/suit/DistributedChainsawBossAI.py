@@ -82,6 +82,8 @@ class DistributedChainsawBossAI(
         self.chainsawPhaseTwoFirstTurn = False
         self.chainsawAbilityBanRounds = 0
         self.chainsawCoreV3 = True
+        self.cutsceneSkipVoters = []
+        self.cutsceneSkipTriggered = False
 
     def getHoodId(self):
         return ToontownGlobals.OutdoorZone
@@ -111,6 +113,28 @@ class DistributedChainsawBossAI(
             return
         self.chainsawPhase = phase
         self.sendUpdate('setChainsawPhase', [phase])
+
+    def requestSkip(self):
+        if self.cutsceneSkipTriggered:
+            return
+        try:
+            stateName = self.getCurrentState().getName()
+        except:
+            stateName = ''
+        if stateName != 'Introduction':
+            return
+        avId = self.air.getAvatarIdFromSender()
+        if avId not in self.involvedToons:
+            return
+        if avId in self.cutsceneSkipVoters:
+            return
+        self.cutsceneSkipVoters.append(avId)
+        playerTotal = max(1, len(self.involvedToons))
+        voteTotal = len(self.cutsceneSkipVoters)
+        self.sendUpdate('setVoteSkips', [voteTotal, playerTotal])
+        if voteTotal >= playerTotal:
+            self.cutsceneSkipTriggered = True
+            self.sendUpdate('setCutsceneSkip', [])
 
     # ------------------------------------------------------------------
     # Suit construction.
@@ -264,6 +288,8 @@ class DistributedChainsawBossAI(
         # Create the real distributed battle/Suits before the CTSC, but the
         # client keeps the real Chainsaw hidden until the local scene actor is
         # retired at the end of the intro.
+        self.cutsceneSkipVoters = []
+        self.cutsceneSkipTriggered = False
         self.initializeChainsawBattle()
         self.barrier = self.beginBarrier(
             'Introduction', self.involvedToons, 140,

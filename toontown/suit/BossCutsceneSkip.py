@@ -32,6 +32,9 @@ class BossCutsceneSkip(object):
         self.intervalName = None
         self.skipRequested = False
         self.playerTotal = 1
+        self.pendingVoteTotal = 0
+        self.pendingPlayerTotal = 1
+        self.hasPendingVoteState = False
 
     def _normalise(self, value):
         if value is None:
@@ -185,6 +188,8 @@ class BossCutsceneSkip(object):
                 self._createPlainFallback()
 
         self._moveInInitial()
+        if self.hasPendingVoteState:
+            self.setVoteSkips(self.pendingVoteTotal, self.pendingPlayerTotal)
 
     def _clearMoveTrack(self):
         if self.moveTrack:
@@ -228,11 +233,41 @@ class BossCutsceneSkip(object):
         self.skipRequested = True
         if self.voteButton:
             self.voteButton['state'] = DGG.DISABLED
+
+        requestVote = getattr(self.boss, 'requestCutsceneSkipVote', None)
+        if requestVote:
+            requestVote()
+            return
+
         if self.voteLabel:
             self.voteLabel['text'] = self._formatVotes(1)
+        interval.finish()
 
-        # Finish the real movie instead of forcing a boss FSM state. Its normal
-        # final callback handles positioning, setup and the multiplayer barrier.
+    def setVoteSkips(self, voteTotal, playerTotal):
+        try:
+            voteTotal = int(voteTotal)
+        except:
+            voteTotal = 0
+        try:
+            playerTotal = int(playerTotal)
+        except:
+            playerTotal = 1
+        self.pendingVoteTotal = max(0, voteTotal)
+        self.pendingPlayerTotal = max(1, playerTotal)
+        self.hasPendingVoteState = True
+        self.playerTotal = self.pendingPlayerTotal
+        if self.voteLabel:
+            self.voteLabel['text'] = self._formatVotes(self.pendingVoteTotal)
+
+    def setCutsceneSkip(self):
+        if not self.boss or not self.intervalName:
+            return
+        interval = self.boss.activeIntervals.get(self.intervalName)
+        if not interval:
+            return
+        self.skipRequested = True
+        if self.voteButton:
+            self.voteButton['state'] = DGG.DISABLED
         interval.finish()
 
     def intervalCleared(self, intervalName):
@@ -251,6 +286,9 @@ class BossCutsceneSkip(object):
 
     def stateChanged(self, state):
         self.cleanup()
+        self.pendingVoteTotal = 0
+        self.pendingPlayerTotal = 1
+        self.hasPendingVoteState = False
 
     def cleanup(self):
         self._clearMoveTrack()
