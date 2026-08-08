@@ -2294,7 +2294,7 @@ class TownBattleToonPanel(DirectFrame):
 
         if avatar.hasToonStatusEffect('groupDamageDown'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.statusIcon = status.find('**/toon_damage_down_icon')
+            self.statusIcon = status.find('**/fizzle_icon')
             slot = self._claimNextToonStatusSlot()
             self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('groupDamageDown'),
                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
