@@ -1850,6 +1850,9 @@ def doSuitAttack(attack):
     )
     if chainsawCtscCamera:
         camTrack = Sequence(Wait(suitTrack.getDuration()))
+    elif name.startswith('ChainsawCore'):
+        camTrack = MovieCamera.randomActorShot(
+            attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
     else:
         camTrack = MovieCamera.chooseSuitShot(attack, suitTrack.getDuration())
     battle = attack['battle']

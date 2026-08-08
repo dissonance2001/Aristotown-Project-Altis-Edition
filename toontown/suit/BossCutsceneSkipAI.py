@@ -1,29 +1,3 @@
-def _normalise(value):
-    if value is None:
-        return ''
-    return ''.join([char.lower() for char in str(value) if char.isalnum()])
-
-
-def _getStateName(owner):
-    try:
-        return owner.getCurrentState().getName()
-    except:
-        return getattr(owner, 'state', '')
-
-
-def _isSkippable(owner):
-    stateKey = _normalise(_getStateName(owner))
-    for word in ('victory', 'reward', 'epilogue', 'defeat', 'elevator'):
-        if word in stateKey:
-            return False
-    if stateKey in ('battleone', 'battletwo', 'battlethree', 'battlefour'):
-        return False
-    for word in ('introduction', 'preparebattle', 'rolltobattle'):
-        if word in stateKey:
-            return True
-    return False
-
-
 def reset(owner):
     owner.cutsceneSkipVoters = []
     owner.cutsceneSkipTriggered = False
@@ -53,7 +27,7 @@ def _sendState(owner):
 
 def requestSkip(owner):
     _ensure(owner)
-    if owner.cutsceneSkipTriggered or not _isSkippable(owner):
+    if owner.cutsceneSkipTriggered:
         return
     avId = owner.air.getAvatarIdFromSender()
     if avId not in getattr(owner, 'involvedToons', []):
@@ -68,5 +42,5 @@ def toonLeft(owner, avId):
     _ensure(owner)
     if avId in owner.cutsceneSkipVoters:
         owner.cutsceneSkipVoters.remove(avId)
-    if not owner.cutsceneSkipTriggered and _isSkippable(owner):
+    if not owner.cutsceneSkipTriggered:
         _sendState(owner)

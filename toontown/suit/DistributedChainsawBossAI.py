@@ -7,6 +7,7 @@ from toontown.battle import DistributedBattleChainsawAI
 from toontown.battle import SuitBattleGlobals
 from toontown.suit import DistributedMinibossAI
 from toontown.suit import DistributedSuitAI
+from toontown.suit import BossCutsceneSkipAI
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 
@@ -115,26 +116,7 @@ class DistributedChainsawBossAI(
         self.sendUpdate('setChainsawPhase', [phase])
 
     def requestSkip(self):
-        if self.cutsceneSkipTriggered:
-            return
-        try:
-            stateName = self.getCurrentState().getName()
-        except:
-            stateName = ''
-        if stateName != 'Introduction':
-            return
-        avId = self.air.getAvatarIdFromSender()
-        if avId not in self.involvedToons:
-            return
-        if avId in self.cutsceneSkipVoters:
-            return
-        self.cutsceneSkipVoters.append(avId)
-        playerTotal = max(1, len(self.involvedToons))
-        voteTotal = len(self.cutsceneSkipVoters)
-        self.sendUpdate('setVoteSkips', [voteTotal, playerTotal])
-        if voteTotal >= playerTotal:
-            self.cutsceneSkipTriggered = True
-            self.sendUpdate('setCutsceneSkip', [])
+        BossCutsceneSkipAI.requestSkip(self)
 
     # ------------------------------------------------------------------
     # Suit construction.

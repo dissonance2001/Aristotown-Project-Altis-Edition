@@ -3,12 +3,12 @@ from otp.avatar import DistributedAvatarAI
 from toontown.battle import BattleExperienceAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.suit import BossCutsceneSkipAI
 from toontown.toon import InventoryBase
 from toontown.battle import DistributedBattleMinibossAI
 from toontown.building import SuitPlannerInteriorAI
 from toontown.battle import BattleBase
 from toontown.coghq import CogDisguiseGlobals
+from toontown.suit import BossCutsceneSkipAI
 from panda3d.core import *
 import SuitDNA, random
 AllBossCogs = []
