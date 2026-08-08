@@ -1641,10 +1641,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
         # tollmaster
     elif name == 'TollmasterMandatoryToll':
-        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack.append(Sequence(motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 2, suit), Wait(attackDuration - 2)))
     elif name == 'TollmasterMandatoryTollFinal':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 7.5, 'suit'), 
-                                 motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 7.5)))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 6.5, 'suit'), 
+                                 heldShot(0, 15, 20, -180, -20, 0, attackDuration - 6.5)))
     elif name == 'TollmasterRushHour':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'TollmasterResonanceTax':
@@ -1712,7 +1712,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RecordkeeperPhantomEntryDamage':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntrySpawn':
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 2, suit), Wait(2)))
     elif name == 'RecordkeeperPhantomEntrySacrifice':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
         # corporate butcherer
@@ -1780,6 +1780,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ButcherLayoffs':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 3.875), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3.875)))
         # contingency director
+    elif name == 'ContingencyOverrideRevert':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 4, suit), Wait(4))
+        return camTrack2
+    elif name == 'ContingencyOverride':
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 4, suit), Wait(4))
+        return camTrack2
     elif name == 'ContingencySelfRepair':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
@@ -1792,14 +1798,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             banDesc = 'The Contingency Director has gained 1 new ability!'
 
-        camTrack2 = Sequence(motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, 0, suit), Wait(attackDuration))
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, attackDuration - 4, suit), Wait(4))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc, attackDuration - 2)
         pbpTrack = pbpText.getShowIntervalCheat('Risk Threshold Breach!', attackDuration - 2)
 
         return Parallel(pbpTrack, pbpDesc, camTrack2)
-        camTrack.append(Sequence(motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, 0, suit), Wait(attackDuration)))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 0, 'suit'), motionShot(-6.0, 6.0, suit.height + 1.0, -135, -20.0, 0.0, attackDuration, suit)))
     elif name == 'ContingencyRiskThresholdBreach75':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyMarkLiquidated':
@@ -2880,14 +2886,91 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
     return track
 
 
-def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
+def motionShot(x, y, z, h, p, r, duration, other=None, name='motionShot'):
     if other:
-        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other)
-        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r), other=other)
+        # Get the camera's current rotation relative to the target.
+        startHpr = camera.getHpr(other)
+
+        # Normalize heading so Panda takes the shortest path
+        # to the requested heading.
+        while startHpr.getX() - h > 180:
+            startHpr.setX(startHpr.getX() - 360)
+
+        while startHpr.getX() - h < -180:
+            startHpr.setX(startHpr.getX() + 360)
+
+        # Do the same for pitch.
+        while startHpr.getY() - p > 180:
+            startHpr.setY(startHpr.getY() - 360)
+
+        while startHpr.getY() - p < -180:
+            startHpr.setY(startHpr.getY() + 360)
+
+        # And roll.
+        while startHpr.getZ() - r > 180:
+            startHpr.setZ(startHpr.getZ() - 360)
+
+        while startHpr.getZ() - r < -180:
+            startHpr.setZ(startHpr.getZ() + 360)
+
+        posTrack = LerpPosInterval(
+            camera,
+            duration,
+            pos=Point3(x, y, z),
+            other=other,
+            blendType='easeInOut'
+        )
+
+        hprTrack = LerpHprInterval(
+            camera,
+            duration,
+            hpr=Point3(h, p, r),
+            startHpr=startHpr,
+            other=other,
+            blendType='easeInOut'
+        )
+
     else:
-        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z))
-        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r))
-    return Parallel(posTrack, hprTrack)
+        startHpr = camera.getHpr()
+
+        while startHpr.getX() - h > 180:
+            startHpr.setX(startHpr.getX() - 360)
+
+        while startHpr.getX() - h < -180:
+            startHpr.setX(startHpr.getX() + 360)
+
+        while startHpr.getY() - p > 180:
+            startHpr.setY(startHpr.getY() - 360)
+
+        while startHpr.getY() - p < -180:
+            startHpr.setY(startHpr.getY() + 360)
+
+        while startHpr.getZ() - r > 180:
+            startHpr.setZ(startHpr.getZ() - 360)
+
+        while startHpr.getZ() - r < -180:
+            startHpr.setZ(startHpr.getZ() + 360)
+
+        posTrack = LerpPosInterval(
+            camera,
+            duration,
+            pos=Point3(x, y, z),
+            blendType='easeInOut'
+        )
+
+        hprTrack = LerpHprInterval(
+            camera,
+            duration,
+            hpr=Point3(h, p, r),
+            startHpr=startHpr,
+            blendType='easeInOut'
+        )
+
+    return Parallel(
+        posTrack,
+        hprTrack,
+        name=name
+    )
 
 
 def allGroupShot(avatar, duration):

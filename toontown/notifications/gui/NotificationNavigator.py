@@ -23,7 +23,7 @@ class NotificationNavigator(DirectFrame):
         self.defineoptions(kw, optiondefs)
         DirectFrame.__init__(self, parent, **kw)
         self.initialiseoptions(NotificationNavigator)
-        self.setBin('sorted-gui-popup', 902)
+        self.setBin('sorted-gui-popup', 0)
         self.setDepthTest(False)
         self.setDepthWrite(False)
 
@@ -62,7 +62,7 @@ class NotificationNavigator(DirectFrame):
             extraArgs=[1],
         )
         for button in (self.button_left, self.button_right):
-            button.setBin('sorted-gui-popup', 903)
+            button.setBin('sorted-gui-popup', 10)
             button.setDepthTest(False)
             button.setDepthWrite(False)
 

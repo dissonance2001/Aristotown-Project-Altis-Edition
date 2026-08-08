@@ -1004,6 +1004,48 @@ DirectorsBattleAPosHpr = (0, 150, 0, 180, 0, 0)
 # Shared boss-battle offsets used by the existing custom boss fights.
 # Keep these at their pre-CFO-split values so custom encounters retain their
 # original positioning.
+FourBossesBossBattleOnePosHpr = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0)
+FourBossesBossBattleFourPosHpr = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0)
+FourBossCogBattleAPosHpr = (0,
+ 100,
+ 21.869,
+ -180,
+ 0,
+ 0)
+FourBossCogBattleBPosHpr = (15,
+ 40,
+ 21.869,
+ -46.5,
+ 0,
+ 0)
+FourBossRankedBattleAPosHpr = (-112,
+ -23,
+ 0.025,
+ 90,
+ 0,
+ 0)
+FourBossRankedBattleBPosHpr = (-112,
+ 23,
+ 0.025,
+ 90,
+ 0,
+ 0)
+FourBossRankedBattleCPosHpr = (-112,
+ 0.0,
+ 0.025,
+ 90,
+ 0,
+ 0)
 BossCogBattleAPosHpr = (0,
  60,
  0,

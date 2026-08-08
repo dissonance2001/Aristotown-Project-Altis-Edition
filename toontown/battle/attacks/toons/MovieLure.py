@@ -805,9 +805,9 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         suit.addPendingQueuedDamage(totalDamage)
         tntTrack = ActorInterval(trapProp, 'tnt')
         explosionTrack = Sequence(Wait(2.3), createTNTExplosionTrack(battle, trapProp=trapProp, relativeTo=parent))
-        flyPos = suit.getPos()
-        flyPos.setZ(suit.getZ() + 17)
-        flyPos.setY(suit.getY() + 4)
+        origPos, _ = battle.getActorPosHpr(suit)
+        flyPos = Point3(*origPos)
+        flyPos.setZ(suit.getZ() + 4)
         dropPos = suit.getPos()
         oldCamera = base.camera.getPos()
         oldHPR = base.camera.getHpr()
@@ -818,22 +818,47 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         
         if base.localAvatar in battle.activeToons:
             if not died:
-                suitTrack.append(Parallel(base.camera.posHprInterval(
-                             0.4, Point3(oldCamera[0], oldCamera[1], oldCamera[2]), Point3(0, 30, 0), blendType='easeInOut'),
-                 Func(battle.movie.needRestoreColor),
-                 Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
-                 Func(trapProp.reparentTo, hidden),
-                 ActorInterval(suit, 'flail', startTime=0.9, duration=0.4, endTime=1.3),
-                 LerpPosInterval(suit, 0.3, flyPos),
-                 ))
+                suitTrack.append(Sequence(
+                Wait(0.1),
+                Parallel(
+                    LerpPosInterval(suit, 0.5, flyPos, other=battle, blendType='easeOut'),
+                    ActorInterval(suit, 'slip-backward', duration=0.1),
+                    Func(battle.movie.needRestoreColor),
+                    Sequence(
+                        Wait(0.1),
+                        Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                        Func(trapProp.reparentTo, hidden),
+                    ),
+                ),
+                Parallel(
+                    LerpPosInterval(suit, 0.5, origPos, other=battle, blendType='easeIn'),
+                    ActorInterval(suit, 'slip-backward', startTime=0.1)
+                ),
+                Func(suit.setColorScale, Vec4(1, 1, 1, 1)),
+                Func(trapProp.sparksEffect.cleanup),
+                Func(battle.movie.clearRestoreColor)
+            ))
         else:
-            suitTrack.append(Parallel(
-                 Func(battle.movie.needRestoreColor),
-                 Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
-                 Func(trapProp.reparentTo, hidden),
-                 ActorInterval(suit, 'flail', startTime=0.9),
-                 LerpPosInterval(suit, 0.3, flyPos),
-                 ))
+            suitTrack.append(Sequence(
+                Wait(0.1),
+                Parallel(
+                    LerpPosInterval(suit, 0.5, flyPos, other=battle, blendType='easeOut'),
+                    ActorInterval(suit, 'slip-backward', duration=0.1),
+                    Func(battle.movie.needRestoreColor),
+                    Sequence(
+                        Wait(0.1),
+                        Func(suit.setColorScale, Vec4(0.2, 0.2, 0.2, 1)),
+                        Func(trapProp.reparentTo, hidden),
+                    ),
+                ),
+                Parallel(
+                    LerpPosInterval(suit, 0.5, origPos, other=battle, blendType='easeIn'),
+                    ActorInterval(suit, 'slip-backward', startTime=0.1)
+                ),
+                Func(suit.setColorScale, Vec4(1, 1, 1, 1)),
+                Func(trapProp.sparksEffect.cleanup),
+                Func(battle.movie.clearRestoreColor)
+            ))
         if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
@@ -843,28 +868,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                 SoundInterval(explosionSound, duration=0.6, node=suit)
             )
         else:
-            if base.localAvatar in battle.activeToons:
-                suitTrack.append(Parallel(
-                         Sequence(
-                                  Wait(0.3), 
-                                  base.camera.posHprInterval(
-                                              0.5, Point3(*oldCamera), Point3(*oldHPR), blendType='easeInOut')
-                                  ),
-                         ActorInterval(suit, 'slip-backward', playRate=1),
-                    Parallel(LerpHprInterval(suit, 0.7, resetHpr, other=battle),
-                             LerpPosInterval(suit, 0.7, resetPos, other=battle)),
-                    )
-                )
-            else:
-                suitTrack.append(Parallel(
-                          ActorInterval(suit, 'slip-backward', playRate=1),
-                    Parallel(LerpHprInterval(suit, 0.7, resetHpr, other=battle),
-                             LerpPosInterval(suit, 0.7, resetPos, other=battle)),
-                          )
-                )
-            suitTrack.append(Func(suit.clearColorScale))
-            suitTrack.append(Func(trapProp.sparksEffect.cleanup))
-            suitTrack.append(Func(battle.movie.clearRestoreColor))
+            pass
 
             damageTrack = Sequence(Wait(2.3), Func(suit.showHpTextNew, -hp, text="DAZED!", colorCode=1), Func(suit.updateHealthBar, hp))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')

@@ -6323,6 +6323,29 @@ class Suit(Avatar.Avatar):
                                   LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
         self.suitColorTrack.loop()
 
+    def setChainsawTexRollContingency(self, abilityCount=0):
+        # Clamp between 0 and 8
+        abilityCount = max(0, min(abilityCount, 8))
+
+        # 0 abilities = 2.0 sec
+        # 8 abilities = 0.5 sec
+        slowDuration = 2.0
+        fastDuration = 0.5
+
+        duration = slowDuration - (
+            abilityCount / 8.0
+        ) * (slowDuration - fastDuration)
+
+        if self.texRollIval:
+            self.texRollIval.pause()
+
+        for headPart in self.headParts:
+            self.texRollIval = self.chainsawMoveInterval(
+                headPart.find('**/Chain'),
+                duration=duration
+            )
+            self.texRollIval.loop()
+
     def setChainsawTexRoll(self, duration=1.6):
         # Can also be called in cutscene to make the chainsaw roll faster or slower.
         if self.texRollIval:
@@ -6331,7 +6354,7 @@ class Suit(Avatar.Avatar):
             self.texRollIval = None
             return
 
-        for headPart in self.animatedHeadParts:
+        for headPart in self.headParts:
             self.texRollIval = self.chainsawMoveInterval(headPart.find('**/Chain'), duration=duration)
             self.texRollIval.loop()
 
@@ -6938,28 +6961,36 @@ class Suit(Avatar.Avatar):
         for headPart in self.headParts:
             headPart.setTexture(texture, 1)
 
-    def makeChainsawPhase2(self, elite=False):
+    def makeContingencyOverride(self, elite=False):
         self.isChainsawPhase2 = 1
         anims = self.generateAnimDict()
         for headPart in self.headParts:
             headPart.removeNode()
         self.headParts = []
         self.generateHead3('chainsaw_b', animated=True)
+        self.setSuitStatusEffect('contingencyOverride')
         texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
         for headPart in self.headParts:
             headPart.setTexture(texture2, 1)
+        self.setChainsawTexRollContingency(self.getSuitStatusModifier('contingencyAbilities'))
 
-    def makeChainsawPhase4(self, elite=False):
+    def removeContingencyOverride(self, elite=False):
         self.isChainsawPhase2 = 1
         anims = self.generateAnimDict()
         for headPart in self.headParts:
             headPart.removeNode()
         self.headParts = []
-        self.generateHead3('chainsaw_b', animated=True)
-        texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png')
+        self.generateHead3('chainsaw', animated=True)
+        self.clearSuitStatusEffect('contingencyOverride')
+        self.setSuitStatusEffect('contingencyOverrideBroken')
+        texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
         for headPart in self.headParts:
             headPart.setTexture(texture2, 1)
             headPart.find('**/bulbLeft').hide()
+            headPart.find('**/bulbRight').hide()
+            self.setupHeadFreakout(headPart, normalTexture=loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png'), hurtTexture=loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png'), glitchTexture=loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b_boardbot.png'))
+            self.startHeadFreakout()
+        self.setChainsawTexRollContingency(self.getSuitStatusModifier('contingencyAbilities'))
 
     def makeChairmanPhase2(self, elite=False):
         anims = self.generateAnimDict()

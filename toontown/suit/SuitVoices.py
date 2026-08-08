@@ -396,7 +396,9 @@ def getDialogueArray(suit):
         return loadDialogArray(StenographerDialogArray, StenographerDialogFiles)
     elif suit.style.name == 'liquid' and not suit.isSkeleton:
         return loadDialogArray(BellringerDialogArray, BellringerDialogFiles)
-    elif suit.style.name == 'cdirector':
+    elif suit.style.name == 'cdirector' and not suit.hasSuitStatusEffect('contingencyOverride'):
+        return loadDialogArray(ChainsawDialogArray, ChainsawDialogFiles)
+    elif suit.style.name == 'cdirector' and suit.hasSuitStatusEffect('contingencyOverride'):
         return loadDialogArray(ChainsawORDialogArray, ChainsawORDialogFiles)
     elif suit.style.name == 'cbutcher' and not suit.isSkeleton:
         return loadDialogArray(StenographerDialogArray, StenographerDialogFiles)

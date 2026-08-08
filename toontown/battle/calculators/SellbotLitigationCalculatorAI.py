@@ -562,6 +562,22 @@ class SellbotLitigationCalculatorAI:
             # Gag Bans & End Of Round Cheats
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'hustle':
+                if self.suitHasCondition(suitId, 'contractenforcementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
+                    i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'contractenforcementcalculator') and self.__suitCanAttack(suitId):
+                   attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                    'name': 'HustlerCustomerRetention',
+                     'animName': 'nothing',
+                    'hp': 0,
+                    'acc': 100,
+                    'freq': 0,
+                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                   if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             # if self.battle.activeSuits[i].dna.name == 'hustle':
             #     if self.__suitCanAttack(suitId):
             #         damageCogs = 0

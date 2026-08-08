@@ -1293,7 +1293,6 @@ class Movie(DirectObject.DirectObject):
                     'ErclaimHemmorage',
                     'SueDamage',
                     'UnionBusterContractEnforcementHealing',
-                    'HustlerCustomerRetention',
                     'SueApplication',
                     'AbilityQueuedPreToon',
                     'BookkeeperPaperCut',

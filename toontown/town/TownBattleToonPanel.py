@@ -2046,7 +2046,7 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Phantom Entry', 
-                                   tooltipDescription="Your Gags will be -%s%% less effective." % avatar.getToonStatusModifier('phantomDebuff'), 
+                                   tooltipDescription="Cogs are more likely to attack this Toon.", 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2067,7 +2067,7 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Revised Filing', 
-                                   tooltipDescription="This Toon will be taking and dealing +%s%% more damage." % avatar.getToonStatusModifier('revisedFiling'), 
+                                   tooltipDescription="This Toon is taking +%s%% more damage." % avatar.getToonStatusModifier('revisedFiling'), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2505,12 +2505,12 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('markedMeltdown'):
                 damage *= (1.0 + self.avatar.getToonStatusModifier('markedMeltdown') * 0.01)
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('markedMeltdown') * 0.01)
-            if self.avatar.hasToonStatusEffect('phantomDebuff'):
-                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-                lureValue *= (1.0 -self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-            if self.avatar.hasToonStatusEffect('revisedFiling'):
-                damage *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
-                lureValue *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
+            # if self.avatar.hasToonStatusEffect('phantomDebuff'):
+            #     damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            # #     lureValue *= (1.0 -self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            # if self.avatar.hasToonStatusEffect('revisedFiling'):
+            #     damage *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
+            #     lureValue *= (1.0 + self.avatar.getToonStatusModifier('revisedFiling') * 0.01)
             if self.avatar.hasToonStatusEffect('raisedAnte'):
                 damage *= (1.0 + self.avatar.getToonStatusModifier('raisedAnte') * 0.01)
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('raisedAnte') * 0.01)

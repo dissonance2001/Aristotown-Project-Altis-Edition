@@ -1653,7 +1653,6 @@ class SuitGenerator(object):
             self.setHeight(8.5)
             # self.makeVulnerable()
             # self.setVulnerability(125)
-            self.setSuitStatusEffect('vulnerable', modifier=125)
         elif dna.name == 'rkeeper':
             self.scale = 7.1 / aSize
             self.handColor = VBase4(0.341, 0.341, 0.341, 1)
@@ -1666,7 +1665,6 @@ class SuitGenerator(object):
             self.setHeight(10.1)
             # self.makeVulnerable()
             # self.setVulnerability(125)
-            self.setSuitStatusEffect('vulnerable', modifier=125)
           #  self.setTransparency(1)
         elif dna.name == 'cbutcher':
             self.scale = 7.1 / aSize
@@ -1682,23 +1680,21 @@ class SuitGenerator(object):
             self.setColor((0, 0, 0, 1))
             # self.makeVulnerable()
             # self.setVulnerability(125)
-            self.setSuitStatusEffect('vulnerable', modifier=300)
-            self.setSuitStatusEffect('phantomRecordkeeper', turns=5)
+            self.setSuitStatusEffect('phantomRecordkeeper')
         elif dna.name == 'cdirector':
             self.scale = 7.25 / aSize
             self.handColor = VBase4(0.478, 0.478, 0.486, 1)
             self.generateBody()
             self.makeExecutive()
-            self.generateHead3('chainsaw_c', animated=True)
+            self.generateHead3('chainsaw', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(10.55)
-            self.setChainsawTexRoll(2.0)
+            self.setChainsawTexRollContingency(0)
             #self.setTransparency(1)
             # self.makeVulnerable()
             # self.setVulnerability(125)
-            self.setSuitStatusEffect('vulnerable', modifier=125)
         elif dna.name == 'dking':
             self.scale = 6.75 / aSize
             self.handColor = VBase4(0.173, 0.173, 0.173, 1)
@@ -1712,7 +1708,6 @@ class SuitGenerator(object):
            # self.setTransparency(1)
             # self.makeVulnerable()
             # self.setVulnerability(125)
-            self.setSuitStatusEffect('vulnerable', modifier=125)
         elif dna.name == 'ottoman':
             self.scale = 6.0 / bSize
             self.handColor = VBase4(0.302, 0.255, 0.196, 1)

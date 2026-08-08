@@ -3032,7 +3032,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
             return suitTrack
 
-        dmg = 1000
+        dmg = 500
         if dmg <= 0:
             return suitTrack
         if self.currHP < dmg:
@@ -3313,6 +3313,40 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 Func(self.updateHealthBar, 0)
             )
         )
+
+    def makeCongestionInterval(self):
+        suitTrack = Sequence()
+
+        if self.currHP <= 0 or self.isDead and not self.getProjectedRevive():
+            return suitTrack
+
+        if not hasattr(self, '_pendingQueuedDamage'):
+            self._pendingQueuedDamage = 0
+        if not hasattr(self, '_pendingQueuedDeath'):
+            self._pendingQueuedDeath = False
+
+        oldPending = self._pendingQueuedDamage
+
+        # HP this suit effectively has left after already-queued damage
+        projectedCurrentHP = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
+
+        # If queued damage already reduces it to 0 or below, do not sacrifice it again
+        if projectedCurrentHP <= 0:
+            return suitTrack
+
+        hpBeforeThisCall = projectedCurrentHP
+
+        if self.dna.name == 'hustle':
+            showDamage = Sequence(Parallel(Func(self.showHpString, "+5% Defense!"),
+                                                  Func(self.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
+        else:
+            showDamage = Sequence(Parallel(Sequence(ActorInterval(self, 'effort', startTime=self.getDuration('effort'), endTime=max(0, self.getDuration('effort') - 1.0), playRate=-1.0),
+                                                           ActorInterval(self, 'effort', startTime=max(0, self.getDuration('effort') - 1.0))),
+                                                  Func(self.showHpString, "+5% Defense!"), 
+                                                  Func(self.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
+        if hpBeforeThisCall < self.maxHP:
+            suitTrack.append(showDamage)
+        return suitTrack
 
     def makeCompensationInterval(self):
         suitTrack = Sequence()
@@ -3965,6 +3999,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             targetAnim = 'neutral-unstable'
         elif self.hasSuitStatusEffect('brokenConnection'):
             targetAnim = 'neutral-unstable'
+        elif self.hasSuitStatusEffect('contingencyOverride'):
+            targetAnim = 'neutral-override'
+        elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
+            targetAnim = 'neutral-unstable'
 
         else:
             return Func(self.setNeutralAnimationDrop)
@@ -4027,6 +4065,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('brokenConnection'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
+        elif self.hasSuitStatusEffect('contingencyOverride'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('zapped') and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers', 'psetter']:
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
@@ -4083,6 +4127,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
+        elif self.hasSuitStatusEffect('contingencyOverride'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('zapped') and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers', 'psetter']:
             Sequence(Func(self.loop, 'neutral-unstable')
                      ).start()
@@ -4134,40 +4184,41 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 Func(self.loopSyncedLuredAnimations)
             ).start()
         elif self.getDizzy() or self.getDizzy3():
-            if self.currHP > 0:
-                Sequence(
-                # Let the damage/reaction animation reach its ending pose.
-                ActorInterval(
-                    self,
-                    'neutral',
-                    endTime=0
-                ),
+            # if self.currHP > 0:
+            #     Sequence(
+            #     # Let the damage/reaction animation reach its ending pose.
+            #     ActorInterval(
+            #         self,
+            #         'neutral',
+            #         endTime=0
+            #     ),
 
-                Func(self.enableBlend),
+            #     Func(self.enableBlend),
 
-                # Both animations must be actively controlled during the blend.
-                Func(self.loop, 'neutral2'),
-                Func(self.loop, 'lured'),
+            #     # Both animations must be actively controlled during the blend.
+            #     Func(self.loop, 'neutral2'),
+            #     Func(self.loop, 'lured'),
 
-                Parallel(LerpAnimInterval(
-                    self,
-                    duration=0.25,
-                    startAnim='neutral2',
-                    endAnim='lured',
-                    startWeight=0.0,
-                    endWeight=1.0,
-                    blendType='easeInOut'
-                ), ActorInterval(
-                    self,
-                    'lured',
-                    startTime=0, endTime=0
-                )),
+            #     Parallel(LerpAnimInterval(
+            #         self,
+            #         duration=0.25,
+            #         startAnim='neutral2',
+            #         endAnim='lured',
+            #         startWeight=0.0,
+            #         endWeight=1.0,
+            #         blendType='easeInOut'
+            #     ), ActorInterval(
+            #         self,
+            #         'lured',
+            #         startTime=0, endTime=0
+            #     )),
 
-                Func(self.disableBlend),
+            #     Func(self.disableBlend),
 
-                # Ensure the intended neutral animation remains playing.
-                Func(self.loopSyncedLuredAnimations)
-            ).start()
+            #     # Ensure the intended neutral animation remains playing.
+            #     Func(self.loopSyncedLuredAnimations)
+            # ).start()
+            self.loopSyncedLuredAnimations()
         elif self.hasSuitStatusEffect('brokenConnection'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                          ).start()
@@ -4187,6 +4238,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif float(self.currHP) > float(self.maxHP * 1.5) and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers']:
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
+        elif self.hasSuitStatusEffect('contingencyOverride'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         else:
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',)),
                      Func(self.loop, 'neutral%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
@@ -4204,10 +4261,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.dna.name == 'cbutcher' and self.isChainsawPhase2:
-            Sequence(
-                Func(self.loop, 'neutral-override')
-            ).start()
+        elif self.hasSuitStatusEffect('contingencyOverride'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()

@@ -37,7 +37,7 @@ class NotificationRibbon(DirectButton):
                 NotifWindowBase.gui.find('**/notification_flag_hover'),
             ),
             image_scale=(0.45 * (84.0 / 256.0), 1, 0.45),
-            image_pos=(0, 0, -0.16),
+            image_pos=(0, 0, -0.13),
             geom=self.off_geom,
             geom_scale=(0.15 * (37.0 / 91.0), 1, 0.15),
             geom_pos=(0, 0, -0.2),
@@ -46,7 +46,7 @@ class NotificationRibbon(DirectButton):
         self.defineoptions(kw, optiondefs)
         DirectButton.__init__(self, parent, **kw)
         self.initialiseoptions(NotificationRibbon)
-        self.setBin('sorted-gui-popup', 904)
+        self.setBin('sorted-gui-popup', 10)
         self.setDepthTest(False)
         self.setDepthWrite(False)
         self.setTextTo('Notifications')
@@ -59,13 +59,13 @@ class NotificationRibbon(DirectButton):
             parent=self,
             relief=None,
             image=NotifWindowBase.gui.find('**/notification_flag_shadow'),
-            image_pos=(0.005, 0, -0.157),
+            image_pos=(0.005, 0, -0.127),
             image_scale=(self.shadow_image_ratio * self.shadow_xscale,
                          1,
                          self.shadow_zscale),
             image_color=(1, 1, 1, 0.7),
         )
-        self.shadow.setBin('sorted-gui-popup', 898)
+        self.shadow.setBin('sorted-gui-popup', 0)
         self.shadow.setDepthTest(False)
         self.shadow.setDepthWrite(False)
 

@@ -2218,20 +2218,37 @@ class TownBattleCogPanel(DirectFrame):
                                         },
                                     ])
 
+        if self.cog.hasSuitStatusEffect('contingencyOverride'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/chain_linked_icon')
+            # self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('phantomRecordkeeper'),
+            #                              text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+            #                              text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+            #                              pos=(0.25, 0, -0.45),
+            #                              text_scale=.6)
+            # self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Contingency Protocol', 
+                                   tooltipDescription="The Contingency Director has entered his Override phase, and as such, he will be dealing and taking +10% more damage!", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
         if self.cog.hasSuitStatusEffect('phantomRecordkeeper'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/worker_management_icon')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('phantomRecordkeeper'),
-                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
-                                         pos=(0.25, 0, -0.45),
-                                         text_scale=.6)
-            self.extraText.show()
+            # self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('phantomRecordkeeper'),
+            #                              text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+            #                              text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+            #                              pos=(0.25, 0, -0.45),
+            #                              text_scale=.6)
+            # self.extraText.show()
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Phantom Entry', 
-                                   tooltipDescription="Defeating this Cog will severely damage the Recordkeeper, if this Cog is left standing when the round timer runs out, it will donate it's remaining health to the Recordkeeper.", 
+                                   tooltipDescription="The Recordkeeper has made a clone of herself! This clone will cause the permanent record to inflate, and apply debuffs to the Toons, defeating it will directly damage the Recordkeeper.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3088,6 +3105,23 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipDescription='Attacks from this Cog will be -%s%% less powerful!' % self.cog.getSuitStatusModifier('damagedown'), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
+
+        if self.cog.hasSuitStatusEffect('contingencyOverrideBroken'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/kickback_icon')
+            # self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('phantomRecordkeeper'),
+            #                              text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+            #                              text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+            #                              pos=(0.25, 0, -0.45),
+            #                              text_scale=.6)
+            # self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Protocol Breach', 
+                                   tooltipDescription="The Contingency Director's override has malfunctioned! He is now taking and dealing -25% less damage.", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
 
         if self.cog.hasSuitStatusEffect('unionBusterNoAttack'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')

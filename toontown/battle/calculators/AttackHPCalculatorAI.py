@@ -2259,13 +2259,10 @@ class AttackHPCalculatorAI(object):
                 for suit in self.battle.suits:
                     if suit.currHP <= 0:
                         continue
-                    x = (suit.maxHP * suit.hardMaxHP) - suit.currHP
-                    if suit.currHP >= (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + 0)
-                    elif suit.currHP + 275 > (suit.maxHP * suit.hardMaxHP):
-                        suit.setHP(suit.currHP + x)
+                    if not self.suitHasCondition(suit.doId, 'directorDamageReduction'):
+                        self.setSuitCondition(suit.doId, 'directorDamageReduction', .95, -1, 'setBoth')
                     else:
-                        suit.setHP(suit.currHP + 275)
+                        self.setSuitCondition(suit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(suit.doId, 'directorDamageReduction') - .05), -1, 'setBoth')
                     continue
             elif atkType['name'] == 'HustlerSalesPitch':
                 result = 0
@@ -2877,17 +2874,16 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'papertrailcalculator', 0, 0, 'setBoth')
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
-                if self.getToonConditionModifier(toonId, 'allGagBoost') < -50:
-                    self.setToonCondition(toon.doId, 'allGagBoost',
-                                            self.getToonConditionModifier(toonId, 'allGagBoost'), 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost',
-                                            self.getToonConditionModifier(toonId, 'lureBoost'), 3, 'setBoth')
-                else:
-                    self.setToonCondition(toon.doId, 'allGagBoost', -50, 3, 'setBoth')
-                    self.setToonCondition(toon.doId, 'lureBoost', -50, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'highTargetChance', 4, 3, 'setBoth')
             elif atkType['name'] == 'RecordkeeperMinutesTaken':
-                self.recordkeeperCalculatorMultiplier += 2
-                self.recordkeeperMultiplier += 2
+                for s in self.battle.activeSuits:
+                    if s.dna.name == 'cbutcher':
+                        if s.currHP > 0:
+                            self.recordkeeperCalculatorMultiplier += 4
+                            self.recordkeeperMultiplier += 4
+                        else:
+                            self.recordkeeperCalculatorMultiplier += 2
+                            self.recordkeeperMultiplier += 2
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'RecordkeeperMinutesTakenContingency':
@@ -2896,7 +2892,6 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'RecordkeeperPhantomEntrySpawn':
-                self.setSuitCondition(theSuit.doId, 'directorDamageReduction', .5, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phantomEntrycalculator', 0, 0, 'setBoth')
                 # for suit in self.battle.activeSuits:
                 #     if not self.TurnsElapsed == 0:
@@ -2920,9 +2915,8 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'RecordkeeperPhantomEntryDamage':
-                self.setSuitCondition(theSuit.doId, 'directorDamageReduction', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phantomDeath', 0, 0, 'setBoth')
-                theSuit.setHP(theSuit.currHP - 3000)
+                theSuit.setHP(theSuit.currHP - 500)
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 if (theSuit.currHP) <= 0:
@@ -2933,14 +2927,12 @@ class AttackHPCalculatorAI(object):
                         self.calculator.deadSuits += 1
                         self.setSuitCondition(theSuit.doId, 'dead', 1, -1, 'setBoth')
             elif atkType['name'] == 'RecordkeeperPhantomEntrySacrifice':
-                self.setSuitCondition(theSuit.doId, 'directorDamageReduction', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phantomDeath', 0, 0, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'rkeeper':
+                    if suit.dna.name in ['cdirector', 'dking', 'liquid']:
                         if suit.currHP <= 0:
                             continue
                         suit.setHP(suit.currHP + theSuit.currHP)
-                        self.setSuitCondition(suit.doId, 'directorDamageReduction', 0, 0, 'setBoth')
                 theSuit.setHP(0)
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3017,6 +3009,22 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(theSuit.currHP + 750)
                 self.setSuitCondition(theSuit.doId, 'selfRepairCalculator', 0, 0, 'setBoth')
+            elif atkType['name'] == 'ContingencyOverride':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'contingencyOverride', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', 1.1, -1, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
+            elif atkType['name'] == 'ContingencyOverrideRevert':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'contingencyOverride', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'contingencyOverrideBroken', 1, -1, 'setBoth')
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * .75)
+                if not self.suitHasCondition(theSuit.doId, 'directorDamageReduction'):
+                    self.setSuitCondition(theSuit.doId, 'directorDamageReduction', .75, -1, 'setBoth')
+                else:
+                    self.setSuitCondition(theSuit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(theSuit.doId, 'directorDamageReduction') - .25), -1, 'setBoth')
             elif atkType['name'] == 'ContingencyContingencyClauseRetaliation':
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2'):
                     self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
@@ -3031,7 +3039,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'redundantcalculator', 0, 0, 'setBoth')
-                theSuit.setHP(theSuit.currHP - 1000)
+                theSuit.setHP(theSuit.currHP - 500)
                 if (theSuit.currHP) <= 0:
                     if theSuit.getSkeleRevives() >= 1:
                         theSuit.useSkeleRevive()
@@ -3094,7 +3102,7 @@ class AttackHPCalculatorAI(object):
                 else:
                     self.setSuitCondition(theSuit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(theSuit.doId, 'directorDamageReduction') - .05), -1, 'setBoth')
             elif atkType['name'] == 'ContingencyRiskThresholdBreach':
-                result = self.contingencyThresholds
+                result = self.calculator.contingencyThresholds
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'ContingencyRiskThresholdBreach25':
                 if self.toonHasCondition(toon.doId, 'contingencyMarked') and self.toonHasCondition(toon.doId, 'contingencyHit'):

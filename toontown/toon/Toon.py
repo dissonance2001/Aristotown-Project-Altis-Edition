@@ -4099,51 +4099,51 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getDialogueArray(self):
         animalType = self.style.getType()
-        if self.isDisguised or self.cogHead:
-            dialogueArray = Suit.SuitDialogArray
+        # if self.isDisguised or self.cogHead:
+        #     dialogueArray = Suit.getDialogueArray
+        # else:
+        if animalType == 'dog':
+            dialogueArray = DogDialogueArray
+        elif animalType == 'cat':
+            dialogueArray = CatDialogueArray
+        elif animalType == 'horse':
+            dialogueArray = HorseDialogueArray
+        elif animalType == 'mouse':
+            dialogueArray = MouseDialogueArray
+        elif animalType == 'rabbit':
+            dialogueArray = RabbitDialogueArray
+        elif animalType == 'duck':
+            dialogueArray = DuckDialogueArray
+        elif animalType == 'monkey':
+            dialogueArray = MonkeyDialogueArray
+        elif animalType == 'bear':
+            dialogueArray = BearDialogueArray
+        elif animalType == 'pig':
+            dialogueArray = PigDialogueArray
+        elif animalType == 'deer':
+            dialogueArray = DeerDialogueArray
+        elif animalType == 'beaver':
+            dialogueArray = BeaverDialogueArray
+        elif animalType == 'alligator':
+            dialogueArray = AlligatorDialogueArray
+        elif animalType == 'fox':
+            dialogueArray = FoxDialogueArray
+        elif animalType == 'bat':
+            dialogueArray = BatDialogueArray
+        elif animalType == 'raccoon':
+            dialogueArray = RaccoonDialogueArray
+        elif animalType == 'armadillo':
+            dialogueArray = ArmadilloDialogueArray
+        elif animalType == 'kangaroo':
+            dialogueArray = KangarooDialogueArray
+        elif animalType == 'kiwi':
+            dialogueArray = KiwiDialogueArray
+        elif animalType == 'koala':
+            dialogueArray = KoalaDialogueArray
+        elif animalType == 'turkey':
+            dialogueArray = TurkeyDialogueArray
         else:
-            if animalType == 'dog':
-                dialogueArray = DogDialogueArray
-            elif animalType == 'cat':
-                dialogueArray = CatDialogueArray
-            elif animalType == 'horse':
-                dialogueArray = HorseDialogueArray
-            elif animalType == 'mouse':
-                dialogueArray = MouseDialogueArray
-            elif animalType == 'rabbit':
-                dialogueArray = RabbitDialogueArray
-            elif animalType == 'duck':
-                dialogueArray = DuckDialogueArray
-            elif animalType == 'monkey':
-                dialogueArray = MonkeyDialogueArray
-            elif animalType == 'bear':
-                dialogueArray = BearDialogueArray
-            elif animalType == 'pig':
-                dialogueArray = PigDialogueArray
-            elif animalType == 'deer':
-                dialogueArray = DeerDialogueArray
-            elif animalType == 'beaver':
-                dialogueArray = BeaverDialogueArray
-            elif animalType == 'alligator':
-                dialogueArray = AlligatorDialogueArray
-            elif animalType == 'fox':
-                dialogueArray = FoxDialogueArray
-            elif animalType == 'bat':
-                dialogueArray = BatDialogueArray
-            elif animalType == 'raccoon':
-                dialogueArray = RaccoonDialogueArray
-            elif animalType == 'armadillo':
-                dialogueArray = ArmadilloDialogueArray
-            elif animalType == 'kangaroo':
-                dialogueArray = KangarooDialogueArray
-            elif animalType == 'kiwi':
-                dialogueArray = KiwiDialogueArray
-            elif animalType == 'koala':
-                dialogueArray = KoalaDialogueArray
-            elif animalType == 'turkey':
-                dialogueArray = TurkeyDialogueArray
-            else:
-                dialogueArray = None
+            dialogueArray = None
         return dialogueArray
 
     def getShadowJoint(self):
