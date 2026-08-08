@@ -1641,7 +1641,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
         # tollmaster
     elif name == 'TollmasterMandatoryToll':
-        camTrack.append(Sequence(motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 2, suit), Wait(attackDuration - 2)))
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 2, suit), Wait(attackDuration - 2)))
     elif name == 'TollmasterMandatoryTollFinal':
         camTrack.append(Sequence(randomActorShot(suit, battle, 6.5, 'suit'), 
                                  heldShot(0, 15, 20, -180, -20, 0, attackDuration - 6.5)))
@@ -1781,10 +1781,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 3.875), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3.875)))
         # contingency director
     elif name == 'ContingencyOverrideRevert':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 4, suit), Wait(4))
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 2, suit), Wait(attackDuration - 2))
         return camTrack2
     elif name == 'ContingencyOverride':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 4, suit), Wait(4))
+        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 2, suit), Wait(attackDuration - 2))
         return camTrack2
     elif name == 'ContingencySelfRepair':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),

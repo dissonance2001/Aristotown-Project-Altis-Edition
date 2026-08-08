@@ -1172,7 +1172,7 @@ def doMeltdownDamage(attack):
         flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, s, 0], softStop=-1)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, s, 0], softStop=-1)
 
-        notifyTrack = Sequence(Wait(1.5), Func(s.showHpText, - 100), Func(s.setHealthForMe, 100))
+        notifyTrack = Sequence(Wait(1.5), Func(s.showHpText, - 100), Func(s.setHealthForMe, - 100))
         if s.hasSuitStatusEffect('marketMeltdown'):
             notifyTracks.append(Sequence(Wait(1.5), Parallel(s.makeHighPressureDeathMovie(100, battle), Sequence(ActorInterval(s, 'soak', endTime=1.5), ActorInterval(s, 'pie-small-react'), Func(s.setNeutralAnimationDrop)))))
             notifyTracks.append(notifyTrack)

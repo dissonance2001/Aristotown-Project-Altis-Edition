@@ -2021,42 +2021,28 @@ class BattleCalculatorAI:
                                 #     rounds = 0
                                 # elif (theSuit.getSkeleton() > 0) and (theSuit.getManager() > 0):
                                 #     rounds = 0
-                                elif theSuit.dna.name == 'hroller':
+                                elif theSuit.dna.name in [
+                                    'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 
+                                                    'hroller',
+                                                    'hroller2',
+                                                    'videog',
+                                                    'chainsaw',
+                                                    'bcaster',
+                                                    'fires',
+                                                    'fbed',
+                                                    'mouthp',
+                                                    'rainmake',
+                                                    'bellring',
+                                                    'treek',
+                                                    'whunter',
+                                                    'wsi',
+                                                    'redd',
+                                                    'ddiver',
+                                                    'director',
+                                                    'duckshfl',
+                                                    'gatekeep',
+                                                ]:
                                     rounds = 0
-                                elif theSuit.dna.name == 'hroller2':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'videog':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'bcaster':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'fires':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'fbed':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'psetter':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'mouthp':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'rainmake':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'bellring':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'treek':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'whunter':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'wsi':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'redd':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'ddiver':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'director':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'duckshfl':
-                                     rounds = 0
-                                elif theSuit.dna.name == 'gatekeep':
-                                     rounds = 0
                                 elif (theSuit.getHP() > (theSuit.getMaxHP() * 1.5)) and suit.dna.name in ('foreman', 'supervis', 'clerk', 'wsi', 'autocad', 'ovt', 'dopa', 'dopr', 'bdirector', 'sya', 'pbl'):
                                     rounds = 0
                                 elif (theSuit.getHP() > (theSuit.getMaxHP() * 1.5)) and ((theSuit.getSkeleton() or theSuit.getVirtual()) > 0):
