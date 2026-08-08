@@ -150,6 +150,17 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.cutsceneSkip.stateChanged(state)
         self.request(state)
 
+    def requestCutsceneSkipVote(self):
+        self.sendUpdate('requestSkip', [])
+
+    def setVoteSkips(self, voteTotal, playerTotal):
+        if getattr(self, 'cutsceneSkip', None):
+            self.cutsceneSkip.setVoteSkips(voteTotal, playerTotal)
+
+    def setCutsceneSkip(self):
+        if getattr(self, 'cutsceneSkip', None):
+            self.cutsceneSkip.setCutsceneSkip()
+
     def setToonIds(self, involvedToons, toons, unused):
         self.involvedToons = involvedToons
         self.toons = toons
