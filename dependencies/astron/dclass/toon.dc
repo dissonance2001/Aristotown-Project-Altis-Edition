@@ -3490,6 +3490,9 @@ dclass DistributedChainsawBoss : DistributedObject {
   setChainsawSuitId(uint32) broadcast ram;
   setChainsawRPM(uint8) broadcast ram;
   setChainsawPhase(uint8) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
   avatarEnter() airecv clsend;
   avatarExit() airecv clsend;
   toonDied(uint32) broadcast;
