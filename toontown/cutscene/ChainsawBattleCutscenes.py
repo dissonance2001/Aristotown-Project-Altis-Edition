@@ -435,6 +435,18 @@ class ChainsawBattleCutsceneSetup(object):
         else:
             toonNode.reparentTo(render)
         self.cleanupNodes.append(toonNode)
+        def cleanupOffboarding():
+            # The original Clash setup explicitly restores the Toon from the
+            # temporary toonPosNode before that node is destroyed.  Without
+            # this, Altis leaves the Toon parented beneath a removed NodePath,
+            # making it disappear from later normal battle movies.
+            if toon:
+                try:
+                    toon.wrtReparentTo(render)
+                except:
+                    pass
+            self._cleanup()
+
         suits = [self.chainsaw, support]
         nodes = [render, hidden, camera, self.battle, self.chainsaw, toon, toonNode]
         return self._baseDict(
@@ -443,7 +455,7 @@ class ChainsawBattleCutsceneSetup(object):
                 'phase_11/audio/sfx/SA_bash.ogg',
                 'phase_3.5/audio/sfx/ENC_cogfall_apart.ogg',
                 'phase_4/audio/sfx/avatar_emotion_surprise.ogg',
-            ]), functions=[self._cleanup])
+            ]), functions=[cleanupOffboarding])
 
     def _layoffs(self):
         targets = self._pad(self._targets(), 4)
@@ -460,6 +472,18 @@ class ChainsawBattleCutsceneSetup(object):
             toonNodes.append(node)
             if node:
                 self.cleanupNodes.append(node)
+        def cleanupLayoffs():
+            # Layoffs uses the same temporary Toon-anchor pattern as
+            # Offboarding.  Restore every affected Toon before removing the
+            # anchors so later battle movies still have visible Toon actors.
+            for toon in targets:
+                if toon:
+                    try:
+                        toon.wrtReparentTo(render)
+                    except:
+                        pass
+            self._cleanup()
+
         suits = [self.chainsaw] + supports
         nodes = [render, hidden, camera, self.battle, self.chainsaw] + targets + toonNodes
         return self._baseDict(
@@ -467,7 +491,7 @@ class ChainsawBattleCutsceneSetup(object):
             self._loadSounds([
                 'phase_3.5/audio/sfx/ENC_cogfall_apart.ogg',
                 'phase_4/audio/sfx/avatar_emotion_surprise.ogg',
-            ]), functions=[self._cleanup])
+            ]), functions=[cleanupLayoffs])
 
     def _chainlinked(self):
         toons = self._allToons()
