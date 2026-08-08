@@ -67,18 +67,13 @@ class DistributedBattleChainsawAI(
         boss = self.__findChainsaw()
         controller = getattr(self, 'bossCog', None)
         if boss and controller:
-            rpm = int(getattr(controller, 'chainsawRPM', 10))
-            phase = int(getattr(controller, 'chainsawPhase', 1))
-
-            if phase == 2:
-                incoming = 0.5 + (0.1 * (rpm - 10))
-                outgoing = 1.0
-            else:
-                incoming = 1.0
-                outgoing = 1.0 + (0.1 * max(0, rpm - 10))
+            revving = self.battleCalc.chainsawCalculator.syncRevvingEffect(
+                boss, controller)
+            outgoing = float(revving.damageMod) if revving else 1.0
+            bossCondition = 1.0
 
             if getattr(controller, 'chainsawKickbackRounds', 0) > 0:
-                incoming *= float(getattr(
+                bossCondition *= float(getattr(
                     controller, 'chainsawKickbackMultiplier', 1.0))
 
             chainLinked = bool(getattr(
@@ -102,7 +97,7 @@ class DistributedBattleChainsawAI(
                 self.battleCalc.setSuitCondition(
                     boss.doId,
                     'vulnerablevideographer',
-                    0.0 if chainLinked and linkedSupports else incoming,
+                    0.0 if chainLinked and linkedSupports else bossCondition,
                     -1,
                     'setBoth')
             except:

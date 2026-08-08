@@ -606,9 +606,9 @@ class RevvingUp(DamageModifier, DefenseModifier):
         }
     
     def updateEffect(self):
-        for i in range(len(self.milestonesReached[self.reforesting].keys())):
-            if self.rpm >= self.milestonesReached[self.reforesting][i]:
-                self.milestonesReached[self.reforesting][i] = True
+        for milestone in self.milestonesReached[self.reforesting]:
+            if self.rpm >= milestone:
+                self.milestonesReached[self.reforesting][milestone] = True
 
         self.damageMod = 1.0 if self.reforesting else (float(self.rpm) * 0.1)
         self.defenseMod = (float(self.rpm) * 0.1 - 0.5) if self.reforesting else 1.0

@@ -1,6 +1,7 @@
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
+from toontown.battle import StatusEffects
 from toontown.toonbase import ToontownBattleGlobals
 
 import math
@@ -41,6 +42,31 @@ class ChainsawCalculatorAI:
             except:
                 pass
         return None
+
+    def syncRevvingEffect(self, boss=None, controller=None):
+        if boss is None:
+            boss = self._findChainsaw()
+        if controller is None:
+            controller = self._getController()
+        if not boss or not controller:
+            return None
+
+        effects = self.calculator.suitStatusConditionsNew.setdefault(
+            boss.doId, [])
+        effect = None
+        for candidate in effects:
+            if isinstance(candidate, StatusEffects.RevvingUp):
+                effect = candidate
+                break
+
+        if effect is None:
+            effect = StatusEffects.RevvingUp()
+            effects.append(effect)
+
+        effect.rpm = int(controller.chainsawRPM)
+        effect.reforesting = int(controller.chainsawPhase) == 2
+        effect.updateEffect()
+        return effect
 
     def _aliveSupports(self, boss):
         result = []
@@ -219,6 +245,7 @@ class ChainsawCalculatorAI:
 
     def _setRPM(self, controller, value):
         controller.b_setChainsawRPM(value)
+        self.syncRevvingEffect(controller=controller)
 
     def _spendRPM(self, controller, stacks):
         self._setRPM(controller, controller.chainsawRPM - stacks)
@@ -821,6 +848,8 @@ class ChainsawCalculatorAI:
         if not boss or not controller or boss.getHP() <= 0:
             return
 
+        self.syncRevvingEffect(boss, controller)
+
         (hits, attackingToons, bossTargetingToons, supportDamage,
          firedSupports, suedSupports, supportTracks, iouToons) = self._bossHitData(boss)
 
@@ -830,7 +859,7 @@ class ChainsawCalculatorAI:
         phaseChanged = False
         if controller.chainsawPhase == 1 and boss.getHP() <= self.PHASE_TWO_HP:
             controller.b_setChainsawPhase(2)
-            controller.b_setChainsawRPM(10)
+            self._setRPM(controller, 10)
             controller.chainsawChainLinked = False
             controller.chainsawPreviousAttack = 'PhaseTwo'
             controller.chainsawUsedThrottle = False
@@ -843,6 +872,7 @@ class ChainsawCalculatorAI:
             phaseChanged = True
         elif controller.chainsawPhase == 2 and boss.getHP() <= self.PHASE_THREE_HP:
             controller.b_setChainsawPhase(3)
+            self.syncRevvingEffect(boss, controller)
             controller.chainsawChainLinked = False
             controller.chainsawPreviousAttack = 'PhaseThree'
             self._makeVisualAttack(
