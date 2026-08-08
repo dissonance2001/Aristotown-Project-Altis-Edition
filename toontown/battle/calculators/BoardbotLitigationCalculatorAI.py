@@ -73,6 +73,160 @@ class BoardbotLitigationCalculatorAI:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'cdirector':
+                if self.battle.activeSuits[i].currHP < 6000 and not self.suitHasCondition(suitId, 'alreadyRisk1'):
+                    self.setSuitCondition(suitId, 'risk1', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 5400 and not self.suitHasCondition(suitId, 'alreadyRisk2'):
+                    self.setSuitCondition(suitId, 'risk2', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 4800 and not self.suitHasCondition(suitId, 'alreadyRisk3'):
+                    self.setSuitCondition(suitId, 'risk3', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 4200 and not self.suitHasCondition(suitId, 'alreadyRisk4'):
+                    self.setSuitCondition(suitId, 'risk4', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 3600 and not self.suitHasCondition(suitId, 'alreadyRisk5'):
+                    self.setSuitCondition(suitId, 'risk5', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 3000 and not self.suitHasCondition(suitId, 'alreadyRisk6'):
+                    self.setSuitCondition(suitId, 'risk6', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 2400 and not self.suitHasCondition(suitId, 'alreadyRisk7'):
+                    self.setSuitCondition(suitId, 'risk7', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                if self.battle.activeSuits[i].currHP <= 1800 and not self.suitHasCondition(suitId, 'alreadyRisk8'):
+                    self.setSuitCondition(suitId, 'risk8', 1, 10, 'setBoth')
+                    self.calculator.contingencyThresholds += 1
+                # if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
+                #     attack = self.__getLureRemoval(suitId)
+                #     if attack[SUIT_ATK_COL]:
+                        # self.battle.suitAttacks.append(attack)
+                # if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
+                #     i].currHP > 0:
+                #     attack = self.__getAbilityQueued(suitId)
+                #     if attack[SUIT_ATK_COL]:
+                        # self.battle.suitAttacks.append(attack)
+                # if self.suitHasCondition(suitId, 'bannedGagUsed') and self.__suitCanAttack(suitId):
+                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                #                                             'name': 'ContingencyContingencyClauseRetaliation',
+                #                                             'animName': 'glower',
+                #                                             'hp': 0,
+                #                                             'acc': 100,
+                #                                             'freq': 0,
+                #                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                #     if attack[SUIT_ATK_COL]:
+                        # self.battle.suitAttacks.append(attack)
+                if self.calculator.contingencyThresholds > 0 and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                     'name': 'ContingencyRiskThresholdBreach',
+                                    'animName': 'revvedup',
+                                     'hp': 0,
+                                     'acc': 100,
+                                     'freq': 0,
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.calculator.contingencyThresholds > 0 and not self.suitHasCondition(suitId, 'contingencyOverride') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                     'name': 'ContingencyOverride',
+                                    'animName': 'nothing',
+                                     'hp': 0,
+                                     'acc': 100,
+                                     'freq': 0,
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk1') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk2') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk3') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk4') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                    'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk5') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk6') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk7') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                     'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'risk8') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'ContingencyMarkRevisedFiling',
+                    'animName': 'revvedup',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'alreadyRisk8') and self.suitHasCondition(suitId, 'contingencyOverride') and not self.suitHasCondition(suitId, 'contingencyOverrideBroken') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                     'name': 'ContingencyOverrideRevert',
+                                    'animName': 'nothing',
+                                     'hp': 0,
+                                     'acc': 100,
+                                     'freq': 0,
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -643,160 +797,6 @@ class BoardbotLitigationCalculatorAI:
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if self.battle.activeSuits[i].dna.name == 'cdirector':
-                if self.battle.activeSuits[i].currHP < 6000 and not self.suitHasCondition(suitId, 'alreadyRisk1'):
-                    self.setSuitCondition(suitId, 'risk1', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 5400 and not self.suitHasCondition(suitId, 'alreadyRisk2'):
-                    self.setSuitCondition(suitId, 'risk2', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 4800 and not self.suitHasCondition(suitId, 'alreadyRisk3'):
-                    self.setSuitCondition(suitId, 'risk3', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 4200 and not self.suitHasCondition(suitId, 'alreadyRisk4'):
-                    self.setSuitCondition(suitId, 'risk4', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 3600 and not self.suitHasCondition(suitId, 'alreadyRisk5'):
-                    self.setSuitCondition(suitId, 'risk5', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 3000 and not self.suitHasCondition(suitId, 'alreadyRisk6'):
-                    self.setSuitCondition(suitId, 'risk6', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 2400 and not self.suitHasCondition(suitId, 'alreadyRisk7'):
-                    self.setSuitCondition(suitId, 'risk7', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                if self.battle.activeSuits[i].currHP <= 1800 and not self.suitHasCondition(suitId, 'alreadyRisk8'):
-                    self.setSuitCondition(suitId, 'risk8', 1, 10, 'setBoth')
-                    self.calculator.contingencyThresholds += 1
-                # if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
-                #     attack = self.__getLureRemoval(suitId)
-                #     if attack[SUIT_ATK_COL]:
-                        # self.battle.suitAttacks.append(attack)
-                # if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
-                #     i].currHP > 0:
-                #     attack = self.__getAbilityQueued(suitId)
-                #     if attack[SUIT_ATK_COL]:
-                        # self.battle.suitAttacks.append(attack)
-                # if self.suitHasCondition(suitId, 'bannedGagUsed') and self.__suitCanAttack(suitId):
-                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                #                                             'name': 'ContingencyContingencyClauseRetaliation',
-                #                                             'animName': 'glower',
-                #                                             'hp': 0,
-                #                                             'acc': 100,
-                #                                             'freq': 0,
-                #                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                #     if attack[SUIT_ATK_COL]:
-                        # self.battle.suitAttacks.append(attack)
-                if self.calculator.contingencyThresholds > 0 and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                     'name': 'ContingencyRiskThresholdBreach',
-                                    'animName': 'revvedup',
-                                     'hp': 0,
-                                     'acc': 100,
-                                     'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.calculator.contingencyThresholds > 0 and not self.suitHasCondition(suitId, 'contingencyOverride') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                     'name': 'ContingencyOverride',
-                                    'animName': 'nothing',
-                                     'hp': 0,
-                                     'acc': 100,
-                                     'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk1') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk2') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk3') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk4') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                    'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk5') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk6') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk7') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                     'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'risk8') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyMarkRevisedFiling',
-                    'animName': 'revvedup',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'alreadyRisk8') and self.suitHasCondition(suitId, 'contingencyOverride') and not self.suitHasCondition(suitId, 'contingencyOverrideBroken') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                     'name': 'ContingencyOverrideRevert',
-                                    'animName': 'nothing',
-                                     'hp': 0,
-                                     'acc': 100,
-                                     'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'rkeeper':
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,

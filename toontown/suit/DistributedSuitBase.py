@@ -3671,8 +3671,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None
-        self.healInterval = Parallel(Func(self.showHpTextNew, 100, text="+10% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'), Func(self.setHealthForMe, 100), Func(self.updateHealthBar, 0)).start()
-        self.addPendingQueuedHealing(100)
+        self.healInterval = Parallel(Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.updateHealthBar, 0)).start()
 
     def checkCompensationForeman(self):
         if self.healInterval:

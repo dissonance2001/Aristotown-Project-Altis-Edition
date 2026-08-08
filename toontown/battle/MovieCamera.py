@@ -1702,7 +1702,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RecordkeeperRevisedFiling':
         camTrack.append(Sequence(randomActorShot(suit, battle, 1.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 1)))
     elif name == 'RecordkeeperRevisedFilingLiquidation':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 1.0, 'suit'), heldShot(0, 15, 20, -180, -20, 0, attackDuration - 1)))
+        camTrack.append(defaultCamera(openShotDuration=6.75))
     elif name == 'RecordkeeperRedlinedClause':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'RecordkeeperRedlinedClauseMissedPayment':

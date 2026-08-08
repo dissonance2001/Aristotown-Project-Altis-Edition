@@ -5096,8 +5096,8 @@ SuitCheatDescription = {
  'TollmasterMandatoryTollFinal': "The Tollmaster collects his dues!",
  'TollmasterMissedPayment': "The Tollmaster strips the defense of full Laff Toons!",
  'TollmasterRushHour': "The toll has been doubled for the next 2 rounds!",
- 'TollmasterLedgerOfSound': "The Tollmaster's bell cracks when sound gags are used!",
- 'TollmasterBalanceTheLedger': "Damaged Cogs are sacrificed to strengthen the Managers!",
+ 'TollmasterLedgerOfSound': "The Tollmaster retaliates when sound gags are used!",
+ 'TollmasterBalanceTheLedger': "Damaged Cogs strengthen the Managers and the Tollmaster's bell cracks!",
  'TollmasterBalanceTheLedger2': "The Tollmaster destroys damaged cogs and distributes their resources to all manager cogs!",
  'TollmasterBalanceTheLedger3': "The Tollmaster destroys damaged cogs and distributes their resources to all manager cogs!",
  'TollmasterBalanceTheLedger4': "The Tollmaster destroys damaged cogs and distributes their resources to all manager cogs!",
@@ -5114,7 +5114,7 @@ SuitCheatDescription = {
  'RecordkeeperAuditCycle': "The Recordkeeper bans your last chosen gag tracks!",
  'RecordkeeperPhantomEntryDamage': "The Recordkeeper takes damage when phantom entries are destroyed!",
  'RecordkeeperPhantomEntrySpawn': "The Recordkeeper creates a shadow entity of herself!",
- 'RecordkeeperPhantomEntrySacrifice': "The Phantom Recordkeeper donates her remaining health to the Recordkeeper!",
+ 'RecordkeeperPhantomEntrySacrifice': "The Phantom Recordkeeper donates her remaining health to the other managers!",
     # Corporate Butcherer Cheats
  'ButcherOverride': "The Corporate Butcherer's override has taken over!",
  'ButcherOverrideRemoval': "The Corporate Butcherer's override has worn off!",
@@ -5158,7 +5158,7 @@ SuitCheatDescription = {
  'DividendTotalMarketMeltdown2': "The market is taking a huge hit!",
  'DividendPeckingOrder': "The Powerhouse charges all cogs!",
  'DividendPeckingOrderZapped': "The Dividend King restricts a Toon's resources!",
- 'DividendZapRetaliation': "The Dividend King becomes stronger when marked!",
+ 'DividendZapRetaliation': "The Dividend King becomes stronger every round he is marked!",
     # Tollmaster Cheats
  'TollmasterResonanceTax': "The Dividend King becomes stronger for every cog defeated!",
  'TollmasterResonanceTax2': "The Dividend King becomes stronger for every cog defeated!",

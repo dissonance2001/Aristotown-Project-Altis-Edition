@@ -3217,7 +3217,6 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'TollmasterLedgerOfSound':
                 self.setSuitCondition(theSuit.doId, 'soundcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1 + (math.ceil(.05 / len(self.battle.activeToons))), -1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedSound'):
                     result = 50
                 else:
@@ -3246,6 +3245,7 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'TollmasterBalanceTheLedger':
                 result = self.syphonedHP
                 attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1.05, -1, 'setBoth')
                 buffPercent = ((self.syphonedHP * 0.05) * 0.01)
                 for suit in self.battle.activeSuits:
                     if suit.getManager():
@@ -3327,8 +3327,7 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'DividendZapRetaliation':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
-                theSuit.setHP(theSuit.currHP + 100)
+                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.05)
             elif atkType['name'] == 'DividendLiquidationEvent':
                 self.setSuitCondition(theSuit.doId, 'liquidationcalculator', 0, 0, 'setBoth')
                 self.setToonCondition(toon.doId, 'liquidationRecentlyTargeted', 1, 2, 'setBoth')
@@ -4476,7 +4475,6 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'MintLedger':
                 self.setSuitCondition(theSuit.doId, 'soundcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1 + (math.ceil(.05 / len(self.battle.activeToons))), -1, 'setBoth')
                 if self.toonHasCondition(toon.doId, 'usedSound'):
                     result = 50
                 else:

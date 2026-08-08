@@ -2478,9 +2478,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('damageDown'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
-            if self.avatar.hasToonStatusEffect('phantomDebuff'):
-                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-                lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            # if self.avatar.hasToonStatusEffect('phantomDebuff'):
+            #     damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            #     lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
             if self.avatar.hasToonStatusEffect('sanctioned'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)

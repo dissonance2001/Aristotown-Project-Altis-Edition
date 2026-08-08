@@ -2879,7 +2879,7 @@ def doShadowToon2(attack):
     resetPos, resetHpr = battle.getActorPosHpr(suit)
     moveUp = Sequence(Parallel(LerpPosHprInterval(suit, duration=1.0, pos=(oldPos), hpr=(resetHpr), other=battle), ActorInterval(suit, 'walk', loop=1, duration=1.0)),
                       Func(suit.setNeutralAnimationDrop))
-    notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "DAMAGE DEBUFF!", colorCode=1))
+    notifyTrack = Sequence(Wait(tPieHitsSuit), Func(toon.showHpTextNew,  - int(hp), "TARGETED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'phantomDebuff', modifier=25, turns=3)))
     toonTrack = getToonTrackCheat(attack, tPieHitsSuit, ['slip-backward'], tSuitDodges, ['sidestep'])
     return Sequence(suitTrack, Parallel(evilToonTrack, pieTrack, notifyTrack, soundTrack, toonTrack), moveUp)
@@ -6061,6 +6061,7 @@ def doBalanceTheLedger(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     dmg = attack['target'][0]['hp']
+    damageTrack = Sequence(Wait(4.0), Func(suit.setSuitStatusEffect, 'vulnerable', modifier=5, mode='refreshModifier'), Func(suit.showHpTextNew, 0, text="+5% Vulnerable!", colorCode=4))
     for suit in battle.activeSuits:
         suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(dmg, battle, int(math.ceil(dmg * .05)))))
         if suit.getManager():
@@ -6127,7 +6128,7 @@ def doBalanceTheLedger(attack):
 )
     soundTrack = getSoundTrack('SA_healing_bell.ogg')
     soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=theSuit)
-    return Parallel(suitTrack2, suitTracks, suitTrack3, soundTrack, soundTrack2, particleTrack)
+    return Parallel(suitTrack2, damageTrack, suitTracks, suitTrack3, soundTrack, soundTrack2, particleTrack)
 
 def doBalanceTheLedger2(attack):
     theSuit = attack['suit']
@@ -6274,7 +6275,7 @@ def doLedgerOfSound(attack):
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
-        suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.setSuitStatusEffect, 'vulnerable', modifier=5, mode='refreshModifier'), Parallel(Func(suit.showHpTextNew, 0, text="+5% Vulnerable!", colorCode=4)),
+        suitTrack = Sequence(getSuitAnimTrack(attack), 
                              Func(suit.setNeutralAnimationDrop))
         suitTrack.append(Wait(2.0))
         if dmg > 0:
