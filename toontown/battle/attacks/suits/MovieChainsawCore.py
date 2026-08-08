@@ -140,6 +140,40 @@ def _parseTrailingIndices(name, prefix):
     return result
 
 
+def _parseCutSlackName(name):
+    suffix = name[len('ChainsawCoreCutTheSlack'):]
+    if 'S' not in suffix:
+        indices = _parseTrailingIndices(name, 'ChainsawCoreCutTheSlack')
+        return (indices[0] if indices else -1, [])
+    targetText, sacrificeText = suffix.split('S', 1)
+    try:
+        targetIndex = int(targetText)
+    except:
+        targetIndex = -1
+    sacrificeIndices = []
+    for char in sacrificeText:
+        if char.isdigit():
+            sacrificeIndices.append(int(char))
+    return targetIndex, sacrificeIndices
+
+
+def _parseIndexedLevelName(name, prefix):
+    suffix = name[len(prefix):]
+    if 'L' not in suffix:
+        indices = _parseTrailingIndices(name, prefix)
+        return (indices[0] if indices else -1, None)
+    indexText, levelText = suffix.split('L', 1)
+    try:
+        index = int(indexText)
+    except:
+        index = -1
+    try:
+        level = int(levelText)
+    except:
+        level = None
+    return index, level
+
+
 def _promotionCloud(target):
     cloud = DustCloud.DustCloud(fBillboard=0, wantSound=1)
     cloud.setBillboardAxis(2.0)
@@ -153,17 +187,21 @@ def _promotionCloud(target):
 
 
 
-def _applyCutSlackPromotion(target):
-    if not target:
+def _applyPromotion(target, actualLevel):
+    if not target or actualLevel is None:
         return
     try:
         relativeLevel = SuitBattleGlobals.getRelativeFromActualLevel(
-            target.dna.name, 30)
+            target.dna.name, actualLevel)
         target.setLevel(relativeLevel)
+    except:
+        return
+    try:
+        target.setExecutive(1)
     except:
         pass
     try:
-        target.setExecutive(1)
+        target.setMaxHP(int(round(target.getHP() * 1.5)))
     except:
         pass
     try:
@@ -174,6 +212,7 @@ def _applyCutSlackPromotion(target):
         target.healthBar.updateHealthBar(forceUpdate=1)
     except:
         pass
+
 
 def _loopSuitNeutral(suit):
     try:
@@ -228,15 +267,15 @@ def doOffboarding(attack):
 
 def doCutTheSlack(attack):
     suit = attack['suit']
-    indices = _parseTrailingIndices(
-        attack.get('name', ''), 'ChainsawCoreCutTheSlack')
-    target = _supportByIndex(attack, indices[0]) if indices else None
+    targetIndex, sacrificeIndices = _parseCutSlackName(
+        attack.get('name', ''))
+    target = _supportByIndex(attack, targetIndex)
     if target is None:
         return Sequence(Func(_syncMeter, attack), Wait(2.0))
 
     targetTrack = Sequence(
         Wait(2.0),
-        Func(_applyCutSlackPromotion, target),
+        Func(_applyPromotion, target, 30),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),
@@ -244,15 +283,12 @@ def doCutTheSlack(attack):
         Func(_loopSuitNeutral, target))
 
     sacrificeTrack = Parallel()
-    for support in _orderedSuits(attack['battle']):
-        if support is suit or support is target:
+    for index in sacrificeIndices:
+        support = _supportByIndex(attack, index)
+        if support is None or support is target:
             continue
-        try:
-            if support.getHP() <= 0:
-                sacrificeTrack.append(
-                    MovieUtil.suitDisintegrateTrack(support, attack['battle']))
-        except:
-            pass
+        sacrificeTrack.append(
+            MovieUtil.suitDisintegrateTrack(support, attack['battle']))
 
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     track = Parallel(
@@ -324,14 +360,15 @@ def doMarkedWood(attack):
 
 def doAggrandize(attack):
     suit = attack['suit']
-    indices = _parseTrailingIndices(
+    targetIndex, newLevel = _parseIndexedLevelName(
         attack.get('name', ''), 'ChainsawCoreAggrandize')
-    target = _supportByIndex(attack, indices[0]) if indices else None
+    target = _supportByIndex(attack, targetIndex)
     if target is None:
         return Sequence(Func(_syncMeter, attack), Wait(2.0))
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     targetTrack = Sequence(
         Wait(1.0),
+        Func(_applyPromotion, target, newLevel),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),

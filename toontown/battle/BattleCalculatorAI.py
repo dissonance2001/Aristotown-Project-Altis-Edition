@@ -2063,6 +2063,8 @@ class BattleCalculatorAI:
                                     rounds = 0
                                 elif self.suitHasCondition(targetId, 'lureResist') and theSuit.dna.name == 'supervis':
                                     rounds = 0
+                                elif getattr(theSuit, 'chainsawOvercharged', False):
+                                    rounds = min(2, self.NumRoundsLured[atkLevel])
                                 elif (theSuit.getManager() > 0 or
                                       getattr(theSuit, 'chainsawManagerBeneficiary', False) or
                                       getattr(getattr(theSuit, 'dna', None), 'name', None) == 'chainsaw'):
@@ -2317,6 +2319,7 @@ class BattleCalculatorAI:
                         managerFireImmune = bool(
                             suit.getManager() or
                             getattr(suit, 'chainsawManagerBeneficiary', False) or
+                            getattr(suit, 'chainsawOvercharged', False) or
                             getattr(getattr(suit, 'dna', None), 'name', None) == 'chainsaw')
                         if managerFireImmune:
                             attackDamage = 0
@@ -2361,6 +2364,7 @@ class BattleCalculatorAI:
                     if suit:
                         if (suit.getManager() or
                                 getattr(suit, 'chainsawManagerBeneficiary', False) or
+                                getattr(suit, 'chainsawOvercharged', False) or
                                 getattr(getattr(suit, 'dna', None), 'name', None) == 'chainsaw'):
                             attackDamage = 0
                         elif suit.getGovernaught():
@@ -4324,6 +4328,23 @@ class BattleCalculatorAI:
 
         suitId = attack[SUIT_ID_COL]
 
+        theSuit = self.battle.findSuit(suitId)
+        if theSuit and getattr(getattr(theSuit, 'dna', None), 'name', None) == 'chainsaw':
+            markedTargets = []
+            for targetIndex, toonId in enumerate(self.battle.activeToons):
+                if self.toonHasCondition(toonId, 'markedwood') and self.__toonCanBeTargetedBySuit(toonId, attack, ignoreRecentTarget=True):
+                    markedTargets.append((targetIndex, toonId))
+            if markedTargets:
+                attackers = []
+                if suitId in self.SuitAttackers:
+                    for toonId in self.toonAtkOrder:
+                        if toonId in self.SuitAttackers[suitId] and toonId in self.battle.activeToons:
+                            attackers.append(toonId)
+                if attackers:
+                    toonId = attackers[-1]
+                    return [self.battle.activeToons.index(toonId)]
+                return [markedTargets[0][0]]
+
         validTargets = []
 
         for targetIndex, toonId in enumerate(
@@ -4529,25 +4550,10 @@ class BattleCalculatorAI:
 
         for currToon in self.battle.activeToons:
             if self.__toonCanBeTargetedBySuit(currToon, attack):
-                toonIndex = self.battle.activeToons.index(currToon)
-
-                # Normal targeting weight.
-                liveToons.append(toonIndex)
-
-                # Increase this Toon's chance of being targeted.
-                if self.toonHasCondition(currToon, 'highTargetChance'):
-                    modifier = self.getToonConditionModifier(
-                        currToon,
-                        'highTargetChance'
-                    )
-
-                    for i in xrange(modifier):
-                        liveToons.append(toonIndex)
+                liveToons.append(self.battle.activeToons.index(currToon))
 
         if len(liveToons) == 0:
-            self.notify.debug(
-                'No tgts avail. for suit ' + str(suitId)
-            )
+            self.notify.debug('No tgts avail. for suit ' + str(suitId))
             return -1
 
         return random.choice(liveToons)
@@ -4793,6 +4799,19 @@ class BattleCalculatorAI:
                 position = self.battle.activeToons.index(t)
                 if attack[SUIT_HP_COL][position] <= 0:
                     continue
+                if theSuit and getattr(getattr(theSuit, 'dna', None), 'name', None) == 'chainsaw':
+                    attackName = ''
+                    try:
+                        attackName = attack[SUIT_ATK_COL].get('name', '')
+                    except:
+                        pass
+                    if not attackName.startswith('ChainsawCoreDeadwood'):
+                        multiplier = 1.0
+                        if self.toonHasCondition(t, 'vulnerable'):
+                            multiplier *= self.getToonConditionModifier(t, 'vulnerable')
+                        if attackName.startswith('ChainsawCore') and self.toonHasCondition(t, 'markedwood'):
+                            multiplier *= self.getToonConditionModifier(t, 'markedwood')
+                        attack[SUIT_HP_COL][position] = int(math.ceil(attack[SUIT_HP_COL][position] * multiplier))
                 toonHp = self.__getToonHp(t)
                 if toonHp - attack[SUIT_HP_COL][position] <= 0:
                     if self.notify.getDebug():
@@ -5975,9 +5994,9 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
                 if self.suitHasCondition(suit.doId, 'battleSpeed'):
                     self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(suit.doId, 'battleSpeed')), -1, 'setBoth')
-                # if suit.dna.name == 'cbutcher':
-                #     if not self.suitHasCondition(suit.doId, 'phantomCounter'):
-                #         self.setSuitCondition(suit.doId, 'phantomCounter', 1, 5, 'setBoth')
+                if suit.dna.name == 'cbutcher':
+                    if not self.suitHasCondition(suit.doId, 'phantomCounter'):
+                        self.setSuitCondition(suit.doId, 'phantomCounter', 1, 5, 'setBoth')
                 if suit.dna.name == 'ambass':
                     if not self.suitHasCondition(suit.doId, 'ambassadorOverconfidence') and not self.suitHasCondition(suit.doId, 'phase3'):
                         self.setSuitCondition(suit.doId, 'ambassadorOverconfidence', 1, 5, 'setBoth')
@@ -6007,6 +6026,10 @@ class BattleCalculatorAI:
                         self.setSuitCondition(s.doId, 'alreadyDesperation', 1, -1, 'setBoth')
                 if suit.dna.name == 'bcaster':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
+                if suit.dna.name == 'cbutcher':
+                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
+                if suit.dna.name in ['cdirector', 'liquid', 'dking', 'rkeeper']:
+                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 2.25, -1, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.getActualLevel() == 30:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                     for s in self.battle.activeSuits:

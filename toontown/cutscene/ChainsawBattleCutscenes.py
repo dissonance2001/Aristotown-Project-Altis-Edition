@@ -570,12 +570,7 @@ class ChainsawBattleCutsceneSetup(object):
                           'layoffs', 'chainlinked', 'sparkplug'):
             extras.append(Sequence(Wait(0.2), Func(self._syncMeter)))
 
-        # The CTSCs move camera relative to node 4 (Chainsaw). A few do the
-        # reparent and camera move in the same t=0 Parallel block. Put camera
-        # in the right parent space before the CTSC begins so callback order
-        # cannot mirror Revved Up or Throttle shots.
         return Sequence(
-            Func(camera.reparentTo, self.chainsaw),
             Parallel(track, extras),
             Func(self._syncMeter),
             Func(self._cleanup))

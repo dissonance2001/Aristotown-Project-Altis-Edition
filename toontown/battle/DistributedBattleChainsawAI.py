@@ -125,7 +125,7 @@ class DistributedBattleChainsawAI(
 
             for index in xrange(len(linkedSupports)):
                 support = linkedSupports[index]
-                supportIncoming = max(0.25, 1.0 - (0.25 * index))
+                supportIncoming = min(1.0, 0.25 * (index + 1))
                 try:
                     self.battleCalc.setSuitCondition(
                         support.doId,

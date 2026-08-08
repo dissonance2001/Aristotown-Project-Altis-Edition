@@ -344,6 +344,15 @@ class DistributedChainsawBossAI(
         reserves = []
         for i in xrange(amount):
             suit = self.__makeGrunt()
+            if self.chainsawPreviousAttack == 'Scabbard':
+                newMax = int(round(suit.getMaxHP() * 1.5))
+                suit.b_setMaxHP(newMax)
+                suit.b_setHP(newMax)
+                suit.chainsawOvercharged = True
+                try:
+                    suit.setDamageMultiplier(suit.getDamageMultiplier() * 1.5)
+                except:
+                    pass
             self.suits.append(suit)
             self.activeSuits.append(suit)
             if self.chainsawChainLinked:

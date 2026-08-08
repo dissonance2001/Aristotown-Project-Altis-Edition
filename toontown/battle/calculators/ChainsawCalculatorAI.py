@@ -1,6 +1,7 @@
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
+from toontown.toonbase import ToontownBattleGlobals
 
 import math
 import random
@@ -246,6 +247,7 @@ class ChainsawCalculatorAI:
         if not suit:
             return
         newLevel = max(1, int(newLevel))
+        wasOvercharged = bool(getattr(suit, 'chainsawOvercharged', False))
 
         if distribute:
             suit.setLevel(newLevel, forceLevel=True)
@@ -253,43 +255,44 @@ class ChainsawCalculatorAI:
                 suit.b_setExecutive(1)
             except:
                 suit.setExecutive(1)
+            if wasOvercharged:
+                newMax = int(math.ceil(suit.getMaxHP() * 1.5))
+                try:
+                    suit.b_setMaxHP(newMax)
+                except:
+                    suit.setMaxHP(newMax)
             try:
                 suit.b_setHP(suit.getMaxHP())
             except:
                 pass
         else:
-            # Cut the Slack must not visibly promote the Cog before its movie.
-            # Keep the authoritative server state updated without distributing
-            # the level/executive fields; MovieChainsawCore applies the matching
-            # visual promotion to the same active-suit slot during the animation.
             try:
                 relativeLevel = SuitBattleGlobals.getRelativeFromActualLevel(
                     suit.dna.name, newLevel)
                 suit.level = relativeLevel
                 vitals = SuitBattleGlobals.getSuitVitals(
                     suit.dna.name, relativeLevel)
-                suit.maxHP = vitals['hp']
-                suit.currHP = vitals['hp']
+                maxHp = int(math.ceil(
+                    vitals['hp'] * ToontownBattleGlobals.EXECUTIVE_HP_MULT))
+                if wasOvercharged:
+                    maxHp = int(math.ceil(maxHp * 1.5))
+                suit.maxHP = maxHp
+                suit.currHP = maxHp
             except:
-                # Older Altis fallback.  This may distribute on unusual forks,
-                # but keeps the battle functional if the helper is unavailable.
                 suit.setLevel(newLevel, forceLevel=True)
             try:
                 suit.executive = 1
             except:
                 suit.setExecutive(1)
 
-        # Both Cut the Slack and Aggrandize grant this employee the
-        # Chainsaw-specific Manager Beneficiary rules.  Keep getManager() at
-        # zero so the visible name remains ``.exe`` as authored; the battle
-        # calculator recognizes this local AI flag for Fire/Sue immunity and
-        # one-round Lure resistance.
         suit.chainsawManagerBeneficiary = True
-
+        suit.chainsawPromotionLocked = True
         if cts:
             controller = self._getController()
             if controller:
                 controller.chainsawCutSlackTargets[suit.doId] = 0
+        else:
+            suit.chainsawAggrandized = True
 
     def _fireSupport(self, support):
         if not support:
@@ -306,6 +309,7 @@ class ChainsawCalculatorAI:
             return False
         self._spendRPM(controller, 2)
         hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
+        hpRatio = min(max(hpRatio, 0.1), 1.2)
         damage = math.ceil(support.getActualLevel() * 3 * hpRatio)
         damage = max(1, int(damage))
         supportIndex = self.battle.activeSuits.index(support)
@@ -355,7 +359,7 @@ class ChainsawCalculatorAI:
         # Beneficiary and can never be promoted by Cut the Slack a second time.
         eligible = []
         for support in supports:
-            if getattr(support, 'chainsawManagerBeneficiary', False):
+            if getattr(support, 'chainsawPromotionLocked', False):
                 continue
             if support.doId in controller.chainsawCutSlackTargets:
                 continue
@@ -388,8 +392,15 @@ class ChainsawCalculatorAI:
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
         targetIndex = self.battle.activeSuits.index(target)
+        sacrificeIndices = []
+        for support in sacrifices:
+            try:
+                sacrificeIndices.append(self.battle.activeSuits.index(support))
+            except:
+                pass
+        suffix = ''.join([str(index) for index in sacrificeIndices])
         self._makeVisualAttack(
-            boss, 'ChainsawCoreCutTheSlack%d' % max(1, targetIndex),
+            boss, 'ChainsawCoreCutTheSlack%dS%s' % (targetIndex, suffix),
             'summon-cog', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
         controller.chainsawPreviousAttack = 'CutTheSlack'
         controller.chainsawPreviousLogicAttack = 'CutTheSlack'
@@ -402,7 +413,7 @@ class ChainsawCalculatorAI:
         for support in supports:
             # User-facing Manager rule: once a Cog has been promoted into a
             # beneficiary, no Chainsaw promotion may select it again.
-            if getattr(support, 'chainsawManagerBeneficiary', False):
+            if getattr(support, 'chainsawPromotionLocked', False):
                 continue
             try:
                 if (not support.getExecutive()) or support.getActualLevel() < 25:
@@ -438,10 +449,11 @@ class ChainsawCalculatorAI:
         except:
             add = 2
         self._spendRPM(controller, 3)
-        self._promoteSuit(target, min(cap, target.getActualLevel() + add))
+        newLevel = min(cap, target.getActualLevel() + add)
+        self._promoteSuit(target, newLevel, distribute=False)
         targetIndex = self.battle.activeSuits.index(target)
         self._makeVisualAttack(
-            boss, 'ChainsawCoreAggrandize%d' % max(1, targetIndex),
+            boss, 'ChainsawCoreAggrandize%dL%d' % (targetIndex, newLevel),
             'summon-cog', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
         controller.chainsawPreviousAttack = 'Aggrandize'
         controller.chainsawPreviousLogicAttack = 'Aggrandize'
@@ -465,10 +477,16 @@ class ChainsawCalculatorAI:
             current = support.getHP()
             maximum = support.getMaxHP()
             if current >= maximum:
-                # Current wiki: a full-health Cog is Overcharged.
-                newMax = int(math.ceil(maximum * 1.5))
-                support.b_setMaxHP(newMax)
-                support.b_setHP(newMax)
+                if not getattr(support, 'chainsawOvercharged', False):
+                    newMax = int(math.ceil(maximum * 1.5))
+                    support.b_setMaxHP(newMax)
+                    support.b_setHP(newMax)
+                    support.chainsawOvercharged = True
+                    try:
+                        support.setDamageMultiplier(
+                            support.getDamageMultiplier() * 1.5)
+                    except:
+                        pass
             else:
                 support.b_setHP(min(maximum, current + int(math.ceil(maximum * 0.5))))
         self._makeVisualAttack(
@@ -518,16 +536,17 @@ class ChainsawCalculatorAI:
             else:
                 damage = int(math.ceil(self._toonCurrentHP(toonId) * 0.5))
             damages.append(max(1, damage))
-            try:
-                self.setToonCondition(toonId, 'vulnerable', 1.25, 2, 'setBoth')
-            except:
-                pass
         throttleName = ('ChainsawCoreThrottleTwo'
                         if controller.chainsawUsedThrottle
                         else 'ChainsawCoreThrottle')
         controller.chainsawUsedThrottle = True
         self._makeTargetedAttack(
             boss, throttleName, living, damages, 'glower')
+        for toonId in living:
+            try:
+                self.setToonCondition(toonId, 'vulnerable', 1.25, 2, 'setBoth')
+            except:
+                pass
         controller.chainsawPreviousAttack = 'Throttle'
         return True
 
@@ -549,6 +568,7 @@ class ChainsawCalculatorAI:
         fired = []
         for support, toonId in pairs:
             hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
+            hpRatio = min(max(hpRatio, 0.1), 1.2)
             damage = math.ceil(support.getActualLevel() * 4 * hpRatio)
             targetToons.append(toonId)
             damages.append(max(1, damage))
@@ -638,7 +658,7 @@ class ChainsawCalculatorAI:
                 # "highest RPM requirement wins" rule.
                 if rpm >= 13:
                     candidates = [s for s in supports
-                                  if not getattr(s, 'chainsawManagerBeneficiary', False)]
+                                  if not getattr(s, 'chainsawPromotionLocked', False)]
                     damaged = [s for s in candidates if supportDamage.get(s, 0) > 0]
                     sued = [s for s in candidates if s in suedSupports]
                     if len(candidates) == 1 or damaged or sued:
@@ -674,15 +694,11 @@ class ChainsawCalculatorAI:
                             survivedAoe = True
                             break
 
-                    levelPool = totalLevel >= 80
                     if (matureCts or controller.chainsawHitlessRounds >= 2 or
-                            firedSupports or survivedAoe or levelPool):
+                            firedSupports or survivedAoe):
                         targetSupport = None
                         retaliateToon = None
-                        if levelPool:
-                            targetSupport = self._chooseHighestLevel(supports)
-                            wantCts = False
-                        elif matureCts:
+                        if matureCts:
                             targetSupport = random.choice(matureCts)
                         elif firedSupports:
                             # Altis records the Toon who selected Fire in the
@@ -698,7 +714,7 @@ class ChainsawCalculatorAI:
                 if wantCts and rpm >= 14 and supports:
                     ctsCandidates = []
                     for support in supports:
-                        if getattr(support, 'chainsawManagerBeneficiary', False):
+                        if getattr(support, 'chainsawPromotionLocked', False):
                             continue
                         if support.doId in controller.chainsawCutSlackTargets:
                             continue
@@ -836,8 +852,6 @@ class ChainsawCalculatorAI:
 
         if hits:
             controller.chainsawHitlessRounds = -1
-        else:
-            controller.chainsawHitlessRounds += 1
 
         usedAbility = False
         if not phaseChanged:
@@ -877,5 +891,8 @@ class ChainsawCalculatorAI:
         if (not usedAbility and not phaseChanged and not bonus and
                 controller.chainsawPreviousLogicAttack is None):
             controller.chainsawPreviousAttack = None
+
+        if not hits:
+            controller.chainsawHitlessRounds += 1
 
         controller.chainsawPreviousSupportCount = len(supports)

@@ -269,28 +269,14 @@ class _ChainsawIntroHead(Actor.Actor):
         self.glitchState = 'glitch'
         if self.glitchTex:
             self.setTexture(self.glitchTex, 1)
-        try:
-            if self.bulbLeft and not self.bulbLeft.isEmpty():
-                self.bulbLeft.show()
-        except:
-            pass
         self.updateSuitVoice(True)
         self.loop('neutral')
 
     def enterSemiGlitch(self, temp=None):
-        # Phase two: normal voice/texture with the damaged left bulb.  Clash
-        # also performs small random twitch effects here; the battle CTSCs do
-        # not depend on those background twitches, so keep this adapter stable
-        # on old Panda while preserving the authored head/body state.
         self.inGlitch = False
         self.glitchState = 'semi'
         if self.normalTex:
             self.setTexture(self.normalTex, 1)
-        try:
-            if self.bulbLeft and not self.bulbLeft.isEmpty():
-                self.bulbLeft.hide()
-        except:
-            pass
         self.updateSuitVoice(False)
         self.loop('neutral')
 
@@ -299,11 +285,6 @@ class _ChainsawIntroHead(Actor.Actor):
         self.glitchState = 'normal'
         if self.normalTex:
             self.setTexture(self.normalTex, 1)
-        try:
-            if self.bulbLeft and not self.bulbLeft.isEmpty():
-                self.bulbLeft.show()
-        except:
-            pass
         self.updateSuitVoice(False)
         self.loop('neutral')
 
