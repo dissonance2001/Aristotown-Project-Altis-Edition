@@ -288,7 +288,7 @@ def doCutTheSlack(attack):
         if support is None or support is target:
             continue
         sacrificeTrack.append(
-            MovieUtil.suitDisintegrateTrack(support, attack['battle']))
+            MovieUtil.createSuitDeathTrack(support, attack['battle']))
 
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     track = Parallel(
