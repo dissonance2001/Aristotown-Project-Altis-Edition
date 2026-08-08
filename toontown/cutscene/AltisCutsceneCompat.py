@@ -345,6 +345,13 @@ def applySuitVisualEffect(suit, effect):
     if key == 'afterimage':
         suit.makeAfterImages()
         return
+    if key == 'chainsawoverride':
+        # Clash uses this effect as an animation-override state.  The original
+        # Chainsaw CTSC already authors neutral-override explicitly, so Altis
+        # only needs to preserve the state marker instead of emulating Clash's
+        # newer VisualEffect object system.
+        suit._altisCutsceneChainsawOverride = True
+        return
     raise RuntimeError(
         '%s Unsupported suit visual effect: %r' %
         (DEFAULT_LOG_PREFIX, effect))
@@ -355,6 +362,10 @@ def unapplySuitVisualEffect(suit, effect):
     key = _normalizeVisualEffectName(effect)
     if key == 'afterimage':
         suit.removeAfterImages()
+        return
+    if key == 'chainsawoverride':
+        if hasattr(suit, '_altisCutsceneChainsawOverride'):
+            del suit._altisCutsceneChainsawOverride
         return
     raise RuntimeError(
         '%s Unsupported suit visual effect: %r' %

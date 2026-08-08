@@ -557,6 +557,25 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     suit = attack['suit']
     name = attack['name']
     battle = attack['battle']
+
+    # Chainsaw Consultant's dedicated Corporate Clash CTSCs own the complete
+    # camera track.  Do not stack Altis's generic Suit camera on top of them.
+    chainsawCtscNames = (
+        'ChainsawCoreRevvingUp',
+        'ChainsawCoreWhipsaw',
+        'ChainsawCorePhaseTwo',
+        'ChainsawCorePhaseThree',
+        'ChainsawCoreChainLinked',
+        'ChainsawCoreScabbard',
+        'ChainsawCoreSparkPlug',
+        'ChainsawCoreThrottle',
+        'ChainsawCoreThrottleTwo',
+        'ChainsawCoreDeadwood',
+    )
+    if (name in chainsawCtscNames or
+            name.startswith('ChainsawCoreOffboarding') or
+            name.startswith('ChainsawCoreLayoffs')):
+        return Sequence(Wait(attackDuration))
     camTrack = Sequence()
 
     def defaultCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):

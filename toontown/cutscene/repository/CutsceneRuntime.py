@@ -18,6 +18,9 @@ _EVENT_MODULES = (
     'GeneralSequence',
     'SuitSequence',
     'ToonSequence',
+    'ParticleSequence',
+    'ToonExpressionSequence',
+    'ChainsawBattleSequence',
 )
 _eventsLoaded = False
 

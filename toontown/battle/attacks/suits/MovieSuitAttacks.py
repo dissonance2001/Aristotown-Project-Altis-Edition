@@ -5,6 +5,7 @@ from toontown.battle.attacks.suits import MovieBoardbotLitigationCheats
 from toontown.battle.attacks.suits import MovieSellbotLitigationCheats
 from toontown.battle.attacks.suits import MovieCashbotLitigationCheats
 from toontown.battle.attacks.suits import MoviePacesetterCheats
+from toontown.battle.attacks.suits import MovieChainsawCore
 from toontown.battle.attacks.suits import MovieHighRollerCheats
 from toontown.battle.attacks.suits import MovieDirectorsCheats
 from toontown.battle.attacks.suits import MovieUniversalCheats
@@ -1232,6 +1233,41 @@ def doSuitAttack(attack):
     elif name == 'DOPRAmbushMarketing':
         suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
+    elif name == 'ChainsawCoreRevvingUp':
+        suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
+    elif name == 'ChainsawCoreWhipsaw':
+        suitTrack = MovieChainsawCore.doRevvingUp(attack, True)
+    elif name == 'ChainsawCorePhaseTwo':
+        suitTrack = MovieChainsawCore.doPhaseTwo(attack)
+    elif name == 'ChainsawCorePhaseThree':
+        suitTrack = MovieChainsawCore.doPhaseThree(attack)
+    elif name in ('ChainsawCoreOffboarding1', 'ChainsawCoreOffboarding2',
+                  'ChainsawCoreOffboarding3', 'ChainsawCoreOffboarding4'):
+        suitTrack = MovieChainsawCore.doOffboarding(attack)
+    elif name in ('ChainsawCoreCutTheSlack1', 'ChainsawCoreCutTheSlack2',
+                  'ChainsawCoreCutTheSlack3', 'ChainsawCoreCutTheSlack4'):
+        suitTrack = MovieChainsawCore.doCutTheSlack(attack)
+    elif name == 'ChainsawCoreMarkedWood':
+        suitTrack = MovieChainsawCore.doMarkedWood(attack)
+    elif name in ('ChainsawCoreAggrandize1', 'ChainsawCoreAggrandize2',
+                  'ChainsawCoreAggrandize3', 'ChainsawCoreAggrandize4'):
+        suitTrack = MovieChainsawCore.doAggrandize(attack)
+    elif name == 'ChainsawCoreChainLinked':
+        suitTrack = MovieChainsawCore.doChainLinked(attack)
+    elif name == 'ChainsawCoreScabbard':
+        suitTrack = MovieChainsawCore.doScabbard(attack)
+    elif name == 'ChainsawCoreSparkPlug':
+        suitTrack = MovieChainsawCore.doSparkPlug(attack)
+    elif name == 'ChainsawCoreSparkPlugDamage':
+        suitTrack = MovieChainsawCore.doSparkPlugDamage(attack)
+    elif name in ('ChainsawCoreThrottle', 'ChainsawCoreThrottleTwo'):
+        suitTrack = MovieChainsawCore.doThrottle(attack)
+    elif name.startswith('ChainsawCoreLayoffs'):
+        suitTrack = MovieChainsawCore.doLayoffs(attack)
+    elif name == 'ChainsawCoreDeadwood':
+        suitTrack = MovieChainsawCore.doDeadwood(attack)
+    elif name == 'ChainsawCoreKickback':
+        suitTrack = MovieChainsawCore.doKickback(attack)
     elif name == 'PacesetterComeOn':
         suitTrack = MoviePacesetterCheats.doComeOn(attack)
     elif name == 'PacesetterMovingGoalposts':

@@ -26,6 +26,7 @@ class InstanceZoneManagerAI(DirectObject):
         # creating a repository/suit import cycle during module startup.
         from toontown.suit import DistributedHighRollerBossAI
         from toontown.suit import DistributedPacesetterBossAI
+        from toontown.suit import DistributedChainsawBossAI
 
         self.registerInstanceType(
             InstanceGlobals.HIGH_ROLLER,
@@ -33,6 +34,9 @@ class InstanceZoneManagerAI(DirectObject):
         self.registerInstanceType(
             InstanceGlobals.PACESETTER,
             DistributedPacesetterBossAI.DistributedPacesetterBossAI)
+        self.registerInstanceType(
+            InstanceGlobals.CHAINSAW,
+            DistributedChainsawBossAI.DistributedChainsawBossAI)
 
     def registerInstanceType(self, instanceId, constructor,
                              doneEvent='BossDone', startState='WaitForToons'):

@@ -652,6 +652,7 @@ from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
 from toontown.building import DistributedSigilvator/AI
 from toontown.building import DistributedHighRollerSigilvator/AI
+from toontown.building import DistributedChainsawSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
 from toontown.building import DistributedCountErfitElevator/AI
@@ -660,6 +661,7 @@ from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
 from toontown.suit import DistributedPacesetterBoss/AI
+from toontown.suit import DistributedChainsawBoss/AI
 from toontown.instances import DistributedCutsceneSkipButton/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
@@ -818,6 +820,7 @@ from toontown.building import DistributedClubElevator/AI
 from toontown.coghq import DistributedMaze/AI
 from toontown.battle import DistributedBattleWaiters/AI
 from toontown.battle import DistributedBattleMiniboss/AI
+from toontown.battle import DistributedBattleChainsaw/AI
 from toontown.coghq import DistributedFoodBelt/AI
 from toontown.coghq import DistributedBanquetTable/AI
 from toontown.battle import DistributedBattleDiners/AI
@@ -2760,6 +2763,9 @@ dclass DistributedSigilvator : DistributedElevatorExt {
 dclass DistributedHighRollerSigilvator : DistributedSigilvator {
 };
 
+dclass DistributedChainsawSigilvator : DistributedSigilvator {
+};
+
 dclass DistributedVPElevator : DistributedBossElevator {
 };
 
@@ -3474,6 +3480,22 @@ dclass DistributedCountErclaimBoss : DistributedBossCog {
   setBattleDifficulty(uint8) broadcast ram;
 };
 
+dclass DistributedChainsawBoss : DistributedObject {
+  // Three-phase Chainsaw instance controller. The visible/fighting manager is
+  // a normal DistributedSuit with DNA name "chainsaw".
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setChainsawSuitId(uint32) broadcast ram;
+  setChainsawRPM(uint8) broadcast ram;
+  setChainsawPhase(uint8) broadcast ram;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+};
+
 dclass DistributedPacesetterBoss : DistributedObject {
   // Standalone Pacesetter instance controller. The visible/fighting boss is
   // a normal DistributedSuit with DNA name "psetter".
@@ -3922,6 +3944,9 @@ dclass DistributedMaze : DistributedEntity {
 };
 
 dclass DistributedBattleMiniboss : DistributedBattleFinal {
+};
+
+dclass DistributedBattleChainsaw : DistributedBattleMiniboss {
 };
 
 dclass DistributedBattleWaiters : DistributedBattleFinal {

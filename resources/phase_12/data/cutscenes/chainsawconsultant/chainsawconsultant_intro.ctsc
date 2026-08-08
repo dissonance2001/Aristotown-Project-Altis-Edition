@@ -405,7 +405,7 @@
         "subEvents": {
             "0": {
                 "eventDefEnum": "doSuitAnim",
-                "kwargs": "{\"suitIndex\": 0, \"anim\": \"sit-lose\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"sit-lose\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1, \"oldStyleEndAnim\": 1}"
             },
             "1": {
                 "eventDefEnum": "suitProjectileFly",
@@ -413,7 +413,7 @@
             },
             "2": {
                 "eventDefEnum": "moveCameraPosHpr",
-                "kwargs": "{\"duration\": 3.5, \"delay\": 0.0, \"pos\": [-13.50993, 17.1643, 3.5536], \"hpr\": [201.99999, 4.99999, 1e-05], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.09136, -0.52946, 9.39458], \"startHpr\": [0.0, 0.0, 0.0]}"
+                "kwargs": "{\"duration\": 3.5, \"delay\": 0.0, \"pos\": [-13.50993, 17.1643, 3.5536], \"hpr\": [201.99999, 5.0, 1e-05], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [-0.09136, -0.52946, 9.39458], \"startHpr\": [0.0, 0.0, 0.0]}"
             }
         }
     },

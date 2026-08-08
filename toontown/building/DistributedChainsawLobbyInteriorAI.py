@@ -1,9 +1,5 @@
-from direct.directnotify import DirectNotifyGlobal
-from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
+from toontown.building.DistributedChainsawInteriorAI import DistributedChainsawInteriorAI
 
 
-class DistributedChainsawLobbyInteriorAI(DistributedToonInteriorAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedChainsawLobbyInteriorAI')
-
-    def __init__(self, blockNumber, air, zoneId, building):
-        DistributedToonInteriorAI.__init__(self, blockNumber, air, zoneId, building)
+class DistributedChainsawLobbyInteriorAI(DistributedChainsawInteriorAI):
+    pass

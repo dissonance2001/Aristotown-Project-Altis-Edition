@@ -25,6 +25,7 @@ from toontown.battle.calculators.DirectorsCalculatorAI import DirectorsCalculato
 from toontown.battle.calculators.FaceTheFamilyCalculatorAI import FaceTheFamilyCalculatorAI
 from toontown.battle.calculators.HighRollerCalculatorAI import HighRollerCalculatorAI
 from toontown.battle.calculators.PacesetterCalculatorAI import PacesetterCalculatorAI
+from toontown.battle.calculators.ChainsawCalculatorAI import ChainsawCalculatorAI
 from toontown.battle.calculators.SellbotLitigationCalculatorAI import SellbotLitigationCalculatorAI
 from toontown.battle.calculators.SuitConditionCalculatorAI import SuitConditionCalculatorAI
 from toontown.battle.calculators.SuitSpawnCalculatorAI import SuitSpawnCalculatorAI
@@ -154,6 +155,7 @@ class BattleCalculatorAI:
         self.countsCalculator = CountsCalculatorAI(self)
         self.witnessStandInCalculator = WitnessStandInCalculatorAI(self)
         self.pacesetterCalculator = PacesetterCalculatorAI(self)
+        self.chainsawCalculator = ChainsawCalculatorAI(self)
         self.highRollerCalculator = HighRollerCalculatorAI(self)
         self.suitConditionCalculator = SuitConditionCalculatorAI(self)
         self.suitSpawnCalculator = SuitSpawnCalculatorAI(self)
@@ -2061,7 +2063,9 @@ class BattleCalculatorAI:
                                     rounds = 0
                                 elif self.suitHasCondition(targetId, 'lureResist') and theSuit.dna.name == 'supervis':
                                     rounds = 0
-                                elif theSuit.getManager() > 0:
+                                elif (theSuit.getManager() > 0 or
+                                      getattr(theSuit, 'chainsawManagerBeneficiary', False) or
+                                      getattr(getattr(theSuit, 'dna', None), 'name', None) == 'chainsaw'):
                                     rounds = 1
                                 elif theSuit.getGovernaught() > 0:
                                     rounds = 1
@@ -2308,8 +2312,13 @@ class BattleCalculatorAI:
                     attackDamage = atkHp
                 elif atkTrack == FIRE:
                     suit = self.battle.findSuit(targetId)
+                    managerFireImmune = False
                     if suit:
-                        if suit.getManager():
+                        managerFireImmune = bool(
+                            suit.getManager() or
+                            getattr(suit, 'chainsawManagerBeneficiary', False) or
+                            getattr(getattr(suit, 'dna', None), 'name', None) == 'chainsaw')
+                        if managerFireImmune:
                             attackDamage = 0
                         elif suit.getGovernaught():
                             attackDamage = 0
@@ -2344,12 +2353,15 @@ class BattleCalculatorAI:
                     self.setToonCondition(toon.doId, 'noFires', 1, 3, 'setBoth')
                     # self.setToonCondition(toon.doId, 'noUnites', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'noSues', 1, 3, 'setBoth')
-                    self.setSuitCondition(targetId, 'dead', 1, 2, 'setBoth')
+                    if not managerFireImmune:
+                        self.setSuitCondition(targetId, 'dead', 1, 2, 'setBoth')
                     bonus = 0
                 elif atkTrack == SUE:
                     suit = self.battle.findSuit(targetId)
                     if suit:
-                        if suit.getManager():
+                        if (suit.getManager() or
+                                getattr(suit, 'chainsawManagerBeneficiary', False) or
+                                getattr(getattr(suit, 'dna', None), 'name', None) == 'chainsaw'):
                             attackDamage = 0
                         elif suit.getGovernaught():
                             attackDamage = 0
@@ -6219,6 +6231,7 @@ class BattleCalculatorAI:
         self.lawbotCalculator.calculateSuitAttacksLawbotLitigation()
         self.witnessStandInCalculator.calculateSuitAttacksWitnessStandIn()
         self.pacesetterCalculator.calculatePacesetterAttacks()
+        self.chainsawCalculator.calculateChainsawAttacks()
         self.directorsCalculator.calculateSuitAttacksDirectors()
         self.countsCalculator.calculateSuitAttacksCounts()
         self.faceTheFamilyCalculator.calculateSuitAttacksFaceTheFamily()
