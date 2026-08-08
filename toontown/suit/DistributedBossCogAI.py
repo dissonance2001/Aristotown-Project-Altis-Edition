@@ -11,6 +11,7 @@ from toontown.building import SuitPlannerInteriorAI
 from toontown.battle import BattleBase
 from pandac.PandaModules import *
 from toontown.suit import SuitDNA
+from toontown.suit import BossCutsceneSkipAI
 import math
 AllBossCogs = []
 
@@ -109,6 +110,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
             self.toonsB.remove(avId)
         if avId in self.nearToons:
             self.nearToons.remove(avId)
+        BossCutsceneSkipAI.toonLeft(self, avId)
         event = self.air.getAvatarExitEvent(avId)
         self.ignore(event)
         if not self.hasToons():
@@ -175,6 +177,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         self.sendUpdate('setState', [state])
 
     def setState(self, state):
+        BossCutsceneSkipAI.reset(self)
         self.demand(state)
         if self.air:
             if state in self.keyStates:
@@ -182,6 +185,9 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
                  state,
                  self.involvedToons,
                  self.formatReward()))
+
+    def requestSkip(self):
+        BossCutsceneSkipAI.requestSkip(self)
 
     def getState(self):
         return self.state

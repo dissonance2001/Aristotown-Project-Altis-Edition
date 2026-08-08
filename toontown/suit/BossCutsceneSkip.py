@@ -239,9 +239,13 @@ class BossCutsceneSkip(object):
             requestVote()
             return
 
-        if self.voteLabel:
-            self.voteLabel['text'] = self._formatVotes(1)
-        interval.finish()
+        try:
+            self.boss.sendUpdate('requestSkip', [])
+            return
+        except:
+            self.skipRequested = False
+            if self.voteButton:
+                self.voteButton['state'] = DGG.NORMAL
 
     def setVoteSkips(self, voteTotal, playerTotal):
         try:

@@ -1391,6 +1391,9 @@ dclass DistributedBossCog : DistributedNode {
   showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
   setAttackCode(uint8, uint32) broadcast;
   setHealthTag(string) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
 };
 
 dclass DistributedSellbotBoss : DistributedBossCog {
@@ -3510,6 +3513,9 @@ dclass DistributedPacesetterBoss : DistributedObject {
   avatarEnter() airecv clsend;
   avatarExit() airecv clsend;
   toonDied(uint32) broadcast;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
 };
 

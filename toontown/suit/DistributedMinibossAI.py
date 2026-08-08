@@ -3,6 +3,7 @@ from otp.avatar import DistributedAvatarAI
 from toontown.battle import BattleExperienceAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
+from toontown.suit import BossCutsceneSkipAI
 from toontown.toon import InventoryBase
 from toontown.battle import DistributedBattleMinibossAI
 from toontown.building import SuitPlannerInteriorAI
@@ -114,6 +115,7 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         except:
             pass
 
+        BossCutsceneSkipAI.toonLeft(self, avId)
         event = self.air.getAvatarExitEvent(avId)
         self.ignore(event)
         if not self.hasToons():
@@ -216,10 +218,14 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
         self.sendUpdate('setState', [state])
 
     def setState(self, state):
+        BossCutsceneSkipAI.reset(self)
         self.demand(state)
         if self.air:
             if state in self.keyStates:
                 self.air.writeServerEvent('bossBattle', self.doId, '%s|%s|%s|%s|%s|%s' % (self.dept, state, self.involvedToons, self.formatReward(), self.formatLaffLevels(), self.formatSuitType()))
+
+    def requestSkip(self):
+        BossCutsceneSkipAI.requestSkip(self)
 
     def getState(self):
         return self.state
