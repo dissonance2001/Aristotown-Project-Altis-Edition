@@ -1831,6 +1831,43 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
+        if getattr(avatar, 'markedWood', 0):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/marked_wood_icon')
+            rounds = avatar.getMarkedWoodRounds()
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text='%s' % rounds,
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45), text_scale=.6)
+            self.extraText.show()
+            modifier = int(round((avatar.getMarkedWood() - 1.0) * 100.0))
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon,
+                                   slot,
+                                   tooltipTitle='Marked Wood',
+                                   tooltipDescription='The Chainsaw Consultant deals +%s%% damage to this Toon.' % modifier,
+                                   tooltipBuff=False,
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if (not avatar.hasToonStatusEffect('vulnerable') and
+                getattr(avatar, 'isVulnerable', 0) and avatar.getVulnerability() > 1.0):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/broken_shield_icon')
+            rounds = avatar.getVulnerabilityRounds()
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text='%s' % rounds,
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45), text_scale=.6)
+            self.extraText.show()
+            modifier = int(round((avatar.getVulnerability() - 1.0) * 100.0))
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon,
+                                   slot,
+                                   tooltipTitle='Vulnerable',
+                                   tooltipDescription='This Toon takes +%s%% more damage while vulnerable.' % modifier,
+                                   tooltipBuff=False,
+                                   slotColor=(0, 0.902, 1, 1))
+
         if avatar.hasToonStatusEffect('vulnerable'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/broken_shield_icon')
@@ -2294,7 +2331,7 @@ class TownBattleToonPanel(DirectFrame):
 
         if avatar.hasToonStatusEffect('groupDamageDown'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.statusIcon = status.find('**/fizzle_icon')
+            self.statusIcon = status.find('**/toon_damage_down_icon')
             slot = self._claimNextToonStatusSlot()
             self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('groupDamageDown'),
                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
@@ -2478,9 +2515,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('damageDown'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
-            # if self.avatar.hasToonStatusEffect('phantomDebuff'):
-            #     damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-            #     lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+            if self.avatar.hasToonStatusEffect('phantomDebuff'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
             if self.avatar.hasToonStatusEffect('sanctioned'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)

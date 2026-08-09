@@ -45,6 +45,45 @@ def _syncMeter(attack):
             pass
 
 
+def _spendMeter(attack, stacks):
+    controller = _controller(attack)
+    if not controller:
+        return
+    meter = getattr(controller, 'chainsawMeter', None)
+    if not meter:
+        return
+    try:
+        meter.setPhase(controller.chainsawPhase)
+        meter.setRPM(max(10, int(round(float(meter.rpm))) - int(stacks)))
+    except:
+        pass
+
+
+def _applyMarkedWoodStatus(toon):
+    if not toon:
+        return
+    try:
+        toon.makeMarkedWood()
+    except:
+        pass
+    try:
+        toon.checkMarkedWood(1.75)
+        toon.addMarkedWoodRounds(2)
+    except:
+        pass
+
+
+def _applyThrottleVulnerability(toon):
+    if not toon:
+        return
+    try:
+        toon.makeVulnerable()
+        toon.checkVulnerabilityUp(1.25)
+        toon.addVulnerabilityRounds(2)
+    except:
+        pass
+
+
 def _showSuitHpStringCompat(suit, text, duration=0.85, scale=1.0):
     # Current Clash accepts an optional color argument here; Altis's older
     # DistributedSuitBase.showHpString only accepts text/duration/scale.
@@ -214,7 +253,7 @@ def _promotionCloud(target):
 
 
 
-def _applyPromotion(target, actualLevel):
+def _applyPromotion(target, actualLevel, battle=None):
     if not target or actualLevel is None:
         return
     try:
@@ -228,9 +267,20 @@ def _applyPromotion(target, actualLevel):
     except:
         pass
     try:
-        target.setMaxHP(int(round(target.getHP() * 1.5)))
+        target.setManager(1)
     except:
         pass
+    try:
+        for name in list(target.getSuitStatusEffects().keys()):
+            if name != 'overcharged':
+                target.clearSuitStatusEffect(name)
+    except:
+        pass
+    if battle:
+        try:
+            battle.unlureSuit(target)
+        except:
+            pass
     try:
         target.setDisplayName(target.createNameInfo())
     except:
@@ -239,6 +289,64 @@ def _applyPromotion(target, actualLevel):
         target.healthBar.updateHealthBar(forceUpdate=1)
     except:
         pass
+
+def _applyScabbardState(suit, finalHP, finalMax):
+    if not suit:
+        return
+    try:
+        current = int(suit.getHP())
+    except:
+        current = int(getattr(suit, 'currHP', finalHP))
+    try:
+        suit.setMaxHP2(int(finalMax))
+    except:
+        try:
+            suit.maxHP = int(finalMax)
+        except:
+            pass
+    heal = max(0, int(finalHP) - current)
+    if heal > 0:
+        try:
+            suit.showHpTextNew(-heal)
+        except:
+            pass
+        try:
+            suit.updateHealthBar(-heal, forceUpdate=1)
+        except:
+            try:
+                suit.setHP(int(finalHP))
+            except:
+                pass
+    else:
+        try:
+            suit.setHP(int(finalHP))
+            suit.updateHealthBar(0, forceUpdate=1)
+        except:
+            pass
+    try:
+        if int(suit.getHP()) != int(finalHP):
+            suit.setHP(int(finalHP))
+            suit.updateHealthBar(0, forceUpdate=1)
+    except:
+        pass
+
+
+def _parseScabbardStates(attack):
+    name = attack.get('name', '')
+    suffix = name[len('ChainsawCoreScabbard'):].strip('_')
+    if not suffix:
+        return []
+    values = suffix.split('_')
+    result = []
+    for offset in xrange(0, len(values) - 3, 4):
+        try:
+            index = int(values[offset])
+            finalHP = int(values[offset + 1])
+            finalMax = int(values[offset + 2])
+        except:
+            continue
+        result.append((index, finalHP, finalMax))
+    return result
 
 
 def _loopSuitNeutral(suit):
@@ -292,17 +400,21 @@ def doPhaseTwo(attack):
 
 
 def doPhaseThree(attack):
-    return makeChainsawBattleCutscene(attack, 'phasethree')
+    return Sequence(
+        Func(attack['battle'].setChainsawChainVisualActive, False),
+        makeChainsawBattleCutscene(attack, 'phasethree'))
 
 
 def doOffboarding(attack):
     indices = _parseTrailingIndices(
         attack.get('name', ''), 'ChainsawCoreOffboarding')
     support = _supportByIndex(attack, indices[0]) if indices else None
-    track = Parallel(
-        makeChainsawBattleCutscene(
-            attack, 'offboarding', supportSuit=support),
-        _damageTrack(attack, 6.0))
+    track = Sequence(
+        Func(_spendMeter, attack, 2),
+        Parallel(
+            makeChainsawBattleCutscene(
+                attack, 'offboarding', supportSuit=support),
+            _damageTrack(attack, 6.0)))
     return _withCheatBanner(
         attack, track, 'OFFBOARDING!',
         'THE CHAINSAW CONSULTANT FIRES A COG... LITERALLY!')
@@ -314,11 +426,11 @@ def doCutTheSlack(attack):
         attack.get('name', ''))
     target = _supportByIndex(attack, targetIndex)
     if target is None:
-        return Sequence(Func(_syncMeter, attack), Wait(2.0))
+        return Sequence(Func(_spendMeter, attack, 4), Wait(2.0))
 
     targetTrack = Sequence(
         Wait(2.0),
-        Func(_applyPromotion, target, 30),
+        Func(_applyPromotion, target, 30, attack['battle']),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),
@@ -334,12 +446,13 @@ def doCutTheSlack(attack):
             MovieUtil.shortCircuitTrack(support, attack['battle']))
 
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
-    track = Parallel(
-        ActorInterval(suit, 'snap-override', partName='modelRoot'),
-        Sequence(Wait(0.1), SoundInterval(sfx, node=suit)),
-        Sequence(Wait(1.0), sacrificeTrack),
-        targetTrack,
-        Func(_syncMeter, attack))
+    track = Sequence(
+        Func(_spendMeter, attack, 4),
+        Parallel(
+            ActorInterval(suit, 'snap-override', partName='modelRoot'),
+            Sequence(Wait(0.1), SoundInterval(sfx, node=suit)),
+            Sequence(Wait(1.0), sacrificeTrack),
+            targetTrack))
     return _withCheatBanner(
         attack, track, 'CUT THE SLACK!',
         'THE CHAINSAW CONSULTANT POWERS UP THE STRONGEST EMPLOYEE!')
@@ -362,10 +475,12 @@ def doMarkedWood(attack):
     except:
         log = None
     if log is None or log.isEmpty():
-        track = Parallel(
-            ActorInterval(suit, 'throw-object', partName='modelRoot'),
-            _damageTrack(attack, 3.66),
-            Func(_syncMeter, attack))
+        track = Sequence(
+            Func(_spendMeter, attack, 7),
+            Parallel(
+                ActorInterval(suit, 'throw-object', partName='modelRoot'),
+                _damageTrack(attack, 3.66),
+                Sequence(Wait(3.66), Func(_applyMarkedWoodStatus, toon))))
         return _withCheatBanner(
             attack, track, 'MARKED WOOD!',
             'THE CHAINSAW CONSULTANT MARKS THE MOST DANGEROUS TOON FOR TERMINATION!')
@@ -395,14 +510,16 @@ def doMarkedWood(attack):
         Parallel(
             ActorInterval(toon, 'cringe'),
             Func(toon.showHpText, -dmg, openEnded=0),
-            Func(_damage, toon, dmg, died)))
-    track = Parallel(
-        ActorInterval(suit, 'throw-paper', partName='modelRoot'),
-        propTrack,
-        Sequence(Wait(2.9), SoundInterval(impact, node=suit)),
-        Sequence(Wait(3.56), SoundInterval(wood, node=toon)),
-        toonTrack,
-        Func(_syncMeter, attack))
+            Func(_damage, toon, dmg, died),
+            Func(_applyMarkedWoodStatus, toon)))
+    track = Sequence(
+        Func(_spendMeter, attack, 7),
+        Parallel(
+            ActorInterval(suit, 'throw-paper', partName='modelRoot'),
+            propTrack,
+            Sequence(Wait(2.9), SoundInterval(impact, node=suit)),
+            Sequence(Wait(3.56), SoundInterval(wood, node=toon)),
+            toonTrack))
     return _withCheatBanner(
         attack, track, 'MARKED WOOD!',
         'THE CHAINSAW CONSULTANT MARKS THE MOST DANGEROUS TOON FOR TERMINATION!')
@@ -414,35 +531,49 @@ def doAggrandize(attack):
         attack.get('name', ''), 'ChainsawCoreAggrandize')
     target = _supportByIndex(attack, targetIndex)
     if target is None:
-        return Sequence(Func(_syncMeter, attack), Wait(2.0))
+        return Sequence(Func(_spendMeter, attack, 3), Wait(2.0))
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     targetTrack = Sequence(
         Wait(1.0),
-        Func(_applyPromotion, target, newLevel),
+        Func(_applyPromotion, target, newLevel, attack['battle']),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),
             ActorInterval(target, 'slip-forward', startTime=2.43, partName='modelRoot')),
         Func(_loopSuitNeutral, target))
-    track = Parallel(
-        ActorInterval(suit, 'snap-override', partName='modelRoot'),
-        Sequence(Wait(0.1), SoundInterval(sfx, node=suit)),
-        targetTrack,
-        Func(_syncMeter, attack))
+    track = Sequence(
+        Func(_spendMeter, attack, 3),
+        Parallel(
+            ActorInterval(suit, 'snap-override', partName='modelRoot'),
+            Sequence(Wait(0.1), SoundInterval(sfx, node=suit)),
+            targetTrack))
     return _withCheatBanner(
         attack, track, 'AGGRANDIZE!',
         'THE CHAINSAW CONSULTANT PROMOTES A COG!')
 
 
 def doChainLinked(attack):
-    track = makeChainsawBattleCutscene(attack, 'chainlinked')
+    track = Sequence(
+        Func(_spendMeter, attack, 2),
+        Func(attack['battle'].setChainsawChainVisualActive, True),
+        makeChainsawBattleCutscene(attack, 'chainlinked'))
     return _withCheatBanner(
         attack, track, 'CHAIN LINKED!',
         'THE CHAINSAW CONSULTANT BINDS THE COGS TOGETHER!')
 
 
 def doScabbard(attack):
-    track = makeChainsawBattleCutscene(attack, 'scabbard')
+    stateTrack = Parallel()
+    for index, finalHP, finalMax in _parseScabbardStates(attack):
+        support = _supportByIndex(attack, index)
+        if support:
+            stateTrack.append(Func(
+                _applyScabbardState, support, finalHP, finalMax))
+    track = Sequence(
+        Func(_spendMeter, attack, 7),
+        Parallel(
+            makeChainsawBattleCutscene(attack, 'scabbard'),
+            Sequence(Wait(2.0), stateTrack)))
     return _withCheatBanner(
         attack, track, 'SCABBARD!',
         'THE CHAINSAW CONSULTANT RECHARGES THE COGS!')
@@ -450,6 +581,7 @@ def doScabbard(attack):
 
 def doSparkPlug(attack):
     track = Sequence(
+        Func(_spendMeter, attack, 2),
         Func(attack['suit'].specialHead.exitGlitch),
         Parallel(
             makeChainsawBattleCutscene(attack, 'sparkplug'),
@@ -482,9 +614,16 @@ def doSparkPlugDamage(attack):
 def doThrottle(attack):
     key = ('throttletwo' if attack.get('name') == 'ChainsawCoreThrottleTwo'
            else 'throttle')
+    statusTrack = Parallel()
+    for target in attack.get('target', ()):
+        toon = target.get('toon')
+        if toon:
+            statusTrack.append(Sequence(
+                Wait(4.5), Func(_applyThrottleVulnerability, toon)))
     track = Parallel(
         makeChainsawBattleCutscene(attack, key),
-        _damageTrack(attack, 4.5))
+        _damageTrack(attack, 4.5),
+        statusTrack)
     return _withCheatBanner(
         attack, track, 'THROTTLE!',
         'THE CHAINSAW CONSULTANT INTERRUPTS HIS OWN ATTACK!')
@@ -498,10 +637,13 @@ def doLayoffs(attack):
         support = _supportByIndex(attack, index)
         if support and support not in supports:
             supports.append(support)
-    track = Parallel(
-        makeChainsawBattleCutscene(
-            attack, 'layoffs', supportSuits=supports),
-        _damageTrack(attack, 5.35))
+    cost = min(10, 6 + len(supports))
+    track = Sequence(
+        Func(_spendMeter, attack, cost),
+        Parallel(
+            makeChainsawBattleCutscene(
+                attack, 'layoffs', supportSuits=supports),
+            _damageTrack(attack, 5.35)))
     return _withCheatBanner(
         attack, track, 'LAYOFFS!',
         'THE CHAINSAW CONSULTANT FIRES EVERY COG!!')
@@ -518,10 +660,18 @@ def doDeadwood(attack):
 
 
 def doKickback(attack):
+    suffix = attack.get('name', '')[len('ChainsawCoreKickback'):]
+    try:
+        percent = int(suffix)
+    except:
+        percent = 30
     track = Parallel(
         ActorInterval(attack['suit'], 'pie-small-react', partName='modelRoot'),
-        Wait(5.75),
-        Func(_syncMeter, attack))
+        Sequence(
+            Func(attack['battle'].setChainsawChainVisualActive, False),
+            Func(attack['suit'].setSuitStatusEffect,
+                 'chainsawKickback', percent, 2, 'setBoth')),
+        Wait(5.75))
     return _withCheatBanner(
         attack, track, 'KICKBACK!',
         'THE CHAINSAW CONSULTANT IS VULNERABLE FOR THE NEXT FEW ROUNDS!')

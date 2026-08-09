@@ -70,6 +70,8 @@ class DistributedChainsawBossAI(
         self.chainsawKickbackMultiplier = 1.0
         self.chainsawPendingKickback = False
         self.chainsawPendingKickbackMultiplier = 1.0
+        self.chainsawKickbackVisualPending = False
+        self.chainsawPendingPromotedSuitId = 0
         self.chainsawSparkPlug = {}
         self.chainsawCutSlackTargets = {}
         self.chainsawUsedThrottle = False
@@ -216,6 +218,8 @@ class DistributedChainsawBossAI(
         self.chainsawKickbackMultiplier = 1.0
         self.chainsawPendingKickback = False
         self.chainsawPendingKickbackMultiplier = 1.0
+        self.chainsawKickbackVisualPending = False
+        self.chainsawPendingPromotedSuitId = 0
         self.chainsawSparkPlug = {}
         self.chainsawCutSlackTargets = {}
         self.chainsawUsedThrottle = False
@@ -286,6 +290,7 @@ class DistributedChainsawBossAI(
             self.barrier = None
 
     def enterBattleOne(self):
+        BossCutsceneSkipAI.reset(self)
         if self.battle:
             self.battle.startBattle(self.toons, self.suits)
 
@@ -395,7 +400,7 @@ class DistributedChainsawBossAI(
                     level = 0
                 if level >= 20:
                     self.chainsawPendingKickback = True
-                    self.chainsawPendingKickbackMultiplier = 1.10 + ((level - 20) * 0.02)
+                    self.chainsawPendingKickbackMultiplier = 1.30
 
         for suitId in self.chainsawCutSlackTargets.keys():
             self.chainsawCutSlackTargets[suitId] += 1
@@ -417,8 +422,7 @@ class DistributedChainsawBossAI(
                 self.chainsawChainLinked = False
                 self.chainsawChainStartSupportIds = []
                 self.chainsawPendingKickback = True
-                chainMultiplier = 1.30 - (0.05 * self.chainsawFiredLinks)
-                self.chainsawPendingKickbackMultiplier = max(1.0, chainMultiplier)
+                self.chainsawPendingKickbackMultiplier = 1.30
                 self.chainsawFiredLinks = 0
 
         boss = self.__findChainsawSuit()
@@ -467,8 +471,27 @@ class DistributedChainsawBossAI(
             self.chainsawKickbackRounds = 2
             self.chainsawAbilityBanRounds = 2
             self.chainsawKickbackMultiplier = self.chainsawPendingKickbackMultiplier
+            self.chainsawKickbackVisualPending = True
             self.chainsawPendingKickback = False
             self.chainsawPendingKickbackMultiplier = 1.0
+
+        if self.chainsawPreviousAttack == 'Scabbard':
+            for suit in self.activeSuits:
+                try:
+                    if suit.dna.name == 'chainsaw' or suit.getHP() <= 0:
+                        continue
+                    suit.d_setMaxHP(suit.getMaxHP())
+                    suit.d_setHP(suit.getHP())
+                except:
+                    pass
+
+        pendingPromoted = self.chainsawPendingPromotedSuitId
+        self.chainsawPendingPromotedSuitId = 0
+        if pendingPromoted:
+            try:
+                self.battle.moveSuitToVisualIndex(pendingPromoted, 1)
+            except:
+                pass
 
         reserves = self.__spawnReserves()
 
@@ -533,6 +556,7 @@ class DistributedChainsawBossAI(
         DistributedMinibossAI.DistributedMinibossAI.enterReward(self)
 
     def enterEpilogue(self):
+        BossCutsceneSkipAI.reset(self)
         self.barrier = self.beginBarrier(
             'Epilogue', self.involvedToons, 75,
             self.__doneEpilogue)

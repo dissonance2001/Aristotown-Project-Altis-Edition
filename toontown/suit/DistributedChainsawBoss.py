@@ -75,6 +75,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         self._chainsawIntroSetup = None
         self._chainsawSpecialHead = None
         self.activeIntervals = {}
+        self.cutsceneSkipExtraIntervals = ('ChainsawDeathMovie', 'EpilogueMovie')
         self.cutsceneSkip = BossCutsceneSkip.BossCutsceneSkip(self)
 
     def announceGenerate(self):

@@ -345,6 +345,11 @@ class ChainsawEndingSetup(object):
             toon = self.controller.cr.doId2do.get(toonId)
             if toon and toon not in self.actualToons:
                 toon.wrtReparentTo(render)
+                try:
+                    toon.stop()
+                    toon.loop('neutral')
+                except:
+                    pass
                 validateExistingMultipartAnimations(
                     toon, ('neutral', 'walk', 'run'),
                     'Chainsaw ending Toon %s' % toonId,
@@ -527,8 +532,30 @@ class ChainsawEndingSetup(object):
         return Parallel(track, cameraFix)
 
 
+def _storeDeathInterval(controller, track):
+    if controller:
+        controller.storeInterval(track, 'ChainsawDeathMovie')
+
+
+def _clearDeathInterval(controller):
+    if not controller:
+        return
+    if 'ChainsawDeathMovie' in controller.activeIntervals:
+        del controller.activeIntervals['ChainsawDeathMovie']
+    if getattr(controller, 'cutsceneSkip', None):
+        controller.cutsceneSkip.intervalCleared('ChainsawDeathMovie')
+
+
 def makeChainsawDeath(suit, battle):
-    return ChainsawDeathSetup(suit, battle).build()
+    setup = ChainsawDeathSetup(suit, battle)
+    track = setup.build()
+    controller = setup.controller
+    if controller is None:
+        return track
+    return Sequence(
+        Func(_storeDeathInterval, controller, track),
+        track,
+        Func(_clearDeathInterval, controller))
 
 
 def makeChainsawEnding(controller):

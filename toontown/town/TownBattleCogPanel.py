@@ -2218,6 +2218,41 @@ class TownBattleCogPanel(DirectFrame):
                                         },
                                     ])
 
+        if self.cog.hasSuitStatusEffect('chainsawChainLinked'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/chain_linked_icon')
+            defense = int(round(self.cog.getSuitStatusModifier('chainsawChainLinked')))
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text='%s%%' % defense,
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45), text_scale=.48)
+            self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon,
+                                   slot,
+                                   tooltipTitle='Chain Linked',
+                                   tooltipDescription='This Cog has %s%% damage resistance while Chain Linked.' % defense,
+                                   tooltipBuff=True,
+                                   slotColor=(1, 0.984, 0, 1))
+
+        if self.cog.hasSuitStatusEffect('chainsawKickback'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/kickback_icon')
+            modifier = int(round(self.cog.getSuitStatusModifier('chainsawKickback')))
+            turns = self.cog.getSuitStatusTurns('chainsawKickback')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text='%s' % turns,
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45), text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon,
+                                   slot,
+                                   tooltipTitle='Kickback',
+                                   tooltipDescription='The Chainsaw Consultant takes +%s%% more damage.' % modifier,
+                                   tooltipBuff=False,
+                                   slotColor=(0, 0.902, 1, 1))
+
         if self.cog.hasSuitStatusEffect('contingencyOverride'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/chain_linked_icon')

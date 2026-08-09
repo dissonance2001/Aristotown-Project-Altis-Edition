@@ -253,7 +253,9 @@ class ChainsawCalculatorAI:
     def _applyRPMGain(self, controller, amount):
         if amount <= 0:
             return 0
-        if controller.chainsawChainLinked:
+        if (controller.chainsawPhase == 2 and
+                (controller.chainsawChainLinked or
+                 controller.chainsawPreviousAttack == 'ChainLinked')):
             return 0
         if controller.chainsawPhase == 3:
             amount *= 2
@@ -312,10 +314,32 @@ class ChainsawCalculatorAI:
             except:
                 suit.setExecutive(1)
 
+        try:
+            suit.b_setManager(1)
+        except:
+            try:
+                suit.setManager(1)
+            except:
+                pass
+
+        try:
+            self.calculator.removeLured(suit.doId)
+        except:
+            pass
+        self.calculator.suitStatusConditions[suit.doId] = {}
+        effects = self.calculator.suitStatusConditionsNew.setdefault(suit.doId, [])
+        effects[:] = [effect for effect in effects
+                      if isinstance(effect, StatusEffects.Overcharged)]
+        effects.append(StatusEffects.ManagerBeneficiary(-1))
+        if cts:
+            effects.append(StatusEffects.LureResistance(1))
+
         suit.chainsawManagerBeneficiary = True
         suit.chainsawPromotionLocked = True
+        controller = self._getController()
+        if controller:
+            controller.chainsawPendingPromotedSuitId = suit.doId
         if cts:
-            controller = self._getController()
             if controller:
                 controller.chainsawCutSlackTargets[suit.doId] = 0
         else:
@@ -500,25 +524,45 @@ class ChainsawCalculatorAI:
 
     def _doScabbard(self, boss, controller, supports):
         self._spendRPM(controller, 7)
+        states = []
         for support in supports:
             current = support.getHP()
             maximum = support.getMaxHP()
-            if current >= maximum:
-                if not getattr(support, 'chainsawOvercharged', False):
-                    newMax = int(math.ceil(maximum * 1.5))
-                    support.b_setMaxHP(newMax)
-                    support.b_setHP(newMax)
-                    support.chainsawOvercharged = True
-                    try:
-                        support.setDamageMultiplier(
-                            support.getDamageMultiplier() * 1.5)
-                    except:
-                        pass
+            overcharged = bool(getattr(support, 'chainsawOvercharged', False))
+            if current >= maximum and not overcharged:
+                newMax = int(math.ceil(maximum * 1.5))
+                support.setMaxHP(newMax)
+                support.setHP(newMax)
+                support.chainsawOvercharged = True
+                effects = self.calculator.suitStatusConditionsNew.setdefault(
+                    support.doId, [])
+                if not any([isinstance(effect, StatusEffects.Overcharged)
+                            for effect in effects]):
+                    effects.append(StatusEffects.Overcharged())
+                try:
+                    support.setDamageMultiplier(
+                        support.getDamageMultiplier() * 1.5)
+                except:
+                    pass
+                finalHP = newMax
+                finalMax = newMax
+                overcharged = True
             else:
-                support.b_setHP(min(maximum, current + int(math.ceil(maximum * 0.5))))
+                finalMax = maximum
+                finalHP = min(
+                    finalMax, current + int(math.ceil(finalMax * 0.5)))
+                support.setHP(finalHP)
+            try:
+                index = self.battle.activeSuits.index(support)
+                states.extend((index, int(finalHP), int(finalMax),
+                               1 if overcharged else 0))
+            except:
+                pass
+        name = 'ChainsawCoreScabbard'
+        if states:
+            name += '_' + '_'.join([str(value) for value in states])
         self._makeVisualAttack(
-            boss, 'ChainsawCoreScabbard', 'sticker', 0,
-            SuitBattleGlobals.ATK_TGT_GROUP)
+            boss, name, 'sticker', 0, SuitBattleGlobals.ATK_TGT_GROUP)
         controller.chainsawPreviousAttack = 'Scabbard'
         return True
 
@@ -585,30 +629,25 @@ class ChainsawCalculatorAI:
         if not toons:
             return False
 
-        orderedSupports = list(supports)
-        orderedSupports.sort(key=lambda s: self.battle.activeSuits.index(s), reverse=True)
-        toons = list(toons)
-        toons.reverse()
-        pairs = zip(orderedSupports[:len(toons)], toons)
-        targetToons = []
+        orderedSupports = sorted(
+            list(supports), key=lambda s: self.battle.activeSuits.index(s))
+        targetCount = min(len(orderedSupports), len(toons))
+        targetToons = list(toons[:targetCount])
         damages = []
-        fired = []
-        for support, toonId in pairs:
+        for index in xrange(targetCount):
+            support = orderedSupports[index]
             hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
             hpRatio = min(max(hpRatio, 0.1), 1.2)
             damage = math.ceil(support.getActualLevel() * 4 * hpRatio)
-            targetToons.append(toonId)
             damages.append(max(1, damage))
-            fired.append(support)
 
-        if not fired:
-            return False
-        cost = min(10, 6 + len(fired))
+        cost = min(10, 6 + len(orderedSupports))
         self._spendRPM(controller, cost)
-        for support in fired:
+        for support in orderedSupports:
             self._fireSupport(support)
         firedIndices = ''.join([
-            str(self.battle.activeSuits.index(support)) for support in fired])
+            str(self.battle.activeSuits.index(support))
+            for support in orderedSupports])
         self._makeTargetedAttack(
             boss, 'ChainsawCoreLayoffs%s' % firedIndices,
             targetToons, damages, 'glower')
@@ -628,36 +667,68 @@ class ChainsawCalculatorAI:
         return True
 
     def _doKickbackVisual(self, boss, controller):
-        if not controller.chainsawPendingKickback:
-            return
+        if not getattr(controller, 'chainsawKickbackVisualPending', False):
+            return False
+        multiplier = controller.chainsawKickbackMultiplier
+        if getattr(controller, 'chainsawPendingKickback', False):
+            multiplier = controller.chainsawPendingKickbackMultiplier
+        percent = int(round(max(0.0, (float(multiplier) - 1.0) * 100.0)))
         self._makeVisualAttack(
-            boss, 'ChainsawCoreKickback', 'pie-small-react', 0,
-            SuitBattleGlobals.ATK_TGT_SINGLE)
+            boss, 'ChainsawCoreKickback%d' % percent,
+            'pie-small-react', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
+        controller.chainsawKickbackVisualPending = False
+        return True
+
+    def _triggerProjectedChainKickback(self, boss, controller,
+                                       supportDamage, firedSupports):
+        if not controller.chainsawChainLinked:
+            return False
+        foundLinked = False
+        for suit in self.battle.activeSuits:
+            try:
+                if (suit is boss or
+                        suit.doId not in controller.chainsawChainStartSupportIds):
+                    continue
+                foundLinked = True
+                if suit.getHP() > 0 and suit not in firedSupports:
+                    return False
+            except:
+                pass
+        if not foundLinked and not controller.chainsawChainStartSupportIds:
+            return False
+        controller.chainsawChainLinked = False
+        controller.chainsawChainStartSupportIds = []
+        controller.chainsawKickbackRounds = 3
+        controller.chainsawAbilityBanRounds = 3
+        controller.chainsawKickbackMultiplier = 1.30
+        controller.chainsawPendingKickback = False
+        controller.chainsawPendingKickbackMultiplier = 1.0
+        controller.chainsawKickbackVisualPending = True
+        controller.chainsawFiredLinks = 0
+        return True
 
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
                        suedSupports, supportTracks, iouToons):
         phase = controller.chainsawPhase
         rpm = controller.chainsawRPM
-        allSupports = self._aliveSupports(boss)
-        livingToons = [toonId for toonId in self.battle.activeToons
-                       if self._toonCurrentHP(toonId) > 0]
-
-        # Corporate Clash evaluates abilities after normal Toon damage.  Altis
-        # has not committed that movie damage to the distributed Suit objects
-        # yet, so derive the post-gag field from the calculated HP rows.
+        allSupports = []
         predictedDead = []
         supports = []
-        for support in allSupports:
-            damage = supportDamage.get(support, 0)
+        for support in self.battle.activeSuits:
+            if support is boss:
+                continue
+            allSupports.append(support)
             try:
-                hp = support.getHP()
+                alive = support.getHP() > 0
             except:
-                hp = 1
-            if damage >= hp and damage > 0:
+                alive = True
+            if support in firedSupports or not alive:
                 predictedDead.append(support)
             else:
                 supports.append(support)
+        livingToons = [toonId for toonId in self.battle.activeToons
+                       if self._toonCurrentHP(toonId) > 0]
 
         fullBattle = len(supports) == 4
         allToonsHitBoss = (len(livingToons) > 0 and
@@ -696,8 +767,9 @@ class ChainsawCalculatorAI:
                             target = sorted(sued, key=lambda x: x.getHP())[-1]
                         chosen = ('Aggrandize', target)
 
-                if (rpm >= 15 and not controller.chainsawChainLinked and
-                        (len(supports) == 0 or allToonsTargetedBoss)):
+                if (rpm >= 15 and
+                        not controller.chainsawChainLinked and
+                        (not supports or allToonsTargetedBoss)):
                     chosen = ('ChainLinked', None)
 
                 if rpm >= 17:
@@ -853,8 +925,10 @@ class ChainsawCalculatorAI:
         (hits, attackingToons, bossTargetingToons, supportDamage,
          firedSupports, suedSupports, supportTracks, iouToons) = self._bossHitData(boss)
 
-        # Spark Plug ticks independently of the selected ability.
         self._doSparkPlugDamage(boss, controller)
+        chainKickback = self._triggerProjectedChainKickback(
+            boss, controller, supportDamage, firedSupports)
+        self._doKickbackVisual(boss, controller)
 
         phaseChanged = False
         if controller.chainsawPhase == 1 and boss.getHP() <= self.PHASE_TWO_HP:
@@ -883,8 +957,8 @@ class ChainsawCalculatorAI:
         if hits:
             controller.chainsawHitlessRounds = -1
 
-        usedAbility = False
-        if not phaseChanged:
+        usedAbility = bool(chainKickback)
+        if not phaseChanged and not chainKickback:
             usedAbility = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
@@ -892,10 +966,10 @@ class ChainsawCalculatorAI:
 
         # Current Clash revving rules: every damaging non-Lure gag that lands
         # on Chainsaw is +1 stack; wiping every support after turn one is +1.
-        rpmGain = hits
+        rpmGain = 0 if chainKickback else hits
         supports = self._aliveSupports(boss)
-        if (controller.chainsawRound > 0 and not supports and
-                controller.chainsawPreviousSupportCount > 0):
+        if (not chainKickback and controller.chainsawRound > 0 and
+                not supports and controller.chainsawPreviousSupportCount > 0):
             rpmGain += 1
 
         # Whipsaw is the phase 1/3 fallback and grants +2 stacks.  It may not

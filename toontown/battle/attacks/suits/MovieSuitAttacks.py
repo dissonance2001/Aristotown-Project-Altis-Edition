@@ -1250,7 +1250,7 @@ def doSuitAttack(attack):
         suitTrack = MovieChainsawCore.doAggrandize(attack)
     elif name == 'ChainsawCoreChainLinked':
         suitTrack = MovieChainsawCore.doChainLinked(attack)
-    elif name == 'ChainsawCoreScabbard':
+    elif name.startswith('ChainsawCoreScabbard'):
         suitTrack = MovieChainsawCore.doScabbard(attack)
     elif name == 'ChainsawCoreSparkPlug':
         suitTrack = MovieChainsawCore.doSparkPlug(attack)
@@ -1262,7 +1262,7 @@ def doSuitAttack(attack):
         suitTrack = MovieChainsawCore.doLayoffs(attack)
     elif name == 'ChainsawCoreDeadwood':
         suitTrack = MovieChainsawCore.doDeadwood(attack)
-    elif name == 'ChainsawCoreKickback':
+    elif name.startswith('ChainsawCoreKickback'):
         suitTrack = MovieChainsawCore.doKickback(attack)
     elif name == 'PacesetterComeOn':
         suitTrack = MoviePacesetterCheats.doComeOn(attack)
@@ -1838,17 +1838,20 @@ def doSuitAttack(attack):
             'ChainsawCorePhaseTwo',
             'ChainsawCorePhaseThree',
             'ChainsawCoreChainLinked',
-            'ChainsawCoreScabbard',
             'ChainsawCoreSparkPlug',
             'ChainsawCoreThrottle',
             'ChainsawCoreThrottleTwo',
             'ChainsawCoreDeadwood',
         ) or
         name.startswith('ChainsawCoreOffboarding') or
+        name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')
     )
     if chainsawCtscCamera:
         camTrack = Sequence(Wait(suitTrack.getDuration()))
+    elif name.startswith('ChainsawCoreKickback'):
+        camTrack = MovieCamera.randomActorShot(
+            attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
     elif name.startswith('ChainsawCore'):
         camTrack = MovieCamera.randomActorShot(
             attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')

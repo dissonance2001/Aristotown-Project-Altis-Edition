@@ -149,6 +149,7 @@ CHAINSAW_BATTLE_BODY_ANIMS = {
     'deadwood': 'phase_12/models/char/suitA-deadwood',
     'layoffs': 'phase_12/models/char/suitA-layoffs',
     'summon': 'phase_5/models/char/suitA-summon',
+    'soak': 'phase_5/models/char/suitA-soak',
     'neutral-override': 'phase_12/models/char/suitA-neutral-override',
     'neutral-override-glitched': 'phase_12/models/char/suitA-neutral-override-glitched',
     'revvedup': 'phase_12/models/char/suitA-revvedup',

@@ -62,17 +62,18 @@ class DistributedBattleChainsawAI(
         self.b_setState('ReservesJoining')
 
     def enterWaitForInput(self):
-        # Install the modifiers before Toon damage is calculated for this
-        # round.  Phase 2 changes damage *taken* based on current RPM; phases
-        # 1/3 change the Chainsaw's outgoing normal attack damage.
         boss = self.__findChainsaw()
         controller = getattr(self, 'bossCog', None)
         if boss and controller:
             revving = self.battleCalc.chainsawCalculator.syncRevvingEffect(
                 boss, controller)
-            outgoing = float(revving.damageMod) if revving else 1.0
-            bossCondition = 1.0
+            if controller.chainsawPhase in (1, 3):
+                outgoing = float(revving.damageMod) if revving else 1.0
+                outgoing = max(1.0, min(2.0, outgoing))
+            else:
+                outgoing = 1.0
 
+            bossCondition = 1.0
             if getattr(controller, 'chainsawKickbackRounds', 0) > 0:
                 bossCondition *= float(getattr(
                     controller, 'chainsawKickbackMultiplier', 1.0))
@@ -80,10 +81,6 @@ class DistributedBattleChainsawAI(
             chainLinked = bool(getattr(
                 controller, 'chainsawChainLinked', False))
             chainIds = getattr(controller, 'chainsawChainStartSupportIds', [])
-
-            # Chain Link: Chainsaw is immune while a linked Cog survives.
-            # The living chain is recalculated left-to-right every round: the
-            # first Cog has no reduction, the next has 25%, then 50%, then 75%.
             linkedSupports = []
             for suit in self.activeSuits:
                 if suit is boss:
@@ -94,41 +91,32 @@ class DistributedBattleChainsawAI(
                 except:
                     pass
 
+            linkedSuits = []
+            if chainLinked and linkedSupports:
+                linkedSuits = [boss] + linkedSupports
+            incoming = [0.0, 0.25, 0.5, 0.75, 1.0]
+            if linkedSuits:
+                incoming = incoming[-len(linkedSuits):]
+
             try:
+                bossIncoming = (0.0 if chainLinked and linkedSupports
+                                else bossCondition)
                 self.battleCalc.setSuitCondition(
-                    boss.doId,
-                    'vulnerablevideographer',
-                    0.0 if chainLinked and linkedSupports else bossCondition,
-                    -1,
-                    'setBoth')
+                    boss.doId, 'vulnerablevideographer', bossIncoming,
+                    -1, 'setBoth')
             except:
                 pass
 
             for support in self.activeSuits:
                 if support is boss:
                     continue
-                if support in linkedSupports:
-                    continue
                 try:
+                    supportIncoming = 1.0
+                    if support in linkedSuits:
+                        supportIncoming = incoming[linkedSuits.index(support)]
                     self.battleCalc.setSuitCondition(
-                        support.doId,
-                        'vulnerablevideographer',
-                        1.0,
-                        -1,
-                        'setBoth')
-                except:
-                    pass
-
-            for index in xrange(len(linkedSupports)):
-                support = linkedSupports[index]
-                supportIncoming = min(1.0, 0.25 * (index + 1))
-                try:
-                    self.battleCalc.setSuitCondition(
-                        support.doId,
-                        'vulnerablevideographer',
-                        supportIncoming,
-                        -1,
-                        'setBoth')
+                        support.doId, 'vulnerablevideographer',
+                        supportIncoming, -1, 'setBoth')
                 except:
                     pass
 

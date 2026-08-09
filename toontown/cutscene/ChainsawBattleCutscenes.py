@@ -238,7 +238,8 @@ class ChainsawBattleCutsceneSetup(object):
             if meter:
                 try:
                     meter.setPhase(phase)
-                    meter.setRPM(controller.chainsawRPM)
+                    if phase == 2:
+                        meter.setRPM(10)
                 except:
                     pass
             # Phase 2 owns a timed crossfade from the CTSC wrapper so the
@@ -308,7 +309,7 @@ class ChainsawBattleCutsceneSetup(object):
         maps, controls, headControls = self._animationData(suits)
         return {
             'nodes': nodes,
-            'affectsCamera': self.key != 'deadwood',
+            'affectsCamera': self.key not in ('deadwood', 'phasetwo'),
             'maxPlayers': len(toons),
             'toons': toons,
             'suits': suits,
@@ -326,6 +327,27 @@ class ChainsawBattleCutsceneSetup(object):
             'suitAnimationControls': controls,
             'suitHeadAnimationControls': headControls,
         }
+
+    def _phaseTwoCameraTrack(self):
+        return Sequence(
+            Func(camera.reparentTo, self.chainsaw),
+            Func(camera.setPosHpr,
+                 2.95629, 7.58349, 7.5835,
+                 156.86395, 0.0, 0.0),
+            Func(camera.wrtReparentTo, self.battle),
+            Wait(8.0),
+            Func(camera.reparentTo, self.chainsaw),
+            Func(camera.setPosHpr,
+                 -4.5696, -0.0014, 8.48323,
+                 -101.56812, 0.0, 0.0),
+            LerpPosHprInterval(
+                camera, 5.0,
+                (-4.5696, -0.0014, 7.96911),
+                (-101.56812, 0.0, 0.0),
+                startPos=(-4.5696, -0.0014, 8.48323),
+                startHpr=(-101.56812, 0.0, 0.0),
+                blendType='noBlend'),
+            Func(camera.wrtReparentTo, self.battle))
 
     def _deadwoodCameraTrack(self):
         return Sequence(
@@ -614,8 +636,6 @@ class ChainsawBattleCutsceneSetup(object):
             extras.append(Sequence(Wait(4.753), Func(self._phaseVisual, 2)))
             if self.controller:
                 try:
-                    # Message 2 (ACTIVATING... REFORESTATION MODE) begins at
-                    # exactly 8.0 seconds in the original unchanged CTSC.
                     extras.append(Sequence(
                         Wait(8.0),
                         self.controller.makeChainsawPhaseTwoMusicHandoff()))
@@ -624,9 +644,6 @@ class ChainsawBattleCutsceneSetup(object):
         elif self.key == 'phasethree':
             extras.append(Sequence(Wait(7.5), Func(self.head.endSemiGlitchFreakout)))
             extras.append(Sequence(Wait(7.6), Func(self._phaseVisual, 3)))
-        elif self.key in ('throttle', 'throttletwo', 'scabbard', 'offboarding',
-                          'layoffs', 'chainlinked', 'sparkplug'):
-            extras.append(Sequence(Wait(0.2), Func(self._syncMeter)))
 
         preTrack = Sequence()
         if self.key in ('revvedup', 'throttle', 'throttletwo',
@@ -634,12 +651,21 @@ class ChainsawBattleCutsceneSetup(object):
                         'sparkplug'):
             preTrack.append(Func(camera.wrtReparentTo, self.chainsaw))
 
-        cameraTrack = self._deadwoodCameraTrack() if self.key == 'deadwood' else Sequence()
+        if self.key == 'deadwood':
+            cameraTrack = self._deadwoodCameraTrack()
+        elif self.key == 'phasetwo':
+            cameraTrack = self._phaseTwoCameraTrack()
+        else:
+            cameraTrack = Sequence()
+
+        finish = Sequence()
+        if self.key == 'revvedup':
+            finish.append(Func(self._syncMeter))
 
         return Sequence(
             preTrack,
             Parallel(track, extras, cameraTrack),
-            Func(self._syncMeter),
+            finish,
             Func(self._cleanup))
 
 

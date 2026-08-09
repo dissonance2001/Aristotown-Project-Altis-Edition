@@ -16,6 +16,7 @@ class DistributedBattleChainsaw(
             'phase_9/audio/sfx/CHQ_door_open.ogg')
         self.doorCloseSfx = loader.loadSfx(
             'phase_9/audio/sfx/CHQ_door_close.ogg')
+        self.chainsawChainVisualActive = False
 
     def delete(self):
         if self.doorOpenSfx:
@@ -31,6 +32,57 @@ class DistributedBattleChainsaw(
         self.doorOpenSfx = None
         self.doorCloseSfx = None
         DistributedBattleMiniboss.DistributedBattleMiniboss.delete(self)
+
+    def setChainsawChainVisualActive(self, active):
+        self.chainsawChainVisualActive = bool(active)
+        self._refreshChainsawChainVisuals()
+
+    def _refreshChainsawChainVisuals(self):
+        boss = None
+        supports = []
+        for suit in self.activeSuits:
+            if not suit:
+                continue
+            try:
+                if suit.getHP() <= 0:
+                    continue
+            except:
+                pass
+            try:
+                if suit.style.name == 'chainsaw':
+                    boss = suit
+                else:
+                    supports.append(suit)
+            except:
+                supports.append(suit)
+
+        for suit in list(getattr(self, 'suits', ())) + list(self.activeSuits):
+            if not suit:
+                continue
+            try:
+                suit.clearSuitStatusEffect('chainsawChainLinked')
+            except:
+                pass
+
+        if not self.chainsawChainVisualActive or not boss or not supports:
+            return
+
+        try:
+            boss.setSuitStatusEffect(
+                'chainsawChainLinked', 100, None, 'setBoth')
+        except:
+            pass
+
+        multipliers = [0.25, 0.5, 0.75, 1.0]
+        multipliers = multipliers[-len(supports):]
+        for index in xrange(len(supports)):
+            suit = supports[index]
+            defense = int(round((1.0 - multipliers[index]) * 100.0))
+            try:
+                suit.setSuitStatusEffect(
+                    'chainsawChainLinked', defense, None, 'setBoth')
+            except:
+                pass
 
     def _pruneStaleLuredSuits(self):
         self.luredSuits = [suit for suit in self.luredSuits
@@ -51,6 +103,8 @@ class DistributedBattleChainsaw(
             toonsRunning, immuneSuits, enragedSuits, absorbingSuits,
             soakedSuits, timestamp)
         self._pruneStaleLuredSuits()
+        if self.chainsawChainVisualActive:
+            self._refreshChainsawChainVisuals()
         return result
 
     def makeSuitJoin(self, suit, ts):

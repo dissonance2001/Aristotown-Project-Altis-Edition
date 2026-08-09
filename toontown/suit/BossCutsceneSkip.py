@@ -46,6 +46,10 @@ class BossCutsceneSkip(object):
         stateKey = self._normalise(getattr(self.boss, 'state', ''))
         combined = intervalKey + stateKey
 
+        for value in getattr(self.boss, 'cutsceneSkipExtraIntervals', ()):
+            if intervalKey == self._normalise(value):
+                return True
+
         blocked = ('victory', 'reward', 'epilogue', 'defeat', 'elevator')
         for word in blocked:
             if word in combined:
