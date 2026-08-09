@@ -215,16 +215,18 @@ def _applyPromotion(target, actualLevel):
 
 
 def _loopSuitNeutral(suit):
-    try:
-        suit.loop('lured' if suit.isLured else 'neutral')
-    except:
-        try:
-            suit.loop('neutral')
-        except:
-            pass
+    suit.setNeutralAnimationDrop()
+    # try:
+    #     suit.loop('lured' if suit.isLured else 'neutral')
+    # except:
+    #     try:
+    #         suit.loop('neutral')
+    #     except:
+    #         pass
 
 
 def doRevvingUp(attack, whipsaw=False):
+    suit = attack['suit']
     oldRPM = _getDisplayedRPM(attack)
     controller = _controller(attack)
     newRPM = getattr(controller, 'chainsawRPM', oldRPM) if controller else oldRPM
@@ -232,6 +234,20 @@ def doRevvingUp(attack, whipsaw=False):
         gain = max(0, (int(newRPM) - int(oldRPM)) * 1000)
     except:
         gain = 0
+    try:
+        rpm = max(1, min(int(newRPM), 10000))
+    except:
+        rpm = 1
+
+    rpmRoll = max(1, min(int(newRPM), 10000))
+
+    slowDuration = 1.6
+    fastDuration = 0.15
+
+    texDuration = slowDuration - (
+        (rpmRoll - 1) / 9999.0
+    ) * (slowDuration - fastDuration)
+    suit.setChainsawTexRoll(texDuration)
     if whipsaw:
         phase = getattr(controller, 'chainsawPhase', 1) if controller else 1
         whipsawGain = 2000 * (2 if phase == 3 else 1)
@@ -288,7 +304,7 @@ def doCutTheSlack(attack):
         if support is None or support is target:
             continue
         sacrificeTrack.append(
-            MovieUtil.createSuitDeathTrack(support, attack['battle']))
+            MovieUtil.shortCircuitTrack(support, attack['battle']))
 
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     track = Parallel(
@@ -320,7 +336,7 @@ def doMarkedWood(attack):
         log = None
     if log is None or log.isEmpty():
         track = Parallel(
-            ActorInterval(suit, 'throw-paper', partName='modelRoot'),
+            ActorInterval(suit, 'throw-object', partName='modelRoot'),
             _damageTrack(attack, 3.66),
             Func(_syncMeter, attack))
         return _withCheatBanner(

@@ -2374,10 +2374,53 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'RushJobSound': '%s needs you to use the Sound track on the %s!' % (suit.name, targetSuit.name),
             'RushJobDrop': '%s needs you to use the Drop track on the %s!' % (suit.name, targetSuit.name),
         }
+        camTrack2 = Sequence(
+            defaultCamera(openShotDuration=0, attackDuration=0),
 
-        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
-                                 motionShot(0.0, 10.0, targetSuit.height - 1, -180, 0, 0.0, 0, targetSuit), motionShot(0.0, 10.0, targetSuit.height + 1, -180, 0, 0.0, 1, targetSuit), Wait(attackDuration - 2.0))
+            # First shot: attacking suit
+            motionShot(
+                0.0,
+                8.8096,
+                7.77317,
+                -180,
+                0.0,
+                0.0,
+                0,
+                suit
+            ),
+
+            Wait(1.0),
+
+            # Switch to target suit shot.
+            Func(
+                camera.setPos,
+                targetSuit,
+                0.0,
+                10.0,
+                targetSuit.height - 3
+            ),
+
+            # Set the orientation for this new shot.
+            Func(
+                camera.setHpr,
+                targetSuit,
+                180,
+                0,
+                0
+            ),
+
+
+            # Now ONLY move upward relative to targetSuit.
+            moveCameraOnly(
+                0.0,
+                10.0,
+                targetSuit.height + 1,
+                1.0,
+                targetSuit
+            ),
+
+            Wait(attackDuration - 2.0)
+        )
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
@@ -2905,6 +2948,25 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
     track.append(Func(camera.setPosHpr, other, x, y, z, h, p, r))
     track.append(Wait(duration))
     return track
+
+def moveCameraOnly(x, y, z, duration, other=None, name='moveCameraOnly'):
+    if other:
+        return LerpPosInterval(
+            camera,
+            duration,
+            pos=Point3(x, y, z),
+            other=other,
+            name=name,
+            blendType='easeInOut'
+        )
+    else:
+        return LerpPosInterval(
+            camera,
+            duration,
+            pos=Point3(x, y, z),
+            name=name,
+            blendType='easeInOut'
+        )
 
 
 def motionShot(x, y, z, h, p, r, duration, other=None, name='motionShot'):

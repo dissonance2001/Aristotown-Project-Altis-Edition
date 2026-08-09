@@ -243,7 +243,7 @@ class _ChainsawIntroHead(Actor.Actor):
             self, self._animName(animName), *args, **kwargs)
 
     def loopNeutral(self):
-        self.loop('neutral')
+        self.loop('neutral-override')
 
     @staticmethod
     def _loadVoiceArray(paths):
@@ -267,29 +267,37 @@ class _ChainsawIntroHead(Actor.Actor):
     def enterGlitch(self, temp=None):
         self.inGlitch = True
         self.glitchState = 'glitch'
-        self.loadAnims(_HEAD_GLITCH)
         if self.glitchTex:
             self.setTexture(self.glitchTex, 1)
         self.updateSuitVoice(True)
-        self.loop('neutral')
+        self.loop('neutral-override')
+        self.suit.setSuitStatusEffect('glitched')
+        self.suit.clearSuitStatusEffect('semi-glitched')
+        self.suit.setChainsawTexRoll()
+        # self.suit.stopHeadFreakout()
 
     def enterSemiGlitch(self, temp=None):
         self.inGlitch = False
         self.glitchState = 'semi'
-        self.loadAnims(_HEAD_NORMAL)
         if self.normalTex:
             self.setTexture(self.normalTex, 1)
         self.updateSuitVoice(False)
-        self.loop('neutral')
+        self.loop('neutral-unstable')
+        self.suit.clearSuitStatusEffect('glitched')
+        self.suit.setSuitStatusEffect('semi-glitched')
+        # self.suit.setChainsawTexRoll()
+        # self.suit.setupHeadFreakout(self, normalTexture=self.normalTex, hurtTexture=self.normalTex, glitchTexture=self.glitchTex)
+        # self.suit.startHeadFreakout()
 
     def exitGlitch(self, temp=None):
         self.inGlitch = False
         self.glitchState = 'normal'
-        self.loadAnims(_HEAD_NORMAL)
         if self.normalTex:
             self.setTexture(self.normalTex, 1)
         self.updateSuitVoice(False)
         self.loop('neutral')
+        self.suit.clearSuitStatusEffect('glitched')
+        self.suit.clearSuitStatusEffect('semi-glitched')
 
     def setChainsawTexRoll(self, duration=1.6):
         if self.texRollIval:
@@ -758,6 +766,7 @@ class ChainsawIntroSetup(object):
             return
         self.head.setChainsawTexRoll()
         self.head.startIdleSfx()
+        suit = self.chainsaw
 
     def _cleanupFakeSuit(self):
         fake = self.fakeSuit
