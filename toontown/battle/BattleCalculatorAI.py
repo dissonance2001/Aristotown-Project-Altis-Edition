@@ -961,9 +961,11 @@ class BattleCalculatorAI:
                 if suit.dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'bookkeeping'):
                     self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                     self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
-                if suit.dna.name == 'hustle':
+                if self.suitHasCondition(suit.doId, 'redLight'):
                     self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                     self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
+                if self.suitHasCondition(suit.doId, 'greenLight'):
+                    self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
                 if suit.dna.name == 'ubuster':
                     self.hustlerHits += 1
                 if suit.dna.name == 'rkeeper':
@@ -1021,6 +1023,8 @@ class BattleCalculatorAI:
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost') * 0.01)
                 if self.toonHasCondition(attackerId, 'allGagBoost2'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
+                if self.toonHasCondition(attackerId, 'yellowLight'):
+                    damage *= (1.0 + (self.getToonConditionModifier(attackerId, 'yellowLight') * 0.01))
                 if self.toonHasCondition(attackerId, 'viralSensation'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'viralSensation') * 0.01)
                 if self.toonHasCondition(attackerId, 'energized'):
@@ -1144,9 +1148,11 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
                 if suit.dna.name == 'wtapper':
                     self.setSuitCondition(suit.doId, 'wiretapperHit', 1, 1, 'setBoth')
-                if suit.dna.name == 'hustle':
+                if self.suitHasCondition(suit.doId, 'redLight'):
                     self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                     self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
+                if self.suitHasCondition(suit.doId, 'greenLight'):
+                    self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
                 if suit.dna.name == 'dopr':
                     self.setSuitCondition(suit.doId, 'doprHit', 1, 1, 'setBoth')
                 if suit.dna.name == 'supervis' and suit.getActualLevel() == 30:
@@ -1187,6 +1193,8 @@ class BattleCalculatorAI:
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost') * 0.01)
                 if self.toonHasCondition(attackerId, 'allGagBoost2'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
+                if self.toonHasCondition(attackerId, 'yellowLight'):
+                    damage *= (1.0 + (self.getToonConditionModifier(attackerId, 'yellowLight') * 0.01))
                 if self.toonHasCondition(attackerId, 'viralSensation'):
                     damage *= (1.0 + self.getToonConditionModifier(attackerId, 'viralSensation') * 0.01)
                 if self.toonHasCondition(attackerId, 'energized'):
@@ -1437,9 +1445,11 @@ class BattleCalculatorAI:
             self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
 
-        if suit.dna.name == 'hustle':
+        if self.suitHasCondition(suit.doId, 'redLight'):
             self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
+        if self.suitHasCondition(suit.doId, 'greenLight'):
+            self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
 
         if suit.dna.name == 'ubuster':
             self.hustlerHits += 1
@@ -1695,7 +1705,7 @@ class BattleCalculatorAI:
                 if self.getToonConditionTurns(toonId, 'winded') < 3 and self.toonHasCondition(toonId, 'winded'):
                     mult *= .5
 
-        for cond in ('allGagBoost', 'allGagBoost2', 'viralSensation', 'energized', 'raisedAnte', 'governaughtBoost', 'highStakesBoost'):
+        for cond in ('allGagBoost', 'allGagBoost2', 'yellowLight', 'viralSensation', 'energized', 'raisedAnte', 'governaughtBoost', 'highStakesBoost'):
             if self.toonHasCondition(toonId, cond) and atkTrack != LURE and atkTrack != TRAP:
                 mult *= 1.0 + self.getToonConditionModifier(toonId, cond) * 0.01
 
@@ -1923,9 +1933,11 @@ class BattleCalculatorAI:
             self.setToonCondition(toonId, 'bookkeepingtoon', 1, 1, 'setBoth')
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
 
-        if suit.dna.name == 'hustle':
-            self.setToonCondition(toonId, 'bookkeepingtoon', 1, 1, 'setBoth')
+        if self.suitHasCondition(suit.doId, 'redLight'):
+            self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
+        if self.suitHasCondition(suit.doId, 'greenLight'):
+            self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
     
 
         if self.suitHasCondition(targetId, 'lureRushJob'):
@@ -2428,6 +2440,8 @@ class BattleCalculatorAI:
                         attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'energized') * 0.01)
                     if self.toonHasCondition(toonId, 'allGagBoost'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost') * 0.01))
+                    if self.toonHasCondition(toonId, 'yellowLight'):
+                        attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'yellowLight') * 0.01))
                     if self.toonHasCondition(toonId, 'allGagBoost2'):
                         attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                     if self.toonHasCondition(toonId, 'raisedAnte'):
@@ -3088,6 +3102,32 @@ class BattleCalculatorAI:
 
         return random.choice(validTargets)
 
+    def __getRandomValidTargetSuitDigitTrafficManager(self, excludeSuitId=None):
+        validTargets = []
+
+        for index, suit in enumerate(self.battle.activeSuits):
+            if suit is None:
+                continue
+
+            if excludeSuitId is not None and suit.doId == excludeSuitId:
+                continue
+
+            if suit.getHP() <= 0:
+                continue
+
+            if not self.suitHasCondition(suit.doId, 'redLight'):
+                continue
+
+            if not self.suitHasCondition(suit.doId, 'greenLight'):
+                continue
+
+            validTargets.append(index)
+
+        if not validTargets:
+            return -1
+
+        return random.choice(validTargets)
+
     def __getRandomValidTargetSuitDigitErclaim(self, excludeSuitId=None):
         validTargets = []
 
@@ -3355,6 +3395,8 @@ class BattleCalculatorAI:
                             attackDamage *= (1.0 + self.getToonConditionModifier(toonId, 'energized') * 0.01)
                         if self.toonHasCondition(toonId, 'allGagBoost'):
                             attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost') * 0.01))
+                        if self.toonHasCondition(toonId, 'yellowLight'):
+                            attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'yellowLight') * 0.01))
                         if self.toonHasCondition(toonId, 'allGagBoost2'):
                             attackDamage *= (1.0 + (self.getToonConditionModifier(toonId, 'allGagBoost2') * 0.01))
                         if self.toonHasCondition(toonId, 'raisedAnte'):

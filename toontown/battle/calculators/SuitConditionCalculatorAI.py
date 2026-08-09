@@ -208,8 +208,12 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'breachcalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'contractenforcementcalculator', 1, 10, 'setBoth')
+                if (x + 2) % 5 == 0:
+                    self.setSuitCondition(suitId, 'yellowlightcalculator', 1, 10, 'setBoth')
+                if (x + 2) % 3 == 0:
+                    self.setSuitCondition(suitId, 'redlightcalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0:
-                    self.setSuitCondition(suitId, 'lightcalculator', 1, 10, 'setBoth')
+                    self.setSuitCondition(suitId, 'greenlightcalculator', 1, 10, 'setBoth')
                 if (x + 2) % 4 == 0:
                     self.setSuitCondition(suitId, 'unionbustercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ubuster': #union buster

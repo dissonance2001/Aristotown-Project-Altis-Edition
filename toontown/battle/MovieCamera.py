@@ -1327,18 +1327,167 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TrafficCongestionPricing':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'TrafficRedLight':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        dmg = attack['target'][0]['hp']
+        targetSuit = battle.activeSuits[dmg]
+        tpMgr = TextPropertiesManager.getGlobalPtr()
+
+        def addTextColor(name, r, g, b):
+            prop = TextProperties()
+            prop.setTextColor(r, g, b, 1)
+            tpMgr.setProperties(name, prop)
+
+        addTextColor('redLight',   1.0, 0.0, 0.0)
+        redLight = '\1redLight\1Red Light\2'
+        camTrack2 = Sequence(
+            defaultCamera(openShotDuration=0, attackDuration=0),
+
+            # First shot: attacking suit
+            motionShot(
+                0.0,
+                8.8096,
+                7.77317,
+                -180,
+                0.0,
+                0.0,
+                0,
+                suit
+            ),
+
+            Wait(1.0),
+
+            # Switch to target suit shot.
+            Func(
+                camera.setPos,
+                targetSuit,
+                0.0,
+                10.0,
+                targetSuit.height - 3
+            ),
+
+            # Set the orientation for this new shot.
+            Func(
+                camera.setHpr,
+                targetSuit,
+                180,
+                0,
+                0
+            ),
+
+
+            # Now ONLY move upward relative to targetSuit.
+            moveCameraOnly(
+                0.0,
+                10.0,
+                targetSuit.height + 1,
+                1.0,
+                targetSuit
+            ),
+
+            Wait(attackDuration - 2.0)
+        )
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('The %s now has the %s and must not be targeted!' % (targetSuit.name, redLight), attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Red Light!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
+    elif name == 'TrafficTrafficViolation':
+        if attackDuration > 2:
+            camTrack.append(Sequence(motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 0, suit), Wait(attackDuration - 0)))
+        else:
+            camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
+            return camTrack2
     elif name == 'TrafficRedLightRetaliation':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=0.5))
+            camTrack.append(Sequence(motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 0, suit), Wait(attackDuration - 0)))
         else:
             camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
             return camTrack2
     elif name == 'TrafficGreenLight':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        dmg = attack['target'][0]['hp']
+        targetSuit = battle.activeSuits[dmg]
+        tpMgr = TextPropertiesManager.getGlobalPtr()
+
+        def addTextColor(name, r, g, b):
+            prop = TextProperties()
+            prop.setTextColor(r, g, b, 1)
+            tpMgr.setProperties(name, prop)
+
+        addTextColor('greenLight',  0.027, 1, 0)
+        greenLight = '\1greenLight\1Green Light\2'
+        camTrack2 = Sequence(
+            defaultCamera(openShotDuration=0, attackDuration=0),
+
+            # First shot: attacking suit
+            motionShot(
+                0.0,
+                8.8096,
+                7.77317,
+                -180,
+                0.0,
+                0.0,
+                0,
+                suit
+            ),
+
+            Wait(1.0),
+
+            # Switch to target suit shot.
+            Func(
+                camera.setPos,
+                targetSuit,
+                0.0,
+                10.0,
+                targetSuit.height - 3
+            ),
+
+            # Set the orientation for this new shot.
+            Func(
+                camera.setHpr,
+                targetSuit,
+                180,
+                0,
+                0
+            ),
+
+
+            # Now ONLY move upward relative to targetSuit.
+            moveCameraOnly(
+                0.0,
+                10.0,
+                targetSuit.height + 1,
+                1.0,
+                targetSuit
+            ),
+
+            Wait(attackDuration - 2.0)
+        )
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('The %s now has the %s and must be targeted!' % (targetSuit.name, greenLight), attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Green Light!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
+    elif name == 'TrafficYellowLight':
+        tpMgr = TextPropertiesManager.getGlobalPtr()
+
+        def addTextColor(name, r, g, b):
+            prop = TextProperties()
+            prop.setTextColor(r, g, b, 1)
+            tpMgr.setProperties(name, prop)
+
+        addTextColor('yellowLight', 0.973, 1, 0)
+        yellowLight = '\1yellowLight\1Yellow Light\2'
+        camTrack2 = randomActorShot(suit, battle, attackDuration, 'suit')
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('Everyone has been given the %s and will deal less damage this round!' % (yellowLight), attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Yellow Light!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'TrafficGreenLightRetaliation':
         if attackDuration > 2:
-            camTrack.append(defaultCamera(openShotDuration=0.5))
+            camTrack.append(Sequence(motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 0, suit), Wait(attackDuration - 0)))
         else:
             camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
             return camTrack2
@@ -2910,92 +3059,120 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
     track.append(Wait(duration))
     return track
 
-
-def motionShot(x, y, z, h, p, r, duration, other=None, name='motionShot'):
+def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
     if other:
-        # Get the camera's current rotation relative to the target.
-        startHpr = camera.getHpr(other)
-
-        # Normalize heading so Panda takes the shortest path
-        # to the requested heading.
-        while startHpr.getX() - h > 180:
-            startHpr.setX(startHpr.getX() - 360)
-
-        while startHpr.getX() - h < -180:
-            startHpr.setX(startHpr.getX() + 360)
-
-        # Do the same for pitch.
-        while startHpr.getY() - p > 180:
-            startHpr.setY(startHpr.getY() - 360)
-
-        while startHpr.getY() - p < -180:
-            startHpr.setY(startHpr.getY() + 360)
-
-        # And roll.
-        while startHpr.getZ() - r > 180:
-            startHpr.setZ(startHpr.getZ() - 360)
-
-        while startHpr.getZ() - r < -180:
-            startHpr.setZ(startHpr.getZ() + 360)
-
-        posTrack = LerpPosInterval(
-            camera,
-            duration,
-            pos=Point3(x, y, z),
-            other=other,
-            blendType='easeInOut'
-        )
-
-        hprTrack = LerpHprInterval(
-            camera,
-            duration,
-            hpr=Point3(h, p, r),
-            startHpr=startHpr,
-            other=other,
-            blendType='easeInOut'
-        )
-
+        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other)
+        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r), other=other)
     else:
-        startHpr = camera.getHpr()
+        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z))
+        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r))
+    return Parallel(posTrack, hprTrack)
 
-        while startHpr.getX() - h > 180:
-            startHpr.setX(startHpr.getX() - 360)
-
-        while startHpr.getX() - h < -180:
-            startHpr.setX(startHpr.getX() + 360)
-
-        while startHpr.getY() - p > 180:
-            startHpr.setY(startHpr.getY() - 360)
-
-        while startHpr.getY() - p < -180:
-            startHpr.setY(startHpr.getY() + 360)
-
-        while startHpr.getZ() - r > 180:
-            startHpr.setZ(startHpr.getZ() - 360)
-
-        while startHpr.getZ() - r < -180:
-            startHpr.setZ(startHpr.getZ() + 360)
-
-        posTrack = LerpPosInterval(
+def moveCameraOnly(x, y, z, duration, other=None, name='moveCameraOnly'):
+    if other:
+        return LerpPosInterval(
             camera,
             duration,
             pos=Point3(x, y, z),
+            other=other,
+            name=name,
             blendType='easeInOut'
         )
-
-        hprTrack = LerpHprInterval(
+    else:
+        return LerpPosInterval(
             camera,
             duration,
-            hpr=Point3(h, p, r),
-            startHpr=startHpr,
+            pos=Point3(x, y, z),
+            name=name,
             blendType='easeInOut'
         )
 
-    return Parallel(
-        posTrack,
-        hprTrack,
-        name=name
-    )
+
+# def motionShot(x, y, z, h, p, r, duration, other=None, name='motionShot'):
+#     if other:
+#         # Get the camera's current rotation relative to the target.
+#         startHpr = camera.getHpr(other)
+
+#         # Normalize heading so Panda takes the shortest path
+#         # to the requested heading.
+#         while startHpr.getX() - h > 180:
+#             startHpr.setX(startHpr.getX() - 360)
+
+#         while startHpr.getX() - h < -180:
+#             startHpr.setX(startHpr.getX() + 360)
+
+#         # Do the same for pitch.
+#         while startHpr.getY() - p > 180:
+#             startHpr.setY(startHpr.getY() - 360)
+
+#         while startHpr.getY() - p < -180:
+#             startHpr.setY(startHpr.getY() + 360)
+
+#         # And roll.
+#         while startHpr.getZ() - r > 180:
+#             startHpr.setZ(startHpr.getZ() - 360)
+
+#         while startHpr.getZ() - r < -180:
+#             startHpr.setZ(startHpr.getZ() + 360)
+
+#         posTrack = LerpPosInterval(
+#             camera,
+#             duration,
+#             pos=Point3(x, y, z),
+#             other=other,
+#             blendType='easeInOut'
+#         )
+
+#         hprTrack = LerpHprInterval(
+#             camera,
+#             duration,
+#             hpr=Point3(h, p, r),
+#             startHpr=startHpr,
+#             other=other,
+#             blendType='easeInOut'
+#         )
+
+#     else:
+#         startHpr = camera.getHpr()
+
+#         while startHpr.getX() - h > 180:
+#             startHpr.setX(startHpr.getX() - 360)
+
+#         while startHpr.getX() - h < -180:
+#             startHpr.setX(startHpr.getX() + 360)
+
+#         while startHpr.getY() - p > 180:
+#             startHpr.setY(startHpr.getY() - 360)
+
+#         while startHpr.getY() - p < -180:
+#             startHpr.setY(startHpr.getY() + 360)
+
+#         while startHpr.getZ() - r > 180:
+#             startHpr.setZ(startHpr.getZ() - 360)
+
+#         while startHpr.getZ() - r < -180:
+#             startHpr.setZ(startHpr.getZ() + 360)
+
+#         posTrack = LerpPosInterval(
+#             camera,
+#             duration,
+#             pos=Point3(x, y, z),
+#             blendType='easeInOut'
+#         )
+
+#         hprTrack = LerpHprInterval(
+#             camera,
+#             duration,
+#             hpr=Point3(h, p, r),
+#             startHpr=startHpr,
+#             blendType='easeInOut'
+#         )
+
+#     return Parallel(
+#         posTrack,
+#         hprTrack,
+#         name=name
+#     )
 
 
 def allGroupShot(avatar, duration):

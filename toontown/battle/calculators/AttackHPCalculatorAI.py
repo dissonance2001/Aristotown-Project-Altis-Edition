@@ -2001,16 +2001,26 @@ class AttackHPCalculatorAI(object):
                 self.setToonCondition(toon.doId, 'busted', 1, 4, 'setBoth')
                 self.setToonCondition(toon.doId, 'unionBusterRecentlyTargeted', 1, 3, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'unionbustercalculator', 0, 0, 'setBoth')
+            elif atkType['name'] == 'TrafficYellowLight':
+                result = self.getSuitConditionModifier(theSuit.doId, 'targetCheckCondition')
+                attack[SUIT_HP_COL][targetIndex] = result
+                targetSuit = self.battle.activeSuits[result]
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'yellowLight', -25, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'yellowLight', -25, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'yellowlightcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'TrafficGreenLight':
-                result = 0
+                result = self.getSuitConditionModifier(theSuit.doId, 'targetCheckCondition')
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'greenLight', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lightcalculator', 0, 0, 'setBoth')
+                targetSuit = self.battle.activeSuits[result]
+                self.calculator.setSuitCondition(targetSuit.doId, 'greenLight', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'greenlightcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'TrafficRedLight':
-                result = 0
+                result = self.getSuitConditionModifier(theSuit.doId, 'targetCheckCondition')
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'redLight', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'lightcalculator', 0, 0, 'setBoth')
+                targetSuit = self.battle.activeSuits[result]
+                self.calculator.setSuitCondition(targetSuit.doId, 'redLight', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'redlightcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'TrafficRedLightRetaliation':
                 self.setSuitCondition(theSuit.doId, 'redLight', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'greenLight', 0, 0, 'setBoth')
@@ -2031,18 +2041,15 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'TrafficGreenLightRetaliation':
                 self.setSuitCondition(theSuit.doId, 'redLight', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'greenLight', 0, 0, 'setBoth')
-                if not self.toonHasCondition(toonId, 'bookkeepingtoon'):
-                    if self.getToonConditionModifier(toonId, 'allGagBoost') < -50:
-                        self.setToonCondition(toonId, 'allGagBoost',
-                                              self.getToonConditionModifier(toonId, 'allGagBoost'), 2, 'setBoth')
-                        self.setToonCondition(toonId, 'lureBoost',
-                                              self.getToonConditionModifier(toonId, 'lureBoost'), 2, 'setBoth')
-                    else:
-                        self.setToonCondition(toonId, 'allGagBoost', -50, 2, 'setBoth')
-                        self.setToonCondition(toonId, 'lureBoost', -50, 2, 'setBoth')
-                    result = 30
+                if self.getToonConditionModifier(toonId, 'allGagBoost') < -50:
+                    self.setToonCondition(toonId, 'allGagBoost',
+                                            self.getToonConditionModifier(toonId, 'allGagBoost'), 2, 'setBoth')
+                    self.setToonCondition(toonId, 'lureBoost',
+                                            self.getToonConditionModifier(toonId, 'lureBoost'), 2, 'setBoth')
                 else:
-                    result = 0
+                    self.setToonCondition(toonId, 'allGagBoost', -50, 2, 'setBoth')
+                    self.setToonCondition(toonId, 'lureBoost', -50, 2, 'setBoth')
+                result = 30
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'UnionBusterBreachOfContract':
                 result = 25
@@ -2137,14 +2144,18 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'breachgagban', 0, 0, 'setBoth')
             elif atkType['name'] == 'TrafficCongestionPricing':
                 result = 0
+
                 attack[SUIT_HP_COL][targetIndex] = result
-                for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'disable4s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'disable5s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'disable6s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'disable7s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, 'disable8s', 1, 0, 'setBoth')
-                    self.setToonCondition(t, random.choice(('disable4s', 'disable5s', 'disable6s', 'disable7s', 'disable8s')), 1, 3, 'setBoth')
+
+                self.applyRandomSpecificGagBans(toonId, turns=3)
+            elif atkType['name'] == 'TrafficTrafficViolation':
+                if self.toonHasCondition(toon.doId, 'banned'):
+                    self.setToonCondition(toon.doId, 'allGagBoost', -50, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost', -50, 2, 'setBoth')
+                    result = 30
+                else:
+                    result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'TrafficDetour':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -4729,6 +4740,8 @@ class AttackHPCalculatorAI(object):
                     )
                 elif theSuit.dna.name == 'foreman':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
+                elif theSuit.dna.name == 'hustle':
+                    self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitTrafficManager(), 1, 'setBoth')
                 elif theSuit.dna.name == 'supervis':
                     self.setSuitCondition(theSuit.doId, 'targetCheckCondition', self.__getRandomValidTargetSuitDigitAttorney(excludeSuitId=theSuit.doId), 1, 'setBoth')
                 else:
@@ -7384,6 +7397,8 @@ class AttackHPCalculatorAI(object):
                     'TollmasterMandatoryToll',
                     'WiretapperWiretapped,'
                     'PowerhouseToleranceBuilding',
+                    'TrafficRedLight',
+                    'TrafficGreenLight',
                     'ScapegoatRageBuilding',
                     'ArbitratorThrowBook',
                     'PresidentExtraTip',
@@ -7726,6 +7741,8 @@ class AttackHPCalculatorAI(object):
                         result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                     if self.suitHasCondition(theSuit.doId, 'brokenconnection'):
                         result *= self.getSuitConditionModifier(theSuit.doId, 'brokenconnection')
+                    if self.suitHasCondition(theSuit.doId, 'yellowLight'):
+                        result *= self.getSuitConditionModifier(theSuit.doId, 'yellowLight')
                     if self.suitHasCondition(theSuit.doId, 'damageDown'):
                         result *= self.getSuitConditionModifier(theSuit.doId, 'damageDown')
                     if self.suitHasCondition(theSuit.doId, 'override'):
@@ -7778,6 +7795,8 @@ class AttackHPCalculatorAI(object):
                     result *= 0.75
                 if self.suitHasCondition(theSuit.doId, 'drenched'):
                     result *= 0.85
+                if self.suitHasCondition(theSuit.doId, 'yellowLight'):
+                    result *= self.getSuitConditionModifier(theSuit.doId, 'yellowLight')
                 if self.suitHasCondition(theSuit.doId, 'damageDown'):
                     result *= self.getSuitConditionModifier(theSuit.doId, 'damageDown')
                 if self.getSuitConditionTurns(theSuit.doId, 'sleepy') == 2 and self.suitHasCondition(theSuit.doId, 'sleepy'):
@@ -7930,6 +7949,8 @@ class AttackHPCalculatorAI(object):
                     result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                 if self.suitHasCondition(theSuit.doId, 'brokenconnection'):
                     result *= self.getSuitConditionModifier(theSuit.doId, 'brokenconnection')
+                if self.suitHasCondition(theSuit.doId, 'yellowLight'):
+                    result *= self.getSuitConditionModifier(theSuit.doId, 'yellowLight')
                 if self.suitHasCondition(theSuit.doId, 'override'):
                     result *= 1.3
                 if self.suitHasCondition(theSuit.doId, 'enraged'):

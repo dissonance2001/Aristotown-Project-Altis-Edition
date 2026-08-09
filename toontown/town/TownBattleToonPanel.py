@@ -2212,6 +2212,27 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
+        if avatar.hasToonStatusEffect('yellowLight'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
+            texture = loader.loadTexture('phase_5/maps/effects/yellow_light.png')
+            self.statusIcon.setTexture(texture, 1)
+            iconRoot = NodePath('immuneIcon')
+            self.statusIcon.reparentTo(iconRoot)
+            self.extraText = DirectLabel(parent=iconRoot, relief=None, text="%s" % avatar.getToonStatusTurns('yellowLight'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(iconRoot, 
+                                   slot, 
+                                   tooltipTitle='Yellow Light', 
+                                   tooltipDescription="This Toon is dealing -25% less damage.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
         if avatar.hasToonStatusEffect('soaked'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/soaked_icon')
@@ -2515,6 +2536,9 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('damageDown'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('damageDown') * 0.01)
+            if self.avatar.hasToonStatusEffect('yellowLight'):
+                damage *= (1.0 - self.avatar.getToonStatusModifier('yellowLight') * 0.01)
+                lureValue *= (1.0 - self.avatar.getToonStatusModifier('yellowLight') * 0.01)
             if self.avatar.hasToonStatusEffect('phantomDebuff'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)

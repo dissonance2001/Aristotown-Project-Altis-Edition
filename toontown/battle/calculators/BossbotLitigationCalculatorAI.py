@@ -181,7 +181,7 @@ class BossbotLitigationCalculatorAI:
                     if not suit.dna.name in SuitBattleGlobals.SpecialCogDict and self.suitHasCondition(suit.doId, 'ambheadrollertarget') and suit.currHP > 0:
                         self.calculator.syphonedHP += suit.currHP
                         self.calculator.sacrificedCogs += 1
-                if self.sacrificedCogs > 0:
+                if self.calculator.sacrificedCogs > 0:
                     if self.suitHasCondition(suitId, 'headroller2calculator') and not len(self.battle.activeSuits) > 1 and not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP > 0:
                         attack = self.__getAbilityQueued(suitId)
                         if attack[SUIT_ATK_COL]:
@@ -206,7 +206,7 @@ class BossbotLitigationCalculatorAI:
                          'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    if self.sacrificedCogs > 0 and self.battle.activeSuits[i].currHP > 0:
+                    if self.calculator.sacrificedCogs > 0 and self.battle.activeSuits[i].currHP > 0:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                           'name': 'AmbassadorHeadRoller', # Damage Up 1
                          'animName': 'summon',

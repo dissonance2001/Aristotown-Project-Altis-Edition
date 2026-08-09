@@ -3301,7 +3301,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         projectedHP = self.getQueuedProjectedHPFull()
 
-        healAmount = min(275, max(0, hpCap - projectedHP))
+        healAmount = min(0, max(0, hpCap - projectedHP))
 
         if healAmount > 0:
             self.addPendingQueuedHealing(healAmount)

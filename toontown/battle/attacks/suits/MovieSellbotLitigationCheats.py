@@ -1077,7 +1077,7 @@ def doContractEnforcementHealingOLD(attack):
         soundTracks.append(getSoundTrack('LB_camera_shutter_2.ogg', delay=1, node=manager))
         soundTracks.append(getSoundTrack('LB_toonup.ogg', delay=1, node=manager))
     for targetSuit in battle.activeSuits:
-        selfDamageTrack = Sequence(Wait(1.0), targetSuit.checkCustomerRetention())
+        selfDamageTrack = Sequence(Wait(1.0), targetSuit.makeCongestionInterval())
         cage = loader.loadModel('phase_5/models/props/ttr_m_ara_cbg_promoted')
         cage.find('**/geo_hole_01').hide()
         platform = cage.find('**/geo_gearLift_01')
@@ -2399,7 +2399,10 @@ def doGreenLight(attack):
     manager = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    node = suit.getGeomNode().getChild(0)
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    targetSuit = battle.activeSuits[dmg]
+    node = targetSuit.getGeomNode().getChild(0)
     suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=.25, colorScale=(0, 1, 0.078, 1),
                                                      blendType='easeInOut'),
                               LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
@@ -2463,7 +2466,8 @@ def doGreenLight(attack):
             Func(manager.setNeutralAnimationDrop), Wait(2.0)
         )
     soundTrack2 = getSoundTrack('SA_sanction.ogg')
-    suitTrack.append(Func(suit.setSuitStatusEffect, 'greenLight', modifier=1, turns=2))
+    suitTrack.append(Func(targetSuit.setSuitStatusEffect, 'greenLight', modifier=1, turns=2))
+    suitTrack.append(Wait(3.0))
     return Parallel(suitTrack, suitColorTrack, soundTrack2)
 
 def doContingencyClauseRetaliation(attack):
@@ -2642,16 +2646,94 @@ def doContractEnforcementHealing(attack):
     if hitAtleastOneSuit > 0:
         soundTrack2.append(getSoundTrack('LB_toonup.ogg', node=manager))
     for targetSuit in battle.activeSuits:
-        selfDamageTrack = Sequence(Wait(1.0), targetSuit.checkCustomerRetention())
+        selfDamageTrack = Sequence(Wait(1.0), targetSuit.makeCongestionInterval())
         selfDamageTracks.append(selfDamageTrack)
     return Parallel(suitTracks, suitTrack, soundTrack2, selfDamageTracks)
+
+def doYellowLight(attack):
+    suit = attack['suit']
+    manager = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    node = suit.getGeomNode().getChild(0)
+    suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=.25, colorScale=(0.973, 1, 0, 1),
+                                                     blendType='easeInOut'),
+                              LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
+                                                     blendType='easeInOut'),
+                              LerpColorScaleInterval(node, duration=.25, colorScale=(0.973, 1, 0, 1),
+                                                     blendType='easeInOut'),
+                              LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
+                                                     blendType='easeInOut'),
+    LerpColorScaleInterval(node, duration=.25, colorScale=(0.973, 1, 0, 1),
+                           blendType='easeInOut'),
+    LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
+                           blendType='easeInOut'),
+    LerpColorScaleInterval(node, duration=.25, colorScale=(0.973, 1, 0, 1),
+                           blendType='easeInOut'),
+    LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
+                           blendType='easeInOut')
+                              )
+    suitTrack = Sequence(
+            # Let the damage/reaction animation reach its ending pose.
+            ActorInterval(
+                manager,
+                'neutral',
+                endTime=0
+            ),
+
+            Func(manager.enableBlend),
+
+            # Both animations must be actively controlled during the blend.
+            Func(manager.loop, 'neutral'),
+            Func(manager.loop, 'sanction'),
+
+            Parallel(getSuitAnimTrack(attack), LerpAnimInterval(
+                manager,
+                duration=0.25,
+                startAnim='neutral',
+                endAnim='sanction',
+                startWeight=0.0,
+                endWeight=1.0,
+                blendType='easeInOut'
+            ), Sequence(ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - .9), 
+                ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1, endTime=manager.getDuration('sanction') - 1.1
+            ), ActorInterval(
+                manager,
+                'sanction',
+                startTime=manager.getDuration('sanction') - 1.1
+            ))),
+
+            Func(manager.disableBlend),
+
+            # Ensure the intended neutral animation remains playing.
+            Func(manager.setNeutralAnimationDrop), Wait(2.0)
+        )
+    soundTrack2 = getSoundTrack('SA_sanction.ogg')
+    for targetSuit in battle.activeSuits:
+        suitTrack.append(Func(targetSuit.setSuitStatusEffect, 'yellowLight', modifier=-50, turns=2))
+    for toon in battle.activeToons:
+        suitTrack.append(Func(toon.setToonStatusEffect, 'yellowLight', modifier=-50, turns=2))
+    return Parallel(suitTrack, suitColorTrack, soundTrack2)
 
 def doRedLight(attack):
     suit = attack['suit']
     manager = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    node = suit.getGeomNode().getChild(0)
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    targetSuit = battle.activeSuits[dmg]
+    node = targetSuit.getGeomNode().getChild(0)
     suitColorTrack = Sequence(LerpColorScaleInterval(node, duration=.25, colorScale=(1, 0, 0, 1),
                                                      blendType='easeInOut'),
                               LerpColorScaleInterval(node, duration=.25, colorScale=(1, 1, 1, 1),
@@ -2715,7 +2797,8 @@ def doRedLight(attack):
             Func(manager.setNeutralAnimationDrop), Wait(2.0)
         )
     soundTrack2 = getSoundTrack('SA_sanction.ogg')
-    suitTrack.append(Func(suit.setSuitStatusEffect, 'redLight', modifier=1, turns=2))
+    suitTrack.append(Func(targetSuit.setSuitStatusEffect, 'redLight', modifier=1, turns=2))
+    suitTrack.append(Wait(3.0))
     return Parallel(suitTrack, suitColorTrack, soundTrack2)
 
 def doDetour(attack):
