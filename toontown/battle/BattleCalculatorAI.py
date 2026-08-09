@@ -6022,9 +6022,6 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
                 if self.suitHasCondition(suit.doId, 'battleSpeed'):
                     self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(suit.doId, 'battleSpeed')), -1, 'setBoth')
-                if suit.dna.name == 'cbutcher':
-                    if not self.suitHasCondition(suit.doId, 'phantomCounter'):
-                        self.setSuitCondition(suit.doId, 'phantomCounter', 1, 5, 'setBoth')
                 if suit.dna.name == 'ambass':
                     if not self.suitHasCondition(suit.doId, 'ambassadorOverconfidence') and not self.suitHasCondition(suit.doId, 'phase3'):
                         self.setSuitCondition(suit.doId, 'ambassadorOverconfidence', 1, 5, 'setBoth')
@@ -6054,10 +6051,6 @@ class BattleCalculatorAI:
                         self.setSuitCondition(s.doId, 'alreadyDesperation', 1, -1, 'setBoth')
                 if suit.dna.name == 'bcaster':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
-                if suit.dna.name == 'cbutcher':
-                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
-                if suit.dna.name in ['cdirector', 'liquid', 'dking', 'rkeeper']:
-                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 2.25, -1, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.getActualLevel() == 30:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                     for s in self.battle.activeSuits:
