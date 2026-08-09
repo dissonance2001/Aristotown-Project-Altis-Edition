@@ -7414,6 +7414,7 @@ class AttackHPCalculatorAI(object):
                     'ForemanContributing',
                     'MintUsury',
                     'RushJobTrap',
+                    'DamageMovie',
                     'RushJobLure',
                     'RushJobThrow',
                     'RushJobSquirt',
@@ -7615,6 +7616,7 @@ class AttackHPCalculatorAI(object):
                     ))
 
                     attack[SUIT_HP_COL][targetIndex] = result
+                    toon.setHp(toon.hp + math.ceil(result))
 
                     if (
                         theSuit.dna.name in ('hroller', 'hrollers') and
