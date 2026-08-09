@@ -1239,9 +1239,9 @@ def doSuitAttack(attack):
     elif name == 'DOPRAmbushMarketing':
         suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
-    elif name == 'ChainsawCoreRevvingUp':
+    elif name.startswith('ChainsawCoreRevvingUp'):
         suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
-    elif name == 'ChainsawCoreWhipsaw':
+    elif name.startswith('ChainsawCoreWhipsaw'):
         suitTrack = MovieChainsawCore.doRevvingUp(attack, True)
     elif name == 'ChainsawCorePhaseTwo':
         suitTrack = MovieChainsawCore.doPhaseTwo(attack)
@@ -1840,8 +1840,6 @@ def doSuitAttack(attack):
         suitTrack = doDefault(attack)
     chainsawCtscCamera = (
         name in (
-            'ChainsawCoreRevvingUp',
-            'ChainsawCoreWhipsaw',
             'ChainsawCorePhaseTwo',
             'ChainsawCorePhaseThree',
             'ChainsawCoreChainLinked',
@@ -1850,6 +1848,8 @@ def doSuitAttack(attack):
             'ChainsawCoreThrottleTwo',
             'ChainsawCoreDeadwood',
         ) or
+        name.startswith('ChainsawCoreRevvingUp') or
+        name.startswith('ChainsawCoreWhipsaw') or
         name.startswith('ChainsawCoreOffboarding') or
         name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')

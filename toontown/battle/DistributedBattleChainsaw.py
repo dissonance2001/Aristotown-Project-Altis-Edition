@@ -88,10 +88,83 @@ class DistributedBattleChainsaw(
         self.luredSuits = [suit for suit in self.luredSuits
                            if suit in self.activeSuits]
 
+    def _applyChainsawPhaseThreeIdle(self, suit):
+        if not getattr(suit, '_chainsawPhaseThreeIdle', False):
+            return
+        try:
+            if suit.getDizzy() or suit.getDizzy3():
+                return
+        except:
+            pass
+        try:
+            if suit.hasSuitStatusEffect('sleepy'):
+                return
+        except:
+            pass
+        try:
+            control = suit.getAnimControl(
+                'neutral-override-glitched', partName='modelRoot')
+        except:
+            control = None
+        if control is None:
+            return
+        try:
+            suit.setPlayRate(
+                1 + (suit.battleSpeed * .1),
+                'neutral-override-glitched', partName='modelRoot')
+        except:
+            pass
+        try:
+            suit.loop('neutral-override-glitched', partName='modelRoot')
+        except:
+            try:
+                suit.loop('neutral-override-glitched')
+            except:
+                pass
+
+    def _installChainsawNeutralRecovery(self, suit):
+        if getattr(suit, '_chainsawNeutralRecoveryInstalled', False):
+            return
+        suit._chainsawNeutralRecoveryInstalled = True
+        suit._chainsawPhaseThreeIdle = False
+        methodNames = (
+            'setNeutralAnimation',
+            'setNeutralAnimationDrop',
+            'setNeutralAnimationTrap',
+            'setNeutralAnimationAttack',
+        )
+        for methodName in methodNames:
+            original = getattr(suit, methodName, None)
+            if original is None:
+                continue
+
+            def recoveredNeutral(original=original, suit=suit, battle=self):
+                result = original()
+                battle._applyChainsawPhaseThreeIdle(suit)
+                return result
+
+            setattr(suit, methodName, recoveredNeutral)
+
+    def _syncChainsawNeutralRecovery(self):
+        controller = getattr(self, 'bossCog', None)
+        phase = getattr(controller, 'chainsawPhase', 1) if controller else 1
+        for suit in self.activeSuits:
+            try:
+                if suit.style.name != 'chainsaw':
+                    continue
+            except:
+                continue
+            self._installChainsawNeutralRecovery(suit)
+            suit._chainsawPhaseThreeIdle = phase == 3
+            if suit._chainsawPhaseThreeIdle:
+                self._applyChainsawPhaseThreeIdle(suit)
+
     def enterWaitForInput(self, ts):
         self._pruneStaleLuredSuits()
-        return DistributedBattleMiniboss.DistributedBattleMiniboss.enterWaitForInput(
+        result = DistributedBattleMiniboss.DistributedBattleMiniboss.enterWaitForInput(
             self, ts)
+        self._syncChainsawNeutralRecovery()
+        return result
 
     def setMembers(self, suits, suitsJoining, suitsPending, suitsActive,
                    suitsLured, suitTraps, toons, toonsJoining, toonsPending,

@@ -984,8 +984,14 @@ class ChainsawCalculatorAI:
 
         gained = self._applyRPMGain(controller, rpmGain + bonus)
         if gained > 0:
-            name = ('ChainsawCoreWhipsaw' if bonus
-                    else 'ChainsawCoreRevvingUp')
+            if bonus:
+                multiplier = 2 if controller.chainsawPhase == 3 else 1
+                normalRequested = rpmGain * multiplier
+                normalGained = min(gained, normalRequested)
+                bonusGained = max(0, gained - normalGained)
+                name = 'ChainsawCoreWhipsaw%d_%d' % (gained, bonusGained)
+            else:
+                name = 'ChainsawCoreRevvingUp%d' % gained
             # RPM is synchronized through the controller/meter; this movie is
             # visual-only and must never deal the stack count as Toon damage.
             self._makeVisualAttack(

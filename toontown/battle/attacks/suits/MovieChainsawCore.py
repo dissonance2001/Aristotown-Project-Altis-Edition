@@ -59,29 +59,34 @@ def _spendMeter(attack, stacks):
         pass
 
 
-def _applyMarkedWoodStatus(toon):
+def _setToonStatusEffect(toon, name, modifier=1, turns=None, mode='setBoth'):
     if not toon:
         return
+    if turns is not None and turns > 0:
+        turns += 1
     try:
-        toon.makeMarkedWood()
+        toon.setToonStatusEffect(name, modifier, turns, mode)
     except:
         pass
+
+
+def _setSuitStatusEffect(suit, name, modifier=0, turns=None, mode='setBoth'):
+    if not suit:
+        return
+    if turns is not None and turns > 0:
+        turns += 1
     try:
-        toon.checkMarkedWood(1.75)
-        toon.addMarkedWoodRounds(2)
+        suit.setSuitStatusEffect(name, modifier, turns, mode)
     except:
         pass
+
+
+def _applyMarkedWoodStatus(toon):
+    _setToonStatusEffect(toon, 'vulnerable', 75, 2, 'keepHighest')
 
 
 def _applyThrottleVulnerability(toon):
-    if not toon:
-        return
-    try:
-        toon.makeVulnerable()
-        toon.checkVulnerabilityUp(1.25)
-        toon.addVulnerabilityRounds(2)
-    except:
-        pass
+    _setToonStatusEffect(toon, 'vulnerable', 25, 2, 'keepHighest')
 
 
 def _showSuitHpStringCompat(suit, text, duration=0.85, scale=1.0):
@@ -253,7 +258,7 @@ def _promotionCloud(target):
 
 
 
-def _applyPromotion(target, actualLevel, battle=None):
+def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
     if not target or actualLevel is None:
         return
     try:
@@ -276,6 +281,11 @@ def _applyPromotion(target, actualLevel, battle=None):
                 target.clearSuitStatusEffect(name)
     except:
         pass
+    _setSuitStatusEffect(
+        target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
+    if aggrandized:
+        _setSuitStatusEffect(
+            target, 'chainsawAggrandized', 1, None, 'setBoth')
     if battle:
         try:
             battle.unlureSuit(target)
@@ -290,7 +300,7 @@ def _applyPromotion(target, actualLevel, battle=None):
     except:
         pass
 
-def _applyScabbardState(suit, finalHP, finalMax):
+def _applyScabbardState(suit, finalHP, finalMax, overcharged=False):
     if not suit:
         return
     try:
@@ -329,6 +339,8 @@ def _applyScabbardState(suit, finalHP, finalMax):
             suit.updateHealthBar(0, forceUpdate=1)
     except:
         pass
+    if overcharged:
+        _setSuitStatusEffect(suit, 'overcharged', 50, None, 'setBoth')
 
 
 def _parseScabbardStates(attack):
@@ -343,9 +355,10 @@ def _parseScabbardStates(attack):
             index = int(values[offset])
             finalHP = int(values[offset + 1])
             finalMax = int(values[offset + 2])
+            overcharged = bool(int(values[offset + 3]))
         except:
             continue
-        result.append((index, finalHP, finalMax))
+        result.append((index, finalHP, finalMax, overcharged))
     return result
 
 
@@ -360,15 +373,35 @@ def _loopSuitNeutral(suit):
     #         pass
 
 
+def _parseRevvingGain(attack, whipsaw):
+    prefix = 'ChainsawCoreWhipsaw' if whipsaw else 'ChainsawCoreRevvingUp'
+    suffix = attack.get('name', '')[len(prefix):]
+    parts = suffix.split('_', 1)
+    try:
+        gained = max(0, int(parts[0]))
+    except:
+        gained = None
+    bonus = None
+    if whipsaw and len(parts) > 1:
+        try:
+            bonus = max(0, int(parts[1]))
+        except:
+            bonus = None
+    return gained, bonus
+
+
 def doRevvingUp(attack, whipsaw=False):
     suit = attack['suit']
     oldRPM = _getDisplayedRPM(attack)
     controller = _controller(attack)
     newRPM = getattr(controller, 'chainsawRPM', oldRPM) if controller else oldRPM
-    try:
-        gain = max(0, (int(newRPM) - int(oldRPM)) * 1000)
-    except:
-        gain = 0
+    gainedStacks, whipsawStacks = _parseRevvingGain(attack, whipsaw)
+    if gainedStacks is None:
+        try:
+            gainedStacks = max(0, int(newRPM) - int(oldRPM))
+        except:
+            gainedStacks = 0
+    gain = gainedStacks * 1000
     try:
         rpm = max(1, min(int(newRPM), 10000))
     except:
@@ -383,9 +416,13 @@ def doRevvingUp(attack, whipsaw=False):
         (rpmRoll - 1) / 9999.0
     ) * (slowDuration - fastDuration)
     suit.setChainsawTexRoll(texDuration)
+    _setSuitStatusEffect(
+        suit, 'chainsawRevvingUp', int(newRPM), None, 'setBoth')
     if whipsaw:
-        phase = getattr(controller, 'chainsawPhase', 1) if controller else 1
-        whipsawGain = 2000 * (2 if phase == 3 else 1)
+        if whipsawStacks is None:
+            phase = getattr(controller, 'chainsawPhase', 1) if controller else 1
+            whipsawStacks = 2 * (2 if phase == 3 else 1)
+        whipsawGain = min(gain, whipsawStacks * 1000)
         normalGain = max(0, gain - whipsawGain)
         desc = 'THE CHAINSAW CONSULTANT GAINS +%s RPM!' % format(normalGain, ',d')
         desc += '\n(WHIPSAW: +%s RPM)' % format(whipsawGain, ',d')
@@ -535,7 +572,7 @@ def doAggrandize(attack):
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     targetTrack = Sequence(
         Wait(1.0),
-        Func(_applyPromotion, target, newLevel, attack['battle']),
+        Func(_applyPromotion, target, newLevel, attack['battle'], True),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),
@@ -564,11 +601,11 @@ def doChainLinked(attack):
 
 def doScabbard(attack):
     stateTrack = Parallel()
-    for index, finalHP, finalMax in _parseScabbardStates(attack):
+    for index, finalHP, finalMax, overcharged in _parseScabbardStates(attack):
         support = _supportByIndex(attack, index)
         if support:
             stateTrack.append(Func(
-                _applyScabbardState, support, finalHP, finalMax))
+                _applyScabbardState, support, finalHP, finalMax, overcharged))
     track = Sequence(
         Func(_spendMeter, attack, 7),
         Parallel(
@@ -580,11 +617,20 @@ def doScabbard(attack):
 
 
 def doSparkPlug(attack):
+    statusTrack = Parallel()
+    for target in attack.get('target', ()):
+        toon = target.get('toon')
+        if toon:
+            statusTrack.append(Sequence(
+                Wait(5.36),
+                Func(_setToonStatusEffect,
+                     toon, 'zapped', 20, 2, 'setBoth')))
     track = Sequence(
         Func(_spendMeter, attack, 2),
         Func(attack['suit'].specialHead.exitGlitch),
         Parallel(
             makeChainsawBattleCutscene(attack, 'sparkplug'),
+            statusTrack,
             Sequence(
                 Wait(5.36),
                 Func(attack['suit'].specialHead.enterSemiGlitch))))
@@ -669,8 +715,8 @@ def doKickback(attack):
         ActorInterval(attack['suit'], 'pie-small-react', partName='modelRoot'),
         Sequence(
             Func(attack['battle'].setChainsawChainVisualActive, False),
-            Func(attack['suit'].setSuitStatusEffect,
-                 'chainsawKickback', percent, 2, 'setBoth')),
+            Func(_setSuitStatusEffect,
+                 attack['suit'], 'chainsawKickback', percent, 2, 'setBoth')),
         Wait(5.75))
     return _withCheatBanner(
         attack, track, 'KICKBACK!',
