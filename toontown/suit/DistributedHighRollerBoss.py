@@ -405,8 +405,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highRollerWheel = globalPropPool.getProp('wheel')
         self.highRollerWheel.loop('wheel')
         self.highRollerWheel.setScale(6)
-        self.highRollerWheel2 = globalPropPool.getProp('wheel2')
-        self.highRollerWheel2.setScale(6)
 
         # Do not load any Cashbot CFO crane-round models.  Empty compatibility
         # nodes keep inherited cleanup methods harmless without adding visible
@@ -443,9 +441,6 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.highRollerWheel.reparentTo(self.geom)
         self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
         self.highRollerWheel.hide()
-        self.highRollerWheel2.reparentTo(self.geom)
-        self.highRollerWheel2.setPosHpr(0, -170, 0, 180, 0, 0)
-        self.highRollerWheel2.hide()
 
         self.__suits = []
         self.__initializeAudience()
@@ -1272,6 +1267,7 @@ class DistributedHighRollerBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.HighRollerBossBattleOnePosHpr)
         self.hide()
+        self.highRollerWheel.show()
         self.pelvis.setHpr(self.pelvisReversedHpr)
         self.doAnimate()
         self.endVault.unstash()
