@@ -32,6 +32,15 @@ class DistributedBattleChainsaw(
         self.doorCloseSfx = None
         DistributedBattleMiniboss.DistributedBattleMiniboss.delete(self)
 
+    def _pruneStaleLuredSuits(self):
+        self.luredSuits = [suit for suit in self.luredSuits
+                           if suit in self.activeSuits]
+
+    def enterWaitForInput(self, ts):
+        self._pruneStaleLuredSuits()
+        return DistributedBattleMiniboss.DistributedBattleMiniboss.enterWaitForInput(
+            self, ts)
+
     def setMembers(self, suits, suitsJoining, suitsPending, suitsActive,
                    suitsLured, suitTraps, toons, toonsJoining, toonsPending,
                    toonsActive, toonsRunning, immuneSuits, enragedSuits,
@@ -62,11 +71,14 @@ class DistributedBattleChainsaw(
                 removed = True
         if removed:
             self.activeSuits = active
+            self._pruneStaleLuredSuits()
             self.needAdjustTownBattle = 1
             try:
                 self._DistributedBattleBase__requestAdjustTownBattle()
             except:
                 pass
+        else:
+            self._pruneStaleLuredSuits()
         return result
 
     def makeSuitJoin(self, suit, ts):

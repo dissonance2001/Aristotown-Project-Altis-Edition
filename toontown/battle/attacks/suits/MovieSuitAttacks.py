@@ -310,8 +310,6 @@ suitTrack2ResetNames = [
     'RecordkeeperMinutesTakenDamage',
     'RecordkeeperMinutesTakenContingency',
     'ContingencyRiskThresholdBreach',
-    'ContingencyOverride',
-    'ContingencyOverrideRevert',
     'ButcherMarkedWood',
     'ForemanUnionized',
     'ButcherOffboarding',
@@ -943,10 +941,6 @@ def doSuitAttack(attack):
     elif name == 'ButcherLayoffs':
         suitTrack = MovieBoardbotLitigationCheats.do10000RPM(attack)
         # contingency director
-    elif name == 'ContingencyOverride':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverride(attack)
-    elif name == 'ContingencyOverrideRevert':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverrideRevert(attack)
     elif name == 'ContingencyFailsafeProtocol':
         suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
     elif name == 'ContingencyRiskThresholdBreach75':
@@ -1246,16 +1240,13 @@ def doSuitAttack(attack):
         suitTrack = MovieChainsawCore.doPhaseTwo(attack)
     elif name == 'ChainsawCorePhaseThree':
         suitTrack = MovieChainsawCore.doPhaseThree(attack)
-    elif name in ('ChainsawCoreOffboarding1', 'ChainsawCoreOffboarding2',
-                  'ChainsawCoreOffboarding3', 'ChainsawCoreOffboarding4'):
+    elif name.startswith('ChainsawCoreOffboarding'):
         suitTrack = MovieChainsawCore.doOffboarding(attack)
-    elif name in ('ChainsawCoreCutTheSlack1', 'ChainsawCoreCutTheSlack2',
-                  'ChainsawCoreCutTheSlack3', 'ChainsawCoreCutTheSlack4'):
+    elif name.startswith('ChainsawCoreCutTheSlack'):
         suitTrack = MovieChainsawCore.doCutTheSlack(attack)
     elif name == 'ChainsawCoreMarkedWood':
         suitTrack = MovieChainsawCore.doMarkedWood(attack)
-    elif name in ('ChainsawCoreAggrandize1', 'ChainsawCoreAggrandize2',
-                  'ChainsawCoreAggrandize3', 'ChainsawCoreAggrandize4'):
+    elif name.startswith('ChainsawCoreAggrandize'):
         suitTrack = MovieChainsawCore.doAggrandize(attack)
     elif name == 'ChainsawCoreChainLinked':
         suitTrack = MovieChainsawCore.doChainLinked(attack)
@@ -1840,7 +1831,29 @@ def doSuitAttack(attack):
     else:
         notify.warning('unknown attack: %s substituting Finger Wag' % name)
         suitTrack = doDefault(attack)
-    camTrack = MovieCamera.chooseSuitShot(attack, suitTrack.getDuration())
+    chainsawCtscCamera = (
+        name in (
+            'ChainsawCoreRevvingUp',
+            'ChainsawCoreWhipsaw',
+            'ChainsawCorePhaseTwo',
+            'ChainsawCorePhaseThree',
+            'ChainsawCoreChainLinked',
+            'ChainsawCoreScabbard',
+            'ChainsawCoreSparkPlug',
+            'ChainsawCoreThrottle',
+            'ChainsawCoreThrottleTwo',
+            'ChainsawCoreDeadwood',
+        ) or
+        name.startswith('ChainsawCoreOffboarding') or
+        name.startswith('ChainsawCoreLayoffs')
+    )
+    if chainsawCtscCamera:
+        camTrack = Sequence(Wait(suitTrack.getDuration()))
+    elif name.startswith('ChainsawCore'):
+        camTrack = MovieCamera.randomActorShot(
+            attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
+    else:
+        camTrack = MovieCamera.chooseSuitShot(attack, suitTrack.getDuration())
     battle = attack['battle']
     target = attack['target']
     groupStatus = attack['group']
@@ -3837,11 +3850,11 @@ def doCanned(attack):
     dmg = target[0]['hp']
     toon = target[0]['toon']
     hips = toon.getHipsParts()
+    propDelay = 0.45
     suitType = getSuitBodyType(attack['suitName'])
-    propDelay = 0.8/1.35
-    suitDelay = 1.83/1.35
-    dodgeDelay = 2.1/1.35
-    throwDuration = 1.5/1.35
+    suitDelay = 1
+    dodgeDelay = 2.6
+    throwDuration = 1.5
     can = globalPropPool.getProp('can')
     explode = []
     scale = 26
@@ -3854,9 +3867,10 @@ def doCanned(attack):
     elif torso == 'l':
         scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
     canHpr = VBase3(-173.47, -0.42, 162.09)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.35))
-    posPoints = [Point3(-0.10, -0.1, 0.02), VBase3(-10.584, 11.945, -161.684)]
-    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(6, 6, 6), scaleUpTime=0.5/1.35))
+    suitTrack = Sequence(getSuitTrack(attack, playRate=1.75))
+    posPoints = [Point3(-0.1734104046242777, -0.5202312138728331, -0.45), VBase3(-10, 90, -170.635838150289)]
+    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(9, 9, 9), scaleUpTime=0.25))
+    propDelay = propDelay + 0.5
     throwTrack.append(Wait(suitDelay))
     hitPoint = toon.getPos(battle)
     hitPoint.setX(hitPoint.getX() + 1.1)
@@ -3877,68 +3891,48 @@ def doCanned(attack):
         explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
         dustTrack = Parallel(Func(splat.reparentTo, toon),
                              Sequence(ActorInterval(splat, splatName), Func(splat.detachNode)))
+        can2 = MovieUtil.copyProp(can)
+        hips1 = hips.getPath(2)
+        hips2 = hips.getPath(1)
+        can2Point = Point3(hitPoint.getX(), hitPoint.getY() + 6.4, hitPoint.getZ())
+        can2.setPos(can2Point)
+        can2.setScale(scaleUpPoint)
+        can2.setHpr(canHpr)
         throwTrack.append(Func(battle.movie.needRestoreHips))
-        throwTrack.append(Func(can.wrtReparentTo, hips[0]))
-        throwTrack.append(Func(battle.movie.clearRestoreHips))
+        throwTrack.append(Func(can.wrtReparentTo, hips1))
+        throwTrack.append(Func(can2.reparentTo, hips2))
+        throwTrack.append(Func(MovieUtil.removeProp, can2))
+        throwTrack.append(Func(MovieUtil.removeProp, can))
         soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
         throwTrack.append(Parallel(explodeTrack, soundTrack))
-        scaleTrack = Sequence(
-                Wait(propDelay + suitDelay),
-                LerpScaleInterval(can, throwDuration, scaleUpPoint),
-            )
-        hprTrack = Sequence(
-                Wait(propDelay + suitDelay), LerpHprInterval(can, throwDuration, canHpr)
-            )
-        soundTrack = Parallel(
-                Sequence(
-                    Wait(2.6 / 1.35),
-                    SoundInterval(
-                        globalBattleSoundCache.getSound("SA_canned_tossup_only.ogg"),
-                        node=suit,
-                    ),
-                ),
-                Sequence(
-                    Wait(4.45 / 1.35),
-                    SoundInterval(
-                        globalBattleSoundCache.getSound("SA_canned_impact_only.ogg"),
-                        node=suit,
-                    ),
-                ),
-            )
+        throwTrack.append(Wait(2.4))
+        throwTrack.append(Func(battle.movie.clearRestoreHips))
+        scaleTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(can, throwDuration, scaleUpPoint))
+        hprTrack = Sequence(Wait(propDelay + suitDelay), LerpHprInterval(can, throwDuration, canHpr))
+        soundTrack = Sequence(Wait(1.2), SoundInterval(globalBattleSoundCache.getSound('SA_canned_tossup_only.ogg'), node=suit), SoundInterval(globalBattleSoundCache.getSound('SA_canned_impact_only.ogg'), node=suit))
     else:
-        land = toon.getPos(self.battle)
-        land = Point3(land.getX() + 1.1, land.getY() - 2.9, land.getZ() + 0.7)
-        bouncePoint1 = Point3(land.getX(), land.getY() - 1.0, land.getZ() + 2.5)
-        bouncePoint2 = Point3(land.getX(), land.getY() - 1.7, land.getZ() - 0.2)
-        bouncePoint3 = Point3(land.getX(), land.getY() - 2.5, land.getZ() + 1.5)
-        bouncePoint4 = Point3(land.getX(), land.getY() - 3.1, land.getZ() + 0.3)
+        land = toon.getPos(battle)
+        land.setZ(land.getZ() + 0.7)
+        bouncePoint1 = Point3(land.getX(), land.getY() - 1.5, land.getZ() + 2.5)
+        bouncePoint2 = Point3(land.getX(), land.getY() - 2.1, land.getZ() - 0.2)
+        bouncePoint3 = Point3(land.getX(), land.getY() - 3.1, land.getZ() + 1.5)
+        bouncePoint4 = Point3(land.getX(), land.getY() - 4.1, land.getZ() + 0.3)
         throwTrack.append(LerpPosInterval(can, 0.4, land))
         throwTrack.append(LerpPosInterval(can, 0.4, bouncePoint1))
         throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint2))
         throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint3))
         throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint4))
-        throwTrack.append(Wait(0.7/1.35))
+        throwTrack.append(Wait(1.1))
         throwTrack.append(LerpScaleInterval(can, 0.3, MovieUtil.PNT3_NEARZERO))
-        scaleTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(can, throwDuration, canHpr))
-        hprTrack = Sequence(
-                Wait(propDelay + suitDelay),
-                LerpHprInterval(can, throwDuration, canHpr),
-                Wait(0.4/1.35),
-                LerpHprInterval(can, 0.4, Point3(83.27, 19.52, -177.92)),
-                LerpHprInterval(can, 0.3, Point3(95.24, -72.09, 88.65)),
-                LerpHprInterval(can, 0.2, Point3(-96.34, -2.63, 179.89)),
-            )
-        soundTrack = getSoundTrack('SA_canned_tossup_only.ogg', delay=2.6/1.35, node=suit)
-    canTrack = Sequence(
-            Parallel(throwTrack, scaleTrack, hprTrack),
-            Func(MovieUtil.removeProp, can),
-            Func(battle.movie.clearRenderProp, can),
-        )
+        scaleTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(can, throwDuration, Point3(11, 11, 11)))
+        hprTrack = Sequence(Wait(propDelay + suitDelay), LerpHprInterval(can, throwDuration, canHpr), Wait(0.4), LerpHprInterval(can, 0.4, Point3(83.27, 19.52, -177.92)), LerpHprInterval(can, 0.3, Point3(95.24, -72.09, 88.65)), LerpHprInterval(can, 0.2, Point3(-96.34, -2.63, 179.89)))
+        soundTrack = getSoundTrack('SA_canned_tossup_only.ogg', delay=1.7, node=suit)
+    canTrack = Sequence(Parallel(throwTrack, scaleTrack, hprTrack), Func(MovieUtil.removeProp, can), Func(battle.movie.clearRenderProp, can))
     damageAnims = [['struggle',
       propDelay + suitDelay + throwDuration - .5,
       0.01,
       0.7], ['slip-backward', 0.01, 0.45]]
-    toonTrack = getToonTrack(attack, damageDelay=propDelay+suitDelay+throwDuration, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=.3)
+    toonTrack = getToonTrack(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=propDelay + suitDelay + 1.9)
     return Parallel(suitTrack, toonTrack, canTrack, soundTrack)
 
 
@@ -4758,7 +4752,7 @@ def doEvilEye(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    damageDelay = 1.84
+    damageDelay = 2.44
     dodgeDelay = 1.64
     suitName = suit.getStyleName()
     eyePos = {
@@ -4788,7 +4782,7 @@ def doEvilEye(attack):
     suitHoldStop = 1.69
     suitHoldDuration = suitHoldStop - suitHoldStart
     eyeHoldDuration = 1.1
-    moveDuration = .5
+    moveDuration = 1.1
     suitSplicedAnims = []
     suitSplicedAnims.append(['glower',
      0.01,
