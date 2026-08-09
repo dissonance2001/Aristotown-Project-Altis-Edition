@@ -6,7 +6,7 @@ COMMANDS = (
     {'name': 'words', 'usage': '', 'description': 'Lists the Magic Word commands available to you.', 'aliases': (), 'access': 300},
     {'name': 'mp', 'usage': '', 'description': 'Teleports you to the Major Player lobby.', 'aliases': (), 'access': 400},
     {'name': 'pace', 'usage': '', 'description': 'Teleports you to the Pacesetter lobby.', 'aliases': (), 'access': 400},
-    {'name': 'cs', 'usage': '', 'description': 'Teleports you to the Chainsaw Consultant lobby.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
+    {'name': 'cs', 'usage': '', 'description': 'Teleports you to the Chainsaw Consultant lobby.', 'aliases': (), 'access': 400},
     {'name': 'acc', 'usage': '', 'description': 'Opens or closes the accessory placement editor.', 'aliases': (), 'access': 400},
     {'name': 'jbs', 'usage': '<amount>', 'description': 'Gives Jellybeans to the target Toon.', 'aliases': (), 'access': 400},
     {'name': 'coin', 'usage': '<amount>', 'description': "Gives Club Coins to the target Toon's Club.", 'aliases': (), 'access': 400},
@@ -269,7 +269,7 @@ NO_TARGET_COMMANDS = set((
     'loadmodel', 'spam', 'wireframe', 'freecam', 'placements', 'acc',
     'background', 'paths', 'bamfile', 'exportbam', 'model', 'backface',
     'bfc', 'frontface', 'ffc', 'toggleparticles', 'upsidedown', '3d',
-    'pos', 'cs'
+    'pos'
 ))
 
 REQUIRED_TARGET_COMMANDS = set((

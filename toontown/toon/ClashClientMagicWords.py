@@ -1,5 +1,8 @@
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import Filename
+from direct.showbase import ShowBaseGlobal
+from direct.task import Task
+from direct.task.TaskManagerGlobal import taskMgr
 
 try:
     import __builtin__ as _builtins
@@ -11,6 +14,10 @@ except:
     PStatClient = None
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+
+base = ShowBaseGlobal.base
+render = ShowBaseGlobal.render
+loader = ShowBaseGlobal.loader
 
 
 @magicWord(name='logout', category=CATEGORY_COMMUNITY_MANAGER, types=[])
@@ -35,10 +42,24 @@ def clashTp(zoneId):
 
 @magicWord(name='cs', category=CATEGORY_PROGRAMMER, types=[])
 def clashChainsawLobby():
-    place = base.cr.playGame.getPlace()
-    if place is None or not hasattr(place, 'fsm'):
+    currentBase = ShowBaseGlobal.base
+    toon = getattr(currentBase, 'localAvatar', None)
+    if toon is None:
+        return 'Local Toon is not available.'
+
+    try:
+        place = currentBase.cr.playGame.getPlace()
+    except:
+        place = None
+
+    if place is None or not hasattr(place, 'requestLeave'):
         return 'You cannot teleport from here.'
-    place.fsm.request('teleportOut', [{
+
+    taskName = 'altis-chainsaw-lobby-position-%s' % getattr(toon, 'doId', 0)
+    taskMgr.remove(taskName)
+    taskMgr.doMethodLater(0.1, _placeChainsawLobbyToon, taskName)
+
+    place.requestLeave({
         'loader': ZoneUtil.getLoaderName(ToontownGlobals.OutdoorZone),
         'where': 'toonInterior',
         'how': 'teleportIn',
@@ -48,8 +69,47 @@ def clashChainsawLobby():
         'avId': -1,
         'battle': 1,
         'quick': 1,
-    }])
+    })
     return 'Teleporting to the Chainsaw Consultant lobby.'
+
+
+def _placeChainsawLobbyToon(task):
+    if task.time > 30.0:
+        return Task.done
+
+    currentBase = ShowBaseGlobal.base
+    toon = getattr(currentBase, 'localAvatar', None)
+    if toon is None:
+        return Task.done
+
+    try:
+        place = currentBase.cr.playGame.getPlace()
+    except:
+        return Task.cont
+
+    if place is None:
+        return Task.cont
+
+    try:
+        if place.getZoneId() != ToontownGlobals.ChainsawLobby:
+            return Task.cont
+    except:
+        return Task.cont
+
+    try:
+        if place.getState() != 'walk':
+            return Task.cont
+    except:
+        return Task.cont
+
+    toon.setPosHpr(
+        1.223862, 4.685430, -0.214102,
+        0.239998, 0.0, 0.0)
+    try:
+        toon.d_broadcastPositionNow()
+    except:
+        pass
+    return Task.done
 
 
 @magicWord(name='district', category=CATEGORY_COMMUNITY_MANAGER, types=[int])
