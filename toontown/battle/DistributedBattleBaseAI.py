@@ -1117,6 +1117,13 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         toonId = self.air.getAvatarIdFromSender()
         oldAttack = self.toonAttacks.get(toonId)
 
+        if oldAttack and oldAttack[TOON_TRACK_COL] == NPCSOS:
+            oldNpcId = oldAttack[TOON_TGT_COL]
+            if self.npcAttacks.get(oldNpcId) == toonId:
+                del self.npcAttacks[oldNpcId]
+                if self.numNPCAttacks > 0:
+                    self.numNPCAttacks -= 1
+
         if track == NO_ATTACK:
             if oldAttack and oldAttack[TOON_TRACK_COL] in (SUE, FIRE):
                 return
@@ -1152,7 +1159,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 npcCollision = 0
                 if av in self.npcAttacks:
                     callingToon = self.npcAttacks[av]
-                    if self.activeToons.count(callingToon) == 1:
+                    if callingToon != toonId and self.activeToons.count(callingToon) == 1:
                         self.toonAttacks[toonId] = getToonAttack(toonId, track=PASS)
                         npcCollision = 1
                 if npcCollision == 0:
