@@ -111,10 +111,9 @@ def __makeCancelledNodePath():
 
 def doDefault(attack):
     notify.debug('building suit attack in doDefault')
-    suitName = attack['suitName']
-    attack['name'] = 'SoakRemoval'
-    attack['animName'] = 'nothing'
-    return MovieUniversalCheats.SoakRemoval(attack)
+    attack['name'] = 'FingerWag'
+    attack['animName'] = 'finger-wag'
+    return doFingerWag(attack)
 
 def __createSuitResetPosTrack(suit, battle):
     return MovieIntervals.__createSuitResetPosTrack(suit, battle)
@@ -1830,7 +1829,7 @@ def doSuitAttack(attack):
     ):
         suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
     else:
-        notify.warning('unknown attack: %s substituting EEEEEEEEEEEEEE' % name)
+        notify.warning('unknown attack: %s substituting Finger Wag' % name)
         suitTrack = doDefault(attack)
     chainsawCtscCamera = (
         name in (
