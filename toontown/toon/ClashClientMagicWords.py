@@ -10,6 +10,7 @@ try:
 except:
     PStatClient = None
 from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 
 
 @magicWord(name='logout', category=CATEGORY_COMMUNITY_MANAGER, types=[])
@@ -30,6 +31,25 @@ def clashTp(zoneId):
     hoodId = ZoneUtil.getHoodId(zoneId)
     place.requestTeleport(hoodId, zoneId, base.localAvatar.currentShard, -1)
     return 'Teleporting to zone %d.' % zoneId
+
+
+@magicWord(name='cs', category=CATEGORY_PROGRAMMER, types=[])
+def clashChainsawLobby():
+    place = base.cr.playGame.getPlace()
+    if place is None or not hasattr(place, 'fsm'):
+        return 'You cannot teleport from here.'
+    place.fsm.request('teleportOut', [{
+        'loader': ZoneUtil.getLoaderName(ToontownGlobals.OutdoorZone),
+        'where': 'toonInterior',
+        'how': 'teleportIn',
+        'hoodId': ToontownGlobals.OutdoorZone,
+        'zoneId': ToontownGlobals.ChainsawLobby,
+        'shardId': None,
+        'avId': -1,
+        'battle': 1,
+        'quick': 1,
+    }])
+    return 'Teleporting to the Chainsaw Consultant lobby.'
 
 
 @magicWord(name='district', category=CATEGORY_COMMUNITY_MANAGER, types=[int])
