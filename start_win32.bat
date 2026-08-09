@@ -96,7 +96,7 @@ goto game
 set TT_GAMESERVER=73.187.108.196:7198
 
 :localhost
-set TT_GAMESERVER=127.0.0.1
+set TT_GAMESERVER=73.187.108.196:7198
 
 :game
 cls
