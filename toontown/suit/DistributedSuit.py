@@ -717,10 +717,10 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         searchString = chatString.lower()
         if searchString.find(OTPLocalizer.DialogSpecial) >= 0:
             self.animHead = 'murmur'
-        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
-            self.animHead = 'question'
         elif searchString.find(OTPLocalizer.DialogExclamation) >= 0:
             self.animHead = 'grunt'
+        elif searchString.find(OTPLocalizer.DialogQuestion) >= 0:
+            self.animHead = 'question'
         else:
             stringLength = len(chatString)
             if stringLength <= 1:
@@ -782,7 +782,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if hasattr(base.cr, 'chatLog') and chatString != "":
             base.cr.chatLog.addToLog("\1cogGray\1%s\2: %s" %(self.name, chatString), category=base.cr.chatLog.TAB_NPC)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        if self.animHead == None and (self.getDizzy() or self.isSleepy or self.isSued):
+        if self.animHead == None and (self.getDizzy() or self.hasSuitStatusEffect('sleepy') or self.hasSuitStatusEffect('sued')):
             if self.dna.name == 'hroller':
                 for headPart in self.animatedHeadParts: Sequence(
                     Func(headPart.loop, 'neutral-lured', fromFrame=0, toFrame=22)

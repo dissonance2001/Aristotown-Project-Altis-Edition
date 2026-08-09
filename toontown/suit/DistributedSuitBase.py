@@ -4002,6 +4002,10 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             targetAnim = 'neutral-override'
         elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
             targetAnim = 'neutral-unstable'
+        elif self.hasSuitStatusEffect('glitched'):
+            targetAnim = 'neutral-override'
+        elif self.hasSuitStatusEffect('semi-glitched'):
+            targetAnim = 'neutral-unstable'
 
         else:
             return Func(self.setNeutralAnimationDrop)
@@ -4058,6 +4062,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.isDanceSession:
             Sequence(Func(self.loop, 'rolled')
                      ).start()
+        elif self.hasSuitStatusEffect('glitched'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('semi-glitched'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
@@ -4120,6 +4130,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
+        elif self.hasSuitStatusEffect('glitched'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('semi-glitched'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.isDanceSession:
             Sequence(Func(self.loop, 'rolled')
                      ).start()
@@ -4224,6 +4240,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.dna.name == 'clerk' and (self.getActualLevel() in [24, 25]):
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'pace'), Func(self.loop, 'pace')
                      ).start()
+        elif self.hasSuitStatusEffect('glitched'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('semi-glitched'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
@@ -4260,6 +4282,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
+        elif self.hasSuitStatusEffect('glitched'):
+            Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('semi-glitched'):
+            Sequence(Func(self.loop, 'neutral-unstable')
+                                 ).start()
         elif self.hasSuitStatusEffect('contingencyOverride'):
             Sequence(Func(self.loop, 'neutral-override')
                                  ).start()
@@ -4482,7 +4510,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return self.luredInterval
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
-        anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+        anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured', 
+                 'neutral_b', 'death_b', 'grunt_b', 'murmur_b', 'question_b', 'statement_b', 'neutral-hurt_b', 'neutral-lured_b', 'stun_b', 
                  'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5', 'mouth-drop',
                  'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
                  'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust', 

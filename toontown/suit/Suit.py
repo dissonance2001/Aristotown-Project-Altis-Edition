@@ -2829,6 +2829,7 @@ class Suit(Avatar.Avatar):
 
     def generateHeadAnims(self, path, cActor, additionalAnims=[]):
         anims = ['neutral', 'death', 'grunt', 'murmur', 'question', 'statement', 'neutral-hurt', 'neutral-lured',
+        'neutral_b', 'death_b', 'grunt_b', 'murmur_b', 'question_b', 'statement_b', 'neutral-hurt_b', 'neutral-lured_b', 'stun_b', 
                  'fusiondance-shot1', 'fusiondance-shot2', 'fusiondance-shot3', 'fusiondance-shot4', 'fusiondance-shot5',
                  'stun', 'enraged', 'sacrifice-cog', 'summon-cog', 'insurance', 'bellow', 'ace-in-the-hole', 'wheelspin', 'healing-bell', 'revvedup',
                  'scabbard', 'sparkplug', 'throttle', 'throttle2', 'mouthdrop', 'dive', 'bust', 
@@ -6961,6 +6962,28 @@ class Suit(Avatar.Avatar):
         for headPart in self.headParts:
             headPart.setTexture(texture, 1)
 
+    def makeChainsawOverride(self, elite=False):
+        anims = self.generateAnimDict()
+        for headPart in self.headParts:
+            headPart.removeNode()
+        self.headParts = []
+        self.generateHead3('chainsaw_b', animated=True)
+        texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b.png')
+        for headPart in self.headParts:
+            headPart.setTexture(texture2, 1)
+        self.setChainsawTexRoll()
+
+    def removeOverride(self, elite=False):
+        anims = self.generateAnimDict()
+        for headPart in self.headParts:
+            headPart.removeNode()
+        self.headParts = []
+        self.generateHead3('chainsaw_b', animated=True)
+        texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_b.png')
+        for headPart in self.headParts:
+            headPart.setTexture(texture2, 1)
+        self.setChainsawTexRoll()
+
     def makeContingencyOverride(self, elite=False):
         self.isChainsawPhase2 = 1
         anims = self.generateAnimDict()
@@ -7740,21 +7763,38 @@ class Suit(Avatar.Avatar):
 
 
     def stopHeadFreakout(self):
-        taskMgr.remove(self.uniqueName(FreakoutTaskName))
-        self.__finishHeadFreakoutSequence()
+        taskName = getattr(self, 'headFreakoutTaskName', None)
+
+        if taskName:
+            taskMgr.remove(taskName)
+            self.headFreakoutTaskName = None
+
+        sequence = getattr(self, 'headFreakoutSequence', None)
+
+        if sequence:
+            sequence.finish()
+            self.headFreakoutSequence = None
 
         headPart = getattr(self, 'headFreakoutPart', None)
         if not headPart or headPart.isEmpty():
             return
-        
-        if float(self.currHP) / float(self.maxHP) <= 0.25:
+
+        currHP = getattr(self, 'currHP', 0)
+        maxHP = getattr(self, 'maxHP', 0)
+
+        if maxHP > 0 and float(currHP) / float(maxHP) <= 0.25:
             normalTex = getattr(self, 'headFreakoutNormalTexHurt', None)
         else:
             normalTex = getattr(self, 'headFreakoutNormalTex', None)
+
         if normalTex:
             headPart.setTexture(normalTex, 1)
 
-        originalHpr = getattr(self, 'headFreakoutOriginalHpr', Vec3(0, 0, 0))
+        originalHpr = getattr(
+            self,
+            'headFreakoutOriginalHpr',
+            Vec3(0, 0, 0)
+        )
         headPart.setHpr(originalHpr)
 
 
