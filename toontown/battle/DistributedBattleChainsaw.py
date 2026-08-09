@@ -50,35 +50,7 @@ class DistributedBattleChainsaw(
             suitTraps, toons, toonsJoining, toonsPending, toonsActive,
             toonsRunning, immuneSuits, enragedSuits, absorbingSuits,
             soakedSuits, timestamp)
-
-        # TownBattle builds its Cog cards from activeSuits. Chainsaw cheat
-        # deaths/sacrifices can briefly leave a zero-HP support in that list
-        # after its death movie, so prune it locally and request a GUI rebuild.
-        removed = False
-        active = []
-        for suit in self.activeSuits:
-            keep = True
-            try:
-                isChainsaw = (getattr(getattr(suit, 'dna', None), 'name', None)
-                              == 'chainsaw')
-                if not isChainsaw and suit.getHP() <= 0:
-                    keep = False
-            except:
-                pass
-            if keep:
-                active.append(suit)
-            else:
-                removed = True
-        if removed:
-            self.activeSuits = active
-            self._pruneStaleLuredSuits()
-            self.needAdjustTownBattle = 1
-            try:
-                self._DistributedBattleBase__requestAdjustTownBattle()
-            except:
-                pass
-        else:
-            self._pruneStaleLuredSuits()
+        self._pruneStaleLuredSuits()
         return result
 
     def makeSuitJoin(self, suit, ts):

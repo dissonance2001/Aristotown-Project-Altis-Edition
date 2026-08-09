@@ -1590,6 +1590,11 @@ def createSuitDeathTrack(suit, battle):
     if suit.style.name == 'psetter':
         from toontown.cutscene.PacesetterDeathCutscene import makePacesetterDeath
         return makePacesetterDeath(suit, battle)
+    if suit.style.name == 'chainsaw':
+        controller = getattr(battle, 'bossCog', None)
+        if controller is not None and hasattr(controller, 'chainsawPhase'):
+            from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawDeath
+            return makeChainsawDeath(suit, battle)
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()

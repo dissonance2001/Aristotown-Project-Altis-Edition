@@ -1,5 +1,5 @@
 from direct.interval.IntervalGlobal import *
-from panda3d.core import Point3, VBase3
+from panda3d.core import Point3, VBase3, Vec4
 
 from toontown.battle import MovieUtil
 from toontown.battle import PlayByPlayText
@@ -72,7 +72,32 @@ def _getDisplayedRPM(attack):
         return None
 
 
-def _cheatBanner(attack, title, description, duration):
+def _descriptionTrack(descText, description, duration, oneLine=False):
+    wordwrap = 100000.0 if oneLine else 30.0
+    return Sequence(
+        Wait(0.5),
+        LerpColorScaleInterval(descText, 0, Vec4(0.847, 0.784, 0.992, 1.0)),
+        Func(descText.hide),
+        Func(descText.textNode.setWordwrap, wordwrap),
+        Func(descText.setPos, 0.0, 0.6625),
+        Func(descText.setScale, 0.09),
+        Func(descText.textNode.setText, description),
+        LerpScaleInterval(descText, duration=0, scale=(0, 0, 0)),
+        descText.posInterval(0, (0, 0, 0.6625)),
+        Func(descText.show),
+        Wait(0.5),
+        Parallel(
+            descText.scaleInterval(0.25, (1.2, 1.1, 1.1)),
+            descText.posInterval(0.25, (0, 0, -0.040))),
+        Parallel(
+            descText.scaleInterval(0.25, (1.1, 1.1, 1.1)),
+            descText.posInterval(0.25, (0, 0, -0.040))),
+        Wait(max(0.0, duration - 0.5)),
+        LerpColorScaleInterval(descText, 0.25, Vec4(0, 0, 0, 0)),
+        Func(descText.hide))
+
+
+def _cheatBanner(attack, title, description, duration, oneLine=False):
     pbpText = attack.get('playByPlayText')
     if pbpText is None:
         return Sequence()
@@ -85,16 +110,18 @@ def _cheatBanner(attack, title, description, duration):
     return Sequence(
         Parallel(
             pbpText.getShowIntervalCheat(title, visibleDuration),
-            descText.getShowIntervalDesc(description, visibleDuration)),
+            _descriptionTrack(descText, description, visibleDuration, oneLine)),
         Func(descText.cleanup))
 
 
-def _withCheatBanner(attack, track, title, description):
+def _withCheatBanner(attack, track, title, description, oneLine=False):
     try:
         duration = track.getDuration()
     except:
         duration = 5.0
-    return Parallel(track, _cheatBanner(attack, title, description, duration))
+    return Parallel(
+        track,
+        _cheatBanner(attack, title, description, duration, oneLine))
 
 
 def _orderedSuits(battle):
@@ -486,7 +513,8 @@ def doDeadwood(attack):
         _damageTrack(attack, 4.0))
     return _withCheatBanner(
         attack, track, 'DEADWOOD!',
-        "YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED")
+        "YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED",
+        oneLine=True)
 
 
 def doKickback(attack):

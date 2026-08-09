@@ -2,6 +2,8 @@ import copy
 import random
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
+from direct.interval.Interval import Interval
+from pandac.PandaModules import CInterval
 from direct.showbase import DirectObject
 from toontown.battle.BattleBase import *
 from toontown.battle import BattleExperience
@@ -54,6 +56,73 @@ CONTENT_SYNC_CONDITION_ORDERS = {
     'contentSync7': [TRAP, DROP, SQUIRT, SOUND, THROW, ZAP, LURE, HEAL],
     'contentSync8': [TRAP, SQUIRT, DROP, THROW, ZAP, LURE, HEAL, SOUND],
 }
+
+class _PacesetterRealtimeInterval(Interval):
+
+    _serial = 0
+
+    def __init__(self, interval, battleSpeed):
+        _PacesetterRealtimeInterval._serial += 1
+        self.interval = interval
+        self.battleSpeed = max(0.1, float(battleSpeed))
+        self.innerDuration = interval.getDuration()
+        Interval.__init__(
+            self,
+            'PacesetterRealtimeInterval-%d' % _PacesetterRealtimeInterval._serial,
+            self.innerDuration * self.battleSpeed)
+
+    def _innerTime(self, t):
+        return max(0.0, min(self.innerDuration, float(t) / self.battleSpeed))
+
+    def privInitialize(self, t):
+        self.interval.privInitialize(self._innerTime(t))
+        self.interval.privPostEvent()
+        self.state = CInterval.SStarted
+        self.currT = t
+
+    def privStep(self, t):
+        self.interval.privStep(self._innerTime(t))
+        self.interval.privPostEvent()
+        self.state = CInterval.SStarted
+        self.currT = t
+
+    def privFinalize(self):
+        self.interval.privFinalize()
+        self.interval.privPostEvent()
+        self.state = CInterval.SFinal
+        self.currT = self.getDuration()
+        self.intervalDone()
+
+    def privInstant(self):
+        self.interval.privInstant()
+        self.interval.privPostEvent()
+        self.state = CInterval.SFinal
+        self.currT = self.getDuration()
+        self.intervalDone()
+
+    def privInterrupt(self):
+        self.interval.privInterrupt()
+        self.interval.privPostEvent()
+        self.state = CInterval.SPaused
+
+    def privReverseInitialize(self, t):
+        self.interval.privReverseInitialize(self._innerTime(t))
+        self.interval.privPostEvent()
+        self.state = CInterval.SStarted
+        self.currT = t
+
+    def privReverseFinalize(self):
+        self.interval.privReverseFinalize()
+        self.interval.privPostEvent()
+        self.state = CInterval.SInitial
+        self.currT = 0.0
+
+    def privReverseInstant(self):
+        self.interval.privReverseInstant()
+        self.interval.privPostEvent()
+        self.state = CInterval.SInitial
+        self.currT = 0.0
+
 
 class Movie(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('Movie')
@@ -1511,6 +1580,7 @@ class Movie(DirectObject.DirectObject):
 
         IGNORE_BATTLE_PLAYRATE = (
             'PacesetterOverclocked',
+            'PacesetterEarlyOverclocked',
         )
 
         parallelGroupNames = {
@@ -1588,13 +1658,10 @@ class Movie(DirectObject.DirectObject):
                 continue
 
             if attackName in IGNORE_BATTLE_PLAYRATE:
-                speed = getattr(self, 'currentBattleSpeed', 1.0)
-
-                if speed != 0:
-                    ival.setPlayRate(1.0 / speed)
-
-                    if camIval:
-                        camIval.setPlayRate(1.0 / speed)
+                speed = max(0.1, float(getattr(self, 'currentBattleSpeed', 1.0)))
+                ival = _PacesetterRealtimeInterval(ival, speed)
+                if camIval:
+                    camIval = _PacesetterRealtimeInterval(camIval, speed)
 
             groupName = parallelGroupNames.get(attackName, attackName)
 

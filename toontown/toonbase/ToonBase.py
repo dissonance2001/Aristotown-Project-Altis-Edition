@@ -408,7 +408,14 @@ class ToonBase(OTPBase.OTPBase):
         loadPrcFileData('', 'texture-anisotropic-degree %d' % level)
         
     def setRatio(self): # Set the aspect ratio
-        base.setAspectRatio(GraphicsOptions.AspectRatios[self.Widescreen])
+        ratio = GraphicsOptions.AspectRatios[self.Widescreen]
+        if ratio:
+            self.aspectRatio = ratio
+        else:
+            x = max(1, base.win.getXSize())
+            y = max(1, base.win.getYSize())
+            self.aspectRatio = float(x) / float(y)
+        base.setAspectRatio(self.aspectRatio)
             
     def setTextureScale(self): # Set the global texture scale (TODO)
         scale = settings.get('texture-scale')
@@ -872,7 +879,16 @@ class ToonBase(OTPBase.OTPBase):
         return Task.cont
 
     def onWindowEvent(self, window):
-        settings['res'] = self.getSize()
         if window.isClosed():
             sys.exit(0)
+        x = max(1, window.getXSize())
+        y = max(1, window.getYSize())
+        settings['res'] = (x, y)
+        if self.Widescreen == 0:
+            ratio = float(x) / float(y)
+            if ratio != self.aspectRatio:
+                self.aspectRatio = ratio
+                base.setAspectRatio(ratio)
+        self.oldX = x
+        self.oldY = y
 

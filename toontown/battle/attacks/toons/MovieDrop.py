@@ -302,8 +302,9 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
     objInit = Func(posObject, object, hp <= 0)
     objectTrack.append(Wait(delay + tObjectAppears))
     objectTrack.append(objInit)
-    visualDied = hasDied and lastDrop
-    roundHasDeath = hasDied
+    pacesetterSpecialDeath = bool(target.get('died')) and suit.dna.name == 'psetter'
+    visualDied = hasDied and lastDrop and not pacesetterSpecialDeath
+    roundHasDeath = hasDied and not pacesetterSpecialDeath
     if hp > 0 and (visualDied or roundHasDeath) and not suit.isVirtual and not suit.isOverpressured:
         # killing drop: full hit animation, then shrink away
         if hasattr(object, 'getAnimControls'):
@@ -460,7 +461,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     hp = target['hp']
     hitSuit = hp > 0
     actualDied = target['died']
-    visualDied = hasDied and lastDrop
+    pacesetterSpecialDeath = bool(actualDied) and suit.dna.name == 'psetter'
+    visualDied = hasDied and lastDrop and not pacesetterSpecialDeath
     revived = target['revived']
     leftSuits = target['leftSuits']
     rightSuits = target['rightSuits']
@@ -515,7 +517,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim', 'psetter'):
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -542,7 +544,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
     elif visualDied != 0 and suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    elif visualDied != 0 and suit.dna.name in ('erfit', 'erclaim'):
+    elif visualDied != 0 and suit.dna.name in ('erfit', 'erclaim', 'psetter'):
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
     elif visualDied != 0 and not suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
@@ -569,6 +571,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
             else:
                 anim = 'drop-react'
             suitTrack = Sequence(Wait(delay + tObjectAppears))
+    if pacesetterSpecialDeath:
+        suitTrack = Sequence(suitTrack, MovieUtil.createSuitDeathTrack(suit, battle))
     return suitTrack
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):

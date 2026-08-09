@@ -1177,7 +1177,32 @@ def doShakedownCooldown(attack):
     else:
         return Parallel(suitTrack, liftTracks, toonTracks, toonRiseTracks)
     
+def _doPacesetterRushJob(attack, modifier):
+    dmg = attack['target'][0]['hp']
+    battle = attack['battle']
+    targetSuit = battle.activeSuits[dmg]
+    suit = attack['suit']
+    rushJobTrack = Sequence(
+        Wait(0.5),
+        Func(targetSuit.setSuitStatusEffect, 'rushJob', modifier=modifier),
+        targetSuit.makeCogStepBackDeathInterval(battle),
+        Func(targetSuit.clearSuitStatusEffect, 'soaked'),
+        Func(targetSuit.clearSuitStatusEffect, 'sued'),
+        Func(targetSuit.setDizzy, 0),
+        Func(targetSuit.clearSuitStatusEffect, 'marked'),
+        Func(targetSuit.clearSuitStatusEffect, 'zapped'),
+        Func(targetSuit.clearSuitStatusEffect, 'dazed')
+    )
+    suitTrack = Sequence(
+        Wait(5.1),
+        Func(suit.loop, 'neutral')
+    )
+    soundTrack = getSoundTrack('SA_rush_job_target.ogg', delay=0.5, node=suit)
+    return Parallel(suitTrack, rushJobTrack, soundTrack)
+
 def doRushJobTrap(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 1)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1212,6 +1237,8 @@ def doRushJobTrap(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobLure(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 2)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1246,6 +1273,8 @@ def doRushJobLure(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobThrow(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 3)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1280,6 +1309,8 @@ def doRushJobThrow(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobSquirt(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 4)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1314,6 +1345,8 @@ def doRushJobSquirt(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobZap(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 5)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1348,6 +1381,8 @@ def doRushJobZap(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobSound(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 6)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]
@@ -1382,6 +1417,8 @@ def doRushJobSound(attack):
     return Parallel(suitTracks, rushJobTrack, soundTrack)
 
 def doRushJobDrop(attack):
+    if attack['suit'].dna.name == 'psetter':
+        return _doPacesetterRushJob(attack, 7)
     dmg = attack['target'][0]['hp']
     battle = attack['battle']
     targetSuit = battle.activeSuits[dmg]

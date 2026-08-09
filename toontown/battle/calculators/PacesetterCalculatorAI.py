@@ -133,6 +133,7 @@ class PacesetterCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
+        rushJobsQueued = set()
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':
@@ -160,6 +161,7 @@ class PacesetterCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                        rushJobsQueued.add(suitId)
 
                 roll = random.randint(0, 100)
                 if roll >= 25 and (self.battle.activeSuits[i].currHP < 8925 or self.suitHasCondition(suitId, 'overclocked')):
@@ -187,6 +189,7 @@ class PacesetterCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
+                            rushJobsQueued.add(suitId)
 
                 roll = random.randint(0, 100)
                 if roll >= 25 and self.battle.activeSuits[i].currHP < 3825:
@@ -211,6 +214,7 @@ class PacesetterCalculatorAI:
                                                                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
+                                rushJobsQueued.add(suitId)
 
 
         for i in xrange(len(self.battle.activeSuits)):
@@ -273,7 +277,9 @@ class PacesetterCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    if self.battle.activeSuits[i].currHP <= 5100 and not self.suitHasCondition(suitId, 'overclocked'):
+                    if (self.battle.activeSuits[i].currHP <= 5100 and
+                            not self.suitHasCondition(suitId, 'overclocked') and
+                            suitId in rushJobsQueued):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'PacesetterOverclocked',
                                                                     'animName': 'overclocked',

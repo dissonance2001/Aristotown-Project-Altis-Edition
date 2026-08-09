@@ -534,6 +534,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
     trapName = trapTrackNames[trapLevel]
     result = Sequence()
     suitGone = 0
+    pacesetterSpecialDeath = bool(died) and suit.dna.name == 'psetter'
     suitStartPos = suit.getPos()
 
     def reparentTrap(trapProp = trapProp, battle = battle):
@@ -650,7 +651,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not pacesetterSpecialDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -690,7 +691,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(1.1))
         soundTrack = Sequence(Wait(1.25),
                               SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not pacesetterSpecialDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -724,7 +725,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'lured', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not pacesetterSpecialDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -767,7 +768,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setY(sinkPos.getY() + 12.5)
         dropPos.setZ(dropPos.getZ() + 40)
         #landPos.setY(dropPos.getY() + 4)
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not pacesetterSpecialDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -819,7 +820,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         suitTrack.append(ActorInterval(suit, 'tnt-react', endTime=2))
         
         if base.localAvatar in battle.activeToons:
-            if not died:
+            if not died or pacesetterSpecialDeath:
                 suitTrack.append(Sequence(
                 Wait(0.1),
                 Parallel(
@@ -861,7 +862,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                 Func(trapProp.sparksEffect.cleanup),
                 Func(battle.movie.clearRestoreColor)
             ))
-        if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not pacesetterSpecialDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -885,7 +886,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         result.append(Func(battle.unlureSuit, suit))
         result.append(Func(suit.setDizzy, 0))
         result.append(Func(suit.loop, 'neutral'))
-        if died:
+        if died and not pacesetterSpecialDeath:
             suitGone = 1
             #result.append(createIncomingTrainInterval(battle, suit, hp, lure, trapProp))
             result.append(MovieUtil.createSuitCrashTrack(suit))

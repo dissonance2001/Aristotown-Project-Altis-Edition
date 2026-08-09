@@ -1,3 +1,5 @@
+import random
+
 """Corporate Clash Chainsaw Consultant intro adapter for Project Altis/Python 2.
 
 The original ``chainsawconsultant_intro.ctsc`` remains unchanged.  This file
@@ -7,10 +9,10 @@ bridges that Clash normally provides around the CTSC runtime.
 
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import (
-    ActorInterval, Func, LerpFunctionInterval, Parallel, ProjectileInterval,
+    ActorInterval, Func, LerpFunctionInterval, LerpHprInterval, Parallel, ProjectileInterval,
     Sequence, SoundInterval, Wait)
 
-from panda3d.core import Texture, TextureStage
+from panda3d.core import Texture, TextureStage, Vec3
 
 from toontown.cutscene.AltisCutsceneCompat import (
     cacheResolvedControls,
@@ -104,6 +106,13 @@ _HEAD_NORMAL = {
     'neutral-lured': _HEAD_PREFIX + '-neutral-lured',
     'neutral-hurt': _HEAD_PREFIX + '-neutral-hurt',
     'death': _HEAD_PREFIX + '-death',
+    'leap': _HEAD_PREFIX + '-cutscene-leap',
+    'getup': _HEAD_PREFIX + '-cutscene-getup',
+    'hurt-neutral': _HEAD_PREFIX + '-cutscene-hurt-neutral',
+    'hurt-walk': _HEAD_PREFIX + '-cutscene-hurt-walk',
+    'laying': _HEAD_PREFIX + '-cutscene-laying',
+    'todesk': _HEAD_PREFIX + '-cutscene-todesk',
+    'desk-neutral': _HEAD_PREFIX + '-cutscene-desk-neutral',
     'revvedup': _HEAD_PREFIX + '-revvedup',
     'sparkplug': _HEAD_PREFIX + '-sparkplug',
     'scabbard': _HEAD_PREFIX + '-scabbard',
@@ -121,6 +130,13 @@ _HEAD_GLITCH = {
     'neutral-lured': _HEAD_PREFIX + '_b-neutral-lured',
     'neutral-hurt': _HEAD_PREFIX + '_b-neutral-hurt',
     'death': _HEAD_PREFIX + '_b-death',
+    'leap': _HEAD_PREFIX + '-cutscene-leap',
+    'getup': _HEAD_PREFIX + '-cutscene-getup',
+    'hurt-neutral': _HEAD_PREFIX + '-cutscene-hurt-neutral',
+    'hurt-walk': _HEAD_PREFIX + '-cutscene-hurt-walk',
+    'laying': _HEAD_PREFIX + '-cutscene-laying',
+    'todesk': _HEAD_PREFIX + '-cutscene-todesk',
+    'desk-neutral': _HEAD_PREFIX + '-cutscene-desk-neutral',
     # These battle-only head animations are shared by all three head modes.
     'revvedup': _HEAD_PREFIX + '-revvedup',
     'sparkplug': _HEAD_PREFIX + '-sparkplug',
@@ -132,6 +148,7 @@ _HEAD_GLITCH = {
 CHAINSAW_BATTLE_BODY_ANIMS = {
     'deadwood': 'phase_12/models/char/suitA-deadwood',
     'layoffs': 'phase_12/models/char/suitA-layoffs',
+    'summon': 'phase_5/models/char/suitA-summon',
     'neutral-override': 'phase_12/models/char/suitA-neutral-override',
     'neutral-override-glitched': 'phase_12/models/char/suitA-neutral-override-glitched',
     'revvedup': 'phase_12/models/char/suitA-revvedup',
@@ -140,6 +157,13 @@ CHAINSAW_BATTLE_BODY_ANIMS = {
     'sparkplug': 'phase_12/models/char/suitA-sparkplug',
     'throttle': 'phase_12/models/char/suitA-throttle',
     'throttletwo': 'phase_12/models/char/suitA-throttletwo',
+    'leap': 'phase_12/models/char/suitA-chainsaw-cutscene-leap',
+    'getup': 'phase_12/models/char/suitA-chainsaw-cutscene-getup',
+    'hurt-neutral': 'phase_12/models/char/suitA-chainsaw-cutscene-hurt-neutral',
+    'hurt-walk': 'phase_12/models/char/suitA-chainsaw-cutscene-hurt-walk',
+    'laying': 'phase_12/models/char/suitA-chainsaw-cutscene-laying',
+    'todesk': 'phase_12/models/char/suitA-chainsaw-cutscene-todesk',
+    'desk-neutral': 'phase_12/models/char/suitA-chainsaw-cutscene-desk-neutral',
 }
 
 _VOICE_NORMAL = (
@@ -165,6 +189,9 @@ class _ChainsawIntroHead(Actor.Actor):
         self.glitchState = 'normal'
         self.sfx = None
         self.texRollIval = None
+        self.freakoutSeq = None
+        self.freakoutTaskName = 'chainsawHeadFreakout-%s' % id(self)
+        self.freakoutOriginalHpr = None
 
         allAnims = dict(_HEAD_NORMAL)
         for name, path in _HEAD_GLITCH.items():
@@ -243,7 +270,7 @@ class _ChainsawIntroHead(Actor.Actor):
             self, self._animName(animName), *args, **kwargs)
 
     def loopNeutral(self):
-        self.loop('neutral-override')
+        self.loop('neutral')
 
     @staticmethod
     def _loadVoiceArray(paths):
@@ -264,40 +291,154 @@ class _ChainsawIntroHead(Actor.Actor):
         if voice:
             voice.voiceArray = voiceArray
 
+    def _setFreakoutTexture(self, texture):
+        if texture:
+            self.setTexture(texture, 1)
+
+    def _chooseFreakoutRepeatCount(self):
+        roll = random.randint(1, 14)
+        if roll <= 10:
+            return 1
+        if roll <= 13:
+            return 2
+        return 3
+
+    def _doFreakout(self, task):
+        if self.glitchState != 'semi':
+            return task.done
+
+        if self.freakoutSeq:
+            try:
+                self.freakoutSeq.pause()
+            except:
+                pass
+            self.freakoutSeq = None
+
+        originalHpr = self.freakoutOriginalHpr
+        if originalHpr is None:
+            originalHpr = self.getHpr()
+            self.freakoutOriginalHpr = Vec3(originalHpr)
+
+        repeatCount = self._chooseFreakoutRepeatCount()
+        seq = Sequence()
+
+        for index in xrange(repeatCount):
+            twitchTime = random.uniform(0.07, 0.12)
+            useHeading = random.random() < 0.5
+            if useHeading:
+                minimumAngle = 10.0
+                maximumAngle = 25.0
+            else:
+                minimumAngle = 10.0 * (2.0 / 3.0)
+                maximumAngle = 25.0 * (2.0 / 3.0)
+
+            angle = random.uniform(minimumAngle, maximumAngle)
+            angle *= random.choice((-1, 1))
+
+            if useHeading:
+                finalHpr = Vec3(
+                    originalHpr.getX() + angle,
+                    originalHpr.getY(),
+                    originalHpr.getZ())
+            else:
+                finalHpr = Vec3(
+                    originalHpr.getX(),
+                    originalHpr.getY(),
+                    originalHpr.getZ() + angle)
+
+            seq.append(Sequence(
+                Func(self._setFreakoutTexture, self.glitchTex),
+                LerpHprInterval(
+                    self, twitchTime, finalHpr,
+                    startHpr=originalHpr)))
+
+            if index == repeatCount - 1:
+                seq.append(Func(self._setFreakoutTexture, self.normalTex))
+                seq.append(LerpHprInterval(
+                    self, twitchTime * 2.0, originalHpr,
+                    blendType='easeOut'))
+
+        self.freakoutSeq = seq
+        seq.start()
+        task.delayTime = random.uniform(1.5, 4.0) + seq.getDuration()
+        return task.again
+
+    def _stopFreakout(self):
+        try:
+            taskMgr.remove(self.freakoutTaskName)
+        except:
+            pass
+        if self.freakoutSeq:
+            try:
+                self.freakoutSeq.pause()
+            except:
+                pass
+            self.freakoutSeq = None
+        if self.freakoutOriginalHpr is not None:
+            self.setHpr(self.freakoutOriginalHpr)
+        self.freakoutOriginalHpr = None
+        if self.normalTex and self.glitchState == 'semi':
+            self.setTexture(self.normalTex, 1)
+
+    def _startFreakout(self):
+        self._stopFreakout()
+        self.freakoutOriginalHpr = Vec3(self.getHpr())
+        taskMgr.doMethodLater(
+            random.uniform(1.5, 4.0),
+            self._doFreakout,
+            self.freakoutTaskName)
+
     def enterGlitch(self, temp=None):
+        self._stopFreakout()
         self.inGlitch = True
         self.glitchState = 'glitch'
+        self.loadAnims(_HEAD_GLITCH)
         if self.glitchTex:
             self.setTexture(self.glitchTex, 1)
         self.updateSuitVoice(True)
-        self.loop('neutral-override')
-        self.suit.setSuitStatusEffect('glitched')
-        self.suit.clearSuitStatusEffect('semi-glitched')
-        self.suit.setChainsawTexRoll()
-        # self.suit.stopHeadFreakout()
+        self.loop('neutral')
+        try:
+            self.suit.setSuitStatusEffect('glitched')
+            self.suit.clearSuitStatusEffect('semi-glitched')
+            self.suit.setChainsawTexRoll()
+        except:
+            pass
 
     def enterSemiGlitch(self, temp=None):
         self.inGlitch = False
         self.glitchState = 'semi'
-        if self.normalTex:
-            self.setTexture(self.normalTex, 1)
-        self.updateSuitVoice(False)
-        self.loop('neutral-unstable')
-        self.suit.clearSuitStatusEffect('glitched')
-        self.suit.setSuitStatusEffect('semi-glitched')
-        # self.suit.setChainsawTexRoll()
-        # self.suit.setupHeadFreakout(self, normalTexture=self.normalTex, hurtTexture=self.normalTex, glitchTexture=self.glitchTex)
-        # self.suit.startHeadFreakout()
-
-    def exitGlitch(self, temp=None):
-        self.inGlitch = False
-        self.glitchState = 'normal'
+        self.loadAnims(_HEAD_NORMAL)
         if self.normalTex:
             self.setTexture(self.normalTex, 1)
         self.updateSuitVoice(False)
         self.loop('neutral')
-        self.suit.clearSuitStatusEffect('glitched')
-        self.suit.clearSuitStatusEffect('semi-glitched')
+        try:
+            self.suit.clearSuitStatusEffect('glitched')
+            self.suit.setSuitStatusEffect('semi-glitched')
+        except:
+            pass
+
+    def beginSemiGlitchFreakout(self):
+        self.enterSemiGlitch()
+        self._startFreakout()
+
+    def endSemiGlitchFreakout(self):
+        self._stopFreakout()
+
+    def exitGlitch(self, temp=None):
+        self._stopFreakout()
+        self.inGlitch = False
+        self.glitchState = 'normal'
+        self.loadAnims(_HEAD_NORMAL)
+        if self.normalTex:
+            self.setTexture(self.normalTex, 1)
+        self.updateSuitVoice(False)
+        self.loop('neutral')
+        try:
+            self.suit.clearSuitStatusEffect('glitched')
+            self.suit.clearSuitStatusEffect('semi-glitched')
+        except:
+            pass
 
     def setChainsawTexRoll(self, duration=1.6):
         if self.texRollIval:
@@ -336,6 +477,7 @@ class _ChainsawIntroHead(Actor.Actor):
             self.sfx.play()
 
     def stopIntroEffects(self):
+        self._stopFreakout()
         if self.sfx:
             try:
                 self.sfx.stop()
@@ -388,6 +530,16 @@ def installChainsawBattleHead(suit, phase=1):
         suit.loadAnims(CHAINSAW_BATTLE_BODY_ANIMS, 'modelRoot')
     except:
         pass
+
+    try:
+        summonControl = suit.getAnimControl('summon')
+    except:
+        summonControl = None
+    if summonControl is None:
+        try:
+            suit.loadAnims({'summon': 'phase_4/models/char/suitA-summon'}, 'modelRoot')
+        except:
+            pass
 
     if not hasattr(suit, 'leftHand') or suit.leftHand is None:
         try:
@@ -766,7 +918,6 @@ class ChainsawIntroSetup(object):
             return
         self.head.setChainsawTexRoll()
         self.head.startIdleSfx()
-        suit = self.chainsaw
 
     def _cleanupFakeSuit(self):
         fake = self.fakeSuit

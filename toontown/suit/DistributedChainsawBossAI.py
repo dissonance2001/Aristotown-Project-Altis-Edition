@@ -432,6 +432,24 @@ class DistributedChainsawBossAI(
         # after it finishes, retire the battle and let the client return them
         # to the foot of the office/lobby.
         if self.chainsawDeadwoodTriggered:
+            for toonId in toonIds:
+                toon = self.air.doId2do.get(toonId)
+                if toon:
+                    try:
+                        toon.hpOwnedByBattle = 0
+                    except:
+                        pass
+                    try:
+                        toon.hpAdjustBattle = 0
+                    except:
+                        pass
+                    try:
+                        toon.b_setHp(1)
+                    except:
+                        try:
+                            toon.setHp(1)
+                        except:
+                            pass
             self.chainsawDeadwoodTriggered = False
             battle = self.battle
             self.battle = None
@@ -515,10 +533,8 @@ class DistributedChainsawBossAI(
         DistributedMinibossAI.DistributedMinibossAI.enterReward(self)
 
     def enterEpilogue(self):
-        # The exact Clash ending CTSC is the next layer.  Keep the completed
-        # fight safe by returning through the existing Chainsaw lobby path.
         self.barrier = self.beginBarrier(
-            'Epilogue', self.involvedToons, 10,
+            'Epilogue', self.involvedToons, 75,
             self.__doneEpilogue)
 
     def __doneEpilogue(self, avIds):

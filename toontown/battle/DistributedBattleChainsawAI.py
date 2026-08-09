@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 
 from toontown.battle import DistributedBattleMinibossAI
+from toontown.battle.BattleBase import SUIT_ATK_COL, SUIT_HP_COL, TOON_DIED_COL
 
 
 class DistributedBattleChainsawAI(
@@ -137,6 +138,75 @@ class DistributedBattleChainsawAI(
                 pass
 
         return DistributedBattleMinibossAI.DistributedBattleMinibossAI.enterWaitForInput(self)
+
+    def _clampDeadwoodMovieDamage(self):
+        controller = getattr(self, 'bossCog', None)
+        if not controller or not getattr(controller, 'chainsawDeadwoodTriggered', False):
+            return
+
+        deadwoodIndex = -1
+        for index in xrange(len(self.suitAttacks)):
+            attack = self.suitAttacks[index]
+            data = attack[SUIT_ATK_COL]
+            if data and data.get('name', '').startswith('ChainsawCoreDeadwood'):
+                deadwoodIndex = index
+                break
+
+        if deadwoodIndex < 0:
+            return
+
+        for toonIndex in xrange(len(self.activeToons)):
+            toonId = self.activeToons[toonIndex]
+            toon = self.getToon(toonId)
+            if not toon:
+                continue
+
+            totalDamage = 0
+            for attack in self.suitAttacks:
+                hps = attack[SUIT_HP_COL]
+                if toonIndex < len(hps) and hps[toonIndex] > 0:
+                    totalDamage += hps[toonIndex]
+
+            allowedDamage = max(0, toon.getHp() - 1)
+            excess = max(0, totalDamage - allowedDamage)
+
+            for attackIndex in xrange(len(self.suitAttacks) - 1, deadwoodIndex, -1):
+                if excess <= 0:
+                    break
+                attack = self.suitAttacks[attackIndex]
+                hps = attack[SUIT_HP_COL]
+                if toonIndex >= len(hps) or hps[toonIndex] <= 0:
+                    continue
+                reduction = min(hps[toonIndex], excess)
+                hps[toonIndex] -= reduction
+                excess -= reduction
+
+            if excess > 0:
+                attack = self.suitAttacks[deadwoodIndex]
+                hps = attack[SUIT_HP_COL]
+                if toonIndex < len(hps) and hps[toonIndex] > 0:
+                    reduction = min(hps[toonIndex], excess)
+                    hps[toonIndex] -= reduction
+                    excess -= reduction
+
+            for attackIndex in xrange(deadwoodIndex - 1, -1, -1):
+                if excess <= 0:
+                    break
+                attack = self.suitAttacks[attackIndex]
+                hps = attack[SUIT_HP_COL]
+                if toonIndex >= len(hps) or hps[toonIndex] <= 0:
+                    continue
+                reduction = min(hps[toonIndex], excess)
+                hps[toonIndex] -= reduction
+                excess -= reduction
+
+            mask = ~(1 << toonIndex)
+            for attack in self.suitAttacks:
+                attack[TOON_DIED_COL] &= mask
+
+    def d_setMovie(self):
+        self._clampDeadwoodMovieDamage()
+        return DistributedBattleMinibossAI.DistributedBattleMinibossAI.d_setMovie(self)
 
     def localMovieDone(self, needUpdate, deadToons, deadSuits, lastActiveSuitDied):
         # Altis normally delays the membership packet until resume().  Chainsaw

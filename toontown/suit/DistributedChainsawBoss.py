@@ -240,6 +240,9 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         if self.state == 'BattleOne':
             self.__playBattleMusic()
 
+    def stopChainsawBattleMusic(self):
+        self.__stopBattleMusic()
+
     def __applyChainsawPhaseVisual(self):
         suit = self.chainsawSuit
         if not suit:
@@ -867,20 +870,20 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.rewardPanel = None
 
     def enterEpilogue(self):
-        # The exact Clash ending CTSC is deliberately left for the next layer.
-        # Keep the completed battle path deterministic and return to the lobby.
         self.cleanupIntervals()
         self.controlToons()
-        taskMgr.remove(self.uniqueName('returnFromChainsaw'))
-        taskMgr.doMethodLater(
-            0.1, self.__returnFromChainsaw,
-            self.uniqueName('returnFromChainsaw'))
-
-    def __returnFromChainsaw(self, task):
-        self.doneBarrier('Epilogue')
-        if self.hasLocalToon():
-            self.__teleportToChainsawLobby()
-        return Task.done
+        self.__stopBattleMusic()
+        try:
+            from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawEnding
+            ival = Sequence(
+                makeChainsawEnding(self),
+                Func(self.doneBarrier, 'Epilogue'),
+                name='EpilogueMovie')
+            ival.start()
+            self.storeInterval(ival, 'EpilogueMovie')
+        except Exception as error:
+            self.notify.warning('Chainsaw ending CTSC failed: %s' % error)
+            self.doneBarrier('Epilogue')
 
     def __teleportToChainsawLobby(self):
         place = self.cr.playGame.getPlace()
@@ -898,7 +901,9 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
             }])
 
     def exitEpilogue(self):
-        taskMgr.remove(self.uniqueName('returnFromChainsaw'))
+        self.clearInterval('EpilogueMovie', finish=0)
+        if self.hasLocalToon():
+            self.__teleportToChainsawLobby()
 
     def enterFrolic(self):
         self.releaseToons()

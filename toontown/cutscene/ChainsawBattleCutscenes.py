@@ -1,6 +1,6 @@
 """Corporate Clash Chainsaw Consultant battle CTSC adapter for Altis/Python 2."""
 
-from direct.interval.IntervalGlobal import Func, Parallel, Sequence, Wait
+from direct.interval.IntervalGlobal import Func, LerpHprInterval, LerpPosHprInterval, Parallel, Sequence, Wait
 from panda3d.core import NodePath
 
 from toontown.cutscene.AltisCutsceneCompat import (
@@ -308,7 +308,7 @@ class ChainsawBattleCutsceneSetup(object):
         maps, controls, headControls = self._animationData(suits)
         return {
             'nodes': nodes,
-            'affectsCamera': True,
+            'affectsCamera': self.key != 'deadwood',
             'maxPlayers': len(toons),
             'toons': toons,
             'suits': suits,
@@ -326,6 +326,53 @@ class ChainsawBattleCutsceneSetup(object):
             'suitAnimationControls': controls,
             'suitHeadAnimationControls': headControls,
         }
+
+    def _deadwoodCameraTrack(self):
+        return Sequence(
+            Func(camera.reparentTo, self.chainsaw),
+            Func(camera.setPosHpr,
+                 0.0, 12.16477, 7.08061,
+                 180.0, 0.0, 0.0),
+            Wait(1.0),
+            LerpHprInterval(
+                camera, 0.15, (180.0, 0.0, 3.0),
+                startHpr=(180.0, 0.0, 0.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.1, (180.0, 0.0, -3.0),
+                startHpr=(180.0, 0.0, 3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.1, (180.0, 0.0, 3.0),
+                startHpr=(180.0, 0.0, -3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.1, (180.0, 0.0, -3.0),
+                startHpr=(180.0, 0.0, 3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.1, (180.0, 0.0, 3.0),
+                startHpr=(180.0, 0.0, -3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.1, (180.0, 0.0, -3.0),
+                startHpr=(180.0, 0.0, 3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.2, (180.0, 0.0, 2.00001),
+                startHpr=(180.0, 0.0, -3.0), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.35, (180.0, 0.0, -2.00001),
+                startHpr=(180.0, 0.0, 2.00001), blendType='easeInOut'),
+            LerpHprInterval(
+                camera, 0.4, (180.0, 0.0, 0.0),
+                startHpr=(180.0, 0.0, -2.00001), blendType='easeInOut'),
+            Wait(1.4),
+            Func(camera.reparentTo, render),
+            Func(camera.setPosHpr,
+                 -16.18102, 7.4942, 9.07771,
+                 -43.85632, -8.16993, 0.0),
+            Wait(0.7),
+            LerpPosHprInterval(
+                camera, 1.5,
+                (0.0, 6.0, 5.0), (0.0, 0.0, 0.0),
+                startPos=(-16.18102, 7.4942, 9.07771),
+                startHpr=(-43.85632, -8.16993, 0.0),
+                blendType='easeInOut'))
 
     def _deadwood(self):
         toons = self._pad(self._allToons(), 4)
@@ -364,7 +411,7 @@ class ChainsawBattleCutsceneSetup(object):
 
         functions = [self._cleanup]
         if self.key == 'throttle':
-            functions += [self.head.bulbLeft.hide, self.head.bulbLeft.show, self.head.enterSemiGlitch]
+            functions += [self.head.bulbLeft.hide, self.head.bulbLeft.show, self.head.beginSemiGlitchFreakout]
             self.particles = getChainsawParticles(('chainsawBulbBreak', 'chainsawGlassDrip'))
         nodes = [render, hidden, camera, self.battle, self.chainsaw, point] + fallPoints + toons
         return self._baseDict(
@@ -499,7 +546,7 @@ class ChainsawBattleCutsceneSetup(object):
         supports = self._allSupports()[:4]
         suits = [self.chainsaw] + supports
 
-        def showText(values):
+        def showText(*values):
             for suit in values:
                 if suit:
                     try:
@@ -551,6 +598,16 @@ class ChainsawBattleCutsceneSetup(object):
             raise
 
         extras = Parallel()
+        if self.key == 'chainlinked':
+            extras.append(Sequence(Wait(0.499), Func(camera.wrtReparentTo, self.battle)))
+        elif self.key == 'layoffs':
+            extras.append(Sequence(Wait(0.479), Func(camera.wrtReparentTo, render)))
+        elif self.key == 'offboarding':
+            extras.append(Sequence(Wait(1.439), Func(camera.wrtReparentTo, self.battle)))
+        elif self.key == 'scabbard':
+            extras.append(Sequence(Wait(0.999), Func(camera.wrtReparentTo, self.battle)))
+        elif self.key == 'sparkplug':
+            extras.append(Sequence(Wait(2.436), Func(camera.wrtReparentTo, self.battle)))
         if self.key == 'revvedup':
             extras.append(Sequence(Wait(1.0), Func(self._syncMeter)))
         elif self.key == 'phasetwo':
@@ -565,13 +622,23 @@ class ChainsawBattleCutsceneSetup(object):
                 except Exception as error:
                     print('[Chainsaw Battle CTSC] Could not build phase-two music handoff: %s' % error)
         elif self.key == 'phasethree':
+            extras.append(Sequence(Wait(7.5), Func(self.head.endSemiGlitchFreakout)))
             extras.append(Sequence(Wait(7.6), Func(self._phaseVisual, 3)))
         elif self.key in ('throttle', 'throttletwo', 'scabbard', 'offboarding',
                           'layoffs', 'chainlinked', 'sparkplug'):
             extras.append(Sequence(Wait(0.2), Func(self._syncMeter)))
 
+        preTrack = Sequence()
+        if self.key in ('revvedup', 'throttle', 'throttletwo',
+                        'chainlinked', 'layoffs', 'offboarding', 'scabbard',
+                        'sparkplug'):
+            preTrack.append(Func(camera.wrtReparentTo, self.chainsaw))
+
+        cameraTrack = self._deadwoodCameraTrack() if self.key == 'deadwood' else Sequence()
+
         return Sequence(
-            Parallel(track, extras),
+            preTrack,
+            Parallel(track, extras, cameraTrack),
             Func(self._syncMeter),
             Func(self._cleanup))
 
