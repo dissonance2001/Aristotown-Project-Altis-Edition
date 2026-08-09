@@ -116,6 +116,17 @@ def pace():
     toon.magicTeleportInitiate(teleportTargetId, 9000, 9613)
     return 'Teleporting to the Pacesetter Lobby.'
 
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def cs():
+    toon = spellbook.getTarget()
+    teleportTargetId = toon.getDoId()
+
+    if teleportTargetId not in toon.magicWordTeleportRequests:
+        toon.magicWordTeleportRequests.append(teleportTargetId)
+
+    toon.magicTeleportInitiate(teleportTargetId, 6000, 6837)
+    return 'Teleporting to the Chainsaw Consultant Lobby.'
+
 def _getClubManagerAI():
     manager = getattr(simbase.air, 'clubMgr', None)
     if manager is not None:
