@@ -360,7 +360,9 @@ Props = ((5, 'partyBall', 'partyBall'),
  (4,
   'splashdown',
   'SZ_splashdown-mod',
-  'SZ_splashdown-chan'))
+  'SZ_splashdown-chan'),
+ (10, 'treekiller_log', 'treekiller_log'),
+ (10, 'treekiller_log_center', 'treekiller_log_center'))
 TartColor = VBase4(255.0 / 255.0, 195.0 / 255.0, 125.0 / 255.0, 1.0)
 CreampieColor = VBase4(250.0 / 255.0, 241.0 / 255.0, 24.0 / 255.0, 1.0)
 FruitpieColor = VBase4(55.0 / 255.0, 40.0 / 255.0, 148.0 / 255.0, 1.0)

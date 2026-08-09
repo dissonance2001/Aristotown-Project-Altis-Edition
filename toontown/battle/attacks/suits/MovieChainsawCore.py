@@ -314,11 +314,18 @@ def doMarkedWood(attack):
     if toon is None:
         return Sequence()
 
-    log = globalPropPool.getProp('treekiller_log')
-    if log is None:
-        return Parallel(
+    try:
+        log = globalPropPool.getProp('treekiller_log')
+    except:
+        log = None
+    if log is None or log.isEmpty():
+        track = Parallel(
             ActorInterval(suit, 'throw-paper', partName='modelRoot'),
-            _damageTrack(attack, 3.66))
+            _damageTrack(attack, 3.66),
+            Func(_syncMeter, attack))
+        return _withCheatBanner(
+            attack, track, 'MARKED WOOD!',
+            'THE CHAINSAW CONSULTANT MARKS THE MOST DANGEROUS TOON FOR TERMINATION!')
 
     try:
         rightHand = suit.getRightHand()
