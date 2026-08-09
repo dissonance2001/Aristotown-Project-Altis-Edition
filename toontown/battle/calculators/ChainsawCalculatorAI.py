@@ -272,6 +272,28 @@ class ChainsawCalculatorAI:
                               self.battle.activeSuits.index(suit)),
             reverse=True)[0]
 
+    def _isCutSlackTarget(self, suit, controller):
+        if getattr(suit, 'chainsawCutSlackTarget', False):
+            return True
+        try:
+            return suit.doId in controller.chainsawCutSlackTargets
+        except:
+            return False
+
+    def _canAggrandize(self, suit, controller):
+        try:
+            level = suit.getActualLevel()
+        except:
+            level = 0
+        if self._isCutSlackTarget(suit, controller):
+            return level < 33
+        if getattr(suit, 'chainsawPromotionLocked', False):
+            return False
+        try:
+            return (not suit.getExecutive()) or level < 25
+        except:
+            return True
+
     def _promoteSuit(self, suit, newLevel, cts=False, distribute=True):
         if not suit:
             return
@@ -340,6 +362,7 @@ class ChainsawCalculatorAI:
         if controller:
             controller.chainsawPendingPromotedSuitId = suit.doId
         if cts:
+            suit.chainsawCutSlackTarget = True
             if controller:
                 controller.chainsawCutSlackTargets[suit.doId] = 0
         else:
@@ -460,17 +483,8 @@ class ChainsawCalculatorAI:
     def _doAggrandize(self, boss, controller, supports, supportDamage,
                       suedSupports=None, preferredTarget=None):
         suedSupports = suedSupports or []
-        candidates = []
-        for support in supports:
-            # User-facing Manager rule: once a Cog has been promoted into a
-            # beneficiary, no Chainsaw promotion may select it again.
-            if getattr(support, 'chainsawPromotionLocked', False):
-                continue
-            try:
-                if (not support.getExecutive()) or support.getActualLevel() < 25:
-                    candidates.append(support)
-            except:
-                candidates.append(support)
+        candidates = [support for support in supports
+                      if self._canAggrandize(support, controller)]
         if not candidates:
             return False
 
@@ -494,7 +508,7 @@ class ChainsawCalculatorAI:
                     pass
             target = nonExe[0] if nonExe else candidates[0]
 
-        cap = 25
+        cap = 33 if self._isCutSlackTarget(target, controller) else 25
         try:
             add = 4 if target.getExecutive() else 2
         except:
@@ -756,7 +770,7 @@ class ChainsawCalculatorAI:
                 # "highest RPM requirement wins" rule.
                 if rpm >= 13:
                     candidates = [s for s in supports
-                                  if not getattr(s, 'chainsawPromotionLocked', False)]
+                                  if self._canAggrandize(s, controller)]
                     damaged = [s for s in candidates if supportDamage.get(s, 0) > 0]
                     sued = [s for s in candidates if s in suedSupports]
                     if len(candidates) == 1 or damaged or sued:

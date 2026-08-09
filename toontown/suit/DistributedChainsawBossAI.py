@@ -392,15 +392,20 @@ class DistributedChainsawBossAI(
         # Track Cut The Slack targets and grant current Clash-style Kickback
         # when a highly promoted one is defeated by the Toons.
         for suit in deadSuits:
-            rounds = self.chainsawCutSlackTargets.pop(getattr(suit, 'doId', 0), None)
-            if rounds is not None:
+            suitId = getattr(suit, 'doId', 0)
+            rounds = self.chainsawCutSlackTargets.pop(suitId, None)
+            isCutSlackTarget = rounds is not None or bool(
+                getattr(suit, 'chainsawCutSlackTarget', False))
+            if isCutSlackTarget:
                 try:
                     level = suit.getActualLevel()
                 except:
                     level = 0
                 if level >= 20:
+                    multiplier = 1.10 + ((level - 20) * 0.02)
                     self.chainsawPendingKickback = True
-                    self.chainsawPendingKickbackMultiplier = 1.30
+                    self.chainsawPendingKickbackMultiplier = max(
+                        self.chainsawPendingKickbackMultiplier, multiplier)
 
         for suitId in self.chainsawCutSlackTargets.keys():
             self.chainsawCutSlackTargets[suitId] += 1
