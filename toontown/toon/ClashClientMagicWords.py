@@ -1,5 +1,8 @@
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import Filename
+from direct.task import Task
+from direct.task.TaskManagerGlobal import taskMgr
+from toontown.toonbase import ToontownGlobals
 
 try:
     import __builtin__ as _builtins
@@ -30,6 +33,35 @@ def clashTp(zoneId):
     hoodId = ZoneUtil.getHoodId(zoneId)
     place.requestTeleport(hoodId, zoneId, base.localAvatar.currentShard, -1)
     return 'Teleporting to zone %d.' % zoneId
+
+
+def _finishChainsawLobbyTeleport(task):
+    try:
+        if base.localAvatar.getZoneId() != ToontownGlobals.ChainsawLobby:
+            if task.time >= 15.0:
+                return Task.done
+            return Task.cont
+        place = base.cr.playGame.getPlace()
+        if place is None or place.__class__.__name__ != 'ToonInterior':
+            if task.time >= 15.0:
+                return Task.done
+            return Task.cont
+        base.localAvatar.setPosHpr(
+            1.223862, 4.685430, -0.214102,
+            0.239998, 0.0, 0.0)
+    except:
+        if task.time < 15.0:
+            return Task.cont
+    return Task.done
+
+
+@magicWord(name='cs', category=CATEGORY_COMMUNITY_MANAGER, types=[])
+def clashChainsawLobby():
+    """Teleports you to the Chainsaw Consultant lobby."""
+    result = clashTp(ToontownGlobals.ChainsawLobby)
+    taskMgr.remove('clash-chainsaw-lobby-teleport')
+    taskMgr.add(_finishChainsawLobbyTeleport, 'clash-chainsaw-lobby-teleport')
+    return result
 
 
 @magicWord(name='district', category=CATEGORY_COMMUNITY_MANAGER, types=[int])
