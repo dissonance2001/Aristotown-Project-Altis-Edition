@@ -2334,14 +2334,35 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'RushJobDrop'):
         dmg = attack['target'][0]['hp']
         targetSuit = battle.activeSuits[dmg]
+        tpMgr = TextPropertiesManager.getGlobalPtr()
+
+        def addTextColor(name, r, g, b):
+            prop = TextProperties()
+            prop.setTextColor(r, g, b, 1)
+            tpMgr.setProperties(name, prop)
+
+        addTextColor('trap',   1.0, 0.0, 0.0)
+        addTextColor('lure',   0.0, 1.0, 0.047)
+        addTextColor('throw',  1.0, 0.639, 0.0)
+        addTextColor('squirt', 0.914, 0.0, 1.0)
+        addTextColor('zap',    0.973, 1.0, 0.0)
+        addTextColor('sound',  0.086, 0.0, 1.0)
+        addTextColor('drop',   0.0, 1.0, 0.992)
+        trapText = '\1trap\1Trap Track\2'
+        lureText = '\1lure\1Lure Track\2'
+        throwText = '\1throw\1Throw Track\2'
+        squirtText = '\1squirt\1Squirt Track\2'
+        zapText = '\1zap\1Zap Track\2'
+        soundText = '\1sound\1Sound Track\2'
+        dropText = '\1drop\1Drop Track\2'
         banDesc = {
-            'RushJobTrap': 'The %s needs you to use the Trap track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobLure': 'The %s needs you to use the Lure track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobThrow': 'The %s needs you to use the Throw track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobSquirt': 'The %s needs you to use the Squirt track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobZap': 'The %s needs you to use the Zap track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobSound': 'The %s needs you to use the Sound track on the %s!' % (suit.name, targetSuit.name),
-            'RushJobDrop': 'The %s needs you to use the Drop track on the %s!' % (suit.name, targetSuit.name),
+            'RushJobTrap': 'The %s needs you to use the %s on the %s!' % (suit.name, trapText, targetSuit.name),
+            'RushJobLure': 'The %s needs you to use the %s on the %s!' % (suit.name, lureText, targetSuit.name),
+            'RushJobThrow': 'The %s needs you to use the %s on the %s!' % (suit.name, throwText, targetSuit.name),
+            'RushJobSquirt': 'The %s needs you to use the %s on the %s!' % (suit.name, squirtText, targetSuit.name),
+            'RushJobZap': 'The %s needs you to use the %s on the %s!' % (suit.name, zapText, targetSuit.name),
+            'RushJobSound': 'The %s needs you to use the %s on the %s!' % (suit.name, soundText, targetSuit.name),
+            'RushJobDrop': 'The %s needs you to use the %s on the %s!' % (suit.name, dropText, targetSuit.name),
         }
 
         banDescHustler = {
@@ -2355,8 +2376,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         }
 
         camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.5),
-                                 motionShot(0.0, 9.0, targetSuit.height + 5, -180, -30.0, 0.0, 0, targetSuit), Wait(attackDuration - 1.5))
+                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
+                                 motionShot(0.0, 10.0, targetSuit.height - 1, -180, 0, 0.0, 0, targetSuit), motionShot(0.0, 10.0, targetSuit.height + 1, -180, 0, 0.0, 1, targetSuit), Wait(attackDuration - 2.0))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)
