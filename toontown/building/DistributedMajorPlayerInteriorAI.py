@@ -13,11 +13,8 @@ class DistributedMajorPlayerInteriorAI(DistributedToonInteriorAI):
         DistributedToonInteriorAI.__init__(
             self, block, air, zoneId, building)
 
-        # Major Player Place can host multiple custom/Kudos minibosses.
-        # The global InstanceZoneManagerAI owns their temporary zones; this
-        # interior only owns the entrance objects that route players to them.
         self.sigilvators = {}
-        self.sigilvator = None  # compatibility alias for High Roller
+        self.sigilvator = None
         self.majorPlayerLobbyManager = getattr(
             self.air, 'instanceZoneManager', None)
 
@@ -28,18 +25,22 @@ class DistributedMajorPlayerInteriorAI(DistributedToonInteriorAI):
     def createSigilvators(self):
         self._createSigilvator(
             MajorPlayerInstanceGlobals.HIGH_ROLLER,
-            DistributedHighRollerSigilvatorAI)
+            DistributedHighRollerSigilvatorAI, 0)
+        self._createSigilvator(
+            MajorPlayerInstanceGlobals.VIDEOGRAPHER,
+            DistributedHighRollerSigilvatorAI, 1)
         self.sigilvator = self.sigilvators.get(
-            MajorPlayerInstanceGlobals.HIGH_ROLLER)
+            (MajorPlayerInstanceGlobals.HIGH_ROLLER, 0))
 
-    def _createSigilvator(self, instanceId, sigilvatorClass):
-        if instanceId in self.sigilvators:
-            return self.sigilvators[instanceId]
+    def _createSigilvator(self, instanceId, sigilvatorClass, entranceId):
+        key = (instanceId, entranceId)
+        if key in self.sigilvators:
+            return self.sigilvators[key]
 
         sigilvator = sigilvatorClass(
-            self.air, self, ToontownGlobals.MajorPlayerLobby)
+            self.air, self, ToontownGlobals.MajorPlayerLobby, entranceId)
         sigilvator.generateWithRequired(self.zoneId)
-        self.sigilvators[instanceId] = sigilvator
+        self.sigilvators[key] = sigilvator
         return sigilvator
 
     def createBossOffice(self, avIdList, instanceId=None):

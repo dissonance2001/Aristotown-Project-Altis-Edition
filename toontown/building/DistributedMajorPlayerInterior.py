@@ -16,6 +16,7 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
         self.majorPlayerMusicFile = None
         self.majorPlayerMusicTaskName = 'majorPlayerLobbyMusic-%s' % id(self)
         self.sigilvatorOrigin = None
+        self.sigilvatorOrigin2 = None
         self.sigilvatorOrigins = {}
 
     def setup(self):
@@ -59,14 +60,17 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
         elevator = loader.loadModel('phase_11/models/lawbotHQ/lawbotElevator.bam')
         elevator.reparentTo(elevatorOrigin)
 
-        # The distributed Clash-style sigilvator finds this node and owns all
-        # sigil visuals, collision, boarding, countdown and teleport behavior.
         self.sigilvatorOrigin = elevatorOrigin.attachNewNode(
             'major_player_sigilvator_origin')
         self.sigilvatorOrigin.setPos(1.5, -70.75, -15.97)
         self.sigilvatorOrigin.setHpr(0, 0, 0)
-        self.sigilvatorOrigins[
-            MajorPlayerInstanceGlobals.HIGH_ROLLER] = self.sigilvatorOrigin
+        self.sigilvatorOrigins[0] = self.sigilvatorOrigin
+
+        self.sigilvatorOrigin2 = elevatorOrigin.attachNewNode(
+            'major_player_sigilvator_origin_1')
+        self.sigilvatorOrigin2.setPos(self.interior, 30.118, 12.678, 0.025)
+        self.sigilvatorOrigin2.setHpr(self.interior, -91.42, 0, 0)
+        self.sigilvatorOrigins[1] = self.sigilvatorOrigin2
 
         del self.colors
         del self.dnaStore
@@ -107,6 +111,7 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
     def disable(self):
         self.__stopMajorPlayerMusic()
         self.sigilvatorOrigin = None
+        self.sigilvatorOrigin2 = None
         self.sigilvatorOrigins = {}
         self.enterOff()
         DistributedToonInterior.disable(self)

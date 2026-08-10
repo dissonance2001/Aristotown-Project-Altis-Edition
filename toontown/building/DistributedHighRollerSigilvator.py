@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
+from direct.task.Task import Task
 from toontown.battle.BattleProps import globalPropPool
 from toontown.battle import BattleParticles
 from toontown.building.DistributedSigilvator import DistributedSigilvator
@@ -12,15 +13,34 @@ class DistributedHighRollerSigilvator(DistributedSigilvator):
 
     def getInstanceId(self):
         from toontown.building import MajorPlayerInstanceGlobals
+        if self.entranceId == 1:
+            return MajorPlayerInstanceGlobals.VIDEOGRAPHER
         return MajorPlayerInstanceGlobals.HIGH_ROLLER
 
     def __init__(self, cr):
+        self.entranceId = None
         DistributedSigilvator.__init__(self, cr)
         self.stageLightSfx = loader.loadSfx(
             'phase_11/audio/sfx/LB_camera_shutter_2.ogg')
         self.particleSfx = loader.loadSfx(
             'phase_12/audio/sfx/SA_scabbard.ogg')
         self.teleportingToons = []
+
+
+    def setEntranceId(self, entranceId):
+        self.entranceId = int(entranceId)
+        if self.entranceId == 0:
+            self.OriginName = 'major_player_sigilvator_origin'
+        else:
+            self.OriginName = 'major_player_sigilvator_origin_%s' % self.entranceId
+
+    def setupElevator(self, task=None):
+        if self.entranceId is None:
+            taskMgr.remove(self.uniqueName('setupSigilvatorDelay'))
+            taskMgr.doMethodLater(0.05, self.setupElevator,
+                                  self.uniqueName('setupSigilvatorDelay'))
+            return Task.done
+        return DistributedSigilvator.setupElevator(self, task)
 
     def getPortInterval(self):
         toons = []

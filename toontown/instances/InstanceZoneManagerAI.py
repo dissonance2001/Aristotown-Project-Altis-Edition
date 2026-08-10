@@ -5,13 +5,6 @@ from toontown.instances import InstanceGlobals
 
 
 class InstanceZoneManagerAI(DirectObject):
-    """Owns the lifecycle of temporary custom/Kudos boss zones.
-
-    The manager only handles routing, dynamic-zone allocation, Toon handoff,
-    and cleanup. Boss-specific cutscenes, battles, phases and mechanics stay
-    in the registered instance class.
-    """
-
     notify = DirectNotifyGlobal.directNotify.newCategory('InstanceZoneManagerAI')
 
     def __init__(self, air):
@@ -22,14 +15,15 @@ class InstanceZoneManagerAI(DirectObject):
         self._registerBuiltins()
 
     def _registerBuiltins(self):
-        # Import lazily so ToontownAIRepository can import this manager without
-        # creating a repository/suit import cycle during module startup.
         from toontown.suit import DistributedHighRollerBossAI
         from toontown.suit import DistributedPacesetterBossAI
         from toontown.suit import DistributedChainsawBossAI
 
         self.registerInstanceType(
             InstanceGlobals.HIGH_ROLLER,
+            DistributedHighRollerBossAI.DistributedHighRollerBossAI)
+        self.registerInstanceType(
+            InstanceGlobals.VIDEOGRAPHER,
             DistributedHighRollerBossAI.DistributedHighRollerBossAI)
         self.registerInstanceType(
             InstanceGlobals.PACESETTER,
@@ -105,8 +99,6 @@ class InstanceZoneManagerAI(DirectObject):
             self.air.deallocateZone(zoneId)
             raise
 
-    # Compatibility name for old lobby/elevator call sites while they are
-    # migrated. New code should call createInstance().
     def createBossOffice(self, avIdList, instanceId, *args, **kwargs):
         return self.createInstance(avIdList, instanceId, *args, **kwargs)
 

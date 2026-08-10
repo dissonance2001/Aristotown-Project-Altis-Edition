@@ -2764,6 +2764,7 @@ dclass DistributedSigilvator : DistributedElevatorExt {
 };
 
 dclass DistributedHighRollerSigilvator : DistributedSigilvator {
+  setEntranceId(uint8) required broadcast ram;
 };
 
 dclass DistributedChainsawSigilvator : DistributedSigilvator {

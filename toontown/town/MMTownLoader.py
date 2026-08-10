@@ -16,9 +16,6 @@ class MMTownLoader(TownLoader.TownLoader):
         self.activityMusicFile = 'phase_6/audio/bgm/MM_SZ_activity.ogg'
         self.townStorageDNAFile = 'phase_6/dna/storage_MM_town.pdna'
 
-        # This is one reusable place state for both planned Major Player
-        # minibosses.  It lives beside street/toonInterior in the existing MML
-        # loader, so entering an instance never constructs a hood or Cog HQ.
         instanceState = State.State(
             MajorPlayerInstanceGlobals.BOSS_BATTLE_STATE,
             self.enterMajorPlayerBossBattle,
@@ -41,11 +38,10 @@ class MMTownLoader(TownLoader.TownLoader):
         Suit.unloadSuits(2)
 
     def getMajorPlayerBossPlaceClass(self, instanceId):
-        if instanceId == MajorPlayerInstanceGlobals.HIGH_ROLLER:
+        if instanceId in (MajorPlayerInstanceGlobals.HIGH_ROLLER,
+                          MajorPlayerInstanceGlobals.VIDEOGRAPHER):
             from toontown.coghq import HighRollerBossBattle
             return HighRollerBossBattle.HighRollerBossBattle
-
-        # Register the second miniboss here once its battle-place class exists.
         return None
 
     def enterMajorPlayerBossBattle(self, requestStatus):
