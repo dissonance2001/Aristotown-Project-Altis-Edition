@@ -177,6 +177,7 @@ def getSoundTrack(fileName, delay = 0.01, duration = 0.0, node = None):
 
 def doPhase2(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     suit = attack['suit']
     battle = attack['battle']
     musicTrack = Parallel()
@@ -187,7 +188,7 @@ def doPhase2(attack):
         headTrack.append(Func(headPart.loop, 'neutral-hurt'))
     suitTrack = Sequence(musicTrack)
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.phase2Intro))
     suitTrack.append(Func(suit.setChatAbsolute, "WhAHAHAHAt a ffhow!", CFSpeech | CFTimeout))
     suitTrack.append(Wait(5.0))
@@ -214,18 +215,19 @@ def doPhase2(attack):
     musicTrack2 = Parallel()
     suitTrack.append(musicTrack2)
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack2.append(Func(obj.startPhase2Music))
     return Parallel(suitTrack)
 
 def doPuzzleBan(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     suit = attack['suit']
     battle = attack['battle']
     musicTrack = Parallel()
     suitTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.shuffle))
     suitTrack.append(Wait(3.0))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
@@ -233,6 +235,7 @@ def doPuzzleBan(attack):
 
 def doPuzzle(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
@@ -243,19 +246,20 @@ def doPuzzle(attack):
         dmg = t['hp']
     suitTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.puzzle))
     suitTrack.append(Wait(3.0))
     return Parallel(suitTrack, notifyTracks)
 
 def doGameOver(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     suit = attack['suit']
     battle = attack['battle']
     soundTrack3 = getSoundTrack('cc_s_bgm_ara_hroller_int_stinger.ogg', node=suit)
     musicTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.stinger))
     suitTrack = Sequence(Parallel(getSuitAnimTrackAttack(attack), musicTrack, Sequence(Wait(4.0), Func(suit.setChatAbsolute, "Ha-HA!", CFSpeech | CFTimeout))))
     suitTrack.append(Wait(1.0))
@@ -2658,13 +2662,14 @@ def doTrickOfTheLight(attack):
 
 def doPhase3(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicIntroTrack = Parallel()
     musicTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicIntroTrack.append(Func(obj.phase3Intro))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.startPhase3Music))
     suit = attack['suit']
     battle = attack['battle']
@@ -3345,9 +3350,10 @@ def doWheelSpin(attack):
     suit = attack['suit']
     battle = attack['battle']
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicIntroTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicIntroTrack.append(Func(obj.makeHighRollerWheelSpin, duration=4.0, spinCount=20))
     suitTrack = Sequence(MovieUtil.createSuitLaughInterval(suit))
     if suit.dna.name != 'hroller2':
@@ -4728,6 +4734,7 @@ def getPartTrackLightning(particleEffect, startDelay, durationDelay, partExtraAr
 
 def doGameTimeCog(attack, ind):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     manager = attack['suit']
     battle = attack['battle']
     toons = attack['target']
@@ -4736,11 +4743,11 @@ def doGameTimeCog(attack, ind):
     soundTrack3 = Parallel()
     musicTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     QUIZ_VARIANTS = [
     {
@@ -4922,6 +4929,7 @@ def doGameTimeCog(attack, ind):
 
 def doGameTimeCog2(attack, ind):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     manager = attack['suit']
     battle = attack['battle']
     toons = attack['target']
@@ -4934,11 +4942,11 @@ def doGameTimeCog2(attack, ind):
                                     steadyLightDuration=14
                                 ))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     QUIZ_VARIANTS = [
     {
@@ -5116,6 +5124,7 @@ def doGameTimeCog2(attack, ind):
 
 def doGameTimeCog2OLD(attack, ind):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     manager = attack['suit']
     battle = attack['battle']
     toons = attack['target']
@@ -5123,7 +5132,7 @@ def doGameTimeCog2OLD(attack, ind):
     targetSuit = battle.activeSuits[dmg]
     soundTrack3 = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     taunt = random.choice(("Well, babe, let'ff not keep them waiting! HAHAHA!!!",
     "Come on, babe, FFHOW UFF THOFFE NUMBERFF!",
@@ -5165,7 +5174,7 @@ def doGameTimeCog2OLD(attack, ind):
         )
     musicTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack), Func(manager.setNeutralAnimation), Wait(18.0))
     managerTrackQuestion = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,
@@ -5284,6 +5293,7 @@ def doGameTimeCog2OLD(attack, ind):
 
 def doGameTimeCogOLD(attack, ind):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     manager = attack['suit']
     battle = attack['battle']
     toons = attack['target']
@@ -5291,7 +5301,7 @@ def doGameTimeCogOLD(attack, ind):
     targetSuit = battle.activeSuits[dmg]
     soundTrack3 = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     taunt = random.choice(("Well, babe, let'ff not keep them waiting! HAHAHA!!!",
 "Come on, babe, FFHOW UFF THOFFE NUMBERFF!",
@@ -5333,7 +5343,7 @@ def doGameTimeCogOLD(attack, ind):
     )
     musicTrack = Parallel()
     for obj in base.cr.doId2do.values():
-        if isinstance(obj, DistributedHighRollerBoss):
+        if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack), Func(manager.setNeutralAnimation), Wait(18.0))
     managerTrackQuestion = Parallel(Sequence(Wait(4.0), Func(manager.setChatAbsolute,

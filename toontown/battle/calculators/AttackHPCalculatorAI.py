@@ -5153,10 +5153,11 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'HighRollerPuzzleBan':
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5213,10 +5214,11 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'spawncalculator', 1, 1, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5238,10 +5240,11 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, -1, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5255,10 +5258,11 @@ class AttackHPCalculatorAI(object):
                                     boss.appendSuitsToBattle(boss.battleNumber, 'mh')
             elif atkType['name'] == 'HighRollerPuzzle':
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5477,10 +5481,11 @@ class AttackHPCalculatorAI(object):
                 else:
                     self.setSuitCondition(theSuit.doId, 'firsttrick', 1, -1, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5512,10 +5517,11 @@ class AttackHPCalculatorAI(object):
                     toon.b_setHp(999)
                     toon.b_setMaxHp(999)
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5578,10 +5584,11 @@ class AttackHPCalculatorAI(object):
                 #     self.setToonCondition(toon.doId, 'silhouettespawn', 1, -1, 'setBoth')
                 #     self.setSuitCondition(theSuit.doId, 'silspawn', 1, -1, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5597,10 +5604,11 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'immunecalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5642,10 +5650,11 @@ class AttackHPCalculatorAI(object):
                         managerTarget.setHP(0)
                         self.__removeLured(managerTarget.doId)
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5661,10 +5670,11 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do
@@ -5678,10 +5688,11 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(0)
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
                 for do in simbase.air.doId2do.values():
-                    if isinstance(do, DistributedHighRollerBossAI):
+                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 boss = do

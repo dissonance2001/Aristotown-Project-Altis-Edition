@@ -41,13 +41,11 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 
-
-OneHighRollerController = None
+OneVideographerController = None
 TTL = TTLocalizer
 
-
-class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedHighRollerBoss')
+class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVideographerBoss')
     numFakeGoons = 0
 
     SUIT_SPAWN_LOCATIONS = [
@@ -90,7 +88,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
-        FSM.FSM.__init__(self, 'DistributedHighRollerBoss')
+        FSM.FSM.__init__(self, 'DistributedVideographerBoss')
         self.gotAllToons = 0
         self.toons = []
         self.toonsA = []
@@ -109,11 +107,11 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.activeIntervals = {}
         self.cutsceneSkip = BossCutsceneSkip.BossCutsceneSkip(self)
         self.allowClickedNameTag = True
-        self.battleANode = NodePath('highRollerBattleA')
-        self.battleBNode = NodePath('highRollerBattleB')
+        self.battleANode = NodePath('videographerBattleA')
+        self.battleBNode = NodePath('videographerBattleB')
         self.battleANode.setPosHpr(*ToontownGlobals.HighRollerBossCogBattleAPosHpr)
         self.battleBNode.setPosHpr(*ToontownGlobals.HighRollerBossCogBattleBPosHpr)
-        self._controllerNode = NodePath('highRollerInstanceController')
+        self._controllerNode = NodePath('videographerInstanceController')
         self.pelvis = self._controllerNode.attachNewNode('pelvis')
         self.neck = self._controllerNode.attachNewNode('neck')
         self.pelvisForwardHpr = VBase3(0, 0, 0)
@@ -176,7 +174,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.duckshuffler2.loop('neutral')
 
     def announceGenerate(self):
-        global OneHighRollerController
+        global OneVideographerController
         DistributedObject.DistributedObject.announceGenerate(self)
         base.cr.forbidCheesyEffects(1)
         try:
@@ -200,12 +198,12 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.physicsMgr.addLinearForce(gravity)
         self.titleText = OnscreenText('Major Player Place\nThe High Roller', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
         self.titleText.hide()
-        if OneHighRollerController is not None and OneHighRollerController is not self:
+        if OneVideographerController is not None and OneVideographerController is not self:
             self.notify.warning('Multiple High Roller instance controllers are visible.')
-        OneHighRollerController = self
+        OneVideographerController = self
 
     def disable(self):
-        global OneHighRollerController
+        global OneVideographerController
         taskMgr.remove(self.uniqueName('highRollerInstanceReady'))
         taskMgr.remove(self.uniqueName('physics'))
         if self.toonRequest is not None:
@@ -233,8 +231,8 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.titleText = None
         removeTint = Sequence(LerpColorScaleInterval(render, 0.1, Vec4(1, 1, 1, 1)))
         removeTint.start()
-        if OneHighRollerController is self:
-            OneHighRollerController = None
+        if OneVideographerController is self:
+            OneVideographerController = None
         if getattr(base, 'boss', None) is self:
             base.boss = None
         self.ignoreAll()
@@ -570,15 +568,13 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         return
 
     def __makeResistanceToon(self):
-        # High Roller is a standalone miniboss.  Never construct Mata Hairy or
-        # the three local CFO goon actors that accompanied her.
+
         self.resistanceToon = None
         self.resistanceToonOnstage = 0
         self.fakeGoons = []
 
     def __cleanupResistanceToon(self):
-        # Defensive cleanup for a mixed/stale client that created one before
-        # this class was reloaded; normal execution has no Resistance Toon.
+
         toon = self.resistanceToon
         self.resistanceToon = None
         self.resistanceToonOnstage = 0
@@ -604,7 +600,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.fakeGoons = []
 
     def __showResistanceToon(self, withSuit):
-        # Intentionally absent from this miniboss instance.
+
         self.resistanceToonOnstage = 0
 
     def __hideResistanceToon(self):
@@ -637,7 +633,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
         self.hrParticles = []
 
-        # Wall smoke
         smokeRender = render.attachNewNode('HRSmokeRender')
         smokeRender.setDepthWrite(False)
         smokeRender.setBin('fixed', 1)
@@ -646,17 +641,14 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         smoke.start(smokeRender)
         self.hrParticles.append((smoke, smokeRender))
 
-        # Ground stars
         ground = BattleParticles.createParticleEffect(file='hr_starground')
         ground.start(render, render)
         self.hrParticles.append((ground, None))
 
-        # Sky stars
         sky = BattleParticles.createParticleEffect(file='hr_skystars')
         sky.start(render, render)
         self.hrParticles.append((sky, None))
 
-        # Stage lights
         lights = BattleParticles.createParticleEffect(file='hr_stagelights')
         lights.start(render, render)
         self.hrParticles.append((lights, None))
@@ -714,7 +706,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
                 blendType='easeOut'
             )
         )
-    
+
     def colorScaleOffAllNodes(self):
         for colorNode in self.colorScaleOffNodes:
             colorNode.setColorScaleOff()
@@ -756,19 +748,13 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.evFloor.setName('floor')
 
     def loadEnvironment(self):
-        # This is now the complete visible environment.  Do not load
-        # MidVault, EndVault, or CFOElevator here: those models were the reason
-        # the sigil route was still effectively taking place inside the CFO
-        # boss room.
+
         self.geom = NodePath('highRollerInstanceGeom')
         self.highRollerArena = loader.loadModel(
             'phase_13/models/events/apriltoons/highroller/cc_m_ara_int_highroller.bam')
         self.highRollerArena.setPos(0, -222, -4.05)
         self.highRollerArena.reparentTo(self.geom)
 
-        # Keep the arena's own entrance locator, but remove any model children
-        # authored beneath it.  The sigils handle transport, so no CFO elevator
-        # model is required in this standalone instance.
         self.highRollerEntrance = self.highRollerArena.find('**/elevator_origin')
         if not self.highRollerEntrance.isEmpty():
             self.highRollerEntrance.getChildren().detach()
@@ -783,9 +769,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.highRollerWheel2 = globalPropPool.getProp('wheel2')
         self.highRollerWheel2.setScale(6)
 
-        # Do not load any Cashbot CFO crane-round models.  Empty compatibility
-        # nodes keep inherited cleanup methods harmless without adding visible
-        # cranes, magnets, safes, controls, lightning or CFO eyes to the scene.
         compatibilityProps = self.geom.attachNewNode(
             'highRoller-disabled-legacy-props')
         compatibilityProps.hide()
@@ -847,8 +830,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.__stars = self.highRollerTV.find('**/stars')
         self.__marks = self.highRollerTV.find('**/exclamation_marks')
 
-        # A catch plane prevents pies/physics objects from falling forever.
-        # The arena BAM keeps ownership of its actual walk and wall collisions.
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
         planeNode = CollisionNode('highRollerDropPlane')
         planeNode.addSolid(plane)
@@ -861,7 +842,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
         self.introduction = base.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn.ogg')
-        # Compatibility aliases only; no CFO elevator/crane music is loaded.
+
         self.elevatorMusic = self.introduction
         self.battleOneMusic = base.loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle.ogg')
@@ -890,9 +871,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             'phase_13/audio/bgm/april_toons/highroller/BONUSROUND.ogg')
 
     def __stopHighRollerMusic(self, exceptMusic=None):
-        # The old High Roller HQ loader used to own the background music.
-        # The reusable Major Player instance has no loader music, so the boss
-        # now owns every encounter track and cleans up anything left playing.
+
         musicNames = (
             'introduction', 'elevatorMusic', 'battleOneMusic',
             'battleTwoMusic', 'battleThreeMusic', 'midCutsceneMusic',
@@ -949,7 +928,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         )
 
     def __setupStagelights(self):
-        # change "statelight" to "spotlight" to target the actual light beam
+
         stagelights = self.highRollerArena.findAllMatches('**/ceiling_lights_back_stagelight_*')
         for stagelight in stagelights:
             stagelight.setColorScaleOff(1)
@@ -989,9 +968,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         The exclaimation marks need to be set up in a specific way.
         """
         self.__marksNode = NodePath('marksNode')
-        # from toontown.battle.BattleProps import globalPropPool
-        # obj = globalPropPool.getProp('anvil')
-        # self.__marksNode.assign(obj.getGeomNode())
 
         self.__marksNode.reparentTo(self.__marks)
         self.__marksNode.setHpr(0, 47.0589, 0)
@@ -1011,7 +987,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
         self.text_displacement_scale = 0.33
         self.text_z_offset = -0.5
-        # Marks Sequence
+
         markSequence = Sequence(
             LerpHprInterval(self.__marksNode, self.marks_pitch_duration / 2.0, hpr=(0, self.marks_pitch_start + self.star_bob_dist, 0), startHpr=(0, self.marks_pitch_start - self.star_bob_dist, 0), blendType='easeInOut'),
             LerpHprInterval(self.__marksNode, self.marks_pitch_duration / 2.0, hpr=(0, self.marks_pitch_start - self.star_bob_dist, 0), startHpr=(0, self.marks_pitch_start + self.star_bob_dist, 0), blendType='easeInOut')
@@ -1019,7 +995,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         markSequence.loop()
         self.__sequences.append(markSequence)
 
-        # Star Sequence
         starSequence = Sequence(
             LerpHprInterval(self.__stars, self.star_bob_duration / 2.0, hpr=(0, self.star_bob_dist, 0), startHpr=(0, -self.star_bob_dist, 0), blendType='easeInOut'),
             LerpHprInterval(self.__stars, self.star_bob_duration / 2.0, hpr=(0, -self.star_bob_dist, 0), startHpr=(0, self.star_bob_dist, 0), blendType='easeInOut')
@@ -1027,7 +1002,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         starSequence.loop()
         self.__sequences.append(starSequence)
 
-        # Light Sequence
         lightSequence = Sequence(
             Func(self.__light1.show),
             Func(self.__light2.hide),
@@ -1044,9 +1018,6 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         The exclaimation marks need to be set up in a specific way.
         """
         self.__marksNode = NodePath('marksNode')
-        # from toontown.battle.BattleProps import globalPropPool
-        # obj = globalPropPool.getProp('anvil')
-        # self.__marksNode.assign(obj.getGeomNode())
 
         self.__marksNode.reparentTo(self.__marks)
         self.__marksNode.setHpr(0, 47.0589, 0)
@@ -1086,28 +1057,9 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         setattr(suit, 'battleTrapProp', None)
         suit.hideNametag2d()
         suit.hideNametag3d()
-        suit.setActiveShadow(0)  # Disable drop shadow calculations
-        suit.hideShadow()  # And then hide it from rendering
-        suit.removeActive()  # Remove nametag calculations
-
-        # # # sigh
-        # # if name in ('foreman', 'charon', 'nix', 'hydra', 'styx', 'kerberos'):
-        # #     suit.makeSkeleton(elite=1)
-
-        # elif name in COG_MINIBOSSES or name == 'ptjockey':
-        #     suit.makeExecutive()
-
-        # if name == 'fbed':
-        #     from panda3d.otp import CFThought
-        #     suit.pose('slip-backward', 33)
-        #     suit.showNametag3d()
-        #     suit.setChatAbsolute(TTLocalizer.ToonSleepString, CFThought, wantHeadAnim=False)
-
-        # if name == 'psetter':
-        #     suit.loop('true-neutral')
-
-        # if name == 'fires':
-        #     suit.specialHead.find("**/fire_seq").setColorScaleOff()
+        suit.setActiveShadow(0)
+        suit.hideShadow()
+        suit.removeActive()
 
         return suit
 
@@ -1149,7 +1101,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         return Sequence()
 
     def makeIntroductionMovie(self, delayDeletes):
-        # The choreography comes exclusively from Clash's unchanged CTSC.
+
         from toontown.cutscene.HighRollerIntroCutscene import makeHighRollerIntroduction
         return makeHighRollerIntroduction(self, delayDeletes)
 
@@ -1181,7 +1133,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.phaseThreeMusic.stop()
         track = Sequence()
         return track2
-		
+
     def createWalkInInterval(self):
         retval = Parallel()
         delay = 0
@@ -1292,7 +1244,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             Func(self.midCutsceneMusic.stop),
             Func(self.__showToons),
             Wait(2))
-        return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track) #Func(base.camera.setPosHpr, 0, -27, 25, 0, -18, 0)
+        return Sequence(Func(base.camera.reparentTo, self), base.camera.posHprInterval(1, Point3(0, -27, 25), VBase3(0, -18, 0), blendType='easeInOut'), track)
 
     def moveToonsToBattleThreePos(self, toons):
         track = Parallel()
@@ -1346,7 +1298,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             (1.0, Func(self.setChatAbsolute, hadEnough, CFSpeech)),
             (5.5, Parallel(
                 Func(base.camera.setPosHpr, 100, -315, 16, -20, 0, 0),
-                #base.camera.posHprInterval(1, Point3(100, -315, 16), VBase3(-20, 0, 0), blendType='easeInOut'),
+
                 Func(self.hideBattleThreeObjects),
                 Func(self.loop, 'Ff_neutral'),
                 rollTrack,
@@ -1435,7 +1387,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.showHpText(-delta, scale=5)
         self.bossDamage = bossDamage
         self.updateHealthBar()
-		
+
     def setMaxHp(self, hp):
         self.bossMaxDamage = hp
 
@@ -1577,6 +1529,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.endVault.unstash()
         self.evWalls.stash()
         self.midVault.unstash()
+
         self.introduction.stop()
 
         self.controlToons()
@@ -1650,13 +1603,13 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.cleanupBattles()
         self.battleOneMusic.stop()
         localAvatar.inventory.setBattleCreditMultiplier(1)
-        
+
     def enterRollToBattleTwo(self):
         pass
 
     def exitRollToBattleTwo(self):
         self.battleOneMusic.stop()
-		
+
     def enterPrepareBattleTwo(self):
         self.controlToons()
         self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
@@ -1675,7 +1628,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.__hideToons()
         self.__hideResistanceToon()
         taskMgr.add(self.__doPhysics, self.uniqueName('physics'), priority=25)
-		
+
     def exitPrepareBattleTwo(self):
         intervalName = 'PrepareBattleTwoMovie'
         self.clearInterval(intervalName)
@@ -1683,7 +1636,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.releaseToons()
         NametagGlobals.setWant2dNametags(True)
         ElevatorUtils.closeDoors(self.leftDoor, self.rightDoor, ElevatorConstants.ELEVATOR_SIGIL)
-    
+
     def enterBattleTwo(self):
         self.reparentTo(render)
         self.evWalls.unstash()
@@ -1700,7 +1653,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def exitBattleTwo(self):
         self.battleTwoMusic.stop()
-    
+
     def __beginBattleTwo(self):
         intervalName = 'PrepareBattleTwoMovie'
         self.clearInterval(intervalName)
@@ -1763,12 +1716,9 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         ival.delayDeletes = delayDeletes
         ival.start()
         self.storeInterval(ival, intervalName)
-        # The normal fight now ends after BattleOne, so do not start the
-        # removed crane-round music during the reward movie.
 
     def __doneReward(self):
-        # The server will move directly into Epilogue after every Toon finishes
-        # the reward movie.  Do not request walk mode inside the boss arena.
+
         self.doneBarrier('Reward')
 
     def exitReward(self):
@@ -1823,9 +1773,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         return
 
     def enterEpilogue(self):
-        # High Roller is not a CFO battle.  Skip Mata Hairy, Resistance Unite
-        # dialogue, and ResistanceChat.doEffect entirely.  Epilogue is now only
-        # a brief transition from the completed reward movie back to MML.
+
         self.cleanupIntervals()
         self.clearChat()
         if self.resistanceToon:

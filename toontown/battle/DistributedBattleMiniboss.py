@@ -23,6 +23,7 @@ from toontown.suit.DistributedBoardbotBoss import DistributedBoardbotBoss
 from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
 from toontown.suit.DistributedLawbotBoss import DistributedLawbotBoss
 from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
+from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
@@ -584,8 +585,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     else:
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
                 continue
-            boss = next((obj for obj in base.cr.doId2do.values()
-            if isinstance(obj, DistributedHighRollerBoss)), None)
+            boss = self.bossCog if isinstance(self.bossCog, (DistributedHighRollerBoss, DistributedVideographerBoss)) else None
             if boss and not suit.dna.name in ['bcaster', 'hrollers', 'hroller2', 'hroller']:
                 suit.setState('Battle')
                 suitTrack = Sequence()
@@ -643,11 +643,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if suit.dna.name == 'hroller2':
                     suit.hide()
                 suit.setState('Battle')
-                if suit.dna.dept == 'l' and pacesetterTimescale is None:
-                    # Legacy Altis Lawbot minibosses parent reserve Cogs to their
-                    # visual BossCog before staging them.  The standalone Pacesetter
-                    # controller is intentionally nonvisual, so it is not a NodePath.
-                    # Pacesetter reserves stay parented to the battle node below.
+                if suit.dna.dept == 'l' and pacesetterTimescale is None and not isinstance(self.bossCog, (DistributedHighRollerBoss, DistributedVideographerBoss)):
                     suit.reparentTo(self.bossCog)
                     suit.setPos(0, 0, 0)
                 if suit in self.joiningSuits:

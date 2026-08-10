@@ -13,13 +13,13 @@ from otp.ai.MagicWordGlobal import *
 from toontown.building import SuitBuildingGlobals
 import math
 
-class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedHighRollerBossAI')
+class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVideographerBossAI')
     maxGoons = 8
 
     def __init__(self, air):
         DistributedAvatarAI.DistributedAvatarAI.__init__(self, air)
-        FSM.FSM.__init__(self, 'DistributedHighRollerBossAI')
+        FSM.FSM.__init__(self, 'DistributedVideographerBossAI')
         self.dna = SuitDNA.SuitDNA()
         self.dna.newSuit('hroller')
         self.dept = self.dna.dept
@@ -70,16 +70,12 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.knockoutDamage = ToontownGlobals.CashbotBossKnockoutDamage
-        # The custom High Roller instance ends after the High Roller Cog battle.
-        # These guards keep the normal reward bookkeeping from running twice
-        # if an administrator still forces the legacy Victory state.
+
         self.highRollerBossKillRecorded = False
         self.highRollerRewardsGranted = False
 
     def enterWaitForToons(self):
-        # The Major Player sigils already provide the boarding/teleport movie,
-        # so there is no CFO Elevator state here.  Give slower clients enough
-        # time to finish quietZone and teleportIn before beginning the intro.
+
         self.acceptNewToons()
         if len(self.involvedToons) == 1:
             self.begunSolo = True
@@ -96,11 +92,11 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             self.scene.reparentTo(self.getRender())
 
     def getHoodId(self):
-        # This is a temporary Major Player room hosted under MML, not a Cog HQ.
+
         return ToontownGlobals.MinniesMelodyland
 
     def __chooseResistanceRewardId(self):
-        # Retained only for DC/API compatibility.  High Roller grants no Unite.
+
         return 0
 
     def formatReward(self):
@@ -113,9 +109,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         return ToontownGlobals.HighRollerBossCogBattleBPosHpr
 
     def makeBattleOneBattles(self):
-        # The High Roller Cog battle is the only battle in this instance.
-        # Skip the old crf2 placeholder Flunky battle and continue directly
-        # into the normal reward sequence when BattleOne finishes.
+
         self.postBattleState = 'Reward'
         self.initializeBattles(1, ToontownGlobals.HighRollerBossBattleOnePosHpr)
 
@@ -187,7 +181,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         DistributedMinibossAI.DistributedMinibossAI.removeToon(self, avId)
 
     def __makeBattleThreeObjects(self):
-        # The standalone High Roller instance has no CFO crane-round objects.
+
         self.cranes = []
         self.safes = []
         self.goons = []
@@ -198,8 +192,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.goons = []
 
     def __deleteBattleThreeObjects(self):
-        # Delete any stale objects received from a mixed server, then keep the
-        # collections empty for the lifetime of this miniboss.
+
         for objects in (self.cranes, self.safes, self.goons):
             for obj in objects or []:
                 try:
@@ -261,7 +254,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             self.toonsToAttack.append(avId)
 
     def makeTreasure(self, goon):
-        # No CFO goons or crane-round treasures exist in this instance.
+
         return
 
     def grabAttempt(self, avId, treasureId):
@@ -314,7 +307,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             return self.maxGoons + 8
 
     def makeGoon(self, side=None):
-        # No distributed CFO goons may be generated for High Roller.
+
         return None
 
     def __chooseOldGoon(self):
@@ -401,7 +394,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         healthDisp = int(self.bossMaxDamage - self.bossDamage)
         if healthDisp < 0:
            healthDisp = 0
-        #self.setHealthTag(str(healthDisp) + '/' + str(int(self.bossMaxDamage)))
+
         if self.bossDamage >= self.bossMaxDamage:
             self.b_setState('Victory')
         elif self.attackCode != ToontownGlobals.BossCogDizzy:
@@ -428,8 +421,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.sendUpdate('setRewardId', [rewardId])
 
     def applyReward(self):
-        # No ResistanceChat effect, promotion unite, or CFO staff event belongs
-        # to the High Roller miniboss.  Acknowledge once for old clients only.
+
         avId = self.air.getAvatarIdFromSender()
         if avId in self.involvedToons and avId not in self.rewardedToons:
             self.rewardedToons.append(avId)
@@ -451,33 +443,32 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         DistributedMinibossAI.DistributedMinibossAI.exitIntroduction(self)
 
     def makeBattleTwoBattles(self):
-        # This instance is battle-only.  Finishing the second Cog battle goes
-        # straight to Reward instead of spawning the legacy CFO crane round.
+
         self.postBattleState = 'Reward'
         self.initializeBattles(2, ToontownGlobals.HighRollerBossBattleOnePosHpr)
-        
+
     def enterPrepareBattleTwo(self):
         self.barrier = self.beginBarrier('PrepareBattleTwo', self.involvedToons, 350, self.__donePrepareBattleTwo)
         self.divideToons()
         self.makeBattleTwoBattles()
         self.calcAndSetBattleDifficulty()
-        
+
     def __donePrepareBattleTwo(self, avIds):
         self.b_setState('BattleTwo')
 
     def exitPrepareBattleTwo(self):
         self.ignoreBarrier(self.barrier)
         self.__deleteBattleThreeObjects()
-		
+
     def enterRollToBattleTwo(self):
         self.barrier = self.beginBarrier('RollToBattleTwo', self.involvedToons, 1, self.__doneRollToBattleTwo)
-        
+
     def __doneRollToBattleTwo(self, avIds):
         self.b_setState('PrepareBattleTwo')
 
     def exitRollToBattleTwo(self):
         self.ignoreBarrier(self.barrier)
-        
+
     def enterBattleTwo(self):
         if self.battle:
             self.battle.startBattle(self.toons, self.suits)
@@ -486,7 +477,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.resetBattles()
 
     def enterPrepareBattleThree(self):
-        # Redirect any stale/forced crane-round request to the normal reward.
+
         self.resetBattles()
         taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
         taskMgr.doMethodLater(
@@ -500,8 +491,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
 
     def enterBattleThree(self):
-        # This state is retained in the DC/FSM contract only.  It creates no
-        # cranes, safes, helmets, goons or attacks and immediately redirects.
+
         self.resetBattles()
         self.__deleteBattleThreeObjects()
         taskMgr.remove(self.uniqueName('removedHighRollerCraneRound'))
@@ -526,7 +516,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
 
         averageTier = math.floor(totalCogSuitTier / totalToons) + 1
         return int(averageTier)
-		
+
     def b_setBonusUnites(self, unites):
         self.setBonusUnites(unites)
         self.d_setBonusUnites(unites)
@@ -542,7 +532,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         battleDifficulty = int(self.toonLevels)
         self.b_setBattleDifficulty(battleDifficulty)
         self.recalcDifficulty()
-		
+
     def recalcDifficulty(self):
         self.b_setMaxHp(ToontownGlobals.CashbotBossMaxDamage)
         self.goonMinStrength = 12
@@ -570,7 +560,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.bossMaxDamage = hp
 
     def d_setMaxHp(self, hp):
-        self.sendUpdate('setMaxHp', [hp])        
+        self.sendUpdate('setMaxHp', [hp])
 
     def __doInitialGoons(self, task):
         self.makeGoon(side='EmergeA')
@@ -611,23 +601,18 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
-                # High Roller is not a CFO battle.  Preserve battle XP,
-                # promotion, statistics, and quest credit, but do not award
-                # Resistance Unites or bonus unite messages.
+
                 toon.b_promote(self.deptIndex)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)
 
     def enterReward(self):
-        # Normal High Roller completion arrives here directly from BattleOne.
-        # Grant the standard battle bookkeeping, then show only the ordinary
-        # reward movie.  High Roller does not award Resistance Unites.
+
         self.resetBattles()
         self.__grantHighRollerRewards()
         DistributedMinibossAI.DistributedMinibossAI.enterReward(self)
 
     def enterVictory(self):
-        # Retained for administrator magic words and old clients, but normal
-        # gameplay no longer enters this crane-round state.
+
         self.resetBattles()
         self.__recordHighRollerBossKill()
         self.barrier = self.beginBarrier('Victory', self.involvedToons, 30, self.__doneVictory)
@@ -640,95 +625,92 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         self.__deleteBattleThreeObjects()
 
     def enterEpilogue(self):
-        # The client uses this state only as a direct return-to-MML transition.
-        # There is no Mata Hairy dialogue or Resistance Unite sequence.
+
         DistributedMinibossAI.DistributedMinibossAI.enterEpilogue(self)
 
-
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def restartHighRollerRound():
+def restartVideographerRound():
     """
-    Restarts the final round in the High Roller fight.
+    Restarts the final round in the Videographer fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedHighRollerBossAI):
+        if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
     if not boss:
-        return "You aren't in the High Roller fight!"
+        return "You aren't in the Videographer fight!"
     boss.b_setState('Reward')
-    return 'The High Roller has no crane round; moving to rewards.'
-
+    return 'The Videographer has no crane round; moving to rewards.'
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
-def skipHighRoller():
+def skipVideographer():
     """
-    Skips to the reward state of the High Roller fight.
+    Skips to the reward state of the Videographer fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedHighRollerBossAI):
+        if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
     if not boss:
-        return "You aren't in the High Roller fight!"
+        return "You aren't in the Videographer fight!"
     boss.b_setState('Reward')
-    return 'Skipping to High Roller rewards...'
+    return 'Skipping to Videographer rewards...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
-def highRoller2():
+def videographer2():
     """
-    Skips to the next round of the High Roller fight.
+    Skips to the next round of the Videographer fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedHighRollerBossAI):
+        if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
     if not boss:
-        return "You aren't in the High Roller fight!"
+        return "You aren't in the Videographer fight!"
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleTwo')
     return 'Skipping the first round...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
-def highRollerCutscene1():
+def videographerCutscene1():
     """
-    Skips to the next round of the High Roller fight.
+    Skips to the next round of the Videographer fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedHighRollerBossAI):
+        if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
     if not boss:
-        return "You aren't in the High Roller fight!"
+        return "You aren't in the Videographer fight!"
     boss.exitIntroduction()
     boss.b_setState('BattleOne')
     return 'Skipping first cutscene...'
 
 @magicWord(category=CATEGORY_PROGRAMMER)
-def killHighRoller():
+def killVideographer():
     """
-    Finishes the High Roller fight.
+    Finishes the Videographer fight.
     """
     invoker = spellbook.getInvoker()
     boss = None
     for do in simbase.air.doId2do.values():
-        if isinstance(do, DistributedHighRollerBossAI):
+        if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
                 break
     if not boss:
-        return "You aren't in the High Roller fight!"
+        return "You aren't in the Videographer fight!"
     boss.b_setState('Victory')
-    return 'Killed High Roller.'
+    return 'Killed Videographer.'
