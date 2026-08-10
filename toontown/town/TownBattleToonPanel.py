@@ -7,6 +7,10 @@ from direct.directnotify import DirectNotifyGlobal
 import string
 import math
 from toontown.toon import LaffMeter
+from toontown.toon import IOURegistry
+from toontown.toon import NPCToons
+from toontown.toon import ToonHead
+from toontown.toon import ToonDNA
 from toontown.battle import BattleBase
 from toontown.toonbase import ToontownBattleGlobals
 from direct.task.Task import Task
@@ -539,6 +543,7 @@ class TownBattleToonPanel(DirectFrame):
         self.zapped = None
         self.zappedRounds = None
         self.choiceOrganicStage = None
+        self.iouChoiceHead = None
         # self.snapped = status.find('**/vulnerable_icon')
         # self.snapped.setPosHprScale(-0.25, 0, 0.03, -180, 0, 0, .125, .125, .125)
         # self.snapped.reparentTo(self)
@@ -711,7 +716,7 @@ class TownBattleToonPanel(DirectFrame):
         self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.23), text_scale=0.09, text_fg=(1, 1, 1, 1))
         self.hide()
         self.toonStatusEffectTooltip = ToonStatusEffectTooltip(parent=self)
-        self.toonStatusEffectTooltip.setPos(0, 0, 0)
+        self.toonStatusEffectTooltip.setPos(0, 0, 0.45)
         self.toonStatusEffectTooltip.setScale(2.0)
         self.toonStatusEffectTooltip.hide()
         gui.removeNode()
@@ -782,12 +787,46 @@ class TownBattleToonPanel(DirectFrame):
         imageNode.setTexOffset(self.choiceOrganicStage, t, -t)
 
     def hideChoiceIcons(self):
+        self.__clearIOUChoiceHead()
         self.choiceEmblem.hide()
         self.undecidedIcon.hide()
         self.passIcon.hide()
         self.fireIcon.hide()
         self.sueIcon.hide()
         self.sosIcon.hide()
+
+    def __clearIOUChoiceHead(self):
+        if self.iouChoiceHead:
+            self.iouChoiceHead.detachNode()
+            self.iouChoiceHead.delete()
+            self.iouChoiceHead = None
+
+    def __createIOUChoiceHead(self, npcId, dimension):
+        npcInfo = NPCToons.NPCToonDict[npcId]
+        dnaList = npcInfo[2]
+        gender = npcInfo[3]
+        if dnaList == 'r':
+            dnaList = NPCToons.getRandomDNA(npcId, gender)
+        dna = ToonDNA.ToonDNA()
+        dna.newToonFromProperties(*dnaList)
+        head = ToonHead.ToonHead()
+        head.setupHead(dna, forGui=1)
+        p1 = Point3()
+        p2 = Point3()
+        head.calcTightBounds(p1, p2)
+        t = p1[0]
+        p1.setX(-p2[0])
+        p2.setX(-t)
+        d = p2 - p1
+        biggest = max(d[0], d[2])
+        scale = dimension / biggest
+        mid = (p1 + d / 2.0) * scale
+        geomXform = hidden.attachNewNode('iouChoiceHeadXform')
+        for child in head.getChildren():
+            child.reparentTo(geomXform)
+        geomXform.setPosHprScale(-mid[0], -mid[1] + 1, -mid[2], 180, 0, 0, scale, scale, scale)
+        geomXform.reparentTo(head)
+        return head
 
     def showChoiceIcon(self, icon, color, organic=False):
         self.hideChoiceIcons()
@@ -1320,10 +1359,131 @@ class TownBattleToonPanel(DirectFrame):
         if self.toonStatusEffectTooltip:
             self.toonStatusEffectTooltip.hide()
 
+    def _getBattleConditionsForToon(self, avatar):
+        conditions = getattr(avatar, 'battleConditions', None)
+        if conditions is None and avatar == base.localAvatar:
+            conditions = getattr(base.localAvatar, 'battleConditions', None)
+        return conditions or {}
+
+    def _attachIOUBattleStatusEffects(self, avatar):
+        conditions = self._getBattleConditionsForToon(avatar)
+        bestByTrack = {}
+        for conditionName, conditionData in conditions.items():
+            parsed = IOURegistry.parseConditionName(conditionName)
+            if parsed is None or len(conditionData) < 2:
+                continue
+            gagTrack, boost = parsed
+            uses = conditionData[1]
+            if uses is None or uses <= 0:
+                continue
+            current = bestByTrack.get(gagTrack)
+            if current is None or boost > current[0]:
+                bestByTrack[gagTrack] = (boost, uses)
+
+        for gagTrack in sorted(bestByTrack.keys()):
+            boost, uses = bestByTrack[gagTrack]
+            iconRoot = NodePath('iouStatusIconRoot')
+            if gagTrack == -1:
+                status = loader.loadModel('phase_3.5/models/gui/status_effects')
+                icon = status.find('**/toon_damage_up_icon')
+                icon.reparentTo(iconRoot)
+            else:
+                inventory = getattr(base.localAvatar, 'inventory', None)
+                if inventory is not None and hasattr(inventory, 'invModels') and gagTrack < len(inventory.invModels) and len(inventory.invModels[gagTrack]) > 6:
+                    icon = inventory.invModels[gagTrack][6].copyTo(iconRoot)
+                    icon.setScale(5)
+                else:
+                    status = loader.loadModel('phase_3.5/models/gui/status_effects')
+                    icon = status.find('**/toon_damage_up_icon')
+                    icon.reparentTo(iconRoot)
+            DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text='%s' % uses,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+            slot = self._claimNextToonStatusSlot()
+            manager = TextPropertiesManager.getGlobalPtr()
+            boostProperties = TextProperties()
+            boostProperties.setTextColor(0.176, 1.0, 0.0, 1.0)
+            manager.setProperties('iouTooltipBoost', boostProperties)
+            boostText = '\x01iouTooltipBoost\x01+%d\x02' % boost
+            plural = '' if uses == 1 else 's'
+            if gagTrack == -1:
+                title = 'Global IOU'
+                gagText = 'Gag'
+            else:
+                trackName = IOURegistry.getTrackName(gagTrack)
+                title = '%s IOU' % trackName
+                trackColor = TrackColors[gagTrack]
+                trackProperties = TextProperties()
+                trackProperties.setTextColor(trackColor[0], trackColor[1], trackColor[2], 1.0)
+                trackProperties.setFont(getSignFont())
+                propertyName = 'iouTooltipTrack%d' % gagTrack
+                manager.setProperties(propertyName, trackProperties)
+                gagText = '\x01%s\x01%s\x02 Gag' % (propertyName, trackName)
+            if gagTrack == HEAL_TRACK:
+                description = 'The next %d %s%s will restore %s more Laff.' % (uses, gagText, plural, boostText)
+            elif gagTrack == LURE_TRACK:
+                description = 'The next %d %s%s will deal %s more knockback damage.' % (uses, gagText, plural, boostText)
+            else:
+                description = 'The next %d %s%s will deal %s more damage.' % (uses, gagText, plural, boostText)
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle=title,
+                tooltipDescription=description,
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1)
+            )
+
+        cooldownTurns = 0
+        for conditionName in ('noSOS', 'noFires', 'noSues', 'noUnites', 'noForges'):
+            conditionData = conditions.get(conditionName)
+            if conditionData is None or len(conditionData) < 2:
+                continue
+            turns = conditionData[1]
+            if turns is not None:
+                cooldownTurns = max(cooldownTurns, turns)
+
+        if cooldownTurns > 0 and not avatar.hasToonStatusEffect('cooldown'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            icon = status.find('**/reward_cooldown_icon')
+            if icon.isEmpty():
+                icon = status.find('**/unite_cooldown_icon')
+            iconRoot = NodePath('rewardCooldownIconRoot')
+            icon.reparentTo(iconRoot)
+            DirectLabel(
+                parent=iconRoot,
+                relief=None,
+                text='%s' % cooldownTurns,
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0),
+                pos=(0.25, 0, -0.45),
+                text_scale=0.6
+            )
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(
+                iconRoot,
+                slot,
+                tooltipTitle='Reward Cooldown',
+                tooltipDescription='Boss Rewards cannot be used for %d more round%s.' % (cooldownTurns, '' if cooldownTurns == 1 else 's'),
+                tooltipBuff=False,
+                slotColor=(0, 0.902, 1, 1)
+            )
+
     def setStatusEffects(self, avatar):
         self.avatar = avatar
         self._cleanupToonStatusDisplay()
         self._buildToonStatusSlots()
+        self._attachIOUBattleStatusEffects(avatar)
 
         if avatar.hasToonStatusEffect('raisedAnte'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -2471,7 +2631,27 @@ class TownBattleToonPanel(DirectFrame):
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
 
-        elif track == BattleBase.SOS or track == BattleBase.NPCSOS or track == BattleBase.PETSOS:
+        elif track == BattleBase.NPCSOS:
+            if numTargets is not None:
+                self.whichText.show()
+                self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
+            definition = IOURegistry.getIOU(level)
+            if definition is None:
+                self.showChoiceIcon(self.sosIcon, Vec4(0, 1, 0.031, 1))
+            else:
+                self.hideChoiceIcons()
+                gagTrack = definition.getGagTrack()
+                if gagTrack == -1:
+                    color = Vec4(1, 1, 1, 1)
+                else:
+                    color = Vec4(TrackColors[gagTrack][0], TrackColors[gagTrack][1], TrackColors[gagTrack][2], 1)
+                self.choiceEmblem['image_color'] = color
+                self.setChoiceOrganic(False)
+                self.choiceEmblem.show()
+                self.iouChoiceHead = self.__createIOUChoiceHead(definition.getNpcId(), 0.23)
+                self.iouChoiceHead.reparentTo(self.choiceRoot)
+                self.iouChoiceHead.setPos(0.21, -0.2, 0.075)
+        elif track == BattleBase.SOS or track == BattleBase.PETSOS:
             self.showChoiceIcon(self.sosIcon, Vec4(0, 1, 0.031, 1))
         elif track >= MIN_TRACK_INDEX and track <= MAX_TRACK_INDEX:
             organic = self.avatar.trackBonusLevel[track] >= 1
@@ -2669,6 +2849,13 @@ class TownBattleToonPanel(DirectFrame):
                 marker = 'X'
         except:
             marker = 'X'
+        if isinstance(targetIndex, (list, tuple)):
+            for i in targetList:
+                if i in targetIndex:
+                    returnStr += marker
+                else:
+                    returnStr += '-'
+            return returnStr
         for i in targetList:
             if targetIndex == -1:
                 returnStr += marker

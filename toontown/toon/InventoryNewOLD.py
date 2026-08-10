@@ -4,6 +4,7 @@ from panda3d.direct import *
 from toontown.toonbase.ToontownBattleGlobals import *
 from toontown.toon import InventoryBase
 from toontown.toonbase import TTLocalizer
+from toontown.toon import IOURegistry
 from toontown.battle import BattleGlobals
 from toontown.quest import BlinkingArrows
 from direct.interval.IntervalGlobal import *
@@ -661,6 +662,21 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         damageAppendStr = ''
         accString = AvTrackAccStrings[track]
 
+        iouBoosts = {}
+        for condition, conditionData in base.localAvatar.battleConditions.items():
+            parsedIOU = IOURegistry.parseConditionName(condition)
+            if parsedIOU is None:
+                continue
+            iouTrack, iouBoost = parsedIOU
+            if iouTrack not in (track, -1):
+                continue
+            currentBoost = iouBoosts.get(iouTrack, 0)
+            if iouBoost > currentBoost:
+                iouBoosts[iouTrack] = iouBoost
+        iouFlatBoost = sum(iouBoosts.values())
+        if track != LURE_TRACK:
+            damage += iouFlatBoost
+
         allGagBoost = False
         if 'allGagBoost' in base.localAvatar.battleConditions:
             allGagBoost = True
@@ -865,7 +881,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(damage, 'groupDamageDown')
         lureValue = int(math.ceil(
-            ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2)))
+            ((ToontownBattleGlobals.AvLureKnockback[level] * 100 + iouFlatBoost) / 2)))
         if track == LURE_TRACK and 'groupDamageDown' in base.localAvatar.battleConditions and level == 7:
             lureValue = int(math.ceil(lureValue * ((base.localAvatar.battleConditions['groupDamageDown'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorize(lureValue, 'groupDamageDown')

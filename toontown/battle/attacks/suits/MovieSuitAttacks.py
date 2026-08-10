@@ -1854,7 +1854,30 @@ def doSuitAttack(attack):
         name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')
     )
-    if chainsawCtscCamera:
+    if name == 'ChainsawCorePhaseTwo':
+        duration = suitTrack.getDuration()
+        camTrack = Sequence(
+            Func(camera.reparentTo, attack['suit']),
+            Func(camera.setPosHpr,
+                 2.95629, 7.58349, 7.5835,
+                 156.86395, 0.0, 0.0),
+            Func(camera.wrtReparentTo, attack['battle']),
+            Wait(8.0),
+            Func(camera.reparentTo, attack['suit']),
+            Func(camera.setPosHpr,
+                 -4.5696, -0.0014, 8.48323,
+                 -101.56812, 0.0, 0.0),
+            LerpPosHprInterval(
+                camera, 5.0,
+                (-4.5696, -0.0014, 7.96911),
+                (-101.56812, 0.0, 0.0),
+                startPos=(-4.5696, -0.0014, 8.48323),
+                startHpr=(-101.56812, 0.0, 0.0),
+                blendType='noBlend'),
+            Func(camera.wrtReparentTo, attack['battle']))
+        if duration > 13.0:
+            camTrack.append(Wait(duration - 13.0))
+    elif chainsawCtscCamera:
         camTrack = Sequence(Wait(suitTrack.getDuration()))
     elif name.startswith('ChainsawCoreKickback'):
         camTrack = MovieCamera.randomActorShot(

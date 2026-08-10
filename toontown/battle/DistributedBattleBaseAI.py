@@ -17,6 +17,7 @@ from toontown.toon import DistributedToonAI
 from toontown.toon import InventoryBase
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
+from toontown.toon import IOURegistry
 from otp.ai.MagicWordGlobal import *
 from toontown.hood import ZoneUtil
 from toontown.pets import DistributedPetProxyAI
@@ -430,7 +431,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                     if track == HEAL:
                         if ta[TOON_LVL_COL] == 1:
                             ta[TOON_HPBONUS_COL] = random.randint(0, 10000)
-                elif track == SOS or track == NPCSOS or track == PETSOS:
+                elif track == NPCSOS:
+                    if self.activeToons.count(ta[TOON_TGT_COL]) != 0:
+                        target = self.activeToons.index(ta[TOON_TGT_COL])
+                    else:
+                        target = -1
+                elif track == SOS or track == PETSOS:
                     target = ta[TOON_TGT_COL]
                 elif track == HEAL:
                     if self.activeToons.count(ta[TOON_TGT_COL]) != 0:
@@ -1117,13 +1123,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         toonId = self.air.getAvatarIdFromSender()
         oldAttack = self.toonAttacks.get(toonId)
 
-        if oldAttack and oldAttack[TOON_TRACK_COL] == NPCSOS:
-            oldNpcId = oldAttack[TOON_TGT_COL]
-            if self.npcAttacks.get(oldNpcId) == toonId:
-                del self.npcAttacks[oldNpcId]
-                if self.numNPCAttacks > 0:
-                    self.numNPCAttacks -= 1
-
         if track == NO_ATTACK:
             if oldAttack and oldAttack[TOON_TRACK_COL] in (SUE, FIRE):
                 return
@@ -1145,27 +1144,40 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.notify.warning('requestAttack() - no toon: %d' % toonId)
             return
         validResponse = 1
+        if oldAttack and oldAttack[TOON_TRACK_COL] == NPCSOS:
+            oldDefinition = IOURegistry.getIOU(oldAttack[TOON_LVL_COL])
+            oldKey = oldAttack[TOON_LVL_COL] if oldDefinition is not None else oldAttack[TOON_TGT_COL]
+            if self.npcAttacks.get(oldKey) == toonId:
+                del self.npcAttacks[oldKey]
+                if self.numNPCAttacks > 0:
+                    self.numNPCAttacks -= 1
         if track == SOS:
             self.notify.debug('toon: %d calls for help' % toonId)
             self.air.writeServerEvent('friendSOS', toonId, '%s' % av)
             self.toonAttacks[toonId] = getToonAttack(toonId, track=SOS, target=av)
         elif track == NPCSOS:
-            self.notify.debug('toon: %d calls for help' % toonId)
-            self.air.writeServerEvent('NPCSOS', toonId, '%s' % av)
-            toon = self.getToon(toonId)
-            if toon == None:
+            definition = IOURegistry.getIOU(level)
+            if not self.validate(toonId, definition is not None, 'requestAttack: invalid IOU subtype: %s' % level):
                 return
-            if av in toon.NPCFriendsDict:
-                npcCollision = 0
-                if av in self.npcAttacks:
-                    callingToon = self.npcAttacks[av]
-                    if callingToon != toonId and self.activeToons.count(callingToon) == 1:
-                        self.toonAttacks[toonId] = getToonAttack(toonId, track=PASS)
-                        npcCollision = 1
-                if npcCollision == 0:
-                    self.toonAttacks[toonId] = getToonAttack(toonId, track=NPCSOS, level=5, target=av)
-                    self.numNPCAttacks += 1
-                    self.npcAttacks[av] = toonId
+            if not self.validate(toonId, self.activeToons.count(av) == 1, 'requestAttack: invalid IOU toon target: %s' % av):
+                return
+            npcId = definition.getNpcId()
+            if not self.validate(toonId, npcId in toon.NPCFriendsDict and toon.NPCFriendsDict[npcId] > 0, 'requestAttack: IOU not owned: %s' % npcId):
+                return
+            self.notify.debug('toon: %d uses IOU subtype: %d on toon: %d' % (toonId, level, av))
+            self.air.writeServerEvent('NPCSOS', toonId, '%s|%s|%s' % (level, npcId, av))
+            npcCollision = 0
+            if level in self.npcAttacks:
+                callingToon = self.npcAttacks[level]
+                if callingToon != toonId and self.activeToons.count(callingToon) == 1:
+                    self.toonAttacks[toonId] = getToonAttack(toonId, track=PASS)
+                    npcCollision = 1
+            if npcCollision == 0:
+                self.toonAttacks[toonId] = getToonAttack(toonId, track=NPCSOS, level=level, target=av)
+                self.numNPCAttacks += 1
+                self.npcAttacks[level] = toonId
+                if len(self.activeToons) > 1 and av == toonId:
+                    validResponse = 0
         elif track == PETSOS:
             self.notify.debug('toon: %d calls for pet: %d' % (toonId, av))
             self.air.writeServerEvent('PETSOS', toonId, '%s' % av)
@@ -1347,21 +1359,23 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.battleCalc.calculateRound()
 
         self.battleCalc.decrementConditionTurns()
-        for toon in self.battleCalc.toonStatusConditions.keys():
+        for toon in self.activeToons:
             conditionStrings = []
             conditionValues = []
             conditionTurns = []
+            conditions = self.battleCalc.toonStatusConditions.get(toon, {})
 
-            for condition in self.battleCalc.toonStatusConditions[toon]:
+            for condition in conditions:
                 conditionStrings.append(condition)
-                conditionValues.append(self.battleCalc.toonStatusConditions[toon][condition]['modifier'])
-                conditionTurns.append(self.battleCalc.toonStatusConditions[toon][condition]['turnsRemaining'])
+                conditionValues.append(conditions[condition]['modifier'])
+                conditionTurns.append(conditions[condition]['turnsRemaining'])
 
-            if not self.battleCalc.toonStatusConditions[toon].keys():
+            if toon in self.battleCalc.toonStatusConditions and not conditions.keys():
                 del self.battleCalc.toonStatusConditions[toon]
 
-            self.sendUpdateToAvatarId(toon, 'setBattleConditions',
-                                      [toon, conditionStrings, conditionValues, conditionTurns])
+            for viewer in self.activeToons:
+                self.sendUpdateToAvatarId(viewer, 'setBattleConditions',
+                                          [toon, conditionStrings, conditionValues, conditionTurns])
 
         for t in self.activeToons:
             self.sendEarnedExperience(t)
@@ -1549,20 +1563,23 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 attack = self.toonAttacks[activeToon]
                 track = attack[TOON_TRACK_COL]
                 npc_level = None
+                iouDefinition = None
                 if track == NPCSOS:
-                    track, npc_level, npc_hp = NPCToons.getNPCTrackLevelHp(attack[TOON_TGT_COL])
-                    if track == None:
-                        track = NPCSOS
-                    elif track == TRAP:
-                        npcTrapAttacks.append(attack)
-                        toon = self.getToon(attack[TOON_ID_COL])
-                        av = attack[TOON_TGT_COL]
-                        if toon != None and av in toon.NPCFriendsDict:
-                            toon.NPCFriendsDict[av] -= 1
-                            if toon.NPCFriendsDict[av] <= 0:
-                                del toon.NPCFriendsDict[av]
-                            toon.d_setNPCFriendsDict(toon.NPCFriendsDict)
-                        continue
+                    iouDefinition = IOURegistry.getIOU(attack[TOON_LVL_COL])
+                    if iouDefinition is None:
+                        track, npc_level, npc_hp = NPCToons.getNPCTrackLevelHp(attack[TOON_TGT_COL])
+                        if track == None:
+                            track = NPCSOS
+                        elif track == TRAP:
+                            npcTrapAttacks.append(attack)
+                            toon = self.getToon(attack[TOON_ID_COL])
+                            av = attack[TOON_TGT_COL]
+                            if toon != None and av in toon.NPCFriendsDict:
+                                toon.NPCFriendsDict[av] -= 1
+                                if toon.NPCFriendsDict[av] <= 0:
+                                    del toon.NPCFriendsDict[av]
+                                toon.d_setNPCFriendsDict(toon.NPCFriendsDict)
+                            continue
                 if track != NO_ATTACK:
                     toonId = attack[TOON_ID_COL]
                     level = attack[TOON_LVL_COL]
@@ -1570,7 +1587,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         level = npc_level
                     if attack[TOON_TRACK_COL] == NPCSOS:
                         toon = self.getToon(toonId)
-                        av = attack[TOON_TGT_COL]
+                        if iouDefinition is not None:
+                            av = iouDefinition.getNpcId()
+                        else:
+                            av = attack[TOON_TGT_COL]
                         if toon != None and av in toon.NPCFriendsDict:
                             toon.NPCFriendsDict[av] -= 1
                             toon.addStat(ToontownGlobals.STATS_SOS)

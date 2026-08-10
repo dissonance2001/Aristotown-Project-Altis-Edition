@@ -166,7 +166,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.maxMoney = 0
         self.maxBankMoney = 0
         self.emblems = [0, 0]
-        self.maxNPCFriends = 16
+        self.maxNPCFriends = 32
         self.petId = 0
         self.bPetTutorialDone = False
         self.bFishBingoTutorialDone = False
@@ -1324,8 +1324,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         NPCFriendsDict = {}
         for friendPair in NPCFriendsList:
             NPCFriendsDict[friendPair[0]] = friendPair[1]
-
+        oldRainCount = NPCFriendsDict.pop(7778, 0)
+        if oldRainCount:
+            NPCFriendsDict[90001] = NPCFriendsDict.get(90001, 0) + oldRainCount
         self.NPCFriendsDict = NPCFriendsDict
+        messenger.send(self.uniqueName('NPCFriendsChange'))
 
     def setMaxAccessories(self, max):
         self.maxAccessories = max

@@ -146,10 +146,15 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.needAdjustTownBattle = 1
 
     def setBattleConditions(self, toonId, conditionNames, conditionVals, conditionTurns):
-        if toonId == base.localAvatar.doId:
-            base.localAvatar.battleConditions = {}
-            for i in range(0, len(conditionNames)):
-                base.localAvatar.battleConditions[conditionNames[i]] = [conditionVals[i], conditionTurns[i]]
+        toon = self.findToon(toonId)
+        if toon is None and toonId == base.localAvatar.doId:
+            toon = base.localAvatar
+        if toon is None:
+            return
+        toon.battleConditions = {}
+        for i in range(0, len(conditionNames)):
+            toon.battleConditions[conditionNames[i]] = [conditionVals[i], conditionTurns[i]]
+        self.__requestAdjustTownBattle()
 
     def suitHasCondition(self, suitId, condition):
         self.notify.debug('suitHasCondition() - checking for \'%s\' on suitId %i' % (condition, suitId))
@@ -735,7 +740,11 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             if track == SOS:
                 targetIndex = -1
             elif track == NPCSOS:
-                targetIndex = -1
+                target = self.findToon(targets[i])
+                if target != None and self.activeToons.count(target) != 0:
+                    targetIndex = self.activeToons.index(target)
+                else:
+                    targetIndex = -1
             elif track == PETSOS:
                 targetIndex = -1
             elif track == PASS:
@@ -1381,6 +1390,14 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             level = response['level']
             target = response['target']
             targetId = target
+            if track == NPCSOS:
+                if target >= 0 and target < len(self.activeToons):
+                    targetId = self.activeToons[target].doId
+                else:
+                    self.notify.warning('invalid IOU target: %d' % target)
+                    track = -1
+                    level = -1
+                    targetId = -1
             if track == HEAL and not levelAffectsGroup(HEAL, level):
                 if target >= 0 and target < len(self.activeToons):
                     targetId = self.activeToons[target].doId
@@ -1425,6 +1442,19 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                             level = -1
                             targetId = -1
             self.d_requestAttack(base.localAvatar.doId, track, level, targetId)
+        elif mode == 'IOUPreview':
+            track = response['track']
+            level = response['level']
+            target = response['target']
+            if track != NPCSOS:
+                self.notify.warning('invalid IOU preview track: %d' % track)
+                return
+            if target >= 0 and target < len(self.activeToons):
+                targetId = self.activeToons[target].doId
+                self.d_requestAttack(base.localAvatar.doId, track, level, targetId)
+            else:
+                self.notify.warning('invalid IOU preview target: %d' % target)
+            noAttack = 1
         elif mode == 'Run':
             self.notify.debug('got a run')
             self.d_toonRequestRun(base.localAvatar.doId)

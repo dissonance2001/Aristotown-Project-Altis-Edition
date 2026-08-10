@@ -13,6 +13,7 @@ from toontown.suit import DistributedSuitBaseAI
 from toontown.battle import SuitBattleGlobals
 from toontown.battle import BattleExperienceAI
 from toontown.toon import NPCToons
+from toontown.toon import IOURegistry
 from toontown.pets import PetTricks, DistributedPetProxyAI
 from toontown.hood import ZoneUtil
 from toontown.toonbase.ToonPythonUtil import lerp
@@ -462,6 +463,8 @@ class BattleCalculatorAI:
     def decrementConditionTurns(self):
         for toon in self.toonStatusConditions.keys():
             for condition in self.toonStatusConditions[toon].keys():
+                if IOURegistry.parseConditionName(condition) is not None:
+                    continue
                 if self.toonStatusConditions[toon][condition]['turnsRemaining'] > 0:
                     self.notify.debug(
                         'decrementConditionTurns() - Decremented %s condition on toon %i (new turns: %i)' % (
@@ -1007,6 +1010,7 @@ class BattleCalculatorAI:
                 else:
                     damage = getTrapDamage(trapLvl, toon, suit)
                     self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
+                damage += self.getIOUFlatBoost(attackerId, TRAP)
                 if self.suitHasCondition(suitId, 'sued'):
                     self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'lured'):
@@ -1676,7 +1680,39 @@ class BattleCalculatorAI:
 
         return attackDamage
 
+    def getIOUBoostConditions(self, toonId, atkTrack):
+        if toonId not in self.toonStatusConditions:
+            return []
+        candidates = {}
+        for condition in self.toonStatusConditions[toonId].keys():
+            parsed = IOURegistry.parseConditionName(condition)
+            if parsed is None:
+                continue
+            gagTrack, boost = parsed
+            if gagTrack not in (atkTrack, -1):
+                continue
+            current = candidates.get(gagTrack)
+            if current is None or boost > current[0]:
+                candidates[gagTrack] = (boost, condition)
+        return [value[1] for value in candidates.values()]
+
+    def getIOUFlatBoost(self, toonId, atkTrack):
+        boost = 0
+        for condition in self.getIOUBoostConditions(toonId, atkTrack):
+            boost += self.toonStatusConditions[toonId][condition]['modifier']
+        return boost
+
+    def consumeIOUBoost(self, toonId, atkTrack):
+        for condition in self.getIOUBoostConditions(toonId, atkTrack):
+            status = self.toonStatusConditions[toonId].get(condition)
+            if status is None:
+                continue
+            status['turnsRemaining'] -= 1
+            if status['turnsRemaining'] <= 0:
+                del self.toonStatusConditions[toonId][condition]
+
     def applyToonGagDamageMultipliers(self, damage, toonId, suitId, atkTrack, atkLevel, organicBonus=False):
+        damage += self.getIOUFlatBoost(toonId, atkTrack)
         mult = 1.0
         suit = self.battle.findSuit(suitId)
         trackBoosts = {
@@ -1897,6 +1933,7 @@ class BattleCalculatorAI:
         return banned
 
     def applyLureKBModifiers(self, lureKBValue, toonId, targetId, atkLevel):
+        lureKBValue += self.getIOUFlatBoost(toonId, LURE)
         # Flat lure KB bonuses.
         for cond in ('lureBoost', 'lureBoost2', 'governaughtBoost', 'highStakesBoost'):
             if self.toonHasCondition(toonId, cond):
@@ -2423,6 +2460,7 @@ class BattleCalculatorAI:
                             self.setSuitCondition(suit.doId, 'bannedGagUsed', 1, 1, 'setBoth')
                         self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
                     attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
+                    attackDamage += self.getIOUFlatBoost(toonId, HEAL)
                     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                     if organicBonus:
                         self.setToonCondition(targetId, 'cheer', attackDamage * .5, 2, 'setBoth')
@@ -4134,6 +4172,8 @@ class BattleCalculatorAI:
                     atkTrack, atkLevel = self.__getActualTrackLevel(attack)
             damagesDone = self.__applyToonAttackDamages(currToonAttack)
             self.__applyToonAttackDamages(currToonAttack, hpbonus=1)
+            if HEAL <= atkTrack <= DROP and (atkTrack == HEAL or self.__attackHasHit(attack)):
+                self.consumeIOUBoost(currToonAttack, atkTrack)
             if atkTrack != LURE and atkTrack != DROP and atkTrack != SOUND:
                 self.__applyToonAttackDamages(currToonAttack, kbbonus=1)
             if lastTrack != atkTrack:
@@ -5915,6 +5955,26 @@ class BattleCalculatorAI:
         toonsHit = 0
         cogsMiss = 0
         for special in specials:
+            if special[TOON_ID_COL] not in self.toonAtkOrder:
+                self.toonAtkOrder.append(special[TOON_ID_COL])
+            definition = IOURegistry.getIOU(special[TOON_LVL_COL])
+            if definition is not None:
+                invokerId = special[TOON_ID_COL]
+                targetId = special[TOON_TGT_COL]
+                targetIds = []
+                if targetId in self.battle.activeToons:
+                    targetIds.append(targetId)
+                invoker = self.battle.getToon(invokerId)
+                gagTrack = definition.getGagTrack()
+                if invokerId not in targetIds and invoker is not None and (gagTrack == -1 or invoker.hasTrackAccess(gagTrack)):
+                    targetIds.append(invokerId)
+                for iouTargetId in targetIds:
+                    self.setToonCondition(iouTargetId, IOURegistry.getConditionName(gagTrack, definition.getBoost()), definition.getBoost(), definition.getUses(), 'setBoth')
+                if invoker is not None and definition.getRewardCooldown() > 0:
+                    cooldownTurns = definition.getRewardCooldown() + 1
+                    for cooldown in ('noSOS', 'noFires', 'noSues', 'noUnites', 'noForges'):
+                        self.setToonCondition(invokerId, cooldown, 1, cooldownTurns, 'setBoth')
+                continue
             npc_track, npc_level, npc_hp, npc_rarity = NPCToons.getNPCTrackLevelHpRarity(special[TOON_TGT_COL])
             if npc_track == NPC_TOONS_HIT:
                 rounds = 3
@@ -6022,6 +6082,9 @@ class BattleCalculatorAI:
                         self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
                 if self.suitHasCondition(suit.doId, 'battleSpeed'):
                     self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(suit.doId, 'battleSpeed')), -1, 'setBoth')
+                if suit.dna.name == 'cbutcher':
+                    if not self.suitHasCondition(suit.doId, 'phantomCounter'):
+                        self.setSuitCondition(suit.doId, 'phantomCounter', 1, 5, 'setBoth')
                 if suit.dna.name == 'ambass':
                     if not self.suitHasCondition(suit.doId, 'ambassadorOverconfidence') and not self.suitHasCondition(suit.doId, 'phase3'):
                         self.setSuitCondition(suit.doId, 'ambassadorOverconfidence', 1, 5, 'setBoth')
@@ -6051,6 +6114,10 @@ class BattleCalculatorAI:
                         self.setSuitCondition(s.doId, 'alreadyDesperation', 1, -1, 'setBoth')
                 if suit.dna.name == 'bcaster':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
+                if suit.dna.name == 'cbutcher':
+                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
+                if suit.dna.name in ['cdirector', 'liquid', 'dking', 'rkeeper']:
+                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 2.25, -1, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.getActualLevel() == 30:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                     for s in self.battle.activeSuits:
@@ -6584,6 +6651,8 @@ class BattleCalculatorAI:
 
     def __getActualTrack(self, toonAttack):
         if toonAttack[TOON_TRACK_COL] == NPCSOS:
+            if IOURegistry.getIOU(toonAttack[TOON_LVL_COL]) is not None:
+                return NPCSOS
             track = NPCToons.getNPCTrack(toonAttack[TOON_TGT_COL])
             if track != None:
                 return track
@@ -6593,6 +6662,8 @@ class BattleCalculatorAI:
 
     def __getActualTrackLevel(self, toonAttack):
         if toonAttack[TOON_TRACK_COL] == NPCSOS:
+            if IOURegistry.getIOU(toonAttack[TOON_LVL_COL]) is not None:
+                return (NPCSOS, toonAttack[TOON_LVL_COL])
             track, level, hp = NPCToons.getNPCTrackLevelHp(toonAttack[TOON_TGT_COL])
             if track != None:
                 return (track, level)
@@ -6602,6 +6673,8 @@ class BattleCalculatorAI:
 
     def __getActualTrackLevelHp(self, toonAttack):
         if toonAttack[TOON_TRACK_COL] == NPCSOS:
+            if IOURegistry.getIOU(toonAttack[TOON_LVL_COL]) is not None:
+                return (NPCSOS, toonAttack[TOON_LVL_COL], 0)
             track, level, hp = NPCToons.getNPCTrackLevelHp(toonAttack[TOON_TGT_COL])
             if track != None:
                 return (track, level, hp)

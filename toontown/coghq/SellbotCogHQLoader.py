@@ -15,7 +15,9 @@ from toontown.coghq import SellbotHQBossBattle
 from pandac.PandaModules import DecalEffect, NodePath
 from direct.interval.IntervalGlobal import *
 from direct.interval.LerpInterval import LerpHprInterval
-from panda3d.core import Vec3
+import os
+import __builtin__
+from panda3d.core import Vec3, Filename
 
 aspectSF = 0.7227
 
@@ -36,7 +38,9 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
         self.musicFile = 'phase_9/audio/bgm/SB_courtyard.ogg'
         self.lobbyMusicFile = 'phase_9/audio/bgm/SB_boss_lobby.ogg'
-        self.battleMusic = 'phase_9/audio/bgm/SB_courtyard_encntnr.ogg'
+        self.courtyardBattleMusicFile = 'phase_9/audio/bgm/SB_courtyard_encntr.ogg'
+        self.factoryMusicFile = 'phase_9/audio/bgm/SB_factory_ext.ogg'
+        self.factoryBattleMusicFile = 'phase_9/audio/bgm/SB_factory_ext_encntr.ogg'
         self.cogHQExteriorModelPath = 'phase_9/models/cogHQ/SellbotHQExterior'
         self.cogHQLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby'
         self.cogHQHardLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby_MS'
@@ -49,9 +53,97 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.spot5Sequence = None
         self.spot6Sequence = None
 
+    def _loadSellbotMusic(self, virtualPath):
+        try:
+            manager = __builtin__.ContentPackMgr
+        except Exception:
+            manager = None
+
+        if manager and hasattr(manager, '_resolveEntry'):
+            try:
+                entry, resolvedPath = manager._resolveEntry(virtualPath, 'music')
+            except Exception:
+                entry = None
+
+            if entry:
+                requested = str(virtualPath).replace('\\', '/').lstrip('/').lower()
+                realName = entry.get('subfiles', {}).get(requested)
+                multifile = entry.get('multifile')
+                if realName and multifile:
+                    try:
+                        subfileIndex = multifile.findSubfile(realName)
+                    except Exception:
+                        subfileIndex = -1
+
+                    if subfileIndex >= 0:
+                        cacheDir = os.path.abspath(os.path.join(
+                            'resources',
+                            'contentpacks',
+                            '.sellbot-music-cache'
+                        ))
+                        try:
+                            entryIndex = manager.packEntries.index(entry)
+                        except Exception:
+                            entryIndex = 0
+                        try:
+                            packMtime = int(os.path.getmtime(os.path.join(
+                                manager.packPath,
+                                entry['filename']
+                            )))
+                        except Exception:
+                            packMtime = 0
+                        cachePath = os.path.join(
+                            cacheDir,
+                            '%04d_%d_%s' % (
+                                entryIndex,
+                                packMtime,
+                                os.path.basename(realName)
+                            )
+                        )
+                        try:
+                            expectedSize = multifile.getSubfileLength(subfileIndex)
+                        except Exception:
+                            expectedSize = 0
+
+                        try:
+                            validCache = os.path.isfile(cachePath)
+                            if validCache and expectedSize:
+                                validCache = os.path.getsize(cachePath) == expectedSize
+
+                            if not validCache:
+                                if not os.path.isdir(cacheDir):
+                                    os.makedirs(cacheDir)
+                                tempPath = cachePath + '.tmp'
+                                if os.path.isfile(tempPath):
+                                    os.remove(tempPath)
+                                tempFilename = Filename.fromOsSpecific(tempPath)
+                                if not multifile.extractSubfile(subfileIndex, tempFilename):
+                                    raise IOError('extractSubfile failed')
+                                if expectedSize and os.path.getsize(tempPath) != expectedSize:
+                                    os.remove(tempPath)
+                                    raise IOError('extracted size mismatch')
+                                if os.path.isfile(cachePath):
+                                    os.remove(cachePath)
+                                os.rename(tempPath, cachePath)
+
+                            cacheFilename = Filename.fromOsSpecific(cachePath)
+                            cacheFilename.makeAbsolute()
+                            sound = base.musicManager.getSound(cacheFilename, False)
+                            if sound and sound.length() > 0.05:
+                                return sound
+                        except Exception:
+                            pass
+
+        try:
+            return base.musicManager.getSound(Filename(virtualPath), False)
+        except Exception:
+            return base.loader.loadMusic(virtualPath)
+
     def load(self, zoneId):
-        self.battleMusic = 'phase_11/audio/bgm/LB_courtyard_encntr.ogg'
         CogHQLoader.CogHQLoader.load(self, zoneId)
+        self.music = self._loadSellbotMusic(self.musicFile)
+        self.lobbyMusic = self._loadSellbotMusic(self.lobbyMusicFile)
+        self.battleMusic = self._loadSellbotMusic(self.courtyardBattleMusicFile)
         Toon.loadSellbotHQAnims()
 
     def unloadPlaceGeom(self):
@@ -303,7 +395,14 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         if self.spot6Sequence:
             self.spot6Sequence.finish()
 
+    def enterCogHQExterior(self, requestStatus):
+        self.music = self._loadSellbotMusic(self.musicFile)
+        self.battleMusic = self._loadSellbotMusic(self.courtyardBattleMusicFile)
+        CogHQLoader.CogHQLoader.enterCogHQExterior(self, requestStatus)
+
     def enterFactoryExterior(self, requestStatus):
+        self.music = self._loadSellbotMusic(self.factoryMusicFile)
+        self.battleMusic = self._loadSellbotMusic(self.factoryBattleMusicFile)
         self.placeClass = FactoryExterior.FactoryExterior
         self.enterPlace(requestStatus)
         self.hood.spawnTitleText(requestStatus['zoneId'])

@@ -312,6 +312,34 @@ class ContentPackManager:
             return virtualPath
 
         _, resolved = self._resolveEntry(rawPath, category)
+        if resolved != rawPath or category != 'music':
+            return resolved
+
+        requested = self._normaliseVirtualPath(rawPath)
+        requestedBase = os.path.basename(requested).lower()
+        sellbotMusic = (
+            'sb_courtyard.ogg',
+            'sb_courtyard_encntr.ogg',
+            'sb_factory_ext.ogg',
+            'sb_factory_ext_encntr.ogg',
+            'sb_boss_lobby.ogg'
+        )
+        if requestedBase not in sellbotMusic:
+            return resolved
+
+        for entry in reversed(self.packEntries):
+            if not self._entryAllowsCategory(entry, category):
+                continue
+            for realName in entry['subfiles'].values():
+                if os.path.basename(realName).lower() != requestedBase:
+                    continue
+                candidate = Filename('%s/%s' % (
+                    str(entry['mountPoint']).rstrip('/'),
+                    realName
+                ))
+                if self.vfSys.exists(candidate):
+                    return str(candidate)
+
         return resolved
 
     def _printGuiSfxResolution(self):

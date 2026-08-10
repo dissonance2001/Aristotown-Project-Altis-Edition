@@ -4,6 +4,7 @@ from toontown.toonbase.ToontownBattleGlobals import *
 from direct.task.Timer import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toon import NPCToons
+from toontown.toon import IOURegistry
 from toontown.toonbase import TTLocalizer
 
 TOON_ID_COL = 0
@@ -160,7 +161,8 @@ def findToonAttack(toons, attacks, track):
             attack = attacks[t]
             local_track = attack[TOON_TRACK_COL]
             if track != NPCSOS and attack[TOON_TRACK_COL] == NPCSOS:
-                local_track = NPCToons.getNPCTrack(attack[TOON_TGT_COL])
+                if IOURegistry.getIOU(attack[TOON_LVL_COL]) is None:
+                    local_track = NPCToons.getNPCTrack(attack[TOON_TGT_COL])
             if local_track == track:
                 if local_track == FIRE:
                     canFire = 1

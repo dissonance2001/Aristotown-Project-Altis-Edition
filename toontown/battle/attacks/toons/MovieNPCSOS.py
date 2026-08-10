@@ -11,14 +11,19 @@ from toontown.chat.ChatGlobals import *
 from toontown.nametag.NametagGlobals import *
 from toontown.toon import LaughingManGlobals
 from toontown.toon import NPCToons
+from toontown.toon import IOURegistry
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.chat import ResistanceChat
 from toontown.speedchat import TTSCDecoders
+from otp.otpbase import OTPGlobals
+from pandac.PandaModules import TextProperties, TextPropertiesManager, TextGraphic, TextNode
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieNPCSOS')
 soundFiles = ('AA_heal_tickle.ogg', 'AA_heal_telljoke.ogg', 'AA_heal_smooch.ogg', 'AA_heal_happydance.ogg', 'AA_heal_pixiedust.ogg', 'AA_heal_juggle.ogg')
 offset = Point3(0, 4.0, 0)
+IOUAnimationSpeed = 1.6
+IOUSpawnPositions = (Point3(0, 0, 0), Point3(4.0, 0, 0), Point3(-4.0, 0, 0), Point3(8.0, 0, 0))
 
 def __cogsMiss(attack, level, hp):
     return __doCogsMiss(attack, level, hp)
@@ -43,9 +48,17 @@ NPCSOSfn_dict = {ToontownBattleGlobals.NPC_COGS_MISS: __cogsMiss,
 def doNPCSOSs(NPCSOSs):
     if len(NPCSOSs) == 0:
         return (None, None)
-    track = Sequence()
-    textTrack = Sequence()
+    track = Parallel()
+    textTrack = Parallel()
+    iouIndex = 0
     for n in NPCSOSs:
+        definition = IOURegistry.getIOU(n.get('level', -1))
+        if definition is not None:
+            if iouIndex < len(IOUSpawnPositions):
+                n['_iouSpawnPos'] = IOUSpawnPositions[iouIndex]
+            else:
+                n['_iouSpawnPos'] = Point3(4.0 * iouIndex, 0, 0)
+            iouIndex += 1
         ival, textIval = __doNPCSOS(n)
         if ival:
             track.append(ival)
@@ -60,6 +73,9 @@ def doNPCSOSs(NPCSOSs):
 
 
 def __doNPCSOS(sos):
+    definition = IOURegistry.getIOU(sos.get('level', -1))
+    if definition is not None:
+        return __doClashIOU(sos, definition)
     npcId = sos['npcId']
     track, level, hp = NPCToons.getNPCTrackLevelHp(npcId)
     if track != None:
@@ -67,6 +83,137 @@ def __doNPCSOS(sos):
     else:
         return __cogsMiss(sos, 0, 0)
 
+
+
+def __doClashIOU(attack, definition):
+    toon = NPCToons.createLocalNPC(definition.getNpcId())
+    if toon is None:
+        return (Sequence(), Sequence())
+    targets = [target['avatar'] for target in attack.get('target', [])]
+    if not targets:
+        return (Sequence(), Sequence())
+    battle = attack['battle']
+    gagTrack = definition.getGagTrack()
+    boost = definition.getBoost()
+    uses = definition.getUses()
+    spawnPos = attack.pop('_iouSpawnPos', Point3(0, 0, 0))
+    track = Sequence(teleportInIOU(attack, toon, pos=spawnPos, cooldownTurns=definition.getRewardCooldown()))
+
+    def face90(actor, recipients, battle):
+        avgPoint = Point3(0, 0, 0)
+        for recipient in recipients:
+            avgPoint += recipient.getPos(battle)
+        avgPoint /= len(recipients)
+        vec = Point3(avgPoint - actor.getPos(battle))
+        vec.setZ(0)
+        temp = vec[0]
+        vec.setX(-vec[1])
+        vec.setY(temp)
+        targetPoint = Point3(actor.getPos(battle) + vec)
+        actor.headsUp(battle, targetPoint)
+
+    timeScale = 1.0 / IOUAnimationSpeed
+    delay = 2.5 * timeScale
+    effectTrack = Parallel()
+    for target in targets:
+        sprayEffect = BattleParticles.createParticleEffect(file='pixieSpray')
+        dropEffect = BattleParticles.createParticleEffect(file='pixieDrop')
+        explodeEffect = BattleParticles.createParticleEffect(file='pixieExplode')
+        poofEffect = BattleParticles.createParticleEffect(file='pixiePoof')
+        wallEffect = BattleParticles.createParticleEffect(file='pixieWall')
+        color = ToontownBattleGlobals.TrackColors[gagTrack]
+        for effect in (sprayEffect, dropEffect, explodeEffect, poofEffect, wallEffect):
+            effect.setColorScale(Vec4(color[0], color[1], color[2], 1))
+        sprinkleNode = battle.attachNewNode('sprinkleNode')
+        sprinkleNode.setPos(toon.getPos())
+        face90(sprinkleNode, (target,), battle)
+        mtrack = Parallel(
+            __getPartTrack(sprayEffect, 1.5 * timeScale, 0.5 * timeScale, [sprayEffect, sprinkleNode, 0]),
+            __getPartTrack(dropEffect, 1.9 * timeScale, 2.0 * timeScale, [dropEffect, target, 0]),
+            __getPartTrack(explodeEffect, 2.7 * timeScale, 1.0 * timeScale, [explodeEffect, toon, 0]),
+            __getPartTrack(poofEffect, 3.4 * timeScale, 1.0 * timeScale, [poofEffect, target, 0]),
+            __getPartTrack(wallEffect, 4.05 * timeScale, 1.2 * timeScale, [wallEffect, toon, 0]),
+            Sequence(Wait(delay), Func(__healToon, target, boost), Func(__showIOUBoostPopup, target, boost, gagTrack, uses), Func(sprinkleNode.removeNode))
+        )
+        effectTrack.append(mtrack)
+    effectTrack.append(Parallel(__getSoundTrack(4, 2 * timeScale, duration=3.1 * timeScale, node=toon), Sequence(Func(face90, toon, targets, battle), ActorInterval(toon, 'sprinkle-dust', playRate=IOUAnimationSpeed))))
+    track.append(effectTrack)
+    track.append(Func(toon.setHpr, Vec3(180.0, 0.0, 0.0)))
+    track.append(teleportOut(attack, toon))
+    return (track, Sequence())
+
+def __showIOUBoostPopup(toon, boost, gagTrack, uses):
+    useText = 'use' if uses == 1 else 'uses'
+    manager = TextPropertiesManager.getGlobalPtr()
+    if gagTrack == -1:
+        color = (1.0, 1.0, 1.0, 1.0)
+        propertyName = 'iouGlobalBoost'
+        graphicName = 'iouGlobalBoostIcon'
+        trackProperties = TextProperties()
+        trackProperties.setTextColor(color[0], color[1], color[2], color[3])
+        manager.setProperties(propertyName, trackProperties)
+        statusModel = loader.loadModel('phase_3.5/models/gui/status_effects')
+        icon = statusModel.find('**/toon_damage_up_icon')
+        if not icon.isEmpty():
+            icon.setColorScale(color[0], color[1], color[2], color[3])
+            iconGraphic = TextGraphic()
+            iconGraphic.setModel(icon)
+            iconGraphic.setFrame((-0.25, 0.25, -0.275, 0.2))
+            manager.setGraphic(graphicName, iconGraphic)
+            text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
+        else:
+            text = '\x01%s\x01+%d (%d %s)\x02' % (propertyName, boost, uses, useText)
+    else:
+        color = ToontownBattleGlobals.TrackColors[gagTrack]
+        trackProperties = TextProperties()
+        trackProperties.setTextColor(color[0], color[1], color[2], 1)
+        propertyName = 'iouTrack%d' % gagTrack
+        graphicName = 'iouLevel6Gag%d' % gagTrack
+        manager.setProperties(propertyName, trackProperties)
+        invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+        gagGeom = invModel.find('**/' + ToontownBattleGlobals.AvPropsNew[gagTrack][5])
+        if not gagGeom.isEmpty():
+            gagGeom.setScale(7)
+            gagGeom.setColorScale(color[0], color[1], color[2], 1)
+            gagGraphic = TextGraphic()
+            gagGraphic.setModel(gagGeom)
+            gagGraphic.setFrame((-0.25, 0.25, -0.275, 0.2))
+            manager.setGraphic(graphicName, gagGraphic)
+            text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
+        else:
+            text = '\x01%s\x01+%d (%d %s)\x02' % (propertyName, boost, uses, useText)
+
+    textNode = TextNode('iouBoostPopup')
+    textNode.setFont(OTPGlobals.getSignFont())
+    textNode.setText(text)
+    textNode.clearShadow()
+    textNode.setAlign(TextNode.ACenter)
+    popup = toon.attachNewNode(textNode.generate())
+    popup.setScale(0.8)
+    popup.setBillboardPointEye()
+    popup.setBin('fixed', 100)
+    popupIndex = getattr(toon, '_iouPopupDisplayCount', 0)
+    toon._iouPopupDisplayCount = popupIndex + 1
+    startZ = toon.height / 2.0 + popupIndex * 0.8
+    popup.setPos(0, 0, startZ)
+
+    def cleanupPopup():
+        if not popup.isEmpty():
+            popup.removeNode()
+        current = getattr(toon, '_iouPopupDisplayCount', 1)
+        toon._iouPopupDisplayCount = max(0, current - 1)
+
+    popupTrack = Sequence(
+        popup.posInterval(1.0, Point3(0, 0, toon.height + 1.5 + popupIndex * 0.8), blendType='easeOut'),
+        Wait(1.0),
+        LerpColorScaleInterval(popup, 0.25, Vec4(0, 0, 0, 0)),
+        Func(cleanupPopup)
+    )
+    popupTrack.start()
+    if gagTrack == -1:
+        statusModel.removeNode()
+    else:
+        invModel.removeNode()
 
 def __healToon(toon, hp, ineffective = 0):
     notify.debug('healToon() - toon: %d hp: %d ineffective: %d' % (toon.doId, hp, ineffective))
@@ -94,7 +241,7 @@ def __getSoundTrack(level, delay, duration = None, node = None):
     return soundIntervals
 
 
-def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
+def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0), cooldownTurns = 2, speed = 1.0):
     '''if npc.getName() == 'Magic Cat':
         LaughingManGlobals.addToonEffect(npc)
         npc.nametag3d.hide()'''
@@ -103,6 +250,7 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     c = Func(npc.setHpr, hpr)
     d = Func(npc.pose, 'teleport', npc.getNumFrames('teleport') - 1)
     e = npc.getTeleportInTrack()
+    e.setPlayRate(speed)
     ee = Func(npc.addActive)
     if npc.nametag.getText() == 'Donald Frump':
         text = random.choice(TTLocalizer.FrumpGreetings)
@@ -113,11 +261,12 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     else:
         text = TTLocalizer.MovieNPCSOSGreeting % attack['toon'].getName()
     f = Func(npc.setChatAbsolute, text, CFSpeech | CFTimeout)
-    g = ActorInterval(npc, 'wave')
+    g = Wait(npc.getDuration('wave') / speed)
     h = Func(npc.loop, 'neutral')
-    seq = Sequence(a, b, c, d, e, ee, f, g, h)
+    seq = Sequence(a, b, c, d, e, ee, h, f, g)
     seq.append(Func(npc.clearChat))
-    seq.append(Parallel(Func(attack['toon'].setToonStatusEffect, 'cooldown', turns=2)))
+    if cooldownTurns > 0:
+        seq.append(Parallel(Func(attack['toon'].setToonStatusEffect, 'cooldown', turns=cooldownTurns)))
     if npc.getName() == 'Prince Frizzy':
         princeFrizzyTrack = Sequence()
         princeFrizzyTrack.append(Func(npc.setChatAbsolute, "Start Dancing! I got this covered!", CFSpeech | CFTimeout))
@@ -126,11 +275,32 @@ def teleportIn(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0)):
     return seq
 
 
-def teleportOut(attack, npc):
-    if npc.style.torso[1] == 'd':
-        a = ActorInterval(npc, 'curtsy')
+def teleportInIOU(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0), cooldownTurns = 2, speed = 1.0):
+    a = Func(npc.reparentTo, attack['battle'])
+    b = Func(npc.setPos, pos)
+    c = Func(npc.setHpr, hpr)
+    d = Func(npc.pose, 'teleport', npc.getNumFrames('teleport') - 1)
+    e = npc.getTeleportInTrack()
+    e.setPlayRate(speed)
+    ee = Func(npc.addActive)
+    ef = Func(npc.stopBlink)
+    eg = Func(npc.openEyes)
+    eh = Func(npc.stopLookAroundNow)
+    if npc.nametag.getText() == 'Donald Frump':
+        text = random.choice(TTLocalizer.FrumpGreetings)
+    elif npc.nametag.getText() == 'Jakebooy':
+        text = random.choice(TTLocalizer.JakebooySOSGreetings)
+    elif npc.nametag.getText() == 'Ask Alice':
+        text = TTLocalizer.AliceSOSGreeting
     else:
-        a = ActorInterval(npc, 'bow')
+        text = TTLocalizer.MovieNPCSOSGreeting % attack['toon'].getName()
+    f = Func(npc.setChatAbsolute, text, CFSpeech | CFTimeout)
+    h = Func(npc.loop, 'neutral')
+    seq = Sequence(a, b, c, d, f, e, ee, ef, eg, eh, h, Func(npc.clearChat))
+    return seq
+
+
+def teleportOut(attack, npc, speed = 1.0):
     if npc.nametag.getText() == 'Donald Frump':
         text = "Oh, by the way, you're fired. Get 'em out of here!"
     elif npc.nametag.getText() == 'Jakebooy':
@@ -141,7 +311,8 @@ def teleportOut(attack, npc):
         text = TTLocalizer.MovieNPCSOSGoodbye
     b = Func(npc.setChatAbsolute, text, CFSpeech | CFTimeout)
     c = npc.getTeleportOutTrack()
-    seq = Sequence(a, b, c)
+    c.setPlayRate(speed)
+    seq = Sequence(b, c)
     seq.append(Func(npc.removeActive))
     seq.append(Func(npc.detachNode))
     seq.append(Func(npc.delete))

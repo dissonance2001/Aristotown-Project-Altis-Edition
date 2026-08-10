@@ -666,12 +666,28 @@ def doThrottle(attack):
         if toon:
             statusTrack.append(Sequence(
                 Wait(4.5), Func(_applyThrottleVulnerability, toon)))
-    track = Parallel(
+    throttleTrack = Parallel(
         makeChainsawBattleCutscene(attack, key),
         _damageTrack(attack, 4.5),
         statusTrack)
+    if key == 'throttle':
+        deadwoodBanner = _cheatBanner(
+            attack, 'DEADWOOD!',
+            "YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED",
+            3.4, True)
+        try:
+            throttleBannerDuration = max(3.0, throttleTrack.getDuration() - deadwoodBanner.getDuration())
+        except:
+            throttleBannerDuration = 5.0
+        throttleBanner = _cheatBanner(
+            attack, 'THROTTLE!',
+            'THE CHAINSAW CONSULTANT INTERRUPTS HIS OWN ATTACK!',
+            throttleBannerDuration)
+        return Parallel(
+            throttleTrack,
+            Sequence(deadwoodBanner, throttleBanner))
     return _withCheatBanner(
-        attack, track, 'THROTTLE!',
+        attack, throttleTrack, 'THROTTLE!',
         'THE CHAINSAW CONSULTANT INTERRUPTS HIS OWN ATTACK!')
 
 

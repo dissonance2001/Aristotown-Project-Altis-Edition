@@ -10,12 +10,14 @@ class NPCFriendPage(ShtikerPage.ShtikerPage):
         ShtikerPage.ShtikerPage.__init__(self)
 
     def load(self):
-        self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.NPCFriendPageTitle, text_scale=0.12, textMayChange=0, pos=(0, 0, 0.6))
+        self.title = DirectLabel(parent=self, relief=None, text='IOUs', text_scale=0.12, textMayChange=0, pos=(0, 0, 0.6))
         self.friendPanel = NPCFriendPanel.NPCFriendPanel(parent=self)
-        self.friendPanel.setScale(0.1225)
-        self.friendPanel.setZ(-0.03)
+        self.friendPanel.setScale(0.54)
+        self.friendPanel.setZ(-0.13)
+        self.accept(base.localAvatar.uniqueName('NPCFriendsChange'), self.updatePage)
 
     def unload(self):
+        self.ignoreAll()
         ShtikerPage.ShtikerPage.unload(self)
         del self.title
         del self.friendPanel
@@ -28,4 +30,5 @@ class NPCFriendPage(ShtikerPage.ShtikerPage):
         ShtikerPage.ShtikerPage.enter(self)
 
     def exit(self):
+        messenger.send('exitNPCFriendPageBook')
         ShtikerPage.ShtikerPage.exit(self)

@@ -18,6 +18,7 @@ from toontown.town import TownBattleCogPanel
 from toontown.toontowngui import TTDialog
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleBase
+from toontown.toon import IOURegistry
 from toontown.toonbase import ToontownTimer
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase import TTLocalizer
@@ -44,6 +45,7 @@ class TownBattle(StateData.StateData):
         self.trappedIndices = []
         self.numToons = 1
         self.toons = []
+        self.toonAvatars = []
         self.localNum = 0
         self.time = 0
         self.bldg = 0
@@ -66,13 +68,14 @@ class TownBattle(StateData.StateData):
           'Sue',
           'SOS']),
          State.State('ChooseCog', self.enterChooseCog, self.exitChooseCog, ['AttackWait', 'Attack']),
-         State.State('AttackWait', self.enterAttackWait, self.exitAttackWait, ['ChooseCog', 'ChooseToon', 'Attack']),
-         State.State('ChooseToon', self.enterChooseToon, self.exitChooseToon, ['AttackWait', 'Attack']),
+         State.State('AttackWait', self.enterAttackWait, self.exitAttackWait, ['ChooseCog', 'ChooseToon', 'Attack', 'SOS']),
+         State.State('ChooseToon', self.enterChooseToon, self.exitChooseToon, ['AttackWait', 'Attack', 'SOS']),
          State.State('Run', self.enterRun, self.exitRun, ['Attack']),
          State.State('SOS', self.enterSOS, self.exitSOS, ['Attack',
           'AttackWait',
           'SOSPetSearch',
-          'SOSPetInfo']),
+          'SOSPetInfo',
+          'ChooseToon']),
          State.State('SOSPetSearch', self.enterSOSPetSearch, self.exitSOSPetSearch, ['SOS', 'SOSPetInfo']),
          State.State('SOSPetInfo', self.enterSOSPetInfo, self.exitSOSPetInfo, ['SOS', 'AttackWait']),
          State.State('Fire', self.enterFire, self.exitFire, ['Attack', 'AttackWait']),
@@ -378,7 +381,16 @@ class TownBattle(StateData.StateData):
                 elif tracks[i] == BattleBase.PASS_ATTACK:
                     numTargets = 0
                     target = -2
-                elif tracks[i] == BattleBase.SOS or tracks[i] == BattleBase.NPCSOS or tracks[i] == BattleBase.PETSOS:
+                elif tracks[i] == BattleBase.NPCSOS:
+                    numTargets = self.numToons
+                    if targets[i] == -1:
+                        numTargets = None
+                        target = -1
+                    else:
+                        target = [targets[i]]
+                        if battleIndices[i] not in target:
+                            target.append(battleIndices[i])
+                elif tracks[i] == BattleBase.SOS or tracks[i] == BattleBase.PETSOS:
                     numTargets = 0
                     target = -2
                 elif tracks[i] == HEAL_TRACK:
@@ -565,6 +577,7 @@ class TownBattle(StateData.StateData):
         self.luredIndices = luredIndices
         self.trappedIndices = trappedIndices
         self.toons = toonIds
+        self.toonAvatars = list(toons)
         self.numToons = len(toons)
         self.localNum = toons.index(base.localAvatar)
         currStateName = self.fsm.getCurrentState().getName()
@@ -582,7 +595,7 @@ class TownBattle(StateData.StateData):
             if currStateName == 'ChooseCog':
                 self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track, self.level)
             elif currStateName == 'ChooseToon':
-                self.chooseToonPanel.adjustToons(self.numToons, self.localNum, self.track, self.level)
+                self.chooseToonPanel.adjustToons(self.numToons, self.localNum, self.track, self.level, self.toonAvatars)
             canHeal, canTrap, canLure = self.checkHealTrapLure()
             base.localAvatar.inventory.setBattleCreditMultiplier(self.creditMultiplier)
             base.localAvatar.inventory.setActivateMode('battle', heal=canHeal, trap=canTrap, lure=canLure, bldg=self.bldg, creditLevel=self.creditLevel, tutorialFlag=self.tutorialFlag)
@@ -624,7 +637,9 @@ class TownBattle(StateData.StateData):
     def __handleAttackWaitBack(self, doneStatus):
         mode = doneStatus['mode']
         if mode == 'Back':
-            if self.track == HEAL_TRACK:
+            if self.track == BattleBase.NPCSOS:
+                self.fsm.request('ChooseToon')
+            elif self.track == HEAL_TRACK:
                 self.fsm.request('Attack')
             elif self.track == BattleBase.NO_ATTACK:
                 self.fsm.request('Attack')
@@ -644,18 +659,45 @@ class TownBattle(StateData.StateData):
             self.numToons,
             localNum=self.localNum,
             track=self.track,
-            level=self.level
+            level=self.level,
+            avatars=self.toonAvatars
         )
         self.accept(self.chooseToonPanelDoneEvent, self.__handleChooseToonPanelDone)
+        self.accept(self.chooseToonPanelDoneEvent + '-preview', self.__handleChooseToonPanelPreview)
+        if self.track == BattleBase.NPCSOS:
+            self.__handleChooseToonPanelPreview(-1)
+            if self.numToons > 1:
+                response = {}
+                response['mode'] = 'IOUPreview'
+                response['track'] = self.track
+                response['level'] = self.level
+                response['target'] = self.localNum
+                messenger.send(self.battleEvent, [response])
 
     def exitChooseToon(self):
         self.ignore(self.chooseToonPanelDoneEvent)
+        self.ignore(self.chooseToonPanelDoneEvent + '-preview')
         self.chooseToonPanel.exit()
+
+    def __handleChooseToonPanelPreview(self, toonIndex):
+        if self.track != BattleBase.NPCSOS:
+            return
+        targets = [self.localNum]
+        if toonIndex >= 0 and toonIndex < self.numToons and toonIndex not in targets:
+            targets.append(toonIndex)
+        self.toonPanels[self.localNum].setValues(self.localNum, self.track, self.level, self.numToons, targets, self.localNum)
 
     def __handleChooseToonPanelDone(self, doneStatus):
         mode = doneStatus['mode']
         if mode == 'Back':
-            self.fsm.request('Attack')
+            if self.track == BattleBase.NPCSOS:
+                if self.numToons > 1:
+                    response = {}
+                    response['mode'] = 'UnAttack'
+                    messenger.send(self.battleEvent, [response])
+                self.fsm.request('SOS')
+            else:
+                self.fsm.request('Attack')
         elif mode == 'Avatar':
             self.toon = doneStatus['avatar']
             self.target = self.toon
@@ -759,11 +801,14 @@ class TownBattle(StateData.StateData):
             self.fsm.request('SOSPetSearch')
         elif mode == 'NPCFriend':
             doId = doneStatus['friend']
-            response = {}
-            response['mode'] = 'NPCSOS'
-            response['id'] = doId
-            messenger.send(self.battleEvent, [response])
-            self.fsm.request('AttackWait')
+            subtype = IOURegistry.getSubtypeByNPCId(doId)
+            if subtype is None:
+                self.fsm.request('SOS')
+                return
+            self.track = BattleBase.NPCSOS
+            self.level = subtype
+            self.lastActionMode = 'IOU'
+            self.fsm.request('ChooseToon')
         elif mode == 'Back':
             self.fsm.request('Attack')
 

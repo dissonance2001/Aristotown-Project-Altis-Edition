@@ -13425,6 +13425,10 @@ NPCToonDict[90052] = (2513,
   (0.713726, 0.4, 0.2, 1.0), (0.713726, 0.4, 0.2, 1.0),
   0, 0, 0, 0, 0, 0),
  'm', 1, NPC_CLUB_SHOP)
+NPCToonDict[90001] = (-1,
+ 'Rain',
+ ('vsl', 'md', 's', 'f', 51, 0, 51, 51, 111, 0, 98, 0, 45, 0),
+ 'f', 1, NPC_HQ)
 del lnames
 BlockerPositions = {TTLocalizer.Flippy: (Point3(207.4, 18.81, -0.475), 90.0)}
 zone2NpcDict = {}
@@ -13530,59 +13534,34 @@ class RestockGagsSOSCard(SOSCard):
 
 
 HQnpcFriends = {
-    #HEAL
-    2001: DamageBoostSOSCard(ToontownBattleGlobals.HEAL_TRACK, 50, 5),
-    2132: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 5, ToontownGlobals.MaxHpLimit * 2, 4),
-    2121: SOSCard(ToontownBattleGlobals.HEAL_TRACK, 3, ToontownGlobals.MaxHpLimit, 3),
-
-    #TRAP
-    2011: DamageBoostSOSCard(ToontownBattleGlobals.TRAP_TRACK, 75, 5),
-    # Wait, what's with these exorbitant damage values?
-    3007: SOSCard(ToontownBattleGlobals.TRAP_TRACK, 6, 750, 4),
-    1001: SOSCard(ToontownBattleGlobals.TRAP_TRACK, 5, 500, 3),
-
-    #LURE
-    3112: DamageBoostSOSCard(ToontownBattleGlobals.LURE_TRACK, 50, 5),
-    1323: SOSCard(ToontownBattleGlobals.LURE_TRACK, 5, 0, 4),
-    2308: SOSCard(ToontownBattleGlobals.LURE_TRACK, 3, 0, 3),
-
-    #SOUND
-    4119: DamageBoostSOSCard(ToontownBattleGlobals.SOUND_TRACK, 50, 5),
-    4219: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 6, 345, 4),
-    4115: SOSCard(ToontownBattleGlobals.SOUND_TRACK, 5, 190, 3),
-
-    #THROW
-    7779: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 25, 5),
-
-    #DROP
-    1116: DamageBoostSOSCard(ToontownBattleGlobals.DROP_TRACK, 25, 5),
-    2311: SOSCard(ToontownBattleGlobals.DROP_TRACK, 6, 300, 4),
-    4140: SOSCard(ToontownBattleGlobals.DROP_TRACK, 5, 220, 3),
-
-    7778: DamageBoostSOSCard(8, 5, 1), # rain
-    7777: DamageBoostSOSCard(8, 15, 5), # boost all!
-
-    #SQUIRT
-    3137: DamageBoostSOSCard(ToontownBattleGlobals.SQUIRT_TRACK, 25, 4),
-
-    4327: CogsMissSOSCard(),
-    4230: CogsMissSOSCard(),
-
-    #ZAP
-    3135: DamageBoostSOSCard(ToontownBattleGlobals.ZAP_TRACK, 25, 5),
-
-    2208: ToonsHitSOSCard(),
-    5124: ToonsHitSOSCard(),
-
-    2003: RestockGagsSOSCard(-1),
-    2126: RestockGagsSOSCard(ToontownBattleGlobals.HEAL_TRACK),
-    4007: RestockGagsSOSCard(ToontownBattleGlobals.TRAP_TRACK),
-    1315: RestockGagsSOSCard(ToontownBattleGlobals.LURE_TRACK),
-    3129: RestockGagsSOSCard(ToontownBattleGlobals.THROW_TRACK),
-    5207: RestockGagsSOSCard(ToontownBattleGlobals.SQUIRT_TRACK),
-    3121: RestockGagsSOSCard(ToontownBattleGlobals.ZAP_TRACK),
-    4125: RestockGagsSOSCard(ToontownBattleGlobals.SOUND_TRACK),
-    1329: RestockGagsSOSCard(ToontownBattleGlobals.DROP_TRACK)
+    2121: DamageBoostSOSCard(ToontownBattleGlobals.HEAL_TRACK, 25, 3),
+    2132: DamageBoostSOSCard(ToontownBattleGlobals.HEAL_TRACK, 35, 4),
+    2001: DamageBoostSOSCard(ToontownBattleGlobals.HEAL_TRACK, 60, 5),
+    1001: DamageBoostSOSCard(ToontownBattleGlobals.TRAP_TRACK, 65, 3),
+    3007: DamageBoostSOSCard(ToontownBattleGlobals.TRAP_TRACK, 90, 4),
+    2011: DamageBoostSOSCard(ToontownBattleGlobals.TRAP_TRACK, 170, 5),
+    1323: DamageBoostSOSCard(ToontownBattleGlobals.LURE_TRACK, 15, 3),
+    2308: DamageBoostSOSCard(ToontownBattleGlobals.LURE_TRACK, 18, 4),
+    3112: DamageBoostSOSCard(ToontownBattleGlobals.LURE_TRACK, 30, 5),
+    4108: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 30, 3),
+    2316: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 40, 4),
+    5012: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 70, 5),
+    1223: DamageBoostSOSCard(ToontownBattleGlobals.SQUIRT_TRACK, 25, 3),
+    5125: DamageBoostSOSCard(ToontownBattleGlobals.SQUIRT_TRACK, 35, 4),
+    2217: DamageBoostSOSCard(ToontownBattleGlobals.SQUIRT_TRACK, 60, 5),
+    2101: DamageBoostSOSCard(ToontownBattleGlobals.ZAP_TRACK, 25, 3),
+    1123: DamageBoostSOSCard(ToontownBattleGlobals.ZAP_TRACK, 35, 4),
+    9203: DamageBoostSOSCard(ToontownBattleGlobals.ZAP_TRACK, 60, 5),
+    4115: DamageBoostSOSCard(ToontownBattleGlobals.SOUND_TRACK, 15, 3),
+    4219: DamageBoostSOSCard(ToontownBattleGlobals.SOUND_TRACK, 20, 4),
+    4119: DamageBoostSOSCard(ToontownBattleGlobals.SOUND_TRACK, 35, 5),
+    4140: DamageBoostSOSCard(ToontownBattleGlobals.DROP_TRACK, 35, 3),
+    2311: DamageBoostSOSCard(ToontownBattleGlobals.DROP_TRACK, 45, 4),
+    1116: DamageBoostSOSCard(ToontownBattleGlobals.DROP_TRACK, 80, 5)
+}
+ExtraIOUFriends = {
+    2314: DamageBoostSOSCard(ToontownBattleGlobals.THROW_TRACK, 30, 3),
+    90001: DamageBoostSOSCard(8, 15, 3)
 }
 FOnpcFriends = {9310: SOSCard(ToontownBattleGlobals.LURE_TRACK, 1, 0, 0),
  9311: SOSCard(ToontownBattleGlobals.LURE_TRACK, 1, 0, 1),
@@ -13607,10 +13586,13 @@ for npcId in disabledSosCards:
     npcId = int(npcId)
     if npcId in HQnpcFriends:
         del HQnpcFriends[npcId]
+    if npcId in ExtraIOUFriends:
+        del ExtraIOUFriends[npcId]
     if npcId in FOnpcFriends:
         del FOnpcFriends[npcId]
 
 npcFriends = dict(HQnpcFriends)
+npcFriends.update(ExtraIOUFriends)
 npcFriends.update(FOnpcFriends)
 npcFriends.update(AprilToonsFriends)
 npcFriends.update(DevFriends)

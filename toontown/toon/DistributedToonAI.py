@@ -852,7 +852,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if max & 32768:
             self.b_setSosPageFlag(1)
             max &= 32767
-        configMax = simbase.config.GetInt('max-sos-cards', 16)
+        configMax = simbase.config.GetInt('max-sos-cards', 32)
         if configMax != max:
             if self.sosPageFlag == 0:
                 self.b_setMaxNPCFriends(configMax)
@@ -860,7 +860,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.b_setMaxNPCFriends(configMax | 32768)
         else:
             self.maxNPCFriends = max
-        if self.maxNPCFriends != 8 and self.maxNPCFriends != 16:
+        if self.maxNPCFriends not in (8, 16, 32):
             self.notify.warning('Wrong max SOS cards %s, %d' % (self.maxNPCFriends, self.doId))
 
     def b_setMaxNPCFriends(self, max):
@@ -900,6 +900,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.NPCFriendsDict = {}
         for friendPair in NPCFriendsList:
             self.NPCFriendsDict[friendPair[0]] = friendPair[1]
+        oldRainCount = self.NPCFriendsDict.pop(7778, 0)
+        if oldRainCount:
+            self.NPCFriendsDict[90001] = self.NPCFriendsDict.get(90001, 0) + oldRainCount
 
     def getNPCFriendsDict(self):
         return self.NPCFriendsDict
@@ -946,7 +949,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return 1
 
     def restockAllNPCFriends(self):
-        desiredNpcFriends = [2001, 2011, 3112, 4119, 1116, 3137, 3135]
+        desiredNpcFriends = [2121, 2132, 2001, 1001, 3007, 2011, 1323, 2308, 3112, 4108, 2316, 5012, 1223, 5125, 2217, 2101, 1123, 9203, 4115, 4219, 4119, 4140, 2311, 1116, 90001]
         self.resetNPCFriendsDict()
         for npcId in desiredNpcFriends:
             self.attemptAddNPCFriend(npcId, 1)
@@ -5518,12 +5521,12 @@ def sos(count, name):
     invoker = spellbook.getInvoker()
     if not 0 <= count <= 100:
         return 'Your SOS count must be in range (0-100).'
-    for npcId, npcName in TTLocalizer.NPCToonNames.items():
-        if name.lower() == npcName.lower():
-            if npcId not in NPCToons.npcFriends:
-                continue
+    npcId = None
+    for candidateId, npcDesc in NPCToons.NPCToonDict.items():
+        if name.lower() == npcDesc[1].lower() and candidateId in NPCToons.npcFriends:
+            npcId = candidateId
             break
-    else:
+    if npcId is None:
         return 'SOS card %s was not found!' % name
     if (count == 0) and (npcId in invoker.NPCFriendsDict):
         del invoker.NPCFriendsDict[npcId]

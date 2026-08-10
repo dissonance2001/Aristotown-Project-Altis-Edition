@@ -5,6 +5,11 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownBattleGlobals import *
 from panda3d.core import TextureStage
 from direct.interval.IntervalGlobal import *
+from toontown.battle import BattleBase
+from toontown.toon import IOURegistry
+from toontown.toon import NPCToons
+from toontown.toon import ToonHead
+from toontown.toon import ToonDNA
 
 
 class TownBattleWaitPanel(StateData.StateData):
@@ -13,6 +18,7 @@ class TownBattleWaitPanel(StateData.StateData):
         StateData.StateData.__init__(self, doneEvent)
         self.track = None
         self.level = None
+        self.iouHead = None
 
     def load(self):
         gui = loader.loadModel('phase_3.5/models/gui/battlegui/targeting')
@@ -93,6 +99,7 @@ class TownBattleWaitPanel(StateData.StateData):
         imageNode.setTexOffset(self.gagEmblemScrollStage, t, -t)
 
     def unload(self):
+        self.__clearIOUHead()
         if getattr(self, 'gagEmblemScrollIval', None):
             self.gagEmblemScrollIval.finish()
             self.gagEmblemScrollIval = None
@@ -123,6 +130,7 @@ class TownBattleWaitPanel(StateData.StateData):
     def enter(self, numParticipants, track=None, level=None, mode='Inventory'):
         self.track = track
         self.level = level
+        self.__clearIOUHead()
         if mode == 'Inventory' and track is not None and level is not None and track >= 0 and level >= 0:
             self.gagIcon['image'] = self.invModels[track][level]
             self.gagIcon.setScale(3)
@@ -131,6 +139,21 @@ class TownBattleWaitPanel(StateData.StateData):
             trackColor = Vec4(TrackColors[track][0], TrackColors[track][1], TrackColors[track][2], 1)
             self.gagEmblem['image_color'] = trackColor
             self.setGagEmblemOrganic(base.localAvatar.checkGagBonus(track, level))
+
+        elif mode == 'IOU':
+            definition = IOURegistry.getIOU(level)
+            self.gagIcon['image'] = None
+            self.gagIcon.setScale(1)
+            self.gagIcon.show()
+            if definition is not None:
+                gagTrack = definition.getGagTrack()
+                if gagTrack == -1:
+                    self.gagEmblem['image_color'] = Vec4(1, 1, 1, 1)
+                else:
+                    self.gagEmblem['image_color'] = Vec4(TrackColors[gagTrack][0], TrackColors[gagTrack][1], TrackColors[gagTrack][2], 1)
+                self.iouHead = self.__createNPCHead(definition.getNpcId(), 0.45)
+                self.iouHead.reparentTo(self.gagIcon)
+            self.setGagEmblemOrganic(False)
 
         elif mode == 'Pass':
             self.gagIcon['image'] = self.passIcon
@@ -178,6 +201,27 @@ class TownBattleWaitPanel(StateData.StateData):
 
     def exit(self):
         self.frame.hide()
+        self.__clearIOUHead()
+
+
+    def __clearIOUHead(self):
+        if self.iouHead:
+            self.iouHead.detachNode()
+            self.iouHead.delete()
+            self.iouHead = None
+
+    def __createNPCHead(self, npcId, dimension):
+        npcInfo = NPCToons.NPCToonDict[npcId]
+        dnaList = npcInfo[2]
+        gender = npcInfo[3]
+        if dnaList == 'r':
+            dnaList = NPCToons.getRandomDNA(npcId, gender)
+        dna = ToonDNA.ToonDNA()
+        dna.newToonFromProperties(*dnaList)
+        head = ToonHead.ToonHead()
+        head.setupHead(dna, forGui=1)
+        head.fitAndCenterHead(dimension, forGui=1)
+        return head
 
     def __handleBack(self):
         doneStatus = {'mode': 'Back'}

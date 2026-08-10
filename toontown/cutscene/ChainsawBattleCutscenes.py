@@ -328,27 +328,6 @@ class ChainsawBattleCutsceneSetup(object):
             'suitHeadAnimationControls': headControls,
         }
 
-    def _phaseTwoCameraTrack(self):
-        return Sequence(
-            Func(camera.reparentTo, self.chainsaw),
-            Func(camera.setPosHpr,
-                 2.95629, 7.58349, 7.5835,
-                 156.86395, 0.0, 0.0),
-            Func(camera.wrtReparentTo, self.battle),
-            Wait(8.0),
-            Func(camera.reparentTo, self.chainsaw),
-            Func(camera.setPosHpr,
-                 -4.5696, -0.0014, 8.48323,
-                 -101.56812, 0.0, 0.0),
-            LerpPosHprInterval(
-                camera, 5.0,
-                (-4.5696, -0.0014, 7.96911),
-                (-101.56812, 0.0, 0.0),
-                startPos=(-4.5696, -0.0014, 8.48323),
-                startHpr=(-101.56812, 0.0, 0.0),
-                blendType='noBlend'),
-            Func(camera.wrtReparentTo, self.battle))
-
     def _deadwoodCameraTrack(self):
         return Sequence(
             Func(camera.reparentTo, self.chainsaw),
@@ -653,8 +632,6 @@ class ChainsawBattleCutsceneSetup(object):
 
         if self.key == 'deadwood':
             cameraTrack = self._deadwoodCameraTrack()
-        elif self.key == 'phasetwo':
-            cameraTrack = self._phaseTwoCameraTrack()
         else:
             cameraTrack = Sequence()
 

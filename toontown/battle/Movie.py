@@ -35,6 +35,7 @@ from toontown.battle.SuitBattleGlobals import *
 from toontown.chat.ChatGlobals import *
 from toontown.distributed import DelayDelete
 from toontown.toon import NPCToons
+from toontown.toon import IOURegistry
 from toontown.toon import Toon
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
@@ -1044,14 +1045,35 @@ class Movie(DirectObject.DirectObject):
                 adict['level'] = level
                 hps = ta[TOON_HP_COL]
                 kbbonuses = ta[TOON_KBBONUS_COL]
+                iouAttack = 0
                 if track == NPCSOS:
-                    adict['npcId'] = ta[TOON_TGT_COL]
-                    toonId = ta[TOON_TGT_COL]
-                    track, npc_level, npc_hp = NPCToons.getNPCTrackLevelHp(adict['npcId'])
-                    if track == None:
-                        track = NPCSOS
-                    adict['track'] = track
-                    adict['level'] = npc_level
+                    definition = IOURegistry.getIOU(level)
+                    if definition is not None:
+                        iouAttack = 1
+                        adict['npcId'] = definition.getNpcId()
+                        adict['avatar'] = toon
+                        adict['track'] = NPCSOS
+                        adict['level'] = level
+                        adict['special'] = 1
+                        recipients = []
+                        targetIndex = ta[TOON_TGT_COL]
+                        if targetIndex >= 0 and targetIndex < len(toons):
+                            targetId = toons[targetIndex]
+                            target = self.battle.findToon(targetId)
+                            if target is not None:
+                                recipients.append(target)
+                        gagTrack = definition.getGagTrack()
+                        if toon not in recipients and (gagTrack == -1 or toon.hasTrackAccess(gagTrack)):
+                            recipients.append(toon)
+                        adict['toons'] = recipients
+                        adict['target'] = [{'avatar': target} for target in recipients]
+                    else:
+                        adict['npcId'] = ta[TOON_TGT_COL]
+                        track, npc_level, npc_hp = NPCToons.getNPCTrackLevelHp(adict['npcId'])
+                        if track == None:
+                            track = NPCSOS
+                        adict['track'] = track
+                        adict['level'] = npc_level
                 elif track == PETSOS:
                     petId = ta[TOON_TGT_COL]
                     adict['toonId'] = toonId
@@ -1068,6 +1090,8 @@ class Movie(DirectObject.DirectObject):
                         target = None
                         adict['targetType'] = 'observer'
                     adict['target'] = target
+                elif iouAttack:
+                    pass
                 elif track == NPCSOS or track == NPC_COGS_MISS or track == NPC_TOONS_HIT or track == NPC_RESTOCK_GAGS or track == NPC_DAMAGE_BOOST or track == PETSOS:
                     adict['special'] = 1
                     toonHandles = []

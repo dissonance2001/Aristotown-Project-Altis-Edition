@@ -23,6 +23,7 @@ class ChainsawMeterGUI(DirectFrame):
         self.rpm = 10
         self.secondaryArrows = []
         self.primaryMove = None
+        self.primaryPointerMove = None
         self.bumpMove = None
         self.phaseMove = None
         self.topFade = None
@@ -67,12 +68,21 @@ class ChainsawMeterGUI(DirectFrame):
             image=self.gui.find('**/meter_markers'),
             image_scale=(1.0, 1.0, 4.0))
 
+        self.primaryArrowRoot = self.phaseRoot.attachNewNode('chainsawMeterPrimaryArrow')
+        self.primaryArrowRoot.setPos(-0.22929, 0, self.getMarkerZPos(0))
         self.primaryArrow = DirectFrame(
-            parent=self.phaseRoot,
+            parent=self.primaryArrowRoot,
             relief=None,
             image=self.gui.find('**/arrow_primary'),
-            pos=(-0.22929, 0, self.getMarkerZPos(0)),
             scale=0.41799)
+        self.primaryPointerMove = Sequence(
+            LerpPosInterval(
+                self.primaryArrow, 0.62, (0.05, 0, 0),
+                startPos=(-0.035, 0, 0), blendType='easeInOut'),
+            LerpPosInterval(
+                self.primaryArrow, 0.62, (-0.035, 0, 0),
+                startPos=(0.05, 0, 0), blendType='easeInOut'))
+        self.primaryPointerMove.loop()
 
         self.setPhase(1, instant=True)
         self.setRPM(10, instant=True)
@@ -86,11 +96,7 @@ class ChainsawMeterGUI(DirectFrame):
 
     def _clearPhaseMarkers(self):
         for entry in self.secondaryArrows:
-            arrow, posTrack, hprTrack = entry
-            try:
-                posTrack.pause()
-            except:
-                pass
+            arrow, hprTrack = entry
             try:
                 hprTrack.pause()
             except:
@@ -116,39 +122,21 @@ class ChainsawMeterGUI(DirectFrame):
                 image=self.gui.find('**/arrow_secondary'),
                 pos=basePos,
                 scale=0.27102)
-            posTrack = Sequence(
-                LerpPosInterval(
-                    arrow, 1.6,
-                    (basePos[0] + 0.03, 0, basePos[2] + 0.02),
-                    startPos=basePos,
-                    blendType='easeOut'),
-                LerpPosInterval(
-                    arrow, 1.6, basePos,
-                    blendType='easeIn'),
-                LerpPosInterval(
-                    arrow, 1.6,
-                    (basePos[0] + 0.03, 0, basePos[2] - 0.02),
-                    blendType='easeOut'),
-                LerpPosInterval(
-                    arrow, 1.6, basePos,
-                    blendType='easeIn'))
             hprTrack = Sequence(
                 LerpHprInterval(
-                    arrow, 4.0, (0, 0, 0.5),
-                    startHpr=(0, 0, -0.5),
+                    arrow, 0.18, (0, 0, 0.4),
+                    startHpr=(0, 0, -0.4),
                     blendType='easeInOut'),
                 LerpHprInterval(
-                    arrow, 4.0, (0, 0, -0.5),
-                    startHpr=(0, 0, 0.5),
+                    arrow, 0.18, (0, 0, -0.4),
+                    startHpr=(0, 0, 0.4),
                     blendType='easeInOut'))
-            posTrack.loop()
             hprTrack.loop()
             try:
-                posTrack.setT((float(index) / 10.0) * posTrack.getDuration())
                 hprTrack.setT((float(index) / 10.0) * hprTrack.getDuration())
             except:
                 pass
-            self.secondaryArrows.append((arrow, posTrack, hprTrack))
+            self.secondaryArrows.append((arrow, hprTrack))
 
     def _setTopAlpha(self, alpha):
         if self.gradientTop:
@@ -286,12 +274,12 @@ class ChainsawMeterGUI(DirectFrame):
             self.primaryMove = None
 
         if instant:
-            self.primaryArrow.setPos(*target)
+            self.primaryArrowRoot.setPos(*target)
             self._refreshJiggle()
             return
 
         self.primaryMove = LerpPosInterval(
-            self.primaryArrow,
+            self.primaryArrowRoot,
             0.15,
             target,
             blendType='easeOut')
@@ -301,7 +289,7 @@ class ChainsawMeterGUI(DirectFrame):
 
     def destroy(self):
         taskMgr.remove(self.jiggleTaskName)
-        for name in ('primaryMove', 'bumpMove', 'phaseMove', 'topFade', 'bottomFade'):
+        for name in ('primaryMove', 'primaryPointerMove', 'bumpMove', 'phaseMove', 'topFade', 'bottomFade'):
             track = getattr(self, name, None)
             if track:
                 try:
