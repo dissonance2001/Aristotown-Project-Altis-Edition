@@ -38,6 +38,7 @@ class FriendsListManager:
     def unload(self):
         #base.cr.friendManager.setGameSpecificFunction(None)
         self.exitFLM()
+        self.ignoreAll()
         if self.avatarPanel:
             del self.avatarPanel
         FriendInviter.unloadFriendInviter()
@@ -49,6 +50,8 @@ class FriendsListManager:
         self.notify.debug('FriendsListManager: enterFLM()')
         if self._preserveFriendsList:
             self._preserveFriendsList = 0
+            return
+        if self._entered:
             return
         self._entered = True
         self.accept('openFriendsList', self.__openFriendsList)
@@ -66,24 +69,35 @@ class FriendsListManager:
             base.cr.friendManager.setAvailable(1)
 
     def exitFLM(self):
-        self.notify.debug('FriendsListManager: enterFLM()')
+        self.notify.debug('FriendsListManager: exitFLM()')
         if self._preserveFriendsList:
-            self._preserveFriendsList = 0
             return
-        self._entered = True
-        self.accept('openFriendsList', self.__openFriendsList)
-        self.accept('clickedNametag', self.__handleClickedNametag)
-        self.accept('clickedNametagPlayer', self.__handleClickedNametagPlayer)
-        base.localAvatar.setFriendsListButtonActive(1)
-        NametagGlobals.setWantActiveNametags(True)
-        self.accept('gotoAvatar', self.__handleGotoAvatar)
-        self.accept('friendAvatar', self.__handleFriendAvatar)
-        self.accept('avatarDetails', self.__handleAvatarDetails)
-        self.accept('playerDetails', self.__handlePlayerDetails)
-        self.accept('friendInvitation', self.__handleFriendInvitation)
-        self.accept(OTPGlobals.PlayerFriendInvitationEvent, self.__handlePlayerFriendInvitation)
+        if not self._entered:
+            return
+        self._entered = False
+        self.ignore('openFriendsList')
+        self.ignore('clickedNametag')
+        self.ignore('clickedNametagPlayer')
+        if hasattr(base, 'localAvatar'):
+            base.localAvatar.setFriendsListButtonActive(0)
+        NametagGlobals.setWantActiveNametags(False)
+        if self.avatarPanel:
+            self.avatarPanel.cleanup()
+            self.avatarPanel = None
+        self.ignore('gotoAvatar')
+        self.ignore('friendAvatar')
+        self.ignore('avatarDetails')
+        self.ignore('playerDetails')
+        self.ignore('friendInvitation')
+        self.ignore(OTPGlobals.PlayerFriendInvitationEvent)
+        FriendsListPanel.hideFriendsList()
+        ToontownFriendSecret.hideFriendSecret()
         if base.cr.friendManager:
-            base.cr.friendManager.setAvailable(1)
+            base.cr.friendManager.setAvailable(0)
+        FriendInviter.hideFriendInviter()
+        ToonAvatarDetailPanel.hideAvatarDetail()
+        ToonTeleportPanel.hideTeleportPanel()
+        return
 
     def __openFriendsList(self):
         FriendsListPanel.showFriendsList()

@@ -499,8 +499,12 @@ class FriendInviter(DirectFrame):
 
     def __friendResponse(self, yesNoMaybe, context):
         if self.context != context:
-            self.notify.warning('Unexpected change of context from %s to %s.' % (self.context, context))
-            self.context = context
+            self.notify.warning('Ignoring friendResponse for stale context %s (current context is %s).' % (context, self.context))
+            return
+        currentState = self.fsm.getCurrentState().getName()
+        if currentState not in ('checkAvailability', 'asking'):
+            self.notify.warning('Ignoring friendResponse in state %s.' % currentState)
+            return
         if yesNoMaybe == 1:
             self.fsm.request('yes')
         elif yesNoMaybe == 0:
