@@ -158,7 +158,7 @@ def __showIOUBoostPopup(toon, boost, gagTrack, uses):
             icon.setColorScale(color[0], color[1], color[2], color[3])
             iconGraphic = TextGraphic()
             iconGraphic.setModel(icon)
-            iconGraphic.setFrame((-0.25, 0.25, -0.275, 0.2))
+            iconGraphic.setFrame((-0.18, 0.18, -0.275, 0.2))
             manager.setGraphic(graphicName, iconGraphic)
             text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
         else:
@@ -177,7 +177,7 @@ def __showIOUBoostPopup(toon, boost, gagTrack, uses):
             gagGeom.setColorScale(color[0], color[1], color[2], 1)
             gagGraphic = TextGraphic()
             gagGraphic.setModel(gagGeom)
-            gagGraphic.setFrame((-0.25, 0.25, -0.275, 0.2))
+            gagGraphic.setFrame((-0.18, 0.18, -0.275, 0.2))
             manager.setGraphic(graphicName, gagGraphic)
             text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
         else:
@@ -297,6 +297,8 @@ def teleportInIOU(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0
     f = Func(npc.setChatAbsolute, text, CFSpeech | CFTimeout)
     h = Func(npc.loop, 'neutral')
     seq = Sequence(a, b, c, d, f, e, ee, ef, eg, eh, h, Func(npc.clearChat))
+    if cooldownTurns > 0:
+        seq.append(Parallel(Func(attack['toon'].setToonStatusEffect, 'cooldown', turns=cooldownTurns)))
     return seq
 
 

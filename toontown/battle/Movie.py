@@ -3,7 +3,7 @@ import random
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
 from direct.interval.Interval import Interval
-from pandac.PandaModules import CInterval
+from pandac.PandaModules import CInterval, NodePath, TextNode
 from direct.showbase import DirectObject
 from toontown.battle.BattleBase import *
 from toontown.battle import BattleExperience
@@ -37,6 +37,7 @@ from toontown.distributed import DelayDelete
 from toontown.toon import NPCToons
 from toontown.toon import IOURegistry
 from toontown.toon import Toon
+from toontown.toon import LaffMeter
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -136,6 +137,11 @@ class Movie(DirectObject.DirectObject):
         self.playByPlayText = PlayByPlayText.PlayByPlayText()
         self.playByPlayText.hide()
         self.renderProps = []
+        self.laffMeters = []
+        self.laffMeterAvatars = []
+        self.laffMeterByAvatarId = {}
+        self.targetNodesMeters = {}
+        self.targetSeqMeters = {}
         self.hasBeenReset = 0
         self.reset()
         self.rewardHasBeenReset = 0
@@ -498,7 +504,121 @@ class Movie(DirectObject.DirectObject):
             if hasattr(toon, methodName):
                 getattr(toon, methodName)()
 
+    def _cleanupMovieLaffMeters(self):
+        for seq in self.targetSeqMeters.values():
+            try:
+                seq.pause()
+            except:
+                pass
+        self.targetSeqMeters = {}
+
+        for node in self.targetNodesMeters.values():
+            if node and not node.isEmpty():
+                node.removeNode()
+        self.targetNodesMeters = {}
+
+        for laffMeter in self.laffMeters:
+            try:
+                laffMeter.destroy()
+            except:
+                pass
+        self.laffMeters = []
+        self.laffMeterAvatars = []
+        self.laffMeterByAvatarId = {}
+
+    def _showMovieLaffMeters(self):
+        self._cleanupMovieLaffMeters()
+        if base.localAvatar not in self.battle.activeToons:
+            return
+
+        positions = ((0.38, 0.0, 0.13), (0.63, 0.0, 0.13), (0.88, 0.0, 0.13))
+        for avatar in self.battle.activeToons:
+            if avatar == base.localAvatar:
+                continue
+            if len(self.laffMeters) >= len(positions):
+                break
+            laffMeter = LaffMeter.LaffMeter(avatar.style, avatar.getHp(), avatar.getMaxHp())
+            laffMeter.setAvatar(avatar)
+            laffMeter.setScale(0.075)
+            laffMeter.reparentTo(base.a2dBottomLeft)
+            laffMeter.setPos(positions[len(self.laffMeters)])
+            laffMeter.start()
+            self.laffMeters.append(laffMeter)
+            self.laffMeterAvatars.append(avatar)
+            self.laffMeterByAvatarId[avatar.doId] = laffMeter
+
+    def _getAttackTargetToonIds(self, attack):
+        targets = attack.get('target', [])
+        if isinstance(targets, dict):
+            targets = [targets]
+        toonIds = []
+        for target in targets:
+            if not isinstance(target, dict):
+                continue
+            toon = target.get('toon')
+            if toon is None or toon not in self.battle.activeToons:
+                continue
+            if toon.doId not in toonIds:
+                toonIds.append(toon.doId)
+        return toonIds
+
+    def _handleLaffMeterTargets(self, *toonIds):
+        textScaleNorm = (0.33, 0.26, 0.26)
+        textScaleLarge = (textScaleNorm[0] * 1.1, textScaleNorm[1] * 1.1, textScaleNorm[2] * 1.1)
+
+        for toonId in toonIds:
+            toon = self.battle.findToon(toonId)
+            if toon is None or toon not in self.battle.activeToons:
+                continue
+
+            if toonId == base.localAvatar.doId:
+                laffMeter = getattr(base.localAvatar, 'laffMeter', None)
+            else:
+                laffMeter = self.laffMeterByAvatarId.get(toonId)
+            if laffMeter is None or laffMeter.isEmpty():
+                continue
+
+            if toonId not in self.targetNodesMeters:
+                textNode = TextNode('meter-target-exclamation-text')
+                textNode.setFont(ToontownGlobals.getSignFont())
+                textNode.setTextColor(1, 0.1, 0.1, 1)
+                textNode.setText('!')
+                textNode.setAlign(TextNode.ACenter)
+                targetNode = NodePath('meter-target-exclamation')
+                targetNode.attachNewNode(textNode.generate())
+                targetNode.reparentTo(hidden)
+                self.targetNodesMeters[toonId] = targetNode
+
+            ourIndicator = self.targetNodesMeters[toonId]
+            if toonId in self.targetSeqMeters:
+                self.targetSeqMeters[toonId].finish()
+
+            targetTrack = Sequence(
+                Func(ourIndicator.reparentTo, aspect2d),
+                Func(ourIndicator.setPos, laffMeter, 0.15, 0, 1.8),
+                Func(ourIndicator.setR, -40),
+                Func(ourIndicator.setScale, 0.01),
+                Func(ourIndicator.setAlphaScale, 1.0),
+                Func(ourIndicator.show),
+                Parallel(
+                    LerpScaleInterval(ourIndicator, 0.14, textScaleNorm, blendType='easeIn'),
+                    LerpHprInterval(ourIndicator, 0.14, (0, 0, 0), blendType='easeIn')
+                ),
+                LerpScaleInterval(ourIndicator, 0.12, textScaleLarge, blendType='easeOut'),
+                LerpScaleInterval(ourIndicator, 0.12, textScaleNorm, blendType='easeIn'),
+                Wait(1.3),
+                Parallel(
+                    LerpFunctionInterval(ourIndicator.setAlphaScale, fromData=1.0, toData=0, duration=0.33, blendType='easeIn'),
+                    LerpHprInterval(ourIndicator, 0.33, (0, 0, 60), blendType='easeIn')
+                ),
+                Func(ourIndicator.hide),
+                Func(ourIndicator.reparentTo, hidden)
+            )
+            self.targetSeqMeters[toonId] = targetTrack
+            targetTrack.start()
+
     def play(self, ts, callback):
+        self._showMovieLaffMeters()
         self.hasBeenReset = 0
 
         speedSuit = None
@@ -748,6 +868,7 @@ class Movie(DirectObject.DirectObject):
             self.rewardPanel.hide()
         if self.playByPlayText:
             self.playByPlayText.hide()
+        self._cleanupMovieLaffMeters()
 
     def applyPendingContentSync(self):
         if not hasattr(base.localAvatar, 'battleConditions'):
@@ -1680,6 +1801,10 @@ class Movie(DirectObject.DirectObject):
             ival, camIval = MovieSuitAttacks.doSuitAttack(a)
             if not ival:
                 continue
+
+            targetToonIds = self._getAttackTargetToonIds(a)
+            if targetToonIds:
+                ival = Sequence(Func(self._handleLaffMeterTargets, *targetToonIds), ival)
 
             if attackName in IGNORE_BATTLE_PLAYRATE:
                 speed = max(0.1, float(getattr(self, 'currentBattleSpeed', 1.0)))

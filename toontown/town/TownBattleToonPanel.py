@@ -714,6 +714,18 @@ class TownBattleToonPanel(DirectFrame):
         self.passNode.hide()
         self.laffMeter = None
         self.whichText = DirectLabel(parent=self, text='', pos=(0.22, 0.1, -0.23), text_scale=0.09, text_fg=(1, 1, 1, 1))
+        self.iouChoiceName = DirectLabel(
+            parent=self,
+            relief=None,
+            pos=(0, 0.05, 0.27),
+            text='',
+            text_align=TextNode.ACenter,
+            text_scale=0.12,
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            text_font=getSignFont()
+        )
+        self.iouChoiceName.hide()
         self.hide()
         self.toonStatusEffectTooltip = ToonStatusEffectTooltip(parent=self)
         self.toonStatusEffectTooltip.setPos(0, 0, 0.45)
@@ -788,6 +800,7 @@ class TownBattleToonPanel(DirectFrame):
 
     def hideChoiceIcons(self):
         self.__clearIOUChoiceHead()
+        self.iouChoiceName.hide()
         self.choiceEmblem.hide()
         self.undecidedIcon.hide()
         self.passIcon.hide()
@@ -2651,6 +2664,10 @@ class TownBattleToonPanel(DirectFrame):
                 self.iouChoiceHead = self.__createIOUChoiceHead(definition.getNpcId(), 0.23)
                 self.iouChoiceHead.reparentTo(self.choiceRoot)
                 self.iouChoiceHead.setPos(0.21, -0.2, 0.075)
+                npcName = NPCToons.getNPCName(definition.getNpcId())
+                if npcName:
+                    self.iouChoiceName['text'] = npcName.upper()
+                    self.iouChoiceName.show()
         elif track == BattleBase.SOS or track == BattleBase.PETSOS:
             self.showChoiceIcon(self.sosIcon, Vec4(0, 1, 0.031, 1))
         elif track >= MIN_TRACK_INDEX and track <= MAX_TRACK_INDEX:
@@ -2895,7 +2912,8 @@ class TownBattleToonPanel(DirectFrame):
             'passIcon',
             'fireIcon',
             'sueIcon',
-            'sosIcon'
+            'sosIcon',
+            'iouChoiceName'
         ):
             node = getattr(self, nodeName, None)
             if node:
