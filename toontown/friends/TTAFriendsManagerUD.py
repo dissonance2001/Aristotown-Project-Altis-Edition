@@ -274,11 +274,15 @@ class TTAFriendsManagerUD(DistributedObjectGlobalUD):
             dnaString = fields['setDNAString'][0]
             experience = fields['setExperience'][0]
             trackBonusLevel = fields['setTrackBonusLevel'][0]
+            profile = fields.get('setToonProfile', [0, 101, 0])
+            profilePose = profile[0]
+            profileNameplate = profile[1]
+            profileBackground = profile[2]
             # We need an actual way to send the fields to the client...............
             # Inventory, trackAccess, trophies, Hp, maxHp, defaultshard, lastHood, dnastring
             self.sendUpdateToAvatarId(senderId, 'friendDetails',
                                       [avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString,
-                                       experience, trackBonusLevel])
+                                       experience, trackBonusLevel, profilePose, profileNameplate, profileBackground])
 
         self.air.dbInterface.queryObject(self.air.dbId, avId, handleToon)
 

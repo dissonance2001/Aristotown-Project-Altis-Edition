@@ -51,7 +51,7 @@ class TTAFriendsManager(DistributedObjectGlobal):
         fields.append(("setLastSeenTimestamp", lastSeen))
         base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
 
-    def friendDetails(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel):
+    def friendDetails(self, avId, inventory, trackAccess, trophies, hp, maxHp, defaultShard, lastHood, dnaString, experience, trackBonusLevel, profilePose, profileNameplate, profileBackground):
         fields = [
             ['setExperience' , experience],
             ['setTrackAccess' , trackAccess],
@@ -62,6 +62,7 @@ class TTAFriendsManager(DistributedObjectGlobal):
             ['setDefaultShard' , defaultShard],
             ['setLastHood' , lastHood],
             ['setDNAString' , dnaString],
+            ['setToonProfileDetails', [profilePose, profileNameplate, profileBackground]],
         ]
         base.cr.n_handleGetAvatarDetailsResp(avId, fields=fields)
 

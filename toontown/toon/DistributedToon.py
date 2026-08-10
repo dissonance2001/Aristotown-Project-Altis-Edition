@@ -3064,6 +3064,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getProfileBackground(self):
         return self.profileBackground
 
+    def setToonProfileDetails(self, profile):
+        self.setToonProfile(profile[0], profile[1], profile[2])
+
     def requestToonProfile(self, pose, nameplate, background):
         pose = TPG.normalisePoseId(pose)
         nameplate = TPG.normaliseNameplateId(nameplate)
