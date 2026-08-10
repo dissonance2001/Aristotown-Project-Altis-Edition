@@ -133,7 +133,7 @@ def __doClashIOU(attack, definition):
             __getPartTrack(explodeEffect, 2.7 * timeScale, 1.0 * timeScale, [explodeEffect, toon, 0]),
             __getPartTrack(poofEffect, 3.4 * timeScale, 1.0 * timeScale, [poofEffect, target, 0]),
             __getPartTrack(wallEffect, 4.05 * timeScale, 1.2 * timeScale, [wallEffect, toon, 0]),
-            Sequence(Wait(delay), Func(__healToon, target, boost), Func(__showIOUBoostPopup, target, boost, gagTrack, uses), Func(sprinkleNode.removeNode))
+            Sequence(Wait(delay), Func(__healToon, target, boost), Func(__playIOUBoostArrows, target, gagTrack), Func(__showIOUBoostPopup, target, boost, gagTrack, uses), Func(sprinkleNode.removeNode))
         )
         effectTrack.append(mtrack)
     effectTrack.append(Parallel(__getSoundTrack(4, 2 * timeScale, duration=3.1 * timeScale, node=toon), Sequence(Func(face90, toon, targets, battle), ActorInterval(toon, 'sprinkle-dust', playRate=IOUAnimationSpeed))))
@@ -160,7 +160,7 @@ def __showIOUBoostPopup(toon, boost, gagTrack, uses):
             iconGraphic.setModel(icon)
             iconGraphic.setFrame((-0.18, 0.18, -0.275, 0.2))
             manager.setGraphic(graphicName, iconGraphic)
-            text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
+            text = '\x01%s\x01+%d  \x05%s\x05  (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
         else:
             text = '\x01%s\x01+%d (%d %s)\x02' % (propertyName, boost, uses, useText)
     else:
@@ -179,7 +179,7 @@ def __showIOUBoostPopup(toon, boost, gagTrack, uses):
             gagGraphic.setModel(gagGeom)
             gagGraphic.setFrame((-0.18, 0.18, -0.275, 0.2))
             manager.setGraphic(graphicName, gagGraphic)
-            text = '\x01%s\x01+%d \x05%s\x05 (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
+            text = '\x01%s\x01+%d  \x05%s\x05  (%d %s)\x02' % (propertyName, boost, graphicName, uses, useText)
         else:
             text = '\x01%s\x01+%d (%d %s)\x02' % (propertyName, boost, uses, useText)
 
@@ -226,6 +226,12 @@ def __healToon(toon, hp, ineffective = 0):
         else:
             laughter = random.choice(TTLocalizer.MovieHealLaughterHits1)
     toon.setChatAbsolute(laughter, CFSpeech | CFTimeout)
+
+
+def __playIOUBoostArrows(toon, gagTrack):
+    playAura = getattr(toon, 'playIOUBoostArrowAura', None)
+    if playAura:
+        playAura(gagTrack)
 
 
 def __getSoundTrack(level, delay, duration = None, node = None):
@@ -297,8 +303,6 @@ def teleportInIOU(attack, npc, pos = Point3(0, 0, 0), hpr = Vec3(180.0, 0.0, 0.0
     f = Func(npc.setChatAbsolute, text, CFSpeech | CFTimeout)
     h = Func(npc.loop, 'neutral')
     seq = Sequence(a, b, c, d, f, e, ee, ef, eg, eh, h, Func(npc.clearChat))
-    if cooldownTurns > 0:
-        seq.append(Parallel(Func(attack['toon'].setToonStatusEffect, 'cooldown', turns=cooldownTurns)))
     return seq
 
 

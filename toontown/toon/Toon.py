@@ -870,6 +870,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.zapArrowAuraTrack = None
         self.soundArrowAuraTrack = None
         self.dropArrowAuraTrack = None
+        self.iouBoostArrowAuraTracks = {}
         # Toon-Up
         self.toonupGagBoost = 0
         self.toonupGagBoostRounds = 0
@@ -1770,6 +1771,89 @@ class Toon(Avatar.Avatar, ToonHead):
             except:
                 pass
 
+    def cleanupIOUBoostArrowAura(self, gagTrack):
+        tracks = getattr(self, 'iouBoostArrowAuraTracks', None)
+        if not tracks:
+            return
+
+        track = tracks.pop(gagTrack, None)
+        if not track:
+            return
+
+        arrows = []
+        arrows.extend(getattr(track, 'arrows', []))
+        arrows.extend(getattr(track, 'fallingArrowProps', []))
+        auraNode = getattr(track, 'auraNode', None)
+
+        try:
+            track.pause()
+        except:
+            pass
+
+        try:
+            if auraNode and not auraNode.isEmpty():
+                auraNode.removeNode()
+        except:
+            pass
+
+        for arrow in arrows:
+            try:
+                if arrow and not arrow.isEmpty():
+                    arrow.removeNode()
+            except:
+                pass
+
+    def cleanupIOUBoostArrowAuras(self):
+        tracks = getattr(self, 'iouBoostArrowAuraTracks', None)
+        if not tracks:
+            return
+
+        for gagTrack in tracks.keys():
+            self.cleanupIOUBoostArrowAura(gagTrack)
+
+    def syncIOUBoostArrowAuras(self):
+        from toontown.toon import IOURegistry
+
+        activeTracks = {}
+        for condition in getattr(self, 'battleConditions', {}).keys():
+            parsed = IOURegistry.parseConditionName(condition)
+            if parsed is None:
+                continue
+            activeTracks[parsed[0]] = 1
+
+        tracks = getattr(self, 'iouBoostArrowAuraTracks', None)
+        if tracks is None:
+            tracks = {}
+            self.iouBoostArrowAuraTracks = tracks
+
+        for gagTrack in tracks.keys():
+            if gagTrack not in activeTracks:
+                self.cleanupIOUBoostArrowAura(gagTrack)
+
+    def playIOUBoostArrowAura(self, gagTrack):
+        from toontown.toonbase import ToontownBattleGlobals
+
+        if self.hp <= 0:
+            return
+
+        if gagTrack == -1:
+            color = (1, 1, 1, 1)
+        elif 0 <= gagTrack < len(ToontownBattleGlobals.TrackColors):
+            trackColor = ToontownBattleGlobals.TrackColors[gagTrack]
+            color = (trackColor[0], trackColor[1], trackColor[2], 1)
+        else:
+            return
+
+        self.cleanupIOUBoostArrowAura(gagTrack)
+        tracks = getattr(self, 'iouBoostArrowAuraTracks', None)
+        if tracks is None:
+            tracks = {}
+            self.iouBoostArrowAuraTracks = tracks
+
+        track = self.makeLoopingArrowAuraColored(color=color, initialDelay=0.0)
+        tracks[gagTrack] = track
+        track.loop()
+
     def makeDriedOut(self):
         if self.hydrated > 0:
             self.energized = 1
@@ -2343,6 +2427,7 @@ class Toon(Avatar.Avatar, ToonHead):
         ):
             self.cleanupArrowAuraTrack(trackName)
 
+        self.cleanupIOUBoostArrowAuras()
         self.cleanupConfusedStars()
         self.cleanupCheerHands()
 
@@ -2380,7 +2465,7 @@ class Toon(Avatar.Avatar, ToonHead):
             fallingArrow.hide()
 
             oneArrowTrack = Sequence(
-                Wait(0.9 + i * 0.25),
+                Wait(initialDelay + i * 0.25),
                 Func(resetFallingArrow, fallingArrow),
                 Parallel(
                     LerpFunctionInterval(
@@ -2411,7 +2496,7 @@ class Toon(Avatar.Avatar, ToonHead):
         loopTrack.auraNode = auraNode
         return loopTrack
 
-    def makeLoopingArrowAuraColored(self, color=(0, 0.918, 1, 1)):
+    def makeLoopingArrowAuraColored(self, color=(0, 0.918, 1, 1), initialDelay=0.9):
         import random
         import math
 

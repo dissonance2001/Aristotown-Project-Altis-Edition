@@ -1044,7 +1044,49 @@ class TownBattleToonPanel(DirectFrame):
 
     def _claimNextToonStatusSlot(self):
         if self.statusEffects >= len(self.toonStatusSlots):
-            return None
+            i = len(self.toonStatusSlots)
+            x, y, z = (0, 0, -0.355)
+
+            bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
+            bgNode = bgModel.find('**/default_background')
+            bgNode.reparentTo(self)
+            bgNode.setPosHprScale(x, y, z, 0, 0, 0, .13, .13, .13)
+            bgNode.setColor(0.525, 0.133, 0.122, 1)
+            bgNode.hide()
+
+            iconRoot = self.attachNewNode('toonStatusIconRoot-%d' % i)
+            iconRoot.setPosHprScale(x, y, z, 0, 0, 0, .12, .12, .12)
+            iconRoot.hide()
+
+            hoverButton = DirectButton(
+                parent=self,
+                relief=DGG.FLAT,
+                frameColor=(0, 0, 0, 0),
+                frameSize=(-0.5, 0.5, -0.5, 0.5),
+                pos=(x, -0.05, z),
+                scale=0.125,
+                state=DGG.NORMAL
+            )
+            hoverButton.bind(
+                DGG.WITHIN,
+                self._enterToonStatusSlot,
+                extraArgs=[i]
+            )
+            hoverButton.bind(
+                DGG.WITHOUT,
+                self._exitToonStatusSlot,
+                extraArgs=[i]
+            )
+            hoverButton.hide()
+
+            self.toonStatusSlots.append({
+                'bgModel': bgModel,
+                'bg': bgNode,
+                'iconRoot': iconRoot,
+                'hoverButton': hoverButton,
+                'effectIndex': None,
+                'pulse': None,
+            })
 
         slot = self.toonStatusSlots[self.statusEffects]
         self.statusEffects += 1
@@ -1052,6 +1094,7 @@ class TownBattleToonPanel(DirectFrame):
         if self.statusEffects > 4:
             slot['bg'].hide()
             slot['iconRoot'].hide()
+            slot['hoverButton'].hide()
 
         return slot
 

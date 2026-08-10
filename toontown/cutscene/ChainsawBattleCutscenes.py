@@ -510,8 +510,14 @@ class ChainsawBattleCutsceneSetup(object):
         supports = self._pad(self.supportSuits or self._allSupports(), 4)
         for support in supports:
             self._prepareCannonCompat(support)
+        liveTargets = [toon for toon in targets if toon]
+        nodeTargets = list(targets)
+        if liveTargets:
+            for index in range(4):
+                if supports[index] and nodeTargets[index] is None:
+                    nodeTargets[index] = liveTargets[index % len(liveTargets)]
         toonNodes = []
-        for index, toon in enumerate(targets):
+        for index, toon in enumerate(nodeTargets):
             if toon:
                 node = toon.attachNewNode('chainsawLayoffsToonPos-%s' % index)
                 node.wrtReparentTo(render)
@@ -533,7 +539,7 @@ class ChainsawBattleCutsceneSetup(object):
             self._cleanup()
 
         suits = [self.chainsaw] + supports
-        nodes = [render, hidden, camera, self.battle, self.chainsaw] + targets + toonNodes
+        nodes = [render, hidden, camera, self.battle, self.chainsaw] + nodeTargets + toonNodes
         return self._baseDict(
             nodes, targets, suits, [TAUNTS['layoffs']],
             self._loadSounds([

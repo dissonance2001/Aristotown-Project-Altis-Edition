@@ -154,6 +154,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         toon.battleConditions = {}
         for i in range(0, len(conditionNames)):
             toon.battleConditions[conditionNames[i]] = [conditionVals[i], conditionTurns[i]]
+        syncIOUBoostArrowAuras = getattr(toon, 'syncIOUBoostArrowAuras', None)
+        if syncIOUBoostArrowAuras:
+            syncIOUBoostArrowAuras()
         self.__requestAdjustTownBattle()
 
     def suitHasCondition(self, suitId, condition):
@@ -1299,6 +1302,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def startTimer(self, ts=0):
         self.notify.debug('startTimer()')
         self.__adjustTownBattle()
+        inventory = getattr(base.localAvatar, 'inventory', None)
+        if inventory and getattr(inventory, 'activateMode', None) == 'battle':
+            inventory.battleActivateButtons()
 
         if ts >= CLIENT_INPUT_TIMEOUT:
             self.notify.warning('startTimer() - ts: %f timeout: %f' % (ts, CLIENT_INPUT_TIMEOUT))

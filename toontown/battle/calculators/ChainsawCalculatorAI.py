@@ -693,6 +693,52 @@ class ChainsawCalculatorAI:
         controller.chainsawKickbackVisualPending = False
         return True
 
+    def _triggerCutSlackKickback(self, boss, controller):
+        multiplier = 1.0
+        for support in self.battle.activeSuits:
+            if support is boss:
+                continue
+            try:
+                if support.getHP() > 0:
+                    continue
+            except:
+                continue
+            if getattr(support, 'chainsawCutSlackKickbackHandled', False):
+                continue
+            if not self._isCutSlackTarget(support, controller):
+                continue
+            support.chainsawCutSlackKickbackHandled = True
+            support.chainsawCutSlackTarget = False
+            try:
+                controller.chainsawCutSlackTargets.pop(support.doId, None)
+            except:
+                pass
+            try:
+                level = support.getActualLevel()
+            except:
+                level = 0
+            if level >= 20:
+                multiplier = max(
+                    multiplier, 1.10 + ((level - 20) * 0.02))
+
+        if multiplier <= 1.0:
+            return False
+
+        currentMultiplier = 1.0
+        if getattr(controller, 'chainsawKickbackRounds', 0) > 0:
+            currentMultiplier = getattr(
+                controller, 'chainsawKickbackMultiplier', 1.0)
+        controller.chainsawKickbackRounds = max(
+            getattr(controller, 'chainsawKickbackRounds', 0), 3)
+        controller.chainsawAbilityBanRounds = max(
+            getattr(controller, 'chainsawAbilityBanRounds', 0), 3)
+        controller.chainsawKickbackMultiplier = max(
+            currentMultiplier, multiplier)
+        controller.chainsawPendingKickback = False
+        controller.chainsawPendingKickbackMultiplier = 1.0
+        controller.chainsawKickbackVisualPending = True
+        return True
+
     def _triggerProjectedChainKickback(self, boss, controller,
                                        supportDamage, firedSupports):
         if not controller.chainsawChainLinked:
@@ -940,6 +986,7 @@ class ChainsawCalculatorAI:
          firedSupports, suedSupports, supportTracks, iouToons) = self._bossHitData(boss)
 
         self._doSparkPlugDamage(boss, controller)
+        self._triggerCutSlackKickback(boss, controller)
         chainKickback = self._triggerProjectedChainKickback(
             boss, controller, supportDamage, firedSupports)
         self._doKickbackVisual(boss, controller)
