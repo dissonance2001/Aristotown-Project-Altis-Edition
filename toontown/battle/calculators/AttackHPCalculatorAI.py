@@ -4946,7 +4946,7 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.__removeLured(theSuit.doId)
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'hroller2':
+                    if suit.dna.name == 'hroller':
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.currHP <= 0:
                             if self.suitHasCondition(suit.doId, 'overpressure'):
@@ -4988,7 +4988,7 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.__removeLured(theSuit.doId)
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'hroller2':
+                    if suit.dna.name == 'hroller':
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.currHP <= 0:
                             if self.suitHasCondition(suit.doId, 'overpressure'):
@@ -5031,7 +5031,7 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdiceroulette', 1, 1, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'hroller2':
+                    if suit.dna.name == 'hroller':
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.getHP() <= 0:
                             if not self.suitHasCondition(suit.doId, 'dead'):
@@ -5054,7 +5054,7 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdiceroulette', 1, 1, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'hroller2':
+                    if suit.dna.name == 'hroller':
                         suit.setHP(math.ceil(suit.currHP - 25))
                         if suit.getHP() <= 0:
                             self.setSuitCondition(suit.doId, 'deathcheck', 1, 1, 'setBoth')
@@ -5192,23 +5192,9 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'HighRollerNoAttack':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                if theSuit.dna.name == 'hroller2':
+                if theSuit.dna.name == 'hroller' and self.suitHasCondition(theSuit.doId, 'phase3'):
                     for t in self.battle.activeToons:
-                        self.setToonCondition(t, 'nolevel8s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel6s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel7s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel5s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'nolevel4s', 1, 0, 'setBoth')
-                        self.setToonCondition(t, random.choice(('nolevel5s', 'nolevel7s', 'nolevel4s', 'nolevel6s', 'nolevel8s')), 1, 2, 'setBoth')
-                        self.setToonCondition(t, 'noSquirtGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noThrowGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noLureGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noDropGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noToonUpGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noTrapGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noZapGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, 'noSoundGags', 1, 0, 'setBoth')
-                        self.setToonCondition(t, random.choice(('noSquirtGags', 'noSoundGags', 'noToonUpGags', 'noLureGags', 'noZapGags', 'noThrowGags', 'noDropGags', 'noTrapGags')), 1, 2, 'setBoth')
+                        self.applyRandomSpecificGagBans(t, turns=2)
             elif atkType['name'] == 'HighRollerGameTimeSpawn':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5238,7 +5224,8 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'HighRollerPhase2':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'phase3', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'hollywoodHijinks', 1, 6, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'phase2', 1, -1, 'setBoth')
                 from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
@@ -5252,7 +5239,6 @@ class AttackHPCalculatorAI(object):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
                                 if s.dna.name == 'hroller':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'videogPhase2')
                                     boss.appendSuitsToBattle(boss.battleNumber, 'cnd')
                                     boss.appendSuitsToBattle(boss.battleNumber, 'std')
                                     boss.appendSuitsToBattle(boss.battleNumber, 'mh')
@@ -5492,7 +5478,7 @@ class AttackHPCalculatorAI(object):
                                 break
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
-                                if s.dna.name == 'hroller2':
+                                if s.dna.name == 'hroller':
                                     selectedSpawns = self.calculator.getSilhouetteSpawns(6)
 
                                     for suitName in selectedSpawns:
@@ -5511,6 +5497,8 @@ class AttackHPCalculatorAI(object):
                 #self.setSuitCondition(theSuit.doId, 'bashcalculator', 1, 10, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'phase3', 1, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'HRdamagereduction', 1, -1, 'setBoth')
+                theSuit.setHP(77777)
+                theSuit.setMaxHP(77777)
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, 'raisedAnte', 1250, -1, 'setBoth')
                     toon = self.battle.getToon(t)
@@ -5528,7 +5516,7 @@ class AttackHPCalculatorAI(object):
                                 break
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
-                                if s.dna.name == 'hroller2':
+                                if s.dna.name == 'hroller':
                                     if not self.calculator.silhouetteSpawns:
                                         self.calculator.silhouetteSpawns = ['sil1', 'sil2', 'sil3', 'sil4', 'sil5', 'sil6', 'sil7', 'sil8', 'sil9', 'sil10', 'sil11', 'sil12']
 
@@ -5702,7 +5690,7 @@ class AttackHPCalculatorAI(object):
                                 if s.dna.name == 'hroller':
                                     boss.appendSuitsToBattle(boss.battleNumber, 'hrollerPhase3')
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name not in ('hroller2', 'videog'):
+                    if suit.dna.name not in ('hroller', 'videog'):
                         managerTarget = suit
                         if managerTarget.currHP <= 0:
                             continue
@@ -5986,12 +5974,12 @@ class AttackHPCalculatorAI(object):
                     self.setToonCondition(toon.doId, 'snapped', 1.25, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'choreocalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'DirectorProductionBudget':
-                result = self.directorMultiplier
+                result = self.calculator.directorMultiplier
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'DirectorBudgetExpansion':
-                self.directorMultiplier += (20 * self.deadSuits)
-                result = self.directorMultiplier
+                self.calculator.directorMultiplier += (20 * self.deadSuits)
+                result = self.calculator.directorMultiplier
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'DirectorCut':
@@ -7701,7 +7689,7 @@ class AttackHPCalculatorAI(object):
                     self.setSuitCondition(theSuit.doId, 'erfitHeal', 0, 0, 'setBoth')
                     self.calculator.syphonHP.get(theSuit.doId, 0)
                 elif atkType['name'] == 'DamageMovie':
-                    result = self.damageHP.get(theSuit.doId, 0)
+                    result = self.calculator.damageHP.get(theSuit.doId, 0)
                     toon.setHp(toon.hp + math.ceil(result))
                     attack[SUIT_HP_COL][targetIndex] = result
 
@@ -7735,7 +7723,7 @@ class AttackHPCalculatorAI(object):
                     toon.setHp(toon.hp + math.ceil(result))
                 elif atkType['name'] == 'SafetyHeatWave':
                     attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
-                    self.damageHP[theSuit.doId] = self.calculator.damageHP.get(theSuit.doId, 0) + math.ceil(result)
+                    self.calculator.damageHP[theSuit.doId] = self.calculator.damageHP.get(theSuit.doId, 0) + math.ceil(result)
                 else:
                     if theSuit.getHP() > (theSuit.getMaxHP() * 1.5):
                         result *= 1.5

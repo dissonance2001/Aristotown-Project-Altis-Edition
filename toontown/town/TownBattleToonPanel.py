@@ -2447,7 +2447,7 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipTitle='Yellow Light', 
                                    tooltipDescription="This Toon is dealing -25% less damage.", 
                                    tooltipBuff=False, 
-                                   slotColor=(0, 0.902, 1, 1))
+                                   slotColor=(0, 0.902, 1, 1), scale=(0.9, 0.9, 0.9))
 
         if avatar.hasToonStatusEffect('soaked'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -2779,9 +2779,6 @@ class TownBattleToonPanel(DirectFrame):
             if self.avatar.hasToonStatusEffect('yellowLight'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('yellowLight') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('yellowLight') * 0.01)
-            if self.avatar.hasToonStatusEffect('phantomDebuff'):
-                damage *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
-                lureValue *= (1.0 - self.avatar.getToonStatusModifier('phantomDebuff') * 0.01)
             if self.avatar.hasToonStatusEffect('sanctioned'):
                 damage *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)
                 lureValue *= (1.0 - self.avatar.getToonStatusModifier('sanctioned') * 0.01)

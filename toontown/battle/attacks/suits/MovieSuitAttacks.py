@@ -944,6 +944,10 @@ def doSuitAttack(attack):
     elif name == 'ButcherLayoffs':
         suitTrack = MovieBoardbotLitigationCheats.do10000RPM(attack)
         # contingency director
+    elif name == 'ContingencyOverrideRevert':
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverrideRevert(attack)
+    elif name == 'ContingencyOverride':
+        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverride(attack)
     elif name == 'ContingencyFailsafeProtocol':
         suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
     elif name == 'ContingencyRiskThresholdBreach75':

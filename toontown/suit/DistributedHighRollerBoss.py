@@ -218,6 +218,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.cutsceneSkip.cleanup()
         self.cleanupIntervals()
         self.cleanupBattles()
+        self.stopHighRollerParticles()
         base.cr.forbidCheesyEffects(0)
         self.__stopHighRollerMusic()
         self.unloadEnvironment()
@@ -883,7 +884,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.phaseTwoCutsceneMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_2.ogg')
         self.phaseTwoMusic = loader.loadMusic(
-            'phase_12/audio/bgm/merc/instance_majorplayer_battle_2.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_3.ogg')
         self.phaseThreeCutsceneMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn_3.ogg')
         self.phaseThreeMusic = loader.loadMusic(
@@ -1059,6 +1060,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             suit.cleanup()
         del self.__suits
         self.colorScaleOffNodes = []
+        self.stopHighRollerParticles()
         self.geom.removeNode()
 
     def __initializeAudience(self):
@@ -1578,7 +1580,12 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.evWalls.stash()
         self.midVault.unstash()
         self.introduction.stop()
-
+        for toonId in self.involvedToons:
+            toon = self.cr.doId2do.get(toonId)
+            if toon:
+                toon.stopLookAround()
+                toon.stopSmooth()
+                toon.setToonStatusEffect('highRollerTurn1')
         self.controlToons()
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)

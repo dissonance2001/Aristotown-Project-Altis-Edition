@@ -132,7 +132,7 @@ class BossbotLitigationCalculatorAI:
                 #                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                 #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'phouse' and not self.TurnsElapsed % 99 == 0 or self.suitHasCondition(suitId, 'beginning'):
+            if self.battle.activeSuits[i].dna.name == 'phouse' and not self.calculator.TurnsElapsed % 99 == 0 or self.suitHasCondition(suitId, 'beginning'):
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'PowerhouseToleranceBuilding',  # Suppression Revert
                                             'animName': 'nothing',
@@ -500,7 +500,11 @@ class BossbotLitigationCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.getSuitConditionTurns(suitId, 'ambassadorOverconfidence') == 1 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.getSuitConditionTurns(suitId, 'ambassadorOverconfidence') == 1 and not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getLureRemoval(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.getSuitConditionTurns(suitId, 'ambassadorOverconfidence') == 1 and not self.suitHasCondition(suitId, 'phase3'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'AmbassadorPhase2', # 'Phase 2'
                      'animName': 'frustrated',
@@ -548,11 +552,11 @@ class BossbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'rotationcalculator') and self.__suitCanAttack(suitId):
-                    if not self.unusedPhases:
-                        self.unusedPhases = [2, 3, 4, 5, 6, 7, 8]
-                    condition = random.choice(self.unusedPhases)
+                    if not self.calculator.unusedPhases:
+                        self.calculator.unusedPhases = [2, 3, 4, 5, 6, 7, 8]
+                    condition = random.choice(self.calculator.unusedPhases)
                     if condition == 1:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseAbsorb',  # Desperation Syphon For All Cogs
                                                                 'animName': 'defense',
@@ -563,7 +567,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 2:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                            'name': 'PowerhouseSoakImmune',
                                                                            'animName': 'nothing',
@@ -574,7 +578,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 3:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                            'name': 'PowerhouseZapImmune',
                                                                            'animName': 'nothing',
@@ -585,7 +589,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 4:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                            'name': 'PowerhouseLureImmune',
                                                                            'animName': 'nothing',
@@ -596,7 +600,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 5:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                            'name': 'PowerhouseDropImmune',
                                                                            'animName': 'nothing',
@@ -607,7 +611,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 6:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                            'name': 'PowerhouseSyphon',
                                                                            'animName': 'summon',
@@ -618,7 +622,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 7:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSnipeVulnerable',
                                                                 'animName': 'cease',
@@ -629,7 +633,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 8:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSnipeMulligan',
                                                                 'animName': 'sound-react',
@@ -644,11 +648,11 @@ class BossbotLitigationCalculatorAI:
                     self.setSuitCondition(suitId, 'rotationcalculator', 0, 0, 'setBoth')
                     self.setSuitCondition(suitId, 'powerhouseRotation', 0, -1, 'setBoth')
                 if self.getSuitConditionModifier(suitId, 'powerhouseRotation') >= 100 and self.battle.activeSuits[i].currHP > 0:
-                    if not self.unusedPhases:
-                        self.unusedPhases = [2, 3, 4, 5, 6, 7, 8]
-                    condition = random.choice(self.unusedPhases)
+                    if not self.calculator.unusedPhases:
+                        self.calculator.unusedPhases = [2, 3, 4, 5, 6, 7, 8]
+                    condition = random.choice(self.calculator.unusedPhases)
                     if condition == 1:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseAbsorb',  # Desperation Syphon For All Cogs
                                                                 'animName': 'defense',
@@ -659,7 +663,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 2:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSoakImmune',
                                                                 'animName': 'nothing',
@@ -670,7 +674,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 3:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseZapImmune',
                                                                 'animName': 'nothing',
@@ -681,7 +685,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 4:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseLureImmune',
                                                                 'animName': 'nothing',
@@ -692,7 +696,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 5:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseDropImmune',
                                                                 'animName': 'nothing',
@@ -703,7 +707,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 6:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSyphon',
                                                                 'animName': 'summon',
@@ -714,7 +718,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 7:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSnipeVulnerable',
                                                                 'animName': 'cease',
@@ -725,7 +729,7 @@ class BossbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 8:
-                        self.unusedPhases.remove(condition)
+                        self.calculator.unusedPhases.remove(condition)
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PowerhouseSnipeMulligan',
                                                                 'animName': 'sound-react',

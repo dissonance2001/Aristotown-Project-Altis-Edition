@@ -211,7 +211,7 @@ def doPhase2(attack):
     suitTrack.append(Func(suit.setChatAbsolute, "Have fun with thiff one, ffweetie pie!", CFSpeech | CFTimeout))
     suitTrack.append(Wait(5.0))
     suitTrack.append(Func(suit.hide))
-    suitTrack.append(Func(suit.setSuitStatusEffect, 'highRollerHijinks', modifier=1))
+    suitTrack.append(Func(suit.setSuitStatusEffect, 'highRollerHijinks', turns=6, modifier=1))
     musicTrack2 = Parallel()
     suitTrack.append(musicTrack2)
     for obj in base.cr.doId2do.values():
@@ -1299,8 +1299,9 @@ def doNoAttack(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-    if suit.hasSuitStatusEffect('silhouetteImmune') and suit.dna.name not in ('hroller', 'videog') and suit.hasSuitStatusEffect('highRollerPhase3'):
-        suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.nametag3d.show), Func(suit.loop, 'neutral2%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else '',)))
+        toon.clearToonStatusEffect('highRollerTurn1')
+    if suit.hasSuitStatusEffect('silhouetteImmune') and suit.hasSuitStatusEffect('highRollerPhase3'):
+        suitTrack = Sequence(ActorInterval(suit, 'highroller-neutral-levitate-in-out', startTime=1, endTime=0), Func(suit.nametag3d.show), Func(suit.loop, 'rolled'))
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'silhouetteImmune'))
         suitTrack.append(Func(suit.setSuitStatusEffect, 'silhouetteShielding', modifier=1))
         return suitTrack
@@ -2677,11 +2678,13 @@ def doPhase3(attack):
         musicTrack.append(Parallel(Func(toon.setToonStatusEffect, 'raisedAnte', modifier=1250)))
     destPos, h = battle.suitPendingPointsSilhouettesHighRoller[7]
     flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
-    startPos = destPos + Point3(0, 0, 20)
+    startPos = destPos + Point3(0, 0, 0)
+    suit.setMaxHP(77777)
+    suit.setHP(77777)
     suit.reparentTo(battle)
     suit.setPos(startPos)
     suit.headsUp(battle)
-    suitTrack = Sequence()
+    suitTrack = Sequence(Parallel(Func(suit.makePhase3)))
     suitTrack.append(musicIntroTrack)
     suitTrack.append(Sequence(Parallel(Sequence(Wait(1), Func(suit.show), Func(suit.setChatAbsolute, "AND NOW FOR THE FFFTAR OF OUR FFHOW!!!!!!", CFSpeech | CFTimeout), flyIval)), Func(suit.loop, 'neutral2')))
     suitTrack.append(Wait(3.0))
@@ -3937,7 +3940,10 @@ def doCommercialBreak2(attack):
     targets = attack['target']
     toon = attack['target']
     suitTracks = Parallel()
-    suitTrackHighRoller = Sequence(getSuitAnimTrack(attack))
+    if theSuit.getSuitStatusTurns('highRollerHijinks'):
+        suitTrackHighRoller = Sequence(ActorInterval(theSuit, 'snap'))
+    else:
+        suitTrackHighRoller = Sequence(getSuitAnimTrack(attack))
     suitTrack2 = Sequence(MovieUtil.createSuitSnapInterval(theSuit), Func(theSuit.setNeutralAnimationDrop))
     soundTrack = getSoundTrack('SA_bash.ogg')
     for suit in battle.activeSuits:
@@ -4914,7 +4920,7 @@ def doGameTimeCog(attack, ind):
                                 0.5,
                                 2.0,
                                 battle
-                            ), 
+                            ), Func(targetSuit.setNeutralAnimationDrop)
                         )
                     )  
     stagelightTrack = Sequence(Wait(1.0), createMiniStagelightTrack(

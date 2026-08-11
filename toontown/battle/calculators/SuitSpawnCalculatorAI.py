@@ -973,6 +973,92 @@ class SuitSpawnCalculatorAI:
                                                     boss.battleNumber,
                                                     spawnCode
                                                 )
+            SPAWNER_DNAS_HIGH_ROLLER = (
+                                       'hroller'
+                                    )
+                        
+            currentSuit = self.battle.activeSuits[i]
+
+            if currentSuit.dna.name in SPAWNER_DNAS_HIGH_ROLLER:
+                if currentSuit.currHP > 0:
+                    # Find all living Cogs that are capable of spawning.
+                    eligibleSpawners = [
+                        suit for suit in self.battle.activeSuits
+                        if suit.currHP > 0 and suit.dna.name in SPAWNER_DNAS_HIGH_ROLLER
+                    ]
+
+                    if eligibleSpawners:
+                        # The oldest/lowest-doId Cog becomes the only spawner.
+                        designatedSpawner = min(
+                            eligibleSpawners,
+                            key=lambda suit: suit.doId
+                        )
+
+                        # Only the designated Cog is allowed to continue.
+                        if currentSuit.doId == designatedSpawner.doId:
+                            from toontown.suit.DistributedHighRollerBossAI import (
+                                DistributedHighRollerBossAI
+                            )
+
+                            boss = None
+
+                            # Find the boss controlling this battle.
+                            for do in simbase.air.doId2do.values():
+                                if not isinstance(do, DistributedHighRollerBossAI):
+                                    continue
+
+                                for suit in self.battle.activeSuits:
+                                    if suit in do.activeSuits:
+                                        boss = do
+                                        break
+
+                                if boss:
+                                    break
+
+                            if boss:
+                                maxSuits = 7
+                                maxSpawnPerTurn = 4
+
+                                # Count only living Cogs.
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
+
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                spawnerId = designatedSpawner.doId
+
+                                if (
+                                        spawnAmount > 0 and
+                                        self.suitHasCondition(
+                                            spawnerId,
+                                            'hollywoodHijinks'
+                                        ) and not self.getSuitConditionTurns(spawnerId, 'hollywoodHijinks') == 1 and not self.getSuitConditionTurns(spawnerId, 'hollywoodHijinks') == 6):
+
+                                    # Mark the designated Cog immediately so this block
+                                    # cannot run again during the same spawning window.
+                                    self.setSuitCondition(
+                                        spawnerId,
+                                        'alreadyCogSpawn',
+                                        1,
+                                        1,
+                                        'setBoth'
+                                    )
+
+                                    spawnCode = 'videog'
+
+                                    for spawnIndex in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(
+                                            boss.battleNumber,
+                                            spawnCode
+                                        )
             # if self.battle.activeSuits[i].dna.name == 'redd':
             #     currentBossHealth = -1
             #     for s in self.battle.suits:

@@ -6066,6 +6066,16 @@ class Suit(Avatar.Avatar):
 
     def makePhase3(self):
         self.isPhase3 = 1
+        texture = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_suit_black.png')
+        textureHighRollerBody = loader.loadTexture('phase_12/maps/cc_t_ene_highroller_body_black.png')
+        highRollerBody = self.find('**/highroller_body')
+        suitBody = self.find('**/body')
+
+        if not highRollerBody.isEmpty():
+            highRollerBody.setTexture(textureHighRollerBody, 1)
+
+        if not suitBody.isEmpty():
+            suitBody.setTexture(texture, 1)
 
     def makeAmbassadorPhase3(self, elite=False):
         for headPart in self.headParts:
@@ -7763,38 +7773,21 @@ class Suit(Avatar.Avatar):
 
 
     def stopHeadFreakout(self):
-        taskName = getattr(self, 'headFreakoutTaskName', None)
-
-        if taskName:
-            taskMgr.remove(taskName)
-            self.headFreakoutTaskName = None
-
-        sequence = getattr(self, 'headFreakoutSequence', None)
-
-        if sequence:
-            sequence.finish()
-            self.headFreakoutSequence = None
+        taskMgr.remove(self.uniqueName(FreakoutTaskName))
+        self.__finishHeadFreakoutSequence()
 
         headPart = getattr(self, 'headFreakoutPart', None)
         if not headPart or headPart.isEmpty():
             return
-
-        currHP = getattr(self, 'currHP', 0)
-        maxHP = getattr(self, 'maxHP', 0)
-
-        if maxHP > 0 and float(currHP) / float(maxHP) <= 0.25:
+        
+        if float(self.currHP) / float(self.maxHP) <= 0.25:
             normalTex = getattr(self, 'headFreakoutNormalTexHurt', None)
         else:
             normalTex = getattr(self, 'headFreakoutNormalTex', None)
-
         if normalTex:
             headPart.setTexture(normalTex, 1)
 
-        originalHpr = getattr(
-            self,
-            'headFreakoutOriginalHpr',
-            Vec3(0, 0, 0)
-        )
+        originalHpr = getattr(self, 'headFreakoutOriginalHpr', Vec3(0, 0, 0))
         headPart.setHpr(originalHpr)
 
 

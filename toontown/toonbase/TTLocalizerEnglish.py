@@ -5257,13 +5257,13 @@ SuitCheatDescription = {
  'ChoreoChoreography': "The Choreographer applies a damage vulnerability to all Toons who can't keep up with him!",
     # Filmmaker Cheats
  'FilmmakerCameraFlash': "The Photographer disrupts a Toon's vision!",
- 'FilmmakerCameraRewind': "The Filmmaker heals damaged producers and strengthens undamaged producers!",
+ 'FilmmakerCameraRewind': "The Filmmaker strengthens the producers!",
  'FilmmakerBudgetCuts': "The Filmmaker attacks when damaged!",
     # Director Cheats
  'DirectorCut': "The Director cuts a Toon's gag damage in half!",
  'DirectorAction': "The Director requires specific gag usage!",
  'DirectorActionRetaliation': "The Director retaliates against Toon's who did not follow his orders!",
- 'DirectorBackToOnes': "The Director goes back to full health while all producer's are still standing!",
+ 'DirectorBackToOnes': "The Director heals back to full while all Producers are still standing!",
  'DirectorBudgetExpansion': "The Director inflates the budget whenever cogs are destroyed!",
  'DirectorProductionBudget': "The budget is inflating!",
     # Factory Foreman Cheats

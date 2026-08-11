@@ -699,11 +699,11 @@ class BaseSuitAttackCalculatorAI:
             x = self.TurnsElapsed
             #attack = self.__getGenericSuitAttack(suitId)
             # Managers Attack Before Cogs
-            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not (self.battle.activeSuits[i].dna.name and self.battle.activeSuits[i].currHP >= 12750) and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+            if self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not (self.battle.activeSuits[i].dna.name == 'psetter' and self.battle.activeSuits[i].currHP >= 12750) and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemoval(suitId)
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            specialCogCanUseRegularAttack = not (self.battle.activeSuits[i].dna.name and self.battle.activeSuits[i].currHP >= 12750)
+            specialCogCanUseRegularAttack = not (self.battle.activeSuits[i].dna.name == 'psetter' and self.battle.activeSuits[i].currHP >= 12750)
             if self.battle.activeSuits[i].dna.name == 'psetter':
                 pacesetterHasRealToonAction = False
                 for toonId in self.battle.activeToons:

@@ -4994,9 +4994,7 @@ def doContingencyOverride(attack):
     ceaseTrack = Sequence(ActorInterval(suit, 'rake-react'))
     ceaseSpeechTrack = Sequence(Func(suit.setChatAbsolute,
                                      "Normal procedure is no longer sufficient...",
-                                     CFSpeech | CFTimeout), Wait(3.0), ActorInterval(suit, 'lured'), ActorInterval(suit, 'lured'),  Func(suit.setNeutralAnimationDrop), Func(suit.setChatAbsolute,
-                                     "I'm cutting through the red tape...",
-                                     CFSpeech | CFTimeout), Wait(3.0),  Func(suit.setChatAbsolute,
+                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
                                      "If the plan won't work... I'll cut around it!", CFSpeech | CFTimeout))
     ceaseSpeechTrack.append(Wait(2.0))
     return Parallel(phase2, ceaseTrack, ceaseSpeechTrack)
@@ -5009,8 +5007,7 @@ def doContingencyOverrideRevert(attack):
     ceaseTrack = Sequence(ActorInterval(suit, 'slip-forward'), Func(suit.setNeutralAnimationDrop))
     ceaseSpeechTrack = Sequence(Func(suit.setChatAbsolute,
                                      "Primary plan compromised!",
-                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
-                                     "I'll have to revise my strategy...", CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+                                     CFSpeech | CFTimeout), Wait(3.0),  Func(suit.setChatAbsolute,
                                      "We'll have to proceed under reduced capacity.", CFSpeech | CFTimeout))
     ceaseSpeechTrack.append(Wait(2.0))
     soundTrack = getSoundTrack('SA_TV_crash.ogg', delay=1.0, node=suit)

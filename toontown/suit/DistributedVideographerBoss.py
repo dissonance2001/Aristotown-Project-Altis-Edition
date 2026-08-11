@@ -806,7 +806,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.highRollerWheel2.hide()
 
         self.__suits = []
-        self.__initializeAudience()
+        #self.__initializeAudience()
         for light in self.highRollerArena.find('**/stage_lights_grp').getChildren():
             self.colorScaleOffNodes.append(light)
         for lightBeam in self.highRollerArena.findAllMatches('**/stagelight_light'):
@@ -1539,7 +1539,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        messenger.send(self.uniqueName('IntroductionStarted'))
+        messenger.send(self.uniqueName('BattleOne'))
         intervalName = 'IntroductionMovie'
         delayDeletes = []
         seq = Sequence(

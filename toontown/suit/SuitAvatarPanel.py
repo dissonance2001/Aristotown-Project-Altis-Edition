@@ -441,152 +441,94 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
     def __updateLabel(self, tempHp, level, maxHp):
         revives = self.avatar.getSkeleRevives() + 1
+
         if self.avatar.isFired:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
+            self.hpLabel['text'] = (
+                TTLocalizer.AvatarPanelCogLevel % level +
+                '\n' +
+                TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
+            )
             self.corpIcon.hide()
             self.deptLabel['text'] = ''
-        elif (self.avatar.hasSuitStatusEffect('immune') or self.avatar.hasSuitStatusEffect('videographerImmune')) and not self.avatar.dna.name == 'hroller' and not self.avatar.dna.name == 'hroller2':
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogImmune % (
-            'Immune')
-        elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif self.avatar.isShadow and self.maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif self.avatar.isShadow and self.maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif self.avatar.isShadow and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif self.avatar.isShadow:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '30.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'hrollers' and self.maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'hrollers' and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif self.avatar.dna.name == 'hrollers':
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % '25.mgr' + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif revives > 2 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif revives > 2 and self.avatar.isVirtual and maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif revives > 2 and self.avatar.isVirtual and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif revives > 2 and self.avatar.isVirtual:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif revives > 2 and self.avatar.isSkeleton and maxHp > 9999 and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
-                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (0, maxHp)
-        elif revives > 2 and self.avatar.isSkeleton and maxHp > 9999:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
-                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (int(tempHp), maxHp)
-        elif revives > 2 and self.avatar.isSkeleton and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
-                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (0, maxHp)
-        elif revives > 2 and self.avatar.isSkeleton:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % (
-                        revives - 1) + '\n' + TTLocalizer.AvatarPanelCogHealth % (int(tempHp), maxHp)
-        elif revives > 1 and self.avatar.isVirtual and maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif revives > 1 and self.avatar.isVirtual and maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif revives > 1 and self.avatar.isVirtual and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif revives > 1 and self.avatar.isVirtual:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif revives > 1 and self.avatar.isSkeleton and self.avatar.isRevived:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), self.maxHp)
-        elif revives > 1 and self.maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif revives > 1 and self.maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif revives > 1 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
+            return
+
+        # Immune display
+        if (
+            self.avatar.hasSuitStatusEffect('immune') or
+            self.avatar.hasSuitStatusEffect('videographerImmune')
+        ) and self.avatar.dna.name not in ('hroller', 'hroller2'):
+            self.hpLabel['text'] = (
+                TTLocalizer.AvatarPanelCogLevel % level +
+                '\n' +
+                TTLocalizer.AvatarPanelCogImmune % 'Immune'
+            )
+            return
+
+        dnaName = self.avatar.dna.name
+        displayLevel = level
+        version = None
+
+        # -------------------------
+        # Special manager levels
+        # -------------------------
+
+        if dnaName == 'hrollers':
+            displayLevel = '25.mgr'
+
+        # -------------------------
+        # Version display
+        # -------------------------
+
+        if revives > 2 and self.avatar.isSkeleton:
+            version = revives - 1
+
         elif revives > 1:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\nVersion %s.0' % revives + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'hroller' and tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
-        elif self.avatar.dna.name == 'hroller':
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'chairman' and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif self.avatar.dna.name == 'chairman':
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif self.avatar.dna.name == 'hroller2' and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif self.avatar.dna.name == 'hroller2':
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif tempHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif self.maxHp > 9999 and tempHp <= 0:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            0, maxHp)
-        elif self.maxHp > 9999:
-            self.hpLabel[
-                'text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth2 % (
-            int(tempHp), maxHp)
-        elif tempHp <= 0:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            0, maxHp)
+            # Virtual Cogs don't show Version text.
+            if not self.avatar.isVirtual:
+                # Revived skeleton branch previously didn't show Version.
+                if not (
+                    self.avatar.isSkeleton and
+                    self.avatar.isRevived
+                ):
+                    version = revives
+
+        # -------------------------
+        # HP
+        # -------------------------
+
+        hp = max(0, int(tempHp))
+
+        # Use the large HP formatter when required.
+        useLargeHealth = (
+            maxHp > 9999 or
+            dnaName in ('chairman', 'hroller2') or (dnaName == 'hroller' and maxHp > 9999)
+        )
+
+        if useLargeHealth:
+            healthText = TTLocalizer.AvatarPanelCogHealth2 % (
+                hp,
+                maxHp
+            )
         else:
-            self.hpLabel['text'] = TTLocalizer.AvatarPanelCogLevel % level + '\n' + TTLocalizer.AvatarPanelCogHealth % (
-            int(tempHp), maxHp)
+            healthText = TTLocalizer.AvatarPanelCogHealth % (
+                hp,
+                maxHp
+            )
+
+        # -------------------------
+        # Build final label
+        # -------------------------
+
+        lines = [
+            TTLocalizer.AvatarPanelCogLevel % displayLevel
+        ]
+
+        if version is not None:
+            lines.append('Version %s.0' % version)
+
+        lines.append(healthText)
+
+        self.hpLabel['text'] = '\n'.join(lines)
 
 
     def __updateHp(self, currHp, maxHp, delta):

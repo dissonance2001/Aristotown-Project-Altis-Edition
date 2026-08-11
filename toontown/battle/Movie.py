@@ -549,17 +549,29 @@ class Movie(DirectObject.DirectObject):
 
     def _getAttackTargetToonIds(self, attack):
         targets = attack.get('target', [])
+
         if isinstance(targets, dict):
             targets = [targets]
+
         toonIds = []
+
         for target in targets:
             if not isinstance(target, dict):
                 continue
+
             toon = target.get('toon')
+            damage = target.get('hp', 0)
+
             if toon is None or toon not in self.battle.activeToons:
                 continue
+
+            # Toon was targeted, but didn't actually take damage.
+            if damage <= 0:
+                continue
+
             if toon.doId not in toonIds:
                 toonIds.append(toon.doId)
+
         return toonIds
 
     def _handleLaffMeterTargets(self, *toonIds):
@@ -1723,6 +1735,72 @@ class Movie(DirectObject.DirectObject):
         track = Sequence(name=name)
         camTrack = Sequence(name=name + '-cam')
 
+        IGNORE_LAFF_METER = (
+             'AttorneyOverseer',
+        'AttorneyOverseerDrop',
+        'AttorneyOverseerSquirt',
+        'AttorneyOverseerThrow',
+        'KnockbackThrow',
+    'KnockbackSquirt',
+    'ComboThrow',
+    'ComboSquirt',
+    'ComboDrop',
+    'RushJobTrap',
+    'RushJobLure',
+    'RushJobThrow',
+    'CalculatingFees',
+    'RushJobSquirt',
+    'RushJobZap',
+    'RushJobSound',
+    'RushJobDrop',
+    'PresidentTargetCheck',
+    'PresidentExtraTip',
+      'HighStakesHeal',
+    'HighStakesTrap',
+    'HighStakesLure',
+    'HighStakesSound',
+    'HighStakesThrow',
+    'HighStakesSquirt',
+    'HighStakesZap',
+    'HighStakesDrop',
+     'AbsorbMovieLure',
+        'AbsorbMovieThrow',
+        'AbsorbMovieSquirt',
+        'AbsorbMovieZap',
+        'AbsorbMovieSound',
+        'AbsorbMovieDrop',
+          'AbsorbMovieLevelLure',
+        'AbsorbMovieLevelThrow',
+        'AbsorbMovieLevelSquirt',
+        'AbsorbMovieLevelZap',
+        'AbsorbMovieLevelSound',
+        'AbsorbMovieLevelDrop',
+        'ZapMovie',
+        'SueDamage',
+        'SueApplication',
+        'DamageMovie', 
+        'SyphonMovie',
+        'AbilityQueued', 
+        'AbilityQueuedPreToon',
+       'LureRemovalPreToon',
+    'LureRemoval',
+    'LureRemovalHeal',
+    'LureRemovalTrap',
+    'LureRemovalLure',
+    'LureRemovalSound',
+    'LureRemovalThrow',
+    'LureRemovalSquirt',
+    'LureRemovalZap',
+    'LureRemovalDrop',
+    'DeathCheck', 
+    'CogSpawn', 
+    'SoakRemoval',
+    'DrenchDecrement',
+    'OilRemoval',
+    'GovernaughtDeath',
+    'MarkRemoval',
+        )
+
         IGNORE_BATTLE_PLAYRATE = (
             'PacesetterOverclocked',
             'PacesetterEarlyOverclocked',
@@ -1748,6 +1826,22 @@ class Movie(DirectObject.DirectObject):
             'AbsorbMovieSquirt',
             'AbsorbMovieZap',
             'AbsorbMovieSound',
+            'ScapegoatRageBuilding',
+            'ArbitratorThrowBook',
+            'RadiographerOvermodulated',
+            'PowerhouseToleranceBuilding',
+            'TollmasterResonanceTax',
+            'RacketeerProfiteering',
+            'UnionBusterUnionWages',
+            'AmbassadorHeadRoller',
+            'WiretapperCollectCall2',
+            'SafetyPromotion',
+            'SafetyHeatWaveCalculation',
+            'TollmasterBalanceTheLedger',
+            'DividendAccountRollover',
+            'RecordkeeperMinutesTakenContingency',
+            'RecordkeeperMinutesTaken',
+            'SafetyOverpressured',
             'AbsorbMovieDrop',
              'AbsorbMovieLure',
         'AbsorbMovieThrow',
@@ -1803,7 +1897,7 @@ class Movie(DirectObject.DirectObject):
                 continue
 
             targetToonIds = self._getAttackTargetToonIds(a)
-            if targetToonIds:
+            if targetToonIds and attackName not in IGNORE_LAFF_METER:
                 ival = Sequence(Func(self._handleLaffMeterTargets, *targetToonIds), ival)
 
             if attackName in IGNORE_BATTLE_PLAYRATE:

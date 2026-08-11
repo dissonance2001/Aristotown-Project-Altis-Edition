@@ -938,6 +938,15 @@ class SuitPlannerInteriorAI:
                 suitName='hroller'
             )
             activeSuits.append(miniboss)
+        elif specialCode == 'videog':
+            miniboss = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='t',
+                suitLevel=99,
+                revives=0,
+                suitName='videog'
+            )
+            activeSuits.append(miniboss)
         elif specialCode == 'pace':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -956,17 +965,6 @@ class SuitPlannerInteriorAI:
                 suitName='f'
             ) # Placeholder
             activeSuits.append(miniboss)
-        elif specialCode == 'videog':
-            miniboss = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
-            miniboss2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            miniboss3 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            miniboss4 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            miniboss5 = self.__genSuitObject(self.zoneId, 20, 's', 20, 0)
-            activeSuits.append(miniboss)
-            activeSuits.append(miniboss2)
-            activeSuits.append(miniboss3)
-            activeSuits.append(miniboss4)
-            activeSuits.append(miniboss5)
         elif specialCode == 'gtk':
             miniboss = self.__genSuitObject(
                 self.zoneId,

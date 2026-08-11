@@ -68,16 +68,16 @@ class SellbotLitigationCalculatorAI:
                         continue
                     if self.suitHasCondition(suit.doId, 'greenLight'):
                         sacrificedCogs += 1
-                    if sacrificedCogs > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                            'name': 'TrafficGreenLightRetaliation', # Breach Of Contract
-                            'animName': 'nothing',
-                            'hp': 0,
-                            'acc': 100,
-                            'freq': 0,
-                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
+                if sacrificedCogs > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'TrafficGreenLightRetaliation', # Breach Of Contract
+                        'animName': 'nothing',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -533,7 +533,7 @@ class SellbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.__suitCanAttack(suitId) and self.damageHP.get(suitId, 0) > 0:
+                if self.__suitCanAttack(suitId) and self.calculator.damageHP.get(suitId, 0) > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'DamageMovie', # Damage From Heat Wave
                      'animName': 'nothing',

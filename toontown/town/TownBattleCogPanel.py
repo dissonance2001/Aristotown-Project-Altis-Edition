@@ -1857,7 +1857,7 @@ class TownBattleCogPanel(DirectFrame):
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.hasSuitStatusEffect('highRollerImmune') and not self.cog.hasSuitStatusEffect('highRollerHijinks'):
+        if self.cog.hasSuitStatusEffect('highRollerImmune') and not self.cog.hasSuitStatusEffect('highRollerHijinks') and not self.cog.hasSuitStatusEffect('silhouetteShielding') and not self.cog.hasSuitStatusEffect('silhouetteImmune'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/insured_icon')
             slot = self._claimNextStatusSlot()
@@ -1933,21 +1933,44 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon2 = status.find('**/hollywood_hijinks_icon')
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
-                                   slot, 
-                                   tooltipTitle='Videographer Hijinks', 
-                                   tooltipDescription="High Roller is on his last commercial break! Defeat the Videographer and his associates to progress.", 
-                                   tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1),
-                                   layerSettings=[
-                                        {
-                                            'scale': (.5, .5, .5),
-                                            'pos': (0, 0, 0),
-                                        },
-                                        {
-                                            'scale': (1, 1, 1),
-                                            'pos': (0, 0, 0),
-                                        },])
+            self.extraText = DirectLabel(parent=self.statusIcon2, relief=None, text="%s" % self.cog.getSuitStatusTurns('highRollerHijinks'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            if self.cog.getSuitStatusTurns('highRollerHijinks') == 1:
+                self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                    slot, 
+                                    tooltipTitle='Hollywood Hijinks', 
+                                    tooltipDescription="High Roller is on his last commercial break! Defeat as many Stars as you can for %s more round!" % self.cog.getSuitStatusTurns('highRollerHijinks'), 
+                                    tooltipBuff=True, 
+                                    slotColor=(1, 0.984, 0, 1),
+                                    layerSettings=[
+                                            {
+                                                'scale': (.5, .5, .5),
+                                                'pos': (0, 0, 0),
+                                            },
+                                            {
+                                                'scale': (1, 1, 1),
+                                                'pos': (0, 0, 0),
+                                            },])
+            else:
+                self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                    slot, 
+                                    tooltipTitle='Hollywood Hijinks', 
+                                    tooltipDescription="High Roller is on his last commercial break! Defeat as many Stars as you can for %s more rounds!" % self.cog.getSuitStatusTurns('highRollerHijinks'), 
+                                    tooltipBuff=True, 
+                                    slotColor=(1, 0.984, 0, 1),
+                                    layerSettings=[
+                                            {
+                                                'scale': (.5, .5, .5),
+                                                'pos': (0, 0, 0),
+                                            },
+                                            {
+                                                'scale': (1, 1, 1),
+                                                'pos': (0, 0, 0),
+                                            },])
             self._rotateStatusIcon(slot, self.statusIcon, duration=4.0)
 
         if self.cog.hasSuitStatusEffect('refractionBarrier'):
@@ -2306,7 +2329,7 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipTitle='Green Light', 
                                    tooltipDescription="The Traffic Manager has given this Cog the right of way! Toons will be punished harshly if it is not attacked.", 
                                    tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1))
+                                   slotColor=(1, 0.984, 0, 1), scale=(0.9, 0.9, 0.9))
 
         if self.cog.hasSuitStatusEffect('redLight'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -2327,7 +2350,7 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipTitle='Red Light', 
                                    tooltipDescription="The Traffic Manager has halted traffic for this Cog! Toons that attack it will be punished harshly.", 
                                    tooltipBuff=True, 
-                                   slotColor=(1, 0.984, 0, 1))
+                                   slotColor=(1, 0.984, 0, 1), scale=(0.9, 0.9, 0.9))
 
         if self.cog.hasSuitStatusEffect('enraged'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -2408,7 +2431,7 @@ class TownBattleCogPanel(DirectFrame):
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
                                         {
-                                            'scale': (5.5, 5.5, 5.5),
+                                            'scale': (.8, .8, .8),
                                             'pos': (0, 0, 0),
                                         },
                                         {
@@ -2558,7 +2581,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Rush Hour', 
-                                   tooltipDescription="The Tollmaster has doubled the entry fee! Attacking the Tollmaster while in this phase will increase your Toll by +16.", 
+                                   tooltipDescription="The Tollmaster has doubled the entry fee! Attacking him while in this phase will increase your Toll by +16.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3160,7 +3183,7 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipTitle='Yellow Light', 
                                    tooltipDescription="This Cog will deal -25% less damage.", 
                                    tooltipBuff=False, 
-                                   slotColor=(1, 0.984, 0, 1))
+                                   slotColor=(1, 0.984, 0, 1), scale=(0.9, 0.9, 0.9))
 
         if self.cog.hasSuitStatusEffect('contingencyOverrideBroken'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')

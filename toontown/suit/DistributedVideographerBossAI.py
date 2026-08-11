@@ -84,7 +84,7 @@ class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI,
             self.__doneHighRollerWaitForToons)
 
     def __doneHighRollerWaitForToons(self, avIds):
-        self.b_setState('Introduction')
+        self.b_setState('BattleOne')
 
     def generate(self):
         DistributedMinibossAI.DistributedMinibossAI.generate(self)
@@ -115,7 +115,7 @@ class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            cogs = self.invokeEmptyPlanner(11, 'crf1')
+            cogs = self.invokeEmptyPlanner(11, 'videog')
             activeSuits = cogs['activeSuits']
             reserveSuits = cogs['reserveSuits']
             while len(activeSuits) >= 6:

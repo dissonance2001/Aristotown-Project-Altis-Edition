@@ -2719,6 +2719,7 @@ def doYellowLight(attack):
             Func(manager.setNeutralAnimationDrop), Wait(2.0)
         )
     soundTrack2 = getSoundTrack('SA_sanction.ogg')
+    suitTrack.append(Wait(2.0))
     for targetSuit in battle.activeSuits:
         suitTrack.append(Func(targetSuit.setSuitStatusEffect, 'yellowLight', modifier=-50, turns=2))
     for toon in battle.activeToons:

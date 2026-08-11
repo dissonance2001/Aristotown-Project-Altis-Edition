@@ -62,7 +62,7 @@ class DistributedMajorPlayerInterior(DistributedToonInterior):
 
         self.sigilvatorOrigin = elevatorOrigin.attachNewNode(
             'major_player_sigilvator_origin')
-        self.sigilvatorOrigin.setPos(1.5, -70.75, -15.97)
+        self.sigilvatorOrigin.setPos(0, -70.75, -15.97)
         self.sigilvatorOrigin.setHpr(0, 0, 0)
         self.sigilvatorOrigins[0] = self.sigilvatorOrigin
 

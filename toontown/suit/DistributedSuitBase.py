@@ -3671,7 +3671,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.healInterval:
             self.healInterval.finish()
             self.healInterval = None
-        self.healInterval = Parallel(Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.updateHealthBar, 0)).start()
+        self.healInterval = Parallel(Func(self.showHpTextNew, 0, text="+5% Damage!", colorCode=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'), Func(self.updateHealthBar, 0)).start()
 
     def checkCompensationForeman(self):
         if self.healInterval:
@@ -3994,6 +3994,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         ):
             targetAnim = 'rolled'
 
+        elif self.dna.name == 'hroller' and self.hasSuitStatusEffect('silhouetteShielding'):
+            targetAnim = 'rolled'
+
         elif projectedHP >= float(self.maxHP * 1.5):
             targetAnim = 'neutral-unstable'
         elif self.hasSuitStatusEffect('brokenConnection'):
@@ -4056,19 +4059,22 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
-        elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
+        elif self.hasSuitStatusEffect('silhouetteImmune') and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
         elif self.isDanceSession:
             Sequence(Func(self.loop, 'rolled')
                      ).start()
+        elif self.hasSuitStatusEffect('silhouetteShielding'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
         elif self.hasSuitStatusEffect('glitched'):
             Sequence(Func(self.loop, 'neutral-override')
                                  ).start()
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
-        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
+        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
         elif self.hasSuitStatusEffect('brokenConnection'):
@@ -4139,11 +4145,14 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.isDanceSession:
             Sequence(Func(self.loop, 'rolled')
                      ).start()
-        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
+        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
         elif self.hasSuitStatusEffect('contingencyOverride'):
             Sequence(Func(self.loop, 'neutral-override')
+                                 ).start()
+        elif self.hasSuitStatusEffect('silhouetteShielding'):
+            Sequence(Func(self.loop, 'rolled')
                                  ).start()
         elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
             Sequence(Func(self.loop, 'neutral-unstable')
@@ -4246,13 +4255,16 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
+        elif self.hasSuitStatusEffect('silhouetteShielding'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
         elif self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
         elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
-        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
+        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller':
             Sequence(
                 Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                 ).start()
@@ -4285,6 +4297,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('glitched'):
             Sequence(Func(self.loop, 'neutral-override')
                                  ).start()
+        elif self.hasSuitStatusEffect('silhouetteShielding'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
@@ -4297,7 +4312,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
-        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller2':
+        elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller':
             Sequence(Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))
                      ).start()
         elif self.hasSuitStatusEffect('brokenConnection'):

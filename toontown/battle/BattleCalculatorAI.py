@@ -25,6 +25,7 @@ from toontown.battle.calculators.CountsCalculatorAI import CountsCalculatorAI
 from toontown.battle.calculators.DirectorsCalculatorAI import DirectorsCalculatorAI
 from toontown.battle.calculators.FaceTheFamilyCalculatorAI import FaceTheFamilyCalculatorAI
 from toontown.battle.calculators.HighRollerCalculatorAI import HighRollerCalculatorAI
+from toontown.battle.calculators.VideographerCalculatorAI import VideographerCalculatorAI
 from toontown.battle.calculators.PacesetterCalculatorAI import PacesetterCalculatorAI
 from toontown.battle.calculators.ChainsawCalculatorAI import ChainsawCalculatorAI
 from toontown.battle.calculators.SellbotLitigationCalculatorAI import SellbotLitigationCalculatorAI
@@ -158,6 +159,7 @@ class BattleCalculatorAI:
         self.pacesetterCalculator = PacesetterCalculatorAI(self)
         self.chainsawCalculator = ChainsawCalculatorAI(self)
         self.highRollerCalculator = HighRollerCalculatorAI(self)
+        self.videographerCalculator = VideographerCalculatorAI(self)
         self.suitConditionCalculator = SuitConditionCalculatorAI(self)
         self.suitSpawnCalculator = SuitSpawnCalculatorAI(self)
         self.faceTheFamilyCalculator = FaceTheFamilyCalculatorAI(self)
@@ -4892,7 +4894,7 @@ class BattleCalculatorAI:
         theSuit = self.battle.findSuit(suitId)
         if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'cantAttack'):
             return 0
-        elif theSuit.dna.name == 'hroller' and theSuit.currHP == 1:
+        elif theSuit.dna.name == 'hroller' and theSuit.currHP == 1 and not self.suitHasCondition(suitId, 'phase3'):
             return 0
         return 1
 
@@ -5505,7 +5507,7 @@ class BattleCalculatorAI:
         if attack[SUIT_TGT_COL] == []:
             attack = getDefaultSuitAttack()
         attack[SUIT_HP_COL] = [-1 for i in xrange(len(self.battle.activeToons))]
-        if theSuit.dna.name == 'hroller2':
+        if theSuit.dna.name == 'hroller':
             self.__calcSuitAtkHpALT(attack)
         else:
             self.__calcSuitAtkHp(attack)
@@ -6144,13 +6146,11 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                 if suit.dna.name == 'hroller':
                     #suit.setHP(1)
-                    if self.TurnsElapsed == 0:
-                        self.setSuitCondition(suit.doId, 'directorDamageReduction', .05, -1, 'setBoth')
-                    else:
-                        self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
-                        self.setSuitCondition(suit.doId, 'absorbingHR', 1, -1, 'setBoth')
-                if suit.dna.name == 'hroller2' and not self.suitHasCondition(suit.doId, 'phase3'):
-                    self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
+                    if not self.TurnsElapsed == 0:
+                        if not self.suitHasCondition(suit.doId, 'phase3'):
+                            self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
+                # if suit.dna.name == 'hroller' and not self.suitHasCondition(suit.doId, 'phase3'):
+                #     self.setSuitCondition(suit.doId, 'immune', 1, -1, 'setBoth')
                 if suit.dna.name == 'videog' and len(self.battle.activeSuits) == 2:
                     self.setSuitCondition(suit.doId, 'immune', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'spawncalculator', 1, 10, 'setBoth')
@@ -6348,6 +6348,7 @@ class BattleCalculatorAI:
         self.bossbotCalculator.calculateSuitAttacksBossbotLitigation()
         self.boardbotCalculator.calculateSuitAttacksBoardbotLitigation()
         self.highRollerCalculator.calculateSuitAttacksHighRoller()
+        self.videographerCalculator.calculateSuitAttacksVideographer()
         self.sellbotCalculator.calculateSuitAttacksSellbotLitigation()
         self.cashbotCalculator.calculateSuitAttacksCashbotLitigation()
         self.lawbotCalculator.calculateSuitAttacksLawbotLitigation()

@@ -1258,7 +1258,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SafetyHeatWave':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5)))
     elif name == 'SafetyHeatWaveCalculation':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
     elif name == 'SafetyOverpressureDeath':
         camTrack2 = heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
@@ -1338,6 +1338,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
         addTextColor('redLight',   1.0, 0.0, 0.0)
         redLight = '\1redLight\1Red Light\2'
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
         camTrack2 = Sequence(
             defaultCamera(openShotDuration=0, attackDuration=0),
 
@@ -1361,7 +1362,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 targetSuit,
                 0.0,
                 10.0,
-                targetSuit.height - 3
+                targetSuit.height - 5
             ),
 
             # Set the orientation for this new shot.
@@ -1373,15 +1374,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 0
             ),
 
-
+            moveCameraOnly(0.0, 10.0, targetSuit.height, 1, targetSuit, h=180, p=0, startH=180, startP=0),
             # Now ONLY move upward relative to targetSuit.
-            moveCameraOnly(
-                0.0,
-                10.0,
-                targetSuit.height + 1,
-                1.0,
-                targetSuit
-            ),
 
             Wait(attackDuration - 2.0)
         )
@@ -1438,7 +1432,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 targetSuit,
                 0.0,
                 10.0,
-                targetSuit.height - 3
+                targetSuit.height - 5
             ),
 
             # Set the orientation for this new shot.
@@ -1450,15 +1444,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 0
             ),
 
-
+            moveCameraOnly(0.0, 10.0, targetSuit.height, 1, targetSuit, h=180, p=0, startH=180, startP=0),
             # Now ONLY move upward relative to targetSuit.
-            moveCameraOnly(
-                0.0,
-                10.0,
-                targetSuit.height + 1,
-                1.0,
-                targetSuit
-            ),
 
             Wait(attackDuration - 2.0)
         )
@@ -1790,7 +1777,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
         # tollmaster
     elif name == 'TollmasterMandatoryToll':
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 2, suit), Wait(attackDuration - 2)))
+        camTrack.append(Sequence(motionShot(0, -6, suit.height + 2, 0, 0, 0.0, 0, suit), moveCameraOnly(2, -1, suit.height, attackDuration - 2, suit, h=0, p=-10, startH=0, startP=0), Wait(2)))
+        #camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(2.0, -2.0, suit.height, 0, -20.0, 0.0, 2, suit), Wait(attackDuration - 2)))
     elif name == 'TollmasterMandatoryTollFinal':
         camTrack.append(Sequence(randomActorShot(suit, battle, 6.5, 'suit'), 
                                  heldShot(0, 15, 20, -180, -20, 0, attackDuration - 6.5)))
@@ -1813,7 +1801,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'TollmasterLedgerOfSound':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=suit.getDuration('glower')), randomActorShot(suit, battle, attackDuration - suit.getDuration('glower'), 'suit')))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5)))
     elif name == 'TollmasterBalanceTheLedger':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), moveShot(0.0, -10.0, 10.0, 0, -20, 0, 0),
                                  Func(taskMgr.add, shake_camera_advancement, 'camera_shake'), Wait(0.5),
@@ -1857,11 +1845,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RecordkeeperRedlinedClauseMissedPayment':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperAuditCycle':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration - 3, suit, h=210, p=0, startH=150, startP=0), Wait(3)))
     elif name == 'RecordkeeperPhantomEntryDamage':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntrySpawn':
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, attackDuration - 2, suit), Wait(2)))
+        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
     elif name == 'RecordkeeperPhantomEntrySacrifice':
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration)))
         # corporate butcherer
@@ -1930,10 +1918,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(heldShot(0.0, -20.0, 10.0, 0, -20, 0, 3.875), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 3.875)))
         # contingency director
     elif name == 'ContingencyOverrideRevert':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 2, suit), Wait(attackDuration - 2))
+        camTrack2 = Sequence(randomActorShot(suit, battle, attackDuration, 'suit'))
         return camTrack2
     elif name == 'ContingencyOverride':
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 2, suit), Wait(attackDuration - 2))
+        camTrack2 = Sequence(randomActorShot(suit, battle, attackDuration, 'suit'))
         return camTrack2
     elif name == 'ContingencySelfRepair':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
@@ -1947,14 +1935,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             banDesc = 'The Contingency Director has gained 1 new ability!'
 
-        camTrack2 = Sequence(motionShot(0.0, 10.0, 5.0, -180, 30.0, 0.0, 0, suit), motionShot(-7.0, 7.0, suit.height + 2.0, -135, -20.0, 0.0, attackDuration - 4, suit), Wait(4))
+        camTrack2 = Sequence(motionShot(6.0, 7.0, suit.height, 225, -10, 0.0, 0, suit), moveCameraOnly(-6.0, 7.0, suit.height, attackDuration - 2, suit, h=225, p=-10, startH=135, startP=-20), Wait(2))
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc, attackDuration - 2)
         pbpTrack = pbpText.getShowIntervalCheat('Risk Threshold Breach!', attackDuration - 2)
 
         return Parallel(pbpTrack, pbpDesc, camTrack2)
-        camTrack.append(Sequence(randomActorShot(suit, battle, 0, 'suit'), motionShot(-6.0, 6.0, suit.height + 1.0, -135, -20.0, 0.0, attackDuration, suit)))
     elif name == 'ContingencyRiskThresholdBreach75':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'ContingencyMarkLiquidated':
@@ -2079,7 +2066,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerPuzzleBan':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'HighRollerCommercialBreak':
-        camTrack.append(heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration))
+        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
+        return camTrack2
     elif name == 'HighRollerGameTimeSpawn':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
@@ -3061,31 +3049,53 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
 
 def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
     if other:
-        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other)
-        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r), other=other)
+        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other, blendType='easeInOut')
+        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r), other=other, blendType='easeInOut')
     else:
-        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z))
-        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r))
+        posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), blendType='easeInOut')
+        hprTrack = LerpHprInterval(camera, duration, hpr=Point3(h, p, r), blendType='easeInOut')
     return Parallel(posTrack, hprTrack)
 
-def moveCameraOnly(x, y, z, duration, other=None, name='moveCameraOnly'):
+def moveCameraOnly(x, y, z, duration, other=None,
+                   h=None, p=None, r=None, startH=None, startP=None, startR=None,
+                   name='moveCameraOnly'):
+
     if other:
-        return LerpPosInterval(
+        posTrack = LerpPosInterval(
             camera,
             duration,
             pos=Point3(x, y, z),
-            other=other,
-            name=name,
-            blendType='easeInOut'
+            other=other, blendType='easeInOut'
         )
     else:
-        return LerpPosInterval(
+        posTrack = LerpPosInterval(
             camera,
             duration,
-            pos=Point3(x, y, z),
-            name=name,
-            blendType='easeInOut'
+            pos=Point3(x, y, z), blendType='easeInOut'
         )
+
+    currentHpr = camera.getHpr()
+
+    startingH = 180 if startH is None else startH
+    startingP = currentHpr[1] if startP is None else startP
+    startingR = currentHpr[2] if startR is None else startR
+
+    targetH = currentHpr[0] if h is None else h
+    targetP = currentHpr[1] if p is None else p
+    targetR = currentHpr[2] if r is None else r
+
+    hprTrack = LerpHprInterval(
+        camera,
+        duration,
+        hpr=Point3(targetH, targetP, targetR),
+        startHpr=Point3(startingH, startingP, startingR), other=other, blendType='easeInOut'
+    )
+
+    return Parallel(
+        posTrack,
+        hprTrack,
+        name=name
+    )
 
 
 # def motionShot(x, y, z, h, p, r, duration, other=None, name='motionShot'):
@@ -3445,16 +3455,16 @@ def randomActorShot(actor, battle, duration, actorType, groupShot = 0):
     centralPoint, origHpr = battle.getActorPosHpr(actor)
     centralPoint.setZ(centralPoint.getZ() + height * 0.75)
     if actorType == 'suit':
-        x = 4 + random.random() * 3
-        y = -2 - random.random() * 4
-        z = height * 0.5 + random.random() * height * 1.5
+        x = 4 + random.random() * 1.5
+        y = -2 - random.random() * 2
+        z = height * 0.5 + random.random() * height * .75
         if groupShot == 1:
             y = -4
             z = height * 0.5
     else:
-        x = 2 + random.random() * 3
-        y = -2 + random.random() * 3
-        z = height + random.random() * height * 1.5
+        x = 4 + random.random() * 1.5
+        y = -2 - random.random() * 2
+        z = height + random.random() * height * .75
         if groupShot == 1:
             y = y + 3
             z = height * 0.5
