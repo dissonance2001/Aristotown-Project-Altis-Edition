@@ -19,6 +19,7 @@ class InstanceZoneManagerAI(DirectObject):
         from toontown.suit import DistributedVideographerBossAI
         from toontown.suit import DistributedPacesetterBossAI
         from toontown.suit import DistributedChainsawBossAI
+        from toontown.instances.MotoroomInstanceSessionAI import MotoroomInstanceSessionAI
 
         self.registerInstanceType(
             InstanceGlobals.HIGH_ROLLER,
@@ -32,6 +33,9 @@ class InstanceZoneManagerAI(DirectObject):
         self.registerInstanceType(
             InstanceGlobals.CHAINSAW,
             DistributedChainsawBossAI.DistributedChainsawBossAI)
+        self.registerInstanceType(
+            InstanceGlobals.MOTOROOM,
+            MotoroomInstanceSessionAI)
 
     def registerInstanceType(self, instanceId, constructor,
                              doneEvent='BossDone', startState='WaitForToons'):

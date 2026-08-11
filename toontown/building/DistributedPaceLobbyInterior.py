@@ -26,6 +26,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
         self.showerSound = None
         self.showerInside = False
         self.showerTaskName = 'paceLobbyShowerTask-%s' % id(self)
+        self.positionPrinterEvent = 'f9'
+        self.motoroomSigilvatorOrigin = None
 
     def generate(self):
         DistributedToonInterior.DistributedToonInterior.generate(self)
@@ -36,6 +38,16 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
         taskMgr.doMethodLater(0.1, self.doMusic, 'pacelobbyMusic')
         taskMgr.add(self.checkBell, self.bellTaskName)
         taskMgr.add(self.checkShower, self.showerTaskName)
+        self.accept(self.positionPrinterEvent, self.printPaceLobbyPosition)
+        print('[Pace Lobby Position] Press F9 to print your Toon position.')
+
+    def printPaceLobbyPosition(self):
+        if not hasattr(base, 'localAvatar') or not base.localAvatar:
+            return
+        pos = base.localAvatar.getPos(render)
+        hpr = base.localAvatar.getHpr(render)
+        print('[Pace Lobby Position] (%.3f, %.3f, %.3f, %.3f)' %
+              (pos.getX(), pos.getY(), pos.getZ(), hpr.getX()))
 
     def doMusic(self, task):
         base.musicManager.stopAllSounds()
@@ -133,6 +145,12 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
             lamp.setH(h)
             self.lavaLamps.append(lamp)
         self.interior.flattenMedium()
+        self.motoroomSigilvatorOrigin = self.interior.attachNewNode(
+            'major_player_sigilvator_origin_2')
+        self.motoroomSigilvatorOrigin.setPos(
+            render, -17.100, 91.284, -11.014)
+        self.motoroomSigilvatorOrigin.setHpr(
+            render, 91.530, 0, 0)
         for npcToon in self.cr.doFindAllInstances(DistributedNPCToonBase):
             npcToon.initToonState()
 
@@ -156,9 +174,11 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
     def disable(self):
         taskMgr.remove(self.bellTaskName)
         taskMgr.remove(self.showerTaskName)
+        self.ignore(self.positionPrinterEvent)
         taskMgr.remove('pacelobbyMusic')
         self.bellInside = False
         self.stopPaceLobbyMusic()
+        self.motoroomSigilvatorOrigin = None
 
         if self.bellSound:
             self.bellSound.stop()
@@ -179,8 +199,10 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
     def delete(self):
         taskMgr.remove(self.bellTaskName)
         taskMgr.remove(self.showerTaskName)
+        self.ignore(self.positionPrinterEvent)
         taskMgr.remove('pacelobbyMusic')
         self.stopPaceLobbyMusic()
+        self.motoroomSigilvatorOrigin = None
         if hasattr(self, 'lavaLamps'):
             for lamp in self.lavaLamps:
                 lamp.cleanup()

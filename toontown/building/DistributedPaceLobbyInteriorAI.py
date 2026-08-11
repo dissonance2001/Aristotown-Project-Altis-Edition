@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedPaceElevatorAI import DistributedPaceElevatorAI
+from toontown.building.DistributedHighRollerSigilvatorAI import DistributedHighRollerSigilvatorAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 from toontown.instances import InstanceGlobals
@@ -21,15 +22,15 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         )
 
         self.paceElevator = None
+        self.motoroomSigilvator = None
         self.paceCat = None
-        # Temporary Pacesetter zones are owned by the global
-        # InstanceZoneManagerAI, not by a lobby-local manager.
         self.paceLobbyManager = getattr(
             self.air, 'instanceZoneManager', None)
 
     def generate(self):
         DistributedToonInteriorAI.generate(self)
         self.createPaceElevator()
+        self.createMotoroomSigilvator()
         self.createPaceCat()
 
     def createPaceCat(self):
@@ -109,7 +110,19 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
 
         self.paceElevator.generateWithRequired(self.zoneId)
 
-    def createBossOffice(self, avIdList):
+    def createMotoroomSigilvator(self):
+        if self.motoroomSigilvator:
+            return
+
+        self.motoroomSigilvator = DistributedHighRollerSigilvatorAI(
+            self.air,
+            self,
+            ToontownGlobals.PacesetterLobby,
+            2
+        )
+        self.motoroomSigilvator.generateWithRequired(self.zoneId)
+
+    def createBossOffice(self, avIdList, instanceId=None):
         manager = getattr(self.air, 'instanceZoneManager', None)
         if manager is None:
             self.notify.warning(
@@ -117,18 +130,23 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
             )
             return 0
 
-        return manager.createInstance(
-            avIdList, InstanceGlobals.PACESETTER)
+        if instanceId is None:
+            instanceId = InstanceGlobals.PACESETTER
+
+        return manager.createInstance(avIdList, instanceId)
 
     def delete(self):
         if self.paceCat:
             self.paceCat.requestDelete()
             self.paceCat = None
 
+        if self.motoroomSigilvator:
+            self.motoroomSigilvator.requestDelete()
+            self.motoroomSigilvator = None
+
         if self.paceElevator:
             self.paceElevator.requestDelete()
             self.paceElevator = None
 
-        # The global manager outlives this lobby; do not delete it here.
         self.paceLobbyManager = None
         DistributedToonInteriorAI.delete(self)

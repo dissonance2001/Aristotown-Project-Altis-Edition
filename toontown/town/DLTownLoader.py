@@ -5,6 +5,7 @@ from toontown.town import TownLoader
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.building import PacesetterInstanceGlobals
+from toontown.building import MotoroomInstanceGlobals
 
 
 class DLTownLoader(TownLoader.TownLoader):
@@ -30,6 +31,17 @@ class DLTownLoader(TownLoader.TownLoader):
         self.fsm.getStateNamed('quietZone').addTransition(
             PacesetterInstanceGlobals.BOSS_BATTLE_STATE)
 
+        motoroomState = State.State(
+            MotoroomInstanceGlobals.INSTANCE_STATE,
+            self.enterMotoroom,
+            self.exitMotoroom,
+            ['quietZone'])
+        self.fsm.addState(motoroomState)
+        self.fsm.getStateNamed('start').addTransition(
+            MotoroomInstanceGlobals.INSTANCE_STATE)
+        self.fsm.getStateNamed('quietZone').addTransition(
+            MotoroomInstanceGlobals.INSTANCE_STATE)
+
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
         Suit.loadSuits(3)
@@ -40,6 +52,35 @@ class DLTownLoader(TownLoader.TownLoader):
     def unload(self):
         TownLoader.TownLoader.unload(self)
         Suit.unloadSuits(3)
+
+
+    def enterMotoroom(self, requestStatus):
+        from toontown.instances import MotoroomPlace
+
+        self.acceptOnce(self.placeDoneEvent, self.handleMotoroomDone)
+        state = self.fsm.getStateNamed(MotoroomInstanceGlobals.INSTANCE_STATE)
+        self.place = MotoroomPlace.MotoroomPlace(
+            self, state, self.placeDoneEvent)
+        base.cr.playGame.setPlace(self.place)
+        self.place.load()
+        self.place.enter(requestStatus)
+
+    def exitMotoroom(self):
+        self.ignore(self.placeDoneEvent)
+        if self.place:
+            self.place.exit()
+            self.place.unload()
+            self.place = None
+            base.cr.playGame.setPlace(None)
+
+    def handleMotoroomDone(self):
+        status = self.place.doneStatus
+        if (ZoneUtil.getBranchZone(status['zoneId']) == self.branchZone and
+                status['shardId'] is None):
+            self.fsm.request('quietZone', [status])
+        else:
+            self.doneStatus = status
+            messenger.send(self.doneEvent)
 
     def enterPacesetterBossBattle(self, requestStatus):
         from toontown.coghq import PacesetterBossBattle

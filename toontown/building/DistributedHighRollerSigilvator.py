@@ -13,8 +13,11 @@ class DistributedHighRollerSigilvator(DistributedSigilvator):
 
     def getInstanceId(self):
         from toontown.building import MajorPlayerInstanceGlobals
+        from toontown.instances import InstanceGlobals
         if self.entranceId == 1:
             return MajorPlayerInstanceGlobals.VIDEOGRAPHER
+        if self.entranceId == 2:
+            return InstanceGlobals.MOTOROOM
         return MajorPlayerInstanceGlobals.HIGH_ROLLER
 
     def __init__(self, cr):
@@ -145,6 +148,68 @@ class DistributedHighRollerSigilvator(DistributedSigilvator):
     def disable(self):
         DistributedSigilvator.disable(self)
         self.restoreTeleportTargets()
+
+
+    def _goToMotoroomInstance(self, zoneId):
+        from toontown.building import MotoroomInstanceGlobals
+        from toontown.toonbase import ToontownGlobals
+
+        playGame = self.cr.playGame
+        if not playGame:
+            self.notify.warning(
+                'Cannot enter Motoroom instance %s: PlayGame unavailable.' %
+                zoneId)
+            self._restoreFailedInstanceTransition()
+            return
+
+        hood = getattr(playGame, 'hood', None)
+        townLoader = getattr(hood, 'loader', None)
+        if (hood is None or
+                getattr(hood, 'hoodId', None) != ToontownGlobals.DonaldsDreamland or
+                townLoader is None or
+                not hasattr(townLoader, 'fsm')):
+            self.notify.warning(
+                'Cannot enter Motoroom instance outside Donalds Dreamland.')
+            self._restoreFailedInstanceTransition()
+            return
+
+        requestStatus = {
+            'loader': MotoroomInstanceGlobals.INSTANCE_LOADER,
+            'where': MotoroomInstanceGlobals.INSTANCE_STATE,
+            'how': 'teleportIn',
+            'hoodId': ToontownGlobals.DonaldsDreamland,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1,
+            'minibossId': self.getInstanceId(),
+            'motoroomInstance': 1,
+        }
+        if not townLoader.fsm.request('quietZone', [requestStatus]):
+            self.notify.warning(
+                'Donalds Dreamland town loader rejected Motoroom instance %s.' %
+                zoneId)
+            self._restoreFailedInstanceTransition()
+
+    def setBossOfficeZone(self, zoneId):
+        from toontown.instances import InstanceGlobals
+        if self.getInstanceId() == InstanceGlobals.MOTOROOM:
+            if self.localToonOnBoard:
+                self._goToMotoroomInstance(zoneId)
+            return
+        DistributedSigilvator.setBossOfficeZone(self, zoneId)
+
+    def setBossOfficeZoneForce(self, zoneId):
+        from toontown.instances import InstanceGlobals
+        if self.getInstanceId() == InstanceGlobals.MOTOROOM:
+            self._goToMotoroomInstance(zoneId)
+            return
+        DistributedSigilvator.setBossOfficeZoneForce(self, zoneId)
+
+    def getDestName(self):
+        from toontown.instances import InstanceGlobals
+        if self.getInstanceId() == InstanceGlobals.MOTOROOM:
+            return 'Motoroom'
+        return DistributedSigilvator.getDestName(self)
 
     @property
     def closeTime(self):

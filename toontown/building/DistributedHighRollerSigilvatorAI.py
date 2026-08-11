@@ -13,8 +13,11 @@ class DistributedHighRollerSigilvatorAI(DistributedSigilvatorAI):
 
     def getInstanceId(self):
         from toontown.building import MajorPlayerInstanceGlobals
+        from toontown.instances import InstanceGlobals
         if self.entranceId == 1:
             return MajorPlayerInstanceGlobals.VIDEOGRAPHER
+        if self.entranceId == 2:
+            return InstanceGlobals.MOTOROOM
         return MajorPlayerInstanceGlobals.HIGH_ROLLER
 
     @property
