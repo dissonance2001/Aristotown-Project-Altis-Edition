@@ -45,7 +45,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             text_font=ToontownGlobals.getToonFont(), text_scale=0.105,
             text_fg=(0.03, 0.03, 0.03, 1), pos=(0, 0, 0.62))
 
-        # Left page: the same three-layer profile preview used by the Toon Panel.
         self.previewRoot = DirectFrame(parent=self, relief=None, pos=(-0.43, 0, 0))
         self.previewBackground = DirectFrame(
             parent=self.previewRoot, relief=None, pos=(0, 0, 0.31),
@@ -64,7 +63,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
         self.previewToonRoot = self.previewRoot.attachNewNode('toonProfilePreviewToonRoot')
         self.previewToonRoot.setPos(0, -0.01, -0.38)
 
-        # Right page: selector order and spacing match the supplied reference.
         self._makeSelector('Profile Background', 0.40, self.changeBackground, 'background')
         self._makeSelector('Profile Nameplate', 0.08, self.changeNameplate, 'nameplate')
         self._makeSelector('Profile Pose', -0.24, self.changePose, 'pose')
@@ -267,21 +265,10 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             toon.getGeomNode().setDepthTest(1)
             toon.getGeomNode().setTwoSided(True)
 
-            # Capture Neutral only as the size reference.  The selected pose
-            # is then measured after its animation, rotation and props exist.
-            # This is important for the left Shticker Book page: AvatarPanelPos
-            # values belong to the separate Toon Avatar Panel and must never be
-            # added to this preview.
             neutralBounds = self._getNeutralBounds(toon)
             TPG.applyPose(toon, poseId, self.notify)
 
-            # Sinking is centred from the Toon body because its melt
-            # animation moves the body root downward.  Naptime keeps its full
-            # composition so the Toon and ZZZ prop move together.
             bodyCenteredPose = poseId == 27
-            # Elegance's sprinkle-dust animation shifts the posed body away
-            # from Neutral's visual anchor, so measure and centre its complete
-            # posed bounds just like the other known off-centre poses.
             posedFit = TPG.usesPosedPanelFit(poseId) or poseId == 40
             if posedFit and not bodyCenteredPose:
                 self._fitSelectedPoseOnBookPage(toon, neutralBounds, 0.42)
@@ -292,14 +279,8 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
                 self._fitGeometry(toon, 0.42, neutralBounds)
                 toon.reparentTo(self.previewToonRoot)
                 self._centerPoseOnNeutral(toon, self.previewToonRoot, (0, 0, 0))
-                # Sinking's animation remains visually too low even after its
-                # body is centred against Neutral.  Raise the complete pose
-                # substantially on the left book page.
                 if poseId == 27:
                     toon.setZ(toon.getZ() + 0.25)
-                # Rolled should sit at the same vertical height as Naptime on
-                # the left book page.  Move the whole Toon-and-log pose up by
-                # the same amount used for Naptime's complete composition.
                 if poseId == 43:
                     toon.setZ(toon.getZ() + 0.04)
             self.previewToon = toon
@@ -307,13 +288,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             self.notify.warning('Unable to build Toon Profile preview: %s' % error)
 
     def _fitSelectedPoseOnBookPage(self, toon, neutralBounds, dimension):
-        """Centre a complete posed composition on the left book page.
-
-        The outer root is the fixed Neutral target.  A separate scale and
-        offset hierarchy lets us measure the selected pose with its own HPR,
-        animation root motion and props already applied, then place that
-        measured visual centre exactly on the Neutral centre.
-        """
         poseRoot = self.previewToonRoot.attachNewNode('toonProfileBookPoseRoot')
         scaleRoot = poseRoot.attachNewNode('toonProfileBookScaleRoot')
         offsetRoot = scaleRoot.attachNewNode('toonProfileBookOffsetRoot')
@@ -343,8 +317,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             if candidate > 0:
                 neutralBiggest = candidate
 
-        # Keep Neutral's normal size, but shrink a wide/tall posed composition
-        # only when necessary so it cannot leave the left page.
         neutralScale = dimension / neutralBiggest
         posedFitScale = dimension / posedBiggest
         finalScale = min(neutralScale, posedFitScale)
@@ -356,7 +328,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
         self.previewPoseRoot = poseRoot
 
     def _getPoseBodyCenter(self, geom, relativeTo):
-        """Return the posed Toon body's visual centre in relativeTo space."""
         props = getattr(geom, '_toonProfilePoseProps', [])
         stashedProps = []
         for prop in props:
@@ -385,9 +356,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
                     pass
 
     def _centerPoseOnNeutral(self, geom, relativeTo, basePos):
-        # fitGeometry maps Neutral's body centre to (0, 2, -0.02).  Use that
-        # exact visual point as the target for every pose while preserving the
-        # pose's own animation, rotation, scale and attached props.
         geom.setPos(basePos[0], basePos[1], basePos[2])
         bodyCenter = self._getPoseBodyCenter(geom, relativeTo)
         if bodyCenter is None:
@@ -420,9 +388,6 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             return None
 
     def _fitGeometry(self, geom, dimension, referenceBounds=None, includePoseProps=False):
-        # All poses are fitted against the bounds captured from Neutral.  This
-        # prevents a raised arm, a seated animation, a rotation, or a large prop
-        # from changing where the Toon appears in the profile preview.
         if referenceBounds is not None:
             p1 = Point3(referenceBounds[0])
             p2 = Point3(referenceBounds[1])

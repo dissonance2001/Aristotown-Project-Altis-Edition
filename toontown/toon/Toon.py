@@ -431,8 +431,9 @@ Phase6AnimList = (('headdown-putt', 'headdown-putt'),
  ('bad-putt', 'bad-putt'),
  ('badloop-putt', 'badloop-putt'),
  ('good-putt', 'good-putt'))
-Phase9AnimList = (('push', 'push'),)
+Phase9AnimList = (('push', 'push'), ('block', 'block'))
 Phase10AnimList = (('leverReach', 'leverReach'), ('leverPull', 'leverPull'), ('leverNeutral', 'leverNeutral'))
+Phase11AnimList = (('wheelRun', 'wheelRun'),)
 Phase12AnimList = ()
 LegDict = {'s': '/models/char/tt_a_chr_dgs_shorts_legs_',
            'm': '/models/char/tt_a_chr_dgm_shorts_legs_',
@@ -568,6 +569,7 @@ def compileGlobalAnimList():
      Phase6AnimList,
      Phase9AnimList,
      Phase10AnimList,
+     Phase11AnimList,
      Phase12AnimList]
     phaseStrList = ['phase_3',
      'phase_3.5',
@@ -577,6 +579,7 @@ def compileGlobalAnimList():
      'phase_6',
      'phase_9',
      'phase_10',
+     'phase_11',
      'phase_12']
     for animList in phaseList:
         phaseStr = phaseStrList[phaseList.index(animList)]

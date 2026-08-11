@@ -264,58 +264,8 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
 
         self.toon = self.generateToon()
         if self.toon:
-            poseId = getattr(self.toon, '_toonProfilePoseId', None)
-            neutralBounds = getattr(self.toon, '_toonProfileNeutralBounds', None)
-            if poseId == 42:
-                # Restore Fire Hands to the original Toon Panel behaviour.
-                # Its complete posed composition (including both fire props)
-                # determines the fit, and none of the Neutral-centering logic
-                # is applied.  The Shticker Book preview is unaffected.
-                self.fitGeometry(self.toon, 1, includePoseProps=True)
-                self.toon.reparentTo(self.tapBackground)
-                profileOffset = getattr(
-                    self.toon, '_toonProfilePanelOffset', (0, 0, 0))
-                self.toon.setPos(profileOffset[0] * 0.045, 0,
-                                 -0.05 + profileOffset[2] * 0.045)
-            elif getattr(self.toon, '_toonProfileUsesPosedFit', False):
-                # Use the same complete posed-composition centring as the left
-                # Shticker Book page.  AvatarPanelPos offsets are deliberately
-                # ignored so these poses share Neutral's exact visual anchor.
-                self.toonPoseRoot = self.fitSelectedPoseOnPanel(
-                    self.toon, self.tapBackground, neutralBounds, 0.4,
-                    (0, 0, -0.05))
-                if (getattr(self.toon, '_toonProfilePoseId', None) == 44 and
-                        self.toonPoseRoot):
-                    # Naptime is correctly placed in the Shticker Book, but
-                    # the smaller Toon Panel needs the whole Toon-and-ZZZ
-                    # composition noticeably higher.
-                    self.toonPoseRoot.setZ(
-                        self.toonPoseRoot.getZ() + 0.10)
-                if (getattr(self.toon, '_toonProfilePoseId', None) == 40 and
-                        self.toonPoseRoot):
-                    # Elegance is centred correctly in the Shticker Book, but
-                    # needs a small panel-only adjustment to the right and down.
-                    self.toonPoseRoot.setX(
-                        self.toonPoseRoot.getX() + 0.055)
-                    self.toonPoseRoot.setZ(
-                        self.toonPoseRoot.getZ() - 0.025)
-            else:
-                # Keep Fire Hands and every already-correct pose on the
-                # Neutral-reference path.
-                self.fitGeometry(self.toon, 1, referenceBounds=neutralBounds)
-                self.toon.reparentTo(self.tapBackground)
-                self.centerPoseOnNeutral(self.toon, self.tapBackground,
-                                         (0, 0, -0.05))
-                # Sinking's melt animation still appears far below Neutral's
-                # visual anchor.  Raise the complete pose substantially in
-                # the Toon Panel without affecting any other pose.
-                if getattr(self.toon, '_toonProfilePoseId', None) == 27:
-                    self.toon.setZ(self.toon.getZ() + 0.15)
-                # Rolled uses the Neutral-reference path.  Raise the complete
-                # Toon-and-log composition to the same panel height as
-                # Naptime, without changing the Shticker Book preview.
-                if getattr(self.toon, '_toonProfilePoseId', None) == 43:
-                    self.toon.setZ(self.toon.getZ() + 0.10)
+            self.toon.reparentTo(self.tapBackground)
+            self.toon.setPos(0, 0, -0.05)
             for i in range(4):
                 clipData = self.ToonClipPlaneValues[i]
                 planeNode = PlaneNode('toon-clippingPlane')
@@ -915,175 +865,20 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         toon.getGeomNode().setDepthWrite(1)
         toon.getGeomNode().setDepthTest(1)
         toon.getGeomNode().setTwoSided(True)
-
-        # Capture Neutral before applying the selected pose.  Only the known
-        # off-centre poses use Clash's posed-composition fitting; all others
-        # keep the Neutral-reference path.
-        neutralBounds = self.getNeutralBounds(toon)
         poseId = getattr(self.avatar, 'profilePose', TPG.DEFAULT_POSE)
         try:
             poseId = self.avatar.getProfilePose()
         except:
             pass
-        offset = TPG.applyPose(toon, poseId, self.notify)
+        TPG.applyPose(toon, poseId, self.notify)
         toon._toonProfilePoseId = poseId
-        toon._toonProfilePanelOffset = offset
-
-        # Sinking is centred from the Toon body because its melt animation
-        # moves the body root downward.  Naptime keeps the full Toon-and-ZZZ
-        # composition and receives its intended upward panel offset later.
-        bodyCenteredPose = poseId == 27
-        # Elegance's sprinkle-dust animation shifts the posed body away from
-        # Neutral's visual anchor.  Use complete posed-bounds fitting for it
-        # in the Toon Panel as well.
-        posedFit = TPG.usesPosedPanelFit(poseId) or poseId == 40
-        toon._toonProfileUsesPosedFit = posedFit and not bodyCenteredPose
-        toon._toonProfileNeutralBounds = neutralBounds
+        self.fitGeometry(toon, 1)
         return toon
 
-    def fitSelectedPoseOnPanel(self, toon, parent, neutralBounds, dimension,
-                               basePos):
-        """Centre a complete posed composition in the Toon Panel.
-
-        This mirrors the left Shticker Book page's centring hierarchy.  The
-        selected animation, root motion, HPR and props are measured together,
-        then their visible centre is placed on Neutral's fixed panel anchor.
-        Wide or tall compositions are shrunk only when required to remain
-        inside the panel.
-        """
-        poseRoot = parent.attachNewNode('toonProfilePanelPoseRoot')
-        scaleRoot = poseRoot.attachNewNode('toonProfilePanelScaleRoot')
-        offsetRoot = scaleRoot.attachNewNode('toonProfilePanelOffsetRoot')
-        facingRoot = offsetRoot.attachNewNode('toonProfilePanelFacingRoot')
-        facingRoot.setH(180)
-        toon.reparentTo(facingRoot)
-
+    def fitGeometry(self, geom, fFlip=0, dimension=0.4):
         p1 = Point3()
         p2 = Point3()
-        try:
-            scaleRoot.calcTightBounds(p1, p2)
-        except:
-            toon.reparentTo(parent)
-            self.fitGeometry(toon, 1, referenceBounds=neutralBounds)
-            self.centerPoseOnNeutral(toon, parent, basePos)
-            poseRoot.removeNode()
-            return None
-
-        posedSize = p2 - p1
-        posedBiggest = max(posedSize[0], posedSize[2])
-        if posedBiggest <= 0:
-            posedBiggest = 1.0
-
-        neutralBiggest = posedBiggest
-        if neutralBounds is not None:
-            neutralSize = neutralBounds[1] - neutralBounds[0]
-            candidate = max(neutralSize[0], neutralSize[2])
-            if candidate > 0:
-                neutralBiggest = candidate
-
-        neutralScale = dimension / neutralBiggest
-        posedFitScale = dimension / posedBiggest
-        finalScale = min(neutralScale, posedFitScale)
-
-        posedCenter = (p1 + p2) / 2.0
-        offsetRoot.setPos(-posedCenter[0], -posedCenter[1], -posedCenter[2])
-        scaleRoot.setScale(finalScale)
-        poseRoot.setPos(basePos[0], basePos[1] + 2.0,
-                        basePos[2] - 0.02)
-        return poseRoot
-
-    def getPoseBodyCenter(self, geom, relativeTo):
-        """Return the posed Toon body's visual centre in relativeTo space."""
-        props = getattr(geom, '_toonProfilePoseProps', [])
-        stashedProps = []
-        for prop in props:
-            try:
-                prop.stash()
-                stashedProps.append(prop)
-            except:
-                pass
-
-        try:
-            p1 = Point3()
-            p2 = Point3()
-            geom.calcTightBounds(p1, p2)
-            localCenter = (p1 + p2) / 2.0
-            try:
-                return relativeTo.getRelativePoint(geom, localCenter)
-            except:
-                return geom.getMat(relativeTo).xformPoint(localCenter)
-        except:
-            return None
-        finally:
-            for prop in stashedProps:
-                try:
-                    prop.unstash()
-                except:
-                    pass
-
-    def centerPoseOnNeutral(self, geom, relativeTo, basePos):
-        # fitGeometry places Neutral's body centre at (0, 2, -0.02).  Align
-        # the currently posed body to that same point without changing its
-        # animation, HPR, scale, or props.
-        geom.setPos(basePos[0], basePos[1], basePos[2])
-        bodyCenter = self.getPoseBodyCenter(geom, relativeTo)
-        if bodyCenter is None:
-            return
-
-        neutralCenter = Point3(basePos[0], basePos[1] + 2.0,
-                               basePos[2] - 0.02)
-        correction = neutralCenter - bodyCenter
-        currentPos = geom.getPos(relativeTo)
-        geom.setPos(relativeTo,
-                    currentPos[0] + correction[0],
-                    currentPos[1],
-                    currentPos[2] + correction[2])
-
-    def getNeutralBounds(self, geom):
-        try:
-            geom.pose('neutral', 0)
-        except:
-            try:
-                geom.loop('neutral')
-            except:
-                pass
-
-        p1 = Point3()
-        p2 = Point3()
-        try:
-            geom.calcTightBounds(p1, p2)
-            return (Point3(p1), Point3(p2))
-        except:
-            return None
-
-    def fitGeometry(self, geom, fFlip=0, dimension=0.4, referenceBounds=None, includePoseProps=False):
-        # Use the Neutral pose as the common centre and scale reference.  The
-        # selected pose is never allowed to recalculate its own anchor.
-        if referenceBounds is not None:
-            p1 = Point3(referenceBounds[0])
-            p2 = Point3(referenceBounds[1])
-        else:
-            props = getattr(geom, '_toonProfilePoseProps', [])
-            stashedProps = []
-            if not includePoseProps:
-                for prop in props:
-                    try:
-                        prop.stash()
-                        stashedProps.append(prop)
-                    except:
-                        pass
-
-            p1 = Point3()
-            p2 = Point3()
-            try:
-                geom.calcTightBounds(p1, p2)
-            finally:
-                for prop in stashedProps:
-                    try:
-                        prop.unstash()
-                    except:
-                        pass
-
+        geom.calcTightBounds(p1, p2)
         if fFlip:
             t = p1[0]
             p1.setX(-p2[0])
@@ -1097,8 +892,14 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
         geomXform = hidden.attachNewNode('geomXform')
         for child in geom.getChildren():
             child.reparentTo(geomXform)
-        geomXform.setPosHprScale(-mid[0], -mid[1] + 2, -mid[2] - 0.02,
-                                180, 0, 0, scale, scale, scale)
+        poseId = getattr(geom, '_toonProfilePoseId', TPG.DEFAULT_POSE)
+        poseData = TPG.getPose(poseId).get('data', {})
+        posOffset = poseData.get('AvatarPanelPos', (0, 0, 0))
+        geomXform.setPosHprScale(
+            -mid[0] + posOffset[0],
+            -mid[1] + 2 + posOffset[1],
+            -mid[2] - 0.02 + posOffset[2],
+            180, 0, 0, scale, scale, scale)
         geomXform.reparentTo(geom)
 
     def generateNameText(self):
