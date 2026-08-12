@@ -255,6 +255,8 @@ class AltisCutsceneEditor(DirectObject):
         self.sfxPaths = []
         self.musicPaths = []
         self.nodePatterns = []
+        self.spawnedSuits = []
+        self.spawnedSuitTypes = []
         self.pendingExportPath = 'cutscene_exports/custom_cutscene.ctsc'
         self._captureBaseline()
         self._loadAutosave()
@@ -381,8 +383,10 @@ class AltisCutsceneEditor(DirectObject):
         self.argsFrame = DirectScrolledFrame(parent=self.root, frameColor=panelInner, frameSize=(-0.37, 0.37, -0.43, 0.43), canvasSize=(-0.34, 0.34, -12, 0.40), pos=(0.85, 0, 0.045), scrollBarWidth=0.035)
 
         DirectFrame(parent=self.root, frameColor=panel, frameSize=(-0.405, 0.405, -0.205, 0.205), pos=(-0.87, 0, -0.695))
+        DirectFrame(parent=self.root, frameColor=panel, frameSize=(-0.405, 0.405, -0.205, 0.205), pos=(-0.01, 0, -0.695))
         DirectFrame(parent=self.root, frameColor=panel, frameSize=(-0.405, 0.405, -0.205, 0.205), pos=(0.85, 0, -0.695))
         DirectLabel(parent=self.root, text='EVENT DETAILS', text_align=TextNode.ALeft, text_scale=0.027, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(-1.23, 0, -0.525))
+        DirectLabel(parent=self.root, text='SCENE ACTORS', text_align=TextNode.ALeft, text_scale=0.027, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(-0.37, 0, -0.525))
         DirectLabel(parent=self.root, text='RESOURCES', text_align=TextNode.ALeft, text_scale=0.027, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(0.49, 0, -0.525))
 
         DirectLabel(parent=self.root, text='Category', text_align=TextNode.ALeft, text_scale=0.024, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(-0.34, 0, 0.445))
@@ -400,6 +404,12 @@ class AltisCutsceneEditor(DirectObject):
         self.modeMenu = DirectOptionMenu(parent=self.root, relief=DGG.FLAT, items=['Parallel', 'Sequence'], scale=0.030, text_fg=textMain, frameColor=button, pos=(-0.69, 0, -0.69), command=self._setEventMode)
         self.addEventButton = self._makeToonButton(self.root, '+ New Event', (-1.09, 0, -0.82), self.addEvent, width=1.45, scale=0.31, textColor=(1.0, 0.95, 0.45, 1))
         self.deleteEventButton = self._makeToonButton(self.root, 'Delete Event', (-0.68, 0, -0.82), self.deleteEvent, width=1.45, scale=0.31, textColor=(1.0, 0.65, 0.65, 1))
+
+        DirectLabel(parent=self.root, text='Suit', text_align=TextNode.ALeft, text_scale=0.023, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(-0.37, 0, -0.60))
+        self.suitSpawnEntry = DirectEntry(parent=self.root, initialText='Flunky', scale=0.027, width=15, text_fg=textMain, frameColor=entry, pos=(-0.21, 0, -0.60), command=self.spawnSuit)
+        self.spawnSuitButton = self._makeToonButton(self.root, 'Spawn', (0.24, 0, -0.60), self.spawnSuit, width=1.0, scale=0.27, textScale=0.08)
+        DirectLabel(parent=self.root, text='Type a Cog name or DNA code', text_align=TextNode.ALeft, text_scale=0.021, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(-0.37, 0, -0.68))
+        self.removeSuitButton = self._makeToonButton(self.root, 'Remove Last', (-0.11, 0, -0.79), self.removeLastSpawnedSuit, width=1.45, scale=0.28, textColor=(1.0, 0.65, 0.65, 1), textScale=0.075)
 
         DirectLabel(parent=self.root, text='Message', text_align=TextNode.ALeft, text_scale=0.023, text_fg=textDim, frameColor=(0, 0, 0, 0), pos=(0.49, 0, -0.59))
         self.messageEntry = DirectEntry(parent=self.root, initialText='', scale=0.027, width=17, text_fg=textMain, frameColor=entry, pos=(0.68, 0, -0.59))
@@ -508,6 +518,7 @@ class AltisCutsceneEditor(DirectObject):
             'musicPaths': self.musicPaths,
             'nodePatterns': self.nodePatterns,
             'sfxPaths': self.sfxPaths,
+            'spawnedSuitTypes': list(self.spawnedSuitTypes),
             'trackLength': self.trackLength,
         }
 
@@ -612,6 +623,7 @@ class AltisCutsceneEditor(DirectObject):
         result['sfxPaths'] = list(self.sfxPaths)
         result['musicPaths'] = list(self.musicPaths)
         result['nodePatterns'] = list(self.nodePatterns)
+        result['spawnedSuitTypes'] = list(self.spawnedSuitTypes)
         result['trackLength'] = self.trackLength
         return result
 
@@ -880,6 +892,91 @@ class AltisCutsceneEditor(DirectObject):
             len(self.cutsceneDict.get('toons', [])), len(self.cutsceneDict.get('suits', [])), len(self.cutsceneDict.get('actors', [])), len(self.cutsceneDict.get('nodes', [])), len(self.cutsceneDict.get('messages', [])), len(self.cutsceneDict.get('sounds', [])), len(self.cutsceneDict.get('music', [])))
         self.resourceStatus['text'] = text
 
+    def _resolveSuitType(self, text):
+        value = str(text).strip().lower()
+        if not value:
+            return None
+        try:
+            from toontown.suit import SuitDNA
+            from toontown.battle import SuitBattleGlobals
+        except:
+            return None
+        for suitType in SuitDNA.suitHeadTypes:
+            if str(suitType).lower() == value:
+                return suitType
+        matches = []
+        for suitType in SuitDNA.suitHeadTypes:
+            data = SuitBattleGlobals.SuitAttributes.get(suitType, {})
+            name = str(data.get('name', '')).strip()
+            if name.lower() == value:
+                return suitType
+            if value and value in name.lower():
+                matches.append(suitType)
+        if len(matches) == 1:
+            return matches[0]
+        return None
+
+    def _addSpawnedSuitToScene(self, suit):
+        for key in ('suits', 'actors', 'nodes'):
+            values = self.cutsceneDict.setdefault(key, [])
+            if suit not in values:
+                values.append(suit)
+
+    def spawnSuit(self, text=None):
+        if text is None:
+            text = self.suitSpawnEntry.get()
+        suitType = self._resolveSuitType(text)
+        if suitType is None:
+            self.resourceStatus['text'] = 'Unknown or ambiguous Cog: %s' % text
+            return
+        try:
+            from toontown.avatar import ToontownAvatarUtils
+            suit = ToontownAvatarUtils.createCog(suitType, coll=False)
+            avatar = getattr(base, 'localAvatar', None)
+            if avatar is not None:
+                suit.reparentTo(avatar)
+                suit.setPos(0, 8, 0)
+                suit.setH(180)
+                suit.wrtReparentTo(render)
+            else:
+                suit.reparentTo(render)
+                suit.setPos(0, 8, 0)
+            suit.loop('neutral')
+        except Exception as error:
+            self.resourceStatus['text'] = 'Could not spawn Cog: %s' % error
+            print('[Cutscene Editor] Cog spawn error: %s' % error)
+            return
+        self.spawnedSuits.append(suit)
+        self.spawnedSuitTypes.append(suitType)
+        self._addSpawnedSuitToScene(suit)
+        self._captureBaseline()
+        self._refreshAll()
+        self._rebuildPreview(self._currentTime())
+        self.resourceStatus['text'] = 'Spawned %s for this editor scene.' % _safeName(suit, suitType)
+
+    def removeLastSpawnedSuit(self):
+        if not self.spawnedSuits:
+            self.resourceStatus['text'] = 'No editor-spawned Cogs to remove.'
+            return
+        suit = self.spawnedSuits.pop()
+        if self.spawnedSuitTypes:
+            self.spawnedSuitTypes.pop()
+        for key in ('suits', 'actors', 'nodes'):
+            values = self.cutsceneDict.get(key, [])
+            if suit in values:
+                values.remove(suit)
+        try:
+            suit.delete()
+        except:
+            try:
+                suit.removeNode()
+            except:
+                pass
+        self._captureBaseline()
+        self._refreshAll()
+        self._rebuildPreview(self._currentTime())
+        self.resourceStatus['text'] = 'Removed the last editor-spawned Cog.'
+
     def refreshScene(self):
         oldMessages = self.cutsceneDict.get('messages', [])
         oldSounds = self.cutsceneDict.get('sounds', [])
@@ -887,6 +984,8 @@ class AltisCutsceneEditor(DirectObject):
         oldFunctions = self.cutsceneDict.get('functions', [])
         oldArguments = self.cutsceneDict.get('arguments', [])
         self.cutsceneDict = _defaultCutsceneDict()
+        for suit in self.spawnedSuits:
+            self._addSpawnedSuitToScene(suit)
         self.cutsceneDict['messages'] = oldMessages
         self.cutsceneDict['sounds'] = oldSounds
         self.cutsceneDict['music'] = oldMusic
@@ -1135,6 +1234,16 @@ class AltisCutsceneEditor(DirectObject):
         taskMgr.remove('altis-cutscene-editor-update')
         self.ignoreAll()
         self._cleanupTrack()
+        for suit in list(self.spawnedSuits):
+            try:
+                suit.delete()
+            except:
+                try:
+                    suit.removeNode()
+                except:
+                    pass
+        self.spawnedSuits = []
+        self.spawnedSuitTypes = []
         try:
             self.root.destroy()
         except:
