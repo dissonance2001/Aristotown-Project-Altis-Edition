@@ -343,3 +343,14 @@ def clashNotifySpam():
     from direct.directnotify import DirectNotifyGlobal
     DirectNotifyGlobal.directNotify.setVerbose()
     return 'Verbose notify output enabled.'
+
+@magicWord(name='cutsceneeditor', category=CATEGORY_PROGRAMMER, types=[])
+def clashCutsceneEditor():
+    from toontown.cutscene.editor.AltisCutsceneEditor import toggleEditor
+    return toggleEditor()
+
+
+@magicWord(name='cse', category=CATEGORY_PROGRAMMER, types=[])
+def clashCutsceneEditorShort():
+    from toontown.cutscene.editor.AltisCutsceneEditor import toggleEditor
+    return toggleEditor()

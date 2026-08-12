@@ -1,0 +1,160 @@
+{
+  "events": [
+    {
+      "name": "Event 1", 
+      "sequenceMode": "Parallel", 
+      "subEvents": {
+        "0": {
+          "eventDefEnum": "doSuitAnim", 
+          "kwargs": {
+            "anim": "finger-wag", 
+            "duration": 0, 
+            "endAnim": "neutral", 
+            "endTime": 0, 
+            "hasDuration": 0, 
+            "hasEndTime": 0, 
+            "hasStartTime": 0, 
+            "isInterval": 1, 
+            "loop": 0, 
+            "oldStyleEndAnim": 1, 
+            "playRate": 1, 
+            "startTime": 0, 
+            "suitIndex": 3, 
+            "useEndAnim": 1
+          }
+        }, 
+        "1": {
+          "eventDefEnum": "actorDialogue", 
+          "kwargs": {
+            "actorIndex": 3, 
+            "bindToHead": false, 
+            "delay": 0.0, 
+            "disable": false, 
+            "duration": 3.0, 
+            "hideNametag": false, 
+            "messageIndex": 0, 
+            "moveNametag": false, 
+            "scale": 1.0, 
+            "wantHeadAnim": true, 
+            "wantSound": true, 
+            "xyz": [
+              0, 
+              0, 
+              0
+            ]
+          }
+        }
+      }, 
+      "time": 0.0
+    }
+  ], 
+  "exportPath": "cutscene_exports/custom_cutscene.ctsc", 
+  "manifest": {
+    "actors": [
+      "0: Eria", 
+      "1: DistributedSuit 1", 
+      "2: DistributedSuit 2", 
+      "3: DistributedSuit 3", 
+      "4: DistributedSuit 4", 
+      "5: DistributedSuit 5", 
+      "6: DistributedSuit 6", 
+      "7: DistributedSuit 7"
+    ], 
+    "bosses": [], 
+    "elevators": [], 
+    "messages": [
+      "I'm telling my boss."
+    ], 
+    "musicPaths": [], 
+    "nodePatterns": [], 
+    "nodes": [
+      "0: render", 
+      "1: camera", 
+      "2: town_top_level", 
+      "3: Eria", 
+      "4: DistributedSuit 4", 
+      "5: DistributedSuit 5", 
+      "6: DistributedSuit 6", 
+      "7: DistributedSuit 7", 
+      "8: DistributedSuit 8", 
+      "9: DistributedSuit 9", 
+      "10: DistributedSuit 10", 
+      "11: Sound Node", 
+      "12: Sound Node", 
+      "13: Sound Node", 
+      "14: Sound Node", 
+      "15: Sound Node", 
+      "16: Sound Node", 
+      "17: Sound Node", 
+      "18: Sound Node", 
+      "19: Sound Node", 
+      "20: Sound Node", 
+      "21: Sound Node", 
+      "22: Sound Node", 
+      "23: roomAnim", 
+      "24: Sound Node", 
+      "25: Sound Node", 
+      "26: roomAnim", 
+      "27: toph_dl_9000", 
+      "28: Sound Node", 
+      "29: town_top_level", 
+      "30: Golden Goose", 
+      "31: Sound Node", 
+      "32: Sound Node", 
+      "33: Big Wig", 
+      "34: tt_r_ara_dga_trashcan.egg", 
+      "35: Sound Node", 
+      "36: streetlight_TT.egg", 
+      "37: Sound Node", 
+      "38: Toxic Leader", 
+      "39: Sound Node", 
+      "40: Sound Node", 
+      "41: streetlight_TT.egg", 
+      "42: Sound Node", 
+      "43: Sound Node", 
+      "44: Sound Node", 
+      "45: Eria", 
+      "46: roomAnim", 
+      "47: Golden Goose", 
+      "48: Sound Node", 
+      "49: Sound Node", 
+      "50: Sound Node", 
+      "51: streetlight_TT.egg", 
+      "52: Sound Node", 
+      "53: Sound Node", 
+      "54: Sound Node", 
+      "55: Ratifier", 
+      "56: streetlight_TT.egg", 
+      "57: Downsizer", 
+      "58: The Big Cheese", 
+      "59: roomAnim", 
+      "60: Sound Node", 
+      "61: Sound Node", 
+      "62: tt_r_ara_dga_trashcan.egg", 
+      "63: toph_mm_4301", 
+      "64: Sound Node", 
+      "65: Sound Node"
+    ], 
+    "sfxPaths": [], 
+    "suits": [
+      "0: DistributedSuit 0", 
+      "1: DistributedSuit 1", 
+      "2: DistributedSuit 2", 
+      "3: DistributedSuit 3", 
+      "4: DistributedSuit 4", 
+      "5: DistributedSuit 5", 
+      "6: DistributedSuit 6"
+    ], 
+    "toons": [
+      "0: Eria"
+    ], 
+    "trackLength": 60.0
+  }, 
+  "messages": [
+    "I'm telling my boss."
+  ], 
+  "musicPaths": [], 
+  "nodePatterns": [], 
+  "sfxPaths": [], 
+  "trackLength": 60.0
+}

@@ -1,5 +1,3 @@
-"""Runtime loader for Corporate Clash .ctsc files on Project Altis/Python 2."""
-
 import json
 import os
 
@@ -8,8 +6,6 @@ from panda3d.core import Filename, VirtualFileSystem
 
 from toontown.cutscene.CutsceneSequenceBase import cutsceneMethodDefs
 
-# Only load the event modules used by highroller_intro.ctsc.  Keeping this
-# focused avoids importing unrelated Clash encounter systems into Altis.
 _EVENT_MODULES = (
     'AudioSequence',
     'CameraSequence',
@@ -81,6 +77,7 @@ def _makeSubeventInterval(subeventData, cutsceneDict, resourcePath,
     kwargs = subeventData.get('kwargs', {})
     if not isinstance(kwargs, dict):
         kwargs = json.loads(kwargs)
+    kwargs = dict(kwargs)
     kwargs['cutsceneDict'] = cutsceneDict
     try:
         return definition['method'](**kwargs)
@@ -93,10 +90,8 @@ def _makeSubeventInterval(subeventData, cutsceneDict, resourcePath,
              eventName, displayKwargs, error))
 
 
-def buildCutscene(resourcePath, cutsceneDict):
-    """Build and return a Panda3D interval from a Clash .ctsc resource."""
+def buildCutsceneData(eventData, cutsceneDict, resourcePath='<memory>', minimumDuration=0.0):
     _loadEventModules()
-    eventData = _readCutsceneData(resourcePath)
     track = Parallel()
 
     for event in eventData:
@@ -111,4 +106,11 @@ def buildCutscene(resourcePath, cutsceneDict):
                 timelineName, timelineTime, subeventIndex))
         track.append(Sequence(Wait(timelineTime), group))
 
+    if minimumDuration:
+        track.append(Sequence(Wait(float(minimumDuration))))
     return track
+
+
+def buildCutscene(resourcePath, cutsceneDict):
+    eventData = _readCutsceneData(resourcePath)
+    return buildCutsceneData(eventData, cutsceneDict, resourcePath)
