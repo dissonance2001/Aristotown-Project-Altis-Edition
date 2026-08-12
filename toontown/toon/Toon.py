@@ -3210,8 +3210,10 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def initializeBodyCollisions(self, collIdStr):
         Avatar.Avatar.initializeBodyCollisions(self, collIdStr)
-        if not self.ghostMode:
-            self.collNode.setCollideMask(self.collNode.getIntoCollideMask() | ToontownGlobals.PieBitmask)
+        if self.ghostMode:
+            self.collNode.setIntoCollideMask(ToontownGlobals.GhostBitmask)
+        else:
+            self.collNode.setIntoCollideMask(ToontownGlobals.PieBitmask | BitMask32(8192))
 
     def getBookActors(self):
         if self.__bookActors:

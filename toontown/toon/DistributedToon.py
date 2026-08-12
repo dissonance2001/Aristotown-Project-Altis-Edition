@@ -1922,9 +1922,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.showNametag3d()
             if hasattr(self, 'collNode'):
                 if self.ghostMode:
-                    self.collNode.setCollideMask(ToontownGlobals.GhostBitmask)
+                    self.collNode.setIntoCollideMask(ToontownGlobals.GhostBitmask)
                 else:
-                    self.collNode.setCollideMask(ToontownGlobals.WallBitmask | ToontownGlobals.PieBitmask)
+                    self.collNode.setIntoCollideMask(ToontownGlobals.PieBitmask | BitMask32(8192))
             
             if self.isLocal():
                 if self.ghostMode:

@@ -199,6 +199,94 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.chatLog = None
         self.prevToonIdx = 0
         self.publicPetId = 0
+        self.toonOverlapIds = []
+        self.toonOverlapFadeTracks = {}
+        self.toonOverlapInEvent = uniqueName('enterInsideLocalToon')
+        self.toonOverlapOutEvent = uniqueName('exitInsideLocalToon')
+        self.initializeToonOverlapCollisions()
+
+    def initializeToonOverlapCollisions(self):
+        top = max(1.0, getattr(self, 'height', 4.0) - 0.5)
+        self.toonOverlapSolid = CollisionTube(0, 0, 0.5, 0, 0, top, 1.0)
+        self.toonOverlapSolid.setTangible(0)
+        self.toonOverlapNode = CollisionNode('InsideLocalToon')
+        self.toonOverlapNode.addSolid(self.toonOverlapSolid)
+        self.toonOverlapNode.setFromCollideMask(BitMask32(8192))
+        self.toonOverlapNode.setIntoCollideMask(BitMask32.allOff())
+        self.toonOverlapNodePath = self.attachNewNode(self.toonOverlapNode)
+        self.toonOverlapHandler = CollisionHandlerEvent()
+        self.toonOverlapHandler.addInPattern(self.toonOverlapInEvent)
+        self.toonOverlapHandler.addOutPattern(self.toonOverlapOutEvent)
+        self.accept(self.toonOverlapInEvent, self.enterOverlappingToon)
+        self.accept(self.toonOverlapOutEvent, self.exitOverlappingToon)
+        self.cTrav.addCollider(self.toonOverlapNodePath, self.toonOverlapHandler)
+
+    def cleanupToonOverlapCollisions(self):
+        if hasattr(self, 'toonOverlapNodePath'):
+            if hasattr(self, 'cTrav'):
+                self.cTrav.removeCollider(self.toonOverlapNodePath)
+            self.toonOverlapNodePath.removeNode()
+            del self.toonOverlapNodePath
+        if hasattr(self, 'toonOverlapFadeTracks'):
+            for toonId, track in self.toonOverlapFadeTracks.items():
+                track.pause()
+                toon = base.cr.doId2do.get(toonId)
+                if toon:
+                    toon.restoreDefaultColorScale()
+            self.toonOverlapFadeTracks.clear()
+        self.ignore(self.toonOverlapInEvent)
+        self.ignore(self.toonOverlapOutEvent)
+
+    def getOverlappingToonId(self, entry):
+        name = entry.getIntoNode().getName().split('-')
+        if not name or len(name) < 2 or name[0] != 'distAvatarCollNode':
+            return None
+        try:
+            toonId = int(name[1])
+        except ValueError:
+            return None
+        if toonId == self.doId:
+            return None
+        return toonId
+
+    def enterOverlappingToon(self, entry):
+        toonId = self.getOverlappingToonId(entry)
+        if toonId is None:
+            return
+        if toonId not in self.toonOverlapIds:
+            self.toonOverlapIds.append(toonId)
+        self.fadeOverlappingToon(toonId, 1)
+
+    def exitOverlappingToon(self, entry):
+        toonId = self.getOverlappingToonId(entry)
+        if toonId is None:
+            return
+        if toonId in self.toonOverlapIds:
+            self.toonOverlapIds.remove(toonId)
+        self.fadeOverlappingToon(toonId, 0)
+
+    def fadeOverlappingToon(self, toonId, fade=1):
+        toon = base.cr.doId2do.get(toonId)
+        if not toon:
+            return
+        oldTrack = self.toonOverlapFadeTracks.pop(toonId, None)
+        if oldTrack:
+            oldTrack.pause()
+        if fade:
+            fadeColorSeq = toon.doToonColorScale(Vec4(1, 1, 1, 0.25), 0.3)
+        else:
+            fadeColorSeq = toon.doToonColorScale(toon.defaultColorScale, 0.3)
+        if fadeColorSeq is None:
+            return
+        track = Sequence(fadeColorSeq)
+        if not fade:
+            track.append(Func(toon.restoreDefaultColorScale))
+        track.append(Func(self.finishOverlappingToonFade, toonId))
+        self.toonOverlapFadeTracks[toonId] = track
+        track.start()
+
+    def finishOverlappingToonFade(self, toonId):
+        self.toonOverlapFadeTracks.pop(toonId, None)
 
     def checkTeleportAccessResponse(self, zoneId):
         if self.mapPage:
@@ -484,6 +572,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         except:
             self.LocalToon_deleted = 1
             
+        self.cleanupToonOverlapCollisions()
         Toon.unloadDialog()
         QuestParser.clear()
         DistributedToon.DistributedToon.delete(self)
