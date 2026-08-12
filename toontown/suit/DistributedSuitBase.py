@@ -6611,6 +6611,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
 
     def showHpString(self, text, duration = 0.85, scale = 1):
+        if self.isEmpty():
+            return
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpTextInterval:
                 self.hpTextInterval.finish()
