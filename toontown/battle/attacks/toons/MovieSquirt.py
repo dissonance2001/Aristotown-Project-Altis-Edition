@@ -86,11 +86,12 @@ def __doSuitSquirts(squirts):
     toonTracks = Parallel()
     delay = 0.0
     if type(squirts[0]['target']) == type([]):
-        for target in squirts[0]['target']:
-            if len(squirts) == 1 and target['hp'] > 0:
-                fShowStun = 1
-            else:
-                fShowStun = 0
+        mainTarget = squirts[0]['target'][0]
+
+        if len(squirts) == 1 and mainTarget['hp'] > 0:
+            fShowStun = 1
+        else:
+            fShowStun = 0
 
     elif len(squirts) == 1 and squirts[0]['target']['hp'] > 0:
         fShowStun = 1
@@ -119,29 +120,127 @@ def doSoakRemovals(soakRemovals):
     camTrack = MovieCamera.allGroupHighShot(None, camDuration)
     return mainTrack, camTrack
 
+def __getSquirtContactTime(squirt):
+    level = squirt['level']
+    toon = squirt['toon']
 
-def __doSquirt(squirt, delay, fShowStun, uberClone = 0):
+    if level == 0:
+        return 2.5 + 0.2
+
+    elif level == 1:
+        return (82.0 / toon.getFrameRate('spit')) + 0.1
+
+    elif level == 2:
+        return (48.0 / toon.getFrameRate('water-gun')) + 0.1
+
+    elif level == 3:
+        # Water Balloon
+        return 1.7 + 0.9 + 0.3
+
+    elif level == 4:
+        # Seltzer Bottle
+        return (53.0 / toon.getFrameRate('hold-bottle')) + 0.05 + 0.2
+
+    elif level == 5:
+        # Fire Hose
+        return 2.9
+
+    elif level == 6:
+        # Storm Cloud
+        return 2.9
+
+    elif level == 7:
+        # Geyser
+        return 2.9
+
+    return 0.0
+
+
+def __doSquirt(squirt, delay, fShowStun, uberClone=0):
+    print 'MOVIESQUIRT TARGET TYPE:', type(squirt['target'])
+    print 'MOVIESQUIRT TARGET:', squirt['target']
     squirtSequence = Sequence(Wait(delay))
+
     if type(squirt['target']) == type([]):
-        for target in squirt['target']:
-            notify.debug('toon: %s squirts prop: %d at suit: %d for hp: %d' % (squirt['toon'].getName(),
-             squirt['level'],
-             target['suit'].doId,
-             target['hp']))
+        targets = squirt['target']
+
+        if not targets:
+            return [squirtSequence]
+
+        # IMPORTANT:
+        # Your AI target list should be:
+        # [mainTarget, leftTarget, rightTarget]
+        mainTarget = targets[0]
+        splashTargets = targets[1:]
+
+        # Build a copy for the real gag so the regular Squirt
+        # functions still receive ONE target dictionary.
+        mainSquirt = squirt.copy()
+        mainSquirt['target'] = mainTarget
+
+        notify.debug(
+            'toon: %s squirts MAIN suit: %d for hp: %d' % (
+                squirt['toon'].getName(),
+                mainTarget['suit'].doId,
+                mainTarget['hp']
+            )
+        )
+
+        if uberClone:
+            mainTrack = squirtfn_array[squirt['level']](
+                mainSquirt,
+                0,
+                fShowStun,
+                uberClone
+            )
+        else:
+            mainTrack = squirtfn_array[squirt['level']](
+                mainSquirt,
+                0,
+                fShowStun
+            )
+
+        combinedTrack = Parallel()
+
+        if mainTrack:
+            combinedTrack.append(mainTrack)
+
+        # Side Cogs only get splash reactions.
+        for target in splashTargets:
+            notify.debug(
+                'Squirt SPLASH suit: %d for hp: %d' % (
+                    target['suit'].doId,
+                    target['hp']
+                )
+            )
+
+            combinedTrack.append(
+                __doAdjacentSquirtSplash(
+                    target,
+                    squirt
+                )
+            )
+
+        squirtSequence.append(combinedTrack)
 
     else:
-        notify.debug('toon: %s squirts prop: %d at suit: %d for hp: %d' % (squirt['toon'].getName(),
-         squirt['level'],
-         squirt['target']['suit'].doId,
-         squirt['target']['hp']))
-    if uberClone:
-        ival = squirtfn_array[squirt['level']](squirt, delay, fShowStun, uberClone)
+        if uberClone:
+            ival = squirtfn_array[squirt['level']](
+                squirt,
+                0,
+                fShowStun,
+                uberClone
+            )
+        else:
+            ival = squirtfn_array[squirt['level']](
+                squirt,
+                0,
+                fShowStun
+            )
+
         if ival:
             squirtSequence.append(ival)
-    else:
-        ival = squirtfn_array[squirt['level']](squirt, delay, fShowStun)
-        if ival:
-            squirtSequence.append(ival)
+
     return [squirtSequence]
 
 
@@ -217,6 +316,163 @@ def __createSuitResetPosTrack2(suit, battle):
     walkTrack = Sequence(Func(suit.setHpr, battle, resetHpr), ActorInterval(suit, 'walk', startTime=1, duration=moveDuration, endTime=0.0001), Func(suit.setNeutralAnimationTrap))
     moveTrack = LerpPosInterval(suit, moveDuration, resetPos, other=battle)
     return Parallel(walkTrack, moveTrack)
+
+def __doAdjacentSquirtSplash(target, squirt):
+    suit = target['suit']
+    hp = target['hp']
+    died = target['died']
+    revived = target['revived']
+
+    battle = squirt['battle']
+    level = squirt['level']
+    toon = squirt['toon']
+
+    track = Sequence()
+
+    if hp <= 0:
+        return track
+
+    tContact = __getSquirtContactTime(squirt)
+
+    # IMPORTANT:
+    # Main __getSuitTrack does this too.
+    # The adjacent Cog needs to participate in queued visual HP.
+    suit.addPendingQueuedDamage(hp)
+
+    # Prestige/bonus Squirt = drenched.
+    # Normal Squirt = soaked.
+    if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
+        drench = 1
+    else:
+        drench = 0
+
+    # Pick reaction animation.
+    if level >= 5:
+        reactAnim = 'soak'
+    else:
+        reactAnim = 'squirt-small-react'
+
+    targetPoint = lambda suit=suit: __suitTargetPoint(suit)
+
+    # Everything happens AT IMPACT.
+    impactTrack = Parallel()
+
+    # Splash visual.
+    impactTrack.append(
+        __getSplashTrack(
+            targetPoint,
+            sprayScales[level],
+            0,
+            battle
+        )
+    )
+
+    # Damage + health bar at contact.
+    impactTrack.append(
+        Sequence(
+            Func(
+                suit.showHpText,
+                -hp,
+                0,
+                openEnded=0,
+                attackTrack=SQUIRT_TRACK
+            ),
+            Func(
+                suit.updateHealthBar,
+                hp
+            )
+        )
+    )
+
+    # Actually tell the Cog it is visually wet.
+    impactTrack.append(
+        Func(
+            suit.soakSuit,
+            drench
+        )
+    )
+
+    # Tint wet/drenched.
+    impactTrack.append(
+        __soakSuit(
+            suit,
+            0,
+            drench=drench
+        )
+    )
+
+    # Splash reaction.
+    impactTrack.append(
+        ActorInterval(
+            suit,
+            reactAnim
+        )
+    )
+
+    # Wait until actual gag impact.
+    track.append(Wait(tContact))
+
+    # Then all the hit visuals occur together.
+    track.append(impactTrack)
+
+    # Handle AI-decided revive/death AFTER reaction.
+    if revived:
+        if suit.dna.name == 'redd':
+            track.append(
+                MovieUtil.createSuitReviveRedd(
+                    suit,
+                    battle
+                )
+            )
+
+        elif suit.isSkeleton:
+            track.append(
+                MovieUtil.createSuitReviveTrackVirtual(
+                    suit,
+                    battle
+                )
+            )
+
+        else:
+            track.append(
+                MovieUtil.createSuitReviveTrack(
+                    suit,
+                    battle
+                )
+            )
+
+    elif died:
+        if suit.isVirtual:
+            track.append(
+                MovieUtil.createVirtualSuitDeathTrack(
+                    suit,
+                    battle
+                )
+            )
+
+        else:
+            track.append(
+                MovieUtil.createSuitDeathTrack(
+                    suit,
+                    battle
+                )
+            )
+
+    else:
+        track.append(
+            suit.makeDeathCheckInterval(
+                0,
+                battle
+            )
+        )
+
+        track.append(
+            Func(
+                suit.setNeutralAnimation
+            )
+        )
+
+    return track
 
 
 def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun = 0.5, afterStun = 1.8, geyser = 0, uberRepeat = 0, revived = 0, level = 0):
@@ -303,8 +559,9 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         suitIndex = battle.activeSuits.index(suit)
         soakTracks.append(Wait(tContact))
         if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
-            soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
-            soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
+            # soakTracks.append(__doAdjacentSquirtSplash(suit, ))
+            # soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
+            # soakTracks.append(__soakNearby2(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
             if suit.dna.name == 'phouse':
                 showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="DRENCHED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
                 soakSuit = Func(suit.setSuitStatusEffect, 'drenched', modifier=1, turns=1)
@@ -346,8 +603,8 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
                 showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
                 soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=4)
                 suitTrack.append(Func(suit.soakSuit, 0))
-            soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
-            soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
+            # soakTracks.append(__soakNearby3(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
+            # soakTracks.append(__soakNearby4(suit, suitIndex - 1, battle.activeSuits, tContact, hp, died, battle, 0, SQUIRT_TRACK, level, drench=0))
         suitTrack.append(showDamage)
         suitTrack.append(updateHealthBar)
         suitTrack.append(soakSuit)

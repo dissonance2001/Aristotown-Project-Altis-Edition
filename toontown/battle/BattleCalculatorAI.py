@@ -836,15 +836,44 @@ class BattleCalculatorAI:
         attack = self.battle.toonAttacks[attackIndex]
         atkTrack, atkLevel = self.__getActualTrackLevel(attack)
         targetList = []
+
         if atkTrack == NPCSOS:
             return targetList
+
+        # Squirt hits selected Cog + adjacent Cogs.
+        if atkTrack == SQUIRT:
+            mainTarget = self.battle.findSuit(attack[TOON_TGT_COL])
+
+            if mainTarget is None:
+                return targetList
+
+            activeSuits = self.battle.activeSuits
+
+            if mainTarget not in activeSuits:
+                return targetList
+
+            mainIndex = activeSuits.index(mainTarget)
+
+            # ALWAYS main target first.
+            targetList.append(mainTarget)
+
+            if mainIndex - 1 >= 0:
+                targetList.append(activeSuits[mainIndex - 1])
+
+            if mainIndex + 1 < len(activeSuits):
+                targetList.append(activeSuits[mainIndex + 1])
+
+            return targetList
+
         if not attackAffectsGroup(atkTrack, atkLevel, attack[TOON_TRACK_COL]):
             if atkTrack == HEAL:
                 target = attack[TOON_TGT_COL]
             else:
                 target = self.battle.findSuit(attack[TOON_TGT_COL])
+
             if target != None:
                 targetList.append(target)
+
         elif atkTrack == HEAL or atkTrack == PETSOS:
             if attack[TOON_TRACK_COL] == NPCSOS or atkTrack == PETSOS:
                 targetList = self.battle.activeToons
@@ -855,6 +884,7 @@ class BattleCalculatorAI:
 
         else:
             targetList = self.battle.activeSuits
+
         return targetList
 
     def __prevAtkTrack(self, attackerId, toon = 1):
@@ -1285,11 +1315,12 @@ class BattleCalculatorAI:
             self.setToonCondition(toonId, 'rushJobCompleted', 1, 3, 'setBoth')
 
     def calculateSquirtTargetDamage(self, baseDamage, toon, toonId, suit, suitId, atkLevel, organicBonus, splashMult=1.0):
-        damage = baseDamage * splashMult
+        damage = baseDamage
 
         if damage <= 0:
             return 0
 
+        # Toon/gag-side bonuses first.
         damage = self.applyToonGagDamageMultipliers(
             damage,
             toonId,
@@ -1299,6 +1330,10 @@ class BattleCalculatorAI:
             organicBonus=organicBonus
         )
 
+        # THEN reduce adjacent damage.
+        damage *= splashMult
+
+        # THEN target-specific Cog defenses/vulnerabilities.
         damage = self.applyCogDamageInterceptors(
             damage,
             toonId,
@@ -1360,7 +1395,7 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suitId, 'soaked', 1, self.NumRoundsSoaked[atkLevel],
                                         'alternateBoth')
 
-        return damage
+        return int(math.ceil(damage))
 
     def applyToonGagUseEffects(self, toonId, atkTrack):
         trackUseConditions = {
@@ -2519,10 +2554,12 @@ class BattleCalculatorAI:
                     self.applyGagBanChecks(toonId, SQUIRT, atkLevel)
 
                     suit = self.battle.findSuit(targetId)
-                    organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
 
-                    activeSuits = self.battle.activeSuits
-                    suitIndex = activeSuits.index(suit)
+                    organicBonus = self.__toonCheckGagBonus(
+                        attack[TOON_ID_COL],
+                        atkTrack,
+                        atkLevel
+                    )
 
                     baseDamage = getAvPropDamage(
                         attackTrack,
@@ -2530,7 +2567,16 @@ class BattleCalculatorAI:
                         toon.experience.getExp(attackTrack)
                     )
 
-                    # Main target.
+                    mainTargetId = attack[TOON_TGT_COL]
+
+                    if targetId == mainTargetId:
+                        splashMult = 1.0
+                    else:
+                        if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
+                            splashMult = 0.75
+                        else:
+                            splashMult = 1.0 / 3.0
+
                     attackDamage = self.calculateSquirtTargetDamage(
                         baseDamage,
                         toon,
@@ -2539,53 +2585,8 @@ class BattleCalculatorAI:
                         targetId,
                         atkLevel,
                         organicBonus,
-                        splashMult=1.0
+                        splashMult=splashMult
                     )
-
-                    if atkHit and attackDamage > 0:
-                        self.applyToonGagUseEffects(toonId, SQUIRT)
-                        self.applyCogHitEffects(toon, toonId, suit, targetId, SQUIRT, atkLevel, attackDamage)
-
-                    # Left splash.
-                    if suitIndex - 1 >= 0:
-                        splashSuit = activeSuits[suitIndex - 1]
-                        splashDamage = self.calculateSquirtTargetDamage(
-                            baseDamage,
-                            toon,
-                            toonId,
-                            splashSuit,
-                            splashSuit.doId,
-                            atkLevel,
-                            organicBonus,
-                            splashMult=0.5
-                        )
-
-                        if atkHit and splashDamage > 0:
-                            self.applyCogHitEffects(toon, toonId, splashSuit, splashSuit.doId, SQUIRT, atkLevel, splashDamage, unLureSuit=False)
-
-                        # You need to assign this wherever your calculator stores splash HP.
-                        # Example only:
-                        # attack[SUIT_HP_COL][indexOfSplashSuit] = splashDamage
-
-                    # Right splash.
-                    if suitIndex + 1 < len(activeSuits):
-                        splashSuit = activeSuits[suitIndex + 1]
-                        splashDamage = self.calculateSquirtTargetDamage(
-                            baseDamage,
-                            toon,
-                            toonId,
-                            splashSuit,
-                            splashSuit.doId,
-                            atkLevel,
-                            organicBonus,
-                            splashMult=0.5
-                        )
-
-                        if atkHit and splashDamage > 0:
-                            self.applyCogHitEffects(toon, toonId, splashSuit, splashSuit.doId, SQUIRT, atkLevel, splashDamage, unLureSuit=False)
-
-                        # Example only:
-                        # attack[SUIT_HP_COL][indexOfSplashSuit] = splashDamage
                 elif atkTrack == THROW:
                     self.applyGagBanChecks(toonId, THROW, atkLevel)
 
@@ -3548,185 +3549,185 @@ class BattleCalculatorAI:
                         activeSuits = self.battle.activeSuits
                         currTarget.setHP(currTarget.getHP() - damageDone)
                         suitIndex = activeSuits.index(currTarget)
-                        damageDone2 = attack[TOON_HP_COL][position]
-                        if suitIndex - 1 >= 0:
-                            target2 = activeSuits[suitIndex - 1]
-                            organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                            if organicBonus:
-                                if not self.suitHasCondition(target2.doId, 'immune') and not self.suitHasCondition(target2.doId, 'oilRain'):
-                                    target2.setHP(target2.getHP() - math.ceil(damageDone * .75))
-                                    if self.suitHasCondition(target2.doId, 'heavyRainDamage'):
-                                        self.setSuitCondition(target2.doId, 'heavyRainDamage', self.getSuitConditionModifier(target2.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
-                                    if target2.dna.name == 'supervis' and target2.getActualLevel() == 20:
-                                        self.levels += atkLevel
-                                    if target2.dna.name == 'clubpres' and target2.getActualLevel() == 25:
-                                        self.setSuitCondition(target2.doId, 'shivering', self.getSuitConditionModifier(target2.doId, 'shivering') + 1, 1, 'setBoth')
-                                    if target2.dna.name == 'clubpres' and target2.getActualLevel() == 23:
-                                        self.setSuitCondition(target2.doId, 'rpm', self.getSuitConditionModifier(target2.doId, 'rpm') + 1, 1, 'setBoth')
-                                    # if target2.dna.name == 'cbutcher':
-                                    #     self.setSuitCondition(target2.doId, 'rpmincrease', self.getSuitConditionModifier(target2.doId, 'rpmincrease') + 1, -1, 'setBoth')
-                                    #     self.setSuitCondition(target2.doId, 'rpmcalculator', 1, 10, 'setBoth')
-                                    if not self.suitHasCondition(target2.doId, 'alreadyTargeted'):
-                                        self.setSuitCondition(target2.doId, 'alreadyTargeted', 1, 1, 'setBoth')
-                                        self.targets += 1
-                                    if target2.getHP() <= 0:
-                                        self.__removeLured(target2.doId)
-                                        if target2.getSkeleRevives() >= 1:
-                                            target2.useSkeleRevive()
-                                        if not self.suitHasCondition(target2.doId, 'dead'):
-                                            if target2.dna.name == 'cbutcher':
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'rkeeper':
-                                                        self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
-                                            if self.suitHasCondition(target2.doId, 'overpressure'):
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'safesupervis':
-                                                        if self.suitHasCondition(s.doId, 'overpressureDeath'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
-                                                        elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
-                                                        else:
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
-                                            self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
-                                            self.deadSuits += 1
-                                            if target2.getExecutive() or target2.getGovernaught():
-                                                levelAmount = target2.getActualLevel() * 9
-                                            else:
-                                                levelAmount = target2.getActualLevel() * 5
+                        # damageDone2 = attack[TOON_HP_COL][position]
+                        # if suitIndex - 1 >= 0:
+                        #     target2 = activeSuits[suitIndex - 1]
+                        #     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                        #     if organicBonus:
+                        #         if not self.suitHasCondition(target2.doId, 'immune') and not self.suitHasCondition(target2.doId, 'oilRain'):
+                        #             target2.setHP(target2.getHP() - math.ceil(damageDone * .75))
+                        #             if self.suitHasCondition(target2.doId, 'heavyRainDamage'):
+                        #                 self.setSuitCondition(target2.doId, 'heavyRainDamage', self.getSuitConditionModifier(target2.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
+                        #             if target2.dna.name == 'supervis' and target2.getActualLevel() == 20:
+                        #                 self.levels += atkLevel
+                        #             if target2.dna.name == 'clubpres' and target2.getActualLevel() == 25:
+                        #                 self.setSuitCondition(target2.doId, 'shivering', self.getSuitConditionModifier(target2.doId, 'shivering') + 1, 1, 'setBoth')
+                        #             if target2.dna.name == 'clubpres' and target2.getActualLevel() == 23:
+                        #                 self.setSuitCondition(target2.doId, 'rpm', self.getSuitConditionModifier(target2.doId, 'rpm') + 1, 1, 'setBoth')
+                        #             # if target2.dna.name == 'cbutcher':
+                        #             #     self.setSuitCondition(target2.doId, 'rpmincrease', self.getSuitConditionModifier(target2.doId, 'rpmincrease') + 1, -1, 'setBoth')
+                        #             #     self.setSuitCondition(target2.doId, 'rpmcalculator', 1, 10, 'setBoth')
+                        #             if not self.suitHasCondition(target2.doId, 'alreadyTargeted'):
+                        #                 self.setSuitCondition(target2.doId, 'alreadyTargeted', 1, 1, 'setBoth')
+                        #                 self.targets += 1
+                        #             if target2.getHP() <= 0:
+                        #                 self.__removeLured(target2.doId)
+                        #                 if target2.getSkeleRevives() >= 1:
+                        #                     target2.useSkeleRevive()
+                        #                 if not self.suitHasCondition(target2.doId, 'dead'):
+                        #                     if target2.dna.name == 'cbutcher':
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'rkeeper':
+                        #                                 self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
+                        #                     if self.suitHasCondition(target2.doId, 'overpressure'):
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'safesupervis':
+                        #                                 if self.suitHasCondition(s.doId, 'overpressureDeath'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
+                        #                                 elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
+                        #                                 else:
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
+                        #                     self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
+                        #                     self.deadSuits += 1
+                        #                     if target2.getExecutive() or target2.getGovernaught():
+                        #                         levelAmount = target2.getActualLevel() * 9
+                        #                     else:
+                        #                         levelAmount = target2.getActualLevel() * 5
 
-                                            self.addLevelDamage(levelAmount, atkTrack)
-                            else:
-                                if not self.suitHasCondition(target2.doId, 'immune'):
-                                    target2.setHP(target2.getHP() - math.ceil(damageDone / 3))
-                                    if self.suitHasCondition(target2.doId, 'heavyRainDamage'):
-                                        self.setSuitCondition(target2.doId, 'heavyRainDamage', self.getSuitConditionModifier(target2.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
-                                    if target2.dna.name == 'supervis' and target2.getActualLevel() == 20:
-                                        self.levels += atkLevel
-                                    if target2.dna.name == 'clubpres' and target2.getActualLevel() == 25:
-                                        self.setSuitCondition(target2.doId, 'shivering', self.getSuitConditionModifier(target2.doId, 'shivering') + 1, 1, 'setBoth')
-                                    if target2.dna.name == 'clubpres' and target2.getActualLevel() == 23:
-                                        self.setSuitCondition(target2.doId, 'rpm', self.getSuitConditionModifier(target2.doId, 'rpm') + 1, 1, 'setBoth')
-                                    # if target2.dna.name == 'cbutcher':
-                                    #     self.setSuitCondition(target2.doId, 'rpmincrease', self.getSuitConditionModifier(target2.doId, 'rpmincrease') + 1, -1, 'setBoth')
-                                    #     self.setSuitCondition(target2.doId, 'rpmcalculator', 1, 10, 'setBoth')
-                                    if not self.suitHasCondition(target2.doId, 'alreadyTargeted'):
-                                        self.setSuitCondition(target2.doId, 'alreadyTargeted', 1, 1, 'setBoth')
-                                        self.targets += 1
-                                    if target2.getHP() <= 0:
-                                        self.__removeLured(target2.doId)
-                                        if target2.getSkeleRevives() >= 1:
-                                            target2.useSkeleRevive()
-                                        if not self.suitHasCondition(target2.doId, 'dead'):
-                                            if target2.dna.name == 'cbutcher':
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'rkeeper':
-                                                        self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
-                                            if self.suitHasCondition(target2.doId, 'overpressure'):
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'safesupervis':
-                                                        if self.suitHasCondition(s.doId, 'overpressureDeath'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
-                                                        elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
-                                                        else:
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
-                                            self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
-                                            self.deadSuits += 1
-                                            if target2.getExecutive() or target2.getGovernaught():
-                                                levelAmount = target2.getActualLevel() * 9
-                                            else:
-                                                levelAmount = target2.getActualLevel() * 5
+                        #                     self.addLevelDamage(levelAmount, atkTrack)
+                        #     else:
+                        #         if not self.suitHasCondition(target2.doId, 'immune'):
+                        #             target2.setHP(target2.getHP() - math.ceil(damageDone / 3))
+                        #             if self.suitHasCondition(target2.doId, 'heavyRainDamage'):
+                        #                 self.setSuitCondition(target2.doId, 'heavyRainDamage', self.getSuitConditionModifier(target2.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
+                        #             if target2.dna.name == 'supervis' and target2.getActualLevel() == 20:
+                        #                 self.levels += atkLevel
+                        #             if target2.dna.name == 'clubpres' and target2.getActualLevel() == 25:
+                        #                 self.setSuitCondition(target2.doId, 'shivering', self.getSuitConditionModifier(target2.doId, 'shivering') + 1, 1, 'setBoth')
+                        #             if target2.dna.name == 'clubpres' and target2.getActualLevel() == 23:
+                        #                 self.setSuitCondition(target2.doId, 'rpm', self.getSuitConditionModifier(target2.doId, 'rpm') + 1, 1, 'setBoth')
+                        #             # if target2.dna.name == 'cbutcher':
+                        #             #     self.setSuitCondition(target2.doId, 'rpmincrease', self.getSuitConditionModifier(target2.doId, 'rpmincrease') + 1, -1, 'setBoth')
+                        #             #     self.setSuitCondition(target2.doId, 'rpmcalculator', 1, 10, 'setBoth')
+                        #             if not self.suitHasCondition(target2.doId, 'alreadyTargeted'):
+                        #                 self.setSuitCondition(target2.doId, 'alreadyTargeted', 1, 1, 'setBoth')
+                        #                 self.targets += 1
+                        #             if target2.getHP() <= 0:
+                        #                 self.__removeLured(target2.doId)
+                        #                 if target2.getSkeleRevives() >= 1:
+                        #                     target2.useSkeleRevive()
+                        #                 if not self.suitHasCondition(target2.doId, 'dead'):
+                        #                     if target2.dna.name == 'cbutcher':
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'rkeeper':
+                        #                                 self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
+                        #                     if self.suitHasCondition(target2.doId, 'overpressure'):
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'safesupervis':
+                        #                                 if self.suitHasCondition(s.doId, 'overpressureDeath'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
+                        #                                 elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
+                        #                                 else:
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
+                        #                     self.setSuitCondition(target2.doId, 'dead', 1, 2, 'setBoth')
+                        #                     self.deadSuits += 1
+                        #                     if target2.getExecutive() or target2.getGovernaught():
+                        #                         levelAmount = target2.getActualLevel() * 9
+                        #                     else:
+                        #                         levelAmount = target2.getActualLevel() * 5
 
-                                            self.addLevelDamage(levelAmount, atkTrack)
-                        if suitIndex + 1 < len(activeSuits):
-                            target3 = activeSuits[suitIndex + 1]
-                            organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                            if organicBonus:
-                                if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'oilRain'):
-                                    target3.setHP(target3.getHP() - math.ceil(damageDone * .75))
-                                    if self.suitHasCondition(target3.doId, 'heavyRainDamage'):
-                                        self.setSuitCondition(target3.doId, 'heavyRainDamage', self.getSuitConditionModifier(target3.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
-                                    if target3.dna.name == 'supervis' and target3.getActualLevel() == 20:
-                                        self.levels += atkLevel
-                                    if target3.dna.name == 'clubpres' and target3.getActualLevel() == 25:
-                                        self.setSuitCondition(target3.doId, 'shivering', self.getSuitConditionModifier(target3.doId, 'shivering') + 1, 1, 'setBoth')
-                                    if target3.dna.name == 'clubpres' and target3.getActualLevel() == 23:
-                                        self.setSuitCondition(target3.doId, 'rpm', self.getSuitConditionModifier(target3.doId, 'rpm') + 1, 1, 'setBoth')
-                                    # if target3.dna.name == 'cbutcher':
-                                    #     self.setSuitCondition(target3.doId, 'rpmincrease', self.getSuitConditionModifier(target3.doId, 'rpmincrease') + 1, -1, 'setBoth')
-                                    #     self.setSuitCondition(target3.doId, 'rpmcalculator', 1, 10, 'setBoth')
-                                    if not self.suitHasCondition(target3.doId, 'alreadyTargeted'):
-                                        self.setSuitCondition(target3.doId, 'alreadyTargeted', 1, 1, 'setBoth')
-                                        self.targets += 1
-                                    if target3.getHP() <= 0:
-                                        self.__removeLured(target3.doId)
-                                        if target3.getSkeleRevives() >= 1:
-                                            target3.useSkeleRevive()
-                                        if not self.suitHasCondition(target3.doId, 'dead'):
-                                            if target3.dna.name == 'cbutcher':
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'rkeeper':
-                                                        self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
-                                            if self.suitHasCondition(target3.doId, 'overpressure'):
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'safesupervis':
-                                                        if self.suitHasCondition(s.doId, 'overpressureDeath'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
-                                                        elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
-                                                        else:
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
-                                            self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
-                                            self.deadSuits += 1
-                                            if target3.getExecutive() or target3.getGovernaught():
-                                                levelAmount = target3.getActualLevel() * 9
-                                            else:
-                                                levelAmount = target3.getActualLevel() * 5
+                        #                     self.addLevelDamage(levelAmount, atkTrack)
+                        # if suitIndex + 1 < len(activeSuits):
+                        #     target3 = activeSuits[suitIndex + 1]
+                        #     organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
+                        #     if organicBonus:
+                        #         if not self.suitHasCondition(target3.doId, 'immune') and not self.suitHasCondition(target3.doId, 'oilRain'):
+                        #             target3.setHP(target3.getHP() - math.ceil(damageDone * .75))
+                        #             if self.suitHasCondition(target3.doId, 'heavyRainDamage'):
+                        #                 self.setSuitCondition(target3.doId, 'heavyRainDamage', self.getSuitConditionModifier(target3.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
+                        #             if target3.dna.name == 'supervis' and target3.getActualLevel() == 20:
+                        #                 self.levels += atkLevel
+                        #             if target3.dna.name == 'clubpres' and target3.getActualLevel() == 25:
+                        #                 self.setSuitCondition(target3.doId, 'shivering', self.getSuitConditionModifier(target3.doId, 'shivering') + 1, 1, 'setBoth')
+                        #             if target3.dna.name == 'clubpres' and target3.getActualLevel() == 23:
+                        #                 self.setSuitCondition(target3.doId, 'rpm', self.getSuitConditionModifier(target3.doId, 'rpm') + 1, 1, 'setBoth')
+                        #             # if target3.dna.name == 'cbutcher':
+                        #             #     self.setSuitCondition(target3.doId, 'rpmincrease', self.getSuitConditionModifier(target3.doId, 'rpmincrease') + 1, -1, 'setBoth')
+                        #             #     self.setSuitCondition(target3.doId, 'rpmcalculator', 1, 10, 'setBoth')
+                        #             if not self.suitHasCondition(target3.doId, 'alreadyTargeted'):
+                        #                 self.setSuitCondition(target3.doId, 'alreadyTargeted', 1, 1, 'setBoth')
+                        #                 self.targets += 1
+                        #             if target3.getHP() <= 0:
+                        #                 self.__removeLured(target3.doId)
+                        #                 if target3.getSkeleRevives() >= 1:
+                        #                     target3.useSkeleRevive()
+                        #                 if not self.suitHasCondition(target3.doId, 'dead'):
+                        #                     if target3.dna.name == 'cbutcher':
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'rkeeper':
+                        #                                 self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
+                        #                     if self.suitHasCondition(target3.doId, 'overpressure'):
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'safesupervis':
+                        #                                 if self.suitHasCondition(s.doId, 'overpressureDeath'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
+                        #                                 elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
+                        #                                 else:
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
+                        #                     self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
+                        #                     self.deadSuits += 1
+                        #                     if target3.getExecutive() or target3.getGovernaught():
+                        #                         levelAmount = target3.getActualLevel() * 9
+                        #                     else:
+                        #                         levelAmount = target3.getActualLevel() * 5
 
-                                            self.addLevelDamage(levelAmount, atkTrack)
-                            else:
-                                if not self.suitHasCondition(target3.doId, 'immune'):
-                                    target3.setHP(target3.getHP() - math.ceil(damageDone / 3))
-                                    if self.suitHasCondition(target3.doId, 'heavyRainDamage'):
-                                        self.setSuitCondition(target3.doId, 'heavyRainDamage', self.getSuitConditionModifier(target3.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
-                                    if target3.dna.name == 'supervis' and target3.getActualLevel() == 20:
-                                        self.levels += atkLevel
-                                    if target3.dna.name == 'clubpres' and target3.getActualLevel() == 25:
-                                        self.setSuitCondition(target3.doId, 'shivering', self.getSuitConditionModifier(target3.doId, 'shivering') + 1, 1, 'setBoth')
-                                    if target3.dna.name == 'clubpres' and target3.getActualLevel() == 23:
-                                        self.setSuitCondition(target3.doId, 'rpm', self.getSuitConditionModifier(target3.doId, 'rpm') + 1, 1, 'setBoth')
-                                    # if target3.dna.name == 'cbutcher':
-                                    #     self.setSuitCondition(target3.doId, 'rpmincrease', self.getSuitConditionModifier(target3.doId, 'rpmincrease') + 1, -1, 'setBoth')
-                                    #     self.setSuitCondition(target3.doId, 'rpmcalculator', 1, 10, 'setBoth')
-                                    if not self.suitHasCondition(target3.doId, 'alreadyTargeted'):
-                                        self.setSuitCondition(target3.doId, 'alreadyTargeted', 1, 1, 'setBoth')
-                                        self.targets += 1
-                                    if target3.getHP() <= 0:
-                                        self.__removeLured(target3.doId)
-                                        if target3.getSkeleRevives() >= 1:
-                                            target3.useSkeleRevive()
-                                        if not self.suitHasCondition(target3.doId, 'dead'):
-                                            if target3.dna.name == 'cbutcher':
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'rkeeper':
-                                                        self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
-                                            if self.suitHasCondition(target3.doId, 'overpressure'):
-                                                for s in self.battle.activeSuits:
-                                                    if s.dna.name == 'safesupervis':
-                                                        if self.suitHasCondition(s.doId, 'overpressureDeath'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
-                                                        elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
-                                                        else:
-                                                            self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
-                                            self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
-                                            self.deadSuits += 1
-                                            if target3.getExecutive() or target3.getGovernaught():
-                                                levelAmount = target3.getActualLevel() * 9
-                                            else:
-                                                levelAmount = target3.getActualLevel() * 5
+                        #                     self.addLevelDamage(levelAmount, atkTrack)
+                        #     else:
+                        #         if not self.suitHasCondition(target3.doId, 'immune'):
+                        #             target3.setHP(target3.getHP() - math.ceil(damageDone / 3))
+                        #             if self.suitHasCondition(target3.doId, 'heavyRainDamage'):
+                        #                 self.setSuitCondition(target3.doId, 'heavyRainDamage', self.getSuitConditionModifier(target3.doId, 'heavyRainDamage') + damageDone, -1, 'setBoth')
+                        #             if target3.dna.name == 'supervis' and target3.getActualLevel() == 20:
+                        #                 self.levels += atkLevel
+                        #             if target3.dna.name == 'clubpres' and target3.getActualLevel() == 25:
+                        #                 self.setSuitCondition(target3.doId, 'shivering', self.getSuitConditionModifier(target3.doId, 'shivering') + 1, 1, 'setBoth')
+                        #             if target3.dna.name == 'clubpres' and target3.getActualLevel() == 23:
+                        #                 self.setSuitCondition(target3.doId, 'rpm', self.getSuitConditionModifier(target3.doId, 'rpm') + 1, 1, 'setBoth')
+                        #             # if target3.dna.name == 'cbutcher':
+                        #             #     self.setSuitCondition(target3.doId, 'rpmincrease', self.getSuitConditionModifier(target3.doId, 'rpmincrease') + 1, -1, 'setBoth')
+                        #             #     self.setSuitCondition(target3.doId, 'rpmcalculator', 1, 10, 'setBoth')
+                        #             if not self.suitHasCondition(target3.doId, 'alreadyTargeted'):
+                        #                 self.setSuitCondition(target3.doId, 'alreadyTargeted', 1, 1, 'setBoth')
+                        #                 self.targets += 1
+                        #             if target3.getHP() <= 0:
+                        #                 self.__removeLured(target3.doId)
+                        #                 if target3.getSkeleRevives() >= 1:
+                        #                     target3.useSkeleRevive()
+                        #                 if not self.suitHasCondition(target3.doId, 'dead'):
+                        #                     if target3.dna.name == 'cbutcher':
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'rkeeper':
+                        #                                 self.setSuitCondition(s.doId, 'phantomDeath', 1, 1, 'setBoth')
+                        #                     if self.suitHasCondition(target3.doId, 'overpressure'):
+                        #                         for s in self.battle.activeSuits:
+                        #                             if s.dna.name == 'safesupervis':
+                        #                                 if self.suitHasCondition(s.doId, 'overpressureDeath'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath2', 1, 1, 'setBoth')
+                        #                                 elif self.suitHasCondition(s.doId, 'overpressureDeath2'):
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath3', 1, 1, 'setBoth')
+                        #                                 else:
+                        #                                     self.setSuitCondition(s.doId, 'overpressureDeath', 1, 1, 'setBoth')
+                        #                     self.setSuitCondition(target3.doId, 'dead', 1, 2, 'setBoth')
+                        #                     self.deadSuits += 1
+                        #                     if target3.getExecutive() or target3.getGovernaught():
+                        #                         levelAmount = target3.getActualLevel() * 9
+                        #                     else:
+                        #                         levelAmount = target3.getActualLevel() * 5
 
-                                            self.addLevelDamage(levelAmount, atkTrack)
+                        #                     self.addLevelDamage(levelAmount, atkTrack)
                     else:
                         currTarget.setHP(currTarget.getHP() - damageDone)
                 targetId = currTarget.getDoId()

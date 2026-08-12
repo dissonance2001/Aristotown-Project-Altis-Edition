@@ -1990,7 +1990,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon.setTexture(texture, 1)
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '+%s%%' % self.cog.getToonStatusModifier('videoStatic'),
+                '+%s%%' % self.cog.getSuitStatusModifier('videoStatic'),
                 'positiveText',
                 (0, 1, 0.016, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -2100,7 +2100,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/shield_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '-%s%%' % self.cog.getToonStatusModifier('refractionBarrier'),
+                '-%s%%' % self.cog.getSuitStatusModifier('refractionBarrier'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -2592,7 +2592,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon.reparentTo(iconRoot)
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '+%s%%' % self.cog.getToonStatusModifier('powerhouseGeneration'),
+                '+%s%%' % self.cog.getSuitStatusModifier('powerhouseGeneration'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3332,7 +3332,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/suit_damage_up_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '+%s%%' % self.cog.getToonStatusModifier('damageUp'),
+                '+%s%%' % self.cog.getSuitStatusModifier('damageUp'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3349,7 +3349,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/ripped_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '+%s%%' % self.cog.getToonStatusModifier('ripped'),
+                '+%s%%' % self.cog.getSuitStatusModifier('ripped'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3366,7 +3366,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/shield_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '-%s%%' % self.cog.getToonStatusModifier('shielding'),
+                '-%s%%' % self.cog.getSuitStatusModifier('shielding'),
                 'positiveText',
                 (0, 1, 0.016, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3383,7 +3383,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/scope_creep_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '-%s%%' % self.cog.getToonStatusModifier('scopeCreep'),
+                '-%s%%' % self.cog.getSuitStatusModifier('scopeCreep'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3650,7 +3650,7 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status.find('**/suit_damage_down_icon')
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '-%s%%' % self.cog.getToonStatusModifier('damageDown'),
+                '-%s%%' % self.cog.getSuitStatusModifier('damageDown'),
                 'positiveText',
                 (0, 1, 0.016, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3884,7 +3884,7 @@ class TownBattleCogPanel(DirectFrame):
                 ToontownGlobals.getSignFont()
             )
             damageText = self.getColoredText(
-                '-%s' % self.cog.getToonStatusModifier('zapped'),
+                '-%s' % self.cog.getSuitStatusModifier('zapped'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
