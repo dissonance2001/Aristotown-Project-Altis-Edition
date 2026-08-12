@@ -1735,6 +1735,8 @@ class Movie(DirectObject.DirectObject):
         IGNORE_LAFF_METER = (
              'AttorneyOverseer',
         'AttorneyOverseerDrop',
+        'Desperation',
+        'Desperation2',
         'AttorneyOverseerSquirt',
         'VideographerStarOfTheShow',
         'AttorneyOverseerThrow',

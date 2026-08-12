@@ -3540,7 +3540,7 @@ def doHotTakeDamage(attack):
         soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
         notifyTrack = Sequence(Func(toon.showHpTextNew, -int(dmg), text="VULNERABLE!", colorCode=3))
         notifyTrack.append(Parallel(Func(toon.clearToonStatusEffect, 'bombed')))
-        notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'bombed2', modifier=75, turns=2)))
+        notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'bombed2', modifier=50, turns=2), Func(toon.setToonStatusEffect, 'bombedDamage', modifier=50, turns=2)))
         notifyTrack.append(Wait(5.0))
         if dmg > 0:
             soundTracks.append(soundTrack)

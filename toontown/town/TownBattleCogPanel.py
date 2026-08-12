@@ -1453,6 +1453,56 @@ class TownBattleCogPanel(DirectFrame):
         slot = self.statusSlots[self.statusEffects]
         self.statusEffects += 1
         return slot
+
+    def getRainbowText(self, text, font=None):
+        colors = (
+            (1.0, 0.0, 0.0, 1.0),  # red
+            (1.0, 0.5, 0.0, 1.0),  # orange
+            (1.0, 1.0, 0.0, 1.0),  # yellow
+            (0.0, 1.0, 0.0, 1.0),  # green
+            (0.0, 0.5, 1.0, 1.0),  # blue
+            (0.5, 0.0, 1.0, 1.0),  # purple
+        )
+
+        manager = TextPropertiesManager.getGlobalPtr()
+        result = ''
+
+        for i, char in enumerate(text):
+            propertyName = 'rainbowText%d' % (i % len(colors))
+            color = colors[i % len(colors)]
+
+            properties = TextProperties()
+            properties.setTextColor(*color)
+
+            if font is not None:
+                properties.setFont(font)
+
+            manager.setProperties(propertyName, properties)
+
+            result += '\x01%s\x01%s\x02' % (
+                propertyName,
+                char
+            )
+
+        return result
+
+    def getColoredText(self, text, propertyName, color, font=None):
+        manager = TextPropertiesManager.getGlobalPtr()
+
+        properties = TextProperties()
+        properties.setTextColor(
+            color[0],
+            color[1],
+            color[2],
+            color[3]
+        )
+
+        if font is not None:
+            properties.setFont(font)
+
+        manager.setProperties(propertyName, properties)
+
+        return '\x01%s\x01%s\x02' % (propertyName, text)
     
     def _attachStatusIcons(
         self,
@@ -1769,10 +1819,16 @@ class TownBattleCogPanel(DirectFrame):
                 self.statusIcon2 = status.find('**/minnieX')
                 self.statusIcon2.setColorScale(1, 0, 0, 1)
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Lure Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to being LURED.", 
+                                    tooltipDescription="This Cog is entirely immune to being %s." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -1794,10 +1850,16 @@ class TownBattleCogPanel(DirectFrame):
                 self.statusIcon2 = status.find('**/minnieX')
                 self.statusIcon2.setColorScale(1, 0, 0, 1)
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Lure Resistance', 
-                                    tooltipDescription="This Cog will stay lured for 1 round.", 
+                                    tooltipDescription="This Cog will stay %s for 1 round." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -1817,10 +1879,16 @@ class TownBattleCogPanel(DirectFrame):
                 self.statusIcon2 = status.find('**/minnieX')
                 self.statusIcon2.setColorScale(1, 0, 0, 1)
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Lure Resistance', 
-                                    tooltipDescription="This Cog will stay lured for 2 rounds.", 
+                                    tooltipDescription="This Cog will stay %s for 2 rounds." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -1838,10 +1906,28 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/overcharge_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+50%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText = self.getColoredText(
+                'OVERCHARGED',
+                'overchargeText',
+                (0.627, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText2 = self.getColoredText(
+                 'OVERCHARGED',
+                'overchargeText',
+                (0.627, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Overcharged', 
-                                tooltipDescription="This Cog is Overcharged! While Overcharged, they have high Lure resistance, deal +50% more damage, and receive the same benefits as Manager Cogs.", 
+                                tooltipDescription="This Cog is %s! While %s, they have high Lure resistance, deal %s more damage, and receive the same benefits as Manager Cogs." % (gagText, gagText2, damageText), 
                                 tooltipBuff=True, 
                                 slotColor=(1, 1, 1, 1), scale=(.9, .9, .9))
             self._pulseStatusSlot(slot, fromColor=(0.992, 0.227, 1, 1), toColor=(self.healthColors[13]))
@@ -1850,10 +1936,28 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/schadenfreude_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+25%',
+                 'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText = self.getColoredText(
+                'OVERHEALED',
+                'overhealedText',
+                (0, 0.992, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText2 = self.getColoredText(
+                'OVERHEALED',
+                'overhealedText',
+                (0, 0.992, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Overhealed', 
-                                tooltipDescription="This Cog is Overhealed! While Overhealed, they will deal +25% more damage.", 
+                                tooltipDescription="This Cog is %s! While %s, they will deal %s more damage." % (gagText, gagText2, damageText), 
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
 
@@ -1885,10 +1989,16 @@ class TownBattleCogPanel(DirectFrame):
             texture = loader.loadTexture('phase_5/maps/effects/videoStatic.png')
             self.statusIcon.setTexture(texture, 1)
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getToonStatusModifier('videoStatic'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Video Static', 
-                                tooltipDescription="The Videographer's broadcast is being interrupted! He is dealing and taking +%s%% more damage." % self.cog.getSuitStatusModifier('videoStatic'),  
+                                tooltipDescription="The Videographer's broadcast is being interrupted! He is dealing and taking %s more damage." % damageText,  
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
 
@@ -1901,11 +2011,17 @@ class TownBattleCogPanel(DirectFrame):
                                          text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -0.45), text_scale=.48)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-%s%%' % defense,
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon,
                                    slot,
                                    tooltipTitle='Chain Linked',
-                                   tooltipDescription='This Cog has %s%% damage resistance while Chain Linked.' % defense,
+                                   tooltipDescription='This Cog has %s damage resistance while Chain Linked.' % damageText,
                                    tooltipBuff=True,
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -1919,11 +2035,17 @@ class TownBattleCogPanel(DirectFrame):
                                          text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -0.45), text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '+%s%%' % modifier,
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon,
                                    slot,
                                    tooltipTitle='Kickback',
-                                   tooltipDescription='The Chainsaw Consultant takes +%s%% more damage.' % modifier,
+                                   tooltipDescription='The Chainsaw Consultant takes  %s more damage.' % damageText,
                                    tooltipBuff=False,
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -1977,10 +2099,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/shield_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getToonStatusModifier('refractionBarrier'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Refraction Barrier', 
-                                   tooltipDescription="This Silhouette is a strange being of light! Attacks will do -%s%% less damage on it!" % self.cog.getSuitStatusModifier('refractionBarrier'),  
+                                   tooltipDescription="This Silhouette is a strange being of light! Attacks will do %s less damage on it!" % damageText,  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1), scale=(.9, .9, .9))
 
@@ -1988,10 +2116,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/harmonious_colors_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-90%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Harmonious Colors', 
-                                tooltipDescription="The colors, they are so pretty... High Roller's Silhouettes are causing him to take 90% less damage!", 
+                                tooltipDescription="The colors, they are so pretty... High Roller's Silhouettes are causing him to take %s less damage!" % damageText, 
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
             self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2000,10 +2134,14 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/harmonious_colors_icon')
             slot = self._claimNextStatusSlot()
+            rainbowText = self.getRainbowText(
+                'INVINCIBLE!!',
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
                                 tooltipTitle='Harmonious Colors', 
-                                tooltipDescription="The colors, they are so pretty... High Roller is currently INVINCIBLE!!", 
+                                tooltipDescription="The colors, they are so pretty... High Roller is currently %s" % rainbowText, 
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
             self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2081,10 +2219,16 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status.find('**/duck_drop_icon')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'DROP',
+                'dropText',
+                (0, 0.992, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='J0K3R', 
-                                    tooltipDescription="This Silhouette is messing with your Gags?? Your Gags will occasionally get demoted or promoted. He ESPECIALLY loves messing with Drop Gags...", 
+                                    tooltipDescription="This Silhouette is messing with your Gags?? Your Gags will occasionally get demoted or promoted. He ESPECIALLY loves messing with %s Gags..." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), scale=(.8, .8, .8))
                 self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2092,10 +2236,16 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status.find('**/backfire_icon')
                 slot = self._claimNextStatusSlot()
+                damageText = self.getColoredText(
+                '-50%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='SPL45HB4CK', 
-                                    tooltipDescription="This Silhouette loves water parks! It's reflective properties will cause your Squirt Gags to bounce back to you! Silhouettes will receive a 50% damage resistance effect when Soaked.", 
+                                    tooltipDescription="This Silhouette loves water parks! It's reflective properties will cause your Squirt Gags to bounce back to you! Silhouettes will receive a %s damage resistance effect when Soaked." % damageText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), scale=(1.1, 1.1, 1.1))
                 self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2103,10 +2253,22 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status.find('**/trap_card_icon')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'TRAP',
+                'trapText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+                gagText2 = self.getColoredText(
+                'TRAP',
+                'trapText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='TR4P-C4RD', 
-                                    tooltipDescription="This Silhouette is eager to play it's Trap Card! It will use a powerful group attack if left unlured or if Trap Gags are placed on the field.", 
+                                    tooltipDescription="This Silhouette is eager to play it's %s Card! It will use a powerful group attack if left unlured or if %s Gags are placed on the field." % (gagText, gagText2), 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1))
                 self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2125,10 +2287,16 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status.find('**/fizzle_icon')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle="F1ZZL3", 
-                                    tooltipDescription="This Silhouette wore a rubber suit to work today! It will reduce your Zap damage by a lot.", 
+                                    tooltipDescription="This Silhouette wore a rubber suit to work today! It will reduce your %s damage by a lot." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1))
                 self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2147,10 +2315,16 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status.find('**/no_green_light_icon')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle="GR33NL1GHT3R", 
-                                    tooltipDescription="This Silhouette is practicing persuasion prevention! It will make different Silhouettes lure immune every round, and refuses to let it or it's friend deal with your knockback damage.", 
+                                    tooltipDescription="This Silhouette is practicing persuasion prevention! It will make different Silhouettes %s immune every round, and refuses to let it or it's friend deal with your knockback damage." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1))
                 self._pulseRainbowStatusSlot(slot, duration=2.0)
@@ -2190,11 +2364,17 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-25%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Overconfidence', 
-                                   tooltipDescription="The Ambassador is extremely confident in his ability to take down the Toons, he will deal 25% less damage in this mode.", 
+                                   tooltipDescription="The Ambassador is extremely confident in his ability to take down the Toons, he will deal %s less damage in this mode." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1), scale=(1.1, 1.1, 1.1))
             
@@ -2234,10 +2414,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+30%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, iconRoot], 
                                     slot, 
                                     tooltipTitle='Broken Connection', 
-                                   tooltipDescription="The Wiretapper has lost signal! She will be dealing and taking 30% more damage in this mode.", 
+                                   tooltipDescription="The Wiretapper has lost signal! She will be dealing and taking %s more damage in this mode." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),
                                     layerSettings=[
@@ -2258,11 +2444,17 @@ class TownBattleCogPanel(DirectFrame):
             texture = loader.loadTexture('phase_5/maps/effects/leverage.png')
             self.statusIcon2.setTexture(texture, 1)
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+50%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Leverage', 
                                    tooltipDescription="The Ambassador has had enough of the Toon's antics and has blown right through his suit! " \
-                                   "He will deal 50% more damage in this mode, and has access to a new ability.", 
+                                   "He will deal %s more damage in this mode, and has access to a new ability." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),
                                     layerSettings=[
@@ -2286,10 +2478,16 @@ class TownBattleCogPanel(DirectFrame):
             #                              text_scale=.6)
             # self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Contingency Protocol', 
-                                   tooltipDescription="The Contingency Director has entered his Override phase, and as such, he will be dealing and taking +10% more damage!", 
+                                   tooltipDescription="The Contingency Director has entered his Override phase, and as such, he will be dealing and taking %s more damage!" % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2362,10 +2560,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+30%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Enraged!', 
-                                   tooltipDescription="The Scapegoat is enraged! Scapegoat will deal +30% more damage while in this mode!", 
+                                   tooltipDescription="The Scapegoat is enraged! Scapegoat will deal %s more damage while in this mode!" % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             
@@ -2387,10 +2591,16 @@ class TownBattleCogPanel(DirectFrame):
             iconRoot = NodePath('immuneIcon')
             self.statusIcon.reparentTo(iconRoot)
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getToonStatusModifier('powerhouseGeneration'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Power Generation', 
-                                   tooltipDescription="The Powerhouse will generate power whenever he is Soaked, Zapped, or when he transitions. He is currently dealing and taking +%s%% more damage." % self.cog.getSuitStatusModifier('powerhouseGeneration'), 
+                                   tooltipDescription="The Powerhouse will generate power whenever he is Soaked, Zapped, or when he transitions. He is currently dealing and taking %s more damage." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2423,10 +2633,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/minnieX')
             self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'DROP',
+                'dropText',
+                (0, 0.992, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Drop Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to DROP Gags.", 
+                                    tooltipDescription="This Cog is entirely immune to %s Gags." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2448,10 +2664,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/minnieX')
             self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Zap Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to ZAP Gags.", 
+                                    tooltipDescription="This Cog is entirely immune to %s Gags." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2470,10 +2692,22 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/soak_shield_icon')
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'SOAKED',
+                'soakText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-60%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Soak Resistance', 
-                                   tooltipDescription="This Cog will take -60% less damage whenever it is Soaked.", 
+                                   tooltipDescription="This Cog will take %s less damage whenever it is %s." % (damageText, gagText), 
                                    tooltipBuff=False, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2484,10 +2718,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/minnieX')
             self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Lure Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to LURE Gags.", 
+                                    tooltipDescription="This Cog is entirely immune to %s Gags." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2509,10 +2749,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/minnieX')
             self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'SOUND',
+                'soundText',
+                (0.043, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Sound Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to SOUND Gags.", 
+                                    tooltipDescription="This Cog is entirely immune to %s Gags." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2534,10 +2780,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/minnieX')
             self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'THROW',
+                'throwText',
+                (1, 0.561, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Throw Resistance', 
-                                    tooltipDescription="This Cog is entirely immune to THROW Gags.", 
+                                    tooltipDescription="This Cog is entirely immune to %s Gags." % gagText, 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2566,10 +2818,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Closed Session', 
-                                   tooltipDescription="The Commissioner is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a +10% attack damage boost.", 
+                                   tooltipDescription="The Commissioner is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a %s attack damage boost." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
@@ -2695,10 +2953,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
             self.statusIcon2 = status.find('**/prestige_star')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+5',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                    slot, 
                                    tooltipTitle='Hollywood Hijinks', 
-                                   tooltipDescription="Defeating this Cog will grant Toons with a +5% Gag damage boost for the duration of the battle.", 
+                                   tooltipDescription="Defeating this Cog will grant Toons with a %s Gag damage boost for the duration of the battle." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),
                                    layerSettings=[
@@ -2774,10 +3038,22 @@ class TownBattleCogPanel(DirectFrame):
             texture = loader.loadTexture('phase_5/maps/effects/attentive.png')
             self.statusIcon2.setTexture(texture, 1)
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getSuitStatusModifier('desperation'), 
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Desperation', 
-                                    tooltipDescription="This Cog is in Desperation! Their attacks will deal +%s%% more damage, and have stronger Lure Resistance." % self.cog.getSuitStatusModifier('desperation'), 
+                                    tooltipDescription="This Cog is in Desperation! Their attacks will deal %s more damage, and have stronger %s Resistance." % (damageText, gagText), 
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -2845,10 +3121,22 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+            damageText = self.getColoredText(
+                '+50',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Insurance', 
-                                   tooltipDescription="This Cog is insured! While insured, they have high Lure resistance, heal +50 health every round, and receive the same benefits as Manager Cogs.", 
+                                   tooltipDescription="This Cog is insured! While insured, they have high %s resistance, heal %s health every round, and receive the same benefits as Manager Cogs." % (gagText, damageText), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             
@@ -2862,10 +3150,22 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+            damageText = self.getColoredText(
+                '+50',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Insurance', 
-                                   tooltipDescription="This Cog is insured! While insured, they have high Lure resistance, heal +85 health every round, and receive the same benefits as Manager Cogs.", 
+                                   tooltipDescription="This Cog is insured! While insured, they have high %s resistance, heal %s health every round, and receive the same benefits as Manager Cogs." % (gagText, damageText), 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2873,10 +3173,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/heal_over_time_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '225',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Insured', 
-                                   tooltipDescription="While the Cogs are alive, the Supervisor is insured. At the end of every round that he is insured, he will heal 225 health and gain a damage boost.", 
+                                   tooltipDescription="While the Cogs are alive, the Supervisor is insured. At the end of every round that he is insured, he will heal %s health and gain a damage boost." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -2889,11 +3195,29 @@ class TownBattleCogPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-10%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText = self.getColoredText(
+                'SQUIRT',
+                'squirtText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText2 = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Prestige Polish', 
-                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they will be entire immune to SQUIRT and ZAP Gags, and will deal and take -10% less damage.", 
+                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they will be entire immune to %s and %s Gags, and will deal and take %s less damage." % (gagText, gagText2, damageText),
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3007,10 +3331,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/attack_icon')
             self.statusIcon = status.find('**/suit_damage_up_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getToonStatusModifier('damageUp'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon2, self.statusIcon], 
                                    slot, 
                                    tooltipTitle='Damage Boost', 
-                                   tooltipDescription='Attacks from this Cog will be +%s%% more powerful.' % self.cog.getSuitStatusModifier('damageUp'), 
+                                   tooltipDescription='Attacks from this Cog will be %s more powerful.' % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3018,10 +3348,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/ripped_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getToonStatusModifier('ripped'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Ripped', 
-                                   tooltipDescription='Count Erfit is getting ripped! All of his attacks will deal +%s%% more damage.' % self.cog.getSuitStatusModifier('ripped'), 
+                                   tooltipDescription='Count Erfit is getting ripped! All of his attacks will deal %s more damage.' % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3029,10 +3365,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/shield_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getToonStatusModifier('shielding'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Damage Reduction', 
-                                   tooltipDescription="This Cog will take -%s%% less damage from each Gag!" % self.cog.getSuitStatusModifier('shielding'),  
+                                   tooltipDescription="This Cog will take %s less damage from each Gag!" % damageText,  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1), scale=(.9, .9, .9))
 
@@ -3040,10 +3382,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/scope_creep_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getToonStatusModifier('scopeCreep'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Scope Creep', 
-                                   tooltipDescription="The Count's damage resistance is creeping up, taking -%s%% less damage." % self.cog.getSuitStatusModifier('ripped'),  
+                                   tooltipDescription="The Count's damage resistance is creeping up, taking %s less damage." % damageText,  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3059,17 +3407,38 @@ class TownBattleCogPanel(DirectFrame):
                                    slotColor=(1, 0.984, 0, 1))
 
         if self.cog.hasSuitStatusEffect('rushJob'):
+            damageText = self.getColoredText(
+                '-40%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText2 = self.getColoredText(
+                'FIRED',
+                'fireText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+                )
             if self.cog.getSuitStatusModifier('rushJob') == 1:
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/attack_icon')
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_wreckingball')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'TRAP',
+                'trapText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if TRAP is not used on this Cog!! " \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3088,11 +3457,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_hypno_goggles')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURE',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if LURE is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3111,11 +3489,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_cake')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'THROW',
+                'throwText',
+                (1, 0.561, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if THROW is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3134,11 +3521,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_storm_cloud')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'SQUIRT',
+                'squirtText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2],  
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if SQUIRT is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3157,11 +3553,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_tesla_coil')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if ZAP is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3180,11 +3585,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_fog_horn')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'SOUND',
+                'soundText',
+                (0.043, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if SOUND is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3203,11 +3617,20 @@ class TownBattleCogPanel(DirectFrame):
                 status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
                 self.statusIcon2 = status.find('**/inventory_boulder')
                 slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'DROP',
+                'dropText',
+                (0, 0.992, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
                 self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Rush Job', 
-                                    tooltipDescription="ALL Toons will be punished if DROP is not used on this Cog!!" \
-                                    "This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit. The wrong Gag will deal 40% less damage.", 
+                                    tooltipDescription=(
+                                            "ALL Toons will be punished if %s is not used on this Cog!! "
+                                            "This Cog cannot be %s, but the right Gag used against this Cog will be much more likely to hit. "
+                                            "The wrong Gag will deal %s less damage."
+                                        ) % (gagText, gagText2, damageText),
                                     tooltipBuff=True, 
                                     slotColor=(1, 0.984, 0, 1), 
                                     layerSettings=[
@@ -3226,10 +3649,16 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon2 = status.find('**/attack_icon')
             self.statusIcon = status.find('**/suit_damage_down_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getToonStatusModifier('damageDown'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                    slot, 
                                    tooltipTitle='Damage Down', 
-                                   tooltipDescription='Attacks from this Cog will be -%s%% less powerful!' % self.cog.getSuitStatusModifier('damagedown'), 
+                                   tooltipDescription='Attacks from this Cog will be %s less powerful!' % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -3247,10 +3676,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-25%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Yellow Light', 
-                                   tooltipDescription="This Cog will deal -25% less damage.", 
+                                   tooltipDescription="This Cog will deal %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(1, 0.984, 0, 1), scale=(0.9, 0.9, 0.9))
 
@@ -3264,10 +3699,16 @@ class TownBattleCogPanel(DirectFrame):
             #                              text_scale=.6)
             # self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-25%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Protocol Breach', 
-                                   tooltipDescription="The Contingency Director's override has malfunctioned! He is now taking and dealing -25% less damage.", 
+                                   tooltipDescription="The Contingency Director's override has malfunctioned! He is now taking and dealing %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3292,10 +3733,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/worker_management_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getSuitStatusModifier('compensationClaims'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Compensation Claims', 
-                                   tooltipDescription="The Union Buster has been punished for cutting off too many of his employees! He is now taking +%s%% more damage as a result." % self.cog.getSuitStatusModifier('compensationClaims'), 
+                                   tooltipDescription="The Union Buster has been punished for cutting off too many of his employees! He is now taking %s more damage as a result." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3303,10 +3750,16 @@ class TownBattleCogPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/broken_shield_icon')
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % self.cog.getSuitStatusModifier('vulnerable'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Vulnerable', 
-                                   tooltipDescription='This Cog is taking +%s%% more damage from Gags!' % self.cog.getSuitStatusModifier('vulnerable'), 
+                                   tooltipDescription='This Cog is taking %s more damage from Gags!' % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(.9, .9, .9))
 
@@ -3320,10 +3773,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-100',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Market Meltdown', 
-                                   tooltipDescription='This Cog will take -100 damage per round while the Meltdown is in effect!', 
+                                   tooltipDescription='This Cog will take %s damage per round while the Meltdown is in effect!' % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -3337,16 +3796,46 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s' % int(self.cog.getMaxHP() / 4),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText = self.getColoredText(
+                'SUED',
+                'suedText',
+                (0.847, 0.784, 0.992, 1.0),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Sued', 
-                                   tooltipDescription='This Cog will take %s damage per round and cannot attack! Each Gag used against this Cog increases the effect duration up to 3 rounds.'
-                                   % int(self.cog.getMaxHP() / 4), 
+                                   tooltipDescription='This Cog is %s, and as such will take %s damage per round and cannot attack! Each Gag used against this Cog increases the effect duration up to 3 rounds.'
+                                   % (gagText, damageText), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
         if self.cog.hasSuitStatusEffect('lured'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+            gagText2 = self.getColoredText(
+                'THROW',
+                'throwText',
+                (1, 0.561, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText3 = self.getColoredText(
+                'SQUIRT',
+                'squirtText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
             if self.cog.isLured == 1:
                 self.statusIcon = status.find('**/lured_icon')
                 self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('lured'),
@@ -3358,8 +3847,8 @@ class TownBattleCogPanel(DirectFrame):
                 slot = self._claimNextStatusSlot()
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
-                                    tooltipTitle='Lured (Unrestige)', 
-                                    tooltipDescription="LURED Cogs cannot attack and take more damage from each THROW or SQUIRT Gag that's used.",
+                                    tooltipTitle='Lured (Unprestige)', 
+                                    tooltipDescription="%s Cogs cannot attack and take more damage from each %s or %s Gag that's used." % (gagText, gagText2, gagText3),
                                     tooltipBuff=False, 
                                     slotColor=(0, 0.902, 1, 1))
             else:
@@ -3374,7 +3863,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='Lured (Prestige)', 
-                                    tooltipDescription="LURED Cogs cannot attack and take more damage from each THROW or SQUIRT Gag that's used.",
+                                    tooltipDescription="%s Cogs cannot attack and take more damage from each %s or %s Gag that's used." % (gagText, gagText2, gagText3),
                                     tooltipBuff=False, 
                                     slotColor=(0, 0.902, 1, 1))
 
@@ -3388,10 +3877,22 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-%s' % self.cog.getToonStatusModifier('zapped'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Aftershock', 
-                                   tooltipDescription='This Cog has been shocked due to being affected by a ZAP gag, and as such will take %s damage at the start of the round!' % self.cog.getSuitStatusModifier('zapped'),
+                                   tooltipDescription='This Cog has been shocked due to being affected by a %s gag, and as such will take %s damage at the start of the round!' % (gagText, damageText),
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -3405,10 +3906,16 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '+10%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Marked for Laugh', 
-                                   tooltipDescription='This cog is more vulnerable, and will take 10% more damage.', 
+                                   tooltipDescription='This cog has been marked due to being affected by a %s gag, and will take %s more damage.' % (gagText, damageText),
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -3422,10 +3929,22 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'TRAP',
+                'trapText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Dazed', 
-                                   tooltipDescription='This Cog is dazed due to a TRAP activation, and as such has a -10% dodge chance reduction!', 
+                                   tooltipDescription='This Cog is dazed due to a %s activation, and as such has a %s dodge chance reduction!' % (gagText, damageText),
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -3439,10 +3958,34 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'SOAKED',
+                'soakText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText2 = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText3 = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Soaked', 
-                                   tooltipDescription='Soaked Cogs have a -10% dodge chance and are vulnerable to ZAP Gags. Removed if this Cog is hit by ZAP Gags.', 
+                                   tooltipDescription='%s Cogs have a %s dodge chance and are vulnerable to %s Gags. Removed if this Cog is hit by %s Gags.' % (gagText, damageText, gagText2, gagText3),
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -3456,10 +3999,46 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'DRENCHED',
+                'drenchText',
+                (0, 0.498, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText4 = self.getColoredText(
+                'DRENCHED',
+                'drenchText',
+                (0, 0.498, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            damageText2 = self.getColoredText(
+                '-15%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            gagText2 = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText3 = self.getColoredText(
+                'ZAP',
+                'zapText',
+                (0.957, 1, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Drenched', 
-                                   tooltipDescription='Soaked Cogs have a -20% dodge chance, deal -15% less damage, and are vulnerable to ZAP Gags. One drenched round is removed if this Cog is hit by ZAP Gags.',
+                                   tooltipDescription='%s Cogs have a %s dodge chance, deal %s less damage, and are vulnerable to %s Gags. One %s round is removed if this Cog is hit by %s Gags.' % (gagText, damageText, damageText2, gagText2, gagText4, gagText3),
                                    tooltipBuff=False, 
                                    slotColor=(0.012, 0, 1))
             
@@ -3468,10 +4047,22 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status2.find('**/attack_icon')
             self.statusIcon2 = status2.find('**/suit_damage_down_icon')
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'DRENCHED',
+                'drenchText',
+                (0, 0.498, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-10%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Damage Down', 
-                                   tooltipDescription='While Drenched, attacks from this Cog will be -15% less powerful!', 
+                                   tooltipDescription='While %s, attacks from this Cog will be %s less powerful!' % (gagText, damageText), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1),
                                     layerSettings=[
@@ -3490,10 +4081,22 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status2.find('**/attack_icon')
             self.statusIcon2 = status2.find('**/suit_damage_down_icon')
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'DRENCHED',
+                'drenchText',
+                (0, 0.498, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-25%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Burnt Out', 
-                                   tooltipDescription='While the Pressurizer is drenched, he will deal -25% less damage and gain an extra attack.', 
+                                   tooltipDescription='While the Pressurizer is %s, he will deal %s less damage and will attack twice.' % (gagText, damageText), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1),
                                     layerSettings=[
@@ -3512,10 +4115,22 @@ class TownBattleCogPanel(DirectFrame):
             self.statusIcon = status2.find('**/attack_icon')
             self.statusIcon2 = status2.find('**/suit_damage_down_icon')
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'SOAKED',
+                'soakText',
+                (1, 0, 0.996, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-25%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                     slot, 
                                     tooltipTitle='Burnt Out', 
-                                   tooltipDescription='While the Pressurizer is soaked, he will deal -25% less damage and gain an extra attack.', 
+                                   tooltipDescription='While the Pressurizer is %s, he will deal %s less damage and will attack twice.' % (gagText, damageText), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1),
                                     layerSettings=[
@@ -3530,6 +4145,30 @@ class TownBattleCogPanel(DirectFrame):
                                     ])
             
         if self.cog.hasSuitStatusEffect('trapped'):
+            gagText = self.getColoredText(
+                'TRAPPED',
+                'trapText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
+            gagText2 = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+            gagText3 = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+            damageText = self.getColoredText(
+                '+20%',
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             if self.cog.getSuitStatusModifier('trapped') == 8:
                 self.statusIcon = status.find('**/inventory_tnt')
@@ -3537,7 +4176,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a TNT! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a TNT! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 7:
@@ -3546,7 +4185,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Wrecking Ball! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Wrecking Ball! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2),  
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 6:
@@ -3555,7 +4194,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Trap Door! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Trap Door! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 5:
@@ -3564,7 +4203,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Quicksand! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Quicksand! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 4:
@@ -3573,7 +4212,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Springboard! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Springboard! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 3:
@@ -3582,7 +4221,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by Marbles! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by Marbles! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2),  
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 2:
@@ -3591,7 +4230,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Rake! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Rake! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             else:
@@ -3600,7 +4239,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is TRAPPED by a Banana Peel! LURE gags are +20% more accurate against this Cog. Once LURED, they will take damage.', 
+                                   tooltipDescription='This Cog is %s by a Banana Peel! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
 

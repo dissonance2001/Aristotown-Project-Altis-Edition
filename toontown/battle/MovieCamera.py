@@ -2573,9 +2573,46 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             from toontown.cutscene.PacesetterRushJobCutscene import makePacesetterRushJob
             camTrack2 = makePacesetterRushJob(suit, targetSuit, battle, attackDuration)
         else:
-            camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.0),
-                                 motionShot(0.0, 10.0, targetSuit.height - 1, -180, 0, 0.0, 0, targetSuit), motionShot(0.0, 10.0, targetSuit.height + 1, -180, 0, 0.0, 1, targetSuit), Wait(attackDuration - 2.0))
+            camTrack2 = Sequence(
+            defaultCamera(openShotDuration=0, attackDuration=0),
+
+            # First shot: attacking suit
+            motionShot(
+                0.0,
+                8.8096,
+                7.77317,
+                -180,
+                0.0,
+                0.0,
+                0,
+                suit
+            ),
+
+            Wait(1.0),
+
+            # Switch to target suit shot.
+            Func(
+                camera.setPos,
+                targetSuit,
+                0.0,
+                10.0,
+                targetSuit.height - 5
+            ),
+
+            # Set the orientation for this new shot.
+            Func(
+                camera.setHpr,
+                targetSuit,
+                180,
+                0,
+                0
+            ),
+
+            moveCameraOnly(0.0, 10.0, targetSuit.height, 1, targetSuit, h=180, p=0, startH=180, startP=0),
+            # Now ONLY move upward relative to targetSuit.
+
+            Wait(attackDuration - 2.0)
+        )
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
         pbpDesc = pbpDc.getShowIntervalDesc(banDesc[name], attackDuration - 2)

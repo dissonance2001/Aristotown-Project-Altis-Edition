@@ -1112,6 +1112,8 @@ class SuitGenerator(object):
             self.makeHighRoller()
             self.generateHead3('highroller', animated=True)
             self.setHeight(10.0)
+            self.setSuitStatusEffect('silhouetteImmune', modifier=10)
+            self.setSuitStatusEffect('silhouetteShielding', modifier=10)
            # self.setTransparency(1)
 
         # Sellbots

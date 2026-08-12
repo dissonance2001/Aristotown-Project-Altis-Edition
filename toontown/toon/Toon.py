@@ -2434,7 +2434,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.cleanupConfusedStars()
         self.cleanupCheerHands()
 
-    def makeLoopingArrowAuraDown(self):
+    def makeLoopingArrowAuraDown(self, initialDelay=0.9):
         import random
         import math
 
@@ -2470,16 +2470,21 @@ class Toon(Avatar.Avatar, ToonHead):
             oneArrowTrack = Sequence(
                 Wait(initialDelay + i * 0.25),
                 Func(resetFallingArrow, fallingArrow),
-                Parallel(
+                Parallel(LerpFunctionInterval(
+                            fallingArrow.setAlphaScale,
+                            0.25,
+                            fromData=0,
+                            toData=1
+                        ), 
                     LerpFunctionInterval(
                         fallingArrow.setZ,
-                        1.0,
+                        2.0,
                         fromData=3,
                         toData=0,
-                        blendType='easeIn'
+                        blendType='easeInOut'
                     ),
                     Sequence(
-                        Wait(0.3),
+                        Wait(1.5),
                         LerpFunctionInterval(
                             fallingArrow.setAlphaScale,
                             0.25,
@@ -2535,16 +2540,21 @@ class Toon(Avatar.Avatar, ToonHead):
             oneArrowTrack = Sequence(
                 Wait(0.9 + i * 0.25),
                 Func(resetArrow, arrow),
-                Parallel(
+                Parallel(LerpFunctionInterval(
+                            arrow.setAlphaScale,
+                            0.25,
+                            fromData=0,
+                            toData=1
+                        ), 
                     LerpFunctionInterval(
                         arrow.setZ,
-                        1.0,
+                        2.0,
                         fromData=0,
                         toData=3,
-                        blendType='easeOut'
+                        blendType='easeInOut'
                     ),
                     Sequence(
-                        Wait(0.5),
+                        Wait(1.5),
                         LerpFunctionInterval(
                             arrow.setAlphaScale,
                             0.25,
@@ -2602,15 +2612,21 @@ class Toon(Avatar.Avatar, ToonHead):
 
                 Parallel(
                     LerpFunctionInterval(
+                            arrow.setAlphaScale,
+                            0.25,
+                            fromData=0,
+                            toData=1
+                        ), 
+                    LerpFunctionInterval(
                         arrow.setZ,
-                        1.0,
+                        2.0,
                         fromData=0,
                         toData=3,
-                        blendType='easeOut'
+                        blendType='easeInOut'
                     ),
 
                     Sequence(
-                        Wait(0.5),
+                        Wait(1.5),
                         LerpFunctionInterval(
                             arrow.setAlphaScale,
                             0.25,

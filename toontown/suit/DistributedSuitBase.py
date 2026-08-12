@@ -38,7 +38,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import SuitBattleGlobals
 
 SoakColor = Point4(0.737, 0.737, 1, 1.0)
-DrenchColor = Point4(0.416, 0.416, 1, 1.0)
+DrenchColor = Point4(0.643, 0.643, 1, 1)
 OilColor = Point4(0.302, 0.302, 0.302, 1)
 
 class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBase.SuitBase):

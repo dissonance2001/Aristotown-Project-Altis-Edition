@@ -357,7 +357,7 @@ def doHurrySickness(attack):
         if dmg > 0:
             suitTracks.append(getSuitAnimTrackAttack(attack))
             notifyTracks.append(Sequence(Wait(1.5), Parallel(Func(toon.showHpTextNew, -int(dmg)))))
-            notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'damageDown', modifier=40, turns=2, mode='keepHighest')))
+            notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'hurrySicknessAttorney', modifier=40, turns=2, mode='keepHighest')))
     toonTracks = getToonTracksCheat(attack, damageDelay, ['slip-backward'], 0, ['nothing'])
     return Parallel(suitTracks, toonTracks, notifyTracks, soundTracks)
 

@@ -2605,18 +2605,18 @@ class AttackHPCalculatorAI(object):
                     self.setToonCondition(toon.doId, 'markedforsanction', 1, 3, 'setBoth')
                     self.setToonCondition(toon.doId, 'bombedToonDamage', 0, 0, 'setBoth')
                     self.setToonCondition(toon.doId, 'bombedToon', 0, 0, 'setBoth')
-                    if self.getToonConditionModifier(toonId, 'snapped') > 1.75:
+                    if self.getToonConditionModifier(toonId, 'snapped') > 1.5:
                         self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), 2, 'setBoth')
                     else:
-                        self.setToonCondition(toon.doId, 'snapped', 1.75, 2, 'setBoth')
-                    if self.getToonConditionModifier(toonId, 'raisedAnte') > 75:
+                        self.setToonCondition(toon.doId, 'snapped', 1.5, 2, 'setBoth')
+                    if self.getToonConditionModifier(toonId, 'raisedAnte') > 50:
                         self.setToonCondition(toon.doId, 'raisedAnte',
                                               self.getToonConditionModifier(toonId, 'raisedAnte'), 2, 'setBoth')
                         self.setToonCondition(toon.doId, 'lureBoost',
                                               self.getToonConditionModifier(toonId, 'lureBoost'), 2, 'setBoth')
                     else:
-                        self.setToonCondition(toon.doId, 'raisedAnte', 75, 2, 'setBoth')
-                        self.setToonCondition(toon.doId, 'lureBoost', 75, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'raisedAnte', 50, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'lureBoost', 50, 2, 'setBoth')
                     result = 15
                 else:
                     result = 0

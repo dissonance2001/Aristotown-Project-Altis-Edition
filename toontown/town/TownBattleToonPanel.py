@@ -733,6 +733,24 @@ class TownBattleToonPanel(DirectFrame):
         self.toonStatusEffectTooltip.hide()
         gui.removeNode()
 
+    def getColoredText(self, text, propertyName, color, font=None):
+        manager = TextPropertiesManager.getGlobalPtr()
+
+        properties = TextProperties()
+        properties.setTextColor(
+            color[0],
+            color[1],
+            color[2],
+            color[3]
+        )
+
+        if font is not None:
+            properties.setFont(font)
+
+        manager.setProperties(propertyName, properties)
+
+        return '\x01%s\x01%s\x02' % (propertyName, text)
+
     def activateToonInfoButton(self):
         if self.toonStatusInformationPanel:
             self.closeToonStatusInformationPanel()
@@ -1452,17 +1470,17 @@ class TownBattleToonPanel(DirectFrame):
                     status = loader.loadModel('phase_3.5/models/gui/status_effects')
                     icon = status.find('**/toon_damage_up_icon')
                     icon.reparentTo(iconRoot)
-            DirectLabel(
-                parent=iconRoot,
-                relief=None,
-                text='%s' % uses,
-                text_fg=(1, 1, 1, 1),
-                text_shadow=(0, 0, 0, 1),
-                text_font=ToontownGlobals.getInterfaceFont(),
-                text_bg=Vec4(0, 0, 0, 0),
-                pos=(0.25, 0, -0.45),
-                text_scale=0.6
-            )
+            # DirectLabel(
+            #     parent=iconRoot,
+            #     relief=None,
+            #     text='%s' % uses,
+            #     text_fg=(1, 1, 1, 1),
+            #     text_shadow=(0, 0, 0, 1),
+            #     text_font=ToontownGlobals.getInterfaceFont(),
+            #     text_bg=Vec4(0, 0, 0, 0),
+            #     pos=(0.25, 0, -0.45),
+            #     text_scale=0.6
+            # )
             slot = self._claimNextToonStatusSlot()
             manager = TextPropertiesManager.getGlobalPtr()
             boostProperties = TextProperties()
@@ -1629,6 +1647,23 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipDescription="This Toon's Gags will deal +%s%% more damage." % avatar.getToonStatusModifier('damageUp'),  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
+
+        if avatar.hasToonStatusEffect('bombedDamage'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/trap_card_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('bombedDamage'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hot Take', 
+                                   tooltipDescription="This Toon is dealing +%s%% more damage." % avatar.getToonStatusModifier('bombedDamage'), 
+                                   tooltipBuff=True, 
+                                   slotColor=(0, 0.902, 1, 1))
 
         if avatar.hasToonStatusEffect('viralSensation'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -1885,10 +1920,22 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            gagText = self.getColoredText(
+                'SOUND',
+                'soundText',
+                (0.043, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('encore'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Encore', 
-                                   tooltipDescription="All Gags have a +%s%% effectiveness boost. By using SOUND again, you'll become Winded." % avatar.getToonStatusModifier('encore'),  
+                                   tooltipDescription="All Gags have a %s effectiveness boost. By using %s again, you'll become Winded." % (damageText, gagText),  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -1929,11 +1976,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('snapped'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Snapped', 
-                                   tooltipDescription="This Toon takes +%s%% more damage while snapped." % avatar.getToonStatusModifier('snapped'), 
+                                   tooltipDescription="This Toon takes %s more damage while snapped." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -1946,11 +1999,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('hemmorage'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hemmorage', 
-                                   tooltipDescription="This Toon takes +%s%% more damage." % avatar.getToonStatusModifier('hemmorage'), 
+                                   tooltipDescription="This Toon takes %s more damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -1963,11 +2022,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-50%',
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Dried Out', 
-                                   tooltipDescription="This Toon has been wrung dry and has -50% accuracy!", 
+                                   tooltipDescription="This Toon has been wrung dry and has %s accuracy!" % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -1981,10 +2046,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('bombed2'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hot Take', 
-                                   tooltipDescription="This Toon is now taking and dealing +%s%% more damage." % avatar.getToonStatusModifier('bombed2'), 
+                                   tooltipDescription="This Toon is now taking %s more damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2032,18 +2103,31 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('wiretapped'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+
+            damageText2 = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('wiretapped'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             if avatar.getToonStatusModifier('wiretapped') > 0:
                 self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Wiretapped', 
-                                   tooltipDescription="This Toon is dealing +%s%% more damage this round." % avatar.getToonStatusModifier('wiretapped'), 
+                                   tooltipDescription="This Toon is dealing %s more damage this round." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             else:
                 self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Wiretapped', 
-                                   tooltipDescription="This Toon is dealing %s%% less damage this round." % avatar.getToonStatusModifier('wiretapped'), 
+                                   tooltipDescription="This Toon is dealing %s less damage this round." % damageText2, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2057,11 +2141,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45), text_scale=.6)
             self.extraText.show()
             modifier = int(round((avatar.getMarkedWood() - 1.0) * 100.0))
+            damageText = self.getColoredText(
+                '+%s%%' % modifier,
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon,
                                    slot,
                                    tooltipTitle='Marked Wood',
-                                   tooltipDescription='The Chainsaw Consultant deals +%s%% damage to this Toon.' % modifier,
+                                   tooltipDescription='The Chainsaw Consultant deals %s damage to this Toon.' % damageText,
                                    tooltipBuff=False,
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2076,11 +2166,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45), text_scale=.6)
             self.extraText.show()
             modifier = int(round((avatar.getVulnerability() - 1.0) * 100.0))
+            damageText = self.getColoredText(
+                '+%s%%' % modifier,
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon,
                                    slot,
                                    tooltipTitle='Vulnerable',
-                                   tooltipDescription='This Toon takes +%s%% more damage while vulnerable.' % modifier,
+                                   tooltipDescription='This Toon takes %s more damage while vulnerable.' % damageText,
                                    tooltipBuff=False,
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2094,10 +2190,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('vulnerable'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Vulnerable', 
-                                   tooltipDescription="This Toon takes +%s%% more damage while vulnerable." % avatar.getToonStatusModifier('vulnerable'), 
+                                   tooltipDescription="This Toon takes %s more damage while vulnerable." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2105,10 +2207,16 @@ class TownBattleToonPanel(DirectFrame):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/broken_shield_icon')
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('aceInTheHole'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Vulnerable', 
-                                   tooltipDescription="The ace up the High Roller's sleeve causes this Toon to take +%s%% more damage from attacks." % avatar.getToonStatusModifier('aceInTheHole'), 
+                                   tooltipDescription="The ace up the High Roller's sleeve causes this Toon to take %s more damage from attacks." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2160,10 +2268,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('inkDrain'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Ink Drain', 
-                                   tooltipDescription="All Gags are -%s%% less effective." % avatar.getToonStatusModifier('inkDrain'), 
+                                   tooltipDescription="All Gags are %s less effective." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2177,10 +2291,39 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('damageDown'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Damage Down', 
-                                   tooltipDescription="This Toon's Gags are -%s%% less effective." % avatar.getToonStatusModifier('damageDown'), 
+                                   tooltipDescription="This Toon's Gags are %s less effective." % damageText, 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
+        if avatar.hasToonStatusEffect('hurrySicknessAttorney'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/hurry_sickness_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('hurrySicknessAttorney'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('hurrySicknessAttorney'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Hurry Sickness', 
+                                   tooltipDescription="This Toon couldn't keep up with the Head Attorney and thus will deal %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2194,10 +2337,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('hurrySickness'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hurry Sickness', 
-                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal -%s%% less damage." % avatar.getToonStatusModifier('hurrySickness'), 
+                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2211,10 +2360,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('hurrySicknessBan'),
+                'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hurry Sickness', 
-                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal -%s%% less damage." % avatar.getToonStatusModifier('hurrySicknessBan'), 
+                                   tooltipDescription="This Toon couldn't keep up with the Pacesetter and thus will deal %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2227,11 +2382,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('sanctioned'),
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Sanctioned', 
-                                   tooltipDescription="This Toon's Gags are -%s%% less effective while sanctioned." % avatar.getToonStatusModifier('sanctioned'), 
+                                   tooltipDescription="This Toon's Gags are %s less effective while sanctioned." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2245,10 +2406,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('breached'),
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Breached', 
-                                   tooltipDescription="This Toon's Gags are -%s%% less effective while breached." % avatar.getToonStatusModifier('breached'), 
+                                   tooltipDescription="This Toon's Gags are %s less effective while Breached." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2261,11 +2428,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('hotShot'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Hot Shot', 
-                                   tooltipDescription="This Toon takes +%s%% more damage." % avatar.getToonStatusModifier('hotShot'), 
+                                   tooltipDescription="This Toon takes %s more damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2279,10 +2452,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('marketMeltdown'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Market Meltdown', 
-                                   tooltipDescription="The Dividend King has locked half of your Gag choices, while buffing the other half of them by +%s%%. This Toon will take 25 per round for the duration of the Meltdown." % avatar.getToonStatusModifier('marketMeltdown'), 
+                                   tooltipDescription="The Dividend King has locked half of your Gag choices, while buffing the other half of them by %s. This Toon will take 25 per round for the duration of the Meltdown." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             
@@ -2317,10 +2496,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '+%s%%' % avatar.getToonStatusModifier('revisedFiling'),
+                'positiveText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Revised Filing', 
-                                   tooltipDescription="This Toon is taking +%s%% more damage." % avatar.getToonStatusModifier('revisedFiling'), 
+                                   tooltipDescription="This Toon is taking %s more damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2344,11 +2529,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-25 Damage',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Power Surged', 
-                                   tooltipDescription="This Toon has been zapped! They will take 25 extra damage at the beginning of the round.", 
+                                   tooltipDescription="This Toon has been zapped! They will take %s at the beginning of the round." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2361,11 +2552,17 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-30 Damage',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             slot = self._claimNextToonStatusSlot()
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Liquidated', 
-                                   tooltipDescription="This Toon has been Liquidated, and as such they will take -30 damage per round.", 
+                                   tooltipDescription="This Toon has been Liquidated, and as such they will take %s per round." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2383,10 +2580,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-25 Damage',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='At-Will Employment', 
-                                   tooltipDescription="This Toon has been employed against their will by the Union Buster! They will take -25 damage per round.", 
+                                   tooltipDescription="This Toon has been employed against their will by the Union Buster! They will take %s per round." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2400,10 +2603,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-20 Damage',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Legally Bound', 
-                                   tooltipDescription="While legally bound, this Toon will take -20 damage per round.", 
+                                   tooltipDescription="While legally bound, this Toon will take %s per round." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2442,10 +2651,16 @@ class TownBattleToonPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextToonStatusSlot()
+            damageText = self.getColoredText(
+                '-25% Damage',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Yellow Light', 
-                                   tooltipDescription="This Toon is dealing -25% less damage.", 
+                                   tooltipDescription="This Toon is dealing %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(0.9, 0.9, 0.9))
 
@@ -2576,10 +2791,16 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            damageText = self.getColoredText(
+                '-%s%%' % avatar.getToonStatusModifier('groupDamageDown'),
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle="Radio Infrequency", 
-                                   tooltipDescription="Your group Gags will deal -%s%% less damage." % avatar.getToonStatusModifier('groupDamageDown'), 
+                                   tooltipDescription="Your group Gags will deal %s less damage." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2593,10 +2814,22 @@ class TownBattleToonPanel(DirectFrame):
                                          pos=(0.25, 0, -0.45),
                                          text_scale=.6)
             self.extraText.show()
+            gagText = self.getColoredText(
+                'SOUND',
+                'soundText',
+                (0.043, 0, 1, 1),
+                ToontownGlobals.getSignFont()
+            )
+            damageText = self.getColoredText(
+                '-50%',
+                'damageText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle="Winded", 
-                                   tooltipDescription="Your SOUND Gags will deal -50% less damage.", 
+                                   tooltipDescription="Your %s Gags will deal %s less damage." % (gagText, damageText), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
