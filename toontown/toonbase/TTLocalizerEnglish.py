@@ -9921,7 +9921,7 @@ SuitAttackTaunts = {
 #                                                   "I don't think you can handle the weight of thiff.",
 #                                                   'Thiff might weigh you down.',
 #                                                   "Thiff'll heavily impact your performanffe."],
-'HighRollerDamageReduction': ["Whoopth! The desk got all thhuffled!",
+'HighRollerDamageReduction': ["Whoopth! The deck got all thhuffled!",
                                                   "The cardth aren't where you left them!",
                                                   'The houthe alwayth changeth the ruleth.',
                                                   "Pleathe keep your handth where we can thee them!",
