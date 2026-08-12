@@ -76,20 +76,30 @@ class TTAFriendsManager(DistributedObjectGlobal):
         if not hasattr(base.localAvatar, 'getTeleportAvailable') or not hasattr(base.localAvatar, 'ghostMode'):
             self.sendUpdate('teleportResponse', [ fromId, 0, 0, 0, 0 ])
             return
-        if not base.localAvatar.getTeleportAvailable() or base.localAvatar.ghostMode:
-            if hasattr(base.cr.identifyFriend(fromId), 'getName'):
+        group = getattr(getattr(base.cr, 'groupManager', None), 'group', None)
+        memberIds = []
+        if group:
+            memberIds = [int(member.get('avId', 0)) for member in group.get('members', []) if not member.get('reserved', False)]
+        isGroupMember = int(fromId) in memberIds
+        teleportAvailable = base.localAvatar.getTeleportAvailable() or (isGroupMember and getattr(base.localAvatar, 'allowGroupMemberTeleports', False))
+        if not teleportAvailable or base.localAvatar.ghostMode:
+            avatar = base.cr.identifyFriend(fromId)
+            if hasattr(avatar, 'getName'):
                 if base.wantTpMessages:
-                    base.localAvatar.setSystemMessage(fromId, OTPLocalizer.WhisperFailedVisit % base.cr.identifyFriend(fromId).getName())
+                    base.localAvatar.setSystemMessage(fromId, OTPLocalizer.WhisperFailedVisit % avatar.getName())
             self.sendUpdate('teleportResponse', [ fromId, 0, 0, 0, 0 ])
             return
 
         hoodId = base.cr.playGame.getPlaceId()
-        if hasattr(base.cr.identifyFriend(fromId), 'getName'):
+        avatar = base.cr.identifyFriend(fromId)
+        if avatar is None and isGroupMember:
+            avatar = base.cr.doId2do.get(int(fromId))
+        if hasattr(avatar, 'getName'):
             if base.wantTpMessages:
-                base.localAvatar.setSystemMessage(fromId, OTPLocalizer.WhisperComingToVisit % base.cr.identifyFriend(fromId).getName())
-        
-        self.sendUpdate('teleportResponse', [fromId,base.localAvatar.getTeleportAvailable(),base.localAvatar.defaultShard,
-            hoodId,base.localAvatar.getZoneId()])
+                base.localAvatar.setSystemMessage(fromId, OTPLocalizer.WhisperComingToVisit % avatar.getName())
+
+        self.sendUpdate('teleportResponse', [fromId, int(bool(teleportAvailable)), base.localAvatar.defaultShard,
+            hoodId, base.localAvatar.getZoneId()])
 
     def d_teleportResponse(self, toId, available, shardId, hoodId, zoneId):
         self.sendUpdate('teleportResponse', [toId, available, shardId,

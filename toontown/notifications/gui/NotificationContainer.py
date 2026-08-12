@@ -30,6 +30,7 @@ class NotificationContainer(DirectFrame, FSM):
     # SocialPanelButtons left margin: 2.5 * 0.1425 = 0.35625
     # Notification right margin:      0.05 * 0.621 = 0.03105
     managed_anchor_pos = (-0.3873, 0, 0)
+    social_anchor_pos = (-0.6273, 0, 0)
 
     close_empty_pos = (0, 0, 0.4)
     move_duration = 0.17
@@ -74,11 +75,28 @@ class NotificationContainer(DirectFrame, FSM):
         self.notifications = []
         self.moveSeq = None
 
+        self.accept('social-panel-opened', self._socialPanelOpened)
+        self.accept('social-panel-closed', self._socialPanelClosed)
+        try:
+            from toontown.friends import FriendsListPanel
+            if FriendsListPanel.isFriendsListShown():
+                self.managed_node.setPos(self.social_anchor_pos)
+        except:
+            pass
+
         self.load()
         self.request(self.state_close)
         self.setBin('sorted-gui-popup', 900)
         self.setDepthTest(False)
         self.setDepthWrite(False)
+
+    def _socialPanelOpened(self):
+        if self.managed_node is not None:
+            self.managed_node.setPos(self.social_anchor_pos)
+
+    def _socialPanelClosed(self):
+        if self.managed_node is not None:
+            self.managed_node.setPos(self.managed_anchor_pos)
 
     def load(self):
         self.navigator = NotificationNavigator(
@@ -139,6 +157,8 @@ class NotificationContainer(DirectFrame, FSM):
         self.updateWindowVisibility()
 
     def destroy(self):
+        self.ignore('social-panel-opened')
+        self.ignore('social-panel-closed')
         if self.moveSeq:
             self.moveSeq.finish()
             self.moveSeq = None

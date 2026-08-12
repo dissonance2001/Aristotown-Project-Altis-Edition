@@ -132,6 +132,8 @@ class ToonTeleportPanel(DirectFrame):
                     self.fsm.request('notOnline')
             else:
                 self.fsm.request('wentAway')
+        elif getattr(base.cr, 'groupManager', None) and base.cr.groupManager.group and self.avId in [int(member.get('avId', 0)) for member in base.cr.groupManager.group.get('members', [])]:
+            self.fsm.request('checkAvailability')
         else:
             self.fsm.request('wentAway')
 

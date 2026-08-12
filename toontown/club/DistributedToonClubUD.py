@@ -10,6 +10,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from toontown.club import ClubGlobals
 from toontown.club import ClubShopCatalog
 from toontown.club import ClubTaskGenerator
+from toontown.groups.DistributedGroupManagerUD import DistributedGroupManagerUD
 
 
 class DistributedToonClubUD(DistributedObjectGlobalUD):
@@ -31,7 +32,50 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         self.pendingInvites = {}
         self.nextClubId = 100000
         self._load()
+        self.groupManager = DistributedGroupManagerUD(self)
         print '[Clubs] Persistent Club service loaded (%s Clubs).' % len(self.clubs)
+
+    def groupHeartbeat(self, avName, zoneId):
+        self.groupManager.heartbeat(avName, zoneId)
+
+    def groupPrepareSuitTeleport(self, targetZone, deptIndex):
+        pass
+
+    def groupRequestState(self):
+        self.groupManager.requestState()
+
+    def groupRequestBrowse(self):
+        self.groupManager.requestBrowse()
+
+    def groupRequestCreate(self, activity, location, zoneId, maxSize, published, avName):
+        self.groupManager.requestCreate(activity, location, zoneId, maxSize, published, avName)
+
+    def groupRequestJoin(self, groupId, avName):
+        self.groupManager.requestJoin(groupId, avName)
+
+    def groupRequestLeave(self):
+        self.groupManager.requestLeave()
+
+    def groupRequestDisband(self):
+        self.groupManager.requestDisband()
+
+    def groupRequestKick(self, avId):
+        self.groupManager.requestKick(avId)
+
+    def groupRequestMassTeleport(self):
+        self.groupManager.requestMassTeleport()
+
+    def groupRequestMassTeleportReady(self, token):
+        self.groupManager.requestMassTeleportReady(token)
+
+    def groupRequestPublish(self, published):
+        self.groupManager.requestPublish(published)
+
+    def groupRequestInvite(self, avId, avName):
+        self.groupManager.requestInvite(avId, avName)
+
+    def groupRespondToInvite(self, groupId, accept, avName):
+        self.groupManager.respondToInvite(groupId, accept, avName)
 
     # ------------------------------------------------------------------
     # Persistence

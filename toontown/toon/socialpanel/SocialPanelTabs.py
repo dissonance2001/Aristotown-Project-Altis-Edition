@@ -46,8 +46,7 @@ class SocialPanelTabs(DirectFrame):
             image=(sp_gui.find('**/ToonButton_N'),
                    sp_gui.find('**/ToonButton_P'),
                    sp_gui.find('**/ToonButton_H')),
-            command=self.panel.unavailableTab,
-            extraArgs=[TAB_GROUPS],
+            command=self.panel.showGroupsTab,
             text=('', 'Groups', 'Groups', ''),
             **textOptions
         )

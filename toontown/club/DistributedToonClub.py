@@ -6,6 +6,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.DirectObject import DirectObject
 
 from toontown.club import ClubGlobals
+from toontown.groups.DistributedGroupManager import DistributedGroupManager
 
 
 class DistributedToonClub(DistributedObjectGlobal, DirectObject):
@@ -23,16 +24,52 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
         self.personalSettings = dict(ClubGlobals.PERSONAL_SETTING_DEFAULTS)
         self._personalSettingsAvatarId = 0
         self._clubNametagPulseTaskName = 'ClubNametag-colorPulse-%s' % id(self)
+        self.groupManager = None
 
     def announceGenerate(self):
         DistributedObjectGlobal.announceGenerate(self)
         self.cr.clubMgr = self
         # Compatibility alias used by the Clash-style chat port.
         self.cr.guildManager = self
+        self.groupManager = DistributedGroupManager(self)
+        self.cr.groupManager = self.groupManager
+        self.cr.groupMgr = self.groupManager
+        self.groupManager.start()
         taskMgr.doMethodLater(0.5, self._requestInitialState, self.uniqueName('requestClubState'))
         print '[Clubs] Club manager loaded.'
 
+    def groupReceiveState(self, groupJson):
+        if self.groupManager:
+            self.groupManager.receiveState(groupJson)
+
+    def groupReceiveBrowse(self, groupsJson):
+        if self.groupManager:
+            self.groupManager.receiveBrowse(groupsJson)
+
+    def groupReceiveInvite(self, groupId, inviterAvId, inviterName, activity, location):
+        if self.groupManager:
+            self.groupManager.receiveInvite(groupId, inviterAvId, inviterName, activity, location)
+
+    def groupReceiveNotification(self, notifyType, message):
+        if self.groupManager:
+            self.groupManager.receiveNotification(notifyType, message)
+
+    def groupReceiveMassTeleport(self, zoneId, shardId, token):
+        if self.groupManager:
+            self.groupManager.receiveMassTeleport(zoneId, shardId, token)
+
+    def groupReceiveMassTeleportStart(self, token):
+        if self.groupManager:
+            self.groupManager.receiveMassTeleportStart(token)
+
     def disable(self):
+        if self.groupManager:
+            self.groupManager.stop()
+            self.groupManager = None
+        if getattr(self.cr, 'groupManager', None):
+            self.cr.groupManager = None
+        if getattr(self.cr, 'groupMgr', None):
+            self.cr.groupMgr = None
         taskMgr.remove(self.uniqueName('requestClubState'))
         taskMgr.remove(self._clubNametagPulseTaskName)
         if getattr(self.cr, 'clubMgr', None) is self:

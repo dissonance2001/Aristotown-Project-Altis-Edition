@@ -528,6 +528,13 @@ class SocialPanelFriendsTab(DirectFrame):
                 target = selected[0]
                 if target.avId != base.localAvatar.doId and not clubMgr.getMember(target.avId):
                     self.contextMenu.addButton('Invite to Club', self.contextInviteToClub)
+            groupMgr = getattr(base.cr, 'groupManager', None)
+            if groupMgr and groupMgr.isInGroup():
+                target = selected[0]
+                group = groupMgr.group or {}
+                memberIds = [int(member.get('avId', 0)) for member in group.get('members', [])]
+                if target.avId != base.localAvatar.doId and target.avId not in memberIds:
+                    self.contextMenu.addButton('Invite to Group', self.contextInviteToGroup)
             if not isLocalAvatar:
                 if isFriend:
                     favoriteText = 'Remove Favorite' if self._allSelectedAreFavorites() else 'Add Favorite'
@@ -583,6 +590,19 @@ class SocialPanelFriendsTab(DirectFrame):
             except:
                 name = ''
             clubMgr.requestInvite(panel.avId, name)
+        self._finishContextAction()
+
+    def contextInviteToGroup(self):
+        panel = self._singleContextSelected()
+        if panel is None:
+            return
+        groupMgr = getattr(base.cr, 'groupManager', None)
+        if groupMgr:
+            try:
+                name = panel.handle.getName()
+            except:
+                name = ''
+            groupMgr.requestInvite(panel.avId, name)
         self._finishContextAction()
 
     def contextAddFriend(self):

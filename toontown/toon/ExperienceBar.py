@@ -47,7 +47,7 @@ class ExperienceBar(DirectFrame):
             self.levelLabel = OnscreenText(parent = self.bgBar, text = TTLocalizer.ExpBarLevel + str(self.level+1), pos = (0.0, 0.05), scale = 0.05, font=ToontownGlobals.getBuildingNametagFont(), fg = (1, 1, 1, 1))
             self.levelLabel.hide()
             gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui')
-            if not settings.get('experienceBarMode'):
+            if self.level >= ToontownGlobals.MaxToonLevel or not settings.get('experienceBarMode'):
                 self.hide()
 
     def destroy(self):
@@ -96,14 +96,17 @@ class ExperienceBar(DirectFrame):
 
     def start(self):
         if self.isToon:
-            if self.bgBar:
-                self.bgBar.show()
-            
-            if self.levelLabel:
-                self.levelLabel.show()
-            
-            if self.visToggle:
-                self.visToggle.show()
+            if self.level >= ToontownGlobals.MaxToonLevel:
+                self.hide()
+            else:
+                if self.bgBar:
+                    self.bgBar.show()
+                
+                if self.levelLabel:
+                    self.levelLabel.show()
+                
+                if self.visToggle:
+                    self.visToggle.show()
             
             if self.av:
                 self.accept(self.av.uniqueName('toonExpChange'), self.updateBar)
@@ -141,6 +144,10 @@ class ExperienceBar(DirectFrame):
         self.__obscured = 1
         
     def show(self):
+        if self.level >= ToontownGlobals.MaxToonLevel:
+            self.hide()
+            return
+        
         if self.bgBar:
             self.bgBar.show()
         

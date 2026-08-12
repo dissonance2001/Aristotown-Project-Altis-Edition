@@ -343,8 +343,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def handleLogicalZoneChange(self, newZoneId, oldZoneId):
         DistributedAvatarAI.DistributedAvatarAI.handleLogicalZoneChange(self, newZoneId, oldZoneId)
 
-        if self.isPlayerControlled() and self.WantTpTrack:
-            messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
+        if self.isPlayerControlled():
+            messenger.send('GroupTrackerLogicalChangeZone-all', [newZoneId, oldZoneId, self])
+            if self.WantTpTrack:
+                messenger.send(self.staticGetLogicalZoneChangeAllEvent(), [newZoneId, oldZoneId, self])
             
         if oldZoneId is not None:
             # check if the previous zone was an interior zone, if so request time update

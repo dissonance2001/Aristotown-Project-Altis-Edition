@@ -52,6 +52,8 @@ def canWearSuit(avatarId, zoneId):
      ToontownGlobals.BossbotHQ]
     if canonicalZoneId in allowedSuitZones:
         return True
+    elif zoneId in (ToontownGlobals.MajorPlayerLobby, ToontownGlobals.PacesetterLobby, ToontownGlobals.ChainsawLobby):
+        return True
     elif zoneId >= ToontownGlobals.DynamicZonesBegin:
         return True
     else:

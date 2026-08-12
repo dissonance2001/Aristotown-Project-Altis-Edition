@@ -6,6 +6,131 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
 
 
+class SelectorButton(DirectFrame):
+    BUTTON_ACTIVE = (0.906, 0.843, 0.125, 1.0)
+    BUTTON_INACTIVE = (0.184, 0.192, 0.212, 1.0)
+
+    def __init__(self, parent, pos, width=0.6, height=0.07, title='', callback=None, disabled=False, scale=0.6, **kwargs):
+        self.width = width
+        self.height = height
+        self.callback = callback
+        self.lightCol = kwargs.pop('lightCol', (1, 1, 1, 1))
+        self.darkCol = kwargs.pop('darkCol', (0.361, 0.361, 0.361, 1.0))
+        DirectFrame.__init__(self, parent=parent, relief=None, pos=pos, scale=scale,
+                             text_pos=(0, -0.014), text_scale=0.05,
+                             text_fg=(0, 0, 0, 1), text='Test choice',
+                             geom=sp_gui.find('**/SmoothTextBox'),
+                             geom_color=self.darkCol, **kwargs)
+        self.initialiseoptions(SelectorButton)
+        self.setWidth(width)
+        self.titleText = DirectLabel(
+            parent=self, relief=None, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+            text_pos=(0, 0.085), text_scale=0.065, text='')
+        if title:
+            self.setTitleText(title)
+        self.button_left = DirectButton(
+            self, pos=(-(width / 2.0) - 0.04, 0, 0), relief=None,
+            command=self.changeOption, extraArgs=[-1],
+            image=(sp_gui.find('**/Arrow_N'), sp_gui.find('**/Arrow_P'),
+                   sp_gui.find('**/Arrow_H'), sp_gui.find('**/Arrow_D')),
+            image_scale=(-(30.0 / 42.0), 1, 1), scale=0.08)
+        self.button_right = DirectButton(
+            self, pos=((width / 2.0) + 0.04, 0, 0), relief=None,
+            command=self.changeOption, extraArgs=[1],
+            image=(sp_gui.find('**/Arrow_N'), sp_gui.find('**/Arrow_P'),
+                   sp_gui.find('**/Arrow_H'), sp_gui.find('**/Arrow_D')),
+            image_scale=((30.0 / 42.0), 1, 1), scale=0.08)
+        self.button_left.hide()
+        self.button_right.hide()
+        self.options = []
+        self.option2Text = {None: ''}
+        self.wraparound = False
+        self.currentIndex = 0
+        self.disabled = disabled
+        self.setDisabled()
+
+    def setDisabled(self):
+        if self.disabled:
+            self.button_left.show()
+            self.button_right.show()
+            self.setButtonState(False)
+            self.setText('')
+            self['geom_color'] = self.darkCol
+        else:
+            self.setButtonState(True)
+            self['geom_color'] = self.lightCol
+
+    def setWidth(self, width):
+        self['geom_scale'] = ((0.18333 * width) * (327.0 / 62.0), 1, 0.11)
+
+    def setTitleText(self, text):
+        self.titleText.setText(text)
+
+    def enterDisable(self):
+        self.disabled = True
+        self.setDisabled()
+
+    def exitDisable(self):
+        self.disabled = False
+        self.setDisabled()
+
+    def setButtonState(self, state):
+        guiState = DGG.NORMAL if state else DGG.DISABLED
+        self.button_left['state'] = guiState
+        self.button_right['state'] = guiState
+
+    def setOptions(self, values=None, texts=None, wraparound=False, setIndex=-1, canDisable=True):
+        if canDisable and not (values or texts):
+            self.enterDisable()
+        else:
+            self.exitDisable()
+        if not values:
+            values = [None]
+        if not texts:
+            texts = ['']
+        self.options = list(values)
+        self.option2Text = dict(zip(self.options, list(texts)))
+        self.wraparound = wraparound
+        self.currentIndex = setIndex if setIndex != -1 else len(self.options) - 1
+        if self.currentIndex < 0:
+            self.currentIndex = 0
+        if self.currentIndex >= len(self.options):
+            self.currentIndex = len(self.options) - 1
+        self.updateButtons()
+
+    def getChoice(self):
+        if not self.options:
+            return None
+        return self.options[self.currentIndex]
+
+    def changeOption(self, direction):
+        if not self.options:
+            return
+        self.currentIndex += direction
+        if self.currentIndex < 0:
+            self.currentIndex = len(self.options) - 1
+        elif self.currentIndex >= len(self.options):
+            self.currentIndex = 0
+        if self.callback is not None:
+            self.callback(self.getChoice())
+        self.updateButtons()
+
+    def updateButtons(self):
+        choice = self.getChoice()
+        self.setText(str(self.option2Text.get(choice, '')))
+        if len(self.options) <= 1:
+            self.button_left.hide()
+            self.button_right.hide()
+            return
+        self.button_left.show()
+        self.button_right.show()
+        if not self.wraparound:
+            self.button_left['state'] = DGG.NORMAL if self.currentIndex != 0 else DGG.DISABLED
+            self.button_right['state'] = DGG.NORMAL if self.currentIndex != len(self.options) - 1 else DGG.DISABLED
+        else:
+            self.setButtonState(True)
+
+
 class SocialPanelContextDropdown(DirectFrame):
     """Python 2 compatible version of Clash's social-panel context menu."""
 

@@ -1705,6 +1705,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return 0
 
     def setCogIndex(self, index):
+        if index == self.cogIndex and index > -1 and self.isDisguised:
+            return
         self.cogIndex = index
 
         if self.cogIndex <= -1:
@@ -1922,9 +1924,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.showNametag3d()
             if hasattr(self, 'collNode'):
                 if self.ghostMode:
-                    self.collNode.setIntoCollideMask(ToontownGlobals.GhostBitmask)
+                    self.collNode.setCollideMask(ToontownGlobals.GhostBitmask)
                 else:
-                    self.collNode.setIntoCollideMask(ToontownGlobals.PieBitmask | BitMask32(8192))
+                    self.collNode.setCollideMask(ToontownGlobals.WallBitmask | ToontownGlobals.PieBitmask)
             
             if self.isLocal():
                 if self.ghostMode:

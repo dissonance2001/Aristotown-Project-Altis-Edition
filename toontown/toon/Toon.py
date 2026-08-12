@@ -5116,8 +5116,27 @@ class Toon(Avatar.Avatar, ToonHead):
             trackName = 'teleportIn'
         return Parallel(holeTrack, toonTrack, name=trackName)
 
+    def getDisguiseTeleportInTrack(self):
+        toonTrack = Sequence(
+            Wait(0.3),
+            Func(self.suitGeom.setPos, 0, 0, 30),
+            Func(self.suitGeom.show),
+            Func(self.nametag3d.show),
+            ActorInterval(self.suit, 'slip-forward', startFrame=8))
+        fallTrack = Sequence(
+            Wait(0.3),
+            LerpPosInterval(self.suitGeom, 6.0 / 24.0, (0, 0, 0), startPos=(0, 0, 30)))
+        soundTrack = Sequence(
+            Wait(0.3),
+            SoundInterval(loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_cage_land.ogg'), node=self))
+        if hasattr(self, 'uniqueName'):
+            trackName = self.uniqueName('teleportIn')
+        else:
+            trackName = 'teleportIn'
+        return Parallel(fallTrack, toonTrack, soundTrack, name=trackName)
+
     def enterTeleportIn(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
-        if self.ghostMode or self.isDisguised:
+        if self.ghostMode:
             if callback:
                 callback(*extraArgs)
             return
@@ -5126,8 +5145,10 @@ class Toon(Avatar.Avatar, ToonHead):
         Emote.globalEmote.disableAll(self, 'enterTeleportIn')
         self.pose('teleport', self.getNumFrames('teleport') - 1)
         self.getGeomNode().hide()
+        if self.isDisguised:
+            self.suitGeom.hide()
         self.nametag3d.hide()
-        self.track = self.getTeleportInTrack()
+        self.track = self.getDisguiseTeleportInTrack() if self.isDisguised else self.getTeleportInTrack()
         if callback:
             self.track.setDoneEvent(self.track.getName())
             self.acceptOnce(self.track.getName(), callback, extraArgs)
@@ -8068,10 +8089,15 @@ class Toon(Avatar.Avatar, ToonHead):
         headPosNode.setScale(render, worldScale)'''
         suitGeom = suit.getGeomNode()
         suitGeom.reparentTo(self)
+        for collisionNodePath in suitGeom.findAllMatches('**/+CollisionNode'):
+            collisionNode = collisionNodePath.node()
+            collisionNode.setIntoCollideMask(collisionNode.getIntoCollideMask() & ~ToontownGlobals.WallBitmask)
         if rental == True:
             suit.makeRentalSuit(SuitDNA.suitDepts[deptIndex])
         self.suit = suit
         self.suitGeom = suitGeom
+        if self.isLocal() and hasattr(self, '_groupLobbyFacingZone'):
+            self.suitGeom.hide()
         self.setHeight(suit.getHeight())
         self.nametag3d.setPos(0, 0, self.height + 1.3)
         if self.isLocal():

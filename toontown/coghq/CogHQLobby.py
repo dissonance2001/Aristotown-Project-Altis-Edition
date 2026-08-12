@@ -124,5 +124,23 @@ class CogHQLobby(Place.Place):
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
 
     def enterTeleportIn(self, requestStatus):
+        groupLobbyTeleport = bool(requestStatus.get('groupLobbyTeleport', False))
+        requestZone = int(requestStatus.get('zoneId', 0) or 0)
+        if not groupLobbyTeleport:
+            try:
+                targetZone = int(getattr(base.localAvatar, '_groupLobbyFacingZone', 0) or 0)
+                groupLobbyTeleport = targetZone == requestZone and requestZone in (ToontownGlobals.SellbotLobby, ToontownGlobals.CashbotLobby, ToontownGlobals.LawbotLobby, ToontownGlobals.BossbotLobby)
+            except:
+                groupLobbyTeleport = False
+        try:
+            if hasattr(base.localAvatar, '_groupLobbyFacingZone'):
+                del base.localAvatar._groupLobbyFacingZone
+        except:
+            pass
         base.localAvatar.setPosHpr(render, 0, 0, 0, 0, 0, 0)
+        if groupLobbyTeleport:
+            base.localAvatar.setH(180)
         Place.Place.enterTeleportIn(self, requestStatus)
+
+    def exitTeleportIn(self):
+        Place.Place.exitTeleportIn(self)

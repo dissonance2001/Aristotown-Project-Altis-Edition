@@ -723,14 +723,49 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         self._tiToken = self.addSetZoneCompleteCallback(Functor(self._placeTeleportInPostZoneComplete, requestStatus), 100)
 
     def _placeTeleportInPostZoneComplete(self, requestStatus):
+        token = requestStatus.get('groupMassTeleportToken', 0)
+        if token:
+            try:
+                groupManager = getattr(base.cr, 'groupManager', None)
+                if groupManager and groupManager.deferMassTeleportArrival(token, self, requestStatus):
+                    return
+            except:
+                pass
+        self._continueTeleportInPostZoneComplete(requestStatus)
+
+    def _continueTeleportInPostZoneComplete(self, requestStatus):
         teleportDebug(requestStatus, '_placeTeleportInPostZoneComplete(%s)' % (requestStatus,))
         NametagGlobals.setWant2dNametags(False)
         base.localAvatar.laffMeter.start()
         base.localAvatar.startQuestMap()
         base.localAvatar.reconsiderCheesyEffect()
         base.localAvatar.obscureMoveFurnitureButton(1)
+        cogHQDoor = requestStatus.get('cogHQDoor', False)
+        elevatorId = requestStatus.get('elevatorId', -1)
         avId = requestStatus.get('avId', -1)
-        if avId != -1:
+        if cogHQDoor:
+            bossDoorPos = {
+                ToontownGlobals.SellbotHQ: (-37.75, -44.5, 10.096, -60),
+                ToontownGlobals.CashbotHQ: (121.75, 543.5, 32.246, 0),
+                ToontownGlobals.LawbotHQ: (0, 220, 19.5, 0),
+                ToontownGlobals.BossbotHQ: (63, 234.5, 0.275, 0),
+            }
+            posH = bossDoorPos.get(base.localAvatar.zoneId)
+            if posH:
+                base.localAvatar.setPos(posH[0], posH[1], posH[2])
+                base.localAvatar.setH(posH[3])
+        elif elevatorId != -1:
+            elevatorObj = base.cr.doId2do.get(elevatorId)
+            if elevatorObj and hasattr(elevatorObj, 'getElevatorModel'):
+                elevatorModel = elevatorObj.getElevatorModel()
+                if elevatorModel and not elevatorModel.isEmpty():
+                    tempNode = render.attachNewNode('group-elevator-teleport')
+                    isCogKart = elevatorObj.__class__.__name__ == 'DistributedCogKart'
+                    tempNode.setPos(elevatorModel, 0, 10 * (1 if isCogKart else -1), 0)
+                    base.localAvatar.setPos(tempNode.getPos(render))
+                    base.localAvatar.headsUp(elevatorModel)
+                    tempNode.removeNode()
+        elif avId != -1:
             if avId in base.cr.doId2do:
                 teleportDebug(requestStatus, 'teleport to avatar')
                 avatar = base.cr.doId2do[avId]
@@ -784,7 +819,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         base.localAvatar.detachCamera()
         base.localAvatar.stopPosHprBroadcast()
         
-    def requestTeleport(self, hoodId, zoneId, shardId, avId):
+    def requestTeleport(self, hoodId, zoneId, shardId, avId, extraStatus = None):
         if avId > 0:
             teleportNotify.debug('requestTeleport%s' % ((hoodId,
               zoneId,
@@ -804,13 +839,16 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if hoodId == ToontownGlobals.PartyHood:
             loaderId = 'safeZoneLoader'
             whereId = 'party'
-        self.requestLeave({'loader': loaderId,
+        requestStatus = {'loader': loaderId,
          'where': whereId,
          'how': 'teleportIn',
          'hoodId': hoodId,
          'zoneId': zoneId,
          'shardId': shardId,
-         'avId': avId})
+         'avId': avId}
+        if extraStatus:
+            requestStatus.update(extraStatus)
+        self.requestLeave(requestStatus)
 
     def enterQuest(self, npcToon):
         base.localAvatar.b_setAnimState('neutral', 1)

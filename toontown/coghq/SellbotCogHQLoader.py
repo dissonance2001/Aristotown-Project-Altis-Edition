@@ -46,6 +46,16 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.cogHQHardLobbyModelPath = 'phase_9/models/cogHQ/SellbotHQLobby_MS'
         self.factoryExteriorModelPath = 'phase_9/models/cogHQ/SellbotFactoryExterior'
         self.geom = None
+        self.helicopter = None
+        self.lightPost = None
+        self.lightPost2 = None
+        self.lightPost3 = None
+        self.lightPost4 = None
+        self.lightPost5 = None
+        self.lightPost6 = None
+        self.lightPost7 = None
+        self.lightPost8 = None
+        self.lightPost9 = None
         self.spot1Sequence = None
         self.spot2Sequence = None
         self.spot3Sequence = None
