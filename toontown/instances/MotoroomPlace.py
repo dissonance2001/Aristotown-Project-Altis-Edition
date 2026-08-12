@@ -1,4 +1,6 @@
 from toontown.toonbase.ToonBaseGlobal import *
+import math
+from random import Random
 from toontown.building import MotoroomInstanceGlobals
 from toontown.building import ToonInterior
 from toontown.building.interior.props.LavaLamp import LavaLamp, hexToPCol
@@ -18,6 +20,9 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         self.pacesetterSky = None
         self.entryXYH = None
         self.roomLightNodes = []
+        self.oreoRoot = None
+        self.oreoNodes = []
+        self.oreoTaskName = 'motoroomFloatingOreos-%s' % id(self)
         self.sakamoreoNameTaskName = 'motoroomSakamoreoName-%s' % id(self)
         self.entryApplyTaskNames = (
             'motoroomEntryApplyA-%s' % id(self),
@@ -32,6 +37,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         self._setupRoomLighting()
         self._setupStageLightBeams()
         self._setupPacesetterView()
+        self._setupFloatingOreos()
         self._setupFloorCollision()
         self._loadSpawnReference()
         self._setupLavaLamp()
@@ -239,6 +245,136 @@ class MotoroomPlace(ToonInterior.ToonInterior):
             exportedSky.setLightOff(100)
             exportedSky.setTwoSided(True)
 
+    def _setupFloatingOreos(self):
+        source = loader.loadModel('phase_8/models/props/motoroom_oreo')
+        if not source or source.isEmpty():
+            print 'MOTOROOM OREOS: source model missing'
+            return
+
+        sourceNode = source.find('**/Sketchfab_model')
+        if sourceNode.isEmpty():
+            sourceNode = source.find('**/Cookies')
+        if sourceNode.isEmpty():
+            sourceNode = source
+
+        try:
+            roomBounds = self.geom.getTightBounds(render)
+        except:
+            roomBounds = None
+
+        if not roomBounds:
+            source.removeNode()
+            print 'MOTOROOM OREOS: room bounds missing'
+            return
+
+        roomCenter = (roomBounds[0] + roomBounds[1]) * 0.5
+        windows = self.geom.findAllMatches('**/bg_glass*')
+        windowData = []
+        seen = set()
+
+        for index in xrange(windows.getNumPaths()):
+            window = windows.getPath(index)
+            try:
+                bounds = window.getTightBounds(render)
+            except:
+                bounds = None
+            if not bounds:
+                continue
+
+            center = (bounds[0] + bounds[1]) * 0.5
+            key = (round(center.getX(), 1), round(center.getY(), 1), round(center.getZ(), 1))
+            if key in seen:
+                continue
+            seen.add(key)
+
+            outward = Vec3(center - roomCenter)
+            outward.setZ(0.0)
+            if outward.length() < 0.01:
+                continue
+            outward.normalize()
+            side = Vec3(-outward.getY(), outward.getX(), 0.0)
+            half = (bounds[1] - bounds[0]) * 0.5
+            sideExtent = abs(side.getX()) * half.getX() + abs(side.getY()) * half.getY()
+            if sideExtent < 2.0:
+                sideExtent = max(half.getX(), half.getY(), 2.0)
+            zExtent = max(half.getZ(), 2.0)
+            windowData.append((center, outward, side, sideExtent, zExtent))
+
+        if not windowData:
+            source.removeNode()
+            print 'MOTOROOM OREOS: no usable windows found'
+            return
+
+        self.oreoRoot = render.attachNewNode('motoroom_floating_oreos')
+        rng = Random(120826)
+
+        for center, outward, side, sideExtent, zExtent in windowData:
+            for cookieIndex in xrange(6):
+                depth = rng.uniform(12.0, 58.0)
+                basePos = Point3(center)
+                basePos += side * rng.uniform(-0.82, 0.82) * sideExtent
+                basePos += Vec3(0.0, 0.0, rng.uniform(-0.78, 0.78) * zExtent)
+                basePos += outward * depth
+
+                oreo = sourceNode.copyTo(self.oreoRoot)
+                oreo.setMat(sourceNode.getMat(source))
+                oreo.setPos(render, basePos)
+                scale = max(18.0, 22.0 + depth * 0.48 + rng.uniform(-6.0, 6.0))
+                oreo.setScale(scale)
+                oreo.setTwoSided(True)
+
+                h = rng.uniform(-180.0, 180.0)
+                p = rng.uniform(-180.0, 180.0)
+                r = rng.uniform(-180.0, 180.0)
+                oreo.setHpr(render, h, p, r)
+
+                self.oreoNodes.append((
+                    oreo, basePos, side, outward,
+                    rng.uniform(0.0, math.pi * 2.0),
+                    rng.uniform(12.0, 20.0),
+                    rng.uniform(0.5, 1.8),
+                    rng.uniform(0.4, 1.4),
+                    rng.uniform(0.14, 0.28),
+                    h, p, r,
+                    rng.uniform(-4.0, 4.0),
+                    rng.uniform(-2.4, 2.4),
+                    rng.uniform(-3.2, 3.2)))
+
+        source.removeNode()
+        taskMgr.remove(self.oreoTaskName)
+        taskMgr.add(self._updateFloatingOreos, self.oreoTaskName)
+        print 'MOTOROOM OREOS: created', len(self.oreoNodes)
+
+    def _updateFloatingOreos(self, task):
+        t = task.time
+        for data in self.oreoNodes:
+            oreo, basePos, side, outward, phase, sideAmp, zAmp, depthAmp, speed, h, p, r, hSpeed, pSpeed, rSpeed = data
+            if oreo.isEmpty():
+                continue
+
+            pos = Point3(basePos)
+            pos -= side * (math.sin(t * speed * 1.35 + phase) * sideAmp)
+            pos += Vec3(0.0, 0.0, math.sin(t * speed * 0.73 + phase * 1.7) * zAmp)
+            pos += outward * (math.sin(t * speed * 0.51 + phase * 0.43) * depthAmp)
+            oreo.setPos(render, pos)
+            oreo.setHpr(
+                render,
+                h + t * hSpeed,
+                p + t * pSpeed,
+                r + t * rSpeed)
+
+        return task.cont
+
+    def _cleanupFloatingOreos(self):
+        taskMgr.remove(self.oreoTaskName)
+        self.oreoNodes = []
+        if self.oreoRoot:
+            try:
+                self.oreoRoot.removeNode()
+            except:
+                pass
+            self.oreoRoot = None
+
     def _getFloorZ(self):
         names = ('floor2', 'floor2.001', 'ground')
 
@@ -400,6 +536,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
 
     def unload(self):
         self._stopSakamoreoNameFix()
+        self._cleanupFloatingOreos()
         for taskName in self.entryApplyTaskNames:
             taskMgr.remove(taskName)
 
