@@ -55,7 +55,7 @@ suitDeptCogs = {
 suitDeptManagers = {
     'c': [
         'autocad', 'clubpres', 'derrman', 'derrhand',
-        'mplayer', 'fires', 'fbed', 'choreo', 'chainsaw', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'ceo',
+        'mplayer', 'mplayers', 'fires', 'fbed', 'choreo', 'chainsaw', 'phouse', 'bkeeper', 'wtapper', 'ambass', 'ceo',
     ],
 
     'l': [
@@ -117,7 +117,7 @@ suitDeptManagers = {
 suitHeadTypes = []
 suitATypes = [
     # Bossbots
-'ym', 'enf', 'ksp', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'fires', 'choreo', 'chainsaw', 'chainsaw2', 'phouse',
+'ym', 'enf', 'ksp', 'hh', 'bsht', 'txl', 'tbc', 'autocad', 'clubpres', 'derrman', 'derrhand', 'mplayer', 'mplayers', 'fires', 'choreo', 'chainsaw', 'chainsaw2', 'phouse',
 'bkeeper', 'wtapper', 'ambass',
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'bw2', 'le2', 'bs2', 'dt2', 'whistleb', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
@@ -530,8 +530,15 @@ class SuitDNA(AvatarDNA.AvatarDNA):
             if suitSpawnTiers.get(name) == tier
         ]
     
-    def newSuitRandom(self, tier=None, dept=None):
+    def newSuitRandom(self, tier=None, dept=None, name=None):
         self.type = 's'
+
+        # If a specific suit name was supplied, use it directly.
+        if name is not None:
+            self.name = name
+            self.dept = getSuitDept(name)
+            self.body = getSuitBodyType(name)
+            return
 
         if dept is None:
             dept = random.choice(suitDepts)

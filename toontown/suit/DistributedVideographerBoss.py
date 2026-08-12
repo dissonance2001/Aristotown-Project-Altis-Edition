@@ -48,42 +48,54 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedVideographerBoss')
     numFakeGoons = 0
 
-    SUIT_SPAWN_LOCATIONS = [
-        ('mplayer', (-43.380, -34.408, 19.124, -31.372, 0.0, 0.0, 1.0, 1.0, 1.0)),
-        ('ambass', (-30.216, -39.855, 19.124, -23.529, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('wtapper', (-22.591, -43.123, 19.124, -15.686, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('phouse', (-18.234, -44.575, 19.124, -11.764, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('bkeeper', (35.792, -38.344, 19.767, 27.058, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('lgator', (33.222, -21.635, 8.52, 28.214, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('stenog', (27.775, -23.629, 8.52, 17.757, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('caseman', (21.991, -24.593, 8.52, 13.13, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('sgoat', (16.181, -26.045, 8.52, 9.208, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('wsi', (34.818, -31.829, 16.553, 27.717, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('cdirector', (40.934, -35.452, 19.767, 31.685, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('cbutcher', (16.988, -43.486, 19.445, 1.308, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('rkeeper', (22.379, -42.76, 19.445, 10.863, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('redd', (27.437, -40.915, 21.124, 25.902, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('dking', (21.332, -38.344, 16.553, 15.491, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('liquid', (27.188, -29.668, 13.982, 21.275, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('liquidr', (22.939, -29.668, 11.982, 15.491, 0.0, 3, 1.0, 1.0, 1.0)),
-        ('safesupervis', (-34.911, -39.408, 18.7, -21.364, 0, 0, 1.0, 1.0, 1.0)),
-        ('ubuster', (-43.23, -22.699, 13.237, -28.305, 0, 0, 1.0, 1.0, 1.0)),
-        ('derrman', (-35.605, -19.431, 10.332, -21.769, 0, 0, 1.0, 1.0, 1.0)),
-        ('derrhand', (-31.974, -28.916, 10.13, -21.919, 0, 0, 1.0, 1.0, 1.0)),
-        ('dopa', (40.648, -23.132, 13.307, 31.294, 0, 0, 1.0, 1.0, 1.0)),
-        ('dopr', (38.077, -26.024, 13.307, 32.451, 0, 0, 1.0, 1.0, 1.0)),
-        ('dold', (-16.55, -27.952, 10.415, -18.189, 0, 0, 1.0, 1.0, 1.0)),
-        ('dola', (-21.049, -25.06, 10.094, -27.443, 0, 0, 1.0, 1.0, 1.0)),
-        ('hustle', (-29.037, -36.316, 17.356, -19.6, 0, 0, 1.0, 1.0, 1.0)),
-        ('racket', (-24.86, -36.316, 17.035, -13.816, 0, 0, 1.0, 1.0, 1.0)),
-        ('radiog', (-31.929, -33.745, 17.035, -26.541, 0, 0, 1.0, 1.0, 1.0)),
-        ('treasure', (-38.998, -31.496, 16.071, -28.855, 0, 0, 1.0, 1.0, 1.0)),
-        ('bookkeep', (30.089, -31.817, 19.85, 22.044, 0.0, 0, 1.0, 1.0, 1.0)),
-        ('ottoman', (17.236, -31.174, 14.066, 18.573, 0.0, 0, 1.0, 1.0, 1.0)),
-        ('chairman', (-23.573, -30.21, 11.745, -16.131, 0.0, 0, 1.0, 1.0, 1.0)),
-        ('erclaim', (-18.11, -32.138, 13.424, -10.347, 0.0, 0, 1.0, 1.0, 1.0)),
-        ('erfit', (45.2786, -33.2291, 21.3257, 37.0543, 0.0, 0.0, 1.0, 1.0, 1.0)),
-    ]
+     # Some constants
+    ballSpinDuration = 6.0
+
+    # Names of Nodes
+    discofloorNames = ['**/discofloor_%d' % i for i in range(6)]
+    discoballNames = ['**/discoball_%d' % i for i in range(3)]
+    stagelightNames = ['**/stagelight_%d' % i for i in range(5)]
+    tableLocatorNames = ['**/tables_locator_%d' % (i + 1) for i in range(6)]
+
+    # Stagelight ranges
+    stagelightRanges = (
+        (Vec3(-20, -20, -20), Vec3(20, 20, 20)),
+        (Vec3(-20, -20, -20), Vec3(20, 20, 20)),
+        (Vec3(-20, -20, -20), Vec3(20, 20, 20)),
+        (Vec3(-20, -20, -20), Vec3(20, 20, 20)),
+        (Vec3(-20, -20, -20), Vec3(20, 20, 20)),
+    )
+
+    # Chair Locator Node positions and headings
+    chairLocatorPosH = (
+        (Point3(8.2, 2.86, 0), 90),
+        (Point3(8.2, -2.46, 0), 90),
+        (Point3(3.06, -8.05, 0), 0),
+        (Point3(-2.46, -8.05, 0), 0),
+        (Point3(-8.2, -2.46, 0), -90),
+        (Point3(-8.2, 2.86, 0), -90),
+        (Point3(-2.46, 8.05, 0), 180),
+        (Point3(3.06, 8.05, 0), 180),
+    )
+
+    # Index 0: Base position
+    # Index 1: Scale Offset
+    sitLocatorPos = {
+        'a': (Point3(0.3, 1.5, 0.4), Point3(-0.3, -0.8, 2.5)),
+        'b': (Point3(-0.2, 1.5, 0.5), Point3(0.0, -0.3, 2.0)),
+        'c': (Point3(0.4, 2.08, 0.3), Point3(-0.5, -2.8, 2.2)),
+    }
+
+    # Indexes for random audience members that talk during intro
+    # Index 0: Table Index
+    # Index 1: Chair Index
+    talkingAudienceIndices = (
+        (5, 6),
+        (5, 7)
+    )
+
+    suitCount = 48
+
     SUIT_TINT = (0.76, 0.76, 0.76, 1.0)
 
     def __init__(self, cr):
@@ -109,8 +121,8 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.allowClickedNameTag = True
         self.battleANode = NodePath('videographerBattleA')
         self.battleBNode = NodePath('videographerBattleB')
-        self.battleANode.setPosHpr(*ToontownGlobals.HighRollerBossCogBattleAPosHpr)
-        self.battleBNode.setPosHpr(*ToontownGlobals.HighRollerBossCogBattleBPosHpr)
+        self.battleANode.setPosHpr(*ToontownGlobals.VideographerBossCogBattleAPosHpr)
+        self.battleBNode.setPosHpr(*ToontownGlobals.VideographerBossCogBattleBPosHpr)
         self._controllerNode = NodePath('videographerInstanceController')
         self.pelvis = self._controllerNode.attachNewNode('pelvis')
         self.neck = self._controllerNode.attachNewNode('neck')
@@ -128,7 +140,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.geomFlashInterval = None
         self.bonusUnites = 0
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
-        self.elevatorType = ElevatorConstants.ELEVATOR_SIGIL
+        self.elevatorType = ElevatorConstants.ELEVATOR_ERCLAIM
         base.boss = self
         self.currHP = 0
         self.maxHP = self.bossMaxDamage
@@ -147,31 +159,17 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.physicsMgr = None
         self.fnp = None
         self.titleText = None
-        self.highroller = DistributedSuitBase.DistributedSuitBase(cr)
+        self.videographer = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('hroller')
+        suitDNA.newSuit('videog')
         self.style = suitDNA
-        self.highroller.setDNA(suitDNA)
-        self.highroller.setPickable(0)
-        self.highroller.setDisplayName('High Roller\nCashbot\nLevel 100.mgr')
-        self.highroller.doId = 0
-        self.highroller.loop('neutral2')
-        self.majorplayer2 = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('mplayer')
-        self.majorplayer2.setDNA(suitDNA)
-        self.majorplayer2.setPickable(0)
-        self.majorplayer2.setDisplayName('Major Player\nBossbot\nLevel 28.mgr')
-        self.majorplayer2.doId = 0
-        self.majorplayer2.loop('neutral2')
-        self.duckshuffler2 = DistributedSuitBase.DistributedSuitBase(cr)
-        suitDNA = SuitDNA.SuitDNA()
-        suitDNA.newSuit('duckshfl')
-        self.duckshuffler2.setDNA(suitDNA)
-        self.duckshuffler2.setPickable(0)
-        self.duckshuffler2.setDisplayName('Duck Shuffler\nCashbot\nLevel 5.mgr')
-        self.duckshuffler2.doId = 0
-        self.duckshuffler2.loop('neutral')
+        self.videographer.setDNA(suitDNA)
+        self.videographer.setPickable(0)
+        self.videographer.setDisplayName('Videographer\nTechbot\nLevel 99.mgr')
+        self.videographer.doId = 0
+        self.videographer.loop('sit-exec')
+        self.videographer.setPosHpr(0, -133.5, -1.25, 180, 0, 0)
+        self.videographer.reparentTo(render)
 
     def announceGenerate(self):
         global OneVideographerController
@@ -626,9 +624,24 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def __showFakeGoons(self, state):
         self.fakeGoons = []
 
-    def startHighRollerParticles(self):
+    def startPhase2Particles(self):
+        self.__playHighRollerMusic(self.phaseTwoMusic, looping=1, volume=1)
+        self.battleOneMusic.stop()
+        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
         self.stopHighRollerParticles()
 
+        BattleParticles.loadParticles()
+
+        self.hrParticles = []
+
+        lights = BattleParticles.createParticleEffect(file='videog_stagelights')
+        lights.start(render, render)
+        self.hrParticles.append((lights, None))
+
+    def startPhase3Particles(self):
+        self.__playHighRollerMusic(self.phaseThreeMusic, looping=1, volume=1)
+        self.stopHighRollerParticles()
+        self.phaseTwoMusic.stop()
         BattleParticles.loadParticles()
 
         self.hrParticles = []
@@ -637,19 +650,19 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         smokeRender.setDepthWrite(False)
         smokeRender.setBin('fixed', 1)
 
-        smoke = BattleParticles.createParticleEffect(file='hr_wallsmoke')
+        smoke = BattleParticles.createParticleEffect(file='videog_wallsmoke')
         smoke.start(smokeRender)
         self.hrParticles.append((smoke, smokeRender))
 
-        ground = BattleParticles.createParticleEffect(file='hr_starground')
+        ground = BattleParticles.createParticleEffect(file='videog_starground')
         ground.start(render, render)
         self.hrParticles.append((ground, None))
 
-        sky = BattleParticles.createParticleEffect(file='hr_skystars')
+        sky = BattleParticles.createParticleEffect(file='videog_skystars')
         sky.start(render, render)
         self.hrParticles.append((sky, None))
 
-        lights = BattleParticles.createParticleEffect(file='hr_stagelights')
+        lights = BattleParticles.createParticleEffect(file='videog_stagelights')
         lights.start(render, render)
         self.hrParticles.append((lights, None))
 
@@ -734,7 +747,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
         self.elevatorModel = self.geom.attachNewNode(
             'highRoller-elevator-placeholder')
-        self.elevatorModel.hide()
+        #self.elevatorModel.hide()
         self.leftDoor = self.elevatorModel.attachNewNode(
             'left-door-placeholder')
         self.rightDoor = self.elevatorModel.attachNewNode(
@@ -751,23 +764,89 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
         self.geom = NodePath('highRollerInstanceGeom')
         self.highRollerArena = loader.loadModel(
-            'phase_13/models/events/apriltoons/highroller/cc_m_ara_int_highroller.bam')
+            'phase_6/models/areas/ttcc_int_mplayer_boss.bam')
         self.highRollerArena.setPos(0, -222, -4.05)
         self.highRollerArena.reparentTo(self.geom)
 
         self.highRollerEntrance = self.highRollerArena.find('**/elevator_origin')
-        if not self.highRollerEntrance.isEmpty():
-            self.highRollerEntrance.getChildren().detach()
-            self.highRollerEntrance.setScale(1)
-            self.highRollerEntrance.setH(180)
+        self.elevatorModel2 = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_csa_elevatorB')
+        self.elevatorModel2.reparentTo(self.highRollerEntrance)
+        self.elevatorModel2.setH(180)
+        self.elevatorModel2.show()
+        ElevatorUtils.closeDoors(self.elevatorModel2.find('**/left_door'), self.elevatorModel2.find('**/right_door'), self.elevatorType)
+        # if not self.highRollerEntrance.isEmpty():
+        #     self.highRollerEntrance.getChildren().detach()
+        #     self.highRollerEntrance.setScale(1)
+        #     self.highRollerEntrance.setH(180)
+        self.__bossRoom = self.highRollerArena
+        self.discofloors = [self.highRollerArena.find(name) for name in self.discofloorNames]
+        self.discoballs = [self.highRollerArena.find(name) for name in self.discoballNames]
+        self.stagelights = [
+            MajorPlayerStagelight(self.highRollerArena.find(name), self.stagelightRanges[i])
+            for i, name in enumerate(self.stagelightNames)
+        ]
+        # self.startHighRollerParticles()
+        # self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
+        # Init tables
+        self.tableLocators = [self.highRollerArena.find(name) for name in self.tableLocatorNames]
 
-        self.highRollerTV = loader.loadModel(
-            'phase_13/models/events/apriltoons/highroller/cc_m_ara_hr_prp_tv_base.bam')
-        self.highRollerWheel = globalPropPool.getProp('wheel')
-        self.highRollerWheel.loop('wheel')
-        self.highRollerWheel.setScale(6)
-        self.highRollerWheel2 = globalPropPool.getProp('wheel2')
-        self.highRollerWheel2.setScale(6)
+        tables = loader.loadModel("phase_12/models/bossbotHQ/BanquetTableChairs")
+        # The dropshadows from the interior model look better than the ones on this model
+        tables.find("**/shadow").removeNode()
+        # We don't need to render collision nodes out
+        tables.find("**/Collision").removeNode()
+        # Workaround to make the lamps glow.
+        tableLamp = tables.find("**/lamp_med_5")
+        #tables.find("**/cloth").wrtReparentTo(tableLamp)
+        tableLamp.setColorScaleOff()
+        # Optimize the tables before we instance them
+        for node in ("table", "chairs"):
+            tables.find("**/%s" % node).flattenStrong()
+        for node in self.tableLocators:
+            tables.instanceTo(node)
+
+        # Disable color scale changes on these nodes to make 'em glow in the dark
+        # Alternatively, define them as their own variables and have them do their own
+        # color scale changes during cutscenes.
+        lightGeometry = [
+            # "rainbow_backdrop",
+            # "crossbeams_rainbow",
+            "discofloor_base",
+            "wall_lights",
+             "stage_floorlights",
+            # "stage_background",
+            # "ground_stage",
+            # "stage_curtains",
+            # "stage_ceiling",
+            "discoball_beams",
+        ]
+        for geom in lightGeometry:
+            self.highRollerArena.find("**/%s" % geom).setColorScaleOff()
+
+        # Various variables.
+        # Includes all parts, including the glow on the floor.
+        # self.ceilingLight = self.__bossRoom.find("**/ceiling_light_group")
+        # For now it's gonna be glowing but feel free to mess around with its colorscale.
+        # self.ceilingLight.setColorScaleOff()
+        self.discofloor = MajorPlayerDiscoFloor(self.discofloors)
+        self.ballSpeen = []
+        # Placeholder none value for each chair position
+        self.sitLocators = [[None] * len(self.chairLocatorPosH) for _ in range(len(self.tableLocators))]
+        self.sittingSuits = [[None] * len(self.chairLocatorPosH) for _ in range(len(self.tableLocators))]
+        self.talkingAudience = []
+
+        # Initialize the dumb things.
+        self.initializeDiscoBalls()
+        self.suitList = []
+        self.initializeAudience()
+
+        # self.highRollerTV = loader.loadModel(
+        #     'phase_13/models/events/apriltoons/highroller/cc_m_ara_hr_prp_tv_base.bam')
+        # self.highRollerWheel = globalPropPool.getProp('wheel')
+        # self.highRollerWheel.loop('wheel')
+        # self.highRollerWheel.setScale(6)
+        # self.highRollerWheel2 = globalPropPool.getProp('wheel2')
+        # self.highRollerWheel2.setScale(6)
 
         compatibilityProps = self.geom.attachNewNode(
             'highRoller-disabled-legacy-props')
@@ -783,52 +862,52 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.eyes = compatibilityProps.attachNewNode('eyes-disabled')
         self.cableTex = None
 
-        self.__setupStagelights()
+        # self.__setupStagelights()
 
-        self.colorScaleOffNodes = []
+        # self.colorScaleOffNodes = []
         self.hide()
         self._makeStandaloneArenaPlaceholders()
 
-        self.highroller.reparentTo(self.geom)
-        self.highroller.setPosHpr(0, -200, 0, 180, 0, 0)
-        self.highroller.hide()
-        self.majorplayer2.reparentTo(self.geom)
-        self.majorplayer2.setPosHpr(5, -200, 0, 180, 0, 0)
-        self.duckshuffler2.reparentTo(self.geom)
-        self.duckshuffler2.setPosHpr(-5, -200, 0, 180, 0, 0)
-        self.duckshuffler2.hide()
+        # self.highroller.reparentTo(self.geom)
+        # self.highroller.setPosHpr(0, -200, 0, 180, 0, 0)
+        # self.highroller.hide()
+        # self.majorplayer2.reparentTo(self.geom)
+        # self.majorplayer2.setPosHpr(5, -200, 0, 180, 0, 0)
+        # self.duckshuffler2.reparentTo(self.geom)
+        # self.duckshuffler2.setPosHpr(-5, -200, 0, 180, 0, 0)
+        # self.duckshuffler2.hide()
 
-        self.highRollerWheel.reparentTo(self.geom)
-        self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
-        self.highRollerWheel.hide()
-        self.highRollerWheel2.reparentTo(self.geom)
-        self.highRollerWheel2.setPosHpr(0, -170, 0, 180, 0, 0)
-        self.highRollerWheel2.hide()
+        # self.highRollerWheel.reparentTo(self.geom)
+        # self.highRollerWheel.setPosHpr(0, -170, 0, 180, 0, 0)
+        # self.highRollerWheel.hide()
+        # self.highRollerWheel2.reparentTo(self.geom)
+        # self.highRollerWheel2.setPosHpr(0, -170, 0, 180, 0, 0)
+        # self.highRollerWheel2.hide()
 
         self.__suits = []
         #self.__initializeAudience()
-        for light in self.highRollerArena.find('**/stage_lights_grp').getChildren():
-            self.colorScaleOffNodes.append(light)
-        for lightBeam in self.highRollerArena.findAllMatches('**/stagelight_light'):
-            lightBeam.hide()
-        for discoBall in self.highRollerArena.findAllMatches('**/disco_ball_*_geom'):
-            self.colorScaleOffNodes.append(discoBall)
-        for curtain in self.highRollerArena.findAllMatches('**/curtains_*_geom'):
-            self.colorScaleOffNodes.append(curtain)
-        for ceilLight in self.highRollerArena.findAllMatches('**/ceiling_lights_*_grp'):
-            self.colorScaleOffNodes.append(ceilLight)
-        for geomNode in (self.highRollerArena.find('**/ceiling_stage'),
-                         self.highRollerArena.find('**/stage_curtains_back')):
-            self.colorScaleOffNodes.append(geomNode)
+        # for light in self.highRollerArena.find('**/stage_lights_grp').getChildren():
+        #     self.colorScaleOffNodes.append(light)
+        # for lightBeam in self.highRollerArena.findAllMatches('**/stagelight_light'):
+        #     lightBeam.hide()
+        # for discoBall in self.highRollerArena.findAllMatches('**/disco_ball_*_geom'):
+        #     self.colorScaleOffNodes.append(discoBall)
+        # for curtain in self.highRollerArena.findAllMatches('**/curtains_*_geom'):
+        #     self.colorScaleOffNodes.append(curtain)
+        # for ceilLight in self.highRollerArena.findAllMatches('**/ceiling_lights_*_grp'):
+        #     self.colorScaleOffNodes.append(ceilLight)
+        # for geomNode in (self.highRollerArena.find('**/ceiling_stage'),
+        #                  self.highRollerArena.find('**/stage_curtains_back')):
+        #     self.colorScaleOffNodes.append(geomNode)
 
-        self.highRollerTV.reparentTo(self.geom)
-        self.highRollerTV.setPosHpr(-25, -185, 21.75, -10, 0, 0)
-        self.__graphic = self.highRollerTV.find('**/screen_graphic_full')
-        self.__static = self.highRollerTV.find('**/screen_graphic_static_seq')
-        self.__light1 = self.highRollerTV.find('**/light_group_1_glow')
-        self.__light2 = self.highRollerTV.find('**/light_group_2_glow')
-        self.__stars = self.highRollerTV.find('**/stars')
-        self.__marks = self.highRollerTV.find('**/exclamation_marks')
+        # self.highRollerTV.reparentTo(self.geom)
+        # self.highRollerTV.setPosHpr(-25, -185, 21.75, -10, 0, 0)
+        # self.__graphic = self.highRollerTV.find('**/screen_graphic_full')
+        # self.__static = self.highRollerTV.find('**/screen_graphic_static_seq')
+        # self.__light1 = self.highRollerTV.find('**/light_group_1_glow')
+        # self.__light2 = self.highRollerTV.find('**/light_group_2_glow')
+        # self.__stars = self.highRollerTV.find('**/stars')
+        # self.__marks = self.highRollerTV.find('**/exclamation_marks')
 
         plane = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, -50)))
         planeNode = CollisionNode('highRollerDropPlane')
@@ -837,22 +916,22 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.geom.attachNewNode(planeNode)
 
         self.geom.reparentTo(render)
-        self.__setupExclaim()
-        self.__startAnimations()
+        # self.__setupExclaim()
+        # self.__startAnimations()
 
         self.introduction = base.loadMusic(
-            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_ctscn.ogg')
+            'phase_12/audio/bgm/merc/instance_majorplayer_ctscn.ogg')
 
         self.elevatorMusic = self.introduction
         self.battleOneMusic = base.loader.loadMusic(
-            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_3.ogg')
         self.battleTwoMusic = base.loadMusic('phase_7/audio/bgm/encntr_suit_winning_indoor.ogg')
         self.betweenBattleMusic = self.battleOneMusic
         self.epilogueMusic = base.loader.loadMusic('phase_9/audio/bgm/encntr_hall_of_fame.ogg')
         self.midCutsceneMusic = self.battleOneMusic
         self.battleThreeMusic = self.battleOneMusic
         self.phaseOneMusic = loader.loadMusic(
-            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_2.ogg')
+            'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_battle_3.ogg')
         self.shuffleMusic = loader.loadMusic(
             'phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_shuffle.ogg')
         self.puzzleMusic = loader.loadMusic(
@@ -946,11 +1025,11 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.phaseTwoCutsceneMusic, looping=0, volume=0.9)
 
     def startPhase2Music(self):
-        self.startHighRollerParticles()
-        self.turnLightsBackOn()
-        self.__static.show()
-        self.colorScaleOffAllNodes()
-        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
+        #self.startHighRollerParticles()
+       # self.turnLightsBackOn()
+        #self.__static.show()
+       # self.colorScaleOffAllNodes()
+        #self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
         self.__playHighRollerMusic(
             self.phaseTwoMusic, looping=1, volume=0.9)
 
@@ -1025,22 +1104,147 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.__marksNode.wrtReparentTo(self.highRollerTV)
         self.__marks.wrtReparentTo(self.__marksNode)
 
+    def initializeAudience(self):
+        dept = None
+        # Make talkingAudience first, must always be made
+        for indices in self.talkingAudienceIndices:
+            # Generate a suit for that seat
+
+            suit = self.createSuitRandom()
+            self.seatSuit(suit, indices[0], indices[1])
+            self.suitList.append(suit)
+        # Make random suits now
+        for tableIndex in range(len(self.tableLocators)):
+            for chairIndex in range(len(self.chairLocatorPosH)):
+                # Don't make a second suit in an occupied suit
+                if self.sittingSuits[tableIndex][chairIndex]:
+                    continue
+                # Generate a suit for that seat
+                suit = self.createSuitRandom()
+                self.seatSuit(suit, tableIndex, chairIndex)
+                self.suitList.append(suit)
+        self.loopAudience()
+
+    def loopAudience(self):
+        for tableIndex, table in enumerate(self.sittingSuits):
+            for chairIndex, suit in enumerate(table):
+                if suit:
+                    fromFrame = tableIndex + chairIndex
+                    for control in suit.getAnimControls('sit', None):
+                        toFrame = fromFrame + control.getNumFrames() - 1
+                        control.loop(1, fromFrame, toFrame)
+
+    def seatSuit(self, suit, tableIndex=0, chairIndex=0):
+        """
+        Takes a suit and seats them based on table and chair index given.
+        Creates chair and sit locator nodes in the process.
+        :param suit:
+        :param tableIndex:
+        :param chairIndex:
+        :return:
+        """
+        # Make locator nodes for chair and sitting positions
+        chairLocator = self.tableLocators[tableIndex].attachNewNode('chairLocator-{chairIndex}')
+        chairLocator.setPos(self.chairLocatorPosH[chairIndex][0])
+        chairLocator.setH(self.chairLocatorPosH[chairIndex][1])
+        sitLocator = chairLocator.attachNewNode('sitLocator')
+
+        # Position sit locator based on suit body type and scale
+        suitScale = suit.getGeomNode().getScale()[0]
+
+        # Scale adjustment to prevent them from being too big
+        maxScale = 1.4
+        if suitScale > maxScale:
+            suit.getGeomNode().setScale(maxScale)
+            suitScale = maxScale
+
+        # Adjust sit position based on suit's scale
+        sitLocator.setPos(self.sitLocatorPos['a'][0]
+                          + (self.sitLocatorPos['a'][1] * (1 - suitScale)))
+        suit.reparentTo(sitLocator)
+        self.sitLocators[tableIndex][chairIndex] = sitLocator
+
+        # Remove shadows and nametags
+        suit.setActiveShadow(0)  # Disable drop shadow calculations
+        suit.hideShadow()  # And then hide it from rendering
+        suit.removeActive()  # Unmanage the nametag from the margin manager
+        self.sittingSuits[tableIndex][chairIndex] = suit
+
+    """
+    Environmental effects
+    """
+
+    def initializeDiscoBalls(self):
+        for index, ball in enumerate(self.discoballs):
+            ballStartH = random.randint(0, 360)
+            seq = LerpHprInterval(ball, self.ballSpinDuration,
+                                  (360 + ballStartH, 0, 0), startHpr=(ballStartH, 0, 0))
+            seq.loop()
+            self.ballSpeen.append(seq)
+            # make sure ball doesnt get affected by room dimming
+            ball.setColorScaleOff()
+            ball.find('**/discolights_*').setColor(1, 1, 1, 0.3)
+            ball.find('**/').setColor(1, 1, 1, 1)
+            ball.setColor(1, 1, 1, 1)
+
+    def hideCentralBall(self):
+        self.discoballs[1].hide()
+
+    def showCentralBall(self):
+        self.discoballs[1].show()
+
+    """
+    Getters
+    """
+
+    def getGeom(self):
+        return self.__bossRoom
+
+    def createSuitRandom(self):
+        diner = Suit.Suit()
+        diner.dna = SuitDNA.SuitDNA()
+        level = random.choice([7, 8])
+        diner.dna.newSuitRandom('s', name=random.choice(('mh2', 'cnd2', 'std2')))
+        diner.setDNA(diner.dna)
+        diner.makeExecutive()
+        diner.loop('sit')
+        diner.nametag.setNametag2d(None)
+        diner.nametag.setNametag3d(None)
+        return diner
+
+    def getNextAudienceSuit(self):
+        # Gets the next relevant audience suit.
+        if not self.suitList:
+            return None
+        suit = self.suitList.pop(0)
+        # If they're not part of the talking audience, we will need to allow them to speak.
+        if suit not in self.talkingAudience:
+            # Init their nametag so they can talk.
+            suit.initName()
+            # Hide their nametag, because they're talking during cutscenes.
+            suit.hideNametag2d()
+            suit.nametag3d.hide()
+        return suit
+
     def unloadEnvironment(self):
         for suit in self.__suits:
             suit.cleanup()
         del self.__suits
         self.colorScaleOffNodes = []
         self.geom.removeNode()
+        for seq in self.ballSpeen:
+            seq.finish()
+        for light in self.stagelights:
+            light.cleanup()
+        for suit in self.suitList:
+            suit.delete()
+        self.talkingAudience = []
+        self.suitList = []
+        self.discofloors = []
+        self.discoballs = []
+        self.stagelights = []
+        self.discofloors = []
 
-    def __initializeAudience(self):
-        for suit in self.__suits:
-            suit.cleanup()
-        self.__suits = []
-        for name, posHprScale in self.SUIT_SPAWN_LOCATIONS:
-            suit = self.__createSuit(name)
-            suit.reparentTo(self.highRollerArena)
-            suit.setPosHprScale(*posHprScale)
-            self.__suits.append(suit)
 
     @staticmethod
     def __createSuit(name):
@@ -1101,9 +1305,67 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         return Sequence()
 
     def makeIntroductionMovie(self, delayDeletes):
-
-        from toontown.cutscene.HighRollerIntroCutscene import makeHighRollerIntroduction
-        return makeHighRollerIntroduction(self, delayDeletes)
+        base.playMusic(self.introduction, looping=1, volume=0.9)
+        base.camera.wrtReparentTo(self.videographer)
+        base.camera.setPosHpr(0, 135.0, 7, 180, 0, 0.0)
+        track = Sequence(Func(self.videographer.nametag3d.setZ, 10), Func(self.videographer.setChatAbsolute, "Well, well, well...", CFSpeech | CFTimeout), 
+                         LerpPosHprInterval(base.camera, 2, (-7.0, 10.0, 7), (210, 0, 0.0), blendType='easeInOut'), 
+        LerpPosHprInterval(base.camera, 2, (0, 15.0, 8), (180, 0, 0.0), blendType='easeInOut'), Func(self.videographer.nametag3d.setZ, 10),
+        Func(self.videographer.setChatAbsolute, "Toons...", CFSpeech | CFTimeout),
+        Wait(4.0),
+                         Func(self.videographer.setChatAbsolute, "I'm afraid the Cog you came all this way to see is currently...", CFSpeech | CFTimeout), 
+                         Wait(4.0), Parallel(Func(self.videographer.setChatAbsolute, "...away.", CFSpeech | CFTimeout), 
+                                             LerpPosHprInterval(base.camera, .5, (0, 10.0, 9), (180, 0, 0.0), blendType='easeInOut')),
+                        Wait(3.0),
+                        Func(self.videographer.setChatAbsolute, "The Suit you Toons know as the 'Major Player' is taking a little break.", CFSpeech | CFTimeout), 
+                        Wait(4.0),
+                        Parallel(LerpPosHprInterval(base.camera, 3, (0, 15, 9), (180, 0, 0.0), blendType='easeInOut'), Sequence(ActorInterval(self.videographer, 'sit-lose'), Func(self.videographer.loop, 'neutral2'), 
+                                                                                                           Func(self.videographer.setPos, (0, -130, 1.25))), 
+                                 Func(self.videographer.setChatAbsolute, "But, I suppose the show must go on shouldn't it? Somebody has to keep the cameras rolling.", CFSpeech | CFTimeout)),
+                                 Wait(3.0),
+                        Parallel(Func(self.videographer.setChatAbsolute, "Fortunately, he left a professional in charge.", CFSpeech | CFTimeout), ActorInterval(self.videographer, 'finger-wag')), 
+                        Parallel(Func(base.camera.setPos, (5, -15, 12.5)), Func(base.camera.setH, 0), Sequence(LerpPosInterval(base.camera, 4, (-5, -15, 12.5)), Func(self.videographer.loop, 'speak')), 
+                                 Func(self.videographer.setChatAbsolute, "I've spent plenty of time behind the cameras.", CFSpeech | CFTimeout)),
+                                 Parallel(LerpPosHprInterval(base.camera, 0, (25, 50, 35), (150, -30, 0.0)), Func(self.videographer.nametag3d.setScale, 2.5),
+                                 Func(self.videographer.setChatAbsolute, "Finding the right angles.", CFSpeech | CFTimeout)),
+                                 Wait(4.0),
+                                 Parallel(LerpPosHprInterval(base.camera, 4, (-25, 50, 35), (210, -30, 0.0), blendType='easeInOut'), Func(self.videographer.nametag3d.setScale, 2.5),
+                                 Func(self.videographer.setChatAbsolute, "Setting the scene.", CFSpeech | CFTimeout)),
+                                 Parallel(LerpPosHprInterval(base.camera, 1, (0, 12, 9), (180, 0, 0.0), blendType='easeInOut'), Func(self.videographer.nametag3d.setScale, 1.0), 
+                                          Sequence(ActorInterval(self.videographer, 'song-and-dance'), Func(self.videographer.loop, 'neutral2')),
+                                 Func(self.videographer.setChatAbsolute, "Making sure every performance looks its best!", CFSpeech | CFTimeout)),
+                                 Parallel(LerpPosHprInterval(base.camera, .25, (0, 10, 9), (180, 0, 0.0)), 
+                                 Func(self.videographer.setChatAbsolute, "But tonight...", CFSpeech | CFTimeout)),
+                                 Wait(2.0),
+                                  Parallel(Sequence(ActorInterval(self.videographer, 'bust'), Func(self.videographer.loop, 'neutral2')), 
+                                           Sequence(Func(self.videographer.setChatAbsolute, "I get to try something a little different.", CFSpeech | CFTimeout), Wait(3.0),
+                                                    Func(self.videographer.setChatAbsolute, "He makes this look so easy.", CFSpeech | CFTimeout), Wait(3.0),
+                                                    Func(self.videographer.setChatAbsolute, "So let's see how I look in the spotlight!", CFSpeech | CFTimeout))),
+                            Parallel(Func(base.camera.setPos, (5, -15, 5)), Func(base.camera.setH, 0), Sequence(LerpPosInterval(base.camera, 4, (-5, -15, 5)), Func(self.videographer.loop, 'rolled')), 
+                                 Func(self.videographer.nametag3d.setZ, 3), Func(self.videographer.setChatAbsolute, "Don't worry, I know exactly what makes a performance good.", CFSpeech | CFTimeout)),
+                                 Parallel(LerpPosHprInterval(base.camera, 0, (25, 50, 15), (150, 0, 0.0)), Func(self.videographer.nametag3d.setScale, 2.5), Func(self.videographer.nametag3d.setZ, 10),
+                                 Func(self.videographer.setChatAbsolute, "A little action.", CFSpeech | CFTimeout)),
+                                 Wait(3.0),
+                                 Parallel(LerpPosHprInterval(base.camera, 3, (-25, 50, 15), (210, 0, 0.0), blendType='easeInOut'), Func(self.videographer.nametag3d.setScale, 2.5),
+                                 Func(self.videographer.setChatAbsolute, "A little drama.", CFSpeech | CFTimeout)),
+                                  Parallel(LerpPosHprInterval(base.camera, 1, (0, 10, 9), (180, 0, 0.0), blendType='easeInOut'), Func(self.videographer.nametag3d.setScale, 2.5),
+                                 Sequence(Func(self.videographer.nametag3d.setScale, 1.0), Func(self.videographer.setChatAbsolute, "And, of course...", CFSpeech | CFTimeout), Wait(3.0), 
+                                          Func(self.videographer.nametag3d.setScale, 1.0), Func(self.videographer.setChatAbsolute, "...a convincing defeat!", CFSpeech | CFTimeout))),
+                                          Wait(3.0),
+                                          Parallel(LerpPosHprInterval(base.camera, 1, (0, 15, 9), (180, 0, 0.0)), Func(self.videographer.nametag3d.setScale, 1.0), 
+                                                   Sequence(Func(self.videographer.setChatAbsolute, "Places, Toons!", CFSpeech | CFTimeout), Func(self.videographer.loop, 'walk'), 
+                                                            LerpHprInterval(self.videographer, .5, (0, 0, 0.0)), LerpPosInterval(self.videographer, 3, (0, -115, 1.25), blendType='easeInOut'),
+                                                            Func(self.videographer.loop, 'neutral2'))),
+                                                            Wait(2.0),
+                                          Parallel(LerpPosHprInterval(base.camera, 1, (0, 15, 9), (180, 0, 0.0)), 
+                                          Sequence(Func(self.videographer.setChatAbsolute, "Try to make this look good.", CFSpeech | CFTimeout), LerpHprInterval(self.videographer, 0, (180, 0, 0.0)),
+                                                   ActorInterval(self.videographer, 'turn-into'), Func(self.videographer.loop, 'turn-loop'),
+                                                   Wait(3.0), Func(self.videographer.setChatAbsolute, "And...", CFSpeech | CFTimeout))),
+                                 Wait(1.0),
+                                 Sequence(ActorInterval(self.videographer, 'turn-out'), LerpHprInterval(self.videographer, 0, (0, 0, 0.0)), Func(self.videographer.loop, 'rolled')),
+                                 Parallel(LerpPosHprInterval(base.camera, .25, (0, 10, 9), (180, 0, 0.0)), Func(self.videographer.setChatAbsolute, "ACTION!", CFSpeech | CFTimeout)),
+                         Wait(5), Func(self.videographer.hide))
+        return track
 
     def makePrepareBattleTwoMovie(self, delayDeletes):
         self.hide()
@@ -1539,11 +1801,10 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        messenger.send(self.uniqueName('BattleOne'))
+        messenger.send(self.uniqueName('IntroductionStarted'))
         intervalName = 'IntroductionMovie'
         delayDeletes = []
-        seq = Sequence(
-            self.makeIntroductionMovie(delayDeletes),
+        seq = Sequence(self.makeIntroductionMovie(delayDeletes),
             Func(self.__finishHighRollerIntroduction),
             name=intervalName)
         seq.delayDeletes = delayDeletes
@@ -1586,7 +1847,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         localAvatar.inventory.setBattleCreditMultiplier(mult)
         self.toonsToBattlePosition(self.toons, self.battleANode)
         self.releaseToons()
-        self.highRollerWheel.show()
+        # self.highRollerWheel.show()
         self.endVault.unstash()
         self.evWalls.stash()
         self.midVault.unstash()
@@ -1597,6 +1858,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
+        self.introduction.stop()
         base.playMusic(self.battleOneMusic, looping=1, volume=0.9)
 
     def exitBattleOne(self):
@@ -1826,3 +2088,186 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def exitFrolic(self):
         self.door3.setZ(0)
         self.door2.setZ(0)
+
+class MajorPlayerStagelight:
+    """
+    Hierarchy of a stagelight:
+
+    stagelight_x [M]
+        -> spotlight_x [M]
+            -> spotlight_beam_x [TS]
+
+    where [M] = ModelNode, [TS] = transparency bit.
+
+    To modify color, do setColor on spotlight_x, but change light transparency with setAlphaScale on spotlight_beam_x.
+    """
+
+    durationToMove = (4.0, 6.0)
+    delay = (1.0, 1.5)
+
+    def __init__(self, stagelight, ranges):
+        self.stagelightGeom = stagelight
+        self.start, self.end = ranges
+        self.cleaningUp = False
+
+        # Initialize stagelight color.
+        for spotlightGeom in self.stagelightGeom.getChildren():
+            # Remove any pre-applied vertex colors on the stagelight nodes.
+            spotlightGeom.setColor(1, 1, 1, 1)
+        spotlight = self.stagelightGeom.find('spotlight_*')  # This includes the bulb (opaque) and beam (transparent)
+        spotlight.setColorScaleOff()  # Make sure it doesn't get affected by color dimming
+        spotlight.setColor(0.953, 0.878, 0.612, 1)  # Color of the spotlight, have a=1 so bulb isn't semi-transparent
+        spotlight.find('spotlight_beam_*').setAlphaScale(0.4)  # Alpha value of the spotlight beam
+
+        # Start at a random position in our range.
+        self.stagelightGeom.setHpr(self.getValidAngle())
+
+        # Start our movement task.
+        self.moveIval = None
+        self.startMoveIvalLoop()
+
+    def cleanup(self):
+        self.cleaningUp = True
+        if self.moveIval:
+            self.moveIval.finish()
+        # we dont need to remove the stagelightGeom since it gets cleaned up with the model
+        self.stagelightGeom = None
+
+    """
+    Various accessors
+    """
+
+    def getValidAngle(self):
+        a, b, c = self.start
+        x, y, z = self.end
+        return Vec3(random.randint(a, x), random.randint(b, y), random.randint(c, z))
+
+    def getDuration(self):
+        start, end = self.durationToMove
+        return start + ((end - start) * random.random())
+
+    def getDelay(self):
+        start, end = self.delay
+        return start + ((end - start) * random.random())
+
+    """
+    Stagelight movement
+    """
+
+    def startMoveIvalLoop(self):
+        if self.cleaningUp:
+            return
+        if self.moveIval:
+            self.moveIval.finish()
+            self.moveIval = None
+        self.moveIval = Sequence(
+            LerpHprInterval(self.stagelightGeom, self.getDuration(), self.getValidAngle(), blendType='easeInOut'),
+            Wait(self.getDelay()),
+            Func(self.startMoveIvalLoop),
+        ).start()
+
+
+class MajorPlayerDiscoFloor:
+    """
+    A Object representing a set of color-changing disco floor tiles.
+    """
+
+    colorChangeDuration = 4.0
+    colorChangeDelay = 0.5
+
+    tileColors = (
+        Vec4(0.443, 0.522, 0.863, 1.0),
+        Vec4(1, 0.302, 0.267, 1.0),
+        Vec4(1, 0.851, 0.094, 1.0),
+        Vec4(1, 0.635, 0.176, 1.0),
+        Vec4(0.271, 0.984, 0.227, 1.0),
+        Vec4(1, 0.431, 1, 1.0),
+    )
+
+    def __init__(self, discotiles):
+        self.discotiles = discotiles
+        # for tile in discotiles:
+        #     tile.setColorScaleOff()
+
+        # Initiate the painting on the disco tiles.
+        self.setAllTileColor(0.992, 0.82, 0.431, 1.0)
+
+        # Start our movement task.
+        self.cleaningUp = False
+        self.mainIval = None
+        self.colorChangeIvals = [None] * len(self.discotiles)
+        self.startColorChanges()
+
+    def cleanup(self):
+        self.cleaningUp = True
+        if self.mainIval:
+            self.mainIval.finish()
+        for ival in self.colorChangeIvals:
+            if ival:
+                ival.finish()
+        self.discotiles = []
+
+    """
+    Floor effects
+    """
+
+    def setAllTileColor(self, *color):
+        for tile in self.discotiles:
+            tile.setColor(color)
+
+    def setTileColorsToList(self, colors):
+        for i, tile in enumerate(self.discotiles):
+            tile.setColor(colors[i])
+
+    """
+    Color operation
+    """
+
+    def getRandomTileColor(self):
+        return random.choice(self.tileColors)
+
+    def getShuffledTileColors(self):
+        colorList = list(self.tileColors)
+        random.shuffle(colorList)
+        return colorList
+
+    """
+    Disco floor loop
+    """
+
+    def lerpTileBetweenColors(self, t, tile, oldColor, newColor):
+        lerpedColor = oldColor + ((newColor - oldColor) * t)
+        tile.setColor(lerpedColor)
+
+    def getFloorRgbChangeSequence(self, tile, newColor):
+        # Makes the sequence of this floor transposing to a new tile type.
+        oldColor = tile.getColor()
+        return LerpFunctionInterval(
+            self.lerpTileBetweenColors, self.colorChangeDuration, blendType='easeInOut',
+            extraArgs=[tile, oldColor, newColor]
+        )
+
+    def startColorChanges(self):
+        self.mainIval = Track()
+        for i in range(len(self.discotiles)):
+            self.mainIval.append(
+                (
+                    self.colorChangeDuration * (i / len(self.discotiles)),
+                    Func(self.doColorChange, i)
+                )
+            )
+        self.mainIval.start()
+
+    def doColorChange(self, i):
+        if self.cleaningUp:
+            return
+        if self.colorChangeIvals[i]:
+            self.colorChangeIvals[i].finish()
+            self.colorChangeIvals[i] = None
+
+        # Build the color change ival.
+        self.colorChangeIvals[i] = Sequence(
+            self.getFloorRgbChangeSequence(self.discotiles[i], self.getRandomTileColor()),
+            Wait(self.colorChangeDelay),
+            Func(self.doColorChange, i),
+        ).start()

@@ -1653,15 +1653,74 @@ class SuitPlannerInteriorAI:
                 suitName='mh2'
             )
             reserveSuits.append(random.choice((suit, suit2, suit3)))
+        if specialCode == 'videoPhase1':
+            suit = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('txl', 'ksp', 'tbc'))
+            )
+            suit2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='l',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('le', 'le2', 'bw', 'bw2', 'magi', 'whistleb', 'br'))
+            )
+            suit3 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='m',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('rb', 'timer'))
+            )
+            suit4 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='s',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('mh', 'cnd', 'std', 'm'))
+            )
+            suit5 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='g',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('mg', 'hho', 'chw'))
+            )
+            suit6 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='t',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('rus', 'rus2', 'itn'))
+            )
+            suit7 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='p',
+                suitLevel=random.randint(10, 20),
+                revives=0,
+                suitName=random.choice(('nsh', 'anc'))
+            )
+            reserveSuits.append(random.choice((suit, suit2, suit3, suit4, suit5, suit6, suit7)))
         if specialCode == 'videog4':
             suit = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='t',
-                suitLevel=33,
+                suitLevel=66,
                 revives=0,
                 suitName='bcaster'
             )
+            suit2 = self.__genSuitObject(
+                self.zoneId,
+                bldgTrack='c',
+                suitLevel=28,
+                revives=0,
+                suitName='mplayers'
+            )
             reserveSuits.append(suit)
+            reserveSuits.append(suit2)
         if specialCode == 'choreo':
             suit = self.__genSuitObject(
                 self.zoneId,

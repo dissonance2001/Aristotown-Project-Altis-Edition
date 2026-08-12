@@ -376,6 +376,8 @@ def getDialogueArray(suit):
         return loadDialogArray(FeatherbedderDialogArray, FeatherbedderDialogFiles)
     elif suit.style.name == 'mplayer' and not suit.isSkeleton:
         return loadDialogArray(MajorPlayerDialogArray, MajorPlayerDialogFiles)
+    elif suit.style.name == 'mplayers' and not suit.isSkeleton:
+        return loadDialogArray(MajorPlayerDialogArray, MajorPlayerDialogFiles)
     elif suit.style.name == 'director' and not suit.isSkeleton:
         return loadDialogArray(MajorPlayerDialogArray, MajorPlayerDialogFiles)
     elif suit.style.name == 'chainsaw' and not suit.isSkeleton:

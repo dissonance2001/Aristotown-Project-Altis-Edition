@@ -82,7 +82,7 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.frame = DirectFrame(geom=gui.find('**/avatar_panel'), geom_scale=0.21, geom_color=(0.69, 0.706, 0.718, 1), geom_pos=(0, 0, 0.02), relief=None, pos=(-0.23, 0, -0.46), parent=base.a2dTopRight)
         self.head = self.frame.attachNewNode('head')
         health = float(avatar.currHP) / float(avatar.maxHP)
-        if not self.avatar.dna.name == 'hrollers' and not self.avatar.dna.name == 'bcaster' and not (self.avatar.dna.name == 'redd' and self.avatar.isVirtual) and not (self.avatar.dna.name == 'wsi' and self.avatar.isVirtual):
+        if not self.avatar.dna.name == 'hrollers' and not self.avatar.dna.name == 'bcaster' and not self.avatar.dna.name == 'mplayers' and not (self.avatar.dna.name == 'redd' and self.avatar.isVirtual) and not (self.avatar.dna.name == 'wsi' and self.avatar.isVirtual):
             for part in avatar.headParts:
                 copyPart = part.copyTo(self.head)
                 copyPart.setDepthTest(1)
@@ -144,6 +144,21 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             self.condition = 11
         self.avatar = avatar
         if self.avatar.dna.name == 'bcaster':
+        #if avatar.isVirtual:
+            self.head.setColor(1, 1, 1, 1)
+            self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+            for part in avatar.headParts:
+                copyPart = part.copyTo(self.head)
+                copyPart.setDepthTest(1)
+                copyPart.setDepthWrite(1)
+            p1 = Point3()
+            p2 = Point3()
+            self.head.calcTightBounds(p1, p2)
+            d = p2 - p1
+            biggest = max(d[0], d[1], d[2])
+            s = 0.3 / biggest
+            self.head.setPosHprScale(0, 0, 0.05, 180, 0, 0, s, s, s)
+        if self.avatar.dna.name == 'mplayers':
         #if avatar.isVirtual:
             self.head.setColor(1, 1, 1, 1)
             self.head.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
@@ -666,6 +681,12 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                                blendType='easeInOut'), LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[condition]),
                                                blendType='easeInOut'))
                     self.changeInterval.start()
+                if self.avatar.dna.name == 'mplayers':
+                    self.changeInterval = Parallel(
+                        LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
+                                               blendType='easeInOut'), LerpColorScaleInterval(self.head, duration=1, colorScale=(self.healthColors[condition]),
+                                               blendType='easeInOut'))
+                    self.changeInterval.start()
                 if self.avatar.dna.name == 'wsi' and self.avatar.isVirtual:
                     self.changeInterval = Parallel(
                         LerpColorScaleInterval(self.button, duration=1, colorScale=(self.healthColors[condition]),
@@ -827,6 +848,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
                                                             blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
                                    blendType='easeInOut'))
             self.interval.start()
+        if self.avatar.dna.name == 'mplayers':
+            self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(1, 0, 0, 1),
+                                                            blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
+                                   blendType='easeInOut'))
+            self.interval.start()
         if self.avatar.dna.name == 'redd' and self.avatar.isVirtual:
             self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(1, 0, 0, 1),
                                                             blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(1, 0, 0, 1),
@@ -933,6 +959,11 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
 
     def __pulseGray(self, task):
         if self.avatar.dna.name == 'bcaster':
+            self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                                            blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
+                                   blendType='easeInOut'))
+            self.interval.start()
+        if self.avatar.dna.name == 'mplayers':
             self.interval = Parallel(LerpColorScaleInterval(self.head, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
                                                             blendType='easeInOut'), LerpColorScaleInterval(self.button, duration=0, colorScale=(0.3, 0.3, 0.3, 1),
                                    blendType='easeInOut'))
@@ -1158,32 +1189,34 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
         self.headTask = None
 
     def __cleanupSequence(self):
-        self.blinkTask = None
-        taskMgr.remove(self.frame.uniqueName('blink-task'))
-        taskMgr.remove(self.frame.uniqueName('pulse-task'))
-        self.headTask = None
-        taskMgr.remove(self.frame.uniqueName('head-task'))
-        if self.labelInterval:
+        frame = getattr(self, 'frame', None)
+
+        if frame is not None and hasattr(frame, 'uniqueName'):
+            taskMgr.remove(frame.uniqueName('blink-task'))
+            taskMgr.remove(frame.uniqueName('pulse-task'))
+            taskMgr.remove(frame.uniqueName('head-task'))
+
+        if getattr(self, 'labelInterval', None):
             self.labelInterval.finish()
             self.labelInterval = None
 
-        if self.healthBarInterval:
+        if getattr(self, 'healthBarInterval', None):
             self.healthBarInterval.finish()
             self.healthBarInterval = None
 
-        if self.changeInterval:
+        if getattr(self, 'changeInterval', None):
             self.changeInterval.finish()
             self.changeInterval = None
 
-        if self.buttonInterval:
+        if getattr(self, 'buttonInterval', None):
             self.buttonInterval.finish()
             self.buttonInterval = None
 
-        if self.blinkTask:
+        if getattr(self, 'blinkTask', None):
             self.blinkTask.finish()
             self.blinkTask = None
 
-        if self.headTask:
+        if getattr(self, 'headTask', None):
             self.headTask.finish()
             self.headTask = None
 

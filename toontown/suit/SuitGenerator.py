@@ -302,6 +302,18 @@ class SuitGenerator(object):
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(10.0)
+        elif dna.name == 'mplayers':
+            self.scale = 7.1 / aSize
+            self.handColor = VBase4(1, 1, 1, 1)
+            self.generateMajorPlayerBody()
+            self.makeMajorPlayer()
+            self.generateHead3('majorplayer', animated=True)
+            texture = loader.loadTexture('phase_12/maps/ttcc_ene_majorplayer.png')
+            for headPart in self.headParts:
+                headPart.setTexture(texture, 1)
+            self.makeVirtual()
+            self.setSuitStatusEffect('vulnerable', modifier=100)
+            self.setHeight(10.0)
            # self.setTransparency(1)
         elif dna.name == 'fires':
             self.scale = 6.5 / aSize

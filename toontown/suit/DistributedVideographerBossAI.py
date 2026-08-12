@@ -84,7 +84,7 @@ class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI,
             self.__doneHighRollerWaitForToons)
 
     def __doneHighRollerWaitForToons(self, avIds):
-        self.b_setState('BattleOne')
+        self.b_setState('Introduction')
 
     def generate(self):
         DistributedMinibossAI.DistributedMinibossAI.generate(self)
@@ -111,7 +111,7 @@ class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI,
     def makeBattleOneBattles(self):
 
         self.postBattleState = 'Reward'
-        self.initializeBattles(1, ToontownGlobals.HighRollerBossBattleOnePosHpr)
+        self.initializeBattles(1, ToontownGlobals.VideographerBossBattleOnePosHpr)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:

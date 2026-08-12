@@ -556,11 +556,11 @@ class TownBattle(StateData.StateData):
     def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons, battle):
         self.battle = battle
         cogIds = map(lambda cog: cog.doId, cogs)
-        self.notify.debug('adjustCogsAndToons() cogIds: %s self.cogs: %s' % (cogIds, self.cogs))
-        self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
-        self.notify.debug('adjustCogsAndToons() trappedIndices: %s self.trappedIndices: %s' % (trappedIndices, self.trappedIndices))
+        # self.notify.debug('adjustCogsAndToons() cogIds: %s self.cogs: %s' % (cogIds, self.cogs))
+        # self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
+        # self.notify.debug('adjustCogsAndToons() trappedIndices: %s self.trappedIndices: %s' % (trappedIndices, self.trappedIndices))
         toonIds = map(lambda toon: toon.doId, toons)
-        self.notify.debug('adjustCogsAndToons() toonIds: %s self.toons: %s' % (toonIds, self.toons))
+        # self.notify.debug('adjustCogsAndToons() toonIds: %s self.toons: %s' % (toonIds, self.toons))
         maxSuitLevel = 0
         cogFireCostIndex = 0
         for cog in cogs:
@@ -570,7 +570,7 @@ class TownBattle(StateData.StateData):
 
         creditLevel = maxSuitLevel
         resetActivateMode = not (cogIds == self.cogs and creditLevel == self.creditLevel and luredIndices == self.luredIndices and trappedIndices == self.trappedIndices and toonIds == self.toons)
-        self.notify.debug('adjustCogsAndToons() resetActivateMode: %s' % resetActivateMode)
+        # self.notify.debug('adjustCogsAndToons() resetActivateMode: %s' % resetActivateMode)
         self.cogs = cogIds
         self.numCogs = len(cogs)
         self.creditLevel = creditLevel

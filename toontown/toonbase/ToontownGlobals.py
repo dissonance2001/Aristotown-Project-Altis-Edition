@@ -1088,6 +1088,18 @@ HighRollerBossCogBattleBPosHpr = (0,
  0,
  0,
  0)
+VideographerBossCogBattleAPosHpr = (0,
+ 120,
+ 0,
+ 0,
+ 0,
+ 0)
+VideographerBossCogBattleBPosHpr = (0,
+ 120,
+ 0,
+ 0,
+ 0,
+ 0)
 SellbotBossMaxDamage = 100
 SellbotBossMaxDamageNerfed = 100
 SellbotBossBattleOnePosHpr = (0,
@@ -1240,6 +1252,7 @@ CashbotBossCranePosHprs = [(97.4, -337.6, 0, -45, 0, 0),
 # CashbotBoss... values above.
 HighRollerBossOffstagePosHpr = (120, -195, 0, 0, 0, 0)
 HighRollerBossBattleOnePosHpr = (0, -130, 0, 180, 0, 0)
+VideographerBossBattleOnePosHpr = (0, -170, 1.25, 0, 0, 0)
 HighRollerBossBattleTwoPosHpr = (120, -285, 0, 180, 0, 0)
 HighRollerRTBattleOneStartPosHpr = (94, -220, 0, 110, 0, 0)
 HighRollerRTBattleTwoStartPosHpr = (94, -220, 0, 110, 0, 0)

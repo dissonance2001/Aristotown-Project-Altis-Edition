@@ -10271,6 +10271,249 @@ def hr_stagelights(self):
     self.addForceGroup(f0)
 
 @particle
+def videog_wallsmoke(self):
+    self.reset()
+    self.setPos(0, -100, -6)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-2')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("RingEmitter")
+    p0.setPoolSize(512)
+    p0.setBirthRate(0.2000)
+    p0.setLitterSize(4)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(6.0000)
+    p0.factory.setLifespanSpread(1.4000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAINOUT)
+    p0.renderer.setUserAlpha(0.29)
+    # Sprite parameters
+    p0.renderer.addTextureFromFile('phase_6/maps/tt_t_efx_ext_smoke.png')
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(11.0000)
+    p0.renderer.setFinalXScale(13.0000)
+    p0.renderer.setInitialYScale(11.0000)
+    p0.renderer.setFinalYScale(13.0000)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(0)
+    p0.renderer.setColorBlendMode(ColorBlendAttrib.MAdd, ColorBlendAttrib.OIncomingAlpha,
+                                  ColorBlendAttrib.OOneMinusIncomingAlpha)
+    p0.renderer.getColorInterpolationManager().addLinear(0.0, 1.0, Vec4(0.7843137383460999, 0.3921568691730499,
+                                                                        0.7843137383460999, 1.0),
+                                                         Vec4(0.19607843458652496, 0.19607843458652496,
+                                                              0.19607843458652496, 1.0), True)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 2.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Ring parameters
+    p0.emitter.setRadius(22.0000)
+    p0.emitter.setRadiusSpread(0.0000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('fg')
+    # Force parameters
+    force0 = LinearVectorForce(Vec3(0.0000, 0.0000, 2.0000), 1.0000, 0)
+    force0.setVectorMasks(1, 1, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+
+@particle
+def videog_starground(self):
+    self.reset()
+    self.setPos(0, -100, 5)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-3')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SparkleParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(1024)
+    p0.setBirthRate(0.1200)
+    p0.setLitterSize(4)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(2.5000)
+    p0.factory.setLifespanSpread(0.5000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(0.72)
+    # Sparkle parameters
+    p0.renderer.setCenterColor(Vec4(0.78, 0.39, 0.78, 1.00))
+    p0.renderer.setEdgeColor(Vec4(0.39, 0.20, 0.39, 1.00))
+    p0.renderer.setBirthRadius(0.1400)
+    p0.renderer.setDeathRadius(0.3000)
+    p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 2.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(25.0000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('fg2')
+    # Force parameters
+    force0 = LinearJitterForce(2.0000, 0)
+    force0.setVectorMasks(1, 1, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    force1 = LinearVectorForce(Vec3(0.0000, 0.0000, -2.0000), 1.0000, 0)
+    force1.setVectorMasks(1, 1, 1)
+    force1.setActive(1)
+    f0.addForce(force1)
+    self.addForceGroup(f0)
+
+
+@particle
+def videog_skystars(self):
+    self.reset()
+    self.setPos(0, -100, 30)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-3')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SparkleParticleRenderer")
+    p0.setEmitter("DiscEmitter")
+    p0.setPoolSize(1024)
+    p0.setBirthRate(0.1000)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(5.0000)
+    p0.factory.setLifespanSpread(2.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(1.00)
+    # Sparkle parameters
+    p0.renderer.setCenterColor(Vec4(0.78, 0.78, 0.59, 1.00))
+    p0.renderer.setEdgeColor(Vec4(0.39, 0.39, 0.29, 1.00))
+    p0.renderer.setBirthRadius(0.1400)
+    p0.renderer.setDeathRadius(0.3000)
+    p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(4.0000, -4.0000, -9.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Disc parameters
+    p0.emitter.setRadius(40.0000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('fg2')
+    # Force parameters
+    self.addForceGroup(f0)
+
+
+@particle
+def videog_stagelights(self):
+    self.reset()
+    self.setPos(0, -100, 80)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-5')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("GeomParticleRenderer")
+    p0.setEmitter("RingEmitter")
+    p0.setPoolSize(50)
+    p0.setBirthRate(0.6000)
+    p0.setLitterSize(3)
+    p0.setLitterSpread(1)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(9.0000)
+    p0.factory.setLifespanSpread(3.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAINOUT)
+    p0.renderer.setUserAlpha(0.39)
+    # Geom parameters
+    geomRef = loader.loadModel("phase_5/models/props/ttcc_gag_stagelight.bam")
+    p0.renderer.setGeomNode(geomRef.node())
+    p0.geomReference = "phase_5/models/props/ttcc_gag_stagelight.bam"
+    p0.renderer.setXScaleFlag(0)
+    p0.renderer.setYScaleFlag(0)
+    p0.renderer.setZScaleFlag(0)
+    p0.renderer.setInitialXScale(2.0000)
+    p0.renderer.setFinalXScale(1.0000)
+    p0.renderer.setInitialYScale(2.0000)
+    p0.renderer.setFinalYScale(1.0000)
+    p0.renderer.setInitialZScale(6.0000)
+    p0.renderer.setFinalZScale(1.0000)
+    p0.renderer.getColorInterpolationManager().addConstant(0.0, 1.0, Vec4(0.9019607901573181, 0.9019607901573181,
+                                                                          0.6274510025978088, 1.0), True)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(1.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Ring parameters
+    p0.emitter.setRadius(24.0000)
+    p0.emitter.setRadiusSpread(0.0000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('fg5')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, -200.0000, 80.0000), LinearDistanceForce.FTONEOVERR, 1.0000, 0.0400, 1)
+    force0.setVectorMasks(0, 1, 0)
+    force0.setActive(1)
+    f0.addForce(force0)
+    force1 = LinearNoiseForce(0.3000, 0)
+    force1.setVectorMasks(1, 1, 0)
+    force1.setActive(1)
+    f0.addForce(force1)
+    self.addForceGroup(f0)
+
+@particle
 def wet2(self):
     self.reset()
     self.setPos(0.000, 0.000, 0.000)

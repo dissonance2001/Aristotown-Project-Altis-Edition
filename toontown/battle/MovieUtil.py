@@ -1555,7 +1555,7 @@ def createVirtualSuitDeathTrack(suit, battle):
                                                          blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
         suitTrack.append(Func(suit.cleanupAllBattleEffects))
         suitTrack.append(Func(suit.clearAllSuitStatusEffects))
-    elif suit.style.name in ('hrollers', 'bcaster'):
+    elif suit.style.name in ('hrollers', 'bcaster', 'mplayers'):
         deathSound = base.loader.loadSfx('phase_11/audio/sfx/LB_capacitor_discharge_3.ogg')
         suitTrack.append(Parallel(ActorInterval(suit, 'mplayer-kneel-into'), LerpColorScaleInterval(suit, duration=1.25, colorScale=(0, 0, 0, 0),
                                    blendType='easeInOut'), SoundInterval(deathSound, volume=0.5)))
@@ -1576,7 +1576,7 @@ def createVirtualSuitDeathTrack(suit, battle):
     returnval = Parallel()
     multiTrack = Parallel(suitTrack, returnval)
     if hasAnimatedHead:
-        if suit.style.name not in ('wsi', 'bcaster', 'hrollers'):
+        if suit.style.name not in ('wsi', 'bcaster', 'mplayers', 'hrollers'):
             returnval.append(headInterval)
     return multiTrack
 

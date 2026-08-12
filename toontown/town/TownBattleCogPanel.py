@@ -1786,8 +1786,8 @@ class TownBattleCogPanel(DirectFrame):
                                         },
                                     ])
                 self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
-            elif (self.cog.hasSuitStatusEffect('desperation') and not self.cog.hasSuitStatusEffect('unionBusterNoAttack')) or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
-                    or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or self.cog.hasSuitStatusEffect('silhouetteShielding') or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat'):
+            elif (self.cog.hasSuitStatusEffect('desperation') and not self.cog.hasSuitStatusEffect('unionBusterNoAttack')) or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'mplayers', 'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
+                    or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or self.cog.hasSuitStatusEffect('starOfTheShow') or self.cog.hasSuitStatusEffect('silhouetteShielding') or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat'):
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/lured_prestige_icon')
                 status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
@@ -1874,7 +1874,7 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(self.statusIcon, 
                                 slot, 
-                                tooltipTitle="Producer's Cuts", 
+                                tooltipTitle="Producer's Cut", 
                                 tooltipDescription="The Videographer will be immune to all Gags until the Producers are defeated! He will also not attack during this phase.",  
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
@@ -2620,6 +2620,75 @@ class TownBattleCogPanel(DirectFrame):
                                         },])
             self._rotateStatusIcon(slot, self.statusIcon, duration=4.0)
 
+        if self.cog.hasSuitStatusEffect('starOfTheShow'):
+            status2 = loader.loadModel('phase_3.5/models/props/ttcc_gen_starburst')
+            self.statusIcon = status2.find('**/starburst')
+            status = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+            self.statusIcon2 = status.find('**/prestige_star')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                   slot, 
+                                   tooltipTitle='Star Of The Show', 
+                                   tooltipDescription="This Cog is the Star Of The Show! And as such, will receive manager benefits and a health boost. Defeating it will damage the Videographer.", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1),
+                                   layerSettings=[
+                                        {
+                                            'scale': (.5, .5, .5),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                            'scale': (0.9, 0.9, 0.9),
+                                            'pos': (0, 0, 0),
+                                        },])
+            self._rotateStatusIcon(slot, self.statusIcon, duration=4.0)
+
+        if self.cog.dna.name == 'mplayers':
+            status2 = loader.loadModel('phase_3.5/models/props/ttcc_gen_starburst')
+            self.statusIcon = status2.find('**/starburst')
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon2 = status.find('**/last_tap_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                   slot, 
+                                   tooltipTitle='Screen Presence', 
+                                   tooltipDescription="This Cog has been cast in the Major Player's image! It will protect the Videographer from any incoming damage, as well as mirror the Major Player's attacks.", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1),
+                                   layerSettings=[
+                                        {
+                                            'scale': (.5, .5, .5),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                            'scale': (1, 1, 1),
+                                            'pos': (0, 0, 0),
+                                        },])
+            self._rotateStatusIcon(slot, self.statusIcon, duration=4.0)
+
+        if self.cog.dna.name == 'bcaster':
+            status2 = loader.loadModel('phase_3.5/models/props/ttcc_gen_starburst')
+            self.statusIcon = status2.find('**/starburst')
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon2 = status.find('**/worker_management_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                   slot, 
+                                   tooltipTitle='Duplicate Footage', 
+                                   tooltipDescription="A lingering image of the Videographer mimics his performance... It will also stop at nothing to make sure the Videographer is at his best!", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1),
+                                   layerSettings=[
+                                        {
+                                            'scale': (.5, .5, .5),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                            'scale': (1, 1, 1),
+                                            'pos': (0, 0, 0),
+                                        },])
+            self._rotateStatusIcon(slot, self.statusIcon, duration=4.0)
+
         if self.cog.dna.name == 'mh2' or self.cog.dna.name == 'std2' or self.cog.dna.name == 'cnd2':
             status2 = loader.loadModel('phase_3.5/models/props/ttcc_gen_starburst')
             self.statusIcon = status2.find('**/starburst')
@@ -2628,7 +2697,7 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
                                    slot, 
-                                   tooltipTitle='Videographer Hijinks', 
+                                   tooltipTitle='Hollywood Hijinks', 
                                    tooltipDescription="Defeating this Cog will grant Toons with a +5% Gag damage boost for the duration of the battle.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1),

@@ -2835,24 +2835,26 @@ def doAftershock(attack):
     notifyTracks = Parallel()
     cagePropTracks = Parallel()
     suitTrack2 = Sequence(
-    Parallel(
+        Parallel(
+            getSuitAnimTrack(attack),
+        ),
+
         Func(suit.enableBlend),
-        ActorInterval(suit, 'sparkplug', startTime=1.75),
+
+        Parallel(ActorInterval(suit, 'sparkplug', startTime=2.5),
+
         LerpAnimInterval(
             suit,
-            duration=0.75,
+            duration=.5,
             startAnim='neutral',
             endAnim='sparkplug',
             startWeight=0.0,
             endWeight=1.0,
             blendType='easeInOut'
-        )
-    ),
+        )),
 
-    Func(suit.disableBlend),
-
-    #ActorInterval(suit, 'sparkplug', startTime=1.75),
-)
+        Func(suit.disableBlend)
+    )
     moveTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -2910,7 +2912,7 @@ def doAftershock(attack):
                 shuffleAnim = 'shuffle-right'
             else:
                 shuffleAnim = 'shuffle-left'
-            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), suitTrack2,
+            moveTracks.append(Sequence(LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle), Wait(3.5),
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                        Func(suit.setNeutralAnimationDrop)))
             smokeTracks.append(smokeTrack)
@@ -2921,7 +2923,7 @@ def doAftershock(attack):
     damageAnims = [['slip-forward', 0.0001, 0.5]]
     toonTrack = getToonTracksCheat(attack, damageDelay=2, splicedDamageAnims=damageAnims, dodgeDelay=1.75, dodgeAnimNames=['sidestep'], splicedDodgeAnims=[], showDamageExtraTime=0)
     soundTrack = getSoundTrack('SA_sparkplug2.ogg', delay=0, node=suit)
-    return Parallel(suitTrack, zapTrack, soundTrack, cagePropTracks, moveTracks, notifyTracks, smokeTracks, toonTrack)
+    return Parallel(suitTrack, zapTrack, soundTrack, cagePropTracks, moveTracks, suitTrack2, notifyTracks, smokeTracks, toonTrack)
 
 def doSlowBurn(attack):
     suit = attack['suit']

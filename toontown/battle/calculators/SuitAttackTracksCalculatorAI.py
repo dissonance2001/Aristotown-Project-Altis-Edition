@@ -94,7 +94,7 @@ class SuitAttackTracksCalculatorAI:
         queuedLevel = False
 
         if (
-            (self.suitHasCondition(suitId, 'shielding') or self.suitHasCondition(suitId, 'recordkeeperShielding')) and
+            (self.suitHasCondition(suitId, 'shielding') or self.suitHasCondition(suitId, 'recordkeeperShielding') or suit.dna.name == 'mplayers') and
             (absorbDamage > 0)
         ):
             attack = self.__getCheatAttack(suitId, {

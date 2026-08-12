@@ -2305,7 +2305,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         suitTrack.append(showDamage)
         crossedZeroThisCall = hpBeforeThisCall > 0 and hpAfterThisCall <= 0
 
-        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead:
+        if crossedZeroThisCall and not self._pendingQueuedDeath and not self.isDead and not self.dna.name == 'videog':
             self._pendingQueuedDeath = True
             revives = self.getSkeleRevives()
             # suitTrack.append(self.makeCogStepBackDeathInterval(battle))
@@ -2756,7 +2756,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.healInterval.finish()
             self.healInterval = None
         x = int(self.currHP)
-        if self.currHP < 1111:
+        if self.currHP < 2222:
             self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
                                                    Func(self.showHpText, -x),
                                                    Func(self.setHealthForMe, -x),
@@ -2770,15 +2770,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             videog.addPendingQueuedHealing(x)
         else:
             self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1), Wait(5.0),
-                                                  Func(self.showHpText, -(self.maxHP / 3)),
-                                                  Func(self.setHealthForMe, -(self.maxHP / 3)),
+                                                  Func(self.showHpText, -2222),
+                                                  Func(self.setHealthForMe, -2222),
                                                   Func(self.updateHealthBar, 0), ActorInterval(self, 'mob-mentality', startTime=1, endTime=0),
                                          Func(self.setNeutralAnimation)).start()
-            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0), Func(videog.showHpText, +(self.maxHP / 3)),
-                                                   Func(videog.setHealthForMe, +(self.maxHP / 3)),
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Wait(5.0), Func(videog.showHpText, +2222),
+                                                   Func(videog.setHealthForMe, +2222),
                                                    Func(videog.updateHealthBar, 0), ActorInterval(videog, 'mob-mentality', startTime=1, endTime=0),
                                Func(videog.setNeutralAnimation)).start()
-            videog.addPendingQueuedHealing((self.maxHP / 3))
+            videog.addPendingQueuedHealing(2222)
 
     def checkBroadcasterDonation2(self, videog, battle):
         if self.damageInterval:
@@ -2788,7 +2788,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.healInterval.finish()
             self.healInterval = None
         x = int(self.currHP)
-        if self.currHP < 111:
+        if self.currHP < 222:
             self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
                                                    Func(self.showHpText, -x),
                                                    Func(self.setHealthForMe, -x),
@@ -2802,15 +2802,15 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             videog.addPendingQueuedHealing(x)
         else:
             self.damageInterval = Sequence(ActorInterval(self, 'mob-mentality', endTime=1),
-                                                  Func(self.showHpText, -111),
-                                                  Func(self.setHealthForMe, -111),
+                                                  Func(self.showHpText, -222),
+                                                  Func(self.setHealthForMe, -222),
                                                   Func(self.updateHealthBar, 0), ActorInterval(self, 'slip-forward'),
                                          Func(self.setNeutralAnimation)).start()
-            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Func(videog.showHpText, +111),
-                                                   Func(videog.setHealthForMe, +111),
+            self.healInterval = Sequence(ActorInterval(videog, 'mob-mentality', endTime=1), Func(videog.showHpText, +222),
+                                                   Func(videog.setHealthForMe, +222),
                                                    Func(videog.updateHealthBar, 0), ActorInterval(videog, 'pie-small-react'),
                                Func(videog.setNeutralAnimation)).start()
-            videog.addPendingQueuedHealing(111)
+            videog.addPendingQueuedHealing(222)
 
     def makeBroadcasterDonationIntervalFail(self, videog, battle):
         suitTrack = Sequence()
@@ -2819,9 +2819,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             return suitTrack
 
         x = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
-        dmg = 111
+        dmg = 222
 
-        if self.currHP < 111:
+        if self.currHP < 222:
             dmg = x
 
         if dmg <= 0:
@@ -2887,9 +2887,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             return suitTrack
 
         x = int(self.currHP + (self._pendingQueuedHealing - self._pendingQueuedDamage))
-        dmg = int(self.maxHP / 3)
+        dmg = 2222
 
-        if self.currHP < 1111:
+        if self.currHP < 2222:
             dmg = x
 
         if dmg <= 0:
@@ -3989,6 +3989,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 'mplayer',
                 'mh2',
                 'cnd2',
+                'mplayers',
                 'std2',
                 'bcaster'
         ):
@@ -3996,7 +3997,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         elif self.dna.name == 'hroller' and self.hasSuitStatusEffect('silhouetteShielding'):
             targetAnim = 'rolled'
-
+        elif self.hasSuitStatusEffect('rolledNeutral'):
+            targetAnim = 'rolled'
         elif projectedHP >= float(self.maxHP * 1.5):
             targetAnim = 'neutral-unstable'
         elif self.hasSuitStatusEffect('brokenConnection'):
@@ -4062,7 +4064,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteImmune') and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
-        elif self.isDanceSession:
+        elif self.hasSuitStatusEffect('rolledNeutral'):
             Sequence(Func(self.loop, 'rolled')
                      ).start()
         elif self.hasSuitStatusEffect('silhouetteShielding'):
@@ -4154,6 +4156,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteShielding'):
             Sequence(Func(self.loop, 'rolled')
                                  ).start()
+        elif self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                     ).start()
         elif self.hasSuitStatusEffect('contingencyOverrideBroken'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
@@ -4255,9 +4260,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
-        elif self.hasSuitStatusEffect('silhouetteShielding'):
-            Sequence(Func(self.loop, 'rolled')
-                                 ).start()
         elif self.hasSuitStatusEffect('enraged') and self.dna.name == 'sgoat':
             Sequence(Func(self.setPlayRate, 1 + (self.battleSpeed * .1), 'neutral-enraged'), Func(self.loop, 'neutral-enraged')
                      ).start()
@@ -4271,6 +4273,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif float(self.currHP) > float(self.maxHP * 1.5) and not self.dna.name in ['mh2', 'std2', 'cnd2', 'videog', 'bcaster', 'hroller2', 'hroller', 'hrollers']:
             Sequence(Func(self.loop, 'neutral-unstable', fromFrame=70, toFrame=80)
                      ).start()
+        elif float(self.currHP) > float(self.maxHP * 1.5) and self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
+        elif not float(self.currHP) / float(self.maxHP) <= 0.25 and self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
         elif self.hasSuitStatusEffect('contingencyOverride'):
             Sequence(Func(self.loop, 'neutral-override')
                                  ).start()
@@ -4300,6 +4308,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteShielding'):
             Sequence(Func(self.loop, 'rolled')
                                  ).start()
+        elif self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                     ).start()
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()

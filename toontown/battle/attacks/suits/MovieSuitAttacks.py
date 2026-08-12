@@ -501,7 +501,7 @@ def doSuitAttack(attack):
     elif name == 'GlowerPower':
         suitTrack = doGlowerPower(attack)
     elif name == 'ReArrange':
-        suitTrack = doFilibusterPhase2(attack)
+        suitTrack = doReOrg(attack)
     elif name == 'ShortSqueeze':
         suitTrack = doShortSqueeze(attack)
     elif name == 'BlueChip':
@@ -1426,6 +1426,8 @@ def doSuitAttack(attack):
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #videographer cheats
+    elif name == 'VideographerStarOfTheShow':
+        suitTrack = MovieHighRollerCheats.doStarOfTheShow(attack)
     elif name == 'VideographerHardCut':
         suitTrack = MovieHighRollerCheats.doHardCut(attack)
     elif name == 'VideographerRisingStars':
@@ -1439,13 +1441,13 @@ def doSuitAttack(attack):
     elif name == 'VideographerVideoStatic':
         suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
     elif name == 'VideographerElectricShock':
-        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 2)
+        suitTrack = MovieHighRollerCheats.doPhase3Videographer(attack)
     elif name == 'VideographerElectricShock2':
-        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 3)
+        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
     elif name == 'VideographerElectricShock3':
-        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 4)
+        suitTrack = MovieHighRollerCheats.doHardCutBan(attack)
     elif name == 'VideographerElectricShock4':
-        suitTrack = MovieHighRollerCheats.doElectricShock(attack, 5)
+        suitTrack = MovieHighRollerCheats.doTouchUp(attack)
     elif name == 'VideographerAttackRewind':
         suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
     elif name == 'VideographerDirectorCuts':
@@ -3134,7 +3136,7 @@ def doFingerWag(attack):
             particleEffect.setP(-110)
         elif suit.dna.name in ["erfit", "cdirector", "videog", "safesupervis"]:
             particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
-            particleEffect.setP(-115)
+            particleEffect.setP(-105)
         else:
             particleEffect.setPos(0, 1.1, suit.getHeight() - 1.2)
         particleEffects.append(particleEffect)

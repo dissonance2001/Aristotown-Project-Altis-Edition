@@ -1653,6 +1653,22 @@ class BattleCalculatorAI:
                     attackDamage *= 0.1
                     self.absorbDamageRecordkeeper += math.ceil(attackDamage * 0.9)
 
+        # Major Player silhouette absorbs part of Videographer's damage.
+        if suit.dna.name == 'videog' and atkTrack not in (FIRE, HEAL, SUE):
+            for s in self.battle.activeSuits:
+                if (
+                    s.dna.name == 'mplayers' and
+                    s.getHP() > 0 and
+                    not self.suitHasCondition(s.doId, 'dead')
+                ):
+                    attackDamage *= 0.7
+                    absorbed = math.ceil(attackDamage * 0.5)
+                    self.absorbDamage += absorbed
+
+                    if atkTrack in self.absorbDamageByTrack:
+                        self.absorbDamageByTrack[atkTrack] += absorbed
+                    break
+
         # Rainmaker-style stored damage.
         if suit.dna.name == 'sgoat' and not self.suitHasCondition(suit.doId, 'enraged'):
              self.setSuitCondition(
@@ -1894,6 +1910,7 @@ class BattleCalculatorAI:
         banned = False
         if self.toonUsedBannedGag(toonId, atkTrack, atkLevel):
             self.setToonCondition(toonId, 'banned', 1, 1, 'setBoth')
+            banned = True
 
         levelBanConds = {
             7: 'nolevel8s',
@@ -2073,7 +2090,7 @@ class BattleCalculatorAI:
                                 # elif (theSuit.getSkeleton() > 0) and (theSuit.getManager() > 0):
                                 #     rounds = 0
                                 elif theSuit.dna.name in [
-                                    'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 
+                                    'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'mplayers',
                                                     'hroller',
                                                     'hroller2',
                                                     'videog',
@@ -2099,6 +2116,8 @@ class BattleCalculatorAI:
                                 elif (theSuit.getHP() > (theSuit.getMaxHP() * 1.5)) and ((theSuit.getSkeleton() or theSuit.getVirtual()) > 0):
                                     rounds = 0
                                 elif self.suitHasCondition(targetId, 'lureResist') and theSuit.dna.name == 'supervis':
+                                    rounds = 0
+                                elif self.suitHasCondition(targetId, 'starOfTheShow'):
                                     rounds = 0
                                 elif getattr(theSuit, 'chainsawOvercharged', False):
                                     rounds = min(2, self.NumRoundsLured[atkLevel])
@@ -2362,6 +2381,8 @@ class BattleCalculatorAI:
                             attackDamage = 0
                         elif suit.getGovernaught():
                             attackDamage = 0
+                        elif self.suitHasCondition(targetId, 'starOfTheShow'):
+                            attackDamage = 0
                         elif suit.currHP > (suit.maxHP * 1.5):
                             attackDamage = 0
                         elif self.suitHasCondition(targetId, 'insured'):
@@ -2406,6 +2427,8 @@ class BattleCalculatorAI:
                             attackDamage = 0
                         elif suit.getGovernaught():
                             attackDamage = 0
+                        elif self.suitHasCondition(targetId, 'starOfTheShow'):
+                            attackDamage = 0
                         elif suit.currHP > (suit.maxHP * 1.5):
                             attackDamage = 0
                         elif self.suitHasCondition(targetId, 'insured'):
@@ -2433,6 +2456,8 @@ class BattleCalculatorAI:
                 elif atkTrack == HEAL:
                     if self.toonUsedBannedGag(toonId, atkTrack, attackLevel):
                         self.setToonCondition(toon.doId, 'banned', 1, 1, 'setBoth')
+                        for suit in self.battle.activeSuits:
+                            self.setSuitCondition(suit.doId, 'bannedGagUsed', 1, 1, 'setBoth')
                     if self.toonHasCondition(toon.doId, 'nolevel8s') and attackLevel == 7:
                         for suit in self.battle.activeSuits:
                             self.setSuitCondition(suit.doId, 'bannedGagUsed', 1, 1, 'setBoth')
@@ -3168,6 +3193,41 @@ class BattleCalculatorAI:
 
         return random.choice(validTargets)
 
+    def applyVideographerSilhouetteAttack(self, attack):
+        if not attack or not attack[SUIT_ATK_COL]:
+            return
+
+        theSuit = self.battle.findSuit(attack[SUIT_ID_COL])
+
+        if not theSuit or theSuit.dna.name != 'videog':
+            return
+
+        attackName = attack[SUIT_ATK_COL]['name']
+
+        conditionMap = {
+            'Schmooze': 'schmoozecalculator',
+            'RazzleDazzle': 'razzledazzlecalculator',
+            'FingerWag': 'fingerwagcalculator',
+            'CigarSmoke': 'cigarsmokecalculator',
+            'SongAndDance': 'songanddancecalculator',
+            'Beguile': 'beguilecalculator',
+        }
+
+        condition = conditionMap.get(attackName)
+
+        if condition is None:
+            return
+
+        for suit in self.battle.activeSuits:
+            if suit.dna.name == 'bcaster' and suit.currHP > 0:
+                self.setSuitCondition(
+                    suit.doId,
+                    condition,
+                    1,
+                    1,
+                    'setBoth'
+                )
+
     def __getRandomValidTargetSuitDigitErclaim(self, excludeSuitId=None):
         validTargets = []
 
@@ -3205,6 +3265,9 @@ class BattleCalculatorAI:
                 continue
 
             if suit.getManager():
+                continue
+
+            if not self.suitHasCondition(suit.doId, 'starOfTheShow'):
                 continue
 
             validTargets.append(index)
@@ -4370,7 +4433,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'bcaster':
+                if s.dna.name == 'bcaster' or s.dna.name == 'mplayers':
                     currentBossHealth = s.currHP
             currentBossHealth2 = -1
             currentBossHealth3 = -1
@@ -5387,7 +5450,7 @@ class BattleCalculatorAI:
             x = self.TurnsElapsed
             currentBossHealth = -1
             for s in self.battle.suits:
-                if s.dna.name == 'bcaster':
+                if s.dna.name == 'bcaster' or s.dna.name == 'mplayers':
                     currentBossHealth = s.currHP
             currentBossHealth2 = -1
             currentBossHealth3 = -1
@@ -6115,6 +6178,8 @@ class BattleCalculatorAI:
                     for s in self.battle.activeSuits:
                         self.setSuitCondition(s.doId, 'alreadyDesperation', 1, -1, 'setBoth')
                 if suit.dna.name == 'bcaster':
+                    self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
+                if suit.dna.name == 'mplayers':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
                 if suit.dna.name == 'cbutcher':
                     self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')

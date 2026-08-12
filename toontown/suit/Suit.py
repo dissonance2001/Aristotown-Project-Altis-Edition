@@ -1004,51 +1004,71 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'mh2':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_hollywood.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'std2':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_hollywood.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'cnd2':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_candidate.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'bcaster':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_bcaster.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'fmaker':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_fmaker.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'director':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_director.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'cinema':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_cinema.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'radiog':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_radiog.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'choreo':
             texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_choreo.png')
             modelRoot.find('**/highroller_body').setTexture(texture2, 1)
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'key':
             modelRoot.find('**/necktie-s').show()
         elif self.style.dept == 's':
@@ -1072,8 +1092,17 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
         elif self.style.name == 'mplayer':
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_mplayer_body_totally_normal.png')
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
+        elif self.style.name == 'mplayers':
+            texture2 = loader.loadTexture('phase_12/maps/ttcc_ene_suittex_mplayer_body_totally_normal.png')
+            modelRoot.find('**/necktie-s').hide()
+            modelRoot.find('**/necktie-w').hide()
+            modelRoot.find('**/bowtie').show()
+            modelRoot.find('**/bowtie').setTexture(texture2, 1)
         elif self.style.name == 'erfit':
             modelRoot.find('**/necktie-s').hide()
             modelRoot.find('**/necktie-w').hide()
@@ -1686,6 +1715,9 @@ class Suit(Avatar.Avatar):
                 #headModel.setZ(-.05)
                 headModel.setY(-.2)
             elif self.style.name == 'mplayer':
+                #headModel.setZ(-.05)
+                headModel.setY(-.2)
+            elif self.style.name == 'mplayers':
                 #headModel.setZ(-.05)
                 headModel.setY(-.2)
             elif self.style.name == 'erclaim':
@@ -2881,6 +2913,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'bcaster':
             self.corpMedallion.setScale(0)
+        elif self.style.name == 'mplayers':
+            self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
@@ -2931,6 +2965,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'hrollers':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'bcaster':
+            self.corpMedallion.setScale(0)
+        elif self.style.name == 'mplayers':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
@@ -3027,6 +3063,8 @@ class Suit(Avatar.Avatar):
             self.corpMedallion.setScale(0)
         elif self.style.name == 'bcaster':
             self.corpMedallion.setScale(0)
+        elif self.style.name == 'mplayers':
+            self.corpMedallion.setScale(0)
         elif self.style.name == 'hroller':
             self.corpMedallion.setScale(0)
         elif self.style.name == 'hrollers':
@@ -3086,6 +3124,8 @@ class Suit(Avatar.Avatar):
             self.hpBase.setScale(0)
         elif self.style.name == 'bcaster':
             self.hpBase.setScale(0)
+        elif self.style.name == 'mplayers':
+            self.hpBase.setScale(0)
         elif self.style.name == 'videog':
             self.hpBase.setScale(0)
         elif self.style.name == 'fmaker':
@@ -3129,6 +3169,8 @@ class Suit(Avatar.Avatar):
             button.setScale(0)
         elif self.style.name == 'bcaster':
             button.setScale(0)
+        elif self.style.name == 'mplayers':
+            button.setScale(0)
         elif self.style.name == 'hroller':
             button.setScale(0)
         elif self.style.name == 'hroller2':
@@ -3169,6 +3211,8 @@ class Suit(Avatar.Avatar):
         elif self.style.name == 'director':
             glow.setScale(0)
         elif self.style.name == 'bcaster':
+            glow.setScale(0)
+        elif self.style.name == 'mplayers':
             glow.setScale(0)
         elif self.style.name == 'hroller':
             glow.setScale(0)
@@ -6110,7 +6154,7 @@ class Suit(Avatar.Avatar):
                                            blendType='easeInOut'),
                     LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1)))
         self.isVulnerable = 1
-        if not self.style.name in ['bcaster', 'cbutcher', 'hroller', 'hroller2', 'cdirector', 'phouse', 'dking', 'liquid', 'rkeeper'] and not self.isOverpressured:
+        if not self.style.name in ['bcaster', 'mplayers', 'cbutcher', 'hroller', 'hroller2', 'cdirector', 'phouse', 'dking', 'liquid', 'rkeeper'] and not self.isOverpressured:
             self.suitColorTrack.loop()
         if self.isOverpressured:
             self.suitColorTrack2.loop()
