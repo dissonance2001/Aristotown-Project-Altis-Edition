@@ -2514,7 +2514,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PacesetterContentSync':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'PacesetterCorporateRestructuring':
-        return allGroupHighShot(suit, attackDuration)
+        camTrack.append(allGroupHighShot(suit, attackDuration))
     elif name == 'PacesetterMovingGoalposts':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'PacesetterOverclocked':
