@@ -1343,17 +1343,58 @@ def doRemandOLD(attack):
 def doRemand(attack):
     suit = attack['suit']
     target = attack['target']
+    if not target:
+        return Sequence()
     toon = target[0]['toon']
     dmg = target[0]['hp']
     battle = attack['battle']
+    if dmg < 0 or dmg >= len(battle.activeSuits):
+        return Sequence()
     targetSuit = battle.activeSuits[dmg]
+    if targetSuit == suit:
+        return Sequence()
+    doSwap = bool(attack.get('hp', 0))
     battle = attack['battle']
     origPos, origHpr = battle.getActorPosHpr(suit)
     targetSuitPos, targetSuitHpr = battle.getActorPosHpr(targetSuit)
+    suitTrapProp = getattr(suit, 'battleTrapProp', None)
+    suitTrap = getattr(suit, 'battleTrap', NO_TRAP)
+    suitTrapFresh = getattr(suit, 'battleTrapIsFresh', 0)
+    targetTrapProp = getattr(targetSuit, 'battleTrapProp', None)
+    targetTrap = getattr(targetSuit, 'battleTrap', NO_TRAP)
+    targetTrapFresh = getattr(targetSuit, 'battleTrapIsFresh', 0)
+    def detachTraps():
+        if suitTrapProp is not None and not suitTrapProp.isEmpty():
+            suitTrapProp.wrtReparentTo(battle)
+        if targetTrapProp is not None and not targetTrapProp.isEmpty():
+            targetTrapProp.wrtReparentTo(battle)
+    def finishRemand():
+        orderedSuits = battle.activeSuits[:]
+        suitIndex = orderedSuits.index(suit)
+        targetIndex = orderedSuits.index(targetSuit)
+        orderedSuits[suitIndex], orderedSuits[targetIndex] = orderedSuits[targetIndex], orderedSuits[suitIndex]
+        battle.setClientSuitOrder(orderedSuits)
+        battle.unlureSuit(suit)
+        battle.unlureSuit(targetSuit)
+        suit.battleTrapProp = targetTrapProp
+        suit.battleTrap = targetTrap
+        suit.battleTrapIsFresh = targetTrapFresh
+        targetSuit.battleTrapProp = suitTrapProp
+        targetSuit.battleTrap = suitTrap
+        targetSuit.battleTrapIsFresh = suitTrapFresh
+        if targetTrapProp is not None and not targetTrapProp.isEmpty():
+            targetTrapProp.wrtReparentTo(suit)
+        if suitTrapProp is not None and not suitTrapProp.isEmpty():
+            suitTrapProp.wrtReparentTo(targetSuit)
+        suitPos, suitHpr = battle.getActorPosHpr(suit)
+        otherPos, otherHpr = battle.getActorPosHpr(targetSuit)
+        suit.setPosHpr(battle, suitPos, suitHpr)
+        targetSuit.setPosHpr(battle, otherPos, otherHpr)
     targetSuitAnimTrack = Sequence(Wait(5.25), ActorInterval(targetSuit, 'flatten', endTime=0.55))
     selfDamageTrack = Sequence(Wait(5.25), Func(targetSuit.checkProfiteering2, suit, battle), targetSuit.makeProfiteeringInterval2(suit, battle))
     soundTrack3 = getSoundTrack('SA_protoon_shake.ogg', delay=0.5, node=suit)
-    suitAnimTrack = Sequence(Parallel(soundTrack3, Sequence(Wait(.5), LerpPosInterval(suit, .8, origPos, other=battle)), Sequence(ActorInterval(suit, 'quick-jump', duration=1.3),
+    suitAnimEndPos = targetSuitPos if doSwap else origPos
+    suitAnimTrack = Sequence(Parallel(soundTrack3, Sequence(Wait(.5), LerpPosInterval(suit, .8, suitAnimEndPos, other=battle)), Sequence(ActorInterval(suit, 'quick-jump', duration=1.3),
                              ActorInterval(suit, 'slip-forward'))), Func(suit.setNeutralAnimationDrop))
     moveTrack = Sequence(Wait(2.0), ActorInterval(suit, 'quick-jump', endTime=.5), Wait(.25), Parallel(ActorInterval(suit, 'quick-jump', startTime=.5, endTime=1.0),
                                                                                                        Sequence(Wait(.25), LerpPosInterval(suit, 0.5, Point3(0, 0, 10), other=suit))), Wait(1.5),
@@ -1361,7 +1402,11 @@ def doRemand(attack):
                                  Func(suit.setNeutralAnimationDrop), Func(suit.setPos, targetSuit, Point3(0, 0, 0)), Wait(0.5), suitAnimTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack2 = getSoundTrack('SA_castling.ogg', delay=2.0)
-    return Parallel(suitTrack, soundTrack2, selfDamageTrack, targetSuitAnimTrack, moveTrack)
+    remandTrack = Parallel(suitTrack, soundTrack2, selfDamageTrack, targetSuitAnimTrack, moveTrack)
+    if doSwap:
+        targetSuitMoveTrack = Sequence(LerpPosHprInterval(targetSuit, 0.75, origPos, origHpr, other=battle), Func(targetSuit.setNeutralAnimationDrop))
+        return Sequence(Func(detachTraps), remandTrack, targetSuitMoveTrack, Func(finishRemand))
+    return remandTrack
 
 
 def doVideoStatic(attack):

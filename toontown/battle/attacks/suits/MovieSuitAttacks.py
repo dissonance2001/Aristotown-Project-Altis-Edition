@@ -1281,6 +1281,8 @@ def doSuitAttack(attack):
         suitTrack = MoviePacesetterCheats.doMovingGoalposts(attack)
     elif name == 'PacesetterContentSync':
         suitTrack = MovieHighRollerCheats.doContentSync(attack)
+    elif name == 'PacesetterCorporateRestructuring':
+        suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
     elif name == 'PacesetterHurrySickness':
         suitTrack = MoviePacesetterCheats.doHurrySickness(attack)
     elif name == 'PacesetterHurrySicknessBan':

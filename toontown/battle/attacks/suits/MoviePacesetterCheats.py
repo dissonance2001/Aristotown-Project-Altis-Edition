@@ -411,3 +411,74 @@ def doMovingGoalposts(attack):
         toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
 
     return Parallel(suitTrack, sprayTracks, toonTracks, toonAnimTracks, toonSpinTracks, spinTracks1, spinTracks2, spinTracks3, soundTracks)
+
+def doCorporateRestructuring(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    oldActiveSuits = battle.activeSuits[:]
+    if len(oldActiveSuits) < 2:
+        return Sequence(getSuitAnimTrack(attack), Func(suit.loop, 'neutral'))
+    payload = int(attack.get('hp', 0))
+    oldIndexes = []
+    for index in xrange(len(oldActiveSuits)):
+        oldIndexes.append((payload >> (index * 3)) & 7)
+    if sorted(oldIndexes) != range(len(oldActiveSuits)):
+        return Sequence(getSuitAnimTrack(attack), Func(suit.loop, 'neutral'))
+    newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
+    suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
+    suitTracks = Parallel()
+    for otherSuit in oldActiveSuits:
+        pendingDeath = False
+        if hasattr(otherSuit, 'getPendingQueuedDeath'):
+            pendingDeath = otherSuit.getPendingQueuedDeath()
+        if getattr(otherSuit, 'isDead', False) or pendingDeath:
+            continue
+        newPos, newHpr = battle.getActorPosHpr(otherSuit, newActiveSuits)
+        if otherSuit.isLured:
+            newPos.setY(newPos.getY() - MovieUtil.SUIT_LURE_DISTANCE)
+        startPos = otherSuit.getPos(battle)
+        startHpr = otherSuit.getHpr(battle)
+        if otherSuit == suit:
+            if oldActiveSuits.index(otherSuit) != newActiveSuits.index(otherSuit):
+                lookNode = battle.attachNewNode('corporate-restructuring-look')
+                lookNode.setPos(startPos)
+                lookNode.lookAt(newPos)
+                turnHpr = lookNode.getHpr(battle)
+                lookNode.removeNode()
+                suitTrack = Parallel(suitTrack, Sequence(
+                    LerpHprInterval(otherSuit, 1.5, turnHpr, startHpr=startHpr, other=battle, fluid=1),
+                    LerpPosInterval(otherSuit, 2.0, newPos, startPos=startPos, other=battle, fluid=1),
+                    LerpHprInterval(otherSuit, 1.0, newHpr, startHpr=turnHpr, other=battle, fluid=1),
+                    Func(otherSuit.setPosHpr, battle, newPos, newHpr)))
+            else:
+                suitTrack = Parallel(suitTrack, Sequence(
+                    Wait(1.5),
+                    Func(otherSuit.setPosHpr, battle, newPos, newHpr)))
+            continue
+        floatOffset = Point3(0, 0, 28)
+        raisedStart = startPos + floatOffset
+        raisedEnd = newPos + floatOffset
+        suitType = getSuitBodyType(otherSuit.getStyleName())
+        flailFrame = 16 if suitType == 'a' else 15
+        animTrack = Sequence(
+            Func(otherSuit.stop),
+            ActorInterval(otherSuit, 'slip-backward', playRate=0.5, startFrame=0, endFrame=flailFrame - 1),
+            Func(otherSuit.pose, 'slip-backward', flailFrame),
+            Wait(0.5),
+            ActorInterval(otherSuit, 'slip-backward', playRate=1.0, startFrame=flailFrame),
+            Wait(0.05),
+            Func(otherSuit.loop, 'neutral'))
+        moveTrack = Sequence(
+            LerpPosInterval(otherSuit, 1.1, raisedStart, startPos=startPos, other=battle, fluid=1),
+            Parallel(
+                LerpPosInterval(otherSuit, 0.6, newPos, startPos=raisedEnd, other=battle, fluid=1),
+                LerpHprInterval(otherSuit, 0.6, newHpr, startHpr=startHpr, other=battle, fluid=1)),
+            Func(otherSuit.setPosHpr, battle, newPos, newHpr))
+        suitTracks.append(Parallel(animTrack, moveTrack))
+    quakeSound = globalBattleSoundCache.getSound('SA_quake.ogg')
+    soundTrack = Sequence(Func(quakeSound.stop), SoundInterval(quakeSound, node=suit))
+    return Sequence(
+        Parallel(suitTrack, soundTrack, Sequence(Wait(1.5), suitTracks)),
+        Func(battle.setClientSuitOrder, newActiveSuits),
+        Func(suit.loop, 'neutral'))
+

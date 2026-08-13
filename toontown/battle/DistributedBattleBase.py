@@ -135,6 +135,31 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             interval = self.activeIntervals[name]
             interval.finish()
 
+    def setClientSuitOrder(self, orderedSuits):
+        if len(orderedSuits) != len(self.activeSuits):
+            return False
+        for suit in self.activeSuits:
+            if suit not in orderedSuits:
+                return False
+        canonical = self._getCanonicalSuitOrder(self.suits)
+        oldActive = self.activeSuits[:]
+        replacement = orderedSuits[:]
+        replacementIndex = 0
+        newCanonical = []
+        for suit in canonical:
+            if suit in oldActive:
+                newCanonical.append(replacement[replacementIndex])
+                replacementIndex += 1
+            else:
+                newCanonical.append(suit)
+        if len(newCanonical) <= 1:
+            self.suits = newCanonical[:]
+        else:
+            self.suits = [newCanonical[0], newCanonical[-1]] + newCanonical[1:-1]
+        self.activeSuits = orderedSuits[:]
+        self.needAdjustTownBattle = 1
+        return True
+
     def swapClientSuitOrder(self, suitA, suitB):
         if suitA not in self.activeSuits or suitB not in self.activeSuits:
             return

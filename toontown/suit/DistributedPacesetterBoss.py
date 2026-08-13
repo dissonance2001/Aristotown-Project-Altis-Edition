@@ -280,7 +280,8 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.sendUpdate('avatarEnter', [])
 
     def d_avatarExit(self):
-        self.sendUpdate('avatarExit', [])
+        if self.cr:
+            self.sendUpdate('avatarExit', [])
 
     def toonDied(self, avId):
         if avId == localAvatar.doId:

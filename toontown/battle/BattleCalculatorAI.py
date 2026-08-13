@@ -2445,6 +2445,10 @@ class BattleCalculatorAI:
                             self.notify.debug('Giving trap EXP to toon ' + str(trapCreatorId))
                             self.__addAttackExp(attack, track=TRAP, level=attackLevel, attackerId=trapCreatorId)
                         self.__clearTrapCreator(trapCreatorId, targetId)
+                        if theSuit is not None and theSuit.dna.name == 'psetter':
+                            if attackLevel == UBER_GAG_LEVEL_INDEX:
+                                self.trainTrapTriggered = True
+                            self.__removeSuitTrap(targetId)
                         if self.suitHasCondition(targetId, 'immune'):
                             lureDidDamage = 0
                         elif self.suitHasCondition(targetId, 'dead'):
@@ -6647,7 +6651,18 @@ class BattleCalculatorAI:
             self.__calculateToonTrackPhase(track)
 
         self.__updateLureTimeouts()
+        physicalSuitOrder = None
+        if hasattr(self.battle, '_remandAttackOrder'):
+            attackSuitOrder = [suit for suit in self.battle._remandAttackOrder if suit in self.battle.activeSuits]
+            for suit in self.battle.activeSuits:
+                if suit not in attackSuitOrder:
+                    attackSuitOrder.append(suit)
+            if len(attackSuitOrder) == len(self.battle.activeSuits):
+                physicalSuitOrder = self.battle.activeSuits[:]
+                self.battle.activeSuits = attackSuitOrder
         self.baseSuitAttacksCalculator.calculateSuitAttacks()
+        if physicalSuitOrder is not None:
+            self.battle.activeSuits = physicalSuitOrder
         self.bossbotCalculator.calculateSuitAttacksBossbotLitigation()
         self.boardbotCalculator.calculateSuitAttacksBoardbotLitigation()
         self.highRollerCalculator.calculateSuitAttacksHighRoller()

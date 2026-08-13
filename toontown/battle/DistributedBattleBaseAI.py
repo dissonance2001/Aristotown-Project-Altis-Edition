@@ -405,8 +405,73 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def d_setMovie(self):
         print('D_SETMOVIE RAW TOONATTACKS:', self.toonAttacks)
         self.notify.debug('network:setMovie()')
-        self.sendUpdate('setMovie', self.getMovie())
+        movie = self.getMovie()
+        self.sendUpdate('setMovie', movie)
+        self._applyQueuedSuitOrderOperations()
         self.__updateEncounteredCogs()
+
+    def queueSuitOrderSwap(self, suitIdA, suitIdB):
+        if not hasattr(self, '_queuedSuitOrderOperations'):
+            self._queuedSuitOrderOperations = []
+        self._queuedSuitOrderOperations.append(('swap', suitIdA, suitIdB))
+
+    def queueSuitOrder(self, suitIds):
+        if not hasattr(self, '_queuedSuitOrderOperations'):
+            self._queuedSuitOrderOperations = []
+        self._queuedSuitOrderOperations.append(('order', suitIds[:]))
+
+    def _setActiveSuitOrderPrivately(self, orderedSuits):
+        if len(orderedSuits) != len(self.activeSuits):
+            return False
+        for suit in self.activeSuits:
+            if suit not in orderedSuits:
+                return False
+        canonical = self._getCanonicalSuitOrder(self.suits)
+        oldActive = self.activeSuits[:]
+        replacement = orderedSuits[:]
+        replacementIndex = 0
+        newCanonical = []
+        for suit in canonical:
+            if suit in oldActive:
+                newCanonical.append(replacement[replacementIndex])
+                replacementIndex += 1
+            else:
+                newCanonical.append(suit)
+        if len(newCanonical) <= 1:
+            self.suits = newCanonical[:]
+        else:
+            self.suits = [newCanonical[0], newCanonical[-1]] + newCanonical[1:-1]
+        self.activeSuits = orderedSuits[:]
+        return True
+
+    def _applyQueuedSuitOrderOperations(self):
+        operations = getattr(self, '_queuedSuitOrderOperations', [])
+        self._queuedSuitOrderOperations = []
+        for operation in operations:
+            if not operation:
+                continue
+            orderedSuits = self.activeSuits[:]
+            if operation[0] == 'swap':
+                suitA = self.findSuit(operation[1])
+                suitB = self.findSuit(operation[2])
+                if suitA not in orderedSuits or suitB not in orderedSuits:
+                    continue
+                indexA = orderedSuits.index(suitA)
+                indexB = orderedSuits.index(suitB)
+                orderedSuits[indexA], orderedSuits[indexB] = orderedSuits[indexB], orderedSuits[indexA]
+            elif operation[0] == 'order':
+                orderedSuits = []
+                for suitId in operation[1]:
+                    suit = self.findSuit(suitId)
+                    if suit is None or suit not in self.activeSuits:
+                        orderedSuits = []
+                        break
+                    orderedSuits.append(suit)
+                if not orderedSuits:
+                    continue
+            else:
+                continue
+            self._setActiveSuitOrderPrivately(orderedSuits)
 
     def getMovie(self):
         suitIds = []

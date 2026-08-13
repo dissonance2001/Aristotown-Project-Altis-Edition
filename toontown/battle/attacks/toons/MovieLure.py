@@ -22,6 +22,11 @@ def safeWrtReparentTo(nodePath, parent):
     if nodePath and not nodePath.isEmpty():
         nodePath.wrtReparentTo(parent)
 
+def clearConsumedTrapState(suit):
+    suit.battleTrapProp = None
+    suit.battleTrap = NO_TRAP
+    suit.battleTrapIsFresh = 0
+
 
 def doLures(lures):
     if len(lures) == 0:
@@ -917,6 +922,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             result.append(Func(suit.setNeutralAnimationTrap))
+    result.append(Func(clearConsumedTrapState, suit))
     return result
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):

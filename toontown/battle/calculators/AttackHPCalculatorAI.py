@@ -4020,6 +4020,9 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'battleSpeed', 1.5, -1, 'setBoth')
                     else:
                         self.setSuitCondition(suit.doId, 'battleSpeed', (self.getSuitConditionModifier(theSuit.doId, 'battleSpeed') + .5), -1, 'setBoth')
+            elif atkType['name'] == 'PacesetterCorporateRestructuring':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'PacesetterContentSync':
                 result = random.randint(1, 8)
 
@@ -4280,6 +4283,51 @@ class AttackHPCalculatorAI(object):
                     if not self.suitHasCondition(targetSuit.doId, 'dead'):
                         self.calculator.deadSuits += 1
                         self.setSuitCondition(targetSuit.doId, 'dead', 1, -1, 'setBoth')
+                if targetSuit is not theSuit and targetSuit.currHP > 0:
+                    if not hasattr(self.battle, '_remandAttackOrder'):
+                        self.battle._remandAttackOrder = self.battle.activeSuits[:]
+                    else:
+                        for otherSuit in self.battle.activeSuits:
+                            if otherSuit not in self.battle._remandAttackOrder:
+                                self.battle._remandAttackOrder.append(otherSuit)
+                    atkType['hp'] = 1
+                    for toonId in self.battle.toonAttacks:
+                        toonAttack = self.battle.toonAttacks[toonId]
+                        if toonAttack[TOON_TGT_COL] == theSuit.doId:
+                            toonAttack[TOON_TGT_COL] = targetSuit.doId
+                        elif toonAttack[TOON_TGT_COL] == targetSuit.doId:
+                            toonAttack[TOON_TGT_COL] = theSuit.doId
+                    traps = getattr(self.calculator, 'traps', None)
+                    if traps is not None:
+                        theTrap = traps.pop(theSuit.doId, None)
+                        targetTrap = traps.pop(targetSuit.doId, None)
+                        if targetTrap is not None:
+                            traps[theSuit.doId] = targetTrap
+                        if theTrap is not None:
+                            traps[targetSuit.doId] = theTrap
+                    instakillTraps = getattr(self.calculator, 'instakillTraps', None)
+                    if instakillTraps is not None:
+                        theInstakillTrap = instakillTraps.pop(theSuit.doId, None)
+                        targetInstakillTrap = instakillTraps.pop(targetSuit.doId, None)
+                        if targetInstakillTrap is not None:
+                            instakillTraps[theSuit.doId] = targetInstakillTrap
+                        if theInstakillTrap is not None:
+                            instakillTraps[targetSuit.doId] = theInstakillTrap
+                    theBattleTrap = getattr(theSuit, 'battleTrap', NO_TRAP)
+                    theBattleTrapFresh = getattr(theSuit, 'battleTrapIsFresh', 0)
+                    targetBattleTrap = getattr(targetSuit, 'battleTrap', NO_TRAP)
+                    targetBattleTrapFresh = getattr(targetSuit, 'battleTrapIsFresh', 0)
+                    theSuit.battleTrap = targetBattleTrap
+                    theSuit.battleTrapIsFresh = targetBattleTrapFresh
+                    targetSuit.battleTrap = theBattleTrap
+                    targetSuit.battleTrapIsFresh = theBattleTrapFresh
+                    self.__removeLured(theSuit.doId)
+                    self.__removeLured(targetSuit.doId)
+                    self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.setSuitCondition(targetSuit.doId, 'lured', 0, 0, 'setBoth')
+                    self.setSuitCondition(theSuit.doId, 'unlureSuit', 0, 0, 'setBoth')
+                    self.setSuitCondition(targetSuit.doId, 'unlureSuit', 0, 0, 'setBoth')
+                    self.battle.queueSuitOrderSwap(theSuit.doId, targetSuit.doId)
             elif atkType['name'] == 'MintUsury':
                 result = self.getSuitConditionModifier(theSuit.doId, 'targetCheckCondition')
                 attack[SUIT_HP_COL][targetIndex] = result
