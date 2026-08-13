@@ -13,6 +13,7 @@ from toontown.building import ElevatorConstants
 from toontown.building import ElevatorUtils
 from toontown.distributed import DelayDelete
 from toontown.hood import ZoneUtil
+from toontown.friends import FriendsListManager
 from toontown.suit import BossCutsceneSkip
 from toontown.nametag import NametagGlobals
 from toontown.toonbase import ToontownBattleGlobals
@@ -702,6 +703,12 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         if self.battleOneMusic:
             self.battleOneMusic.setPlayRate(self.setPhase1MusicRate)
 
+    def __clickedNameTag(self, avatar):
+        if self.cr:
+            place = self.cr.playGame.getPlace()
+            if place and hasattr(place, 'fsm'):
+                FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
     def enterBattleOne(self):
         self.cleanupIntervals()
         mult = ToontownBattleGlobals.getBossBattleCreditMultiplier(1)
@@ -718,6 +725,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
+        self.accept('clickedNametag', self.__clickedNameTag)
         self.setPhase1MusicRate = 1.0
         self._pacesetterUsingPhaseTwoMusic = False
         self._pacesetterDefeated = False
@@ -729,6 +737,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         self._pacesetterMusicPlaying = True
 
     def exitBattleOne(self):
+        self.ignore('clickedNametag')
         self.stopPacesetterBattleMusic()
         self.cleanupBattles()
         localAvatar.inventory.setBattleCreditMultiplier(1)
