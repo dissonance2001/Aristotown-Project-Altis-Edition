@@ -212,7 +212,16 @@ class SocialPanelGroupsTab(DirectFrame):
         self.updateCapacityText()
 
     def _getAvailableActivities(self):
-        return list(GroupGlobals.ACTIVITY_NAMES)
+        activities = list(GroupGlobals.ACTIVITY_NAMES)
+        if not self._isInPlayground():
+            activities = [activity for activity in activities if activity not in ('Trolley', 'Fishing')]
+        return activities
+
+    def _isInPlayground(self):
+        try:
+            return ZoneUtil.getWhereName(self._getZoneId(), True) == 'playground'
+        except:
+            return False
 
     def updateGroupType(self, activity):
         options = self._capacityOptions(activity)
@@ -409,10 +418,10 @@ class SocialPanelGroupsTab(DirectFrame):
 
     def _getActivityDestination(self, activity):
         fixed = {
-            'VP': (ToontownGlobals.SellbotLobby, 'Sellbot HQ'),
-            'CFO': (ToontownGlobals.CashbotLobby, 'Cashbot HQ'),
-            'CJ': (ToontownGlobals.LawbotLobby, 'Lawbot HQ'),
-            'CEO': (ToontownGlobals.BossbotLobby, 'Bossbot HQ'),
+            'VP': (ToontownGlobals.SellbotHQ, 'Sellbot HQ'),
+            'CFO': (ToontownGlobals.CashbotHQ, 'Cashbot HQ'),
+            'CJ': (ToontownGlobals.LawbotHQ, 'Lawbot HQ'),
+            'CEO': (ToontownGlobals.BossbotHQ, 'Bossbot HQ'),
             'Sellbot Factory': (ToontownGlobals.SellbotFactoryExt, 'Sellbot HQ'),
             'Cashbot Mint': (ToontownGlobals.CashbotHQ, 'Cashbot HQ'),
             'Lawbot DA Office': (ToontownGlobals.LawbotOfficeExt, 'Lawbot HQ'),
