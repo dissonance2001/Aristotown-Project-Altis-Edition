@@ -126,32 +126,31 @@ class TownBattle(StateData.StateData):
         self.timer.setPos(-0.151, 0, -1.808)
         self.timer.setScale(0.4)
         self.timer.hide()
-        # self.timerHoverRegion = DirectFrame(
-        #     parent=self.timer,
-        #     relief=None,
-        #     state=DGG.NORMAL,
-        #     frameSize=(-0.8, 0.8, -0.8, 0.8),
-        #     pos=(0, 0, 0)
-        # )
-        # self.timerHoverRegion.setTransparency(True)
-
-        # self.timerHoverRegion.bind(DGG.WITHIN, self.__handleWithinTimer)
-        # self.timerHoverRegion.bind(DGG.WITHOUT, self.__handleWithoutTimer)
-        # self.roundCount = DirectFrame(
-        #     parent=base.a2dBottomRight,
-        #     relief=None,
-        #     image='phase_3/maps/gui/ttcc_gui_scaledFrame_shadow.png',
-        #     image_scale=(1.05, 1, -1.808),
-        #     pos=(-0.151, 0, -1.008),
-        #     scale=1,
-        #     text='Round 1',
-        #     text_scale=0.14,
-        #     text_pos=(0, -0.05),
-        #     text_fg=(1, 1, 1, 1),
-        #     text_font=getMinnieFont()
-        # )
-        # self.roundCount.hide()
-        # self.roundCountSeq = None
+        self.timerHoverRegion = DirectFrame(
+            parent=self.timer,
+            relief=DGG.FLAT,
+            state=DGG.NORMAL,
+            frameColor=(1, 1, 1, 0),
+            frameSize=(-0.9, 0.9, -0.9, 0.9),
+            pos=(0, 0, 0))
+        self.timerHoverRegion.setTransparency(True)
+        self.timerHoverRegion.bind(DGG.WITHIN, self.__handleWithinTimer)
+        self.timerHoverRegion.bind(DGG.WITHOUT, self.__handleWithoutTimer)
+        self.roundCount = DirectFrame(
+            parent=base.a2dTopRight,
+            relief=None,
+            image='phase_3/maps/gui/ttcc_gui_scaledFrame_shadow.png',
+            image_scale=(0.19, 1, 0.06),
+            pos=(-0.17, 0, -1.61),
+            scale=1,
+            text='Round 1',
+            text_scale=0.046,
+            text_pos=(0, -0.014),
+            text_fg=(1, 1, 1, 1),
+            text_font=ToontownGlobals.getMinnieFont())
+        self.roundCount.setTransparency(True)
+        self.roundCount.hide()
+        self.roundCountSeq = None
 
     def cleanup(self):
         self.ignore(self.attackPanelDoneEvent)
@@ -170,9 +169,13 @@ class TownBattle(StateData.StateData):
         del self.SOSPetInfoPanel
         for toonPanel in self.toonPanels:
             toonPanel.cleanup()
-        # if self.roundCountSeq:
-        #     self.roundCountSeq.finish()
-        # self.roundCountSeq = None
+        if self.roundCountSeq:
+            self.roundCountSeq.finish()
+        self.roundCountSeq = None
+        self.timerHoverRegion.destroy()
+        self.roundCount.destroy()
+        del self.timerHoverRegion
+        del self.roundCount
         del self.toonPanels
         for cogPanel in self.cogPanels:
             cogPanel.cleanup()
@@ -438,6 +441,11 @@ class TownBattle(StateData.StateData):
         self.target = 0
         if hasattr(self, 'timer'):
             self.timer.hide()
+        if hasattr(self, 'roundCount'):
+            if self.roundCountSeq:
+                self.roundCountSeq.pause()
+            self.roundCount.hide()
+            self.roundCount.setColorScale(1, 1, 1, 0)
 
     def exitOff(self):
         if self.isLoaded:
@@ -869,34 +877,26 @@ class TownBattle(StateData.StateData):
         retval = BattleBase.attackAffectsGroup(HEAL_TRACK, levelNum)
         return retval
     
-    # def __handleWithinTimer(self, *args, **kwargs):
-    #     if not self.roundCount:
-    #         return
-    #     if not self.battle:
-    #         return
+    def __handleWithinTimer(self, *args, **kwargs):
+        if not self.battle:
+            return
 
-    #     currRound = self.battle.TurnsElapsed + 1
-    #     self.roundCount.setText('Round {currRound}')
-    #     self.roundCount['text_scale'] = 0.12 if currRound >= 100 else 0.14
+        currRound = max(1, self.battle.TurnsElapsed + 1)
+        self.roundCount['text'] = 'Round %d' % currRound
+        self.roundCount['text_scale'] = 0.043 if currRound >= 100 else 0.05
 
-    #     if self.roundCountSeq:
-    #         self.roundCountSeq.pause()
-    #     self.roundCountSeq = Sequence(
-    #         Func(self.roundCount.show),
-    #         LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 1))
-    #     )
-    #     self.roundCountSeq.start()
+        if self.roundCountSeq:
+            self.roundCountSeq.pause()
+        self.roundCount.setColorScale(1, 1, 1, 0)
+        self.roundCountSeq = Sequence(
+            Func(self.roundCount.show),
+            LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 1)))
+        self.roundCountSeq.start()
 
-    # def __handleWithoutTimer(self, *args, **kwargs):
-    #     if not self.roundCount:
-    #         return
-    #     if not self.battle:
-    #         return
-
-    #     if self.roundCountSeq:
-    #         self.roundCountSeq.pause()
-    #     self.roundCountSeq = Sequence(
-    #         LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 0)),
-    #         Func(self.roundCount.hide),
-    #     )
-    #     self.roundCountSeq.start()
+    def __handleWithoutTimer(self, *args, **kwargs):
+        if self.roundCountSeq:
+            self.roundCountSeq.pause()
+        self.roundCountSeq = Sequence(
+            LerpColorScaleInterval(self.roundCount, 0.08, (1, 1, 1, 0)),
+            Func(self.roundCount.hide))
+        self.roundCountSeq.start()
