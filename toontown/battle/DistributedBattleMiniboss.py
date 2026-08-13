@@ -54,6 +54,24 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             pass
         return None
 
+    def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, suitsImmune, suitsEnraged, suitsAbsorbing, suitsSoaked, timestamp):
+        oldSuits = self.suits[:]
+        result = DistributedBattleFinal.DistributedBattleFinal.setMembers(
+            self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps,
+            toons, toonsJoining, toonsPending, toonsActive, toonsRunning,
+            suitsImmune, suitsEnraged, suitsAbsorbing, suitsSoaked, timestamp)
+        if self._getPacesetterController() is not None:
+            incomingSuitIds = set(suits)
+            for suit in oldSuits:
+                if suit is None:
+                    continue
+                try:
+                    if suit.doId not in incomingSuitIds:
+                        suit.setState('Off')
+                except:
+                    pass
+        return result
+
     def _isPacesetterTarget(self, targetId):
         controller = self._getPacesetterController()
         if controller is not None and targetId == getattr(controller, 'pacesetterSuitId', 0):
