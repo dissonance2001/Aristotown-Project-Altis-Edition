@@ -307,8 +307,8 @@ class VideographerCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[
-                                i].currHP <= 17777 and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'phase2') and self.battle.activeSuits[
+                                i].currHP <= 18888 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerDirectorCuts',  # Director Cuts
                                                         'animName': 'song-and-dance',

@@ -1359,8 +1359,75 @@ class Movie(DirectObject.DirectObject):
                             pass
                         if sdict['died'] != 0:
                             pass
-                        if track == DROP or track == LURE or track == TRAP:
+                        if track == SQUIRT:
+                            targets = []
+
+                            # MAIN TARGET FIRST
+                            targets.append(sdict)
+
+                            # Add every other Cog that actually received
+                            # calculated Squirt damage from the AI.
+                            for splashIndex in xrange(len(suits)):
+                                if splashIndex == targetIndex:
+                                    continue
+
+                                splashId = suits[splashIndex]
+
+                                if splashId == -1:
+                                    continue
+
+                                # No calculated splash damage = not a splash target.
+                                if hps[splashIndex] <= 0:
+                                    continue
+
+                                splashSuit = self.battle.findSuit(splashId)
+
+                                if splashSuit is None:
+                                    continue
+
+                                if splashSuit not in self.battle.activeSuits:
+                                    continue
+
+                                splashDict = {}
+
+                                splashDict['suit'] = splashSuit
+                                splashDict['hp'] = hps[splashIndex]
+                                splashDict['kbbonus'] = kbbonuses[splashIndex]
+                                splashDict['died'] = ta[SUIT_DIED_COL] & 1 << splashIndex
+                                splashDict['revived'] = ta[SUIT_REVIVE_COL] & 1 << splashIndex
+
+                                splashSuitIndex = self.battle.activeSuits.index(splashSuit)
+
+                                leftSuits = []
+
+                                for si in xrange(0, splashSuitIndex):
+                                    asuit = self.battle.activeSuits[si]
+
+                                    if self.battle.isSuitLured(asuit) == 0:
+                                        leftSuits.append(asuit)
+
+                                rightSuits = []
+
+                                if len(self.battle.activeSuits) > splashSuitIndex + 1:
+                                    for si in xrange(
+                                        splashSuitIndex + 1,
+                                        len(self.battle.activeSuits)
+                                    ):
+                                        asuit = self.battle.activeSuits[si]
+
+                                        if self.battle.isSuitLured(asuit) == 0:
+                                            rightSuits.append(asuit)
+
+                                splashDict['leftSuits'] = leftSuits
+                                splashDict['rightSuits'] = rightSuits
+
+                                targets.append(splashDict)
+
+                            adict['target'] = targets
+
+                        elif track == DROP or track == LURE or track == TRAP:
                             adict['target'] = [sdict]
+
                         else:
                             adict['target'] = sdict
                 adict['hpbonus'] = ta[TOON_HPBONUS_COL]

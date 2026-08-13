@@ -602,6 +602,11 @@ class BattleCalculatorAI:
         debug = self.notify.getDebug()
         attack = self.battle.toonAttacks[attackIndex]
         atkTrack, atkLevel = self.__getActualTrackLevel(attack)
+        if atkTrack == SQUIRT:
+            mainTarget = self.battle.findSuit(attack[TOON_TGT_COL])
+
+            if mainTarget is not None:
+                atkTargets = [mainTarget]
 
         hasAccuracyBuff = False
         toon = simbase.air.doId2do.get(attack[TOON_ID_COL])
@@ -1314,8 +1319,20 @@ class BattleCalculatorAI:
         if self.toonHasCondition(toonId, 'useSound'):
             self.setToonCondition(toonId, 'rushJobCompleted', 1, 3, 'setBoth')
 
-    def calculateSquirtTargetDamage(self, baseDamage, toon, toonId, suit, suitId, atkLevel, organicBonus, splashMult=1.0):
+    def calculateSquirtTargetDamage(
+        self,
+        baseDamage,
+        toon,
+        toonId,
+        suit,
+        suitId,
+        atkLevel,
+        organicBonus,
+        splashMult=1.0,
+        mainTargetId=None):
         damage = baseDamage
+
+        # Splash inherits vulnerability from the Cog directly hit by Squirt.
 
         if damage <= 0:
             return 0
@@ -1328,12 +1345,18 @@ class BattleCalculatorAI:
             SQUIRT,
             atkLevel,
             organicBonus=organicBonus
-        )
+                )
 
-        # THEN reduce adjacent damage.
+        # 33% / 75% adjacent splash.
         damage *= splashMult
 
-        # THEN target-specific Cog defenses/vulnerabilities.
+        # ONLY additional behavior:
+        # splash also scales from the directly-hit Cog's vulnerability.
+        if splashMult != 1.0 and mainTargetId is not None:
+            damage *= self.getSquirtMainVulnerabilityMultiplier(
+                mainTargetId
+            )
+
         damage = self.applyCogDamageInterceptors(
             damage,
             toonId,
@@ -1368,32 +1391,129 @@ class BattleCalculatorAI:
                     -1,
                     'setBoth'
                 )
+            # Only the MAIN Squirt target gets soaked/drenched.
+        if splashMult == 1.0:
             if organicBonus:
                 if suit.dna.name == 'redd':
-                    self.setSuitCondition(suitId, 'drenched', 1, 1,
-                                            'alternateBoth')
-                if suit.getVirtual() > 0 or suit.dna.name in ('hrollers', 'bcaster'):
-                    self.setSuitCondition(suitId, 'drenched', 1, self.NumRoundsSoaked[atkLevel] - 2,
-                                            'alternateBoth')
-                elif suit.getSkeleton() > 0 or suit.dna.name in ('foreman', 'supervis', 'clerk', 'wsi', 'autocad', 'ovt', 'dopa', 'dopr', 'bdirector', 'sya', 'pbl'):
-                    self.setSuitCondition(suitId, 'drenched', 1, self.NumRoundsSoaked[atkLevel] - 1,
-                                            'alternateBoth')
+                    self.setSuitCondition(
+                        suitId,
+                        'drenched',
+                        1,
+                        1,
+                        'alternateBoth'
+                    )
+
+                elif suit.getVirtual() > 0 or suit.dna.name in ('hrollers', 'bcaster'):
+                    self.setSuitCondition(
+                        suitId,
+                        'drenched',
+                        1,
+                        self.NumRoundsSoaked[atkLevel] - 2,
+                        'alternateBoth'
+                    )
+
+                elif suit.getSkeleton() > 0 or suit.dna.name in (
+                    'foreman', 'supervis', 'clerk', 'wsi',
+                    'autocad', 'ovt', 'dopa', 'dopr',
+                    'bdirector', 'sya', 'pbl'
+                ):
+                    self.setSuitCondition(
+                        suitId,
+                        'drenched',
+                        1,
+                        self.NumRoundsSoaked[atkLevel] - 1,
+                        'alternateBoth'
+                    )
+
                 else:
-                    self.setSuitCondition(suitId, 'drenched', 1, self.NumRoundsSoaked[atkLevel],
-                                        'alternateBoth')
+                    self.setSuitCondition(
+                        suitId,
+                        'drenched',
+                        1,
+                        self.NumRoundsSoaked[atkLevel],
+                        'alternateBoth'
+                    )
+
             else:
                 if suit.dna.name == 'redd':
-                    self.setSuitCondition(suitId, 'soaked', 1, 1,
-                                            'alternateBoth')
-                if suit.getVirtual() > 0 or suit.dna.name in ('hrollers', 'bcaster'):
-                    self.setSuitCondition(suitId, 'soaked', 1, self.NumRoundsSoaked[atkLevel] - 2,
-                                            'alternateBoth')
-                elif suit.getSkeleton() > 0 or suit.dna.name in ('foreman', 'supervis', 'clerk', 'wsi', 'autocad', 'ovt', 'dopa', 'dopr', 'bdirector', 'sya', 'pbl'):
-                    self.setSuitCondition(suitId, 'soaked', 1, self.NumRoundsSoaked[atkLevel] - 1,
-                                            'alternateBoth')
+                    self.setSuitCondition(
+                        suitId,
+                        'soaked',
+                        1,
+                        1,
+                        'alternateBoth'
+                    )
+
+                elif suit.getVirtual() > 0 or suit.dna.name in ('hrollers', 'bcaster'):
+                    self.setSuitCondition(
+                        suitId,
+                        'soaked',
+                        1,
+                        self.NumRoundsSoaked[atkLevel] - 2,
+                        'alternateBoth'
+                    )
+
+                elif suit.getSkeleton() > 0 or suit.dna.name in (
+                    'foreman', 'supervis', 'clerk', 'wsi',
+                    'autocad', 'ovt', 'dopa', 'dopr',
+                    'bdirector', 'sya', 'pbl'
+                ):
+                    self.setSuitCondition(
+                        suitId,
+                        'soaked',
+                        1,
+                        self.NumRoundsSoaked[atkLevel] - 1,
+                        'alternateBoth'
+                    )
+
                 else:
-                    self.setSuitCondition(suitId, 'soaked', 1, self.NumRoundsSoaked[atkLevel],
-                                        'alternateBoth')
+                    self.setSuitCondition(
+                        suitId,
+                        'soaked',
+                        1,
+                        self.NumRoundsSoaked[atkLevel],
+                        'alternateBoth'
+                    )
+        else:
+            if suit.dna.name == 'redd':
+                    self.setSuitCondition(
+                        suitId,
+                        'soaked',
+                        1,
+                        1,
+                        'alternateBoth'
+                    )
+
+            elif suit.getVirtual() > 0 or suit.dna.name in ('hrollers', 'bcaster'):
+                self.setSuitCondition(
+                    suitId,
+                    'soaked',
+                    1,
+                    self.NumRoundsSoaked[atkLevel] - 2,
+                    'alternateBoth'
+                )
+
+            elif suit.getSkeleton() > 0 or suit.dna.name in (
+                'foreman', 'supervis', 'clerk', 'wsi',
+                'autocad', 'ovt', 'dopa', 'dopr',
+                'bdirector', 'sya', 'pbl'
+            ):
+                self.setSuitCondition(
+                    suitId,
+                    'soaked',
+                    1,
+                    self.NumRoundsSoaked[atkLevel] - 1,
+                    'alternateBoth'
+                )
+
+            else:
+                self.setSuitCondition(
+                    suitId,
+                    'soaked',
+                    1,
+                    self.NumRoundsSoaked[atkLevel],
+                    'alternateBoth'
+                )
 
         return int(math.ceil(damage))
 
@@ -2578,15 +2698,16 @@ class BattleCalculatorAI:
                             splashMult = 1.0 / 3.0
 
                     attackDamage = self.calculateSquirtTargetDamage(
-                        baseDamage,
-                        toon,
-                        toonId,
-                        suit,
-                        targetId,
-                        atkLevel,
-                        organicBonus,
-                        splashMult=splashMult
-                    )
+                            baseDamage,
+                            toon,
+                            toonId,
+                            suit,
+                            targetId,
+                            atkLevel,
+                            organicBonus,
+                            splashMult=splashMult,
+                            mainTargetId=mainTargetId
+                        )
                 elif atkTrack == THROW:
                     self.applyGagBanChecks(toonId, THROW, atkLevel)
 
@@ -3894,16 +4015,30 @@ class BattleCalculatorAI:
         if atkTrack == HEAL or atkTrack == PETSOS:
             return
         tgts = self.__createToonTargetList(toonId)
+
+        # For knockback bonuses, Squirt splash Cogs do NOT count.
+        if not hp and atkTrack == SQUIRT:
+            mainTargetId = attack[TOON_TGT_COL]
+            mainTarget = self.battle.findSuit(mainTargetId)
+
+            if mainTarget:
+                tgts = [mainTarget]
+            else:
+                tgts = []
+
         for currTgt in tgts:
             tgtPos = self.battle.activeSuits.index(currTgt)
+
             attackerId = self.toonAtkOrder[attackIndex]
             attack = self.battle.toonAttacks[attackerId]
             track = self.__getActualTrack(attack)
+
             if hp:
                 if track in self.hpBonuses[tgtPos]:
                     self.hpBonuses[tgtPos][track].append([attackIndex, dmg])
                 else:
                     self.hpBonuses[tgtPos][track] = [[attackIndex, dmg]]
+
             elif self.__suitIsLured(currTgt.getDoId()):
                 if track in self.kbBonuses[tgtPos]:
                     self.kbBonuses[tgtPos][track].append([attackIndex, dmg])
@@ -4032,19 +4167,65 @@ class BattleCalculatorAI:
         else:
             self.__clearBonuses(hp=0)
 
-    def __handleBonus(self, attackIdx, hp = 1):
+    def getSquirtMainVulnerabilityMultiplier(self, mainTargetId):
+        mult = 1.0
+
+        if self.suitHasCondition(mainTargetId, 'vulnerable'):
+            mult *= 1.3
+
+        if self.suitHasCondition(mainTargetId, 'vulnerablebroadcaster'):
+            mult *= 2.0
+
+        if self.suitHasCondition(mainTargetId, 'vulnerablesilhouette1'):
+            mult *= 1.5
+
+        if self.suitHasCondition(mainTargetId, 'vulnerablesilhouette2'):
+            mult *= 2.0
+
+        if self.suitHasCondition(mainTargetId, 'vulnerablesilhouette3'):
+            mult *= 3.0
+
+        if self.suitHasCondition(mainTargetId, 'vulnerablevideographer'):
+            mult *= self.getSuitConditionModifier(
+                mainTargetId,
+                'vulnerablevideographer'
+            )
+
+        return mult
+
+    def __handleBonus(self, attackIdx, hp=1):
         attackerId = self.toonAtkOrder[attackIdx]
         attack = self.battle.toonAttacks[attackerId]
-        atkDmg = self.__attackDamage(attack, suit=0)
+
         atkTrack = self.__getActualTrack(attack)
+
+        if not hp and atkTrack == SQUIRT:
+            mainTargetId = attack[TOON_TGT_COL]
+            mainTarget = self.battle.findSuit(mainTargetId)
+
+            if mainTarget and mainTarget in self.battle.activeSuits:
+                mainPos = self.battle.activeSuits.index(mainTarget)
+                atkDmg = attack[TOON_HP_COL][mainPos]
+            else:
+                atkDmg = 0
+
+        else:
+            atkDmg = self.__attackDamage(attack, suit=0)
+
         if atkDmg > 0:
             if hp:
                 if atkTrack != LURE:
-                    self.notify.debug('Adding dmg of ' + str(atkDmg) + ' to hpBonuses list')
-                    self.__addDmgToBonuses(atkDmg, attackIdx)
+                    self.__addDmgToBonuses(
+                        atkDmg,
+                        attackIdx
+                    )
+
             elif self.__knockBackAtk(attackerId, toon=1):
-                self.notify.debug('Adding dmg of ' + str(atkDmg) + ' to kbBonuses list')
-                self.__addDmgToBonuses(atkDmg, attackIdx, hp=0)
+                self.__addDmgToBonuses(
+                    atkDmg,
+                    attackIdx,
+                    hp=0
+                )
 
     def __clearAttack(self, attackIdx, toon = 1):
         if toon:
@@ -4279,21 +4460,49 @@ class BattleCalculatorAI:
         else:
             self.notify.warning('__allTargetsDead: suit ver. not implemented!')
         return allTargetsDead
-
-    def __clearLuredSuitsByAttack(self, toonId, kbBonusReq = 0, targetId = -1):
+    
+    def __clearLuredSuitsByAttack(self, toonId, kbBonusReq=0, targetId=-1):
         if self.notify.getDebug():
             self.notify.debug('__clearLuredSuitsByAttack')
-        if targetId != -1 and self.__suitIsLured(t.getDoId()):
-            self.__removeLured(t.getDoId())
+
+        attack = self.battle.toonAttacks[toonId]
+        atkTrack = self.__getActualTrack(attack)
+
+        if targetId != -1:
+            if self.__suitIsLured(targetId):
+                self.__removeLured(targetId)
+            return
+
+        # Squirt splash does NOT unlure adjacent Cogs.
+        if atkTrack == SQUIRT:
+            mainTargetId = attack[TOON_TGT_COL]
+            mainTarget = self.battle.findSuit(mainTargetId)
+
+            if mainTarget:
+                tgtList = [mainTarget]
+            else:
+                tgtList = []
+
         else:
             tgtList = self.__createToonTargetList(toonId)
-            for t in tgtList:
-                if self.__suitIsLured(t.getDoId()) and (not kbBonusReq or self.__bonusExists(t, hp=0)):
-                    self.__removeLured(t.getDoId())
-                    if self.notify.getDebug():
-                        self.notify.debug('Suit %d stepping from lured spot' % t.getDoId())
-                else:
-                    self.notify.debug('Suit ' + str(t.getDoId()) + ' not found in currently lured suits')
+
+        for t in tgtList:
+            if (
+                self.__suitIsLured(t.getDoId()) and
+                (not kbBonusReq or self.__bonusExists(t, hp=0))
+            ):
+                self.__removeLured(t.getDoId())
+
+                if self.notify.getDebug():
+                    self.notify.debug(
+                        'Suit %d stepping from lured spot' %
+                        t.getDoId()
+                    )
+            else:
+                self.notify.debug(
+                    'Suit ' + str(t.getDoId()) +
+                    ' not found in currently lured suits'
+                )
 
     def __clearLuredSuitsDelayed(self):
         if self.notify.getDebug():
@@ -4308,15 +4517,43 @@ class BattleCalculatorAI:
 
         self.delayedUnlures = []
 
-    def __addLuredSuitsDelayed(self, toonId, targetId = -1, ignoreDamageCheck = False):
+    def __addLuredSuitsDelayed(self, toonId, targetId=-1, ignoreDamageCheck=False):
         if self.notify.getDebug():
             self.notify.debug('__addLuredSuitsDelayed')
+
         if targetId != -1:
             self.delayedUnlures.append(targetId)
+
         else:
-            tgtList = self.__createToonTargetList(toonId)
+            attack = self.battle.toonAttacks[toonId]
+            atkTrack = self.__getActualTrack(attack)
+
+            # Squirt only unlures the directly-hit Cog.
+            if atkTrack == SQUIRT:
+                mainTargetId = attack[TOON_TGT_COL]
+                mainTarget = self.battle.findSuit(mainTargetId)
+
+                if mainTarget:
+                    tgtList = [mainTarget]
+                else:
+                    tgtList = []
+
+            else:
+                tgtList = self.__createToonTargetList(toonId)
+
             for t in tgtList:
-                if self.__suitIsLured(t.getDoId()) and t.getDoId() not in self.delayedUnlures and (self.__attackDamageForTgt(self.battle.toonAttacks[toonId], self.battle.activeSuits.index(t), suit=0) > 0 or ignoreDamageCheck):
+                if (
+                    self.__suitIsLured(t.getDoId()) and
+                    t.getDoId() not in self.delayedUnlures and
+                    (
+                        self.__attackDamageForTgt(
+                            self.battle.toonAttacks[toonId],
+                            self.battle.activeSuits.index(t),
+                            suit=0
+                        ) > 0
+                        or ignoreDamageCheck
+                    )
+                ):
                     self.delayedUnlures.append(t.getDoId())
 
     def __calculateToonAttacksForTracks(self, allowedTracks, finalizeBonuses=True):

@@ -2695,7 +2695,7 @@ class TownBattleCogPanel(DirectFrame):
             gagText = self.getColoredText(
                 'SOAKED',
                 'soakText',
-                (1, 0, 0.996, 1),
+                (0, 0.647, 1, 1),
                 ToontownGlobals.getSignFont()
             )
             damageText = self.getColoredText(
@@ -3961,7 +3961,7 @@ class TownBattleCogPanel(DirectFrame):
             gagText = self.getColoredText(
                 'SOAKED',
                 'soakText',
-                (1, 0, 0.996, 1),
+                (0, 0.647, 1, 1),
                 ToontownGlobals.getSignFont()
             )
             damageText = self.getColoredText(
@@ -4118,7 +4118,7 @@ class TownBattleCogPanel(DirectFrame):
             gagText = self.getColoredText(
                 'SOAKED',
                 'soakText',
-                (1, 0, 0.996, 1),
+                (0, 0.647, 1, 1),
                 ToontownGlobals.getSignFont()
             )
             damageText = self.getColoredText(

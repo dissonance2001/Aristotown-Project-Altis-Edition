@@ -151,7 +151,7 @@ def __getSquirtContactTime(squirt):
 
     elif level == 7:
         # Geyser
-        return 2.9
+        return 3.3875
 
     return 0.0
 
@@ -347,59 +347,32 @@ def __doAdjacentSquirtSplash(target, squirt):
         drench = 0
 
     # Pick reaction animation.
-    if level >= 5:
-        reactAnim = 'soak'
-    else:
-        reactAnim = 'squirt-small-react'
-
-    targetPoint = lambda suit=suit: __suitTargetPoint(suit)
+    reactAnim = 'squirt-small-react'
 
     # Everything happens AT IMPACT.
     impactTrack = Parallel()
 
-    # Splash visual.
-    impactTrack.append(
-        __getSplashTrack(
-            targetPoint,
-            sprayScales[level],
-            0,
-            battle
-        )
-    )
-
     # Damage + health bar at contact.
-    impactTrack.append(
-        Sequence(
-            Func(
-                suit.showHpText,
-                -hp,
-                0,
-                openEnded=0,
-                attackTrack=SQUIRT_TRACK
-            ),
-            Func(
-                suit.updateHealthBar,
-                hp
-            )
-        )
-    )
-
-    # Actually tell the Cog it is visually wet.
-    impactTrack.append(
-        Func(
-            suit.soakSuit,
-            drench
-        )
-    )
-
-    # Tint wet/drenched.
-    impactTrack.append(
-        __soakSuit(
-            suit,
-            0,
-            drench=drench
-        )
-    )
+    if suit.dna.name == 'phouse':
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 1 ROUND", attackTrack=SQUIRT_TRACK, colorCode=1))
+        soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=1)
+        impactTrack.append(Parallel(soakSuit, showDamage, Func(suit.updateHealthBar, hp), Func(suit.soakSuit, 0)))
+    elif suit.dna.name == 'redd':
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+        soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=2)
+        impactTrack.append(Parallel(soakSuit, showDamage, Func(suit.updateHealthBar, hp), Func(suit.soakSuit, 0)))
+    elif suit.isVirtual:
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 2 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+        soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=2)
+        impactTrack.append(Parallel(soakSuit, showDamage, Func(suit.updateHealthBar, hp), Func(suit.soakSuit, 0)))
+    elif suit.isSkeleton:
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 3 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+        soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=3)
+        impactTrack.append(Parallel(soakSuit, showDamage, Func(suit.updateHealthBar, hp), Func(suit.soakSuit, 0)))
+    else:
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="SOAKED 4 ROUNDS", attackTrack=SQUIRT_TRACK, colorCode=1))
+        soakSuit = Func(suit.setSuitStatusEffect, 'soaked', modifier=1, turns=4)
+        impactTrack.append(Parallel(soakSuit, showDamage, Func(suit.updateHealthBar, hp), Func(suit.soakSuit, 0)))
 
     # Splash reaction.
     impactTrack.append(
@@ -411,7 +384,10 @@ def __doAdjacentSquirtSplash(target, squirt):
 
     # Wait until actual gag impact.
     track.append(Wait(tContact))
-
+    if suit.hasSuitStatusEffect('sued'):
+        track.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
+    if suit.getSuitStatusModifier('rushJob') == 4:
+        track.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     # Then all the hit visuals occur together.
     track.append(impactTrack)
 
@@ -468,7 +444,7 @@ def __doAdjacentSquirtSplash(target, squirt):
 
         track.append(
             Func(
-                suit.setNeutralAnimation
+                suit.setNeutralAnimationDrop
             )
         )
 
@@ -557,7 +533,6 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         if suit.getSuitStatusModifier('rushJob') == 4:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
         suitIndex = battle.activeSuits.index(suit)
-        soakTracks.append(Wait(tContact))
         if toon.getTrackBonusLevel(SQUIRT_TRACK) > 1:
             # soakTracks.append(__doAdjacentSquirtSplash(suit, ))
             # soakTracks.append(__soakNearby(suit, suitIndex + 1, battle.activeSuits, tContact, hp, died, battle, 1, SQUIRT_TRACK, level, drench=1))
