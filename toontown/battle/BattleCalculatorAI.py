@@ -2215,6 +2215,8 @@ class BattleCalculatorAI:
             if atkTrack == LURE:
                 self.currentlyImmuneSuits = self.getImmuneSuits()
                 if targetId not in self.currentlyImmuneSuits:
+                    if self.suitHasCondition(targetId, 'lureRushJob'):
+                        self.setSuitCondition(targetId, 'lureRushJob', 0, 0, 'setBoth')
                     if self.getSuitTrapType(targetId) == NO_TRAP:
                         if self.notify.getDebug():
                             self.notify.debug('Suit lured, but no trap exists')
