@@ -238,6 +238,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.isPlayerControlled():
             if self.maxBankMoney != ToontownGlobals.DefaultMaxBankMoney:
                 self.b_setMaxBankMoney(ToontownGlobals.DefaultMaxBankMoney)
+            self.repairTrainingPointState()
             messenger.send('avatarEntered', [self])
 
         from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
@@ -5265,40 +5266,122 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getSpentTrainingPoints(self):
         return self.spentTrainingPoints
 		
+    def isRefundZoneValid(self):
+        return not ZoneUtil.isDynamicZone(self.zoneId)
+
+    def sendFailedRefundNotif(self):
+        self.sendUpdate('doRefundFailure')
+
+    def repairTrainingPointState(self):
+        trackAccess = self.getTrackAccess()
+        pointsSpent = self.getSpentTrainingPoints()
+        bonusArray = self.getTrackBonusLevel()
+        changed = False
+        for i in xrange(8):
+            if trackAccess[i] == 1 and pointsSpent[i] < 2:
+                pointsSpent[i] = 2
+                bonusArray[i] = -1
+                changed = True
+            elif trackAccess[i] == 0 and pointsSpent[i] != 0:
+                pointsSpent[i] = 0
+                bonusArray[i] = -1
+                changed = True
+        if changed:
+            self.b_setSpentTrainingPoints(pointsSpent)
+            self.b_setTrackBonusLevel(bonusArray)
+
     def requestSkillSpend(self, track):
-        trackArray = self.getTrackAccess()
+        if not self.isRefundZoneValid():
+            self.sendFailedRefundNotif()
+            return
+
         bonusArray = self.getTrackBonusLevel()
         pointsAvailable = self.getTrainingPoints()
         pointsSpent = self.getSpentTrainingPoints()
-        if pointsAvailable > 0: # Time to skill them up!
+        if pointsAvailable > 0:
             if pointsSpent[track] >= 3:
-                return # Prestiging isn't coded yet
+                return
+            elif pointsSpent[track] == 0:
+                if pointsAvailable < 2:
+                    return
+                pointsSpent[track] += 2
+                pointsAvailable -= 2
             else:
                 pointsSpent[track] += 1
                 pointsAvailable -= 1
-            for i in xrange(8): # Go through all tracks and recalculate
+            for i in xrange(8):
                 if pointsSpent[i] >= 2:
                     self.addTrackAccess(i)
                 if pointsSpent[i] >= 3:
-                    if bonusArray[i] != 6:
+                    if bonusArray[i] < 1:
                         bonusArray[i] = 6
+                else:
+                    bonusArray[i] = -1
             self.b_setTrackBonusLevel(bonusArray)
             self.b_setSpentTrainingPoints(pointsSpent)
             self.b_setTrainingPoints(pointsAvailable)
         else:
             return
 
-    def requestSkillReturn(self, track):
+    def requestSkillReturn(self, track, free = False, returnPoint = True):
+        if not self.isRefundZoneValid():
+            self.sendFailedRefundNotif()
+            return
+
         pointsAvailable = self.getTrainingPoints()
+        bonusArray = self.getTrackBonusLevel()
         pointsSpent = self.getSpentTrainingPoints()
-        if pointsSpent[track] == 1: # They wanna remove a point from a progressing track, nbd
-            pointsAvailable += 1
+        if pointsSpent[track] == 1:
+            if returnPoint:
+                pointsAvailable += 1
             pointsSpent[track] = 0
             self.b_setSpentTrainingPoints(pointsSpent)
             self.b_setTrainingPoints(pointsAvailable)
-        else:
+        elif pointsSpent[track] == 3:
+            if returnPoint:
+                pointsAvailable += 1
+            pointsSpent[track] = 2
+            for i in xrange(8):
+                if pointsSpent[i] >= 2:
+                    self.addTrackAccess(i)
+                if pointsSpent[i] >= 3:
+                    if bonusArray[i] < 1:
+                        bonusArray[i] = 6
+                else:
+                    bonusArray[i] = -1
+            self.b_setSpentTrainingPoints(pointsSpent)
+            self.b_setTrainingPoints(pointsAvailable)
+            self.b_setTrackBonusLevel(bonusArray)
+
+    def requestRefundSpend(self, track, returnPoint = True):
+        self.repairTrainingPointState()
+        pointsSpent = self.getSpentTrainingPoints()
+        if pointsSpent[track] < 2:
             return
-			
+        if sum(self.getTrackAccess()) <= 2:
+            self.sendUpdate('doRefundFailure')
+            return
+        if not self.isRefundZoneValid():
+            self.sendFailedRefundNotif()
+            return
+
+        self.inventory.zeroTrack(track)
+        self.d_setInventory(self.inventory.makeNetString())
+
+        if pointsSpent[track] == 3:
+            self.requestSkillReturn(track, free = True)
+
+        trackAccess = self.getTrackAccess()
+        trackAccess[track] = 0
+        self.b_setTrackAccess(trackAccess)
+
+        self.spentTrainingPoints[track] = 0
+        self.b_setSpentTrainingPoints(self.spentTrainingPoints)
+
+        if returnPoint:
+            self.trainingPoints += 2
+            self.b_setTrainingPoints(self.trainingPoints)
+
     def b_setCerts(self, certs):
         self.setCerts(certs)
         self.d_setCerts(certs)
@@ -5400,6 +5483,9 @@ def maxToon(missingTrack=None):
             return 'You are required to have Throw and Squirt.'
         gagTracks[index] = 0
     target.b_setTrackAccess(gagTracks)
+    target.b_setSpentTrainingPoints([2 if track else 0 for track in gagTracks])
+    target.b_setTrainingPoints(gagTracks.count(0) * 2)
+    target.b_setTrackBonusLevel([-1] * len(target.getTrackBonusLevel()))
     target.b_setMaxCarry(150)
 
     # Next, max out their experience for the tracks they have:
@@ -6158,6 +6244,16 @@ def trackBonus(trackIndex=-1, trackIndex2=-1, trackIndex3=-1, trackIndex4=-1, tr
     else:
         pass
     invoker.b_setTrackBonusLevel(bonus)
+    pointsSpent = invoker.getSpentTrainingPoints()
+    trackAccess = invoker.getTrackAccess()
+    for i in xrange(8):
+        if not trackAccess[i]:
+            pointsSpent[i] = 0
+        elif bonus[i] >= 1:
+            pointsSpent[i] = 3
+        else:
+            pointsSpent[i] = 2
+    invoker.b_setSpentTrainingPoints(pointsSpent)
     return 'Your prestiges have been set!'
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, str, int])

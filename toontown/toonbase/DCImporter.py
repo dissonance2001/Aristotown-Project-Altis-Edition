@@ -1221,6 +1221,8 @@ dclass DistributedToon : DistributedPlayer {
   setSpentTrainingPoints(uint8[] = [0, 0, 0, 0, 2, 2, 0, 0]) required ownrecv db;
   requestSkillSpend(uint8) ownsend airecv;
   requestSkillReturn(uint8) ownsend airecv;
+  requestRefundSpend(uint8) ownsend airecv;
+  doRefundFailure() ownrecv;
   setCerts(string[] = []) required broadcast ownrecv db;
 };
 
@@ -4369,6 +4371,26 @@ dclass DistributedToonClub : DistributedObjectGlobal {
   receiveLogs(string(0-65535));
   reportProgressAI(uint32, string(0-32), uint32);
   reportClubCoinsAI(uint32, uint32);
+  groupHeartbeat(string(0-64), uint32) clsend;
+  groupPrepareSuitTeleport(uint32, int8) airecv clsend;
+  groupRequestState() clsend;
+  groupRequestBrowse() clsend;
+  groupRequestCreate(string(0-64), string(0-96), uint32, uint8, uint8, string(0-64)) clsend;
+  groupRequestJoin(uint32, string(0-64)) clsend;
+  groupRequestLeave() clsend;
+  groupRequestDisband() clsend;
+  groupRequestKick(uint32) clsend;
+  groupRequestPublish(uint8) clsend;
+  groupRequestInvite(uint32, string(0-64)) clsend;
+  groupRespondToInvite(uint32, uint8, string(0-64)) clsend;
+  groupReceiveState(string(0-65535));
+  groupReceiveBrowse(string(0-65535));
+  groupReceiveInvite(uint32, uint32, string(0-64), string(0-64), string(0-96));
+  groupReceiveNotification(uint8, string(0-256));
+  groupRequestMassTeleport() clsend;
+  groupRequestMassTeleportReady(uint32) clsend;
+  groupReceiveMassTeleport(uint32, uint32, uint32);
+  groupReceiveMassTeleportStart(uint32);
 };
 
 dclass DistributedWeatherMGR : DistributedObject {

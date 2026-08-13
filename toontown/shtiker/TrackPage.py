@@ -1,181 +1,451 @@
 from pandac.PandaModules import *
 from toontown.shtiker import ShtikerPage
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
-from toontown.quest import Quests
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
-from toontown.toon import Toon
 from toontown.toontowngui import TTDialog
+
 
 class TrackPage(ShtikerPage.ShtikerPage):
 
+    TrackOrder = [
+        ToontownBattleGlobals.HEAL_TRACK,
+        ToontownBattleGlobals.LURE_TRACK,
+        ToontownBattleGlobals.SQUIRT_TRACK,
+        ToontownBattleGlobals.SOUND_TRACK,
+        ToontownBattleGlobals.TRAP_TRACK,
+        ToontownBattleGlobals.THROW_TRACK,
+        ToontownBattleGlobals.ZAP_TRACK,
+        ToontownBattleGlobals.DROP_TRACK,
+    ]
+    GagIconLevel = 5
+
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)
+        self.refundMode = False
+        self.infoDialog = None
 
     def load(self):
-        self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageTitle, text_scale=0.1, pos=(0, 0, 0.65))
-        self.pointDesc = DirectLabel(parent=self, relief=None, text=TTLocalizer.TrackPageSubtitle, text_scale=0.075, pos=(0, 0, 0.55))
-        self.pointLabel = DirectLabel(parent=self, relief=None, text=str(base.localAvatar.getTrainingPoints()), text_font=ToontownGlobals.getBuildingNametagFont(), text_fg=(0, 0.75, 0.75, 1), text_scale=0.1, pos=(0, 0, 0.45))
-        self.trackRows = []
-        self.trackNameLabels = []
-        self.trackProgressLabels = []
-        self.buttons = []
-        TrackYOffset = 0.35
-        TrackYSpacing = -0.12
-        ButtonXOffset = -0.28
-        ButtonXSpacing = 0.26
-        self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_guiTRAINING')
-        self.upButton = self.buttonModels.find('**/InventoryButtonUp')
-        self.downButton = self.buttonModels.find('**/InventoryButtonDown')
-        self.rolloverButton = self.buttonModels.find('**/InventoryButtonRollover')
-        self.flatButton = self.buttonModels.find('**/InventoryButtonFlat')
-        self.rowModel = self.buttonModels.find('**/TrainingPointRow')
-        self.infoText = OnscreenText(parent=self, text='', wordwrap = 30, scale=0.055, fg=(0, 0, 0, 1), shadow=(0, 0, 0, 0), pos=(0.0, -0.6), font=ToontownGlobals.getInterfaceFont(), mayChange=True)
-        for track in xrange(len(ToontownBattleGlobals.Tracks)):
-            trackFrame = DirectFrame(parent=self, image=self.rowModel, scale=(1.05, 0.8, 1.1), pos=(0, 0.3, TrackYOffset + track * TrackYSpacing), image_color=(ToontownBattleGlobals.TrackColors[track][0],
-             ToontownBattleGlobals.TrackColors[track][1],
-             ToontownBattleGlobals.TrackColors[track][2],
-             1), state=DGG.NORMAL, relief=None)
-            self.trackRows.append(trackFrame)
-            self.trackNameLabels.append(DirectLabel(text=TextEncoder.upper(ToontownBattleGlobals.Tracks[track]), parent=self.trackRows[track], pos=(-0.72 + -0.06825, -0.1, 0.01), scale=TTLocalizer.INtrackNameLabels, relief=None, text_fg=(0.2, 0.2, 0.2, 1), text_font=ToontownGlobals.getInterfaceFont(), text_align=TextNode.ALeft, textMayChange=0))
-            self.trackProgressLabels.append(DirectLabel(text='', parent=self.trackRows[track], pos=(-0.72 + -0.06825, -0.1, -0.025), scale=TTLocalizer.INtrackNameLabels/2, relief=None, text_fg=(0.2, 0.2, 0.2, 1), text_font=ToontownGlobals.getInterfaceFont(), text_align=TextNode.ALeft, textMayChange=0))
-            self.buttons.append([])
-            for item in xrange(5):
-                button = DirectButton(parent=self.trackRows[track], image=(self.upButton,
-                 self.downButton,
-                 self.rolloverButton,
-                 self.flatButton), text='', text_scale=0.04, text_align=TextNode.ARight, geom_scale=0.7, geom_pos=(-0.01, -0.1, 0), text_fg=Vec4(1, 1, 1, 1), text_pos=(0.07, -0.04), textMayChange=1, relief=None, image_color=(0, 0.6, 1, 1), image_scale=(1.05, 1, 1), pos=(ButtonXOffset + item * ButtonXSpacing + -0.06825, -0.1, 0), command=self.handleUpgrade, extraArgs=[track, item])
-                button.bind(DGG.WITHIN, self.showInfo, extraArgs = [((track * 5) + item), False])
-                self.buttons[track].append(button)
+        self.trainingRoot = DirectFrame(
+            parent=self,
+            relief=None,
+            pos=(0.05, 0, 0),
+            scale=0.875)
+
+        self.title = DirectLabel(
+            parent=self.trainingRoot,
+            relief=None,
+            text=TTLocalizer.TrackPageTitle,
+            text_scale=0.12,
+            pos=(-0.05, 0, 0.68))
+
+        self.pointDesc = DirectLabel(
+            parent=self.trainingRoot,
+            relief=None,
+            text=TTLocalizer.TrackPageSubtitle,
+            text_scale=0.077,
+            text_align=TextNode.ARight,
+            pos=(-0.08, 0, -0.695))
+
+        self.pointLabel = DirectLabel(
+            parent=self.trainingRoot,
+            relief=None,
+            text=str(base.localAvatar.getTrainingPoints()),
+            text_font=ToontownGlobals.getBuildingNametagFont(),
+            text_fg=(0, 0.75, 0.75, 1),
+            text_scale=0.085,
+            text_align=TextNode.ALeft,
+            pos=(-0.05, 0, -0.695))
+
+        self.menuModel = loader.loadModel('phase_3/models/gui/ttcc_menu_buttons')
+        self.menuNormal = self.menuModel.find('**/menubtn')
+        self.menuPressed = self.menuModel.find('**/menubtn-press')
+
+        self.infoModel = loader.loadModel('phase_3/models/gui/ttcc_gui_generalButtons')
+        self.infoUp = self.infoModel.find('**/report_BtnUP')
+        self.infoDown = self.infoModel.find('**/report_BtnDN')
+        self.infoRollover = self.infoModel.find('**/report_BtnRLVR')
+
+        self.gagSelectionModel = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+        self.lockGeom = self.gagSelectionModel.find('**/lock')
+        self.prestigeStarEmpty = self.gagSelectionModel.find('**/prestige_star_empty')
+        self.prestigeStarFilled = self.gagSelectionModel.find('**/prestige_star')
+
+        self.inventoryIconModel = None
+        self.trackFrames = {}
+        self.gagFrames = {}
+        self.trackLabels = {}
+        self.manageButtons = {}
+        self.infoButtons = {}
+        self.lockImages = {}
+        self.trackStars = {}
+        self.trackStarFilled = {}
+        self.trackStarFallback = {}
+
+        zPositions = [0.48, 0.1866667, -0.1066667, -0.4]
+        for index in xrange(len(self.TrackOrder)):
+            track = self.TrackOrder[index]
+            column = index / 4
+            row = index % 4
+            x = -0.79 if column == 0 else 0.22
+            z = zPositions[row]
+
+            frame = DirectFrame(
+                parent=self.trainingRoot,
+                relief=None,
+                pos=(x, 0, z),
+                scale=2.4)
+            self.trackFrames[track] = frame
+
+            gagFrame = DirectFrame(
+                parent=frame,
+                relief=None,
+                pos=(-0.01764, 0, 0),
+                scale=1.0,
+                image=self.getGagGeom(track),
+                image_scale=1.0)
+            self.gagFrames[track] = gagFrame
+
+            trackLabel = DirectLabel(
+                parent=frame,
+                relief=None,
+                text=ToontownBattleGlobals.Tracks[track],
+                text_scale=0.04,
+                text_align=TextNode.ALeft,
+                text_fg=Vec4(
+                    ToontownBattleGlobals.TrackColors[track][0],
+                    ToontownBattleGlobals.TrackColors[track][1],
+                    ToontownBattleGlobals.TrackColors[track][2],
+                    1),
+                text_font=ToontownGlobals.getSignFont(),
+                pos=(0.05878, 0, 0.0147))
+            self.trackLabels[track] = trackLabel
+
+            manageButton = DirectButton(
+                parent=frame,
+                relief=None,
+                pos=(0.13522, 0, -0.02939),
+                scale=(0.551768, 0.4, 0.39412),
+                image=(
+                    self.menuNormal,
+                    self.menuPressed,
+                    self.menuNormal,
+                    self.menuPressed),
+                image_scale=(0.3, 0.15, 0.15),
+                image1_scale=(0.3, 0.15, 0.15),
+                image2_scale=(0.3, 0.15, 0.15),
+                image3_scale=(0.3, 0.15, 0.15),
+                text='',
+                text_pos=(0.00016, -0.01624),
+                text_scale=(0.035714, 0.05, 0.05),
+                text_fg=(1, 1, 1, 1),
+                text_shadow=(0, 0, 0, 1),
+                command=self.handleManage,
+                extraArgs=[track])
+            self.manageButtons[track] = manageButton
+
+            if not self.infoUp.isEmpty() and not self.infoDown.isEmpty() and not self.infoRollover.isEmpty():
+                infoButton = DirectButton(
+                    parent=frame,
+                    relief=None,
+                    pos=(0.03428, 0, -0.04417),
+                    scale=0.39412,
+                    image=(
+                        self.infoUp,
+                        self.infoDown,
+                        self.infoRollover,
+                        self.infoUp),
+                    command=self.openInfo,
+                    extraArgs=[track])
+            else:
+                infoButton = DirectButton(
+                    parent=frame,
+                    relief=DGG.RAISED,
+                    borderWidth=(0.01, 0.01),
+                    frameSize=(-0.035, 0.035, -0.035, 0.035),
+                    pos=(0.03428, 0, -0.04417),
+                    scale=0.39412,
+                    text='i',
+                    text_scale=0.06,
+                    command=self.openInfo,
+                    extraArgs=[track])
+            self.infoButtons[track] = infoButton
+
+            if not self.lockGeom.isEmpty():
+                lockImage = DirectFrame(
+                    parent=gagFrame,
+                    relief=None,
+                    pos=(0, 0, 0),
+                    scale=0.06969,
+                    image=self.lockGeom,
+                    image_scale=(1.0, 1.0, 160.0 / 116.0))
+            else:
+                lockImage = DirectFrame(parent=gagFrame, relief=None)
+                lockImage.hide()
+            self.lockImages[track] = lockImage
+
+            if not self.prestigeStarEmpty.isEmpty() and not self.prestigeStarFilled.isEmpty():
+                trackStar = DirectFrame(
+                    parent=frame,
+                    relief=None,
+                    pos=(0.24427, 0, -0.03053),
+                    scale=0.05026,
+                    image=self.prestigeStarEmpty)
+                filledStar = DirectFrame(
+                    parent=trackStar,
+                    relief=None,
+                    pos=(0, 0, 0),
+                    scale=1.06,
+                    image=self.prestigeStarFilled)
+                filledStar.hide()
+                fallbackStar = None
+            else:
+                trackStar = DirectFrame(parent=frame, relief=None)
+                trackStar.hide()
+                filledStar = None
+                fallbackStar = DirectLabel(
+                    parent=frame,
+                    relief=None,
+                    text='*',
+                    text_scale=0.075,
+                    text_fg=(0.45, 0.45, 0.45, 1),
+                    text_shadow=(1, 1, 1, 1),
+                    text_font=ToontownGlobals.getSignFont(),
+                    pos=(0.24427, 0, -0.047))
+            self.trackStars[track] = trackStar
+            self.trackStarFilled[track] = filledStar
+            self.trackStarFallback[track] = fallbackStar
+
+        self.refundButton = DirectButton(
+            parent=self.trainingRoot,
+            relief=None,
+            pos=(0.42, 0, -0.67566),
+            scale=(1.4, 1, 1),
+            image=(
+                self.menuNormal,
+                self.menuPressed,
+                self.menuNormal,
+                self.menuPressed),
+            image_scale=(0.3, 0.15, 0.15),
+            image1_scale=(0.3, 0.15, 0.15),
+            image2_scale=(0.3, 0.15, 0.15),
+            image3_scale=(0.3, 0.15, 0.15),
+            image_color=(1.0, 0.45, 0.45, 1.0),
+            text='Refund Point',
+            text_pos=(0.00016, -0.01624),
+            text_scale=(0.035714, 0.05, 0.05),
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            command=self.changeRefundMode)
+        self.refundButton.hide()
+
         self.accept('skillPointChange', self.updatePage)
+        self.updatePage()
 
     def unload(self):
+        self.cleanupDialogs()
+        self.ignoreAll()
+        if self.inventoryIconModel:
+            self.inventoryIconModel.removeNode()
+            self.inventoryIconModel = None
+        if self.menuModel:
+            self.menuModel.removeNode()
+        if self.infoModel:
+            self.infoModel.removeNode()
+        if self.gagSelectionModel:
+            self.gagSelectionModel.removeNode()
         del self.title
         del self.pointDesc
         del self.pointLabel
-        del self.trackRows
-        del self.trackNameLabels
-        del self.trackProgressLabels
-        del self.buttons
+        del self.trackFrames
+        del self.gagFrames
+        del self.trackLabels
+        del self.manageButtons
+        del self.infoButtons
+        del self.lockImages
+        del self.trackStars
+        del self.trackStarFilled
+        del self.trackStarFallback
+        self.trainingRoot.destroy()
+        del self.trainingRoot
         ShtikerPage.ShtikerPage.unload(self)
 
     def clearPage(self):
-        pass
-
-    def updatePage(self):
-        for track in xrange(8):
-            points = base.localAvatar.getSpentTrainingPoints()
-            points = points[track]
-            if points < 2:
-                self.trackProgressLabels[track]['text'] = TTLocalizer.TrackPageProgress % points
-            else:
-                self.trackProgressLabels[track]['text'] = TTLocalizer.TrackPageUnlocked
-        self.pointLabel['text'] = str(base.localAvatar.getTrainingPoints())
-        self.updateButtons()
-		
-    def showInfo(self, index, clear, dummy):
-        if clear:
-            self.infoText.setText('')
-            self.infoText.hide()
-            return
-        self.infoText.setText(TTLocalizer.TrackPageHints[index])
-        self.infoText.show()
+        self.cleanupDialogs()
 
     def enter(self):
+        self.refundMode = False
         self.updatePage()
         ShtikerPage.ShtikerPage.enter(self)
 
     def exit(self):
         self.clearPage()
         ShtikerPage.ShtikerPage.exit(self)
-		
-    def updateButtons(self):
-        av = base.localAvatar
-        pointArray = av.getSpentTrainingPoints()
-        for buttonArray in self.buttons:
-            for button in buttonArray:
-                button['state'] = DGG.DISABLED
-        for track in xrange(len(pointArray)):
-            i = 0
-            for button in self.buttons[track]:
-                if i == (pointArray[track] - 1) or i >= (pointArray[track] + 1):
-                    button['state'] = DGG.DISABLED
-                    button['text'] = '0/1'
-                else:
-                    button['state'] = DGG.NORMAL
-                    button['image_color'] = Vec4(0, 0.6, 1, 1)
-                    button['text'] = '0/1'
-                i += 1
-            for iteration in xrange(pointArray[track]):
-                if pointArray[track] == 1:
-                    self.buttons[track][iteration]['state'] = DGG.NORMAL
-                    self.buttons[track][iteration]['image_color'] = Vec4(0, 0.6, 1, 1)
-                else:
-                    self.buttons[track][iteration]['state'] = DGG.DISABLED
-                    self.buttons[track][iteration]['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
-                self.buttons[track][iteration]['text'] = '1/1'
-            if pointArray[track] < 2:
-                for i in xrange(3):
-                    self.buttons[track][i+2]['state'] = DGG.DISABLED
-                    self.buttons[track][i+2]['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
-                    self.buttons[track][i+2]['text'] = '0/1'
+
+    def getGagGeom(self, track):
+        try:
+            return base.localAvatar.inventory.invModels[track][self.GagIconLevel]
+        except:
+            if not self.inventoryIconModel:
+                self.inventoryIconModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
+            return self.inventoryIconModel.find('**/' + ToontownBattleGlobals.AvPropsNew[track][self.GagIconLevel])
+
+    def hasBoughtTrack(self, track):
+        return bool(base.localAvatar.getTrackAccess()[track])
+
+    def hasPrestigedTrack(self, track):
+        return base.localAvatar.getTrackBonusLevel(track) >= 1
+
+    def canBuyTrack(self, track):
+        return base.localAvatar.getTrainingPoints() >= 2 and not self.hasBoughtTrack(track)
+
+    def canPrestigeTrack(self, track):
+        return base.localAvatar.getTrainingPoints() >= 1 and not self.hasPrestigedTrack(track)
+
+    def canRefundTrack(self, track):
+        return self.hasBoughtTrack(track)
+
+    def canEnterRefundMode(self):
+        return sum(base.localAvatar.getTrackAccess()) > 2
+
+    def updatePage(self, *args):
+        self.pointLabel['text'] = str(base.localAvatar.getTrainingPoints())
+
+        if self.canEnterRefundMode():
+            self.refundButton.show()
+            self.pointDesc.setX(-0.34)
+            self.pointLabel.setX(-0.31)
+        else:
+            if self.refundMode:
+                self.refundMode = False
+            self.refundButton.hide()
+            self.pointDesc.setX(-0.08)
+            self.pointLabel.setX(-0.05)
+
+        self.refundButton['text'] = 'Manage Tracks' if self.refundMode else 'Refund Track'
+
+        for track in self.TrackOrder:
+            self.updateTrack(track)
+
+    def updateTrack(self, track):
+        bought = self.hasBoughtTrack(track)
+        prestiged = self.hasPrestigedTrack(track)
+
+        if bought:
+            self.gagFrames[track]['image_color'] = (1, 1, 1, 1)
+            self.lockImages[track].hide()
+            if self.trackStarFallback[track] is not None:
+                self.trackStarFallback[track].show()
+                self.trackStarFallback[track]['text_fg'] = (0.43, 0.37, 1.0, 1) if prestiged else (0.45, 0.45, 0.45, 1)
             else:
-                for i in xrange(2):
-                    self.buttons[track][i+3]['state'] = DGG.DISABLED
-                    self.buttons[track][i+3]['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
-                    self.buttons[track][i+3]['text'] = '0/1'
-            if av.getTrainingPoints() == 0:
-                if pointArray[track] == 1:
-                    for i in xrange(len(self.buttons[track])):
-                        if i == 0:
-                            pass
-                        else:
-                            self.buttons[track][i]['state'] = DGG.DISABLED
+                self.trackStars[track].show()
+                if prestiged:
+                    self.trackStarFilled[track].show()
                 else:
-                    for button in self.buttons[track]:
-                        button['state'] = DGG.DISABLED
-						
-    def handleUpgrade(self, track, index):
-        if index <= 1:
-            warning = TTLocalizer.TrackPageAckTakeback % {'track': TTLocalizer.BattleGlobalTracks[track].upper()}
+                    self.trackStarFilled[track].hide()
         else:
-            warning = TTLocalizer.TrackPageAckPrestige % {'track': TTLocalizer.BattleGlobalTracks[track].upper(), 'bonus': TTLocalizer.TrackPageHints[(track * 5) + index]}
-        self.dialog = TTDialog.TTGlobalDialog(
-            style=TTDialog.TwoChoice,
-            text=warning,
-            text_wordwrap=18.5,
-            text_scale=TTLocalizer.APBdialog,
-            okButtonText=TTLocalizer.lOK,
-            cancelButtonText=TTLocalizer.lCancel,
-            doneEvent='IgnoreConfirm',
-            command=self.upgradeMe,
-            extraArgs=[track, index])
-        DirectLabel(
-            parent=self.dialog,
-            relief=None,
-            pos=(0, 0, 0.325),
-            text=TTLocalizer.TrackPageUpgrade,
-            textMayChange=0,
-            text_scale=0.08)
-        self.dialog.show()
-				
-    def upgradeMe(self, value, track, index):
-        if value == -1:
-            self.dialog.hide()
+            self.gagFrames[track]['image_color'] = (0.5, 0.5, 0.5, 1)
+            self.lockImages[track].show()
+            if self.trackStarFallback[track] is not None:
+                self.trackStarFallback[track].hide()
+            else:
+                self.trackStars[track].hide()
+
+        button = self.manageButtons[track]
+        button['image_color'] = (1, 1, 1, 1)
+        button['image3_color'] = (0.75, 0.75, 0.75, 1)
+
+        if not self.refundMode:
+            if not bought:
+                button['text'] = 'Unlock (x2)'
+                button['state'] = DGG.NORMAL if self.canBuyTrack(track) else DGG.DISABLED
+            elif not prestiged:
+                button['text'] = 'Prestige (x1)'
+                button['state'] = DGG.NORMAL if self.canPrestigeTrack(track) else DGG.DISABLED
+                button['image_color'] = (0.43, 0.37, 1.0, 1)
+            else:
+                button['text'] = 'Unprestige'
+                button['state'] = DGG.NORMAL
+                button['image_color'] = (1.0, 0.26, 0.36, 1.0)
+        else:
+            if self.canRefundTrack(track):
+                button['text'] = 'Refund Track'
+                button['state'] = DGG.NORMAL
+                button['image_color'] = (1.0, 0.45, 0.45, 1.0)
+            else:
+                button['text'] = "Can't Refund"
+                button['state'] = DGG.DISABLED
+                button['image_color'] = (0.75, 0.75, 0.75, 1.0)
+
+    def changeRefundMode(self):
+        self.refundMode = not self.refundMode
+        self.updatePage()
+
+    def handleManage(self, track):
+        if not self.canChangeTracksHere():
+            self.showChangeFailure()
             return
+
         av = base.localAvatar
-        pointArray = av.getSpentTrainingPoints()
-        if pointArray[track] == 1 and index == 0:
-            av.sendUpdate('requestSkillReturn', [track])
+        if self.refundMode:
+            if self.canRefundTrack(track):
+                av.sendUpdate('requestRefundSpend', [track])
+            return
+
+        if not self.hasBoughtTrack(track):
+            if self.canBuyTrack(track):
+                av.sendUpdate('requestSkillSpend', [track])
+        elif not self.hasPrestigedTrack(track):
+            if self.canPrestigeTrack(track):
+                av.sendUpdate('requestSkillSpend', [track])
         else:
-            av.sendUpdate('requestSkillSpend', [track])
-        self.dialog.hide()
-        self.updatePage()
-		
-    def downgradeMe(self, track, index):
-        av = base.localAvatar
-        self.updatePage()
-        
-                
+            av.sendUpdate('requestSkillReturn', [track])
+
+    def getTrackName(self, track):
+        try:
+            return TTLocalizer.BattleGlobalTracks[track].upper()
+        except:
+            return str(ToontownBattleGlobals.Tracks[track]).upper()
+
+    def getPrestigeHint(self, track):
+        try:
+            return TTLocalizer.TrackPageHints[(track * 5) + 2]
+        except:
+            return ''
+
+    def canChangeTracksHere(self):
+        try:
+            return base.localAvatar.isRefundZoneValid()
+        except:
+            return True
+
+    def showChangeFailure(self):
+        try:
+            base.localAvatar.sendFailedRefundNotif()
+        except:
+            pass
+
+    def openInfo(self, track):
+        self.cleanupInfo()
+        name = self.getTrackName(track)
+        prestige = self.getPrestigeHint(track)
+        message = '%s\n\nUnlock Cost: 2 Training Points\nPrestige Cost: 1 Training Point\n\nPrestige Bonus:\n%s' % (name, prestige)
+        self.infoDialog = TTDialog.TTGlobalDialog(
+            message=message,
+            doneEvent='TrackPageInfoDone',
+            style=TTDialog.Acknowledge,
+            okButtonText=TTLocalizer.lOK,
+            text_wordwrap=21,
+            text_scale=0.06)
+        self.acceptOnce('TrackPageInfoDone', self.cleanupInfo)
+        self.infoDialog.show()
+
+    def cleanupInfo(self):
+        self.ignore('TrackPageInfoDone')
+        if self.infoDialog:
+            self.infoDialog.cleanup()
+            self.infoDialog = None
+
+    def cleanupDialogs(self):
+        self.cleanupInfo()

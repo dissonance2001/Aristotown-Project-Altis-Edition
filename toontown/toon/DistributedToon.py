@@ -2877,6 +2877,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.trackBonusLevel = trackArray
         if self.inventory:
             self.inventory.updateGUI()
+        if self.isLocal():
+            messenger.send('skillPointChange')
 
     def getTrackBonusLevel(self, track = None):
         if track == None:
@@ -4151,6 +4153,26 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getSpentTrainingPoints(self):
         return self.spentTrainingPoints
 		
+    def isRefundZoneValid(self):
+        if base.cr.doFind('DistributedSuitInterior'):
+            return False
+        return base.cr.doFind('DistributedEstate') or base.cr.doFind('DistributedHouse') or not ZoneUtil.isDynamicZone(self.zoneId)
+
+    def sendFailedRefundNotif(self):
+        from toontown.notifications.NotificationManager import addNotification
+        from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification
+        addNotification(GenericTextNotification(
+            title="Can't Change Gags Here!",
+            subtitle='You cannot unlock Gag Tracks, refund Gag Tracks, or change prestiges in this area.'))
+
+    def doRefundFailure(self):
+        from toontown.notifications.NotificationManager import addNotification
+        from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification
+        addNotification(GenericTextNotification(
+            title="Can't Refund",
+            subtitle='You cannot refund this track, as you must own at least two Gag tracks.'))
+        messenger.send('skillPointChange')
+
     def setCerts(self, certs):
         self.certs = certs
         messenger.send('certificateChange')

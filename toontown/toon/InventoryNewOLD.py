@@ -210,7 +210,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
     def unload(self):
         if getattr(self, 'gagEmblemScrollIval', None):
-            self.gagEmblemScrollIval.finish()
+            self.gagEmblemScrollIval.pause()
             self.gagEmblemScrollIval = None
 
         if getattr(self, 'gagEmblemScroll', None):

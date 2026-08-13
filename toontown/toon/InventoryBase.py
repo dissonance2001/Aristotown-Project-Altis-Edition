@@ -300,5 +300,14 @@ class InventoryBase(DirectObject.DirectObject):
 
         self.calcTotalProps()
 
+    def zeroTrack(self, track, killUber = 1):
+        for level in xrange(LAST_REGULAR_GAG_LEVEL + 1):
+            self.inventory[track][level] = 0
+        if killUber:
+            self.inventory[track][LAST_REGULAR_GAG_LEVEL] = 0
+        if self.inventory[track][LAST_REGULAR_GAG_LEVEL] > 1:
+            self.inventory[track][LAST_REGULAR_GAG_LEVEL] = 1
+        self.calcTotalProps()
+
     def _garbageInfo(self):
         return self._createStack
