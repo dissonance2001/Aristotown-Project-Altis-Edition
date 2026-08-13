@@ -4991,13 +4991,12 @@ def doContingencyOverride(attack):
     battle = attack['battle']
 
     phase2 = Func(suit.makeContingencyOverride)
-    ceaseTrack = Sequence(ActorInterval(suit, 'rake-react'))
-    ceaseSpeechTrack = Sequence(Func(suit.setChatAbsolute,
-                                     "Normal procedure is no longer sufficient...",
-                                     CFSpeech | CFTimeout), Wait(3.0), Func(suit.setChatAbsolute,
+    ceaseTrack = Sequence(getSuitAnimTrack(attack))
+    ceaseSpeechTrack = Sequence(Wait(3.0), Func(suit.setChatAbsolute,
                                      "If the plan won't work... I'll cut around it!", CFSpeech | CFTimeout))
     ceaseSpeechTrack.append(Wait(2.0))
-    return Parallel(phase2, ceaseTrack, ceaseSpeechTrack)
+    soundTrack = getSoundTrack('instance_chainsawconsultant_ctscn_intro_override.ogg', node=suit)
+    return Parallel(phase2, soundTrack, ceaseTrack, ceaseSpeechTrack)
 
 def doContingencyOverrideRevert(attack):
     suit = attack['suit']
@@ -6058,7 +6057,7 @@ def doBalanceTheLedger(attack):
     tauntIndex = attack['taunt']
     suitTracks = Parallel()
     dmg = attack['target'][0]['hp']
-    damageTrack = Sequence(Wait(4.0), Func(suit.setSuitStatusEffect, 'vulnerable', modifier=5, mode='refreshModifier'), Func(suit.showHpTextNew, 0, text="+5% Vulnerable!", colorCode=4))
+    damageTrack = Sequence(Wait(4.0), Func(theSuit.setSuitStatusEffect, 'vulnerable', modifier=5, mode='refreshModifier'), Func(theSuit.showHpTextNew, 0, text="+5% Vulnerable!", colorCode=4))
     for suit in battle.activeSuits:
         suitTracks.append(Parallel(suit.makeBalanceTheLedgerInterval(dmg, battle, int(math.ceil(dmg * .05)))))
         if suit.getManager():

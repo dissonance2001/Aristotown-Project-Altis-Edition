@@ -5150,7 +5150,7 @@ SuitCheatDescription = {
  'ContingencySelfRepair': "The Contingency Director repairs himself!",
  'ContingencyMarkRevisedFiling': "The Oversight Committee is raising the ante!",
  'ContingencyMarkLiquidated': "The Contingency Director marks unliquidated Toons!",
- 'ContingencyFailsafeProtocol': "The Contingency Director gains a damage defense when attacked!",
+ 'ContingencyFailsafeProtocol': "The Contingency Director randomizes the cog order!",
  'ContingencyRiskThresholdBreach75': "The Contingency Director is now absorbing damage dealt to other cogs!",
  'ContingencyRiskThresholdBreach50': "The Contingency Director marks a Toon!",
  'ContingencyRiskThresholdBreach25': "The Contingency Director retaliates against marked Toons!",
@@ -5257,9 +5257,9 @@ SuitCheatDescription = {
  'VideographerDirectorCuts': "The Videographer calls his producers!",
  'VideographerDeath': "The High Roller removes all cogs from the battle!",
     # Broadcaster Cheats
- 'BroadcasterDonation': "The Videographer Silhouette donates part of his health to the Videographer!",
- 'BroadcasterDonation2': "The Videographer Silhouette donates part of his health to the Videographer!",
- 'BroadcasterViralSensation': "The Videographer Silhouette applies a damage buff to Toons at random!",
+ 'BroadcasterDonation': "The Videographer receives a refresh from his Silhouette!",
+ 'BroadcasterDonation2': "The Videographer receives a refresh from his Silhouette!",
+ 'BroadcasterViralSensation': "The Major Player Silhouette applies a damage buff to Toons at random!",
     # Choreographer Cheats
  'ChoreoChoreography': "The Choreographer applies a damage vulnerability to all Toons who can't keep up with him!",
     # Filmmaker Cheats
@@ -5272,7 +5272,7 @@ SuitCheatDescription = {
  'DirectorActionRetaliation': "The Director retaliates against Toon's who did not follow his orders!",
  'DirectorBackToOnes': "The Director heals back to full while all Producers are still standing!",
  'DirectorBudgetExpansion': "The Director inflates the budget whenever cogs are destroyed!",
- 'DirectorProductionBudget': "The budget is inflating!",
+ 'DirectorProductionBudget': "The budget is growing!",
     # Factory Foreman Cheats
  'ForemanPolish': "The Factory Foreman drowns cogs in oil to make them stronger!",
  'ForemanExtortion': "The Factory Foreman steals resources from the Toons!",
@@ -6891,7 +6891,7 @@ SuitAttackTaunts = {
  'FallingKnife': {
      'cdirector': ["You mistake boldness for recklessness!",
                    "I've rehearsed this outcome.",
-                   "See? Even danger can be structured!",
+                   "See? Even danger can be structured.",
                    "I model disaster, I don't fear it!",
                    "This will be a 'sharp' investment!",
                    "Volatility favors the prepared."],
@@ -10673,6 +10673,8 @@ SuitAttackTaunts = {
                                  "Do not confuse resistance with leverage!",
                                  "I have contingencies for contingencies.",
                                  "From here on, it's my structure.",
+                      ],
+'ContingencyOverride': ["Normal procedure is no longer sufficient...",
                       ],
 'ContingencyRiskThresholdBreach75': ["You've exceeded acceptable risk!",
                     "Excess liabilities will be removed.",

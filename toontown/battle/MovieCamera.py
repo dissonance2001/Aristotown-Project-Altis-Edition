@@ -1927,7 +1927,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
     elif name == 'ContingencyFailsafeProtocol':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(allGroupHighShot(suit, attackDuration))
     elif name == 'ContingencyRiskThresholdBreach':
         dmg = attack['target'][0]['hp']
         if dmg > 1:
@@ -2466,11 +2466,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'AttorneyObjectionOverruled':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'AttorneyChrono':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+        camTrack.append(Sequence(motionShot(0, 15, suit.height - 2.5, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, 7.0, suit.height - 2.5, 1.5, suit, h=180, p=0, startH=180, startP=0), Wait(attackDuration - 1.5)))
     elif name == 'PacesetterComeOn':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+        camTrack.append(Sequence(motionShot(0, 15, suit.height - 2.5, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, 7.0, suit.height - 2.5, 1.5, suit, h=180, p=0, startH=180, startP=0), Wait(attackDuration - 1.5)))
     elif name == 'AttorneyRushJob':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                       heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))

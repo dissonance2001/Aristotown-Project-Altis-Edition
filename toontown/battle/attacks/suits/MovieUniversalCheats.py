@@ -516,7 +516,7 @@ def doSueApplication(attack):
     suitTrack.append(Parallel(ActorInterval(suit, 'pie-small-react'), Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=1)))
     suitTrack.append(Func(suit.makeSued, 4))
     suitTrack.append(Func(suit.setNeutralAnimationDrop))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('LB_receive_evidence.ogg'), node=suit))
+    soundTrack = getSoundTrack('LB_receive_evidence.ogg', node=suit)
     return Parallel(suitTrack, soundTrack, explodeTrack)
 
 def doSueDamage(attack):
@@ -535,7 +535,7 @@ def doZapMovie(attack):
     suitTrack = Parallel()
     dmg = attack['target'][0]['hp']
     suitTrack.append(Parallel(theSuit.makeZapDamageInterval(battle, dmg)))
-    soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('AA_battery.ogg'), node=theSuit))
+    soundTrack = getSoundTrack('AA_battery.ogg', node=theSuit)
     return Parallel(soundTrack, suitTrack)
 
 def doDeathCheck(attack):

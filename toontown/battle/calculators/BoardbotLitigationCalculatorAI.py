@@ -39,6 +39,13 @@ class BoardbotLitigationCalculatorAI:
             **kwargs
         )
 
+    def __encodeSuitOrder(self, oldSuits, newSuits):
+        value = 0
+        for newIndex in xrange(len(newSuits)):
+            oldIndex = oldSuits.index(newSuits[newIndex])
+            value |= oldIndex << (newIndex * 3)
+        return value
+
     def calculateSuitAttacksBoardbotLitigation(self):
         for i in xrange(len(self.battle.activeSuits)):  # Cheats before Cog Attacks
             suitId = self.battle.activeSuits[i].doId
@@ -130,7 +137,7 @@ class BoardbotLitigationCalculatorAI:
                 if self.calculator.contingencyThresholds > 0 and not self.suitHasCondition(suitId, 'contingencyOverride') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                      'name': 'ContingencyOverride',
-                                    'animName': 'nothing',
+                                    'animName': 'rake-react',
                                      'hp': 0,
                                      'acc': 100,
                                      'freq': 0,
@@ -290,21 +297,6 @@ class BoardbotLitigationCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'cdirector':
-                if self.suitHasCondition(suitId, 'contingencyHit') and self.suitHasCondition(suitId, 'alreadyFailsafeProtocol') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
-                    i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'contingencyHit') and self.suitHasCondition(suitId, 'alreadyFailsafeProtocol') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'ContingencyFailsafeProtocol',
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
                 damageCogs = 0
                 if self.suitHasCondition(suitId, 'redundantcalculator') and self.battle.activeSuits[i].currHP > 0:
                     for suit in self.battle.activeSuits:
@@ -808,3 +800,75 @@ class BoardbotLitigationCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+
+        for suit in self.battle.activeSuits[:]:
+            suitId = suit.doId
+
+            if (
+                suit.dna.name == 'cdirector' and
+                suit.currHP > 0 and
+                self.suitHasCondition(suitId, 'alreadyFailsafeProtocol')
+            ):
+
+                # If he cannot attack, use the queued ability instead.
+                if not self.__suitCanAttack(suitId):
+                    attack = self.__getAbilityQueued(suitId)
+
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+
+                    continue
+
+                # Otherwise do the Failsafe Protocol shuffle.
+                oldActiveSuits = self.battle.activeSuits[:]
+                oldLivingSuits = []
+                livingPositions = []
+
+                for index in xrange(len(oldActiveSuits)):
+                    otherSuit = oldActiveSuits[index]
+
+                    if (
+                        otherSuit.currHP > 0 and
+                        not self.suitHasCondition(otherSuit.doId, 'dead')
+                    ):
+                        oldLivingSuits.append(otherSuit)
+                        livingPositions.append(index)
+
+                if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
+                    continue
+
+                newLivingSuits = oldLivingSuits[:]
+                random.shuffle(newLivingSuits)
+
+                if newLivingSuits == oldLivingSuits:
+                    newLivingSuits.reverse()
+
+                newActiveSuits = oldActiveSuits[:]
+
+                for index in xrange(len(livingPositions)):
+                    newActiveSuits[livingPositions[index]] = newLivingSuits[index]
+
+                payload = self.__encodeSuitOrder(
+                    oldActiveSuits,
+                    newActiveSuits
+                )
+
+                attack = self.__getCheatAttack(
+                    suitId,
+                    {
+                        'suitName': suit.dna.name,
+                        'name': 'ContingencyFailsafeProtocol',
+                        'animName': 'quick-jump',
+                        'hp': payload,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP
+                    }
+                )
+
+                if attack[SUIT_ATK_COL]:
+                    self.battle.suitAttacks.append(attack)
+
+                self.battle.queueSuitOrder(
+                    [otherSuit.doId for otherSuit in newActiveSuits]
+                )

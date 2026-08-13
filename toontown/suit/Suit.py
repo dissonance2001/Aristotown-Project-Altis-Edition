@@ -341,6 +341,8 @@ class Suit(Avatar.Avatar):
         # self.headParts = []
         # self.animatedHeadParts = []
         self.healthBar = None
+        self.zapActor = None
+        self.zapActorHeadParts = []
         self.healthBarDisplay = None
         self.healthCondition = 0
         self.isTrapped = 0
@@ -429,6 +431,8 @@ class Suit(Avatar.Avatar):
         return ModelDict
 
     def delete(self):
+        if getattr(self, 'zapActor', None) is not None:
+            self.cleanupZapActor()
         try:
             self.Suit_deleted
             return
@@ -4027,20 +4031,69 @@ class Suit(Avatar.Avatar):
 
 
     def cleanupZapActor(self):
-        self.notify.debug('cleanupLoseActor()')
-        if self.zapActor != None:
-            self.notify.debug('cleanupLoseActor() - got one')
-            self.zapActor.cleanup()
+        self.notify.debug('cleanupZapActor()')
+
+        if self.zapActor is not None:
+            try:
+                if not self.zapActor.isEmpty():
+                    self.zapActor.detachNode()
+
+                self.zapActor.cleanup()
+
+            except:
+                pass
 
         self.zapActor = None
+        self.zapActorHeadParts = []
 
     def getZapActor(self):
+        # Already generated and still valid.
+        if self.zapActor is not None and not self.zapActor.isEmpty():
+            try:
+                self.zapActor.stop()
+            except:
+                pass
+
+            self.zapActor.detachNode()
+            self.zapActor.clearColorScale()
+            self.zapActor.setColorScale(1, 1, 1, 1)
+
+            self.zapActor.setScale(self.scale)
+            self.zapActor.setPos(self.getPos())
+            self.zapActor.setHpr(self.getHpr())
+
+            return self.zapActor
+
+        # Generate it only once.
         model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
         anims = self.generateAnimDict()
-        self.zapActor = Actor.Actor(model, anims)
 
-        self.zapActor.setBlend(frameBlend=base.wantSmoothAnims)
-        self.zapActor.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+        self.zapActor = Actor.Actor(
+            model,
+            anims
+        )
+
+        self.zapActor.setBlend(
+            frameBlend=base.wantSmoothAnims
+        )
+
+        self.zapActor.setLODAnimation(
+            base.lodMaxRange,
+            base.lodMinRange,
+            base.lodDelayFactor
+        )
+
+        self.zapActorHeadParts = []
+
+        # ------------------------------------------------
+        # KEEP ALL YOUR EXISTING HEAD GENERATION CODE HERE
+        # ------------------------------------------------
+        #
+        # if self.style.body == 'a' and ...
+        #     self.generateHeadZap(...)
+        #
+        # etc.
+        #
         if self.style.body == 'a' and self.style.name == 'derrhand':
             self.zapActorHeadParts = []
             self.generateHeadZap('derrickhand_skele', animated=True, targetActor=self.zapActor)

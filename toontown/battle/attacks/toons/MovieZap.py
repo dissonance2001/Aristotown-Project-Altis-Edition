@@ -63,6 +63,41 @@ def doZaps(zaps):
     if len(zaps) == 0:
         return (None, None)
 
+    # ---------------------------------------------------------
+    # Figure out which Zap is the LAST Zap to actually hit
+    # each individual Cog.
+    # ---------------------------------------------------------
+
+    lastZapTargetBySuit = {}
+
+    # First clear the flag and remember the most recent
+    # target dictionary that actually damages each Cog.
+    for zap in zaps:
+        targets = zap['target']
+
+        if type(targets) != type([]):
+            targets = [targets]
+
+        for target in targets:
+            target['lastZapForSuit'] = 0
+
+            suit = target.get('suit')
+            hp = target.get('hp', 0)
+
+            if suit is None:
+                continue
+
+            # "Last Zap that HITS this Cog"
+            # Zero-damage Zap entries don't count.
+            if hp <= 0:
+                continue
+
+            lastZapTargetBySuit[suit.doId] = target
+
+    # Now mark exactly ONE target dictionary per Cog.
+    for target in lastZapTargetBySuit.values():
+        target['lastZapForSuit'] = 1
+
     suitZapsDict = {}
     doneUber = 0
     npcArrivals, npcDepartures, npcs = MovieNPCSOS.doNPCTeleports(zaps)
@@ -104,7 +139,7 @@ def doZaps(zaps):
             ival = __doSuitZaps(st, npcs)
             if ival:
                 mtrack.append(Sequence(Wait(delay), ival))
-            delay = delay + TOON_ZAP_SUIT_DELAY
+            delay = .5
     zapTrack = Sequence(npcArrivals, mtrack, npcDepartures)
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
@@ -117,59 +152,353 @@ def __doSuitZaps(zaps, npcs):
     uberClone = 0
     toonTracks = Parallel()
     delay = 0.0
+
     if type(zaps[0]['target']) == type([]):
-        for target in zaps[0]['target']:
-            if len(zaps) == 1 and target['hp'] > 0:
-                fShowStun = 1
-            else:
-                fShowStun = 0
+        mainTarget = zaps[0]['target'][0]
+
+        if len(zaps) == 1 and mainTarget['hp'] > 0:
+            fShowStun = 1
+        else:
+            fShowStun = 0
 
     elif len(zaps) == 1 and zaps[0]['target']['hp'] > 0:
         fShowStun = 1
     else:
         fShowStun = 0
+
     lastZapLevel = -1
+
     for s in zaps:
         if s['level'] > lastZapLevel:
             if lastZapLevel != -1:
-                delay = delay + perZapTypeDelays[lastZapLevel]
+                delay += perZapTypeDelays[lastZapLevel]
+
             lastZapLevel = s['level']
+
         lastZap = zaps.index(s) == len(zaps) - 1
-        tracks = __doZap(s, delay, fShowStun, lastZap, uberClone, npcs)
+
+        tracks = __doZap(
+            s,
+            delay,
+            fShowStun,
+            lastZap,
+            uberClone,
+            npcs
+        )
+
         if s['level'] >= ToontownBattleGlobals.UBER_GAG_LEVEL_INDEX:
             uberClone = 1
+
         if tracks:
             for track in tracks:
                 toonTracks.append(track)
 
-        delay = delay + TOON_ZAP_DELAY
+        # IMPORTANT: accumulate the delay.
+        delay += .5
 
     return toonTracks
 
 
-def __doZap(zap, delay, fShowStun, lastZap, uberClone = 0, npcs=[]):
+def __doZap(zap, delay, fShowStun, lastZap, uberClone=0, npcs=[]):
     zapSequence = Sequence(Wait(delay))
+
     if type(zap['target']) == type([]):
-        for target in zap['target']:
-            notify.debug('toon: %s zaps prop: %d at suit: %d for hp: %d' % (zap['toon'].getName(),
-             zap['level'],
-             target['suit'].doId,
-             target['hp']))
+        targets = zap['target']
+
+        if not targets:
+            return [zapSequence]
+
+        # AI/movie target order:
+        # [main, jump1, jump2, jump3]
+        mainTarget = targets[0]
+        chainTargets = targets[1:]
+        mainLastZap = mainTarget.get(
+            'lastZapForSuit',
+            0
+        )
+
+        notify.debug(
+            'toon: %s zaps MAIN prop: %d at suit: %d for hp: %d' % (
+                zap['toon'].getName(),
+                zap['level'],
+                mainTarget['suit'].doId,
+                mainTarget['hp']
+            )
+        )
+
+        # IMPORTANT:
+        # Keep this as a LIST because all of your existing
+        # Zap gag functions do:
+        #
+        # targets = zap['target']
+        # for t in targets:
+        #
+        mainZap = zap.copy()
+        mainZap['target'] = [mainTarget]
+
+        if uberClone:
+            mainTrack = zapfn_array[zap['level']](
+                mainZap,
+                0,
+                fShowStun,
+                mainLastZap,
+                uberClone,
+                npcs=npcs
+            )
+        else:
+            mainTrack = zapfn_array[zap['level']](
+                mainZap,
+                0,
+                fShowStun,
+                mainLastZap,
+                npcs=npcs
+            )
+
+        combinedTrack = Parallel()
+
+        if mainTrack:
+            combinedTrack.append(mainTrack)
+
+        # The other Cogs are chained Zap hits only.
+        for chainIndex in xrange(len(chainTargets)):
+            target = chainTargets[chainIndex]
+
+            if chainIndex == 0:
+                previousTarget = mainTarget
+            else:
+                previousTarget = chainTargets[chainIndex - 1]
+
+            adjacentLastZap = target.get(
+                'lastZapForSuit',
+                0
+            )
+
+            combinedTrack.append(
+                __doAdjacentZap(
+                    target,
+                    previousTarget,
+                    zap,
+                    chainIndex + 1,
+                    adjacentLastZap
+                )
+            )
+
+        zapSequence.append(combinedTrack)
 
     else:
-        notify.debug('toon: %s zaps prop: %d at suit: %d for hp: %d' % (zap['toon'].getName(),
-         zap['level'],
-         zap['target']['suit'].doId,
-         zap['target']['hp']))
-    if uberClone:
-        ival = zapfn_array[zap['level']](zap, delay, fShowStun, lastZap, uberClone, npcs=npcs)
+        # Legacy/single target fallback.
+        notify.debug(
+            'toon: %s zaps prop: %d at suit: %d for hp: %d' % (
+                zap['toon'].getName(),
+                zap['level'],
+                zap['target']['suit'].doId,
+                zap['target']['hp']
+            )
+        )
+
+        singleZap = zap.copy()
+        singleZap['target'] = [zap['target']]
+
+        if uberClone:
+            mainTrack = zapfn_array[zap['level']](
+                mainZap,
+                0,
+                fShowStun,
+                lastZap,
+                uberClone,
+                npcs=npcs
+            )
+        else:
+            mainTrack = zapfn_array[zap['level']](
+                mainZap,
+                0,
+                fShowStun,
+                lastZap,
+                npcs=npcs
+            )
+
         if ival:
             zapSequence.append(ival)
-    else:
-        ival = zapfn_array[zap['level']](zap, delay, fShowStun, lastZap, npcs=npcs)
-        if ival:
-            zapSequence.append(ival)
+
     return [zapSequence]
+
+def __getZapContactTime(zap):
+    level = zap['level']
+    toon = zap['toon']
+
+    if level == 0:
+        # Joybuzzer
+        return 2.2, 'small-zap'
+
+    elif level == 1:
+        # Rug
+        return 5.3, 'small-zap'
+
+    elif level == 2:
+        # Balloon / Radio in your modified setup
+        return 3.1, 'small-zap'
+
+    elif level == 3:
+        # Battery
+        return (51.0 / toon.getFrameRate('throw')) + 0.8, 'small-zap'
+
+    elif level == 4:
+        # TV - tune from its function
+        return 2.6, 'large-zap'
+
+    elif level == 5:
+        # Stagelight/Tazer
+        return 2.5 + 2.20 + .15, 'large-zap'
+
+    elif level == 6:
+        # Tesla
+        return 2.9, 'large-zap'
+
+    elif level == 7:
+        # Lightning
+        return 4.1, 'large-zap'
+
+    return 0.0
+
+def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
+    suit = target['suit']
+    hp = target['hp']
+    died = target['died']
+    revived = target['revived']
+
+    battle = zap['battle']
+    toon = zap['toon']
+    level = zap['level']
+
+    track = Sequence()
+    deathTracks = Sequence(Wait(0.8))
+    headTrack = Sequence()
+
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(Func(headPart.pose, 'stun', 5))
+    headTrack.append(Wait(1.0))
+    headTrack.append(Func(suit.setNeutralAnimationHead))
+
+    if hp <= 0:
+        return track
+
+    # We'll make this gag-specific below.
+    tContact, anim = __getZapContactTime(zap)
+
+    # Small delay between electrical jumps.
+    # chainIndex 1 = first jump, etc.
+    jumpDelay = 0.12 * chainIndex
+
+    suit.addPendingQueuedDamage(hp)
+
+    track.append(
+        Wait(tContact)
+    )
+
+    impactTrack = Parallel()
+    updateHealthBar = Func(suit.updateHealthBar, hp)
+    if toon.getTrackBonusLevel(ZAP_TRACK) > 1:
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.setSuitStatusEffect, 'zapped', modifier=int(math.ceil(hp / 2)), turns=2, mode='refreshModifier'))
+    else:
+        showDamage = Sequence(Func(suit.showHpTextNew, -hp, text="AFTERSHOCK!", colorCode=3), Func(suit.setSuitStatusEffect, 'zapped', modifier=int(math.ceil(hp / 4)), turns=2, mode='refreshModifier'))
+
+    # Damage already calculated by BattleCalculatorAI.
+    impactTrack.append(showDamage)
+    impactTrack.append(updateHealthBar)
+    if suit.getSuitStatusModifier('rushJob') == 5:
+        impactTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
+    if suit.hasSuitStatusEffect('sued'):
+        impactTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
+
+    # Zap reaction.
+    if lastZap:
+        impactTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+    else:
+        impactTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
+
+    track.append(impactTrack)
+
+    if revived:
+        if suit.dna.name == 'redd':
+            track.append(
+                MovieUtil.createSuitReviveRedd(
+                    suit,
+                    battle
+                )
+            )
+
+        elif suit.isSkeleton:
+            track.append(
+                MovieUtil.createSuitReviveTrackVirtual(
+                    suit,
+                    battle
+                )
+            )
+
+        else:
+            track.append(
+                MovieUtil.createSuitReviveTrack(
+                    suit,
+                    battle
+                )
+            )
+
+    elif died:
+        if suit.isVirtual:
+            track.append(
+                Func(
+                    suit.clearSuitStatusEffect,
+                    'zapped'
+                )
+            )
+
+            track.append(
+                MovieUtil.createVirtualSuitDeathTrack(
+                    suit,
+                    battle
+                )
+            )
+
+        elif level > 3:
+            deathTracks.append(
+                Func(
+                    suit.clearSuitStatusEffect,
+                    'zapped'
+                )
+            )
+
+            deathTracks.append(
+                MovieUtil.shortCircuitTrack(
+                    suit,
+                    battle
+                )
+            )
+
+        else:
+            track.append(
+                Func(
+                    suit.clearSuitStatusEffect,
+                    'zapped'
+                )
+            )
+
+            track.append(
+                MovieUtil.createSuitDeathTrack(
+                    suit,
+                    battle
+                )
+            )
+
+    else:
+        if lastZap:
+            track.append(Func(MovieUtil.stopZapCogNeutral, suit))
+            track.append(
+                Func(
+                    suit.setNeutralAnimationTrap
+                )
+        )
+
+    return track
 
 
 def __suitTargetPoint(suit):
@@ -312,7 +641,9 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         suitTrack.append(Func(suit.setDizzy, 0))
         suitTrack.append(Func(suit.makeFreshlyZapped))
        # suitTrack.append(createSuitResetPosTrack(suit, battle))
-        suitTrack.append(Func(suit.setNeutralAnimationTrap))
+        if lastZap:
+            suitTrack.append(Func(MovieUtil.stopZapCogNeutral, suit))
+            suitTrack.append(Func(suit.setNeutralAnimationTrap))
         #suitTrack.append(Parallel(__soakRemoval(suit, 1)))
         #suitTrack.append(soakRemoval)
         #suitTrack.append(Func(suit.setNeutralAnimation))

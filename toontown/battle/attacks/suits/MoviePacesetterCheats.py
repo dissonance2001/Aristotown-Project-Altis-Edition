@@ -417,13 +417,13 @@ def doCorporateRestructuring(attack):
     battle = attack['battle']
     oldActiveSuits = battle.activeSuits[:]
     if len(oldActiveSuits) < 2:
-        return Sequence(getSuitAnimTrack(attack), Func(suit.loop, 'neutral'))
+        return Sequence(getSuitAnimTrack(attack))
     payload = int(attack.get('hp', 0))
     oldIndexes = []
     for index in xrange(len(oldActiveSuits)):
         oldIndexes.append((payload >> (index * 3)) & 7)
     if sorted(oldIndexes) != range(len(oldActiveSuits)):
-        return Sequence(getSuitAnimTrack(attack), Func(suit.loop, 'neutral'))
+        return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
     suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
     suitTracks = Parallel()

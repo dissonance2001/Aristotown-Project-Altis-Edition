@@ -1196,6 +1196,13 @@ def doDirectorCuts(attack):
                               Parallel(Func(theSuit.setChatAbsolute, "Now...", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Func(theSuit.setChatAbsolute, "Take it from the top!", CFSpeech | CFTimeout)), Wait(4.0), 
                               ))
+    suitTrack.append(Func(theSuit.clearSuitStatusEffect, 'vulnerable'))
+    suitTrack.append(Func(theSuit.clearSuitStatusEffect, 'soaked'))
+    suitTrack.append(Func(theSuit.clearSuitStatusEffect, 'marked'))
+    suitTrack.append(__soakRemoval(theSuit, 1))
+    suitTrack.append(Func(theSuit.splatSuit, 0, 1))
+    suitTrack.append(Func(theSuit.clearSuitStatusEffect, 'zapped'))
+    suitTrack.append(Func(theSuit.clearSuitStatusEffect, 'dazed'))
     suitTrack.append(Func(theSuit.setSuitStatusEffect, 'videographerImmune', modifier=1))
     return Parallel(suitTrack, soundTrack, propTracks, smokeTracks, selfDamageTracks, suitDeathTracks)
 

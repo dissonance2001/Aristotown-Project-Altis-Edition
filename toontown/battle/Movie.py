@@ -1424,6 +1424,82 @@ class Movie(DirectObject.DirectObject):
                                 targets.append(splashDict)
 
                             adict['target'] = targets
+                        elif track == ZAP:
+                            targets = []
+
+                            # MAIN TARGET FIRST.
+                            targets.append(sdict)
+
+                            mainSuit = target
+                            mainSuitIndex = self.battle.activeSuits.index(mainSuit)
+
+                            zapSuitOrder = []
+
+                            # Priority: LEFT of main first.
+                            index = mainSuitIndex - 1
+
+                            while index >= 0 and len(zapSuitOrder) < 3:
+                                zapSuit = self.battle.activeSuits[index]
+                                zapIndex = suits.index(zapSuit.doId)
+
+                                # Only include it if AI actually gave it Zap damage.
+                                if hps[zapIndex] > 0:
+                                    zapSuitOrder.append(zapSuit)
+
+                                index -= 1
+
+                            # Then fill remaining chain slots from RIGHT of main.
+                            index = mainSuitIndex + 1
+
+                            while index < len(self.battle.activeSuits) and len(zapSuitOrder) < 3:
+                                zapSuit = self.battle.activeSuits[index]
+                                zapIndex = suits.index(zapSuit.doId)
+
+                                if hps[zapIndex] > 0:
+                                    zapSuitOrder.append(zapSuit)
+
+                                index += 1
+
+                            # Build movie dictionaries in the exact Zap chain order.
+                            for zapSuit in zapSuitOrder:
+                                zapIndex = suits.index(zapSuit.doId)
+
+                                zapDict = {}
+
+                                zapDict['suit'] = zapSuit
+                                zapDict['hp'] = hps[zapIndex]
+                                zapDict['kbbonus'] = kbbonuses[zapIndex]
+                                zapDict['died'] = ta[SUIT_DIED_COL] & 1 << zapIndex
+                                zapDict['revived'] = ta[SUIT_REVIVE_COL] & 1 << zapIndex
+
+                                battleIndex = self.battle.activeSuits.index(zapSuit)
+
+                                leftSuits = []
+
+                                for si in xrange(0, battleIndex):
+                                    asuit = self.battle.activeSuits[si]
+
+                                    if self.battle.isSuitLured(asuit) == 0:
+                                        leftSuits.append(asuit)
+
+                                rightSuits = []
+
+                                if battleIndex + 1 < len(self.battle.activeSuits):
+                                    for si in xrange(
+                                        battleIndex + 1,
+                                        len(self.battle.activeSuits)
+                                    ):
+                                        asuit = self.battle.activeSuits[si]
+
+                                        if self.battle.isSuitLured(asuit) == 0:
+                                            rightSuits.append(asuit)
+
+                                zapDict['leftSuits'] = leftSuits
+                                zapDict['rightSuits'] = rightSuits
+
+                                targets.append(zapDict)
+
+                            adict['target'] = targets
 
                         elif track == DROP or track == LURE or track == TRAP:
                             adict['target'] = [sdict]
@@ -1800,8 +1876,13 @@ class Movie(DirectObject.DirectObject):
         camTrack = Sequence(name=name + '-cam')
 
         IGNORE_LAFF_METER = (
+            'BroadcasterDonation', 
              'AttorneyOverseer',
         'AttorneyOverseerDrop',
+        'BroadcasterDonation2',
+        'HighRollerTrickOfTheLight',
+        'HighRollerDonation',
+        'HighRollerDamageReduction',
         'Desperation',
         'Desperation2',
         'AttorneyOverseerSquirt',

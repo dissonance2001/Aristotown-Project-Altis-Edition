@@ -2074,9 +2074,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if track == SOUND_TRACK and 'confused' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             self.makeUnpressable(button, track, level)
-                        if track == ZAP_TRACK and 'confused' in base.localAvatar.battleConditions and not self.numItem(
-                                track, level) <= 0:
-                            self.makeUnpressable(button, track, level)
+                        # if track == ZAP_TRACK and 'confused' in base.localAvatar.battleConditions and not self.numItem(
+                        #         track, level) <= 0:
+                        #     self.makeUnpressable(button, track, level)
                         if track == HEAL_TRACK and 'confused' in base.localAvatar.battleConditions and level == 7 and not self.numItem(
                                 track, level) <= 0:
                             self.makeUnpressable(button, track, level)
@@ -2547,7 +2547,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == SQUIRT_TRACK:
             return TTLocalizer.InventoryAffectsThreeCogs
         elif track == ZAP_TRACK:
-            return TTLocalizer.InventoryAffectsSoakedCogs
+            return "Targets: 1 to 4 Cogs"
         elif track == SOUND_TRACK:
             return TTLocalizer.InventoryAffectsOneCog
         elif track == DROP_TRACK:

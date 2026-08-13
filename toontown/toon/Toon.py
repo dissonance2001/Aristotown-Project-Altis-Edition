@@ -238,8 +238,8 @@ TOON_STATUS_EFFECT_VISUALS = {
         'passModifier': True,
     },
     'contingencyMarked': {
-        'start': 'makeMarkedWood',
-        'stop': 'makeUnMarkedWood',
+        'start': 'makeContingencyMarked',
+        'stop': 'makeUnContingencyMarked',
         'passModifier': True,
     },
     'encore': {
@@ -1997,6 +1997,21 @@ class Toon(Avatar.Avatar, ToonHead):
         self.woodAuraTrack.loop()
 
     def makeUnMarkedWood(self):
+        self.markedWood = 0
+        self.markedWoodNumber = 0
+        self.cleanupWoodAura()
+
+    def makeContingencyMarked(self):
+        if getattr(self, 'isDead', False) or self.isEmpty():
+            return
+
+        if getattr(self, 'shockAuraTrack', None):
+            return
+
+        self.woodAuraTrack = self.makeLoopingWoodAura()
+        self.woodAuraTrack.loop()
+
+    def makeUnContingencyMarked(self):
         self.markedWood = 0
         self.markedWoodNumber = 0
         self.cleanupWoodAura()

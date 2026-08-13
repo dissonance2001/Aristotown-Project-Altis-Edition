@@ -3107,11 +3107,11 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'ContingencyFailsafeProtocol':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'contingencyHit', 0, 0, 'setBoth')
-                if not self.suitHasCondition(theSuit.doId, 'directorDamageReduction'):
-                    self.setSuitCondition(theSuit.doId, 'directorDamageReduction', .95, -1, 'setBoth')
-                else:
-                    self.setSuitCondition(theSuit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(theSuit.doId, 'directorDamageReduction') - .05), -1, 'setBoth')
+                # self.setSuitCondition(theSuit.doId, 'contingencyHit', 0, 0, 'setBoth')
+                # if not self.suitHasCondition(theSuit.doId, 'directorDamageReduction'):
+                #     self.setSuitCondition(theSuit.doId, 'directorDamageReduction', .95, -1, 'setBoth')
+                # else:
+                #     self.setSuitCondition(theSuit.doId, 'directorDamageReduction', (self.getSuitConditionModifier(theSuit.doId, 'directorDamageReduction') - .05), -1, 'setBoth')
             elif atkType['name'] == 'ContingencyRiskThresholdBreach':
                 result = self.calculator.contingencyThresholds
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3256,7 +3256,10 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'TollmasterBalanceTheLedger':
                 result = self.syphonedHP
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1.05, -1, 'setBoth')
+                if not self.suitHasCondition(theSuit.doId, 'vulnerablevideographer'):
+                    self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', 1.05, -1, 'setBoth')
+                else:
+                    self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1.05), -1, 'setBoth')
                 buffPercent = ((self.syphonedHP * 0.05) * 0.01)
                 for suit in self.battle.activeSuits:
                     if suit.getManager():
@@ -5659,25 +5662,16 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'phase2', 1, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'immune', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'dazed', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'sued', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'marked', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'soaked', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'drenched', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'suemovie', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'zapped', 0, 0, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'directorscutscalculator', 1, 2, 'setBoth')
                 for suit in self.battle.activeSuits:
-                    if suit.dna.name == 'mh2':
-                        managerTarget = suit
-                        if managerTarget.currHP <= 0:
-                            continue
-                        if managerTarget == None:
-                            continue
-                        managerTarget.setHP(0)
-                        self.__removeLured(managerTarget.doId)
-                    if suit.dna.name == 'std2':
-                        managerTarget = suit
-                        if managerTarget.currHP <= 0:
-                            continue
-                        if managerTarget == None:
-                            continue
-                        managerTarget.setHP(0)
-                        self.__removeLured(managerTarget.doId)
-                    if suit.dna.name == 'cnd2':
+                    if not suit.dna.name == 'videog':
                         managerTarget = suit
                         if managerTarget.currHP <= 0:
                             continue

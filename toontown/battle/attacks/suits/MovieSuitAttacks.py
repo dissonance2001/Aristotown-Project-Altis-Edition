@@ -949,7 +949,8 @@ def doSuitAttack(attack):
     elif name == 'ContingencyOverride':
         suitTrack = MovieBoardbotLitigationCheats.doContingencyOverride(attack)
     elif name == 'ContingencyFailsafeProtocol':
-        suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
+        suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
+        # suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
     elif name == 'ContingencyRiskThresholdBreach75':
         suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
     elif name == 'ContingencyRiskThresholdBreach50':

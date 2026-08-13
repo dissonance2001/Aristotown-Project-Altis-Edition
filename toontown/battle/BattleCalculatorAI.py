@@ -837,6 +837,69 @@ class BattleCalculatorAI:
         suitDef = SuitBattleGlobals.calculateDefense(suitAttr['level'], suit.getLevel(), boost = boost)
         return -suitDef
 
+    def __isValidZapChainTarget(self, suit):
+        if suit is None:
+            return False
+
+        if suit.getHP() <= 0:
+            return False
+
+        if self.suitHasCondition(suit.doId, 'dead'):
+            return False
+
+        return (
+            self.suitHasCondition(suit.doId, 'soaked') or
+            self.suitHasCondition(suit.doId, 'drenched') or
+            self.suitHasCondition(suit.doId, 'missedSoak')
+        )
+
+    def __createZapTargetList(self, attackIndex):
+        attack = self.battle.toonAttacks[attackIndex]
+
+        mainTarget = self.battle.findSuit(
+            attack[TOON_TGT_COL]
+        )
+
+        if mainTarget is None:
+            return []
+
+        activeSuits = self.battle.activeSuits
+
+        if mainTarget not in activeSuits:
+            return []
+
+        # Main Cog must also be wet.
+        if not self.__isValidZapChainTarget(mainTarget):
+            return []
+
+        mainIndex = activeSuits.index(mainTarget)
+
+        targetList = [mainTarget]
+
+        # Prioritize LEFT.
+        index = mainIndex - 1
+
+        while index >= 0 and len(targetList) < 4:
+            suit = activeSuits[index]
+
+            if self.__isValidZapChainTarget(suit):
+                targetList.append(suit)
+
+            index -= 1
+
+        # Then fill remaining slots from RIGHT.
+        index = mainIndex + 1
+
+        while index < len(activeSuits) and len(targetList) < 4:
+            suit = activeSuits[index]
+
+            if self.__isValidZapChainTarget(suit):
+                targetList.append(suit)
+
+            index += 1
+
+        return targetList
+
     def __createToonTargetList(self, attackIndex):
         attack = self.battle.toonAttacks[attackIndex]
         atkTrack, atkLevel = self.__getActualTrackLevel(attack)
@@ -844,6 +907,7 @@ class BattleCalculatorAI:
 
         if atkTrack == NPCSOS:
             return targetList
+            
 
         # Squirt hits selected Cog + adjacent Cogs.
         if atkTrack == SQUIRT:
@@ -869,6 +933,9 @@ class BattleCalculatorAI:
                 targetList.append(activeSuits[mainIndex + 1])
 
             return targetList
+
+        if atkTrack == ZAP:
+            return self.__createZapTargetList(attackIndex)
 
         if not attackAffectsGroup(atkTrack, atkLevel, attack[TOON_TRACK_COL]):
             if atkTrack == HEAL:
@@ -1393,6 +1460,7 @@ class BattleCalculatorAI:
                 )
             # Only the MAIN Squirt target gets soaked/drenched.
         if splashMult == 1.0:
+            self.setSuitCondition(suitId, 'unlureSuit', 0, 0, 'setBoth')
             if organicBonus:
                 if suit.dna.name == 'redd':
                     self.setSuitCondition(
@@ -2677,6 +2745,14 @@ class BattleCalculatorAI:
                     if self.toonHasCondition(toonId, 'groupDamageDown') and atkLevel in (1, 3, 5, 7):
                         attackDamage *= 0.5
                 elif atkTrack == SQUIRT:
+                    if self.suitHasCondition(targetId, 'squirtRushJob'):
+                            self.setSuitCondition(
+                                targetId,
+                                'squirtRushJob',
+                                0,
+                                0,
+                                'setBoth'
+                            )
                     self.applyGagBanChecks(toonId, SQUIRT, atkLevel)
 
                     suit = self.battle.findSuit(targetId)
@@ -2894,30 +2970,71 @@ class BattleCalculatorAI:
 
                     suit = self.battle.findSuit(targetId)
 
+                    mainTargetId = attack[TOON_TGT_COL]
+
+                    mainZapBlocked = (
+                        self.suitHasCondition(mainTargetId, 'oilRain') or
+                        self.suitHasCondition(mainTargetId, 'immune')or
+                        self.suitHasCondition(mainTargetId, 'zapImmune')
+                    )
+
+                    if not (
+                        self.suitHasCondition(mainTargetId, 'soaked') or
+                        self.suitHasCondition(mainTargetId, 'drenched') or
+                        self.suitHasCondition(mainTargetId, 'missedSoak')
+                    ):
+                        mainZapBlocked = True
+
                     attackDamage = getAvPropDamage(
                         attackTrack,
                         attackLevel,
                         toon.experience.getExp(attackTrack)
                     )
 
-                    # ZAP-specific conductivity rules.
-                    if self.suitHasCondition(targetId, 'oilRain'):
+                    # If the MAIN Cog cannot be zapped,
+                    # none of the chain targets should take damage.
+                    if targetId != mainTargetId and mainZapBlocked:
                         attackDamage = 0
 
-                    elif self.suitHasCondition(targetId, 'immune'):
-                        attackDamage = 0
-
-                    elif self.suitHasCondition(targetId, 'dead'):
-                        attackDamage = 0
-
-                    elif self.suitHasCondition(targetId, 'zapImmune'):
-                        attackDamage = 0
-
-                    elif not (self.suitHasCondition(targetId, 'soaked') or self.suitHasCondition(targetId, 'drenched')):
-                        if self.suitHasCondition(targetId, 'missedSoak'):
-                            attackDamage *= 0.25
-                        else:
+                    else:
+                        # Conductivity / immunity for THIS Cog.
+                        if self.suitHasCondition(targetId, 'oilRain'):
                             attackDamage = 0
+
+                        elif self.suitHasCondition(targetId, 'immune'):
+                            attackDamage = 0
+
+                        elif self.suitHasCondition(targetId, 'zapImmune'):
+                            attackDamage = 0
+
+                        elif not (
+                            self.suitHasCondition(targetId, 'soaked') or
+                            self.suitHasCondition(targetId, 'drenched')
+                        ):
+                            if self.suitHasCondition(targetId, 'missedSoak'):
+                                attackDamage *= 0.25
+                            else:
+                                attackDamage = 0
+
+                    # Find where this Cog occurs in the Zap chain.
+                    zapTargets = self.__createZapTargetList(toonId)
+
+                    try:
+                        zapIndex = zapTargets.index(suit)
+                    except ValueError:
+                        zapIndex = -1
+
+                    zapMultipliers = (
+                        1.0,
+                        0.9,
+                        0.8,
+                        0.7
+                    )
+
+                    if 0 <= zapIndex < len(zapMultipliers):
+                        zapMult = zapMultipliers[zapIndex]
+                    else:
+                        zapMult = 0.0
 
                     if attackDamage > 0:
                         attackDamage = self.applyToonGagDamageMultipliers(
@@ -2929,6 +3046,9 @@ class BattleCalculatorAI:
                             organicBonus=False
                         )
 
+                        # Zap chain falloff.
+                        attackDamage *= zapMult
+
                         attackDamage = self.applyCogDamageInterceptors(
                             attackDamage,
                             toonId,
@@ -2937,15 +3057,24 @@ class BattleCalculatorAI:
                             ZAP
                         )
 
-                    if atkHit and attackDamage > 0:
-                        self.applyCogHitEffects(
-                            toon,
-                            toonId,
-                            suit,
+                    # Only consume hit effects if the FINAL damage
+                    # is actually greater than zero.
+                    if attackDamage > 0:
+                        if self.suitHasCondition(targetId, 'zapRushJob'):
+                            self.setSuitCondition(
+                                targetId,
+                                'zapRushJob',
+                                0,
+                                0,
+                                'setBoth'
+                            )
+
+                        self.setSuitCondition(
                             targetId,
-                            ZAP,
-                            atkLevel,
-                            attackDamage
+                            'unlureSuit',
+                            0,
+                            0,
+                            'setBoth'
                         )
 
                     target = self.battle.findSuit(attack[TOON_TGT_COL])
@@ -6425,10 +6554,6 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
                 if suit.dna.name == 'mplayers':
                     self.setSuitCondition(suit.doId, 'vulnerablebroadcaster', 1, -1, 'setBoth')
-                if suit.dna.name == 'cbutcher':
-                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 3.0, -1, 'setBoth')
-                if suit.dna.name in ['cdirector', 'liquid', 'dking', 'rkeeper']:
-                    self.setSuitCondition(suit.doId, 'vulnerablevideographer', 2.25, -1, 'setBoth')
                 if suit.dna.name == 'hrollers' and suit.getActualLevel() == 30:
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
                     for s in self.battle.activeSuits:

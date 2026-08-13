@@ -395,10 +395,10 @@ def insertZapSuit(suit, zapSuit, battle = None, pos = None, hpr = None):
     return
 	
 def removeZapSuit(suit, zapSuit):
-    notify.debug('removeDeathSuit()')
-    if not zapSuit.isEmpty():
+    notify.debug('removeZapSuit()')
+
+    if zapSuit is not None and not zapSuit.isEmpty():
         zapSuit.detachNode()
-        suit.cleanupZapActor()
 
 def removeZapSuitPowerhouse(suit, zapSuit):
     notify.debug('removeDeathSuit()')

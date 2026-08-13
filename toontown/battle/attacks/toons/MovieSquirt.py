@@ -151,14 +151,12 @@ def __getSquirtContactTime(squirt):
 
     elif level == 7:
         # Geyser
-        return 3.3875
+        return 2.9
 
     return 0.0
 
 
 def __doSquirt(squirt, delay, fShowStun, uberClone=0):
-    print 'MOVIESQUIRT TARGET TYPE:', type(squirt['target'])
-    print 'MOVIESQUIRT TARGET:', squirt['target']
     squirtSequence = Sequence(Wait(delay))
 
     if type(squirt['target']) == type([]):
@@ -1368,8 +1366,6 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
     hitSuit = hp > 0
     scale = sprayScales[level]
     soundTrack = __getSoundTrack(level, hitSuit, 1.8, toon)
-    delayTime = random.random()
-    tracks.append(Wait(delayTime))
     tracks.append(soundTrack)
     cloud = globalPropPool.getProp('geyser')
     cloud2 = MovieUtil.copyProp(cloud)
@@ -1406,9 +1402,9 @@ def __doGeyser(squirt, delay, fShowStun, uberClone = 0):
         return track
 
     if not uberClone:
-        tracks.append(Sequence(Wait(delayTime), getGeyserTrack(cloud, suit, geyserPosPoint, scaleUpPoint, rainEffects, rainDelay, effectDelay, geyserHold, useEffect=1)))
+        tracks.append(Sequence(getGeyserTrack(cloud, suit, geyserPosPoint, scaleUpPoint, rainEffects, rainDelay, effectDelay, geyserHold, useEffect=1)))
     if hp > 0 or delay <= 0:
-        tracks.append(Sequence(Wait(delayTime), __getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, geyser=1, uberRepeat=uberClone, revived=revived, level=6)))
+        tracks.append(Sequence(__getSuitTrack(suit, tContact, tSuitDodges, squirt, hp, hpbonus, kbbonus, 'soak', died, leftSuits, rightSuits, battle, toon, fShowStun, beforeStun=2.6, afterStun=2.3, geyser=1, uberRepeat=uberClone, revived=revived, level=6)))
 
     return tracks
 
