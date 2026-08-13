@@ -3906,6 +3906,12 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
+            gagText = self.getColoredText(
+                'THROW',
+                'throwText',
+                (1, 0.561, 0, 1),
+                ToontownGlobals.getSignFont()
+            )
             damageText = self.getColoredText(
                 '+10%',
                 'positiveText',
