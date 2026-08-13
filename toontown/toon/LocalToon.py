@@ -267,7 +267,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def fadeOverlappingToon(self, toonId, fade=1):
         toon = base.cr.doId2do.get(toonId)
-        if not toon:
+        if not toon or toon.isEmpty():
+            return
+        geomNode = toon.getGeomNode()
+        if not geomNode or geomNode.isEmpty():
             return
         oldTrack = self.toonOverlapFadeTracks.pop(toonId, None)
         if oldTrack:
@@ -287,6 +290,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def finishOverlappingToonFade(self, toonId):
         self.toonOverlapFadeTracks.pop(toonId, None)
+
+    def cancelToonOverlapFade(self, toonId):
+        if hasattr(self, 'toonOverlapIds') and toonId in self.toonOverlapIds:
+            self.toonOverlapIds.remove(toonId)
+        if hasattr(self, 'toonOverlapFadeTracks'):
+            track = self.toonOverlapFadeTracks.pop(toonId, None)
+            if track:
+                track.pause()
 
     def checkTeleportAccessResponse(self, zoneId):
         if self.mapPage:

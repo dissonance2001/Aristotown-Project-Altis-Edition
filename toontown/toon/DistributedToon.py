@@ -792,7 +792,13 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             else:
                 self.damageInterval = Sequence(Wait(1.0), Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitDefeatTauntsNone), CFSpeech | CFTimeout)).start()
 
+    def _cancelLocalToonOverlapFade(self):
+        localAvatar = getattr(base, 'localAvatar', None)
+        if localAvatar and localAvatar is not self and hasattr(localAvatar, 'cancelToonOverlapFade'):
+            localAvatar.cancelToonOverlapFade(self.doId)
+
     def disable(self):
+        self._cancelLocalToonOverlapFade()
         taskMgr.remove(self._clubNametagPulseTaskName())
         self.stopStickerSequence()
         for soundSequence in self.soundSequenceList:
@@ -1577,6 +1583,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.tunnelTrack.start(tOffset)
 
     def enterTeleportOut(self, *args, **kw):
+        self._cancelLocalToonOverlapFade()
         Toon.Toon.enterTeleportOut(self, *args, **kw)
         self.clearAllToonStatusEffects()
         self.makeContentSync(0)
@@ -1705,8 +1712,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return 0
 
     def setCogIndex(self, index):
-        if index == self.cogIndex and index > -1 and self.isDisguised:
-            return
         self.cogIndex = index
 
         if self.cogIndex <= -1:
@@ -1924,9 +1929,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.showNametag3d()
             if hasattr(self, 'collNode'):
                 if self.ghostMode:
-                    self.collNode.setCollideMask(ToontownGlobals.GhostBitmask)
+                    self.collNode.setIntoCollideMask(ToontownGlobals.GhostBitmask)
                 else:
-                    self.collNode.setCollideMask(ToontownGlobals.WallBitmask | ToontownGlobals.PieBitmask)
+                    self.collNode.setIntoCollideMask(ToontownGlobals.PieBitmask | BitMask32(8192))
             
             if self.isLocal():
                 if self.ghostMode:
@@ -2107,6 +2112,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def doSmoothTask(self, task):
         self.smoother.computeAndApplySmoothPosHpr(self, self)
         self.setSpeed(self.smoother.getSmoothForwardVelocity(),
+                      self.smoother.getSmoothRotationalVelocity(),
                       self.smoother.getSmoothLateralVelocity())
         return Task.cont
 
