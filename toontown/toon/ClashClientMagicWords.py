@@ -1,5 +1,6 @@
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import Filename
+import sys
 
 try:
     import __builtin__ as _builtins
@@ -10,6 +11,7 @@ try:
 except:
     PStatClient = None
 from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 
 
 @magicWord(name='logout', category=CATEGORY_COMMUNITY_MANAGER, types=[])
@@ -30,6 +32,19 @@ def clashTp(zoneId):
     hoodId = ZoneUtil.getHoodId(zoneId)
     place.requestTeleport(hoodId, zoneId, base.localAvatar.currentShard, -1)
     return 'Teleporting to zone %d.' % zoneId
+
+
+@magicWord(name='printpos', category=CATEGORY_PROGRAMMER, types=[])
+def clashPrintPos():
+    if not getattr(base, 'localAvatar', None):
+        return 'Local Toon is unavailable.'
+    pos = base.localAvatar.getPos(render)
+    hpr = base.localAvatar.getHpr(render)
+    output = 'POS %.3f %.3f %.3f  HPR %.3f %.3f %.3f' % (
+        pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
+    sys.stdout.write(output + '\n')
+    sys.stdout.flush()
+    return output
 
 
 @magicWord(name='district', category=CATEGORY_COMMUNITY_MANAGER, types=[int])

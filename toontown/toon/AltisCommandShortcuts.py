@@ -7,6 +7,8 @@ COMMANDS = (
     {'name': 'mp', 'usage': '', 'description': 'Teleports you to the Major Player lobby.', 'aliases': (), 'access': 400},
     {'name': 'pace', 'usage': '', 'description': 'Teleports you to the Pacesetter lobby.', 'aliases': (), 'access': 400},
     {'name': 'cs', 'usage': '', 'description': 'Teleports you to the Chainsaw Consultant lobby.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
+    {'name': 'pizza', 'usage': '', 'description': 'Teleports you directly to the Pizzeria.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
+    {'name': 'printpos', 'usage': '', 'description': 'Prints your Toon position and rotation.', 'aliases': ('ppos',), 'access': 400, 'targetMode': 'none'},
     {'name': 'acc', 'usage': '', 'description': 'Opens or closes the accessory placement editor.', 'aliases': (), 'access': 400},
     {'name': 'jbs', 'usage': '<amount>', 'description': 'Gives Jellybeans to the target Toon.', 'aliases': (), 'access': 400},
     {'name': 'coin', 'usage': '<amount>', 'description': "Gives Club Coins to the target Toon's Club.", 'aliases': (), 'access': 400},

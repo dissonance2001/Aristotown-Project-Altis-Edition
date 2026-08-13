@@ -4199,6 +4199,13 @@ def disableGC():
     return 'Disabled garbage collection'
     
 @magicWord(category=CATEGORY_CREATIVE)
+def pizza():
+    spellbook.getInvoker().magicTeleportInitiate(
+        ToontownGlobals.TheBrrrgh, ToontownGlobals.PizzariaInterior)
+    return 'Teleporting to the Pizzeria.'
+
+
+@magicWord(category=CATEGORY_CREATIVE)
 def soprano():
     spellbook.getInvoker().magicTeleportInitiate(4000, 4401)
 	

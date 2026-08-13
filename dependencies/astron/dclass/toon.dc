@@ -654,6 +654,7 @@ from toontown.building import DistributedBossElevator/AI
 from toontown.building import DistributedSigilvator/AI
 from toontown.building import DistributedHighRollerSigilvator/AI
 from toontown.building import DistributedChainsawSigilvator/AI
+from toontown.instances.elevators.mercs import DistributedPlutocratSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
 from toontown.building import DistributedCountErfitElevator/AI
@@ -2812,6 +2813,9 @@ dclass DistributedHighRollerSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedChainsawSigilvator : DistributedSigilvator {
+};
+
+dclass DistributedPlutocratSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedVPElevator : DistributedBossElevator {

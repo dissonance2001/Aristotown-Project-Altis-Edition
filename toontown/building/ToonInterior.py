@@ -4,6 +4,7 @@ from direct.fsm import State
 from direct.fsm import StateData
 from direct.showbase import DirectObject
 from direct.task import Task
+from direct.interval.IntervalGlobal import Sequence, Parallel, Func, LerpFunctionInterval
 from pandac.PandaModules import *
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.hood import Place
@@ -107,15 +108,91 @@ class ToonInterior(Place.Place):
         elif self.zoneId == ToontownGlobals.ChainsawLobby:
             taskMgr.doMethodLater(0, self.ChainsawLobbyMusic, 'ChainsawLobbyMusic')
 
+    def _setPizzeriaMusicVolume(self, volume, music):
+        if music:
+            music.setVolume(volume)
+
+    def _crossfadePizzeriaMusic(self, targetMusic):
+        sourceMusic = getattr(self, 'pizzeriaMusic', None)
+        if sourceMusic is targetMusic:
+            return
+
+        fade = getattr(self, 'pizzeriaMusicFade', None)
+        if fade:
+            try:
+                if fade.isPlaying():
+                    fade.finish()
+            except:
+                pass
+            self.pizzeriaMusicFade = None
+            sourceMusic = getattr(self, 'pizzeriaMusic', None)
+
+        currentTime = 0.0
+        if sourceMusic:
+            try:
+                currentTime = sourceMusic.getTime()
+            except:
+                currentTime = 0.0
+
+        try:
+            targetMusic.stop()
+        except:
+            pass
+        targetMusic.setLoop(1)
+        targetMusic.setVolume(0.0)
+        try:
+            targetMusic.setTime(currentTime)
+        except:
+            pass
+        targetMusic.play()
+
+        self.pizzeriaMusic = targetMusic
+        self.pizzeriaMusicFile = targetMusic
+
+        if not sourceMusic:
+            targetMusic.setVolume(1.0)
+            return
+
+        fadeOut = LerpFunctionInterval(
+            self._setPizzeriaMusicVolume,
+            duration=0.3,
+            blendType='easeIn',
+            fromData=1.0,
+            toData=0.0,
+            extraArgs=[sourceMusic])
+        fadeIn = LerpFunctionInterval(
+            self._setPizzeriaMusicVolume,
+            duration=0.3,
+            blendType='easeOut',
+            fromData=0.0,
+            toData=1.0,
+            extraArgs=[targetMusic])
+        self.pizzeriaMusicFade = Sequence(
+            Parallel(fadeOut, fadeIn),
+            Func(sourceMusic.stop))
+        self.pizzeriaMusicFade.start()
+
     def PizzeriaMusic(self, task):
+        if not hasattr(self, 'pizzeriaStandardMusic') or not self.pizzeriaStandardMusic:
             base.musicManager.stopAllSounds()
-            self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
-            self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping=1)
+            self.pizzeriaStandardMusic = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_standard.ogg")
+            self.pizzeriaColdMusic = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_cold.ogg")
+            self.pizzeriaMusic = self.pizzeriaStandardMusic
+            self.pizzeriaMusicFile = self.pizzeriaStandardMusic
+            self.pizzeriaStandardMusic.setLoop(1)
+            self.pizzeriaStandardMusic.setVolume(1.0)
+            self.pizzeriaStandardMusic.play()
+        else:
+            self._crossfadePizzeriaMusic(self.pizzeriaStandardMusic)
+        if task:
+            return task.done
 
     def PizzeriaFreezerMusic(self, task):
-            base.musicManager.stopAllSounds()
-            self.pizzeriaMusicFile = loader.loadMusic("phase_10/audio/bgm/merc/instance_plutocrat_lobby_cold.ogg")
-            self.pizzeriaMusic = base.playMusic(self.pizzeriaMusicFile, looping=1)
+        if not hasattr(self, 'pizzeriaColdMusic') or not self.pizzeriaColdMusic:
+            self.PizzeriaMusic(None)
+        self._crossfadePizzeriaMusic(self.pizzeriaColdMusic)
+        if task:
+            return task.done
 
     def PacesetterLobbyMusic(self, task):
             base.musicManager.stopAllSounds()
@@ -131,6 +208,24 @@ class ToonInterior(Place.Place):
 
     def exit(self):
         self.ignoreAll()
+        taskMgr.remove('PizzeriaMusic')
+        fade = getattr(self, 'pizzeriaMusicFade', None)
+        if fade:
+            try:
+                fade.finish()
+            except:
+                pass
+            self.pizzeriaMusicFade = None
+        if hasattr(self, 'pizzeriaStandardMusic') and self.pizzeriaStandardMusic:
+            self.pizzeriaStandardMusic.stop()
+            self.pizzeriaStandardMusic = None
+        if hasattr(self, 'pizzeriaColdMusic') and self.pizzeriaColdMusic:
+            self.pizzeriaColdMusic.stop()
+            self.pizzeriaColdMusic = None
+        if hasattr(self, 'pizzeriaMusic'):
+            self.pizzeriaMusic = None
+        if hasattr(self, 'pizzeriaMusicFile'):
+            self.pizzeriaMusicFile = None
         taskMgr.remove('ChainsawLobbyMusic')
         if hasattr(self, 'chainsawLobbyMusic') and self.chainsawLobbyMusic:
             self.chainsawLobbyMusic.stop()
