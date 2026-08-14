@@ -23,13 +23,11 @@ class DMenuDisclaimer(DirectObject):
         self.deny = DirectButton(parent = aspect2d, relief = None, image = (noUp, noDown, noUp), image_scale = (0.6, 0.6, 0.6), image1_scale = (0.7, 0.7, 0.7), image2_scale = (0.7, 0.7, 0.7), text = ('', 'You better not click this button', 'You better not click this button'), text_pos=(0, -0.175), text_style = 3, text_scale=0.08, pos = (-.4, 0, -.5), command = self.deny)
         
     def accept(self):
-        self.disclaimer['text'] = 'Loading...'
         self.accept.destroy()
         self.deny.destroy()
-        base.graphicsEngine.renderFrame()
-        messenger.send("AgreeToGame")
-        base.cr.hasAccepted = True
         self.disclaimer.removeNode()
+        base.cr.hasAccepted = True
+        messenger.send("AgreeToGame")
         
     def deny(self):
         base.exitFunc()

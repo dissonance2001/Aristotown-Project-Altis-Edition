@@ -236,17 +236,15 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.avChoiceDoneEvent = 'avatarChooserDone'
         
         self.avChoice = None # Will be set in the main menu
+        self.PAT_AVLIST = avList
+        self.PAT_LOGINFSM = self.loginFSM
+        self.PAT_DONEEVENT = self.avChoiceDoneEvent
         
         if not self.hasAccepted:
             self.disclaimer = DMenuDisclaimer.DMenuDisclaimer
             self.disclaimer()
         else:
             self.acceptGame()
-        
-        self.PAT_AVLIST = avList
-        self.PAT_LOGINFSM = self.loginFSM
-        self.PAT_DONEEVENT = self.avChoiceDoneEvent
-
         
         self.accept(self.avChoiceDoneEvent, self.__handleAvatarChooserDone, [avList])
         if config.GetBool('want-gib-loader', 1):
@@ -255,18 +253,28 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def __handleAvatarChooserDone(self, avList, doneStatus):
         done = doneStatus['mode']
+        index = doneStatus.get('choice', 0)
         if done == 'exit':
+            if hasattr(self, 'mainmenu') and self.mainmenu:
+                self.mainmenu.exitMenu()
             self.loginFSM.request('shutdown')
-        index = self.avChoice.getChoice()
+            return
+
+        avatarChoice = None
+        dna = None
         for av in avList:
             if av.position == index:
                 avatarChoice = av
                 dna = ToonDNA.ToonDNA()
                 dna.makeFromNetString(av.dna)
                 print '__handleAvatarChooserDone: %r, %r, %r, %r' % (av.id, av.name, dna.asTuple(), av.position)
+                break
 
         if done == 'chose':
-            self.avChoice.exit()
+            if not avatarChoice:
+                return
+            if hasattr(self, 'mainmenu') and self.mainmenu:
+                self.mainmenu.exitMenu()
             if avatarChoice.approvedName != '':
                 self.congratulations(avatarChoice)
                 avatarChoice.approvedName = ''
@@ -278,13 +286,19 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
                 base.localAvatarName = avatarChoice.name
                 self.loginFSM.request('waitForSetAvatarResponse', [avatarChoice])
         elif done == 'nameIt':
+            if hasattr(self, 'mainmenu') and self.mainmenu:
+                self.mainmenu.exitMenu()
             self.accept('downloadAck-response', self.__handleDownloadAck, [avList, index])
             self.downloadAck = DownloadForceAcknowledge('downloadAck-response')
             self.downloadAck.enter(4)
         elif done == 'create':
+            if hasattr(self, 'mainmenu') and self.mainmenu:
+                self.mainmenu.exitMenu()
             self.loginFSM.request('createAvatar', [avList, index])
         elif done == 'delete':
-            if hasattr(self, 'avatarChoice'):
+            if hasattr(self, 'mainmenu') and self.mainmenu:
+                self.mainmenu.exitMenu()
+            if avatarChoice:
                 self.loginFSM.request('waitForDeleteAvatarResponse', [avatarChoice])
 
     def __handleDownloadAck(self, avList, index, doneStatus):
@@ -298,14 +312,15 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def exitChooseAvatar(self):
         self.handler = None
-        if self.avChoice:
-            self.avChoice.exit()
-            self.avChoice.unload()
-            self.avChoice = None
+        if hasattr(self, 'mainmenu') and self.mainmenu:
+            self.mainmenu.exitMenu()
+            self.mainmenu = None
+        self.avChoice = None
         self.ignore(self.avChoiceDoneEvent)
 
     def goToPickAName(self, avList, index):
-        self.avChoice.exit()
+        if self.avChoice:
+            self.avChoice.exit()
         self.loginFSM.request('createAvatar', [avList, index])
 
     def enterCreateAvatar(self, avList, index, newDNA = None):
