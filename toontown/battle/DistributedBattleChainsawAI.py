@@ -91,6 +91,8 @@ class DistributedBattleChainsawAI(
                 outgoing = 1.0
 
             bossCondition = 1.0
+            if controller.chainsawPhase == 2:
+                bossCondition *= max(0.0, 1.0 + (controller.chainsawRPM - 15) * 0.1)
             if getattr(controller, 'chainsawKickbackRounds', 0) > 0:
                 bossCondition *= float(getattr(
                     controller, 'chainsawKickbackMultiplier', 1.0))

@@ -13,11 +13,11 @@ class DistributedChainsawSigilvator(DistributedSigilvator):
     notify = DirectNotifyGlobal.directNotify.newCategory(
         'DistributedChainsawSigilvator')
     OriginName = 'sigilvator_origin'
-    JumpOutOffsets = list(reversed(SigilJumpOutOffsets))
+    JumpOutOffsets = SigilJumpOutOffsets
 
     def __init__(self, cr):
         DistributedSigilvator.__init__(self, cr)
-        self.elevatorPoints = list(reversed(SigilvatorPoints))
+        self.elevatorPoints = SigilvatorPoints
         self.doorOpenSfx = loader.loadSfx(
             'phase_9/audio/sfx/CHQ_door_open.ogg')
         self.doorCloseSfx = loader.loadSfx(

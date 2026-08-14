@@ -230,7 +230,8 @@ class ChainsawCalculatorAI:
                     pass
                 if targetsBoss:
                     try:
-                        lureHit = not attack[TOON_ACCBONUS_COL]
+                        lureHit = (not attack[TOON_ACCBONUS_COL] or
+                                   boss.doId in self.calculator.successfulLures)
                     except:
                         lureHit = True
                     if lureHit:
