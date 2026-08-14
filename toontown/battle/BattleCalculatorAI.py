@@ -2973,52 +2973,79 @@ class BattleCalculatorAI:
                     suit = self.battle.findSuit(targetId)
 
                     mainTargetId = attack[TOON_TGT_COL]
+                    mainSuit = self.battle.findSuit(mainTargetId)
 
-                    mainZapBlocked = (
-                        self.suitHasCondition(mainTargetId, 'oilRain') or
-                        self.suitHasCondition(mainTargetId, 'immune')or
-                        self.suitHasCondition(mainTargetId, 'zapImmune')
-                    )
-
-                    if not (
-                        self.suitHasCondition(mainTargetId, 'soaked') or
-                        self.suitHasCondition(mainTargetId, 'drenched') or
-                        self.suitHasCondition(mainTargetId, 'missedSoak')
-                    ):
-                        mainZapBlocked = True
-
-                    attackDamage = getAvPropDamage(
+                    baseDamage = getAvPropDamage(
                         attackTrack,
                         attackLevel,
                         toon.experience.getExp(attackTrack)
                     )
 
-                    # If the MAIN Cog cannot be zapped,
-                    # none of the chain targets should take damage.
-                    if targetId != mainTargetId and mainZapBlocked:
-                        attackDamage = 0
+                    # --------------------------------------------------
+                    # Figure out whether the MAIN Zap can happen at all.
+                    # If the main target is blocked, NO jumps happen.
+                    # --------------------------------------------------
+                    mainZapBlocked = (
+                        mainSuit is None or
+                        self.suitHasCondition(mainTargetId, 'oilRain') or
+                        self.suitHasCondition(mainTargetId, 'immune') or
+                        self.suitHasCondition(mainTargetId, 'zapImmune')
+                    )
+
+                    if not mainZapBlocked:
+                        if not (
+                            self.suitHasCondition(mainTargetId, 'soaked') or
+                            self.suitHasCondition(mainTargetId, 'drenched')
+                        ):
+                            if not self.suitHasCondition(mainTargetId, 'missedSoak'):
+                                mainZapBlocked = True
+
+                    # --------------------------------------------------
+                    # Calculate MAIN target damage.
+                    #
+                    # This is the important part:
+                    # main target vulnerability / shielding / etc. gets
+                    # included BEFORE we calculate jump damage.
+                    # --------------------------------------------------
+                    if mainZapBlocked:
+                        mainDamage = 0
 
                     else:
-                        # Conductivity / immunity for THIS Cog.
-                        if self.suitHasCondition(targetId, 'oilRain'):
-                            attackDamage = 0
+                        mainDamage = baseDamage
 
-                        elif self.suitHasCondition(targetId, 'immune'):
-                            attackDamage = 0
-
-                        elif self.suitHasCondition(targetId, 'zapImmune'):
-                            attackDamage = 0
-
-                        elif not (
-                            self.suitHasCondition(targetId, 'soaked') or
-                            self.suitHasCondition(targetId, 'drenched')
+                        # Missed soak only gives 25% conductivity.
+                        if (
+                            not self.suitHasCondition(mainTargetId, 'soaked') and
+                            not self.suitHasCondition(mainTargetId, 'drenched') and
+                            self.suitHasCondition(mainTargetId, 'missedSoak')
                         ):
-                            if self.suitHasCondition(targetId, 'missedSoak'):
-                                attackDamage *= 0.25
-                            else:
-                                attackDamage = 0
+                            mainDamage *= 0.25
 
-                    # Find where this Cog occurs in the Zap chain.
+                        # Toon-side gag bonuses.
+                        mainDamage = self.applyToonGagDamageMultipliers(
+                            mainDamage,
+                            toonId,
+                            mainTargetId,
+                            ZAP,
+                            atkLevel,
+                            organicBonus=False
+                        )
+
+                        # MAIN COG vulnerability / shielding / defenses.
+                        #
+                        # The result of this becomes the base for the
+                        # entire Zap chain.
+                        mainDamage = self.applyCogDamageInterceptors(
+                            mainDamage,
+                            toonId,
+                            mainSuit,
+                            mainTargetId,
+                            ZAP
+                        )
+
+                    # --------------------------------------------------
+                    # Get this Cog's position in the Zap chain.
+                    # --------------------------------------------------
                     zapTargets = self.__createZapTargetList(toonId)
 
                     try:
@@ -3038,30 +3065,61 @@ class BattleCalculatorAI:
                     else:
                         zapMult = 0.0
 
+                    # --------------------------------------------------
+                    # MAIN TARGET
+                    # --------------------------------------------------
+                    if targetId == mainTargetId:
+                        attackDamage = mainDamage
+
+                    # --------------------------------------------------
+                    # JUMP TARGET
+                    # --------------------------------------------------
+                    else:
+                        # Main target didn't actually take Zap damage.
+                        # Therefore the electricity cannot jump.
+                        if mainDamage <= 0:
+                            attackDamage = 0
+
+                        # This target isn't actually part of the chain.
+                        elif zapMult <= 0:
+                            attackDamage = 0
+
+                        # Jump target itself cannot receive Zap.
+                        elif self.suitHasCondition(targetId, 'oilRain'):
+                            attackDamage = 0
+
+                        elif self.suitHasCondition(targetId, 'immune'):
+                            attackDamage = 0
+
+                        elif self.suitHasCondition(targetId, 'zapImmune'):
+                            attackDamage = 0
+
+                        elif self.suitHasCondition(targetId, 'dead'):
+                            attackDamage = 0
+
+                        elif not (
+                            self.suitHasCondition(targetId, 'soaked') or
+                            self.suitHasCondition(targetId, 'drenched')
+                        ):
+                            if self.suitHasCondition(targetId, 'missedSoak'):
+                                attackDamage = mainDamage * zapMult * 0.25
+                            else:
+                                attackDamage = 0
+
+                        else:
+                            # THIS is the new behavior:
+                            #
+                            # jump damage is based on the FINAL main Cog
+                            # damage, including its vulnerability.
+                            attackDamage = mainDamage * zapMult
+
+                    # --------------------------------------------------
+                    # Successful Zap hit effects.
+                    # --------------------------------------------------
                     if attackDamage > 0:
-                        attackDamage = self.applyToonGagDamageMultipliers(
-                            attackDamage,
-                            toonId,
-                            targetId,
-                            ZAP,
-                            atkLevel,
-                            organicBonus=False
-                        )
 
-                        # Zap chain falloff.
-                        attackDamage *= zapMult
-
-                        attackDamage = self.applyCogDamageInterceptors(
-                            attackDamage,
-                            toonId,
-                            suit,
-                            targetId,
-                            ZAP
-                        )
-
-                    # Only consume hit effects if the FINAL damage
-                    # is actually greater than zero.
-                    if attackDamage > 0:
+                        # Rush Job is consumed only if this Cog
+                        # actually received Zap damage.
                         if self.suitHasCondition(targetId, 'zapRushJob'):
                             self.setSuitCondition(
                                 targetId,
@@ -3078,13 +3136,7 @@ class BattleCalculatorAI:
                             0,
                             'setBoth'
                         )
-
-                    target = self.battle.findSuit(attack[TOON_TGT_COL])
-                    activeSuits = self.battle.activeSuits
-                    target = self.battle.findSuit(targetId)
-                    suitIndex = activeSuits.index(target)
-                    organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                    if attackDamage > 0:
+                        organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
                         self.setToonCondition(toonId, 'zapToon', 1, 1, 'setBoth')
                         if organicBonus:
                             if self.suitHasCondition(targetId, 'soaked') or self.suitHasCondition(targetId, 'missedSoak') or self.suitHasCondition(targetId, 'drenched'):
@@ -3099,6 +3151,12 @@ class BattleCalculatorAI:
                         if self.suitHasCondition(targetId, 'missedSoak'):
                             self.setSuitCondition(targetId, 'missedSoak', 1, 1, 'setBoth')
                         self.__removeLured(targetId)
+
+
+                    target = self.battle.findSuit(attack[TOON_TGT_COL])
+                    activeSuits = self.battle.activeSuits
+                    target = self.battle.findSuit(targetId)
+                    suitIndex = activeSuits.index(target)
                 else:
                     if not atkTrack == ZAP:
                         attackDamage = getAvPropDamage(attackTrack, attackLevel, toon.experience.getExp(attackTrack))
@@ -4692,6 +4750,61 @@ class BattleCalculatorAI:
                     )
                 ):
                     self.delayedUnlures.append(t.getDoId())
+
+    def calculateZapMainDamage(
+        self,
+        baseDamage,
+        toonId,
+        suit,
+        suitId,
+        atkLevel):
+
+        damage = baseDamage
+
+        if damage <= 0:
+            return 0
+
+        # Conductivity / immunity on the MAIN target.
+        if self.suitHasCondition(suitId, 'oilRain'):
+            return 0
+
+        if self.suitHasCondition(suitId, 'immune'):
+            return 0
+
+        if self.suitHasCondition(suitId, 'zapImmune'):
+            return 0
+
+        if not (
+            self.suitHasCondition(suitId, 'soaked') or
+            self.suitHasCondition(suitId, 'drenched')
+        ):
+            if self.suitHasCondition(suitId, 'missedSoak'):
+                damage *= 0.25
+            else:
+                return 0
+
+        # Toon-side Zap bonuses.
+        damage = self.applyToonGagDamageMultipliers(
+            damage,
+            toonId,
+            suitId,
+            ZAP,
+            atkLevel,
+            organicBonus=False
+        )
+
+        # THIS is what makes the main Cog's vulnerability,
+        # shielding, damage reduction, etc. affect the
+        # damage that the chain is based upon.
+        damage = self.applyCogDamageInterceptors(
+            damage,
+            toonId,
+            suit,
+            suitId,
+            ZAP
+        )
+
+        return damage
 
     def __calculateToonAttacksForTracks(self, allowedTracks, finalizeBonuses=True):
         self.notify.debug('Traps: ' + str(self.traps))
