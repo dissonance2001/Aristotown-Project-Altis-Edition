@@ -510,22 +510,19 @@ class ChainsawBattleCutsceneSetup(object):
         supports = self._pad(self.supportSuits or self._allSupports(), 4)
         for support in supports:
             self._prepareCannonCompat(support)
-        liveTargets = [toon for toon in targets if toon]
         nodeTargets = list(targets)
-        if liveTargets:
-            for index in range(4):
-                if supports[index] and nodeTargets[index] is None:
-                    nodeTargets[index] = liveTargets[index % len(liveTargets)]
         toonNodes = []
         for index, toon in enumerate(nodeTargets):
-            if toon:
-                node = toon.attachNewNode('chainsawLayoffsToonPos-%s' % index)
-                node.wrtReparentTo(render)
-            else:
-                node = None
+            source = toon
+            if source is None:
+                source = NodePath('chainsawLayoffsUnusedToon-%s' % index)
+                source.reparentTo(hidden)
+                nodeTargets[index] = source
+                self.cleanupNodes.append(source)
+            node = source.attachNewNode('chainsawLayoffsToonPos-%s' % index)
+            node.wrtReparentTo(render)
             toonNodes.append(node)
-            if node:
-                self.cleanupNodes.append(node)
+            self.cleanupNodes.append(node)
         def cleanupLayoffs():
             # Layoffs uses the same temporary Toon-anchor pattern as
             # Offboarding.  Restore every affected Toon before removing the

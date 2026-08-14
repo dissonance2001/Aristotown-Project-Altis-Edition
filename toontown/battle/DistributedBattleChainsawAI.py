@@ -64,6 +64,23 @@ class DistributedBattleChainsawAI(
     def enterWaitForInput(self):
         boss = self.__findChainsaw()
         controller = getattr(self, 'bossCog', None)
+        if boss:
+            promoted = []
+            regular = []
+            for suit in self.activeSuits:
+                if suit is boss:
+                    continue
+                if getattr(suit, 'chainsawManagerBeneficiary', False):
+                    promoted.append(suit)
+                else:
+                    regular.append(suit)
+            ordered = [boss] + promoted + regular
+            if ordered != self.activeSuits:
+                try:
+                    if self._setActiveSuitOrderPrivately(ordered):
+                        self.d_setMembers()
+                except:
+                    pass
         if boss and controller:
             revving = self.battleCalc.chainsawCalculator.syncRevvingEffect(
                 boss, controller)

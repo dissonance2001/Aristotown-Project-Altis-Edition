@@ -6,15 +6,18 @@ from toontown.building.DistributedSigilvator import DistributedSigilvator
 from toontown.instances import InstanceGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.building import ChainsawInstanceGlobals
+from toontown.building.ElevatorConstants import SigilvatorPoints, SigilJumpOutOffsets
 
 
 class DistributedChainsawSigilvator(DistributedSigilvator):
     notify = DirectNotifyGlobal.directNotify.newCategory(
         'DistributedChainsawSigilvator')
     OriginName = 'sigilvator_origin'
+    JumpOutOffsets = list(reversed(SigilJumpOutOffsets))
 
     def __init__(self, cr):
         DistributedSigilvator.__init__(self, cr)
+        self.elevatorPoints = list(reversed(SigilvatorPoints))
         self.doorOpenSfx = loader.loadSfx(
             'phase_9/audio/sfx/CHQ_door_open.ogg')
         self.doorCloseSfx = loader.loadSfx(
@@ -47,7 +50,7 @@ class DistributedChainsawSigilvator(DistributedSigilvator):
             return DistributedSigilvator.getPortInterval(self)
 
         toons = []
-        for avId in list(self.boardedAvIds.keys()):
+        for avId in sorted(self.boardedAvIds.keys(), key=lambda item: self.boardedAvIds[item]):
             av = base.cr.doId2do.get(avId)
             if av:
                 toons.append(av)

@@ -426,8 +426,10 @@ class DistributedChainsawBossAI(
             if not livingIds:
                 self.chainsawChainLinked = False
                 self.chainsawChainStartSupportIds = []
+                firedLinks = max(0, int(self.chainsawFiredLinks))
                 self.chainsawPendingKickback = True
-                self.chainsawPendingKickbackMultiplier = 1.30
+                self.chainsawPendingKickbackMultiplier = max(
+                    1.0, 1.30 - (0.05 * firedLinks))
                 self.chainsawFiredLinks = 0
 
         boss = self.__findChainsawSuit()
@@ -490,13 +492,7 @@ class DistributedChainsawBossAI(
                 except:
                     pass
 
-        pendingPromoted = self.chainsawPendingPromotedSuitId
         self.chainsawPendingPromotedSuitId = 0
-        if pendingPromoted:
-            try:
-                self.battle.moveSuitToVisualIndex(pendingPromoted, 1)
-            except:
-                pass
 
         reserves = self.__spawnReserves()
 

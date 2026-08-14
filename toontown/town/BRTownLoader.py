@@ -6,6 +6,7 @@ from toontown.town import TownLoader
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.building import PlutocratInstanceGlobals
+from toontown.building import CountErfitInstanceGlobals
 from toontown.dna.DNAParser import DNABulkLoader
 from toontown.dna import DNAStorage
 from pandac.PandaModules import NodePath
@@ -34,6 +35,16 @@ class BRTownLoader(TownLoader.TownLoader):
         self.fsm.addState(plutocratState)
         self.fsm.getStateNamed('start').addTransition(PlutocratInstanceGlobals.BOSS_BATTLE_STATE)
         self.fsm.getStateNamed('quietZone').addTransition(PlutocratInstanceGlobals.BOSS_BATTLE_STATE)
+
+
+        countErfitState = State.State(
+            CountErfitInstanceGlobals.BOSS_BATTLE_STATE,
+            self.enterCountErfitBossBattle,
+            self.exitCountErfitBossBattle,
+            ['quietZone'])
+        self.fsm.addState(countErfitState)
+        self.fsm.getStateNamed('start').addTransition(CountErfitInstanceGlobals.BOSS_BATTLE_STATE)
+        self.fsm.getStateNamed('quietZone').addTransition(CountErfitInstanceGlobals.BOSS_BATTLE_STATE)
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
@@ -285,3 +296,36 @@ class BRTownLoader(TownLoader.TownLoader):
         else:
             self.doneStatus = status
             messenger.send(self.doneEvent)
+
+    def enterCountErfitBossBattle(self, requestStatus):
+        from toontown.coghq import CountErfitBossBattle
+        self.acceptOnce(self.placeDoneEvent, self.handleCountErfitBossBattleDone)
+        self.place = CountErfitBossBattle.CountErfitBossBattle(self, self.fsm, self.placeDoneEvent)
+        base.cr.playGame.setPlace(self.place)
+        self.place.load()
+        base.localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
+        base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
+        base.cr.forbidCheesyEffects(1)
+        self.place.enter(requestStatus)
+
+    def exitCountErfitBossBattle(self):
+        self.ignore(self.placeDoneEvent)
+        if self.place:
+            self.place.exit()
+            self.place.unload()
+            self.place = None
+            base.cr.playGame.setPlace(None)
+        base.cr.forbidCheesyEffects(0)
+        base.localAvatar.setCameraFov(settings['fieldofview'])
+        base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
+
+    def handleCountErfitBossBattleDone(self):
+        status = self.place.doneStatus
+        if (status.get('loader') == CountErfitInstanceGlobals.INSTANCE_LOADER and
+                ZoneUtil.getBranchZone(status['zoneId']) == self.branchZone and
+                status.get('shardId') is None):
+            self.fsm.request('quietZone', [status])
+        else:
+            self.doneStatus = status
+            messenger.send(self.doneEvent)
+

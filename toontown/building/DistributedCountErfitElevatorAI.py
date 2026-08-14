@@ -1,6 +1,6 @@
 from toontown.building.ElevatorConstants import *
 from toontown.building import DistributedElevatorExtAI
-from toontown.toonbase import ToontownGlobals
+from toontown.instances import InstanceGlobals
 
 class DistributedCountErfitElevatorAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
 
@@ -13,52 +13,25 @@ class DistributedCountErfitElevatorAI(DistributedElevatorExtAI.DistributedElevat
             antiShuffle=antiShuffle,
             minLaff=minLaff
         )
-
         self.zone = zone
         self.bldgDoId = 0
+        self.type = ELEVATOR_ERFIT
+        self.countdownTime = ElevatorData[self.type]['countdown']
 
     def getDoId(self):
         return 0
-    
+
     def _createInterior(self):
-        from toontown.suit import DistributedCountErclaimBossAI
+        manager = getattr(self.air, 'instanceZoneManager', None)
+        if manager is None:
+            self.notify.warning('Count Erfit InstanceZoneManagerAI is unavailable.')
+            return
 
-        boss = DistributedCountErclaimBossAI.DistributedCountErclaimBossAI(self.air)
-        boss.generateWithRequired(ToontownGlobals.SellbotLobby)
-
-        print 'COUNT ERFIT: boss generated', boss.doId
-
-        for avId in self.seats:
-            print 'COUNT ERFIT: checking seat', avId
-
-            if avId:
-                toon = self.air.doId2do.get(avId)
-                print 'COUNT ERFIT: toon is', toon
-
-                if toon:
-                    toon.b_setLocation(boss.doId, ToontownGlobals.SellbotLobby)
-                    print 'COUNT ERFIT: toon sent'
-
-    def createCountErfitBoss(self):
-        from toontown.suit import DistributedCountErclaimBossAI
-
-        boss = DistributedCountErclaimBossAI.DistributedCountErclaimBossAI(self.air)
-        boss.generateWithRequired(ToontownGlobals.SellbotLobby)
+        bossZone = manager.createInstance(self.seats, InstanceGlobals.COUNT_ERFIT)
+        if not bossZone:
+            self.notify.warning('Count Erfit instance manager returned an invalid zone.')
+            return
 
         for avId in self.seats:
             if avId:
-                toon = self.air.doId2do.get(avId)
-                if toon:
-                    toon.b_setLocation(boss.doId, ToontownGlobals.SellbotLobby)
-
-    def sendToBossBattle(self):
-        avIds = []
-
-        for avId in self.seats:
-            if avId:
-                avIds.append(avId)
-
-        for avId in avIds:
-            toon = self.air.doId2do.get(avId)
-            if toon:
-                toon.b_setLocation(ToontownGlobals.CountErfitBattle, ToontownGlobals.CountErfitBattle)
+                self.sendUpdateToAvatarId(avId, 'setBossOfficeZoneForce', [bossZone])

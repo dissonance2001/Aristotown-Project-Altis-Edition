@@ -228,8 +228,15 @@ class ChainsawCalculatorAI:
                         targetsBoss = True
                 except:
                     pass
-                if targetsBoss and toonId not in bossTargetingToons:
-                    bossTargetingToons.append(toonId)
+                if targetsBoss:
+                    try:
+                        lureHit = not attack[TOON_ACCBONUS_COL]
+                    except:
+                        lureHit = True
+                    if lureHit:
+                        hits += 1
+                    if toonId not in bossTargetingToons:
+                        bossTargetingToons.append(toonId)
 
             for index in xrange(min(len(hpList), len(self.battle.activeSuits))):
                 suit = self.battle.activeSuits[index]
@@ -287,12 +294,7 @@ class ChainsawCalculatorAI:
             level = 0
         if self._isCutSlackTarget(suit, controller):
             return level < 33
-        if getattr(suit, 'chainsawPromotionLocked', False):
-            return False
-        try:
-            return (not suit.getExecutive()) or level < 25
-        except:
-            return True
+        return level < 25
 
     def _promoteSuit(self, suit, newLevel, cts=False, distribute=True):
         if not suit:
@@ -336,11 +338,12 @@ class ChainsawCalculatorAI:
             except:
                 suit.setExecutive(1)
 
+        managerValue = 1 if cts else 0
         try:
-            suit.b_setManager(1)
+            suit.b_setManager(managerValue)
         except:
             try:
-                suit.setManager(1)
+                suit.setManager(managerValue)
             except:
                 pass
 
@@ -587,7 +590,7 @@ class ChainsawCalculatorAI:
             return False
         target = sorted(living, key=self._toonCurrentHP, reverse=True)[0]
         self._spendRPM(controller, 2)
-        controller.chainsawSparkPlug[target] = 2
+        controller.chainsawSparkPlug[target] = 1
         self._makeTargetedAttack(
             boss, 'ChainsawCoreSparkPlug', [target], [0], 'finger-wag')
         controller.chainsawPreviousAttack = 'SparkPlug'
@@ -758,9 +761,10 @@ class ChainsawCalculatorAI:
             return False
         controller.chainsawChainLinked = False
         controller.chainsawChainStartSupportIds = []
+        firedLinks = max(0, int(getattr(controller, 'chainsawFiredLinks', 0)))
         controller.chainsawKickbackRounds = 3
         controller.chainsawAbilityBanRounds = 3
-        controller.chainsawKickbackMultiplier = 1.30
+        controller.chainsawKickbackMultiplier = max(1.0, 1.30 - (0.05 * firedLinks))
         controller.chainsawPendingKickback = False
         controller.chainsawPendingKickbackMultiplier = 1.0
         controller.chainsawKickbackVisualPending = True
@@ -1025,8 +1029,6 @@ class ChainsawCalculatorAI:
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons)
 
-        # Current Clash revving rules: every damaging non-Lure gag that lands
-        # on Chainsaw is +1 stack; wiping every support after turn one is +1.
         rpmGain = 0 if chainKickback else hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and

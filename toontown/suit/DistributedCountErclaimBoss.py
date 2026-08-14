@@ -813,6 +813,10 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         base.camera.reparentTo(self.elevatorModel)
         base.camera.setPosHpr(0, 30, 8, 180, 0, 0)
         base.camLens.setMinFov(ToontownGlobals.CJElevatorFov/(4./3.))
+        try:
+            base.transitions.fadeIn(0.8)
+        except:
+            pass
 
     def exitElevator(self):
         self.notify.debug('----- exitElevator')

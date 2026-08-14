@@ -2349,7 +2349,6 @@ class BattleCalculatorAI:
                                 elif getattr(theSuit, 'chainsawOvercharged', False):
                                     rounds = min(2, self.NumRoundsLured[atkLevel])
                                 elif (theSuit.getManager() > 0 or
-                                      getattr(theSuit, 'chainsawManagerBeneficiary', False) or
                                       getattr(getattr(theSuit, 'dna', None), 'name', None) == 'chainsaw'):
                                     rounds = 1
                                 elif theSuit.getGovernaught() > 0:

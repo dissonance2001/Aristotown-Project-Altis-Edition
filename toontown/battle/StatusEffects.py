@@ -611,7 +611,7 @@ class RevvingUp(DamageModifier, DefenseModifier):
                 self.milestonesReached[self.reforesting][milestone] = True
 
         self.damageMod = 1.0 if self.reforesting else (float(self.rpm) * 0.1)
-        self.defenseMod = (float(self.rpm) * 0.1 - 0.5) if self.reforesting else 1.0
+        self.defenseMod = max(0.0, 1.0 + ((float(self.rpm) - 15.0) * 0.1)) if self.reforesting else 1.0
         self.name = 'Revved-Up: {},000 RPM'.format(self.rpm)
         self.desc = 'The Chainsaw Consultant is '
         if self.rpm > 10:
@@ -619,7 +619,11 @@ class RevvingUp(DamageModifier, DefenseModifier):
         else:
             self.desc += 'operating under normal conditions.'
         if self.reforesting:
-            self.desc += u' He will take {}\u0025 {} damage!'.format('TBD', 'less' if self.defenseMod < 1.0 else 'more')
+            difference = int(round(abs(self.defenseMod - 1.0) * 100.0))
+            if difference:
+                self.desc += u' He will take {}\u0025 {} damage!'.format(difference, 'less' if self.defenseMod < 1.0 else 'more')
+            else:
+                self.desc += u' He will take normal damage!'
         elif self.rpm > 10:
             self.desc += u' He will deal {}\u0025 more damage!'.format(str((self.damageMod - 1.0) * 100))
         self.desc += '\n'

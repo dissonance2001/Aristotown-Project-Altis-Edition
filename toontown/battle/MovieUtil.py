@@ -1722,6 +1722,14 @@ def createSuitDeathTrack(suit, battle):
         return makePacesetterDeath(suit, battle)
     if suit.style.name == 'chainsaw':
         controller = getattr(battle, 'bossCog', None)
+        if controller is None or not hasattr(controller, 'chainsawPhase'):
+            try:
+                from toontown.suit import DistributedChainsawBoss
+                controller = DistributedChainsawBoss.OneChainsawController
+                if controller is not None:
+                    battle.bossCog = controller
+            except:
+                controller = None
         if controller is not None and hasattr(controller, 'chainsawPhase'):
             from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawDeath
             return makeChainsawDeath(suit, battle)

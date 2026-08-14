@@ -272,7 +272,7 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
     except:
         pass
     try:
-        target.setManager(1)
+        target.setManager(0 if aggrandized else 1)
     except:
         pass
     try:
