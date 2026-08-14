@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 import __builtin__
 import os
+import sys
 
 __builtin__.process = 'client'
 
@@ -15,8 +16,9 @@ from panda3d.core import *
 
 loadPrcFile('dependencies/config/general.prc')
 loadPrcFile('dependencies/config/release/dev.prc')
+if sys.platform == 'darwin':
+    loadPrcFile('dependencies/config/macos.prc')
 
-import sys
 import StringIO
 vfs = VirtualFileSystem.getGlobalPtr()
 import glob
@@ -47,7 +49,10 @@ loadPrcFileData('Settings: music', 'audio-music-active %s' % settings['music'])
 loadPrcFileData('Settings: sfx', 'audio-sfx-active %s' % settings['sfx'])
 loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % settings['musicVol'])
 loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfxVol'])
-loadPrcFileData('Settings: loadDisplay', 'load-display %s' % settings['loadDisplay'])
+loadDisplay = settings.get('loadDisplay', 'pandagl')
+if sys.platform == 'darwin':
+    loadDisplay = 'pandagl'
+loadPrcFileData('Settings: loadDisplay', 'load-display %s' % loadDisplay)
 loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
 loadPrcFileData('', 'texture-anisotropic-degree %d' % settings['anisotropic-filtering'])
 loadPrcFileData('', 'framebuffer-multisample %s' % settings['anti-aliasing'])
@@ -59,7 +64,14 @@ import glob
 notify.info("Loading Default Pack...")
 __builtin__.defaultPhaseMultifiles = []
 for file in glob.glob('resources/default/*.mf'):
-    if float(file.replace('.mf', '').replace('resources/default\phase_', '')) in DefaultPhases:
+    phaseName = os.path.splitext(os.path.basename(file))[0]
+    if not phaseName.startswith('phase_'):
+        continue
+    try:
+        phase = float(phaseName[len('phase_'):])
+    except ValueError:
+        continue
+    if phase in DefaultPhases:
         mf = Multifile()
         phaseFilename = Filename.fromOsSpecific(os.path.abspath(file))
         if not mf.openRead(phaseFilename):
@@ -76,8 +88,7 @@ from toontown.toonbase.ContentPackManager import ContentPackManager
 __builtin__.ContentPackMgr = ContentPackManager()
 ContentPackMgr.loadAll()
 
-loadDisplay = settings.get('loadDisplay', 'pandagl')
-loadPrcFileData('', 'load-display %s' % settings['loadDisplay'])
+loadPrcFileData('', 'load-display %s' % loadDisplay)
 
 import os
 import time
