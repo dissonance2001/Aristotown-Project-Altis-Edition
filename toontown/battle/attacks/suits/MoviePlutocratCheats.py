@@ -85,14 +85,13 @@ def _cheatBanner(attack, title, description, duration, oneLine=False):
 def _restore(attack):
     boss = _boss(attack)
     battle = attack.get('battle')
-    if boss:
-        boss.restoreBattlePresentation()
-    elif battle:
+    if battle:
         try:
-            camera.reparentTo(battle)
-            camera.setPosHpr(0, -18, 12, 0, -12, 0)
+            camera.wrtReparentTo(battle)
         except:
             pass
+    if boss:
+        boss.restoreBattlePresentation(resetCamera=0)
 
 
 def _finish(attack, track, title, description, oneLine=False):
@@ -529,8 +528,59 @@ def doSnowSquallDamage(attack):
     track = Parallel(
         PlutocratCutscenes.makeSnowSquallDamage(boss),
         _temporaryColdColor(attack),
-        Sequence(Wait(2.0), Func(_damageToons, attack)))
+        Sequence(Wait(5.5), Func(_damageToons, attack)))
     return _finish(
         attack, track,
         'SNOW SQUALL!',
         'ALL TOONS ARE BUFFETED BY THE SNOW SQUALL!')
+
+
+def doShatter(attack):
+    parts = _parse(attack['name'])
+    if len(parts) < 5:
+        return Sequence(Wait(0.01))
+    battle = attack['battle']
+    sourceId = int(parts[1])
+    data = parts[2:]
+    source = _findSuit(attack, sourceId)
+    damageTracks = Parallel()
+    bubbleBurst = False
+    i = 0
+    while i + 2 < len(data):
+        targetId = int(data[i])
+        damage = int(data[i + 1])
+        burst = int(data[i + 2])
+        i += 3
+        target = _findSuit(attack, targetId)
+        if not target:
+            continue
+        react = random.choice(('squirt-small-react', 'pie-small-react'))
+        seq = Sequence(
+            Parallel(
+                SoundInterval(
+                    loader.loadSfx('phase_10/audio/sfx/SA_shatter_hit.ogg'),
+                    node=target),
+                ActorInterval(target, react),
+                Sequence(
+                    Wait(0.1),
+                    Func(target.showHpText, -damage, openEnded=0))),
+            Func(target.loop, 'neutral'))
+        if burst:
+            bubbleBurst = True
+            seq = Parallel(
+                seq,
+                Sequence(
+                    Wait(1.4),
+                    Func(target.hideHpText),
+                    Func(target.showHpString, 'BUBBLE BURST!', 0.85, 0.7)))
+        damageTracks.append(seq)
+    if source:
+        try:
+            source.hideHpText()
+        except:
+            pass
+    title = 'SHATTER!'
+    description = 'A FROZEN COG SHATTERS AND DAMAGES ADJACENT COGS!'
+    if bubbleBurst:
+        description = 'SHATTER BURSTS THE PLUTOCRAT\\'S MARKET BUBBLE!'
+    return _finish(attack, damageTracks, title, description)

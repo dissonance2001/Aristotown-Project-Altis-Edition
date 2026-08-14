@@ -206,16 +206,23 @@ def cleanupCutscenePlutocrat(boss):
 
 
 def makeJoinPcrat(boss, suit, destNode, toons):
-    suit.wrtReparentTo(render)
+    suit.wrtReparentTo(boss.battleNode)
     data = _dict(
         nodes=[boss.battleNode, destNode, suit],
         toons=_padToons(toons), suits=[suit], actors=[suit],
         messages=JOIN_DIALOGUE)
-    return buildCutscene(JOIN_PCRAT_PATH, data)
+    toonRefusal = Parallel()
+    for toon in toons:
+        if toon:
+            toonRefusal.append(Sequence(
+                Wait(12.5),
+                ActorInterval(toon, 'taunt'),
+                Func(toon.loop, 'neutral')))
+    return Parallel(buildCutscene(JOIN_PCRAT_PATH, data), toonRefusal)
 
 
 def makeJoinGeneric(boss, suit, destNode):
-    suit.wrtReparentTo(render)
+    suit.wrtReparentTo(boss.battleNode)
     data = _dict(nodes=[boss.battleNode, destNode, suit], suits=[suit])
     return buildCutscene(JOIN_GENERIC_PATH, data)
 
@@ -231,7 +238,10 @@ def makeKickUp(boss, hydra, target):
     helper = boss.battleNode.attachNewNode('hydraKicknode')
     data = _dict(nodes=[hydra, target, boss.battleNode, helper],
                  suits=[hydra, target], actors=[hydra, target], messages=DUMMY_DIALOGUE)
-    return Sequence(buildCutscene(KICKUP_PATH, data), Func(helper.removeNode))
+    return Sequence(
+        buildCutscene(KICKUP_PATH, data),
+        Func(camera.wrtReparentTo, boss.battleNode),
+        Func(helper.removeNode))
 
 
 def makeTribute(boss, kerberos, target):
@@ -251,7 +261,12 @@ def makeSitdown(boss, styx):
     subnode = boss.battleNode.attachNewNode('styxSitdownNode')
     data = _dict(nodes=[styx, boss.battleNode, subnode, chair, chairNode],
                  suits=[styx], actors=[styx], messages=DUMMY_DIALOGUE)
-    return Sequence(buildCutscene(SITDOWN_PATH, data), Func(subnode.removeNode), Func(chair.removeNode), Func(chairNode.removeNode))
+    return Sequence(
+        buildCutscene(SITDOWN_PATH, data),
+        Func(camera.wrtReparentTo, boss.battleNode),
+        Func(subnode.removeNode),
+        Func(chair.removeNode),
+        Func(chairNode.removeNode))
 
 
 def makeUsury(boss, styx, waiter):

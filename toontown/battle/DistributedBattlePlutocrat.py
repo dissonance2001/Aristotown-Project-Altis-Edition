@@ -135,6 +135,7 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
         track = Sequence(
             pcratTrack,
             hatch if wantHatch else investorTracks,
+            Func(boss.refreshFrozenSuitVisuals),
             done,
             name=name)
         track.start(ts)

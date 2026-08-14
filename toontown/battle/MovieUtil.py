@@ -1595,6 +1595,14 @@ def createSuitDeathTrack(suit, battle):
         if controller is not None and hasattr(controller, 'chainsawPhase'):
             from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawDeath
             return makeChainsawDeath(suit, battle)
+    if suit.style.name == 'pcrat':
+        controller = getattr(battle, 'bossCog', None)
+        if controller is not None and hasattr(controller, 'plutocratPhase'):
+            from toontown.cutscene import PlutocratCutscenes
+            controller.plutocratDeathPlayed = True
+            return Parallel(
+                PlutocratCutscenes.makeDeath(controller, suit),
+                Sequence(Wait(12.0), Func(controller.playVictoryMusic)))
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
@@ -1933,6 +1941,8 @@ def __KnockbackSilhouette(suitIndex, suits, hp, battle):
 
 def createSuitHeadlessDeathTrack(suit, battle):
     suit._pendingQueuedDeath = True
+    if suit.style.name == 'pcrat':
+        return createSuitDeathTrack(suit, battle)
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
     suitTrack = Sequence()

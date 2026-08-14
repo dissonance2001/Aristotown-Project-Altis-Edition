@@ -167,8 +167,6 @@ class PlutocratCalculatorAI:
                         continue
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', 0.6, 1, 'setBoth')
                 self._visual(performer, 'PlutocratCoreSlushFund', True, SuitBattleGlobals.ATK_TGT_GROUP)
-                controller.snowSquallActive = not controller.snowSquallActive
-                self._visual(pcrat, 'PlutocratCoreSnowSquall_%s' % (1 if controller.snowSquallActive else 0), False, SuitBattleGlobals.ATK_TGT_GROUP)
 
     def _doHydra(self, controller):
         hydra = self._find('hydra')
@@ -237,11 +235,77 @@ class PlutocratCalculatorAI:
                 self._visual(pcrat, 'PlutocratCoreDeepFreeze_2', False, SuitBattleGlobals.ATK_TGT_GROUP)
                 controller.queueRemainingInvestor()
 
+    def _toonKillingTrack(self, suitIndex):
+        killingTrack = None
+        for toonId in self.battle.activeToons:
+            attack = self.battle.toonAttacks.get(toonId)
+            if not attack:
+                continue
+            try:
+                died = attack[SUIT_DIED_COL] & (1 << suitIndex)
+                if died:
+                    killingTrack = attack[TOON_TRACK_COL]
+            except:
+                pass
+        return killingTrack
+
+    def _queueShatters(self, controller):
+        if not controller.snowSquallActive:
+            return
+        suits = list(self.battle.activeSuits)
+        for index, shattered in enumerate(suits):
+            killingTrack = self._toonKillingTrack(index)
+            if killingTrack is None or killingTrack == FIRE:
+                continue
+            targets = []
+            if index > 0:
+                targets.append(suits[index - 1])
+            if index < len(suits) - 1:
+                targets.append(suits[index + 1])
+            encoded = []
+            baseDamage = int(math.ceil(shattered.getMaxHP() * 0.40))
+            for target in targets:
+                try:
+                    targetIndex = suits.index(target)
+                    if self._toonKillingTrack(targetIndex) is not None:
+                        continue
+                    if target.getHP() <= 0:
+                        continue
+                except:
+                    continue
+                damage = baseDamage
+                burst = 0
+                try:
+                    if target.dna.name == 'pcrat':
+                        stacks = controller.marketBubbleStacks
+                        if stacks > 0:
+                            damage = int(math.ceil(
+                                damage * (1.0 + min(0.05 * stacks, 1.0))))
+                            controller.marketBubbleStacks = -2
+                            burst = 1
+                        elif stacks < 0:
+                            damage = int(math.ceil(damage * 1.25))
+                except:
+                    pass
+                damage = min(damage, target.getHP())
+                if damage <= 0:
+                    continue
+                target.b_setHP(max(0, target.getHP() - damage))
+                encoded.extend((str(target.doId), str(damage), str(burst)))
+            if encoded:
+                self._visual(
+                    shattered,
+                    'PlutocratCoreShatter_%s_%s' % (
+                        shattered.doId, '_'.join(encoded)),
+                    False,
+                    SuitBattleGlobals.ATK_TGT_GROUP)
+
     def calculateBeforeSuitAttacks(self):
         controller = self._controller()
         if not controller:
             return
         self._refreshInvestorDamage(controller)
+        self._queueShatters(controller)
         if controller.plutocratPhase == 1:
             self._doHydra(controller)
             self._doKerberos(controller)
@@ -251,7 +315,8 @@ class PlutocratCalculatorAI:
                 hits = self._marketBubbleHits(pcrat)
                 if hits:
                     controller.marketBubbleStacks += hits
-                pcrat.setDamageMultiplier(1.0 + (controller.marketBubbleStacks * 0.03))
+                pcrat.setDamageMultiplier(
+                    1.0 + (max(0, controller.marketBubbleStacks) * 0.03))
                 self._fireGates(controller, pcrat)
 
     def _findWaiter(self):
@@ -350,4 +415,12 @@ class PlutocratCalculatorAI:
                 self._targeted(pcrat, 'PlutocratCoreSnowSquallDamage', toonIds, damages)
             if pcrat and controller.plutocratRound % 2 == 1:
                 controller.queueNaturalReserves(2)
+            if pcrat and controller.plutocratRound % 3 == 1:
+                nextSnowState = not controller.snowSquallActive
+                self._visual(
+                    pcrat,
+                    'PlutocratCoreSnowSquall_%s' % (1 if nextSnowState else 0),
+                    False,
+                    SuitBattleGlobals.ATK_TGT_GROUP)
+                controller.snowSquallActive = nextSnowState
         self._removeDefeatedInvestorAttacks()

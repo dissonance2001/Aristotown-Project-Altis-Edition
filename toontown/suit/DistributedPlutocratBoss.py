@@ -61,6 +61,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.introDelayDeletes = []
         self.introInvestors = []
         self.deathCutsceneSuits = []
+        self.plutocratDeathPlayed = False
         self.activeIntervals = {}
         self.cutsceneSkipExtraIntervals = ('PlutocratDeathMovie',)
         self.cutsceneSkip = BossCutsceneSkip.BossCutsceneSkip(self)
@@ -361,6 +362,20 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             except:
                 pass
 
+    def refreshFrozenSuitVisuals(self):
+        if not self.battle:
+            return
+        for suit in getattr(self.battle, 'suits', ()):
+            if not suit:
+                continue
+            try:
+                if self.snowSquallActive:
+                    suit.getGeomNode().setColorScale(0.72, 0.9, 1.0, 1.0)
+                else:
+                    suit.getGeomNode().clearColorScale()
+            except:
+                pass
+
     def setSnowSquallActive(self, active):
         self.snowSquallActive = bool(active)
         if self.environment:
@@ -368,7 +383,11 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                 self.environment.setSnowSquall()
             else:
                 self.environment.setDefault()
+        self.refreshFrozenSuitVisuals()
         self.setSnowSquallMusic(self.snowSquallActive)
+
+    def playVictoryMusic(self):
+        self._playMusicObject(self.victoryMusic, 1, 1.0)
 
     def d_avatarEnter(self):
         self.sendUpdate('avatarEnter', [])
@@ -706,8 +725,18 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.stopMusic()
 
     def enterReward(self):
+        if self.plutocratDeathPlayed:
+            taskMgr.doMethodLater(
+                0.1,
+                self.__finishPlayedDeathReward,
+                self.uniqueName('plutocratRewardDone'))
+            return
         self.stopMusic()
         taskMgr.add(self.__waitForDeathSuit, self.uniqueName('plutocratRewardDone'))
+
+    def __finishPlayedDeathReward(self, task):
+        self.doneBarrier('Reward')
+        return Task.done
 
     def __waitForDeathSuit(self, task):
         plutocrat = None

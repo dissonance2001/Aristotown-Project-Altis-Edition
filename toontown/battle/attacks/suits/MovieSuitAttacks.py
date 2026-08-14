@@ -595,7 +595,7 @@ def doSuitAttack(attack):
     elif name == 'Spin':
         suitTrack = doSpin(attack)
     elif name == 'Synergy':
-        suitTrack = doSynergy(attack)
+        suitTrack = doInterestCalculations(attack)
     elif name == 'Tabulate':
         suitTrack = doTabulate(attack)
     elif name == 'Golf':
@@ -1269,6 +1269,8 @@ def doSuitAttack(attack):
         suitTrack = MoviePlutocratCheats.doSnowSquall(attack)
     elif name == 'PlutocratCoreSnowSquallDamage':
         suitTrack = MoviePlutocratCheats.doSnowSquallDamage(attack)
+    elif name.startswith('PlutocratCoreShatter_'):
+        suitTrack = MoviePlutocratCheats.doShatter(attack)
     elif name.startswith('ChainsawCoreRevvingUp'):
         suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
     elif name.startswith('ChainsawCoreWhipsaw'):
@@ -3269,6 +3271,10 @@ def doRazzleDazzle(attack):
     toonTrack = getToonTracks(attack, 2.0, ['cringe'], 1.0, ['sidestep'])
     soundTrack = getSoundTrack('SA_razzle_dazzle.ogg', delay=0.8, node=suit)
     return Sequence(Parallel(suitTrack, signPropTracks, signPropAnimTracks, toonTrack, soundTrack), Func(MovieUtil.removeProp, sign))
+
+
+def doInterestCalculations(attack):
+    return doSynergy(attack)
 
 
 def doSynergy(attack):
