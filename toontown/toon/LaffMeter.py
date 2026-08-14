@@ -387,9 +387,27 @@ class LaffMeter(DirectFrame):
             if self.av:
                 self.ignore(self.av.uniqueName('hpChange'))
 
+    def setMeterColor(self, color=None):
+        if color is None:
+            self.color = self.style.getHeadColor()
+        else:
+            self.color = Vec4(color)
+        try:
+            self.container['image_color'] = self.color
+        except:
+            pass
+
     def setAvatar(self, av):
         if self.av:
             self.ignore(self.av.uniqueName('hpChange'))
+            self.ignore(self.av.uniqueName('set-laff-meter-color'))
         
         self.av = av
         self.flashName = self.av.uniqueName('laffMeterFlash') + '-' + str(self.this)
+        self.accept(self.av.uniqueName('set-laff-meter-color'), self.setMeterColor)
+        try:
+            frozenColor = getattr(self.av, '_plutocratLaffMeterColor', None)
+            if frozenColor is not None:
+                self.setMeterColor(frozenColor)
+        except:
+            pass

@@ -7,7 +7,6 @@ from toontown.cutscene.PlutocratCutsceneParticles import getPlutocratParticles
 from toontown.distributed import DelayDelete
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
-from toontown.toon import TTEmote
 
 INTRO_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_intro.ctsc'
 DEATH_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_death.ctsc'
@@ -155,9 +154,18 @@ def _installCannonCompat(suit):
 
 
 def makeIntroduction(boss, delayDeletes, investors=None):
-    investors = list(investors or [])
-    if len(investors) < 3:
-        investors = boss._getIntroductionInvestors()
+    if not boss.battle:
+        raise RuntimeError('Plutocrat battle is not ready for introduction')
+    if investors is None:
+        investors = []
+        for suit in list(boss.battle.suits):
+            try:
+                if suit.dna.name in INVESTORS:
+                    investors.append(suit)
+            except:
+                pass
+    else:
+        investors = list(investors)
     if len(investors) < 3:
         raise RuntimeError('Plutocrat introduction needs 3 Investors, got %s' % len(investors))
     investors = [investors[1], investors[2], investors[0]]
@@ -171,11 +179,6 @@ def makeIntroduction(boss, delayDeletes, investors=None):
         pass
     fake.doId = -75
     boss.cutscenePlutocrat = fake
-    for speaker in [fake] + investors:
-        try:
-            speaker.getDialogueArray()
-        except:
-            pass
     actualToons = _toons(boss.involvedToons, boss.cr, delayDeletes, 'PlutocratIntroduction')
     cutsceneToons = _padToons(actualToons)
     suits = [fake] + investors
@@ -207,22 +210,16 @@ def cleanupCutscenePlutocrat(boss):
 
 
 def makeJoinPcrat(boss, suit, destNode, toons):
-    suit.wrtReparentTo(boss.battleNode)
+    suit.wrtReparentTo(render)
     data = _dict(
         nodes=[boss.battleNode, destNode, suit],
         toons=_padToons(toons), suits=[suit], actors=[suit],
         messages=JOIN_DIALOGUE)
-    toonRefusal = Parallel()
-    for toon in toons:
-        if toon:
-            toonRefusal.append(Sequence(
-                Wait(12.5),
-                Func(TTEmote.doNo, toon)))
-    return Parallel(buildCutscene(JOIN_PCRAT_PATH, data), toonRefusal)
+    return buildCutscene(JOIN_PCRAT_PATH, data)
 
 
 def makeJoinGeneric(boss, suit, destNode):
-    suit.wrtReparentTo(boss.battleNode)
+    suit.wrtReparentTo(render)
     data = _dict(nodes=[boss.battleNode, destNode, suit], suits=[suit])
     return buildCutscene(JOIN_GENERIC_PATH, data)
 
@@ -234,17 +231,31 @@ def makeHatch(boss, opening=True):
     return buildCutscene(HATCH_OPEN_PATH if opening else HATCH_CLOSE_PATH, data)
 
 
-def makeKickUp(boss, hydra, target, battle):
+def makeKickUp(boss, hydra, target, battle=None):
+    battle = battle or boss.battleNode
     helper = battle.attachNewNode('hydraKicknode')
     data = _dict(nodes=[hydra, target, battle, helper],
                  suits=[hydra, target], actors=[hydra, target], messages=DUMMY_DIALOGUE)
-    return Sequence(
-        buildCutscene(KICKUP_PATH, data),
-        Func(camera.wrtReparentTo, battle),
-        Func(helper.removeNode))
+    return Sequence(buildCutscene(KICKUP_PATH, data), Func(helper.removeNode))
 
 
-def makeTribute(boss, kerberos, target, battle):
+
+def _faceSitdownCamera(styx):
+    try:
+        camera.reparentTo(styx)
+        camera.setPos(5.65547, -10.15417, 5.01282)
+        camera.lookAt(styx, 0, 0, styx.height * 0.6)
+        camera.wrtReparentTo(render)
+        camera.setR(render, 0)
+    except:
+        try:
+            camera.lookAt(styx)
+            camera.setR(render, 0)
+        except:
+            pass
+
+def makeTribute(boss, kerberos, target, battle=None):
+    battle = battle or boss.battleNode
     data = _dict(nodes=[kerberos, target, battle],
                  suits=[kerberos, target], actors=[kerberos, target], messages=DUMMY_DIALOGUE)
     return Sequence(
@@ -252,16 +263,8 @@ def makeTribute(boss, kerberos, target, battle):
         Func(camera.wrtReparentTo, battle))
 
 
-def _positionSitdownCamera(styx, battle):
-    camera.reparentTo(battle)
-    camera.setPos(styx, 5.65547, -10.15417, 5.01282)
-    try:
-        camera.lookAt(styx, 0, 0, styx.height * 0.55)
-    except:
-        camera.lookAt(styx)
-
-
-def makeSitdown(boss, styx, battle):
+def makeSitdown(boss, styx, battle=None):
+    battle = battle or boss.battleNode
     chairNode = styx.attachNewNode('chairbase')
     table = loader.loadModel('phase_8/models/props/ttcc_prp_pc_table')
     chair = table.find('**/pizza_chair_1')
@@ -272,38 +275,38 @@ def makeSitdown(boss, styx, battle):
     subnode = battle.attachNewNode(':)')
     data = _dict(nodes=[styx, battle, subnode, chair, chairNode],
                  suits=[styx], actors=[styx], messages=DUMMY_DIALOGUE)
-    data['affectsCamera'] = False
-    cameraTrack = Sequence(
-        Func(_positionSitdownCamera, styx, battle),
-        Wait(2.75),
-        Func(camera.wrtReparentTo, battle))
     return Sequence(
-        Parallel(buildCutscene(SITDOWN_PATH, data), cameraTrack),
+        buildCutscene(SITDOWN_PATH, data),
         Func(camera.wrtReparentTo, battle),
+        Func(camera.setR, battle, 0),
         Func(subnode.removeNode),
         Func(chair.removeNode),
         Func(chairNode.removeNode))
 
 
-def makeUsury(boss, styx, waiter, battle):
+def makeUsury(boss, styx, waiter, battle=None):
+    battle = battle or boss.battleNode
     data = _dict(nodes=[styx, waiter, battle],
                  suits=[styx, waiter], actors=[styx, waiter], messages=DUMMY_DIALOGUE)
     return buildCutscene(USURY_PATH, data)
 
 
-def makeUsuryFodder(boss, styx, fodders, battle):
+def makeUsuryFodder(boss, styx, fodders, battle=None):
+    battle = battle or boss.battleNode
     fodders = list(fodders)
     data = _dict(nodes=[battle, styx] + fodders,
                  suits=[styx] + fodders, actors=[styx] + fodders, messages=DUMMY_DIALOGUE)
     return buildCutscene(USURY_FODDER_PATH, data)
 
 
-def makeDeepFreeze(boss, plutocrat, battle):
+def makeDeepFreeze(boss, plutocrat, battle=None):
+    battle = battle or boss.battleNode
     data = _dict(nodes=[plutocrat, battle])
     return buildCutscene(DEEPFREEZE_PATH, data)
 
 
-def _snowData(boss, battle, plutocrat=None, damage=False):
+def _snowData(boss, plutocrat=None, damage=False, battle=None):
+    battle = battle or boss.battleNode
     actualToons = _toons(boss.involvedToons, boss.cr)
     particles = getPlutocratParticles(('chillyAir', 'chillyFlakes'))
     if damage:
@@ -318,13 +321,13 @@ def _snowData(boss, battle, plutocrat=None, damage=False):
                  particles=particles)
 
 
-def makeSnowSquall(boss, plutocrat, active, battle):
-    data = _snowData(boss, battle, plutocrat, False)
+def makeSnowSquall(boss, plutocrat, active, battle=None):
+    data = _snowData(boss, plutocrat, False, battle)
     return buildCutscene(SNOW_START_PATH if active else SNOW_END_PATH, data)
 
 
-def makeSnowSquallDamage(boss, battle):
-    return buildCutscene(SNOW_DAMAGE_PATH, _snowData(boss, battle, None, True))
+def makeSnowSquallDamage(boss, battle=None):
+    return buildCutscene(SNOW_DAMAGE_PATH, _snowData(boss, None, True, battle))
 
 
 def makeDeath(boss, plutocrat):

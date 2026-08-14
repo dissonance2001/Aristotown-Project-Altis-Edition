@@ -319,9 +319,23 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                     part.setColorScale(self.deepFreezeColor)
                 except:
                     pass
+        for toonId in self.involvedToons:
+            toon = self.cr.doId2do.get(toonId)
+            if not toon:
+                continue
+            try:
+                toon._plutocratLaffMeterColor = VBase4(self.deepFreezeColor)
+            except:
+                pass
+            try:
+                messenger.send(
+                    toon.uniqueName('set-laff-meter-color'),
+                    [self.deepFreezeColor])
+            except:
+                pass
         for meter in self._laffMeters():
             try:
-                meter.setColorScale(self.deepFreezeColor)
+                meter.clearColorScale()
                 meter.show()
             except:
                 pass
@@ -333,7 +347,17 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             rounds = 2
         self.deepFreezeRoundsLeft = max(
             self.deepFreezeRoundsLeft, max(1, rounds) + 1)
+        taskMgr.remove(self.uniqueName('deepFreezeVisualRefresh'))
+        taskMgr.doMethodLater(
+            0.05, self._refreshDeepFreezeTask,
+            self.uniqueName('deepFreezeVisualRefresh'))
         self.refreshDeepFreezeVisuals()
+
+    def _refreshDeepFreezeTask(self, task):
+        if self.deepFreezeRoundsLeft <= 0:
+            return Task.done
+        self.refreshDeepFreezeVisuals()
+        return Task.again
 
     def advanceDeepFreezeVisuals(self):
         if self.deepFreezeRoundsLeft <= 0:
@@ -346,6 +370,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def clearDeepFreezeVisuals(self):
         self.deepFreezeRoundsLeft = 0
+        taskMgr.remove(self.uniqueName('deepFreezeVisualRefresh'))
         if not self.cr:
             return
         for toonId in self.involvedToons:
@@ -357,6 +382,19 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                     part.clearColorScale()
                 except:
                     pass
+        for toonId in self.involvedToons:
+            toon = self.cr.doId2do.get(toonId)
+            if not toon:
+                continue
+            try:
+                if hasattr(toon, '_plutocratLaffMeterColor'):
+                    del toon._plutocratLaffMeterColor
+            except:
+                pass
+            try:
+                messenger.send(toon.uniqueName('set-laff-meter-color'))
+            except:
+                pass
         for meter in self._laffMeters():
             try:
                 meter.clearColorScale()

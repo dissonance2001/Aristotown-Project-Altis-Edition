@@ -1890,7 +1890,14 @@ def doSuitAttack(attack):
         name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')
     )
-    if name.startswith('PlutocratCore'):
+    if name == 'PlutocratCoreStandupGuy':
+        camTrack = MovieCamera.heldRelativeShot(
+            suit, 0, 12, 13, 180, -30, 0,
+            suitTrack.getDuration(), 'singleAvatarShot')
+    elif name == 'PlutocratCoreSlushFund':
+        camTrack = MovieCamera.randomActorShot(
+            suit, attack['battle'], suitTrack.getDuration(), 'suit')
+    elif name.startswith('PlutocratCore'):
         camTrack = Sequence(Wait(suitTrack.getDuration()))
     elif name == 'ChainsawCorePhaseTwo':
         duration = suitTrack.getDuration()

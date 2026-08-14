@@ -16,10 +16,10 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPlutocratBossAI')
     InvestorInfo = {
         'charon': (25, 2000),
-        'nix': (21, 1625),
-        'hydra': (22, 1700),
-        'styx': (20, 1500),
-        'kerberos': (23, 1800),
+        'nix': (21, 1675),
+        'hydra': (22, 1800),
+        'styx': (20, 1625),
+        'kerberos': (23, 1850),
     }
 
     def __init__(self, air):
@@ -64,6 +64,12 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
         self.charonAbsorbChance = {}
         self.ghostPayrollVisualDeaths = 0
         self.investorKickUpMultipliers = {}
+        self.investorTurnCounts = {}
+        self.charonStandupSuitId = 0
+        self.charonAbsorbedDamage = 0
+        self.snowSquallDamageRounds = 0
+        self.slushFundNextRound = 0
+        self.pendingDeepFreezeCount = 0
 
     def getHoodId(self):
         return ToontownGlobals.TheBrrrgh
@@ -240,6 +246,12 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
         self.charonAbsorbChance = {}
         self.ghostPayrollVisualDeaths = 0
         self.investorKickUpMultipliers = {}
+        self.investorTurnCounts = {}
+        self.charonStandupSuitId = 0
+        self.charonAbsorbedDamage = 0
+        self.snowSquallDamageRounds = 0
+        self.slushFundNextRound = 0
+        self.pendingDeepFreezeCount = 0
         self.battle = self.makeBattle()
         self.battleId = self.battle.doId
         self.sendBattleIds()

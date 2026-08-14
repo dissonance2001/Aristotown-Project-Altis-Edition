@@ -18,6 +18,10 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
             toonTrackOrder, suitAttacks)
         if int(movieHasBeenMade) != 1:
             return result
+        boss = self.bossCog
+        if boss and getattr(boss, 'deepFreezeRoundsLeft', 0) > 0:
+            for attack in getattr(self.movie, 'suitAttackDicts', ()):
+                attack['phase'] = 'preToon'
         frozenIds = set()
         for attack in getattr(self.movie, 'suitAttackDicts', ()):
             name = attack.get('name', '')
@@ -99,6 +103,16 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
         taskMgr.remove(self.uniqueName('plutocratPresentationRefresh'))
         return DistributedBattleMiniboss.DistributedBattleMiniboss.exitWaitForInput(self)
 
+
+    def _restorePostPlutocratJoinCamera(self):
+        if not self.hasLocalToon():
+            return
+        try:
+            camera.reparentTo(self)
+            camera.setPosHpr(0, -14.92, 9.56, 0, -18.5, 0)
+        except:
+            pass
+
     def showSuitsFalling(self, suits, ts, name, callback):
         boss = self.bossCog
         if boss is None:
@@ -148,6 +162,7 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
                 pcratTrack = Sequence(
                     Func(PlutocratCutscenes.cleanupCutscenePlutocrat, boss),
                     Parallel(fly, music, cam),
+                    Func(self._restorePostPlutocratJoinCamera),
                     Func(dest.removeNode))
             else:
                 suit.hide()

@@ -3,6 +3,7 @@ from pandac.PandaModules import Point3, Vec4
 from toontown.battle import BattleParticles
 from toontown.battle import MovieUtil
 from toontown.battle import MovieCamera
+from toontown.battle import SuitBattleGlobals
 from toontown.battle import PlayByPlayText
 from toontown.battle.BattleSounds import globalBattleSoundCache
 from toontown.chat.ChatGlobals import CFSpeech
@@ -84,29 +85,55 @@ def _cheatBanner(attack, title, description, duration, oneLine=False):
         Func(descText.cleanup))
 
 
+def _primeCamera(attack):
+    boss = _boss(attack)
+    battle = attack.get('battle')
+    if boss:
+        try:
+            boss.restoreBattlePresentation(resetCamera=1)
+            return
+        except:
+            pass
+    if battle:
+        try:
+            camera.reparentTo(battle)
+            camera.setPosHpr(0, -18, 12, 0, -12, 0)
+        except:
+            pass
+
+
 def _restore(attack):
     boss = _boss(attack)
     battle = attack.get('battle')
-    if battle:
+    if boss:
         try:
-            camera.wrtReparentTo(battle)
+            boss.restoreBattlePresentation(resetCamera=1)
+            return
         except:
             pass
-    if boss:
-        boss.restoreBattlePresentation(resetCamera=0)
+    if battle:
+        try:
+            camera.reparentTo(battle)
+            camera.setPosHpr(0, -18, 12, 0, -12, 0)
+        except:
+            pass
 
 
-def _finish(attack, track, title, description, oneLine=False):
+def _finish(attack, track, title, description, oneLine=False, primeCamera=True, restoreCamera=True, bannerDurationOffset=0.0):
     try:
         duration = track.getDuration()
     except:
         duration = 5.0
-    return Sequence(
-        Parallel(
-            track,
-            _cheatBanner(
-                attack, title, description, duration, oneLine)),
-        Func(_restore, attack))
+    result = Sequence()
+    if primeCamera:
+        result.append(Func(_primeCamera, attack))
+    result.append(Parallel(
+        track,
+        _cheatBanner(
+            attack, title, description, max(0.75, duration + bannerDurationOffset), oneLine)))
+    if restoreCamera:
+        result.append(Func(_restore, attack))
+    return result
 
 
 def _say(suit, text, anim='finger-wag', duration=2.5, sfx=None):
@@ -309,7 +336,7 @@ def doShakedown(attack):
         'NIX INFLICTS A RANDOM TOON WITH A REWARD COOLDOWN!'
         if mode == 0 else
         'NIX INFLICTS A RANDOM TOON WITH A DAMAGE VULNERABILITY!')
-    return _finish(attack, track, 'SHAKEDOWN!', description)
+    return _finish(attack, track, 'SHAKEDOWN!', description, primeCamera=False)
 
 def doGhostPayroll(attack):
     responses = {
@@ -321,12 +348,19 @@ def doGhostPayroll(attack):
     }
     suit = attack['suit']
     name = getattr(getattr(suit, 'dna', None), 'name', '')
-    track = _say(
+    action = _say(
         suit,
         responses.get(name, 'Ghost Payroll!'),
         'mob-mentality',
         3.5,
         'phase_5/audio/sfx/SA_extra_tip.ogg')
+    track = Parallel(
+        action,
+        Sequence(
+            MovieCamera.heldShot(
+                0, -17, 14, 0, -22, 0,
+                action.getDuration(), 'allGroupOverheadShot'),
+            Func(camera.wrtReparentTo, attack['battle'])))
     return _finish(
         attack, track,
         'GHOST PAYROLL!',
@@ -419,7 +453,8 @@ def doKickUp(attack):
         getattr(target, 'dna', None), 'name', 'COG').upper()
     return _finish(
         attack, track, 'KICK UP!',
-        'HYDRA GIVES A DAMAGE BUFF TO %s!' % targetName)
+        'HYDRA GIVES A DAMAGE BUFF TO %s!' % targetName,
+        primeCamera=False, restoreCamera=False, bannerDurationOffset=-0.25)
 
 
 def doSitdown(attack):
@@ -498,23 +533,28 @@ def doUsuryFodder(attack):
 def doTribute(attack):
     boss = _boss(attack)
     parts = _parse(attack['name'])
-    target = _findSuit(attack, int(parts[-3]))
+    targetId = int(parts[-3])
+    target = _findSuit(attack, targetId) if targetId else None
     kerberos = attack['suit']
-    if not boss or not target:
+    if not boss:
         return Sequence(Wait(0.01))
     phrases = (
         "In honor of my fallen Satellites.",
         "To the Don!",
         "Suits like us gotta look out for each other.",
     )
-    track = Parallel(
-        Sequence(
+    if target:
+        action = Sequence(
             Func(attack['battle'].unlureSuit, kerberos),
             Func(attack['battle'].unlureSuit, target),
-            PlutocratCutscenes.makeTribute(boss, kerberos, target, attack['battle'])),
-        _chat(kerberos, random.choice(phrases), duration=5.5))
-    targetName = getattr(
-        getattr(target, 'dna', None), 'name', 'COG').upper()
+            PlutocratCutscenes.makeTribute(boss, kerberos, target, attack['battle']))
+        targetName = SuitBattleGlobals.SuitAttributes[target.dna.name]['name']
+    else:
+        action = Sequence(
+            Func(attack['battle'].unlureSuit, kerberos),
+            ActorInterval(kerberos, 'effort'))
+        targetName = 'NO ONE'
+    track = Parallel(action, _chat(kerberos, random.choice(phrases), duration=5.5))
     return _finish(
         attack, track, 'TRIBUTE!',
         'KERBEROS GIVES UP SOME HEALTH TO %s!' % targetName)

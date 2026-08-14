@@ -216,6 +216,7 @@ bookkeep = (('pencil-sharpener', 'pencil-sharpener', 4), ('shredder', 'shredder'
 racket = (('pickpocket', 'pickpocket', 4), ('smile', 'smile', 4), ('layoffs', 'layoffs', 4), ('quick-jump', 'jump', 4), ('taunt', 'taunt', 4), ('smile', 'smile', 4), ('cease', 'cease', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('objection', 'objection', 4), ('effort', 'effort', 4), ('rush-job', 'rush-job', 4), ('come-on', 'come-on', 4), ('stomp', 'stomp', 4), ('glower', 'glower', 4))
 liquidr = (('pickpocket', 'pickpocket', 4), ('pen-squirt', 'fountain-pen', 4))
 treasure = (('cigar-smoke', 'cigar-smoke', 4), ('pen-squirt', 'fountain-pen', 4))
+charon = (('defense', 'defense', 4),)
 pcrat = (('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4), ('cigar-smoke', 'plutocrat-cigar-smoke', 4))
 erfit = (('quick-jump', 'jump', 4), ('smile', 'smile', 4), ('pickpocket', 'pickpocket', 4), ('glower', 'glower', 4))
 

@@ -1597,10 +1597,16 @@ def _plutocratShatterDeath(suit, battle):
 
 
 def _createPlutocratFrozenDeathTrack(suit, battle):
-    iceModel = loader.loadModel(
-        'cosmetics/hat/models/cc_m_acc_hat_over_icecube')
+    try:
+        iceModel = loader.loadModel(
+            'cosmetics/hat/models/cc_m_acc_hat_over_icecube')
+    except:
+        iceModel = None
     if not iceModel or iceModel.isEmpty():
-        iceModel = loader.loadModel('phase_8/models/props/icecube.bam')
+        try:
+            iceModel = loader.loadModel('phase_8/models/props/icecube.bam')
+        except:
+            iceModel = None
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     part = suit.getGeomNode()
     explosionPoint = Point3(
@@ -1711,8 +1717,6 @@ def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
     suit._pendingQueuedDeath = True
 
-    # Corporate Clash Pacesetter special death.  Choose it here before
-    # Altis constructs the normal Cog lose / gear-explosion track.
     if suit.style.name == 'psetter':
         from toontown.cutscene.PacesetterDeathCutscene import makePacesetterDeath
         return makePacesetterDeath(suit, battle)

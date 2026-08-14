@@ -1798,7 +1798,9 @@ class Movie(DirectObject.DirectObject):
                     'WriteOff',
                 ]
 
-                if suit and adict['name'] in phaseByName:
+                if sa[SUIT_BEFORE_TOONS_COL]:
+                    adict['phase'] = 'preToon'
+                elif suit and adict['name'] in phaseByName:
                     adict['phase'] = phaseByName[adict['name']]
                 elif suit and adict['name'] in PRE_TOON_ATTACKS:
                     adict['phase'] = 'preToon'

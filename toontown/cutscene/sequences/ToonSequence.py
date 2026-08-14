@@ -490,16 +490,35 @@ def seq_setToonAnimState(delay=0, animState='Neutral', cutsceneDict=None):
         retParallel.append(Func(toon.setAnimState, animState, 1.0, None, None, None, extraArgs))
     return Sequence(Wait(delay), retParallel)
 
+
+def _playCutsceneEmote(toon, emoteIndex, emoteName=None):
+    _prepareManualToonAnimation(toon)
+    if emoteName == 'Taunt':
+        try:
+            toon.play('taunt')
+        except:
+            pass
+        try:
+            sfx = loader.loadSfx('phase_4/audio/sfx/avatar_emotion_taunt.ogg')
+            base.playSfx(sfx, node=toon)
+        except:
+            pass
+        return
+    try:
+        toon.doEmote(emoteIndex, 1.0, 0, None, [])
+    except:
+        pass
+
 @cutsceneSequence(name='Toon: Emote One', enum=EDE.setOneEmote)
 def seq_setOneToonEmote(toonIndex=0, delay=0, emoteIndex=0, cutsceneDict=None):
     toon = cutsceneDict['toons'][toonIndex]
     if not toon:
         return Sequence()
+    emoteName = emoteIndex
     emoteIndex = OTPLocalizer.EmoteFuncDict[emoteIndex]
     return Sequence(
         Wait(delay),
-        Func(_prepareManualToonAnimation, toon),
-        Func(toon.doEmote, emoteIndex, 1.0, 0, None, []))
+        Func(_playCutsceneEmote, toon, emoteIndex, emoteName))
 
 @cutsceneSequence(name='Toon: Emote All', enum=EDE.setAllEmote)
 def seq_setToonEmote(delay=0, emoteIndex=0, cutsceneDict=None):

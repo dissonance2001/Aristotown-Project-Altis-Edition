@@ -173,6 +173,21 @@ def _configureSuitNametag(suit, visible=False):
     except:
         pass
 
+
+def _attachCutscenePropeller(suit):
+    try:
+        head = suit.find('**/to_head')
+        if head.isEmpty():
+            head = suit.find('**/joint_head')
+        if suit.prop and not head.isEmpty():
+            suit.prop.reparentTo(head)
+            suit.prop.setPosHpr(0, 0, 0, 0, 0, 0)
+            suit.prop.setScale(1)
+            suit.prop.clearColorScale()
+            suit.prop.show()
+    except:
+        pass
+
 def createSuitMoveIval(suit, destPos, duration, gravityMult=0.4):
     """
     Creates a sequence which moves the suit using propeller in a projectile arc.
@@ -186,13 +201,17 @@ def createSuitMoveIval(suit, destPos, duration, gravityMult=0.4):
     moveIval = Sequence(Func(suit.pose, 'landing', 0), ProjectileInterval(suit, duration=flyingDur, endPos=destPos, gravityMult=gravityMult), ActorInterval(suit, 'landing'))
     if suit.prop is None:
         suit.prop = BattleProps.globalPropPool.getProp('propeller')
+    if suit.propInSound is None:
+        suit.propInSound = base.loader.loadSfx('phase_5/audio/sfx/ENC_propeller_in.ogg')
+    if suit.propOutSound is None:
+        suit.propOutSound = base.loader.loadSfx('phase_5/audio/sfx/ENC_propeller_out.ogg')
     propDur = suit.prop.getDuration('propeller')
     lastSpinFrame = 8
     fr = suit.prop.getFrameRate('propeller')
     spinTime = lastSpinFrame / fr
     openTime = (lastSpinFrame + 1) / fr
     propTrack = Parallel(SoundInterval(suit.propInSound, duration=flyingDur, node=suit), Sequence(ActorInterval(suit.prop, 'propeller', constrainedLoop=1, duration=flyingDur + 1, startTime=0.0, endTime=spinTime), ActorInterval(suit.prop, 'propeller', duration=landingDur, startTime=openTime), Func(suit.detachPropeller)))
-    result = Parallel(Sequence(Func(suit.attachPropeller), ActorInterval(suit.prop, 'propeller', startFrame=lastSpinFrame, endFrame=suit.prop.getNumFrames('propeller'), playRate=-1.6)), Sequence(Wait(0.5), Parallel(moveIval, propTrack)))
+    result = Parallel(Sequence(Func(_attachCutscenePropeller, suit), ActorInterval(suit.prop, 'propeller', startFrame=lastSpinFrame, endFrame=suit.prop.getNumFrames('propeller'), playRate=-1.6)), Sequence(Wait(0.5), Parallel(moveIval, propTrack)))
     return result
 
 def createSuitMoveIvalErfit(suit, destPos, hole):

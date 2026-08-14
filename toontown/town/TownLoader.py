@@ -223,6 +223,9 @@ class TownLoader(StateData.StateData):
             self.geom.reparentTo(hidden)
         else:
             self.geom = hidden.attachNewNode(node)
+        prepareHoodGeometry = getattr(self, 'prepareHoodGeometryBeforeFlatten', None)
+        if prepareHoodGeometry:
+            prepareHoodGeometry()
         self.makeDictionaries(self.hood.dnaStore)
         self.reparentLandmarkBlockNodes()
         self.renameFloorPolys(self.nodeList)
