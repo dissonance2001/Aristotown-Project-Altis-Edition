@@ -109,6 +109,9 @@ class DistributedPlutocratSigilvator(DistributedSigilvator):
     def setBossOfficeZoneForce(self, zoneId):
         self._goToPlutocratInstance(zoneId)
 
+    def enterClosed(self, ts):
+        self.forceDoorsClosed()
+
     def getDestName(self):
         return 'Plutocrat'
 
