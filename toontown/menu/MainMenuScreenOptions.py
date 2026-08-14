@@ -1,7 +1,8 @@
 from direct.gui.DirectGui import *
 from toontown.menu.MainMenuScreen import MainMenuScreen
-from toontown.menu.MainMenuGui import MainMenuButton
 from toontown.dmenu import DMenuOptions
+from toontown.toonbase import TTLocalizer
+from toontown.toontowngui.TTGui import btnDn, btnRlvr, btnUp
 
 
 class MainMenuScreenOptions(MainMenuScreen):
@@ -13,13 +14,27 @@ class MainMenuScreenOptions(MainMenuScreen):
     def createUI(self):
         self.optionsMgr = DMenuOptions.DMenuOptions()
         self.optionsMgr.showOptions(animate=False)
-        self.backButton = MainMenuButton(
-            parent=base.a2dTopLeft,
+
+        self.backButton = DirectButton(
+            parent=self.optionsMgr.optionsNode,
+            relief=None,
+            image=(btnUp, btnDn, btnRlvr),
             text='Back',
-            pos=(.2, 0, -.1),
-            command=lambda: base.cr.mainmenu.request('Play')
+            text_fg=(0, 0, 0, 1),
+            text_scale=TTLocalizer.AClogoutButton,
+            text_pos=(0, -0.035),
+            image_scale=1,
+            image1_scale=1.05,
+            image2_scale=1.05,
+            scale=0.7,
+            command=self.__goBack
         )
+        self.backButton.setPos(0, 1, -.75)
+        self.backButton.show()
         self.uiItems.append(self.backButton)
+
+    def __goBack(self):
+        base.cr.mainmenu.request('Play')
 
     def destroy(self):
         if self.optionsMgr:
