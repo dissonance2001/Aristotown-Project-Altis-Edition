@@ -456,7 +456,7 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
 
         self.skyFadeSeq = LerpFunctionInterval(setSkyAlpha, 2.2, fromData=0.0, toData=0.85, blendType='easeOut')
         self.skyFadeSeq.start()
-
+        #we disable boss elevator
     def loadEnvironment(self):
         self.notify.debug('----- loadEnvironment')
         self.hide()
