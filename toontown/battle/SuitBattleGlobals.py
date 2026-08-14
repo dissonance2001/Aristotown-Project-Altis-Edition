@@ -6537,7 +6537,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
  'bcaster': {'name': 'Videographer Silhouette',
              'singularname': 'a Videographer Silhouette',
              'pluralname': 'Videographer Silhouettes',
-             'level': 65,
+             'level': 32,
              'hp':(6666,),
              'def':(60,),
              'freq':(0,),

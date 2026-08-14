@@ -3075,51 +3075,72 @@ class BattleCalculatorAI:
                     # JUMP TARGET
                     # --------------------------------------------------
                     else:
-                        # Main target didn't actually take Zap damage.
-                        # Therefore the electricity cannot jump.
                         if mainDamage <= 0:
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
-                        # This target isn't actually part of the chain.
                         elif zapMult <= 0:
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
-                        # Jump target itself cannot receive Zap.
                         elif self.suitHasCondition(targetId, 'oilRain'):
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
                         elif self.suitHasCondition(targetId, 'immune'):
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
                         elif self.suitHasCondition(targetId, 'zapImmune'):
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
                         elif self.suitHasCondition(targetId, 'dead'):
-                            attackDamage = 0
+                            initialJumpDamage = 0
 
                         elif not (
                             self.suitHasCondition(targetId, 'soaked') or
                             self.suitHasCondition(targetId, 'drenched')
                         ):
                             if self.suitHasCondition(targetId, 'missedSoak'):
-                                attackDamage = mainDamage * zapMult * 0.25
+                                initialJumpDamage = mainDamage * zapMult * 0.25
                             else:
-                                attackDamage = 0
+                                initialJumpDamage = 0
 
                         else:
-                            # THIS is the new behavior:
-                            #
-                            # jump damage is based on the FINAL main Cog
-                            # damage, including its vulnerability.
-                            attackDamage = mainDamage * zapMult
+                            initialJumpDamage = mainDamage * zapMult
+
+                        # Apply THIS jump Cog's own vulnerability / shielding / reductions.
+                        if initialJumpDamage > 0:
+                            jumpDamage = self.applyCogDamageInterceptors(
+                                initialJumpDamage,
+                                toonId,
+                                suit,
+                                targetId,
+                                ZAP
+                            )
+                            attackDamage = self.applyToonGagDamageMultipliers(
+                                jumpDamage,
+                                toonId,
+                                targetId,
+                                ZAP,
+                                atkLevel,
+                                organicBonus=False
+                            )
 
                     # --------------------------------------------------
-                    # Successful Zap hit effects.
+                    # EVERYTHING BELOW HERE APPLIES TO BOTH
+                    # MAIN TARGET AND JUMP TARGETS.
                     # --------------------------------------------------
+                    if atkHit and attackDamage > 0:
+                        self.applyCogHitEffects(
+                            toon,
+                            toonId,
+                            suit,
+                            targetId,
+                            ZAP,
+                            atkLevel,
+                            attackDamage
+                        )
+
                     if attackDamage > 0:
 
-                        # Rush Job is consumed only if this Cog
-                        # actually received Zap damage.
+                        # Consume Zap Rush Job.
                         if self.suitHasCondition(targetId, 'zapRushJob'):
                             self.setSuitCondition(
                                 targetId,
@@ -3136,18 +3157,78 @@ class BattleCalculatorAI:
                             0,
                             'setBoth'
                         )
-                        organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                        self.setToonCondition(toonId, 'zapToon', 1, 1, 'setBoth')
-                        if organicBonus:
-                            if self.suitHasCondition(targetId, 'soaked') or self.suitHasCondition(targetId, 'missedSoak') or self.suitHasCondition(targetId, 'drenched'):
-                                self.setSuitCondition(targetId, 'zapped', self.getSuitConditionModifier(targetId, 'zapped') + math.ceil(attackDamage / 2), 2, 'setBoth')
-                        else:
-                            if self.suitHasCondition(targetId, 'soaked') or self.suitHasCondition(targetId, 'missedSoak') or self.suitHasCondition(targetId, 'drenched'):
-                                self.setSuitCondition(targetId, 'zapped', self.getSuitConditionModifier(targetId, 'zapped') + math.ceil(attackDamage / 4), 2, 'setBoth')
+
+                        organicBonus = self.__toonCheckGagBonus(
+                            attack[TOON_ID_COL],
+                            atkTrack,
+                            atkLevel
+                        )
+
+                        self.setToonCondition(
+                            toonId,
+                            'zapToon',
+                            1,
+                            1,
+                            'setBoth'
+                        )
+
+                        # Apply Zapped based on this Cog's FINAL damage.
+                        if (
+                            self.suitHasCondition(targetId, 'soaked') or
+                            self.suitHasCondition(targetId, 'missedSoak') or
+                            self.suitHasCondition(targetId, 'drenched')
+                        ):
+                            if organicBonus:
+                                self.setSuitCondition(
+                                    targetId,
+                                    'zapped',
+                                    self.getSuitConditionModifier(
+                                        targetId,
+                                        'zapped'
+                                    ) + math.ceil(attackDamage / 2),
+                                    2,
+                                    'setBoth'
+                                )
+
+                            else:
+                                self.setSuitCondition(
+                                    targetId,
+                                    'zapped',
+                                    self.getSuitConditionModifier(
+                                        targetId,
+                                        'zapped'
+                                    ) + math.ceil(attackDamage / 4),
+                                    2,
+                                    'setBoth'
+                                )
+
                         if self.suitHasCondition(targetId, 'soaked'):
-                            self.setSuitCondition(targetId, 'soaked', 1, 1, 'setBoth')
+                            self.setSuitCondition(
+                                targetId,
+                                'soaked',
+                                1,
+                                1,
+                                'setBoth'
+                            )
+
                         if self.suitHasCondition(targetId, 'missedSoak'):
-                            self.setSuitCondition(targetId, 'missedSoak', 1, 1, 'setBoth')
+                            self.setSuitCondition(
+                                targetId,
+                                'missedSoak',
+                                1,
+                                1,
+                                'setBoth'
+                            )
+
+                        if suit.dna.name == 'dking':
+                            self.setSuitCondition(
+                                targetId,
+                                'zappedcalculator',
+                                1,
+                                1,
+                                'setBoth'
+                            )
+
                         self.__removeLured(targetId)
 
 

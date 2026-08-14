@@ -1708,7 +1708,7 @@ class SuitPlannerInteriorAI:
             suit = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='t',
-                suitLevel=66,
+                suitLevel=33,
                 revives=0,
                 suitName='bcaster'
             )
