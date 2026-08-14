@@ -11,6 +11,38 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
             self, x, y, z)
         self.setH(-90)
 
+    def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks,
+                 toonTrackOrder, suitAttacks):
+        result = DistributedBattleMiniboss.DistributedBattleMiniboss.setMovie(
+            self, movieHasBeenMade, avIds, suitIds, toonAttacks,
+            toonTrackOrder, suitAttacks)
+        if int(movieHasBeenMade) != 1:
+            return result
+        frozenIds = set()
+        for attack in getattr(self.movie, 'suitAttackDicts', ()):
+            name = attack.get('name', '')
+            if name.startswith('PlutocratCoreFreezeSuit_'):
+                parts = name.split('_')
+                if len(parts) >= 3:
+                    try:
+                        frozenIds.add(int(parts[-2]))
+                    except:
+                        pass
+            elif name.startswith('PlutocratCoreShatter_'):
+                parts = name.split('_')
+                if len(parts) >= 2:
+                    try:
+                        frozenIds.add(int(parts[1]))
+                    except:
+                        pass
+        for suit in getattr(self, 'suits', ()):
+            if getattr(suit, 'doId', None) in frozenIds:
+                try:
+                    suit.movieFrozen = True
+                except:
+                    pass
+        return result
+
     def showSuitsJoining(self, suits, ts, name, callback):
         if not self.initialReservesJoiningDone:
             investors = []
@@ -56,6 +88,7 @@ class DistributedBattlePlutocrat(DistributedBattleMiniboss.DistributedBattleMini
         boss = self.bossCog
         if boss:
             boss.advanceDeepFreezeVisuals()
+            boss.advanceFrozenSuitVisuals()
             taskMgr.doMethodLater(
                 0.05,
                 lambda task: (boss.restoreBattlePresentation(resetCamera=0), task.done)[1],

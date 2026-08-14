@@ -7,6 +7,7 @@ from toontown.cutscene.PlutocratCutsceneParticles import getPlutocratParticles
 from toontown.distributed import DelayDelete
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
+from toontown.toon import TTEmote
 
 INTRO_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_intro.ctsc'
 DEATH_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_death.ctsc'
@@ -216,8 +217,7 @@ def makeJoinPcrat(boss, suit, destNode, toons):
         if toon:
             toonRefusal.append(Sequence(
                 Wait(12.5),
-                ActorInterval(toon, 'taunt'),
-                Func(toon.loop, 'neutral')))
+                Func(TTEmote.doNo, toon)))
     return Parallel(buildCutscene(JOIN_PCRAT_PATH, data), toonRefusal)
 
 
@@ -234,23 +234,34 @@ def makeHatch(boss, opening=True):
     return buildCutscene(HATCH_OPEN_PATH if opening else HATCH_CLOSE_PATH, data)
 
 
-def makeKickUp(boss, hydra, target):
-    helper = boss.battleNode.attachNewNode('hydraKicknode')
-    data = _dict(nodes=[hydra, target, boss.battleNode, helper],
+def makeKickUp(boss, hydra, target, battle):
+    helper = battle.attachNewNode('hydraKicknode')
+    data = _dict(nodes=[hydra, target, battle, helper],
                  suits=[hydra, target], actors=[hydra, target], messages=DUMMY_DIALOGUE)
     return Sequence(
         buildCutscene(KICKUP_PATH, data),
-        Func(camera.wrtReparentTo, boss.battleNode),
+        Func(camera.wrtReparentTo, battle),
         Func(helper.removeNode))
 
 
-def makeTribute(boss, kerberos, target):
-    data = _dict(nodes=[kerberos, target, boss.battleNode],
+def makeTribute(boss, kerberos, target, battle):
+    data = _dict(nodes=[kerberos, target, battle],
                  suits=[kerberos, target], actors=[kerberos, target], messages=DUMMY_DIALOGUE)
-    return buildCutscene(TRIBUTE_PATH, data)
+    return Sequence(
+        buildCutscene(TRIBUTE_PATH, data),
+        Func(camera.wrtReparentTo, battle))
 
 
-def makeSitdown(boss, styx):
+def _positionSitdownCamera(styx, battle):
+    camera.reparentTo(battle)
+    camera.setPos(styx, 5.65547, -10.15417, 5.01282)
+    try:
+        camera.lookAt(styx, 0, 0, styx.height * 0.55)
+    except:
+        camera.lookAt(styx)
+
+
+def makeSitdown(boss, styx, battle):
     chairNode = styx.attachNewNode('chairbase')
     table = loader.loadModel('phase_8/models/props/ttcc_prp_pc_table')
     chair = table.find('**/pizza_chair_1')
@@ -258,57 +269,62 @@ def makeSitdown(boss, styx):
     chair.setPosHpr(0, 0, 0, 0, 0, 0)
     chair.hide()
     table.removeNode()
-    subnode = boss.battleNode.attachNewNode('styxSitdownNode')
-    data = _dict(nodes=[styx, boss.battleNode, subnode, chair, chairNode],
+    subnode = battle.attachNewNode(':)')
+    data = _dict(nodes=[styx, battle, subnode, chair, chairNode],
                  suits=[styx], actors=[styx], messages=DUMMY_DIALOGUE)
+    data['affectsCamera'] = False
+    cameraTrack = Sequence(
+        Func(_positionSitdownCamera, styx, battle),
+        Wait(2.75),
+        Func(camera.wrtReparentTo, battle))
     return Sequence(
-        buildCutscene(SITDOWN_PATH, data),
-        Func(camera.wrtReparentTo, boss.battleNode),
+        Parallel(buildCutscene(SITDOWN_PATH, data), cameraTrack),
+        Func(camera.wrtReparentTo, battle),
         Func(subnode.removeNode),
         Func(chair.removeNode),
         Func(chairNode.removeNode))
 
 
-def makeUsury(boss, styx, waiter):
-    data = _dict(nodes=[styx, waiter, boss.battleNode],
+def makeUsury(boss, styx, waiter, battle):
+    data = _dict(nodes=[styx, waiter, battle],
                  suits=[styx, waiter], actors=[styx, waiter], messages=DUMMY_DIALOGUE)
     return buildCutscene(USURY_PATH, data)
 
 
-def makeUsuryFodder(boss, styx, fodders):
+def makeUsuryFodder(boss, styx, fodders, battle):
     fodders = list(fodders)
-    data = _dict(nodes=[boss.battleNode, styx] + fodders,
+    data = _dict(nodes=[battle, styx] + fodders,
                  suits=[styx] + fodders, actors=[styx] + fodders, messages=DUMMY_DIALOGUE)
     return buildCutscene(USURY_FODDER_PATH, data)
 
 
-def makeDeepFreeze(boss, plutocrat):
-    data = _dict(nodes=[plutocrat, boss.battleNode])
+def makeDeepFreeze(boss, plutocrat, battle):
+    data = _dict(nodes=[plutocrat, battle])
     return buildCutscene(DEEPFREEZE_PATH, data)
 
 
-def _snowData(boss, plutocrat=None, damage=False):
+def _snowData(boss, battle, plutocrat=None, damage=False):
     actualToons = _toons(boss.involvedToons, boss.cr)
     particles = getPlutocratParticles(('chillyAir', 'chillyFlakes'))
     if damage:
-        return _dict(nodes=[boss.battleNode, boss.particleRender],
+        return _dict(nodes=[battle, boss.particleRender],
                      toons=_padToons(actualToons),
                      sounds=[loader.loadSfx('phase_10/audio/sfx/SA_snowsquall_dot.ogg')],
                      particles=particles)
-    return _dict(nodes=[plutocrat, boss.battleNode, boss.particleRender],
+    return _dict(nodes=[plutocrat, battle, boss.particleRender],
                  toons=_padToons(actualToons), suits=[plutocrat],
                  actors=actualToons + [plutocrat],
                  sounds=[loader.loadSfx('phase_10/audio/sfx/SA_snowsquall_start.ogg')],
                  particles=particles)
 
 
-def makeSnowSquall(boss, plutocrat, active):
-    data = _snowData(boss, plutocrat, False)
+def makeSnowSquall(boss, plutocrat, active, battle):
+    data = _snowData(boss, battle, plutocrat, False)
     return buildCutscene(SNOW_START_PATH if active else SNOW_END_PATH, data)
 
 
-def makeSnowSquallDamage(boss):
-    return buildCutscene(SNOW_DAMAGE_PATH, _snowData(boss, None, True))
+def makeSnowSquallDamage(boss, battle):
+    return buildCutscene(SNOW_DAMAGE_PATH, _snowData(boss, battle, None, True))
 
 
 def makeDeath(boss, plutocrat):

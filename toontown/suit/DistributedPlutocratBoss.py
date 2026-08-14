@@ -44,6 +44,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.particleRender = None
         self.environment = None
         self.snowSquallActive = False
+        self.frozenSuitRounds = {}
         self.deepFreezeRoundsLeft = 0
         self.deepFreezeColor = VBase4(51.0 / 255.0, 1.0, 1.0, 1.0)
         self.fanModel = None
@@ -362,6 +363,52 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             except:
                 pass
 
+    def applyFrozenSuitVisual(self, suit, rounds):
+        if not suit:
+            return
+        try:
+            rounds = int(rounds)
+        except:
+            rounds = 1
+        self.frozenSuitRounds[suit.doId] = max(1, rounds) + 1
+        try:
+            suit.movieFrozen = True
+        except:
+            pass
+        for effectName in ('soaked', 'drenched'):
+            try:
+                suit.clearSuitStatusEffect(effectName)
+            except:
+                pass
+        self.refreshFrozenSuitVisuals()
+
+    def advanceFrozenSuitVisuals(self):
+        expired = []
+        for suitId, rounds in self.frozenSuitRounds.items():
+            if rounds > 0:
+                rounds -= 1
+                if rounds <= 0:
+                    expired.append(suitId)
+                else:
+                    self.frozenSuitRounds[suitId] = rounds
+        for suitId in expired:
+            if suitId in self.frozenSuitRounds:
+                del self.frozenSuitRounds[suitId]
+        self.refreshFrozenSuitVisuals()
+
+    def clearFrozenSuitVisuals(self):
+        self.frozenSuitRounds = {}
+        if not self.battle:
+            return
+        for suit in getattr(self.battle, 'suits', ()):
+            if not suit:
+                continue
+            try:
+                suit.movieFrozen = False
+                suit.getGeomNode().clearColorScale()
+            except:
+                pass
+
     def refreshFrozenSuitVisuals(self):
         if not self.battle:
             return
@@ -369,7 +416,11 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             if not suit:
                 continue
             try:
-                if self.snowSquallActive:
+                frozen = bool(
+                    self.snowSquallActive or
+                    self.frozenSuitRounds.get(suit.doId, 0) > 0)
+                suit.movieFrozen = frozen
+                if frozen:
                     suit.getGeomNode().setColorScale(0.72, 0.9, 1.0, 1.0)
                 else:
                     suit.getGeomNode().clearColorScale()
@@ -425,6 +476,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def unloadEnvironment(self):
         self.clearDeepFreezeVisuals()
+        self.clearFrozenSuitVisuals()
         if self.environment:
             self.environment.cleanup()
             self.environment = None

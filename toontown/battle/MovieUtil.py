@@ -1581,6 +1581,132 @@ def createVirtualSuitDeathTrack(suit, battle):
     return multiTrack
 
 
+def _plutocratShatterDeath(suit, battle):
+    try:
+        if getattr(suit, 'movieFrozen', False):
+            return True
+        shatterPrefix = 'PlutocratCoreShatter_%s_' % suit.doId
+        frozenPrefix = 'PlutocratCoreFreezeSuit_%s_' % suit.doId
+        for attack in battle.movie.suitAttackDicts:
+            name = attack.get('name', '')
+            if name.startswith(shatterPrefix) or name.startswith(frozenPrefix):
+                return True
+    except:
+        pass
+    return False
+
+
+def _createPlutocratFrozenDeathTrack(suit, battle):
+    iceModel = loader.loadModel(
+        'cosmetics/hat/models/cc_m_acc_hat_over_icecube')
+    if not iceModel or iceModel.isEmpty():
+        iceModel = loader.loadModel('phase_8/models/props/icecube.bam')
+    suitPos, suitHpr = battle.getActorPosHpr(suit)
+    part = suit.getGeomNode()
+    explosionPoint = Point3(
+        suitPos.getX(), suitPos.getY(), suitPos.getZ() + suit.height / 1.6)
+
+    iceNode = suit.attachNewNode('plutocratShatterIce')
+    if iceModel and not iceModel.isEmpty():
+        iceModel.copyTo(iceNode)
+    iceNode.setTransparency(True)
+    iceNode.setColorScale(1, 1, 1, 0)
+    height = suit.height / 7.0
+    scale = height / 2.0
+    if suit.style.body == 'c':
+        scale = height / 1.5
+    elif suit.style.body == 'b':
+        scale = height / 2.5
+    iceNode.setScale(0.3, 0.3, height)
+    iceNode.setHpr(
+        random.randrange(-15, 15),
+        random.randrange(-5, 5),
+        random.randrange(-5, 5))
+    iceTrack = Parallel(
+        LerpScaleInterval(
+            iceNode, 1.0, (scale / 0.8, scale, height)),
+        LerpColorScaleInterval(
+            iceNode, 1.0, (1, 1, 1, 1)))
+
+    headTrack = Sequence()
+    specialHead = getattr(suit, 'specialHead', None)
+    if specialHead:
+        try:
+            headTrack.append(
+                ActorInterval(specialHead, 'grunt', endFrame=5))
+            headTrack.append(Func(specialHead.pose, 'grunt', 5))
+        except:
+            pass
+
+    trembleTrack = Sequence()
+    for unused in xrange(50):
+        offset = Vec3(
+            random.uniform(-0.1, 0.1),
+            random.uniform(-0.1, 0.1),
+            random.uniform(-0.1, 0.1))
+        trembleTrack.append(
+            LerpPosInterval(suit, 0.01, suitPos + offset, other=battle))
+
+    smallGears = BattleParticles.createParticleEffect(
+        'GearExplosion', numParticles=10)
+    bigGears = BattleParticles.createParticleEffect(
+        'BigGearExplosion', numParticles=30)
+    iceBurst = BattleParticles.createParticleEffect(file='snowflakeBurst')
+    snowBurst = BattleParticles.createParticleEffect(file='snowyExplosion')
+    for effect in (smallGears, bigGears, iceBurst, snowBurst):
+        effect.setPos(explosionPoint)
+        effect.setDepthWrite(False)
+    try:
+        snowBurst.setScale(suit.scale)
+        snowBurst.setColorScaleOff(1)
+        particles = snowBurst.getParticlesNamed('particles-1')
+        if particles:
+            particles.emitter.setOffsetForce(
+                Vec3(0, 0, 7.0 + suit.height))
+    except:
+        pass
+    particleTrack = Parallel(
+        ParticleInterval(
+            smallGears, battle, worldRelative=False,
+            duration=1.2, cleanup=True),
+        ParticleInterval(
+            bigGears, battle, worldRelative=False,
+            duration=1.0, cleanup=True),
+        ParticleInterval(
+            iceBurst, battle, worldRelative=False,
+            duration=1.1, cleanup=True),
+        ParticleInterval(
+            snowBurst, battle, worldRelative=False,
+            duration=2.0, softStopT=-1.4, cleanup=True))
+
+    shatterSound = loader.loadSfx(
+        'phase_10/audio/sfx/SA_shatter.ogg')
+    actorTrack = ActorInterval(
+        suit, 'large-zap', duration=1.0,
+        playRate=0.07, startFrame=0, endFrame=1)
+    shatterTrack = Sequence(
+        Func(suit.makeDead),
+        headTrack,
+        ParallelEndTogether(
+            actorTrack,
+            LerpColorScaleInterval(
+                part, 1.0, (0.75, 1.0, 1.0, 1.0)),
+            iceTrack),
+        Wait(0.3),
+        trembleTrack,
+        Parallel(
+            SoundInterval(shatterSound),
+            particleTrack,
+            Func(iceNode.removeNode),
+            createKapowExplosionTrack(
+                battle, explosionPoint=explosionPoint, scale=1.5),
+            Sequence(
+                Wait(0.05),
+                Func(suit.hide),
+                Func(suit.cleanupAllBattleEffects),
+                Func(suit.clearAllSuitStatusEffects))))
+    return shatterTrack
+
 def createSuitDeathTrack(suit, battle):
     suitTrack = Sequence()
     suit._pendingQueuedDeath = True
@@ -1603,6 +1729,8 @@ def createSuitDeathTrack(suit, battle):
             return Parallel(
                 PlutocratCutscenes.makeDeath(controller, suit),
                 Sequence(Wait(12.0), Func(controller.playVictoryMusic)))
+    if _plutocratShatterDeath(suit, battle):
+        return _createPlutocratFrozenDeathTrack(suit, battle)
     suitTrackErfit = Sequence(createErfitDeathTrack(suit, battle))
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
@@ -1943,6 +2071,8 @@ def createSuitHeadlessDeathTrack(suit, battle):
     suit._pendingQueuedDeath = True
     if suit.style.name == 'pcrat':
         return createSuitDeathTrack(suit, battle)
+    if _plutocratShatterDeath(suit, battle):
+        return _createPlutocratFrozenDeathTrack(suit, battle)
     if suit.hasSuitStatusEffect('overpressured'):
         return Sequence()
     suitTrack = Sequence()

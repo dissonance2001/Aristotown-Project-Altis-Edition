@@ -3,6 +3,7 @@ from direct.fsm import FSM
 from otp.avatar import DistributedAvatarAI
 from toontown.battle import DistributedBattlePlutocratAI
 from toontown.battle import SuitBattleGlobals
+from toontown.battle import StatusEffects
 from toontown.suit import DistributedMinibossAI
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
@@ -113,7 +114,7 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
         for unused in xrange(count):
             if len(living) + len(self.reserveSuits) >= self.battle.maxSuits:
                 break
-            actualLevel = random.randint(10, 15)
+            actualLevel = random.randint(12, 15)
             candidates = []
             for name in SuitDNA.suitDeptCogs.get('m', ()):
                 try:
@@ -130,7 +131,7 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
             dna.newSuit(name)
             suit.dna = dna
             suit.setLevel(actualLevel, forceLevel=True)
-            if random.random() <= 0.2:
+            if random.random() <= 0.25:
                 suit.setExecutive(1)
             suit.generateWithRequired(self.zoneId)
             self.reserveSuits.append(suit)
@@ -147,12 +148,22 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
             except:
                 if getattr(suit, 'isWaiter', 0) and suit.getHP() > 0:
                     return suit
+        candidates = []
+        for dept in SuitDNA.suitDepts:
+            for name in SuitDNA.suitDeptCogs.get(dept, ()):
+                try:
+                    if (SuitBattleGlobals.getSuitMinLevel(name) <= 15 <=
+                            SuitBattleGlobals.getSuitMaxLevel(name)):
+                        candidates.append(name)
+                except:
+                    pass
         waiter = DistributedSuitAI.DistributedSuitAI(self.air, None)
         dna = SuitDNA.SuitDNA()
-        dna.newSuit('tf')
+        dna.newSuit(random.choice(candidates) if candidates else 'tf')
         waiter.dna = dna
         waiter.setLevel(15, forceLevel=True)
         waiter.setExecutive(1)
+        waiter.plutocratWaiterLureResistance = 2
         try:
             waiter.setWaiter(1)
         except:
@@ -298,6 +309,10 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
             self.activeSuits.append(reserve)
             joined.append(reserve)
         self.battle.resume(joined)
+        for reserve in joined:
+            if getattr(reserve, 'plutocratWaiterLureResistance', 0):
+                effects = self.battle.battleCalc.suitStatusConditionsNew.setdefault(reserve.doId, [])
+                effects.append(StatusEffects.LureResistance(2))
 
     def enterReward(self):
         self.barrier = self.beginBarrier('Reward', self.involvedToons, 35, self.__doneReward)
