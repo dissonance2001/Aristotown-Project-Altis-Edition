@@ -1364,18 +1364,27 @@ def doRemand(attack):
     battle = attack['battle']
     origPos, origHpr = battle.getActorPosHpr(suit)
     targetSuitPos, targetSuitHpr = battle.getActorPosHpr(targetSuit)
-    suitTrapProp = getattr(suit, 'battleTrapProp', None)
-    suitTrap = getattr(suit, 'battleTrap', NO_TRAP)
-    suitTrapFresh = getattr(suit, 'battleTrapIsFresh', 0)
-    targetTrapProp = getattr(targetSuit, 'battleTrapProp', None)
-    targetTrap = getattr(targetSuit, 'battleTrap', NO_TRAP)
-    targetTrapFresh = getattr(targetSuit, 'battleTrapIsFresh', 0)
+    trapState = {}
     def detachTraps():
+        trapState['suitTrapProp'] = getattr(suit, 'battleTrapProp', None)
+        trapState['suitTrap'] = getattr(suit, 'battleTrap', NO_TRAP)
+        trapState['suitTrapFresh'] = getattr(suit, 'battleTrapIsFresh', 0)
+        trapState['targetTrapProp'] = getattr(targetSuit, 'battleTrapProp', None)
+        trapState['targetTrap'] = getattr(targetSuit, 'battleTrap', NO_TRAP)
+        trapState['targetTrapFresh'] = getattr(targetSuit, 'battleTrapIsFresh', 0)
+        suitTrapProp = trapState['suitTrapProp']
+        targetTrapProp = trapState['targetTrapProp']
         if suitTrapProp is not None and not suitTrapProp.isEmpty():
             suitTrapProp.wrtReparentTo(battle)
         if targetTrapProp is not None and not targetTrapProp.isEmpty():
             targetTrapProp.wrtReparentTo(battle)
     def finishRemand():
+        suitTrapProp = trapState.get('suitTrapProp')
+        suitTrap = trapState.get('suitTrap', NO_TRAP)
+        suitTrapFresh = trapState.get('suitTrapFresh', 0)
+        targetTrapProp = trapState.get('targetTrapProp')
+        targetTrap = trapState.get('targetTrap', NO_TRAP)
+        targetTrapFresh = trapState.get('targetTrapFresh', 0)
         orderedSuits = battle.activeSuits[:]
         suitIndex = orderedSuits.index(suit)
         targetIndex = orderedSuits.index(targetSuit)
