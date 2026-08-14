@@ -451,10 +451,13 @@ def doKickUp(attack):
         _chat(hydra, random.choice(phrases), duration=4.0))
     targetName = getattr(
         getattr(target, 'dna', None), 'name', 'COG').upper()
-    return _finish(
-        attack, track, 'KICK UP!',
-        'HYDRA GIVES A DAMAGE BUFF TO %s!' % targetName,
-        primeCamera=False, restoreCamera=False, bannerDurationOffset=-0.25)
+    return Sequence(
+        _finish(
+            attack, track, 'KICK UP!',
+            'HYDRA GIVES A DAMAGE BUFF TO %s!' % targetName,
+            primeCamera=False, restoreCamera=False, bannerDurationOffset=-0.25),
+        Func(camera.wrtReparentTo, attack['battle']),
+        Func(camera.setR, attack['battle'], 0))
 
 
 def doSitdown(attack):
