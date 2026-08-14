@@ -582,5 +582,5 @@ def doShatter(attack):
     title = 'SHATTER!'
     description = 'A FROZEN COG SHATTERS AND DAMAGES ADJACENT COGS!'
     if bubbleBurst:
-        description = 'SHATTER BURSTS THE PLUTOCRAT\\'S MARKET BUBBLE!'
+        description = "SHATTER BURSTS THE PLUTOCRAT'S MARKET BUBBLE!"
     return _finish(attack, damageTracks, title, description)
