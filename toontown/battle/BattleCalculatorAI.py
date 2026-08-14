@@ -3146,8 +3146,6 @@ class BattleCalculatorAI:
                                 self.setSuitCondition(targetId, 'zapped', self.getSuitConditionModifier(targetId, 'zapped') + math.ceil(attackDamage / 4), 2, 'setBoth')
                         if self.suitHasCondition(targetId, 'soaked'):
                             self.setSuitCondition(targetId, 'soaked', 1, 1, 'setBoth')
-                        if target.dna.name == 'dking':
-                            self.setSuitCondition(targetId, 'zappedcalculator', 1, 1, 'setBoth')
                         if self.suitHasCondition(targetId, 'missedSoak'):
                             self.setSuitCondition(targetId, 'missedSoak', 1, 1, 'setBoth')
                         self.__removeLured(targetId)
