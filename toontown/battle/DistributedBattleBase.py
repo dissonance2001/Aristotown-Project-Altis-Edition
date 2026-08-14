@@ -724,6 +724,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks):
         self.toonTrackOrder = toonTrackOrder
         base.localAvatar.toonTrackOrder = toonTrackOrder
+        if int(movieHasBeenMade) == 1:
+            self.TurnsElapsed += 1
 
         print('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder)
         if self.__battleCleanedUp:

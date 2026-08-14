@@ -28,6 +28,7 @@ from toontown.battle.calculators.HighRollerCalculatorAI import HighRollerCalcula
 from toontown.battle.calculators.VideographerCalculatorAI import VideographerCalculatorAI
 from toontown.battle.calculators.PacesetterCalculatorAI import PacesetterCalculatorAI
 from toontown.battle.calculators.ChainsawCalculatorAI import ChainsawCalculatorAI
+from toontown.battle.calculators.PlutocratCalculatorAI import PlutocratCalculatorAI
 from toontown.battle.calculators.SellbotLitigationCalculatorAI import SellbotLitigationCalculatorAI
 from toontown.battle.calculators.SuitConditionCalculatorAI import SuitConditionCalculatorAI
 from toontown.battle.calculators.SuitSpawnCalculatorAI import SuitSpawnCalculatorAI
@@ -158,6 +159,7 @@ class BattleCalculatorAI:
         self.witnessStandInCalculator = WitnessStandInCalculatorAI(self)
         self.pacesetterCalculator = PacesetterCalculatorAI(self)
         self.chainsawCalculator = ChainsawCalculatorAI(self)
+        self.plutocratCalculator = PlutocratCalculatorAI(self)
         self.highRollerCalculator = HighRollerCalculatorAI(self)
         self.videographerCalculator = VideographerCalculatorAI(self)
         self.suitConditionCalculator = SuitConditionCalculatorAI(self)
@@ -5318,6 +5320,14 @@ class BattleCalculatorAI:
                         if attackName.startswith('ChainsawCore') and self.toonHasCondition(t, 'markedwood'):
                             multiplier *= self.getToonConditionModifier(t, 'markedwood')
                         attack[SUIT_HP_COL][position] = int(math.ceil(attack[SUIT_HP_COL][position] * multiplier))
+                plutocratMultiplier = 1.0
+                if self.toonHasCondition(t, 'plutocratVulnerable'):
+                    plutocratMultiplier *= self.getToonConditionModifier(t, 'plutocratVulnerable')
+                if self.toonHasCondition(t, 'plutocratDeepFreeze'):
+                    plutocratMultiplier *= self.getToonConditionModifier(t, 'plutocratDeepFreeze')
+                if plutocratMultiplier != 1.0:
+                    attack[SUIT_HP_COL][position] = int(math.ceil(
+                        attack[SUIT_HP_COL][position] * plutocratMultiplier))
                 toonHp = self.__getToonHp(t)
                 if toonHp - attack[SUIT_HP_COL][position] <= 0:
                     if self.notify.getDebug():
@@ -6768,6 +6778,7 @@ class BattleCalculatorAI:
 
         self.suitConditionCalculator.calculateSuitConditions()
         self.baseSuitAttacksCalculator.calculatePreToonSuitAttacks()
+        self.plutocratCalculator.calculatePreToonAttacks()
 
         self.__calculateToonAttacksForTracks([FIRE, SUE, SOS, NPCSOS, PETSOS])
         self.__postProcessToonAttacksForTracks([FIRE, SUE, SOS, NPCSOS, PETSOS])
@@ -6787,6 +6798,7 @@ class BattleCalculatorAI:
             if len(attackSuitOrder) == len(self.battle.activeSuits):
                 physicalSuitOrder = self.battle.activeSuits[:]
                 self.battle.activeSuits = attackSuitOrder
+        self.plutocratCalculator.calculateBeforeSuitAttacks()
         self.baseSuitAttacksCalculator.calculateSuitAttacks()
         if physicalSuitOrder is not None:
             self.battle.activeSuits = physicalSuitOrder
@@ -6800,6 +6812,7 @@ class BattleCalculatorAI:
         self.witnessStandInCalculator.calculateSuitAttacksWitnessStandIn()
         self.pacesetterCalculator.calculatePacesetterAttacks()
         self.chainsawCalculator.calculateChainsawAttacks()
+        self.plutocratCalculator.calculatePostSuitAttacks()
         self.directorsCalculator.calculateSuitAttacksDirectors()
         self.countsCalculator.calculateSuitAttacksCounts()
         self.faceTheFamilyCalculator.calculateSuitAttacksFaceTheFamily()

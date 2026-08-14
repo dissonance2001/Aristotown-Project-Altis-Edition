@@ -1327,6 +1327,8 @@ class Suit(Avatar.Avatar):
         texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         if self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_waiter.png')
+        elif self.style.name in ('charon', 'nix', 'hydra', 'styx', 'kerberos'):
+            texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.style.dept == 'c' and not self.isExecutive and not self.isManager and not self.isGovernaught and not self.isWaiter:
             texture = loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_%s.png' % self.style.dept)
         elif self.isExecutive and not self.isWaiter or self.isManager:
@@ -1359,24 +1361,24 @@ class Suit(Avatar.Avatar):
             modelRoot.find('**/necktie-w').setTexture(textureWSI, 1)
         elif self.style.name == 'hydra':
             modelRoot.find('**/bowtie').show()
-            modelRoot.setColor((0.729, 0.729, 0.729, 1))
+            modelRoot.setColor((0.612, 0.71, 0.729, 1.0))
             modelRoot.find('**/bowtie').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'charon':
             modelRoot.find('**/necktie-w').hide()
             modelRoot.find('**/necktie-s').show()
-            modelRoot.setColor((0.51, 0.49, 0.467, 1))
+            modelRoot.setColor((0.529, 0.506, 0.475, 1.0))
             modelRoot.find('**/necktie-s').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'nix':
             modelRoot.find('**/necktie-w').show()
-            modelRoot.setColor((0.6, 0.6, 0.6, 1))
+            modelRoot.setColor((0.565, 0.588, 0.627, 1.0))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'styx':
             modelRoot.find('**/necktie-w').show()
-            modelRoot.setColor((0.671, 0.671, 0.671, 1))
+            modelRoot.setColor((0.749, 0.749, 0.749, 1.0))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'kerberos':
             modelRoot.find('**/necktie-w').show()
-            modelRoot.setColor((0.62, 0.659, 0.624, 1))
+            modelRoot.setColor((0.649, 0.749, 0.649, 1.0))
             modelRoot.find('**/necktie-w').setColor((0.741, 0.82, 0.769, 1))
         elif self.style.name == 'rainmake':
             modelRoot.find('**/necktie-w').hide()

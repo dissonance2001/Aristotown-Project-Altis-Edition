@@ -664,6 +664,7 @@ from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
 from toontown.suit import DistributedPacesetterBoss/AI
 from toontown.suit import DistributedChainsawBoss/AI
+from toontown.suit import DistributedPlutocratBoss/AI
 from toontown.instances import DistributedCutsceneSkipButton/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
@@ -822,6 +823,7 @@ from toontown.building import DistributedClubElevator/AI
 from toontown.coghq import DistributedMaze/AI
 from toontown.battle import DistributedBattleWaiters/AI
 from toontown.battle import DistributedBattleMiniboss/AI
+from toontown.battle import DistributedBattlePlutocrat/AI
 from toontown.battle import DistributedBattleChainsaw/AI
 from toontown.coghq import DistributedFoodBelt/AI
 from toontown.coghq import DistributedBanquetTable/AI
@@ -3549,6 +3551,20 @@ dclass DistributedChainsawBoss : DistributedObject {
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
 };
 
+dclass DistributedPlutocratBoss : DistributedObject {
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setPlutocratPhase(uint8) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+};
+
 dclass DistributedPacesetterBoss : DistributedObject {
   setState(string) broadcast ram;
   setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
@@ -3998,6 +4014,9 @@ dclass DistributedMaze : DistributedEntity {
 };
 
 dclass DistributedBattleMiniboss : DistributedBattleFinal {
+};
+
+dclass DistributedBattlePlutocrat : DistributedBattleMiniboss {
 };
 
 dclass DistributedBattleChainsaw : DistributedBattleMiniboss {

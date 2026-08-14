@@ -1071,6 +1071,31 @@ class SuitGenerator(object):
                 headPart.setTexture(texture, 1)
           #  self.setTransparency(1)
             self.setHeight(9.4)
+        elif dna.name == 'charon':
+            self.scale = 5.7 / aSize
+            self.handColor = VBase4(0.294, 0.651, 0.871, 1)
+            self.makeSkeletonManager()
+            self.setHeight(6.7)
+        elif dna.name == 'nix':
+            self.scale = 5.8 / bSize
+            self.handColor = VBase4(0.294, 0.651, 0.871, 1)
+            self.makeSkeletonManager()
+            self.setHeight(6.8)
+        elif dna.name == 'hydra':
+            self.scale = 6.3 / cSize
+            self.handColor = VBase4(0.294, 0.651, 0.871, 1)
+            self.makeSkeletonManager()
+            self.setHeight(8.0)
+        elif dna.name == 'styx':
+            self.scale = 5.4 / cSize
+            self.handColor = VBase4(0.294, 0.651, 0.871, 1)
+            self.makeSkeletonManager()
+            self.setHeight(6.8)
+        elif dna.name == 'kerberos':
+            self.scale = 6.9 / aSize
+            self.handColor = VBase4(0.294, 0.651, 0.871, 1)
+            self.makeSkeletonManager()
+            self.setHeight(8.5)
         elif dna.name == 'pcrat':
             self.scale = 3.2 / cSize
             self.handColor = VBase4(0.702, 0.776, 0.788, 1)

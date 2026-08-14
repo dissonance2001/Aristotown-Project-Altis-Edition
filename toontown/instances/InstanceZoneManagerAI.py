@@ -19,6 +19,7 @@ class InstanceZoneManagerAI(DirectObject):
         from toontown.suit import DistributedVideographerBossAI
         from toontown.suit import DistributedPacesetterBossAI
         from toontown.suit import DistributedChainsawBossAI
+        from toontown.suit import DistributedPlutocratBossAI
         from toontown.instances.MotoroomInstanceSessionAI import MotoroomInstanceSessionAI
 
         self.registerInstanceType(
@@ -33,6 +34,9 @@ class InstanceZoneManagerAI(DirectObject):
         self.registerInstanceType(
             InstanceGlobals.CHAINSAW,
             DistributedChainsawBossAI.DistributedChainsawBossAI)
+        self.registerInstanceType(
+            InstanceGlobals.PLUTOCRAT,
+            DistributedPlutocratBossAI.DistributedPlutocratBossAI)
         self.registerInstanceType(
             InstanceGlobals.MOTOROOM,
             MotoroomInstanceSessionAI)

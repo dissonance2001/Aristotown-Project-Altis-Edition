@@ -6,6 +6,7 @@ from toontown.battle.attacks.suits import MovieSellbotLitigationCheats
 from toontown.battle.attacks.suits import MovieCashbotLitigationCheats
 from toontown.battle.attacks.suits import MoviePacesetterCheats
 from toontown.battle.attacks.suits import MovieChainsawCore
+from toontown.battle.attacks.suits import MoviePlutocratCheats
 from toontown.battle.attacks.suits import MovieHighRollerCheats
 from toontown.battle.attacks.suits import MovieDirectorsCheats
 from toontown.battle.attacks.suits import MovieUniversalCheats
@@ -594,7 +595,7 @@ def doSuitAttack(attack):
     elif name == 'Spin':
         suitTrack = doSpin(attack)
     elif name == 'Synergy':
-        suitTrack = doInterestCalculations(attack)
+        suitTrack = doSynergy(attack)
     elif name == 'Tabulate':
         suitTrack = doTabulate(attack)
     elif name == 'Golf':
@@ -1244,6 +1245,30 @@ def doSuitAttack(attack):
     elif name == 'DOPRAmbushMarketing':
         suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
         # erclaim erfit cheats
+    elif name == 'PlutocratCoreStandupGuy':
+        suitTrack = MoviePlutocratCheats.doStandupGuy(attack)
+    elif name.startswith('PlutocratCoreShakedown_'):
+        suitTrack = MoviePlutocratCheats.doShakedown(attack)
+    elif name == 'PlutocratCoreGhostPayroll':
+        suitTrack = MoviePlutocratCheats.doGhostPayroll(attack)
+    elif name == 'PlutocratCoreSlushFund':
+        suitTrack = MoviePlutocratCheats.doSlushFund(attack)
+    elif name.startswith('PlutocratCoreKickUp_'):
+        suitTrack = MoviePlutocratCheats.doKickUp(attack)
+    elif name == 'PlutocratCoreSitdown':
+        suitTrack = MoviePlutocratCheats.doSitdown(attack)
+    elif name.startswith('PlutocratCoreUsuryWaiter_'):
+        suitTrack = MoviePlutocratCheats.doUsuryWaiter(attack)
+    elif name.startswith('PlutocratCoreUsuryFodder_'):
+        suitTrack = MoviePlutocratCheats.doUsuryFodder(attack)
+    elif name.startswith('PlutocratCoreTribute_'):
+        suitTrack = MoviePlutocratCheats.doTribute(attack)
+    elif name.startswith('PlutocratCoreDeepFreeze_'):
+        suitTrack = MoviePlutocratCheats.doDeepFreeze(attack)
+    elif name.startswith('PlutocratCoreSnowSquall_'):
+        suitTrack = MoviePlutocratCheats.doSnowSquall(attack)
+    elif name == 'PlutocratCoreSnowSquallDamage':
+        suitTrack = MoviePlutocratCheats.doSnowSquallDamage(attack)
     elif name.startswith('ChainsawCoreRevvingUp'):
         suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
     elif name.startswith('ChainsawCoreWhipsaw'):
@@ -1863,7 +1888,9 @@ def doSuitAttack(attack):
         name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')
     )
-    if name == 'ChainsawCorePhaseTwo':
+    if name.startswith('PlutocratCore'):
+        camTrack = Sequence(Wait(suitTrack.getDuration()))
+    elif name == 'ChainsawCorePhaseTwo':
         duration = suitTrack.getDuration()
         camTrack = Sequence(
             Func(camera.reparentTo, attack['suit']),

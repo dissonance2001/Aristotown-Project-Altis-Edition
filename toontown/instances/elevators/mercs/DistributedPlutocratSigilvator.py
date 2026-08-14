@@ -4,6 +4,8 @@ from direct.interval.IntervalGlobal import *
 
 from toontown.building.DistributedSigilvator import DistributedSigilvator
 from toontown.instances import InstanceGlobals
+from toontown.toonbase import ToontownGlobals
+from toontown.building import PlutocratInstanceGlobals
 
 
 class DistributedPlutocratSigilvator(DistributedSigilvator):
@@ -82,6 +84,30 @@ class DistributedPlutocratSigilvator(DistributedSigilvator):
                         left, 1.2, (0, 0, 0), blendType='easeIn'),
                     LerpHprInterval(
                         right, 1.2, (0, 0, 0), blendType='easeIn'))))
+
+    def _goToPlutocratInstance(self, zoneId):
+        playGame = self.cr.playGame
+        if not playGame:
+            self.notify.warning('Cannot enter Plutocrat instance %s: PlayGame unavailable.' % zoneId)
+            self._restoreFailedInstanceTransition()
+            return
+        hood = getattr(playGame, 'hood', None)
+        townLoader = getattr(hood, 'loader', None)
+        if (hood is None or getattr(hood, 'hoodId', None) != ToontownGlobals.TheBrrrgh or townLoader is None or not hasattr(townLoader, 'fsm')):
+            self.notify.warning('Cannot enter Plutocrat instance outside The Brrrgh.')
+            self._restoreFailedInstanceTransition()
+            return
+        requestStatus = {'loader': PlutocratInstanceGlobals.INSTANCE_LOADER, 'where': PlutocratInstanceGlobals.BOSS_BATTLE_STATE, 'how': 'teleportIn', 'hoodId': ToontownGlobals.TheBrrrgh, 'zoneId': zoneId, 'shardId': None, 'avId': -1, 'minibossId': InstanceGlobals.PLUTOCRAT, 'plutocratInstance': 1}
+        if not townLoader.fsm.request('quietZone', [requestStatus]):
+            self.notify.warning('Brrrgh town loader rejected Plutocrat instance %s.' % zoneId)
+            self._restoreFailedInstanceTransition()
+
+    def setBossOfficeZone(self, zoneId):
+        if self.localToonOnBoard:
+            self._goToPlutocratInstance(zoneId)
+
+    def setBossOfficeZoneForce(self, zoneId):
+        self._goToPlutocratInstance(zoneId)
 
     def getDestName(self):
         return 'Plutocrat'

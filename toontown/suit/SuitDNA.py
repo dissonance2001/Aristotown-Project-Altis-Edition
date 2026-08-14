@@ -67,6 +67,7 @@ suitDeptManagers = {
     'm': [
         'supervis', 'duckshfl', 'treek', 'payman',
         'bookkeep', 'racket', 'liquidr', 'treasure',
+        'charon', 'nix', 'hydra', 'styx', 'kerberos',
         'pcrat', 'hroller', 'erfit', 'hrollers', 'hroller2', 'cfo',
     ],
 
@@ -122,7 +123,7 @@ suitATypes = [
     # Lawbots
 'dt', 'cv', 'le', 'br', 'bw', 'bw2', 'le2', 'bs2', 'dt2', 'whistleb', 'whunter', 'wsi', 'caseman', 'stenog', 'lgator',
     # Cashbots
-'pp', 'sw', 'nc', 'trs', 'rb', 'payman', 'racket', 'liquidr', 'treasure', 'hroller', 'erfit', 'hrollers', 'hroller2',
+'pp', 'sw', 'nc', 'trs', 'rb', 'payman', 'racket', 'liquidr', 'treasure', 'charon', 'kerberos', 'hroller', 'erfit', 'hrollers', 'hroller2',
     # Sellbots
 'nd', 'dc', 'fcs', 'tf', 'ppl', 'm', 'cnd', 'mh', 'watchm', 'foreman', 'mh2', 'cinema', 'radiog', 'hustle', 'ubuster', 'safesupervis',
     # Boardbots
@@ -138,7 +139,7 @@ suitBTypes = [
     # Lawbots
 'b', 'pf', 'ac', 'bs', 'b2', 'sd2', 'ac2', 'sd', 'sh', 'clerk', 'mouthp', 'rainmake', 'erclaim', 'redd', 'sgoat', 'rat', 'surg',
     # Cashbots
-'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl',
+'shy', 'bc', 'gld', 'ls', 'ovt', 'duckshfl', 'nix',
     # Sellbots
 'tm', 'cn', 'ms', 'bam', 'bellring', 'prethink', 'psetter',
     # Boardbots
@@ -154,7 +155,7 @@ suitCTypes = [
     # Lawbots
 'bf', 'nn', 'ad', 'judy', 'bf2', 'bsd',
     # Cashbots
-'sc', 'tw', 'fct', 'mb', 'bfh', 'supervis', 'treek', 'bookkeep', 'pcrat', 'aud', 'cow', 'brck',
+'sc', 'tw', 'fct', 'mb', 'bfh', 'supervis', 'treek', 'bookkeep', 'hydra', 'styx', 'pcrat', 'aud', 'cow', 'brck',
     # Sellbots
 'cc', 'gh', 'mad', 'asm', 'dopr', 'dopa', 'mslacker',
     # Boardbots
