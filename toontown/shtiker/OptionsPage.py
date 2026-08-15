@@ -5,6 +5,7 @@ from direct.task import Task
 from panda3d.core import *
 from toontown.shtiker import DisplaySettingsDialog
 from toontown.shtiker import ShtikerPage
+from toontown.shtiker import ClashOptionsPanel
 from otp.speedchat import SCColorScheme
 from otp.speedchat import SCStaticTextTerminal
 from otp.speedchat import SpeedChat
@@ -140,7 +141,7 @@ class OptionsPage(ShtikerPage.ShtikerPage, DirectObject):
     def load(self):
         ShtikerPage.ShtikerPage.load(self)
 
-        self.optionsTabPage = OptionsTabPage(self)
+        self.optionsTabPage = ClashOptionsPanel.ClashOptionsPanel(self)
         self.optionsTabPage.hide()
         self.codesTabPage = CodesTabPage(self)
         self.codesTabPage.hide()

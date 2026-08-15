@@ -58,8 +58,9 @@ class Walk(StateData.StateData):
     def enterWalking(self):
         if base.localAvatar.hp > 0:
             base.localAvatar.startTrackAnimToSpeed()
-            self.accept('shift-up', base.localAvatar.setWalkSpeedNormal)
-            self.accept('shift', base.localAvatar.setWalkSpeedFast)
+            # Sprint input is owned by LocalToon.  Do not bind Shift here as
+            # the old safezone walk-speed handler would override the sprint
+            # speed immediately, especially in toggle-sprint mode.
             base.localAvatar.applyBuffs()
         else:
             self.fsm.request('slowWalking')

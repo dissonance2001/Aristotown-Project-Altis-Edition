@@ -39,23 +39,37 @@ __builtin__.settings = Settings(preferencesFilename)
 from toontown.settings import ToontownSettings
 __builtin__.ttsettings = ToontownSettings
 
+hadDisplayMode = 'display-mode' in settings
 for setting in ttsettings.DefaultSettings:
     if setting not in settings:
         settings[setting] = ttsettings.DefaultSettings[setting]
 
+if not hadDisplayMode:
+    settings['display-mode'] = 2 if settings.get('fullscreen', False) else 0
+
+displayMode = int(settings.get('display-mode', 0))
+settings['fullscreen'] = displayMode == 2
 loadPrcFileData('Settings: res', 'win-size %d %d' % tuple(settings.get('res', (1280, 720))))
 loadPrcFileData('Settings: fullscreen', 'fullscreen %s' % settings['fullscreen'])
+loadPrcFileData('Settings: borderless', 'undecorated %s' % (displayMode == 1))
 loadPrcFileData('Settings: music', 'audio-music-active %s' % settings['music'])
 loadPrcFileData('Settings: sfx', 'audio-sfx-active %s' % settings['sfx'])
-loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % settings['musicVol'])
-loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % settings['sfxVol'])
+musicVol = float(settings.get('musicVol', 1.0))
+sfxVol = float(settings.get('sfxVol', 1.0))
+loadPrcFileData('Settings: musicVol', 'audio-master-music-volume %s' % musicVol)
+loadPrcFileData('Settings: sfxVol', 'audio-master-sfx-volume %s' % sfxVol)
 loadDisplay = settings.get('loadDisplay', 'pandagl')
 if sys.platform == 'darwin':
     loadDisplay = 'pandagl'
 loadPrcFileData('Settings: loadDisplay', 'load-display %s' % loadDisplay)
 loadPrcFileData('Settings: toonChatSounds', 'toon-chat-sounds %s' % settings['toonChatSounds'])
-loadPrcFileData('', 'texture-anisotropic-degree %d' % settings['anisotropic-filtering'])
+anisoIndex = int(settings.get('anisotropic-filtering', 0))
+if anisoIndex < 0 or anisoIndex >= len(ttsettings.AnistrophicOptions):
+    anisoIndex = 0
+    settings['anisotropic-filtering'] = anisoIndex
+loadPrcFileData('', 'texture-anisotropic-degree %d' % ttsettings.AnistrophicOptions[anisoIndex])
 loadPrcFileData('', 'framebuffer-multisample %s' % settings['anti-aliasing'])
+loadPrcFileData('', 'multisamples %s' % (1 if settings['anti-aliasing'] else 0))
 loadPrcFileData('', 'sync-video %s' % settings['vertical-sync'])
 
 vfs = VirtualFileSystem.getGlobalPtr()

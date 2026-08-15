@@ -73,8 +73,8 @@ class ChatLog(DirectFrame, DirectObject):
         self._selectTab(self.TAB_MAIN, playSound=False)
         self._closeDisplay(playSound=False, instant=True)
 
-        self.accept(base.CHAT_HOTKEY, self.focusChat)
-        self.accept('c', self.chatHotkey)
+        self._boundControlHotkeys = []
+        self.reloadHotkeys()
         self.accept('mouse1', self._handleMouseClickFocus)
         self.accept('chat-panel-open', self.open)
         self.accept('chat-panel-close', self.close)
@@ -1161,6 +1161,52 @@ class ChatLog(DirectFrame, DirectObject):
         else:
             self.close()
 
+    def _openTabHotkey(self, tab):
+        if self._entryFocused:
+            return
+        if tab == self.TAB_CLUBS and not getattr(base.localAvatar, 'guildId', 0):
+            tab = self.TAB_MAIN
+        self._selectTab(tab)
+        self.open()
+
+    def _commandHotkey(self):
+        if self._entryFocused:
+            return
+        self.focusChat()
+        try:
+            self.entry.enterText('/')
+        except:
+            try:
+                self.entry['text'] = '/'
+            except:
+                pass
+
+    def reloadHotkeys(self):
+        for eventName in getattr(self, '_boundControlHotkeys', []):
+            try:
+                self.ignore(eventName)
+            except:
+                pass
+        self._boundControlHotkeys = []
+
+        bindings = (
+            (getattr(base, 'CHAT_HOTKEY', 't'), self.focusChat, []),
+            (getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'), self.chatHotkey, []),
+            (getattr(base, 'COMMAND_HOTKEY', '/'), self._commandHotkey, []),
+            (getattr(base, 'CHANNEL_MAIN', '1'), self._openTabHotkey, [self.TAB_MAIN]),
+            (getattr(base, 'CHANNEL_WHISPERS', '2'), self._openTabHotkey, [self.TAB_WHISPERS]),
+            (getattr(base, 'CHANNEL_ALERTS', '3'), self._openTabHotkey, [self.TAB_ALERTS]),
+            (getattr(base, 'CHANNEL_NPC', '4'), self._openTabHotkey, [self.TAB_NPC]),
+            (getattr(base, 'CHANNEL_CLUBS', '5'), self._openTabHotkey, [self.TAB_CLUBS])
+        )
+        seen = set()
+        for eventName, method, extraArgs in bindings:
+            if not eventName or eventName in seen:
+                continue
+            seen.add(eventName)
+            self.accept(eventName, method, extraArgs)
+            self._boundControlHotkeys.append(eventName)
+
     def closeChatHotkey(self):
         # Let DirectEntry keep the letter C while the player is typing.
         if self._entryFocused:
@@ -1341,7 +1387,7 @@ class ChatLog(DirectFrame, DirectObject):
         self.entry.ignore(self.entry.guiItem.getPressEvent(KeyboardButton.down()))
         self.entry.ignore(self.entry.guiItem.getRepeatEvent(KeyboardButton.down()))
         self.entry.ignore(self.entry.guiItem.getPressEvent(KeyboardButton.tab()))
-        self.accept('c', self.chatHotkey)
+        self.reloadHotkeys()
         try:
             if base.wantCustomControls:
                 base.localAvatar.controlManager.enableWASD()

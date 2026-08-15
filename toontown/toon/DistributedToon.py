@@ -1423,23 +1423,22 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.__considerUpdateMeter()
 
     def __considerUpdateMeter(self):
-        pass
-        #wantMeter = self.__shouldDisplayMeter()
-        #try:
-            #if wantMeter and not self.overheadMeter:
-                #self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
-                #self.overheadMeter.setAvatar(self)
-                #self.overheadMeter.setZ(5)
-                #self.overheadMeter.setScale(1.5)
-                #self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
-                #self.overheadMeter.hide(BitMask32.bit(1)) # Hide from 2D camera.
-                #self.overheadMeter.start()
-            #elif not wantMeter and self.overheadMeter:
-                #self.overheadMeter.stop()
-                #self.overheadMeter.destroy()
-                #self.overheadMeter = None
-        #except:
-            #pass
+        wantMeter = self.__shouldDisplayMeter()
+        try:
+            if wantMeter and not self.overheadMeter:
+                self.overheadMeter = LaffMeter(self.style, self.hp, self.maxHp)
+                self.overheadMeter.setAvatar(self)
+                self.overheadMeter.setZ(5)
+                self.overheadMeter.setScale(1.5)
+                self.overheadMeter.reparentTo(NodePath(self.nametag.getNameIcon()))
+                self.overheadMeter.hide(BitMask32.bit(1))
+                self.overheadMeter.start()
+            elif not wantMeter and self.overheadMeter:
+                self.overheadMeter.stop()
+                self.overheadMeter.destroy()
+                self.overheadMeter = None
+        except:
+            pass
 
     def __shouldDisplayMeter(self):
         if base.meterMode == 0:

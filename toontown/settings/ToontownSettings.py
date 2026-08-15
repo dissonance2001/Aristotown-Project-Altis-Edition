@@ -30,10 +30,20 @@ DefaultSettings = {
 'keymap': {},
 'acceptingNewFriends': {},
 'acceptingNonFriendWhispers': {},
-'want-Custom-Controls': False
+'want-Custom-Controls': False,
+'res': [1280, 720],
+'display-mode': 0,
+'show-fps': False,
+'camSensitivityX': 0.31,
+'camSensitivityY': 0.21,
+'cam-toggle-lock': False,
+'cam-recenter-on-release': False,
+'cam-recenter-on-movement': False,
+'reduce-gui-movement': False,
+"toggle-sprint": False
 }
 
-AnistrophicOptions = [16]
+AnistrophicOptions = [0, 2, 4, 8, 16]
 
 # Taken from toontown.options.GraphicsOptions
 AspectRatios = [
@@ -46,7 +56,7 @@ AspectRatios = [
 AspectRatioLabels = [
              "Adaptive",
              "4:3",
-             "5:3",
+             "5:4",
              "16:9",
              "21:9"]
              

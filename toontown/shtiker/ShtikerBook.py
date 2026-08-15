@@ -35,6 +35,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.__obscured = 0
         self.__shown = 0
         self.__isOpen = 0
+        self._boundBookHotkeys = []
         self.numTabsPerSide = 14
         self.hide()
         self.setPos(0, 0, 0.1)
@@ -62,6 +63,29 @@ class ShtikerBook(DirectFrame, StateData.StateData):
          TTLocalizer.NewsPageName]
         return
 
+    def _ignoreCloseHotkeys(self):
+        for eventName in self._boundBookHotkeys:
+            self.ignore(eventName)
+        self._boundBookHotkeys = []
+
+    def _acceptCloseHotkeys(self):
+        self._ignoreCloseHotkeys()
+        for eventName in (ToontownGlobals.StickerBookHotkey, ToontownGlobals.OptionsPageHotkey):
+            if eventName and eventName not in self._boundBookHotkeys:
+                self.accept(eventName, self.__close)
+                self._boundBookHotkeys.append(eventName)
+
+    def __reloadActionKeys(self):
+        if not self.entered:
+            return
+        try:
+            from toontown.shtiker import NewsPage
+            if self.currPageIndex is not None and isinstance(self.pages[self.currPageIndex], NewsPage.NewsPage):
+                return
+        except:
+            pass
+        self._acceptCloseHotkeys()
+
     def setSafeMode(self, setting):
         self.safeMode = setting
 
@@ -85,8 +109,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.showPageArrows()
         if not self.safeMode:
             self.accept('shtiker-page-done', self.__pageDone)
-            self.accept(ToontownGlobals.StickerBookHotkey, self.__close)
-            self.accept(ToontownGlobals.OptionsPageHotkey, self.__close)
+            self._acceptCloseHotkeys()
+            self.accept('reloadActionKeys', self.__reloadActionKeys)
             self.pageTabFrame.show()
             self.pageTabFrame2.show()
         self.pages[self.currPageIndex].enter()
@@ -121,8 +145,8 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.pageTabFrame.hide()
         self.pageTabFrame2.hide()
         self.ignore('shtiker-page-done')
-        self.ignore(ToontownGlobals.StickerBookHotkey)
-        self.ignore(ToontownGlobals.OptionsPageHotkey)
+        self._ignoreCloseHotkeys()
+        self.ignore('reloadActionKeys')
         self.ignore('arrow_right')
         self.ignore('arrow_left')
         if base.config.GetBool('want-qa-regression', 0):
@@ -368,8 +392,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
 
     def setPageBeforeNews(self, enterPage = True):
         self.setPage(self.pageBeforeNews, enterPage)
-        self.accept(ToontownGlobals.StickerBookHotkey, self.__close)
-        self.accept(ToontownGlobals.OptionsPageHotkey, self.__close)
+        self._acceptCloseHotkeys()
 
     def setPageTabIndex(self, pageTabIndex):
         if self.currPageTabIndex is not None and pageTabIndex != self.currPageTabIndex:
@@ -498,8 +521,7 @@ class ShtikerBook(DirectFrame, StateData.StateData):
         self.setPage(page)
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: SHTICKERBOOK: Browse tabs %s' % page.pageName)
-        self.ignore(ToontownGlobals.StickerBookHotkey)
-        self.ignore(ToontownGlobals.OptionsPageHotkey)
+        self._ignoreCloseHotkeys()
         localAvatar.newsButtonMgr.acceptEscapeKeyPress()
 
     def disableBookCloseButton(self):

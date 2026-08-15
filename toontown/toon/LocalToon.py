@@ -149,6 +149,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.tossPieStart = None
         self.__presentingPie = 0
         self.__pieSequence = 0
+        self.sprinting = False
+        self.sprintToggled = False
+        self.canSprint = True
+        self.__boundMovementHotkeys = []
         self.wantBattles = base.config.GetBool('want-battles', 1)
         wantNameTagAvIds = base.config.GetBool('want-nametag-avids', 0)
         if wantNameTagAvIds:
@@ -724,10 +728,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             guiButton = loader.loadModel('phase_3/models/gui/quit_button')
             self.purchaseButton = DirectButton(parent=aspect2d, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=0.9, text=TTLocalizer.OptionsPagePurchase, text_scale=0.05, text_pos=(0, -0.01), textMayChange=0, pos=(0.885, 0, -0.94), sortOrder=100, command=self.__handlePurchase)
             base.setCellsActive([base.bottomCells[3]], 0)
-        self.accept('time-insert', self.__beginTossPie)
-        self.accept('time-insert-up', self.__endTossPie)
-        self.accept('time-delete', self.__beginTossPie)
-        self.accept('time-delete-up', self.__endTossPie)
+        self.initializeMovementHotkeys()
         self.accept('pieHit', self.__pieHit)
         self.accept('interrupt-pie', self.interruptPie)
         self.accept('InputState-jump', self.__toonMoved)
@@ -982,6 +983,99 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.pieHandler.addInPattern('pieHit')
             self.pieHandler.addInPattern('pieHit-%in')
         return self.__pieBubble
+
+    def initializeMovementHotkeys(self):
+        self.__clearMovementHotkeys()
+        primaryKey = getattr(base, 'ACTION_BUTTON', 'delete')
+        secondaryKey = getattr(base, 'SECONDARY_KEY', 'g')
+        sprintKey = getattr(base, 'SPRINT_KEY', 'shift')
+
+        # Preserve the original Altis pie shortcuts and add configurable
+        # primary/secondary action bindings. Secondary Action is separate so it
+        # can later drive CLO Taunt without changing the keybind system.
+        for key in ('insert', 'delete'):
+            eventDown = 'time-' + key
+            eventUp = eventDown + '-up'
+            self.accept(eventDown, self.__beginTossPie)
+            self.accept(eventUp, self.__endTossPie)
+            self.__boundMovementHotkeys.extend((eventDown, eventUp))
+
+        for key in (primaryKey, secondaryKey):
+            eventDown = 'time-' + key
+            eventUp = eventDown + '-up'
+            if eventDown not in self.__boundMovementHotkeys:
+                self.accept(eventDown, self.__beginTossPie)
+                self.accept(eventUp, self.__endTossPie)
+                self.__boundMovementHotkeys.extend((eventDown, eventUp))
+
+        self.accept(sprintKey, self.requestSprint)
+        self.accept(sprintKey + '-up', self.stopSprint)
+        self.__boundMovementHotkeys.extend((sprintKey, sprintKey + '-up'))
+        self.accept('reloadActionKeys', self.reloadMovementHotkeys)
+        self.__boundMovementHotkeys.append('reloadActionKeys')
+
+    def __clearMovementHotkeys(self):
+        for eventName in getattr(self, '_LocalToon__boundMovementHotkeys', []):
+            try:
+                self.ignore(eventName)
+            except:
+                pass
+        self.__boundMovementHotkeys = []
+
+    def reloadMovementHotkeys(self):
+        self.__clearMovementHotkeys()
+        self.initializeMovementHotkeys()
+        if not settings.get('toggle-sprint', False):
+            self.sprintToggled = False
+            if self.sprinting:
+                self.stopSprint(fromFunc=True)
+
+    def requestSprint(self):
+        # In toggle mode, one press turns sprint on and the next press turns
+        # it off. In hold mode the key-up handler below stops sprinting.
+        if not self.canSprint or self.getHp() < 1:
+            return
+        if settings.get('toggle-sprint', False):
+            self.sprintToggled = not self.sprintToggled
+            if self.sprintToggled:
+                self.startSprint()
+            else:
+                self.stopSprint(fromFunc=True)
+        else:
+            self.startSprint()
+
+    def startSprint(self):
+        if not self.canSprint or self.getHp() < 1:
+            return
+        try:
+            place = base.cr.playGame.getPlace()
+            if place is None:
+                return
+            self.controlManager.setSpeeds(
+                ToontownGlobals.ToonForwardSpeed * 1.5,
+                ToontownGlobals.ToonJumpForce,
+                ToontownGlobals.ToonReverseSpeed * 1.5,
+                ToontownGlobals.ToonRotateSpeed)
+            self.sprinting = True
+        except:
+            pass
+
+    def stopSprint(self, fromFunc=False):
+        if not fromFunc and settings.get('toggle-sprint', False):
+            return
+        if not self.sprinting:
+            return
+        try:
+            self.controlManager.setSpeeds(
+                ToontownGlobals.ToonForwardSpeed,
+                ToontownGlobals.ToonJumpForce,
+                ToontownGlobals.ToonReverseSpeed,
+                ToontownGlobals.ToonRotateSpeed)
+        except:
+            pass
+        self.sprinting = False
+        if not settings.get('toggle-sprint', False):
+            self.sprintToggled = False
 
     def __beginTossPieMouse(self, mouseParam):
         self.__beginTossPie(globalClock.getFrameTime())

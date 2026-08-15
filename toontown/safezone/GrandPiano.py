@@ -119,7 +119,7 @@ class GrandPiano(DirectObject):
             return
         try:
             chatLog.ignore(getattr(base, 'CHAT_HOTKEY', 't'))
-            chatLog.ignore('c')
+            chatLog.ignore(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'))
             self.chatBindingsSuspended = True
         except:
             pass
@@ -130,8 +130,11 @@ class GrandPiano(DirectObject):
         chatLog = getattr(getattr(base, 'cr', None), 'chatLog', None)
         if chatLog is not None:
             try:
-                chatLog.accept(getattr(base, 'CHAT_HOTKEY', 't'), chatLog.focusChat)
-                chatLog.accept('c', chatLog.chatHotkey)
+                if hasattr(chatLog, 'reloadHotkeys'):
+                    chatLog.reloadHotkeys()
+                else:
+                    chatLog.accept(getattr(base, 'CHAT_HOTKEY', 't'), chatLog.focusChat)
+                    chatLog.accept(getattr(base, 'CHAT_CLOSE_HOTKEY', 'c'), chatLog.chatHotkey)
             except:
                 pass
         self.chatBindingsSuspended = False

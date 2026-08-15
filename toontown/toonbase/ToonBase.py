@@ -310,29 +310,48 @@ class ToonBase(OTPBase.OTPBase):
         
         self.wantCustomControls = settings.get('want-Custom-Controls', False)
 
-        self.MOVE_UP = 'arrow_up'   
-        self.MOVE_DOWN = 'arrow_down'
-        self.MOVE_LEFT = 'arrow_left'      
-        self.MOVE_RIGHT = 'arrow_right'
-        self.JUMP = 'control'
-        self.ACTION_BUTTON = 'delete'
-        self.SCREENSHOT_KEY = 'f9'
-        self.INTERACT = 'shift'
+        self._controlDefaults = {
+            'MOVE_UP': 'arrow_up',
+            'MOVE_DOWN': 'arrow_down',
+            'MOVE_LEFT': 'arrow_left',
+            'MOVE_RIGHT': 'arrow_right',
+            'JUMP': 'control',
+            'ACTION_BUTTON': 'delete',
+            'SECONDARY_KEY': 'g',
+            'SPRINT_KEY': 'shift',
+            'INTERACT': 'shift',
+            'INVENTORY_KEY': getattr(ToontownGlobals, 'InventoryHotkeyOn', 'q'),
+            'QUESTS_KEY': getattr(ToontownGlobals, 'QuestsHotkeyOn', 'e'),
+            'CHAT_HOTKEY': 't',
+            'CHAT_CLOSE_HOTKEY': 'c',
+            'NEXT_CAMERA_POS': getattr(ToontownGlobals, 'NextCameraPosHotkey', 'tab'),
+            'MAP_PAGE_HOTKEY': getattr(ToontownGlobals, 'StickerBookHotkey', 'escape'),
+            'OPTIONS_PAGE_HOTKEY': getattr(ToontownGlobals, 'OptionsPageHotkey', 'f2'),
+            'SCREENSHOT_KEY': 'f9',
+            'STREET_MAP_KEY': getattr(ToontownGlobals, 'MapHotkey', 'alt'),
+            'COMMAND_HOTKEY': '/',
+            'CHANNEL_MAIN': '1',
+            'CHANNEL_WHISPERS': '2',
+            'CHANNEL_ALERTS': '3',
+            'CHANNEL_NPC': '4',
+            'CHANNEL_CLUBS': '5'
+        }
+        for controlName, controlDefault in self._controlDefaults.items():
+            setattr(self, controlName, controlDefault)
+
         keymap = settings.get('keymap', {})
         if self.wantCustomControls:
-            self.MOVE_UP = keymap.get('MOVE_UP', self.MOVE_UP)
-            self.MOVE_DOWN = keymap.get('MOVE_DOWN', self.MOVE_DOWN)
-            self.MOVE_LEFT = keymap.get('MOVE_LEFT', self.MOVE_LEFT)
-            self.MOVE_RIGHT = keymap.get('MOVE_RIGHT', self.MOVE_RIGHT)
-            self.JUMP = keymap.get('JUMP', self.JUMP)
-            self.ACTION_BUTTON = keymap.get('ACTION_BUTTON', self.ACTION_BUTTON)
-            self.SCREENSHOT_KEY = keymap.get('SCREENSHOT_KEY', self.SCREENSHOT_KEY)
-            self.INTERACT = keymap.get('INTERACT', self.INTERACT)
-            ToontownGlobals.OptionsPageHotkey = keymap.get('OPTIONS-PAGE', ToontownGlobals.OptionsPageHotkey)
-        
-        self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 't')
-        self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', 'c')
-        
+            for controlName in self._controlDefaults:
+                if controlName == 'OPTIONS_PAGE_HOTKEY':
+                    value = keymap.get(controlName, keymap.get('OPTIONS-PAGE', getattr(self, controlName)))
+                else:
+                    value = keymap.get(controlName, getattr(self, controlName))
+                setattr(self, controlName, value)
+        else:
+            self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', self.CHAT_HOTKEY)
+            self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', self.CHAT_CLOSE_HOTKEY)
+
+        self._applyExtendedHotkeys()
         self.accept(self.SCREENSHOT_KEY, self.takeScreenShot)
 
         self.Widescreen = settings.get('aspect-ratio', 0)
@@ -397,14 +416,34 @@ class ToonBase(OTPBase.OTPBase):
         self.lockedMusic = False
             
     def updateAntiAliasing(self):
-        loadPrcFileData('', 'framebuffer-multisample %s' %settings.get('anti-aliasing'))
+        enabled = bool(settings.get('anti-aliasing', False))
+        if enabled:
+            loadPrcFileData('', 'framebuffer-multisample 1')
+            loadPrcFileData('', 'multisamples 1')
+            try:
+                render.setAntialias(AntialiasAttrib.MAuto)
+                aspect2d.setAntialias(AntialiasAttrib.MAuto)
+            except:
+                pass
+        else:
+            loadPrcFileData('', 'framebuffer-multisample 0')
+            loadPrcFileData('', 'multisamples 0')
+            try:
+                render.setAntialias(AntialiasAttrib.MNone)
+                aspect2d.setAntialias(AntialiasAttrib.MNone)
+            except:
+                pass
             
     def updateAspectRatio(self):
         self.setRatio()
 
     def updateAnisotrophicFiltering(self):
-        level = ttsettings.AnistrophicOptions[settings.get('anisotropic-filtering')]
-        
+        try:
+            index = int(settings.get('anisotropic-filtering', 0))
+        except:
+            index = 0
+        index = max(0, min(index, len(ttsettings.AnistrophicOptions) - 1))
+        level = ttsettings.AnistrophicOptions[index]
         loadPrcFileData('', 'texture-anisotropic-degree %d' % level)
         
     def setRatio(self): # Set the aspect ratio
@@ -777,32 +816,100 @@ class ToonBase(OTPBase.OTPBase):
         wp.setMinimized(True)
         base.win.requestProperties(wp)
 
+    def _applyExtendedHotkeys(self):
+        ToontownGlobals.InventoryHotkeyOn = self.INVENTORY_KEY
+        ToontownGlobals.InventoryHotkeyOff = self.INVENTORY_KEY + '-up'
+        ToontownGlobals.QuestsHotkeyOn = self.QUESTS_KEY
+        ToontownGlobals.QuestsHotkeyOff = self.QUESTS_KEY + '-up'
+        ToontownGlobals.NextCameraPosHotkey = self.NEXT_CAMERA_POS
+        ToontownGlobals.StickerBookHotkey = self.MAP_PAGE_HOTKEY
+        ToontownGlobals.OptionsPageHotkey = self.OPTIONS_PAGE_HOTKEY
+        ToontownGlobals.MapHotkey = self.STREET_MAP_KEY
+        ToontownGlobals.MapHotkeyOn = self.STREET_MAP_KEY
+        ToontownGlobals.MapHotkeyOff = self.STREET_MAP_KEY + '-up'
+
     def reloadControls(self):
-        self.ignore(self.SCREENSHOT_KEY)
+        oldScreenshot = getattr(self, 'SCREENSHOT_KEY', None)
+        if oldScreenshot:
+            self.ignore(oldScreenshot)
+
+        oldInventoryOn = getattr(ToontownGlobals, 'InventoryHotkeyOn', None)
+        oldInventoryOff = getattr(ToontownGlobals, 'InventoryHotkeyOff', None)
+        oldQuestsOn = getattr(ToontownGlobals, 'QuestsHotkeyOn', None)
+        oldQuestsOff = getattr(ToontownGlobals, 'QuestsHotkeyOff', None)
+        oldMap = getattr(ToontownGlobals, 'MapHotkey', None)
+        oldMapOn = getattr(ToontownGlobals, 'MapHotkeyOn', None)
+        oldMapOff = getattr(ToontownGlobals, 'MapHotkeyOff', None)
+        oldCamera = getattr(ToontownGlobals, 'NextCameraPosHotkey', None)
+
+        avatar = getattr(self, 'localAvatar', None)
+        if avatar:
+            invPage = getattr(avatar, 'invPage', None)
+            questPage = getattr(avatar, 'questPage', None)
+            questMap = getattr(avatar, 'questMap', None)
+            orbitalCamera = getattr(avatar, 'orbitalCamera', None)
+            if invPage:
+                for eventName in (oldInventoryOn, oldInventoryOff):
+                    if eventName:
+                        invPage.ignore(eventName)
+            if questPage:
+                for eventName in (oldQuestsOn, oldQuestsOff):
+                    if eventName:
+                        questPage.ignore(eventName)
+            if questMap:
+                for eventName in (oldMap, oldMapOn, oldMapOff):
+                    if eventName:
+                        questMap.ignore(eventName)
+            if orbitalCamera and oldCamera:
+                orbitalCamera.ignore(oldCamera)
+
         keymap = settings.get('keymap', {})
-        self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', 't')
-        self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', 'c')
+        defaults = getattr(self, '_controlDefaults', {})
         if self.wantCustomControls:
-            self.MOVE_UP = keymap.get('MOVE_UP', self.MOVE_UP)
-            self.MOVE_DOWN = keymap.get('MOVE_DOWN', self.MOVE_DOWN)
-            self.MOVE_LEFT = keymap.get('MOVE_LEFT', self.MOVE_LEFT)
-            self.MOVE_RIGHT = keymap.get('MOVE_RIGHT', self.MOVE_RIGHT)
-            self.JUMP = keymap.get('JUMP', self.JUMP)
-            self.ACTION_BUTTON = keymap.get('ACTION_BUTTON', self.ACTION_BUTTON)
-            self.SCREENSHOT_KEY = keymap.get('SCREENSHOT_KEY', self.SCREENSHOT_KEY)
-            self.INTERACT = keymap.get('INTERACT', self.INTERACT)
-            ToontownGlobals.OptionsPageHotkey = keymap.get('OPTIONS-PAGE', ToontownGlobals.OptionsPageHotkey)
+            for controlName, controlDefault in defaults.items():
+                if controlName == 'OPTIONS_PAGE_HOTKEY':
+                    value = keymap.get(controlName, keymap.get('OPTIONS-PAGE', controlDefault))
+                else:
+                    value = keymap.get(controlName, controlDefault)
+                setattr(self, controlName, value)
         else:
-            self.MOVE_UP = 'arrow_up'
-            self.MOVE_DOWN = 'arrow_down'
-            self.MOVE_LEFT = 'arrow_left'      
-            self.MOVE_RIGHT = 'arrow_right'
-            self.JUMP = 'control'
-            self.ACTION_BUTTON = 'delete'
-            self.SCREENSHOT_KEY = 'f9'
-            self.INTERACT = 'shift'
-    
+            for controlName, controlDefault in defaults.items():
+                setattr(self, controlName, controlDefault)
+            self.CHAT_HOTKEY = keymap.get('CHAT_HOTKEY', self.CHAT_HOTKEY)
+            self.CHAT_CLOSE_HOTKEY = keymap.get('CHAT_CLOSE_HOTKEY', self.CHAT_CLOSE_HOTKEY)
+
+        self._applyExtendedHotkeys()
         self.accept(self.SCREENSHOT_KEY, self.takeScreenShot)
+
+        if avatar:
+            if invPage:
+                try:
+                    invPage.acceptOnscreenHooks()
+                except:
+                    pass
+            if questPage:
+                try:
+                    questPage.acceptOnscreenHooks()
+                except:
+                    pass
+            if questMap:
+                try:
+                    questMap.acceptOnscreenHooks()
+                except:
+                    pass
+            if orbitalCamera:
+                try:
+                    if orbitalCamera.isActive():
+                        orbitalCamera.acceptTab()
+                except:
+                    pass
+
+        chatLog = getattr(getattr(self, 'cr', None), 'chatLog', None)
+        if chatLog and hasattr(chatLog, 'reloadHotkeys'):
+            try:
+                chatLog.reloadHotkeys()
+            except:
+                pass
 
     def setCustomFPSVisible(self, visible):
         if visible:
