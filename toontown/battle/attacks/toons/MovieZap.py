@@ -482,6 +482,8 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
                 )
             )
 
+            if suit.dna.name == 'chainsaw':
+                track.append(Func(MovieUtil.stopZapCogNeutral, suit))
             track.append(
                 MovieUtil.createSuitDeathTrack(
                     suit,
@@ -628,6 +630,8 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
         elif died != 0 and not suit.isVirtual:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
+            if suit.dna.name == 'chainsaw':
+                suitTrack.append(Func(MovieUtil.stopZapCogNeutral, suit))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))

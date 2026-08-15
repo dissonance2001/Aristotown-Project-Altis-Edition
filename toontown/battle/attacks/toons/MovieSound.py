@@ -110,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
-                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name in ['erfit', 'erclaim', 'redd', 'wsi', 'psetter']:
+                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name in ['erfit', 'erclaim', 'redd', 'wsi', 'psetter', 'chainsaw']:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
