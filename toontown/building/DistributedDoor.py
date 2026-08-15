@@ -410,6 +410,14 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         self.accept(self.getEnterTriggerEvent(), self.doorTrigger)
 
     def doorTrigger(self, args=None):
+        if getattr(base, 'toonselTownMinigameIsActive', False):
+            try:
+                hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
+            except:
+                hoodId = self.zoneId
+            if hoodId == ToontownGlobals.Toonseltown:
+                base.localAvatar.setSystemMessage(0, TTLocalizer.TsMinigameDoorsLocked)
+                return
         self.ignore(self.getEnterTriggerEvent())
         self.accept(self.getExitTriggerEvent(), self.leaveDoor)
         

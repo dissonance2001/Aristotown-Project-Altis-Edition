@@ -7,6 +7,8 @@ COMMANDS = (
     {'name': 'mp', 'usage': '', 'description': 'Teleports you to the Major Player lobby.', 'aliases': (), 'access': 400},
     {'name': 'pace', 'usage': '', 'description': 'Teleports you to the Pacesetter lobby.', 'aliases': (), 'access': 400},
     {'name': 'cs', 'usage': '', 'description': 'Teleports you to the Chainsaw Consultant lobby.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
+    {'name': 'presentthiefstart', 'usage': '', 'description': 'Starts the Present Thief minigame in Toonseltown after the 10-second warning.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
+    {'name': 'presentthiefend', 'usage': '', 'description': 'Immediately ends the active Present Thief minigame and cleans it up.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
     {'name': 'pizza', 'usage': '', 'description': 'Teleports you directly to the Pizzeria.', 'aliases': (), 'access': 400, 'targetMode': 'none'},
     {'name': 'printpos', 'usage': '', 'description': 'Prints your Toon position and rotation.', 'aliases': ('ppos',), 'access': 400, 'targetMode': 'none'},
     {'name': 'acc', 'usage': '', 'description': 'Opens or closes the accessory placement editor.', 'aliases': (), 'access': 400},

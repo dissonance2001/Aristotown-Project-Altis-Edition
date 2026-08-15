@@ -870,6 +870,8 @@ from toontown.club import DistributedToonClub/AI/UD
 from toontown.environment import DistributedDayTimeManager/AI
 from toontown.environment import DistributedRainManager/AI
 from toontown.environment import DistributedWeatherMGR/AI
+from toontown.events.winter import DistributedWinterMinigameSuit/AI
+from toontown.events.winter import DistributedToonseltownMinigame/AI
 
 
 struct GiftItem {
@@ -4439,4 +4441,28 @@ dclass DistributedRainManager : DistributedWeatherMGR {
 };
 
 dclass IwNEFKfzGHouaaXAaaXoWxDViVmgEJMMweGSXTWBJuKtkALzesSKMgRZEIgWcIMqXlIaEMsYBpYdUWlKbfpHXyYHipiUSVEBGwzG : DistributedObject {
+};
+
+dclass DistributedWinterMinigameSuit : DistributedSuitBase {
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
+  flyIn(int16/10, int16/10, int16/10) broadcast;
+  explode() broadcast;
+};
+
+dclass DistributedToonseltownMinigame : DistributedObject {
+  setupTree() broadcast;
+  setupGUI() broadcast;
+  handleEventStart(uint16) broadcast;
+  generateFieldPresent(uint16, int32/1000, int32/1000, int32/1000) broadcast;
+  destroyPresent(uint16) broadcast;
+  generateTreePresent(int32/1000, int32/1000, int32/1000) broadcast;
+  showHoldingPresent();
+  hideHoldingPresent();
+  updateTotalScore(int32) broadcast;
+  activateSuit(uint32) broadcast;
+  showWarningText() broadcast;
+  startCleanup() broadcast;
+  playerTouchedFieldPresent(uint16) airecv clsend;
+  playerTouchedTree() airecv clsend;
+  playerHitCogWithSnowball(uint32) airecv clsend;
 };

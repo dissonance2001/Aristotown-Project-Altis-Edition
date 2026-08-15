@@ -3,6 +3,7 @@ from toontown.battle import SuitBattleGlobals
 from toontown.shtiker import CogPageGlobals
 from toontown.suit import SuitDNA
 from toontown.suit.SuitInvasionGlobals import IFV2, IFSkelecog, IFWaiter, INVASION_TYPE_MEGA, INVASION_TYPE_NORMAL
+from toontown.toonbase import ToontownGlobals
 
 
 def _resolveSuitName(value):
@@ -212,3 +213,28 @@ def clashLegs(value):
 def clashLegColor(r, g, b):
     """Changes the target Toon's leg color using RGB values."""
     return _runWord('color', 'legs %d %d %d' % (r, g, b))
+
+def _getPresentThiefHood():
+    return simbase.air.hoodId2Hood.get(ToontownGlobals.Toonseltown)
+
+
+@magicWord(name='presentthiefstart', category=CATEGORY_PROGRAMMER, types=[])
+def clashPresentThiefStart():
+    """Starts the Present Thief minigame in Toonseltown after the 10-second warning."""
+    hood = _getPresentThiefHood()
+    if not hood:
+        return 'Toonseltown is not loaded.'
+    started, message = hood.beginPresentThief()
+    return message
+
+
+@magicWord(name='presentthiefend', category=CATEGORY_PROGRAMMER, types=[])
+def clashPresentThiefEnd():
+    """Immediately ends the active Present Thief minigame and cleans it up."""
+    hood = _getPresentThiefHood()
+    if not hood:
+        return 'Toonseltown is not loaded.'
+    ended, message = hood.endPresentThief()
+    hood.scheduleNextMinigame()
+    return message
+

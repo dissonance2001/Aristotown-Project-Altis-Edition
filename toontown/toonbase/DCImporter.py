@@ -536,6 +536,8 @@ from toontown.safezone import DistributedTrolley/AI
 from toontown.safezone import DistributedPartyGate/AI
 from toontown.suit import DistributedSuitPlanner/AI
 from toontown.suit import DistributedSuitBase/AI
+from toontown.events.winter import DistributedWinterMinigameSuit/AI
+from toontown.events.winter import DistributedToonseltownMinigame/AI
 from toontown.suit import DistributedSuit/AI
 from toontown.suit import DistributedTutorialSuit/AI
 from toontown.suit import DistributedFactorySuit/AI
@@ -1355,6 +1357,30 @@ dclass DistributedSuitBase : DistributedObject {
   setCog(uint8) required broadcast ram;
   setGovernaught(uint8) required broadcast ram;
   setMaxHP(uint16) broadcast ram;
+};
+
+dclass DistributedWinterMinigameSuit : DistributedSuitBase {
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
+  flyIn(int16/10, int16/10, int16/10) broadcast;
+  explode() broadcast;
+};
+
+dclass DistributedToonseltownMinigame : DistributedObject {
+  setupTree() broadcast;
+  setupGUI() broadcast;
+  handleEventStart(uint16) broadcast;
+  generateFieldPresent(uint16, int32/1000, int32/1000, int32/1000) broadcast;
+  destroyPresent(uint16) broadcast;
+  generateTreePresent(int32/1000, int32/1000, int32/1000) broadcast;
+  showHoldingPresent();
+  hideHoldingPresent();
+  updateTotalScore(int32) broadcast;
+  activateSuit(uint32) broadcast;
+  showWarningText() broadcast;
+  startCleanup() broadcast;
+  playerTouchedFieldPresent(uint16) airecv clsend;
+  playerTouchedTree() airecv clsend;
+  playerHitCogWithSnowball(uint32) airecv clsend;
 };
 
 dclass DistributedSuit : DistributedSuitBase {

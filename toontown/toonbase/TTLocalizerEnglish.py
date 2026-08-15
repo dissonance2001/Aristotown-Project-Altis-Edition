@@ -19070,3 +19070,8 @@ FoxChatter = ["Fox Rox!", 'My favorite jellybean color is orange.', "I'm adorabl
 BatChatter = ["Don't be a brat, vote for Bat!", 'My favorite jellybean color is black.', "Whoooo dares awaken me!", "Got questions?", 'I gotta earn my wings, first.']
 RaccoonChatter = ["Sing some tunes and vote Raccoon!", 'My favorite jellybean color is purple.', "Oooh! There is half of an apple in here!", 'My friends call me "Trash Panda."', "I'm not rabid, I swear!"]
 
+
+TsMinigameDoorsLocked = "This shop is currently closed! Get out there and stop the Cogs from stealing the presents."
+TsMinigameCogsSpawn = "Cogs are stealing\nthe presents!!"
+TsMinigameStartingSoon = "The Cogs have arrived! Keep our presents safe by bringing them to the center tree, and keep the Cog's hands off of them by using snowballs!"
+TsMinigameEnd = "Great job, Toons! We've fought off the wave of Cogs. But keep alert, there may be more that try to invade!"

@@ -1,3 +1,6 @@
+import time
+from direct.task.TaskManagerGlobal import taskMgr
+from toontown.events.winter import DistributedToonseltownMinigameAI
 from toontown.classicchars import DistributedMinnieAI
 from toontown.hood import HoodAI
 from toontown.safezone import DistributedTrolleyAI
@@ -14,6 +17,8 @@ class TSHoodAI(HoodAI.HoodAI):
 
         self.trolley = None
         self.classicChar = None
+        self.timeBetweenGame = 20
+        self.minigame = None
 
         self.startup()
 
@@ -43,10 +48,72 @@ class TSHoodAI(HoodAI.HoodAI):
                 self.air)
             self.WinterCarolingTargetManager.generateWithRequired(4614)
 
+        if simbase.config.GetBool('want-toonseltown-present-thief', True):
+            self.scheduleNextMinigame()
+
     # def createTrolley(self):
     #     self.trolley = DistributedTrolleyAI.DistributedTrolleyAI(self.air)
     #     self.trolley.generateWithRequired(self.zoneId)
     #     self.trolley.start()
+
+    def getTimeUntilNextGame(self):
+        return (self.timeBetweenGame * 60) - (time.time() % (self.timeBetweenGame * 60))
+
+    def scheduleNextMinigame(self):
+        taskMgr.remove('ts-start-minigame-loop')
+        taskMgr.doMethodLater(self.getTimeUntilNextGame(), self.startMinigame, 'ts-start-minigame-loop')
+
+    def getMissingPresentThiefDclasses(self):
+        missing = []
+        required = (
+            ('DistributedToonseltownMinigameAI', 'DistributedToonseltownMinigame'),
+            ('DistributedWinterMinigameSuitAI', 'DistributedWinterMinigameSuit'),
+        )
+        for className, displayName in required:
+            if className not in self.air.dclassesByName:
+                missing.append(displayName)
+        return missing
+
+    def beginPresentThief(self):
+        if self.minigame:
+            return False, 'Present Thief is already active.'
+        missing = self.getMissingPresentThiefDclasses()
+        if missing:
+            message = 'Present Thief cannot start because the active dclass/toon.dc is missing: %s' % ', '.join(missing)
+            self.notify.warning(message)
+            return False, message
+        taskMgr.remove('ts-start-minigame-loop')
+        taskMgr.remove('ts-minigame-end')
+        self.minigame = DistributedToonseltownMinigameAI.DistributedToonseltownMinigameAI(self.air)
+        self.minigame.generateWithRequired(ToontownGlobals.Toonseltown)
+        taskMgr.doMethodLater(self.minigame.gameTime + 10, self.finishMinigame, 'ts-minigame-end')
+        self.minigame.startGameWarnings()
+        return True, 'Present Thief will begin in 10 seconds.'
+
+    def startMinigame(self, task=None):
+        started, message = self.beginPresentThief()
+        if not started and not self.minigame:
+            self.scheduleNextMinigame()
+
+    def endPresentThief(self):
+        taskMgr.remove('ts-minigame-end')
+        if not self.minigame:
+            return False, 'There is no active Present Thief minigame.'
+        self.minigame.endGame()
+        self.minigame = None
+        return True, 'Ended the Present Thief minigame.'
+
+    def finishMinigame(self, task=None):
+        self.endPresentThief()
+        self.scheduleNextMinigame()
+
+    def shutdown(self):
+        taskMgr.remove('ts-start-minigame-loop')
+        taskMgr.remove('ts-minigame-end')
+        if self.minigame:
+            self.minigame.endGame()
+            self.minigame = None
+        HoodAI.HoodAI.shutdown(self)
 
     def createClassicChar(self):
         self.classicChar = DistributedMinnieAI.DistributedMinnieAI(self.air)
