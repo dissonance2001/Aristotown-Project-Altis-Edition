@@ -754,7 +754,10 @@ class ChainsawCalculatorAI:
                         suit.doId not in controller.chainsawChainStartSupportIds):
                     continue
                 foundLinked = True
-                if suit.getHP() > 0 and suit not in firedSupports:
+                if suit in firedSupports:
+                    continue
+                projectedHP = suit.getHP() - supportDamage.get(suit, 0)
+                if projectedHP > 0:
                     return False
             except:
                 pass
