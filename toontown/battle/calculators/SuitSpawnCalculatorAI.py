@@ -932,7 +932,7 @@ class SuitSpawnCalculatorAI:
                                     spawnThisRound = (spawnCycleRound % 2 == 1)
 
                                     if spawnThisRound:
-                                        maxSuits = 7
+                                        maxSuits = 5
                                         maxSpawnPerTurn = 3
 
                                         # Count only living Cogs.
