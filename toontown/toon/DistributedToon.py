@@ -163,6 +163,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.money = 0
         self.gumballs = 0
         self.gumballBoosters = []
+        self.clubBoosters = []
         self.gumballBounties = {}
         self.weeklyBountyGumballs = [0, 0]
         self.exp = 0
@@ -2228,9 +2229,26 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gumballBoosters = GumballGlobals.cleanupBoosters(self.gumballBoosters)
         return self.gumballBoosters
 
+    def setClubBoosters(self, data):
+        try:
+            boosters = cPickle.loads(data) if isinstance(data, str) else data
+        except:
+            boosters = []
+        from toontown.gumball import GumballGlobals
+        self.clubBoosters = GumballGlobals.cleanupBoosters(boosters)
+        messenger.send(self.uniqueName('clubBoostersChange'), [self.clubBoosters])
+
+    def getClubBoosters(self):
+        from toontown.gumball import GumballGlobals
+        self.clubBoosters = GumballGlobals.cleanupBoosters(self.clubBoosters)
+        return self.clubBoosters
+
+    def getEffectiveBoosters(self):
+        return self.getGumballBoosters() + self.getClubBoosters()
+
     def applyGumballBoosters(self, boosterTypes, value, applyRound=False):
         from toontown.gumball import GumballGlobals
-        return GumballGlobals.applyBoosters(self.getGumballBoosters(), boosterTypes, value, applyRound)
+        return GumballGlobals.applyBoosters(self.getEffectiveBoosters(), boosterTypes, value, applyRound)
 
     def setGumballBounties(self, data):
         try:

@@ -151,6 +151,59 @@ from toontown.club.ClubShopCatalog import (
 )
 
 
+CLUB_LEGACY_BOOSTER_GUMBALL_TYPES = {
+    'gag': 12,
+    'activity': 11,
+    'merit': 16,
+    'department': 9,
+    'reward': 13,
+    'universal': 60,
+}
+
+CLUB_BOOSTER_GUMBALL_TYPES = {
+    2000: 50,
+    2001: 51,
+    2002: 12,
+    2003: 20,
+    2004: 21,
+    2005: 22,
+    2006: 23,
+    2007: 11,
+    2008: 14,
+    2009: 3,
+    2010: 4,
+    2011: 5,
+    2012: 6,
+    2014: 16,
+    2015: 40,
+    2016: 41,
+    2017: 42,
+    2018: 43,
+    2020: 13,
+    2021: 30,
+    2022: 31,
+    2023: 32,
+    2024: 33,
+    2026: 9,
+    2027: 60,
+}
+
+
+def normalizeClubBoosterItemId(itemId):
+    itemId = int(itemId)
+    if 2100 <= itemId < 2200:
+        itemId -= 100
+    return itemId
+
+
+def getClubBoosterType(itemId):
+    try:
+        itemId = normalizeClubBoosterItemId(itemId)
+    except:
+        return CLUB_LEGACY_BOOSTER_GUMBALL_TYPES.get(str(itemId))
+    return CLUB_BOOSTER_GUMBALL_TYPES.get(itemId)
+
+
 def unpackShopItem(item):
     """Return a normalized seven-field Club Shop tuple.
 

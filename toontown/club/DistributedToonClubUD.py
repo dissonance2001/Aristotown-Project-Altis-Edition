@@ -1,3 +1,4 @@
+import cPickle
 import json
 import os
 import random
@@ -262,6 +263,62 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         for member in club.get('members', []):
             self._syncMemberNametag(int(member.get('avId', 0)))
 
+    def _getClubRewardBoosters(self, club):
+        now = int(time.time())
+        result = []
+        if not club:
+            return result
+        for key, endTime in club.get('boosters', {}).items():
+            try:
+                endTime = int(endTime)
+                if endTime <= now:
+                    continue
+                boosterType = ClubGlobals.getClubBoosterType(key)
+                if boosterType is None:
+                    continue
+                result.append([int(boosterType), endTime, 0])
+            except:
+                pass
+        return result
+
+    def _syncMemberBoosters(self, avId):
+        avId = int(avId)
+        if avId <= 0:
+            return
+
+        def queried(dclass, fields):
+            if not dclass:
+                return
+            boosters = self._getClubRewardBoosters(self._clubForAv(avId))
+            data = cPickle.dumps(boosters, 1)
+            try:
+                current = fields.get('setClubBoosters', [None])[0]
+            except:
+                current = None
+            try:
+                if current != data:
+                    self.air.dbInterface.updateObject(
+                        self.air.dbId, avId, dclass,
+                        {'setClubBoosters': [data]})
+                dg = dclass.aiFormatUpdate(
+                    'setClubBoosters', avId, avId, self.air.ourChannel, [data])
+                self.air.send(dg)
+            except Exception as error:
+                self.notify.warning(
+                    'Could not sync Club boosters for Toon %s: %s' %
+                    (avId, error))
+
+        try:
+            self.air.dbInterface.queryObject(self.air.dbId, avId, queried)
+        except Exception as error:
+            self.notify.warning(
+                'Could not query Toon %s for Club boosters: %s' %
+                (avId, error))
+
+    def _syncClubBoosters(self, club):
+        for member in club.get('members', []):
+            self._syncMemberBoosters(int(member.get('avId', 0)))
+
     def _sendState(self, avId):
         club = self._clubForAv(avId)
         if club:
@@ -271,6 +328,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             payload = json.dumps(publicClub, separators=(',', ':'))
         else:
             payload = 'null'
+        self._syncMemberBoosters(avId)
         self.sendUpdateToAvatarId(int(avId), 'receiveState', [payload])
 
     def _broadcastState(self, club):
@@ -331,6 +389,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
                 changed = True
         if changed:
             self._save()
+            self._syncClubBoosters(club)
 
     def _awardExperience(self, club, amount, notifyLevelUp=True):
         amount = max(0, int(amount))
@@ -457,8 +516,17 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
                 return True
         return False
 
+    def _hasActiveClubBoosterType(self, club, boosterTypes):
+        now = int(time.time())
+        for key, endTime in club.get('boosters', {}).items():
+            if int(endTime) <= now:
+                continue
+            if ClubGlobals.getClubBoosterType(key) in boosterTypes:
+                return True
+        return False
+
     def _progressMultiplier(self, club, progressType):
-        if self._hasActiveBooster(club, ('universal',)):
+        if self._hasActiveClubBoosterType(club, (60,)):
             return 2
         if progressType in ('cogs', 'bosses') and self._hasActiveBooster(
                 club, ('merit',)):
@@ -472,7 +540,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         return 1
 
     def _coinMultiplier(self, club):
-        return 2 if self._hasActiveBooster(club, ('universal',)) else 1
+        return 2 if self._hasActiveClubBoosterType(club, (60,)) else 1
 
     # ------------------------------------------------------------------
     # Client requests

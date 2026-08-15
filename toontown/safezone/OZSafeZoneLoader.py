@@ -39,7 +39,11 @@ class OZSafeZoneLoader(SafeZoneLoader):
         
         binMgr = CullBinManager.getGlobalPtr()
         binMgr.addBin('water', CullBinManager.BTFixed, 29)
-        binMgr = CullBinManager.getGlobalPtr()
+        waterNodes = self.geom.findAllMatches('**/Water*')
+        for i in xrange(waterNodes.getNumPaths()):
+            water = waterNodes.getPath(i)
+            water.setTransparency(1)
+            water.setBin('water', 51, 1)
 
     def exit(self):
         SafeZoneLoader.exit(self)

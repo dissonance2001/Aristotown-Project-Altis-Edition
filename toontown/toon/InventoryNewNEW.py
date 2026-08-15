@@ -505,6 +505,13 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
             mult = self.__battleCreditMultiplier
             if self.__respectInvasions:
                 mult *= self.__invasionCreditMultiplier
+            if self.toon and hasattr(self.toon, 'getGumballBoosters'):
+                from toontown.gumball import GumballGlobals
+                if hasattr(self.toon, 'getEffectiveBoosters'):
+                    boosters = self.toon.getEffectiveBoosters()
+                else:
+                    boosters = self.toon.getGumballBoosters()
+                mult += GumballGlobals.getGagExperienceMultiplier(boosters, track)
             self.setDetailCredit(track, (level + 1) * mult)
         else:
             self.setDetailCredit(track, None)

@@ -114,6 +114,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.toonLevel = 0
         self.gumballs = 0
         self.gumballBoosters = []
+        self.clubBoosters = []
         self.gumballBounties = {}
         self.weeklyBountyGumballs = [0, 0]
         self.petId = None
@@ -3054,6 +3055,22 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.d_setGumballBoosters(clean)
         return self.gumballBoosters
 
+    def setClubBoosters(self, data):
+        try:
+            boosters = cPickle.loads(data) if isinstance(data, str) else data
+        except:
+            boosters = []
+        from toontown.gumball import GumballGlobals
+        self.clubBoosters = GumballGlobals.cleanupBoosters(boosters)
+
+    def getClubBoosters(self):
+        from toontown.gumball import GumballGlobals
+        self.clubBoosters = GumballGlobals.cleanupBoosters(self.clubBoosters)
+        return self.clubBoosters
+
+    def getEffectiveBoosters(self):
+        return self.getGumballBoosters() + self.getClubBoosters()
+
     def addGumballBooster(self, boosterType, seconds):
         from toontown.gumball import GumballGlobals
         boosters, endTimestamp = GumballGlobals.addBooster(self.getGumballBoosters(), boosterType, seconds)
@@ -3062,7 +3079,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def applyGumballBoosters(self, boosterTypes, value, applyRound=False):
         from toontown.gumball import GumballGlobals
-        return GumballGlobals.applyBoosters(self.getGumballBoosters(), boosterTypes, value, applyRound)
+        return GumballGlobals.applyBoosters(self.getEffectiveBoosters(), boosterTypes, value, applyRound)
 
     def b_setGumballBounties(self, bounties):
         self.setGumballBounties(bounties)

@@ -294,15 +294,12 @@ def hasBooster(rawBoosters, boosterType):
 
 def getGagExperienceMultiplier(rawBoosters, track):
     active = _activeTypes(rawBoosters)
-    multiplier = 0
-    if EXP_GAGS_GLOBAL in active:
-        multiplier += BOOSTERS[EXP_GAGS_GLOBAL][2]
-    if int(track) in SUPPORT_GAG_TRACKS and EXP_GAGS_SUPPORT in active:
-        multiplier += BOOSTERS[EXP_GAGS_SUPPORT][2]
-    elif int(track) in POWER_GAG_TRACKS and EXP_GAGS_POWER in active:
-        multiplier += BOOSTERS[EXP_GAGS_POWER][2]
-    if ALL_STAR in active:
-        multiplier += BOOSTERS[EXP_GAGS_POWER][2]
+    multiplier = active.count(EXP_GAGS_GLOBAL) * BOOSTERS[EXP_GAGS_GLOBAL][2]
+    if int(track) in SUPPORT_GAG_TRACKS:
+        multiplier += active.count(EXP_GAGS_SUPPORT) * BOOSTERS[EXP_GAGS_SUPPORT][2]
+    elif int(track) in POWER_GAG_TRACKS:
+        multiplier += active.count(EXP_GAGS_POWER) * BOOSTERS[EXP_GAGS_POWER][2]
+    multiplier += active.count(ALL_STAR) * BOOSTERS[EXP_GAGS_POWER][2]
     return multiplier
 
 def applyBoosters(rawBoosters, boosterTypes, value, applyRound=False):
@@ -312,12 +309,11 @@ def applyBoosters(rawBoosters, boosterTypes, value, applyRound=False):
     active = _activeTypes(rawBoosters)
     applying = []
     for boosterType in boosterTypes:
-        if boosterType in active:
-            applying.append(boosterType)
-    if ALL_STAR in active:
-        gagTypes = [EXP_GAGS_GLOBAL, EXP_GAGS_SUPPORT, EXP_GAGS_POWER]
-        meritTypes = [MERIT_GLOBAL, MERIT_SELLBOT, MERIT_CASHBOT, MERIT_LAWBOT, MERIT_BOSSBOT, MERIT_BOARDBOT]
-        deptTypes = [EXP_DEPT_GLOBAL, EXP_DEPT_SELLBOT, EXP_DEPT_CASHBOT, EXP_DEPT_LAWBOT, EXP_DEPT_BOSSBOT, EXP_DEPT_BOARDBOT]
+        applying.extend([boosterType] * active.count(boosterType))
+    gagTypes = [EXP_GAGS_GLOBAL, EXP_GAGS_SUPPORT, EXP_GAGS_POWER]
+    meritTypes = [MERIT_GLOBAL, MERIT_SELLBOT, MERIT_CASHBOT, MERIT_LAWBOT, MERIT_BOSSBOT, MERIT_BOARDBOT]
+    deptTypes = [EXP_DEPT_GLOBAL, EXP_DEPT_SELLBOT, EXP_DEPT_CASHBOT, EXP_DEPT_LAWBOT, EXP_DEPT_BOSSBOT, EXP_DEPT_BOARDBOT]
+    for unused in xrange(active.count(ALL_STAR)):
         if any([x in boosterTypes for x in gagTypes]):
             applying.append(EXP_GAGS_POWER)
         if JELLYBEANS_GLOBAL in boosterTypes:
@@ -328,11 +324,8 @@ def applyBoosters(rawBoosters, boosterTypes, value, applyRound=False):
             applying.append(REWARD_BOSS_GLOBAL)
         if any([x in boosterTypes for x in deptTypes]):
             applying.append(EXP_DEPT_GLOBAL)
-    if REWARD_BOSS_GLOBAL in active:
-        for boosterType in boosterTypes:
-            if boosterType in BOSS_REWARD_BOOSTS:
-                applying.append(REWARD_BOSS_GLOBAL)
-                break
+    if any([x in boosterTypes for x in BOSS_REWARD_BOOSTS]):
+        applying.extend([REWARD_BOSS_GLOBAL] * active.count(REWARD_BOSS_GLOBAL))
     boostedValue = value
     multBoost = 1.0
     for boosterType in applying:

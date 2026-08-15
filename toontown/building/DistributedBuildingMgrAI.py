@@ -7,6 +7,7 @@ from toontown.building import KartShopBuildingAI
 from toontown.building import PetshopBuildingAI
 from toontown.building import UncapturableBuildingAI
 from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 # from toontown.building import DistributedAnimBuildingAI
 
 class DistributedBuildingMgrAI:
@@ -120,6 +121,12 @@ class DistributedBuildingMgrAI:
                 self.air.districtId, self.branchId))
             backups = {}
         (blocks, hqBlocks, uncapturableBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks) = self.getDNABlockLists()
+        if self.canonicalBranchId == ToontownGlobals.OutdoorZone:
+            for blockList in (blocks, hqBlocks, uncapturableBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks):
+                while 5 in blockList:
+                    blockList.remove(5)
+            if 5 not in gagshopBlocks:
+                gagshopBlocks.append(5)
         for blockNumber in blocks:
             self.newBuilding(blockNumber, backup=backups.get(blockNumber, None))
         for blockNumber in animBldgBlocks:
@@ -184,10 +191,14 @@ class DistributedBuildingMgrAI:
         return building
 
     def newGagshopBuilding(self, blockNumber):
-        dnaStore = self.air.dnaStoreMap[self.canonicalBranchId]
-        exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
-        exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchId)
-        interiorZoneId = (self.branchId - (self.branchId%100)) + 500 + blockNumber
+        if self.canonicalBranchId == ToontownGlobals.OutdoorZone and blockNumber == 5:
+            exteriorZoneId = ToontownGlobals.OutdoorZone
+            interiorZoneId = ToontownGlobals.OZGagShop
+        else:
+            dnaStore = self.air.dnaStoreMap[self.canonicalBranchId]
+            exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
+            exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchId)
+            interiorZoneId = (self.branchId - (self.branchId%100)) + 500 + blockNumber
         building = GagshopBuildingAI.GagshopBuildingAI(
             self.air, exteriorZoneId, interiorZoneId, blockNumber)
         self.__buildings[blockNumber] = building

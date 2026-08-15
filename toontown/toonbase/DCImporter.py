@@ -1010,6 +1010,7 @@ dclass DistributedToon : DistributedPlayer {
   setMoney(uint16 = 0) required ownrecv db;
   setGumballs(uint16 = 0) required ownrecv db;
   setGumballBoosters(blob = []) required ownrecv db;
+  setClubBoosters(blob = []) required ownrecv db airecv;
   setGumballBounties(blob = []) required ownrecv db;
   setWeeklyBountyGumballs(uint16 = 0, uint32 = 0) required ownrecv db;
   setMaxBankMoney(uint32 maxMoney = 150000) required broadcast ownrecv db;

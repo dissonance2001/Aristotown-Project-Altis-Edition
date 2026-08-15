@@ -230,6 +230,10 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
         self.hideDoorParts()
         self.setTriggerName()
+        if self.doorType == DoorTypes.EXT_STANDARD and self.block == 5 and ZoneUtil.getCanonicalZoneId(self.zoneId) == ToontownGlobals.OutdoorZone:
+            doorTrigger = self.getBuilding().find('**/door_trigger*')
+            if not doorTrigger.isEmpty():
+                doorTrigger.node().setName(self.getTriggerName())
 
         # Check if we are dealing with a DDL HQ door...
         if self.doorType == DoorTypes.EXT_HQ and \
@@ -270,6 +274,10 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 if self.building.isEmpty():
                     self.building = self.cr.playGame.hood.loader.geom.find(
                         '**/??' + str(self.block) + ':animated_building_*_DNARoot;+s')
+                if self.building.isEmpty() and self.doorType == DoorTypes.EXT_STANDARD and self.block == 5 and ZoneUtil.getCanonicalZoneId(self.zoneId) == ToontownGlobals.OutdoorZone:
+                    self.building = self.cr.playGame.hood.loader.geom.find('**/*toon_landmark_DD_gag_shop_DNARoot;+s')
+                    if self.building.isEmpty():
+                        self.building = self.cr.playGame.hood.loader.geom.find('**/*gag_shop*_DNARoot;+s')
             elif self.doorType == DoorTypes.EXT_COGHQ or self.doorType == DoorTypes.INT_COGHQ:
                 self.building = self.cr.playGame.hood.loader.geom
             else:

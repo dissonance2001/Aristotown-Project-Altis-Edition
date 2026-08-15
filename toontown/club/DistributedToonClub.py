@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -287,15 +288,27 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
     def _applyLocalState(self):
         if not hasattr(base, 'localAvatar') or not base.localAvatar:
             return
+        clubBoosters = []
         if self.club:
             member = self.getMember(base.localAvatar.doId) or {}
             base.localAvatar.guildId = int(self.club.get('id', 0))
             base.localAvatar.guildName = self.club.get('name', '')
             base.localAvatar.guildRank = int(member.get('rank', ClubGlobals.RANK_MEMBER))
+            now = int(time.time())
+            for key, endTime in self.club.get('boosters', {}).items():
+                try:
+                    endTime = int(endTime)
+                    boosterType = ClubGlobals.getClubBoosterType(key)
+                    if boosterType is not None and endTime > now:
+                        clubBoosters.append([int(boosterType), endTime, 0])
+                except:
+                    pass
         else:
             base.localAvatar.guildId = 0
             base.localAvatar.guildName = ''
             base.localAvatar.guildRank = 0
+        if hasattr(base.localAvatar, 'setClubBoosters'):
+            base.localAvatar.setClubBoosters(clubBoosters)
         self._applyPersonalSettings()
         chatLog = getattr(self.cr, 'chatLog', None)
         if chatLog and hasattr(chatLog, 'setClubAvailable'):
