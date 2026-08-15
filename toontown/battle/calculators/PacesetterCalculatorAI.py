@@ -144,7 +144,8 @@ class PacesetterCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':
-                if self.battle.activeSuits[i].currHP > 0 and not self.battle.activeSuits[i].currHP >= 12750:
+                self.__cancelOpeningChallengeIfNeeded(suitId)
+                if self.battle.activeSuits[i].currHP > 0 and (not self.battle.activeSuits[i].currHP >= 12750 or self.suitHasCondition(suitId, 'openingChallengeCancelled')):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': 'PresidentTargetCheck',  # Target Check
                                                                 'animName': 'nothing',
