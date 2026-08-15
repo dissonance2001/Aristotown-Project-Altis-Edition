@@ -36,6 +36,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.finishCallback = finishCallback
         self.avatarExitEvents = []
         self.responses = {}
+        self.surrenderRequests = {}
+        self.numSurrendered = 0
+        self.maxSurrendered = 0
+        self.surrenderedToons = []
+        self.surrenderInProgress = False
         self.adjustingResponses = {}
         self.joinResponses = {}
         self.adjustingSuits = []
@@ -261,6 +266,18 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def d_setMembers(self):
         self.notify.debug('network:setMembers()')
         self.sendUpdate('setMembers', self.getMembers())
+
+    def setNumSurrendered(self, numSurrendered, maxSurrendered, surrenderedToons):
+        self.numSurrendered = numSurrendered
+        self.maxSurrendered = maxSurrendered
+        self.surrenderedToons = list(surrenderedToons)
+
+    def d_setNumSurrendered(self, numSurrendered, maxSurrendered, surrenderedToons):
+        self.sendUpdate('setNumSurrendered', [numSurrendered, maxSurrendered, surrenderedToons])
+
+    def b_setNumSurrendered(self, numSurrendered, maxSurrendered, surrenderedToons):
+        self.setNumSurrendered(numSurrendered, maxSurrendered, surrenderedToons)
+        self.d_setNumSurrendered(numSurrendered, maxSurrendered, surrenderedToons)
 
     def checkRevertImmuneStatus(self):
         if self.battleCalc.checkRevertImmuneCogs() == 1:
@@ -770,6 +787,11 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.__removeTaskName(taskName)
         self.__removeToon(toonId)
         self.d_setMembers()
+        if self.surrenderInProgress:
+            if len(self.toons) == 0:
+                self.notify.debug('last surrendered toon is gone - battle is finished')
+                self.b_setState('Resume')
+            return Task.done
         if len(self.toons) == 0:
             self.notify.debug('last toon is gone - battle is finished')
             self.b_setState('Resume')
@@ -875,6 +897,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         if self.adjustingToons.count(toonId) == 1:
             self.notify.warning('removeToon() - toon: %d was adjusting!' % toonId)
             self.adjustingToons.remove(toonId)
+        self.clearSurrenderRequests()
         self.toonGone = 1
         if toonId in self.pets:
             self.pets[toonId].requestDelete()
@@ -918,6 +941,66 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         else:
             self.notify.warning('getToon() - toon: %d not in repository!' % toonId)
         return 
+
+    def clearSurrenderRequests(self):
+        self.surrenderRequests = {}
+        self.b_setNumSurrendered(0, len(self.activeToons), [])
+
+    def adjustSurrendered(self):
+        activeToons = list(self.activeToons)
+        maxSurrendered = len(activeToons)
+        surrenderedToons = [toonId for toonId in activeToons if self.surrenderRequests.get(toonId, False)]
+        self.b_setNumSurrendered(len(surrenderedToons), maxSurrendered, surrenderedToons)
+        if maxSurrendered and len(surrenderedToons) == maxSurrendered:
+            self.finishSurrender()
+
+    def finishSurrender(self):
+        if self.surrenderInProgress:
+            return
+        self.surrenderInProgress = True
+        self.ignoreResponses = 1
+        self.timer.stop()
+        self.adjustingTimer.stop()
+        self.__removeTaskName(self.uniqueName('make-movie'))
+        self.clearAttacks()
+        bossCog = getattr(self, 'bossCog', None)
+        if bossCog is not None and hasattr(bossCog, 'postBattleState'):
+            bossCog.postBattleState = 'Off'
+        callbackOwner = getattr(self.finishCallback, 'im_self', None)
+        if callbackOwner is None:
+            callbackOwner = getattr(self.finishCallback, '__self__', None)
+        if callbackOwner is not None:
+            if hasattr(callbackOwner, 'postBattleState'):
+                callbackOwner.postBattleState = 'Off'
+            if hasattr(callbackOwner, 'removeToon'):
+                for toonId in self.activeToons[:]:
+                    try:
+                        callbackOwner.removeToon(toonId)
+                    except:
+                        pass
+        self.runableFsm.request('Unrunable')
+        self.joinableFsm.request('Unjoinable')
+        for toonId in self.activeToons[:]:
+            self.__makeToonRun(toonId, 0)
+            toon = self.getToon(toonId)
+            if toon:
+                toon.b_setHp(200)
+        self.d_setMembers()
+        self.needAdjust = 0
+
+    def toonRequestSurrender(self):
+        toonId = self.air.getAvatarIdFromSender()
+        if self.fsm.getCurrentState().getName() != 'WaitForInput':
+            self.notify.debug('ignoring surrender response outside WaitForInput from toon: %d' % toonId)
+            return
+        if self.ignoreResponses == 1:
+            self.notify.debug('ignoring surrender response from toon: %d' % toonId)
+            return
+        if self.activeToons.count(toonId) == 0:
+            self.notify.warning('toon tried to surrender, but not found in activeToons: %d' % toonId)
+            return
+        self.surrenderRequests[toonId] = not self.surrenderRequests.get(toonId, False)
+        self.adjustSurrendered()
 
     def toonRequestRun(self):
         toonId = self.air.getAvatarIdFromSender()
@@ -1551,6 +1634,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.joinableFsm.request('Joinable')
         self.runableFsm.request('Runable')
         self.resetResponses()
+        self.adjustSurrendered()
         self.__requestAdjust()
         if not self.tutorialFlag:
             self.timer.startCallback(SERVER_INPUT_TIMEOUT, self.__serverTimedOut)

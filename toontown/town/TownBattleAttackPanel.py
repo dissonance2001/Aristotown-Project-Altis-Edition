@@ -32,6 +32,7 @@ class TownBattleAttackPanel(StateData.StateData):
             base.localAvatar.inventory.show()
         self.accept('inventory-selection', self.__handleInventory)
         self.accept('inventory-run', self.__handleRun)
+        self.accept('inventory-surrender', self.__handleSurrender)
         self.accept('inventory-sos', self.__handleSOS)
         self.accept('inventory-pass', self.__handlePass)
         self.accept('inventory-fire', self.__handleFire)
@@ -42,6 +43,7 @@ class TownBattleAttackPanel(StateData.StateData):
         StateData.StateData.exit(self)
         self.ignore('inventory-selection')
         self.ignore('inventory-run')
+        self.ignore('inventory-surrender')
         self.ignore('inventory-sos')
         self.ignore('inventory-pass')
         self.ignore('inventory-fire')
@@ -54,6 +56,10 @@ class TownBattleAttackPanel(StateData.StateData):
 
     def __handleRun(self):
         doneStatus = {'mode': 'Run'}
+        messenger.send(self.doneEvent, [doneStatus])
+
+    def __handleSurrender(self):
+        doneStatus = {'mode': 'Surrender'}
         messenger.send(self.doneEvent, [doneStatus])
 
     def __handleSOS(self):

@@ -899,6 +899,7 @@ class Movie(DirectObject.DirectObject):
 
 
     def getMovieToonTrackOrder(self):
+        order = [HEAL, TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP]
         for toon in self.battle.activeToons:
             if toon.contentSync == 1:
                 order = [DROP, SQUIRT, ZAP, TRAP, THROW, LURE, SOUND, HEAL]

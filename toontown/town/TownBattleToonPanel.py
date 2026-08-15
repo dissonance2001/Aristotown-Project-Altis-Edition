@@ -671,6 +671,15 @@ class TownBattleToonPanel(DirectFrame):
             scale=(0.13, 1, 0.26),
         )
         self.gagLocked.hide()
+        surrenderFlagImage = toonPanelGui.find('**/surrender_flag')
+        if surrenderFlagImage.isEmpty():
+            surrenderGui = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+            surrenderFlagImage = surrenderGui.find('**/tab_surrender_tab')
+        self.surrenderFlag = DirectFrame(parent=self, relief=None, image=surrenderFlagImage, scale=0.3, frameSize=(-0.53, 0.4, -0.34, 0.34), pos=(-0.45, 0, 0.28))
+        self.surrenderFlag.setBin('gui-popup', 1000)
+        self.surrenderFlag.hide()
+        self.surrenderSeq = None
+        self.surrenderState = False
         self.choiceEmblem.hide()
         self.choiceOrganicTex = loader.loadTexture('phase_3.5/maps/battlegui/pres_scroll_bg.png')
         self.choiceOrganicTex.setWrapU(Texture.WMRepeat)
@@ -3170,8 +3179,48 @@ class TownBattleToonPanel(DirectFrame):
 
         return returnStr
 
+    def updateSurrenderState(self, surrenderState, instant=False):
+        changeState = self.surrenderState != surrenderState
+        self.surrenderState = surrenderState
+        if not changeState:
+            return
+        if self.surrenderSeq:
+            self.surrenderSeq.finish()
+            self.surrenderSeq = None
+        if instant:
+            if surrenderState:
+                self.surrenderFlag.show()
+            else:
+                self.surrenderFlag.hide()
+            return
+        if surrenderState:
+            self.surrenderSeq = Sequence(
+                Func(self.surrenderFlag.setPos, (-0.17, 0, 0.0)),
+                Func(self.surrenderFlag.setScale, 0.01),
+                Func(self.surrenderFlag.show),
+                Parallel(
+                    LerpScaleInterval(self.surrenderFlag, 0.2, 0.3, blendType='easeOut'),
+                    LerpPosInterval(self.surrenderFlag, 0.2, (-0.45, 0, 0.28), blendType='easeOut')
+                )
+            )
+        else:
+            self.surrenderSeq = Sequence(
+                Func(self.surrenderFlag.setPos, (-0.45, 0, 0.28)),
+                Func(self.surrenderFlag.setScale, 0.3),
+                Parallel(
+                    LerpScaleInterval(self.surrenderFlag, 0.2, 0.01, blendType='easeIn'),
+                    LerpPosInterval(self.surrenderFlag, 0.2, (-0.17, 0, 0.0), blendType='easeIn')
+                ),
+                Func(self.surrenderFlag.hide)
+            )
+        self.surrenderSeq.start()
+
     def cleanup(self):
         self.ignoreAll()
+
+        if getattr(self, 'surrenderSeq', None):
+            self.surrenderSeq.finish()
+            self.surrenderSeq = None
 
         if getattr(self, 'choiceOrganicIval', None):
             self.choiceOrganicIval.finish()
@@ -3192,6 +3241,7 @@ class TownBattleToonPanel(DirectFrame):
             'fireIcon',
             'sueIcon',
             'sosIcon',
+            'surrenderFlag',
             'iouChoiceName'
         ):
             node = getattr(self, nodeName, None)

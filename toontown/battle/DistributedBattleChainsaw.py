@@ -3,6 +3,8 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Func, LerpHprInterval, LerpPosInterval, Parallel, Sequence, Track, Wait
 
 from toontown.battle import DistributedBattleMiniboss
+from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
 
 
 class DistributedBattleChainsaw(
@@ -22,6 +24,19 @@ class DistributedBattleChainsaw(
         points[1] = ((Point3(10, 4.5, 0), 155),
                      (Point3(5, 5.8, 0), 170))
         self.suitPoints = tuple(points)
+
+    def getSurrenderExitStatus(self):
+        return {
+            'loader': ZoneUtil.getLoaderName(ToontownGlobals.OutdoorZone),
+            'where': 'toonInterior',
+            'how': 'teleportIn',
+            'hoodId': ToontownGlobals.OutdoorZone,
+            'zoneId': ToontownGlobals.ChainsawLobby,
+            'shardId': None,
+            'avId': -1,
+            'battle': 1,
+            'quick': 1,
+        }
 
     def delete(self):
         for taskName in list(self._chainsawIdleTasks):

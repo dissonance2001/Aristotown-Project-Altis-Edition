@@ -78,6 +78,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.clickSuperGags = 1
         self.propAndOrganicBonusStack = config.GetBool('prop-and-organic-bonus-stack', 0)
         self.propBonusIval = Parallel()
+        self.numSurrendered = 0
+        self.maxSurrendered = 0
         self.activateMode = 'book'
         self.load()
         self.hide()
@@ -588,6 +590,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
     def __handleRun(self):
         messenger.send('inventory-run')
+
+    def __handleSurrender(self):
+        messenger.send('inventory-surrender')
 
     def __handleFire(self):
         messenger.send('inventory-fire')
@@ -1748,6 +1753,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     def isSpecificGagBanned(self, track, level):
         return 'noGag_%s_%s' % (track, level) in base.localAvatar.battleConditions
 
+    def adjustSurrenderedToons(self, numSurrendered, maxSurrendered):
+        self.numSurrendered = numSurrendered
+        self.maxSurrendered = maxSurrendered
+        if getattr(self, 'surrenderVoteFlag', None):
+            self.surrenderVoteFlag['text'] = '%d/%d' % (numSurrendered, maxSurrendered)
+            if self.bldg == 1 and numSurrendered > 0:
+                self.surrenderVoteFlag.show()
+            else:
+                self.surrenderVoteFlag.hide()
+
     def battleActivateButtons(self):
         self.__applyBattleDetailLayout()
         self.applyDisplayTrackOrder()
@@ -1772,12 +1787,19 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.runButton.hide()
             self.sosButton.show()
             self.passButton.show()
+            self.surrenderButton.show()
+            if self.numSurrendered > 0:
+                self.surrenderVoteFlag.show()
+            else:
+                self.surrenderVoteFlag.hide()
             self.levelsButton.show()
         elif self.tutorialFlag == 1:
             self.runButton.hide()
             self.sosButton.hide()
             self.passButton.hide()
             self.fireButton.hide()
+            self.surrenderButton.hide()
+            self.surrenderVoteFlag.hide()
             self.levelsButton.hide()
         else:
             self.runButton.show()
@@ -1785,6 +1807,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.passButton.show()
             self.fireButton.show()
             self.sueButton.show()
+            self.surrenderButton.hide()
+            self.surrenderVoteFlag.hide()
             self.levelsButton.show()
             if localAvatar.getPinkSlips() > 0:
                 self.fireButton['state'] = DGG.NORMAL
@@ -2274,6 +2298,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.runButton.hide()
         self.sosButton.hide()
         self.levelsButton.hide()
+        self.surrenderButton.hide()
+        self.surrenderVoteFlag.hide()
         self.passButton['text'] = TTLocalizer.lCancel
         self.passButton.show()
         for track in range(len(Tracks)):
@@ -2626,6 +2652,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         sueDown = buttonGui.find('**/tab_sue_press')
         sueHover = buttonGui.find('**/tab_sue_hover')
 
+        surrenderUp = buttonGui.find('**/tab_surrender')
+        surrenderDown = buttonGui.find('**/tab_surrender_press')
+        surrenderHover = buttonGui.find('**/tab_surrender_hover')
+        surrenderFlag = buttonGui.find('**/tab_surrender_tab')
+
         battleModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.levelsButton = DirectButton(self, relief=None, pos=(0, 0, 0.35), text='', text_scale=TTLocalizer.INlevelsButton, text_pos=(0, 0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=1, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(3.0, 1.0, 1.5), image_color=(1, 0.6, 0, 1), command=self.__handleLevels)
         self.battleFrame = DirectFrame(relief=None, pos=(.25, 0, -.1), image=battleModels.find('**/gag_selection_main'), image_pos=(-1.275, 0, -0.01), image_scale=(1.175, 1.175, 1.175), parent=self)
@@ -2635,6 +2666,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.passButton = DirectButton(parent=self, relief=None, pos=(-1.3, 0, .25), image=(passUp, passDown, passHover), image_scale=0.3, image_color=(1, 1, 1, 1),  command=self.__handlePass)
         self.fireButton = DirectButton(parent=self, relief=None, pos=(-1.3, 0, -.325), image=(fireUp, fireDown, fireHover), image_scale=(.5, .15, .125), image_color=(1, 1, 1, 1), command=self.__handleFire)
         self.sueButton = DirectButton(parent=self, relief=None, pos=(-1.3, 0, -.475), image=(sueUp, sueDown, sueHover), image_scale=(.5, .15, .125), image_color=(1, 1, 1, 1), command=self.__handleSue)
+        self.surrenderButton = DirectButton(parent=self, relief=None, pos=(-1.3, 0, .05), image=(surrenderUp, surrenderDown, surrenderHover), scale=0.3, image_color=(1, 1, 1, 1), text=('', TTLocalizer.InventorySurrender, TTLocalizer.InventorySurrender), text_pos=(-0.55, -0.075), text_align=TextNode.ARight, text_scale=0.3, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), command=self.__handleSurrender)
+        self.surrenderVoteFlag = DirectFrame(parent=self, relief=None, pos=(-1.51, 0, .05), image=surrenderFlag, scale=0.3, text='%d/%d' % (self.numSurrendered, self.maxSurrendered), text_pos=(0, -0.075), text_align=TextNode.ACenter, text_scale=0.2, text_fg=(0, 0, 0, 1))
         self.tutText = DirectFrame(parent=self.battleFrame, relief=None, pos=(0.05, 0, -0.1133), scale=0.143, image=DGG.getDefaultDialogGeom(), image_scale=5.125, image_pos=(0, 0, -0.65), image_color=ToontownGlobals.GlobalDialogColor, text_scale=TTLocalizer.INclickToAttack, text=TTLocalizer.InventoryClickToAttack, textMayChange=0)
         self.tutText.hide()
         self.passButton.setBin('fixed', 0) 
@@ -2642,6 +2675,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.sosButton.setBin('fixed', 0) 
         self.fireButton.setBin('fixed', 0) 
         self.sueButton.setBin('fixed', 0) 
+        self.surrenderButton.setBin('fixed', 0)
+        self.surrenderVoteFlag.setBin('fixed', 0)
         self.tutArrows = BlinkingArrows.BlinkingArrows(parent=self.battleFrame)
         battleModels.removeNode()
         self.levelsButton.hide()

@@ -64,6 +64,7 @@ class TownBattle(StateData.StateData):
           'ChooseToon',
           'AttackWait',
           'Run',
+          'Surrender',
           'Fire',
           'Sue',
           'SOS']),
@@ -71,6 +72,7 @@ class TownBattle(StateData.StateData):
          State.State('AttackWait', self.enterAttackWait, self.exitAttackWait, ['ChooseCog', 'ChooseToon', 'Attack', 'SOS']),
          State.State('ChooseToon', self.enterChooseToon, self.exitChooseToon, ['AttackWait', 'Attack', 'SOS']),
          State.State('Run', self.enterRun, self.exitRun, ['Attack']),
+         State.State('Surrender', self.enterSurrender, self.exitSurrender, ['Attack']),
          State.State('SOS', self.enterSOS, self.exitSOS, ['Attack',
           'AttackWait',
           'SOSPetSearch',
@@ -82,6 +84,9 @@ class TownBattle(StateData.StateData):
          State.State('Sue', self.enterSue, self.exitSue, ['Attack', 'AttackWait'])], 'Off', 'Off')
         self.runPanel = TTDialog.TTDialog(dialogName='TownBattleRunPanel', text=TTLocalizer.TownBattleRun, style=TTDialog.TwoChoice, command=self.__handleRunPanelDone)
         self.runPanel.hide()
+        self.surrenderedToons = []
+        self.surrenderPanel = TTDialog.TTDialog(dialogName='TownBattleSurrenderPanel', text=TTLocalizer.TownBattleSurrenderVote, style=TTDialog.TwoChoice, command=self.__handleSurrenderPanelDone)
+        self.surrenderPanel.hide()
         self.attackPanelDoneEvent = 'attack-panel-done'
         self.attackPanel = TownBattleAttackPanel.TownBattleAttackPanel(self.attackPanelDoneEvent)
         self.waitPanelDoneEvent = 'wait-panel-done'
@@ -158,6 +163,8 @@ class TownBattle(StateData.StateData):
         del self.fsm
         self.runPanel.cleanup()
         del self.runPanel
+        self.surrenderPanel.cleanup()
+        del self.surrenderPanel
         del self.attackPanel
         del self.waitPanel
         del self.chooseCogPanel
@@ -198,6 +205,9 @@ class TownBattle(StateData.StateData):
         self.numToons = 1
         self.numCogs = 1
         self.toons = [base.localAvatar.doId]
+        self.surrenderedToons = []
+        for toonPanel in self.toonPanels:
+            toonPanel.updateSurrenderState(False, instant=True)
        # self.toonPanels[0].setLaffMeter(base.localAvatar)
         self.bldg = bldg
         self.creditLevel = None
@@ -518,6 +528,8 @@ class TownBattle(StateData.StateData):
                 messenger.send(self.battleEvent, [response])
         elif mode == 'Run':
             self.fsm.request('Run')
+        elif mode == 'Surrender':
+            self.fsm.request('Surrender')
         elif mode == 'SOS':
             self.fsm.request('SOS')
             self.lastActionMode = 'SOS'
@@ -596,6 +608,8 @@ class TownBattle(StateData.StateData):
             self.__cogPanels(self.numCogs)
             for i in range(len(toons)):
                 self.toonPanels[i].setLaffMeter(toons[i])
+
+            self.setSurrenderedToons(self.surrenderedToons)
 
             for i in range(len(cogs)):
                 self.cogPanels[i].setCogInformation(cogs[i])
@@ -718,6 +732,36 @@ class TownBattle(StateData.StateData):
             messenger.send(self.battleEvent, [response])
         else:
             self.notify.warning('unknown mode: %s' % mode)
+
+    def setSurrenderedToons(self, surrenderedToons):
+        self.surrenderedToons = list(surrenderedToons)
+        for toonPanel in self.toonPanels:
+            avatar = getattr(toonPanel, 'avatar', None)
+            surrendered = avatar is not None and avatar.doId in self.surrenderedToons
+            toonPanel.updateSurrenderState(surrendered)
+
+    def enterSurrender(self):
+        if base.localAvatar.doId in self.surrenderedToons:
+            self.surrenderPanel['text'] = TTLocalizer.TownBattleSurrenderUnvote
+        else:
+            self.surrenderPanel['text'] = TTLocalizer.TownBattleSurrenderVote
+        self.surrenderPanel.show()
+
+    def exitSurrender(self):
+        self.surrenderPanel.hide()
+
+    def __handleSurrenderPanelDone(self, doneStatus):
+        if doneStatus == DGG.DIALOG_OK:
+            localToonId = base.localAvatar.doId
+            localSurrenderedToons = list(self.surrenderedToons)
+            if localToonId in localSurrenderedToons:
+                localSurrenderedToons.remove(localToonId)
+            else:
+                localSurrenderedToons.append(localToonId)
+            self.setSurrenderedToons(localSurrenderedToons)
+            response = {'mode': 'Surrender'}
+            messenger.send(self.battleEvent, [response])
+        self.fsm.request('Attack')
 
     def enterRun(self):
         self.runPanel.show()

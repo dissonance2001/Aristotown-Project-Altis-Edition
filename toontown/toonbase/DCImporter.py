@@ -1671,6 +1671,7 @@ dclass DistributedBattleBase : DistributedObject {
   setMovie(int8, uint32[], uint32[], ToonAttack[], int8[], SuitAttack[]) required broadcast ram;
   setToonTrackOrder(int8[]) broadcast ram;
   setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;
+  setNumSurrendered(uint8, uint8, uint32[]) broadcast ram;
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
   denyLocalToonJoin();
   setBattleConditions(int32, string[], int16[], int8[]);
@@ -1679,6 +1680,7 @@ dclass DistributedBattleBase : DistributedObject {
   faceOffDone() airecv clsend;
   toonRequestJoin(int16/10, int16/10, int16/10) airecv clsend;
   toonRequestRun() airecv clsend;
+  toonRequestSurrender() airecv clsend;
   toonDied() airecv clsend;
   adjustDone() airecv clsend;
   timeout() airecv clsend;

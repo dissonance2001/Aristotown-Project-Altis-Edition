@@ -63,6 +63,8 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         self.activeTab = 4
         self.propAndOrganicBonusStack = config.GetBool('prop-and-organic-bonus-stack', 0)
         self.propBonusIval = Parallel()
+        self.numSurrendered = 0
+        self.maxSurrendered = 0
         self.activateMode = 'book'
         self.load()
         self.hide()
@@ -386,6 +388,9 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
 
     def __handleRun(self):
         messenger.send('inventory-run')
+
+    def __handleSurrender(self):
+        messenger.send('inventory-surrender')
 
     def __handleFire(self):
         messenger.send('inventory-fire')
@@ -1047,6 +1052,16 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         self.invFrame.reparentTo(self)
         self.purchaseFrame.hide()
 
+    def adjustSurrenderedToons(self, numSurrendered, maxSurrendered):
+        self.numSurrendered = numSurrendered
+        self.maxSurrendered = maxSurrendered
+        if getattr(self, 'surrenderVoteFlag', None):
+            self.surrenderVoteFlag['text'] = '%d/%d' % (numSurrendered, maxSurrendered)
+            if self.bldg == 1 and numSurrendered > 0:
+                self.surrenderVoteFlag.show()
+            else:
+                self.surrenderVoteFlag.hide()
+
     def battleActivateButtons(self):
         self.stopAndClearPropBonusIval()
         self.reparentTo(aspect2d)
@@ -1069,6 +1084,11 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
             self.runButton.hide()
             self.sosButton.show()
             self.passButton.show()
+            self.surrenderButton.show()
+            if self.numSurrendered > 0:
+                self.surrenderVoteFlag.show()
+            else:
+                self.surrenderVoteFlag.hide()
             self.levelsButton.show()
         elif self.tutorialFlag == 1:
             self.runButton.hide()
@@ -1076,6 +1096,8 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
             self.passButton.hide()
             self.fireButton.hide()
             self.sueButton.hide()
+            self.surrenderButton.hide()
+            self.surrenderVoteFlag.hide()
             self.levelsButton.hide()
         else:
             self.runButton.show()
@@ -1083,6 +1105,8 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
             self.passButton.show()
             self.fireButton.show()
             self.sueButton.show()
+            self.surrenderButton.hide()
+            self.surrenderVoteFlag.hide()
             self.levelsButton.show()
 
             if localAvatar.getPinkSlips():
@@ -1154,6 +1178,8 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         self.runButton.hide()
         self.sosButton.hide()
         self.levelsButton.hide()
+        self.surrenderButton.hide()
+        self.surrenderVoteFlag.hide()
         self.passButton['text'] = TTLocalizer.lCancel
         self.passButton.show()
         for track in xrange(len(Tracks)):
@@ -1432,6 +1458,7 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
 
     def loadBattleFrame(self):
         battleModels = loader.loadModel('phase_3.5/models/gui/battle_gui_new')
+        surrenderGui = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.levelsButton = DirectButton(self, relief=None, pos=(0.675, 0, -0.5), text='', text_scale=TTLocalizer.INlevelsButton, text_fg=Vec4(1, 1, 1, 1), textMayChange=1, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(2.5, 1.05, 1), image_color=(1, 0.6, 0, 1), command=self.__handleLevels)
         self.battleFrame = DirectFrame(relief=None, parent=self)
         self.runButton = DirectButton(parent=self.battleFrame, relief=None, pos=(1.4, 0, -0.5), text=TTLocalizer.InventoryRun, text_scale=TTLocalizer.INrunButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(2, 1.05, 1), image_color=(0, 0.6, 1, 1), command=self.__handleRun)
@@ -1439,10 +1466,13 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
         self.passButton = DirectButton(parent=self.battleFrame, relief=None, pos=(1.45, 0, -0.6), text=TTLocalizer.InventoryPass, text_scale=TTLocalizer.INpassButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=1, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(2, 1.05, 1), image_color=(0, 0.6, 1, 1), command=self.__handlePass)
         self.fireButton = DirectButton(parent=self.battleFrame, relief=None, pos=(1.4, 0, -0.8), text=TTLocalizer.InventoryFire, text_scale=TTLocalizer.INfireButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(2, 1.05, 1), image_color=(0, 0.6, 1, 1), command=self.__handleFire)
         self.sueButton = DirectButton(parent=self.frame, relief=None, pos=(1.4, 0, -0.9), text=TTLocalizer.InventoryFire, text_scale=TTLocalizer.INfireButton, text_pos=(0, -0.02), text_fg=Vec4(1, 1, 1, 1), textMayChange=0, image=(self.upButton, self.downButton, self.rolloverButton), image_scale=(2, 1.05, 1), image_color=(0, 0.6, 1, 1), command=self.__handleSue)
+        self.surrenderButton = DirectButton(parent=self.battleFrame, relief=None, pos=(1.4, 0, -0.5), image=(surrenderGui.find('**/tab_surrender'), surrenderGui.find('**/tab_surrender_press'), surrenderGui.find('**/tab_surrender_hover')), scale=0.3, image_color=(1, 1, 1, 1), text=('', TTLocalizer.InventorySurrender, TTLocalizer.InventorySurrender), text_pos=(-0.55, -0.075), text_align=TextNode.ARight, text_scale=0.3, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), command=self.__handleSurrender)
+        self.surrenderVoteFlag = DirectFrame(parent=self.battleFrame, relief=None, pos=(1.19, 0, -0.5), image=surrenderGui.find('**/tab_surrender_tab'), scale=0.3, text='%d/%d' % (self.numSurrendered, self.maxSurrendered), text_pos=(0, -0.075), text_align=TextNode.ACenter, text_scale=0.2, text_fg=(0, 0, 0, 1))
         self.tutText = DirectFrame(parent=self.battleFrame, relief=None, pos=(-1, 0, -0.1133), scale=0.143, image=DGG.getDefaultDialogGeom(), image_scale=5.125, image_pos=(0, 0, -0.65), image_color=ToontownGlobals.GlobalDialogColor, text_scale=TTLocalizer.INclickToAttack, text=TTLocalizer.InventoryClickToAttack, textMayChange=0)
         self.tutText.hide()
         self.tutArrows = BlinkingArrows.BlinkingArrows(parent=self.battleFrame)
         battleModels.removeNode()
+        surrenderGui.removeNode()
         self.levelsButton.hide()
         self.battleFrame.hide()
 
