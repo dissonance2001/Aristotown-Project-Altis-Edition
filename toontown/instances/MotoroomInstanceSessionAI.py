@@ -44,7 +44,7 @@ class MotoroomInstanceSessionAI(DirectObject):
             0,
             0,
             0,
-            79,
+            72,
             0
         )
         desc = (

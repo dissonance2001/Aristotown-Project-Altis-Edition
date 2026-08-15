@@ -312,6 +312,71 @@ class DistributedNPCToon(DistributedNPCToonBase):
         }
         return data.get(self.getName())
 
+    def _applyToonseltownClothes(self):
+        clothes = {
+            'Shinny Upatree': (506, 484, 'boy', 276, 'ss'),
+            'Candie LaBrum': (515, 492, 'girl', 218, 'md'),
+            'Perez Cent': (517, 494, 'boy', 284, 'ss'),
+            'Corgi Diem': (163, 154, 'boy', 70, 'ls'),
+            'Pepper Minstix': (506, 484, 'boy', 276, 'ms'),
+        }
+        data = clothes.get(self.getName())
+        if not data:
+            return False
+        try:
+            from toontown.toon import ToonDNA
+            shirtId, sleeveId, bottomKind, bottomId, torsoCode = data
+            if self.style.torso != torsoCode:
+                self.swapToonTorso(torsoCode, genClothes=0)
+            shirtTex = loader.loadTexture(ToonDNA.Shirts[shirtId], okMissing=True)
+            sleeveTex = loader.loadTexture(ToonDNA.Sleeves[sleeveId], okMissing=True)
+            if bottomKind == 'boy':
+                bottomPath = ToonDNA.BoyShorts[bottomId]
+            else:
+                bottomPath = ToonDNA.GirlBottoms[bottomId][0]
+            bottomTex = loader.loadTexture(bottomPath, okMissing=True)
+            if not shirtTex or not sleeveTex or not bottomTex:
+                return False
+            shirtTex.setMinfilter(Texture.FTLinearMipmapLinear)
+            shirtTex.setMagfilter(Texture.FTLinear)
+            sleeveTex.setMinfilter(Texture.FTLinearMipmapLinear)
+            sleeveTex.setMagfilter(Texture.FTLinear)
+            bottomTex.setMinfilter(Texture.FTLinearMipmapLinear)
+            bottomTex.setMagfilter(Texture.FTLinear)
+            color = ToonDNA.ClothesColors[0]
+            darkColor = color * 0.5
+            darkColor.setW(1.0)
+            for lodName in self.getLODNames():
+                torso = self.getPart('torso', lodName)
+                top = torso.find('**/torso-top')
+                if not top.isEmpty():
+                    top.setTexture(shirtTex, 1)
+                    top.setColor(color)
+                sleeves = torso.find('**/sleeves')
+                if not sleeves.isEmpty():
+                    sleeves.setTexture(sleeveTex, 1)
+                    sleeves.setColor(color)
+                bottoms = torso.findAllMatches('**/torso-bot')
+                for index in xrange(bottoms.getNumPaths()):
+                    bottom = bottoms.getPath(index)
+                    bottom.setTexture(bottomTex, 1)
+                    bottom.setColor(color)
+                torso.findAllMatches('**/torso-bot-cap').setColor(darkColor)
+            return True
+        except:
+            return False
+
+    def _applyToonseltownTransparency(self):
+        if self.getName() not in ('Candie LaBrum', 'Perez Cent', 'Corgi Diem'):
+            return False
+        try:
+            track = self.doToonColorScale(VBase4(1, 1, 1, 0.6), 0, keepDefault=1)
+            if track:
+                track.start()
+            return True
+        except:
+            return False
+
     def _applyToonseltownNPCState(self):
         data = self._getToonseltownData()
         if not data:
@@ -321,6 +386,8 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.setH(data[1])
         self.npcType = data[2]
         self.setToonTag(data[2])
+        self._applyToonseltownClothes()
+        self._applyToonseltownTransparency()
         self.setAnimState('neutral', 0.9, None, None)
         return True
 
