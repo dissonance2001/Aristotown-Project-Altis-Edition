@@ -677,6 +677,21 @@ class CogStatusEffectTooltip(DirectFrame):
             self.background['image'] = self.debuffImage
             self.background['geom'] = self.debuffIcon
 
+        self.background['image_scale'] = (1, 1, 0.5)
+        self.titleLabel.setPos(0, 0, 0.039)
+        self.titleLabel['text_scale'] = 0.053
+        self.titleLabel['text_wordwrap'] = 18
+        self.descriptionLabel.setPos(0, 0, -0.01)
+        self.descriptionLabel['text_scale'] = 0.0375
+        self.descriptionLabel['text_wordwrap'] = 23
+
+        if title.startswith('Revved-Up:'):
+            self.titleLabel.setPos(0, 0, 0.045)
+            self.titleLabel['text_scale'] = 0.049
+            self.descriptionLabel.setPos(0, 0, -0.003)
+            self.descriptionLabel['text_scale'] = 0.0295
+            self.descriptionLabel['text_wordwrap'] = 30
+
         self.titleLabel['text'] = title
         self.descriptionLabel['text'] = description
 
