@@ -302,9 +302,9 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased, alre
     objInit = Func(posObject, object, hp <= 0)
     objectTrack.append(Wait(delay + tObjectAppears))
     objectTrack.append(objInit)
-    pacesetterSpecialDeath = bool(target.get('died')) and suit.dna.name == 'psetter'
-    visualDied = hasDied and lastDrop and not pacesetterSpecialDeath
-    roundHasDeath = hasDied and not pacesetterSpecialDeath
+    specialBossDeath = bool(target.get('died')) and suit.dna.name in ('psetter', 'chainsaw')
+    visualDied = hasDied and lastDrop and not specialBossDeath
+    roundHasDeath = hasDied and not specialBossDeath
     if hp > 0 and (visualDied or roundHasDeath) and not suit.isVirtual and not suit.isOverpressured:
         # killing drop: full hit animation, then shrink away
         if hasattr(object, 'getAnimControls'):
@@ -461,8 +461,8 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
     hp = target['hp']
     hitSuit = hp > 0
     actualDied = target['died']
-    pacesetterSpecialDeath = bool(actualDied) and suit.dna.name == 'psetter'
-    visualDied = hasDied and lastDrop and not pacesetterSpecialDeath
+    specialBossDeath = bool(actualDied) and suit.dna.name in ('psetter', 'chainsaw')
+    visualDied = hasDied and lastDrop and not specialBossDeath
     revived = target['revived']
     leftSuits = target['leftSuits']
     rightSuits = target['rightSuits']
@@ -571,7 +571,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
             else:
                 anim = 'drop-react'
             suitTrack = Sequence(Wait(delay + tObjectAppears))
-    if pacesetterSpecialDeath:
+    if specialBossDeath:
         suitTrack = Sequence(suitTrack, MovieUtil.createSuitDeathTrack(suit, battle))
     return suitTrack
 

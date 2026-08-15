@@ -304,7 +304,7 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif died and suit.dna.name == 'erclaim':
             deathTracks.append(MovieUtil.makeErclaimDeath(suit, battle))
-        elif died and suit.dna.name == 'psetter':
+        elif died and suit.dna.name in ('psetter', 'chainsaw'):
             deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             if sound['level'] >= 7:

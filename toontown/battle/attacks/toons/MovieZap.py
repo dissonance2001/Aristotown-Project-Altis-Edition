@@ -459,7 +459,7 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
                 )
             )
 
-        elif level > 3:
+        elif level > 3 and suit.dna.name != 'chainsaw':
             deathTracks.append(
                 Func(
                     suit.clearSuitStatusEffect,
@@ -623,10 +623,10 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         elif died != 0 and suit.isVirtual:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level > 3:
+        elif died != 0 and not suit.isVirtual and level > 3 and suit.dna.name != 'chainsaw':
             deathTracks.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and level <= 3:
+        elif died != 0 and not suit.isVirtual:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         elif revived != 0 and suit.isSkeleton:
