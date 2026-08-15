@@ -785,8 +785,16 @@ class BattleCalculatorAI:
                     self.notify.debug('all targets are lured, attack misses')
                 attack[TOON_ACCBONUS_COL] = 0
                 return (0, 0)
-        if acc > MaxToonAcc:
-            acc = MaxToonAcc
+        maxToonAcc = MaxToonAcc
+        try:
+            for activeSuit in self.battle.activeSuits:
+                if getattr(getattr(activeSuit, 'dna', None), 'name', None) == 'chainsaw':
+                    maxToonAcc = 99
+                    break
+        except:
+            pass
+        if acc > maxToonAcc:
+            acc = maxToonAcc
 
         if self.suitHasCondition(attack[TOON_TGT_COL], 'dodgy'):
             self.notify.debug('Original accuracy target: %i' % acc)
