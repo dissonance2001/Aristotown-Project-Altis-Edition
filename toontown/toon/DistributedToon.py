@@ -89,6 +89,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self._isGM = False
         self._gmType = None
         self.trophyScore = 0
+        self.snowballCooldown = time.time()
         self.trophyStar = None
         self.trophyStarSpeed = 0
         self.safeZonesVisited = []
@@ -2336,9 +2337,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return True
 
     def presentPie(self, x, y, z, h, timestamp32):
-        if self.numPies <= 0:
+        snowball = h >= 1000.0
+        if snowball:
+            h -= 1000.0
+        if self.numPies <= 0 and not snowball:
             return
-        
+
         if not launcher.getPhaseComplete(5):
             return
         
@@ -2349,7 +2353,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         
         ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
+        oldPieType = self.pieType
+        if snowball:
+            self.pieType = 9
         ival = self.getPresentPieInterval(x, y, z, h)
+        if snowball:
+            self.pieType = oldPieType
         if ts > 0:
             startTime = ts
             lastTossTrack.finish()
@@ -2363,10 +2372,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.tossTrack = ival
 
     def tossPie(self, x, y, z, h, sequence, power, throwType, timestamp32):
-        if self.numPies <= 0:
+        snowball = throwType == 200
+        if self.numPies <= 0 and not snowball:
             return
-        
-        if self.numPies != ToontownGlobals.FullPies:
+
+        if not snowball and self.numPies != ToontownGlobals.FullPies:
             self.setNumPies(self.numPies - 1)
         self.lastTossedPie = globalClock.getFrameTime()
         if not launcher.getPhaseComplete(5):
@@ -2384,7 +2394,13 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         
         ts = globalClockDelta.localElapsedTime(timestamp32, bits=32)
         ts -= self.smoother.getDelay()
+        oldPieType = self.pieType
+        if snowball:
+            self.pieType = 9
+            throwType = ToontownGlobals.PieThrowLinear
         toss, pie, flyPie = self.getTossPieInterval(x, y, z, h, power, throwType)
+        if snowball:
+            self.pieType = oldPieType
         if ts > 0:
             startTime = ts
             lastTossTrack.finish()
@@ -2475,6 +2491,19 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.pieType = pieType
         if self.isLocal():
             self.updatePieButton()
+
+    def requestSnowballs(self):
+        cooldown = 5
+        if self.snowballCooldown + cooldown < time.time():
+            self.snowballCooldown = time.time()
+            self.setPieType(9)
+            self.setNumPies(10)
+            if self.isLocal() and hasattr(self, 'beginAllowPies'):
+                self.beginAllowPies()
+
+    def clearSnowballs(self):
+        if self.pieType == 9:
+            self.setNumPies(0)
 
     def setTrophyScore(self, score):
         self.trophyScore = score

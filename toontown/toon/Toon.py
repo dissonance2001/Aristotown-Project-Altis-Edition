@@ -8286,6 +8286,8 @@ class Toon(Avatar.Avatar, ToonHead):
         pie = self.getPieModel()
         flyPie = pie.copyTo(NodePath('a'))
         pieName = ToontownBattleGlobals.pieNames[self.pieType]
+        if pieName == 'snowball':
+            throwType = ToontownGlobals.PieThrowLinear
         pieType = BattleProps.globalPropPool.getPropType(pieName)
         animPie = Sequence()
         if pieType == 'actor':
@@ -8299,9 +8301,12 @@ class Toon(Avatar.Avatar, ToonHead):
                                       endPos=Point3(0, dist, 0), duration=time)
             relVel = proj.startVel
         elif throwType == ToontownGlobals.PieThrowLinear:
-            magnitude = power / 2. + 25
- 
-            relVel = Vec3(0, 1, 0.25)
+            if pieName == 'snowball':
+                magnitude = power / 2. + 100
+                relVel = Vec3(0, 1, 0.01)
+            else:
+                magnitude = power / 2. + 25
+                relVel = Vec3(0, 1, 0.25)
             relVel.normalize()
             relVel *= magnitude
 

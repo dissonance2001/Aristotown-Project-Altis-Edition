@@ -328,6 +328,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             surfaceType = intoNode.getTag('surface')
         else:
             surfaceType = 'regular'
+        if intoNode.hasTag('giveSnowballs') and intoNode.getTag('giveSnowballs') == 'snowballs':
+            self.requestSnowballs()
         try:
             self.updateWalkSound(self.movementSounds['walk_' + surfaceType])
             self.updateRunSound(self.movementSounds['run_' + surfaceType])
@@ -1030,10 +1032,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         pos = self.getPos()
         hpr = self.getHpr()
         timestamp32 = globalClockDelta.getFrameNetworkTime(bits=32)
+        networkHeading = hpr[0] % 360.0
+        if self.pieType == 9:
+            networkHeading += 1000.0
         self.sendUpdate('presentPie', [pos[0],
          pos[1],
          pos[2],
-         hpr[0] % 360.0,
+         networkHeading,
          timestamp32])
         Emote.globalEmote.disableBody(self)
         messenger.send('begin-pie')
@@ -1116,13 +1121,16 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         pieBubble = self.getPieBubble().instanceTo(NodePath())
 
         def pieFlies(self = self, pos = pos, hpr = hpr, sequence = sequence, power = power, timestamp32 = timestamp32, pieBubble = pieBubble):
+            networkThrowType = self.pieThrowType
+            if self.pieType == 9:
+                networkThrowType = 200
             self.sendUpdate('tossPie', [pos[0],
              pos[1],
              pos[2],
              hpr[0] % 360.0,
              sequence,
              power,
-             self.pieThrowType,
+             networkThrowType,
              timestamp32])
             if self.numPies != ToontownGlobals.FullPies:
                 self.setNumPies(self.numPies - 1)
@@ -1219,7 +1227,16 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 self.__pieButton = None
         if self.__pieButton == None:
             inv = self.inventory
-            if self.pieType >= len(inv.invModels[ToontownBattleGlobals.THROW_TRACK]):
+            if self.pieType == 9:
+                gui = loader.loadModel('phase_3.5/models/gui/cc_m_txc_gui_icon_throwables')
+                pieGui = gui.find('**/snowball_1')
+                pieScale = 0.075
+                if pieGui.isEmpty():
+                    gui.removeNode()
+                    gui = loader.loadModel('phase_5/models/props/snowball')
+                    pieGui = gui
+                    pieScale = 0.18
+            elif self.pieType >= len(inv.invModels[ToontownBattleGlobals.THROW_TRACK]):
                 gui = loader.loadModel('phase_3.5/models/gui/stickerbook_gui')
                 pieGui = gui.find('**/summons')
                 pieScale = 0.1

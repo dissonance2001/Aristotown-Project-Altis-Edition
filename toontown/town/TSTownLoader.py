@@ -22,6 +22,11 @@ class TSTownLoader(TownLoader.TownLoader):
                                             'phase_8/audio/sfx/SZ_TB_wind_3.ogg'])
         self.snow = BattleParticles.loadParticleFile('snowdisk.ptf')
         self.snow.setPos(0, 0, 5)
+        self.extraSnow = []
+        for snowPos in ((0, 30, 10), (0, 10, 10), (0, 20, 5)):
+            snowEffect = BattleParticles.loadParticleFile('snowdisk.ptf')
+            snowEffect.setPos(*snowPos)
+            self.extraSnow.append(snowEffect)
         self.snowRender = self.geom.attachNewNode('snowRender')
         self.snowRender.setDepthWrite(0)
         self.snowRender.setBin('fixed', 1)
@@ -31,13 +36,18 @@ class TSTownLoader(TownLoader.TownLoader):
         Suit.unloadSuits(3)
         del self.windSound
         del self.snow
+        del self.extraSnow
         del self.snowRender
 
     def enter(self, requestStatus):
         TownLoader.TownLoader.enter(self, requestStatus)
         self.snow.start(camera, self.snowRender)
+        for snowEffect in self.extraSnow:
+            snowEffect.start(camera, self.snowRender)
 
     def exit(self):
         TownLoader.TownLoader.exit(self)
         self.snow.cleanup()
+        for snowEffect in self.extraSnow:
+            snowEffect.cleanup()
         self.snowRender.removeNode()

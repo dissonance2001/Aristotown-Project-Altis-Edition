@@ -185,7 +185,7 @@ GOVERNAUGHT_HP_MULT = 2
 GOVERNAUGHT_DMG_MULT = 1.0
 GOVERNAUGHT_BASE_CHANCE = 10
 V2_BASE_CHANCE = 25
-pieNames = ['cupcake', 'fruitpie-slice', 'creampie-slice', 'birthday-cake-slice', 'fruitpie', 'creampie', 'birthday-cake', 'wedding-cake', 'lawbook']
+pieNames = ['cupcake', 'fruitpie-slice', 'creampie-slice', 'birthday-cake-slice', 'fruitpie', 'creampie', 'birthday-cake', 'wedding-cake', 'lawbook', 'snowball']
 AvProps = (
 ('feather', 'bullhorn', 'lipstick', 'bamboocane','pixiedust', 'baton', 'pixiedust', 'baton'),
 ('banana', 'rake', 'marbles', 'spring', 'quicksand', 'trapdoor', 'xspot', 'tnt'),

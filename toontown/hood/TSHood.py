@@ -14,3 +14,8 @@ class TSHood(ToonHood):
     SKY_FILE = 'phase_3.5/models/props/BR_sky'
     SPOOKY_SKY_FILE = 'phase_3.5/models/props/BR_sky'
     TITLE_COLOR = (0.3, 0.6, 1.0, 1.0)
+
+    def unload(self):
+        if getattr(base, 'localAvatar', None) and getattr(base.localAvatar, 'pieType', -1) == 9:
+            base.localAvatar.clearSnowballs()
+        ToonHood.unload(self)
