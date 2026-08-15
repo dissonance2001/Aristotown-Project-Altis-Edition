@@ -5,6 +5,7 @@ from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from toontown.gumball import GumballBank
 
 class InventoryPageOLD(ShtikerPage.ShtikerPage):
 
@@ -27,9 +28,13 @@ class InventoryPageOLD(ShtikerPage.ShtikerPage):
         jarGui = loader.loadModel('phase_3.5/models/gui/jar_gui')
         self.moneyDisplay = DirectLabel(parent=self, relief=None, pos=(0.55, 0, -0.5), scale=0.8, text=str(base.localAvatar.getMoney()), text_scale=0.18, text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1), text_pos=(0, -0.1, 0), image=jarGui.find('**/Jar'), text_font=ToontownGlobals.getSignFont())
         self.bankDisplay = DirectLabel(parent=self.moneyDisplay, relief=None, pos=(0, 0, -0.1), scale=0.8, text=str(base.localAvatar.getBankMoney()), text_scale=0.09, text_fg=(0.95, 0.95, 0.5, 1), text_shadow=(0, 0, 0, 1), text_pos=(0, -0.1, 0), text_font=ToontownGlobals.getSignFont())
+        self.gumballBank = GumballBank.GumballBank(parent=self.moneyDisplay, pos=(0.1977, 0, 0.17689), scale=0.13117)
         jarGui.removeNode()
 
     def unload(self):
+        if hasattr(self, 'gumballBank') and self.gumballBank:
+            self.gumballBank.destroy()
+            self.gumballBank = None
         del self.title
         ShtikerPage.ShtikerPage.unload(self)
 

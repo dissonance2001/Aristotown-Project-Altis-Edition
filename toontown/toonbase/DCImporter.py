@@ -761,6 +761,7 @@ from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliver
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
 from toontown.suit import DistributedLawbotBoss/AI
 from toontown.suit import DistributedCountErclaimBoss/AI
+from toontown.suit import DistributedCountErfitBoss/AI
 from toontown.suit import DistributedPacesetterBoss/AI
 from toontown.coghq import DistributedLawbotBossGavel/AI
 from toontown.suit import DistributedLawbotBossSuit/AI
@@ -1007,6 +1008,10 @@ dclass DistributedToon : DistributedPlayer {
   setDNAString(blob) required broadcast ownrecv db;
   setGM(uint16 = 0) required broadcast ownrecv db;
   setMoney(uint16 = 0) required ownrecv db;
+  setGumballs(uint16 = 0) required ownrecv db;
+  setGumballBoosters(blob = []) required ownrecv db;
+  setGumballBounties(blob = []) required ownrecv db;
+  setWeeklyBountyGumballs(uint16 = 0, uint32 = 0) required ownrecv db;
   setMaxBankMoney(uint32 maxMoney = 150000) required broadcast ownrecv db;
   setMaxMoney(uint16 maxMoney = 500) required broadcast ownrecv db;
   setBankMoney(uint64 money = 0) required ownrecv db;
@@ -2553,6 +2558,9 @@ dclass DistributedHQInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
   setLeaderBoard(blob) required broadcast ram;
   setTutorial(uint8) required broadcast ram;
+  requestGumballPurchase(uint16) airecv clsend;
+  gumballPurchaseResult(uint8, uint16, uint8, uint32) ownrecv;
+  setGumballMachineAnim(uint8) broadcast;
 };
 
 dclass DistributedGagshopInterior : DistributedObject {
@@ -3534,6 +3542,9 @@ dclass DistributedCountErclaimBoss : DistributedBossCog {
   toonGotHealed(uint32) broadcast;
   enteredBonusState() broadcast;
   setBattleDifficulty(uint8) broadcast ram;
+};
+
+dclass DistributedCountErfitBoss : DistributedCountErclaimBoss {
 };
 
 dclass DistributedChainsawBoss : DistributedObject {

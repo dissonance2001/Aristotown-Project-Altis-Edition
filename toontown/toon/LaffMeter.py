@@ -31,6 +31,8 @@ class LaffMeter(DirectFrame):
         self.__obscured = 0
         self.isLocalHealth = isLocalHealth
         self.container = DirectFrame(parent=self, relief=None)
+        self.boosterPopup = None
+        self.boosterDetailsButton = None
 
         self.isToon = 1 if self.style.type == 't' else 0
 
@@ -158,9 +160,34 @@ class LaffMeter(DirectFrame):
         
         self.showDetailsButton['command'] = self.showDetailsPopup
         
+    def closeBoosterPopup(self):
+        if not self.boosterPopup:
+            return
+        try:
+            self.boosterPopup.close()
+        except:
+            try:
+                self.boosterPopup.destroy()
+            except:
+                pass
+        self.boosterPopup = None
+
+    def toggleBoosterPopup(self):
+        if not self.isLocalHealth:
+            return
+        if self.boosterPopup:
+            self.closeBoosterPopup()
+            return
+        try:
+            from toontown.gumball.BoosterStatusPopup import BoosterStatusPopup
+            self.boosterPopup = BoosterStatusPopup(self)
+        except:
+            self.boosterPopup = None
+
     def obscure(self, obscured):
         self.__obscured = obscured
         if self.__obscured:
+            self.closeBoosterPopup()
             self.hide()
             base.localAvatar.expBar.hide() # Hacky, I know, but I'll figure out a better way to hide the exp bar
 
@@ -258,6 +285,12 @@ class LaffMeter(DirectFrame):
              0.5,
              0.666666,
              0.833333]
+            if self.isLocalHealth:
+                self.boosterDetailsButton = DirectButton(parent=self.container, relief=None,
+                                                         frameColor=(1, 1, 1, 0),
+                                                         frameSize=(-1.15, 1.15, -1.25, 1.20),
+                                                         command=self.toggleBoosterPopup, pressEffect=0)
+                self.boosterDetailsButton.setTransparency(TransparencyAttrib.MAlpha)
             #if self.isLocalHealth: # Embed a little invisible button to show gags when clicking on the laff
                # self.showDetailsButton = DirectButton(relief = None, parent = self.container, image = 'phase_3/maps/android/tui_move_l.png', scale = (1), command = self.showDetailsPopup)
                 #self.showDetailsButton.setTransparency(1)
@@ -265,6 +298,13 @@ class LaffMeter(DirectFrame):
         gui.removeNode()
 
     def destroy(self):
+        self.closeBoosterPopup()
+        if self.boosterDetailsButton:
+            try:
+                self.boosterDetailsButton.destroy()
+            except:
+                pass
+            self.boosterDetailsButton = None
         if self.av:
             ToontownIntervals.cleanup(self.av.uniqueName('laffMeterBoing') + '-' + str(self.this))
             ToontownIntervals.cleanup(self.av.uniqueName('laffMeterBoing') + '-' + str(self.this) + '-play')
@@ -383,6 +423,7 @@ class LaffMeter(DirectFrame):
 
     def stop(self):
         if self.isToon:
+            self.closeBoosterPopup()
             self.hide()
             if self.av:
                 self.ignore(self.av.uniqueName('hpChange'))

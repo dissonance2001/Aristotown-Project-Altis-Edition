@@ -425,7 +425,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
 
             self.chairs = None
         return
-        #explodes USE MY INSTANCE MANAGER
+
     def __stopChairs(self):
         if self.chairs != None:
             for chair in self.chairs:

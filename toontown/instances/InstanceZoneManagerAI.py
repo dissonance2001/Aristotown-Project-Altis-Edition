@@ -20,7 +20,7 @@ class InstanceZoneManagerAI(DirectObject):
         from toontown.suit import DistributedPacesetterBossAI
         from toontown.suit import DistributedChainsawBossAI
         from toontown.suit import DistributedPlutocratBossAI
-        from toontown.suit import DistributedCountErclaimBossAI
+        from toontown.suit import DistributedCountErfitBossAI
         from toontown.instances.MotoroomInstanceSessionAI import MotoroomInstanceSessionAI
 
         self.registerInstanceType(
@@ -40,7 +40,7 @@ class InstanceZoneManagerAI(DirectObject):
             DistributedPlutocratBossAI.DistributedPlutocratBossAI)
         self.registerInstanceType(
             InstanceGlobals.COUNT_ERFIT,
-            DistributedCountErclaimBossAI.DistributedCountErclaimBossAI)
+            DistributedCountErfitBossAI.DistributedCountErfitBossAI)
         self.registerInstanceType(
             InstanceGlobals.MOTOROOM,
             MotoroomInstanceSessionAI)

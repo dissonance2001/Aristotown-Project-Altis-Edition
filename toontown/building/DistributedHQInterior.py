@@ -21,6 +21,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.leaderScores = []
         self.numLeaders = 10
         self.tutorial = 0
+        self.gumballMachine = None
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
@@ -36,6 +37,11 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.leaderBoard.reparentTo(emptyBoard.getChild(0))
         for npcToon in self.cr.doFindAllInstances(DistributedNPCToonBase):
             npcToon.initToonState()
+        try:
+            from toontown.gumball.GumballMachine import GumballMachine
+            self.gumballMachine = GumballMachine(self)
+        except Exception, e:
+            self.notify.warning('Unable to load Gumball Machine: %s' % e)
 
     def setTutorial(self, flag):
         if self.tutorial == flag:
@@ -160,7 +166,18 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         del self.dnaStore
         del self.randomGenerator
 
+    def gumballPurchaseResult(self, status, offerId, resolvedType, endTimestamp):
+        if self.gumballMachine:
+            self.gumballMachine.purchaseResult(status, offerId, resolvedType, endTimestamp)
+
+    def setGumballMachineAnim(self, animState):
+        if self.gumballMachine and int(animState) == 1:
+            self.gumballMachine.playRedeem()
+
     def disable(self):
+        if self.gumballMachine:
+            self.gumballMachine.destroy()
+            self.gumballMachine = None
         self.leaderBoard.removeNode()
         del self.leaderBoard
         self.interior.removeNode()

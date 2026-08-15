@@ -720,10 +720,13 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
+                rewardCount = 1 + self.bonusUnites
+                if hasattr(toon, 'applyGumballBoosters'):
+                    from toontown.gumball import GumballGlobals
+                    rewardCount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_CASHBOT], rewardCount, True)
                 toon.addResistanceMessage(self.rewardId)
-                if self.bonusUnites:
-                    for x in xrange(self.bonusUnites):
-                        toon.addResistanceMessage(ResistanceChat.getRandomId())
+                for x in xrange(max(0, rewardCount - 1)):
+                    toon.addResistanceMessage(ResistanceChat.getRandomId())
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CFO)
                 simbase.air.questManager.toonDefeatedBoss(toon, ToontownGlobals.dept2cogHQ(self.dept), self.dna.dept, self.involvedToons)

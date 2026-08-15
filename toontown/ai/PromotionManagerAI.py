@@ -45,6 +45,13 @@ class PromotionManagerAI:
                             merits *= 1
                         merits = merits * multiplier
                         merits = int(round(merits))
+                        if hasattr(av, 'applyGumballBoosters'):
+                            from toontown.gumball import GumballGlobals
+                            deptBoosters = {0: GumballGlobals.MERIT_BOSSBOT, 1: GumballGlobals.MERIT_LAWBOT, 2: GumballGlobals.MERIT_CASHBOT, 3: GumballGlobals.MERIT_SELLBOT, 4: GumballGlobals.MERIT_BOARDBOT}
+                            boosterTypes = [GumballGlobals.MERIT_GLOBAL]
+                            if dept in deptBoosters:
+                                boosterTypes.append(deptBoosters[dept])
+                            merits = av.applyGumballBoosters(boosterTypes, merits, True)
                         meritsRecovered[dept] += merits
                         self.notify.debug('recoverMerits: merits = %s' % merits)
                     else:

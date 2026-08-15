@@ -543,6 +543,9 @@ from toontown.suit import DistributedStageSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedSellbotBossMini/AI
 from toontown.suit import DistributedCashbotBoss/AI
+from toontown.suit import DistributedHighRollerBoss/AI
+from toontown.suit import DistributedVideographerBoss/AI
+from toontown.suit import DistributedDirectorsMiniboss/AI
 from toontown.suit import DistributedCashbotBossMini/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
 from toontown.coghq import DistributedCashbotBossCrane/AI
@@ -555,6 +558,7 @@ from toontown.battle import DistributedBattleBldg/AI
 from toontown.tutorial import DistributedBattleTutorial/AI
 from toontown.coghq import DistributedBattleFactory/AI
 from toontown.battle import DistributedBattleFinal/AI
+from toontown.battle import DistributedCashbotBattleFinal/AI
 from toontown.safezone import DistributedBoat/AI
 from toontown.safezone import DistributedButterfly/AI
 from toontown.safezone import DistributedMMPiano/AI
@@ -647,6 +651,10 @@ from toontown.coghq import DistributedLawOfficeElevatorExt/AI
 from toontown.coghq import DistributedLawOfficeElevatorInt/AI
 from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
+from toontown.building import DistributedSigilvator/AI
+from toontown.building import DistributedHighRollerSigilvator/AI
+from toontown.building import DistributedChainsawSigilvator/AI
+from toontown.instances.elevators.mercs import DistributedPlutocratSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
 from toontown.building import DistributedCountErfitElevator/AI
@@ -654,6 +662,10 @@ from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
+from toontown.suit import DistributedPacesetterBoss/AI
+from toontown.suit import DistributedChainsawBoss/AI
+from toontown.suit import DistributedPlutocratBoss/AI
+from toontown.instances import DistributedCutsceneSkipButton/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
 from toontown.building import DistributedPaceElevator/AI
@@ -747,8 +759,8 @@ from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliver
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
 from toontown.suit import DistributedLawbotBoss/AI
 from toontown.suit import DistributedCountErclaimBoss/AI
+from toontown.suit import DistributedCountErfitBoss/AI
 from toontown.suit import DistributedPacesetterBoss/AI
-from toontown.suit import DistributedDirectorsMiniboss/AI
 from toontown.coghq import DistributedLawbotBossGavel/AI
 from toontown.suit import DistributedLawbotBossSuit/AI
 from toontown.coghq import DistributedLawbotCannon/AI
@@ -812,6 +824,8 @@ from toontown.building import DistributedClubElevator/AI
 from toontown.coghq import DistributedMaze/AI
 from toontown.battle import DistributedBattleWaiters/AI
 from toontown.battle import DistributedBattleMiniboss/AI
+from toontown.battle import DistributedBattlePlutocrat/AI
+from toontown.battle import DistributedBattleChainsaw/AI
 from toontown.coghq import DistributedFoodBelt/AI
 from toontown.coghq import DistributedBanquetTable/AI
 from toontown.battle import DistributedBattleDiners/AI
@@ -992,6 +1006,10 @@ dclass DistributedToon : DistributedPlayer {
   setDNAString(blob) required broadcast ownrecv db;
   setGM(uint16 = 0) required broadcast ownrecv db;
   setMoney(uint16 = 0) required ownrecv db;
+  setGumballs(uint16 = 0) required ownrecv db;
+  setGumballBoosters(blob = []) required ownrecv db;
+  setGumballBounties(blob = []) required ownrecv db;
+  setWeeklyBountyGumballs(uint16 = 0, uint32 = 0) required ownrecv db;
   setMaxBankMoney(uint32 maxMoney = 150000) required broadcast ownrecv db;
   setMaxMoney(uint16 maxMoney = 500) required broadcast ownrecv db;
   setBankMoney(uint64 money = 0) required ownrecv db;
@@ -1041,6 +1059,8 @@ dclass DistributedToon : DistributedPlayer {
   setTunnelOut(int16, int16/10, int16/10, int16/10, int16/10, int16/100, int32/100) ownsend broadcast;
   setAnimState(char [0-1024], int16/1000, int16) broadcast ram ownsend airecv;
   setEmoteState(int16, int16/1000, int16) broadcast ram ownsend;
+  requestSticker(uint8) clsend airecv;
+  setSticker(uint8, uint8) broadcast ownsend;
   setEmoteAccess(uint8[] = [1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) required ownrecv db;
   setCustomMessages(uint16[] = []) required ownrecv db;
   setSleepAutoReply(uint32) broadcast clsend ownrecv;
@@ -1207,6 +1227,8 @@ dclass DistributedToon : DistributedPlayer {
   setSpentTrainingPoints(uint8[] = [0, 0, 0, 0, 2, 2, 0, 0]) required ownrecv db;
   requestSkillSpend(uint8) ownsend airecv;
   requestSkillReturn(uint8) ownsend airecv;
+  requestRefundSpend(uint8) ownsend airecv;
+  doRefundFailure() ownrecv;
   setCerts(string[] = []) required broadcast ownrecv db;
 };
 
@@ -1380,6 +1402,9 @@ dclass DistributedBossCog : DistributedNode {
   showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
   setAttackCode(uint8, uint32) broadcast;
   setHealthTag(string) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
 };
 
 dclass DistributedSellbotBoss : DistributedBossCog {
@@ -1416,6 +1441,52 @@ dclass DistributedSellbotBossMini : DistributedBossCog {
 
 dclass DistributedCashbotBoss : DistributedBossCog {
   setState(string) broadcast ram;
+  setBossDamage(uint16) broadcast ram;
+  setRewardId(uint16) broadcast ram;
+  applyReward() airecv clsend;
+  setBattleDifficulty(uint8) broadcast ram;
+  setMaxHp(uint16) broadcast ram;
+  setBonusUnites(uint8) broadcast ram;
+};
+
+dclass DistributedHighRollerBoss : DistributedObject {
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+  setAttackCode(uint8, uint32) broadcast;
+  showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
+  setHealthTag(string) broadcast ram;
+  setBossDamage(uint16) broadcast ram;
+  setRewardId(uint16) broadcast ram;
+  applyReward() airecv clsend;
+  setBattleDifficulty(uint8) broadcast ram;
+  setMaxHp(uint16) broadcast ram;
+  setBonusUnites(uint8) broadcast ram;
+};
+
+dclass DistributedVideographerBoss : DistributedObject {
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+  setAttackCode(uint8, uint32) broadcast;
+  showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
+  setHealthTag(string) broadcast ram;
   setBossDamage(uint16) broadcast ram;
   setRewardId(uint16) broadcast ram;
   applyReward() airecv clsend;
@@ -1617,6 +1688,9 @@ dclass DistributedBattleFinal : DistributedBattleBase {
   setBossCogId(uint32) required broadcast ram;
   setBattleNumber(uint8) required broadcast ram;
   setBattleSide(uint8) required broadcast ram;
+};
+
+dclass DistributedCashbotBattleFinal : DistributedBattleFinal {
 };
 
 dclass DistributedBoat : DistributedObject {
@@ -2307,18 +2381,6 @@ dclass DistributedDungeonInterior : DistributedToonInterior {
 };
 
 dclass DistributedMajorPlayerInterior : DistributedToonInterior {
-  fillSlot0(uint32, uint8) broadcast ram;
-  fillSlot1(uint32, uint8) broadcast ram;
-  fillSlot2(uint32, uint8) broadcast ram;
-  fillSlot3(uint32, uint8) broadcast ram;
-  emptySlot0(uint32, int8, int16, int16) broadcast ram;
-  emptySlot1(uint32, int8, int16, int16) broadcast ram;
-  emptySlot2(uint32, int8, int16, int16) broadcast ram;
-  emptySlot3(uint32, int8, int16, int16) broadcast ram;
-  requestBoard() airecv clsend;
-  rejectBoard(uint32, uint8);
-  requestExit() airecv clsend;
-  setBoardingState(string, int16) broadcast ram;
 };
 
 dclass DistributedChainsawInterior : DistributedToonInterior {
@@ -2494,6 +2556,9 @@ dclass DistributedHQInterior : DistributedObject {
   setZoneIdAndBlock(uint32, uint16) required broadcast ram;
   setLeaderBoard(blob) required broadcast ram;
   setTutorial(uint8) required broadcast ram;
+  requestGumballPurchase(uint16) airecv clsend;
+  gumballPurchaseResult(uint8, uint16, uint8, uint32) ownrecv;
+  setGumballMachineAnim(uint8) broadcast;
 };
 
 dclass DistributedGagshopInterior : DistributedObject {
@@ -2746,6 +2811,21 @@ dclass DistributedCogdoElevatorInt : DistributedElevatorInt {
 dclass DistributedBossElevator : DistributedElevatorExt {
   setBossOfficeZone(uint32);
   setBossOfficeZoneForce(uint32);
+};
+
+dclass DistributedSigilvator : DistributedElevatorExt {
+  setBossOfficeZone(uint32);
+  setBossOfficeZoneForce(uint32);
+};
+
+dclass DistributedHighRollerSigilvator : DistributedSigilvator {
+  setEntranceId(uint8) required broadcast ram;
+};
+
+dclass DistributedChainsawSigilvator : DistributedSigilvator {
+};
+
+dclass DistributedPlutocratSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedVPElevator : DistributedBossElevator {
@@ -3462,21 +3542,59 @@ dclass DistributedCountErclaimBoss : DistributedBossCog {
   setBattleDifficulty(uint8) broadcast ram;
 };
 
-dclass DistributedPacesetterBoss : DistributedBossCog {
+dclass DistributedCountErfitBoss : DistributedCountErclaimBoss {
+};
+
+dclass DistributedChainsawBoss : DistributedObject {
   setState(string) broadcast ram;
-  setBossDamage(uint16, uint8, int16) broadcast ram;
-  touchWitnessStand() airecv clsend;
-  hitBoss(uint8) airecv clsend;
-  healBoss(uint8) airecv clsend;
-  hitToon(uint32) airecv clsend;
-  hitDefensePan() airecv clsend;
-  hitProsecutionPan() airecv clsend;
-  hitChair(uint8, uint8) airecv clsend;
-  setLawyerIds(uint32[]) broadcast ram;
-  setTaunt(int8, int8) broadcast;
-  toonGotHealed(uint32) broadcast;
-  enteredBonusState() broadcast;
-  setBattleDifficulty(uint8) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setChainsawSuitId(uint32) broadcast ram;
+  setChainsawRPM(uint8) broadcast ram;
+  setChainsawPhase(uint8) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+};
+
+dclass DistributedPlutocratBoss : DistributedObject {
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setPlutocratPhase(uint8) broadcast ram;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+};
+
+dclass DistributedPacesetterBoss : DistributedObject {
+  setState(string) broadcast ram;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setPacesetterSuitId(uint32) broadcast ram;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(uint8, uint8) broadcast;
+  setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
+};
+
+dclass DistributedCutsceneSkipButton : DistributedObject {
+  requestSkip() airecv clsend;
+  setCutsceneSkip() broadcast;
+  setVoteSkips(int8, uint8) broadcast;
 };
 
 dclass DistributedDirectorsMiniboss : DistributedBossCog {
@@ -3909,6 +4027,12 @@ dclass DistributedMaze : DistributedEntity {
 dclass DistributedBattleMiniboss : DistributedBattleFinal {
 };
 
+dclass DistributedBattlePlutocrat : DistributedBattleMiniboss {
+};
+
+dclass DistributedBattleChainsaw : DistributedBattleMiniboss {
+};
+
 dclass DistributedBattleWaiters : DistributedBattleFinal {
 };
 
@@ -4178,7 +4302,7 @@ dclass TTAFriendsManager : DistributedObjectGlobal {
   getAvatarDetails(uint32) clsend;
   getPetDetails(uint32) clsend;
 
-  friendDetails(uint32, blob, uint16[], uint16, int16, int16, uint32, uint32, blob, blob, int8[]);
+  friendDetails(uint32, blob, uint16[], uint16, int16, int16, uint32, uint32, blob, blob, int8[], uint8, uint16, uint16);
   petDetails(uint32, uint32, string, uint32, uint32, uint16/1000[], PetTrait[], int8[], uint32);
 
   routeTeleportQuery(uint32 toId) clsend;
@@ -4279,6 +4403,26 @@ dclass DistributedToonClub : DistributedObjectGlobal {
   receiveLogs(string(0-65535));
   reportProgressAI(uint32, string(0-32), uint32);
   reportClubCoinsAI(uint32, uint32);
+  groupHeartbeat(string(0-64), uint32) clsend;
+  groupPrepareSuitTeleport(uint32, int8) airecv clsend;
+  groupRequestState() clsend;
+  groupRequestBrowse() clsend;
+  groupRequestCreate(string(0-64), string(0-96), uint32, uint8, uint8, string(0-64)) clsend;
+  groupRequestJoin(uint32, string(0-64)) clsend;
+  groupRequestLeave() clsend;
+  groupRequestDisband() clsend;
+  groupRequestKick(uint32) clsend;
+  groupRequestPublish(uint8) clsend;
+  groupRequestInvite(uint32, string(0-64)) clsend;
+  groupRespondToInvite(uint32, uint8, string(0-64)) clsend;
+  groupReceiveState(string(0-65535));
+  groupReceiveBrowse(string(0-65535));
+  groupReceiveInvite(uint32, uint32, string(0-64), string(0-64), string(0-96));
+  groupReceiveNotification(uint8, string(0-256));
+  groupRequestMassTeleport() clsend;
+  groupRequestMassTeleportReady(uint32) clsend;
+  groupReceiveMassTeleport(uint32, uint32, uint32);
+  groupReceiveMassTeleportStart(uint32);
 };
 
 dclass DistributedWeatherMGR : DistributedObject {

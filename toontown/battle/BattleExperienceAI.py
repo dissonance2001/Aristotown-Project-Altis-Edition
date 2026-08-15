@@ -186,6 +186,9 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
         toon.b_setExperience(toon.experience.makeNetString())
         toon.d_setInventory(toon.inventory.makeNetString())
         toon.b_setAnimState('victory', 1)
+        if not simbase.air.config.GetBool('battle-passing-no-credit', True) or (helpfulToons and toon.doId in helpfulToons):
+            if hasattr(toon, 'awardGumballBounties'):
+                toon.awardGumballBounties(suitsKilled)
 
         if simbase.air.config.GetBool('battle-passing-no-credit', True):
             # Check if the toon was a helpful toon

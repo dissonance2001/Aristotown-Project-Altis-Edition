@@ -1,7 +1,7 @@
 from toontown.battle import BattlePlace
 from toontown.building import CountErfitInstanceGlobals
 from toontown.coghq import CogHQBossBattle
-from toontown.suit import DistributedCountErclaimBoss
+from toontown.suit import DistributedCountErfitBoss
 from toontown.suit import Suit
 
 class CountErfitBossBattle(CogHQBossBattle.CogHQBossBattle):
@@ -45,7 +45,7 @@ class CountErfitBossBattle(CogHQBossBattle.CogHQBossBattle):
             hpr[0], hpr[1], hpr[2])
 
     def enter(self, requestStatus):
-        controller = DistributedCountErclaimBoss.OneBossCog
+        controller = DistributedCountErfitBoss.OneBossCog
         self._setArenaTeleportPosition(controller)
         try:
             base.transitions.fadeOut(0.0)

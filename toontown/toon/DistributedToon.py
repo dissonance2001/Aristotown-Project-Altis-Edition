@@ -1,3 +1,4 @@
+import cPickle
 import operator, copy, random, time, gc
 from toontown.toon import Experience, InventoryNewOLD, InventoryNewNEW, TTEmote, Toon
 from direct.controls.GravityWalker import GravityWalker
@@ -160,6 +161,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.posIndex = 0
         self.houseId = 0
         self.money = 0
+        self.gumballs = 0
+        self.gumballBoosters = []
+        self.gumballBounties = {}
+        self.weeklyBountyGumballs = [0, 0]
         self.exp = 0
         self.level = 0
         self.bankMoney = 0
@@ -2199,6 +2204,56 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def getMoney(self):
         return self.money
+
+    def setGumballs(self, gumballs):
+        gumballs = max(0, min(int(gumballs), 9999))
+        if gumballs != self.gumballs:
+            self.gumballs = gumballs
+            messenger.send(self.uniqueName('gumballsChange'), [self.gumballs])
+
+    def getGumballs(self):
+        return self.gumballs
+
+    def setGumballBoosters(self, data):
+        try:
+            boosters = cPickle.loads(data) if isinstance(data, str) else data
+        except:
+            boosters = []
+        from toontown.gumball import GumballGlobals
+        self.gumballBoosters = GumballGlobals.cleanupBoosters(boosters)
+        messenger.send(self.uniqueName('gumballBoostersChange'), [self.gumballBoosters])
+
+    def getGumballBoosters(self):
+        from toontown.gumball import GumballGlobals
+        self.gumballBoosters = GumballGlobals.cleanupBoosters(self.gumballBoosters)
+        return self.gumballBoosters
+
+    def applyGumballBoosters(self, boosterTypes, value, applyRound=False):
+        from toontown.gumball import GumballGlobals
+        return GumballGlobals.applyBoosters(self.getGumballBoosters(), boosterTypes, value, applyRound)
+
+    def setGumballBounties(self, data):
+        try:
+            bounties = cPickle.loads(data) if isinstance(data, str) else data
+            self.gumballBounties = dict(bounties or [])
+        except:
+            self.gumballBounties = {}
+
+    def getGumballBounties(self):
+        return self.gumballBounties
+
+    def setWeeklyBountyGumballs(self, amount, timestamp):
+        self.weeklyBountyGumballs = [int(amount), int(timestamp)]
+
+    def getWeeklyBountyGumballs(self):
+        return self.weeklyBountyGumballs
+
+    def getWeeklyBountyGumballsAmount(self):
+        if not self.weeklyBountyGumballs or len(self.weeklyBountyGumballs) < 2:
+            return 0
+        if time.time() > self.weeklyBountyGumballs[1]:
+            return 0
+        return self.weeklyBountyGumballs[0]
 		
     def setToonExp(self, exp):
         if exp != self.exp:

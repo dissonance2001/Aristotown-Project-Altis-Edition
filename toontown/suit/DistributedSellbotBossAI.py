@@ -457,7 +457,11 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
-                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=self.numSos):
+                rewardCount = self.numSos
+                if hasattr(toon, 'applyGumballBoosters'):
+                    from toontown.gumball import GumballGlobals
+                    rewardCount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_SELLBOT], rewardCount, True)
+                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=rewardCount):
                     self.notify.info('%s.unable to add NPCFriend %s to %s.' % (self.doId, self.cagedToonNpcId, toonId))
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_VP)

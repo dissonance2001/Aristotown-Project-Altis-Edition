@@ -603,7 +603,11 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 toon.addStat(ToontownGlobals.STATS_CEO)
 
     def givePinkSlipReward(self, toon):
-        toon.addPinkSlips(self.battleDifficulty + 1)
+        amount = self.battleDifficulty + 1
+        if hasattr(toon, 'applyGumballBoosters'):
+            from toontown.gumball import GumballGlobals
+            amount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_BOSSBOT], amount, True)
+        toon.addPinkSlips(amount)
 
     def getThreat(self, toonId):
         if toonId in self.threatDict:

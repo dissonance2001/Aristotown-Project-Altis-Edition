@@ -1,3 +1,4 @@
+import cPickle
 import random
 import time
 import re
@@ -111,6 +112,10 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = None
         self.toonExp = 0
         self.toonLevel = 0
+        self.gumballs = 0
+        self.gumballBoosters = []
+        self.gumballBounties = {}
+        self.weeklyBountyGumballs = [0, 0]
         self.petId = None
         self.quests = []
         self.questHistory = []
@@ -2943,6 +2948,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.toonLevel
 
     def addMoney(self, deltaMoney):
+        if deltaMoney > 0:
+            from toontown.gumball import GumballGlobals
+            deltaMoney = self.applyGumballBoosters([GumballGlobals.JELLYBEANS_GLOBAL], deltaMoney, True)
         self.addStat(ToontownGlobals.STATS_JB_EARNED, amount = deltaMoney)
         money = deltaMoney + self.money
         pocketMoney = min(money, self.maxMoney)
@@ -2993,6 +3001,158 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getTotalMoney(self):
         return self.money + self.bankMoney
+
+    def b_setGumballs(self, gumballs):
+        self.setGumballs(gumballs)
+        self.d_setGumballs(self.gumballs)
+
+    def d_setGumballs(self, gumballs):
+        self.sendUpdate('setGumballs', [gumballs])
+
+    def setGumballs(self, gumballs):
+        from toontown.gumball import GumballGlobals
+        self.gumballs = max(0, min(int(gumballs), GumballGlobals.MAX_GUMBALLS))
+
+    def getGumballs(self):
+        return self.gumballs
+
+    def addGumballs(self, amount):
+        from toontown.gumball import GumballGlobals
+        amount = int(amount)
+        if amount > 0:
+            amount = GumballGlobals.applyBoosters(self.getGumballBoosters(), [GumballGlobals.GUMBALLS_GLOBAL], amount, True)
+        self.b_setGumballs(self.gumballs + amount)
+        return amount
+
+    def takeGumballs(self, amount):
+        amount = max(0, int(amount))
+        if amount > self.gumballs:
+            return False
+        self.b_setGumballs(self.gumballs - amount)
+        return True
+
+    def b_setGumballBoosters(self, boosters):
+        self.setGumballBoosters(boosters)
+        self.d_setGumballBoosters(self.gumballBoosters)
+
+    def d_setGumballBoosters(self, boosters):
+        self.sendUpdate('setGumballBoosters', [cPickle.dumps(boosters, 1)])
+
+    def setGumballBoosters(self, data):
+        try:
+            boosters = cPickle.loads(data) if isinstance(data, str) else data
+        except:
+            boosters = []
+        from toontown.gumball import GumballGlobals
+        self.gumballBoosters = GumballGlobals.cleanupBoosters(boosters)
+
+    def getGumballBoosters(self):
+        from toontown.gumball import GumballGlobals
+        clean = GumballGlobals.cleanupBoosters(self.gumballBoosters)
+        if clean != self.gumballBoosters:
+            self.gumballBoosters = clean
+            self.d_setGumballBoosters(clean)
+        return self.gumballBoosters
+
+    def addGumballBooster(self, boosterType, seconds):
+        from toontown.gumball import GumballGlobals
+        boosters, endTimestamp = GumballGlobals.addBooster(self.getGumballBoosters(), boosterType, seconds)
+        self.b_setGumballBoosters(boosters)
+        return endTimestamp
+
+    def applyGumballBoosters(self, boosterTypes, value, applyRound=False):
+        from toontown.gumball import GumballGlobals
+        return GumballGlobals.applyBoosters(self.getGumballBoosters(), boosterTypes, value, applyRound)
+
+    def b_setGumballBounties(self, bounties):
+        self.setGumballBounties(bounties)
+        self.d_setGumballBounties(self.gumballBounties)
+
+    def d_setGumballBounties(self, bounties):
+        self.sendUpdate('setGumballBounties', [cPickle.dumps(sorted(bounties.items()), 1)])
+
+    def setGumballBounties(self, data):
+        try:
+            bounties = cPickle.loads(data) if isinstance(data, str) else data
+            self.gumballBounties = dict(bounties or [])
+        except:
+            self.gumballBounties = {}
+
+    def getGumballBounties(self):
+        return self.gumballBounties
+
+    def cogGumballBountyAvailable(self, suitName):
+        return time.time() > self.gumballBounties.get(suitName, 0)
+
+    def addGumballBountyCooldowns(self, suitNames):
+        from toontown.gumball import GumballGlobals
+        nextTimestamp = GumballGlobals.getNextBountyTimestamp()
+        for suitName in suitNames:
+            self.gumballBounties[suitName] = nextTimestamp
+        self.b_setGumballBounties(self.gumballBounties)
+
+    def b_setWeeklyBountyGumballs(self, amount, timestamp):
+        self.setWeeklyBountyGumballs(amount, timestamp)
+        self.d_setWeeklyBountyGumballs(amount, timestamp)
+
+    def d_setWeeklyBountyGumballs(self, amount, timestamp):
+        self.sendUpdate('setWeeklyBountyGumballs', [int(amount), int(timestamp)])
+
+    def setWeeklyBountyGumballs(self, amount, timestamp):
+        self.weeklyBountyGumballs = [int(amount), int(timestamp)]
+
+    def getWeeklyBountyGumballs(self):
+        return self.weeklyBountyGumballs
+
+    def getWeeklyBountyGumballsAmount(self):
+        if not self.weeklyBountyGumballs or len(self.weeklyBountyGumballs) < 2:
+            return 0
+        if time.time() > self.weeklyBountyGumballs[1]:
+            return 0
+        return self.weeklyBountyGumballs[0]
+
+    def remainingWeeklyBountyGumballs(self):
+        from toontown.gumball import GumballGlobals
+        return max(0, GumballGlobals.COG_BOUNTY_WEEKLY_LIMIT - self.getWeeklyBountyGumballsAmount())
+
+    def addWeeklyBountyGumballs(self, amount):
+        from toontown.gumball import GumballGlobals
+        amount = max(0, int(amount))
+        if amount <= 0:
+            return 0
+        current = self.getWeeklyBountyGumballsAmount()
+        timestamp = self.weeklyBountyGumballs[1] if self.weeklyBountyGumballs and len(self.weeklyBountyGumballs) > 1 else 0
+        if timestamp <= time.time():
+            timestamp = GumballGlobals.getNextWeeklyBountyReset()
+        newAmount = min(GumballGlobals.COG_BOUNTY_WEEKLY_LIMIT, current + amount)
+        self.b_setWeeklyBountyGumballs(newAmount, timestamp)
+        return newAmount - current
+
+    def awardGumballBounties(self, suitsKilled):
+        from toontown.gumball import GumballGlobals
+        toCheck = []
+        for suit in suitsKilled:
+            suitName = suit.get('type')
+            if suitName in GumballGlobals.GUMBALL_BOUNTY_GROUPS:
+                for groupSuit in GumballGlobals.GUMBALL_BOUNTY_GROUPS[suitName]:
+                    if groupSuit not in toCheck:
+                        toCheck.append(groupSuit)
+            elif suitName in GumballGlobals.GUMBALL_BOUNTIES and suitName not in toCheck:
+                toCheck.append(suitName)
+        redeemed = []
+        baseEarned = 0
+        for suitName in toCheck:
+            if self.cogGumballBountyAvailable(suitName):
+                baseEarned += GumballGlobals.GUMBALL_BOUNTIES.get(suitName, 0)
+                redeemed.append(suitName)
+        if not redeemed:
+            return 0
+        self.addGumballBountyCooldowns(redeemed)
+        baseAward = min(baseEarned, self.remainingWeeklyBountyGumballs())
+        if baseAward <= 0:
+            return 0
+        self.addWeeklyBountyGumballs(baseAward)
+        return self.addGumballs(baseAward)
         
     def b_setMaxBankMoney(self, maxMoney):
         maxMoney = ToontownGlobals.DefaultMaxBankMoney
@@ -6712,3 +6872,18 @@ def chatmode(mode=-1):
         return "Chat mode 1 is reserved for moderators."
     invoker.setChatMode(mode)
     return "You are now talking in the %s chat mode." % mode2name.get(mode, "N/A")
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def gumballs(amount=9999):
+    target = spellbook.getTarget()
+    target.b_setGumballs(amount)
+    return "Set %s's Gumballs to %s." % (target.getName(), target.getGumballs())
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int, int])
+def gumballBooster(boosterType, hours=2):
+    target = spellbook.getTarget()
+    from toontown.gumball import GumballGlobals
+    if boosterType not in GumballGlobals.BOOSTERS or boosterType == GumballGlobals.RANDOM:
+        return 'Unknown Booster type.'
+    target.addGumballBooster(boosterType, max(1, hours) * 3600)
+    return 'Added %s for %s hour(s).' % (GumballGlobals.getBoosterName(boosterType), max(1, hours))
