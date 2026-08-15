@@ -224,6 +224,40 @@ class PacesetterCalculatorAI:
                                 rushJobsQueued.add(suitId)
 
 
+        for suit in self.battle.activeSuits[:]:
+            if suit.dna.name != 'psetter' or suit.currHP <= 0:
+                continue
+            oldActiveSuits = self.battle.activeSuits[:]
+            oldLivingSuits = []
+            livingPositions = []
+            for index in xrange(len(oldActiveSuits)):
+                otherSuit = oldActiveSuits[index]
+                if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
+                    oldLivingSuits.append(otherSuit)
+                    livingPositions.append(index)
+            if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
+                continue
+            newLivingSuits = oldLivingSuits[:]
+            random.shuffle(newLivingSuits)
+            if newLivingSuits == oldLivingSuits:
+                newLivingSuits.reverse()
+            newActiveSuits = oldActiveSuits[:]
+            for index in xrange(len(livingPositions)):
+                newActiveSuits[livingPositions[index]] = newLivingSuits[index]
+            payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
+            attack = self.__getCheatAttack(suit.doId, {
+                'suitName': suit.dna.name,
+                'name': 'PacesetterCorporateRestructuring',
+                'animName': 'quick-jump',
+                'hp': payload,
+                'acc': 100,
+                'freq': 0,
+                'group': SuitBattleGlobals.ATK_TGT_GROUP
+            })
+            if attack[SUIT_ATK_COL]:
+                self.battle.suitAttacks.append(attack)
+            self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])
+
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
@@ -306,37 +340,3 @@ class PacesetterCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-
-        for suit in self.battle.activeSuits[:]:
-            if suit.dna.name != 'psetter' or suit.currHP <= 0:
-                continue
-            oldActiveSuits = self.battle.activeSuits[:]
-            oldLivingSuits = []
-            livingPositions = []
-            for index in xrange(len(oldActiveSuits)):
-                otherSuit = oldActiveSuits[index]
-                if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
-                    oldLivingSuits.append(otherSuit)
-                    livingPositions.append(index)
-            if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
-                continue
-            newLivingSuits = oldLivingSuits[:]
-            random.shuffle(newLivingSuits)
-            if newLivingSuits == oldLivingSuits:
-                newLivingSuits.reverse()
-            newActiveSuits = oldActiveSuits[:]
-            for index in xrange(len(livingPositions)):
-                newActiveSuits[livingPositions[index]] = newLivingSuits[index]
-            payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
-            attack = self.__getCheatAttack(suit.doId, {
-                'suitName': suit.dna.name,
-                'name': 'PacesetterCorporateRestructuring',
-                'animName': 'quick-jump',
-                'hp': payload,
-                'acc': 100,
-                'freq': 0,
-                'group': SuitBattleGlobals.ATK_TGT_GROUP
-            })
-            if attack[SUIT_ATK_COL]:
-                self.battle.suitAttacks.append(attack)
-            self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])

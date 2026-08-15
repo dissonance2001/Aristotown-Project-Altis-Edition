@@ -613,6 +613,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 if (trapid == NO_TRAP or trapid != suit.battleTrap) and suit.battleTrapProp != None:
                     self.notify.debug('569 calling self.removeTrap, suit=%d' % suit.doId)
                     self.removeTrap(suit)
+                if trapid == NO_TRAP and suit.battleTrapProp == None:
+                    suit.battleTrap = NO_TRAP
+                    suit.battleTrapIsFresh = 0
                 if trapid != NO_TRAP and suit.battleTrapProp == None:
                     if self.fsm.getCurrentState().getName() != 'PlayMovie':
                         self.loadTrap(suit, trapid)
