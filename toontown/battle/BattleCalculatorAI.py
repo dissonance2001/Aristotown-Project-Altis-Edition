@@ -4268,14 +4268,9 @@ class BattleCalculatorAI:
                 self.toonSkillPtsGained[id] = expList
             skillCreditMultiplier = self.__skillCreditMultiplier
             toon = simbase.air.doId2do.get(id)
-            if toon and hasattr(toon, 'applyGumballBoosters'):
+            if toon and hasattr(toon, 'getGumballBoosters'):
                 from toontown.gumball import GumballGlobals
-                boosterTypes = [GumballGlobals.EXP_GAGS_GLOBAL]
-                if trk in GumballGlobals.SUPPORT_GAG_TRACKS:
-                    boosterTypes.append(GumballGlobals.EXP_GAGS_SUPPORT)
-                elif trk in GumballGlobals.POWER_GAG_TRACKS:
-                    boosterTypes.append(GumballGlobals.EXP_GAGS_POWER)
-                skillCreditMultiplier += toon.applyGumballBoosters(boosterTypes, 0)
+                skillCreditMultiplier += GumballGlobals.getGagExperienceMultiplier(toon.getGumballBoosters(), trk)
             expList[trk] = min(ExperienceCap, expList[trk] + (lvl + 1) * skillCreditMultiplier)
 
 
@@ -6674,6 +6669,7 @@ class BattleCalculatorAI:
     def __calculateToonTrackPhase(self, track):
         self.__calculateToonAttacksForTracks([track])
         self.__postProcessToonAttacksForTracks([track])
+        self.chainsawCalculator.calculateAfterToonTrack(track)
 
         if track == HEAL:
             self.tracksCalculator.calculateSuitAttacksAfterHeal()
@@ -6983,6 +6979,7 @@ class BattleCalculatorAI:
 
         self.__calculateToonAttacksForTracks([FIRE, SUE, SOS, NPCSOS, PETSOS])
         self.__postProcessToonAttacksForTracks([FIRE, SUE, SOS, NPCSOS, PETSOS])
+        self.chainsawCalculator.calculateAfterToonTrack(None)
         # choose once
         self.battle.toonTrackOrder = self.getCurrentToonTrackOrder()
 

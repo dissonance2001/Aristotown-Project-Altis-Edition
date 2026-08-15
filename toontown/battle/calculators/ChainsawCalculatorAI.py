@@ -208,7 +208,8 @@ class ChainsawCalculatorAI:
                             suedSupports.append(suit)
                     break
 
-            if bossIndex >= 0 and bossIndex < len(hpList):
+            if (track not in (HEAL, PETSOS) and bossIndex >= 0 and
+                    bossIndex < len(hpList)):
                 damage = hpList[bossIndex]
                 if damage > 0 and track != LURE:
                     hits += 1
@@ -239,14 +240,15 @@ class ChainsawCalculatorAI:
                     if toonId not in bossTargetingToons:
                         bossTargetingToons.append(toonId)
 
-            for index in xrange(min(len(hpList), len(self.battle.activeSuits))):
-                suit = self.battle.activeSuits[index]
-                if suit is boss:
-                    continue
-                damage = hpList[index]
-                if damage > 0:
-                    supportDamage[suit] = supportDamage.get(suit, 0) + damage
-                    supportTracks.setdefault(suit, []).append(track)
+            if track not in (HEAL, PETSOS):
+                for index in xrange(min(len(hpList), len(self.battle.activeSuits))):
+                    suit = self.battle.activeSuits[index]
+                    if suit is boss:
+                        continue
+                    damage = hpList[index]
+                    if damage > 0:
+                        supportDamage[suit] = supportDamage.get(suit, 0) + damage
+                        supportTracks.setdefault(suit, []).append(track)
 
         return (hits, attackingToons, bossTargetingToons, supportDamage,
                 firedSupports, suedSupports, supportTracks, iouToons)
@@ -743,6 +745,78 @@ class ChainsawCalculatorAI:
         controller.chainsawKickbackVisualPending = True
         return True
 
+    def calculateAfterToonTrack(self, track):
+        boss = self._findChainsaw()
+        controller = self._getController()
+        if (not boss or not controller or
+                not getattr(controller, 'chainsawChainLinked', False)):
+            return False
+
+        chainIds = list(getattr(
+            controller, 'chainsawChainStartSupportIds', []))
+        if not chainIds:
+            return False
+
+        for suit in self.battle.activeSuits:
+            try:
+                if (suit is not boss and suit.doId in chainIds and
+                        suit.getHP() > 0):
+                    return False
+            except:
+                pass
+
+        firedIds = []
+        for toonId in self.battle.activeToons:
+            attack = self.battle.toonAttacks.get(toonId)
+            if not attack or attack[TOON_TRACK_COL] != FIRE:
+                continue
+            targetId = attack[TOON_TGT_COL]
+            if targetId not in chainIds or targetId in firedIds:
+                continue
+            support = None
+            for suit in self.battle.activeSuits:
+                if suit is not boss and getattr(suit, 'doId', 0) == targetId:
+                    support = suit
+                    break
+            if support is None:
+                continue
+            isManager = False
+            try:
+                isManager = bool(support.getManager())
+            except:
+                pass
+            if getattr(support, 'chainsawManagerBeneficiary', False):
+                isManager = True
+            if not isManager:
+                firedIds.append(targetId)
+
+        firedLinks = max(0, int(getattr(
+            controller, 'chainsawFiredLinks', 0))) + len(firedIds)
+        controller.chainsawChainLinked = False
+        controller.chainsawChainStartSupportIds = []
+        controller.chainsawKickbackRounds = 3
+        controller.chainsawAbilityBanRounds = 3
+        controller.chainsawKickbackMultiplier = max(
+            1.0, 1.30 - (0.05 * firedLinks))
+        controller.chainsawPendingKickback = False
+        controller.chainsawPendingKickbackMultiplier = 1.0
+        controller.chainsawKickbackVisualPending = True
+        controller.chainsawKickbackActivatedThisRound = True
+        controller.chainsawFiredLinks = 0
+
+        bossCondition = 1.0
+        if controller.chainsawPhase == 2:
+            bossCondition *= max(
+                0.0, 1.0 + (controller.chainsawRPM - 15) * 0.1)
+        bossCondition *= controller.chainsawKickbackMultiplier
+        try:
+            self.calculator.setSuitCondition(
+                boss.doId, 'vulnerablevideographer', bossCondition,
+                -1, 'setBoth')
+        except:
+            pass
+        return True
+
     def _triggerProjectedChainKickback(self, boss, controller,
                                        supportDamage, firedSupports):
         if not controller.chainsawChainLinked:
@@ -754,10 +828,7 @@ class ChainsawCalculatorAI:
                         suit.doId not in controller.chainsawChainStartSupportIds):
                     continue
                 foundLinked = True
-                if suit in firedSupports:
-                    continue
-                projectedHP = suit.getHP() - supportDamage.get(suit, 0)
-                if projectedHP > 0:
+                if suit.getHP() > 0 and suit not in firedSupports:
                     return False
             except:
                 pass
@@ -995,9 +1066,13 @@ class ChainsawCalculatorAI:
 
         self._doSparkPlugDamage(boss, controller)
         self._triggerCutSlackKickback(boss, controller)
-        chainKickback = self._triggerProjectedChainKickback(
-            boss, controller, supportDamage, firedSupports)
+        chainKickback = bool(getattr(
+            controller, 'chainsawKickbackActivatedThisRound', False))
+        if not chainKickback:
+            chainKickback = self._triggerProjectedChainKickback(
+                boss, controller, supportDamage, firedSupports)
         self._doKickbackVisual(boss, controller)
+        controller.chainsawKickbackActivatedThisRound = False
 
         phaseChanged = False
         if controller.chainsawPhase == 1 and boss.getHP() <= self.PHASE_TWO_HP:

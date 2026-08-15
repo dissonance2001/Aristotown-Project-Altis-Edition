@@ -71,6 +71,7 @@ class DistributedChainsawBossAI(
         self.chainsawPendingKickback = False
         self.chainsawPendingKickbackMultiplier = 1.0
         self.chainsawKickbackVisualPending = False
+        self.chainsawKickbackActivatedThisRound = False
         self.chainsawPendingPromotedSuitId = 0
         self.chainsawSparkPlug = {}
         self.chainsawCutSlackTargets = {}
@@ -202,6 +203,13 @@ class DistributedChainsawBossAI(
         battle.generateWithRequired(self.zoneId)
         return battle
 
+    def divideToons(self):
+        toons = self.involvedToons[:]
+        numToons = min(len(toons), 8)
+        self.toons = toons[:numToons]
+        self.looseToons += toons[numToons:]
+        self.sendToonIds()
+
     def initializeChainsawBattle(self):
         self.resetBattles()
         if not self.involvedToons:
@@ -219,6 +227,7 @@ class DistributedChainsawBossAI(
         self.chainsawPendingKickback = False
         self.chainsawPendingKickbackMultiplier = 1.0
         self.chainsawKickbackVisualPending = False
+        self.chainsawKickbackActivatedThisRound = False
         self.chainsawPendingPromotedSuitId = 0
         self.chainsawSparkPlug = {}
         self.chainsawCutSlackTargets = {}
