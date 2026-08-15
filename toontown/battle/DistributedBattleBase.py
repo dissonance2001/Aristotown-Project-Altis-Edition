@@ -50,6 +50,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.choseAttackAlready = 0
         self.toons = []
         self.exitedToons = []
+        self.numSurrendered = 0
+        self.maxSurrendered = 0
+        self.surrenderedToons = []
+        self.surrenderComplete = False
         self.suitTraps = ''
         self.membersKeep = None
         self.faceOffName = self.uniqueBattleName('faceoff')
@@ -457,8 +461,22 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def setState(self, state, timestamp):
         if self.__battleCleanedUp:
             return
+        if self.surrenderComplete and state in ('Reward', 'BuildingReward', 'FactoryReward', 'MintReward', 'StageReward', 'CountryClubReward', 'BoardOfficeReward'):
+            state = 'Resume'
         self.notify.debug('setState(%s)' % state)
         self.fsm.request(state, [globalClockDelta.localElapsedTime(timestamp)])
+
+    def setNumSurrendered(self, numSurrendered, maxSurrendered, surrenderedToons):
+        self.numSurrendered = numSurrendered
+        self.maxSurrendered = maxSurrendered
+        self.surrenderedToons = list(surrenderedToons)
+        if maxSurrendered and numSurrendered >= maxSurrendered and base.localAvatar.doId in self.surrenderedToons:
+            self.surrenderComplete = True
+        if hasattr(base.localAvatar, 'inventory') and base.localAvatar.inventory:
+            if hasattr(base.localAvatar.inventory, 'adjustSurrenderedToons'):
+                base.localAvatar.inventory.adjustSurrenderedToons(numSurrendered, maxSurrendered)
+        if self.townBattle and hasattr(self.townBattle, 'setSurrenderedToons'):
+            self.townBattle.setSurrenderedToons(self.surrenderedToons)
 
     def setMembers(self, suits, suitsJoining, suitsPending, suitsActive, suitsLured, suitTraps, toons, toonsJoining, toonsPending, toonsActive, toonsRunning, suitsImmune, suitsEnraged, suitsAbsorbing, suitsSoaked, timestamp):
         if self.__battleCleanedUp:
@@ -1062,8 +1080,39 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.pendingSuits.append(suit)
         self._rebuildSuitStateLists()
 
+    def getSurrenderExitStatus(self):
+        return None
+
     def __teleportToSafeZone(self, toon):
         self.notify.debug('teleportToSafeZone(%d)' % toon.doId)
+        if self.surrenderComplete:
+            surrenderStatus = self.getSurrenderExitStatus()
+            if not surrenderStatus:
+                hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
+                if hoodId in base.localAvatar.hoodsVisited:
+                    target_sz = ZoneUtil.getSafeZoneId(self.zoneId)
+                else:
+                    target_sz = ZoneUtil.getSafeZoneId(base.localAvatar.defaultZone)
+                surrenderStatus = {'loader': ZoneUtil.getLoaderName(target_sz),
+                  'where': ZoneUtil.getWhereName(target_sz, 1),
+                  'how': 'teleportIn',
+                  'hoodId': target_sz,
+                  'zoneId': target_sz,
+                  'shardId': None,
+                  'avId': -1,
+                  'battle': 1}
+            place = base.cr.playGame.getPlace()
+            if place:
+                place.doneStatus = surrenderStatus
+                messenger.send(place.doneEvent)
+                return
+        if self.surrenderComplete:
+            surrenderStatus = self.getSurrenderExitStatus()
+            if surrenderStatus:
+                place = base.cr.playGame.getPlace()
+                if place and hasattr(place, 'fsm'):
+                    place.fsm.request('teleportOut', [surrenderStatus])
+                    return
         hoodId = ZoneUtil.getCanonicalHoodId(self.zoneId)
         if hoodId in base.localAvatar.hoodsVisited:
             target_sz = ZoneUtil.getSafeZoneId(self.zoneId)
@@ -1265,6 +1314,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def d_toonRequestRun(self, toonId):
         self.notify.debug('network:toonRequestRun()')
         self.sendUpdate('toonRequestRun', [])
+
+    def d_toonRequestSurrender(self):
+        self.notify.debug('network:toonRequestSurrender()')
+        self.sendUpdate('toonRequestSurrender', [])
 
     def d_toonDied(self, toonId):
         self.notify.debug('network:toonDied()')
@@ -1494,6 +1547,10 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         elif mode == 'Run':
             self.notify.debug('got a run')
             self.d_toonRequestRun(base.localAvatar.doId)
+        elif mode == 'Surrender':
+            self.notify.debug('got a surrender vote')
+            self.d_toonRequestSurrender()
+            noAttack = 1
         elif mode == 'SOS':
             targetId = response['id']
             self.notify.debug('got an SOS for friend: %d' % targetId)
@@ -1619,6 +1676,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     inventoryNetString = localAvatar.getInventory()
                     localAvatar.inventory = InventoryNewNEW.InventoryNewNEW(localAvatar, inventoryNetString)
                     localAvatar.inventory.updateInvString(inventoryNetString)
+                if hasattr(localAvatar.inventory, 'adjustSurrenderedToons'):
+                    localAvatar.inventory.adjustSurrenderedToons(self.numSurrendered, self.maxSurrendered)
                 localAvatar.inventory.setInteractivePropTrackBonus(self.interactivePropTrackBonus)
         camera.wrtReparentTo(self)
         base.camLens.setMinFov(self.camFov/(4./3.))
@@ -1631,6 +1690,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 inventoryNetString = localAvatar.getInventory()
                 localAvatar.inventory = InventoryNewOLD.InventoryNewOLD(localAvatar, inventoryNetString)
                 localAvatar.inventory.updateInvString(inventoryNetString)
+            if hasattr(localAvatar.inventory, 'adjustSurrenderedToons'):
+                localAvatar.inventory.adjustSurrenderedToons(self.numSurrendered, self.maxSurrendered)
             localAvatar.inventory.setInteractivePropTrackBonus(-1)
         stateName = None
         place = base.cr.playGame.getPlace()

@@ -693,7 +693,7 @@ class ChainsawCalculatorAI:
                   if self._toonCurrentHP(toonId) > 0]
         if not living:
             return False
-        damages = [max(0, self._toonCurrentHP(t) - 1) for t in living]
+        damages = [0 for t in living]
         self._makeTargetedAttack(
             boss, 'ChainsawCoreDeadwood', living, damages, 'glower')
         controller.chainsawDeadwoodTriggered = True
@@ -1028,27 +1028,9 @@ class ChainsawCalculatorAI:
                             preferred = random.choice(suedEligible) if suedEligible else None
                             chosen = ('CutTheSlack', preferred)
 
-                if (rpm >= 17 and
-                        controller.chainsawPreviousLogicAttack != 'MarkedWood'):
-                    if (exactlyOneHitBoss or allToonsHitBoss or
-                            allToonsTargetedBoss or iouToons):
-                        targetToon = None
-                        if iouToons:
-                            livingIous = [toonId for toonId in iouToons
-                                         if toonId in livingToons]
-                            if livingIous:
-                                targetToon = sorted(
-                                    livingIous,
-                                    key=self._toonCurrentHP)[-1]
-                        elif exactlyOneHitBoss:
-                            targetToon = attackingToons[0]
-                        elif livingToons:
-                            targetToon = sorted(
-                                livingToons,
-                                key=self._toonCurrentHP)[-1]
-                        chosen = ('MarkedWood', targetToon)
-
-        # Extreme attacks override the normal pool exactly like Clash.
+        # Extreme attacks are the fallback for phase 1/3. Marked Wood has
+        # priority when its qualifying hit pattern is present, including when
+        # the projected RPM crosses the Deadwood threshold this round.
         if phase != 2 and rpm >= 20:
             if phase == 1:
                 chosen = ('Deadwood', None)
@@ -1056,6 +1038,34 @@ class ChainsawCalculatorAI:
                 chosen = ('Layoffs', None)
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
+
+        markedCombo = []
+        if phase != 2 and rpm >= 17:
+            comboTracks = {}
+            for toonId in self.battle.activeToons:
+                attack = self.battle.toonAttacks.get(toonId)
+                if not attack:
+                    continue
+                track = attack[TOON_TRACK_COL]
+                if track not in (TRAP, LURE, THROW):
+                    continue
+                targetId = attack[TOON_TGT_COL]
+                targetsBoss = targetId == boss.doId
+                try:
+                    if attackAffectsGroup(track, attack[TOON_LVL_COL]):
+                        targetsBoss = True
+                except:
+                    pass
+                if targetsBoss:
+                    comboTracks.setdefault(track, []).append(toonId)
+            if comboTracks.get(TRAP) and comboTracks.get(LURE) and comboTracks.get(THROW):
+                markedCombo = comboTracks[THROW] + comboTracks[TRAP] + comboTracks[LURE]
+
+        if markedCombo and controller.chainsawPreviousLogicAttack != 'MarkedWood':
+            markedTargets = [toonId for toonId in markedCombo if toonId in livingToons]
+            if markedTargets:
+                targetToon = markedTargets[0]
+                chosen = ('MarkedWood', targetToon)
 
         # Fallback attacks.  Spark Plug cannot repeat; when it would repeat,
         # Clash forces Scabbard or Aggrandize if the RPM/field permits it.
