@@ -91,8 +91,6 @@ class DistributedBattleChainsawAI(
                 outgoing = 1.0
 
             bossCondition = 1.0
-            if controller.chainsawPhase == 2:
-                bossCondition *= max(0.0, 1.0 + (controller.chainsawRPM - 15) * 0.1)
             if getattr(controller, 'chainsawKickbackRounds', 0) > 0:
                 bossCondition *= float(getattr(
                     controller, 'chainsawKickbackMultiplier', 1.0))
@@ -118,8 +116,9 @@ class DistributedBattleChainsawAI(
                 incoming = incoming[-len(linkedSuits):]
 
             try:
-                bossIncoming = (0.0 if chainLinked and linkedSupports
-                                else bossCondition)
+                bossIncoming = bossCondition
+                if linkedSuits:
+                    bossIncoming *= max(0.25, incoming[0])
                 self.battleCalc.setSuitCondition(
                     boss.doId, 'vulnerablevideographer', bossIncoming,
                     -1, 'setBoth')

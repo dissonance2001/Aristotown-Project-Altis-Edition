@@ -2002,6 +2002,62 @@ class TownBattleCogPanel(DirectFrame):
                                 tooltipBuff=True, 
                                 slotColor=(1, 0.984, 0, 1))
 
+        if getattr(getattr(self.cog, 'dna', None), 'name', None) == 'chainsaw':
+            rpm = 10
+            phase = 1
+            try:
+                from toontown.suit import DistributedChainsawBoss
+                controller = DistributedChainsawBoss.OneChainsawController
+                if controller:
+                    rpm = int(getattr(controller, 'chainsawRPM', rpm))
+                    phase = int(getattr(controller, 'chainsawPhase', phase))
+            except:
+                pass
+            if self.cog.hasSuitStatusEffect('chainsawRevvingUp'):
+                try:
+                    rpm = int(self.cog.getSuitStatusModifier('chainsawRevvingUp'))
+                except:
+                    pass
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/chainsaw_icon')
+            if self.statusIcon.isEmpty():
+                self.statusIcon = status.find('**/overclocked_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text='%sk' % rpm,
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45), text_scale=.48)
+            self.extraText.show()
+            title = 'Revved-Up: %s,000 RPM' % rpm
+            if phase == 2:
+                defenseMod = max(0.0, 1.0 + ((float(rpm) - 15.0) * 0.1))
+                difference = int(round(abs(defenseMod - 1.0) * 100.0))
+                if difference:
+                    desc = 'The Chainsaw Consultant takes %s%% %s damage in Reforestation Mode.' % (difference, 'less' if defenseMod < 1.0 else 'more')
+                else:
+                    desc = 'The Chainsaw Consultant takes normal damage in Reforestation Mode.'
+                abilities = ((13, 'Aggrandize'), (15, 'Chain Link'), (17, 'Scabbard'))
+            else:
+                damageMod = max(1.0, min(2.0, float(rpm) * 0.1))
+                difference = int(round((damageMod - 1.0) * 100.0))
+                if difference:
+                    desc = 'The Chainsaw Consultant deals %s%% more damage.' % difference
+                else:
+                    desc = 'The Chainsaw Consultant is operating under normal conditions.'
+                abilities = ((12, 'Offboarding'), (14, 'Cut The Slack'), (17, 'Marked Wood'))
+            for threshold, ability in abilities:
+                desc += '\nAt %s,000 RPM: %s' % (threshold, "Can use '%s'" % ability if rpm >= threshold else '?????')
+            if phase == 1:
+                desc += '\nAt 20,000 RPM: %s' % ("Can use 'Deadwood'" if rpm >= 20 else '?????')
+            elif phase == 3:
+                desc += '\nAt 20,000 RPM: %s' % ("Can use 'Layoffs'" if rpm >= 20 else '?????')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon,
+                                   slot,
+                                   tooltipTitle=title,
+                                   tooltipDescription=desc,
+                                   tooltipBuff=True,
+                                   slotColor=(1, 0.984, 0, 1))
+
         if self.cog.hasSuitStatusEffect('chainsawChainLinked'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/chain_linked_icon')

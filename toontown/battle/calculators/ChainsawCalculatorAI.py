@@ -208,6 +208,17 @@ class ChainsawCalculatorAI:
                             suedSupports.append(suit)
                     break
 
+            targetsBoss = False
+            if track in (TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP):
+                targetsBoss = targetId == boss.doId
+                try:
+                    if attackAffectsGroup(track, attack[TOON_LVL_COL]):
+                        targetsBoss = True
+                except:
+                    pass
+                if targetsBoss and toonId not in bossTargetingToons:
+                    bossTargetingToons.append(toonId)
+
             if (track not in (HEAL, PETSOS) and bossIndex >= 0 and
                     bossIndex < len(hpList)):
                 damage = hpList[bossIndex]
@@ -217,28 +228,15 @@ class ChainsawCalculatorAI:
                         hits += 1
                     if toonId not in attackingToons:
                         attackingToons.append(toonId)
-                    if toonId not in bossTargetingToons:
-                        bossTargetingToons.append(toonId)
 
-            # Chain Link counts Lure as targeting Chainsaw. Marked Wood does
-            # not, so track targeting independently from actual damage hits.
-            if track == LURE:
-                targetsBoss = targetId == boss.doId
+            if track == LURE and targetsBoss:
                 try:
-                    if attackAffectsGroup(LURE, attack[TOON_LVL_COL]):
-                        targetsBoss = True
+                    lureHit = (not attack[TOON_ACCBONUS_COL] or
+                               boss.doId in self.calculator.successfulLures)
                 except:
-                    pass
-                if targetsBoss:
-                    try:
-                        lureHit = (not attack[TOON_ACCBONUS_COL] or
-                                   boss.doId in self.calculator.successfulLures)
-                    except:
-                        lureHit = True
-                    if lureHit:
-                        hits += 1
-                    if toonId not in bossTargetingToons:
-                        bossTargetingToons.append(toonId)
+                    lureHit = True
+                if lureHit:
+                    hits += 1
 
             if track not in (HEAL, PETSOS):
                 for index in xrange(min(len(hpList), len(self.battle.activeSuits))):
@@ -264,8 +262,7 @@ class ChainsawCalculatorAI:
         if amount <= 0:
             return 0
         if (controller.chainsawPhase == 2 and
-                (controller.chainsawChainLinked or
-                 controller.chainsawPreviousAttack == 'ChainLinked')):
+                controller.chainsawChainLinked):
             return 0
         if controller.chainsawPhase == 3:
             amount *= 2
@@ -434,6 +431,12 @@ class ChainsawCalculatorAI:
     def _doCutTheSlack(self, boss, controller, supports, preferredTarget=None):
         if not supports:
             return False
+        existingCts = [s for s in supports
+                       if self._isCutSlackTarget(s, controller)]
+        if len(existingCts) >= 2:
+            return self._doOffboarding(
+                boss, controller, supports, [],
+                targetSupport=self._chooseHighestLevel(existingCts))
 
         # A Cog that has already received a Chainsaw promotion is a Manager
         # Beneficiary and can never be promoted by Cut the Slack a second time.
@@ -804,11 +807,7 @@ class ChainsawCalculatorAI:
         controller.chainsawKickbackActivatedThisRound = True
         controller.chainsawFiredLinks = 0
 
-        bossCondition = 1.0
-        if controller.chainsawPhase == 2:
-            bossCondition *= max(
-                0.0, 1.0 + (controller.chainsawRPM - 15) * 0.1)
-        bossCondition *= controller.chainsawKickbackMultiplier
+        bossCondition = controller.chainsawKickbackMultiplier
         try:
             self.calculator.setSuitCondition(
                 boss.doId, 'vulnerablevideographer', bossCondition,
@@ -828,7 +827,8 @@ class ChainsawCalculatorAI:
                         suit.doId not in controller.chainsawChainStartSupportIds):
                     continue
                 foundLinked = True
-                if suit.getHP() > 0 and suit not in firedSupports:
+                projectedHP = suit.getHP() - max(0, supportDamage.get(suit, 0))
+                if projectedHP > 0 and suit not in firedSupports:
                     return False
             except:
                 pass
@@ -843,6 +843,7 @@ class ChainsawCalculatorAI:
         controller.chainsawPendingKickback = False
         controller.chainsawPendingKickbackMultiplier = 1.0
         controller.chainsawKickbackVisualPending = True
+        controller.chainsawKickbackActivatedThisRound = True
         controller.chainsawFiredLinks = 0
         return True
 
@@ -859,7 +860,8 @@ class ChainsawCalculatorAI:
                 continue
             allSupports.append(support)
             try:
-                alive = support.getHP() > 0
+                projectedHP = support.getHP() - max(0, supportDamage.get(support, 0))
+                alive = projectedHP > 0
             except:
                 alive = True
             if support in firedSupports or not alive:
@@ -922,31 +924,29 @@ class ChainsawCalculatorAI:
                     matureCts = []
                     for support in supports:
                         if controller.chainsawCutSlackTargets.get(
-                                support.doId, -1) >= 3:
+                                support.doId, -1) >= 4:
                             matureCts.append(support)
 
-                    survivedAoe = False
+                    survivedAoe = []
                     for support in supports:
                         tracks = supportTracks.get(support, ())
                         if any([track in tracks for track in (SQUIRT, ZAP, SOUND)]):
-                            survivedAoe = True
-                            break
+                            survivedAoe.append(support)
 
-                    if (matureCts or controller.chainsawHitlessRounds >= 2 or
+                    if (matureCts or controller.chainsawHitlessRounds >= 1 or
                             firedSupports or survivedAoe):
                         targetSupport = None
                         retaliateToon = None
                         if matureCts:
-                            targetSupport = random.choice(matureCts)
+                            targetSupport = self._chooseHighestLevel(matureCts)
                         elif firedSupports:
-                            # Altis records the Toon who selected Fire in the
-                            # raw attack list.  Retaliate against the first one
-                            # that actually fired a support Cog.
                             for toonId in self.battle.activeToons:
                                 attack = self.battle.toonAttacks.get(toonId)
                                 if attack and attack[TOON_TRACK_COL] == FIRE:
                                     retaliateToon = toonId
                                     break
+                        elif survivedAoe:
+                            targetSupport = self._chooseHighestLevel(survivedAoe)
                         chosen = ('Offboarding', (targetSupport, retaliateToon))
 
                 if wantCts and rpm >= 14 and supports:
@@ -965,12 +965,18 @@ class ChainsawCalculatorAI:
 
                     suedEligible = [s for s in suedSupports if s in ctsCandidates]
                     if ctsCandidates and (fullBattle or len(predictedDead) >= 2 or suedEligible):
-                        preferred = random.choice(suedEligible) if suedEligible else None
-                        chosen = ('CutTheSlack', preferred)
+                        existingCts = [s for s in supports
+                                       if self._isCutSlackTarget(s, controller)]
+                        if len(existingCts) >= 2:
+                            chosen = ('Offboarding',
+                                      (self._chooseHighestLevel(existingCts), None))
+                        else:
+                            preferred = random.choice(suedEligible) if suedEligible else None
+                            chosen = ('CutTheSlack', preferred)
 
                 if (rpm >= 17 and
                         controller.chainsawPreviousLogicAttack != 'MarkedWood'):
-                    if exactlyOneHitBoss or allToonsHitBoss or iouToons:
+                    if exactlyOneHitBoss or allToonsTargetedBoss or iouToons:
                         targetToon = None
                         if iouToons:
                             livingIous = [toonId for toonId in iouToons
@@ -1098,7 +1104,7 @@ class ChainsawCalculatorAI:
                 SuitBattleGlobals.ATK_TGT_GROUP)
             phaseChanged = True
 
-        if hits:
+        if bossTargetingToons:
             controller.chainsawHitlessRounds = -1
 
         usedAbility = bool(chainKickback)
@@ -1108,7 +1114,7 @@ class ChainsawCalculatorAI:
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons)
 
-        rpmGain = 0 if chainKickback else hits
+        rpmGain = hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and
                 not supports and controller.chainsawPreviousSupportCount > 0):
@@ -1144,7 +1150,7 @@ class ChainsawCalculatorAI:
                 controller.chainsawPreviousLogicAttack is None):
             controller.chainsawPreviousAttack = None
 
-        if not hits:
+        if not bossTargetingToons:
             controller.chainsawHitlessRounds += 1
 
         controller.chainsawPreviousSupportCount = len(supports)

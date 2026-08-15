@@ -67,14 +67,18 @@ class DistributedBattleChainsaw(
         if not self.chainsawChainVisualActive or not boss or not supports:
             return
 
+        incoming = [0.0, 0.25, 0.5, 0.75, 1.0]
+        linkedIncoming = incoming[-(len(supports) + 1):]
+        bossMultiplier = max(0.25, linkedIncoming[0])
         try:
             boss.setSuitStatusEffect(
-                'chainsawChainLinked', 100, None, 'setBoth')
+                'chainsawChainLinked',
+                int(round((1.0 - bossMultiplier) * 100.0)),
+                None, 'setBoth')
         except:
             pass
 
-        multipliers = [0.25, 0.5, 0.75, 1.0]
-        multipliers = multipliers[-len(supports):]
+        multipliers = linkedIncoming[1:]
         for index in xrange(len(supports)):
             suit = supports[index]
             defense = int(round((1.0 - multipliers[index]) * 100.0))
