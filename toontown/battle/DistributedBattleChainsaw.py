@@ -27,7 +27,7 @@ class DistributedBattleChainsaw(
 
     def getSurrenderExitStatus(self):
         return {
-            'loader': ZoneUtil.getLoaderName(ToontownGlobals.OutdoorZone),
+            'loader': 'townLoader',
             'where': 'toonInterior',
             'how': 'teleportIn',
             'hoodId': ToontownGlobals.OutdoorZone,
