@@ -4268,9 +4268,14 @@ class BattleCalculatorAI:
                 self.toonSkillPtsGained[id] = expList
             skillCreditMultiplier = self.__skillCreditMultiplier
             toon = simbase.air.doId2do.get(id)
-            if toon and hasattr(toon, 'getGumballBoosters'):
+            if toon and hasattr(toon, 'applyGumballBoosters'):
                 from toontown.gumball import GumballGlobals
-                skillCreditMultiplier += GumballGlobals.getGagExperienceMultiplier(toon.getGumballBoosters(), trk)
+                boosterTypes = [GumballGlobals.EXP_GAGS_GLOBAL]
+                if trk in GumballGlobals.SUPPORT_GAG_TRACKS:
+                    boosterTypes.append(GumballGlobals.EXP_GAGS_SUPPORT)
+                elif trk in GumballGlobals.POWER_GAG_TRACKS:
+                    boosterTypes.append(GumballGlobals.EXP_GAGS_POWER)
+                skillCreditMultiplier += toon.applyGumballBoosters(boosterTypes, 0)
             expList[trk] = min(ExperienceCap, expList[trk] + (lvl + 1) * skillCreditMultiplier)
 
 
