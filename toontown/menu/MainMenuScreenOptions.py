@@ -60,7 +60,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
     def _makeTab(self, gui, parent, pos, nodeName, text, stateName):
         image = MainMenuGui._node(gui, nodeName)
         kw = dict(parent=parent, relief=None, pos=pos, command=lambda: self.request(stateName),
-                  frameSize=(-.12, .1, 0, .1), sortOrder=0)
+                  frameSize=(-.12, .1, 0, .1), sortOrder=-1)
         if image is not None:
             kw['image'] = image
             kw['image_scale'] = (0.35, 1, 0.175)
