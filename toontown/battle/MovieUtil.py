@@ -1722,15 +1722,35 @@ def createSuitDeathTrack(suit, battle):
         return makePacesetterDeath(suit, battle)
     if suit.style.name == 'chainsaw':
         controller = getattr(battle, 'bossCog', None)
+        battleId = getattr(battle, 'doId', 0)
+        if controller is not None and hasattr(controller, 'chainsawPhase'):
+            controllerBattle = getattr(controller, 'battle', None)
+            controllerBattleId = getattr(controller, 'battleId', 0)
+            if controllerBattle is not battle and controllerBattleId != battleId:
+                controller = None
         if controller is None or not hasattr(controller, 'chainsawPhase'):
             try:
                 from toontown.suit import DistributedChainsawBoss
-                controller = DistributedChainsawBoss.OneChainsawController
-                if controller is not None:
-                    battle.bossCog = controller
+                candidate = DistributedChainsawBoss.OneChainsawController
+                if candidate is not None and hasattr(candidate, 'chainsawPhase'):
+                    if (getattr(candidate, 'battle', None) is battle or
+                            getattr(candidate, 'battleId', 0) == battleId):
+                        controller = candidate
+            except:
+                controller = None
+        if controller is None or not hasattr(controller, 'chainsawPhase'):
+            try:
+                for candidate in base.cr.doId2do.values():
+                    if not hasattr(candidate, 'chainsawPhase'):
+                        continue
+                    if (getattr(candidate, 'battle', None) is battle or
+                            getattr(candidate, 'battleId', 0) == battleId):
+                        controller = candidate
+                        break
             except:
                 controller = None
         if controller is not None and hasattr(controller, 'chainsawPhase'):
+            battle.bossCog = controller
             from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawDeath
             return makeChainsawDeath(suit, battle)
     if suit.style.name == 'pcrat':

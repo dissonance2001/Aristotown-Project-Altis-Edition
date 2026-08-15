@@ -88,6 +88,7 @@ class DistributedChainsawBossAI(
         self.chainsawCoreV3 = True
         self.cutsceneSkipVoters = []
         self.cutsceneSkipTriggered = False
+        self._chainsawDoneSent = False
 
     def getHoodId(self):
         return ToontownGlobals.OutdoorZone
@@ -382,6 +383,25 @@ class DistributedChainsawBossAI(
             reserves.append(suit)
         return reserves
 
+    def _livingLinkedSupportIds(self):
+        chainIds = set(self.chainsawChainStartSupportIds)
+        living = []
+        seen = set()
+        for collection in (self.activeSuits, self.suits):
+            for suit in collection:
+                if suit is None:
+                    continue
+                suitId = getattr(suit, 'doId', 0)
+                if not suitId or suitId not in chainIds or suitId in seen:
+                    continue
+                seen.add(suitId)
+                try:
+                    if suit.getHP() > 0:
+                        living.append(suitId)
+                except:
+                    pass
+        return living
+
     def handleRoundADone(self, toonIds, totalHp, deadSuits):
         if not self.battle:
             return
@@ -425,13 +445,7 @@ class DistributedChainsawBossAI(
         # disappeared.  Current Clash grants two rounds of Kick Back; each Cog
         # removed by a Fire during the chain reduces the 30% bonus by 5%.
         if self.chainsawChainLinked and self.chainsawChainStartSupportIds:
-            livingIds = []
-            for suit in self.activeSuits:
-                try:
-                    if suit.getHP() > 0 and suit.doId in self.chainsawChainStartSupportIds:
-                        livingIds.append(suit.doId)
-                except:
-                    pass
+            livingIds = self._livingLinkedSupportIds()
             if not livingIds:
                 self.chainsawChainLinked = False
                 self.chainsawChainStartSupportIds = []
@@ -443,6 +457,7 @@ class DistributedChainsawBossAI(
 
         boss = self.__findChainsawSuit()
         if not boss or boss.getHP() <= 0:
+            self.postBattleState = 'Reward'
             self.__finishRemainingSupports()
             self.battle.resume([])
             return
@@ -579,6 +594,17 @@ class DistributedChainsawBossAI(
             self.ignoreBarrier(self.barrier)
             self.barrier = None
 
+    def removeToon(self, avId):
+        DistributedMinibossAI.DistributedMinibossAI.removeToon(self, avId)
+        if self.hasToons() or self.state != 'Off' or self._chainsawDoneSent:
+            return
+        taskMgr.remove(self.uniqueName('BossDone'))
+        self._chainsawDoneSent = True
+        if self.air:
+            self.air.writeServerEvent('bossBattleDone', self.doId, '%s' % self.dept)
+        messenger.send(self.uniqueName('BossDone'))
+        self.ignoreAll()
+
     def enterOff(self):
         self.resetBattles()
 
@@ -586,6 +612,7 @@ class DistributedChainsawBossAI(
         pass
 
     def delete(self):
+        taskMgr.remove(self.uniqueName('BossDone'))
         try:
             if self.barrier:
                 self.ignoreBarrier(self.barrier)

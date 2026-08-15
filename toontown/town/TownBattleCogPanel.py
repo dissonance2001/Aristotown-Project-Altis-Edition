@@ -2052,7 +2052,8 @@ class TownBattleCogPanel(DirectFrame):
                     desc = 'The Chainsaw Consultant takes normal damage in Reforestation Mode.'
                 abilities = ((13, 'Aggrandize'), (15, 'Chain Link'), (17, 'Scabbard'))
             else:
-                damageMod = max(1.0, min(2.0, float(rpm) * 0.1))
+                maxDamageMod = 3.0 if phase == 3 else 2.0
+                damageMod = max(1.0, min(maxDamageMod, float(rpm) * 0.1))
                 difference = int(round((damageMod - 1.0) * 100.0))
                 if difference:
                     desc = 'The Chainsaw Consultant deals %s%% more damage.' % difference

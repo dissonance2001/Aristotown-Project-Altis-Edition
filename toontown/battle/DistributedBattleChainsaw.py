@@ -17,8 +17,16 @@ class DistributedBattleChainsaw(
         self.doorCloseSfx = loader.loadSfx(
             'phase_9/audio/sfx/CHQ_door_close.ogg')
         self.chainsawChainVisualActive = False
+        self._chainsawIdleTasks = set()
+        points = list(self.suitPoints)
+        points[1] = ((Point3(10, 4.5, 0), 155),
+                     (Point3(5, 5.8, 0), 170))
+        self.suitPoints = tuple(points)
 
     def delete(self):
+        for taskName in list(self._chainsawIdleTasks):
+            taskMgr.remove(taskName)
+        self._chainsawIdleTasks.clear()
         if self.doorOpenSfx:
             try:
                 self.doorOpenSfx.stop()
@@ -69,7 +77,7 @@ class DistributedBattleChainsaw(
 
         incoming = [0.0, 0.25, 0.5, 0.75, 1.0]
         linkedIncoming = incoming[-(len(supports) + 1):]
-        bossMultiplier = max(0.25, linkedIncoming[0])
+        bossMultiplier = linkedIncoming[0]
         try:
             boss.setSuitStatusEffect(
                 'chainsawChainLinked',
@@ -126,6 +134,24 @@ class DistributedBattleChainsaw(
             except:
                 pass
 
+    def _queueChainsawPhaseThreeIdle(self, suit, delay=0.2):
+        taskName = self.uniqueName(
+            'chainsawPhaseThreeIdle-%s' % getattr(suit, 'doId', id(suit)))
+        taskMgr.remove(taskName)
+        self._chainsawIdleTasks.add(taskName)
+
+        def applyIdle(task):
+            self._chainsawIdleTasks.discard(taskName)
+            try:
+                if suit not in self.activeSuits or suit.getHP() <= 0:
+                    return task.done
+            except:
+                return task.done
+            self._applyChainsawPhaseThreeIdle(suit)
+            return task.done
+
+        taskMgr.doMethodLater(delay, applyIdle, taskName)
+
     def _installChainsawNeutralRecovery(self, suit):
         if getattr(suit, '_chainsawNeutralRecoveryInstalled', False):
             return
@@ -145,6 +171,7 @@ class DistributedBattleChainsaw(
             def recoveredNeutral(original=original, suit=suit, battle=self):
                 result = original()
                 battle._applyChainsawPhaseThreeIdle(suit)
+                battle._queueChainsawPhaseThreeIdle(suit)
                 return result
 
             setattr(suit, methodName, recoveredNeutral)
@@ -162,6 +189,7 @@ class DistributedBattleChainsaw(
             suit._chainsawPhaseThreeIdle = phase == 3
             if suit._chainsawPhaseThreeIdle:
                 self._applyChainsawPhaseThreeIdle(suit)
+                self._queueChainsawPhaseThreeIdle(suit)
 
     def enterWaitForInput(self, ts):
         self._pruneStaleLuredSuits()

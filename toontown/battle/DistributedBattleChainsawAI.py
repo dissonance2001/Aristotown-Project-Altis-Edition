@@ -84,9 +84,12 @@ class DistributedBattleChainsawAI(
         if boss and controller:
             revving = self.battleCalc.chainsawCalculator.syncRevvingEffect(
                 boss, controller)
-            if controller.chainsawPhase in (1, 3):
+            if controller.chainsawPhase == 1:
                 outgoing = float(revving.damageMod) if revving else 1.0
                 outgoing = max(1.0, min(2.0, outgoing))
+            elif controller.chainsawPhase == 3:
+                outgoing = float(revving.damageMod) if revving else 1.0
+                outgoing = max(1.0, min(3.0, outgoing))
             else:
                 outgoing = 1.0
 
@@ -118,7 +121,7 @@ class DistributedBattleChainsawAI(
             try:
                 bossIncoming = bossCondition
                 if linkedSuits:
-                    bossIncoming *= max(0.25, incoming[0])
+                    bossIncoming *= incoming[0]
                 self.battleCalc.setSuitCondition(
                     boss.doId, 'vulnerablevideographer', bossIncoming,
                     -1, 'setBoth')

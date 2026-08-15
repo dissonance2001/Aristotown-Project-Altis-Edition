@@ -506,7 +506,12 @@ class ChainsawBattleCutsceneSetup(object):
             ]), functions=[cleanupOffboarding])
 
     def _layoffs(self):
-        targets = self._pad(self._targets(), 4)
+        targets = []
+        for target in self.attack.get('target', ()):
+            toon = target.get('toon')
+            if toon and target.get('hp', 0) > 0 and toon not in targets:
+                targets.append(toon)
+        targets = self._pad(targets, 4)
         supports = self._pad(self.supportSuits or self._allSupports(), 4)
         for support in supports:
             self._prepareCannonCompat(support)

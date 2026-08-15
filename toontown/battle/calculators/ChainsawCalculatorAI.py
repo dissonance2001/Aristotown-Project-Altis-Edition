@@ -270,6 +270,17 @@ class ChainsawCalculatorAI:
         self._setRPM(controller, old + amount)
         return controller.chainsawRPM - old
 
+    def _projectRPMGain(self, controller, amount):
+        if amount <= 0:
+            return controller.chainsawRPM
+        if (controller.chainsawPhase == 2 and
+                controller.chainsawChainLinked):
+            return controller.chainsawRPM
+        if controller.chainsawPhase == 3:
+            amount *= 2
+        maximum = 30 if controller.chainsawPhase == 3 else 20
+        return min(maximum, controller.chainsawRPM + amount)
+
     def _chooseHighestLevel(self, suits):
         if not suits:
             return None
@@ -748,11 +759,37 @@ class ChainsawCalculatorAI:
         controller.chainsawKickbackVisualPending = True
         return True
 
+    def _linkedSupportCandidates(self, boss, controller):
+        chainIds = set(getattr(
+            controller, 'chainsawChainStartSupportIds', []))
+        result = []
+        seen = set()
+        for collection in (getattr(self.battle, 'activeSuits', ()),
+                           getattr(self.battle, 'suits', ())):
+            for suit in collection:
+                if suit is None or suit is boss:
+                    continue
+                suitId = getattr(suit, 'doId', 0)
+                if not suitId or suitId not in chainIds or suitId in seen:
+                    continue
+                seen.add(suitId)
+                result.append(suit)
+        return result
+
     def calculateAfterToonTrack(self, track):
         boss = self._findChainsaw()
         controller = self._getController()
-        if (not boss or not controller or
-                not getattr(controller, 'chainsawChainLinked', False)):
+        if not boss or not controller:
+            return False
+
+        if (controller.chainsawPhase == 1 and
+                boss.getHP() <= self.PHASE_TWO_HP):
+            try:
+                boss.setDamageMultiplier(1.0)
+            except:
+                pass
+
+        if not getattr(controller, 'chainsawChainLinked', False):
             return False
 
         chainIds = list(getattr(
@@ -760,10 +797,9 @@ class ChainsawCalculatorAI:
         if not chainIds:
             return False
 
-        for suit in self.battle.activeSuits:
+        for suit in self._linkedSupportCandidates(boss, controller):
             try:
-                if (suit is not boss and suit.doId in chainIds and
-                        suit.getHP() > 0):
+                if suit.getHP() > 0:
                     return False
             except:
                 pass
@@ -820,20 +856,16 @@ class ChainsawCalculatorAI:
                                        supportDamage, firedSupports):
         if not controller.chainsawChainLinked:
             return False
-        foundLinked = False
-        for suit in self.battle.activeSuits:
+        linkedSupports = self._linkedSupportCandidates(boss, controller)
+        if not linkedSupports and not controller.chainsawChainStartSupportIds:
+            return False
+        for suit in linkedSupports:
             try:
-                if (suit is boss or
-                        suit.doId not in controller.chainsawChainStartSupportIds):
-                    continue
-                foundLinked = True
                 projectedHP = suit.getHP() - max(0, supportDamage.get(suit, 0))
                 if projectedHP > 0 and suit not in firedSupports:
                     return False
             except:
                 pass
-        if not foundLinked and not controller.chainsawChainStartSupportIds:
-            return False
         controller.chainsawChainLinked = False
         controller.chainsawChainStartSupportIds = []
         firedLinks = max(0, int(getattr(controller, 'chainsawFiredLinks', 0)))
@@ -849,9 +881,10 @@ class ChainsawCalculatorAI:
 
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
-                       suedSupports, supportTracks, iouToons):
+                       suedSupports, supportTracks, iouToons,
+                       projectedRPM=None, preAbilityGain=0):
         phase = controller.chainsawPhase
-        rpm = controller.chainsawRPM
+        rpm = controller.chainsawRPM if projectedRPM is None else projectedRPM
         allSupports = []
         predictedDead = []
         supports = []
@@ -976,7 +1009,8 @@ class ChainsawCalculatorAI:
 
                 if (rpm >= 17 and
                         controller.chainsawPreviousLogicAttack != 'MarkedWood'):
-                    if exactlyOneHitBoss or allToonsTargetedBoss or iouToons:
+                    if (exactlyOneHitBoss or allToonsHitBoss or
+                            allToonsTargetedBoss or iouToons):
                         targetToon = None
                         if iouToons:
                             livingIous = [toonId for toonId in iouToons
@@ -1019,12 +1053,22 @@ class ChainsawCalculatorAI:
 
         if chosen is None:
             controller.chainsawPreviousLogicAttack = None
-            return False
+            return (False, False)
 
         name, data = chosen
         if name == 'Whipsaw':
             controller.chainsawPreviousLogicAttack = 'Whipsaw'
-            return False
+            return (False, False)
+
+        gainApplied = False
+        if preAbilityGain > 0:
+            gained = self._applyRPMGain(controller, preAbilityGain)
+            if gained > 0:
+                self._makeVisualAttack(
+                    boss, 'ChainsawCoreRevvingUp%d' % gained,
+                    'roll-o-dex', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
+            gainApplied = True
+
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)
         elif name == 'Layoffs':
@@ -1057,7 +1101,7 @@ class ChainsawCalculatorAI:
 
         if result:
             controller.chainsawPreviousLogicAttack = name
-        return result
+        return (result, gainApplied)
 
     def calculateChainsawAttacks(self):
         boss = self._findChainsaw()
@@ -1108,13 +1152,16 @@ class ChainsawCalculatorAI:
             controller.chainsawHitlessRounds = -1
 
         usedAbility = bool(chainKickback)
+        gainAppliedBeforeAbility = False
         if not phaseChanged and not chainKickback:
-            usedAbility = self._chooseAbility(
+            projectedRPM = self._projectRPMGain(controller, hits)
+            usedAbility, gainAppliedBeforeAbility = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
-                suedSupports, supportTracks, iouToons)
+                suedSupports, supportTracks, iouToons,
+                projectedRPM=projectedRPM, preAbilityGain=hits)
 
-        rpmGain = hits
+        rpmGain = 0 if gainAppliedBeforeAbility else hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and
                 not supports and controller.chainsawPreviousSupportCount > 0):

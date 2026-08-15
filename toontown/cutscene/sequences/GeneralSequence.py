@@ -746,13 +746,17 @@ def seq_createExplosion(nodeIndex=0, scale=1, cutsceneDict=None):
     parent = cutsceneDict['nodes'][nodeIndex]
     if not parent:
         return Sequence()
+    try:
+        parentHeight = parent.getHeight()
+    except:
+        return Sequence()
     toonPlacerNode = NodePath('toonPlacerNode')
     toonPlacerNode.reparentTo(parent)
     toonPlacerNode.setY(-5)
     toonPos = toonPlacerNode.getPos(render)
     toonPlacerNode.removeNode()
     point = Point3(*toonPos)
-    point.setZ(point.getZ() + parent.getHeight() + 1)
+    point.setZ(point.getZ() + parentHeight + 1)
     return MovieUtil.createKapowExplosionTrack(render, explosionPoint=point, scale=scale)
 
 @cutsceneSequence(name='Node: Jiggle Vicariously', enum=EDE.jiggleNode)

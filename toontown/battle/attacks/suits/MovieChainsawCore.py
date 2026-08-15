@@ -49,6 +49,10 @@ def _spendMeter(attack, stacks):
     controller = _controller(attack)
     if not controller:
         return
+    if stacks > 0:
+        _showSuitHpStringCompat(
+            attack.get('suit'), '-%s RPM' % format(int(stacks) * 1000, ',d'),
+            1.0, 0.8)
     meter = getattr(controller, 'chainsawMeter', None)
     if not meter:
         return
@@ -57,6 +61,45 @@ def _spendMeter(attack, stacks):
         meter.setRPM(max(10, int(round(float(meter.rpm))) - int(stacks)))
     except:
         pass
+
+
+def _setThrottleMeter(attack):
+    controller = _controller(attack)
+    if not controller:
+        return
+    meter = getattr(controller, 'chainsawMeter', None)
+    if not meter:
+        return
+    try:
+        meter.setPhase(2)
+        meter.setRPM(10)
+    except:
+        pass
+
+
+def _sparkPoint(actor, fraction=0.65):
+    if actor is None:
+        return Point3(0, 0, 0)
+    try:
+        point = actor.getPos(render)
+    except:
+        point = Point3(0, 0, 0)
+    try:
+        point.setZ(point.getZ() + actor.getHeight() * fraction)
+    except:
+        pass
+    return Point3(point)
+
+
+def _sparkOrigin(suit):
+    hand = getattr(suit, 'leftHand', None)
+    if hand is not None:
+        try:
+            if not hand.isEmpty():
+                return Point3(hand.getPos(render))
+        except:
+            pass
+    return _sparkPoint(suit, 0.7)
 
 
 def _setToonStatusEffect(toon, name, modifier=1, turns=None, mode='setBoth'):
@@ -618,6 +661,7 @@ def doScabbard(attack):
 
 def doSparkPlug(attack):
     statusTrack = Parallel()
+    beamTrack = Parallel()
     for target in attack.get('target', ()):
         toon = target.get('toon')
         if toon:
@@ -625,12 +669,21 @@ def doSparkPlug(attack):
                 Wait(5.36),
                 Func(_setToonStatusEffect,
                      toon, 'zapped', 20, 2, 'setBoth')))
+            beamTrack.append(Sequence(
+                Wait(4.0),
+                MovieUtil.getZapTrack(
+                    attack['battle'], Vec4(1.0, 1.0, 0.0, 1.0),
+                    lambda suit=attack['suit']: _sparkOrigin(suit),
+                    lambda toon=toon: _sparkPoint(toon, 0.65),
+                    0.1, 0.25, 0.1, horizScale=0.1, vertScale=0.1,
+                    parent=render, activeTrack=True)))
     track = Sequence(
         Func(_spendMeter, attack, 2),
         Func(attack['suit'].specialHead.exitGlitch),
         Parallel(
             makeChainsawBattleCutscene(attack, 'sparkplug'),
             statusTrack,
+            beamTrack,
             Sequence(
                 Wait(5.36),
                 Func(attack['suit'].specialHead.enterSemiGlitch))))
@@ -671,6 +724,7 @@ def doThrottle(attack):
         _damageTrack(attack, 4.5),
         statusTrack)
     if key == 'throttle':
+        throttleTrack = Sequence(Func(_setThrottleMeter, attack), throttleTrack)
         deadwoodBanner = _cheatBanner(
             attack, 'DEADWOOD!',
             "YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED",
