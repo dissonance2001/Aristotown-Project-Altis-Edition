@@ -1,6 +1,9 @@
 import time
 from direct.gui.DirectGui import DirectFrame, DirectLabel
 from direct.gui import DirectGuiGlobals as DGG
+from direct.interval.LerpInterval import LerpPosInterval
+from direct.interval.MetaInterval import Sequence, Parallel
+from direct.interval.FunctionInterval import Func, Wait
 from pandac.PandaModules import TextNode
 from toontown.gumball import GumballGlobals
 from toontown.toonbase import ToontownGlobals
@@ -28,12 +31,12 @@ class BoosterIcon(DirectFrame):
         self.initialiseoptions(BoosterIcon)
 
         self.hoverText = DirectFrame(
-            parent=self,
+            parent=base.a2dBottomLeft,
             relief=None,
-            pos=(0, 0, 0),
+            pos=(0.28, 0, 0.42),
             text=' ',
-            text_pos=(0.0, -0.7882),
-            text_scale=(0.2462, 0.2462),
+            text_pos=(0.0, 0.0),
+            text_scale=(0.037, 0.037),
             text_align=TextNode.ACenter,
             text_fg=(1, 1, 1, 1),
             text_bg=(0, 0, 0, 0.7),
@@ -94,6 +97,13 @@ class BoosterIcon(DirectFrame):
         self.hovered = bool(mode)
         if self.hovered:
             self._refreshHoverText()
+            try:
+                pos = self.getPos(base.a2dBottomLeft)
+                hoverX = max(0.30, pos[0])
+                hoverZ = max(0.28, pos[2] - 0.16)
+                self.hoverText.setPos(hoverX, 0, hoverZ)
+            except:
+                self.hoverText.setPos(0.30, 0, 0.42)
             self.hoverText.show()
         else:
             self.hoverText.hide()
@@ -140,18 +150,26 @@ class BoosterStatusPopup(DirectFrame):
         self.ownerMeter = ownerMeter
         self.boosterModel = None
         self.icons = []
+        self.iconTargets = []
         self.emptyLabel = None
         self.closed = False
+        self.closing = False
         self.boosterSignature = None
+        self.openIval = None
+        self.closeIval = None
+        self.slideDuration = 0.32
+        self.slideStagger = 0.045
+        self.holdDuration = 7.0
+        self.collapsedPos = (0.0, 0, -0.22)
 
         meterPos = ownerMeter.getPos(base.a2dBottomLeft)
         DirectFrame.__init__(
             self,
             parent=base.a2dBottomLeft,
             relief=None,
-            pos=(meterPos[0] + 0.02, 0, meterPos[2] + 0.22),
+            pos=(meterPos[0], 0, meterPos[2] + 0.22),
             frameColor=(1, 1, 1, 0),
-            frameSize=(-0.02, 0.72, -0.02, 0.30),
+            frameSize=(-0.02, 0.72, -0.22, 0.30),
             sortOrder=100,
         )
         self.initialiseoptions(BoosterStatusPopup)
@@ -169,15 +187,18 @@ class BoosterStatusPopup(DirectFrame):
         if getattr(base, 'localAvatar', None):
             self.accept(base.localAvatar.uniqueName('gumballBoostersChange'), self._boostersChanged)
 
-        self.rebuild()
+        self.rebuild(True)
         taskMgr.doMethodLater(1.0, self._updateTask, self._taskName())
 
     def _taskName(self):
         return 'gumballBoosterBar-%s' % id(self)
 
+    def _autoCloseTaskName(self):
+        return 'gumballBoosterAutoClose-%s' % id(self)
+
     def _boostersChanged(self, boosters=None):
-        if not self.closed:
-            self.rebuild()
+        if not self.closed and not self.closing:
+            self.rebuild(True)
 
     def _getBoosters(self):
         av = getattr(base, 'localAvatar', None)
@@ -188,13 +209,30 @@ class BoosterStatusPopup(DirectFrame):
         except:
             return []
 
+    def _stopIntervals(self):
+        if self.openIval:
+            try:
+                self.openIval.pause()
+            except:
+                pass
+            self.openIval = None
+        if self.closeIval:
+            try:
+                self.closeIval.pause()
+            except:
+                pass
+            self.closeIval = None
+
     def _clearIcons(self):
+        self._stopIntervals()
+        taskMgr.remove(self._autoCloseTaskName())
         for icon in self.icons:
             try:
                 icon.destroy()
             except:
                 pass
         self.icons = []
+        self.iconTargets = []
         if self.emptyLabel:
             try:
                 self.emptyLabel.destroy()
@@ -202,7 +240,7 @@ class BoosterStatusPopup(DirectFrame):
                 pass
             self.emptyLabel = None
 
-    def rebuild(self):
+    def rebuild(self, animate=False):
         self._clearIcons()
         boosters = self._getBoosters()
         self.boosterSignature = tuple([(int(x[0]), int(x[1]), int(x[2])) for x in boosters])
@@ -217,15 +255,16 @@ class BoosterStatusPopup(DirectFrame):
                 text_scale=0.035,
                 text_fg=(1, 1, 1, 1),
                 text_bg=(0, 0, 0, 0.7),
-                pos=(0.02, 0, 0.02),
+                pos=(0.02, 0, -0.02),
                 sortOrder=190,
             )
+            taskMgr.doMethodLater(self.holdDuration, self._autoClose, self._autoCloseTaskName())
             return
 
         maxPerRow = 6
-        spacingX = 0.112
-        spacingZ = 0.112
-        iconScale = 0.112
+        spacingX = 0.205
+        spacingZ = 0.205
+        iconScale = 0.19
 
         for index, data in enumerate(boosters):
             try:
@@ -234,37 +273,116 @@ class BoosterStatusPopup(DirectFrame):
                 continue
             col = index % maxPerRow
             row = index // maxPerRow
-            pos = (0.055 + col * spacingX, 0, row * spacingZ)
+            rowStart = row * maxPerRow
+            rowCount = min(maxPerRow, len(boosters) - rowStart)
+            centeredCol = col - ((rowCount - 1) * 0.5)
+            targetPos = (centeredCol * spacingX, 0, row * spacingZ)
+            startPos = self.collapsedPos if animate else targetPos
             icon = BoosterIcon(
                 parent=self,
                 boosterModel=self.boosterModel,
                 boosterType=boosterType,
                 endTimestamp=endTimestamp,
-                pos=pos,
+                pos=startPos,
                 scale=iconScale,
             )
             self.icons.append(icon)
+            self.iconTargets.append(targetPos)
+
+        if animate:
+            self._slideOut()
+        else:
+            taskMgr.doMethodLater(self.holdDuration, self._autoClose, self._autoCloseTaskName())
+
+    def _slideOut(self):
+        if self.closed or self.closing or not self.icons:
+            return
+        taskMgr.remove(self._autoCloseTaskName())
+        intervals = []
+        for index, icon in enumerate(self.icons):
+            targetPos = self.iconTargets[index]
+            intervals.append(Sequence(
+                Wait(index * self.slideStagger),
+                LerpPosInterval(icon, self.slideDuration, targetPos, startPos=icon.getPos(), blendType='easeOut')
+            ))
+        totalDuration = self.slideDuration + max(0, len(self.icons) - 1) * self.slideStagger
+        self.openIval = Sequence(
+            Parallel(*intervals),
+            Func(self._openFinished, totalDuration)
+        )
+        self.openIval.start()
+
+    def _openFinished(self, totalDuration=0.0):
+        self.openIval = None
+        if self.closed or self.closing:
+            return
+        taskMgr.remove(self._autoCloseTaskName())
+        taskMgr.doMethodLater(self.holdDuration, self._autoClose, self._autoCloseTaskName())
+
+    def _autoClose(self, task):
+        self.close()
+        return task.done
+
+    def _slideIn(self):
+        self._stopIntervals()
+        intervals = []
+        count = len(self.icons)
+        for reverseIndex, icon in enumerate(reversed(self.icons)):
+            delay = reverseIndex * self.slideStagger
+            intervals.append(Sequence(
+                Wait(delay),
+                LerpPosInterval(icon, self.slideDuration, self.collapsedPos, startPos=icon.getPos(), blendType='easeIn')
+            ))
+            try:
+                icon.hoverText.hide()
+            except:
+                pass
+        if not intervals:
+            self._finishClose()
+            return
+        self.closeIval = Sequence(
+            Parallel(*intervals),
+            Func(self._finishClose)
+        )
+        self.closeIval.start()
 
     def _updateTask(self, task):
         if self.closed:
             return task.done
+        if self.closing:
+            return task.cont
         boosters = self._getBoosters()
         signature = tuple([(int(x[0]), int(x[1]), int(x[2])) for x in boosters])
         if signature != self.boosterSignature:
-            self.rebuild()
+            self.rebuild(True)
         return task.again
 
     def close(self, event=None):
+        if self.closed or self.closing:
+            return
+        self.closing = True
+        taskMgr.remove(self._autoCloseTaskName())
+        self.ignore('escape')
+        if self.ownerMeter:
+            try:
+                if self.ownerMeter.boosterPopup is self:
+                    self.ownerMeter.boosterPopup = None
+            except:
+                pass
+        if self.emptyLabel:
+            self._finishClose()
+            return
+        self._slideIn()
+
+    def _finishClose(self):
         if self.closed:
             return
         self.closed = True
+        self.closing = False
         taskMgr.remove(self._taskName())
+        taskMgr.remove(self._autoCloseTaskName())
+        self._stopIntervals()
         self.ignoreAll()
-        if self.ownerMeter:
-            try:
-                self.ownerMeter.boosterPopup = None
-            except:
-                pass
         self.ownerMeter = None
         self._clearIcons()
         if self.boosterModel:

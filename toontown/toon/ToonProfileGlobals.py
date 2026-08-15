@@ -31,6 +31,7 @@ POSED_PANEL_FIT_IDS = frozenset((
     39,  # At The Gate
     44,  # Naptime
     45,
+    46,
 ))
 
 
@@ -42,6 +43,10 @@ POSES.append(OrderedDict({'id': 45, 'enum': 'HighRoller', 'name': 'High Roller',
 _HIGH_ROLLER_ANIM = 'profile-high-roller'
 _HIGH_ROLLER_LEG_ANIMS = {'s': 'phase_3/models/char/tt_a_chr_dgs_shorts_legs_high-roller', 'm': 'phase_3/models/char/tt_a_chr_dgm_shorts_legs_high-roller', 'l': 'phase_3/models/char/tt_a_chr_dgl_shorts_legs_high-roller'}
 _HIGH_ROLLER_TORSO_ANIMS = {'ss': 'phase_3/models/char/tt_a_chr_dgs_shorts_torso_high-roller', 'ms': 'phase_3/models/char/tt_a_chr_dgm_shorts_torso_high-roller', 'ls': 'phase_3/models/char/tt_a_chr_dgl_shorts_torso_high-roller', 'sd': 'phase_3/models/char/tt_a_chr_dgs_skirt_torso_high-roller', 'md': 'phase_3/models/char/tt_a_chr_dgm_skirt_torso_high-roller', 'ld': 'phase_3/models/char/tt_a_chr_dgl_skirt_torso_high-roller'}
+POSES.append(OrderedDict({'id': 46, 'enum': 'Dab', 'name': 'Dab', 'data': OrderedDict({'DabPose': True, 'Eyes': 'angry-close', 'Muzzle': 'laugh'})}))
+_DAB_ANIM = 'profile-dab'
+_DAB_LEG_ANIMS = {'s': 'phase_3/models/char/tt_a_chr_dgs_shorts_legs_dab', 'm': 'phase_3/models/char/tt_a_chr_dgm_shorts_legs_dab', 'l': 'phase_3/models/char/tt_a_chr_dgl_shorts_legs_dab'}
+_DAB_TORSO_ANIMS = {'ss': 'phase_3/models/char/tt_a_chr_dgs_shorts_torso_dab', 'ms': 'phase_3/models/char/tt_a_chr_dgm_shorts_torso_dab', 'ls': 'phase_3/models/char/tt_a_chr_dgl_shorts_torso_dab', 'sd': 'phase_3/models/char/tt_a_chr_dgs_skirt_torso_dab', 'md': 'phase_3/models/char/tt_a_chr_dgm_skirt_torso_dab', 'ld': 'phase_3/models/char/tt_a_chr_dgl_skirt_torso_dab'}
 
 NAMEPLATES = [OrderedDict({'id': 101, 'enum': 'DefaultBlue', 'name': 'Default Blue', 'node': 'default_med_blue'}), OrderedDict({'id': 102, 'enum': 'DefaultGreen', 'name': 'Default Green', 'node': 'default_green'}), OrderedDict({'id': 103, 'enum': 'DefaultPurple', 'name': 'Default Purple', 'node': 'default_purple'}), OrderedDict({'id': 104, 'enum': 'DefaultRed', 'name': 'Default Red', 'node': 'default_red'}), OrderedDict({'id': 105, 'enum': 'DefaultYellow', 'name': 'Default Yellow', 'node': 'default_yellow'}), OrderedDict({'id': 106, 'enum': 'DefaultOrange', 'name': 'Default Orange', 'node': 'default_orange'}), OrderedDict({'id': 107, 'enum': 'DefaultBlueB', 'name': 'Default Blue', 'node': 'default_blue'}), OrderedDict({'id': 108, 'enum': 'DefaultDarkBlue', 'name': 'Default Dark Blue', 'node': 'default_dark_blue'}), OrderedDict({'id': 109, 'enum': 'DefaultDarkGreen', 'name': 'Default Dark Green', 'node': 'default_dark_green'}), OrderedDict({'id': 200, 'enum': 'PG_TTC', 'name': 'Toontown Central', 'node': 'hidden_pg_ttc'}), OrderedDict({'id': 201, 'enum': 'PG_BB', 'name': 'Barnacle Boatyard', 'node': 'hidden_pg_bb'}), OrderedDict({'id': 202, 'enum': 'PG_YOTT', 'name': 'Ye Olde Toontowne', 'node': 'hidden_pg_yott'}), OrderedDict({'id': 203, 'enum': 'PG_DG', 'name': 'Daffodil Gardens', 'node': 'hidden_pg_dg'}), OrderedDict({'id': 204, 'enum': 'PG_MML', 'name': 'Mezzo Melodyland', 'node': 'hidden_pg_mml'}), OrderedDict({'id': 205, 'enum': 'PG_TB', 'name': 'The Brrrgh', 'node': 'hidden_pg_tb'}), OrderedDict({'id': 206, 'enum': 'PG_AA', 'name': 'Acorn Acres', 'node': 'hidden_pg_aa'}), OrderedDict({'id': 207, 'enum': 'PG_DDL', 'name': 'Drowsy Dreamland', 'node': 'hidden_pg_ddl'}), OrderedDict({'id': 300, 'enum': 'Activity_Golfing', 'name': 'Golfing', 'node': 'hidden_golfing'}), OrderedDict({'id': 301, 'enum': 'Activity_Trolley', 'name': 'The Trolley', 'node': 'hidden_trolley'}), OrderedDict({'id': 302, 'enum': 'Activity_Racing', 'name': 'Racing', 'node': 'hidden_racing'}), OrderedDict({'id': 400, 'enum': 'Tasks_Judy', 'name': 'Crocheting Lessons', 'node': 'sidetask_judy', 'position': (0.008, 0, 0.138)}), OrderedDict({'id': 500, 'enum': 'Special_Stars', 'name': 'Stars', 'node': 'hidden_stars'}), OrderedDict({'id': 501, 'enum': 'Special_UnderTheSea', 'name': 'Under the Sea', 'node': 'hidden_underwater'}), OrderedDict({'id': 502, 'enum': 'Special_Slippin', 'name': 'Slippin', 'node': 'hidden_banana'}), OrderedDict({'id': 503, 'enum': 'Special_UpToEleven', 'name': 'Turning It Up To 11', 'node': 'hidden_maxevidence'}), OrderedDict({'id': 504, 'enum': 'Special_SnowballFight', 'name': 'Snowball Fight', 'node': 'hidden_steve'}), OrderedDict({'id': 505, 'enum': 'Special_SellbotPaint', 'name': 'Sellbot Paint', 'node': 'hidden_ocftf'}), OrderedDict({'id': 600, 'enum': 'Event_Tinsel', 'name': 'Tinsel', 'node': 'event_tinsel'}), OrderedDict({'id': 601, 'enum': 'Event_Candy', 'name': 'Candy', 'node': 'event_candy'}), OrderedDict({'id': 602, 'enum': 'Event_Wrapping', 'name': 'Wrapping', 'node': 'event_wrapping'}), OrderedDict({'id': 603, 'enum': 'Event_NightLights', 'name': 'Night Lights', 'node': 'event_nightlights'}), OrderedDict({'id': 604, 'enum': 'Event_NewYears2019', 'name': 'New Years 2019 Fireworks', 'node': 'event_2019_fireworks'}), OrderedDict({'id': 605, 'enum': 'Event_SkyClan', 'name': 'Dreams Come True', 'node': 'event_skyclan'}), OrderedDict({'id': 606, 'enum': 'Event_Outback', 'name': 'Outback', 'node': 'event_outback'}), OrderedDict({'id': 607, 'enum': 'Event_LazyBones', 'name': 'Lazy Bones', 'node': 'event_lazy'}), OrderedDict({'id': 608, 'enum': 'Event_Thanksgiving2019', 'name': 'Thanksgiving 2019', 'node': 'event_2019_thanksgiving'}), OrderedDict({'id': 609, 'enum': 'Event_NewYears2020', 'name': 'New Years 2020 Fireworks', 'node': 'event_2020_newyears'}), OrderedDict({'id': 610, 'enum': 'Event_PinkSlip', 'name': 'Pink Slip', 'node': 'event_btl'}), OrderedDict({'id': 611, 'enum': 'Event_Easter2020', 'name': 'Easter 2020', 'node': 'event_easter2020'}), OrderedDict({'id': 612, 'enum': 'Event_AtticusDesk', 'name': "Atticus' Desk", 'node': 'event_standin'}), OrderedDict({'id': 613, 'enum': 'Event_FourthJuly2020', 'name': 'Prepare for Launch', 'node': 'firework_nameplate'}), OrderedDict({'id': 614, 'enum': 'Event_Electric', 'name': 'Electric', 'node': 'event_electric', 'scale': (1.08, 1, 1.08)}), OrderedDict({'id': 619, 'enum': 'Event_Witch', 'name': 'Halloween Night', 'node': 'event_halloween_witch'}), OrderedDict({'id': 615, 'enum': 'Event_HighRoller', 'name': 'High Roller', 'node': 'event_highroller'}), OrderedDict({'id': 700, 'enum': 'Halloween_CandyBlue', 'name': 'Blue Halloween Candy', 'node': 'event_halloween_candy_blue', 'scale': (1.125, 1, 0.95)}), OrderedDict({'id': 701, 'enum': 'Halloween_CandyGreen', 'name': 'Green Halloween Candy', 'node': 'event_halloween_candy_green', 'scale': (1.125, 1, 0.95)}), OrderedDict({'id': 702, 'enum': 'Halloween_CandyMagenta', 'name': 'Magenta Halloween Candy', 'node': 'event_halloween_candy_magenta', 'scale': (1.125, 1, 0.95)}), OrderedDict({'id': 703, 'enum': 'Halloween_CandyPurple', 'name': 'Purple Halloween Candy', 'node': 'event_halloween_candy_purple', 'scale': (1.125, 1, 0.95)}), OrderedDict({'id': 704, 'enum': 'Halloween_CandyRed', 'name': 'Red Halloween Candy', 'node': 'event_halloween_candy_red', 'scale': (1.125, 1, 0.95)}), OrderedDict({'id': 705, 'enum': 'Halloween_SpookyBat', 'name': 'Spooky Bat', 'node': 'event_halloween_bat', 'position': (0, 0, 0.1325), 'scale': (1.125, 1, 1)}), OrderedDict({'id': 800, 'enum': 'Kudos_TTC', 'name': 'You Did It', 'node': 'kudos_ttc'}), OrderedDict({'id': 801, 'enum': 'Kudos_BB', 'name': 'Sandcastles', 'node': 'kudos_bb'}), OrderedDict({'id': 802, 'enum': 'Kudos_YOTT', 'name': 'The Doodragon', 'node': 'kudos_yott'}), OrderedDict({'id': 803, 'enum': 'Kudos_DG', 'name': 'Gardening', 'node': 'kudos_dg'}), OrderedDict({'id': 804, 'enum': 'Kudos_MML', 'name': "Fires n' Flames", 'node': 'kudos_mml'}), OrderedDict({'id': 805, 'enum': 'Kudos_TB', 'name': 'Scarf', 'node': 'kudos_tb'}), OrderedDict({'id': 806, 'enum': 'Kudos_AA', 'name': 'Light Show', 'node': 'kudos_aa'}), OrderedDict({'id': 807, 'enum': 'Kudos_DDL', 'name': 'Sweet', 'node': 'kudos_ddl'}), OrderedDict({'id': 616, 'enum': 'Makeship_DuckShufflerGreen', 'name': 'Duck Shuffler Green', 'node': 'makeship_duckshuffler_green'}), OrderedDict({'id': 617, 'enum': 'Makeship_DuckShufflerRed', 'name': 'Duck Shuffler Red', 'node': 'makeship_duckshuffler_red'}), OrderedDict({'id': 618, 'enum': 'Makeship_FirePace', 'name': 'Firestarter & Pacesetter', 'node': 'makeship_firepace'})]
 
@@ -238,6 +243,21 @@ def _applyHighRollerPose(toon):
         return False
 
 
+def _applyDabPose(toon):
+    try:
+        legPath = _DAB_LEG_ANIMS[toon.style.legs]
+        torsoPath = _DAB_TORSO_ANIMS[toon.style.torso]
+        for lodName in ('1000', '500', '250'):
+            toon.loadAnims({_DAB_ANIM: legPath}, 'legs', lodName)
+            toon.loadAnims({_DAB_ANIM: torsoPath}, 'torso', lodName)
+        toon.pose(_DAB_ANIM, 0, 'legs')
+        toon.pose(_DAB_ANIM, 0, 'torso')
+        toon.pose('neutral', 0, 'head')
+        return True
+    except:
+        return False
+
+
 def applyPose(toon, poseId, notify=None):
     """Apply one profile pose. Missing animations or props fall back safely."""
     entry = getPose(poseId)
@@ -257,6 +277,12 @@ def applyPose(toon, poseId, notify=None):
 
     if data.get('HighRollerPose'):
         if not _applyHighRollerPose(toon):
+            try:
+                toon.pose('neutral', 0)
+            except:
+                pass
+    elif data.get('DabPose'):
+        if not _applyDabPose(toon):
             try:
                 toon.pose('neutral', 0)
             except:
@@ -281,6 +307,8 @@ def applyPose(toon, poseId, notify=None):
         _call(toon, 'surpriseEyes')
     elif eyeType == 'angry':
         _call(toon, 'angryEyes'); _call(toon, 'closeEyes'); _call(toon, 'openEyes')
+    elif eyeType == 'angry-close':
+        _call(toon, 'angryEyes'); _call(toon, 'closeEyes')
     elif eyeType == 'close':
         _call(toon, 'closeEyes')
 
