@@ -910,6 +910,27 @@ class ChainsawCalculatorAI:
         allToonsTargetedBoss = (len(livingToons) > 0 and
                                 len(bossTargetingToons) == len(livingToons))
         exactlyOneHitBoss = len(attackingToons) == 1
+        markedWoodTracks = []
+        for toonId in self.battle.activeToons:
+            attack = self.battle.toonAttacks.get(toonId)
+            if not attack:
+                continue
+            track = attack[TOON_TRACK_COL]
+            if track not in (TRAP, LURE, THROW):
+                continue
+            targetsBoss = attack[TOON_TGT_COL] == boss.doId
+            try:
+                if attackAffectsGroup(track, attack[TOON_LVL_COL]):
+                    targetsBoss = True
+            except:
+                pass
+            if targetsBoss:
+                markedWoodTracks.append(track)
+        markedWoodCombo = (TRAP in markedWoodTracks and
+                           LURE in markedWoodTracks and
+                           THROW in markedWoodTracks)
+        if markedWoodCombo:
+            allToonsTargetedBoss = True
         totalLevel = 0
         for suit in supports:
             try:

@@ -890,7 +890,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         place = self.cr.playGame.getPlace()
         if place and hasattr(place, 'fsm'):
             place.fsm.request('teleportOut', [{
-                'loader': ZoneUtil.getLoaderName(ToontownGlobals.OutdoorZone),
+                'loader': 'townLoader',
                 'where': 'toonInterior',
                 'how': 'teleportIn',
                 'hoodId': ToontownGlobals.OutdoorZone,

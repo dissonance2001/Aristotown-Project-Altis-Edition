@@ -177,6 +177,7 @@ class DistributedBattleChainsawAI(
                     totalDamage += hps[toonIndex]
 
             allowedDamage = max(0, toon.getHp() - 1)
+            allowedDamage = 0
             excess = max(0, totalDamage - allowedDamage)
 
             for attackIndex in xrange(len(self.suitAttacks) - 1, deadwoodIndex, -1):
