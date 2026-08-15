@@ -11,6 +11,6 @@ class TSHood(ToonHood):
     TOWNLOADER_CLASS = TSTownLoader
     SAFEZONELOADER_CLASS = TSSafeZoneLoader
     STORAGE_DNA = 'phase_13/dna/storage_TS.pdna'
-    SKY_FILE = 'phase_3,5/models/props/BR_sky'
+    SKY_FILE = 'phase_3.5/models/props/BR_sky'
     SPOOKY_SKY_FILE = 'phase_3.5/models/props/BR_sky'
-    TITLE_COLOR = (1.0, 0.5, 0.5, 1.0)
+    TITLE_COLOR = (0.3, 0.6, 1.0, 1.0)

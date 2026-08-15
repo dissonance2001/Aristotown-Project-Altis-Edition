@@ -90,6 +90,17 @@ class MapPage(ShtikerPage.ShtikerPage):
             textMayChange=0,
             command=self.goHome)
         self.goHomeButton.hide()
+        self.toonseltownButton = DirectButton(
+            parent=self.map,
+            relief=None,
+            image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')),
+            image_scale=(1.0, 1.0, 0.9),
+            pos=(0.72, 0, 0.62),
+            text='Toonseltown',
+            text_scale=0.045,
+            text_pos=(0, -0.015),
+            textMayChange=0,
+            command=self.goToToonseltown)
         guiButton.removeNode()
         self.hoodLabel = DirectLabel(
             parent=self.map,
@@ -151,6 +162,7 @@ class MapPage(ShtikerPage.ShtikerPage):
         del self.clouds
         self.safeZoneButton.destroy()
         self.goHomeButton.destroy()
+        self.toonseltownButton.destroy()
         ShtikerPage.ShtikerPage.unload(self)
 
     def enter(self):
@@ -172,6 +184,10 @@ class MapPage(ShtikerPage.ShtikerPage):
             self.goHomeButton.hide()
         elif base.housingEnabled:
             self.goHomeButton.show()
+        if self.book.safeMode or ToontownGlobals.Toonseltown not in base.cr.hoodMgr.getAvailableZones():
+            self.toonseltownButton.hide()
+        else:
+            self.toonseltownButton.show()
         if base.cr.playGame.getPlaceId() == ToontownGlobals.MyEstate:
             if base.cr.playGame.hood.loader.atMyEstate():
                 self.hoodLabel['text'] = TTLocalizer.MapPageYouAreAtHome
@@ -230,6 +246,13 @@ class MapPage(ShtikerPage.ShtikerPage):
             self.notify.info('QA-REGRESSION: VISITESTATE: Visit estate')
         self.doneStatus = {'mode': 'gohome',
          'hood': base.localAvatar.lastHood}
+        messenger.send(self.doneEvent)
+
+    def goToToonseltown(self):
+        if ToontownGlobals.Toonseltown not in base.cr.hoodMgr.getAvailableZones():
+            return
+        self.doneStatus = {'mode': 'teleport',
+         'hood': ToontownGlobals.Toonseltown}
         messenger.send(self.doneEvent)
 
     def __buttonCallback(self, hood):

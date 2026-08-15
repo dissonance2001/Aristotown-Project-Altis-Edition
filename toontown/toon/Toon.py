@@ -4523,6 +4523,18 @@ class Toon(Avatar.Avatar, ToonHead):
                 else:
                     self.suit.setPlayRate(rate, anim)
             showWake, wakeWaterHeight = ZoneUtil.getWakeInfo()
+            if showWake:
+                try:
+                    place = base.cr.playGame.getPlace()
+                    if place and ZoneUtil.getCanonicalZoneId(place.getZoneId()) == ToontownGlobals.OutdoorZone:
+                        loaderObj = getattr(place, 'loader', None)
+                        if loaderObj and hasattr(loaderObj, 'getWakeWaterHeightAt'):
+                            wakeWaterHeight = loaderObj.getWakeWaterHeightAt(self.getX(render), self.getY(render))
+                            showWake = wakeWaterHeight is not None
+                        else:
+                            showWake = 0
+                except AttributeError:
+                    showWake = 0
             movementMagnitude = max(abs(forwardSpeed), abs(slideSpeed))
             if showWake and self.getZ(render) < wakeWaterHeight and movementMagnitude > ToontownGlobals.WalkCutOff:
                 currT = globalClock.getFrameTime()

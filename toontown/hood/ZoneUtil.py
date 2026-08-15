@@ -239,8 +239,8 @@ def getWakeInfo(hoodId = None, zoneId = None):
             wakeWaterHeight = TTWakeWaterHeight
             showWake = 1
         elif canonicalZoneId == OutdoorZone:
-            wakeWaterHeight = OZWakeWaterHeight
-            showWake = 0
+            wakeWaterHeight = -2.4
+            showWake = 1
         elif hoodId == MyEstate:
             wakeWaterHeight = EstateWakeWaterHeight
             showWake = 1

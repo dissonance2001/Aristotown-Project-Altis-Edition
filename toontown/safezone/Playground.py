@@ -524,7 +524,7 @@ class Playground(BattlePlace.BattlePlace):
             self.deathAckBox.cleanup()
             self.deathAckBox = None
 
-    def enterTeleportIn(self, requestStatus):
+    def _placeTeleportInPostZoneComplete(self, requestStatus):
         imgScale = 0.25
         if self.dialog:
             x, y, z, h, p, r = base.cr.hoodMgr.getPlaygroundCenterFromId(self.loader.hood.id)
@@ -592,6 +592,9 @@ class Playground(BattlePlace.BattlePlace):
             x, y, z, h, p, r = base.cr.hoodMgr.getPlaygroundCenterFromId(self.loader.hood.id)
         base.localAvatar.detachNode()
         base.localAvatar.setPosHpr(render, x, y, z, h, p, r)
+        BattlePlace.BattlePlace._placeTeleportInPostZoneComplete(self, requestStatus)
+
+    def enterTeleportIn(self, requestStatus):
         BattlePlace.BattlePlace.enterTeleportIn(self, requestStatus)
 
     def __cleanupDialog(self, value):

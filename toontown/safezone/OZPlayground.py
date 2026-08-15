@@ -11,11 +11,14 @@ from toontown.safezone import GolfKart
 from direct.task.Task import Task
 
 class OZPlayground(Playground.Playground):
-    waterLevel = 1
+    waterLevel = -3.1
+    toonWaterLevel = -6.3
 
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)
         self.parentFSM = parentFSM
+        self.cameraSubmerged = -1
+        self.toonSubmerged = -1
 
     def load(self):
         Playground.Playground.load(self)
@@ -31,6 +34,8 @@ class OZPlayground(Playground.Playground):
         taskMgr.remove('oz-check-toon-underwater')
         taskMgr.remove('oz-check-cam-underwater')
         self.loader.hood.setNoFog()
+        if hasattr(self.loader, 'underwaterSound'):
+            self.loader.underwaterSound.stop()
 
     def doRequestLeave(self, requestStatus):
         self.fsm.request('trialerFA', [requestStatus])
@@ -44,6 +49,72 @@ class OZPlayground(Playground.Playground):
         else:
             self.dfa.enter(5)
 
+    def enterStart(self):
+        self.activateSubmergeTask()
+
+    def exitDoorIn(self):
+        self.activateSubmergeTask()
+        Playground.Playground.exitDoorIn(self)
+
+    def exitTunnelIn(self):
+        self.activateSubmergeTask()
+        Playground.Playground.exitTunnelIn(self)
+
+    def activateSubmergeTask(self):
+        self.cameraSubmerged = 0
+        self.toonSubmerged = 0
+        taskMgr.remove('oz-check-toon-underwater')
+        taskMgr.remove('oz-check-cam-underwater')
+        taskMgr.add(self.__checkToonUnderwater, 'oz-check-toon-underwater')
+        taskMgr.add(self.__checkCameraUnderwater, 'oz-check-cam-underwater')
+
+    def __checkCameraUnderwater(self, task):
+        if camera.getZ(render) < self.waterLevel and not base.localAvatar.isFishing:
+            self.__submergeCamera()
+        else:
+            self.__emergeCamera()
+        return Task.cont
+
+    def __checkToonUnderwater(self, task):
+        if base.localAvatar.getZ() < self.toonWaterLevel and not base.localAvatar.isFishing:
+            self.__submergeToon()
+        else:
+            self.__emergeToon()
+        return Task.cont
+
+    def __submergeCamera(self):
+        if self.cameraSubmerged == 1:
+            return
+        self.loader.hood.setUnderwaterFog()
+        base.playSfx(self.loader.underwaterSound, looping=1, volume=0.8)
+        self.cameraSubmerged = 1
+        self.walkStateData.setSwimSoundAudible(1)
+
+    def __emergeCamera(self):
+        if self.cameraSubmerged == 0:
+            return
+        self.loader.hood.setNoFog()
+        self.loader.underwaterSound.stop()
+        self.cameraSubmerged = 0
+        self.walkStateData.setSwimSoundAudible(0)
+
+    def __submergeToon(self):
+        if self.toonSubmerged == 1:
+            return
+        base.playSfx(self.loader.submergeSound)
+        if base.config.GetBool('disable-flying-glitch') == 0:
+            self.fsm.request('walk')
+        self.walkStateData.fsm.request('swimming', [self.loader.swimSound])
+        pos = base.localAvatar.getPos(render)
+        base.localAvatar.d_playSplashEffect(pos[0], pos[1], self.waterLevel)
+        self.toonSubmerged = 1
+
+    def __emergeToon(self):
+        if self.toonSubmerged == 0:
+            return
+        self.walkStateData.fsm.request('walking')
+        self.toonSubmerged = 0
+
     def enterTeleportIn(self, requestStatus):
         reason = requestStatus.get('reason')
         if reason == RaceGlobals.Exit_Barrier:
@@ -56,8 +127,18 @@ class OZPlayground(Playground.Playground):
             requestStatus['nextState'] = 'popup'
             self.dialog = TTDialog.TTDialog(text=TTLocalizer.KartRace_RaceTimeoutNoRefund, command=self.__cleanupDialog, style=TTDialog.Acknowledge)
         self.toonSubmerged = -1
+        taskMgr.remove('oz-check-toon-underwater')
+        taskMgr.remove('oz-check-cam-underwater')
         Playground.Playground.enterTeleportIn(self, requestStatus)
 
     def teleportInDone(self):
-        self.toonSubmerged = -1
+        self.activateSubmergeTask()
         Playground.Playground.teleportInDone(self)
+
+    def __cleanupDialog(self, value):
+        if self.dialog:
+            self.dialog.cleanup()
+            self.dialog = None
+        if hasattr(self, 'fsm'):
+            self.fsm.request('walk', [1])
+        return

@@ -9,6 +9,7 @@ from toontown.quest import QuestChoiceGui
 from toontown.quest import QuestParser
 from toontown.quest import TrackChoiceGui
 from toontown.toonbase import TTLocalizer
+from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TeaserPanel
 from toontown.toon import ToonHead
 from toontown.toon import ToonHallCustomNPCs
@@ -299,7 +300,34 @@ class DistributedNPCToon(DistributedNPCToonBase):
             taskName
         )
 
+    def _getToonseltownData(self):
+        if ZoneUtil.getCanonicalHoodId(getattr(self, 'zoneId', 0)) != ToontownGlobals.Toonseltown:
+            return None
+        data = {
+            'Shinny Upatree': ((101.392, -41.948, 23.6), 60.439, 'Villager'),
+            'Candie LaBrum': ((170.5, 6.6, 29.208), 110, 'Spirit of the Past'),
+            'Perez Cent': ((70.302, -93.298, 20.716), 72.94, 'Spirit of the Present'),
+            'Corgi Diem': ((-216.75, 126.14, 51.147), 96.25, 'Spirit of the Future'),
+            'Pepper Minstix': ((-5.252, 301.172, 32.860), 131.719, 'Elf'),
+        }
+        return data.get(self.getName())
+
+    def _applyToonseltownNPCState(self):
+        data = self._getToonseltownData()
+        if not data:
+            return False
+        self.reparentTo(render)
+        self.setPos(*data[0])
+        self.setH(data[1])
+        self.npcType = data[2]
+        self.setToonTag(data[2])
+        self.setAnimState('neutral', 0.9, None, None)
+        return True
+
     def initToonState(self):
+        if self._applyToonseltownNPCState():
+            return
+
         customData = ToonHallCustomNPCs.getDataForNPC(self)
         if customData:
             self.__startToonHallCustomNPCPositioning()
@@ -464,6 +492,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
 
     def announceGenerate(self):
         DistributedNPCToonBase.announceGenerate(self)
+        self._applyToonseltownNPCState()
         if ToonHallCustomNPCs.getDataForNPC(self):
             self.__startToonHallCustomNPCPositioning()
         self._applyCustomNPCDisplayName()

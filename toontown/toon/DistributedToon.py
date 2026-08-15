@@ -4288,7 +4288,7 @@ def soprano():
 
 @magicWord(category=CATEGORY_CREATIVE)
 def toonseltown():
-    spellbook.getInvoker().magicTeleportInitiate(18000, 18000)
+    spellbook.getInvoker().magicTeleportInitiate(ToontownGlobals.Toonseltown, ToontownGlobals.Toonseltown)
 
 @magicWord(category=CATEGORY_CREATIVE)
 def skyclan():

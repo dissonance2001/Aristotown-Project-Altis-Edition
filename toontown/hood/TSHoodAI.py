@@ -1,6 +1,7 @@
 from toontown.classicchars import DistributedMinnieAI
 from toontown.hood import HoodAI
 from toontown.safezone import DistributedTrolleyAI
+from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DistributedTrickOrTreatTargetAI
 from toontown.ai import DistributedWinterCarolingTargetAI
@@ -18,6 +19,14 @@ class TSHoodAI(HoodAI.HoodAI):
 
     def startup(self):
         HoodAI.HoodAI.startup(self)
+
+        existingNpcIds = set([getattr(obj, 'npcId', None) for obj in self.air.doId2do.values()])
+        npcIdList = NPCToons.zone2NpcDict.get(self.zoneId, [])
+        for i in xrange(len(npcIdList)):
+            npcId = npcIdList[i]
+            if npcId not in existingNpcIds:
+                npcDesc = NPCToons.NPCToonDict.get(npcId)
+                NPCToons.createNPC(self.air, npcId, npcDesc, self.zoneId, posIndex=i)
 
         # if simbase.config.GetBool('want-minigames', True):
         #     self.createTrolley()

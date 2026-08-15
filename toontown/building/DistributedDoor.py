@@ -227,7 +227,11 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
             elif ZoneUtil.getHoodId(self.zoneId) == ToontownGlobals.TechbotHQ:
                 self.bHasFlat = not self.findDoorNode('door*flat', False)
             else:
-                self.bHasFlat = not self.findDoorNode('door*flat', True).isEmpty()
+                doorNode = self.findDoorNode('door*flat', True)
+                if doorNode:
+                    self.bHasFlat = not doorNode.isEmpty()
+                else:
+                    self.bHasFlat = False
         self.hideDoorParts()
         self.setTriggerName()
         if self.doorType == DoorTypes.EXT_STANDARD and self.block == 5 and ZoneUtil.getCanonicalZoneId(self.zoneId) == ToontownGlobals.OutdoorZone:
