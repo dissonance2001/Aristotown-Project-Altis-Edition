@@ -347,6 +347,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def setName(self, name):
         base.localAvatarName = name
+        try:
+            if hasattr(base, 'discord'):
+                base.discord.setToonName(name)
+        except:
+            pass
         DistributedToon.DistributedToon.setName(self, name)
         
     def setToonTag(self, tag):
@@ -2284,6 +2289,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if value == -1:
             self.notify.error('zoneId should not be set to -1, tell Redmond')
         self._zoneId = value
+        if hasattr(base, 'discord'):
+            try:
+                base.discord.setZone(value)
+            except Exception as exc:
+                self.notify.warning('Discord Rich Presence zone update failed: %s' % exc)
 
     zoneId = property(getZoneId, setZoneId)
 

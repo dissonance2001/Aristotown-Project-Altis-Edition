@@ -1411,11 +1411,23 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setMaxHp(self, hitPoints):
         DistributedPlayer.DistributedPlayer.setMaxHp(self, hitPoints)
+        if hasattr(self, 'doId') and self.doId == getattr(getattr(base, 'localAvatar', None), 'doId', -1):
+            try:
+                if hasattr(base, 'discord'):
+                    base.discord.setMaxHp(self.getMaxHp())
+            except:
+                pass
         if self.inventory:
             self.inventory.updateGUI()
 
     def setHp(self, hp):
         DistributedPlayer.DistributedPlayer.setHp(self, hp)
+        if hasattr(self, 'doId') and self.doId == getattr(getattr(base, 'localAvatar', None), 'doId', -1):
+            try:
+                if hasattr(base, 'discord'):
+                    base.discord.setHp(self.getHp())
+            except:
+                pass
 
         self.__considerUpdateMeter()
 
