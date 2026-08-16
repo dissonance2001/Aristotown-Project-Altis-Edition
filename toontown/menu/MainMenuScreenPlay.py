@@ -310,11 +310,6 @@ class MainMenuScreenPlay(MainMenuScreen):
         except:
             pass
 
-        if self.afk:
-            self.afk.finish()
-        if self.jumpIn:
-            self.jumpIn.finish()
-
         av = [x for x in self.avatarList if x.position == self.selectedToon][0]
         dnaString = av.dna
         if av.allowedName == 1:
@@ -381,6 +376,12 @@ class MainMenuScreenPlay(MainMenuScreen):
             self.afk.finish()
 
     def cleanUpToon(self):
+        if self.jumpIn:
+            self.jumpIn.finish()
+            self.jumpIn = None
+        if self.afk:
+            self.afk.finish()
+            self.afk = None
         if self.toon:
             self.toon.delete()
             self.toon = None

@@ -40,11 +40,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
 
 
     def _getClubVinciData(self):
-        if self.isEmpty():
-            return None
-        name = self.__dict__.get('name', '')
-        if not isinstance(name, basestring):
-            return None
+        name = getattr(self, 'name', '')
         if name == 'Doe Vinci':
             return {
                 'kind': 'creation',
@@ -305,8 +301,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
         )
 
     def _getToonseltownData(self):
-        if self.isEmpty():
-            return None
         if ZoneUtil.getCanonicalHoodId(getattr(self, 'zoneId', 0)) != ToontownGlobals.Toonseltown:
             return None
         data = {
@@ -319,8 +313,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
         return data.get(self.getName())
 
     def _applyToonseltownClothes(self):
-        if self.isEmpty():
-            return False
         clothes = {
             'Shinny Upatree': (506, 484, 'boy', 276, 'ss'),
             'Candie LaBrum': (515, 492, 'girl', 218, 'md'),
@@ -375,7 +367,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
             return False
 
     def _applyToonseltownTransparency(self):
-        if self.isEmpty() or self.getName() not in ('Candie LaBrum', 'Perez Cent', 'Corgi Diem'):
+        if self.getName() not in ('Candie LaBrum', 'Perez Cent', 'Corgi Diem'):
             return False
         try:
             track = self.doToonColorScale(VBase4(1, 1, 1, 0.6), 0, keepDefault=1)
@@ -543,7 +535,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.clubGui = manager.openShopGui(self)
 
     def applySakamoreoNametagColor(self):
-        if self.isEmpty() or self.getName() != 'Sakamoreo':
+        if self.getName() != 'Sakamoreo':
             return
 
         currentColor = self.nametag.getNametagColor()
@@ -561,8 +553,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.nametag.updateAll()
 
     def _applyCustomNPCDisplayName(self):
-        if self.isEmpty():
-            return
         if ToonHallCustomNPCs.isCustomNPC(self) or self._isClubVinci():
             self.npcType = ''
             self.setDisplayName(self.getName())
@@ -903,8 +893,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
             return None
 		
     def checkCompletedQuests(self):
-        if self.isEmpty():
-            return False
         av = base.localAvatar
         for quest in av.quests:
             questId, fromNpcId, toNpcId, rewardId, toonProgress = quest
@@ -920,8 +908,6 @@ class DistributedNPCToon(DistributedNPCToonBase):
         return False
 		
     def checkIncompletedQuests(self):
-        if self.isEmpty():
-            return False
         av = base.localAvatar
         for quest in av.quests:
             questId, fromNpcId, toNpcId, rewardId, toonProgress = quest
@@ -944,3 +930,4 @@ class DistributedNPCToon(DistributedNPCToonBase):
         self.checkQuestStatus()
         taskMgr.doMethodLater(1, self.__updateQuest, 'update-quests')
         return Task.done
+        
