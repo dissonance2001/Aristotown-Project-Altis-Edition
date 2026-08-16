@@ -628,7 +628,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             suit = self.suits[index]
             index += 1
             if suit != None:
-                if suit.doId in suitsLured and trapid != NO_TRAP:
+                if str(suit.doId) in suitsLured and trapid != NO_TRAP:
                     self.notify.debug('clearing stale trap from lured suit=%d' % suit.doId)
                     self.removeTrap(suit)
                     trapid = NO_TRAP
