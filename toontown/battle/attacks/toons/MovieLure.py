@@ -23,9 +23,17 @@ def safeWrtReparentTo(nodePath, parent):
         nodePath.wrtReparentTo(parent)
 
 def clearConsumedTrapState(suit):
+    trapProp = getattr(suit, 'battleTrapProp', None)
+    if trapProp:
+        try:
+            if not trapProp.isEmpty():
+                MovieUtil.removeProp(trapProp)
+        except:
+            pass
     suit.battleTrapProp = None
     suit.battleTrap = NO_TRAP
     suit.battleTrapIsFresh = 0
+    suit.clearSuitStatusEffect('trapped')
 
 
 def doLures(lures):
