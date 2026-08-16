@@ -88,13 +88,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.sleepCallback = None
         self.accept('wakeup', self.wakeUp)
         self.jumpLandAnimFixTask = None
-        
-        # FOV System
         self.fov = OTPGlobals.DefaultCameraFov
-        self.sprintFov = 65
-        self.camLerpInterval = None
-        self.lastTargetFov = self.fov
-        
         self.accept('avatarMoving', self.clearPageUpDown)
         self.showNametag2d()
         self.setPickable(0)
@@ -1041,24 +1035,15 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             self.popCameraToDest()
             
     def lerpCameraFov(self, fov, time):
-        if self.camLerpInterval:
-            self.camLerpInterval.finish()
-            self.camLerpInterval = None
+        taskMgr.remove('cam-fov-lerp-play')
+        oldFov = base.camLens.getHfov()
+        if abs(fov - oldFov) > 0.1:
 
-        currentFov = base.camLens.getFov()[0]
+            def setCamFov(fov):
+                base.camLens.setMinFov(fov/(4./3.))
 
-        def updateFov(f):
-            base.camLens.setFov(f)
-
-        self.camLerpInterval = LerpFunctionInterval(
-            updateFov, 
-            fromData=currentFov, 
-            toData=fov, 
-            duration=time, 
-            blendType='easeInOut',
-            name='cam-fov-lerp'
-        )
-        self.camLerpInterval.start()
+            self.camLerpInterval = LerpFunctionInterval(setCamFov, fromData=oldFov, toData=fov, duration=time, name='cam-fov-lerp')
+            self.camLerpInterval.start()
 
     def setCameraFov(self, fov):
         self.fov = fov
@@ -1260,16 +1245,6 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
 
     def trackAnimToSpeed(self, task):
         speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
-
-        # FOV Trigger: Only zoom out if speed exceeds normal run speed (handles toggle + shift)
-        # and ensure the transition only triggers when a change occurs.
-        isSprinting = speed > (OTPGlobals.ToonForwardSpeed + 1.0)
-        targetFov = self.sprintFov if isSprinting else self.fov
-
-        if targetFov != self.lastTargetFov:
-            self.lerpCameraFov(targetFov, 0.3)
-            self.lastTargetFov = targetFov
-
         if speed != 0.0 or rotSpeed != 0.0 or inputState.isSet('jump'):
             if not self.movingFlag:
                 self.movingFlag = 1
