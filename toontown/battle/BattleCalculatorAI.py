@@ -1361,11 +1361,6 @@ class BattleCalculatorAI:
     def __removeSuitTrap(self, suitId):
         if suitId in self.traps:
             del self.traps[suitId]
-        for suit in self.battle.activeSuits:
-            if suit.doId == suitId:
-                suit.battleTrap = NO_TRAP
-                suit.battleTrapIsFresh = 0
-                break
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:
@@ -4591,9 +4586,6 @@ class BattleCalculatorAI:
                                     self.trainTrapTriggered = True
                             if not self.suitHasCondition(tgtId, 'lureImmune') and not self.suitHasCondition(tgtId, 'immune') and not (self.suitHasCondition(tgtId, 'enraged') and self.suitHasCondition(tgtId, 'desperation')):
                                 self.__removeSuitTrap(tgtId)
-                                self.__removeLured(tgtId)
-                                self.setSuitCondition(tgtId, 'lured', 0, 0, 'setBoth')
-                                self.setSuitCondition(tgtId, 'unlureSuit', 0, 0, 'setBoth')
                             lureAtk[TOON_KBBONUS_COL][tgtPos] = KBBONUS_TGT_LURED
                             lureAtk[TOON_HP_COL][tgtPos] = lureInfo[3]
                         elif self.__suitIsLured(tgtId) and atkTrack == DROP:
@@ -4696,9 +4688,6 @@ class BattleCalculatorAI:
                                 self.trainTrapTriggered = True
                         if not self.suitHasCondition(tgtId, 'lureImmune') and not self.suitHasCondition(tgtId, 'immune') and not (self.suitHasCondition(tgtId, 'enraged') and self.suitHasCondition(tgtId, 'desperation')):
                             self.__removeSuitTrap(tgtId)
-                            self.__removeLured(tgtId)
-                            self.setSuitCondition(tgtId, 'lured', 0, 0, 'setBoth')
-                            self.setSuitCondition(tgtId, 'unlureSuit', 0, 0, 'setBoth')
                         lureAtk[TOON_KBBONUS_COL][tgtPos] = KBBONUS_TGT_LURED
                         lureAtk[TOON_HP_COL][tgtPos] = lureInfo[3]
                     elif self.__suitIsLured(tgtId) and atkTrack == DROP:
@@ -4770,6 +4759,7 @@ class BattleCalculatorAI:
         if targetId != -1:
             if self.__suitIsLured(targetId):
                 self.__removeLured(targetId)
+                self.setSuitCondition(targetId, 'unluredThisTurn', 1, 1, 'setBoth')
             return
 
         # Squirt splash does NOT unlure adjacent Cogs.
@@ -4791,6 +4781,7 @@ class BattleCalculatorAI:
                 (not kbBonusReq or self.__bonusExists(t, hp=0))
             ):
                 self.__removeLured(t.getDoId())
+                self.setSuitCondition(t.getDoId(), 'unluredThisTurn', 1, 1, 'setBoth')
 
                 if self.notify.getDebug():
                     self.notify.debug(
@@ -4809,6 +4800,7 @@ class BattleCalculatorAI:
         for t in self.delayedUnlures:
             if self.__suitIsLured(t):
                 self.__removeLured(t)
+                self.setSuitCondition(t, 'unluredThisTurn', 1, 1, 'setBoth')
                 if self.notify.getDebug():
                     self.notify.debug('Suit %d stepping back from lured spot' % t)
             else:
@@ -5555,7 +5547,7 @@ class BattleCalculatorAI:
 
     def __suitCanAttack(self, suitId):
         theSuit = self.battle.findSuit(suitId)
-        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'cantAttack'):
+        if self.__combatantDead(suitId, toon=0) or self.__suitIsLured(suitId) or self.suitHasCondition(suitId, 'cantAttack') or self.suitHasCondition(suitId, 'unluredThisTurn'):
             return 0
         elif theSuit.dna.name == 'hroller' and theSuit.currHP == 1 and not self.suitHasCondition(suitId, 'phase3'):
             return 0
@@ -6553,6 +6545,7 @@ class BattleCalculatorAI:
 
         for currLuredSuit in noLongerLured:
             self.__removeLured(currLuredSuit)
+            self.setSuitCondition(currLuredSuit, 'unluredThisTurn', 1, 1, 'setBoth')
 
     def __updateWetTimeouts(self):
         noLongerWet = []

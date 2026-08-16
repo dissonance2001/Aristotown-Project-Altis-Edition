@@ -157,9 +157,18 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             else:
                 newCanonical.append(suit)
         if len(newCanonical) <= 1:
-            self.suits = newCanonical[:]
+            reorderedSuits = newCanonical[:]
         else:
-            self.suits = [newCanonical[0], newCanonical[-1]] + newCanonical[1:-1]
+            reorderedSuits = [newCanonical[0], newCanonical[-1]] + newCanonical[1:-1]
+
+        oldSuitTraps = self.suitTraps
+        if len(oldSuitTraps) == len(self.suits):
+            trapBySuit = {}
+            for index, suit in enumerate(self.suits):
+                trapBySuit[suit] = oldSuitTraps[index]
+            self.suitTraps = ''.join(trapBySuit.get(suit, '9') for suit in reorderedSuits)
+
+        self.suits = reorderedSuits
         self.activeSuits = orderedSuits[:]
         self.needAdjustTownBattle = 1
         return True
@@ -628,17 +637,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             suit = self.suits[index]
             index += 1
             if suit != None:
-                if str(suit.doId) in suitsLured and trapid != NO_TRAP:
-                    self.notify.debug('clearing stale trap from lured suit=%d' % suit.doId)
-                    self.removeTrap(suit)
-                    trapid = NO_TRAP
-                    suitTraps[index - 1] = '9'
                 if (trapid == NO_TRAP or trapid != suit.battleTrap) and suit.battleTrapProp != None:
                     self.notify.debug('569 calling self.removeTrap, suit=%d' % suit.doId)
                     self.removeTrap(suit)
-                if trapid == NO_TRAP and suit.battleTrapProp == None:
-                    suit.battleTrap = NO_TRAP
-                    suit.battleTrapIsFresh = 0
                 if trapid != NO_TRAP and suit.battleTrapProp == None:
                     if self.fsm.getCurrentState().getName() != 'PlayMovie':
                         self.loadTrap(suit, trapid)
