@@ -330,6 +330,7 @@ class PacesetterCalculatorAI:
                                                                     'freq': 0,
                                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
+                            self.setSuitCondition(suitId, 'battleSpeed', 6, -1, 'setBoth')
                             self.battle.suitAttacks.append(attack)
                     if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked') and not self.battle.activeSuits[i].currHP >= 12750:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,

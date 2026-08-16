@@ -1361,6 +1361,11 @@ class BattleCalculatorAI:
     def __removeSuitTrap(self, suitId):
         if suitId in self.traps:
             del self.traps[suitId]
+        for suit in self.battle.activeSuits:
+            if suit.doId == suitId:
+                suit.battleTrap = NO_TRAP
+                suit.battleTrapIsFresh = 0
+                break
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:
@@ -4586,6 +4591,9 @@ class BattleCalculatorAI:
                                     self.trainTrapTriggered = True
                             if not self.suitHasCondition(tgtId, 'lureImmune') and not self.suitHasCondition(tgtId, 'immune') and not (self.suitHasCondition(tgtId, 'enraged') and self.suitHasCondition(tgtId, 'desperation')):
                                 self.__removeSuitTrap(tgtId)
+                                self.__removeLured(tgtId)
+                                self.setSuitCondition(tgtId, 'lured', 0, 0, 'setBoth')
+                                self.setSuitCondition(tgtId, 'unlureSuit', 0, 0, 'setBoth')
                             lureAtk[TOON_KBBONUS_COL][tgtPos] = KBBONUS_TGT_LURED
                             lureAtk[TOON_HP_COL][tgtPos] = lureInfo[3]
                         elif self.__suitIsLured(tgtId) and atkTrack == DROP:
@@ -4688,6 +4696,9 @@ class BattleCalculatorAI:
                                 self.trainTrapTriggered = True
                         if not self.suitHasCondition(tgtId, 'lureImmune') and not self.suitHasCondition(tgtId, 'immune') and not (self.suitHasCondition(tgtId, 'enraged') and self.suitHasCondition(tgtId, 'desperation')):
                             self.__removeSuitTrap(tgtId)
+                            self.__removeLured(tgtId)
+                            self.setSuitCondition(tgtId, 'lured', 0, 0, 'setBoth')
+                            self.setSuitCondition(tgtId, 'unlureSuit', 0, 0, 'setBoth')
                         lureAtk[TOON_KBBONUS_COL][tgtPos] = KBBONUS_TGT_LURED
                         lureAtk[TOON_HP_COL][tgtPos] = lureInfo[3]
                     elif self.__suitIsLured(tgtId) and atkTrack == DROP:
