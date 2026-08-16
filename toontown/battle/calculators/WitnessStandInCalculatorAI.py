@@ -52,7 +52,8 @@ class WitnessStandInCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if x % 3 == 0 and len(self.battle.activeSuits) < 6 and self.__suitCanAttack(suitId):
@@ -62,7 +63,8 @@ class WitnessStandInCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'redd':  # redd heir wing

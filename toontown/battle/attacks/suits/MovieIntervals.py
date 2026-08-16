@@ -163,30 +163,83 @@ def getSuitTrack(attack, delay = 1e-06, splicedAnims = None, playRate = 1.0, dis
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
-    target = attack['target']
-    toon = target[0]['toon']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    track = Sequence(Wait(delay))
-    origH = suit.getH(battle)
-
-    # Calculate heading to toon
     targets = attack['target']
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    # for t in targets:
-    #     toon = t['toon']
-    #     track.append(Func(toon.headsUp, origPos))
-    origPos2 = suit.getPos(battle)
-    suit.setPos(battle, origPos)
-    targetPos = toon.getPos(battle)
-    suit.headsUp(battle, targetPos)
-    targetH = suit.getH(battle)
 
-    # Restore original heading
-    suit.setH(battle, origH)
-    suit.setPos(battle, origPos2)
+    targetActor = None
 
-    # Normalize difference to shortest path
-    delta = (targetH - origH + 180) % 360 - 180
+    for t in targets:
+        if 'toon' in t:
+            targetActor = t['toon']
+            break
+
+        if 'suit' in t:
+            targetActor = t['suit']
+            break
+
+    taunt = getAttackTaunt(
+        attack['name'],
+        attack['suitName'],
+        tauntIndex
+    )
+
+    track = Sequence(
+        Wait(delay)
+    )
+
+    origH = suit.getH(
+        battle
+    )
+
+    origPos, origHpr = battle.getActorPosHpr(
+        suit
+    )
+
+    origPos2 = suit.getPos(
+        battle
+    )
+
+    suit.setPos(
+        battle,
+        origPos
+    )
+
+    if targetActor is not None:
+        targetPos = targetActor.getPos(
+            battle
+        )
+
+        # If self-targeting, don't try to face yourself.
+        if targetActor != suit:
+            suit.headsUp(
+                battle,
+                targetPos
+            )
+
+            targetH = suit.getH(
+                battle
+            )
+        else:
+            targetH = origH
+
+    else:
+        targetH = origH
+
+    suit.setH(
+        battle,
+        origH
+    )
+
+    suit.setPos(
+        battle,
+        origPos2
+    )
+
+    delta = (
+        targetH -
+        origH +
+        180
+    ) % 360 - 180
+
 
     if attack['suitName'] == 'hho' and attack['name'] == 'CigarSmoke' and not attack['suit'].isSkeleton:  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
@@ -272,11 +325,31 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
 
     suit.setPos(battle, origPos)
 
-    targetPos = getToonGroupCenter(attack, battle)
+    targetPos = getToonGroupCenter(
+        attack,
+        battle
+    )
+
     if targetPos is None:
-        target = attack['target']
-        toon = target[0]['toon']
-        targetPos = toon.getPos(battle)
+        targetActor = None
+
+        for t in targets:
+            if 'toon' in t:
+                targetActor = t['toon']
+                break
+
+            if 'suit' in t:
+                targetActor = t['suit']
+                break
+
+        if targetActor is not None:
+            targetPos = targetActor.getPos(
+                battle
+            )
+        else:
+            targetPos = suit.getPos(
+                battle
+            )
 
     suit.headsUp(battle, targetPos)
     targetH = suit.getH(battle)
@@ -287,8 +360,17 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
     suitActualPos = suit.getPos(battle)
 
     for t in targets:
+        if 'toon' not in t:
+            continue
+
         toon = t['toon']
-        track.append(Func(toon.headsUp, battle, suitActualPos))
+        track.append(
+            Func(
+                toon.headsUp,
+                battle,
+                suitActualPos
+            )
+        )
 
     delta = (targetH - origH + 180) % 360 - 180
     # for s in battle.activeSuits:
@@ -476,9 +558,9 @@ def getSuitAnimTrackAttack(attack, delay = 0, splicedAnims = None, playRate = 1.
                 if not disrespectBlend == True:
                     track.append(
                 suit.makeBlendInterval(shuffleAnim))
-                else:
-                    track.append(
-                    Func(suit.setNeutralAnimationDrop))
+            else:
+                track.append(
+                Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 
@@ -532,7 +614,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
     elif attack['name'] == 'LitigatorBayouBash':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
-    elif attack['name'] == 'CaseManagerInsurancePlan2':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
+    elif attack['name'] == 'CaseManagerInsurancePlanScapegoat':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
         track.append(Func(suit.setChatAbsoluteSpecial, taunt,
                           CFSpeech | CFTimeout))
     elif attack['name'] == 'CaseManagerInsurancePlan':  # Special track for when Head Honchos use cigar smoke so the animations are no longer playing at the same time.
@@ -702,9 +784,9 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
                 if not disrespectBlend == True:
                     track.append(
                 suit.makeBlendInterval('neutral'))
-                else:
-                    track.append(
-                    Func(suit.setNeutralAnimationDrop))
+            else:
+                track.append(
+                Func(suit.setNeutralAnimationDrop))
     track.append(unsueTrack)
     return track
 

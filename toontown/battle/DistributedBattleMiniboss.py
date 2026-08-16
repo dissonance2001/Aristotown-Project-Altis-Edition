@@ -757,9 +757,9 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 if self.hasLocalToon():
                     camera.reparentTo(self)
                     if random.choice([0, 1]):
-                        camera.setPosHpr(20, -4, 7, 60, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
                     else:
-                        camera.setPosHpr(-20, -4, 7, -60, 0, 0)
+                        camera.setPosHpr(0, -15, 7, 0, 0, 0)
         done = Func(callback)
         track = Sequence(suitTracks, done, name=name)
         # Match Clash: reserve joining, inter-Cog delay, landing animation,

@@ -104,8 +104,13 @@ class SuitAttackTracksCalculatorAI:
                 'hp': 0,
                 'acc': 100,
                 'freq': 0,
-                'group': SuitBattleGlobals.ATK_TGT_SINGLE
-            })
+                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': True,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'
+                        })
             if attack[SUIT_ATK_COL]:
                 self.battle.suitAttacks.append(attack)
             queuedAbsorb = True
@@ -118,8 +123,13 @@ class SuitAttackTracksCalculatorAI:
                 'hp': 0,
                 'acc': 100,
                 'freq': 0,
-                'group': SuitBattleGlobals.ATK_TGT_SINGLE
-            })
+                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': True,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'
+                        })
             if attack[SUIT_ATK_COL]:
                 self.battle.suitAttacks.append(attack)
             queuedLevel = True
@@ -368,7 +378,12 @@ class SuitAttackTracksCalculatorAI:
                                         'hp': 0,
                                         'acc': 100,
                                         'freq': 0,
-                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': True,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
@@ -393,7 +408,8 @@ class SuitAttackTracksCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.knockbackDamage *= 0
@@ -405,7 +421,8 @@ class SuitAttackTracksCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.comboDamage *= 0
@@ -459,7 +476,12 @@ class SuitAttackTracksCalculatorAI:
                                         'hp': 0,
                                         'acc': 100,
                                         'freq': 0,
-                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': True,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
@@ -484,7 +506,8 @@ class SuitAttackTracksCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.knockbackDamage *= 0
@@ -496,7 +519,8 @@ class SuitAttackTracksCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.comboDamage *= 0
@@ -531,7 +555,8 @@ class SuitAttackTracksCalculatorAI:
                      'hp': 0,
                      'acc': 85,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'videog':
@@ -754,7 +779,10 @@ class SuitAttackTracksCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                                'requiredToonConditions': (
+                                                                            'usedSound',
+                                                                        )})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -771,7 +799,12 @@ class SuitAttackTracksCalculatorAI:
                                         'hp': 0,
                                         'acc': 100,
                                         'freq': 0,
-                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': True,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
@@ -784,7 +817,8 @@ class SuitAttackTracksCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.comboDamage *= 0

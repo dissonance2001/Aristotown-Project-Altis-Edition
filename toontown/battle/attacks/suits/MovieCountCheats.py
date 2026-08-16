@@ -349,25 +349,56 @@ def doWringOut(attack):
 def doProToonShake(attack):
     suit = attack['suit']
     battle = attack['battle']
-    dmg = attack['target'][0]['hp']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    damage = int(targetData.get('hp', 0))
+    heal = int(targetData.get('heal', 0))
+
     notifyTracks = Parallel()
     toonTrack = Parallel()
+
     suitTrack = Sequence(getSuitAnimTrack(attack))
+
     soundTrack2 = getSoundTrack('SA_protoon_shake.ogg', delay=0.5, node=suit)
-    suitAnimTrack = Sequence(Parallel(ActorInterval(suit, 'quick-jump', duration=1.3)),
-                             Parallel(Sequence(Wait(0.5), suit.checkProToonShakeErfit(dmg, battle)), ActorInterval(suit, 'slip-forward')), Func(suit.setNeutralAnimationDrop))
-    toonTrack = Parallel()
+
+    resultTrack = Sequence(Wait(0.5))
+
+    # =========================================================
+    # ERFIT PAYS HP TO ANOTHER COG
+    # =========================================================
+    if damage > 0:
+        resultTrack.append(Parallel(Func(suit.showHpTextNew, -damage), Func(suit.setHealthForMe, -damage), Func(suit.updateHealthBar, 0)))
+
+    # =========================================================
+    # TARGET COG RECEIVES HEALING
+    # =========================================================
+    if heal > 0:
+        resultTrack.append(Parallel(Func(targetSuit.showHpTextNew, heal), Func(targetSuit.setHealthForMe, heal), Func(targetSuit.updateHealthBar, 0)))
+
+    suitAnimTrack = Sequence(
+        Parallel(ActorInterval(suit, 'quick-jump', duration=1.3)),
+        Parallel(resultTrack, ActorInterval(suit, 'slip-forward')),
+        Func(suit.setNeutralAnimationDrop)
+    )
+
+    # =========================================================
+    # TOON REACTIONS
+    # =========================================================
     for toon in battle.activeToons:
-        # Toon Reaction
-        reactionTrack = Sequence()
-        reactionTrack.append(
-            Func(toon.headsUp, battle, suit.getPos(battle))
-        )
-        reactionTrack.append(Wait(1.8))
-        reactionTrack.append(ActorInterval(toon, "slip-forward", playRate=0.7))
-        reactionTrack.append(Func(toon.loop, "neutral"))
+        reactionTrack = Sequence(Func(toon.headsUp, battle, suit.getPos(battle)), Wait(1.8), ActorInterval(toon, 'slip-forward', playRate=0.7), Func(toon.loop, 'neutral'))
         toonTrack.append(reactionTrack)
+
     notifyTracks.append(Parallel(soundTrack2, suitTrack, suitAnimTrack))
+
     return Parallel(notifyTracks, toonTrack)
 
 def doProToonShakeDamage(attack):
@@ -517,43 +548,112 @@ def doPersonalTrainer(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
-    dmg = target[0]['hp']
+
+    if not target:
+        return Sequence()
+
+    targetData = target[0]
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
     headTrack = Sequence()
+
     for headPart in suit.animatedHeadParts:
         headTrack.append(ActorInterval(headPart, 'summon-cog'))
         headTrack.append(Func(suit.setNeutralAnimationHead))
-    selfDamageTracks = Parallel(getSuitAnimTrack(attack), Func(suit.personalTrainer))
+
+    selfDamageTracks = Parallel(getSuitAnimTrack(attack))
+
+    damageTrack = Sequence(
+        Parallel(
+            Func(suit.showHpTextNew, -dmg),
+            Func(suit.setHealthForMe, -dmg),
+            Func(suit.updateHealthBar, 0)
+        )
+    )
+
+    damageTrack.append(Func(suit.setNeutralAnimationDrop))
+
     soundTrack = getSoundTrack('SA_personal_trainer.ogg', node=suit)
-    return Parallel(headTrack, soundTrack, selfDamageTracks)
+
+    return Parallel(headTrack, soundTrack, selfDamageTracks, damageTrack)
 
 def doGainsFromTheScrap(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = target[0]['hp']
-    targetSuit = battle.activeSuits[dmg]
-    selfDamageTracks = Parallel()
-    cagePropTracks = Parallel()
-    smokeTracks = Parallel()
-    puddleTracks = Parallel()
-    moveTracks = Parallel()
-    managerHealTracks = Parallel()
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    sacrificeData = None
+
+    # =========================================================
+    # FIND THE SACRIFICE TARGET
+    # =========================================================
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        if targetData.get('died', False) and targetData.get('hp', 0) > 0:
+            sacrificeData = targetData
+            break
+
+    if sacrificeData is None:
+        return Sequence()
+
+    targetSuit = sacrificeData['suit']
+    dmg = int(sacrificeData.get('hp', 0))
+
+    healTracks = Parallel()
     headTrack = Sequence()
 
+    # =========================================================
+    # HEAD ANIMATION
+    # =========================================================
     for headPart in suit.animatedHeadParts:
         headTrack.append(ActorInterval(headPart, 'sacrifice-cog'))
         headTrack.append(Func(suit.setNeutralAnimationHead))
-    animTracks = Sequence(Wait(3.55))
-    animTracks.append(Parallel(MovieUtil.midairSuitExplodeTrack(targetSuit, battle)))
+
+    # =========================================================
+    # SACRIFICED COG
+    # =========================================================
+    targetDeathTrack = Sequence(
+        Wait(3.55),
+        Parallel(
+            Func(targetSuit.showHpTextNew, -dmg),
+            Func(targetSuit.setHealthForMe, -dmg),
+            Func(targetSuit.updateHealthBar, 0)
+        ),
+        MovieUtil.midairSuitExplodeTrack(targetSuit, battle),
+        Func(targetSuit.makeDead)
+    )
+
+    # =========================================================
+    # SMOKE
+    # =========================================================
     smoke = loader.loadModel('phase_4/models/props/test_clouds')
     smoke.setColor(0.8, 0.7, 0.5, 1)
     smoke.setBillboardPointEye()
-    smokeTrack = Sequence(Wait(3.55), Func(smoke.reparentTo, battle),
-                            Parallel(LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
-                                    LerpColorScaleInterval(smoke, 1, Vec4(1, 1, 1, 0))),
-                            Func(smoke.reparentTo, hidden), Func(smoke.clearColorScale), Func(smoke.removeNode))
+
+    smokeTrack = Sequence(
+        Wait(3.55),
+        Func(smoke.reparentTo, battle),
+        Parallel(
+            LerpScaleInterval(smoke, 0.2, Point3(4, 1, 4)),
+            LerpColorScaleInterval(smoke, 1.0, Vec4(1, 1, 1, 0))
+        ),
+        Func(smoke.reparentTo, hidden),
+        Func(smoke.clearColorScale),
+        Func(smoke.removeNode)
+    )
+
+    # =========================================================
+    # CAGE
+    # =========================================================
     cage = loader.loadModel('phase_9/models/cogHQ/square_stomper')
     cagePosition = LerpHprInterval(cage, 0, Point3(0, -90, 0))
+
     shaft = cage.find('**/shaft')
     shaft.setScale(0.75, 120.0, 0.75)
     shaft.setPos(0, 0, 0)
@@ -563,69 +663,193 @@ def doGainsFromTheScrap(attack):
     cagePropTrack = Sequence(
         Wait(3.0),
         getPropAppearTrack(cage, targetSuit, cagePos, 0, scaleUpPoint=Point3(1.4), scaleUpTime=0),
-        Parallel(cagePosition),
-        Parallel(
-            cage.posInterval(0.55, Point3(0, 0, 0.01), blendType='easeIn')
-        ),
-        Parallel(
-        Sequence(Wait(1.0), cage.posInterval(2, Point3(0, 0, 40), blendType='easeIn'))),
+        cagePosition,
+        cage.posInterval(0.55, Point3(0, 0, 0.01), blendType='easeIn'),
+        Sequence(Wait(1.0), cage.posInterval(2.0, Point3(0, 0, 40), blendType='easeIn')),
         Func(cage.removeNode)
     )
-    cagePropTracks.append(cagePropTrack)
-    smokeTracks.append(smokeTrack)
-    for s in battle.activeSuits:
-        if s and s != targetSuit:
-            managerHealTracks.append(Sequence(Wait(3.55), Func(targetSuit.erclaimSacrifice, s, battle)))
-    suitTrack = Parallel(getSuitAnimTrack(attack),  Sequence(Wait(5.55), Func(suit.showHpTextNew, 0, text="RIPPED!", colorCode=1)), 
-                                       Func(suit.setSuitStatusEffect, 'ripped', modifier=5, mode='refreshModifier'))
+
+    # =========================================================
+    # HEALING / ERFIT SELF DAMAGE
+    # =========================================================
+    for resultData in targets:
+        if 'suit' not in resultData:
+            continue
+
+        resultSuit = resultData['suit']
+
+        if resultSuit == targetSuit:
+            continue
+
+        heal = int(resultData.get('heal', 0))
+        damage = int(resultData.get('hp', 0))
+        died = resultData.get('died', False)
+
+        if heal <= 0 and damage <= 0:
+            continue
+
+        resultTrack = Sequence(Wait(3.55))
+
+        # -----------------------------------------------------
+        # HEAL
+        # -----------------------------------------------------
+        if heal > 0:
+            resultTrack.append(
+                Parallel(
+                    Func(resultSuit.showHpTextNew, heal),
+                    Func(resultSuit.setHealthForMe, heal),
+                    Func(resultSuit.updateHealthBar, 0)
+                )
+            )
+
+        # -----------------------------------------------------
+        # ERFIT SELF DAMAGE
+        # -----------------------------------------------------
+        if damage > 0:
+            resultTrack.append(
+                Parallel(
+                    Func(resultSuit.showHpTextNew, -damage),
+                    Func(resultSuit.setHealthForMe, -damage),
+                    Func(resultSuit.updateHealthBar, 0)
+                )
+            )
+
+
+        healTracks.append(resultTrack)
+
+    # =========================================================
+    # MAIN ERFIT TRACK
+    # =========================================================
+    suitTrack = Parallel(
+        getSuitAnimTrack(attack),
+        Sequence(
+            Wait(5.55),
+            Func(suit.showHpTextNew, 0, text='RIPPED!', colorCode=1)
+        ),
+        Func(suit.setSuitStatusEffect, 'ripped', modifier=5, mode='refreshModifier')
+    )
+
     soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.55, node=suit)
-    return Parallel(suitTrack, soundTrack2, headTrack, smokeTracks, moveTracks, animTracks, cagePropTracks, soundTrack, managerHealTracks)
+
+    return Parallel(suitTrack, soundTrack2, headTrack, smokeTrack, targetDeathTrack, cagePropTrack, soundTrack, healTracks)
 
 def doSacrifice(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = target[0]['hp']
-    targetSuit = battle.activeSuits[dmg]
-    hollywoods = []
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    heal = int(targetData.get('heal', 0))
+    died = targetData.get('died', False)
+
     puddleTracks = Parallel()
     moveTracks = Parallel()
-    managerHealTracks = Parallel()
     animTracks = Parallel()
+
+    # =========================================================
+    # SACRIFICE TARGET
+    # =========================================================
     puddle = globalPropPool.getProp('quicksand')
     puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
     puddle.setHpr(Point3(120, 0, 0))
     puddle.setScale(0.01)
-    puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
-                            Func(puddle.reparentTo, targetSuit), Func(puddle.wrtReparentTo, render),
-                            LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
-                                                startScale=MovieUtil.PNT3_NEARZERO), Wait(3.0),
-                            LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                            Func(puddle.removeNode))
-    sinkPos1 = targetSuit.getPos(battle)
-    sinkPos2 = targetSuit.getPos(battle)
-    dropPos = targetSuit.getPos(battle)
-    landPos = targetSuit.getPos(battle)
-    sinkPos1.setZ(sinkPos1.getZ() - 3.1)
-    sinkPos2.setZ(sinkPos2.getZ() - 9.1)
-    dropPos.setZ(dropPos.getZ())
-    landPos.setY(dropPos.getY())
-    speechTrack = Sequence(Wait(1.8), Func(targetSuit.setChatAbsolute, random.choice(("To my realm I retuuuurnnnnn......!", "But I am not finished!", "No! Noooooo!", "Anything you wish, sire!")), CFSpeech | CFTimeout))
-    moveTrack = Sequence(Wait(1.8), LerpPosInterval(targetSuit, 0.9, Point3(0, 0, -3.1), other=puddle),
-                            LerpPosInterval(targetSuit, 0.4, Point3(0, 0, -9.1), other=puddle), Func(targetSuit.hide))
-    animTrack = Sequence(Wait(0.9), ActorInterval(targetSuit, 'flail-qs', endTime=1.75),
-                            ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.75),
-                            ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.25))
-    animTracks.append(animTrack)
-    moveTracks.append(moveTrack)
-    puddleTracks.append(puddleTrack)
 
-    suitTrack = Parallel(Sequence(Wait(1.8), Func(targetSuit.erclaimSacrifice, suit, battle)), getSuitAnimTrack(attack),
-                                       Func(suit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'))
+    puddleTrack = Sequence(
+        Func(battle.movie.needRestoreRenderProp, puddle),
+        Func(puddle.reparentTo, targetSuit),
+        Func(puddle.wrtReparentTo, render),
+        LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
+        Wait(3.0),
+        LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+        Func(puddle.removeNode)
+    )
+
+    speechTrack = Sequence(
+        Wait(1.8),
+        Func(targetSuit.setChatAbsolute, random.choice(("To my realm I retuuuurnnnnn......!", "But I am not finished!", "No! Noooooo!", "Anything you wish, sire!")), CFSpeech | CFTimeout)
+    )
+
+    moveTrack = Sequence(
+        Wait(1.8),
+        LerpPosInterval(targetSuit, 0.9, Point3(0, 0, -3.1), other=puddle),
+        LerpPosInterval(targetSuit, 0.4, Point3(0, 0, -9.1), other=puddle),
+        Func(targetSuit.hide)
+    )
+
+    animTrack = Sequence(
+        Wait(0.9),
+        ActorInterval(targetSuit, 'flail-qs', endTime=1.75),
+        ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.75),
+        ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.25)
+    )
+
+    puddleTracks.append(puddleTrack)
+    moveTracks.append(moveTrack)
+    animTracks.append(animTrack)
+
+    # =========================================================
+    # TARGET DAMAGE
+    # =========================================================
+    targetDamageTrack = Sequence(Wait(1.8))
+
+    if dmg > 0:
+        targetDamageTrack.append(
+            Parallel(
+                Func(targetSuit.showHpTextNew, -dmg),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+    if died:
+        targetDamageTrack.append(Func(targetSuit.makeDead))
+
+    # =========================================================
+    # ERCLAIM HEAL
+    # =========================================================
+    healTrack = Sequence(Wait(1.8))
+
+    if heal > 0:
+        healTrack.append(
+            Parallel(
+                Func(suit.showHpTextNew, heal),
+                Func(suit.setHealthForMe, heal),
+                Func(suit.updateHealthBar, 0)
+            )
+        )
+
+    # =========================================================
+    # ERCLAIM MAIN ANIMATION
+    # =========================================================
+    suitTrack = Parallel(
+        getSuitAnimTrack(attack),
+        Func(suit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')
+    )
+
     soundTrack = getSoundTrack('SA_sacrifice.ogg', delay=1.0)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.8)
-    return Parallel(suitTrack, soundTrack2, speechTrack, moveTracks, animTracks, soundTrack, puddleTracks)
+
+    return Parallel(
+        suitTrack,
+        soundTrack2,
+        speechTrack,
+        moveTracks,
+        animTracks,
+        soundTrack,
+        puddleTracks,
+        targetDamageTrack,
+        healTrack
+    )
 
 def doRiseFromTheScrap(attack):
     theSuit = attack['suit']

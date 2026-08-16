@@ -551,20 +551,74 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             suitAttack = ()
             index = -1
             id = sa[SUIT_ID_COL]
+
             if id != -1:
                 index = suitIds.index(id)
+
             if not sa[SUIT_ATK_COL]:
                 targetIndex = []
+                attackValues = []
+
             else:
                 targetIndex = sa[SUIT_TGT_COL]
-                if targetIndex == []:
-                    self.notify.debug('suit attack: %d must be group' % sa[SUIT_ATK_COL])
-            suitAttack = suitAttack + (index, sa[SUIT_ATK_COL].values(), targetIndex)
+
+                atkType = sa[SUIT_ATK_COL]
+
+                targetType = atkType.get(
+                    'targetType',
+                    'toon'
+                )
+
+                if targetType == 'suit':
+                    targetTypeCode = SuitBattleGlobals.ATK_TARGET_SUIT
+
+                elif targetType == 'both':
+                    targetTypeCode = SuitBattleGlobals.ATK_TARGET_BOTH
+
+                elif targetType == 'none':
+                    targetTypeCode = SuitBattleGlobals.ATK_TARGET_NONE
+
+                else:
+                    targetTypeCode = SuitBattleGlobals.ATK_TARGET_TOON
+
+                encodedGroup = (
+                    atkType.get(
+                        'group',
+                        SuitBattleGlobals.ATK_TGT_SINGLE
+                    ) |
+                    (
+                        targetTypeCode <<
+                        SuitBattleGlobals.TARGET_TYPE_SHIFT
+                    )
+                )
+
+                attackValues = [
+                    atkType.get('acc', 0),        # 0
+                    encodedGroup,                 # 1
+                    atkType.get('name', ''),      # 2
+                    atkType.get('hp', 0),         # 3
+                    atkType.get('suitName', ''),  # 4
+                    atkType.get('freq', 0),       # 5
+                    atkType.get('animName', 'nothing') # 6
+                ]
+
+            suitAttack = suitAttack + (
+                index,
+                attackValues,
+                targetIndex
+            )
+
             sa[SUIT_TAUNT_COL] = 0
+
             if sa[SUIT_ATK_COL]:
                 suit = self.findSuit(id)
+
                 if suit:
-                    sa[SUIT_TAUNT_COL] = getAttackTauntIndex(sa[SUIT_ATK_COL]['name'], suit.getStyleName())
+                    sa[SUIT_TAUNT_COL] = getAttackTauntIndex(
+                        sa[SUIT_ATK_COL]['name'],
+                        suit.getStyleName()
+                    )
+
             suitAttack = suitAttack + tuple(sa[3:])
             suitAttacks = suitAttacks + [suitAttack]
         p.append(suitAttacks)
@@ -885,10 +939,21 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             activeToonIdx = self.activeToons.index(toonId)
             self.notify.debug('removing activeToons[%d], updating suitAttacks SUIT_HP_COL to match' % activeToonIdx)
             for i in range(len(self.suitAttacks)):
+                attack = self.suitAttacks[i][SUIT_ATK_COL]
+
+                if not attack:
+                    continue
+
+                targetType = attack.get('targetType', 'toon')
+
+                if targetType == 'suit' or targetType == 'none':
+                    continue
+
                 if activeToonIdx < len(self.suitAttacks[i][SUIT_HP_COL]):
                     del self.suitAttacks[i][SUIT_HP_COL][activeToonIdx]
-                else:
-                    self.notify.warning("suitAttacks %d doesn't have an HP column for active toon index %d" % (i, activeToonIdx))
+
+                if activeToonIdx < len(self.suitAttacks[i][SUIT_HEAL_COL]):
+                    del self.suitAttacks[i][SUIT_HEAL_COL][activeToonIdx]
 
             del self.battleCalc.toonStatusConditionsNew[toonId]
             self.activeToons.remove(toonId)
@@ -2031,43 +2096,110 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             lastActiveSuitDied = 1
         for i in range(len(self.suitAttacks)):
             attack = self.suitAttacks[i][SUIT_ATK_COL]
-            if attack:
-                suitId = self.suitAttacks[i][SUIT_ID_COL]
-                suit = self.findSuit(suitId)
-                # if suit == None:
-                #     self.notify.warning('movieDone() - suit: %d is gone!' % suitId)
-                #     continue
-                if not (hasattr(suit, 'dna') and suit.dna):
-                    toonId = self.air.getAvatarIdFromSender()
-                    self.notify.warning('_movieDone avoiding crash, sender=%s but suit has no dna' % toonId)
-                    self.air.writeServerEvent('suspicious', toonId, '_movieDone avoiding crash, suit has no dna')
-                    continue
-                hps = self.suitAttacks[i][SUIT_HP_COL]
-                if attack['group'] == ATK_TGT_GROUP:
-                    for activeToon in self.activeToons:
-                        toon = self.getToon(activeToon)
-                        if toon != None:
-                            targetIndex = self.activeToons.index(activeToon)
-                            toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
-                            hp = hps[targetIndex]
-                            if hp > 0:
-                                if toonDied != 0:
-                                    toonHpDict[toon.doId][2] = 1
-                                toonHpDict[toon.doId][1] += hp
-                
-                else:
-                    for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
-                        if targetIndex >= len(self.activeToons):
-                            self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)
+
+            if not attack:
+                continue
+
+            targetType = attack.get('targetType', 'toon')
+            hps = self.suitAttacks[i][SUIT_HP_COL]
+
+            # =========================================================
+            # SUIT-ONLY / TARGETLESS
+            # These HP entries are NOT Toon-indexed.
+            # =========================================================
+            if targetType == 'suit' or targetType == 'none':
+                continue
+
+            # =========================================================
+            # NORMAL TOON ATTACK
+            # =========================================================
+            if targetType == 'toon':
+                if attack.get('group', ATK_TGT_SINGLE) == ATK_TGT_GROUP:
+                    for targetIndex in xrange(len(self.activeToons)):
+                        if targetIndex >= len(hps):
                             continue
+
                         toonId = self.activeToons[targetIndex]
                         toon = self.getToon(toonId)
-                        toonDied = self.suitAttacks[i][TOON_DIED_COL] & 1 << targetIndex
+
+                        if toon is None:
+                            continue
+
                         hp = hps[targetIndex]
-                        if hp > 0:
-                            if toonDied != 0:
-                                toonHpDict[toon.doId][2] = 1
-                            toonHpDict[toon.doId][1] += hp
+
+                        if hp <= 0:
+                            continue
+
+                        toonDied = self.suitAttacks[i][TOON_DIED_COL] & (1 << targetIndex)
+
+                        if toonDied != 0:
+                            toonHpDict[toon.doId][2] = 1
+
+                        toonHpDict[toon.doId][1] += hp
+
+                else:
+                    for targetIndex in self.suitAttacks[i][SUIT_TGT_COL]:
+                        if targetIndex < 0 or targetIndex >= len(self.activeToons):
+                            self.notify.warning('movieDone() - toon: %d gone!' % targetIndex)
+                            continue
+
+                        if targetIndex >= len(hps):
+                            continue
+
+                        toonId = self.activeToons[targetIndex]
+                        toon = self.getToon(toonId)
+
+                        if toon is None:
+                            continue
+
+                        hp = hps[targetIndex]
+
+                        if hp <= 0:
+                            continue
+
+                        toonDied = self.suitAttacks[i][TOON_DIED_COL] & (1 << targetIndex)
+
+                        if toonDied != 0:
+                            toonHpDict[toon.doId][2] = 1
+
+                        toonHpDict[toon.doId][1] += hp
+
+            # =========================================================
+            # MIXED TOON + SUIT ATTACK
+            # Mixed indexes:
+            #
+            # 0 .. toonCount - 1              = Toons
+            # toonCount .. toonCount+suits-1  = Cogs
+            #
+            # Only apply the Toon portion here.
+            # =========================================================
+            elif targetType == 'both':
+                toonCount = len(self.activeToons)
+
+                for mixedIndex in self.suitAttacks[i][SUIT_TGT_COL]:
+                    if mixedIndex < 0 or mixedIndex >= toonCount:
+                        continue
+
+                    if mixedIndex >= len(hps):
+                        continue
+
+                    toonId = self.activeToons[mixedIndex]
+                    toon = self.getToon(toonId)
+
+                    if toon is None:
+                        continue
+
+                    hp = hps[mixedIndex]
+
+                    if hp <= 0:
+                        continue
+
+                    toonDied = self.suitAttacks[i][TOON_DIED_COL] & (1 << mixedIndex)
+
+                    if toonDied != 0:
+                        toonHpDict[toon.doId][2] = 1
+
+                    toonHpDict[toon.doId][1] += hp
 
         deadToons = []
         for activeToon in self.activeToons:

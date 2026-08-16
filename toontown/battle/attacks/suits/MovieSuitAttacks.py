@@ -683,7 +683,7 @@ def doSuitAttack(attack):
     elif name == 'CaseManagerInsurance':
         suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
     elif name == 'CaseManagerInsurance2':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsuranceScapegoat(attack)
+        suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
     elif name == 'CaseManagerLegalBindings':
         suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
     elif name == 'CaseManagerLegalBindings2':
@@ -1182,31 +1182,31 @@ def doSuitAttack(attack):
         suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
         # racketeer
     elif name == 'RacketeerOverextendedLeverage2':
-        suitTrack = MovieSellbotLitigationCheats.doOverextendedLeverage(attack)
+        suitTrack = MovieCashbotLitigationCheats.doOverextendedLeverage(attack)
     elif name == 'RacketeerOverextendedLeverage':
-        suitTrack = MovieSellbotLitigationCheats.doProtectedRacket(attack)
+        suitTrack = MovieCashbotLitigationCheats.doProtectedRacket(attack)
     elif name == 'RacketeerProfiteering':
-        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 1)
+        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 1)
     elif name == 'RacketeerProfiteering2':
-        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 2)
+        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 2)
     elif name == 'RacketeerProfiteering3':
-        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 3)
+        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 3)
     elif name == 'RacketeerProfiteering4':
-        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 4)
+        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 4)
     elif name == 'RacketeerProfiteering5':
-        suitTrack = MovieSellbotLitigationCheats.doProfiteering(attack, 5)
+        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 5)
     elif name == 'RacketeerExtortion':
-        suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
+        suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
     elif name == 'RacketeerExtortion2':
-        suitTrack = MovieSellbotLitigationCheats.doProtectionPayout(attack)
+        suitTrack = MovieCashbotLitigationCheats.doProtectionPayout(attack)
     elif name == 'RacketeerCompensation':
-        suitTrack = MovieSellbotLitigationCheats.doCompensation(attack)
+        suitTrack = MovieCashbotLitigationCheats.doCompensation(attack)
     elif name == 'RacketeerHustling': # Pressurizer Target Check
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     elif name == 'RacketeerRacketeering':
-        suitTrack = MovieSellbotLitigationCheats.doRacketeering(attack)
+        suitTrack = MovieCashbotLitigationCheats.doRacketeering(attack)
     elif name == 'RacketeerPeckingOrderRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
+        suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
     elif name == 'RacketeerPeckingOrderRetaliationSoak':
         suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
         # radiographer
@@ -1576,7 +1576,7 @@ def doSuitAttack(attack):
     elif name == 'ForemanPolish':
         suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
     elif name == 'ForemanExtortion':
-        suitTrack = MovieSellbotLitigationCheats.doExtortion(attack)
+        suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
     elif name == 'ForemanSnipe':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     elif name == 'ForemanRedTape':
@@ -1846,7 +1846,7 @@ def doSuitAttack(attack):
         elif suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
         elif suit.dna.name == 'racket':
-            suitTrack = MovieSellbotLitigationCheats.doPeckingOrderGroup(attack)
+            suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
         elif suit.dna.name == 'cdirector':
             suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
         elif suit.dna.name == 'ubuster':
@@ -1936,9 +1936,38 @@ def doSuitAttack(attack):
     target = attack['target']
     groupStatus = attack['group']
     toonHprTrack = Parallel()
+    target = attack.get('target', [])
+    groupStatus = attack['group']
+
+    targetHprTrack = Parallel()
+
     for t in target:
-        toon = t['toon']
-        toonHprTrack.append(Sequence(Func(toon.headsUp, battle, MovieUtil.PNT3_ZERO), Func(toon.loop, 'neutral')))
+
+        # ----------------------------------------
+        # NORMAL TOON TARGET
+        # ----------------------------------------
+        if 'toon' in t:
+            toon = t['toon']
+
+            targetHprTrack.append(
+                Sequence(
+                    Func(
+                        toon.headsUp,
+                        battle,
+                        MovieUtil.PNT3_ZERO
+                    ),
+                    Func(
+                        toon.loop,
+                        'neutral'
+                    )
+                )
+            )
+
+        # ----------------------------------------
+        # COG TARGET
+        # ----------------------------------------
+        elif 'suit' in t:
+            targetSuit = t['suit']
 
     suit = attack['suit']
     # Let's see if the Cog exists to attack (Cog's ID cannot be -1).
@@ -1946,9 +1975,9 @@ def doSuitAttack(attack):
         if name in suitTrack2ResetNames:
             resetSuitTrack = Sequence(suitTrack)
         else:
-            resetSuitTrack = Sequence(Parallel(toonHprTrack, suitTrack, Func(suit.clearSuitStatusEffect, 'lured'), Func(suit.setDizzy, 0), Func(battle.unlureSuit, suit)))
+            resetSuitTrack = Sequence(Parallel(targetHprTrack, suitTrack, Func(suit.clearSuitStatusEffect, 'lured'), Func(suit.setDizzy, 0), Func(battle.unlureSuit, suit)))
     else:
-        resetSuitTrack = Parallel(suitTrack, toonHprTrack) # Make sure we play the movie and, if necessary, reset the Toon's position.
+        resetSuitTrack = Parallel(suitTrack, targetHprTrack) # Make sure we play the movie and, if necessary, reset the Toon's position.
     return (resetSuitTrack, camTrack)
 
 
@@ -7436,10 +7465,10 @@ def doEvictionNotice(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
-        scale = Point3(1.2, 1.2, 1.2)
+        posPoints = posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
+        scale = Point3(1.0, 1.0, 1.0)
     else:
-        posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
+        posPoints = posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
         scale = Point3(1, 1, 1)
     propTracks = Parallel()
     for t in targets:
@@ -8418,10 +8447,10 @@ def doRestrainingOrder(attack):
         #suitTrack.append(Func(s.setPlayRate2, theSuit.getPlayRate2() + .5))
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
-        posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
-        scale = Point3(1.2, 1.2, 1.2)
+        posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
+        scale = Point3(1, 1, 1)
     else:
-        posPoints = [Point3(.78, -1.89, -.17), VBase3(10, 250, -10)]
+        posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
         scale = Point3(1, 1, 1)
     propTracks = Parallel()
     for t in targets:

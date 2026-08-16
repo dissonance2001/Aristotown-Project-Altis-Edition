@@ -3153,7 +3153,7 @@ class TownBattleCogPanel(DirectFrame):
                                          text_scale=.6)
             self.extraText.show()
             slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(self.statusIcon, 
+            self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Oversight', 
                                    tooltipDescription="This Cog will heal if knockback and/or combo damage is applied.", 
@@ -3179,7 +3179,7 @@ class TownBattleCogPanel(DirectFrame):
                                    slot, 
                                    tooltipTitle='Protection Racket', 
                                    tooltipDescription="The Racketeer will increase the Racket based on how many Cogs are on the field. The more inflated the Racket is, the more abilities he can use." \
-                                   " Using Gags against the Racketeer will decrease the value of the Racket.", 
+                                   " Using Gags against him will decrease the value of the Racket.", 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
@@ -3229,7 +3229,7 @@ class TownBattleCogPanel(DirectFrame):
                 ToontownGlobals.getSignFont()
                 )
             damageText = self.getColoredText(
-                '+50',
+                '+85',
                 'positiveText',
                 (0, 1, 0.016, 1),
                 ToontownGlobals.getInterfaceFont()
@@ -3869,7 +3869,7 @@ class TownBattleCogPanel(DirectFrame):
             self.extraText.show()
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
-                '-%s' % int(self.cog.getMaxHP() / 4),
+                '-%s' % int(self.cog.getMaxHP() / 5),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()

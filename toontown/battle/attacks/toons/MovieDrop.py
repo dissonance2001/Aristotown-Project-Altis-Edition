@@ -500,7 +500,10 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitReact = ActorInterval(suit, anim, endTime=TOON_DROP_DELAY)
 
     else:
-        suitReact = ActorInterval(suit, anim)
+        if not visualDied:
+            suitReact = ActorInterval(suit, anim)
+        else:
+            suitReact = Parallel()
     suitTrack.append(Wait(delay + tObjectAppears))
     if suit.getSuitStatusModifier('rushJob') == 7:
         suitTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))

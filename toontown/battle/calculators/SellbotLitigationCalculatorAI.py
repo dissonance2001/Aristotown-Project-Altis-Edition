@@ -48,7 +48,10 @@ class SellbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                                'requiredToonConditions': (
+                                                                            'bookkeepingtoon',
+                                                                        )})
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hustle':
@@ -58,7 +61,10 @@ class SellbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                                'requiredToonConditions': (
+                                                                            'banned',
+                                                                        )})
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hustle':
@@ -345,72 +351,33 @@ class SellbotLitigationCalculatorAI:
                         }
                     ]
                 )
-                if self.suitHasCondition(suitId, 'overpressurecalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'TargetCheck', # Target Check for Promotion
-                     'animName': 'nothing',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'overpressurecalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'overpressurecalculator') and not (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'overpressurecalculator') and (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'overpressurecalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'SafetyOverpressured', # Promotion
                      'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'target3'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'SafetyOverpressured2',  # Promotion
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'target4'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'SafetyOverpressured3',  # Promotion
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'target5'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'SafetyOverpressured4',  # Promotion
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'target6'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'SafetyOverpressured5',  # Promotion
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                     'excludeManagers': True,
+                        'requiredConditions': (),
+                        'excludeConditions': ('overpressure',),
+                        'priorityConditions': (),
+
+                        'targetWeights': {}})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -429,75 +396,56 @@ class SellbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'busted',
+                    )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'ubuster':  # arbitrator
-                if self.suitHasCondition(suitId, 'unionbustcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'TargetCheck', # Target Check for Throw Book
-                     'animName': 'throw-object',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator') and not self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'ubuster': 
                 if self.suitHasCondition(suitId, 'unionbustcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator') and self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'unionbustcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                      'name': 'UnionBusterUnionBust', # ThrowBook
+                     'name': 'UnionBusterUnionBust', # ThrowBook
                      'animName': 'quick-jump',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_DOUBLE,
+
+                        'targetType': 'suit',
+                         'damageTarget': 'target',
+                        'healTarget': 'attacker',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                     'excludeManagers': True,
+                        'requiredConditions': (),
+                        'excludeConditions': ('overpressure',),
+                        'priorityConditions': (),
+
+                        'targetWeights': {}})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator2') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'TargetCheck', # Target Check for Throw Book
-                     'animName': 'throw-object',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator2') and not self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'unionbustcalculator2') and self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                      'name': 'UnionBusterUnionBust', # ThrowBook
-                     'animName': 'quick-jump',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                        self.setSuitCondition(suitId, 'unionbustcalculator2', 0, 0, 'setBoth')
-                if (self.calculator.unionSacrifices % 2 == 0 and not self.calculator.unionSacrifices == 0) and self.__suitCanAttack(suitId):
+                if (self.calculator.unionSacrifices % 3 == 0 and not self.calculator.unionSacrifices == 0) and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                       'name': 'UnionBusterCompensationClaims', # ThrowBook
                      'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                         self.calculator.unionSacrifices *= 0
@@ -514,7 +462,8 @@ class SellbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'safesupervis':
@@ -524,25 +473,35 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'heatwavecalculator') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP < 4850:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'SafetyHeatWave', # Heat Wave
-                     'animName': 'magic3-alt',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': 'safesupervis',
+                        'name': 'SafetyHeatWave',
+                        'animName': 'magic3-alt',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'both',
+
+                        'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'suitGroup': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'allowSelfTarget': True,
+                        'targetSelf': True
+                    })
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.__suitCanAttack(suitId) and self.calculator.damageHP.get(suitId, 0) > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'DamageMovie', # Damage From Heat Wave
-                     'animName': 'nothing',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+                # if self.__suitCanAttack(suitId) and self.calculator.damageHP.get(suitId, 0) > 0:
+                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                #      'name': 'DamageMovie', # Damage From Heat Wave
+                #      'animName': 'nothing',
+                #      'hp': 0,
+                #      'acc': 100,
+                #      'freq': 0,
+                #      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                #     if attack[SUIT_ATK_COL]:
+                #         self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'Desperation',  # Desperation Activation
@@ -550,7 +509,8 @@ class SellbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
@@ -562,7 +522,8 @@ class SellbotLitigationCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
 
@@ -576,14 +537,29 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'contractenforcementcalculator') and self.__suitCanAttack(suitId):
-                   attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                    'name': 'HustlerCustomerRetention',
-                     'animName': 'nothing',
-                    'hp': 0,
-                    'acc': 100,
-                    'freq': 0,
-                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                   if attack[SUIT_ATK_COL]:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'HustlerCustomerRetention',
+                        'animName': 'nothing',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False,
+                        'requireDamaged': True,
+                            'requiredConditions': (),
+                            'excludeConditions': (),
+                            'priorityConditions': (),
+
+                            'targetWeights': {}})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
+                    if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             # if self.battle.activeSuits[i].dna.name == 'hustle':
             #     if self.__suitCanAttack(suitId):
@@ -619,60 +595,62 @@ class SellbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'greenlightcalculator') and self.battle.activeSuits[i].currHP > 0 and not self.__suitCanAttack(suitId):
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'greenlightcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'PresidentTargetCheck', # Target Check for Promotion
-                     'animName': 'nothing',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'greenlightcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'greenlightcalculator') and not (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'greenlightcalculator') and (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'TrafficGreenLight', # Promotion
                      'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redlightcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'PresidentTargetCheck', # Target Check for Promotion
-                     'animName': 'nothing',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False,
+                        'requireDamaged': False,
+                            'requiredConditions': (),
+                            'excludeConditions': ('redLight',),
+                            'priorityConditions': (),
+
+                            'targetWeights': {}})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'redlightcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redlightcalculator') and not (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redlightcalculator') and (self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1) and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'redlightcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'TrafficRedLight', # Promotion
                      'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                             'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False,
+                        'requireDamaged': False,
+                            'requiredConditions': (),
+                            'excludeConditions': ('greenLight',),
+                            'priorityConditions': (),
+
+                            'targetWeights': {}})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hustle':

@@ -53,7 +53,10 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                                'requiredToonConditions': (
+                                                                            'bookkeepingtoon',
+                                                                        )})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'bookkeeperHit') and self.suitHasCondition(suitId, 'bookkeeping'):
@@ -63,7 +66,8 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -139,7 +143,11 @@ class BossbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
@@ -158,65 +166,57 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'refinemmanagercalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
+                if self.suitHasCondition(suitId, 'headroller2calculator') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[
+                    i].currHP > 0:
+                    attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'refinemanagercalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'AmbassadorRefinementManager',  # Refinement Manager
-                                                            'animName': 'snap',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                if self.suitHasCondition(suitId, 'headroller2calculator') and self.battle.activeSuits[
+                    i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {
+                    'suitName': self.battle.activeSuits[i].dna.name,
+                    'name': 'AmbassadorHeadRollerGroup',
+                    'animName': 'snap-override',
+                    'hp': 0,
+                    'acc': 100,
+                    'freq': 0,
+                    'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                    'targetType': 'suit',
+                    'allowSelfTarget': False,
+                    'targetSelf': False,
+                    'requiredConditions': ('ambheadrollertarget',),
+                    'excludeManagers': True,
+                    'damageTarget': 'target',
+                    'healTarget': 'target'
+                })
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                for suit in self.battle.activeSuits:
-                    if suit.currHP <= 0:
-                        continue
-                    if not suit.dna.name in SuitBattleGlobals.SpecialCogDict and self.suitHasCondition(suit.doId, 'ambheadrollertarget') and suit.currHP > 0:
-                        self.calculator.syphonedHP += suit.currHP
-                        self.calculator.sacrificedCogs += 1
-                if self.calculator.sacrificedCogs > 0:
-                    if self.suitHasCondition(suitId, 'headroller2calculator') and not len(self.battle.activeSuits) > 1 and not self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP > 0:
-                        attack = self.__getAbilityQueued(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'headroller2calculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                        attack = self.__getAbilityQueued(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'headroller2calculator') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[
-                        i].currHP > 0:
-                        attack = self.__getLureRemoval(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'headroller2calculator') and self.battle.activeSuits[
-                        i].currHP > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                         'name': 'AmbassadorHeadRollerGroup', # Group Head Roller
-                         'animName': 'snap-override',
-                         'hp': 0,
-                         'acc': 100,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.calculator.sacrificedCogs > 0 and self.battle.activeSuits[i].currHP > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                          'name': 'AmbassadorHeadRoller', # Damage Up 1
-                         'animName': 'summon',
-                         'hp': 0,
-                         'acc': 100,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                            self.syphonedHP *= 0
+                if self.calculator.sacrificedCogs > 0 and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'AmbassadorHeadRoller',
+                        'animName': 'summon',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'
+                    })
+
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
                     # if self.sacrificedCogs == 2:
                     #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                     #                                             'name': 'AmbassadorHeadRoller2',  # Damage Up 2
@@ -292,36 +292,55 @@ class BossbotLitigationCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ambass':  # ambassador
-                if self.suitHasCondition(suitId, 'advancementcalculator') and not (self.__suitCanAttack(suitId) or (not len(self.battle.activeSuits) > 2) or self.deadSuits > 0 or self.sacrificedCogs > 0) and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'advancementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'advancementcalculator') and self.__suitCanAttack(suitId) and (len(self.battle.activeSuits) > 2 and self.deadSuits == 0 and not self.sacrificedCogs > 0):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorAdvancement', # Refinement
-                     'animName': 'bellow',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                if self.suitHasCondition(suitId, 'advancementcalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'AmbassadorAdvancement',
+                        'animName': 'bellow',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'suit',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                        'excludeManagers': True,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'
+                    })
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'headrollercalculator') and self.suitHasCondition(suitId, 'phase3') and not (self.__suitCanAttack(suitId) or self.deadSuits == 0 or self.sacrificedCogs > 0) and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'headrollercalculator') and self.suitHasCondition(suitId, 'phase3') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'headrollercalculator') and not len(self.battle.activeSuits) > 1 and self.suitHasCondition(suitId, 'phase3') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'headrollercalculator') and self.deadSuits == 0 and len(self.battle.activeSuits) > 1 and self.suitHasCondition(suitId, 'phase3') and not self.sacrificedCogs > 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorGhostMentality', # Ghost Mentality
-                     'animName': 'deadwood',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                if self.suitHasCondition(suitId, 'headrollercalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'AmbassadorGhostMentality',
+                        'animName': 'deadwood',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                        'targetWeakest': True,
+                        'excludeManagers': True
+                    })
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'bkeeper':
@@ -336,7 +355,17 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                      'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': False,
+                        'excludeManagers': False,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -359,7 +388,8 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'wtapper':  # wiretapper
@@ -374,7 +404,8 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'collectcallcalculator') and not self.suitHasCondition(suitId, 'immune') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -388,7 +419,14 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'collectcalled',
+                    )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'collectcallcalculator4') and not self.suitHasCondition(suitId, 'immune') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -402,7 +440,14 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'collectcalled',
+                    )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.setSuitCondition(suitId, 'collectcallcalculator4', 0, 0, 'setBoth')
@@ -431,7 +476,8 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
@@ -447,16 +493,6 @@ class BossbotLitigationCalculatorAI:
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if (self.suitHasCondition(suitId, 'damageupcalculator1') and self.__suitCanAttack(suitId)) or (self.suitHasCondition(suitId, 'damageupcalculator2') and self.__suitCanAttack(suitId)):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorDamageUp', # Compensation
-                     'animName': 'summon',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'ambass':
@@ -511,7 +547,8 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -544,7 +581,8 @@ class BossbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'rotationcalculator') and self.battle.activeSuits[i].currHP > 0:
@@ -563,7 +601,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 2:
@@ -574,7 +613,8 @@ class BossbotLitigationCalculatorAI:
                                                                            'hp': 0,
                                                                            'acc': 100,
                                                                            'freq': 0,
-                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 3:
@@ -585,7 +625,8 @@ class BossbotLitigationCalculatorAI:
                                                                            'hp': 0,
                                                                            'acc': 100,
                                                                            'freq': 0,
-                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 4:
@@ -596,7 +637,8 @@ class BossbotLitigationCalculatorAI:
                                                                            'hp': 0,
                                                                            'acc': 100,
                                                                            'freq': 0,
-                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 5:
@@ -607,7 +649,8 @@ class BossbotLitigationCalculatorAI:
                                                                            'hp': 0,
                                                                            'acc': 100,
                                                                            'freq': 0,
-                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 6:
@@ -618,7 +661,8 @@ class BossbotLitigationCalculatorAI:
                                                                            'hp': 0,
                                                                            'acc': 100,
                                                                            'freq': 0,
-                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 7:
@@ -629,7 +673,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 8:
@@ -640,7 +685,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     else:
@@ -659,7 +705,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 2:
@@ -670,7 +717,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 3:
@@ -681,7 +729,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 4:
@@ -692,7 +741,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 5:
@@ -703,7 +753,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 6:
@@ -714,7 +765,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 7:
@@ -725,7 +777,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif condition == 8:
@@ -736,7 +789,8 @@ class BossbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     else:
@@ -773,7 +827,11 @@ class BossbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
@@ -817,29 +875,6 @@ class BossbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'phouse' and not self.suitHasCondition(suitId, 'dead'):
-                if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'Desperation',  # Desperation Activation
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                    for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
-                        suitId = self.battle.activeSuits[i].doId
-                        if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
-                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'Desperation2',  # Desperation Activation
-                                                                    'animName': 'nothing',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                            if attack[SUIT_ATK_COL]:
-                                self.battle.suitAttacks.append(attack)
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -869,13 +904,22 @@ class BossbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'scabbardcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'DividendPeckingOrder',  # Audit
-                                                            'animName': 'nothing',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'DividendPeckingOrder',
+                        'animName': 'nothing',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': False,
+                        'excludeManagers': False,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'
+                    })
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'groundbreakercalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:

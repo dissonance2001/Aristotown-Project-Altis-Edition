@@ -374,7 +374,7 @@ def __throwPie(throw, delay, hitCount):
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage
 
-        showDamage = Parallel(Func(battle.sueSuit, suit), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=1))
+        showDamage = Parallel(Func(suit.setSued2, 1), Func(suit.showHpTextNew, 0, text="CEASE AND DESIST!", colorCode=1))
         explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
         splatName = 'dust'
         splat = globalPropPool.getProp('dust')

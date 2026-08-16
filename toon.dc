@@ -1538,13 +1538,15 @@ struct AttackData {
 };
 
 struct SuitAttack {
-  int8 index;
-  AttackData attack;
-  int8[] target;
-  int16[] damage;
-  int8 toonDied;
-  int8 beforeToons;
-  int8 taunt;
+    int8 index;
+    AttackData attack;
+    int8[] target;
+    int16[] damage;
+    int8 toonDied;
+    int8 beforeToons;
+    int8 taunt;
+    int8 suitDied;
+    int16[] healing;
 };
 
 dclass DistributedBattleBase : DistributedObject {

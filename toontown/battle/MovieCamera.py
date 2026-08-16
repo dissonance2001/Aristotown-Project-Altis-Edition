@@ -532,6 +532,59 @@ def chooseNPCExitShot(exits, exitsDuration):
     track = apply(random.choice(shotChoices), [av, duration])
     return track
 
+def randomTargetGroupShot(targets, suit, duration, battle):
+    totalHeight = 0
+    actorCount = 0
+
+    for target in targets:
+        if 'toon' in target:
+            actor = target['toon']
+
+        elif 'suit' in target:
+            actor = target['suit']
+
+        else:
+            continue
+
+        totalHeight += actor.getHeight()
+        actorCount += 1
+
+    if actorCount <= 0:
+        return Sequence(Wait(duration))
+
+    avgHeight = float(totalHeight) / actorCount * 0.75
+
+    suitPos, origHpr = battle.getActorPosHpr(suit)
+
+    x = 1 + random.random() * 3
+
+    if suitPos.getX() > 0:
+        x = -x
+
+    if random.random() > 0.5:
+        y = 3 + random.random()
+        z = avgHeight + random.random() * 6
+
+    else:
+        y = 11 + random.random() * 2
+        z = 13 + random.random() * 2
+
+    focalPoint = Point3(0, -4, avgHeight)
+
+    return focusShot(x, y, z, duration, focalPoint)
+
+def getAttackTargetActor(target):
+    if not target:
+        return None
+
+    if 'toon' in target[0]:
+        return target[0]['toon']
+
+    if 'suit' in target[0]:
+        return target[0]['suit']
+
+    return None
+
 def chooseSuitShot(attack, attackDuration, cheat=0):
     duration = attackDuration
     if duration < 0:
@@ -539,11 +592,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     diedTrack = None
     groupStatus = attack['group']
     target = attack['target']
-    deadToons = []
     targetDicts = attack['target']
+    deadToons = []
+
     for targetDict in targetDicts:
-        died = targetDict['died']
-        if died != 0:
+        died = targetDict.get('died', 0)
+
+        if died != 0 and 'toon' in targetDict:
             deadToons.append(targetDict['toon'])
 
     if len(deadToons) > 0:
@@ -580,10 +635,19 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
     def defaultCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
         if attack['group'] == ATK_TGT_SINGLE:
-            return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration,
-                                   openShotDuration, 'suit')
-        else:
-            return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
+            targetActor = getAttackTargetActor(target)
+
+            if targetActor is None:
+                return Sequence()
+
+            if 'suit' in target[0]:
+                defenderString = 'suit'
+            else:
+                defenderString = 'toon'
+
+            return randomAttackCam(attack['suit'], targetActor, attack['battle'], attackDuration, openShotDuration, 'suit', defenderString)
+
+        return randomGroupAttackCam(attack['suit'], target, attack['battle'], attackDuration, openShotDuration)
 
     # def defaultCamera(attack=attack, attackDuration=attackDuration, openShotDuration=3.5, target=target):
     #     return randomAttackCam(attack['suit'], target[0]['toon'], attack['battle'], attackDuration,
@@ -901,8 +965,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorThrowBook':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
-                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 3.2)))
+                                 moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.0),
+                                 heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 2.7)))
     elif name == 'ArbitratorThrowBook2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
@@ -933,8 +997,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'LitigatorSnapStenographer':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'LitigatorBayouBash':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                      heldRelativeShot(suit, 0.0, 7.8096, 9, -180, -10.0, 0.0, attackDuration)))
+        camTrack.append(Sequence(motionShot(.5, 9.0, suit.height - 1, 175, 0, 0.0, 0, suit), moveCameraOnly(-1.0, 9.0, suit.height - 1, 1, suit, h=190, p=0, startH=175, startP=0), Wait(attackDuration - 1)))
     elif name == 'LitigatorBayouBellow':
         camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', attackDuration)))
         # stenographer cheats
@@ -1226,10 +1289,18 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(openShotDuration=2, attackDuration=2.0), heldShot(0, -60, 20, 0, -20, 0, attackDuration - 2)))
     # safety supervisor cheats
     elif name == 'SafetyOverpressured':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
+        target = attack['target']
+        targetSuit = target[0]['suit']
+        camTrack2 = Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
                                  moveShot(0.0, -20.0, 10.0, 0, -20, 0, 1.5),
-                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 6.5)))
+                                 heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 6.5))
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('The Pressurizer pushes the %s to their limit!' % (targetSuit.name), attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Overpressured!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'SafetyOverpressured2':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 9, 6, -180, 0.0, 0.0, 0, suit), Wait(5.0),
@@ -1256,7 +1327,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  Func(taskMgr.remove, 'camera_shake'),
                                  heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration - 7)))
     elif name == 'SafetyHeatWave':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5)))
+        camTrack.append(Sequence(motionShot(4.0, -10.0, suit.height + 5, 30, -30.0, 0.0, 0, suit), moveCameraOnly(-4, -10.0, suit.height + 5, suit.getDuration('magic3-alt'), suit, h=-30, p=-30, startH=30, startP=-30), motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration - suit.getDuration('magic3-alt'))))
     elif name == 'SafetyHeatWaveCalculation':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
     elif name == 'SafetyOverpressureDeath':
@@ -1327,8 +1398,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TrafficCongestionPricing':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'TrafficRedLight':
-        dmg = attack['target'][0]['hp']
-        targetSuit = battle.activeSuits[dmg]
+        target = attack['target']
+        targetSuit = target[0]['suit']
         tpMgr = TextPropertiesManager.getGlobalPtr()
 
         def addTextColor(name, r, g, b):
@@ -1338,7 +1409,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
         addTextColor('redLight',   1.0, 0.0, 0.0)
         redLight = '\1redLight\1Red Light\2'
-        camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
         camTrack2 = Sequence(
             defaultCamera(openShotDuration=0, attackDuration=0),
 
@@ -1398,8 +1468,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
             return camTrack2
     elif name == 'TrafficGreenLight':
-        dmg = attack['target'][0]['hp']
-        targetSuit = battle.activeSuits[dmg]
+        target = attack['target']
+        targetSuit = target[0]['suit']
         tpMgr = TextPropertiesManager.getGlobalPtr()
 
         def addTextColor(name, r, g, b):
@@ -1508,7 +1578,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
     elif name == 'UnionBusterUnionWages':
-        camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
+        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration - 3, suit, h=210, p=0, startH=150, startP=0), Wait(3)))
     elif name == 'UnionBusterUnionWages2':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'UnionBusterUnionWages3':
@@ -2204,8 +2274,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             return camTrack2
         #videographer cheats
     elif name == 'VideographerStarOfTheShow':
-        dmg = attack['target'][0]['hp']
-        targetSuit = battle.activeSuits[dmg]
+        target = attack['target']
+        targetSuit = target[0]['suit']
         camTrack.append(Sequence(motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, attackDuration - 2, suit, h=180, p=-30), Wait(2)))
         camTrack2 = Sequence(
             defaultCamera(openShotDuration=0, attackDuration=0),
@@ -2528,8 +2598,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'RushJobZap',
             'RushJobSound',
             'RushJobDrop'):
-        dmg = attack['target'][0]['hp']
-        targetSuit = battle.activeSuits[dmg]
+        targets = attack['target']
+        targetData = targets[0]
+        targetSuit = targetData['suit']
         tpMgr = TextPropertiesManager.getGlobalPtr()
 
         def addTextColor(name, r, g, b):
@@ -3047,11 +3118,13 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
     else:
         av = None
         shotChoices = [avatarCloseUpThreeQuarterRightShot, suitGroupThreeQuarterLeftBehindShot]
-        deadToons = []
         targetDicts = attack['target']
+        deadToons = []
+
         for targetDict in targetDicts:
-            died = targetDict['died']
-            if died != 0:
+            died = targetDict.get('died', 0)
+
+            if died != 0 and 'toon' in targetDict:
                 deadToons.append(targetDict['toon'])
 
         if len(deadToons) > 0:
@@ -3466,32 +3539,41 @@ def randomCamera(suit, toon, battle, attackDuration, openShotDuration):
     return randomAttackCam(suit, toon, battle, attackDuration, openShotDuration, 'suit')
 
 
-def randomAttackCam(suit, toon, battle, attackDuration, openShotDuration, attackerString = 'suit'):
+def randomAttackCam(suit, target, battle, attackDuration, openShotDuration, attackerString='suit', defenderString='toon'):
     if openShotDuration > attackDuration:
         openShotDuration = attackDuration
+
     closeShotDuration = attackDuration - openShotDuration
+
     if attackerString == 'suit':
         attacker = suit
-        defender = toon
-        defenderString = 'toon'
+        defender = target
     else:
-        attacker = toon
+        attacker = target
         defender = suit
-        defenderString = 'suit'
+
     randomDouble = random.random()
+
     if randomDouble > 0.6:
         openShot = randomActorShot(attacker, battle, openShotDuration, attackerString)
+
     elif randomDouble > 0.2:
-        openShot = randomOverShoulderShot(suit, toon, battle, openShotDuration, focus=attackerString)
+        openShot = randomOverShoulderShot(suit, target, battle, openShotDuration, focus=attackerString)
+
     else:
         openShot = randomActorShot(attacker, battle, openShotDuration, attackerString)
+
     randomDouble = random.random()
+
     if randomDouble > 0.6:
         closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
+
     elif randomDouble > 0.2:
-        closeShot = randomOverShoulderShot(suit, toon, battle, closeShotDuration, focus=defenderString)
+        closeShot = randomOverShoulderShot(suit, target, battle, closeShotDuration, focus=defenderString)
+
     else:
-        closeShot = randomSplitShot(attacker, defender, battle, closeShotDuration)
+        closeShot = randomActorShot(defender, battle, closeShotDuration, defenderString)
+
     return Sequence(openShot, closeShot)
 
 def randomAttackCamCheat(suit, toon, battle, attackDuration, openShotDuration, attackerString = 'suit'):
@@ -3540,9 +3622,11 @@ def randomManagerCheatCam(suit, targets, battle, attackDuration, openShotDuratio
 def randomGroupAttackCam(suit, targets, battle, attackDuration, openShotDuration):
     if openShotDuration > attackDuration:
         openShotDuration = attackDuration
+
     closeShotDuration = attackDuration - openShotDuration
     openShot = randomActorShot(suit, battle, openShotDuration, 'suit', groupShot=0)
-    closeShot = randomToonGroupShot(targets, suit, closeShotDuration, battle)
+    closeShot = randomTargetGroupShot(targets, suit, closeShotDuration, battle)
+
     return Sequence(openShot, closeShot)
 
 

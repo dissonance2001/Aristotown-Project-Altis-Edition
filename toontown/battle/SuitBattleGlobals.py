@@ -561,6 +561,14 @@ ATK_TGT_ATTORNEY = 8
 ATK_TGT_PRESIDENT = 9
 ATK_TGT_CONFUSED = 10
 
+TARGET_TYPE_SHIFT = 4
+TARGET_GROUP_MASK = 0x0F
+
+ATK_TARGET_TOON = 0
+ATK_TARGET_SUIT = 1
+ATK_TARGET_BOTH = 2
+ATK_TARGET_NONE = 3
+
 class SuitAttack:
     '''
     In this manner, we can have somewhat more organized attacks and more freedom with how we handle them.

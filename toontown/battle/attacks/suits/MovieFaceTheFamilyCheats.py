@@ -362,14 +362,30 @@ def doHurrySickness(attack):
     return Parallel(suitTracks, toonTracks, notifyTracks, soundTracks)
 
 def doOverseer(attack):
-    suit = attack['suit']
-    battle = attack['battle']
-    soundTrack = getSoundTrack('LB_toonup.ogg', delay=0, node=suit)
-    dmg = attack['target'][0]['hp']
-    suit.addPendingQueuedHealing(dmg)
-    suitTrack = Sequence(Func(suit.showHpTextNew, +dmg), Func(suit.setHealthForMe, +dmg),
-                               Func(suit.updateHealthBar, 0), Func(suit.setNeutralAnimationDrop), Wait(2.0))
-    return Parallel(suitTrack, soundTrack)
+    theSuit = attack['suit']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+    heal = int(targetData.get('heal', 0))
+
+    notifyTracks = Sequence()
+
+    if heal > 0:
+        notifyTrack = Sequence(
+            Parallel(
+                Func(theSuit.showHpTextNew, heal, text="SYPHONED!", colorCode=1),
+                Func(theSuit.setHealthForMe, heal),
+                Func(theSuit.updateHealthBar, 0)
+            )
+        )
+
+        healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+        notifyTracks.append(Parallel(notifyTrack, healSound))
+
+    return notifyTracks
 
 def doRedTape(attack):
     suit = attack['suit']
@@ -1178,10 +1194,20 @@ def doShakedownCooldown(attack):
         return Parallel(suitTrack, liftTracks, toonTracks, toonRiseTracks)
     
 def _doPacesetterRushJob(attack, modifier):
-    dmg = attack['target'][0]['hp']
     battle = attack['battle']
-    targetSuit = battle.activeSuits[dmg]
     suit = attack['suit']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+
     rushJobTrack = Sequence(
         Wait(0.5),
         Func(targetSuit.setSuitStatusEffect, 'rushJob', modifier=modifier),
@@ -1193,11 +1219,15 @@ def _doPacesetterRushJob(attack, modifier):
         Func(targetSuit.clearSuitStatusEffect, 'zapped'),
         Func(targetSuit.clearSuitStatusEffect, 'dazed')
     )
-    suitTrack = Sequence(getSuitAnimTrack(attack), 
+
+    suitTrack = Sequence(
+        getSuitAnimTrack(attack),
         Wait(5.1),
         Func(suit.loop, 'neutral')
     )
+
     soundTrack = getSoundTrack('SA_rush_job_target.ogg', delay=0.5, node=suit)
+
     return Parallel(suitTrack, rushJobTrack, soundTrack)
 
 def doRushJobTrap(attack):

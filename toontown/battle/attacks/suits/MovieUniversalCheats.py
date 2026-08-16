@@ -377,33 +377,82 @@ def doAbilityQueued(attack):
     return Sequence(notifyTracks)
 
 def doAbsorbMovie(attack):
-    theSuit = attack['suit']
     battle = attack['battle']
-    dmg = attack['target'][0]['hp']
-    notifyTracks = Sequence()
-    notifyTrack = Parallel(theSuit.makeAbsorbDamageInterval(battle, dmg))
-    cameraTrack = Wait(3.0)
-    notifyTracks.append(Parallel(notifyTrack))
-    return Sequence(notifyTracks)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
+    damageTrack = Sequence()
+
+    if dmg > 0:
+        damageTrack.append(
+            Parallel(
+                ActorInterval(targetSuit, 'pie-small-react'),
+                Func(targetSuit.showHpTextNew, -dmg, text="ABSORBED!", colorCode=1),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+    if died:
+        if targetSuit.isVirtual:
+            damageTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+        else:
+            damageTrack.append(MovieUtil.createSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+
+    else:
+        damageTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+
+    return damageTrack
 
 def doSyphonMovie(attack):
     theSuit = attack['suit']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+    heal = int(targetData.get('heal', 0))
+
     notifyTracks = Sequence()
-    dmg = attack['target'][0]['hp']
-    #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
-                           #  Func(theSuit.updateHealthBar, 0))
-    notifyTrack = Sequence(theSuit.checkSyphonHP(dmg))
-    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
-    cameraTrack = Wait(3.0)
-    notifyTracks.append(Parallel(notifyTrack, healSound))
-    return Sequence(notifyTracks)
+
+    if heal > 0:
+        notifyTrack = Sequence(
+            Parallel(
+                Func(theSuit.showHpTextNew, heal, text="SYPHONED!", colorCode=1),
+                Func(theSuit.setHealthForMe, heal),
+                Func(theSuit.updateHealthBar, 0)
+            )
+        )
+
+        healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
+        notifyTracks.append(Parallel(notifyTrack, healSound))
+
+    return notifyTracks
 
 def doRageBuilding(attack):
     theSuit = attack['suit']
     suit = attack['suit']
-    notifyTracks = Sequence()
-    battle = attack['battle']
-    dmg = attack['target'][0]['hp']
+    targets = attack.get('target', [])
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+    dmg = targetData.get('hp', 0)
     suitResponseTrack = Parallel()
     if suit.dna.name == 'sgoat':
         suitResponseTrack.append(Sequence(Func(suit.setSuitStatusEffect, 'rageBuilding', modifier=dmg)))
@@ -412,31 +461,86 @@ def doRageBuilding(attack):
     return suitResponseTrack
 
 def doDamageMovie(attack):
-    theSuit = attack['suit']
-    notifyTracks = Sequence()
     battle = attack['battle']
-    dmg = attack['target'][0]['hp']
-    #notifyTrack = Sequence(Func(theSuit.showHpTextNew, +dmg), Func(theSuit.setHealthForMe, +dmg),
-                           #  Func(theSuit.updateHealthBar, 0))
-    notifyTrack = Parallel(theSuit.makeDamageInterval(battle, dmg))
-    if theSuit.dna.name == 'safesupervis':
-        node = theSuit.getGeomNode().getChild(0)
-        notifyTrack.append(Parallel(LerpColorScaleInterval(node, duration=1, colorScale=(1, 1, 1, 1),
-                                        blendType='easeInOut')))
-    healSound = SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'))
-    cameraTrack = Wait(3.0)
-    notifyTracks.append(Parallel(notifyTrack))
-    return Sequence(notifyTracks)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
+    damageTrack = Sequence()
+
+    if dmg > 0:
+        damageTrack.append(
+            Parallel(
+                ActorInterval(targetSuit, 'pie-small-react'),
+                Func(targetSuit.showHpTextNew, -dmg),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+    if died:
+        if targetSuit.isVirtual:
+            damageTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+        else:
+            damageTrack.append(MovieUtil.createSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+
+    else:
+        damageTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+
+    return damageTrack
 
 def doAbsorbMovieLevel(attack):
-    theSuit = attack['suit']
-    notifyTracks = Sequence()
     battle = attack['battle']
-    dmg = attack['target'][0]['hp']
-    notifyTrack = Parallel(theSuit.makeDamageLevelInterval(battle, dmg))
-    cameraTrack = Wait(3.0)
-    notifyTracks.append(Parallel(notifyTrack))
-    return Sequence(notifyTracks)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
+    damageTrack = Sequence()
+
+    if dmg > 0:
+        damageTrack.append(
+            Parallel(
+                ActorInterval(targetSuit, 'pie-small-react'),
+                Func(targetSuit.showHpTextNew, -dmg),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+    if died:
+        if targetSuit.isVirtual:
+            damageTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+        else:
+            damageTrack.append(MovieUtil.createSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+
+    else:
+        damageTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+
+    return damageTrack
 
 def doDrenchDecrement(attack):
     suit = attack['suit']
@@ -494,7 +598,7 @@ def doSueRemoval(attack):
     suit = attack['suit']
     battle = attack['battle']
     suitTrack = Sequence()
-    suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), Func(suit.clearSuitStatusEffect, 'sued')), Func(battle.unSueSuit, suit)), Func(suit.setNeutralAnimationDrop)))
+    suitTrack.append(Sequence(Parallel(ActorInterval(suit, 'soak', startTime=3.5), Sequence(Wait(1.0), Func(suit.setSued2, 0), Func(suit.clearSuitStatusEffect, 'sued'))), Func(suit.setNeutralAnimationDrop)))
     suitTrack.append(Func(suit.removeSued))
     return suitTrack
 
@@ -520,23 +624,86 @@ def doSueApplication(attack):
     return Parallel(suitTrack, soundTrack, explodeTrack)
 
 def doSueDamage(attack):
-    theSuit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = attack['target'][0]['hp']
-    suitTrack = Parallel()
-    suitTrack.append(Parallel(theSuit.makeSueDamageInterval(battle, dmg)))
-    return Parallel(suitTrack)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
+    damageTrack = Sequence()
+    if dmg > 0:
+        damageTrack.append(
+            Parallel(
+                ActorInterval(targetSuit, 'pie-small-react'),
+                Func(targetSuit.showHpTextNew, -dmg, text="SUED!", colorCode=1),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+    if died:
+        if targetSuit.isVirtual:
+            damageTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+        else:
+            damageTrack.append(MovieUtil.createSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+
+    else:
+        damageTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+
+    return damageTrack
 
 def doZapMovie(attack):
-    theSuit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    suitTrack = Parallel()
-    dmg = attack['target'][0]['hp']
-    suitTrack.append(Parallel(theSuit.makeZapDamageInterval(battle, dmg)))
-    soundTrack = getSoundTrack('AA_battery.ogg', node=theSuit)
-    return Parallel(soundTrack, suitTrack)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+    dmg = int(targetData.get('hp', 0))
+    died = targetData.get('died', False)
+
+    damageTrack = Sequence()
+
+    if dmg > 0:
+        damageTrack.append(
+            Parallel(
+            ActorInterval(targetSuit, 'small-zap'),
+            MovieUtil.createSuitStunInterval(targetSuit, 0, 2.0),
+            Func(targetSuit.showHpTextNew, -dmg, text="AFTERSHOCK!", colorCode=3),
+            Func(targetSuit.setHealthForMe, -dmg),
+            Func(targetSuit.updateHealthBar, 0), Func(targetSuit.clearSuitStatusEffect, 'zapped')
+        )
+        )
+
+    if died:
+        if targetSuit.isVirtual:
+            damageTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+        else:
+            damageTrack.append(MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
+            damageTrack.append(Func(targetSuit.makeDead))
+
+    else:
+        damageTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+    soundTrack = getSoundTrack('AA_battery.ogg', node=targetSuit)
+    return Parallel(soundTrack, damageTrack)
 
 def doDeathCheck(attack):
     name = attack['name']

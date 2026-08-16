@@ -147,82 +147,56 @@ class PacesetterCalculatorAI:
                 self.__cancelOpeningChallengeIfNeeded(suitId)
                 if self.battle.activeSuits[i].currHP > 0 and (not self.battle.activeSuits[i].currHP >= 12750 or self.suitHasCondition(suitId, 'openingChallengeCancelled')):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'PresidentTargetCheck',  # Target Check
-                                                                'animName': 'nothing',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.battle.activeSuits[i].currHP > 0:
-                    if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
-                        attack = self.__getLureRemoval(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                 'name': self.__chooseRushJobAttack(suitId),
                                                                 'animName': 'rush-job',
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                                            'targetType': 'suit',
+                                                            'allowSelfTarget': True,
+                                                             'excludeConditions': ('trapRushJob', 'lureRushJob', 'throwRushJob', 'squirtRushJob', 'zapRushJob', 'soundRushJob', 'dropRushJob',),
+                                                            'targetSelf': False,
+                                                        'excludeManagers': False})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                         rushJobsQueued.add(suitId)
 
                 roll = random.randint(0, 100)
                 if roll >= 25 and (self.battle.activeSuits[i].currHP < 8925 or self.suitHasCondition(suitId, 'overclocked')):
-                    if self.battle.activeSuits[i].currHP > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'PresidentTargetCheck',  # Target Check
-                                                                    'animName': 'nothing',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.battle.activeSuits[i].currHP > 0:
-                        if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
-                            attack = self.__getLureRemoval(suitId)
-                            if attack[SUIT_ATK_COL]:
-                                self.battle.suitAttacks.append(attack)
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': self.__chooseRushJobAttack(suitId),
-                                                                    'animName': 'rush-job',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                            rushJobsQueued.add(suitId)
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': self.__chooseRushJobAttack(suitId),
+                                                                'animName': 'rush-job',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                                            'targetType': 'suit',
+                                                            'allowSelfTarget': True,
+                                                             'excludeConditions': ('trapRushJob', 'lureRushJob', 'throwRushJob', 'squirtRushJob', 'zapRushJob', 'soundRushJob', 'dropRushJob',),
+                                                            'targetSelf': False,
+                                                        'excludeManagers': False})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                        rushJobsQueued.add(suitId)
 
                 roll = random.randint(0, 100)
                 if roll >= 25 and self.battle.activeSuits[i].currHP < 3825:
-                    if self.battle.activeSuits[i].currHP > 0:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'PresidentTargetCheck',  # Target Check
-                                                                    'animName': 'nothing',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                        if (self.suitHasCondition(suitId, 'targetCheckCondition') and
-                                self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1):
-                            attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                        'name': self.__chooseRushJobAttack(suitId),
-                                                                        'animName': 'rush-job',
-                                                                        'hp': 0,
-                                                                        'acc': 100,
-                                                                        'freq': 0,
-                                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                            if attack[SUIT_ATK_COL]:
-                                self.battle.suitAttacks.append(attack)
-                                rushJobsQueued.add(suitId)
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': self.__chooseRushJobAttack(suitId),
+                                                                'animName': 'rush-job',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                                            'targetType': 'suit',
+                                                            'allowSelfTarget': True,
+                                                             'excludeConditions': ('trapRushJob', 'lureRushJob', 'throwRushJob', 'squirtRushJob', 'zapRushJob', 'soundRushJob', 'dropRushJob',),
+                                                            'targetSelf': False,
+                                                        'excludeManagers': False})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                        rushJobsQueued.add(suitId)
 
 
         for suit in self.battle.activeSuits[:]:
@@ -294,7 +268,8 @@ class PacesetterCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                             self.setSuitCondition(suitId, 'turn2', 1, -1, 'setBoth')
@@ -305,7 +280,8 @@ class PacesetterCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                             self.setSuitCondition(suitId, 'turn1', 1, -1, 'setBoth')
@@ -316,7 +292,8 @@ class PacesetterCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     if (self.battle.activeSuits[i].currHP <= 5100 and
@@ -328,7 +305,8 @@ class PacesetterCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.setSuitCondition(suitId, 'battleSpeed', 6, -1, 'setBoth')
                             self.battle.suitAttacks.append(attack)
@@ -339,6 +317,42 @@ class PacesetterCalculatorAI:
                                                                     'hp': 0,
                                                                     'acc': 100,
                                                                     'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
+
+        for suit in self.battle.activeSuits[:]:
+            if suit.dna.name != 'psetter' or suit.currHP <= 0:
+                continue
+            oldActiveSuits = self.battle.activeSuits[:]
+            oldLivingSuits = []
+            livingPositions = []
+            for index in xrange(len(oldActiveSuits)):
+                otherSuit = oldActiveSuits[index]
+                if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
+                    oldLivingSuits.append(otherSuit)
+                    livingPositions.append(index)
+            if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
+                continue
+            newLivingSuits = oldLivingSuits[:]
+            random.shuffle(newLivingSuits)
+            if newLivingSuits == oldLivingSuits:
+                newLivingSuits.reverse()
+            newActiveSuits = oldActiveSuits[:]
+            for index in xrange(len(livingPositions)):
+                newActiveSuits[livingPositions[index]] = newLivingSuits[index]
+            payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
+            attack = self.__getCheatAttack(suit.doId, {
+                'suitName': suit.dna.name,
+                'name': 'PacesetterCorporateRestructuring',
+                'animName': 'quick-jump',
+                'hp': payload,
+                'acc': 100,
+                'freq': 0,
+                'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'
+            })
+            if attack[SUIT_ATK_COL]:
+                self.battle.suitAttacks.append(attack)
+            self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])

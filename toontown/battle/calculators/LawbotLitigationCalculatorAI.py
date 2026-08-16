@@ -90,7 +90,11 @@ class LawbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'sgoat':
@@ -173,23 +177,23 @@ class LawbotLitigationCalculatorAI:
             #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
             if not self.suitHasCondition(suitId, 'healfinished'):
-                attack = self.__getCheatAttack(suitId, {'suitName': '',
-                                            'name': 'CaseManagerInsurance',  # Insurance for when Case Manager is defeated
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                if attack[SUIT_ATK_COL]:
-                    self.battle.suitAttacks.append(attack)
-            if not self.suitHasCondition(suitId, 'healfinished2'):
-                attack = self.__getCheatAttack(suitId, {'suitName': '',
-                                            'name': 'CaseManagerInsurance2',  # Insurance for when Case Manager is defeated
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                attack = self.__getCheatAttack(suitId, {
+                    'suitName': '',
+                    'name': 'CaseManagerInsurance',
+                    'animName': 'nothing',
+                    'hp': 0,
+                    'acc': 100,
+                    'freq': 0,
+                    'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                    'targetType': 'suit',
+                    'allowSelfTarget': True,
+                    'targetSelf': False,
+                    'requiredConditions': ('insured', 'insured2'),
+                    'excludeManagers': False,
+                    'damageTarget': 'target',
+                    'healTarget': 'target'
+                })
+
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
@@ -207,22 +211,34 @@ class LawbotLitigationCalculatorAI:
                             currentBossHealth = s.currHP
                     if currentBossHealth >= 1:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': random.choice(('CaseManagerInsurancePlanScapegoat', 'CaseManagerInsurancePlanScapegoat2')),  # Insurance Plan
+                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
                                                                 'animName': 'throw-insurance',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     else:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': random.choice(('CaseManagerInsurancePlan', 'CaseManagerInsurancePlan2')),  # Insurance Plan
+                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
                                                                 'animName': 'throw-insurance',
                                                                 'hp': 0,
                                                                 'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'insurancecalculator3') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -236,25 +252,36 @@ class LawbotLitigationCalculatorAI:
                             currentBossHealth = s.currHP
                     if currentBossHealth >= 1:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': random.choice(('CaseManagerInsurancePlanScapegoat', 'CaseManagerInsurancePlanScapegoat2')),  # Insurance Plan
+                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
                                                                 'animName': 'throw-insurance',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                    'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     else:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': random.choice(('CaseManagerInsurancePlan', 'CaseManagerInsurancePlan2')),  # Insurance Plan
+                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
                                                                 'animName': 'throw-insurance',
                                                                 'hp': 0,
                                                                 'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    self.setSuitCondition(suitId, 'insurancecalculator3', 0, 0, 'setBoth')
                 if self.suitHasCondition(suitId, 'insurancecalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
@@ -266,9 +293,16 @@ class LawbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                        self.setSuitCondition(suitId, 'insurancecalculator3', 0, 0, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'stenog':
                 if self.suitHasCondition(suitId, 'whirlwindcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
@@ -383,33 +417,32 @@ class LawbotLitigationCalculatorAI:
             # Secondary Cheats
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if self.battle.activeSuits[i].dna.name == 'lgator':  # arbitrator
-                if self.suitHasCondition(suitId, 'throwbookcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'TargetCheck', # Target Check for Throw Book
-                     'animName': 'throw-object',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'throwbookcalculator') and not self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'throwbookcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'throwbookcalculator') and self.suitHasCondition(suitId, 'targetCheckCondition') and self.getSuitConditionModifier(suitId, 'targetCheckCondition') > -1 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'throwbookcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                       'name': 'ArbitratorThrowBook', # ThrowBook
                      'animName': 'throw-object',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                         'damageTarget': 'target',
+                        'healTarget': 'attacker',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                     'excludeManagers': True,
+                        'requiredConditions': (),
+                        'excludeConditions': ('insured', 'insured2',),})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'stenog':
@@ -472,7 +505,14 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'excludeToonConditions': (
+                            'bound',
+                        )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'bindingscalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -486,7 +526,14 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'bound',
+                    )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                         self.setSuitCondition(suitId, 'bindingscalculator2', 0, 0, 'setBoth')
@@ -521,7 +568,8 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     self.battle.suitAttacks.append(attack)
                 if self.getSuitConditionTurns(suitId, 'enraged') == 1 and self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'enraged'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -530,7 +578,8 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'bashcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -544,7 +593,8 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'stenog':
@@ -555,7 +605,11 @@ class LawbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
@@ -603,7 +657,7 @@ class LawbotLitigationCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'lgator':
-                if self.suitHasCondition(suitId, 'bellowcalculator') and self.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
+                if self.suitHasCondition(suitId, 'bellowcalculator') and self.calculator.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
                     self.setSuitCondition(suitId, 'bellowcalculator', 0, 0, 'setBoth')
                 if self.suitHasCondition(suitId, 'bellowcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
@@ -616,7 +670,8 @@ class LawbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'bellowcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -630,7 +685,8 @@ class LawbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 self.setSuitCondition(suitId, 'bellowcalculator2', 0, 0, 'setBoth')

@@ -520,85 +520,137 @@ def __soakRemoval(suit, remove=0):
 def doOilRainHeal(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = target[0]['hp']
+    targets = attack['target']
+
     puddleTracks = Parallel()
     moveTracks = Parallel()
     cloudPropTracks = Parallel()
-    managerHealTracks = Parallel()
+    healTracks = Parallel()
     animTracks = Parallel()
+
     BattleParticles.loadParticles()
-    for s in battle.activeSuits:
+
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        targetSuit = targetData['suit']
+        heal = int(targetData.get('heal', 0))
+        damage = int(targetData.get('hp', 0))
+
         currentBossHealth = -1
-        if s.dna.name == 'phouse':
-            currentBossHealth = s.currHP
-        # if currentBossHealth >= 1:
-        #     if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
-        #         managerHealTracks.append(Func(s.checkRefinementPowerhouse))
-        # else:
-        #     if s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
-        #         managerHealTracks.append(Func(s.checkRefinement))
+
+        for activeSuit in battle.activeSuits:
+            if activeSuit.dna.name == 'phouse':
+                currentBossHealth = activeSuit.currHP
+                break
+
+        # =====================================================
+        # CLOUD
+        # =====================================================
         cloud = globalPropPool.getProp('stormcloud')
         rainEffect = BattleParticles.createParticleEffect(file='oilRain')
         rainEffect.setColor(0.259, 0.259, 0.259, 1)
-        initialCloudHeight = s.height + 3
+
+        initialCloudHeight = targetSuit.height + 3
         cloudPosPoints = [Point3(0, 0, initialCloudHeight), VBase3(180, 0, 0)]
+
         cloudPropTrack = Sequence()
         cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
-        cloudPropTrack.append(getPropAppearTrack(cloud, s, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
+        cloudPropTrack.append(getPropAppearTrack(cloud, targetSuit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.25))
         cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
         cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
         cloudPropTrack.append(Wait(0.6))
-        cloudPropTrack.append(Parallel(
-            Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=4.1, cleanup=True, softStopT=-1)),
-            Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
+        cloudPropTrack.append(Parallel(Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=4.1, cleanup=True, softStopT=-1)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
         cloudPropTrack.append(Wait(0.4))
         cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
         cloudPropTrack.append(Parallel(Func(MovieUtil.removeProp, cloud), Func(battle.movie.clearRenderProp, cloud)))
+
         cloudPropTracks.append(cloudPropTrack)
+
+        # =====================================================
+        # PUDDLE
+        # =====================================================
         puddle = globalPropPool.getProp('quicksand')
         puddle.setColor(Vec4(0, 0, 0, 1))
         puddle.setHpr(Point3(120, 0, 0))
         puddle.setScale(0.01)
-        puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
-                               Func(puddle.reparentTo, s), Func(puddle.wrtReparentTo, render),
-                               LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
-                                                 startScale=MovieUtil.PNT3_NEARZERO), Wait(6.2),
-                               LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                               Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
-        sinkPos1 = s.getPos(battle)
-        sinkPos2 = s.getPos(battle)
-        dropPos = s.getPos(battle)
-        landPos = s.getPos(battle)
-        sinkPos1.setZ(sinkPos1.getZ() - 3.1)
-        sinkPos2.setZ(sinkPos2.getZ() - 9.1)
-        dropPos.setZ(dropPos.getZ())
-        landPos.setY(dropPos.getY())
-        if not s.dna.name == 'ambass' and not (s.dna.name == 'foreman' and s.getActualLevel() == 28):
-            if currentBossHealth >= 1:
-                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, Point3(0, 0, -3.1), other=puddle),
-                                 LerpPosInterval(s, 0.4, Point3(0, 0, -9.1), other=puddle),
-                                     )
-            else:
-                moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, Point3(0, 0, -3.1), other=puddle),
-                                 LerpPosInterval(s, 0.4, Point3(0, 0, -9.1), other=puddle),
-                                 )
-            animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75), 
-                             ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
-                             ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25),  Func(s.soakSuit, 0, 1), Func(s.setPos, puddle, Point3(0, 0, 0)), Func(s.clearSuitStatusEffect, 'soaked'), 
-                             Func(s.clearSuitStatusEffect, 'drenched'), 
-                             ActorInterval(s, 'reanimated'), Func(s.setSuitStatusEffect, 'oilRain', modifier=1, turns=3),  Func(s.setNeutralAnimationDrop))
-            animTracks.append(animTrack)
+
+        puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle), Func(puddle.reparentTo, targetSuit), Func(puddle.wrtReparentTo, render), LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO), Wait(6.2), LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8), Func(MovieUtil.removeProp, puddle), Func(battle.movie.clearRenderProp, puddle))
+
+        # =====================================================
+        # TARGET MOVEMENT / REANIMATION
+        # =====================================================
+        if targetSuit != suit and not (targetSuit.dna.name == 'foreman' and targetSuit.getActualLevel() == 28):
+            moveTrack = Sequence(Wait(1.8), LerpPosInterval(targetSuit, 0.9, Point3(0, 0, -3.1), other=puddle), LerpPosInterval(targetSuit, 0.4, Point3(0, 0, -9.1), other=puddle))
+
+            animTrack = Sequence(
+                Wait(0.9),
+                ActorInterval(targetSuit, 'flail-qs', endTime=1.75),
+                ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.75),
+                ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.25),
+                Func(targetSuit.soakSuit, 0, 1),
+                Func(targetSuit.setPos, puddle, Point3(0, 0, 0)),
+                Func(targetSuit.clearSuitStatusEffect, 'soaked'),
+                Func(targetSuit.clearSuitStatusEffect, 'drenched'),
+                ActorInterval(targetSuit, 'reanimated'),
+                Func(targetSuit.setSuitStatusEffect, 'oilRain', modifier=1, turns=3),
+                Func(targetSuit.setNeutralAnimationDrop)
+            )
+
             moveTracks.append(moveTrack)
+            animTracks.append(animTrack)
             puddleTracks.append(puddleTrack)
 
-    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(.5), Func(suit.clearSuitStatusEffect, 'drenched'),  Func(suit.setSuitStatusEffect, 'oilRain', modifier=1, turns=3), 
-                         Func(suit.clearSuitStatusEffect, 'soaked'), Func(suit.soakSuit, 0, 1),  ActorInterval(suit, 'summon-cog'), Func(suit.setNeutralAnimationDrop))
+        # =====================================================
+        # HEAL RESULT FROM AI
+        # =====================================================
+        if heal > 0:
+            healTrack = Sequence(
+                Wait(3.1),
+                Parallel(
+                    Func(targetSuit.showHpTextNew, heal),
+                    Func(targetSuit.setHealthForMe, heal),
+                    Func(targetSuit.updateHealthBar, 0),
+                    Func(targetSuit.checkHealingPhrases, 0)
+                )
+            )
+
+            healTracks.append(healTrack)
+
+        # Optional support if Refinement can also damage anything.
+        if damage > 0:
+            damageTrack = Sequence(
+                Wait(3.1),
+                Parallel(
+                    Func(targetSuit.showHpTextNew, -damage),
+                    Func(targetSuit.setHealthForMe, -damage),
+                    Func(targetSuit.updateHealthBar, 0)
+                )
+            )
+
+            healTracks.append(damageTrack)
+
+    # =========================================================
+    # AMBASSADOR MAIN TRACK
+    # =========================================================
+    suitTrack = Sequence(
+        getSuitAnimTrack(attack),
+        Wait(0.5),
+        Func(suit.clearSuitStatusEffect, 'drenched'),
+        Func(suit.setSuitStatusEffect, 'oilRain', modifier=1, turns=3),
+        Func(suit.clearSuitStatusEffect, 'soaked'),
+        Func(suit.soakSuit, 0, 1),
+        ActorInterval(suit, 'summon-cog'),
+        Func(suit.setNeutralAnimationDrop)
+    )
+
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     soundTrack4 = getSoundTrack('SA_liquidate.ogg', node=suit)
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.1, node=suit)
-    soundTrack3 = getSoundTrack('SA_zombie_cogs_rising.ogg', delay=suit.getDuration('snap') + .5, node=suit)
-    return Parallel(suitTrack, moveTracks, soundTrack4, soundTrack3, soundTrack2, animTracks, managerHealTracks, cloudPropTracks, soundTrack, puddleTracks)
+    soundTrack3 = getSoundTrack('SA_zombie_cogs_rising.ogg', delay=suit.getDuration('snap') + 0.5, node=suit)
+
+    return Parallel(suitTrack, moveTracks, soundTrack4, soundTrack3, soundTrack2, animTracks, healTracks, cloudPropTracks, soundTrack, puddleTracks)
 
 def doOilRemoval(attack):
     suit = attack['suit']
@@ -814,37 +866,45 @@ def doAdvancement(attack):
     suit = attack['suit']
     theSuit = attack['suit']
     battle = attack['battle']
+    targets = attack['target']
+
     suitTracks = Parallel()
-    liftTracks = Parallel()
-    suitTrack2 = Sequence(Parallel(
-    getSuitAnimTrack(attack),
 
-    ActorInterval(suit, 'sacrifice-cog', startTime=2.25, endTime=4.25)),
+    suitTrack2 = Sequence(
+        Parallel(
+            getSuitAnimTrack(attack),
+            ActorInterval(suit, 'sacrifice-cog', startTime=2.25, endTime=4.25)
+        ),
+        Parallel(
+            Func(suit.enableBlend),
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(suit, duration=.75, startAnim='sacrifice-cog', endAnim='neutral', startWeight=0.0, endWeight=1.0, blendType='easeInOut')
+        ),
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop)
+    )
 
-    Parallel(Func(suit.enableBlend),
-        ActorInterval(suit, 'neutral', loop=1),
-        LerpAnimInterval(
-            suit,
-            duration=.75,
-            startAnim='sacrifice-cog',
-            endAnim='neutral',
-            startWeight=0.0,
-            endWeight=1.0,
-            blendType='easeInOut'
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        targetSuit = targetData['suit']
+
+        if targetSuit == suit:
+            continue
+
+        suitTrack = Sequence(
+            Wait(1.5),
+            Func(targetSuit.checkHealingPhrases, 1),
+            Func(targetSuit.setSuitStatusEffect, 'ambassadorTarget', turns=2),
+            ActorInterval(targetSuit, 'slip-forward'),
+            Func(targetSuit.setNeutralAnimationDrop)
         )
-    ),
 
-    Func(suit.disableBlend),
-    Func(suit.setNeutralAnimationDrop)
-)
-    #suitTrack2 = Sequence(ActorInterval(suit, 'sacrifice-cog', startTime=2.25), Func(suit.setNeutralAnimationDrop))
-    for targetSuit in battle.activeSuits:
-        suitTrack = Sequence(Wait(1.5), Func(targetSuit.checkHealingPhrases, 1), Func(targetSuit.setSuitStatusEffect, 'ambassadorTarget', turns=2), ActorInterval(targetSuit, 'slip-forward'),
-                             Func(targetSuit.setNeutralAnimationDrop))
-        if not targetSuit.dna.name == 'ambass':
-            if not targetSuit.isManager and not targetSuit.isGovernaught:
-                suitTracks.append(suitTrack)
+        suitTracks.append(suitTrack)
+
     soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=theSuit)
+
     return Parallel(suitTracks, soundTrack2, suitTrack2)
 
 def doBrokenConnectionOLD(attack):
@@ -875,13 +935,20 @@ def doBrokenConnection(attack):
 def doVoicemail(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets = attack.get('target', [])
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+    dmg = targetData.get('hp', 0)
     calculator = globalPropPool.getProp('court-costs-calculator')
     calculator.setTwoSided(True)
     calculator.setScale(1.5)
     suitTrack = Sequence(ActorInterval(attack['suit'], 'calculating-costs'),  Func(suit.setNeutralAnimationDrop), Wait(2.0))
     suitSpeechTrack = Func(suit.setChatAbsolute,
                            "Every call costs more, and I always keep track... Updating billing record to %s dollars." %
-                           int(attack['target'][0]['hp']), CFSpeech | CFTimeout)
+                           int(dmg), CFSpeech | CFTimeout)
     calcPosPoints = [Point3(-0.43352601156069426, 0.25, -.05), VBase3(12.485549132947995, 0.0, 181.0)]
     calcPropTrack = Sequence(
         Func(__showProp, calculator, suit.getRightHand(), *calcPosPoints),
@@ -1406,119 +1473,143 @@ def doHeadRoller(attack, ind):
 def doHeadRollerGroup(attack):
     manager = attack['suit']
     battle = attack['battle']
-    selfDamageTracks = Parallel()
+    targets = attack['target']
+
     suitTracks = Parallel()
     managerTrack = Sequence(getSuitAnimTrack(attack))
 
-    for targetSuit in battle.activeSuits:
-        suitTrack = Sequence(Wait(1.0), targetSuit.makeHeadRollerInterval(battle))
-        if not targetSuit.dna.name == 'ambass':
-            if not targetSuit.isManager and targetSuit.hasSuitStatusEffect('ambassadorTarget') and not targetSuit.isGovernaught:
-                suitTracks.append(suitTrack)
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        targetSuit = targetData['suit']
+        dmg = int(targetData.get('hp', 0))
+        died = targetData.get('died', False)
+
+        if targetSuit == manager:
+            continue
+
+        if dmg <= 0:
+            continue
+
+        targetTrack = Sequence(
+            Wait(1.0),
+            ActorInterval(targetSuit, 'soak', duration=2.0),
+            Parallel(
+                Func(targetSuit.makeUnTarget),
+                Sequence(
+                    Func(targetSuit.setChatAbsolute, "Ouch.", CFSpeech | CFTimeout),
+                    ActorInterval(targetSuit, 'pie-small-react'),
+                    Func(targetSuit.setNeutralAnimationDrop)
+                ),
+                MovieUtil.spawnHeadExplosion(targetSuit, battle),
+                Func(targetSuit.showHpTextNew, -dmg, text="TERMINATED!", colorCode=4),
+                Func(targetSuit.setHealthForMe, -dmg),
+                Func(targetSuit.updateHealthBar, 0)
+            )
+        )
+
+        if died:
+            targetTrack.append(MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
+            targetTrack.append(Func(targetSuit.makeDead))
+        else:
+            targetTrack.append(Func(targetSuit.setNeutralAnimationDrop))
+
+        suitTracks.append(targetTrack)
+
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
+
     return Parallel(managerTrack, suitTracks, soundTrack)
 
 def doGhostMentality(attack):
     manager = attack['suit']
-    suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
+    targets = attack['target']
 
-    suitTracks = Parallel()
-    managerTracks = Parallel()
-    moveTracks = Parallel()
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
 
     origPos, origHpr = battle.getActorPosHpr(manager)
-    origPos2 = suit.getPos(battle)
+    origPos2 = manager.getPos(battle)
 
     walkOutPos = Point3(origPos)
     walkOutPos.setY(walkOutPos.getY() - 12.5)
 
-    for targetSuit in battle.activeSuits:
-        if targetSuit == manager:
-            continue
+    # =========================================================
+    # CALCULATE FACING TOWARD ACTUAL TARGET
+    # =========================================================
+    targetPos = targetSuit.getPos(battle)
 
-        # Face the target suit while standing out in front
-        targetPos = targetSuit.getPos(battle)
+    manager.setPos(battle, walkOutPos)
+    manager.setHpr(battle, origHpr)
+    manager.headsUp(battle, targetPos)
 
-        manager.setPos(battle, walkOutPos)
-        manager.setHpr(battle, origHpr)
-        manager.headsUp(battle, targetPos)
-        targetHpr = manager.getHpr(battle)
+    targetHpr = manager.getHpr(battle)
 
-        manager.setPos(battle, origPos2)
-        manager.setHpr(battle, origHpr)
+    manager.setPos(battle, origPos2)
+    manager.setHpr(battle, origHpr)
 
-        moveTrack = Sequence(
-            Parallel(LerpHprInterval(
-                suit,
-                1.5,
-                targetHpr,
-                startHpr=origHpr,
-                other=battle
-            ),
-                LerpPosInterval(
-                    suit,
-                    1.5,
-                    walkOutPos,
-                    startPos=origPos,
-                    other=battle
-                )),
-            Wait(suit.getDuration('deadwood')),
-            Parallel(LerpHprInterval(
-                suit,
-               1.5,
-                origHpr,
-                startHpr=targetHpr,
-                other=battle
-            ),
-                LerpPosInterval(
-                    suit,
-                    1.5,
-                    origPos,
-                    startPos=walkOutPos,
-                    other=battle
-                )),
-            Func(suit.setPos, battle, origPos),
-            Func(suit.setHpr, battle, origHpr)
+    # =========================================================
+    # MOVEMENT
+    # =========================================================
+    moveTrack = Sequence(
+        Parallel(
+            LerpHprInterval(manager, 1.5, targetHpr, startHpr=origHpr, other=battle),
+            LerpPosInterval(manager, 1.5, walkOutPos, startPos=origPos, other=battle)
+        ),
+        Wait(manager.getDuration('deadwood')),
+        Parallel(
+            LerpHprInterval(manager, 1.5, origHpr, startHpr=targetHpr, other=battle),
+            LerpPosInterval(manager, 1.5, origPos, startPos=walkOutPos, other=battle)
+        ),
+        Func(manager.setPos, battle, origPos),
+        Func(manager.setHpr, battle, origHpr)
+    )
+
+    # =========================================================
+    # AMBASSADOR ANIMATION
+    # =========================================================
+    managerTrack = Sequence(
+        ActorInterval(manager, 'walk', duration=1.5),
+        Parallel(
+            getSuitAnimTrack(attack),
+            Wait(manager.getDuration('deadwood'))
+        ),
+        ActorInterval(manager, 'walk', duration=1.5),
+        Func(manager.setNeutralAnimation)
+    )
+
+    # =========================================================
+    # TARGET EFFECT
+    # =========================================================
+    effectDelay = manager.getDuration('deadwood')
+
+    if targetSuit.isVirtual:
+        targetTrack = Sequence(
+            Wait(effectDelay),
+            Func(targetSuit.showHpString, "+50% Damage!"),
+            Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier')
         )
-
-        managerTrack = Sequence(
-            ActorInterval(manager, 'walk', duration=1.5),
-            Parallel(getSuitAnimTrack(attack), Wait(manager.getDuration('deadwood'))),
-            ActorInterval(manager, 'walk', duration=1.5),
-            Func(manager.setNeutralAnimation)
+    else:
+        targetTrack = Sequence(
+            Wait(effectDelay),
+            MovieUtil.createGhostMentalityTrack(targetSuit, battle),
+            Func(battle.unSueSuit, targetSuit)
         )
-
-        managerTracks.append(managerTrack)
-        moveTracks.append(moveTrack)
-
-        suitTrack = Sequence(
-            Wait(manager.getDuration('deadwood') + 1.5 - 1.5),
-            MovieUtil.createGhostMentalityTrack(targetSuit, battle)
-        )
-
-        suitTrack2 = Sequence(
-            Wait(manager.getDuration('deadwood') + 1.5 - 1.5),
-            Func(targetSuit.showHpString, "+50% Damage!"), Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier'),
-        )
-
-        suitTrack.append(Func(battle.unSueSuit, targetSuit))
-
-        if targetSuit.dna.name != 'ambass':
-            if targetSuit.isManager:
-                pass
-            elif not targetSuit.isVirtual:
-                suitTracks.append(suitTrack)
-            else:
-                suitTracks.append(suitTrack2)
 
     soundTrack = Sequence(
         Wait(1.5),
         SoundInterval(globalBattleSoundCache.getSound('SA_deadwood.ogg'), node=manager)
     )
 
-    return Parallel(managerTracks, moveTracks, suitTracks, soundTrack)
+    return Parallel(managerTrack, moveTrack, targetTrack, soundTrack)
 
 def doAmbassadorPhase2(attack):
     theSuit = attack['suit']
@@ -1856,12 +1947,32 @@ def doAmbassadorDamageUp(attack):
 def doDamageUp1(attack):
     theSuit = attack['suit']
     battle = attack['battle']
-    dmg = attack['target'][0]['hp']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+    heal = int(targetData.get('heal', 0))
+
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
-    makeImmune =  Parallel(Func(theSuit.setSuitStatusEffect, 'damageUp', modifier=int(math.ceil(dmg * .05)), mode='refreshModifier'))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextNew, dmg, text="+%s%%" % int(math.ceil(dmg * .05)) + " Damage!", colorCode=1), Func(theSuit.setHealthForMe, + dmg), Func(theSuit.updateHealthBar, 0), Wait(3.0))
-    return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
+
+    damageUpAmount = int(math.ceil(heal * 0.05))
+
+    makeDamageUp = Parallel(Func(theSuit.setSuitStatusEffect, 'damageUp', modifier=damageUpAmount, mode='refreshModifier'))
+
+    managerHealTrack = Sequence(
+        Wait(2.0),
+        Parallel(
+            Func(theSuit.showHpTextNew, heal, text="+%s%% Damage!" % damageUpAmount, colorCode=1),
+            Func(theSuit.setHealthForMe, heal),
+            Func(theSuit.updateHealthBar, 0)
+        ),
+        Wait(3.0)
+    )
+
+    return Parallel(suitTrack, soundTrack, managerHealTrack, makeDamageUp)
 
 def doDamageUp2(attack):
     theSuit = attack['suit']
@@ -3096,64 +3207,148 @@ def doLiquidateGROUP(attack):
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
 def doOverseer(attack):
-    suit = attack['suit']
-    theSuit = attack['suit']
+    attacker = attack['suit']
     battle = attack['battle']
-    healSound = getSoundTrack('LB_toonup.ogg')
+    targets = attack['target']
+
     suitTracks = Parallel()
-    liftTracks = Parallel()
-    for suit in battle.activeSuits:
-        suitTrack = Sequence()
-        suitTrack.append(Wait(4))
-        suitTracks.append(suitTrack)
-        if suit.dna.name != 'bkeeper':
-            suitTrack.append(Parallel(healSound, Func(suit.setChatAbsolute, random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
-                                           CFSpeech | CFTimeout)))
-        suitTracks.append(Sequence(getSuitAnimTrack(attack, playRate=1.5)))
-        suitTracks.append(Func(suit.setSuitStatusEffect, 'overseer', modifier=1, turns=3))
-        suitTracks.append(Wait(6.5))
-    posPoints = [Point3(0.88, -2.21917, -0.22), VBase3(10, 250, -10)]
     knifeTracks = Parallel()
-    for suit in battle.activeSuits:
-        theSuit = attack['suit']
-        hitPoint = suit.getPos(battle)
-        hitPoint.setZ(suit.height + 2)
-        hitPoint.setY(hitPoint.getY() + 0.5)
+
+    healSound = getSoundTrack('LB_toonup.ogg')
+
+    # =========================================================
+    # TARGET REACTIONS / OVERSEER STATUS
+    # =========================================================
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        targetSuit = targetData['suit']
+
+        targetTrack = Sequence(
+            Wait(4.0)
+        )
+
+        if targetSuit.dna.name != 'bkeeper':
+            targetTrack.append(
+                Parallel(
+                    Func(
+                        targetSuit.setChatAbsolute,
+                        random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                        CFSpeech | CFTimeout
+                    )
+                )
+            )
+
+        targetTrack.append(
+            Func(
+                targetSuit.setSuitStatusEffect,
+                'overseer',
+                modifier=1,
+                turns=3
+            )
+        )
+
+        targetTrack.append(Wait(3.5))
+
+        suitTracks.append(targetTrack)
+
+    # =========================================================
+    # ATTACKER ANIMATION
+    # =========================================================
+    attackerTrack = Sequence(
+        getSuitAnimTrack(attack, playRate=1.5)
+    )
+
+    # =========================================================
+    # PAPER PROJECTILES
+    # =========================================================
+    posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
+
+    for targetData in targets:
+        if 'suit' not in targetData:
+            continue
+
+        targetSuit = targetData['suit']
+
         knife = globalPropPool.getProp('shredder-paper')
+
         knifeTrack = Sequence(
             getPropAppearTrack(
                 knife,
-                theSuit.getRightHand(),
+                attacker.getRightHand(),
                 posPoints,
                 0.5,
-                VBase3(1.2, 1.2, 1.2),
+                VBase3(1, 1, 1),
                 scaleUpTime=0.5
             ),
-            Wait(.95),
+
+            Wait(0.95),
 
             Parallel(
-                getThrowTrack(knife, (0, 0, suit.getHeight() + 2.5), 1.5, suit, -20.288),
-                LerpHprInterval(knife, 1.0, VBase3(0, -20, -20))
+                getThrowTrack(
+                    knife,
+                    (0, 0, targetSuit.getHeight() + 2.5),
+                    1.5,
+                    targetSuit,
+                    -30.288
+                ),
+
+                LerpHprInterval(
+                    knife,
+                    1.0,
+                    VBase3(0, -20, -20)
+                )
             ),
 
             Wait(0.15),
 
             Parallel(
-                LerpPosInterval(knife, 0.45, (0, 0, suit.getHeight() - 2.5), other=suit, blendType='easeIn'),
-                LerpScaleInterval(knife, 0.45, VBase3(0.6, 0.6, 0.6), blendType='easeIn')
+                LerpPosInterval(
+                    knife,
+                    0.45,
+                    (0, 0, targetSuit.getHeight() - 2.5),
+                    other=targetSuit,
+                    blendType='easeIn'
+                ),
+
+                LerpScaleInterval(
+                    knife,
+                    0.45,
+                    VBase3(0.6, 0.6, 0.6),
+                    blendType='easeIn'
+                )
             ),
 
             Parallel(
-                LerpScaleInterval(knife, 0.2, VBase3(0.01, 0.01, 0.01)),
-                LerpColorScaleInterval(knife, 0.2, Vec4(1, 1, 1, 0))
+                LerpScaleInterval(
+                    knife,
+                    0.2,
+                    VBase3(0.01, 0.01, 0.01)
+                ),
+
+                LerpColorScaleInterval(
+                    knife,
+                    0.2,
+                    Vec4(1, 1, 1, 0)
+                )
             ),
 
             Func(knife.removeNode)
         )
+
         knifeTracks.append(knifeTrack)
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
-    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4)
-    return Parallel(suitTracks, soundTrack2, liftTracks, soundTrack, knifeTracks)
+
+    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.0, node=attacker)
+    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.0)
+
+    return Parallel(
+        attackerTrack,
+        suitTracks,
+        knifeTracks,
+        soundTrack2,
+        soundTrack
+    )
 
 def doThrowBook(attack):
     suit = attack['suit']

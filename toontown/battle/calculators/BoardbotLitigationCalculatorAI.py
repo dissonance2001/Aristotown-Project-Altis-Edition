@@ -61,7 +61,8 @@ class BoardbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                 'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -75,7 +76,8 @@ class BoardbotLitigationCalculatorAI:
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
@@ -131,7 +133,11 @@ class BoardbotLitigationCalculatorAI:
                                      'hp': 0,
                                      'acc': 100,
                                      'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.calculator.contingencyThresholds > 0 and not self.suitHasCondition(suitId, 'contingencyOverride') and self.battle.activeSuits[i].currHP > 0:
@@ -141,7 +147,8 @@ class BoardbotLitigationCalculatorAI:
                                      'hp': 0,
                                      'acc': 100,
                                      'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk1') and self.battle.activeSuits[i].currHP > 0:
@@ -151,7 +158,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk2') and self.battle.activeSuits[i].currHP > 0:
@@ -161,7 +169,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk3') and self.battle.activeSuits[i].currHP > 0:
@@ -171,7 +180,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk4') and self.battle.activeSuits[i].currHP > 0:
@@ -181,7 +191,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk5') and self.battle.activeSuits[i].currHP > 0:
@@ -191,7 +202,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk6') and self.battle.activeSuits[i].currHP > 0:
@@ -201,7 +213,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk7') and self.battle.activeSuits[i].currHP > 0:
@@ -211,7 +224,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'risk8') and self.battle.activeSuits[i].currHP > 0:
@@ -221,17 +235,8 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'alreadyRisk8') and self.suitHasCondition(suitId, 'contingencyOverride') and not self.suitHasCondition(suitId, 'contingencyOverrideBroken') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                     'name': 'ContingencyOverrideRevert',
-                                    'animName': 'nothing',
-                                     'hp': 0,
-                                     'acc': 100,
-                                     'freq': 0,
-                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -239,12 +244,19 @@ class BoardbotLitigationCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
                 attack = self.__getCheatAttack(suitId, {'suitName': '',
-                                            'name': 'DividendTotalMarketMeltdownDamage',  # Insurance for when Case Manager is defeated
+                                            'name': 'DividendTotalMarketMeltdownDamage',
                                             'animName': 'nothing',
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'both',
+                         'requiredConditions': ('marketMeltdown',),
+                        'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+                         'excludeManagers': False,
+                        'allowSelfTarget': True,
+                        'targetSelf': False})
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
@@ -293,39 +305,40 @@ class BoardbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                                                'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                                'requiredToonConditions': (
+                                                                            'tollmasterHit',
+                                                                        )})
+                        if not attack[SUIT_ATK_COL]:
+                            ability = self.__getAbilityQueued(suitId)
+                            self.battle.suitAttacks.append(ability)
+
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'cdirector':
-                damageCogs = 0
-                if self.suitHasCondition(suitId, 'redundantcalculator') and self.battle.activeSuits[i].currHP > 0:
-                    for suit in self.battle.activeSuits:
-                        if suit.currHP <= 0:
-                            continue
-                        if suit.getHP() > 0 and suit.dna.name != 'cdirector':
-                            damageCogs += 1
-                if self.suitHasCondition(suitId, 'redundantcalculator') and not damageCogs > 2 and self.battle.activeSuits[
-                    i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'redundantcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
                     i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'redundantcalculator') and self.suitHasCondition(suitId, 'highpressurecalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if damageCogs > 2 and self.suitHasCondition(suitId, 'redundantcalculator') and not self.suitHasCondition(suitId, 'highpressurecalculator') and self.__suitCanAttack(suitId) and len(self.battle.activeSuits) > 1:
+                if self.suitHasCondition(suitId, 'redundantcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'ContingencyRedundantAuthority',
                                                             'animName': 'scabbard',
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'suit',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                        'excludeManagers': False,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'highpressurecalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -339,7 +352,14 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'both',
+
+                        'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+
+                        'allowSelfTarget': False,
+                        'targetSelf': False})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
@@ -417,7 +437,6 @@ class BoardbotLitigationCalculatorAI:
                     if not suit.getManager() and (suit.currHP < suit.maxHP) and suit.currHP > 0 and not suit.getGovernaught():
                         if (self.TurnsElapsed + 1) % 2 == 0:
                             self.calculator.sacrificedCogs += 1
-                            self.calculator.syphonedHP += suit.currHP
                 if self.sacrificedCogs > 0 and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
@@ -429,10 +448,19 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': False,
+                        'excludeManagers': False,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                        self.syphonedHP *= 0
                 # if self.sacrificedCogs == 2 and self.battle.activeSuits[i].currHP > 0:
                 #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                 #                                             'name': 'TollmasterBalanceTheLedger2',  # Extra Attack for Dead Suits
@@ -484,7 +512,10 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.deadSuits == 2 and self.battle.activeSuits[i].currHP > 0:
@@ -494,7 +525,10 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.deadSuits == 3 and self.battle.activeSuits[i].currHP > 0:
@@ -504,7 +538,10 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.deadSuits == 4 and self.battle.activeSuits[i].currHP > 0:
@@ -514,7 +551,10 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.deadSuits > 4 and self.battle.activeSuits[i].currHP > 0:
@@ -524,7 +564,10 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             # if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'dotfinished') and self.battle.activeSuits[i].dna.name in ['cdirector', 'rkeeper', 'liquid'] and not self.battle.activeSuits[i].dna.name == 'dking':
@@ -634,7 +677,10 @@ class BoardbotLitigationCalculatorAI:
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'rkeeper':
@@ -661,7 +707,8 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
@@ -680,7 +727,14 @@ class BoardbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': random.choice((SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_SINGLE))})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'liquidated',
+                    )})
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.setSuitCondition(suitId, 'liquidationcalculator2', 0, 0, 'setBoth')
@@ -696,7 +750,9 @@ class BoardbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                                                                 'freq': 0,
-                                                                'group': random.choice((SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_SINGLE))})
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                    'excludeToonConditions': (
+                        'liquidated',)})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'liquid':
@@ -726,7 +782,8 @@ class BoardbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'cdirector':
@@ -735,13 +792,24 @@ class BoardbotLitigationCalculatorAI:
                     if s.getManager() and not s.dna.name == 'cdirector':
                         currentBossHealth = s.currHP
                 if self.battle.activeSuits[i].currHP <= 1667 and currentBossHealth > 0 and not self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'ContingencyForecastCollapse',
-                     'animName': 'speak',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'ContingencyForecastCollapse',
+                        'animName': 'speak',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': False,
+                        'targetSelf': False,
+                        'requiredManagerNames': ('rkeeper', 'liquid', 'dking',)
+                    })
+
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'alreadyContingency') and self.__suitCanAttack(suitId):
@@ -789,6 +857,18 @@ class BoardbotLitigationCalculatorAI:
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'cdirector':
+                if self.suitHasCondition(suitId, 'alreadyRisk8') and self.suitHasCondition(suitId, 'contingencyOverride') and not self.suitHasCondition(suitId, 'contingencyOverrideBroken') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                     'name': 'ContingencyOverrideRevert',
+                                    'animName': 'nothing',
+                                     'hp': 0,
+                                     'acc': 100,
+                                     'freq': 0,
+                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'targetType': 'none'})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'rkeeper':
                 if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -862,7 +942,8 @@ class BoardbotLitigationCalculatorAI:
                         'hp': payload,
                         'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_GROUP
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'
                     }
                 )
 

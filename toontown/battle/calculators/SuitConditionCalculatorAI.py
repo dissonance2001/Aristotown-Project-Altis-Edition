@@ -67,6 +67,8 @@ class SuitConditionCalculatorAI:
                 if x % 2 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
+                    self.setSuitCondition(suitId, 'insurancecalculator3', 1, 10, 'setBoth')
+                if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator2', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 for suit in self.battle.activeSuits:
@@ -156,7 +158,7 @@ class SuitConditionCalculatorAI:
                 if (x + 2) % 5 == 0:
                     self.setSuitCondition(suitId, 'burncalculator2', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
-                if (x + 3) % 5 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'explodingcalculator', 1, 9, 'setBoth')
                 if (x + 1) % 2 == 0:
                     self.setSuitCondition(suitId, 'filingcalculator', 1, 9, 'setBoth')
@@ -190,7 +192,7 @@ class SuitConditionCalculatorAI:
                 #         currentBossHealth = s.currHP
                 #     if (x + 3) % 4 == 0 and currentBossHealth > 0:
                 #         self.setSuitCondition(suitId, 'refinemanagercalculator', 1, 10, 'setBoth')
-                if (x + 1) % 5 == 0 and self.suitHasCondition(suitId, 'phase3'):
+                if (x + 1) % 3 == 0 and self.suitHasCondition(suitId, 'phase3'):
                     self.setSuitCondition(suitId, 'headrollercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'safesupervis': #safety supervisor
                 # if len(self.battle.activeSuits) >= 6 and (x % 2 == 0) and self.deadSuits == 0:
@@ -274,30 +276,30 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'marketcalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'liquidationcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].dna.name == 'racket': #racketeer
-                    # if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
-                    #     from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
+            if self.battle.activeSuits[i].dna.name == 'racket': #racketeer
+                # if x % 2 == 0 and self.battle.activeSuits[i].currHP > 0:
+                #     from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
-                    #     boss = None
-                    #     for do in simbase.air.doId2do.values():
-                    #         if isinstance(do, DistributedSellbotBossMiniAI):
-                    #             for s in self.battle.activeSuits:
-                    #                 if s in do.activeSuits:
-                    #                     boss = do
-                    #                     break
-                    #             for s in self.battle.activeSuits:
-                    #                 if s in do.activeSuits:
-                    #                     if s.dna.name == 'racket':
-                    #                         if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
-                    #                             if self.suitHasCondition(suitId, 'desperation'):
-                    #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-                    #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-                    #                             else:
-                    #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
-                    if (x + 2) % 3 == 0:
-                        self.setSuitCondition(suitId, 'profiteeringcalculator', 1, 10, 'setBoth')
-                    if (x + 1) % 3 == 0:
-                        self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
+                #     boss = None
+                #     for do in simbase.air.doId2do.values():
+                #         if isinstance(do, DistributedSellbotBossMiniAI):
+                #             for s in self.battle.activeSuits:
+                #                 if s in do.activeSuits:
+                #                     boss = do
+                #                     break
+                #             for s in self.battle.activeSuits:
+                #                 if s in do.activeSuits:
+                #                     if s.dna.name == 'racket':
+                #                         if len(self.battle.activeSuits) < 6 and not self.suitHasCondition(suitId, 'alreadyCogSpawn'):
+                #                             if self.suitHasCondition(suitId, 'desperation'):
+                #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+                #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+                #                             else:
+                #                                 boss.appendSuitsToBattle(boss.battleNumber, 'pres')
+                if (x + 2) % 3 == 0:
+                    self.setSuitCondition(suitId, 'profiteeringcalculator', 1, 10, 'setBoth')
+                if (x + 1) % 3 == 0:
+                    self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
                 if x % 2 == 0:
                     self.setSuitCondition(suitId, 'filmmakercalculator', 1, 10, 'setBoth')
