@@ -275,6 +275,9 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def setToonIds(self, involvedToons, toons, unused):
         self.involvedToons = involvedToons
+        # Discord Rich Presence
+        if localAvatar.doId in self.involvedToons:
+            base.discord.applyPreset('videographer')
         self.toons = toons
         self.toonsA = toons
         self.toonsB = []

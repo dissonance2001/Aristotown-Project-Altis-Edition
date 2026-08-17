@@ -754,11 +754,21 @@ presets = {
 
     'counterclaim': {
         'state': ['Fighting the spooky Skelecogs!', 'Fighting %s!' % suitName('count')],
-        'large_image_key': ['warning', 'warning'],
+        'large_image_key': ['instance_erfit'],
     },
     'counterfit': {
         'state': ['Inside the Tower of Power!', 'Getting swole!', 'Skipping leg day!'],
-        'large_image_key': ['warning', 'warning', 'warning'],
+        'large_image_key': ['instance_erfit'],
+    },
+    'erfit': {
+        'state': ['Inside the Tower of Power!', 'Getting swole!', 'Skipping leg day!'],
+        'large_image_hover': 'Fighting Count Erfit!',
+        'large_image_key': 'instance_erfit'
+    },
+    'videographer': {
+        'state': ['Stealing the Spotlight!', 'Cutting the Production Short!', 'Surviving the Final Cut!'],
+        'large_image_hover': 'Fighting the Videographer!',
+        'large_image_key': 'instance_videog'
     },
     'hroller': {
         'state': 'Winning it big!',

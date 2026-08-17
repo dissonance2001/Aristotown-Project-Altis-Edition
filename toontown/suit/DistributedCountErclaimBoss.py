@@ -820,6 +820,8 @@ class DistributedCountErclaimBoss(DistributedBossCog.DistributedBossCog, FSM.FSM
         #self.witnessToon.removeActive()
 
     def enterIntroduction(self):
+        # Discord Rich Presence
+        base.discord.applyPreset('erfit')
         self.notify.debug('----- enterIntroduction')
         self.reparentTo(render)
         self.setPosHpr(*ToontownGlobals.LawbotBossBattleOnePosHpr)
