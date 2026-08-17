@@ -335,7 +335,7 @@ def __doAdjacentSquirtSplash(target, squirt):
     # IMPORTANT:
     # Main __getSuitTrack does this too.
     # The adjacent Cog needs to participate in queued visual HP.
-    suit.addPendingQueuedDamage(hp)
+  #  suit.addPendingQueuedDamage(hp)
 
     # Prestige/bonus Squirt = drenched.
     # Normal Squirt = soaked.
@@ -515,7 +515,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             totalDamage += hpbonus
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+    #    suit.addPendingQueuedDamage(totalDamage)
 
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage
@@ -608,7 +608,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
         if kbbonus == 0:
             suitTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitTrack.append(Func(suit.setDizzy, 0))
-        suit.setPendingQueuedLured(False)
+      #  suit.setPendingQueuedLured(False)
         #suitTrack.append(Func(suit.setNeutralAnimation))
         if suit.dna.name == 'redd' and revived != 0:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))

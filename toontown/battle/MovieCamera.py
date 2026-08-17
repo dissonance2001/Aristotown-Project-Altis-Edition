@@ -2338,8 +2338,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'VideographerElectricShock':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock2':
-        camTrack2 = Sequence(motionShot(0.0, 9.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration))
-        return camTrack2
+        camTrack.append(Sequence(motionShot(0.0, 12.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerElectricShock3':
         camTrack.append(Sequence(motionShot(0, -6, suit.height + 2, 0, 0, 0.0, 0, suit), moveCameraOnly(-2, -1, suit.height, attackDuration - 2, suit, h=0, p=-10, startH=0, startP=0), Wait(2)))
     elif name == 'VideographerElectricShock4':
@@ -2377,16 +2376,65 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack2 = defaultCamera(openShotDuration=0)
         return camTrack2
     #director cheats
-    elif name == 'DirectorCut':
-        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
-    elif name == 'DirectorAction':
-        camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
+    elif name == 'DirectorActionCog':
+        target = attack['target']
+        targetSuit = target[0]['suit']
+        camTrack2 = Sequence(
+            defaultCamera(openShotDuration=0, attackDuration=0),
+
+            # First shot: attacking suit
+            motionShot(
+                0.0,
+                12.8096,
+                8.77317,
+                -180,
+                0.0,
+                0.0,
+                0,
+                suit
+            ),
+
+            Wait(1.0),
+
+            # Switch to target suit shot.
+            Func(
+                camera.setPos,
+                targetSuit,
+                0.0,
+                10.0,
+                targetSuit.height - 5
+            ),
+
+            # Set the orientation for this new shot.
+            Func(
+                camera.setHpr,
+                targetSuit,
+                180,
+                0,
+                0
+            ),
+
+            moveCameraOnly(0.0, 10.0, targetSuit.height, 1, targetSuit, h=180, p=0, startH=180, startP=0),
+            # Now ONLY move upward relative to targetSuit.
+
+            Wait(attackDuration - 2.0)
+        )
+        pbpText = attack['playByPlayText']
+        pbpDc = PlayByPlayText.PlayByPlayText()
+        pbpDesc = pbpDc.getShowIntervalDesc('The Director requires all Toons to attack the %s!' % (targetSuit.name), attackDuration - 2)
+        pbpTrack = pbpText.getShowIntervalCheat('Action!', attackDuration - 2)
+
+        return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'DirectorActionRetaliation':
-        if attackDuration > 1:
-            camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
-        else:
-            camTrack2 = defaultCamera(openShotDuration=0)
-            return camTrack2
+        camTrack.append(defaultCamera(openShotDuration=3.55))
+    elif name == 'DirectorActionPartner':
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=2), heldShot(0.0, 0.0, 3.5, 180, -20, 0, attackDuration - 2)))
+    elif name == 'DirectorCut':
+        camTrack.append(defaultCamera(openShotDuration=3.55))
+    elif name == 'DirectorAction':
+        camTrack.append(Sequence(motionShot(0.0, 12.0, suit.height + 5, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
+    elif name == 'DirectorActionRetaliation':
+        camTrack.append(defaultCamera(openShotDuration=3.55))
     elif name == 'DirectorBackToOnes':
         camTrack.append(heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration))
     elif name == 'DirectorProductionBudget':

@@ -164,9 +164,9 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
         throwTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     throwTrack.append(Func(unthrownProp.reparentTo, hidden))
     throwTrack.append(Func(toon.update))
-    if suit.battleTrap != NO_TRAP:
-        notify.debug('trapSuit() - trap: %d destroyed existing trap: %d' % (level, suit.battleTrap))
-        battle.removeTrap(suit)
+    if suit.battleTrap != NO_TRAP or suit.battleTrapProp:
+        notify.debug('trapSuit() - removing existing trap before placing new one')
+        safeRemoveExistingTrap(suit, battle)
     if trapName == 'rake':
         trapProp = globalPropPool.getProp('rake-react')
     else:
@@ -274,15 +274,17 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
     return Parallel(propTrack, throwTrack, toonTrack)
 
 def safeRemoveExistingTrap(suit, battle):
+    trapProp = getattr(suit, 'battleTrapProp', None)
+
     try:
         battle.removeTrap(suit)
     except:
         pass
 
-    if hasattr(suit, 'battleTrapProp') and suit.battleTrapProp:
+    if trapProp:
         try:
-            if not suit.battleTrapProp.isEmpty():
-                MovieUtil.removeProp(suit.battleTrapProp)
+            if not trapProp.isEmpty():
+                MovieUtil.removeProp(trapProp)
         except:
             pass
 

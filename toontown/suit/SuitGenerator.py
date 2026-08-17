@@ -2130,7 +2130,6 @@ class SuitGenerator(object):
                 headPart.setTexture(texture, 1)
             self.setHeight(10.05)
             #self.isSkelecogDialogue = 1
-            self.setSuitStatusEffect('absorbing')
         # DUMMY BOSSES
         elif dna.name == 'ceo':
             self.scale = 7.0 / aSize

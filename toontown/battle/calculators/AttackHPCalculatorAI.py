@@ -1233,6 +1233,9 @@ class AttackHPCalculatorAI(object):
                 self.__removeLured(targetId)
 
                 continue
+            elif atkType['name'] == 'DirectorActionCog':
+                self.calculator.setSuitCondition(targetSuit.doId, 'greenLight', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'retaliationcalculator2', 1, 2, 'setBoth')
             elif atkType['name'] == 'VideographerStarOfTheShow':
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(targetId, 'bellowattack', 1, 1, 'setBoth')
@@ -1463,6 +1466,14 @@ class AttackHPCalculatorAI(object):
 
                 result = (self.getSuitConditionModifier(theSuit.doId, 'phantomDeath') * 2)
                 self.setSuitCondition(theSuit.doId, 'phantomDeath', 0, 0, 'setBoth')
+
+                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HEAL_COL][targetIndex] = 0
+
+                continue
+            elif atkType['name'] == 'DirectorAction':
+
+                result = 500
 
                 attack[SUIT_HP_COL][targetIndex] = result
                 attack[SUIT_HEAL_COL][targetIndex] = 0
@@ -7918,25 +7929,37 @@ class AttackHPCalculatorAI(object):
                 result = self.calculator.directorMultiplier
                 toon.setHp(toon.hp + result)
                 attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'DirectorActionPartner':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'collectCallRecentlyTargeted', 1, 1, 'setBoth')
+                self.setToonCondition(toon.doId, 'collectcalled', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'collectcalled', 1, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'partnered', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'partnered', 1, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'retaliationcalculator2', 1, 2, 'setBoth')
             elif atkType['name'] == 'DirectorCut':
                 self.setToonCondition(toon.doId, 'allGagBoost2', -50, 2, 'setBoth')
                 self.setToonCondition(toon.doId, 'lureBoost2', -50, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'retaliationcalculator2', 0, 0, 'setBoth')
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'DirectorAction':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'extortioncalculator2', 1, 10, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'retaliationcalculator', 1, 10, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
                 for t in self.battle.activeToons:
                     self.setToonCondition(t, random.choice(
                         ('useToonUp','useTrap', 'useLure', 'useThrow', 'useSquirt', 'useZap', 'useSound', 'useDrop',)), 1, 2, 'setBoth')
             elif atkType['name'] == 'DirectorActionRetaliation':
-                if not self.toonHasCondition(toon.doId, 'rushJobCompleted'):
-                    result = random.randint(20, 40)
-                    attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'extortioncalculator2', 0, 0, 'setBoth')
+                self.setToonCondition(toon.doId, 'allGagBoost2', -50, 2, 'setBoth')
+                self.setToonCondition(toon.doId, 'lureBoost2', -50, 2, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'directorcalculator', 0, 0, 'setBoth')
+                result = 25
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setSuitCondition(theSuit.doId, 'retaliationcalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'DirectorBackToOnes':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -10117,6 +10140,17 @@ class AttackHPCalculatorAI(object):
                     )
 
                 # Contingency Mark only triggers on an actual hit.
+                if self.toonHasCondition(
+                    toonId,
+                    'collectcalled'
+                ):
+                    self.setSuitCondition(
+                        theSuit.doId,
+                        'collectcalledCog',
+                        1,
+                        1,
+                        'setBoth'
+                    )
                 if self.toonHasCondition(
                     toonId,
                     'contingencyMarked'

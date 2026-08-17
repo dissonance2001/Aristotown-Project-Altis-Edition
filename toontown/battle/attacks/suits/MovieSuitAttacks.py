@@ -1502,11 +1502,15 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     #director cheats
     elif name == 'DirectorCut':
-        suitTrack = MovieHighRollerCheats.doCut(attack)
+        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
     elif name == 'DirectorAction':
-        suitTrack = MovieHighRollerCheats.doAction(attack)
+        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+    elif name == 'DirectorActionCog':
+        suitTrack = MovieHighRollerCheats.doActionCog(attack)
     elif name == 'DirectorActionRetaliation':
-        suitTrack = MovieHighRollerCheats.doSnipeMegaphone(attack)
+        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
+    elif name == 'DirectorActionPartner':
+        suitTrack = MovieHighRollerCheats.doActionPartner(attack)
     elif name == 'DirectorBackToOnes':
         suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
     elif name == 'DirectorProductionBudget':

@@ -432,7 +432,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             totalDamage += hpbonus
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+       # suit.addPendingQueuedDamage(totalDamage)
 
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage
@@ -511,7 +511,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         if kbbonus == 0:
             suitResponseTrack.append(Sequence(__createSuitResetPosTrack2(suit, battle), Func(battle.unlureSuit, suit), Func(suit.makeUnLured)))
         suitResponseTrack.append(Func(suit.setDizzy, 0))
-        suit.setPendingQueuedLured(False)
+      #  suit.setPendingQueuedLured(False)
         suitResponseTrack.append(Func(suit.setNeutralAnimation))
         #suitResponseTrack.append(Wait(1.0))
         if suit.dna.name == 'redd' and revived != 0:

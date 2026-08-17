@@ -2471,6 +2471,24 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
+        if self.cog.hasSuitStatusEffect('directorAction'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/encore_icon')
+            slot = self._claimNextStatusSlot()
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="1",
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Action', 
+                                   tooltipDescription="The Director requires ALL Toons to attack this Cog!! Failure to do so will result in a harsh punishment.", 
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1))
+
         if self.cog.hasSuitStatusEffect('brokenConnection'):
             status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status2.find('**/attack_icon')

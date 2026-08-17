@@ -1084,12 +1084,15 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
                 if self.suitHasCondition(suit.doId, 'greenLight'):
                     self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
+                    self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
                 if suit.dna.name == 'ubuster':
                     self.hustlerHits += 1
                 if suit.dna.name == 'rkeeper':
                     self.setSuitCondition(suit.doId, 'recordkeeperHit', 1, 1, 'setBoth')
                 if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+                if suit.dna.name == 'director':
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
                 if suit.dna.name == 'hustle' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
@@ -1262,6 +1265,8 @@ class BattleCalculatorAI:
                     self.setSuitCondition(suit.doId, 'recordkeeperHit', 1, 1, 'setBoth')
                 if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
+                    self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+                if suit.dna.name == 'director':
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
                 if suit.dna.name == 'hustle' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
@@ -1440,13 +1445,15 @@ class BattleCalculatorAI:
         #         mainTargetId
         #     )
 
-        damage = self.applyCogDamageInterceptors(
-            damage,
-            toonId,
-            suit,
-            suitId,
-            SQUIRT
-        )
+        if suitId != mainTargetId:
+            damage = self.applyToonGagDamageMultipliers(
+                damage,
+                toonId,
+                suitId,
+                SQUIRT,
+                atkLevel,
+                organicBonus=organicBonus
+                    )
 
         if damage > 0:
             if suit.dna.name == 'liquid':
@@ -1698,6 +1705,7 @@ class BattleCalculatorAI:
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
         if self.suitHasCondition(suit.doId, 'greenLight'):
             self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
+            self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
 
         if suit.dna.name == 'ubuster':
             self.hustlerHits += 1
@@ -1707,6 +1715,9 @@ class BattleCalculatorAI:
 
         if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
             self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
+            self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+
+        if suit.dna.name == 'director':
             self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
 
         if suit.dna.name == 'hustle' and self.toonHasCondition(toon.doId, 'partnered'):
@@ -2236,6 +2247,7 @@ class BattleCalculatorAI:
             self.setSuitCondition(suit.doId, 'bookkeeperHit', 1, 1, 'setBoth')
         if self.suitHasCondition(suit.doId, 'greenLight'):
             self.setSuitCondition(suit.doId, 'greenLight', 0, 0, 'setBoth')
+            self.setToonCondition(toon.doId, 'bookkeepingtoon', 1, 1, 'setBoth')
     
 
         if self.suitHasCondition(targetId, 'lureRushJob'):
@@ -7960,8 +7972,6 @@ class BattleCalculatorAI:
                         else:
                             self.litigationSpawns.remove(4)
                     self.setSuitCondition(suit.doId, 'beginning', 1, -1, 'setBoth')
-                if suit.dna.name == 'director':
-                    self.setSuitCondition(suit.doId, 'shielding', 1, -1, 'setBoth')
                 suit.b_setHP(suit.getHP())
 
         for suit in self.battle.activeSuits:

@@ -351,8 +351,15 @@ def doPhantomEntryDamage(attack):
             Func(targetSuit.setHealthForMe, -dmg),
             Func(targetSuit.updateHealthBar, 0),
             ActorInterval(targetSuit, 'pie-small-react')
-        )
+        ), Wait(2.0)
     )
+    if died:
+        if targetSuit.isVirtual:
+            notifyTrack.append(MovieUtil.createVirtualSuitDeathTrack(targetSuit, battle))
+            notifyTrack.append(Func(targetSuit.makeDead))
+        else:
+            notifyTrack.append(MovieUtil.createSuitDeathTrack(targetSuit, battle))
+            notifyTrack.append(Func(targetSuit.makeDead))
 
     notifyTrack.append(
             Func(targetSuit.setNeutralAnimationDrop)
@@ -1030,13 +1037,71 @@ def doAction(attack):
     sprayEffect.setTwoSided(1)
     sprayTrack = Sequence()
     sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, suit, 0], softStop=-3.5))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 3.0, [sprayEffect, suit, 0], softStop=-3.5))
     can = loader.loadModel('phase_5/models/props/megaphone')
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(ActorInterval(suit, 'glower', endTime=1.5), Wait(3.0), ActorInterval(suit, 'glower', startTime=1.5), Func(suit.setNeutralAnimation))
+    suitTrack2 = Sequence(ActorInterval(suit, 'glower'), Func(suit.setNeutralAnimationDrop))
     posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
-    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
+    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(0.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     return Parallel(suitTrack, throwTrack, suitTrack2, sprayTrack)
+
+def doActionCog(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetData = targets[0]
+
+    if 'suit' not in targetData:
+        return Sequence()
+
+    targetSuit = targetData['suit']
+
+    sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
+    sprayEffect.setDepthWrite(0)
+    sprayEffect.setDepthTest(0)
+    sprayEffect.setTwoSided(1)
+
+    sprayTrack = Sequence()
+    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 3.0, [sprayEffect, suit, 0], softStop=-3.5))
+
+    can = loader.loadModel('phase_5/models/props/megaphone')
+
+    suitTrack = Sequence(getSuitAnimTrack(attack), Func(targetSuit.setSuitStatusEffect, 'directorAction', modifier=1, turns=2))
+
+    suitTrack2 = Sequence(ActorInterval(suit, 'glower'), Func(suit.setNeutralAnimationDrop), Wait(2.0))
+
+    posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
+
+    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(0.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
+
+    return Parallel(suitTrack, throwTrack, suitTrack2, sprayTrack)
+
+def doActionPartner(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    dmg = target[0]['hp']
+    toon = target[0]['toon']
+    sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
+    sprayEffect.setDepthWrite(0)
+    sprayEffect.setDepthTest(0)
+    sprayEffect.setTwoSided(1)
+    sprayTrack = Sequence()
+    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
+    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 3.0, [sprayEffect, suit, 0], softStop=-3.5))
+    can = loader.loadModel('phase_5/models/props/megaphone')
+    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack2 = Sequence(ActorInterval(suit, 'glower'), Func(suit.setNeutralAnimationDrop))
+    posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
+    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(0.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
+    notifyTrack = Sequence(Wait(2.0), ActorInterval(toon, 'confused'))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'actionPartner', turns=2)))
+    return Parallel(suitTrack, notifyTrack, throwTrack, suitTrack2, sprayTrack)
 
 def doCameraFlash(attack):
     suit = attack['suit']
@@ -1788,10 +1853,15 @@ def doRecordCut(attack):
     recordTracks = Parallel()
     suitTracks = Parallel()
     notifyTracks = Parallel()
-    suitTrack = Parallel(getSuitAnimTrackAttack(attack))
-    suitAnimTrack = Sequence(ActorInterval(suit, 'effort', endTime=3.0), ActorInterval(suit, 'sanction'))
-    record = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
-    posPoints = [Point3(0, 1, 6), VBase3(0, 90, 0)]
+    suitTrack = Parallel(getSuitAnimTrack(attack))
+    suitAnimTrack = Sequence(ActorInterval(suit, 'effort', endTime=3.0), ActorInterval(suit, 'sanction'), Func(suit.setNeutralAnimationDrop))
+    posPoints = [Point3(0, 2.5, 5), VBase3(0, 90, 0)]
+    soundTrack = getSoundTrack('SA_magic_orb.ogg', node=suit)
+    soundTrack3 = getSoundTrack('CHQ_VP_frisbee_gears.ogg', delay=3.8,  node=suit)
+    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=3.8, node=suit)
+    soundTracks.append(soundTrack)
+    soundTracks.append(soundTrack3)
+    soundTracks.append(soundTrack2)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -1799,27 +1869,27 @@ def doRecordCut(attack):
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         leftPosPoints = [Point3(0, 0, 0), VBase3(0, 0, 90)]
         rightPosPoints = [Point3(0, 0, 0), VBase3(0, 0, 90)]
+        gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
         explosionTrack = Sequence()
-        explosionTrack.append(Wait(1.5))
+        explosionTrack.append(Wait(3.8))
+        record = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-        recordTrack = Sequence(Parallel(LerpHprInterval(record, 3.8, (0, 90, 2700), startHpr=(0, 90, 0), other=suit), getPropAppearTrack(record, suit, posPoints, 0, Point3(2, 2, 2), scaleUpTime=2.0)), 
-                               Parallel(LerpHprInterval(record, .3, (0, 90, 900), getPropThrowTrack(attack, record, hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t))))
+        recordTrack = Sequence(Parallel(LerpHprInterval(record, 3.5, (0, 90, 2700), startHpr=(0, 90, 0), other=suit),
+                                         getPropAppearTrack(record, suit, posPoints, 0, Point3(1, 1, 1), scaleUpTime=2.0)), 
+                               Parallel(LerpHprInterval(record, .3, (0, 90, 900), startHpr=(0, 90, 0), other=suit),
+                                         getPropThrowTrack(attack, record, hitPointNames=['face'], missPointNames=['miss'], hitDuration=0.3, missDuration=0.3, target=t)))
         recordTracks.append(recordTrack)
 
-        notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="DAMAGE CUT!", colorCode=4))
+        notifyTrack = Sequence(Wait(3.8), Func(toon.showHpTextNew, - int(dmg), text="DAMAGE CUT!", colorCode=4))
         notifyTrack.append(Func(toon.setToonStatusEffect, 'damageDown', modifier=50, turns=2, mode='keepHighest'))
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
-        soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
-        soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         if dmg > 0:
-            soundTracks.append(soundTrack)
-            soundTracks.append(soundTrack2)
             explosionTracks.append(explosionTrack)
             notifyTracks.append(notifyTrack)
     damageAnims = [['slip-backward', 0.01, 0.35]]
-    toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
+    toonDamageTrack = getToonTracksCheat(attack, damageDelay=3.8, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
                                          dodgeAnimNames=['neutral'])
-    return Parallel(suitTracks, toonTracks, toonDamageTrack, notifyTracks, explosionTracks, soundTracks, recordTracks, suitAnimTrack)
+    return Parallel(suitTracks, suitTrack, toonTracks, toonDamageTrack, notifyTracks, explosionTracks, soundTracks, recordTracks, suitAnimTrack)
 
 def doSnipeMegaphone(attack):
     suit = attack['suit']

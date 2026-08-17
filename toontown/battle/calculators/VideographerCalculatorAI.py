@@ -160,6 +160,22 @@ class VideographerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'director':  # filmmaker
+                if not self.suitHasCondition(suitId, 'collectcalledCog') and self.suitHasCondition(suitId, 'collectcalled') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                            'name': 'DirectorAction',
+                                            'animName': 'nothing',
+                                            'hp': 0,
+                                            'acc': 100,
+                                            'freq': 0,
+                                              'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
@@ -241,31 +257,53 @@ class VideographerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'extortioncalculator2') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'retaliationcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'DirectorActionRetaliation',
-                                            'animName': 'glower',
+                                            'animName': 'nothing',
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                            'priorityToonConditions': ('collectcalled',)})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'directorcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
-                                                           'name': 'DirectorAction',
-                                                           'animName': 'nothing',
-                                                           'hp': 0,
-                                                           'acc': 100,
-                                                           'freq': 0,
-                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE},
-                                                          {'suitName': self.battle.activeSuits[i].dna.name,
+                if self.suitHasCondition(suitId, 'retaliationcalculator2') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                            'name': 'DirectorCut',
                                                            'animName': 'nothing',
                                                            'hp': 0,
                                                            'acc': 100,
                                                            'freq': 0,
-                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE}]))
+                                                           'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                            'excludeToonConditions': ('bookkeepingtoon',)})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                           'name': 'DirectorActionCog',
+                                                           'animName': 'nothing',
+                                                           'hp': 0,
+                                                           'acc': 100,
+                                                           'freq': 0,
+                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False,
+                        'requireDamaged': False,
+                             'requiredManagerNames':  ('cinema', 'fmaker', 'director', 'choreo'),})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if (self.TurnsElapsed + 1) % 3 == 0 and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                           'name': 'DirectorActionPartner',
+                                                           'animName': 'nothing',
+                                                           'hp': 0,
+                                                           'acc': 100,
+                                                           'freq': 0,
+                                                           'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in xrange(len(self.battle.activeSuits)):
@@ -295,6 +333,7 @@ class VideographerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                        self.calculator.directorMultiplier += 2
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId

@@ -208,10 +208,12 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 reachTrack = ActorInterval(suit, 'reach')
                 suitTrack.append(Parallel(moveTrack, reachTrack))
                 if trapProp:
-                    suitTrack.append(Func(trapProp.wrtReparentTo, battle))
+                    suitTrack.append(Func(safeWrtReparentTo, trapProp, battle))
+
                 suitTrack.append(Func(suit.setPos, battle, reachPos))
+
                 if trapProp:
-                    suitTrack.append(Func(trapProp.wrtReparentTo, suit))
+                    suitTrack.append(Func(safeWrtReparentTo, trapProp, suit))
                     suit.battleTrapProp = trapProp
                 suitTrack.append(Func(suit.setDizzy, 1))
                 suitTrack.append(Func(suit.loopSyncedLuredAnimations))
@@ -539,10 +541,10 @@ def showDazeRounds(suit):
 
 
 def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0):
-    if (trapProp is None) or trapProp.isEmpty():
+    if trapProp is None or trapProp.isEmpty():
         return Func(suit.loop, 'lured')
     toon = lure['toon']
-    trapProp.wrtReparentTo(battle)
+    safeWrtReparentTo(trapProp, battle)
     trapTrack = ToontownBattleGlobals.TRAP_TRACK
     trapLevel = suit.battleTrap
     trapTrackNames = ToontownBattleGlobals.AvProps[trapTrack]
@@ -595,7 +597,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         slidePos = trapProp.getPos(parent)
         slidePos.setY(slidePos.getY() - 5.1)
         moveTrack = Sequence(Wait(0.1), LerpPosInterval(trapProp, 0.1, slidePos, other=battle))
@@ -614,7 +616,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         hpr = trapProp.getHpr(parent)
         upHpr = Vec3(hpr[0], 179.9999, hpr[2])
         bounce1Hpr = Vec3(hpr[0], 120, hpr[2])
@@ -632,7 +634,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         slidePos = trapProp.getPos(parent)
         slidePos.setY(slidePos.getY() - 6.5)
         moveTrack = Sequence(Wait(0.1), LerpPosInterval(trapProp, 0.8, slidePos, other=battle), Wait(1.1), LerpScaleInterval(trapProp, 1, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
@@ -648,7 +650,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         sinkPos1 = trapProp.getPos(battle)
         sinkPos2 = trapProp.getPos(battle)
         dropPos = trapProp.getPos(battle)
@@ -661,7 +663,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             nameTag = suit.find('**/def_nameTag')
         else:
             nameTag = suit.find('**/joint_nameTag')
-        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(MovieUtil.removeProp, trapProp))
+        trapTrack = Sequence(Wait(2.4), LerpScaleInterval(trapProp, 0.8, Point3(0.01, 0.01, 0.01)), Func(trapProp.hide))
         moveTrack = Sequence(Wait(0.9), LerpPosInterval(suit, 0.9, sinkPos1, other=battle), LerpPosInterval(suit, 0.4, sinkPos2, other=battle), Func(suit.setPos, battle, dropPos), Func(suit.wrtReparentTo, hidden), Wait(1.1))
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
@@ -686,7 +688,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         sinkPos1 = trapProp.getPos(battle)
         sinkPos2 = trapProp.getPos(battle)
         sinkPos3 = trapProp.getPos(battle)
@@ -726,7 +728,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         sinkPos = trapProp.getPos(battle)
         dropPos = trapProp.getPos(battle)
         landPos = trapProp.getPos(battle)
@@ -761,7 +763,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         ballPropTrack = Sequence()
         suitPos = trapProp.getPos(battle)
         y = suitPos.getY()
@@ -820,7 +822,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-        suit.addPendingQueuedDamage(totalDamage)
+        #suit.addPendingQueuedDamage(totalDamage)
         tntTrack = ActorInterval(trapProp, 'tnt')
         explosionTrack = Sequence(Wait(2.3), createTNTExplosionTrack(battle, trapProp=trapProp, relativeTo=parent))
         origPos, _ = battle.getActorPosHpr(suit)
