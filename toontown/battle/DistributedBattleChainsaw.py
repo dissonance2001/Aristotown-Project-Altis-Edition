@@ -21,11 +21,6 @@ class DistributedBattleChainsaw(
             'phase_9/audio/sfx/CHQ_door_close.ogg')
         self.chainsawChainVisualActive = False
         self._chainsawIdleTasks = set()
-        points = list(self.suitPoints)
-        points[1] = ((Point3(10, 4.5, 0), 155),
-                     (Point3(5, 5.8, 0), 170))
-        self.suitPoints = tuple(points)
-
     def getActorPosHpr(self, actor, actorList=[]):
         try:
             if isinstance(actor, Suit.Suit):
@@ -64,7 +59,8 @@ class DistributedBattleChainsaw(
                             index = 0
                         else:
                             orderedSupports = [s for s in actorList if s is not boss]
-                            index = orderedSupports.index(actor) + 1
+                            supportIndex = orderedSupports.index(actor)
+                            index = len(orderedSupports) - supportIndex
                         point = formation[index]
                         return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
         except:
@@ -334,16 +330,12 @@ class DistributedBattleChainsaw(
             except:
                 pass
             suit.setState('Battle')
-            # Use the final canonical battle slot for the arriving Cog.
-            # The generic pending points put the first joining Cog in the
-            # middle-left preview slot, but Chainsaw battles expect the first
-            # support Cog to arrive at the far-left slot.
-            futureSuits = self.suits[:]
-            if suit not in futureSuits:
-                futureSuits.append(suit)
-            orderedFutureSuits = self._getCanonicalSuitOrder(futureSuits)
-            destPos, destHpr = self.getActorPosHpr(
-                suit, orderedFutureSuits)
+            if suit in self.joiningSuits:
+                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
+                destPos, h = self.suitPendingPoints[i]
+                destHpr = VBase3(h, 0, 0)
+            else:
+                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
 
             startPos = Point3(-36.88455, 4.53885, 0)
             endWalkPos = Point3(-12.34567, 4.5389, 0)

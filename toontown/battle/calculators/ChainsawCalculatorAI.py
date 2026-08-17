@@ -451,6 +451,13 @@ class ChainsawCalculatorAI:
     def _doCutTheSlack(self, boss, controller, supports, preferredTarget=None):
         if not supports:
             return False
+        existingCts = [s for s in supports
+                       if self._isCutSlackTarget(s, controller)]
+        if len(existingCts) >= 2:
+            return self._doOffboarding(
+                boss, controller, supports, [],
+                targetSupport=self._chooseHighestLevel(existingCts))
+
         eligible = []
         for support in supports:
             if getattr(support, 'chainsawPromotionLocked', False):
@@ -493,7 +500,7 @@ class ChainsawCalculatorAI:
         if newLevel <= target.getActualLevel():
             return False
 
-        self._spendRPM(controller, 3)
+        self._spendRPM(controller, 4)
         for support in sacrifices:
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
@@ -891,24 +898,10 @@ class ChainsawCalculatorAI:
         controller.chainsawFiredLinks = 0
         return True
 
-    def _hasValidCutSlackChoice(self, supports, controller):
-        for support in supports:
-            if getattr(support, 'chainsawPromotionLocked', False):
-                continue
-            if support.doId in controller.chainsawCutSlackTargets:
-                continue
-            try:
-                if support.getActualLevel() >= 30:
-                    continue
-            except:
-                pass
-            return True
-        return False
-
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
                        suedSupports, supportTracks, iouToons,
-                       projectedRPM=None, preAbilityGain=0):
+                       projectedRPM=None):
         phase = controller.chainsawPhase
         rpm = controller.chainsawRPM if projectedRPM is None else projectedRPM
         allSupports = []
@@ -1024,16 +1017,22 @@ class ChainsawCalculatorAI:
 
                     suedEligible = [s for s in suedSupports if s in ctsCandidates]
                     if ctsCandidates and (fullBattle or len(predictedDead) >= 2 or suedEligible):
-                        preferred = random.choice(suedEligible) if suedEligible else None
-                        chosen = ('CutTheSlack', preferred)
+                        existingCts = [s for s in supports
+                                       if self._isCutSlackTarget(s, controller)]
+                        if len(existingCts) >= 2:
+                            chosen = ('Offboarding',
+                                      (self._chooseHighestLevel(existingCts), None))
+                        else:
+                            preferred = random.choice(suedEligible) if suedEligible else None
+                            chosen = ('CutTheSlack', preferred)
 
         # Extreme attacks are the fallback for phase 1/3. Marked Wood has
         # priority when its qualifying hit pattern is present, including when
         # the projected RPM crosses the Deadwood threshold this round.
         if phase != 2 and rpm >= 20:
-            if phase == 1 and not controller.chainsawDeadwoodTriggered:
+            if phase == 1:
                 chosen = ('Deadwood', None)
-            elif phase == 3 and supports:
+            elif supports:
                 chosen = ('Layoffs', None)
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
@@ -1050,7 +1049,7 @@ class ChainsawCalculatorAI:
             if markedTarget is None and livingToons and len(attackingToons) == len(livingToons):
                 markedTarget = sorted(
                     attackingToons, key=self._toonCurrentHP, reverse=True)[0]
-            if markedTarget is not None and (chosen is None or chosen[0] != 'CutTheSlack'):
+            if markedTarget is not None:
                 chosen = ('MarkedWood', markedTarget)
 
         # Fallback attacks.  Spark Plug cannot repeat; when it would repeat,
@@ -1076,8 +1075,6 @@ class ChainsawCalculatorAI:
         if name == 'Whipsaw':
             controller.chainsawPreviousLogicAttack = 'Whipsaw'
             return (False, False)
-
-        gainApplied = False
 
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)
@@ -1111,7 +1108,7 @@ class ChainsawCalculatorAI:
 
         if result:
             controller.chainsawPreviousLogicAttack = name
-        return (result, gainApplied)
+        return (result, False)
 
     def calculateChainsawAttacks(self):
         boss = self._findChainsaw()
@@ -1163,15 +1160,15 @@ class ChainsawCalculatorAI:
 
         usedAbility = bool(chainKickback)
         if not phaseChanged and not chainKickback:
-            usedAbility, _ = self._chooseAbility(
+            projectedRPM = self._projectRPMGain(controller, hits)
+            usedAbility, unusedGainFlag = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons,
-                projectedRPM=None, preAbilityGain=0)
+                projectedRPM=projectedRPM)
 
-        # Conditional cheats consume the RPM that was present at the start of
-        # the turn. The RPM generated by this turn's attacks is always applied
-        # afterward as the rev-up animation/value change.
+        # Revving Up happens after the conditional cheat. Projected RPM above
+        # is used only to decide whether this turn qualifies for a cheat.
         rpmGain = hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and
