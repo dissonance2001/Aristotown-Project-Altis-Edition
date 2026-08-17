@@ -15,7 +15,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 
 # Corporate Clash's public Discord application ID. Replace this with an
 # Altis-owned Discord application ID when one is available.
-client_id = '532686383211479042'
+client_id = '1538380119322664970'
 
 notify = directNotify.newCategory('DiscordRPC')
 
