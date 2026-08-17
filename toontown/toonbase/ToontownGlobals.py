@@ -864,6 +864,11 @@ ChipSpeed = 3
 DaleSpeed = 3.5
 DaleOrbitDistance = 3
 SuitWalkSpeed = 4.8
+# Cog disguises use a dedicated sprint speed. Keep this separate from
+# ToonForwardSpeed because the latter is temporarily replaced while disguised.
+SuitSprintSpeedFactor = 2.0
+SuitSprintForwardSpeed = SuitWalkSpeed * SuitSprintSpeedFactor
+SuitSprintReverseSpeed = SuitWalkSpeed * SuitSprintSpeedFactor
 PieThrowArc = 0
 PieThrowLinear = 1
 PieCodeBossCog = 1

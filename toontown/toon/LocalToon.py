@@ -1056,10 +1056,21 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             place = base.cr.playGame.getPlace()
             if place is None:
                 return
+            # Cog disguise replaces ToonForwardSpeed with SuitWalkSpeed.
+            # Sprint must use the original Toon sprint speed instead of
+            # multiplying the disguise walk speed (4.8), which only gives
+            # 7.2 and therefore stays in the walk animation.
+            if self.isDisguised and hasattr(self, 'oldForward'):
+                sprintForward = self.oldForward * 1.5
+                sprintReverse = self.oldReverse * 1.5
+            else:
+                sprintForward = ToontownGlobals.ToonForwardSpeed * 1.5
+                sprintReverse = ToontownGlobals.ToonReverseSpeed * 1.5
+
             self.controlManager.setSpeeds(
-                ToontownGlobals.ToonForwardSpeed * 1.5,
+                sprintForward,
                 ToontownGlobals.ToonJumpForce,
-                ToontownGlobals.ToonReverseSpeed * 1.5,
+                sprintReverse,
                 ToontownGlobals.ToonRotateSpeed)
             self.sprinting = True
         except:
@@ -1071,11 +1082,23 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if not self.sprinting:
             return
         try:
+            # While disguised, ToonForwardSpeed/ToonReverseSpeed are changed
+            # globally to the slow Cog disguise walk speed (4.8). Restore the
+            # original Toon movement speed when sprint is turned off.
+            if self.isDisguised and hasattr(self, 'oldForward') and hasattr(self, 'oldReverse'):
+                normalForward = self.oldForward
+                normalReverse = self.oldReverse
+                normalRotate = getattr(self, 'oldRotate', ToontownGlobals.ToonRotateSpeed)
+            else:
+                normalForward = ToontownGlobals.ToonForwardSpeed
+                normalReverse = ToontownGlobals.ToonReverseSpeed
+                normalRotate = ToontownGlobals.ToonRotateSpeed
+
             self.controlManager.setSpeeds(
-                ToontownGlobals.ToonForwardSpeed,
+                normalForward,
                 ToontownGlobals.ToonJumpForce,
-                ToontownGlobals.ToonReverseSpeed,
-                ToontownGlobals.ToonRotateSpeed)
+                normalReverse,
+                normalRotate)
         except:
             pass
         self.sprinting = False
