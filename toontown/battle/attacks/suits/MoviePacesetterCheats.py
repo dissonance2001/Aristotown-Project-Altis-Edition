@@ -298,8 +298,10 @@ def doHurrySickness(attack):
     notifyTracks = Parallel()
     suitTracks = Parallel()
     soundTracks = Parallel()
-    for suit in battle.activeSuits:
-        suitTracks.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
+    for s in battle.activeSuits:
+        if s.isLured:
+            suitTracks.append(Func(battle.unlureSuit, s))
+        suitTracks.append(Func(s.clearSuitStatusEffect, 'rushJob'))
     hitAtLeastOneToon = 0
     for t in targets:
         dmg = t['hp']
@@ -313,8 +315,12 @@ def doHurrySickness(attack):
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
-            notifyTracks.append(Sequence(Wait(1.5), Parallel(Func(toon.showHpTextNew, -int(dmg)))))
-            notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'hurrySickness', modifier=40, turns=2, mode='keepHighest')))
+            # We apply status effect first, then trigger the damage text to ensure visual clarity.
+            notifyTracks.append(Sequence(
+                Wait(1.5), 
+                Func(toon.setToonStatusEffect, 'hurrySickness', modifier=40, turns=2, mode='keepHighest'),
+                Func(toon.showHpTextNew, -int(dmg))
+            ))
     toonTracks = getToonTracksCheat(attack, damageDelay, ['slip-backward'], 0, ['nothing'])
     return Parallel(suitTrack, suitTracks, toonTracks, notifyTracks, soundTracks)
 
@@ -415,14 +421,22 @@ def doMovingGoalposts(attack):
 def doCorporateRestructuring(attack):
     suit = attack['suit']
     battle = attack['battle']
+    
+    # Logic guard to prevent overlapping restructuring triggers
+    if hasattr(battle, 'restructuringInProgress') and battle.restructuringInProgress:
+        return Sequence(Wait(0.1))
+    battle.restructuringInProgress = True
+
     oldActiveSuits = battle.activeSuits[:]
     if len(oldActiveSuits) < 2:
+        battle.restructuringInProgress = False
         return Sequence(getSuitAnimTrack(attack))
     payload = int(attack.get('hp', 0))
     oldIndexes = []
     for index in xrange(len(oldActiveSuits)):
         oldIndexes.append((payload >> (index * 3)) & 7)
     if sorted(oldIndexes) != range(len(oldActiveSuits)):
+        battle.restructuringInProgress = False
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
     suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
@@ -475,10 +489,15 @@ def doCorporateRestructuring(attack):
                 LerpHprInterval(otherSuit, 0.6, newHpr, startHpr=startHpr, other=battle, fluid=1)),
             Func(otherSuit.setPosHpr, battle, newPos, newHpr))
         suitTracks.append(Parallel(animTrack, moveTrack))
+    
     quakeSound = globalBattleSoundCache.getSound('SA_quake.ogg')
     soundTrack = Sequence(Func(quakeSound.stop), SoundInterval(quakeSound, node=suit))
+
+    def finishRestructuring():
+        battle.setClientSuitOrder(newActiveSuits)
+        battle.restructuringInProgress = False
+
     return Sequence(
         Parallel(suitTrack, soundTrack, Sequence(Wait(1.5), suitTracks)),
-        Func(battle.setClientSuitOrder, newActiveSuits),
+        Func(finishRestructuring),
         Func(suit.loop, 'neutral'))
-

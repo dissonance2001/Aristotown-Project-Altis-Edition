@@ -451,13 +451,6 @@ class ChainsawCalculatorAI:
     def _doCutTheSlack(self, boss, controller, supports, preferredTarget=None):
         if not supports:
             return False
-        existingCts = [s for s in supports
-                       if self._isCutSlackTarget(s, controller)]
-        if len(existingCts) >= 2:
-            return self._doOffboarding(
-                boss, controller, supports, [],
-                targetSupport=self._chooseHighestLevel(existingCts))
-
         eligible = []
         for support in supports:
             if getattr(support, 'chainsawPromotionLocked', False):
@@ -500,7 +493,7 @@ class ChainsawCalculatorAI:
         if newLevel <= target.getActualLevel():
             return False
 
-        self._spendRPM(controller, 4)
+        self._spendRPM(controller, 3)
         for support in sacrifices:
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
@@ -1017,22 +1010,16 @@ class ChainsawCalculatorAI:
 
                     suedEligible = [s for s in suedSupports if s in ctsCandidates]
                     if ctsCandidates and (fullBattle or len(predictedDead) >= 2 or suedEligible):
-                        existingCts = [s for s in supports
-                                       if self._isCutSlackTarget(s, controller)]
-                        if len(existingCts) >= 2:
-                            chosen = ('Offboarding',
-                                      (self._chooseHighestLevel(existingCts), None))
-                        else:
-                            preferred = random.choice(suedEligible) if suedEligible else None
-                            chosen = ('CutTheSlack', preferred)
+                        preferred = random.choice(suedEligible) if suedEligible else None
+                        chosen = ('CutTheSlack', preferred)
 
         # Extreme attacks are the fallback for phase 1/3. Marked Wood has
         # priority when its qualifying hit pattern is present, including when
         # the projected RPM crosses the Deadwood threshold this round.
         if phase != 2 and rpm >= 20:
-            if phase == 1:
+            if phase == 1 and not controller.chainsawDeadwoodTriggered:
                 chosen = ('Deadwood', None)
-            elif supports:
+            elif phase == 3 and supports:
                 chosen = ('Layoffs', None)
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
@@ -1077,13 +1064,6 @@ class ChainsawCalculatorAI:
             return (False, False)
 
         gainApplied = False
-        if preAbilityGain > 0:
-            gained = self._applyRPMGain(controller, preAbilityGain)
-            if gained > 0:
-                self._makeVisualAttack(
-                    boss, 'ChainsawCoreRevvingUp%d' % gained,
-                    'roll-o-dex', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
-            gainApplied = True
 
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)

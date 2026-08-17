@@ -248,7 +248,7 @@ class DistributedChainsawBossAI(
 
         # This matches the battle node authored into the Chainsaw room.
         self.battle = self.makeBattle(
-            (0, 10, 0, 180, 0, 0),
+            (0, 0, 0, 180, 0, 0),
             (0, 0, 0, 0, 0, 0),
             self.handleRoundADone,
             self.handleBattleADone,
@@ -381,6 +381,7 @@ class DistributedChainsawBossAI(
             if self.chainsawChainLinked:
                 self.chainsawChainStartSupportIds.append(suit.doId)
             reserves.append(suit)
+
         return reserves
 
     def _livingLinkedSupportIds(self):

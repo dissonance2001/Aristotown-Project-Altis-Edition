@@ -74,7 +74,7 @@ class DistributedBattleChainsawAI(
                     promoted.append(suit)
                 else:
                     regular.append(suit)
-            ordered = [boss] + promoted + regular
+            ordered = [boss] + regular + promoted
             if ordered != self.activeSuits:
                 try:
                     if self._setActiveSuitOrderPrivately(ordered):
@@ -222,7 +222,8 @@ class DistributedBattleChainsawAI(
         boss = self.__findChainsaw()
         if not boss:
             return
-        supports = []
+        promoted = []
+        regular = []
         for suit in self.activeSuits:
             if suit is boss:
                 continue
@@ -231,7 +232,11 @@ class DistributedBattleChainsawAI(
                     continue
             except:
                 pass
-            supports.append(suit)
+            if getattr(suit, 'chainsawManagerBeneficiary', False):
+                promoted.append(suit)
+            else:
+                regular.append(suit)
+        supports = regular + promoted
         ordered = [boss] + supports
         if ordered != self.activeSuits:
             self.activeSuits[:] = ordered
