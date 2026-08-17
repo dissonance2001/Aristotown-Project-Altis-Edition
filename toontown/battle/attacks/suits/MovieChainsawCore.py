@@ -58,7 +58,7 @@ def _spendMeter(attack, stacks):
         return
     try:
         meter.setPhase(controller.chainsawPhase)
-        meter.setRPM(max(10, int(round(float(meter.rpm))) - int(stacks)))
+        meter.setRPM(int(controller.chainsawRPM))
     except:
         pass
 
@@ -326,6 +326,8 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
         pass
     _setSuitStatusEffect(
         target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
+    _setSuitStatusEffect(
+        target, 'lureResist', 2 if aggrandized else 1, None, 'setBoth')
     if aggrandized:
         _setSuitStatusEffect(
             target, 'chainsawAggrandized', 1, None, 'setBoth')
@@ -360,7 +362,7 @@ def _applyScabbardState(suit, finalHP, finalMax, overcharged=False):
     heal = max(0, int(finalHP) - current)
     if heal > 0:
         try:
-            suit.showHpTextNew(-heal)
+            suit.showHpTextNew(heal)
         except:
             pass
         try:
@@ -461,6 +463,13 @@ def doRevvingUp(attack, whipsaw=False):
     suit.setChainsawTexRoll(texDuration)
     _setSuitStatusEffect(
         suit, 'chainsawRevvingUp', int(newRPM), None, 'setBoth')
+    meter = getattr(controller, 'chainsawMeter', None) if controller else None
+    if meter:
+        try:
+            meter.setPhase(controller.chainsawPhase)
+            meter.setRPM(int(newRPM))
+        except:
+            pass
     if whipsaw:
         if whipsawStacks is None:
             phase = getattr(controller, 'chainsawPhase', 1) if controller else 1

@@ -425,7 +425,8 @@ class DistributedChainsawBossAI(
             rounds = self.chainsawCutSlackTargets.pop(suitId, None)
             isCutSlackTarget = rounds is not None or bool(
                 getattr(suit, 'chainsawCutSlackTarget', False))
-            if isCutSlackTarget:
+            if isCutSlackTarget and not getattr(
+                    suit, 'chainsawOffboarded', False):
                 try:
                     level = suit.getActualLevel()
                 except:

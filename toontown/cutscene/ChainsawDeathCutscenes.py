@@ -559,4 +559,7 @@ def makeChainsawDeath(suit, battle):
 
 
 def makeChainsawEnding(controller):
-    return ChainsawEndingSetup(controller).build()
+    setup = ChainsawEndingSetup(controller)
+    controller._chainsawEndingSetup = setup
+    track = setup.build()
+    return track

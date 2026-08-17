@@ -1826,7 +1826,20 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipBuff=True, 
                                    slotColor=(0.722, 0.722, 0.722, 1))
 
-        if self.cog.getManager() or self.cog.getGovernaught() or self.cog.hasSuitStatusEffect('lureResist') or self.cog.hasSuitStatusEffect('insured') or self.cog.hasSuitStatusEffect('insured2') or self.cog.healthCondition == 13:
+        if self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/tie_icon')
+            slot = self._claimNextStatusSlot()
+            self._attachStatusIcon(
+                self.statusIcon,
+                slot,
+                tooltipTitle='Manager Beneficiary',
+                tooltipDescription='This Cog cannot be fired or sued.',
+                tooltipBuff=True,
+                slotColor=(1, 0.984, 0, 1))
+
+        if ((self.cog.getManager() or self.cog.getGovernaught()) and
+                not self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary')) or self.cog.hasSuitStatusEffect('lureResist') or self.cog.hasSuitStatusEffect('insured') or self.cog.hasSuitStatusEffect('insured2') or self.cog.healthCondition == 13:
             if (self.cog.isDesperation and (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat')) or self.cog.hasSuitStatusEffect('videographerImmune') or self.cog.hasSuitStatusEffect('silhouetteImmune') or self.cog.hasSuitStatusEffect('lureImmune') or self.cog.hasSuitStatusEffect('highRollerImmune') or self.cog.hasSuitStatusEffect('immune') or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers') or self.cog.hasSuitStatusEffect('lureResist'):
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/lured_prestige_icon')

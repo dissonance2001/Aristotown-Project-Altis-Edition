@@ -369,6 +369,8 @@ class ChainsawCalculatorAI:
         effects.append(StatusEffects.ManagerBeneficiary(-1))
         if cts:
             effects.append(StatusEffects.LureResistance(1))
+        else:
+            effects.append(StatusEffects.LureResistance(2))
 
         suit.chainsawManagerBeneficiary = True
         suit.chainsawPromotionLocked = True
@@ -396,10 +398,22 @@ class ChainsawCalculatorAI:
         if not support:
             return False
         self._spendRPM(controller, 2)
-        hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
-        hpRatio = min(max(hpRatio, 0.1), 1.2)
-        damage = math.ceil(support.getActualLevel() * 3 * hpRatio)
-        damage = max(1, int(damage))
+        support.chainsawOffboarded = True
+        support.chainsawCutSlackTarget = False
+        support.chainsawCutSlackKickbackHandled = True
+        try:
+            controller.chainsawCutSlackTargets.pop(support.doId, None)
+        except:
+            pass
+        try:
+            hpRatio = float(max(0, support.getHP())) / max(
+                1.0, float(support.getMaxHP()))
+            hpRatio = min(max(hpRatio, 0.1), 1.2)
+            damage = int(math.ceil(
+                support.getActualLevel() * 3 * hpRatio))
+        except:
+            damage = int(support.getActualLevel() * 3)
+        damage = max(1, damage)
         supportIndex = self.battle.activeSuits.index(support)
         name = 'ChainsawCoreOffboarding%d' % max(1, supportIndex)
         self._fireSupport(support)
@@ -475,10 +489,25 @@ class ChainsawCalculatorAI:
         else:
             target = ordered[-1]
 
-        # Current Clash balance only sacrifices up to two lower-level Cogs.
         sacrificePool = [s for s in ordered if s is not target]
-        sacrifices = sacrificePool[:2]
-        newLevel = 30
+        sacrifices = sacrificePool[:3]
+
+        # Cut the Slack promotes the surviving target from the sacrificed
+        # Cogs' levels rather than simply forcing it to Level 30.
+        if sacrifices:
+            try:
+                sacrificeLevels = sum(
+                    [s.getActualLevel() for s in sacrifices])
+                newLevel = min(
+                    30, target.getActualLevel() +
+                    int(math.ceil(sacrificeLevels / 2.0)))
+            except:
+                newLevel = 30
+        else:
+            try:
+                newLevel = min(30, target.getActualLevel() + 3)
+            except:
+                newLevel = 30
 
         # Current wiki/update behavior uses a 4,000 RPM cost.
         self._spendRPM(controller, 4)
@@ -724,6 +753,8 @@ class ChainsawCalculatorAI:
             except:
                 continue
             if getattr(support, 'chainsawCutSlackKickbackHandled', False):
+                continue
+            if getattr(support, 'chainsawOffboarded', False):
                 continue
             if not self._isCutSlackTarget(support, controller):
                 continue
@@ -1039,32 +1070,25 @@ class ChainsawCalculatorAI:
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
 
-        markedCombo = []
-        if phase != 2 and rpm >= 17:
-            comboTracks = {}
-            for toonId in self.battle.activeToons:
-                attack = self.battle.toonAttacks.get(toonId)
-                if not attack:
-                    continue
-                track = attack[TOON_TRACK_COL]
-                if track not in (TRAP, LURE, THROW):
-                    continue
-                targetId = attack[TOON_TGT_COL]
-                targetsBoss = targetId == boss.doId
-                try:
-                    if attackAffectsGroup(track, attack[TOON_LVL_COL]):
-                        targetsBoss = True
-                except:
-                    pass
-                if targetsBoss:
-                    comboTracks.setdefault(track, []).append(toonId)
-            if comboTracks.get(TRAP) and comboTracks.get(LURE) and comboTracks.get(THROW):
-                markedCombo = comboTracks[THROW] + comboTracks[TRAP] + comboTracks[LURE]
-
-        if markedCombo and controller.chainsawPreviousLogicAttack != 'MarkedWood':
-            markedTargets = [toonId for toonId in markedCombo if toonId in livingToons]
-            if markedTargets:
-                targetToon = markedTargets[0]
+        if (phase != 2 and rpm >= 17 and
+                controller.chainsawPreviousLogicAttack != 'MarkedWood'):
+            # Marked Wood is keyed to the turn's Toon targeting pattern:
+            # one Toon hitting Chainsaw, all living Toons hitting Chainsaw,
+            # or an IOU being used. Lure by itself does not count as a hit.
+            markedWoodTrigger = (
+                exactlyOneHitBoss or
+                (len(livingToons) == 4 and allToonsHitBoss) or
+                bool(iouToons))
+            if markedWoodTrigger:
+                targetToon = None
+                if iouToons:
+                    ioUTargets = [toonId for toonId in iouToons
+                                  if toonId in livingToons]
+                    if ioUTargets:
+                        targetToon = sorted(
+                            ioUTargets,
+                            key=self._toonCurrentHP,
+                            reverse=True)[0]
                 chosen = ('MarkedWood', targetToon)
 
         # Fallback attacks.  Spark Plug cannot repeat; when it would repeat,

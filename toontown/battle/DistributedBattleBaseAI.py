@@ -162,24 +162,6 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.timer.stop()
         self.adjustingTimer.stop()
 
-    def __removeSuit(self, suit):
-        self.notify.debug('__removeSuit(%d)' % suit.doId)
-        if self.suits.count(suit) != 0:
-            self.suits.remove(suit)
-        if self.activeSuits.count(suit) != 0:
-            self.activeSuits.remove(suit)
-        if self.luredSuits.count(suit) == 1:
-            self.luredSuits.remove(suit)
-        if self.immuneSuits.count(suit) == 1:
-            self.immuneSuits.remove(suit)
-        if self.enragedSuits.count(suit) == 1:
-            self.enragedSuits.remove(suit)
-        if self.absorbingSuits.count(suit) == 1:
-            self.absorbingSuits.remove(suit)
-        if self.soakedSuits.count(suit) == 1:
-            self.soakedSuits.remove(suit)
-        self.suitGone = 1
-
     def findSuit(self, id):
         for s in self.suits:
             if s.doId == id:
@@ -437,6 +419,35 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self._queuedSuitOrderOperations = []
         self._queuedSuitOrderOperations.append(('order', suitIds[:]))
 
+    def _rebaseSuitTargetConditions(self, oldActive, newActive):
+        calculator = getattr(self, 'battleCalc', None)
+        if calculator is None:
+            return
+
+        oldToNew = {}
+        for oldIndex, suit in enumerate(oldActive):
+            try:
+                oldToNew[oldIndex] = newActive.index(suit)
+            except ValueError:
+                pass
+
+        conditionsBySuit = getattr(calculator, 'suitStatusConditions', {})
+        for suit in newActive:
+            conditions = conditionsBySuit.get(suit.doId)
+            if not conditions:
+                continue
+            condition = conditions.get('targetCheckCondition')
+            if condition is None:
+                continue
+
+            oldIndex = condition.get('modifier')
+            if not isinstance(oldIndex, (int, long)):
+                continue
+            if oldIndex not in oldToNew:
+                continue
+
+            condition['modifier'] = oldToNew[oldIndex]
+
     def _setActiveSuitOrderPrivately(self, orderedSuits):
         if len(orderedSuits) != len(self.activeSuits):
             return False
@@ -459,6 +470,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         else:
             self.suits = [newCanonical[0], newCanonical[-1]] + newCanonical[1:-1]
         self.activeSuits = orderedSuits[:]
+        self._rebaseSuitTargetConditions(oldActive, self.activeSuits)
         return True
 
     def _applyQueuedSuitOrderOperations(self):

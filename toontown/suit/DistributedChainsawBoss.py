@@ -876,6 +876,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.__stopBattleMusic()
         try:
             from toontown.cutscene.ChainsawDeathCutscenes import makeChainsawEnding
+            self._chainsawEndingSetup = None
             ival = Sequence(
                 makeChainsawEnding(self),
                 Func(self.doneBarrier, 'Epilogue'),
@@ -903,8 +904,26 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def exitEpilogue(self):
         self.clearInterval('EpilogueMovie', finish=0)
+        self._chainsawEndingSetup = None
         if self.hasLocalToon():
             self.__teleportToChainsawLobby()
+
+    def skipEpilogueMovie(self):
+        interval = self.activeIntervals.get('EpilogueMovie')
+        if interval:
+            self.clearInterval('EpilogueMovie', finish=0)
+        setup = getattr(self, '_chainsawEndingSetup', None)
+        if setup:
+            try:
+                setup._cleanup()
+            except:
+                pass
+            self._chainsawEndingSetup = None
+        try:
+            camera.wrtReparentTo(render)
+        except:
+            pass
+        self.doneBarrier('Epilogue')
 
     def enterFrolic(self):
         self.releaseToons()

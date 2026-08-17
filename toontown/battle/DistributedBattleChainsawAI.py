@@ -218,19 +218,34 @@ class DistributedBattleChainsawAI(
         self._clampDeadwoodMovieDamage()
         return DistributedBattleMinibossAI.DistributedBattleMinibossAI.d_setMovie(self)
 
+    def _compactChainsawActiveSuits(self):
+        boss = self.__findChainsaw()
+        if not boss:
+            return
+        supports = []
+        for suit in self.activeSuits:
+            if suit is boss:
+                continue
+            try:
+                if suit.getHP() <= 0:
+                    continue
+            except:
+                pass
+            supports.append(suit)
+        ordered = [boss] + supports
+        if ordered != self.activeSuits:
+            self.activeSuits[:] = ordered
+
     def localMovieDone(self, needUpdate, deadToons, deadSuits, lastActiveSuitDied):
-        # Altis normally delays the membership packet until resume().  Chainsaw
-        # can create a replacement reserve in that same callback, which left a
-        # defeated Cog visible in the target list until the reserve movie was
-        # over.  Push the post-death membership immediately; resume() will send
-        # the later reserve membership as a second, normal update.
+        result = DistributedBattleMinibossAI.DistributedBattleMinibossAI.localMovieDone(
+            self, needUpdate, deadToons, deadSuits, lastActiveSuitDied)
         if needUpdate or deadSuits or deadToons:
+            self._compactChainsawActiveSuits()
             try:
                 self.d_setMembers()
             except:
                 pass
-        return DistributedBattleMinibossAI.DistributedBattleMinibossAI.localMovieDone(
-            self, needUpdate, deadToons, deadSuits, lastActiveSuitDied)
+        return result
 
     def _pruneChainsawStaleSuitState(self):
         # Altis' generic __removeSuit() does not notify BattleCalculatorAI via
