@@ -245,11 +245,6 @@ class BossCutsceneSkip(object):
 
         if self.voteLabel:
             self.voteLabel['text'] = self._formatVotes(1)
-        if self.intervalName == 'EpilogueMovie':
-            skipEpilogue = getattr(self.boss, 'skipEpilogueMovie', None)
-            if skipEpilogue:
-                skipEpilogue()
-                return
         interval.finish()
 
     def setVoteSkips(self, voteTotal, playerTotal):
@@ -271,17 +266,28 @@ class BossCutsceneSkip(object):
     def setCutsceneSkip(self):
         if not self.boss or not self.intervalName:
             return
-        interval = self.boss.activeIntervals.get(self.intervalName)
+        intervalName = self.intervalName
+        interval = self.boss.activeIntervals.get(intervalName)
         if not interval:
             return
         self.skipRequested = True
         if self.voteButton:
             self.voteButton['state'] = DGG.DISABLED
-        if self.intervalName == 'EpilogueMovie':
-            skipEpilogue = getattr(self.boss, 'skipEpilogueMovie', None)
-            if skipEpilogue:
-                skipEpilogue()
-                return
+
+        if intervalName == 'EpilogueMovie':
+            try:
+                self.boss.clearInterval(intervalName, finish=0)
+            except:
+                try:
+                    interval.pause()
+                except:
+                    pass
+            try:
+                self.boss.doneBarrier('Epilogue')
+            except:
+                pass
+            return
+
         interval.finish()
 
     def intervalCleared(self, intervalName):

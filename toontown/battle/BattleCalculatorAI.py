@@ -7467,7 +7467,17 @@ class BattleCalculatorAI:
 
 
     def getLureRemovalHeal(self, suitId):
-        return self.__getLureRemovalHeal(suitId)
+        attack = self.__getLureRemovalHeal(suitId)
+        try:
+            suit = self.battle.findSuit(suitId)
+        except:
+            suit = None
+        if suit is not None and getattr(suit, 'chainsawCutSlackTarget', False):
+            try:
+                attack[SUIT_HEAL_COL] = [0 for _ in attack[SUIT_HEAL_COL]]
+            except:
+                pass
+        return attack
 
 
     def getLureRemovalTrap(self, suitId):

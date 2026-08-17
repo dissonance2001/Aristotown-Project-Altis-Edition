@@ -398,25 +398,20 @@ class ChainsawCalculatorAI:
         if not support:
             return False
         self._spendRPM(controller, 2)
-        support.chainsawOffboarded = True
-        support.chainsawCutSlackTarget = False
-        support.chainsawCutSlackKickbackHandled = True
-        try:
-            controller.chainsawCutSlackTargets.pop(support.doId, None)
-        except:
-            pass
-        try:
-            hpRatio = float(max(0, support.getHP())) / max(
-                1.0, float(support.getMaxHP()))
-            hpRatio = min(max(hpRatio, 0.1), 1.2)
-            damage = int(math.ceil(
-                support.getActualLevel() * 3 * hpRatio))
-        except:
-            damage = int(support.getActualLevel() * 3)
-        damage = max(1, damage)
+        hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
+        hpRatio = min(max(hpRatio, 0.1), 1.2)
+        damage = math.ceil(support.getActualLevel() * 3 * hpRatio)
+        damage = max(1, int(damage))
         supportIndex = self.battle.activeSuits.index(support)
         name = 'ChainsawCoreOffboarding%d' % max(1, supportIndex)
         self._fireSupport(support)
+        if getattr(support, 'chainsawCutSlackTarget', False):
+            support.chainsawCutSlackKickbackHandled = True
+            support.chainsawCutSlackTarget = False
+            try:
+                controller.chainsawCutSlackTargets.pop(support.doId, None)
+            except:
+                pass
         if retaliationToon in self.battle.activeToons:
             self._makeTargetedAttack(
                 boss, name, [retaliationToon], [damage], 'throw-paper')
@@ -463,8 +458,6 @@ class ChainsawCalculatorAI:
                 boss, controller, supports, [],
                 targetSupport=self._chooseHighestLevel(existingCts))
 
-        # A Cog that has already received a Chainsaw promotion is a Manager
-        # Beneficiary and can never be promoted by Cut the Slack a second time.
         eligible = []
         for support in supports:
             if getattr(support, 'chainsawPromotionLocked', False):
@@ -491,25 +484,22 @@ class ChainsawCalculatorAI:
 
         sacrificePool = [s for s in ordered if s is not target]
         sacrifices = sacrificePool[:3]
-
-        # Cut the Slack promotes the surviving target from the sacrificed
-        # Cogs' levels rather than simply forcing it to Level 30.
-        if sacrifices:
+        sacrificeLevels = 0
+        for support in sacrifices:
             try:
-                sacrificeLevels = sum(
-                    [s.getActualLevel() for s in sacrifices])
-                newLevel = min(
-                    30, target.getActualLevel() +
-                    int(math.ceil(sacrificeLevels / 2.0)))
+                sacrificeLevels += support.getActualLevel()
             except:
-                newLevel = 30
-        else:
-            try:
-                newLevel = min(30, target.getActualLevel() + 3)
-            except:
-                newLevel = 30
+                pass
+        try:
+            newLevel = min(30, target.getActualLevel() + int(math.ceil(
+                sacrificeLevels / 2.0)))
+        except:
+            newLevel = 30
+        if newLevel <= target.getActualLevel():
+            newLevel = min(30, target.getActualLevel() + 3)
+        if newLevel <= target.getActualLevel():
+            return False
 
-        # Current wiki/update behavior uses a 4,000 RPM cost.
         self._spendRPM(controller, 4)
         for support in sacrifices:
             self._fireSupport(support)
@@ -523,7 +513,7 @@ class ChainsawCalculatorAI:
                 pass
         suffix = ''.join([str(index) for index in sacrificeIndices])
         self._makeVisualAttack(
-            boss, 'ChainsawCoreCutTheSlack%dS%s' % (targetIndex, suffix),
+            boss, 'ChainsawCoreCutTheSlack%dL%dS%s' % (targetIndex, newLevel, suffix),
             'summon-cog', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
         controller.chainsawPreviousAttack = 'CutTheSlack'
         controller.chainsawPreviousLogicAttack = 'CutTheSlack'
@@ -754,8 +744,6 @@ class ChainsawCalculatorAI:
                 continue
             if getattr(support, 'chainsawCutSlackKickbackHandled', False):
                 continue
-            if getattr(support, 'chainsawOffboarded', False):
-                continue
             if not self._isCutSlackTarget(support, controller):
                 continue
             support.chainsawCutSlackKickbackHandled = True
@@ -941,27 +929,6 @@ class ChainsawCalculatorAI:
         allToonsTargetedBoss = (len(livingToons) > 0 and
                                 len(bossTargetingToons) == len(livingToons))
         exactlyOneHitBoss = len(attackingToons) == 1
-        markedWoodTracks = []
-        for toonId in self.battle.activeToons:
-            attack = self.battle.toonAttacks.get(toonId)
-            if not attack:
-                continue
-            track = attack[TOON_TRACK_COL]
-            if track not in (TRAP, LURE, THROW):
-                continue
-            targetsBoss = attack[TOON_TGT_COL] == boss.doId
-            try:
-                if attackAffectsGroup(track, attack[TOON_LVL_COL]):
-                    targetsBoss = True
-            except:
-                pass
-            if targetsBoss:
-                markedWoodTracks.append(track)
-        markedWoodCombo = (TRAP in markedWoodTracks and
-                           LURE in markedWoodTracks and
-                           THROW in markedWoodTracks)
-        if markedWoodCombo:
-            allToonsTargetedBoss = True
         totalLevel = 0
         for suit in supports:
             try:
@@ -1070,26 +1037,20 @@ class ChainsawCalculatorAI:
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
 
-        if (phase != 2 and rpm >= 17 and
-                controller.chainsawPreviousLogicAttack != 'MarkedWood'):
-            # Marked Wood is keyed to the turn's Toon targeting pattern:
-            # one Toon hitting Chainsaw, all living Toons hitting Chainsaw,
-            # or an IOU being used. Lure by itself does not count as a hit.
-            markedWoodTrigger = (
-                exactlyOneHitBoss or
-                (len(livingToons) == 4 and allToonsHitBoss) or
-                bool(iouToons))
-            if markedWoodTrigger:
-                targetToon = None
-                if iouToons:
-                    ioUTargets = [toonId for toonId in iouToons
-                                  if toonId in livingToons]
-                    if ioUTargets:
-                        targetToon = sorted(
-                            ioUTargets,
-                            key=self._toonCurrentHP,
-                            reverse=True)[0]
-                chosen = ('MarkedWood', targetToon)
+        if phase != 2 and rpm >= 17 and controller.chainsawPreviousLogicAttack != 'MarkedWood':
+            markedTarget = None
+            if iouToons:
+                iouTargets = [toonId for toonId in iouToons if toonId in livingToons]
+                if iouTargets:
+                    markedTarget = sorted(
+                        iouTargets, key=self._toonCurrentHP, reverse=True)[0]
+            if markedTarget is None and len(attackingToons) == 1:
+                markedTarget = attackingToons[0]
+            if markedTarget is None and livingToons and len(attackingToons) == len(livingToons):
+                markedTarget = sorted(
+                    attackingToons, key=self._toonCurrentHP, reverse=True)[0]
+            if markedTarget is not None:
+                chosen = ('MarkedWood', markedTarget)
 
         # Fallback attacks.  Spark Plug cannot repeat; when it would repeat,
         # Clash forces Scabbard or Aggrandize if the RPM/field permits it.

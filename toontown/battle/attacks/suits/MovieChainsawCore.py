@@ -58,7 +58,7 @@ def _spendMeter(attack, stacks):
         return
     try:
         meter.setPhase(controller.chainsawPhase)
-        meter.setRPM(int(controller.chainsawRPM))
+        meter.setRPM(controller.chainsawRPM)
     except:
         pass
 
@@ -260,6 +260,8 @@ def _parseCutSlackName(name):
         indices = _parseTrailingIndices(name, 'ChainsawCoreCutTheSlack')
         return (indices[0] if indices else -1, [])
     targetText, sacrificeText = suffix.split('S', 1)
+    if 'L' in targetText:
+        targetText = targetText.split('L', 1)[0]
     try:
         targetIndex = int(targetText)
     except:
@@ -326,8 +328,6 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
         pass
     _setSuitStatusEffect(
         target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
-    _setSuitStatusEffect(
-        target, 'lureResist', 2 if aggrandized else 1, None, 'setBoth')
     if aggrandized:
         _setSuitStatusEffect(
             target, 'chainsawAggrandized', 1, None, 'setBoth')
@@ -463,13 +463,6 @@ def doRevvingUp(attack, whipsaw=False):
     suit.setChainsawTexRoll(texDuration)
     _setSuitStatusEffect(
         suit, 'chainsawRevvingUp', int(newRPM), None, 'setBoth')
-    meter = getattr(controller, 'chainsawMeter', None) if controller else None
-    if meter:
-        try:
-            meter.setPhase(controller.chainsawPhase)
-            meter.setRPM(int(newRPM))
-        except:
-            pass
     if whipsaw:
         if whipsawStacks is None:
             phase = getattr(controller, 'chainsawPhase', 1) if controller else 1
@@ -513,13 +506,20 @@ def doCutTheSlack(attack):
     suit = attack['suit']
     targetIndex, sacrificeIndices = _parseCutSlackName(
         attack.get('name', ''))
+    newLevel = None
+    name = attack.get('name', '')
+    try:
+        levelSuffix = name.split('L', 1)[1].split('S', 1)[0]
+        newLevel = int(levelSuffix)
+    except:
+        newLevel = 30
     target = _supportByIndex(attack, targetIndex)
     if target is None:
         return Sequence(Func(_spendMeter, attack, 4), Wait(2.0))
 
     targetTrack = Sequence(
         Wait(2.0),
-        Func(_applyPromotion, target, 30, attack['battle']),
+        Func(_applyPromotion, target, newLevel, attack['battle']),
         Parallel(
             _promotionCloud(target),
             Func(_showSuitHpStringCompat, target, 'PROMOTED!', 0.85, 0.7),

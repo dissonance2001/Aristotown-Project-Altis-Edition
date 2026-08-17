@@ -3,6 +3,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Func, LerpHprInterval, LerpPosInterval, Parallel, Sequence, Track, Wait
 
 from toontown.battle import DistributedBattleMiniboss
+from toontown.suit import Suit
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 
@@ -24,6 +25,52 @@ class DistributedBattleChainsaw(
         points[1] = ((Point3(10, 4.5, 0), 155),
                      (Point3(5, 5.8, 0), 170))
         self.suitPoints = tuple(points)
+
+    def getActorPosHpr(self, actor, actorList=[]):
+        try:
+            if isinstance(actor, Suit.Suit):
+                if actorList == []:
+                    actorList = self.activeSuits
+                if actor in actorList:
+                    boss = None
+                    supports = []
+                    for suit in actorList:
+                        try:
+                            if suit.style.name == 'chainsaw':
+                                boss = suit
+                            else:
+                                supports.append(suit)
+                        except:
+                            supports.append(suit)
+                    formations = {
+                        1: ((Point3(10, 4.5, 0), 155),),
+                        2: ((Point3(10, 4.5, 0), 155),
+                            (Point3(-10, 4.5, 0), 205)),
+                        3: ((Point3(10, 4.5, 0), 155),
+                            (Point3(0, 7, 0), 179),
+                            (Point3(-10, 4.5, 0), 205)),
+                        4: ((Point3(10, 4.5, 0), 155),
+                            (Point3(5, 5.8, 0), 170),
+                            (Point3(-5, 5.8, 0), 190),
+                            (Point3(-10, 4.5, 0), 205)),
+                        5: ((Point3(10, 4.5, 0), 155),
+                            (Point3(5, 5.8, 0), 170),
+                            (Point3(0, 7, 0), 179),
+                            (Point3(-5, 5.8, 0), 190),
+                            (Point3(-10, 4.5, 0), 205))}
+                    formation = formations.get(len(actorList))
+                    if formation:
+                        if actor is boss:
+                            index = 0
+                        else:
+                            orderedSupports = [s for s in actorList if s is not boss]
+                            index = orderedSupports.index(actor) + 1
+                        point = formation[index]
+                        return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
+        except:
+            pass
+        return DistributedBattleMiniboss.DistributedBattleMiniboss.getActorPosHpr(
+            self, actor, actorList)
 
     def getSurrenderExitStatus(self):
         return {
