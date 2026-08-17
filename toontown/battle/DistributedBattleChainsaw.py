@@ -43,7 +43,7 @@ class DistributedBattleChainsaw(
                         except:
                             supports.append(suit)
                     formations = {
-                        1: ((Point3(10, 4.5, 0), 155),),
+                        1: ((Point3(0, 7, 0), 179),),
                         2: ((Point3(10, 4.5, 0), 155),
                             (Point3(-10, 4.5, 0), 205)),
                         3: ((Point3(10, 4.5, 0), 155),
@@ -334,12 +334,16 @@ class DistributedBattleChainsaw(
             except:
                 pass
             suit.setState('Battle')
-            if suit in self.joiningSuits:
-                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
-                destHpr = VBase3(h, 0, 0)
-            else:
-                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+            # Use the final canonical battle slot for the arriving Cog.
+            # The generic pending points put the first joining Cog in the
+            # middle-left preview slot, but Chainsaw battles expect the first
+            # support Cog to arrive at the far-left slot.
+            futureSuits = self.suits[:]
+            if suit not in futureSuits:
+                futureSuits.append(suit)
+            orderedFutureSuits = self._getCanonicalSuitOrder(futureSuits)
+            destPos, destHpr = self.getActorPosHpr(
+                suit, orderedFutureSuits)
 
             startPos = Point3(-36.88455, 4.53885, 0)
             endWalkPos = Point3(-12.34567, 4.5389, 0)
