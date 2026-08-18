@@ -369,10 +369,16 @@ class ChainsawCalculatorAI:
         effects.append(StatusEffects.ManagerBeneficiary(-1))
         if cts:
             effects.append(StatusEffects.LureResistance(1))
-            self.setSuitCondition(suit.doId, 'lureResist', 1, -1, 'setBoth')
+            try:
+                suit.setSuitStatusEffect('lureResist', 1, 1, 'setBoth')
+            except:
+                pass
         else:
             effects.append(StatusEffects.LureResistance(2))
-            self.setSuitCondition(suit.doId, 'lureResist', 2, -1, 'setBoth')
+            try:
+                suit.setSuitStatusEffect('lureResist', 2, 2, 'setBoth')
+            except:
+                pass
 
         suit.chainsawManagerBeneficiary = True
         suit.chainsawPromotionLocked = True
@@ -408,7 +414,6 @@ class ChainsawCalculatorAI:
         name = 'ChainsawCoreOffboarding%d' % max(1, supportIndex)
         self._fireSupport(support)
         if getattr(support, 'chainsawCutSlackTarget', False):
-            self.setSuitCondition(support.doId, 'lureResist', 0, 0, 'setBoth')
             support.chainsawCutSlackKickbackHandled = True
             support.chainsawCutSlackTarget = False
             try:
@@ -904,9 +909,9 @@ class ChainsawCalculatorAI:
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
                        suedSupports, supportTracks, iouToons,
-                       projectedRPM=None, preAbilityGain=0):
+                       projectedRPM=None):
         phase = controller.chainsawPhase
-        rpm = controller.chainsawRPM
+        rpm = controller.chainsawRPM if projectedRPM is None else projectedRPM
         allSupports = []
         predictedDead = []
         supports = []
@@ -1032,7 +1037,7 @@ class ChainsawCalculatorAI:
         # Extreme attacks are the fallback for phase 1/3. Marked Wood has
         # priority when its qualifying hit pattern is present, including when
         # the projected RPM crosses the Deadwood threshold this round.
-        if phase != 2 and rpm >= 20:
+        if phase != 2 and controller.chainsawRPM >= 20:
             if phase == 1:
                 chosen = ('Deadwood', None)
             elif supports:
@@ -1080,7 +1085,6 @@ class ChainsawCalculatorAI:
             return (False, False)
 
         gainApplied = False
-
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)
         elif name == 'Layoffs':
@@ -1171,9 +1175,9 @@ class ChainsawCalculatorAI:
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons,
-                projectedRPM=projectedRPM, preAbilityGain=hits)
+                projectedRPM=projectedRPM)
 
-        rpmGain = hits
+        rpmGain = 0 if gainAppliedBeforeAbility else hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and
                 not supports and controller.chainsawPreviousSupportCount > 0):

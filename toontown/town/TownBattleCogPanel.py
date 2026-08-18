@@ -1826,64 +1826,133 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipBuff=True, 
                                    slotColor=(0.722, 0.722, 0.722, 1))
 
-        lureResistModifier = 0
-        try:
-            lureResistModifier = self.cog.getSuitStatusModifier('lureResist')
-        except:
-            lureResistModifier = 0
-
         if self.cog.hasSuitStatusEffect('lureResist'):
-            status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.statusIcon = status2.find('**/lured_prestige_icon')
-            status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
-            self.statusIcon2 = status.find('**/minnieX')
-            self.statusIcon2.setColorScale(1, 0, 0, 1)
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/lured_prestige_icon')
             slot = self._claimNextStatusSlot()
+            rounds = max(1, int(self.cog.getSuitStatusTurns('lureResist') or 1))
+            self.extraText = DirectLabel(
+                parent=self.statusIcon, relief=None, text='%s' % rounds,
+                text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                text_font=ToontownGlobals.getInterfaceFont(),
+                text_bg=Vec4(0, 0, 0, 0), pos=(0.25, 0, -0.45),
+                text_scale=.6)
+            self.extraText.show()
             gagText = self.getColoredText(
-                'LURED', 'lureText', (0, 1, 0.016, 1),
+                'LURE', 'lureText', (0, 1, 0.016, 1),
                 ToontownGlobals.getSignFont())
-            if lureResistModifier <= 0:
-                lureDescription = 'This Cog is entirely immune to being %s.' % gagText
-            elif lureResistModifier == 1:
-                lureDescription = 'This Cog will stay %s for 1 round.' % gagText
-            else:
-                lureDescription = 'This Cog will stay %s for %s rounds.' % (gagText, int(lureResistModifier))
-            self._attachStatusIcons(
-                [self.statusIcon, self.statusIcon2], slot,
+            self._attachStatusIcon(
+                self.statusIcon,
+                slot,
                 tooltipTitle='Lure Resistance',
-                tooltipDescription=lureDescription,
+                tooltipDescription='This Cog will stay %s for %s round%s.' % (
+                    gagText, rounds, '' if rounds == 1 else 's'),
                 tooltipBuff=True,
-                slotColor=(1, 0.984, 0, 1),
-                layerSettings=[
-                    {'scale': (1.0, 1.0, 1.0), 'pos': (0, 0, 0)},
-                    {'scale': (2.75, 2.75, 2.75), 'pos': (0, 0, -0.05)},
-                ])
-            if lureResistModifier <= 0:
-                self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+                slotColor=(1, 0.984, 0, 1))
 
         if self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/tie_icon')
             slot = self._claimNextStatusSlot()
             self._attachStatusIcon(
-                self.statusIcon, slot,
+                self.statusIcon,
+                slot,
                 tooltipTitle='Manager Beneficiary',
                 tooltipDescription='This Cog cannot be fired or sued.',
                 tooltipBuff=True,
                 slotColor=(1, 0.984, 0, 1))
 
         if ((self.cog.getManager() or self.cog.getGovernaught()) and
-                not self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary') and
-                not self.cog.hasSuitStatusEffect('lureResist')):
-            status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.statusIcon = status.find('**/tie_icon')
-            slot = self._claimNextStatusSlot()
-            self._attachStatusIcon(
-                self.statusIcon, slot,
-                tooltipTitle='Manager Beneficiary',
-                tooltipDescription='This Cog cannot be fired or sued.',
-                tooltipBuff=True,
-                slotColor=(1, 0.984, 0, 1))
+                not self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary')) or self.cog.hasSuitStatusEffect('insured') or self.cog.hasSuitStatusEffect('insured2') or self.cog.healthCondition == 13:
+            if (self.cog.isDesperation and (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat')) or self.cog.hasSuitStatusEffect('videographerImmune') or self.cog.hasSuitStatusEffect('silhouetteImmune') or self.cog.hasSuitStatusEffect('lureImmune') or self.cog.hasSuitStatusEffect('highRollerImmune') or self.cog.hasSuitStatusEffect('immune') or (self.cog.getActualLevel() == 25 and self.cog.dna.name == 'hrollers'):
+                status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
+                self.statusIcon = status2.find('**/lured_prestige_icon')
+                status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
+                self.statusIcon2 = status.find('**/minnieX')
+                self.statusIcon2.setColorScale(1, 0, 0, 1)
+                slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+                self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                    slot, 
+                                    tooltipTitle='Lure Resistance', 
+                                    tooltipDescription="This Cog is entirely immune to being %s." % gagText, 
+                                    tooltipBuff=True, 
+                                    slotColor=(1, 0.984, 0, 1), 
+                                    layerSettings=[
+                                        {
+                                            'scale': (1.0, 1.0, 1.0),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                             'scale': (2.75, 2.75, 2.75),
+                                            'pos': (0, 0, -0.05),
+                                        },
+                                    ])
+                self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
+            elif (self.cog.hasSuitStatusEffect('desperation') and not self.cog.hasSuitStatusEffect('unionBusterNoAttack')) or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'mplayers', 'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'director', 'bellring', 'ddiver', 'gatekeep')\
+                    or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or self.cog.hasSuitStatusEffect('starOfTheShow') or self.cog.hasSuitStatusEffect('silhouetteShielding') or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat'):
+                status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
+                self.statusIcon = status2.find('**/lured_prestige_icon')
+                status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
+                self.statusIcon2 = status.find('**/minnieX')
+                self.statusIcon2.setColorScale(1, 0, 0, 1)
+                slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+                self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                    slot, 
+                                    tooltipTitle='Lure Resistance', 
+                                    tooltipDescription="This Cog will stay %s for 1 round." % gagText, 
+                                    tooltipBuff=True, 
+                                    slotColor=(1, 0.984, 0, 1), 
+                                    layerSettings=[
+                                        {
+                                            'scale': (1.0, 1.0, 1.0),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                             'scale': (2.75, 2.75, 2.75),
+                                             'pos': (0, 0, -0.05),
+                                        },
+                                    ])
+            else:
+                status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
+                self.statusIcon = status2.find('**/lured_prestige_icon')    
+                status = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
+                self.statusIcon2 = status.find('**/minnieX')
+                self.statusIcon2.setColorScale(1, 0, 0, 1)
+                slot = self._claimNextStatusSlot()
+                gagText = self.getColoredText(
+                'LURED',
+                'lureText',
+                (0, 1, 0.016, 1),
+                ToontownGlobals.getSignFont()
+                )
+                self._attachStatusIcons([self.statusIcon, self.statusIcon2], 
+                                    slot, 
+                                    tooltipTitle='Lure Resistance', 
+                                    tooltipDescription="This Cog will stay %s for 2 rounds." % gagText, 
+                                    tooltipBuff=True, 
+                                    slotColor=(1, 0.984, 0, 1), 
+                                    layerSettings=[
+                                        {
+                                            'scale': (1.0, 1.0, 1.0),
+                                            'pos': (0, 0, 0),
+                                        },
+                                        {
+                                             'scale': (2.75, 2.75, 2.75),
+                                             'pos': (0, 0, -0.05),
+                                        },
+                                    ])
 
         if self.cog.healthCondition == 13:
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
