@@ -74,9 +74,6 @@ class DistributedBattleChainsawAI(
                     promoted.append(suit)
                 else:
                     regular.append(suit)
-            # Keep regular Cogs in their arrival order, but place the newest
-            # Cut the Slack Cog beside the previous CTL Cog rather than always
-            # pushing the newest CTL to the far-left slot.
             ordered = [boss] + regular + promoted
             if ordered != self.activeSuits:
                 try:

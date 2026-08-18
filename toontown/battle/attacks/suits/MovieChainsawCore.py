@@ -127,10 +127,14 @@ def _setSuitStatusEffect(suit, name, modifier=0, turns=None, mode='setBoth'):
 def _applyMarkedWoodStatus(toon):
     try:
         toon.makeMarkedWood()
+    except:
+        pass
+    try:
+        toon.setMarkedWood(1.75)
         toon.addMarkedWoodRounds(2)
     except:
         pass
-    _setToonStatusEffect(toon, 'markedwood', 1.75, 2, 'setBoth')
+    _setToonStatusEffect(toon, 'vulnerable', 75, 2, 'keepHighest')
 
 
 def _applyThrottleVulnerability(toon):
@@ -333,12 +337,8 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
         pass
     _setSuitStatusEffect(
         target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
-    if aggrandized:
-        _setSuitStatusEffect(
-            target, 'lureResist', 2, 2, 'setBoth')
-    else:
-        _setSuitStatusEffect(
-            target, 'lureResist', 1, 1, 'setBoth')
+    _setSuitStatusEffect(
+        target, 'lureResist', 2 if aggrandized else 1, None, 'setBoth')
     if aggrandized:
         _setSuitStatusEffect(
             target, 'chainsawAggrandized', 1, None, 'setBoth')

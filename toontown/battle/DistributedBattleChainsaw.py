@@ -21,6 +21,8 @@ class DistributedBattleChainsaw(
             'phase_9/audio/sfx/CHQ_door_close.ogg')
         self.chainsawChainVisualActive = False
         self._chainsawIdleTasks = set()
+        points = list(self.suitPoints)
+        self.suitPoints = tuple(points)
 
     def getActorPosHpr(self, actor, actorList=[]):
         try:
@@ -39,7 +41,7 @@ class DistributedBattleChainsaw(
                         except:
                             supports.append(suit)
                     formations = {
-                        1: ((Point3(0, 7, 0), 179),),
+                        1: ((Point3(0, 4.5, 0), 180),),
                         2: ((Point3(10, 4.5, 0), 155),
                             (Point3(-10, 4.5, 0), 205)),
                         3: ((Point3(10, 4.5, 0), 155),
@@ -59,7 +61,19 @@ class DistributedBattleChainsaw(
                         if actor is boss:
                             index = 0
                         else:
-                            orderedSupports = [s for s in actorList if s is not boss]
+                            regular = []
+                            promoted = []
+                            for suit in actorList:
+                                if suit is boss:
+                                    continue
+                                if getattr(suit, 'chainsawManagerBeneficiary', False):
+                                    promoted.append(suit)
+                                else:
+                                    regular.append(suit)
+                            # CTS/Manager Cogs occupy the positions nearest Chainsaw,
+                            # in their arrival order. Regular Cogs fill from the far
+                            # left toward Chainsaw in their arrival order.
+                            orderedSupports = promoted + list(reversed(regular))
                             index = orderedSupports.index(actor) + 1
                         point = formation[index]
                         return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
@@ -330,12 +344,14 @@ class DistributedBattleChainsaw(
             except:
                 pass
             suit.setState('Battle')
+            finalSuits = list(self.activeSuits)
+            for joining in suits:
+                if joining not in finalSuits:
+                    finalSuits.append(joining)
             if suit in self.joiningSuits:
-                i = len(self.pendingSuits) + self.joiningSuits.index(suit)
-                destPos, h = self.suitPendingPoints[i]
-                destHpr = VBase3(h, 0, 0)
+                destPos, destHpr = self.getActorPosHpr(suit, finalSuits)
             else:
-                destPos, destHpr = self.getActorPosHpr(suit, self.suits)
+                destPos, destHpr = self.getActorPosHpr(suit, finalSuits)
 
             startPos = Point3(-36.88455, 4.53885, 0)
             endWalkPos = Point3(-12.34567, 4.5389, 0)

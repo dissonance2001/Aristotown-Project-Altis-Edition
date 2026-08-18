@@ -369,16 +369,8 @@ class ChainsawCalculatorAI:
         effects.append(StatusEffects.ManagerBeneficiary(-1))
         if cts:
             effects.append(StatusEffects.LureResistance(1))
-            try:
-                suit.setSuitStatusEffect('lureResist', 1, 1, 'setBoth')
-            except:
-                pass
         else:
             effects.append(StatusEffects.LureResistance(2))
-            try:
-                suit.setSuitStatusEffect('lureResist', 2, 2, 'setBoth')
-            except:
-                pass
 
         suit.chainsawManagerBeneficiary = True
         suit.chainsawPromotionLocked = True
@@ -509,7 +501,7 @@ class ChainsawCalculatorAI:
             return False
 
         self._spendRPM(controller, 3)
-        for support in sacrifices:
+        for support in sacrifices
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
         targetIndex = self.battle.activeSuits.index(target)
@@ -909,7 +901,7 @@ class ChainsawCalculatorAI:
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
                        suedSupports, supportTracks, iouToons,
-                       projectedRPM=None):
+                       projectedRPM=None, preAbilityGain=0):
         phase = controller.chainsawPhase
         rpm = controller.chainsawRPM if projectedRPM is None else projectedRPM
         allSupports = []
@@ -1037,7 +1029,7 @@ class ChainsawCalculatorAI:
         # Extreme attacks are the fallback for phase 1/3. Marked Wood has
         # priority when its qualifying hit pattern is present, including when
         # the projected RPM crosses the Deadwood threshold this round.
-        if phase != 2 and controller.chainsawRPM >= 20:
+        if phase != 2 and rpm >= 20:
             if phase == 1:
                 chosen = ('Deadwood', None)
             elif supports:
@@ -1085,6 +1077,7 @@ class ChainsawCalculatorAI:
             return (False, False)
 
         gainApplied = False
+
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)
         elif name == 'Layoffs':
@@ -1117,6 +1110,17 @@ class ChainsawCalculatorAI:
 
         if result:
             controller.chainsawPreviousLogicAttack = name
+
+        # Revving Up is an end-of-turn gain.  Cheat selection uses the RPM
+        # Chainsaw had before this turn's attacks; once the cheat has spent its
+        # RPM, apply the turn's gain and append the Revving Up movie afterward.
+        if preAbilityGain > 0:
+            gained = self._applyRPMGain(controller, preAbilityGain)
+            if gained > 0:
+                self._makeVisualAttack(
+                    boss, 'ChainsawCoreRevvingUp%d' % gained,
+                    'roll-o-dex', 0, SuitBattleGlobals.ATK_TGT_SINGLE)
+            gainApplied = True
         return (result, gainApplied)
 
     def calculateChainsawAttacks(self):
@@ -1170,12 +1174,12 @@ class ChainsawCalculatorAI:
         usedAbility = bool(chainKickback)
         gainAppliedBeforeAbility = False
         if not phaseChanged and not chainKickback:
-            projectedRPM = self._projectRPMGain(controller, hits)
+            projectedRPM = controller.chainsawRPM
             usedAbility, gainAppliedBeforeAbility = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons,
-                projectedRPM=projectedRPM)
+                projectedRPM=projectedRPM, preAbilityGain=hits)
 
         rpmGain = 0 if gainAppliedBeforeAbility else hits
         supports = self._aliveSupports(boss)

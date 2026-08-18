@@ -1829,26 +1829,25 @@ class TownBattleCogPanel(DirectFrame):
         if self.cog.hasSuitStatusEffect('lureResist'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/lured_prestige_icon')
+            status2 = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
+            self.statusIcon2 = status2.find('**/minnieX')
+            self.statusIcon2.setColorScale(1, 0, 0, 1)
             slot = self._claimNextStatusSlot()
-            rounds = max(1, int(self.cog.getSuitStatusTurns('lureResist') or 1))
-            self.extraText = DirectLabel(
-                parent=self.statusIcon, relief=None, text='%s' % rounds,
-                text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
-                text_font=ToontownGlobals.getInterfaceFont(),
-                text_bg=Vec4(0, 0, 0, 0), pos=(0.25, 0, -0.45),
-                text_scale=.6)
-            self.extraText.show()
+            maxRounds = int(self.cog.getSuitStatusModifier('lureResist'))
             gagText = self.getColoredText(
-                'LURE', 'lureText', (0, 1, 0.016, 1),
+                'LURED', 'lureText', (0, 1, 0.016, 1),
                 ToontownGlobals.getSignFont())
-            self._attachStatusIcon(
-                self.statusIcon,
-                slot,
+            self._attachStatusIcons(
+                [self.statusIcon, self.statusIcon2], slot,
                 tooltipTitle='Lure Resistance',
-                tooltipDescription='This Cog will stay %s for %s round%s.' % (
-                    gagText, rounds, '' if rounds == 1 else 's'),
+                tooltipDescription='This Cog will stay %s for %s round%s.' %
+                (gagText, maxRounds, '' if maxRounds == 1 else 's'),
                 tooltipBuff=True,
-                slotColor=(1, 0.984, 0, 1))
+                slotColor=(1, 0.984, 0, 1),
+                layerSettings=[
+                    {'scale': (1.0, 1.0, 1.0), 'pos': (0, 0, 0)},
+                    {'scale': (2.75, 2.75, 2.75), 'pos': (0, 0, -0.05)},
+                ])
 
         if self.cog.hasSuitStatusEffect('chainsawManagerBeneficiary'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
