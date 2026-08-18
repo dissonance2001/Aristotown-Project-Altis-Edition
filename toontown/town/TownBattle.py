@@ -606,6 +606,23 @@ class TownBattle(StateData.StateData):
         if resetActivateMode:
             self.__enterPanels(self.numToons, self.localNum)
             self.__cogPanels(self.numCogs)
+            try:
+                if any([getattr(cog.dna, 'name', '') == 'chainsaw' for cog in cogs]):
+                    panelXs = [((self.numCogs - 1) * 0.25) - (i * 0.5)
+                               for i in range(self.numCogs)]
+                    panelXs.sort()
+                    physical = []
+                    for cogIndex in range(len(cogs)):
+                        try:
+                            pos, hpr = battle.getActorPosHpr(cogs[cogIndex], cogs)
+                            physical.append((pos.getX(), cogIndex))
+                        except:
+                            physical.append((float(cogIndex), cogIndex))
+                    physical.sort()
+                    for panelRank, (worldX, cogIndex) in enumerate(physical):
+                        self.cogPanels[cogIndex].setX(panelXs[panelRank])
+            except:
+                pass
             for i in range(len(toons)):
                 self.toonPanels[i].setLaffMeter(toons[i])
 

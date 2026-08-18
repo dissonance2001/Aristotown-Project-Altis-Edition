@@ -72,7 +72,7 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.hasSuitStatusEffect('closedSession'):
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.getManager():
+    elif suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False):
         suit.showHpStringGreen("LURED 2 ROUNDS")
     elif suit.getGovernaught():
         suit.showHpStringGreen("LURED 2 ROUNDS")
@@ -156,12 +156,13 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
-                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                        lureRounds = max(1, int(suit.getSuitStatusModifier('lureResist')))
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=lureRounds)
                     elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
@@ -173,7 +174,7 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
                     else:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
@@ -268,12 +269,13 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitMoveDuration = 0.8
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
-                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                        lureRounds = max(1, int(suit.getSuitStatusModifier('lureResist')))
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=lureRounds)
                     elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
@@ -285,7 +287,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     else:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
@@ -381,12 +383,13 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
-                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                        lureRounds = max(1, int(suit.getSuitStatusModifier('lureResist')))
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=lureRounds)
                     elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
@@ -398,7 +401,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     else:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
@@ -1175,12 +1178,13 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.hasSuitStatusEffect('lureResist') and not trapProp:
-                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
+                        lureRounds = max(1, int(suit.getSuitStatusModifier('lureResist')))
+                        makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=lureRounds)
                     elif suit.hasSuitStatusEffect('insured') or suit.hasSuitStatusEffect('insured2') and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
                     elif suit.currHP > (suit.maxHP * 1.5) and not trapProp:
@@ -1192,7 +1196,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     else:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=ToontownBattleGlobals.AvLureRounds[lure['level']] + 1)
                 else:
-                    if suit.getManager() and not trapProp:
+                    if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)
                     elif suit.getGovernaught() and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=1, turns=2)

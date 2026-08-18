@@ -1026,9 +1026,9 @@ class ChainsawCalculatorAI:
                             preferred = random.choice(suedEligible) if suedEligible else None
                             chosen = ('CutTheSlack', preferred)
 
-        # Extreme attacks are the fallback for phase 1/3. Marked Wood has
-        # priority when its qualifying hit pattern is present, including when
-        # the projected RPM crosses the Deadwood threshold this round.
+        # Extreme attacks are the fallback for phase 1/3. Marked Wood is
+        # evaluated after the normal RPM-spending abilities so those abilities
+        # keep their existing priority for the special Trap + Lure case.
         if phase != 2 and rpm >= 20:
             if phase == 1:
                 chosen = ('Deadwood', None)
@@ -1037,7 +1037,16 @@ class ChainsawCalculatorAI:
         elif phase == 2 and rpm <= 10:
             chosen = ('Throttle', None)
 
-        if phase != 2 and rpm >= 17 and controller.chainsawPreviousLogicAttack != 'MarkedWood':
+        bossTracks = []
+        for toonId in bossTargetingToons:
+            attack = self.battle.toonAttacks.get(toonId)
+            if attack:
+                bossTracks.append(attack[TOON_TRACK_COL])
+        trapAndLureOnBoss = TRAP in bossTracks and LURE in bossTracks
+
+        if (phase != 2 and rpm >= 17 and
+                controller.chainsawPreviousLogicAttack != 'MarkedWood' and
+                not (trapAndLureOnBoss and chosen and chosen[0] == 'CutTheSlack')):
             markedTarget = None
             if iouToons:
                 iouTargets = [toonId for toonId in iouToons if toonId in livingToons]
@@ -1134,7 +1143,6 @@ class ChainsawCalculatorAI:
         (hits, attackingToons, bossTargetingToons, supportDamage,
          firedSupports, suedSupports, supportTracks, iouToons) = self._bossHitData(boss)
 
-        self._doSparkPlugDamage(boss, controller)
         self._triggerCutSlackKickback(boss, controller)
         chainKickback = bool(getattr(
             controller, 'chainsawKickbackActivatedThisRound', False))
@@ -1174,12 +1182,12 @@ class ChainsawCalculatorAI:
         usedAbility = bool(chainKickback)
         gainAppliedBeforeAbility = False
         if not phaseChanged and not chainKickback:
-            projectedRPM = controller.chainsawRPM
+            projectedRPM = self._projectRPMGain(controller, hits)
             usedAbility, gainAppliedBeforeAbility = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons,
-                projectedRPM=projectedRPM, preAbilityGain=hits)
+                projectedRPM=projectedRPM, preAbilityGain=0)
 
         rpmGain = 0 if gainAppliedBeforeAbility else hits
         supports = self._aliveSupports(boss)
@@ -1212,6 +1220,10 @@ class ChainsawCalculatorAI:
             self._makeVisualAttack(
                 boss, name, 'roll-o-dex', 0,
                 SuitBattleGlobals.ATK_TGT_SINGLE)
+
+        # Spark Plug damage is an end-of-turn effect and must play after the
+        # selected cheat/Revving Up movie in Phase 2 as well.
+        self._doSparkPlugDamage(boss, controller)
 
         if (not usedAbility and not phaseChanged and not bonus and
                 controller.chainsawPreviousLogicAttack is None):

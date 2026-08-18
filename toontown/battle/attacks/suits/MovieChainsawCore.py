@@ -339,6 +339,10 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
         target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
     _setSuitStatusEffect(
         target, 'lureResist', 2 if aggrandized else 1, None, 'setBoth')
+    try:
+        target.chainsawCutSlackTarget = not aggrandized
+    except:
+        pass
     if aggrandized:
         _setSuitStatusEffect(
             target, 'chainsawAggrandized', 1, None, 'setBoth')
@@ -489,12 +493,15 @@ def doRevvingUp(attack, whipsaw=False):
 
 
 def doPhaseTwo(attack):
-    return makeChainsawBattleCutscene(attack, 'phasetwo')
+    return Sequence(
+        Func(_syncMeter, attack),
+        makeChainsawBattleCutscene(attack, 'phasetwo'))
 
 
 def doPhaseThree(attack):
     return Sequence(
         Func(attack['battle'].setChainsawChainVisualActive, False),
+        Func(_syncMeter, attack),
         makeChainsawBattleCutscene(attack, 'phasethree'))
 
 

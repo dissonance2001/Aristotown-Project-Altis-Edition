@@ -41,7 +41,7 @@ class DistributedBattleChainsaw(
                         except:
                             supports.append(suit)
                     formations = {
-                        1: ((Point3(0, 4.5, 0), 180),),
+                        1: ((Point3(0, 7, 0), 179),),
                         2: ((Point3(10, 4.5, 0), 155),
                             (Point3(-10, 4.5, 0), 205)),
                         3: ((Point3(10, 4.5, 0), 155),
