@@ -501,7 +501,7 @@ class ChainsawCalculatorAI:
             return False
 
         self._spendRPM(controller, 3)
-        for support in sacrifices
+        for support in sacrifices:
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
         targetIndex = self.battle.activeSuits.index(target)
