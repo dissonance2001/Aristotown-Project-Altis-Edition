@@ -72,7 +72,7 @@ def showLureRounds(suit, battle, level):
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.hasSuitStatusEffect('closedSession'):
         suit.showHpStringGreen("LURED 1 ROUND")
-    elif suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False):
+    elif suit.getManager():
         suit.showHpStringGreen("LURED 2 ROUNDS")
     elif suit.getGovernaught():
         suit.showHpStringGreen("LURED 2 ROUNDS")

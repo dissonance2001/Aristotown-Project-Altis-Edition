@@ -562,15 +562,13 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             pass
 
     def checkMarkedWoodRoundCountdown(self):
-        if self.damageInterval:
-            self.damageInterval.finish()
-            self.damageInterval = None
-        if self.getMarkedWoodRounds() - 1 == 0:
-            self.damageInterval = Parallel(Func(self.makeUnMarkedWood))
-        elif self.getMarkedWoodRounds() > 0:
-            self.damageInterval = Parallel(Func(self.addMarkedWoodRounds, self.getMarkedWoodRounds() - 1)).start()
-        else:
-            pass
+        rounds = self.getMarkedWoodRounds()
+        if rounds > 0:
+            rounds -= 1
+            if rounds <= 0:
+                self.makeUnMarkedWood()
+            else:
+                self.addMarkedWoodRounds(rounds)
 
     def checkDamageOvertimeRoundCountdown(self):
         if self.damageInterval:

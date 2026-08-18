@@ -606,23 +606,6 @@ class TownBattle(StateData.StateData):
         if resetActivateMode:
             self.__enterPanels(self.numToons, self.localNum)
             self.__cogPanels(self.numCogs)
-            try:
-                if any([getattr(cog.dna, 'name', '') == 'chainsaw' for cog in cogs]):
-                    panelXs = [((self.numCogs - 1) * 0.25) - (i * 0.5)
-                               for i in range(self.numCogs)]
-                    panelXs.sort()
-                    physical = []
-                    for cogIndex in range(len(cogs)):
-                        try:
-                            pos, hpr = battle.getActorPosHpr(cogs[cogIndex], cogs)
-                            physical.append((pos.getX(), cogIndex))
-                        except:
-                            physical.append((float(cogIndex), cogIndex))
-                    physical.sort()
-                    for panelRank, (worldX, cogIndex) in enumerate(physical):
-                        self.cogPanels[cogIndex].setX(panelXs[panelRank])
-            except:
-                pass
             for i in range(len(toons)):
                 self.toonPanels[i].setLaffMeter(toons[i])
 
@@ -630,6 +613,28 @@ class TownBattle(StateData.StateData):
 
             for i in range(len(cogs)):
                 self.cogPanels[i].setCogInformation(cogs[i])
+
+            try:
+                if (self.battle is not None and
+                        hasattr(self.battle, 'getActorPosHpr') and
+                        any([getattr(getattr(cog, 'dna', None), 'name', '') == 'chainsaw'
+                             for cog in cogs])):
+                    panelXs = [((self.numCogs - 1) * 0.25) - (i * 0.5)
+                               for i in range(self.numCogs)]
+                    physical = []
+                    for cogIndex, cog in enumerate(cogs):
+                        try:
+                            pos, unusedHpr = self.battle.getActorPosHpr(
+                                cog, cogs)
+                            physical.append((pos.getX(), cogIndex))
+                        except:
+                            physical.append((float(-cogIndex), cogIndex))
+                    physical.sort(reverse=True)
+                    for panelRank, unusedEntry in enumerate(physical):
+                        cogIndex = unusedEntry[1]
+                        self.cogPanels[cogIndex].setX(panelXs[panelRank])
+            except:
+                pass
 
             if currStateName == 'ChooseCog':
                 self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track, self.level)

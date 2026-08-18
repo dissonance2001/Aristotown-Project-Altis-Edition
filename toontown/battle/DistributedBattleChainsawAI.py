@@ -101,6 +101,17 @@ class DistributedBattleChainsawAI(
             chainLinked = bool(getattr(
                 controller, 'chainsawChainLinked', False))
             chainIds = getattr(controller, 'chainsawChainStartSupportIds', [])
+            if chainLinked and not chainIds:
+                chainIds = []
+                for suit in self.activeSuits:
+                    if suit is boss:
+                        continue
+                    try:
+                        if suit.getHP() > 0:
+                            chainIds.append(suit.doId)
+                    except:
+                        pass
+                controller.chainsawChainStartSupportIds = list(chainIds)
             linkedSupports = []
             for suit in self.activeSuits:
                 if suit is boss:

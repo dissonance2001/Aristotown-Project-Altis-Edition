@@ -40,43 +40,26 @@ class DistributedBattleChainsaw(
                                 supports.append(suit)
                         except:
                             supports.append(suit)
-                    formations = {
-                        1: ((Point3(0, 7, 0), 179),),
-                        2: ((Point3(10, 4.5, 0), 155),
-                            (Point3(-10, 4.5, 0), 205)),
-                        3: ((Point3(10, 4.5, 0), 155),
-                            (Point3(0, 7, 0), 179),
-                            (Point3(-10, 4.5, 0), 205)),
-                        4: ((Point3(10, 4.5, 0), 155),
-                            (Point3(5, 5.8, 0), 170),
-                            (Point3(-5, 5.8, 0), 190),
-                            (Point3(-10, 4.5, 0), 205)),
-                        5: ((Point3(10, 4.5, 0), 155),
-                            (Point3(5, 5.8, 0), 170),
-                            (Point3(0, 7, 0), 179),
-                            (Point3(-5, 5.8, 0), 190),
-                            (Point3(-10, 4.5, 0), 205))}
-                    formation = formations.get(len(actorList))
-                    if formation:
-                        if actor is boss:
-                            index = 0
-                        else:
-                            regular = []
-                            promoted = []
-                            for suit in actorList:
-                                if suit is boss:
-                                    continue
-                                if getattr(suit, 'chainsawManagerBeneficiary', False):
-                                    promoted.append(suit)
-                                else:
-                                    regular.append(suit)
-                            # CTS/Manager Cogs occupy the positions nearest Chainsaw,
-                            # in their arrival order. Regular Cogs fill from the far
-                            # left toward Chainsaw in their arrival order.
-                            orderedSupports = promoted + list(reversed(regular))
-                            index = orderedSupports.index(actor) + 1
-                        point = formation[index]
-                        return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
+                    formation = self.suitPoints[len(actorList) - 1]
+                    if actor is boss:
+                        index = 0
+                    else:
+                        regular = []
+                        promoted = []
+                        for suit in actorList:
+                            if suit is boss:
+                                continue
+                            if getattr(suit, 'chainsawManagerBeneficiary', False):
+                                promoted.append(suit)
+                            else:
+                                regular.append(suit)
+                        # CTS Cogs stay nearest Chainsaw in arrival order.
+                        # Regular Cogs fill the remaining slots from far left
+                        # toward Chainsaw in arrival order.
+                        orderedSupports = promoted + list(reversed(regular))
+                        index = orderedSupports.index(actor) + 1
+                    point = formation[index]
+                    return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
         except:
             pass
         return DistributedBattleMiniboss.DistributedBattleMiniboss.getActorPosHpr(
