@@ -64,6 +64,26 @@ class DistributedBattleChainsawAI(
     def enterWaitForInput(self):
         boss = self.__findChainsaw()
         controller = getattr(self, 'bossCog', None)
+        if boss:
+            promoted = []
+            regular = []
+            for suit in self.activeSuits:
+                if suit is boss:
+                    continue
+                if getattr(suit, 'chainsawManagerBeneficiary', False):
+                    promoted.append(suit)
+                else:
+                    regular.append(suit)
+            # Keep regular Cogs in their arrival order, but place the newest
+            # Cut the Slack Cog beside the previous CTL Cog rather than always
+            # pushing the newest CTL to the far-left slot.
+            ordered = [boss] + regular + promoted
+            if ordered != self.activeSuits:
+                try:
+                    if self._setActiveSuitOrderPrivately(ordered):
+                        self.d_setMembers()
+                except:
+                    pass
         if boss and controller:
             revving = self.battleCalc.chainsawCalculator.syncRevvingEffect(
                 boss, controller)

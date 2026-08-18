@@ -131,6 +131,7 @@ def _applyMarkedWoodStatus(toon):
         toon.addMarkedWoodRounds(2)
     except:
         pass
+    _setToonStatusEffect(toon, 'vulnerable', 75, 2, 'keepHighest')
 
 
 def _applyThrottleVulnerability(toon):
@@ -333,8 +334,6 @@ def _applyPromotion(target, actualLevel, battle=None, aggrandized=False):
         pass
     _setSuitStatusEffect(
         target, 'chainsawManagerBeneficiary', 1, None, 'setBoth')
-    _setSuitStatusEffect(
-        target, 'lureResist', 1 if not aggrandized else 2, 1 if not aggrandized else 2, 'setBoth')
     if aggrandized:
         _setSuitStatusEffect(
             target, 'chainsawAggrandized', 1, None, 'setBoth')
@@ -522,7 +521,7 @@ def doCutTheSlack(attack):
         newLevel = 30
     target = _supportByIndex(attack, targetIndex)
     if target is None:
-        return Sequence(Func(_spendMeter, attack, 3), Wait(2.0))
+        return Sequence(Func(_spendMeter, attack, 4), Wait(2.0))
 
     targetTrack = Sequence(
         Wait(2.0),
@@ -543,7 +542,7 @@ def doCutTheSlack(attack):
 
     sfx = loader.loadSfx('phase_11/audio/sfx/SA_bash.ogg')
     track = Sequence(
-        Func(_spendMeter, attack, 3),
+        Func(_spendMeter, attack, 4),
         Parallel(
             ActorInterval(suit, 'snap-override', partName='modelRoot'),
             Sequence(Wait(0.1), SoundInterval(sfx, node=suit)),

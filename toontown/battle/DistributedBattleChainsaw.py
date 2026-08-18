@@ -21,6 +21,11 @@ class DistributedBattleChainsaw(
             'phase_9/audio/sfx/CHQ_door_close.ogg')
         self.chainsawChainVisualActive = False
         self._chainsawIdleTasks = set()
+        points = list(self.suitPoints)
+        points[1] = ((Point3(0, 4.5, 0), 180),
+                     (Point3(5, 5.8, 0), 170))
+        self.suitPoints = tuple(points)
+
     def getActorPosHpr(self, actor, actorList=[]):
         try:
             if isinstance(actor, Suit.Suit):
@@ -38,7 +43,7 @@ class DistributedBattleChainsaw(
                         except:
                             supports.append(suit)
                     formations = {
-                        1: ((Point3(0, 7, 0), 179),),
+                        1: ((Point3(0, 4.5, 0), 180),),
                         2: ((Point3(10, 4.5, 0), 155),
                             (Point3(-10, 4.5, 0), 205)),
                         3: ((Point3(10, 4.5, 0), 155),
@@ -58,9 +63,17 @@ class DistributedBattleChainsaw(
                         if actor is boss:
                             index = 0
                         else:
-                            orderedSupports = [s for s in actorList if s is not boss]
-                            supportIndex = orderedSupports.index(actor)
-                            index = len(orderedSupports) - supportIndex
+                            regularSupports = []
+                            promotedSupports = []
+                            for support in actorList:
+                                if support is boss:
+                                    continue
+                                if getattr(support, 'chainsawManagerBeneficiary', False):
+                                    promotedSupports.append(support)
+                                else:
+                                    regularSupports.append(support)
+                            orderedSupports = regularSupports + list(reversed(promotedSupports))
+                            index = orderedSupports.index(actor) + 1
                         point = formation[index]
                         return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
         except:

@@ -369,8 +369,10 @@ class ChainsawCalculatorAI:
         effects.append(StatusEffects.ManagerBeneficiary(-1))
         if cts:
             effects.append(StatusEffects.LureResistance(1))
+            self.setSuitCondition(suit.doId, 'lureResist', 1, -1, 'setBoth')
         else:
             effects.append(StatusEffects.LureResistance(2))
+            self.setSuitCondition(suit.doId, 'lureResist', 2, -1, 'setBoth')
 
         suit.chainsawManagerBeneficiary = True
         suit.chainsawPromotionLocked = True
@@ -406,6 +408,7 @@ class ChainsawCalculatorAI:
         name = 'ChainsawCoreOffboarding%d' % max(1, supportIndex)
         self._fireSupport(support)
         if getattr(support, 'chainsawCutSlackTarget', False):
+            self.setSuitCondition(support.doId, 'lureResist', 0, 0, 'setBoth')
             support.chainsawCutSlackKickbackHandled = True
             support.chainsawCutSlackTarget = False
             try:
@@ -500,7 +503,7 @@ class ChainsawCalculatorAI:
         if newLevel <= target.getActualLevel():
             return False
 
-        self._spendRPM(controller, 4)
+        self._spendRPM(controller, 3)
         for support in sacrifices:
             self._fireSupport(support)
         self._promoteSuit(target, newLevel, cts=True, distribute=False)
@@ -901,9 +904,9 @@ class ChainsawCalculatorAI:
     def _chooseAbility(self, boss, controller, hits, attackingToons,
                        bossTargetingToons, supportDamage, firedSupports,
                        suedSupports, supportTracks, iouToons,
-                       projectedRPM=None):
+                       projectedRPM=None, preAbilityGain=0):
         phase = controller.chainsawPhase
-        rpm = controller.chainsawRPM if projectedRPM is None else projectedRPM
+        rpm = controller.chainsawRPM
         allSupports = []
         predictedDead = []
         supports = []
@@ -1076,6 +1079,8 @@ class ChainsawCalculatorAI:
             controller.chainsawPreviousLogicAttack = 'Whipsaw'
             return (False, False)
 
+        gainApplied = False
+
         if name == 'Deadwood':
             result = self._doDeadwood(boss, controller)
         elif name == 'Layoffs':
@@ -1108,7 +1113,7 @@ class ChainsawCalculatorAI:
 
         if result:
             controller.chainsawPreviousLogicAttack = name
-        return (result, False)
+        return (result, gainApplied)
 
     def calculateChainsawAttacks(self):
         boss = self._findChainsaw()
@@ -1159,16 +1164,15 @@ class ChainsawCalculatorAI:
             controller.chainsawHitlessRounds = -1
 
         usedAbility = bool(chainKickback)
+        gainAppliedBeforeAbility = False
         if not phaseChanged and not chainKickback:
             projectedRPM = self._projectRPMGain(controller, hits)
-            usedAbility, unusedGainFlag = self._chooseAbility(
+            usedAbility, gainAppliedBeforeAbility = self._chooseAbility(
                 boss, controller, hits, attackingToons,
                 bossTargetingToons, supportDamage, firedSupports,
                 suedSupports, supportTracks, iouToons,
-                projectedRPM=projectedRPM)
+                projectedRPM=projectedRPM, preAbilityGain=hits)
 
-        # Revving Up happens after the conditional cheat. Projected RPM above
-        # is used only to decide whether this turn qualifies for a cheat.
         rpmGain = hits
         supports = self._aliveSupports(boss)
         if (not chainKickback and controller.chainsawRound > 0 and
