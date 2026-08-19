@@ -629,7 +629,14 @@ class TownBattle(StateData.StateData):
                             physical.append((pos.getX(), cogIndex))
                         except:
                             physical.append((float(-cogIndex), cogIndex))
-                    physical.sort(reverse=True)
+                    # The Chainsaw room is loaded with a 180-degree heading
+                    # rotation, which mirrors world-space X relative to the
+                    # camera. Sorting by raw world X therefore lined panels
+                    # up backwards against the Cogs' actual on-screen
+                    # positions -- sort ascending instead so panelXs[0]
+                    # (screen-right) lands on the Cog that's actually
+                    # rendered on the right, and so on down the line.
+                    physical.sort()
                     for panelRank, unusedEntry in enumerate(physical):
                         cogIndex = unusedEntry[1]
                         self.cogPanels[cogIndex].setX(panelXs[panelRank])

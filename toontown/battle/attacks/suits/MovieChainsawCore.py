@@ -4,6 +4,7 @@ from panda3d.core import Point3, VBase3, Vec4
 from toontown.battle import MovieUtil
 from toontown.battle import PlayByPlayText
 from toontown.battle import SuitBattleGlobals
+from toontown.battle.BattleBase import SUIT_ID_COL, SUIT_ATK_COL
 from toontown.battle.BattleProps import globalPropPool
 from toontown.effects import DustCloud
 from toontown.cutscene.ChainsawBattleCutscenes import makeChainsawBattleCutscene
@@ -45,6 +46,39 @@ def _syncMeter(attack):
             pass
 
 
+def _pendingRoundGain(attack):
+    # By the time any movie plays client-side, the AI has already resolved
+    # the *entire* round -- both this cheat's RPM cost and the round's
+    # end-of-turn hit-based gain are already baked into controller.chainsawRPM.
+    # If a cheat's meter sync reads that value directly, the meter jumps
+    # straight to the final (post-gain) number the instant the cheat's
+    # cutscene starts, instead of dipping for the cost and climbing later
+    # during Revving Up. Look ahead in this round's suitAttacks for the
+    # trailing RevvingUp/Whipsaw entry so mid-cheat syncs can subtract it
+    # back out and show the true post-spend, pre-gain value.
+    battle = attack.get('battle')
+    suit = attack.get('suit')
+    if battle is None or suit is None:
+        return 0
+    suitId = getattr(suit, 'doId', None)
+    if suitId is None:
+        return 0
+    for row in getattr(battle, 'suitAttacks', ()) or ():
+        try:
+            if row[SUIT_ID_COL] != suitId:
+                continue
+            name = row[SUIT_ATK_COL].get('name', '')
+        except:
+            continue
+        if name.startswith('ChainsawCoreRevvingUp'):
+            gained, unusedBonus = _parseRevvingGain({'name': name}, False)
+            return gained or 0
+        if name.startswith('ChainsawCoreWhipsaw'):
+            gained, unusedBonus = _parseRevvingGain({'name': name}, True)
+            return gained or 0
+    return 0
+
+
 def _spendMeter(attack, stacks):
     controller = _controller(attack)
     if not controller:
@@ -58,7 +92,11 @@ def _spendMeter(attack, stacks):
         return
     try:
         meter.setPhase(controller.chainsawPhase)
-        meter.setRPM(controller.chainsawRPM)
+        # Show the RPM as it stood right after this cheat's cost -- not the
+        # fully-resolved end-of-round total, which already folds in a gain
+        # that hasn't visually happened yet (see _pendingRoundGain above).
+        displayRPM = controller.chainsawRPM - _pendingRoundGain(attack)
+        meter.setRPM(displayRPM)
     except:
         pass
 

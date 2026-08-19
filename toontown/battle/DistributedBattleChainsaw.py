@@ -53,10 +53,11 @@ class DistributedBattleChainsaw(
                                 promoted.append(suit)
                             else:
                                 regular.append(suit)
-                        # CTS Cogs stay nearest Chainsaw in arrival order.
-                        # Regular Cogs fill the remaining slots from far left
-                        # toward Chainsaw in arrival order.
-                        orderedSupports = promoted + list(reversed(regular))
+                        # Regular Cogs fill the slots nearest Chainsaw first,
+                        # in arrival order. Promoted Cogs (Cut The Slack /
+                        # Aggrandize) get pushed out to the far slots, away
+                        # from Chainsaw, instead of standing next to him.
+                        orderedSupports = list(regular) + list(promoted)
                         index = orderedSupports.index(actor) + 1
                     point = formation[index]
                     return (Point3(point[0]), VBase3(point[1], 0.0, 0.0))
