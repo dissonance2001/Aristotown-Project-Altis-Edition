@@ -771,7 +771,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         suitPos = trapProp.getPos(battle)
         y = suitPos.getY()
         ballPosPoints = [Point3(suitPos.getX(), y - 4, 21.0), VBase3(0, -90, 0)]
-        ball = loader.loadModel('phase_5/models/char/wreckingball-ball')
+        ball = loader.loadModel('phase_5/models/char/wreckingball-ball').copyTo(hidden)
         ballPropTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
         #ballPropTrack.append(Func(ball.wrtReparentTo, render))
         targetPoint = battle.getActorPosHpr(suit)
@@ -779,8 +779,16 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         ballPropTrack.append(getPropAppearTrack(ball, battle, ballPosPoints, 0, Point3(1, 1, 1), scaleUpTime=0))
         ballPropTrack.append(LerpHprInterval(ball, 0.75, VBase3(0, 0, 0)))
         ballPropTrack.append(Parallel(Sequence(Wait(.375), LerpColorScaleInterval(ball, 0.375, (1, 1, 1, 0), blendType='easeInOut')), LerpHprInterval(ball, 0.75, VBase3(0, 90, 0))))
-        #ballPropTrack.append(Func(battle.movie.clearRenderProp, trapProp))
-        ballPropTrack.append(Func(ball.removeNode))
+        # Loading the same model path repeatedly can hand back a NodePath
+        # tied to Panda's model cache, so this must clean itself up the same
+        # safe way every other one-off prop in this file does: through the
+        # isEmpty()-guarded MovieUtil.removeProp, never a raw removeNode().
+        # It also has to unregister itself from the movie's renderProps list
+        # (needRestoreRenderProp above) once it's cleanly gone, or the next
+        # end-of-round restore() pass will find and act on this same, already
+        # empty NodePath -- which is what was crashing with !is_empty().
+        ballPropTrack.append(Func(MovieUtil.removeProp, ball))
+        ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
         sinkPos = trapProp.getPos(battle)
         dropPos = trapProp.getPos(battle)
         landPos = battle.getActorPosHpr(suit)
