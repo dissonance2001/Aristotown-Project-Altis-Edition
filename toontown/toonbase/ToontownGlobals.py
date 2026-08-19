@@ -209,7 +209,7 @@ def getSuitFont():
         SuitFont = loader.loadFont(TTLocalizer.SuitFont, pixelsPerUnit = 40, spaceAdvance = 0.25, lineHeight = 1.0)
     return SuitFont
 
-
+CHRISTMAS = 154
 DonaldsDock = 1000
 ToontownCentral = 2000
 TheBrrrgh = 3000

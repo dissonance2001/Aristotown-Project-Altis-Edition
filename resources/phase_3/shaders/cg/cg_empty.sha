@@ -1,0 +1,16 @@
+//Cg
+//
+
+void vshader(float4 vtx_position : POSITION,
+             float2 vtx_texcoord0 : TEXCOORD0,
+             uniform float4x4 mat_modelproj)
+{
+
+}
+
+void fshader(float2 l_texcoord0 : TEXCOORD0,
+             uniform sampler2D tex_0 : TEXUNIT0)
+{
+
+}
+

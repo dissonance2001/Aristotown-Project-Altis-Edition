@@ -4512,7 +4512,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
                               acc=(75,),
                               freq=(25,)),
                    SuitAttack('PowerTrip',
-                              hp=(8),
+                              hp=(8,),
                               acc=(70,),
                               freq=(20,)),
                    SuitAttack('BrainStorm',

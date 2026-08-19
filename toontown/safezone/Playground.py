@@ -2,6 +2,8 @@ from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
+from toontown.shader import FogGlobals
+from toontown.shader.ToontownFog import ToontownFog
 from toontown.hood import Place # Make sure to replace all (battleplace.battleplace) with (place.place) when invasion is done
 from toontown.battle import BattlePlace # Use for TTC Invasion
 from direct.showbase import DirectObject
@@ -30,6 +32,7 @@ class Playground(BattlePlace.BattlePlace):
     def __init__(self, loader, parentFSM, doneEvent):
         BattlePlace.BattlePlace.__init__(self, loader, doneEvent)
         self.tfaDoneEvent = 'tfaDoneEvent'
+        self.fog = None
         self.fsm = ClassicFSM.ClassicFSM('Playground', [
             State.State('start',
                         self.enterStart,
@@ -279,6 +282,10 @@ class Playground(BattlePlace.BattlePlace):
             how = 'deathAck'
         self.fsm.request(how, [requestStatus])
 
+        # Configure fog
+        assert self.fog is None  # if this is thrown, we haven't cleaned up our fog from a previous playground load.
+        self.fog = ToontownFog(FogGlobals.zoneId2FogAttrs.get(self.zoneId), 'Playground Fog-%s' % self.zoneId)
+        self.fog.attachFog([render])
 
     def exit(self):
         self.ignoreAll()
@@ -291,7 +298,7 @@ class Playground(BattlePlace.BattlePlace):
         if self.screen:
             self.screen.delete()
 
-        del self.tunnelOriginList
+        del self.tunnelOriginList1
         self.loader.geom.reparentTo(hidden)
 
         def __lightDecorationOff__():
@@ -329,6 +336,10 @@ class Playground(BattlePlace.BattlePlace):
         for i in xrange(len(points)):
             p = points[i]
             self.showDebugPointText(str(i), p)
+
+            # Remove Fog
+            self.fog.removeFog()
+            self.fog = None
 
     def showDropPoints(self, points):
         self.hideDebugPointText()
