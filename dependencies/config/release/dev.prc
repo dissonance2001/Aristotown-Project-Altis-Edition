@@ -2,9 +2,9 @@
 model-path resources
 
 # Server:
-server-version AristoTown-Altis-Edition-2.0.0.
+server-version dev
 min-access-level 700
-accountdb-type local
+accountdb-type developer
 shard-low-pop 50
 shard-mid-pop 100
 
@@ -40,4 +40,6 @@ want-instant-parties #f
 # Weather
 weather-cycle-duration 100
 
-audio-library-name p3fmod_audio
+audio-library-name p3openal_audio
+
+client-version AristoTown-Altis-Edition-2.0.0

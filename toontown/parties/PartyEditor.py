@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import time
-from sets import Set
+#from sets import Set
 from pandac.PandaModules import Vec3, Vec4, Point3, TextNode, VBase4
 from toontown.pgui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectScrolledList, DirectCheckButton
 from toontown.pgui import DirectGuiGlobals
@@ -15,7 +15,7 @@ from toontown.parties import PartyUtils
 from toontown.parties.PartyEditorGrid import PartyEditorGrid
 from toontown.parties.PartyEditorListElement import PartyEditorListElement
 
-class PartyEditor(DirectObject, FSM):
+class PartyEditor(FSM, DirectObject):
     notify = directNotify.newCategory('PartyEditor')
 
     def __init__(self, partyPlanner, parent):

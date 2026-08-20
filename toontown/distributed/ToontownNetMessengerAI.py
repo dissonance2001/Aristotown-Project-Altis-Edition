@@ -40,6 +40,6 @@ class ToontownNetMessengerAI:
         
     def handle(self, msgType, di):
         message = di.getString()
-        data = zlib.decompress(di.getString())
+        data = zlib.decompress(di.getBlob())
         sentArgs = six.moves.cPickle.loads(data)
         messenger.send(message, sentArgs)

@@ -2269,6 +2269,7 @@ class SerialNumGen:
     def next(self):
         self.__counter += 1
         return self.__counter
+    __next__ = next
 
 class SerialMaskedGen(SerialNumGen):
     def __init__(self, mask, start=None):

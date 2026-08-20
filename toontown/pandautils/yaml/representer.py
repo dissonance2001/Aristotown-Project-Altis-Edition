@@ -478,8 +478,8 @@ Representer.add_representer(types.BuiltinFunctionType,
 Representer.add_representer(types.ModuleType,
         Representer.represent_module)
 
-Representer.add_multi_representer(types.InstanceType,
-        Representer.represent_instance)
+Representer.add_multi_representer(object,
+         Representer.represent_instance)
 
 Representer.add_multi_representer(object,
         Representer.represent_object)

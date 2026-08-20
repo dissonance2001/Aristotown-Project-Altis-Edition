@@ -2,6 +2,9 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import six.moves.builtins
+import direct.showbase.ShowBase
+from panda3d.core import Plane
+direct.showbase.ShowBase.Plane = Plane
 import os
 import sys
 
@@ -21,7 +24,7 @@ loadPrcFile('dependencies/config/release/dev.prc')
 if sys.platform == 'darwin':
     loadPrcFile('dependencies/config/macos.prc')
 
-import StringIO
+from io import StringIO
 vfs = VirtualFileSystem.getGlobalPtr()
 import glob
 

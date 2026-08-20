@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import copy, os, re, sys, token, tokenize
-from StringIO import StringIO
+from io import StringIO
 from panda3d.core import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *

@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 import collections
+import collections.abc
 import json
 import os
 
-class Settings(collections.MutableMapping):
+class Settings(collections.abc.MutableMapping):
 
     def __init__(self, filename):
         self.filename = filename

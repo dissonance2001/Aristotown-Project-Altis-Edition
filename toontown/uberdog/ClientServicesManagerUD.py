@@ -1014,15 +1014,18 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         del self.pendingLogins[context]
 
         # Time to check this login to see if its authentic
-        digest_maker = hmac.new(self.key)
-        digest_maker.update(backupCookie)
+        digest_maker = hmac.new(self.key.encode('utf-8'), digestmod=hashlib.md5)
+        if backupCookie is not None:
+            digest_maker.update(backupCookie.encode('utf-8'))
+        else:
+            digest_maker.update(b'')
 
-        if not hmac.compare_digest(digest_maker.hexdigest(), authKey):
-            # recieved a bad authentication key from the client, drop there connection!
+        authKey_str = authKey.decode('utf-8') if isinstance(authKey, bytes) else authKey
+        if not hmac.compare_digest(digest_maker.hexdigest(), authKey_str):
             self.killConnection(sender, 'Failed to login, recieved a bad login cookie %s!' % (cookie))
             return
 
-        if sender >> 32:
+        if sender and (int(sender) >> 32):
             self.killConnection(sender, 'Failed to login, client is already logged in.')
             return
 

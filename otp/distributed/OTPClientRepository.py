@@ -244,6 +244,7 @@ class OTPClientRepository(ClientRepositoryBase):
         self.activeDistrictMap = {}
         self.telemetryLimiter = TelemetryLimiter()
         self.serverVersion = serverVersion
+        self.serverVersion = 'AristoTown-Altis-Edition-2.0.0.'
         self.waitingForDatabase = None
         self.loginFSM = ClassicFSM('loginFSM', [
             State('loginOff',
@@ -845,7 +846,10 @@ class OTPClientRepository(ClientRepositoryBase):
         self.handler = self.handleMessageType
         self.__currentAvId = 0
         self.stopHeartbeat()
-        self.stopReaderPollTask()
+        self.stopReaderPollTask()       
+        if self.bootedIndex in (122, 124, 125):
+            self.loginFSM.request('login')
+            return
         if (self.bootedIndex is not None) and (self.bootedIndex in OTPLocalizer.CRBootedReasons):
             message = OTPLocalizer.CRBootedReasons[self.bootedIndex]
         elif self.bootedIndex == 155:
@@ -881,7 +885,8 @@ class OTPClientRepository(ClientRepositoryBase):
     def exitNoConnection(self):
         self.handler = None
         self.ignore('lostConnectionAck')
-        self.lostConnectionBox.stop()
+        if hasattr(self, 'lostConnectionBox') and self.lostConnectionBox:
+            self.lostConnectionBox.stop()
         messenger.send('connectionRetrying')
 
     @report(types = ['args', 'deltaStamp'], dConfigParam = 'teleport')

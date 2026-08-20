@@ -2,12 +2,12 @@ from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import ConfigVariableBool
 from direct.task import Task
-from string import maketrans
+#from string import maketrans
 import six.moves.cPickle
 import os
 import sys
-import dumbdbm
-import anydbm
+from dbm import dumb as dumbdbm
+import dbm as anydbm
 import time
 from six.moves import range
 from six.moves import zip
@@ -138,7 +138,7 @@ class DataStore:
         self.close()
         if self.wantAnyDbm:
             lt = time.asctime(time.localtime())
-            trans = maketrans(': ', '__')
+            trans = str.maketrans(': ', '__')
             t = lt.translate(trans)
             head, tail = os.path.split(self.filepath)
             newFileName = 'UDStoreBak' + t

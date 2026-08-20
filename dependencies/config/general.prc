@@ -174,3 +174,5 @@ want-live-updates #t
 
 # SSL
 server-force-ssl #f
+
+client-version AristoTown-Altis-Edition-2.0.0

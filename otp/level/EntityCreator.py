@@ -18,8 +18,8 @@ from otp.level import CollisionSolidEntity
 def nothing(*args):
     return 'nothing'
 
-def nonlocal(*args):
-    return 'non_local'
+def notLocal(self, *args, **kw):
+    return LevelEntityCreator.LevelEntityCreator.notLocal(self, *args, **kw)
 
 class EntityCreator(EntityCreatorBase.EntityCreatorBase):
 

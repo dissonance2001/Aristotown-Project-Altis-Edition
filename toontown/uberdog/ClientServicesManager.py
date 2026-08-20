@@ -3,6 +3,7 @@ import hmac
 import six.moves.http_client
 import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import json
+import hashlib
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from pandac.PandaModules import *
@@ -20,9 +21,14 @@ class ClientServicesManager(DistributedObjectGlobal):
     def performLogin(self, doneEvent):
         self.doneEvent = doneEvent
         cookie = base.launcher.getUsername()
+        
+        # Sécurité : Si le launcher ne renvoie rien, on met un nom par défaut
+        if cookie is None:
+            cookie = "Player"
+            
         key = 'oa1qt8fwc0r750gkse3fgt6k3scyhzptudk422u5'
-        digest_maker = hmac.new(key)
-        digest_maker.update(cookie)
+        digest_maker = hmac.new(key.encode('utf-8'), digestmod=hashlib.md5)
+        digest_maker.update(cookie.encode('utf-8'))
         import uuid
         cookie = cookie + ("#%s" % uuid.getnode())
         del uuid

@@ -7,7 +7,8 @@ from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
 from . import ToonInterior
 from .DistributedToonInterior import DistributedToonInterior
-import ToonInteriorColors, random
+from . import ToonInteriorColors
+import random
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 import random

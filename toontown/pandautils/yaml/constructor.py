@@ -291,7 +291,7 @@ class SafeConstructor(BaseConstructor):
                     "failed to decode base64 data: %s" % exc, node.start_mark) 
 
     timestamp_regexp = re.compile(
-            ur'''^(?P<year>[0-9][0-9][0-9][0-9])
+            r'''^(?P<year>[0-9][0-9][0-9][0-9])
                 -(?P<month>[0-9][0-9]?)
                 -(?P<day>[0-9][0-9]?)
                 (?:(?:[Tt]|[ \t]+)

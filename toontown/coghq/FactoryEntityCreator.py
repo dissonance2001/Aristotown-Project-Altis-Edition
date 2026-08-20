@@ -19,7 +19,7 @@ class FactoryEntityCreator(EntityCreator.EntityCreator):
     def __init__(self, level):
         EntityCreator.EntityCreator.__init__(self, level)
         nothing = EntityCreator.nothing
-        notLocal = EntityCreator.nonlocal  # <-- Changed variable name to 'notLocal'
+        notLocal = EntityCreator.notLocal
         self.privRegisterTypes({'activeCell': notLocal,
          'crusherCell': notLocal,
          'battleBlocker': notLocal,
