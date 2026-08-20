@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.actor.Actor import Actor
 from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectGui import DirectFrame

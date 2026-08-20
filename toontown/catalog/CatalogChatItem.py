@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from toontown.catalog import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
+from six.moves import zip
 bannedPhrases = [11009]
 
 class CatalogChatItem(CatalogItem.CatalogItem):
@@ -86,7 +89,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
     def showMessagePicker(self, phone, callback):
         self.phone = phone
         self.callback = callback
-        import CatalogChatItemPicker
+        from . import CatalogChatItemPicker
         self.messagePicker = CatalogChatItemPicker.CatalogChatItemPicker(self.__handlePickerDone, self.customIndex)
         self.messagePicker.show()
 
@@ -94,12 +97,12 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         self.mailbox = mailbox
         self.callback = callback
         self.index = index
-        import CatalogChatItemPicker
+        from . import CatalogChatItemPicker
         self.messagePicker = CatalogChatItemPicker.CatalogChatItemPicker(self.__handlePickerOnAccept, self.customIndex)
         self.messagePicker.show()
 
     def __handlePickerOnAccept(self, status, pickedMessage = None):
-        print 'Picker Status%s' % status
+        print('Picker Status%s' % status)
         if status == 'pick':
             self.mailbox.acceptItem(self, self.index, self.callback, pickedMessage)
         else:

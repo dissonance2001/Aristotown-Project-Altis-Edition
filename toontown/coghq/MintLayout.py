@@ -1,38 +1,41 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase.ToonPythonUtil import invertDictLossless
 from toontown.coghq import MintRoomSpecs
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToonPythonUtil import normalDistrib, lerp
 import random
+from six.moves import range
 
 def printAllCashbotInfo():
-    print 'roomId: roomName'
+    print('roomId: roomName')
     for roomId, roomName in MintRoomSpecs.CashbotMintRoomId2RoomName.items():
-        print '%s: %s' % (roomId, roomName)
+        print('%s: %s' % (roomId, roomName))
 
-    print '\nroomId: numBattles'
+    print('\nroomId: numBattles')
     for roomId, numBattles in MintRoomSpecs.roomId2numBattles.items():
-        print '%s: %s' % (roomId, numBattles)
+        print('%s: %s' % (roomId, numBattles))
 
-    print '\nmintId floor roomIds'
+    print('\nmintId floor roomIds')
     printMintRoomIds()
-    print '\nmintId floor numRooms'
+    print('\nmintId floor numRooms')
     printNumRooms()
-    print '\nmintId floor numForcedBattles'
+    print('\nmintId floor numForcedBattles')
     printNumBattles()
 
 
 def iterateCashbotMints(func):
     from toontown.toonbase import ToontownGlobals
     for mintId in [ToontownGlobals.CashbotMintIntA, ToontownGlobals.CashbotMintIntB, ToontownGlobals.CashbotMintIntC]:
-        for floorNum in xrange(ToontownGlobals.MintNumFloors[mintId]):
+        for floorNum in range(ToontownGlobals.MintNumFloors[mintId]):
             func(MintLayout(mintId, floorNum))
 
 
 def printMintInfo():
 
     def func(ml):
-        print ml
+        print(ml)
 
     iterateCashbotMints(func)
 
@@ -40,7 +43,7 @@ def printMintInfo():
 def printMintRoomIds():
 
     def func(ml):
-        print ml.getMintId(), ml.getFloorNum(), ml.getRoomIds()
+        print(ml.getMintId(), ml.getFloorNum(), ml.getRoomIds())
 
     iterateCashbotMints(func)
 
@@ -48,7 +51,7 @@ def printMintRoomIds():
 def printMintRoomNames():
 
     def func(ml):
-        print ml.getMintId(), ml.getFloorNum(), ml.getRoomNames()
+        print(ml.getMintId(), ml.getFloorNum(), ml.getRoomNames())
 
     iterateCashbotMints(func)
 
@@ -56,7 +59,7 @@ def printMintRoomNames():
 def printNumRooms():
 
     def func(ml):
-        print ml.getMintId(), ml.getFloorNum(), ml.getNumRooms()
+        print(ml.getMintId(), ml.getFloorNum(), ml.getNumRooms())
 
     iterateCashbotMints(func)
 
@@ -64,7 +67,7 @@ def printNumRooms():
 def printNumBattles():
 
     def func(ml):
-        print ml.getMintId(), ml.getFloorNum(), ml.getNumBattles()
+        print(ml.getMintId(), ml.getFloorNum(), ml.getNumBattles())
 
     iterateCashbotMints(func)
 
@@ -723,7 +726,7 @@ class MintLayout:
             self.roomIds = self._genFloorLayout()
         hallwayRng = self.getRng()
         connectorRoomNames = MintRoomSpecs.CashbotMintConnectorRooms
-        for i in xrange(self.numHallways):
+        for i in range(self.numHallways):
             self.hallways.append(hallwayRng.choice(connectorRoomNames))
 
     def _genFloorLayout(self):
@@ -761,7 +764,7 @@ class MintLayout:
 
         if middleRoomsLeft > 0:
             actionRoomIds = numBattles2middleRoomIds[0]
-            for i in xrange(middleRoomsLeft):
+            for i in range(middleRoomsLeft):
                 roomId = rng.choice(actionRoomIds)
                 actionRoomIds.remove(roomId)
                 middleRoomIds.append(roomId)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.building.ElevatorConstants import *
@@ -11,6 +12,7 @@ from direct.fsm import State
 from toontown.battle import BattleBase
 from toontown.hood import ZoneUtil
 import random
+from six.moves import range
 
 SKY_COLORS = [Vec4(1,1,1,1), Vec4(1,1,1,1), Vec4(0.8,0.8,0.8,1), Vec4(0.6,0.6,0.6,1), Vec4(0.4,0.4,0.4,1), Vec4(0.2,0.2,0.2,1)]
 
@@ -77,7 +79,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
 
     def setElevatorLights(self, elevatorModel):
         npc = elevatorModel.findAllMatches('**/floor_light_?;+s')
-        for i in xrange(npc.getNumPaths()):
+        for i in range(npc.getNumPaths()):
             np = npc.getPath(i)
             floor = int(np.getName()[-1:]) - 1
             if floor == self.currentFloor:
@@ -213,7 +215,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
                 self.notify.warning('setSuits() - no suit: %d' % suitId)
 
         self.reserveSuits = []
-        for index in xrange(len(reserveIds)):
+        for index in range(len(reserveIds)):
             suitId = reserveIds[index]
             if suitId in self.cr.doId2do:
                 suit = self.cr.doId2do[suitId]
@@ -279,7 +281,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
             self.skyModel.setZ(-100)
             self.skyBoxLoop = self.skyModel.hprInterval(300, Vec3(360, 0, 0))
             self.skyBoxLoop.loop()
-        for index in xrange(len(self.suits)):
+        for index in range(len(self.suits)):
             self.suits[index].setPos(SuitPositions[index])
             if len(self.suits) > 2:
                 self.suits[index].setH(SuitHs[index])

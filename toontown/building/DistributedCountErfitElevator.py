@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import Func, Sequence, Wait
 from toontown.building import DistributedElevator
 from toontown.building import DistributedBossElevator

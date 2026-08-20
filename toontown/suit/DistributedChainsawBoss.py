@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from direct.fsm import FSM
@@ -18,6 +19,7 @@ from toontown.suit import SuitDNA
 from toontown.suit import BossCutsceneSkip
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 OneChainsawController = None
@@ -261,7 +263,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
                 'Invalid Chainsaw battle experience payload: %s' % len(args))
             return
         entries = []
-        for index in xrange(8):
+        for index in range(8):
             start = index * 9
             entries.append(tuple(args[start:start + 9]))
         self.deathList = args[72]
@@ -576,7 +578,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds or not battleNode:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]

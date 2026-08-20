@@ -1,4 +1,5 @@
-import CatalogItem
+from __future__ import absolute_import
+from . import CatalogItem
 import time
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer

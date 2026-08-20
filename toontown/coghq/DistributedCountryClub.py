@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -13,6 +14,7 @@ from toontown.coghq import FactoryCameraViews
 from direct.gui import OnscreenText
 from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
+from six.moves import range
 
 class DistributedCountryClub(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountryClub')
@@ -221,7 +223,7 @@ class DistributedCountryClub(DistributedObject.DistributedObject):
         base.localAvatar.setSystemMessage(avId, TTLocalizer.CountryClubBossConfrontedMsg % av.getName())
 
     def warpToRoom(self, roomId):
-        for i in xrange(len(self.rooms)):
+        for i in range(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break

@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from toontown.safezone import DGPlayground
 from toontown.safezone import SafeZoneLoader
+from six.moves import map
 
 class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     
@@ -13,10 +15,10 @@ class DGSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
-        self.birdSound = map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_DG_bird_01.ogg',
+        self.birdSound = list(map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_DG_bird_01.ogg',
                                             'phase_8/audio/sfx/SZ_DG_bird_02.ogg',
                                             'phase_8/audio/sfx/SZ_DG_bird_03.ogg',
-                                            'phase_8/audio/sfx/SZ_DG_bird_04.ogg'])
+                                            'phase_8/audio/sfx/SZ_DG_bird_04.ogg']))
 
     def unload(self):
         SafeZoneLoader.SafeZoneLoader.unload(self)

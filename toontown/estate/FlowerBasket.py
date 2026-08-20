@@ -1,6 +1,9 @@
+from __future__ import absolute_import
 from toontown.estate import GardenGlobals
 from direct.directnotify import DirectNotifyGlobal
 from toontown.estate import FlowerBase
+from six.moves import range
+from six.moves import zip
 
 class FlowerBasket:
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerBasket')
@@ -50,7 +53,7 @@ class FlowerBasket:
         import random
         numFish = random.randint(1, 20)
         self.flowerList = []
-        for i in xrange(numFish):
+        for i in range(numFish):
             species, variety = GardenGlobals.getRandomFlower()
             self.addFlower(species, variety)
 

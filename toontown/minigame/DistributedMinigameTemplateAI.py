@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State

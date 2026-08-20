@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.town import Street
 from direct.gui import DirectGui
 from pandac.PandaModules import *

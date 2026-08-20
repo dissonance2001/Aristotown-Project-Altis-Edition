@@ -1,5 +1,6 @@
 """Contains the WidgetPropertiesDialog class."""
 
+from __future__ import absolute_import
 __all__ = ['WidgetPropertiesDialog']
 
 from direct.showbase.TkGlobal import *
@@ -35,8 +36,8 @@ class WidgetPropertiesDialog(Toplevel):
                 import tkinter
                 parent = tkinter._default_root
             else:
-                import Tkinter
-                parent = Tkinter._default_root
+                import six.moves.tkinter
+                parent = six.moves.tkinter._default_root
         # Create toplevel window
         Toplevel.__init__(self, parent)
         self.transient(parent)

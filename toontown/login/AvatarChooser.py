@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from toontown.login import AvatarChoice
@@ -11,6 +12,7 @@ from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
 import random
+from six.moves import range
 MAX_AVATARS = 6
 POSITIONS = (Vec3(-0.860167, 0, 0.359333),
  Vec3(0, 0, 0.346533),
@@ -108,7 +110,7 @@ class AvatarChooser(StateData.StateData):
             used_position_indexs.append(av.position)
             self.panelList.append(panel)
 
-        for panelNum in xrange(0, MAX_AVATARS):
+        for panelNum in range(0, MAX_AVATARS):
             if panelNum not in used_position_indexs:
                 panel = AvatarChoice.AvatarChoice(position=panelNum, paid=isPaid)
                 panel.setPos(POSITIONS[panelNum])
@@ -139,7 +141,7 @@ class AvatarChooser(StateData.StateData):
             return toonHead.getRandomForwardLookAtPoint()
         else:
             other_toon_idxs = []
-            for i in xrange(len(self.IsLookingAt)):
+            for i in range(len(self.IsLookingAt)):
                 if self.IsLookingAt[i] == toonidx:
                     other_toon_idxs.append(i)
 
@@ -187,7 +189,7 @@ class AvatarChooser(StateData.StateData):
         if len(self.used_panel_indexs) == 0:
             return
         self.IsLookingAt = []
-        for i in xrange(MAX_AVATARS):
+        for i in range(MAX_AVATARS):
             self.IsLookingAt.append('f')
 
         for panel in self.panelList:

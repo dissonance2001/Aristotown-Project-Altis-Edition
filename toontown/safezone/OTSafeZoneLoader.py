@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
-import SafeZoneLoader
-import OTPlayground
+from . import SafeZoneLoader
+from . import OTPlayground
 from toontown.battle import BattleParticles
 from toontown.toonbase import ToontownGlobals
 

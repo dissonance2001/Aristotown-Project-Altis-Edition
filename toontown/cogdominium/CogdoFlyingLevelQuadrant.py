@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 import math
 from direct.directutil import Mopath
 from pandac.PandaModules import NodePath, Point3, Vec4
 from toontown.cogdominium.CogdoFlyingObjects import CogdoFlyingPlatform
 from toontown.cogdominium import CogdoFlyingGameGlobals as Globals
+import six
 
 class CogdoFlyingLevelQuadrant:
     notify = directNotify.newCategory('CogdoFlyingLevelQuadrant')
@@ -138,7 +140,7 @@ class CogdoFlyingLevelQuadrant:
                 gatherable.removeNode()
 
         def generatePowerUps():
-            for powerupType, locName in Globals.Level.PowerupType2Loc.iteritems():
+            for powerupType, locName in six.iteritems(Globals.Level.PowerupType2Loc):
                 gatherables = gatherableModel.findAllMatches('**/%s' % locName)
                 for gatherable in gatherables:
                     pickup = self._level.gatherableFactory.createPowerup(powerupType)

@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from otp.avatar.DistributedPlayer import DistributedPlayer
 from direct.task.Task import Task
+import six
 
 class TelemetryLimiter(DirectObject):
     TaskName = 'TelemetryLimiterEnforce'
@@ -41,7 +43,7 @@ class TelemetryLimiter(DirectObject):
         self.ignore(self._getDummyEventName(obj))
 
     def _enforceLimits(self, task = None):
-        for obj in self._objs.itervalues():
+        for obj in six.itervalues(self._objs):
             obj.enforceTelemetryLimits()
 
         return Task.cont
@@ -113,7 +115,7 @@ class TLGatherAllAvs(DirectObject):
     def destroy(self):
         self.ignoreAll()
         while len(self._avs):
-            self._handlePlayerLeave(self._avs.values()[0])
+            self._handlePlayerLeave(list(self._avs.values())[0])
 
         del self._avs
         del self._limits

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.actor.Actor import Actor
 from direct.task.Task import Task
 from pandac.PandaModules import *
@@ -9,6 +10,7 @@ from toontown.parties.PartyGlobals import ActivityIds, ActivityTypes, JUKEBOX_TI
 from toontown.parties.PartyGlobals import getMusicRepeatTimes, MUSIC_PATH, sanitizePhase
 from toontown.parties.JukeboxGui import JukeboxGui
 from toontown.estate import DistributedEstate
+from six.moves import range
 
 class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
     notify = directNotify.newCategory('DistributedPartyJukeboxActivityBase')
@@ -123,7 +125,7 @@ class DistributedPartyJukeboxActivityBase(DistributedPartyActivity):
 
     def queuedSongsResponse(self, songInfoList, index):
         if self.gui.isLoaded():
-            for i in xrange(len(songInfoList)):
+            for i in range(len(songInfoList)):
                 songInfo = songInfoList[i]
                 self.__addSongToQueue(songInfo, isLocalQueue=index >= 0 and i == index)
 

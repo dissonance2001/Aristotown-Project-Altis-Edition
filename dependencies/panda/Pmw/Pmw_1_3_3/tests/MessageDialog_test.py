@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/tests/messagedialog.test code.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -31,7 +32,7 @@ tests_1 = (
   ('message_pady', 15),
   ('icon_image', ''),
   (c.title, 'MessageDialog 1: new title', ''),
-  (c.interior, (), Tkinter.Frame),
+  (c.interior, (), six.moves.tkinter.Frame),
   ('defaultbutton', 'OK'), 
 )
 

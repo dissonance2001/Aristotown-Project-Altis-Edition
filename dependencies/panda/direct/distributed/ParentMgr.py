@@ -1,5 +1,6 @@
 """ParentMgr module: contains the ParentMgr class"""
 
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import isDefaultValue
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.ai.DistributedPhaseEventMgrAI import DistributedPhaseEventMgrAI
 from otp.ai.MagicWordGlobal import *

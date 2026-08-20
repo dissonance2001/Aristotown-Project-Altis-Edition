@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import random
 from direct.distributed import ClockDelta
 from direct.task import Task
 from toontown.coghq import LaserGameBase
+from six.moves import range
 
 class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
 
@@ -30,7 +32,7 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
     def startGrid(self):
         LaserGameBase.LaserGameBase.startGrid(self)
         self.hiddenData = []
-        for i in xrange(0, self.gridNumX):
+        for i in range(0, self.gridNumX):
             self.hiddenData.append([
                 0] * self.gridNumY)
 
@@ -48,8 +50,8 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
                     bomb += 1
                     continue
 
-        for column in xrange(0, self.gridNumX):
-            for row in xrange(0, self.gridNumY):
+        for column in range(0, self.gridNumX):
+            for row in range(0, self.gridNumY):
                 if self.hiddenData[column][row] == 12:
                     self.gridData[column][row] = 11
                     continue
@@ -70,8 +72,8 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
 
 
     def revealAll(self):
-        for column in xrange(0, self.gridNumX):
-            for row in xrange(0, self.gridNumY):
+        for column in range(0, self.gridNumX):
+            for row in range(0, self.gridNumY):
                 self.neighborReveal(column, row, 1)
 
 
@@ -115,7 +117,7 @@ class LaserGameMineSweeper(LaserGameBase.LaserGameBase):
 
     def rowSum(self, y):
         sum = 0
-        for i in xrange(0, self.gridNumX - 1):
+        for i in range(0, self.gridNumX - 1):
             if self.hiddenData[i][y] == 12:
                 sum += 1
                 continue

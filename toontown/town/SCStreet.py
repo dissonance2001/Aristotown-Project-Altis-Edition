@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from direct.task.Task import Task
 from toontown.town import Street

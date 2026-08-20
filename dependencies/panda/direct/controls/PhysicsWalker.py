@@ -16,6 +16,8 @@ although it does send messages that allow a listener to play sounds or
 animations based on walker events.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import DirectObject
 from direct.controls.ControlManager import CollisionHandlerRayStart
@@ -667,7 +669,7 @@ class PhysicsWalker(DirectObject.DirectObject):
     def setPriorParentVector(self):
         assert self.debugPrint("doDeltaPos()")
 
-        print("self.__oldDt %s self.__oldPosDelta %s" % (self.__oldDt, self.__oldPosDelta))
+        print(("self.__oldDt %s self.__oldPosDelta %s" % (self.__oldDt, self.__oldPosDelta)))
         if __debug__:
             onScreenDebug.add("__oldDt", "% 10.4f"%self.__oldDt)
             onScreenDebug.add("self.__oldPosDelta",

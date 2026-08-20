@@ -1,5 +1,7 @@
 """LerpInterval module: contains the LerpInterval class"""
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = [
     'LerpNodePathInterval', 'LerpPosInterval', 'LerpHprInterval',
     'LerpQuatInterval', 'LerpScaleInterval', 'LerpShearInterval',

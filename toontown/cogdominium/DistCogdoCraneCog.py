@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac import PandaModules as PM
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.distributed.DistributedObject import DistributedObject

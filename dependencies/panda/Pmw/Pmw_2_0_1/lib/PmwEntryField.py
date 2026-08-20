@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/entryfield.itk code.
 
+from __future__ import absolute_import
 import re
 import string
 import types

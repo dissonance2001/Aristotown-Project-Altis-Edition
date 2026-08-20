@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm.StatePush import FunctionCall
 from direct.showbase.PythonUtil import formatTimeExact, normalDistrib
 from direct.task import Task
+from six.moves import range
 
 class FrameProfiler:
     notify = directNotify.newCategory('FrameProfiler')

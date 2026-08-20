@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.avatar.Avatar import teleportNotify
 from toontown.toonbase import ToontownGlobals
 import copy

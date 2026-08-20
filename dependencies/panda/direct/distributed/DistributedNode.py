@@ -1,5 +1,6 @@
 """DistributedNode module: contains the DistributedNode class"""
 
+from __future__ import absolute_import
 from panda3d.core import NodePath
 from . import GridParent
 from . import DistributedObject

@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.stdpy import threading
 from direct.stdpy import threading2
-import httplib
+import six.moves.http_client
 import json
 import socket
 import time
@@ -203,7 +204,7 @@ class ToontownRPCConnection:
         """
         Write an HTTP response to the socket.
         """
-        response = 'HTTP/1.1 %d %s\r\n' % (code, httplib.responses.get(code))
+        response = 'HTTP/1.1 %d %s\r\n' % (code, six.moves.http_client.responses.get(code))
 
         # Add the standard headers:
         response += 'Date: %s\r\n' % time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
@@ -225,7 +226,7 @@ class ToontownRPCConnection:
         Write an HTTP error response to the socket.
         """
         self.notify.warning('Received a bad HTTP request: ' + str(code))
-        body = '%d %s' % (code, httplib.responses.get(code))
+        body = '%d %s' % (code, six.moves.http_client.responses.get(code))
         self.writeHTTPResponse(body, contentType='text/plain', code=code)
 
     def writeJSONResponse(self, response, id=None):

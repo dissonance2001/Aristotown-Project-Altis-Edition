@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import string
 import types
 from direct.actor import Actor
@@ -18,6 +19,7 @@ from toontown.battle import BattleProps
 from toontown.nametag import NametagGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 GenericModel = 'phase_9/models/char/bossCog'
 ModelDict = {'s': 'phase_9/models/char/sellbotBoss',
@@ -1135,7 +1137,7 @@ class BossCog(Avatar.Avatar):
             self.raised = 1
         elif anim == 'Fb_fall':
             ival = Parallel(ActorInterval(self, 'Fb_fall'), Sequence(SoundInterval(self.reelSfx), SoundInterval(self.deathSfx)))
-        elif isinstance(anim, types.StringType):
+        elif isinstance(anim, bytes):
             ival = ActorInterval(self, anim)
         else:
             ival = anim

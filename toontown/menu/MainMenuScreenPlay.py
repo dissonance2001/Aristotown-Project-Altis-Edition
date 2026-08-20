@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
@@ -10,11 +11,12 @@ from toontown.toontowngui import TTDialog
 from toontown.menu import MainMenuGui, MainMenuGlobals
 from toontown.menu.MainMenuGui import MainMenuButton
 from toontown.menu.MainMenuScreen import MainMenuScreen
+from six.moves import range
 
 
 class MainMenuScreenPlay(MainMenuScreen):
     def __init__(self, avatarList, parentFSM, doneEvent):
-        self.toonList = dict((i, i in [x.position for x in avatarList]) for i in xrange(6))
+        self.toonList = dict((i, i in [x.position for x in avatarList]) for i in range(6))
         self.avatarList = avatarList
         self.selectedToon = 0
         self.prevSelectedToon = -1
@@ -151,7 +153,7 @@ class MainMenuScreenPlay(MainMenuScreen):
         for av in self.avatarList:
             self.setupButtons(av, av.position)
             buttonIndex.append(av.position)
-        for pos in xrange(6):
+        for pos in range(6):
             if pos not in buttonIndex:
                 self.setupButtons(position=pos)
 

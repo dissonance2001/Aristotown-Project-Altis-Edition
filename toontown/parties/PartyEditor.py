@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import time
 from sets import Set
 from pandac.PandaModules import Vec3, Vec4, Point3, TextNode, VBase4

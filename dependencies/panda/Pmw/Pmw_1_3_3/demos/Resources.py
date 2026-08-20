@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Using Tk option database to configure Tk widgets'
 
 # Import Pmw from this directory tree.
@@ -5,7 +6,7 @@ import sys
 sys.path[:0] = ['../../..']
 
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 info = """
@@ -34,12 +35,12 @@ class DemoClass(Pmw.MegaWidget):
 	Pmw.MegaWidget.__init__(self, parent)
 
 	interior = self.interior()
-	listbox = Tkinter.Listbox(interior, height = 12, width = 40)
+	listbox = six.moves.tkinter.Listbox(interior, height = 12, width = 40)
 	listbox.pack(fill='both', expand='yes')
 	for line in string.split(info, '\n'):
 	    listbox.insert('end', line)
 
-	entry = Tkinter.Entry(interior)
+	entry = six.moves.tkinter.Entry(interior)
 	entry.pack(fill='y')
 	entry.insert(0, 'Hello, World!')
 
@@ -64,11 +65,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

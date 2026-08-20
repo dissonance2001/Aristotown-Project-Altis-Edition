@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.pgui.DirectGui import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal

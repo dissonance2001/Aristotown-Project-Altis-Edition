@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import string
 import sys
 import types
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 class Counter(Pmw.MegaWidget):
 

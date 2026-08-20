@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import string
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToonPythonUtil import lineInfo

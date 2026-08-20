@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import VBase3, VBase4
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, LerpColorScaleInterval, LerpScaleInterval
 from toontown.safezone import DistributedTreasure

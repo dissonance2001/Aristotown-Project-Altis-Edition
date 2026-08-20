@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.estate import DistributedLawnDecor
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.ShowBase import *

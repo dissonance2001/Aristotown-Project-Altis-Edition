@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.hood import HoodAI
 from toontown.toonbase import ToontownGlobals
 from toontown.distributed.DistributedTimerAI import DistributedTimerAI

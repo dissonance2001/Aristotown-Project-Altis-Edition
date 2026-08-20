@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import LevelMgr
 from toontown.toonbase.ToonPythonUtil import Functor
 from toontown.toonbase import ToontownGlobals

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.gui.DirectGui import *
 from toontown.toonbase import ToonPythonUtil as PythonUtil

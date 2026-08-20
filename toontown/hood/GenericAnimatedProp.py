@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.hood import AnimatedProp
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import *

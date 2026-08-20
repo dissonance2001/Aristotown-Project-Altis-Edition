@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import datetime
 import time
 from pandac.PandaModules import TextNode, Vec3, Vec4, PlaneNode, Plane, Point3

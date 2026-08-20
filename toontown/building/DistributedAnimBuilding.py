@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import DecalEffect, DepthWriteAttrib
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import DistributedBuilding

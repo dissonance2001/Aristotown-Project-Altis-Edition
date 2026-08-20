@@ -4,6 +4,8 @@ See the :ref:`particle-effects` section in the manual for an explanation
 of the particle system.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 
 from panda3d.physics import PhysicalNode
@@ -34,6 +36,8 @@ from . import SpriteParticleRendererExt
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
 import sys
+from six.moves import range
+from six.moves import zip
 
 
 class Particles(ParticleSystem):
@@ -116,7 +120,7 @@ class Particles(ParticleSystem):
         elif (type == "OrientedParticleFactory"):
             self.factory = OrientedParticleFactory()
         else:
-            print("unknown factory type: %s" % type)
+            print(("unknown factory type: %s" % type))
             return None
         self.factory.setLifespanBase(0.5)
         ParticleSystem.setFactory(self, self.factory)
@@ -147,7 +151,7 @@ class Particles(ParticleSystem):
             self.renderer = SpriteParticleRendererExt.SpriteParticleRendererExt()
             # self.renderer.setTextureFromFile()
         else:
-            print("unknown renderer type: %s" % type)
+            print(("unknown renderer type: %s" % type))
             return None
         ParticleSystem.setRenderer(self, self.renderer)
 
@@ -179,7 +183,7 @@ class Particles(ParticleSystem):
         elif (type == "TangentRingEmitter"):
             self.emitter = TangentRingEmitter()
         else:
-            print("unknown emitter type: %s" % type)
+            print(("unknown emitter type: %s" % type))
             return None
         ParticleSystem.setEmitter(self, self.emitter)
 
@@ -576,9 +580,9 @@ class Particles(ParticleSystem):
                          self.factory.getLifespanBase()+self.factory.getLifespanSpread()]
         birthRateRange = [self.getBirthRate()] * 3
 
-        print('Litter Ranges:    %s' % litterRange)
-        print('LifeSpan Ranges:  %s' % lifespanRange)
-        print('BirthRate Ranges: %s' % birthRateRange)
+        print(('Litter Ranges:    %s' % litterRange))
+        print(('LifeSpan Ranges:  %s' % lifespanRange))
+        print(('BirthRate Ranges: %s' % birthRateRange))
 
         return dict(zip(('min','median','max'),[l*s/b for l,s,b in zip(litterRange,lifespanRange,birthRateRange)]))
 

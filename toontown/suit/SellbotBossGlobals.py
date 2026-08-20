@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
+import six
 
 try:
     from toontown.coghq.DistributedHealBarrelAI import DistributedHealBarrelAI
@@ -46,7 +48,7 @@ BarrelDefs = {8000: {'type': DistributedHealBarrelAI,
         'rewardPerGrabMax': 0}}
 
 def setBarrelAttr(barrel, entId):
-    for defAttr, defValue in BarrelDefs[entId].iteritems():
+    for defAttr, defValue in six.iteritems(BarrelDefs[entId]):
         setattr(barrel, defAttr, defValue)
 
 

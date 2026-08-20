@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from toontown.toon.DistributedNPCToonBaseAI import *

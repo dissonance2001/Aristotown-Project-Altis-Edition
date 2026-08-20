@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
@@ -9,6 +10,7 @@ from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
 from toontown.hood import QuietZoneState
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
+from six.moves import range
 
 class DistributedGagshopInterior(DistributedObject.DistributedObject):
     zone2music = {
@@ -51,7 +53,7 @@ class DistributedGagshopInterior(DistributedObject.DistributedObject):
     def replaceRandomInModel(self, model):
         baseTag = 'random_'
         npc = model.findAllMatches('**/' + baseTag + '???_*')
-        for i in xrange(npc.getNumPaths()):
+        for i in range(npc.getNumPaths()):
             np = npc.getPath(i)
             name = np.getName()
             b = len(baseTag)

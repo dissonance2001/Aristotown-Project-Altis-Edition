@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from otp.ai.AIBaseGlobal import *
 from toontown.building import DistributedBuildingAI
@@ -8,6 +9,7 @@ from toontown.building import PetshopBuildingAI
 from toontown.building import UncapturableBuildingAI
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 # from toontown.building import DistributedAnimBuildingAI
 
 class DistributedBuildingMgrAI:
@@ -67,7 +69,7 @@ class DistributedBuildingMgrAI:
         return blocks
 
     def getBuildings(self):
-        return self.__buildings.values()
+        return list(self.__buildings.values())
 
     def getFrontDoorPoint(self, blockNumber):
         if self.isValidBlockNumber(blockNumber):
@@ -93,7 +95,7 @@ class DistributedBuildingMgrAI:
         petshopBlocks = []
         kartshopBlocks = []
         animBldgBlocks = []
-        for i in xrange(self.dnaStore.getNumBlockNumbers()):
+        for i in range(self.dnaStore.getNumBlockNumbers()):
             blockNumber = self.dnaStore.getBlockNumberAt(i)
             buildingType = self.dnaStore.getBlockBuildingType(blockNumber)
             if buildingType == 'hq':

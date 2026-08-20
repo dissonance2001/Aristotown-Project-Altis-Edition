@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Using Tk option database to configure Tk widgets'
 
 # Import Pmw from this directory tree.

@@ -4,6 +4,7 @@ This module contains functions to parse and access the arguments given
 to the program on the command line.
 """
 
+from __future__ import absolute_import
 import types
 import string
 import sys
@@ -80,7 +81,7 @@ def parseArgs(title, argv, argSpecs, filesOK):
     else:
       set(arg, None)
 
-  knownKeys = argSpecDic.keys()
+  knownKeys = list(argSpecDic.keys())
 
   i = 1
   _fileList = []
@@ -99,14 +100,14 @@ def parseArgs(title, argv, argSpecs, filesOK):
 	value = argv[i]
 	if len(spec) >= SPEC_LENGTH:
 	  try:
-	      if type(spec[DEFAULT]) == types.IntType:
+	      if type(spec[DEFAULT]) == int:
 		  typeStr = 'integer'
 		  value = string.atoi(value)
-	      elif type(spec[DEFAULT]) == types.FloatType:
+	      elif type(spec[DEFAULT]) == float:
 		  typeStr = 'float'
 		  value = string.atof(value)
 	  except:
-	      sys.exc_traceback = None   # Clean up object references
+	      sys.exc_info()[2] = None   # Clean up object references
 	      return errMsg + 'cannot convert string \'' + value + \
 	        '\' to ' + typeStr + ' for option \'-' + key + '\'.'
 	set(key, value)
@@ -133,7 +134,7 @@ def parseArgs(title, argv, argSpecs, filesOK):
       str(_missing[0]) + '\' is missing.'
   elif len(_missing) > 1:
     return errMsg + 'required arguments ' + \
-      str(map(lambda s: '-' + s, _missing)) + ' are missing.'
+      str(['-' + s for s in _missing]) + ' are missing.'
 
   return None
 
@@ -167,7 +168,7 @@ def _helpString(title, argSpecs):
 	else:
 	  arg = '-%s <%s>' % (spec[NAME], spec[TYPE])
 	if len(spec) >= SPEC_LENGTH:
-	  if type(spec[DEFAULT]) == types.StringType:
+	  if type(spec[DEFAULT]) == bytes:
 	      definition = spec[HELP] + ' (' + spec[DEFAULT] + ')'
 	  else:
 	      definition = spec[HELP] + ' (' + str(spec[DEFAULT]) + ')'
@@ -178,7 +179,7 @@ def _helpString(title, argSpecs):
   return rtn
 
 def exists(key):
-    return configDict.has_key(key)
+    return key in configDict
 
 def get(key):
     return configDict[key]

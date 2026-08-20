@@ -1,5 +1,6 @@
 """DistributedActor module: contains the DistributedActor class"""
 
+from __future__ import absolute_import
 __all__ = ['DistributedActor']
 
 from direct.distributed import DistributedNode

@@ -2,6 +2,7 @@
 Notifier module: contains methods for handling information output
 for the programmer/user
 """
+from __future__ import absolute_import
 from .LoggerGlobal import defaultLogger
 from direct.showbase import PythonUtil
 from panda3d.core import ConfigVariableBool, NotifyCategory, StreamWriter, Notify

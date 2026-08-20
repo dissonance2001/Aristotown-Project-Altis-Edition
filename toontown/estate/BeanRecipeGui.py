@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.estate import GardenGlobals
 from toontown.estate import PlantingGUI
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class BeanRecipeGui(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('PlantingGUI')
@@ -27,11 +29,11 @@ class BeanRecipeGui(DirectFrame):
         self.initialiseoptions(BeanRecipeGui)
         self.jellyBeanBoxList = []
         xIncrement = 0.052
-        for i in xrange(len(recipe)):
+        for i in range(len(recipe)):
             beanIndex = GardenGlobals.BeanColorLetters.index(recipe[i])
             self.createJellyBeanBox(beanIndex, borderWidth + xIncrement * i, borderWidth)
 
-        for j in xrange(len(recipe), GardenGlobals.getNumberOfShovelBoxes()):
+        for j in range(len(recipe), GardenGlobals.getNumberOfShovelBoxes()):
             self.createEmptyBeanBox(borderWidth + xIncrement * j, borderWidth)
 
         return

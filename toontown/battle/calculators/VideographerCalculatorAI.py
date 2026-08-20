@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
 import random
 import math
+from six.moves import range
 
 class VideographerCalculatorAI:
 
@@ -37,7 +39,7 @@ class VideographerCalculatorAI:
 
     
     def calculateSuitAttacksVideographer(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.battle.activeSuits[i].dna.name == 'videog':  # videographer
             #     if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
@@ -51,7 +53,7 @@ class VideographerCalculatorAI:
             #         if attack[SUIT_ATK_COL]:
             #             self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director':
                 if not self.suitHasCondition(suitId, 'deadproducer') and len(self.battle.activeSuits) == 6 and not self.deadSuits > 0 and self.__suitCanAttack(suitId):
@@ -93,7 +95,7 @@ class VideographerCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # Initial Cheats
@@ -176,7 +178,7 @@ class VideographerCalculatorAI:
                         'healTarget': 'target'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(
@@ -306,7 +308,7 @@ class VideographerCalculatorAI:
                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director': 
                 if self.calculator.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
@@ -335,7 +337,7 @@ class VideographerCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                         self.calculator.directorMultiplier += 2
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog' and not self.suitHasCondition(suitId, 'immune'):
                 if self.calculator.deadSuits == 1 and self.__suitCanAttack(suitId):
@@ -391,7 +393,7 @@ class VideographerCalculatorAI:
     
 
         # Secondary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 if self.suitHasCondition(suitId, 'hollywoodcalculator') and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):

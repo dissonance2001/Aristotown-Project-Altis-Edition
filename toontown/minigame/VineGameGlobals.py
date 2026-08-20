@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import BitMask32
 NumVines = 20

@@ -1,26 +1,27 @@
+from __future__ import absolute_import
 title = 'Component python class configuration demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
-class MyButton(Tkinter.Button):
+class MyButton(six.moves.tkinter.Button):
     # This is just an ordinary button with special colors.
 
     def __init__(self, master=None, cnf={}, **kw):
 	self.__toggle = 0
 	kw['background'] = 'green'
 	kw['activebackground'] = 'red'
-	apply(Tkinter.Button.__init__, (self, master, cnf), kw)
+	six.moves.tkinter.Button.__init__(*(self, master, cnf), **kw)
 
 class Demo:
     def __init__(self, parent):
 
 	# Create a title label:
-	label = Tkinter.Label(parent,
+	label = six.moves.tkinter.Label(parent,
 		text = 'EntryFields with label components of specified type:')
 	label.pack(fill='x', expand=1, padx=10, pady=5)
 
@@ -35,7 +36,7 @@ class Demo:
 
 	entry = Pmw.EntryField(parent,
 		labelpos = 'w',
-		label_pyclass = Tkinter.Button,
+		label_pyclass = six.moves.tkinter.Button,
 		label_text = 'Button'
 	)
 	entry.pack(fill='x', expand=1, padx=10, pady=5)
@@ -66,11 +67,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

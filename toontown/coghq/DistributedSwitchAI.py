@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.ClockDelta import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import DistributedSwitchBase

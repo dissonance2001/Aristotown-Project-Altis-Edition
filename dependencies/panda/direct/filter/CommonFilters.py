@@ -15,6 +15,7 @@ clunky approach.  - Josh
 
 """
 
+from __future__ import absolute_import
 from .FilterManager import FilterManager
 from .filterBloomI import BLOOM_I
 from .filterBloomX import BLOOM_X

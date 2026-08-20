@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
@@ -5,6 +6,7 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import StatusEffects
 import random
 import math
+from six.moves import range
 
 class SuitAttackTracksCalculatorAI:
 
@@ -280,7 +282,7 @@ class SuitAttackTracksCalculatorAI:
 
     
     def calculateSuitAttacksAfterHeal(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 damageCogs = 0
@@ -307,7 +309,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterTrap(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 damageCogs = 0
@@ -341,7 +343,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterLure(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 damageCogs = 0
@@ -369,7 +371,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterThrow(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if (self.suitHasCondition(suitId, 'overseerKB') or self.suitHasCondition(suitId, 'overseerCombo')) and (self.comboDamage > 0 or self.knockbackDamage > 0) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -386,7 +388,7 @@ class SuitAttackTracksCalculatorAI:
                             'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.battle.activeSuits[i].dna.name == 'clerk' and self.battle.activeSuits[i].getActualLevel() == 20:
             #     if (self.knockbackDamage > 0) and self.battle.activeSuits[i].currHP > 0:
@@ -426,7 +428,7 @@ class SuitAttackTracksCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.comboDamage *= 0
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'dking':
                 if self.suitHasCondition(suitId, 'marked') and self.__suitCanAttack(suitId):
@@ -467,7 +469,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterSquirt(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if (self.suitHasCondition(suitId, 'overseerKB') or self.suitHasCondition(suitId, 'overseerCombo')) and (self.comboDamage > 0 or self.knockbackDamage > 0) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -484,7 +486,7 @@ class SuitAttackTracksCalculatorAI:
                             'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.battle.activeSuits[i].dna.name == 'clerk' and self.battle.activeSuits[i].getActualLevel() == 20:
             #     if (self.knockbackDamage > 0) and self.battle.activeSuits[i].currHP > 0:
@@ -541,7 +543,7 @@ class SuitAttackTracksCalculatorAI:
                             }
                         ]
                     )
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'redd': #redd heir wing
                 if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
@@ -618,7 +620,7 @@ class SuitAttackTracksCalculatorAI:
             #         if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'phouse':
                 if self.suitHasCondition(suitId, 'soakedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and  self.battle.activeSuits[i].currHP > 0:
@@ -670,9 +672,9 @@ class SuitAttackTracksCalculatorAI:
         self.absorbDamageByTrack[SQUIRT] = 0
 
     def calculateSuitAttacksAfterZap(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 damageCogs = 0
@@ -734,7 +736,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterSound(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 damageCogs = 0
@@ -758,7 +760,7 @@ class SuitAttackTracksCalculatorAI:
             self.__queueGagBanRetaliation(suit, 'Sound')
             self.__queueAbsorbMovieForTrack(suit, 'Sound', SOUND)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'supervis' and self.battle.activeSuits[i].getActualLevel() == 27:
                 if self.suitHasCondition(suitId, 'soundcalculator') and self.__suitCanAttack(suitId):
@@ -790,7 +792,7 @@ class SuitAttackTracksCalculatorAI:
 
 
     def calculateSuitAttacksAfterDrop(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if (self.suitHasCondition(suitId, 'overseerKB') or self.suitHasCondition(suitId, 'overseerCombo')) and (self.comboDamage > 0 or self.knockbackDamage > 0) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -807,7 +809,7 @@ class SuitAttackTracksCalculatorAI:
                             'healTarget': 'target'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hrollers' and self.battle.activeSuits[i].getActualLevel() == 26:
                 if (self.comboDamage > 0) and self.battle.activeSuits[i].currHP > 0:

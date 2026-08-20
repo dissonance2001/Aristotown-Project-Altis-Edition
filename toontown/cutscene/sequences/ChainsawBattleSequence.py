@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence, getUniqueCutsceneId
 from toontown.cutscene.CutsceneSequenceHelpers import NodePathWithState

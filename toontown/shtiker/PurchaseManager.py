@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.shtiker.PurchaseManagerConstants import *
 from direct.distributed.ClockDelta import *

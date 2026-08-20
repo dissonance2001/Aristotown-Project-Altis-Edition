@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from toontown.cogdominium.DistCogdoLevelGame import DistCogdoLevelGame
 from toontown.cogdominium.CogdoBoardroomGameBase import CogdoBoardroomGameBase

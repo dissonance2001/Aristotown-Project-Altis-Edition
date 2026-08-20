@@ -1,6 +1,7 @@
 """
 Defines ProtoPalette tree UI
 """
+from __future__ import absolute_import
 import wx
 import os
 from panda3d.core import *

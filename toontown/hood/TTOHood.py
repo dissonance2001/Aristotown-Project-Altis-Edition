@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone.TTOSafeZoneLoader import TTOSafeZoneLoader
 from toontown.town.TTOTownLoader import TTOTownLoader
 from toontown.toonbase import ToontownGlobals

@@ -4,6 +4,7 @@ See the :ref:`directslider` page in the programming manual for a more
 in-depth explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
 __all__ = ['DirectSlider']
 
 from panda3d.core import *

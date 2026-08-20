@@ -1,6 +1,8 @@
 """
 Defines Palette tree control
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import wx
 from .ObjectPaletteBase import *
 
@@ -155,7 +157,7 @@ class PaletteTreeCtrl(wx.TreeCtrl):
 
         if item != self.GetRootItem(): # prevent dragging root item
             text = self.GetItemText(item)
-            print("Starting drag'n'drop with %s..." % repr(text))
+            print(("Starting drag'n'drop with %s..." % repr(text)))
 
             tdo = wx.TextDataObject(text)
             tds = wx.DropSource(self)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
@@ -20,6 +21,7 @@ from toontown.pets import PetNameGenerator
 from toontown.hood import ZoneUtil
 import string
 import random
+from six.moves import range
 Dialog_MainMenu = 0
 Dialog_AdoptPet = 1
 Dialog_ChoosePet = 2

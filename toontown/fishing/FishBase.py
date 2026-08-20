@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.fishing import FishGlobals
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal

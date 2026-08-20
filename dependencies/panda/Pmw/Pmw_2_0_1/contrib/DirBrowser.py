@@ -30,6 +30,8 @@
 #
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import tkinter
 import Pmw
@@ -295,7 +297,7 @@ if __name__ == '__main__':
                                             #hidedotfiles = 0,
                                             )
         dir = dirBrowserDialog.activate()
-        print('Selected Directory:', dir)
+        print(('Selected Directory:', dir))
 
     dirButton = tkinter.Button(rootWin, text="Browser", command=buildBrowser)
     dirButton.pack(side = 'left', padx = 10, pady = 10)

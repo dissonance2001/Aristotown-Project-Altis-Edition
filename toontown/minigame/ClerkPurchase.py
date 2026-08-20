@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.PurchaseBase import *
 from toontown.toonbase import ToontownTimer
 COUNT_UP_RATE = 0.15

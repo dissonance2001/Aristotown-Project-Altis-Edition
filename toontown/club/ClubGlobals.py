@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 import math
+from six.moves import range
 
 # Python 2.7 compatible Altis Club constants.
 
@@ -280,7 +282,7 @@ def getExperienceRequiredForLevel(level):
     """Return the XP required to advance from ``level`` to ``level + 1``."""
     level = max(1, int(level))
     required = CLUB_STARTING_LEVEL_XP
-    for unused in xrange(1, level):
+    for unused in range(1, level):
         required = int(math.ceil(required * CLUB_LEVEL_XP_GROWTH))
     return required
 
@@ -289,7 +291,7 @@ def getExperienceForLevel(level):
     """Return the total XP at the beginning of an exact Club level."""
     level = max(1, int(level))
     experience = 0
-    for currentLevel in xrange(1, level):
+    for currentLevel in range(1, level):
         experience += getExperienceRequiredForLevel(currentLevel)
     return experience
 

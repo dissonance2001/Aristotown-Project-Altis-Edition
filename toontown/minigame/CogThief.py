@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from pandac.PandaModules import CollisionSphere, CollisionNode, Point3, CollisionTube, Vec3, rad2Deg
 from direct.showbase.DirectObject import DirectObject
@@ -9,6 +10,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.minigame import CogThiefGameGlobals
 from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
+from six.moves import range
 CTGG = CogThiefGameGlobals
 
 class CogThief(DirectObject):
@@ -217,7 +219,7 @@ class CogThief(DirectObject):
             return
         if not hasattr(self.game, 'barrels'):
             return
-        if self.goalId not in xrange(len(self.game.barrels)):
+        if self.goalId not in range(len(self.game.barrels)):
             return
         if not self.lastThinkTime:
             self.lastThinkTime = globalClock.getFrameTime()

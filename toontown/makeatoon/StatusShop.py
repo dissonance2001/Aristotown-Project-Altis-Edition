@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from toontown.toon import ToonDNA
 from direct.fsm import StateData
@@ -35,7 +37,7 @@ class StatusShop(StateData.StateData):
         try:
             del self.toon
         except:
-            print 'StatusShop: toon not found'
+            print('StatusShop: toon not found')
 
         self.hideButtons()
 

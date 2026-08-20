@@ -2,6 +2,7 @@
 Palette for Prototyping
 """
 
+from __future__ import absolute_import
 from .ProtoPaletteBase import *
 import os
 

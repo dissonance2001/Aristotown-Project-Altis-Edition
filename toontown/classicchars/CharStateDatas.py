@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -7,6 +8,7 @@ from toontown.toonbase.ToonPythonUtil import *
 from direct.task import Task
 from toontown.classicchars import CCharPaths
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class CharNeutralState(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('CharNeutralState')
@@ -89,7 +91,7 @@ class CharWalkState(StateData.StateData):
         if raycast:
             track.append(Func(nodePath.enableRaycast, 1))
         startHpr = nodePath.getHpr()
-        for pointIndex in xrange(len(posPoints) - 1):
+        for pointIndex in range(len(posPoints) - 1):
             startPoint = posPoints[pointIndex]
             endPoint = posPoints[pointIndex + 1]
             track.append(Func(nodePath.setPos, startPoint))

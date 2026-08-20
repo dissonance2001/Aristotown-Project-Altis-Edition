@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone import DistributedTreasure
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import *

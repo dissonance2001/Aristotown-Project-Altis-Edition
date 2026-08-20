@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
@@ -12,6 +13,7 @@ from toontown.distributed import DelayDelete
 from direct.task.Task import Task
 from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
+from six.moves import range
 
 class DistributedTrolley(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedTrolley')
@@ -58,7 +60,7 @@ class DistributedTrolley(DistributedObject.DistributedObject):
         self.numKeys = self.keys.getNumPaths()
         self.keyInit = []
         self.keyRef = []
-        for i in xrange(self.numKeys):
+        for i in range(self.numKeys):
             key = self.keys[i]
             key.setTwoSided(1)
             ref = self.trolleyCar.attachNewNode('key' + repr(i) + 'ref')
@@ -70,7 +72,7 @@ class DistributedTrolley(DistributedObject.DistributedObject):
         self.numFrontWheels = self.frontWheels.getNumPaths()
         self.frontWheelInit = []
         self.frontWheelRef = []
-        for i in xrange(self.numFrontWheels):
+        for i in range(self.numFrontWheels):
             wheel = self.frontWheels[i]
             ref = self.trolleyCar.attachNewNode('frontWheel' + repr(i) + 'ref')
             ref.iPosHpr(wheel)
@@ -81,7 +83,7 @@ class DistributedTrolley(DistributedObject.DistributedObject):
         self.numBackWheels = self.backWheels.getNumPaths()
         self.backWheelInit = []
         self.backWheelRef = []
-        for i in xrange(self.numBackWheels):
+        for i in range(self.numBackWheels):
             wheel = self.backWheels[i]
             ref = self.trolleyCar.attachNewNode('backWheel' + repr(i) + 'ref')
             ref.iPosHpr(wheel)
@@ -361,29 +363,29 @@ class DistributedTrolley(DistributedObject.DistributedObject):
         self.trolleyExitTrack.finish()
 
     def animateTrolley(self, t, keyAngle, wheelAngle):
-        for i in xrange(self.numKeys):
+        for i in range(self.numKeys):
             key = self.keys[i]
             ref = self.keyRef[i]
             key.setH(ref, t * keyAngle)
 
-        for i in xrange(self.numFrontWheels):
+        for i in range(self.numFrontWheels):
             frontWheel = self.frontWheels[i]
             ref = self.frontWheelRef[i]
             frontWheel.setH(ref, t * wheelAngle)
 
-        for i in xrange(self.numBackWheels):
+        for i in range(self.numBackWheels):
             backWheel = self.backWheels[i]
             ref = self.backWheelRef[i]
             backWheel.setH(ref, t * wheelAngle)
 
     def resetAnimation(self):
-        for i in xrange(self.numKeys):
+        for i in range(self.numKeys):
             self.keys[i].setTransform(self.keyInit[i])
 
-        for i in xrange(self.numFrontWheels):
+        for i in range(self.numFrontWheels):
             self.frontWheels[i].setTransform(self.frontWheelInit[i])
 
-        for i in xrange(self.numBackWheels):
+        for i in range(self.numBackWheels):
             self.backWheels[i].setTransform(self.backWheelInit[i])
 
     def getStareAtNodeAndOffset(self):

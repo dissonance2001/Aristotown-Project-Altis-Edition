@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from pandac.PandaModules import VBase4
 GameActions = PythonUtil.Enum(('EnterDoor',

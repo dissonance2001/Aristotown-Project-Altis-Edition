@@ -1,14 +1,16 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import Point3, Vec3, VBase3
 from direct.tkwidgets.AppShell import *
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets.Tree import *
 from direct.tkwidgets import Slider, Floater
-from tkSimpleDialog import askstring
-from tkMessageBox import showwarning, askyesno
-from Tkinter import *
+from six.moves.tkinter_tksimpledialog import askstring
+from six.moves.tkinter_messagebox import showwarning, askyesno
+from six.moves.tkinter import *
 from toontown.toonbase.ToonPythonUtil import Functor, list2dict
 from direct.gui.DirectGui import DGG
-import tkFileDialog
+import six.moves.tkinter_filedialog
 from direct.showbase import DirectObject
 import math
 import operator
@@ -18,6 +20,8 @@ from otp.level import LevelConstants
 from direct.directtools import DirectSession
 import types
 import Pmw
+from six.moves import map
+from six.moves import range
 
 class InGameEditor(AppShell):
     appname = 'In-Game Editor'
@@ -85,11 +89,11 @@ class InGameEditor(AppShell):
         menuBar.addmenuitem('Entity', 'separator')
         permanentTypes = self.level.entTypeReg.getPermanentTypeNames()
         entTypes = list(self.level.entTypes)
-        map(entTypes.remove, permanentTypes)
+        list(map(entTypes.remove, permanentTypes))
         entTypes.sort()
         numEntities = len(entTypes)
         cascadeMenu = ''
-        for index in xrange(numEntities):
+        for index in range(numEntities):
             type = entTypes[index]
             if index % 10 == 0:
                 lastIndex = min(index + 9, numEntities - 1)
@@ -371,7 +375,7 @@ class InGameEditor(AppShell):
         label = Label(frame, text=attribName, width=15, anchor=W, justify=LEFT)
         label.pack(side=LEFT, expand=0)
         for choice in params.get('choiceSet', []):
-            if type(choice) is types.StringType:
+            if type(choice) is bytes:
                 choiceStr = choice
             else:
                 choiceStr = repr(choice)
@@ -410,19 +414,19 @@ class InGameEditor(AppShell):
 
             def cbCommand(var, trueValue = trueValue):
                 vd = self.cbDict[attribName]
-                print vd
+                print(vd)
                 if var.get():
-                    print 'got it', trueValue, vd
+                    print('got it', trueValue, vd)
                     vd[trueValue] = 1
                 else:
-                    print 'not it', trueValue, vd
+                    print('not it', trueValue, vd)
                     if trueValue in vd:
                         del vd[trueValue]
-                value = vd.keys()
-                print 'SENDING', value
+                value = list(vd.keys())
+                print('SENDING', value)
                 self.level.setAttribEdit(entId, attribName, value)
 
-            if type(choice) is types.StringType:
+            if type(choice) is bytes:
                 labelStr = choice
             else:
                 labelStr = repr(choice)
@@ -435,7 +439,7 @@ class InGameEditor(AppShell):
         self.attribWidgets.append(frame)
 
         def setCheckbuttonVar(attributeValueList):
-            print 'COMING BACK', attributeValueList
+            print('COMING BACK', attributeValueList)
             for attributeValue, cb in checkbuttonDict.items():
                 if attributeValue in attributeValueList:
                     cb.set(1)
@@ -542,7 +546,7 @@ class InGameEditor(AppShell):
                 initialDir = Filename.expandFrom('$TTMODELS/built/').toOsSpecific()
             else:
                 initialDir = Filename.expandFrom('$TTMODELS/built/%s' % text.get()[1:-1]).toOsSpecific()
-            print text, text.get()[1:-1], initialDir
+            print(text, text.get()[1:-1], initialDir)
             rawFilename = askopenfilename(defaultextension='*', initialdir=initialDir, filetypes=(('Bam Files', '*.bam'),
              ('Egg Files', '*.egg'),
              ('Maya Binaries', '*.mb'),
@@ -660,7 +664,7 @@ class InGameEditor(AppShell):
             for eType in self.level.entType2ids.keys():
                 idDict[eType] = self.level.entType2ids.get(eType, [])
 
-        typeKeys = idDict.keys()
+        typeKeys = list(idDict.keys())
         typeKeys.sort()
 
         def getChildEntIds(entity):
@@ -787,7 +791,7 @@ class InGameEditor(AppShell):
         self.ignore('DIRECT_manipulateObjectCleanup')
         self.ignore('DIRECT_undo')
         self.ignore('DIRECT_redo')
-        print 'InGameEditor.onDestroy()'
+        print('InGameEditor.onDestroy()')
         if self.visZonesEditor:
             self.visZonesEditor.destroy()
         self.explorer._node.destroy()
@@ -798,7 +802,7 @@ class InGameEditor(AppShell):
         messenger.send(self.requestSaveEvent)
 
     def handleSaveAs(self):
-        filename = tkFileDialog.asksaveasfilename(parent=self.parent, defaultextension='.py', filetypes=[('Python Source Files', '.py'), ('All Files', '*')])
+        filename = six.moves.tkinter_filedialog.asksaveasfilename(parent=self.parent, defaultextension='.py', filetypes=[('Python Source Files', '.py'), ('All Files', '*')])
         if len(filename) > 0:
             messenger.send(self.saveAsEvent, [filename])
 

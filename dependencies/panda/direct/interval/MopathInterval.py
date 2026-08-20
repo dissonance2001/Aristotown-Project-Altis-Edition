@@ -1,5 +1,6 @@
 """MopathInterval module: contains the MopathInterval class"""
 
+from __future__ import absolute_import
 __all__ = ['MopathInterval']
 
 from . import LerpInterval

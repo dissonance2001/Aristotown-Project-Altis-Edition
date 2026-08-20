@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import LVector4f
 from toontown.dna import DNANode
 from toontown.dna import DNAUtil
@@ -37,7 +39,7 @@ class DNALandmarkBuilding(DNANode.DNANode):
             name = 's' + name[1:]
             node = nodePathB.find('**/*suit_building_origin')
             if node.isEmpty():
-                print 'DNALandmarkBuilding ' + name + ' did not find **/*suit_building_origin'
+                print('DNALandmarkBuilding ' + name + ' did not find **/*suit_building_origin')
                 node = nodePathA.attachNewNode(name)
                 node.setPosHprScale(self.pos, self.hpr, self.scale)
             else:

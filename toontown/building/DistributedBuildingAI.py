@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 import time
 from toontown.building import DistributedDoorAI
@@ -26,6 +27,7 @@ from toontown.cogdominium.DistributedCogdoInteriorAI import DistributedCogdoInte
 from toontown.cogdominium.SuitPlannerCogdoInteriorAI import SuitPlannerCogdoInteriorAI
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBuildingAI')
@@ -289,7 +291,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         self.victorList = victorList
 
     def findVictorIndex(self, avId):
-        for i in xrange(len(self.victorList)):
+        for i in range(len(self.victorList)):
             if self.victorList[i] == avId:
                 return i
 
@@ -363,7 +365,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
                 self.air.questManager.toonKilledBuilding(toon, self.track, self.difficulty, self.numFloors, self.zoneId, activeToons)
                 toon.addStat(ToontownGlobals.STATS_BLDGS)
                 self.air.achievementsManager.bldg(t)
-        for i in xrange(0, 4):
+        for i in range(0, 4):
             victor = victorList[i]
             if (victor is None) or (victor not in self.air.doId2do):
                 victorList[i] = 0
@@ -417,7 +419,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         victorList.extend([None, None, None, None])
         for i in range(0, 4):
             victor = victorList[i]
-            if victor == None or not self.air.doId2do.has_key(victor):
+            if victor == None or victor not in self.air.doId2do:
                 victorList[i] = 0
                 continue
             event = self.air.getAvatarExitEvent(victor)

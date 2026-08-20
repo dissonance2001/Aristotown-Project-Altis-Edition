@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import random
 from direct.distributed import DistributedObjectAI
 from direct.fsm import FSM
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import BanquetTableBase
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM, BanquetTableBase.BanquetTableBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBanquetTableAI')
@@ -17,7 +19,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         self.numChairs = 8
         self.dinerStatus = {}
         self.dinerInfo = {}
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             self.dinerStatus[i] = self.INACTIVE
             hungryDuration = 25
             eatingDuration = 30
@@ -66,7 +68,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         eatingDurations = []
         dinerLevels = []
         dinerSuitDept = []
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             hungryDurations.append(self.dinerInfo[i][0])
             eatingDurations.append(self.dinerInfo[i][1])
             dinerLevels.append(self.dinerInfo[i][2])
@@ -159,7 +161,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
 
     def getNotDeadInfo(self):
         notDeadList = []
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             if self.dinerStatus[i] != self.DEAD:
                 notDeadList.append((self.index, i, self.dinerInfo[i][2], self.dinerInfo[i][3]))
 
@@ -206,7 +208,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         return 0
 
     def enterOn(self):
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             self.b_setDinerStatus(i, self.HUNGRY)
 
     def exitOn(slef):

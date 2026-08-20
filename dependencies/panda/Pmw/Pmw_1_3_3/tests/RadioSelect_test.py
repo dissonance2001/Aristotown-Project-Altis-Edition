@@ -1,10 +1,11 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
 Test.initialise()
 
-if Tkinter.TkVersion >= 8.4:
+if six.moves.tkinter.TkVersion >= 8.4:
   expected1 = 'TclError: bad relief "bogus": must be '
 else:
   expected1 = 'TclError: bad relief type "bogus": must be '
@@ -16,10 +17,10 @@ tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
   (Test.num_options, (), 8),
   (c.index, Pmw.END, 'ValueError: RadioSelect has no buttons'),
-  (c.add, ('Fruit',), Tkinter.Button),
-  (c.add, ('Vegetables',), Tkinter.Button),
-  (c.add, ('CornFlakes',), {'text': 'Cereals'}, Tkinter.Button),
-  (c.add, ('Legumes',), Tkinter.Button),
+  (c.add, ('Fruit',), six.moves.tkinter.Button),
+  (c.add, ('Vegetables',), six.moves.tkinter.Button),
+  (c.add, ('CornFlakes',), {'text': 'Cereals'}, six.moves.tkinter.Button),
+  (c.add, ('Legumes',), six.moves.tkinter.Button),
   (c.add, ('Legumes',), 'ValueError: button "Legumes" already exists'),
   (c.index, 0, 0),
   (c.index, Pmw.END, 3),
@@ -48,7 +49,7 @@ tests_1 = (
   ('CornFlakes_background', 'yellow'),
   ('Legumes_background', 'brown'),
   ('Legumes_foreground', 'white'),
-  (c.add, ('Foo',), Tkinter.Button),
+  (c.add, ('Foo',), six.moves.tkinter.Button),
   ('label_text', 'Label'),
   ('frame_relief', 'sunken'),
   ('frame_relief', 'bogus', expected1 + Test.reliefs),
@@ -62,10 +63,10 @@ kw_2 = {
 }
 tests_2 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
-  (c.add, ('Fruit',), Tkinter.Button),
-  (c.add, ('Vegetables',), Tkinter.Button),
-  (c.add, ('CornFlakes',), {'text': 'Cereals'}, Tkinter.Button),
-  (c.add, ('Legumes',), Tkinter.Button),
+  (c.add, ('Fruit',), six.moves.tkinter.Button),
+  (c.add, ('Vegetables',), six.moves.tkinter.Button),
+  (c.add, ('CornFlakes',), {'text': 'Cereals'}, six.moves.tkinter.Button),
+  (c.add, ('Legumes',), six.moves.tkinter.Button),
   ('command', Test.callback2),
   (c.getcurselection, (), ()),
   (c.invoke, 'Vegetables', ('Vegetables', 1)),
@@ -77,8 +78,8 @@ tests_2 = (
   (c.invoke, 'Legumes', ('Legumes', 0)),
   (c.getcurselection, (), ('Vegetables', 'Fruit')),
   (c.deleteall, ()),
-  (c.add, ('Fruit',), Tkinter.Button),
-  (c.add, ('Vegetables',), Tkinter.Button),
+  (c.add, ('Fruit',), six.moves.tkinter.Button),
+  (c.add, ('Vegetables',), six.moves.tkinter.Button),
   (c.invoke, 'Vegetables', ('Vegetables', 1)),
   (c.getcurselection, (), ('Vegetables',)),
 )
@@ -91,8 +92,8 @@ alltests = [
 
 tests_3 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10}),
-  (c.add, ('Foo',), Tkinter.Button),
-  (c.add, ('Bar',), Tkinter.Button),
+  (c.add, ('Foo',), six.moves.tkinter.Button),
+  (c.add, ('Bar',), six.moves.tkinter.Button),
 )
 
 poslist = ('nw', 'n', 'ne', 'en', 'e', 'es', 'se', 's', 'sw', 'ws', 'w', 'wn',)

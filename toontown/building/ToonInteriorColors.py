@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownGlobals import *
 
 wainscottingBase = [Vec4(0.8, 0.5, 0.3, 1.0), Vec4(0.699, 0.586, 0.473, 1.0), Vec4(0.473, 0.699, 0.488, 1.0)]

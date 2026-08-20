@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.MenuBar demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -41,7 +43,7 @@ class Demo:
 		label = 'General...')
 
 	# Create a checkbutton menu item.
-        self.toggleVar = Tkinter.IntVar()
+        self.toggleVar = six.moves.tkinter.IntVar()
 	# Initialise the checkbutton to 1:
         self.toggleVar.set(1)
         menuBar.addmenuitem('Options', 'checkbutton', 'Toggle me on/off',
@@ -63,7 +65,7 @@ class Demo:
 		label = 'About...')
 
 	# Create and pack the main part of the window.
-	self.mainPart = Tkinter.Label(parent,
+	self.mainPart = six.moves.tkinter.Label(parent,
 		text = 'This is the\nmain part of\nthe window',
 		background = 'black',
 		foreground = 'white',
@@ -96,7 +98,7 @@ class Demo:
 	self.testMenuList = []
 
     def _toggleMe(self):
-        print 'Toggle value:', self.toggleVar.get()
+        print('Toggle value:', self.toggleVar.get())
 
     def add(self):
 	if len(self.testMenuList) == 0:
@@ -150,17 +152,17 @@ class PrintOne:
         self.text = text
 
     def __call__(self):
-        print self.text
+        print(self.text)
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

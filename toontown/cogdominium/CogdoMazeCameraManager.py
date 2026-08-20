@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import random
 from toontown.toonbase.ToonPythonUtil import bound as clamp

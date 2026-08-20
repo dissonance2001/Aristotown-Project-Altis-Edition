@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.battle import BattleParticles
 from toontown.safezone import BRPlayground
 from toontown.safezone import SafeZoneLoader
+from six.moves import map
 
 class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     
@@ -14,9 +16,9 @@ class BRSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
-        self.windSound = map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_TB_wind_1.ogg',
+        self.windSound = list(map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_TB_wind_1.ogg',
                                             'phase_8/audio/sfx/SZ_TB_wind_2.ogg',
-                                            'phase_8/audio/sfx/SZ_TB_wind_3.ogg'])
+                                            'phase_8/audio/sfx/SZ_TB_wind_3.ogg']))
         self.snow = BattleParticles.loadParticleFile('snowdisk.ptf')
         self.snow.setPos(0, 0, 5)
         self.snowRender = self.geom.attachNewNode('snowRender')

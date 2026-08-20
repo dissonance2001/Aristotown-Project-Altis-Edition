@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.ButtonBox demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -34,23 +36,23 @@ class Demo:
 	self.buttonBox.invoke()
 
     def ok(self):
-	print 'You clicked on OK'
+	print('You clicked on OK')
 
     def apply(self):
-	print 'You clicked on Apply'
+	print('You clicked on Apply')
 
     def cancel(self):
-	print 'You clicked on Cancel'
+	print('You clicked on Cancel')
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

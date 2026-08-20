@@ -1,5 +1,6 @@
 """DistributedObjectGlobal module: contains the DistributedObjectGlobal class"""
 
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObject import DistributedObject
 

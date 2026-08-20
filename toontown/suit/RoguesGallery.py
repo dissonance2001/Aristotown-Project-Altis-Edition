@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.fsm import StateData
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 import random
+from six.moves import range
 
 class RoguesGallery(StateData.StateData):
 
@@ -91,7 +94,7 @@ class RoguesGallery(StateData.StateData):
         self.text.setTextColor(0.0, 0.0, 0.0, 1.0)
         self.rowHeight = 0.0
         self.minXScale = None
-        print "rognamestr='", self.rognamestr, "'\n"
+        print("rognamestr='", self.rognamestr, "'\n")
         if self.rognamestr == None or len(self.rognamestr) == 0:
             for dept in SuitDNA.suitDepts:
                 self.__makeDept(dept)
@@ -109,7 +112,7 @@ class RoguesGallery(StateData.StateData):
     def __makeDept(self, dept):
         self.suitRow = []
         self.rowWidth = 0.0
-        for type in xrange(self.numSuitTypes):
+        for type in range(self.numSuitTypes):
             self.__makeSuit(dept, type)
 
         xScale = self.xRowSpace / self.rowWidth

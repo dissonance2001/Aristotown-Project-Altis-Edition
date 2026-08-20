@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import time
 from direct.task.TaskManagerGlobal import taskMgr
 from toontown.events.winter import DistributedToonseltownMinigameAI
@@ -8,6 +9,7 @@ from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DistributedTrickOrTreatTargetAI
 from toontown.ai import DistributedWinterCarolingTargetAI
+from six.moves import range
 
 class TSHoodAI(HoodAI.HoodAI):
     def __init__(self, air):
@@ -27,7 +29,7 @@ class TSHoodAI(HoodAI.HoodAI):
 
         existingNpcIds = set([getattr(obj, 'npcId', None) for obj in self.air.doId2do.values()])
         npcIdList = NPCToons.zone2NpcDict.get(self.zoneId, [])
-        for i in xrange(len(npcIdList)):
+        for i in range(len(npcIdList)):
             npcId = npcIdList[i]
             if npcId not in existingNpcIds:
                 npcDesc = NPCToons.NPCToonDict.get(npcId)

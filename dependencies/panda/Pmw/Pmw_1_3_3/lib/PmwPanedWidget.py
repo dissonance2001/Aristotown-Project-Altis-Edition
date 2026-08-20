@@ -1,11 +1,14 @@
 # PanedWidget
 # a frame which may contain several resizable sub-frames
 
+from __future__ import absolute_import
 import string
 import sys
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import map
+from six.moves import range
 
 class PanedWidget(Pmw.MegaWidget):
 
@@ -31,8 +34,8 @@ class PanedWidget(Pmw.MegaWidget):
 	self.bind('<Configure>', self._handleConfigure)
 
 	if self['orient'] not in ('horizontal', 'vertical'):
-	    raise ValueError, 'bad orient option ' + repr(self['orient']) + \
-		': must be either \'horizontal\' or \'vertical\''
+	    raise ValueError('bad orient option ' + repr(self['orient']) + \
+		': must be either \'horizontal\' or \'vertical\'')
 
         self._separatorThickness = self['separatorthickness']
         self._handleSize = self['handlesize']
@@ -74,7 +77,7 @@ class PanedWidget(Pmw.MegaWidget):
 	self._paneNames[insertPos:insertPos] = [name]
 	self._frame[name] = self.createcomponent(name,
 		(), 'Frame',
-		Tkinter.Frame, (self.interior(),))
+		six.moves.tkinter.Frame, (self.interior(),))
 
 	# Add separator, if necessary.
 	if len(self._paneNames) > 1:
@@ -107,7 +110,7 @@ class PanedWidget(Pmw.MegaWidget):
 	return self._frame[name]
 
     def add(self, name, **kw):
-        return apply(self.insert, (name, len(self._paneNames)), kw)
+        return self.insert(*(name, len(self._paneNames)), **kw)
 
     def delete(self, name):
 	deletePos = self._nameToIndex(name)
@@ -212,7 +215,7 @@ class PanedWidget(Pmw.MegaWidget):
     def _parsePaneOptions(self, name, args):
 	# Parse <args> for options.
 	for arg, value in args.items():
-	    if type(value) == types.FloatType:
+	    if type(value) == float:
 		relvalue = value
 		value = self._absSize(relvalue)
 	    else:
@@ -225,7 +228,7 @@ class PanedWidget(Pmw.MegaWidget):
 	    elif arg == 'max':
 		self._max[name], self._relmax[name] = value, relvalue
 	    else:
-		raise ValueError, 'keyword must be "size", "min", or "max"'
+		raise ValueError('keyword must be "size", "min", or "max"')
 
     def _absSize(self, relvalue):
 	return int(round(relvalue * self._majorSize))
@@ -246,7 +249,7 @@ class PanedWidget(Pmw.MegaWidget):
 	# Create the line dividing the panes.
 	sep = self.createcomponent(self._sepName(n),
 		(), 'Separator',
-		Tkinter.Frame, (self.interior(),),
+		six.moves.tkinter.Frame, (self.interior(),),
 		borderwidth = 1,
 		relief = self['separatorrelief'])
 	self._separator.append(sep)
@@ -269,7 +272,7 @@ class PanedWidget(Pmw.MegaWidget):
 	# Create the handle on the dividing line.
 	handle = self.createcomponent(self._buttonName(n),
 		(), 'Handle',
-		Tkinter.Frame, (self.interior(),),
+		six.moves.tkinter.Frame, (self.interior(),),
 		    relief = 'raised',
 		    borderwidth = 1,
 		    width = self._handleSize,
@@ -329,11 +332,11 @@ class PanedWidget(Pmw.MegaWidget):
 	if self['orient'] == 'vertical':
 	    self._majorSize = self.winfo_height()
 	    self._minorSize = self.winfo_width()
-	    majorspec = Tkinter.Frame.winfo_reqheight
+	    majorspec = six.moves.tkinter.Frame.winfo_reqheight
 	else:
 	    self._majorSize = self.winfo_width()
 	    self._minorSize = self.winfo_height()
-	    majorspec = Tkinter.Frame.winfo_reqwidth
+	    majorspec = six.moves.tkinter.Frame.winfo_reqwidth
 
         bw = string.atoi(str(self.cget('hull_borderwidth')))
         hl = string.atoi(str(self.cget('hull_highlightthickness')))
@@ -351,7 +354,7 @@ class PanedWidget(Pmw.MegaWidget):
 	    if self._relsize[name] is None:
 		#special case
 		if self._size[name] == 0:
-		    self._size[name] = apply(majorspec, (self._frame[name],))
+		    self._size[name] = majorspec(*(self._frame[name],))
 		    self._setrel(name)
 	    else:
 		self._size[name] = self._absSize(self._relsize[name])
@@ -383,7 +386,7 @@ class PanedWidget(Pmw.MegaWidget):
 
     def _iterate(self, names, proc, n):
 	for i in names:
-	    n = apply(proc, (i, n))
+	    n = proc(*(i, n))
 	    if n == 0:
 		break
 
@@ -434,7 +437,7 @@ class PanedWidget(Pmw.MegaWidget):
 	# Invoke the callback command
 	cmd = self['command']
 	if callable(cmd):
-	    cmd(map(lambda x, s = self: s._size[x], self._paneNames))
+	    cmd(list(map(lambda x, s = self: s._size[x], self._paneNames)))
 
     def _plotHandles(self):
 	if len(self._paneNames) == 0:

@@ -3,6 +3,10 @@
 This can be used, for example, to extract a list of dependencies from an .exe
 or .dll file, or to add version information and an icon resource to it. """
 
+from __future__ import absolute_import
+from six import unichr
+import six
+from six.moves import range
 __all__ = ["PEFile"]
 
 from struct import Struct, unpack, pack, pack_into
@@ -13,7 +17,7 @@ from io import BytesIO
 import sys
 
 if sys.version_info >= (3, 0):
-    unicode = str
+    six.text_type = str
     unichr = chr
 
 # Define some internally used structures.
@@ -208,7 +212,7 @@ class VersionInfoResource(object):
         if isinstance(value, dict):
             type = 1
             value_length = 0
-        elif isinstance(value, bytes) or isinstance(value, unicode):
+        elif isinstance(value, bytes) or isinstance(value, six.text_type):
             type = 1
             value_length = len(value) * 2 + 2
         else:
@@ -225,9 +229,9 @@ class VersionInfoResource(object):
         assert len(data) & 3 == 0
 
         if isinstance(value, dict):
-            for key2, value2 in sorted(value.items(), key=lambda x:x[0]):
+            for key2, value2 in sorted(list(value.items()), key=lambda x:x[0]):
                 self._pack_info(data, key2, value2)
-        elif isinstance(value, bytes) or isinstance(value, unicode):
+        elif isinstance(value, bytes) or isinstance(value, six.text_type):
             for c in value:
                 data += pack('<H', ord(c))
             data += b'\x00\x00'
@@ -648,7 +652,7 @@ class PEFile(object):
         group = IconGroupResource()
         self.resources[group.type][ordinal][1033] = group
 
-        images = sorted(icon.images.items(), key=lambda x:-x[0])
+        images = sorted(list(icon.images.items()), key=lambda x:-x[0])
         id = 1
 
         # Write 8-bpp image headers for sizes under 256x256.
@@ -705,7 +709,7 @@ class PEFile(object):
 
         Returns the newly created Section object. """
 
-        if isinstance(name, unicode):
+        if isinstance(name, six.text_type):
             name = name.encode('ascii')
 
         section = Section()

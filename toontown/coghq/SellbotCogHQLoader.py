@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
 from toontown.coghq import CogHQLoader
@@ -16,7 +18,7 @@ from pandac.PandaModules import DecalEffect, NodePath
 from direct.interval.IntervalGlobal import *
 from direct.interval.LerpInterval import LerpHprInterval
 import os
-import __builtin__
+import six.moves.builtins
 from panda3d.core import Vec3, Filename
 
 aspectSF = 0.7227
@@ -65,7 +67,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
 
     def _loadSellbotMusic(self, virtualPath):
         try:
-            manager = __builtin__.ContentPackMgr
+            manager = six.moves.builtins.ContentPackMgr
         except Exception:
             manager = None
 
@@ -382,7 +384,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             self.geom.flattenStrong()
             self.geom2.flattenStrong()
         elif zoneId == ToontownGlobals.SellbotMultislackerLobby:
-            print 'LOADING SELLBOT HARDMODE LOBBY'
+            print('LOADING SELLBOT HARDMODE LOBBY')
             self.geom = loader.loadModel('phase_9/models/cogHQ/SellbotHQLobby_MS')
             self.geom.flattenMedium()
         else:

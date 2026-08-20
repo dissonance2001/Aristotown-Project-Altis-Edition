@@ -6,6 +6,7 @@
 # This tutorial shows how to play animations on models aka "actors".
 # It is based on the popular game of "Rock 'em Sock 'em Robots".
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import AmbientLight, DirectionalLight
 from panda3d.core import TextNode

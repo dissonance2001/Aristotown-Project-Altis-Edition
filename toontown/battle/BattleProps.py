@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from otp.otpbase import OTPGlobals
 import random
+from six.moves import range
 
 Props = ((5, 'partyBall', 'partyBall'),
  (5,
@@ -582,14 +584,14 @@ class PropPool:
             self.props[name].setTexture(tex, 1)
         elif name == 'dust':
             bin = 110
-            for cloudNum in xrange(1, 12):
+            for cloudNum in range(1, 12):
                 cloudName = '**/cloud' + str(cloudNum)
                 cloud = self.props[name].find(cloudName)
                 cloud.setBin('fixed', bin)
                 bin -= 10
         elif name == 'dust2':
             bin = 110
-            for cloudNum in xrange(1, 50):
+            for cloudNum in range(1, 50):
                 cloudName = '**/cloud' + str(cloudNum)
                 cloud = self.props[name].find(cloudName)
                 cloud.setBin('fixed', bin)

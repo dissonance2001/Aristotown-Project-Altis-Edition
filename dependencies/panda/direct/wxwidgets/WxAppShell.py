@@ -2,6 +2,7 @@
 WxAppShell provides a GUI application framework using wxPython.
 This is an wxPython version of AppShell.py
 """
+from __future__ import absolute_import
 import wx, sys
 
 class WxAppShell(wx.Frame):

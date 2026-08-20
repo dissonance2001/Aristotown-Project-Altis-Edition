@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import LevelMgrAI
 
 class FactoryLevelMgrAI(LevelMgrAI.LevelMgrAI):

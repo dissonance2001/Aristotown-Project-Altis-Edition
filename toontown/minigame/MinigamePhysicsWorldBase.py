@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Quat
 from pandac.PandaModules import OdeWorld, OdeSimpleSpace, OdeJointGroup, OdeUtil
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import globalClockDelta
+from six.moves import range
 
 class MinigamePhysicsWorldBase:
     notify = DirectNotifyGlobal.directNotify.newCategory('MinigamePhysicsWorldBase')
@@ -89,7 +91,7 @@ class MinigamePhysicsWorldBase:
 
     def setupSimulation(self):
         if self.canRender:
-            for count in xrange(self.jointMarkerCount):
+            for count in range(self.jointMarkerCount):
                 testMarker = render.attachNewNode('Joint Marker')
                 ballmodel = loader.loadModel('phase_3/models/misc/sphere')
                 ballmodel.reparentTo(testMarker)
@@ -126,7 +128,7 @@ class MinigamePhysicsWorldBase:
 
     def postStep(self):
         if self.showContacts and self.canRender:
-            for count in xrange(self.jointMarkerCount):
+            for count in range(self.jointMarkerCount):
                 pandaNodePathGeom = self.jointMarkers[count]
                 if count < self.colCount:
                     pandaNodePathGeom.setPos(self.space.getContactData(count * 3 + 0), self.space.getContactData(count * 3 + 1), self.space.getContactData(count * 3 + 2))

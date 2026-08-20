@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import time
 from toontown.catalog import CatalogItem
 from toontown.toonbase import ToontownGlobals
@@ -38,7 +40,7 @@ class CatalogGardenStarterItem(CatalogItem.CatalogItem):
                 if av:
                     av.b_setGardenStarted(1)
             else:
-                print 'starter garden-- something not there'
+                print('starter garden-- something not there')
         return ToontownGlobals.P_ItemAvailable
 
     def getPicture(self, avatar):

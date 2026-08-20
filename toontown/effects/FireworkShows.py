@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.effects.FireworkGlobals import *
 from toontown.toonbase import ToontownGlobals
 from toontown.parties import PartyGlobals

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
@@ -21,6 +22,7 @@ from toontown.toon import NPCToons
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 '''
 GUIDE TO CREATING SUIT PLANNER ENTRIES:
 Index 0: Zone ID
@@ -150,7 +152,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if simbase.air.wantCogdominiums:
             if not hasattr(self.__class__, 'CogdoPopAdjusted'):
                 self.__class__.CogdoPopAdjusted = False
-                for index in xrange(len(self.SuitHoodInfo)):
+                for index in range(len(self.SuitHoodInfo)):
                     hoodInfo = self.SuitHoodInfo[index]
                     hoodInfo[self.SUIT_HOOD_INFO_BMIN] = int(0.5 + self.CogdoPopFactor * hoodInfo[
                         self.SUIT_HOOD_INFO_BMIN])
@@ -159,7 +161,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                         self.SUIT_HOOD_INFO_BMAX])
         
         self.hoodInfoIdx = -1
-        for index in xrange(len(self.SuitHoodInfo)):
+        for index in range(len(self.SuitHoodInfo)):
             currHoodInfo = self.SuitHoodInfo[index]
             if currHoodInfo[self.SUIT_HOOD_INFO_ZONE] == self.canonicalZoneId:
                 self.hoodInfoIdx = index
@@ -718,7 +720,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         # If we aren't at our minimum number of buildings, let's spawn some!
         suitBlockCount = len(self.buildingMgr.getSuitBlocks())
         if suitBlockCount < self.targetNumSuitBuildings:
-            for _ in xrange(self.targetNumSuitBuildings - suitBlockCount):
+            for _ in range(self.targetNumSuitBuildings - suitBlockCount):
                 blockNumber = random.choice(self.buildingMgr.getToonBlocks())
                 building = self.buildingMgr.getBuilding(blockNumber)
                 if building is None:
@@ -817,7 +819,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         while numToAssign > 0:
             smallestCount = None
             smallestTracks = []
-            for trackIndex in xrange(4):
+            for trackIndex in range(4):
                 if totalWeightPerTrack[trackIndex]:
                     track = SuitDNA.suitDepts[trackIndex]
                     count = numPerTrack[track]
@@ -833,7 +835,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             buildingTrackIndex = SuitDNA.suitDepts.index(buildingTrack)
             smallestCount = None
             smallestHeights = []
-            for height in xrange(5):
+            for height in range(5):
                 if totalWeightPerHeight[height]:
                     count = float(numPerHeight[height]) / float(self.BUILDING_HEIGHT_DISTRIBUTION[height])
                     if (smallestCount is None) or (count < smallestCount):
@@ -941,7 +943,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         totalWeight = sum(dist)
         c = random.random() * totalWeight
         t = 0
-        for i in xrange(len(hoodInfo)):
+        for i in range(len(hoodInfo)):
             t += dist[i]
             if c < t:
                 return hoodInfo[i]
@@ -987,7 +989,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         pos = self.battlePosDict[canonicalZoneId]
         interactivePropTrackBonus = -1
         
-        if simbase.config.GetBool('props-buff-battles', True) and self.cellToGagBonusDict.has_key(canonicalZoneId):
+        if simbase.config.GetBool('props-buff-battles', True) and canonicalZoneId in self.cellToGagBonusDict:
             tentativeBonusTrack = self.cellToGagBonusDict[canonicalZoneId]
             trackToHolidayDict = {
                 ToontownBattleGlobals.SQUIRT_TRACK: ToontownGlobals.HYDRANTS_BUFF_BATTLES,
@@ -1055,7 +1057,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if suit.zoneId == currBattle[0]:
                 self.notify.debug(' battle found' + str(suit.zoneId))
                 for currPath in currBattle[1]:
-                    for currPathPtSuit in xrange(suit.currWpt, suit.myPath.getNumPoints()):
+                    for currPathPtSuit in range(suit.currWpt, suit.myPath.getNumPoints()):
                         ptIdx = suit.myPath.getPointIndex(currPathPtSuit)
                         if self.notify.getDebug():
                             self.notify.debug(' comparing' + str(ptIdx) + 'with' + str(currPath))
@@ -1065,7 +1067,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                             return 0
             battleIndex += 1
         pointList = []
-        for currPathPtSuit in xrange(suit.currWpt, suit.myPath.getNumPoints()):
+        for currPathPtSuit in range(suit.currWpt, suit.myPath.getNumPoints()):
             ptIdx = suit.myPath.getPointIndex(currPathPtSuit)
             if self.notify.getDebug():
                 self.notify.debug(' appending point with index of' + str(ptIdx))
@@ -1106,7 +1108,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
         if level == None:
             level = random.choice(self.SuitHoodInfo[self.hoodInfoIdx][self.SUIT_HOOD_INFO_LVL])
         if type == None:
-            typeChoices = xrange(max(level - 12, 1), min(level, self.MAX_SUIT_TYPES) + 1)
+            typeChoices = range(max(level - 12, 1), min(level, self.MAX_SUIT_TYPES) + 1)
             type = random.choice(typeChoices)
 
         if level not in ToontownGlobals.SuitLevels:

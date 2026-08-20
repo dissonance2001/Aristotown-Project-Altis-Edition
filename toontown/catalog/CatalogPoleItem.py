@@ -1,9 +1,11 @@
-import CatalogItem
+from __future__ import absolute_import
+from . import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.fishing import FishGlobals
 from direct.actor import Actor
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
+from six.moves import range
 
 class CatalogPoleItem(CatalogItem.CatalogItem):
     sequenceNumber = 0
@@ -101,7 +103,7 @@ def nextAvailablePole(avatar, duplicateItems):
 
 def getAllPoles():
     list = []
-    for rodId in xrange(0, FishGlobals.MaxRodId + 1):
+    for rodId in range(0, FishGlobals.MaxRodId + 1):
         list.append(CatalogPoleItem(rodId))
 
     return list

@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 import random
 
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase import ToontownGlobals
 from toontown.dna.DNAParser import DNADoor
-from DistributedToonInterior import DistributedToonInterior
+from .DistributedToonInterior import DistributedToonInterior
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import ToonInteriorColors
 from toontown.hood import ZoneUtil

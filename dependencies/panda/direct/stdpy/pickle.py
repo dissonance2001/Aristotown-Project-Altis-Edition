@@ -21,13 +21,14 @@ shared context between all objects written by that Pickler.
 Unfortunately, cPickle cannot be supported, because it does not
 support extensions of this nature. """
 
+from __future__ import absolute_import
 import sys
 from panda3d.core import BamWriter, BamReader
 
 if sys.version_info >= (3, 0):
     from copyreg import dispatch_table
 else:
-    from copy_reg import dispatch_table
+    from six.moves.copyreg import dispatch_table
 
 # A funny replacement for "import pickle" so we don't get confused
 # with the local pickle.py.

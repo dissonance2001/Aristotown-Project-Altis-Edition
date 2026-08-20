@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
 from toontown.chat import ResistanceChat
-from TTSCResistanceTerminal import TTSCResistanceTerminal
+from .TTSCResistanceTerminal import TTSCResistanceTerminal
 
 class TTSCResistanceMenu(SCMenu):
 

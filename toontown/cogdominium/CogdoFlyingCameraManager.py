@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from pandac.PandaModules import NodePath, Vec3
 from pandac.PandaModules import CollisionTraverser, CollisionHandlerQueue

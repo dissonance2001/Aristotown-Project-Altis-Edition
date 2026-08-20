@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -8,6 +9,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 import math
 from math import *
+from six.moves import range
 
 class FogOverlay:
     SomeCounter = 0
@@ -32,12 +34,12 @@ class FogOverlay:
         overlayVertexData = GeomVertexData('holds my vertices', gFormat, Geom.UHDynamic)
         overlayVertexWriter = GeomVertexWriter(overlayVertexData, 'vertex')
         overlayColorWriter = GeomVertexWriter(overlayVertexData, 'color')
-        for index in xrange(len(shapeVertexs)):
+        for index in range(len(shapeVertexs)):
             overlayVertexWriter.addData3f(shapeVertexs[index][0], shapeVertexs[index][1], shapeVertexs[index][2])
             overlayColorWriter.addData4f(1.0, 1.0, 1.0, 1.0)
 
         overlayTris = GeomTristrips(Geom.UHStatic)
-        for index in xrange(len(shapeVertexs)):
+        for index in range(len(shapeVertexs)):
             overlayTris.addVertex(index)
 
         overlayTris.closePrimitive()

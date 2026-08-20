@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.estate import GardenGlobals
 from direct.directnotify import DirectNotifyGlobal
 from toontown.estate import FlowerBase
+from six.moves import zip
 
 class FlowerCollection:
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerCollection')

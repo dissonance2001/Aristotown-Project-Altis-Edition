@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Vec4
 import random
 from direct.task import Task
@@ -11,6 +12,7 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownIntervals
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class LaffMeter(DirectFrame):
     deathColor = Vec4(0.58039216, 0.80392157, 0.34117647, 1.0)
@@ -239,7 +241,7 @@ class LaffMeter(DirectFrame):
             elif hType == 'armadillo':
                 headModel = gui.find('**/laffMeter_armadillo')
             else:
-                raise StandardError('unknown toon species: ', hType)
+                raise Exception('unknown toon species: ', hType)
             self.color = self.style.getHeadColor()
             self.container['image'] = headModel
             self.container['image_color'] = self.color
@@ -332,7 +334,7 @@ class LaffMeter(DirectFrame):
 
     def adjustTeeth(self):
         if self.isToon:
-            for i in xrange(len(self.teeth)):
+            for i in range(len(self.teeth)):
                 if self.hp > self.maxHp * self.fractions[i]:
                     self.teeth[i].show()
                 else:

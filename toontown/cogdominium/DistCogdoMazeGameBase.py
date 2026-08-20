@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.RandomNumGen import RandomNumGen
 from toontown.cogdominium.CogdoMaze import CogdoMazeFactory
 from toontown.cogdominium import CogdoMazeGameGlobals as Globals

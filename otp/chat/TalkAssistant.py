@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import time
 from direct.directnotify import DirectNotifyGlobal
@@ -226,12 +228,12 @@ class TalkAssistant(DirectObject.DirectObject):
         self.floodThreshold = hold
 
     def printHistoryComplete(self):
-        print 'HISTORY COMPLETE'
+        print('HISTORY COMPLETE')
         for message in self.historyComplete:
-            print '%s %s %s\n%s\n' % (message.getTimeStamp(),
+            print('%s %s %s\n%s\n' % (message.getTimeStamp(),
              message.getSenderAvatarName(),
              message.getSenderAccountName(),
-             message.getBody())
+             message.getBody()))
 
     def checkOpenTypedChat(self):
         if base.localAvatar.commonChatFlags & OTPGlobals.CommonChat:
@@ -652,7 +654,7 @@ class TalkAssistant(DirectObject.DirectObject):
             else:
                 error = ERROR_NO_GUILD_CHAT
         else:
-            print 'Guild chat error'
+            print('Guild chat error')
             error = ERROR_NO_GUILD_CHAT
         
         return error
@@ -725,7 +727,7 @@ class TalkAssistant(DirectObject.DirectObject):
             else:
                 error = ERROR_NO_GUILD_CHAT
         else:
-            print 'Guild Speedchat error'
+            print('Guild Speedchat error')
             error = ERROR_NO_GUILD_CHAT
         return error
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.speedchat.SCColorScheme import SCColorScheme
 from otp.otpbase import OTPLocalizer
 

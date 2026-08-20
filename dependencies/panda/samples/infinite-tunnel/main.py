@@ -12,6 +12,7 @@
 # The tunnel and texture was originally created by Vamsi Bandaru and Victoria
 # Webb for the Entertainment Technology Center class Building Virtual Worlds
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Fog
 from panda3d.core import TextNode
@@ -21,6 +22,7 @@ from direct.interval.MetaInterval import Sequence
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func
 import sys
+from six.moves import range
 
 # Global variables for the tunnel dimensions and speed of travel
 TUNNEL_SEGMENT_LENGTH = 50

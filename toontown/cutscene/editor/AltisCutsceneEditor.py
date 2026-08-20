@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import inspect
 import json
 import os
@@ -15,6 +17,7 @@ from panda3d.core import TextNode
 
 from toontown.cutscene.CutsceneSequenceBase import cutsceneMethodDefs
 from toontown.cutscene.repository.CutsceneRuntime import buildCutsceneData, getRegisteredEventNames
+import six
 
 
 _editor = None
@@ -227,7 +230,7 @@ def _collectionForArg(name):
 def _labelCollection(values):
     labels = []
     for index, value in enumerate(values):
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             text = value
         else:
             text = _safeName(value, str(index))
@@ -527,7 +530,7 @@ class AltisCutsceneEditor(DirectObject):
             self._writeJsonFile('cutscene_editor_autosave.ctsc', self._workspaceData())
             return True
         except Exception as error:
-            print('[Cutscene Editor] Autosave error: %s' % error)
+            print(('[Cutscene Editor] Autosave error: %s' % error))
             return False
 
     def loadFromEntry(self):
@@ -566,7 +569,7 @@ class AltisCutsceneEditor(DirectObject):
                 self._reloadSavedResources()
                 self._applyManifestOrdering(manifest)
             except Exception as error:
-                print('[Cutscene Editor] Setup manifest error: %s' % error)
+                print(('[Cutscene Editor] Setup manifest error: %s' % error))
         self.events = data
         self.selectedEvent = self.events[0] if self.events else None
         keys = self._subeventKeys(self.selectedEvent) if self.selectedEvent else []
@@ -586,7 +589,7 @@ class AltisCutsceneEditor(DirectObject):
             self._writeJsonFile(manifestPath, self._manifestData())
         except Exception as error:
             self.resourceStatus['text'] = 'Export failed: %s' % error
-            print('[Cutscene Editor] Export error: %s' % error)
+            print(('[Cutscene Editor] Export error: %s' % error))
             return
         self.autosave()
         self.resourceStatus['text'] = 'Exported CTSC + setup manifest.'
@@ -944,7 +947,7 @@ class AltisCutsceneEditor(DirectObject):
             suit.loop('neutral')
         except Exception as error:
             self.resourceStatus['text'] = 'Could not spawn Cog: %s' % error
-            print('[Cutscene Editor] Cog spawn error: %s' % error)
+            print(('[Cutscene Editor] Cog spawn error: %s' % error))
             return
         self.spawnedSuits.append(suit)
         self.spawnedSuitTypes.append(suitType)
@@ -1129,7 +1132,7 @@ class AltisCutsceneEditor(DirectObject):
             self.playing = False
             self.playButton['text'] = 'Play'
             self.resourceStatus['text'] = 'Preview error: %s' % error
-            print('[Cutscene Editor] Preview error: %s' % error)
+            print(('[Cutscene Editor] Preview error: %s' % error))
 
     def _handleEscape(self):
         if self.previewMode:

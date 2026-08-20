@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.parties.DistributedPartyCogActivity import DistributedPartyCogActivity
 
 class DistributedPartyWinterCogActivity(DistributedPartyCogActivity):

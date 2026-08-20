@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from panda3d.core import Vec3
+from six.moves import range
 # Utility functions that are useful to both AI and client CartesianGrid code
 
 class CartesianGridBase:
@@ -109,7 +111,7 @@ class CartesianGridBase:
         for currCol in range(int(rightOffset + leftOffset + 1)):
             if ((currCol == 0 and leftOffset == radius) or (currCol == rightOffset + leftOffset and rightOffset == radius)):
                 # at either left or right edge of area, look at all rows
-                possibleRows = range(int(bottomOffset + topOffset + 1))
+                possibleRows = list(range(int(bottomOffset + topOffset + 1)))
             else:
                 # in a middle column, only look at top and bottom rows
                 possibleRows = []

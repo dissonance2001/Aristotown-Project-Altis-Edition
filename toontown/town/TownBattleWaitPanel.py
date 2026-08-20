@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
@@ -10,6 +11,7 @@ from toontown.toon import IOURegistry
 from toontown.toon import NPCToons
 from toontown.toon import ToonHead
 from toontown.toon import ToonDNA
+from six.moves import range
 
 
 class TownBattleWaitPanel(StateData.StateData):

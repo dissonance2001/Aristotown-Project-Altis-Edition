@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import MovieCamera
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
@@ -26,6 +27,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits import MovieIntervals
+from six.moves import range
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -346,14 +348,14 @@ def doExplodingDocument(attack):
     explosionTrack = Sequence()
     explosionTrack.append(Wait(2.25))
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodePosPoints = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
     explodePosPoints1 = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
     explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(Wait(2.25))
         explodeTrack.append(
@@ -451,7 +453,7 @@ def __soakSuit(suit, remove=0):
     actorNode = suit.find('**/__Actor_modelRoot')
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             if suit.dna.name != 'cbutcher':
@@ -493,7 +495,7 @@ def __soakRemoval(suit, remove=0):
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
     texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             if suit.dna.name != 'cbutcher' and not suit.isShadow:
@@ -782,10 +784,10 @@ def doCollectCall(attack):
     explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explode = []
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(Wait(4.75))
         explodeTrack.append(
@@ -1210,10 +1212,10 @@ def doWiretapped(attack):
     explodePosPoints1 = [Point3(0, 10, 1), MovieUtil.PNT3_ZERO]
     explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(Wait(2.7))
         explodeTrack.append(
@@ -2200,7 +2202,7 @@ def doWiretapperGagBan(attack):
         dmg = t['hp']
         tape = globalPropPool.getProp('redtape')
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
 
         hitPoint = lambda toon = toon: __toonTorsoPoint(toon)
@@ -2234,7 +2236,7 @@ def doWiretapperGagBan(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 0, 3, scaleUpPoint=scaleUpPoint))
 
@@ -2348,7 +2350,7 @@ def doForeAttack2(attack):
         startDelay = 2.0
         intervalDelay = 0.075
 
-        for i in xrange(numBalls):
+        for i in range(numBalls):
             ball = baseBall.copyTo(hidden)  # not render
             delay = startDelay + (i * intervalDelay)
 
@@ -2403,7 +2405,7 @@ def doForeAttack(attack):
         startDelay = 2.0
         intervalDelay = 0.075
 
-        for i in xrange(numBalls):
+        for i in range(numBalls):
             ball = baseBall.copyTo(hidden)  # not render
             delay = startDelay + (i * intervalDelay)
 
@@ -2746,7 +2748,7 @@ def makeZapBeamTrack(battle, coil, suit, tDelay, duration):
         for geomNp in beam.findAllMatches('**/+GeomNode'):
             stages = geomNp.findAllTextureStages()
 
-            for i in xrange(stages.getNumTextureStages()):
+            for i in range(stages.getNumTextureStages()):
                 ts = stages.getTextureStage(i)
 
                 tex = geomNp.getTexture(ts)
@@ -2916,7 +2918,7 @@ def doAftershockDamage(attack):
         shakeLeft = Point3(x, y - 0.7, z)
         shakeTrack = Sequence(Wait(tContact))
         origPos, origHpr = battle.getActorPosHpr(toon)
-        for i in xrange(0, 30):
+        for i in range(0, 30):
             shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
             shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
         shakeTrack.append(LerpPosInterval(toon, 0, origPos, other=battle))
@@ -3081,7 +3083,7 @@ def doSlowBurn(attack):
 
         def changeColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
@@ -3089,7 +3091,7 @@ def doSlowBurn(attack):
 
         def resetColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.clearColorScale))
 
@@ -3560,10 +3562,10 @@ def doBudgetCuts(attack):
             )
         ))
         partTracks2.append(partTracks)
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             rightTrack = Sequence()
             rightTrack.append(Wait(0.5))
@@ -3717,7 +3719,7 @@ def doOverheat(attack):
 
         def changeColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
@@ -3725,7 +3727,7 @@ def doOverheat(attack):
 
         def resetColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.clearColorScale))
 
@@ -3827,11 +3829,11 @@ def doSnipe(attack):
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         leftKnives = []
         rightKnives = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             leftKnives.append(globalPropPool.getProp('dagger'))
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
             leftTrack.append(Wait(1.1))

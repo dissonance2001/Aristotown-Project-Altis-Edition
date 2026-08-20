@@ -1,4 +1,7 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import random
+from six.moves import range
 
 """Corporate Clash Chainsaw Consultant intro adapter for Project Altis/Python 2.
 
@@ -323,7 +326,7 @@ class _ChainsawIntroHead(Actor.Actor):
         repeatCount = self._chooseFreakoutRepeatCount()
         seq = Sequence()
 
-        for index in xrange(repeatCount):
+        for index in range(repeatCount):
             twitchTime = random.uniform(0.07, 0.12)
             useHeading = random.random() < 0.5
             if useHeading:

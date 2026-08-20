@@ -1,6 +1,7 @@
 # This tests Pmw option and component handling.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -64,7 +65,7 @@ class Simple(Pmw.MegaWidget):
 	interior = self.interior()
 	self._widget = self.createcomponent('widget',
 		(('widgy', 'widget'),), None,
-		Tkinter.Button, (interior,))
+		six.moves.tkinter.Button, (interior,))
 	self._widget.grid(column=0, row=0, sticky='nsew')
 
 	self.initialiseoptions()
@@ -109,12 +110,12 @@ class Base(Pmw.MegaWidget):
 
 	self._child = self.createcomponent('child',
 		(), 'Mygroup',
-		Tkinter.Frame, (oldInterior,))
+		six.moves.tkinter.Frame, (oldInterior,))
 	self._child.grid(column=0, row=1, sticky='nsew')
 
 	self._groupie = self.createcomponent('groupie',
 		(), 'Mygroup',
-		Tkinter.Button, (oldInterior,), text = 'XXXXX')
+		six.moves.tkinter.Button, (oldInterior,), text = 'XXXXX')
 	self._groupie.grid(column=0, row=2, sticky='nsew')
 
 	self.basedummy = []

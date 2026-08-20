@@ -1,9 +1,13 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.pets import PetTraits
 from toontown.pets import PetMood, PetTricks
 from toontown.toonbase import ToontownGlobals
 import string
+from six.moves import range
+from six.moves import zip
 
 class DistributedPetProxy(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPetProxy')
@@ -43,7 +47,7 @@ class DistributedPetProxy(DistributedObject.DistributedObject):
         self.safeZone = safeZone
 
     def __generateDistTraitFuncs(self):
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             setterName = self.getSetterName(traitName)
 
@@ -133,7 +137,7 @@ class DistributedPetProxy(DistributedObject.DistributedObject):
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
         self.traits = PetTraits.PetTraits(self.traitSeed, self.safeZone)
-        print self.traits.traits
+        print(self.traits.traits)
         self.mood = PetMood.PetMood(self)
         self.lastKnownMood = self.mood.makeCopy()
         for mood, value in self.requiredMoodComponents.items():

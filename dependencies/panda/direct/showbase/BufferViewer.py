@@ -12,6 +12,8 @@ Or, you can enable the following variable in your Config.prc::
     show-buffers true
 """
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['BufferViewer']
 
 from panda3d.core import *

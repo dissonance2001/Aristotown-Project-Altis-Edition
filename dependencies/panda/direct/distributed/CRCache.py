@@ -1,5 +1,6 @@
 """CRCache module: contains the CRCache class"""
 
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from . import DistributedObject
 

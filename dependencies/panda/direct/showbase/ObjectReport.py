@@ -9,6 +9,7 @@
 >>> o.diff(o2)
 """
 
+from __future__ import absolute_import
 __all__ = ['ExclusiveObjectPool', 'ObjectReport']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -20,7 +21,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import __builtin__ as builtins
+    import six.moves.builtins as builtins
 
 class ExclusiveObjectPool(DirectObject.DirectObject):
     # ObjectPool specialization that excludes particular objects
@@ -52,7 +53,7 @@ class ExclusiveObjectPool(DirectObject.DirectObject):
         self._objects = list(objects)
         self._postFilterObjs = []
         self._sync = Sync('%s-%s' % (self.__class__.__name__,
-                                     self._SerialNumGen.next()),
+                                     next(self._SerialNumGen)),
                           self._SyncMaster)
         self._sync.invalidate()
         ExclusiveObjectPool.addExclObjs(self._objects, self._postFilterObjs,

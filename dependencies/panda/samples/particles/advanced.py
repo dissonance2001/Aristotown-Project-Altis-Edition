@@ -4,6 +4,7 @@
 # can define an inertial particle system with a moving emitter whose position
 # can not be pre-determined.
 
+from __future__ import absolute_import
 from array import array
 from itertools import chain
 from random import uniform
@@ -28,6 +29,7 @@ from panda3d.core import loadPrcFileData
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.OnscreenText import OnscreenText
 import sys
+from six.moves import range
 
 HELP_TEXT = """
 left/right arrow: Rotate teapot

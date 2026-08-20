@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from direct.showbase.InputStateGlobal import inputState
 #from DirectGui import *
 #from PythonUtil import *

@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import time
+from six.moves import range
 
 
 class RotatingLog:
@@ -91,7 +94,7 @@ class RotatingLog:
                 self.timeLimit=time.time()+self.timeInterval
         else:
             # We'll keep writing to the old file, if available.
-            print("RotatingLog error: Unable to open new log file \"%s\"." % (path,))
+            print(("RotatingLog error: Unable to open new log file \"%s\"." % (path,)))
 
     def write(self, data):
         """
@@ -129,7 +132,7 @@ class RotatingLog:
         return self.file.readlines(sizehint)
 
     def xreadlines(self):
-        return self.file.xreadlines()
+        return self.file
 
     def seek(self, offset, whence=0):
         return self.file.seek(offset, whence)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
@@ -8,6 +9,7 @@ import math
 from toontown.toonbase import ToontownGlobals
 from toontown.minigame import VineGameGlobals
 from toontown.minigame import VineSpider
+from six.moves import range
 
 class SwingVine(NodePath):
     notify = DirectNotifyGlobal.directNotify.newCategory('SwingVine')
@@ -104,7 +106,7 @@ class SwingVine(NodePath):
         self.links = []
         self.links.append((self.topLink, Point3(0, 0, 0)))
         anchor = self.topLink
-        for linkNum in xrange(self.numLinks):
+        for linkNum in range(self.numLinks):
             anchor = self.__makeLink(anchor, linkNum)
 
         self.bottomLink = self.links[-1][0]
@@ -153,7 +155,7 @@ class SwingVine(NodePath):
         self.tubes = []
         self.tubes2 = []
         radius = 0.5
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             az = self.tubeLength / 2.0
             bz = -self.tubeLength / 2.0
             ct = CollisionTube(0, 0, az, 0, 0, bz, radius)
@@ -187,16 +189,16 @@ class SwingVine(NodePath):
 
     def makeSpline(self):
         rope = Rope.Rope()
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
 
         rope.setup(min(len(self.links), 4), self.links)
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
 
         rope.curve.normalizeKnots()
         self.notify.debug('after normalize Knots')
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
 
         rn = rope.ropeNode
@@ -396,7 +398,7 @@ class SwingVine(NodePath):
     def updateTubes(self):
         newPoint = Vec3(0, 0, 0)
         curve = self.rope.ropeNode.getCurve().evaluate()
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             tube = self.tubes[tubeIndex]
             t = self.getCenterTForTube(tubeIndex)
             curve.evalPoint(t, newPoint)
@@ -409,7 +411,7 @@ class SwingVine(NodePath):
             rAngle = -90 - degrees
             tube.setR(rAngle)
 
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             tube = self.tubes2[tubeIndex]
             t = self.getCenterTForTube(tubeIndex)
             curve.evalPoint(t, newPoint)

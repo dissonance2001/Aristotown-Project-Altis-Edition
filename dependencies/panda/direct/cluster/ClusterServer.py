@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from .ClusterMsgs import *
 from direct.distributed.MsgTypes import *

@@ -1,5 +1,7 @@
 """ DIRECT Session Main panel """
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['DirectSessionPanel']
 
 # Import Tkinter, Pmw, and the dial code

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import json
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.DirectObject import DirectObject

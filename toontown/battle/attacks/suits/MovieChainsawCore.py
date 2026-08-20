@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from panda3d.core import Point3, VBase3, Vec4
 
@@ -7,6 +8,7 @@ from toontown.battle import SuitBattleGlobals
 from toontown.battle.BattleProps import globalPropPool
 from toontown.effects import DustCloud
 from toontown.cutscene.ChainsawBattleCutscenes import makeChainsawBattleCutscene
+from six.moves import range
 
 
 def _damage(toon, dmg, died=0):
@@ -393,7 +395,7 @@ def _parseScabbardStates(attack):
         return []
     values = suffix.split('_')
     result = []
-    for offset in xrange(0, len(values) - 3, 4):
+    for offset in range(0, len(values) - 3, 4):
         try:
             index = int(values[offset])
             finalHP = int(values[offset + 1])

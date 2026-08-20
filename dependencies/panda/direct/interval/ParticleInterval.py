@@ -2,6 +2,7 @@
 Contains the ParticleInterval class
 """
 
+from __future__ import absolute_import
 __all__ = ['ParticleInterval']
 
 from panda3d.core import *

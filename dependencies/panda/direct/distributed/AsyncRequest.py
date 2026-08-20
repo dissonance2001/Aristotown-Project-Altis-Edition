@@ -1,4 +1,6 @@
 #from otp.ai.AIBaseGlobal import *
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
 from .ConnectionRepository import *
@@ -251,9 +253,9 @@ class AsyncRequest(DirectObject):
             if __debug__:
                 if _breakOnTimeout:
                     if hasattr(self, "avatarId"):
-                        print("\n\nself.avatarId =", self.avatarId)
-                    print("\nself.neededObjects =", self.neededObjects)
-                    print("\ntimed out after %s seconds.\n\n"%(task.delayTime,))
+                        print(("\n\nself.avatarId =", self.avatarId))
+                    print(("\nself.neededObjects =", self.neededObjects))
+                    print(("\ntimed out after %s seconds.\n\n"%(task.delayTime,)))
                     import pdb; pdb.set_trace()
             self.delete()
             return Task.done

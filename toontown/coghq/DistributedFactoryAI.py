@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from otp.level import DistributedLevelAI
 from direct.directnotify import DirectNotifyGlobal
-import cPickle
+import six.moves.cPickle
 from toontown.coghq import LevelSuitPlannerAI
 from toontown.coghq import FactoryBase
 from direct.task import Task

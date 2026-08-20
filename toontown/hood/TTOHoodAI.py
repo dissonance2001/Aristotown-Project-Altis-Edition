@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.classicchars import DistributedMickeyAI
 from toontown.hood import HoodAI
 from toontown.safezone import ButterflyGlobals
@@ -8,6 +9,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DistributedTrickOrTreatTargetAI
 from toontown.ai import DistributedWinterCarolingTargetAI
+from six.moves import range
 
 class TTOHoodAI(HoodAI.HoodAI):
     
@@ -59,8 +61,8 @@ class TTOHoodAI(HoodAI.HoodAI):
 
     def createButterflies(self):
         ButterflyGlobals.generateIndexes(self.zoneId, ButterflyGlobals.TTC)
-        for i in xrange(0, ButterflyGlobals.NUM_BUTTERFLY_AREAS[ButterflyGlobals.TTC]):
-            for _ in xrange(0, ButterflyGlobals.NUM_BUTTERFLIES[ButterflyGlobals.TTC]):
+        for i in range(0, ButterflyGlobals.NUM_BUTTERFLY_AREAS[ButterflyGlobals.TTC]):
+            for _ in range(0, ButterflyGlobals.NUM_BUTTERFLIES[ButterflyGlobals.TTC]):
                 butterfly = DistributedButterflyAI(self.air, playground, i, self.zoneId)
                 butterfly.generateWithRequired(self.zoneId)
                 butterfly.start()

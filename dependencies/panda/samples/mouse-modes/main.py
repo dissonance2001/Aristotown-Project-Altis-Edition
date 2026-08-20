@@ -10,6 +10,8 @@ Demonstrate different mouse modes
 #
 # loadPrcFileData("", "load-display p3tinydisplay")
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import WindowProperties, TextNode
 from direct.task.TaskManagerGlobal import taskMgr
 from direct.gui.OnscreenText import OnscreenText
@@ -76,7 +78,7 @@ class App(ShowBase):
         self.mouseTask = taskMgr.add(self.mouseTask, "Mouse Task")
 
     def setMouseMode(self, mode):
-        print("Changing mode to %s" % mode)
+        print(("Changing mode to %s" % mode))
 
         self.mouseMode = mode
 
@@ -92,7 +94,7 @@ class App(ShowBase):
 
         actualMode = wp.getMouseMode()
         if self.mouseMode != actualMode:
-            print("ACTUAL MOUSE MODE: %s" % actualMode)
+            print(("ACTUAL MOUSE MODE: %s" % actualMode))
 
         self.mouseMode = actualMode
 

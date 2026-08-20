@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from toontown.building import DistributedBuildingMgrAI
 from toontown.dna.DNAParser import DNAStorage, DNAGroup, DNAVisGroup
@@ -13,6 +14,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.environment import DistributedDayTimeManagerAI
 from toontown.environment import DistributedRainManagerAI
+from six.moves import range
+from six.moves import zip
 
 class HoodAI:
     notify = directNotify.newCategory('HoodAI')
@@ -104,7 +107,7 @@ class HoodAI:
             fishingPonds.append(fishingPond)
         elif isinstance(dnaGroup, DNAVisGroup):
             zoneId = ZoneUtil.getTrueZoneId(int(dnaGroup.getName().split(':')[0]), zoneId)
-        for i in xrange(dnaGroup.getNumChildren()):
+        for i in range(dnaGroup.getNumChildren()):
             (foundFishingPonds, foundFishingPondGroups) = self.findFishingPonds(dnaGroup.at(i), zoneId, area)
             fishingPonds.extend(foundFishingPonds)
             fishingPondGroups.extend(foundFishingPondGroups)
@@ -121,7 +124,7 @@ class HoodAI:
             fishingSpot.generateWithRequired(fishingPond.zoneId)
 
             fishingSpots.append(fishingSpot)
-        for i in xrange(dnaGroup.getNumChildren()):
+        for i in range(dnaGroup.getNumChildren()):
             foundFishingSpots = self.findFishingSpots(dnaGroup.at(i), fishingPond)
             fishingSpots.extend(foundFishingSpots)
         return fishingSpots
@@ -153,7 +156,7 @@ class HoodAI:
             partyGate.generateWithRequired(zoneId)
 
             partyGates.append(partyGates)
-        for i in xrange(dnaGroup.getNumChildren()):
+        for i in range(dnaGroup.getNumChildren()):
             foundPartyGates = self.findPartyGates(dnaGroup.at(i), zoneId)
             partyGates.extend(foundPartyGates)
         return partyGates

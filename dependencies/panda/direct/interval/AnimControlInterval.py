@@ -1,5 +1,7 @@
 """AnimControlInterval module: contains the AnimControlInterval class"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['AnimControlInterval']
 
 from panda3d.core import *

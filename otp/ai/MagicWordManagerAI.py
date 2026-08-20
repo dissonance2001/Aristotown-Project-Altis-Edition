@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from otp.ai.MagicWordGlobal import *
@@ -50,7 +52,7 @@ class MagicWordManagerAI(DistributedObjectAI):
         if not os.path.exists('user/logs/mw'):
             os.makedirs('user/logs/mw')
 
-        print("%s | %s : %s\n" % (now, invokerId, word))
+        print(("%s | %s : %s\n" % (now, invokerId, word)))
 
         if os.getenv('DISTRICT_NAME', 'Test Canvas') == "Test Canvas":
             return
@@ -61,7 +63,7 @@ class MagicWordManagerAI(DistributedObjectAI):
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[str])
 def help(wordName=None):
-    print 'help called with %s' % (wordName)
+    print('help called with %s' % (wordName))
     if not wordName:
         return "What were you interested getting help for?"
     word = spellbook.words.get(wordName.lower())   # look it up by its lower case value

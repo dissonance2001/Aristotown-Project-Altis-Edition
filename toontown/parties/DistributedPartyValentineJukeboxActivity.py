@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.parties.DistributedPartyJukeboxActivityBase import DistributedPartyJukeboxActivityBase
 from toontown.parties import PartyGlobals
 

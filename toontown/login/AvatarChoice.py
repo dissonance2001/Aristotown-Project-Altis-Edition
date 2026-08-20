@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.gui.DirectGuiGlobals import NO_FADE_SORT_INDEX
 from toontown.toonbase import ToontownGlobals

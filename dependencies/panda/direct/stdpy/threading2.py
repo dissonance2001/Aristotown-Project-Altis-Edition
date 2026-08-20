@@ -13,12 +13,15 @@ to import Panda's thread reimplementation instead of the system thread
 module, and so it is therefore layered on top of Panda's thread
 implementation. """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys as _sys
 import atexit as _atexit
 
 from direct.stdpy import thread as _thread
 from direct.stdpy.thread import stack_size, _newname, _local as local
 from panda3d import core
+from six.moves import range
 _sleep = core.Thread.sleep
 
 from time import time as _time

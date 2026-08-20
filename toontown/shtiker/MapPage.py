@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.shtiker import ShtikerPage
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToonPythonUtil as PythonUtil
@@ -6,6 +7,7 @@ from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import TTLocalizer
+from six.moves import zip
 
 class MapPage(ShtikerPage.ShtikerPage):
 

@@ -10,6 +10,9 @@ current cell using geoms and a collision ray.
 """
 
 # Some config options which can be changed.
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 ENABLE_PORTALS = True # Set False to disable portal culling and see FPS drop!
 DEBUG_PORTALS = False # Set True to see visually which portals are used
 
@@ -251,14 +254,14 @@ class CellManager(object):
                 try:
                     from_cell = self.cells[from_cell_id]
                 except KeyError:
-                    print ('could not load portal "%s" because cell "%s"'
-                           'does not exist' % (name, from_cell_id))
+                    print(('could not load portal "%s" because cell "%s"'
+                           'does not exist' % (name, from_cell_id)))
                     continue
                 try:
                     into_cell = self.cells[into_cell_id]
                 except KeyError:
-                    print ('could not load portal "%s" because cell "%s"'
-                           'does not exist' % (name, into_cell_id))
+                    print(('could not load portal "%s" because cell "%s"'
+                           'does not exist' % (name, into_cell_id)))
                     continue
                 from_cell.add_portal(portal_nodepath, into_cell)
         portal_model.removeNode()

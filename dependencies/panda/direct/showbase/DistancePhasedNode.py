@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from panda3d.core import *
 from .PhasedObject import PhasedObject
+from six.moves import zip
 
 
 class DistancePhasedNode(PhasedObject, DirectObject, NodePath):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from toontown.pgui.DirectGui import *
@@ -85,8 +86,8 @@ class FishPanel(DirectFrame):
 
     def show(self, code = FishGlobals.FishItem):
         messenger.send('wakeup')
-        apply(self.photo.setSwimBounds, self.swimBounds)
-        apply(self.photo.setSwimColor, self.swimColor)
+        self.photo.setSwimBounds(*self.swimBounds)
+        self.photo.setSwimColor(*self.swimColor)
         if code == FishGlobals.FishItem:
             self.extraLabel.hide()
         elif code == FishGlobals.FishItemNewEntry:

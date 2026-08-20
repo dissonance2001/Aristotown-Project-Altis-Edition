@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import Pmw
 
 class AboutDialog(Pmw.MessageDialog):
@@ -25,10 +26,10 @@ class AboutDialog(Pmw.MessageDialog):
 	Pmw.MessageDialog.__init__(self, parent)
 
 	applicationname = self['applicationname']
-        if not kw.has_key('title'):
+        if 'title' not in kw:
             self.configure(title = 'About ' + applicationname)
 
-        if not kw.has_key('message_text'):
+        if 'message_text' not in kw:
             text = applicationname + '\n\n'
             if AboutDialog._version != '':
               text = text + 'Version ' + AboutDialog._version + '\n'

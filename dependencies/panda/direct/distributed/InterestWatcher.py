@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.EventGroup import EventGroup

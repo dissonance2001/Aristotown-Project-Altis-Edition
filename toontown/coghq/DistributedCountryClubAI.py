@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObjectAI
 from otp.level import DistributedLevelAI
@@ -5,6 +6,7 @@ from toontown.building import DistributedClubElevatorAI
 from toontown.coghq import BattleExperienceAggregatorAI
 from toontown.coghq import CountryClubLayout, DistributedCountryClubRoomAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedCountryClubAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCountryClubAI')
@@ -20,7 +22,7 @@ class DistributedCountryClubAI(DistributedObjectAI.DistributedObjectAI):
         self.elevatorList = []
         self.battleExpAggreg = battleExpAggreg
         self.layout = CountryClubLayout.CountryClubLayout(self.countryClubId, self.floorNum, self.layoutIndex)
-        for i in xrange(self.layout.getNumRooms()):
+        for i in range(self.layout.getNumRooms()):
             if i:
                 self.blockedRooms.append(i)
 
@@ -30,7 +32,7 @@ class DistributedCountryClubAI(DistributedObjectAI.DistributedObjectAI):
         self.rooms = []
         if self.battleExpAggreg is None:
             self.battleExpAggreg = BattleExperienceAggregatorAI.BattleExperienceAggregatorAI()
-        for i in xrange(self.layout.getNumRooms()):
+        for i in range(self.layout.getNumRooms()):
             room = DistributedCountryClubRoomAI.DistributedCountryClubRoomAI(self.air, self.countryClubId, self.doId, self.zoneId, self.layout.getRoomId(i), i * 2, self.avIds, self.battleExpAggreg)
             room.generateWithRequired(self.zoneId)
             self.rooms.append(room)

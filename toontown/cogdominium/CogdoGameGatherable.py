@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import CollisionSphere, CollisionNode
 from pandac.PandaModules import NodePath, BitMask32
 from direct.showbase.DirectObject import DirectObject

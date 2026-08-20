@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import re
 import time
@@ -159,7 +160,7 @@ class OTPBase(ShowBase):
         while self.pixelZoomCamMovedList and self.pixelZoomCamMovedList[0][0] < now - self.pixelZoomCamHistory:
             del self.pixelZoomCamMovedList[0]
 
-        dist = sum(map(lambda pair: pair[1], self.pixelZoomCamMovedList))
+        dist = sum([pair[1] for pair in self.pixelZoomCamMovedList])
         speed = dist / self.pixelZoomCamHistory
         if speed < 5:
             self.backgroundDrawable.setPixelZoom(4)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase import RandomNumGen
 
 def getMazeName(gameDoId, numPlayers, mazeNames):

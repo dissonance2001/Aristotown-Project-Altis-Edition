@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import State
 from toontown.suit import Suit
 from toontown.town import DLStreet

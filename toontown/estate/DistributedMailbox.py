@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed import DistributedObject
 from toontown.toonbase import ToontownGlobals
 from toontown.estate import MailboxGlobals
@@ -220,7 +222,7 @@ class DistributedMailbox(DistributedObject.DistributedObject):
     def acceptItemResponse(self, context, retcode):
         DistributedMailbox.notify.debug('acceptItemResponse')
         if retcode == ToontownGlobals.P_UserCancelled:
-            print 'DistributedMailbox User Canceled'
+            print('DistributedMailbox User Canceled')
         self.doCallbackContext(context, [retcode])
 
     def discardItem(self, item, index, callback, optional = -1):

@@ -1,6 +1,7 @@
 """
 A module containing various helper methods for cutscene sequence types.
 """
+from __future__ import absolute_import
 from panda3d.core import Point3, NodePath
 
 

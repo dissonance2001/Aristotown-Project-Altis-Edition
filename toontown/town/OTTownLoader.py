@@ -1,5 +1,6 @@
-import TownLoader
-import OTStreet
+from __future__ import absolute_import
+from . import TownLoader
+from . import OTStreet
 from toontown.suit import Suit
 from toontown.battle import BattleParticles
 

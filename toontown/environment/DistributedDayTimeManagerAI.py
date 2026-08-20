@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -10,8 +11,8 @@ from toontown.toonbase import TTLocalizer
 import random
 import time
 from direct.showbase import PythonUtil
-import DayTimeGlobals
-from DistributedWeatherMGRAI import DistributedWeatherMGRAI
+from . import DayTimeGlobals
+from .DistributedWeatherMGRAI import DistributedWeatherMGRAI
 
 class DistributedDayTimeManagerAI(DistributedWeatherMGRAI):
     notify = directNotify.newCategory('DistributedDayTimeManagerAI')

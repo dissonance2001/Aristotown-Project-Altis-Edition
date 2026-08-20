@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.otpbase.OTPTimer import OTPTimer
 from pandac.PandaModules import *
 

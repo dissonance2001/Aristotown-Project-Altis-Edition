@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.estate.DistributedClosetAI import DistributedClosetAI
 from toontown.toon.ToonDNA import ToonDNA, HAT, GLASSES, BACKPACK, SHOES
 from direct.distributed.ClockDelta import globalClockDelta

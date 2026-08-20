@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.task.Task import Task
 from direct.directnotify import DirectNotifyGlobal

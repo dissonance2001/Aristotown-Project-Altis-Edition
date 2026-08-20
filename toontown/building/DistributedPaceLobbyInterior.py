@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import random
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
@@ -46,8 +48,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
             return
         pos = base.localAvatar.getPos(render)
         hpr = base.localAvatar.getHpr(render)
-        print('[Pace Lobby Position] (%.3f, %.3f, %.3f, %.3f)' %
-              (pos.getX(), pos.getY(), pos.getZ(), hpr.getX()))
+        print(('[Pace Lobby Position] (%.3f, %.3f, %.3f, %.3f)' %
+              (pos.getX(), pos.getY(), pos.getZ(), hpr.getX())))
 
     def doMusic(self, task):
         base.musicManager.stopAllSounds()

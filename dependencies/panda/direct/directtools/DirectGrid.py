@@ -1,8 +1,10 @@
 
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.showbase.DirectObject import DirectObject
 from .DirectUtil import *
 from .DirectGeometry import *
+from six.moves import range
 
 class DirectGrid(NodePath, DirectObject):
     def __init__(self,gridSize=100.0,gridSpacing=5.0,planeColor=(0.5,0.5,0.5,0.5),parent = None):

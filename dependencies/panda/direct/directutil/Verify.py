@@ -45,6 +45,8 @@ Please use assert (properly) and do proper error handling; and use
 where it helps you resist using assert for error handling.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import ConfigVariableBool
 
 # Set to true to load pdb on failure.
@@ -59,9 +61,9 @@ def verify(assertion):
     if not assertion:
         print("\n\nverify failed:")
         import sys
-        print("    File \"%s\", line %d" % (
+        print(("    File \"%s\", line %d" % (
                 sys._getframe(1).f_code.co_filename,
-                sys._getframe(1).f_lineno))
+                sys._getframe(1).f_lineno)))
         if wantVerifyPdb:
             import pdb
             pdb.set_trace()

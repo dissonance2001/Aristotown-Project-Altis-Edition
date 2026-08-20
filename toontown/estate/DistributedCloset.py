@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
@@ -359,15 +361,15 @@ class DistributedCloset(DistributedFurnitureItem.DistributedFurnitureItem):
         return
 
     def printInfo(self):
-        print 'avid: %s, gender: %s' % (self.av.doId, self.av.style.gender)
-        print 'current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
+        print('avid: %s, gender: %s' % (self.av.doId, self.av.style.gender))
+        print('current top = %s,%s,%s,%s and  bot = %s,%s,' % (self.av.style.topTex,
          self.av.style.topTexColor,
          self.av.style.sleeveTex,
          self.av.style.sleeveTexColor,
          self.av.style.botTex,
-         self.av.style.botTexColor)
-        print 'topsList = %s' % self.av.getClothesTopsList()
-        print 'bottomsList = %s' % self.av.getClothesBottomsList()
+         self.av.style.botTexColor))
+        print('topsList = %s' % self.av.getClothesTopsList())
+        print('bottomsList = %s' % self.av.getClothesBottomsList())
 
     def setMovie(self, mode, avId, timestamp):
         self.isLocalToon = avId == base.localAvatar.doId

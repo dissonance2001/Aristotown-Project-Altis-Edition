@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *

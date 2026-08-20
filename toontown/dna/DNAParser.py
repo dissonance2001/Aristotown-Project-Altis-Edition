@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.stdpy import threading
 from toontown.dna import DNALoader
 from toontown.dna.DNAStorage import *
@@ -27,7 +29,7 @@ class DNABulkLoader:
 
     def loadDNAFiles(self):
         for file in self.dnaFiles:
-            print 'Reading DNA file...', file
+            print('Reading DNA file...', file)
             loadDNABulk(self.dnaStorage, file)
         
         del self.dnaStorage
@@ -39,7 +41,7 @@ def loadDNABulk(dnaStorage, file):
     dnaLoader.destroy()
 
 def loadDNAFile(dnaStorage, file):
-    print 'Reading DNA file...', file
+    print('Reading DNA file...', file)
     dnaLoader = DNALoader.DNALoader()
     node = dnaLoader.loadDNAFile(dnaStorage, file)
     dnaLoader.destroy()

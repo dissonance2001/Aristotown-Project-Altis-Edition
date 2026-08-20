@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.classicchars import DistributedCCharBase
-import DistributedDonald
+from . import DistributedDonald
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State

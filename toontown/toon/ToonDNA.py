@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
@@ -5,6 +6,7 @@ from panda3d.core import *
 from panda3d.direct import *
 import ast, colorsys, hashlib, json, os, random
 from otp.avatar import AvatarDNA
+import six
 
 notify = directNotify.newCategory('ToonDNA')
 mergeMATTailor = config.GetBool('want-mat-all-tailors', 0)
@@ -798,16 +800,16 @@ def _getKnownClothingPaths():
         'skirt': set(),
     }
     for assetPath in Shirts:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, six.string_types):
             knownPaths['shirt'].add(_normalizeClothingAssetPath(assetPath))
     for assetPath in Sleeves:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, six.string_types):
             knownPaths['sleeves'].add(_normalizeClothingAssetPath(assetPath))
     for assetPath in BoyShorts:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, six.string_types):
             knownPaths['shorts'].add(_normalizeClothingAssetPath(assetPath))
     for bottomData in GirlBottoms:
-        if isinstance(bottomData, tuple) and bottomData and isinstance(bottomData[0], basestring):
+        if isinstance(bottomData, tuple) and bottomData and isinstance(bottomData[0], six.string_types):
             if len(bottomData) > 1 and bottomData[1] == SKIRT:
                 pieceName = 'skirt'
             else:
@@ -1044,19 +1046,19 @@ def loadCustomClothing():
             continue
         shirtPath = outfitData.get('shirt')
         shirtId = outfitData.get('shirt_id')
-        if isinstance(shirtPath, basestring) and isinstance(shirtId, int):
+        if isinstance(shirtPath, six.string_types) and isinstance(shirtId, int):
             _setListItemAtId(Shirts, shirtId, shirtPath, defaultShirt)
         sleevesPath = outfitData.get('sleeves')
         sleevesId = outfitData.get('sleeves_id')
-        if isinstance(sleevesPath, basestring) and isinstance(sleevesId, int):
+        if isinstance(sleevesPath, six.string_types) and isinstance(sleevesId, int):
             _setListItemAtId(Sleeves, sleevesId, sleevesPath, defaultSleeves)
         shortsPath = outfitData.get('shorts')
         shortsId = outfitData.get('shorts_id')
-        if isinstance(shortsPath, basestring) and isinstance(shortsId, int):
+        if isinstance(shortsPath, six.string_types) and isinstance(shortsId, int):
             _setListItemAtId(BoyShorts, shortsId, shortsPath, defaultShorts)
         skirtPath = outfitData.get('skirt')
         skirtId = outfitData.get('skirt_id')
-        if isinstance(skirtPath, basestring) and isinstance(skirtId, int):
+        if isinstance(skirtPath, six.string_types) and isinstance(skirtId, int):
             _setListItemAtId(GirlBottoms, skirtId, (skirtPath, SKIRT), defaultGirlBottom)
     if registryChanged or not os.path.isfile(registryPath):
         _saveClothingRegistry(registryPath, registry)
@@ -2219,10 +2221,10 @@ def getRandomBottom(gender, tailorId = MAKE_A_TOON, generator = None, girlBottom
     elif girlBottomType is None:
         style = generator.choice(collection[GIRL_BOTTOMS])
     elif girlBottomType == SKIRT:
-        skirtCollection = filter(lambda style: GirlBottoms[BottomStyles[style][0]][1] == SKIRT, collection[GIRL_BOTTOMS])
+        skirtCollection = [style for style in collection[GIRL_BOTTOMS] if GirlBottoms[BottomStyles[style][0]][1] == SKIRT]
         style = generator.choice(skirtCollection)
     elif girlBottomType == SHORTS:
-        shortsCollection = filter(lambda style: GirlBottoms[BottomStyles[style][0]][1] == SHORTS, collection[GIRL_BOTTOMS])
+        shortsCollection = [style for style in collection[GIRL_BOTTOMS] if GirlBottoms[BottomStyles[style][0]][1] == SHORTS]
         style = generator.choice(shortsCollection)
     else:
         notify.error('Bad girlBottomType: %s' % girlBottomType)
@@ -4003,7 +4005,7 @@ def _appendManualAccessoryTexture(textureList, texturePath):
     normalizedPath = texturePath.replace('\\', '/').lower()
 
     for textureId, existingPath in enumerate(textureList):
-        if (isinstance(existingPath, basestring) and
+        if (isinstance(existingPath, six.string_types) and
                 existingPath.replace('\\', '/').lower() == normalizedPath):
             return textureId
 
@@ -4358,7 +4360,7 @@ def _getRegistryCandidateIds(oldAccessories, group, minimumId):
             matches = accessoryData.get('fingerprint') == group['fingerprint']
         if not matches:
             oldName = accessoryData.get('name')
-            if isinstance(oldName, basestring):
+            if isinstance(oldName, six.string_types):
                 matches = oldName.lower() in groupNames
         if not matches:
             oldBaseName = os.path.splitext(os.path.basename(registryKey))[0].lower()
@@ -4388,7 +4390,7 @@ def _getPreservedAccessoryDisplayName(oldAccessories, group):
 
         if matches:
             displayName = accessoryData.get('display_name')
-            if isinstance(displayName, basestring) and displayName.strip():
+            if isinstance(displayName, six.string_types) and displayName.strip():
                 return displayName.strip()
 
     return None

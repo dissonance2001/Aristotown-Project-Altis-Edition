@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.distributed.ToontownMsgTypes import *
@@ -19,6 +20,7 @@ from toontown.hood import QuietZoneState
 from toontown.dna.DNAParser import *
 from direct.stdpy.file import *
 from toontown.town import TownBattle
+from six.moves import range
 
 class SafeZoneLoader(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('SafeZoneLoader')
@@ -93,7 +95,7 @@ class SafeZoneLoader(StateData.StateData):
         self.createKudosBoard()
         self.holidayPropTransforms = {}
         npl = self.geom.findAllMatches('**/=DNARoot=holiday_prop')
-        for i in xrange(npl.getNumPaths()):
+        for i in range(npl.getNumPaths()):
             np = npl.getPath(i)
             np.setTag('transformIndex', repr(i))
             self.holidayPropTransforms[i] = np.getNetTransform()
@@ -128,7 +130,7 @@ class SafeZoneLoader(StateData.StateData):
             if boardNodes.getNumPaths() == 0:
                 self.notify.warning('Could not find Kudo Board texture node: board')
             else:
-                for i in xrange(boardNodes.getNumPaths()):
+                for i in range(boardNodes.getNumPaths()):
                     boardNodes.getPath(i).setTexture(texture, 1)
         else:
             self.notify.warning('Could not load Kudo Board texture: %s' % placement[2])
@@ -197,7 +199,7 @@ class SafeZoneLoader(StateData.StateData):
 
     def makeDictionaries(self, dnaStore):
         self.nodeList = []
-        for i in xrange(dnaStore.getNumDNAVisGroups()):
+        for i in range(dnaStore.getNumDNAVisGroups()):
             groupFullName = dnaStore.getDNAVisGroupName(i)
             groupName = base.cr.hoodMgr.extractGroupName(groupFullName)
             groupNode = self.geom.find('**/' + groupFullName)
@@ -214,7 +216,7 @@ class SafeZoneLoader(StateData.StateData):
 
     def removeLandmarkBlockNodes(self):
         npc = self.geom.findAllMatches('**/suit_building_origin')
-        for i in xrange(npc.getNumPaths()):
+        for i in range(npc.getNumPaths()):
             npc.getPath(i).removeNode()
 
     def enterStart(self):
@@ -305,7 +307,7 @@ class SafeZoneLoader(StateData.StateData):
         for i in nodeList:
             animPropNodes = i.findAllMatches('**/animated_prop_*')
             numAnimPropNodes = animPropNodes.getNumPaths()
-            for j in xrange(numAnimPropNodes):
+            for j in range(numAnimPropNodes):
                 animPropNode = animPropNodes.getPath(j)
                 if animPropNode.getName().startswith('animated_prop_generic'):
                     className = 'GenericAnimatedProp'
@@ -320,7 +322,7 @@ class SafeZoneLoader(StateData.StateData):
 
             interactivePropNodes = i.findAllMatches('**/interactive_prop_*')
             numInteractivePropNodes = interactivePropNodes.getNumPaths()
-            for j in xrange(numInteractivePropNodes):
+            for j in range(numInteractivePropNodes):
                 interactivePropNode = interactivePropNodes.getPath(j)
                 className = 'GenericAnimatedProp'
                 symbols = {}

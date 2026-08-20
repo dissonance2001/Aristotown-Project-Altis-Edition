@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.parties import PartyGlobals
 from toontown.parties.DistributedPartyDanceActivityBase import DistributedPartyDanceActivityBase
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class DistributedPartyValentineDanceActivity(DistributedPartyDanceActivityBase):
     notify = directNotify.newCategory('DistributedPartyValentineDanceActivity')
@@ -21,7 +23,7 @@ class DistributedPartyValentineDanceActivity(DistributedPartyDanceActivityBase):
         origBall = self.danceFloor.find('**/discoBall_mesh_orig')
         if not correctBall.isEmpty():
             numChildren = parentGroup.getNumChildren()
-            for i in xrange(numChildren):
+            for i in range(numChildren):
                 child = parentGroup.getChild(i)
                 if child != correctBall:
                     child.hide()

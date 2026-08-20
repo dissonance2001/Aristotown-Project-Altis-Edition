@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import VBase4
 
 CCNormal = 0

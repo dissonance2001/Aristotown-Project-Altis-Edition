@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedCFOElevatorAI
 from toontown.building import DistributedCBMElevatorAI
 from toontown.building import FADoorCodes
@@ -8,6 +9,7 @@ from toontown.suit import DistributedCashbotBossAI
 from toontown.suit import DistributedCashbotBossMiniAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class CashbotHQAI(CogHQAI.CogHQAI):
     
@@ -44,7 +46,7 @@ class CashbotHQAI(CogHQAI.CogHQAI):
             ToontownGlobals.CashbotMintIntC
         )
         mins = ToontownGlobals.FactoryLaffMinimums[1]
-        for i in xrange(len(destZones)):
+        for i in range(len(destZones)):
             mintElevator = DistributedMintElevatorExtAI(
                 self.air, self.air.mintMgr, destZones[i],
                 antiShuffle=0, minLaff=mins[i])

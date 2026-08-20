@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import DistributedBattleAI
 from toontown.battle import DistributedBattleBaseAI
 from direct.directnotify import DirectNotifyGlobal

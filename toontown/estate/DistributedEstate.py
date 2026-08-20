@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -15,7 +16,7 @@ from direct.showbase import RandomNumGen
 from direct.task.Task import Task
 from toontown.toonbase import TTLocalizer
 import random
-import cPickle
+import six.moves.cPickle
 import time
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.hood import Place
@@ -182,7 +183,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
 
     def setHouseInfo(self, houseInfo):
         self.notify.debug('setHouseInfo')
-        houseType, housePos = cPickle.loads(houseInfo)
+        houseType, housePos = six.moves.cPickle.loads(houseInfo)
         self.loadEstate(houseType, housePos)
 
     def loadEstate(self, indexList, posList):

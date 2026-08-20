@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.pets import PetDNA, PetTraits, PetConstants
 from toontown.pets import PetNameGenerator
 from toontown.toonbase import ToonPythonUtil as PythonUtil

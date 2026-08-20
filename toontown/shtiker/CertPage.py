@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
-import ShtikerPage
-import ShtikerBook
+from . import ShtikerPage
+from . import ShtikerBook
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 from panda3d.core import *

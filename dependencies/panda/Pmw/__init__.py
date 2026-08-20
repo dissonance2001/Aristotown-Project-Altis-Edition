@@ -8,9 +8,11 @@
 # This is the only file in Pmw which is not part of a particular Pmw
 # release.
 
+from __future__ import absolute_import
 import sys
 import os
 import re
+from six.moves import filter
 
 def _hasLoader(dir):
     if dir.startswith('Pmw_2_') and sys.version_info < (3, 0):

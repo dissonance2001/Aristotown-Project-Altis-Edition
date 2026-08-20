@@ -3,6 +3,8 @@ This module defines the various "meta intervals", which execute other
 intervals either in parallel or in a specified sequential order.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['MetaInterval', 'Sequence', 'Parallel', 'ParallelEndTogether', 'Track']
 
 from panda3d.core import *
@@ -498,9 +500,9 @@ class MetaInterval(CMetaInterval):
                 ival = None
         except:
             if ival != None:
-                print("Exception occurred while processing %s of %s:" % (ival.getName(), self.getName()))
+                print(("Exception occurred while processing %s of %s:" % (ival.getName(), self.getName())))
             else:
-                print("Exception occurred while processing %s:" % (self.getName()))
+                print(("Exception occurred while processing %s:" % (self.getName())))
             print(self)
             raise
 

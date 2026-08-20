@@ -9,6 +9,7 @@
 # and having it walk around on uneven terrain, as well
 # as implementing a fully rotatable camera.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay

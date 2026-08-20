@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
 from panda3d.core import *
 import sys
 import os
@@ -10,6 +11,7 @@ from direct.gui.DirectGui import OnscreenText
 from direct.showbase.DirectObject import DirectObject
 from direct.actor import Actor
 from random import *
+from six.moves import range
 
 # Function to put instructions on the screen.
 def addInstructions(pos, msg):

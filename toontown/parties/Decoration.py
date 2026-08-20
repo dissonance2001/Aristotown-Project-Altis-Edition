@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.actor import Actor
@@ -5,6 +6,7 @@ from toontown.toonbase import ToontownGlobals
 import random
 from toontown.parties import PartyGlobals
 from toontown.parties.PartyUtils import getCenterPosFromGridSize
+from six.moves import range
 
 class Decoration(NodePath):
     notify = directNotify.newCategory('Decoration')
@@ -211,7 +213,7 @@ class Decoration(NodePath):
             self.decorationModels = loader.loadModel('phase_4/models/parties/partyDecorations')
             self.decorationModels.copyTo(self)
             decors = self.findAllMatches('**/partyDecoration_*')
-            for i in xrange(decors.getNumPaths()):
+            for i in range(decors.getNumPaths()):
                 decPiece = decors.getPath(i)
                 n = decPiece.getName()
                 if n.endswith('shadow') or n.endswith('base') or n.endswith('collision') or n.endswith(name):

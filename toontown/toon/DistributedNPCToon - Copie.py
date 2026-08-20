@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 from toontown.toon.DistributedNPCToonBase import *
@@ -13,6 +14,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TeaserPanel
 from toontown.toon import ToonHead
 from toontown.toon import ToonHallCustomNPCs
+from six.moves import range
 
 ChoiceTimeout = 20
 AVAILABLE_QUEST = 0
@@ -276,7 +278,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                     caps.getPath(index).setColor(darkBottomColor)
 
             return applied
-        except Exception, error:
+        except Exception as error:
             self.notify.warning(
                 'Could not apply extended custom NPC clothing for %s: %s' %
                 (data.get('name', 'unknown NPC'), error)
@@ -357,7 +359,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                     sleeves.setTexture(sleeveTex, 1)
                     sleeves.setColor(color)
                 bottoms = torso.findAllMatches('**/torso-bot')
-                for index in xrange(bottoms.getNumPaths()):
+                for index in range(bottoms.getNumPaths()):
                     bottom = bottoms.getPath(index)
                     bottom.setTexture(bottomTex, 1)
                     bottom.setColor(color)

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from panda3d.direct import *
 from panda3d.core import *
@@ -17,6 +19,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.distributed import DelayDelete
 from toontown.distributed.DelayDeletable import DelayDeletable
 import random
+from six.moves import range
+from six.moves import zip
 if __dev__:
     import pdb
 BeanColors = (VBase4(1.0, 0.2, 0.2, 1.0),
@@ -115,7 +119,7 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode, Pet.Pet, PetBa
         self.safeZone = safeZone
 
     def __generateDistTraitFuncs(self):
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             setterName = self.getSetterName(traitName)
 
@@ -473,15 +477,15 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode, Pet.Pet, PetBa
             try:
                 self.movieTrack = Sequence(Func(self._petMovieStart, av), Parallel(av.getCallPetIval(), Sequence(Wait(0.54), SoundInterval(self.callSfx))), self._getPetMovieCompleteIval(av))
                 self.movieTrack.start()
-            except StandardError, error:
-                print str(error)
+            except Exception as error:
+                print(str(error))
 
         if mode == PetConstants.PET_MOVIE_SCRATCH:
             try:
                 self.movieTrack = Sequence(Func(self._petMovieStart, av), Func(self.holdPetDownForMovie), Parallel(self.getInteractIval(self.Interactions.SCRATCH), av.getScratchPetIval(), SoundInterval(self.petSfx)), Func(self.releasePetFromHoldDown), self._getPetMovieCompleteIval(av))
                 self.movieTrack.start()
-            except StandardError, error:
-                print str(error)
+            except Exception as error:
+                print(str(error))
 
         if mode == PetConstants.PET_MOVIE_FEED:
             self.bean = loader.loadModel('phase_4/models/props/jellybean4')

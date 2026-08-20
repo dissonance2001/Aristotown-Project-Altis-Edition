@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/scrolledtext.itk code.   
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Pmw
 
 class ScrolledText(Pmw.MegaWidget):
@@ -39,7 +40,7 @@ class ScrolledText(Pmw.MegaWidget):
 	    # text widget.
 	    self._borderframe = self.createcomponent('borderframe',
 		    (), None,
-		    Tkinter.Frame, (interior,),
+		    six.moves.tkinter.Frame, (interior,),
 		    relief = 'sunken',
 		    borderwidth = 2,
 	    )
@@ -48,7 +49,7 @@ class ScrolledText(Pmw.MegaWidget):
 	    # Create the text widget.
 	    self._textbox = self.createcomponent('text',
 		    (), None,
-		    Tkinter.Text, (self._borderframe,),
+		    six.moves.tkinter.Text, (self._borderframe,),
 		    highlightthickness = 0,
 		    borderwidth = 0,
 	    )
@@ -60,7 +61,7 @@ class ScrolledText(Pmw.MegaWidget):
 	    # Create the text widget.
 	    self._textbox = self.createcomponent('text',
 		    (), None,
-		    Tkinter.Text, (interior,),
+		    six.moves.tkinter.Text, (interior,),
 	    )
 	    self._textbox.grid(row = 4, column = 4, sticky = 'news')
 
@@ -71,7 +72,7 @@ class ScrolledText(Pmw.MegaWidget):
         if self['columnheader']:
             self._columnheader = self.createcomponent('columnheader',
                     (), 'Header',
-                    Tkinter.Text, (interior,),
+                    six.moves.tkinter.Text, (interior,),
                     height=1,
                     wrap='none',
                     borderwidth = bw,
@@ -84,7 +85,7 @@ class ScrolledText(Pmw.MegaWidget):
         if self['rowheader']:
             self._rowheader = self.createcomponent('rowheader',
                     (), 'Header',
-                    Tkinter.Text, (interior,),
+                    six.moves.tkinter.Text, (interior,),
                     wrap='none',
                     borderwidth = bw,
                     highlightthickness = ht,
@@ -96,7 +97,7 @@ class ScrolledText(Pmw.MegaWidget):
         if self['rowcolumnheader']:
             self._rowcolumnheader = self.createcomponent('rowcolumnheader',
                     (), 'Header',
-                    Tkinter.Text, (interior,),
+                    six.moves.tkinter.Text, (interior,),
                     height=1,
                     wrap='none',
                     borderwidth = bw,
@@ -110,7 +111,7 @@ class ScrolledText(Pmw.MegaWidget):
 	# Create the horizontal scrollbar
 	self._horizScrollbar = self.createcomponent('horizscrollbar',
 		(), 'Scrollbar',
-		Tkinter.Scrollbar, (interior,),
+		six.moves.tkinter.Scrollbar, (interior,),
 	        orient='horizontal',
 		command=self._textbox.xview
 	)
@@ -118,7 +119,7 @@ class ScrolledText(Pmw.MegaWidget):
 	# Create the vertical scrollbar
 	self._vertScrollbar = self.createcomponent('vertscrollbar',
 		(), 'Scrollbar',
-		Tkinter.Scrollbar, (interior,),
+		six.moves.tkinter.Scrollbar, (interior,),
 		orient='vertical',
 		command=self._textbox.yview
 	)
@@ -224,7 +225,7 @@ class ScrolledText(Pmw.MegaWidget):
 		self._toggleHorizScrollbar()
 	else:
 	    message = 'bad hscrollmode option "%s": should be static, dynamic, or none' % mode
-	    raise ValueError, message
+	    raise ValueError(message)
 
         self._configureScrollCommands()
 
@@ -244,7 +245,7 @@ class ScrolledText(Pmw.MegaWidget):
 		self._toggleVertScrollbar()
 	else:
 	    message = 'bad vscrollmode option "%s": should be static, dynamic, or none' % mode
-	    raise ValueError, message
+	    raise ValueError(message)
 
         self._configureScrollCommands()
 
@@ -440,4 +441,4 @@ class ScrolledText(Pmw.MegaWidget):
     def bbox(self, index):
 	return self._textbox.bbox(index)
 
-Pmw.forwardmethods(ScrolledText, Tkinter.Text, '_textbox')
+Pmw.forwardmethods(ScrolledText, six.moves.tkinter.Text, '_textbox')

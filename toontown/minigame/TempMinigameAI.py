@@ -1,10 +1,13 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 ALLOW_TEMP_MINIGAMES = simbase.config.GetBool('allow-temp-minigames', False)
 TEMP_MG_ID_COUNTER = ToontownGlobals.TravelGameId - 1
 TempMgCtors = {}
 
 def _printMessage(message):
-    print '\n\n!!!', message, '\n\n'
+    print('\n\n!!!', message, '\n\n')
 
 
 def _registerTempMinigame(name, Class, id, minPlayers = 1, maxPlayers = 4):
@@ -16,7 +19,7 @@ def _registerTempMinigame(name, Class, id, minPlayers = 1, maxPlayers = 4):
     ToontownGlobals.MinigameIDs += (id,)
     ToontownGlobals.MinigameNames[name] = id
     TempMgCtors[id] = Class
-    for i in xrange(minPlayers, maxPlayers):
+    for i in range(minPlayers, maxPlayers):
         ToontownGlobals.MinigamePlayerMatrix[i] += (id,)
 
     _printMessage('registerTempMinigame: ' + name)

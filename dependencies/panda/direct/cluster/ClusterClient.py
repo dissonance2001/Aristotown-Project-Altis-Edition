@@ -1,5 +1,7 @@
 """ClusterClient: Master for multi-piping or PC clusters."""
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from .ClusterMsgs import *
 from .ClusterConfig import *
@@ -7,6 +9,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import DirectObject
 from direct.task import Task
 import os
+from six.moves import range
 
 
 class ClusterClient(DirectObject.DirectObject):
@@ -147,7 +150,7 @@ class ClusterClient(DirectObject.DirectObject):
     def sendNamedMovementDone(self, serverList = None):
 
         if (serverList == None):
-            serverList = range(len(self.serverList))
+            serverList = list(range(len(self.serverList)))
 
         for server in serverList:
             self.serverList[server].sendNamedMovementDone()
@@ -220,7 +223,7 @@ class ClusterClient(DirectObject.DirectObject):
                           offset = None, priority = 0):
         if (objectName not in self.controlMappings):
             if (serverList == None):
-                serverList = range(len(self.serverList))
+                serverList = list(range(len(self.serverList)))
             if (offset == None):
                 offset = Vec3(0,0,0)
 

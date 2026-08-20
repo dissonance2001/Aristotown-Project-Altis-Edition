@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import State, StateData, ClassicFSM
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import CogHQLoader

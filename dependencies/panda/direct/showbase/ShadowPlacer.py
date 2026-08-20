@@ -6,6 +6,7 @@ Or it may do that later, right now it puts a node on the surface under
 the its parent node.
 """
 
+from __future__ import absolute_import
 __all__ = ['ShadowPlacer']
 
 from direct.controls.ControlManager import CollisionHandlerRayStart

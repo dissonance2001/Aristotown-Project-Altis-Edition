@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
 
@@ -17,6 +19,6 @@ class TimeManagerAI(DistributedObjectAI.DistributedObjectAI):
         """
         timestamp = globalClockDelta.getRealNetworkTime(bits=32)
         requesterId = self.air.getAvatarIdFromSender()
-        print("requestServerTime from %s" % (requesterId))
+        print(("requestServerTime from %s" % (requesterId)))
         self.sendUpdateToAvatarId(requesterId, "serverTime",
                                   [context, timestamp])

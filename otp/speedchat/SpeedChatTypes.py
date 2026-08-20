@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.speedchat.SCObject import SCObject
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCElement import SCElement

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone.TrolleyConstants import *
 from direct.distributed.ClockDelta import *
 from direct.gui.DirectGui import *

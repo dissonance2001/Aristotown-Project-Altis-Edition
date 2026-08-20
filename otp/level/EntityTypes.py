@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level.EntityTypeDesc import EntityTypeDesc
 from toontown.coghq.SpecImports import *
 

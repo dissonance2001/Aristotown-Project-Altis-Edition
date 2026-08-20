@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.dna import DNANode
 
 class DNASignText(DNANode.DNANode):

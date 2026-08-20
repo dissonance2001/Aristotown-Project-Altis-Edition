@@ -6,7 +6,9 @@ to scale the task. The effective Toon count can be reconstructed exactly
 from the same difficulty formula used by the task generator.
 """
 
+from __future__ import absolute_import
 import math
+from six.moves import range
 
 
 TASK_DIFFICULTY_COEFFICIENT = 1.15
@@ -38,7 +40,7 @@ def _toonCountFromDifficulty(difficulty):
     closestCount = 1
     closestDistance = None
 
-    for toonCount in xrange(1, MAX_DECODE_TOON_COUNT + 1):
+    for toonCount in range(1, MAX_DECODE_TOON_COUNT + 1):
         candidate = _difficultyForToonCount(toonCount)
         distance = abs(candidate - difficulty)
         if distance == 0:

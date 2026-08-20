@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.avatar.AvatarHandle import AvatarHandle
 
 class FriendInfo(AvatarHandle):

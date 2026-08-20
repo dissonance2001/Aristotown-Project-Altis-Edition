@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.parties.BaseActivityFSM import BaseActivityFSM
 from toontown.parties.activityFSMMixins import IdleMixin

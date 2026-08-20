@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from otp.otpbase import OTPLocalizer
 from toontown.hood import ZoneUtil
+from six.moves import zip
 
 class TTAFriendsManager(DistributedObjectGlobal):
     
@@ -36,14 +38,14 @@ class TTAFriendsManager(DistributedObjectGlobal):
 
     def petDetails(self, avId, ownerId, petName, traitSeed, sz, traits, moods, dna, lastSeen):
         fields = list(zip(("setHead", "setEars", "setNose", "setTail", "setBodyTexture", "setColor", "setColorScale", "setEyeColor", "setGender"), dna))
-        fields.extend(zip(("setBoredom", "setRestlessness", "setPlayfulness", "setLoneliness",
+        fields.extend(list(zip(("setBoredom", "setRestlessness", "setPlayfulness", "setLoneliness",
                            "setSadness", "setAffection", "setHunger", "setConfusion", "setExcitement",
-                           "setFatigue", "setAnger", "setSurprise"), moods))
-        fields.extend(zip(("setForgetfulness", "setBoredomThreshold", "setRestlessnessThreshold",
+                           "setFatigue", "setAnger", "setSurprise"), moods)))
+        fields.extend(list(zip(("setForgetfulness", "setBoredomThreshold", "setRestlessnessThreshold",
                            "setPlayfulnessThreshold", "setLonelinessThreshold", "setSadnessThreshold",
                            "setFatigueThreshold", "setHungerThreshold", "setConfusionThreshold",
                            "setExcitementThreshold", "setAngerThreshold", "setSurpriseThreshold",
-                           "setAffectionThreshold"), traits))
+                           "setAffectionThreshold"), traits)))
         fields.append(("setOwnerId", ownerId))
         fields.append(("setPetName", petName))
         fields.append(("setTraitSeed", traitSeed))

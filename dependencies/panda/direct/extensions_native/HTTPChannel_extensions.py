@@ -3,6 +3,7 @@
 #del func
 #####################################################################
 
+from __future__ import absolute_import
 from panda3d import core
 from .extension_native_helpers import Dtool_funcToMethod
 

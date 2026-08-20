@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.avatar import Avatar
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *

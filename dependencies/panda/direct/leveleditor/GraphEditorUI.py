@@ -1,12 +1,14 @@
 """
 Defines Graph Editor
 """
+from __future__ import absolute_import
 import wx
 import math
 from .PaletteTreeCtrl import *
 from . import ObjectGlobals as OG
 from . import AnimGlobals as AG
 from wx.lib.embeddedimage import PyEmbeddedImage
+from six.moves import range
 
 property =  [
     "translateX",

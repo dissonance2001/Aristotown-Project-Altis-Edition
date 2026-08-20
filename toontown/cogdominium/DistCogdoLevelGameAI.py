@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from otp.level.DistributedLevelAI import DistributedLevelAI
 from toontown.cogdominium.DistCogdoGameAI import DistCogdoGameAI

@@ -6,11 +6,13 @@
 #     Cancel        Close a window which may be used to change the state of
 #                   the application.
 
+from __future__ import absolute_import
 import sys
 import types
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 # A Toplevel with a ButtonBox and child site.
 

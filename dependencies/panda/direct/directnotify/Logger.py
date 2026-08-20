@@ -1,6 +1,7 @@
 """Logger module: contains the logger class which creates and writes
    data to log files on disk"""
 
+from __future__ import absolute_import
 import time
 import math
 

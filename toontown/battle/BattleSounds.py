@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
 from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 import os
-import __builtin__
+import six.moves.builtins
 
 class BattleSounds:
     notify = DirectNotifyGlobal.directNotify.newCategory('BattleSounds')
@@ -50,7 +52,7 @@ class BattleSounds:
                 resolvedPath = None
 
                 try:
-                    manager = __builtin__.ContentPackMgr
+                    manager = six.moves.builtins.ContentPackMgr
                 except Exception:
                     manager = None
 
@@ -60,7 +62,7 @@ class BattleSounds:
                         if str(selectedPath) != str(candidate):
                             resolvedPath = selectedPath
                     except Exception as error:
-                        print 'CONTENT PACK BATTLE SFX RESOLVE ERROR:', error
+                        print('CONTENT PACK BATTLE SFX RESOLVE ERROR:', error)
 
                 if not resolvedPath:
                     resolvedPath = ContentPackCompatibility.resolveMountedFile(
@@ -77,7 +79,7 @@ class BattleSounds:
                 found = vfs.resolveFilename(filename, self.sfxSearchPath)
             if not found:
                 self.notify.warning('%s not found on:' % name)
-                print self.sfxSearchPath
+                print(self.sfxSearchPath)
             else:
                 return self.mgr.getSound(filename.getFullpath())
         return self.mgr.getNullSound()

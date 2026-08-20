@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from toontown.speedchat import TTSCIndexedTerminal
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from direct.interval.IntervalGlobal import *
+from six.moves import range
 
 class DistributedWinterCarolingTarget(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWinterCarolingTarget')
@@ -19,7 +21,7 @@ class DistributedWinterCarolingTarget(DistributedObject.DistributedObject):
     def phraseSaid(self, phraseId):
         self.notify.debug('Checking if phrase was said')
         helpPhrases = []
-        for i in xrange(6):
+        for i in range(6):
             helpPhrases.append(30220 + i)
 
         def reset():

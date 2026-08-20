@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from toontown.cogdominium.DistCogdoLevelGameAI import DistCogdoLevelGameAI
@@ -6,6 +7,7 @@ from toontown.cogdominium.CogdoCraneGameBase import CogdoCraneGameBase
 from otp.level.LevelSpec import LevelSpec
 from toontown.cogdominium.DistCogdoCraneCogAI import DistCogdoCraneCogAI
 from toontown.suit.SuitDNA import SuitDNA
+from six.moves import range
 
 class DistCogdoCraneGameAI(DistCogdoLevelGameAI, CogdoCraneGameBase):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistCogdoCraneGameAI")
@@ -25,7 +27,7 @@ class DistCogdoCraneGameAI(DistCogdoLevelGameAI, CogdoCraneGameBase):
         self.finishEvent = self.uniqueName('CogdoCraneGameDone')
         self.gameOverEvent = self.uniqueName('CogdoCraneGameLose')
 
-        for index in xrange(4):
+        for index in range(4):
             crane = DistCogdoCraneAI(self.air, self.doId)
             crane.setIndex(index)
             crane.generateWithRequired(self.zoneId)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.estate.DistributedHouseInteriorAI import DistributedHouseInteriorAI
 from toontown.estate.DistributedHouseDoorAI import DistributedHouseDoorAI
@@ -300,7 +301,7 @@ class DistributedHouseAI(DistributedObjectAI):
             self.atticItems.append(item)
         elif item.replacesExisting() and item.hasExisting():
             if item.getFlags() & FLCloset:
-                closets = ClosetToClothes.keys()
+                closets = list(ClosetToClothes.keys())
                 for itItem in self.interiorItems:
                     if itItem.furnitureType in closets:
                         posHpr = itItem.posHpr

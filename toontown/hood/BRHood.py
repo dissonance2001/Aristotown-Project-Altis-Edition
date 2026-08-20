@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone.BRSafeZoneLoader import BRSafeZoneLoader
 from toontown.town.BRTownLoader import BRTownLoader
 from toontown.toonbase import ToontownGlobals

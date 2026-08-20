@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectOV import DistributedObjectOV
 
 class DistributedCameraOV(DistributedObjectOV):
@@ -22,7 +23,7 @@ class DistributedCameraOV(DistributedObjectOV):
         self.fixtures = fixtures
 
     def storeToFile(self, name):
-        f = file('cameras-%s.txt' % name, 'w')
+        f = open('cameras-%s.txt' % name, 'w')
         f.writelines(self.getObject().pack())
         f.close()
 
@@ -33,7 +34,7 @@ class DistributedCameraOV(DistributedObjectOV):
 
     def loadFromFile(self, name):
         self.b_setFixtures([])
-        f = file('cameras-%s.txt' % name, 'r');
+        f = open('cameras-%s.txt' % name, 'r');
         for line in f.readlines():
             pos,hpr,fov = self.unpackFixture(line)
             self.addFixture([pos[0],pos[1],pos[2],

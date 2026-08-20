@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.controls.GravityWalker import GravityWalker
 from pandac.PandaModules import CollisionSphere, CollisionNode, BitMask32, CollisionHandlerEvent, CollisionRay, CollisionHandlerGravity, CollisionHandlerFluidPusher, CollisionHandlerPusher
 from toontown.toonbase import ToontownGlobals

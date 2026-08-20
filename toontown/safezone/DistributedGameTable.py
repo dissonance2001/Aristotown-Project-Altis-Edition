@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from direct.distributed import DistributedObject
 from direct.fsm import ClassicFSM, State
@@ -10,6 +11,7 @@ from toontown.safezone.PicnicGameTutorial import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownTimer import ToontownTimer
+from six.moves import range
 
 class DistributedGameTable(DistributedObject.DistributedObject):
     
@@ -69,7 +71,7 @@ class DistributedGameTable(DistributedObject.DistributedObject):
         self.seats = []
         self.jumpOffsets = []
         self.picnicTableSphereNodes = []
-        for i in xrange(self.numSeats):
+        for i in range(self.numSeats):
             self.seats.append(self.picnicTable.find('**/*seat' + str(i+1)))
             self.jumpOffsets.append(self.picnicTable.find('**/*jumpOut' + str(i+1)))
             cn = CollisionNode('picnicTable_sphere_%d_%d' % (self.doId, i))
@@ -132,16 +134,16 @@ class DistributedGameTable(DistributedObject.DistributedObject):
         del self.fsm
 
     def enableCollisions(self):
-        for i in xrange(self.numSeats):
+        for i in range(self.numSeats):
             event = 'enterpicnicTable_sphere_%d_%d' % (self.doId, i)
             self.accept(event, self.handleEnterPicnicTableSphere, [i])
             self.picnicTableSphereNodes[i].setCollideMask(ToontownGlobals.WallBitmask)
         self.tableClothSphereNode.setCollideMask(ToontownGlobals.WallBitmask)
 
     def disableCollisions(self):
-        for i in xrange(self.numSeats):
+        for i in range(self.numSeats):
             self.ignore('enterpicnicTable_sphere_%d_%d' % (self.doId, i))
-        for i in xrange(self.numSeats):
+        for i in range(self.numSeats):
             self.picnicTableSphereNodes[i].setCollideMask(BitMask32(0))
         self.tableClothSphereNode.setCollideMask(BitMask32(0))
 

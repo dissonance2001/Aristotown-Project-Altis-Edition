@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level.BasicEntities import DistributedNodePathEntity
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -12,6 +13,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownTimer
 from direct.task import Task
 from direct.gui.DirectGui import DGG, DirectFrame, DirectLabel
+from six.moves import range
 
 class DistributedMaze(DistributedNodePathEntity):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMaze')
@@ -70,7 +72,7 @@ class DistributedMaze(DistributedNodePathEntity):
          270]
         self.getRng().shuffle(rotations)
         self.numSections = 0
-        for i in xrange(0, 4):
+        for i in range(0, 4):
             maze = room.getGeom().find('**/Maze_Inside_%d' % i)
             if not maze.isEmpty():
                 self.numSections += 1

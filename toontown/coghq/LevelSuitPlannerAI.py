@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from toontown.suit import SuitDNA
@@ -8,6 +9,7 @@ from toontown.suit import DistributedSuitAI
 from toontown.toonbase import ToontownBattleGlobals
 import types
 import random
+from six.moves import range
 
 class LevelSuitPlannerAI(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelSuitPlannerAI')
@@ -40,7 +42,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
     def __genJoinChances(self, num):
         joinChances = []
-        for currChance in xrange(num):
+        for currChance in range(num):
             joinChances.append(random.randint(1, 100))
 
         joinChances.sort(cmp)
@@ -63,14 +65,14 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
         self.suitInfos = {}
         self.suitInfos['activeSuits'] = []
-        for i in xrange(len(self.cogSpecs)):
+        for i in range(len(self.cogSpecs)):
             spec = self.cogSpecs[i]
             self.suitInfos['activeSuits'].append(getSuitDict(spec, i))
 
         numReserve = len(self.reserveCogSpecs)
         joinChances = self.__genJoinChances(numReserve)
         self.suitInfos['reserveSuits'] = []
-        for i in xrange(len(self.reserveCogSpecs)):
+        for i in range(len(self.reserveCogSpecs)):
             spec = self.reserveCogSpecs[i]
             suitDict = getSuitDict(spec, i)
             suitDict['joinChance'] = joinChances[i]
@@ -224,7 +226,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             if oldCell in self.battleCellId2suits:
                 self.battleCellId2suits[oldCell].remove(suit)
             else:
-                self.notify.warning('FIXME crash bandaid suitBattleCellChange suit.doId =%s, oldCell=%s not in battleCellId2Suits.keys %s' % (suit.doId, oldCell, self.battleCellId2suits.keys()))
+                self.notify.warning('FIXME crash bandaid suitBattleCellChange suit.doId =%s, oldCell=%s not in battleCellId2Suits.keys %s' % (suit.doId, oldCell, list(self.battleCellId2suits.keys())))
             blocker = self.battleMgr.battleBlockers.get(oldCell)
             if blocker:
                 blocker.removeSuit(suit)

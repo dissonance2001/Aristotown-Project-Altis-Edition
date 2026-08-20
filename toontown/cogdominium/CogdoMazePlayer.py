@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import Point3, NodePath
 from direct.fsm.FSM import FSM

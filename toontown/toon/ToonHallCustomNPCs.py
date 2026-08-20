@@ -1,6 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import weakref
 import json
 import os
+import six
+from six.moves import range
 
 # Custom decorative NPC definitions for Project Altis.
 #
@@ -124,7 +128,7 @@ def _loadCustomAccessoryId(accessoryType, accessoryName, fallbackId=None):
 
         matched = False
         for candidateName in candidateNames:
-            if (isinstance(candidateName, basestring) and
+            if (isinstance(candidateName, six.string_types) and
                     candidateName.lower() == wantedName):
                 matched = True
                 break
@@ -160,7 +164,7 @@ def _loadSavedAccessoryPlacementByName(accessoryType, accessoryName,
     if not isinstance(typeData, dict):
         return None
 
-    if isinstance(placementKeys, basestring):
+    if isinstance(placementKeys, six.string_types):
         placementKeys = (placementKeys,)
 
     # Older editor builds could move the same BAM to a new native ID every
@@ -185,7 +189,7 @@ def _loadSavedAccessoryPlacementByName(accessoryType, accessoryName,
                 continue
 
             entryName = entry.get('name')
-            if (isinstance(entryName, basestring) and
+            if (isinstance(entryName, six.string_types) and
                     entryName.lower() != wantedName):
                 continue
 
@@ -221,7 +225,7 @@ def _loadSavedAccessoryPlacement(accessoryType, accessoryId, placementKeys):
     if not isinstance(accessoryData, dict):
         return None
 
-    if isinstance(placementKeys, basestring):
+    if isinstance(placementKeys, six.string_types):
         placementKeys = (placementKeys,)
 
     for placementKey in placementKeys or ():
@@ -2696,11 +2700,11 @@ def _applySpeechFont(npc, data):
     font = _loadSpeechFont(data)
     if not font:
         if not getattr(npc, '_speechFontMissingLogged', False):
-            print (
+            print((
                 '[Toon Hall NPC] Could not find Comical font for %s. '
                 'Checked registered fonts and Comic.ttf paths.'
                 % data.get('name', 'unknown NPC')
-            )
+            ))
             npc._speechFontMissingLogged = True
         return False
 
@@ -2722,14 +2726,14 @@ def _applySpeechFont(npc, data):
                     pass
 
     if applied and not getattr(npc, '_speechFontAppliedLogged', False):
-        print (
+        print((
             '[Toon Hall NPC] Applied %s speech font to %s from %s'
             % (
                 data.get('speechFontName', 'custom'),
                 data.get('name', 'unknown NPC'),
                 data.get('_loadedSpeechFontPath', 'registered font')
             )
-        )
+        ))
         npc._speechFontAppliedLogged = True
 
     return applied
@@ -2864,10 +2868,10 @@ def _loadNPCDialogueSound(data):
     _NPC_DIALOGUE_SOUND_CACHE[soundPath] = sound
 
     if not sound:
-        print (
+        print((
             '[Toon Hall NPC] Could not load dialogue sound for %s: %s'
             % (data.get('name', 'unknown NPC'), soundPath)
-        )
+        ))
 
     return sound
 
@@ -3282,7 +3286,7 @@ def positionClientNPC(npc):
     actualHpr = npc.getHpr(positionReference)
 
     if not getattr(npc, '_toonHallPositionLogged', False):
-        print (
+        print((
             '[Custom NPC] Positioned %s at '
             'X=%.3f Y=%.3f Z=%.3f H=%.3f'
             % (
@@ -3292,7 +3296,7 @@ def positionClientNPC(npc):
                 actual[2],
                 actualHpr[0]
             )
-        )
+        ))
         npc._toonHallPositionLogged = True
 
     return True

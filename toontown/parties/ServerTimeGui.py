@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import TextNode
 from direct.gui.DirectGui import DirectFrame, DirectLabel
 from direct.interval.IntervalGlobal import Func, Sequence, Wait

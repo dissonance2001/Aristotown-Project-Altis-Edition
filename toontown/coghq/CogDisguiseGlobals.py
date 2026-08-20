@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.suit import SuitDNA
 import types
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from otp.otpbase import OTPGlobals
+from six.moves import range
 PartsPerSuit = (10,
  10,
  10,
@@ -3388,7 +3390,7 @@ def getTotalMerits(toon, index):
 
 def getTotalParts(bitString, shiftWidth = 40):
     sum = 0
-    for shift in xrange(0, shiftWidth):
+    for shift in range(0, shiftWidth):
         sum = sum + (bitString >> shift & 1)
 
     return sum
@@ -3407,7 +3409,7 @@ def asBitstring(number):
         shift += 1
 
     str = ''
-    for i in xrange(0, len(array)):
+    for i in range(0, len(array)):
         str = str + array[i]
 
     return str
@@ -3415,7 +3417,7 @@ def asBitstring(number):
 
 def asNumber(bitstring):
     num = 0
-    for i in xrange(0, len(bitstring)):
+    for i in range(0, len(bitstring)):
         if bitstring[i] == '1':
             num += pow(2, len(bitstring) - 1 - i)
 
@@ -3423,6 +3425,6 @@ def asNumber(bitstring):
 
 
 def dept2deptIndex(dept):
-    if type(dept) == types.StringType:
+    if type(dept) == bytes:
         dept = SuitDNA.suitDepts.index(dept)
     return dept

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from panda3d.core import *
 from panda3d.direct import *
@@ -6,6 +7,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals, ToontownTimer
 from toontown.cogdominium import CogdoBarrelRoomConsts, CogdoBarrelRoomRewardPanel
 from toontown.distributed import DelayDelete
+from six.moves import range
 
 class CogdoBarrelRoom:
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogdoBarrelRoom')
@@ -49,7 +51,7 @@ class CogdoBarrelRoom:
         self.fog.setColor(CogdoBarrelRoomConsts.BarrelRoomFogColor)
         self.fog.setLinearRange(*CogdoBarrelRoomConsts.BarrelRoomFogLinearRange)
         self.brBarrel = render.attachNewNode('@@CogdoBarrels')
-        for i in xrange(len(CogdoBarrelRoomConsts.BarrelProps)):
+        for i in range(len(CogdoBarrelRoomConsts.BarrelProps)):
             self.bPath = self.brBarrel.attachNewNode('%s%s'% (CogdoBarrelRoomConsts.BarrelPathName, i))
             self.bPath.setPos(CogdoBarrelRoomConsts.BarrelProps[i]['pos'])
             self.bPath.setH(CogdoBarrelRoomConsts.BarrelProps[i]['heading'])
@@ -117,11 +119,11 @@ class CogdoBarrelRoom:
         self.timer.stash()
 
     def placeToonsAtEntrance(self, toons):
-        for i in xrange(len(toons)):
+        for i in range(len(toons)):
             toons[i].setPosHpr(self.entranceNode, *CogdoBarrelRoomConsts.BarrelRoomPlayerSpawnPoints[i])
 
     def placeToonsNearBattle(self, toons):
-        for i in xrange(len(toons)):
+        for i in range(len(toons)):
             toons[i].setPosHpr(self.nearBattleNode, *CogdoBarrelRoomConsts.BarrelRoomPlayerSpawnPoints[i])
 
     def showBattleAreaLight(self, visible = True):

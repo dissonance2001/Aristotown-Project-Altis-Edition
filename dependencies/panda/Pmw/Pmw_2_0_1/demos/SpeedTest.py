@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Test of the speed of creating Pmw megawidgets'
 
 # Import Pmw from this directory tree.

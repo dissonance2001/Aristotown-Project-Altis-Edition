@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import math
 from pandac.PandaModules import CollisionSphere, CollisionNode, Vec3, Point3, deg2Rad
 from direct.interval.IntervalGlobal import Sequence, Func, Parallel, ActorInterval, Wait, Parallel, LerpHprInterval, ProjectileInterval, LerpPosInterval
@@ -347,7 +349,7 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
         self.clock.setH(self.clock.getH() + 180)
 
     def rejectBoard(self, avId, reason = 0):
-        print 'rejectBoard %s' % reason
+        print('rejectBoard %s' % reason)
         if hasattr(base.localAvatar, 'elevatorNotifier'):
             if reason == ElevatorConstants.REJECT_SHUFFLE:
                 base.localAvatar.elevatorNotifier.showMe(TTLocalizer.ElevatorHoppedOff)

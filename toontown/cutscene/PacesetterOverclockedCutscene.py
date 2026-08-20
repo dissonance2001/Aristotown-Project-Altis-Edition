@@ -1,5 +1,7 @@
 """Corporate Clash Pacesetter Overclocked transition adapter for Altis/Python 2."""
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.interval.IntervalGlobal import Func, LerpFunctionInterval, Parallel, Sequence, Wait
 
 from toontown.cutscene.AltisCutsceneCompat import (

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from six.moves import range
 title = 'Pmw.PanedWidget demonstration (pane factory)'
 
 # Import Pmw from this directory tree.

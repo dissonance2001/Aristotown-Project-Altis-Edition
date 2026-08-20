@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 
 REPORT_PLAYER = 'report-player'

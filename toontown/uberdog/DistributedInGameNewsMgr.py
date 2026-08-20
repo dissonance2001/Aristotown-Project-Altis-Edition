@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import socket, datetime, os
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.distributed.DistributedObject import DistributedObject

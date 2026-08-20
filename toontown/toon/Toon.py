@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import random
 import types
 import json
@@ -35,6 +37,9 @@ from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+import six
+from six.moves import range
+from six.moves import zip
 
 
 def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
@@ -85,7 +90,7 @@ def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
         finally:
             placementFile.close()
     except Exception as error:
-        print 'Accessory placement override read failed:', error
+        print('Accessory placement override read failed:', error)
         return None
 
     try:
@@ -111,7 +116,7 @@ def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
         tuple(scale)
     )
 
-    print 'APPLYING ACCESSORY OVERRIDE:', accessoryType, accessoryId, dnaKey, result
+    print('APPLYING ACCESSORY OVERRIDE:', accessoryType, accessoryId, dnaKey, result)
     return result
 
 TOON_STATUS_EFFECT_VISUALS = {
@@ -449,7 +454,7 @@ TorsoDict = {
 def loadModels():
     global Preloaded
     if not Preloaded:
-        print 'Preloading avatars...'
+        print('Preloading avatars...')
 
         def preload(task):
             for key in LegDict.keys():
@@ -1236,7 +1241,7 @@ class Toon(Avatar.Avatar, ToonHead):
             spark.setAlphaScale(1)
             spark.setColor(1, 0.988, 0.408, 1.0)
 
-        for i in xrange(sparkCount):
+        for i in range(sparkCount):
             spark = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(burstNode)
@@ -1332,7 +1337,7 @@ class Toon(Avatar.Avatar, ToonHead):
             spark.setAlphaScale(1)
             spark.setColor(1, 0.988, 0.408, 1.0)
 
-        for i in xrange(12):
+        for i in range(12):
             spark = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(self.shockAuraNode)
@@ -1415,7 +1420,7 @@ class Toon(Avatar.Avatar, ToonHead):
             spark.setAlphaScale(1)
             spark.setColor(1, 0.988, 0.408, 1.0)
 
-        for i in xrange(12):
+        for i in range(12):
             spark = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(self.woodAuraNode)
@@ -2471,7 +2476,7 @@ class Toon(Avatar.Avatar, ToonHead):
             fallingArrow.setPos(x, y, 3)
             fallingArrow.setAlphaScale(1)
 
-        for i in xrange(30):
+        for i in range(30):
             fallingArrow = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(auraNode)
@@ -2541,7 +2546,7 @@ class Toon(Avatar.Avatar, ToonHead):
             arrow.setPos(x, y, 0)
             arrow.setAlphaScale(1)
 
-        for i in xrange(30):
+        for i in range(30):
             arrow = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(auraNode)
@@ -2609,7 +2614,7 @@ class Toon(Avatar.Avatar, ToonHead):
             arrow.setPos(x, y, 0)
             arrow.setAlphaScale(1)
 
-        for i in xrange(30):
+        for i in range(30):
             arrow = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(hidden)
@@ -3534,7 +3539,7 @@ class Toon(Avatar.Avatar, ToonHead):
                 sleeves.setTexture(sleeveTex, 1)
                 sleeves.setColor(sleeveColor)
                 bottoms = thisPart.findAllMatches('**/torso-bot')
-                for bottomNum in xrange(0, bottoms.getNumPaths()):
+                for bottomNum in range(0, bottoms.getNumPaths()):
                     bottom = bottoms.getPath(bottomNum)
                     bottom.setTexture(bottomTex, 1)
                     bottom.setColor(bottomColor)
@@ -3666,14 +3671,14 @@ class Toon(Avatar.Avatar, ToonHead):
                 break
 
         if geom is None or geom.isEmpty():
-            print 'CUSTOM ACCESSORY MODEL FAILED:', modelPath
-            print 'CUSTOM ACCESSORY MODEL CANDIDATES:', modelCandidates
+            print('CUSTOM ACCESSORY MODEL FAILED:', modelPath)
+            print('CUSTOM ACCESSORY MODEL CANDIDATES:', modelCandidates)
             self.sendLogSuspiciousEvent(
                 'failed to load custom accessory model %s' % modelPath
             )
             return True
 
-        print 'CUSTOM ACCESSORY MODEL LOADED:', loadedModelPath
+        print('CUSTOM ACCESSORY MODEL LOADED:', loadedModelPath)
 
         if accessoryType == 'hat':
             self._clearCustomAccessoryNodes('hatNodes')
@@ -3783,7 +3788,7 @@ class Toon(Avatar.Avatar, ToonHead):
             return None
 
         textureName = textureList[textureIdx]
-        if not isinstance(textureName, basestring) or not textureName:
+        if not isinstance(textureName, six.string_types) or not textureName:
             self.notify.warning(
                 'Ignoring empty %s texture ID %s for model %s.' %
                 (accessoryType, textureIdx, modelIdx)
@@ -3962,7 +3967,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
                 if transOffset is None:
                     hatModelPath = ToonDNA.HatModels[hat[0]]
-                    if isinstance(hatModelPath, basestring) and hatModelPath.startswith('phase_14/accessories/'):
+                    if isinstance(hatModelPath, six.string_types) and hatModelPath.startswith('phase_14/accessories/'):
                         transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
 
                 if transOffset is None:
@@ -4085,7 +4090,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
                 if transOffset is None:
                     glassesModelPath = ToonDNA.GlassesModels[glasses[0]]
-                    if isinstance(glassesModelPath, basestring) and glassesModelPath.startswith('phase_14/accessories/'):
+                    if isinstance(glassesModelPath, six.string_types) and glassesModelPath.startswith('phase_14/accessories/'):
                         transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
 
                 if transOffset is None:
@@ -5396,11 +5401,11 @@ class Toon(Avatar.Avatar, ToonHead):
             for partName, pieceNames in pieces:
                 part = self.getPart(partName, lodName)
                 if part:
-                    if type(pieceNames) == types.StringType:
+                    if type(pieceNames) == bytes:
                         pieceNames = (pieceNames,)
                     for pieceName in pieceNames:
                         npc = part.findAllMatches('**/%s;+s' % pieceName)
-                        for i in xrange(npc.getNumPaths()):
+                        for i in range(npc.getNumPaths()):
                             results.append(npc[i])
 
         return results
@@ -5452,7 +5457,7 @@ class Toon(Avatar.Avatar, ToonHead):
         if not self.headParts:
             return track
         
-        for hi in xrange(self.headParts.getNumPaths()):
+        for hi in range(self.headParts.getNumPaths()):
             head = self.headParts[hi]
             track.append(LerpScaleInterval(head, lerpTime, scale, blendType='easeInOut'))
 
@@ -5470,7 +5475,7 @@ class Toon(Avatar.Avatar, ToonHead):
             return track
         if not self.legsParts:
             return track
-        for li in xrange(self.legsParts.getNumPaths()):
+        for li in range(self.legsParts.getNumPaths()):
             legs = self.legsParts[li]
             torso = self.torsoParts[li]
             track.append(LerpScaleInterval(legs, lerpTime, scale, blendType='easeInOut'))
@@ -5608,10 +5613,10 @@ class Toon(Avatar.Avatar, ToonHead):
 
             def hideParts():
                 self.notify.debug('HidePaths')
-                for hi in xrange(self.headParts.getNumPaths()):
+                for hi in range(self.headParts.getNumPaths()):
                     head = self.headParts[hi]
                     parts = head.getChildren()
-                    for pi in xrange(parts.getNumPaths()):
+                    for pi in range(parts.getNumPaths()):
                         p = parts[pi]
                         if not p.isHidden():
                             p.hide()
@@ -5628,10 +5633,10 @@ class Toon(Avatar.Avatar, ToonHead):
 
             def showHiddenParts():
                 self.notify.debug('ShowHiddenPaths')
-                for hi in xrange(self.headParts.getNumPaths()):
+                for hi in range(self.headParts.getNumPaths()):
                     head = self.headParts[hi]
                     parts = head.getChildren()
-                    for pi in xrange(parts.getNumPaths()):
+                    for pi in range(parts.getNumPaths()):
                         p = parts[pi]
                         if not self.snowMen.hasPath(p) and p.getTag('snowman') == 'enabled':
                             p.show()
@@ -8057,12 +8062,12 @@ class Toon(Avatar.Avatar, ToonHead):
         return Sequence()
 
     def printCameraPos():
-        print(base.localAvatar.getPos())
-        print(base.localAvatar.getHpr())
+        print((base.localAvatar.getPos()))
+        print((base.localAvatar.getHpr()))
 
     def printCameraPos2():
-        print(base.camera.getPos(render))
-        print(base.camera.getHpr(render))
+        print((base.camera.getPos(render)))
+        print((base.camera.getHpr(render)))
 
     base.accept('[', printCameraPos)
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.MetaInterval import Sequence
 from panda3d.core import Vec4
 from direct.interval.MetaInterval import Parallel

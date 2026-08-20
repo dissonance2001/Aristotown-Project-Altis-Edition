@@ -4,6 +4,8 @@ from direct.showbase import Loader as nLoader
 from toontown.toontowngui import ToontownLoadingScreen
 from toontown.dna.DNAParser import *
 import traceback
+import __builtin__
+from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 
 class ToontownLoader(nLoader.Loader):
     TickPeriod = 0.1
@@ -32,6 +34,7 @@ class ToontownLoader(nLoader.Loader):
         self.inBulkBlock = 1
         self._lastTickT = globalClock.getRealTime()
         self.blockName = name
+        messenger.send('altis-bulk-load-begin')
         self.loadingScreen.begin(range, label, gui, tipCategory, zoneId)
          
     def endBulkLoad(self, name):
@@ -45,6 +48,7 @@ class ToontownLoader(nLoader.Loader):
         
         self.inBulkBlock = None
         expectedCount, loadedCount = self.loadingScreen.end()
+        messenger.send('altis-bulk-load-end')
         now = globalClock.getRealTime()
         nLoader.Loader.notify.info("At end of block '%s', expected %s, loaded %s, duration=%s" % (self.blockName,
          expectedCount,
@@ -56,6 +60,7 @@ class ToontownLoader(nLoader.Loader):
             nLoader.Loader.notify.info("Aborting block ('%s')" % self.blockName)
             self.inBulkBlock = None
             self.loadingScreen.abort()
+            messenger.send('altis-bulk-load-end')
 
     def tick(self):
         if self.inBulkBlock:
@@ -68,15 +73,36 @@ class ToontownLoader(nLoader.Loader):
 
     def loadModel(self, *args, **kw):
         ret = nLoader.Loader.loadModel(self, *args, **kw)
+
+        modelName = ''
+        if args:
+            try:
+                modelName = str(args[0]).replace('\\', '/').lower()
+            except Exception:
+                modelName = ''
+
+        if ret and 'inventory_icons' in modelName:
+            ContentPackCompatibility.applyClashGagIconCompatibility(ret)
+
+        if ret and 'status_effects' in modelName:
+            ContentPackCompatibility.applyStatusEffectsCompatibility(ret)
+
         if ret:
             gsg = base.win.getGsg()
             if gsg:
                 ret.prepareScene(gsg)
-        
+
         self.tick()
         return ret
 
     def loadFont(self, *args, **kw):
+        if args:
+            newArgs = list(args)
+            newArgs[0] = ContentPackCompatibility.resolveFontPath(
+                args[0]
+            )
+            args = tuple(newArgs)
+
         ret = nLoader.Loader.loadFont(self, *args, **kw)
         self.tick()
         return ret
@@ -96,6 +122,20 @@ class ToontownLoader(nLoader.Loader):
 
     def pdnaModel(self, *args, **kw):
         ret = nLoader.Loader.loadModel(self, *args, **kw)
+
+        modelName = ''
+        if args:
+            try:
+                modelName = str(args[0]).replace('\\', '/').lower()
+            except Exception:
+                modelName = ''
+
+        if ret and 'inventory_icons' in modelName:
+            ContentPackCompatibility.applyClashGagIconCompatibility(ret)
+
+        if ret and 'status_effects' in modelName:
+            ContentPackCompatibility.applyStatusEffectsCompatibility(ret)
+
         if ret:
             gsg = base.win.getGsg()
             if gsg:
@@ -104,6 +144,13 @@ class ToontownLoader(nLoader.Loader):
         return ret
 
     def pdnaFont(self, *args, **kw):
+        if args:
+            newArgs = list(args)
+            newArgs[0] = ContentPackCompatibility.resolveFontPath(
+                args[0]
+            )
+            args = tuple(newArgs)
+
         ret = nLoader.Loader.loadFont(self, *args, **kw)
         self.tick()
         return ret
@@ -113,12 +160,31 @@ class ToontownLoader(nLoader.Loader):
         self.tick()
         return ret
 
+    def _resolveContentPackAudio(self, soundPath, category):
+        try:
+            manager = __builtin__.ContentPackMgr
+        except Exception:
+            manager = None
+
+        if manager and hasattr(manager, 'resolveFile'):
+            try:
+                return manager.resolveFile(soundPath, category)
+            except Exception as error:
+                print 'CONTENT PACK AUDIO RESOLVE ERROR (%s): %s' % (
+                    category,
+                    error
+                )
+
+        return soundPath
+
     def loadSfx(self, soundPath):
-        ret = nLoader.Loader.loadSfx(self, soundPath)
+        resolvedPath = self._resolveContentPackAudio(soundPath, 'sfx')
+        ret = nLoader.Loader.loadSfx(self, resolvedPath)
         self.tick()
         return ret
 
     def loadMusic(self, soundPath):
-        ret = nLoader.Loader.loadMusic(self, soundPath)
+        resolvedPath = self._resolveContentPackAudio(soundPath, 'music')
+        ret = nLoader.Loader.loadMusic(self, resolvedPath)
         self.tick()
         return ret

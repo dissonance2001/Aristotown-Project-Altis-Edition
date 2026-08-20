@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 def aligngrouptags(groups):
@@ -54,19 +55,19 @@ class Group( Pmw.MegaWidget ):
 	self._ring = self.createcomponent(
 	    'ring', 
 	    (), None,
-	    Tkinter.Frame, (interior,),
+	    six.moves.tkinter.Frame, (interior,),
 	    )
 
 	self._groupChildSite = self.createcomponent(
 	    'groupchildsite',
 	    (), None,
-	    Tkinter.Frame, (self._ring,)
+	    six.moves.tkinter.Frame, (self._ring,)
 	    )
 
         self._tag = self.createcomponent(
 	    'tag',
 	    (), None,
-	    Tkinter.Label, (interior,),
+	    six.moves.tkinter.Label, (interior,),
 	    )
 
 	ringBorder = (string.atoi(str(self._ring.cget('borderwidth'))) +

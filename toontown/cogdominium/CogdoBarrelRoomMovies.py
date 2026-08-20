@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath, Point3, PlaneNode, TextNode
 from direct.interval.IntervalGlobal import *
 from direct.showbase.ShowBase import Plane
@@ -10,7 +11,7 @@ from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase import TTLocalizer
 from toontown.suit import Suit, SuitDNA
 from toontown.toon import Toon, ToonHead, ToonDNA
-from DistributedCogdoInterior import *
+from .DistributedCogdoInterior import *
 from toontown.cogdominium.CogdoUtil import CogdoGameMovie
 from toontown.cogdominium import CogdoBarrelRoomConsts, CogdoUtil
 

@@ -5,6 +5,7 @@
 #
 # See the associated manual page for an explanation.
 #
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import FrameBufferProperties, WindowProperties
 from panda3d.core import GraphicsPipe, GraphicsOutput

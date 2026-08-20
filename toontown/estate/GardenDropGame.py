@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -17,11 +19,12 @@ from direct.showbase import RandomNumGen
 from toontown.toonbase import TTLocalizer
 import random
 import random
-import cPickle
+import six.moves.cPickle
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.estate import GameSprite
 from math import pi
 from toontown.estate import GardenProgressMeter
+from six.moves import range
 
 class GardenDropGame(DirectObject.DirectObject):
 
@@ -62,15 +65,15 @@ class GardenDropGame(DirectObject.DirectObject):
         self.controlOffsetX = 0.0
         self.controlOffsetZ = 0.0
         self.queExtent = 3
-        print 'Grid Dimensions X%s Z%s' % (gX, gZ)
+        print('Grid Dimensions X%s Z%s' % (gX, gZ))
         self.grid = []
         self.gridDimX = gX
         self.gridDimZ = gZ
         self.gridBrick = False
         base.gardenGame = self
-        for countX in xrange(self.gridDimX):
+        for countX in range(self.gridDimX):
             newRow = []
-            for countZ in xrange(self.gridDimZ):
+            for countZ in range(self.gridDimZ):
                 offset = 0
                 if countZ % 2 == 0:
                     offset = size / 2
@@ -81,7 +84,7 @@ class GardenDropGame(DirectObject.DirectObject):
         self.controlSprite = None
         self.cogSprite = self.addUnSprite(self.block, posX=0.25, posZ=0.5)
         self.cogSprite.setColor(self.colorShadow)
-        for ball in xrange(0, 3):
+        for ball in range(0, 3):
             place = random.random() * self.rangeX
             newSprite = self.addSprite(self.block, size=0.5, posX=self.minX + place, posZ=0.0, found=1)
             self.stickInGrid(newSprite, True)
@@ -99,8 +102,8 @@ class GardenDropGame(DirectObject.DirectObject):
     def findGrid(self, x, z, force = False):
         currentClosest = None
         currentDist = 10000000
-        for countX in xrange(self.gridDimX):
-            for countZ in xrange(self.gridDimZ):
+        for countX in range(self.gridDimX):
+            for countZ in range(self.gridDimZ):
                 testDist = self.testPointDistanceSquare(x, z, self.grid[countX][countZ][1], self.grid[countX][countZ][2])
                 if self.grid[countX][countZ][0] == None and testDist < currentDist and (force or self.hasNeighbor(countX, countZ)):
                     currentClosest = self.grid[countX][countZ]
@@ -242,7 +245,7 @@ class GardenDropGame(DirectObject.DirectObject):
         tileDimZ = rangeZ / self.gridDimZ
         tileX = int(framedX / tileDimX)
         tileZ = int(framedZ / tileDimZ)
-        print 'find Grid tileX%s tileZ%s' % (tileX, tileZ)
+        print('find Grid tileX%s tileZ%s' % (tileX, tileZ))
         return (tileX, tileZ)
 
     def findPos(self, x, z):
@@ -252,7 +255,7 @@ class GardenDropGame(DirectObject.DirectObject):
         tileDimZ = rangeZ / self.gridDimZ
         posX = tileDimX * x + self.minX
         posZ = tileDimZ * z + self.minZ
-        print 'find Pos X%s Z%s' % (posX, posZ)
+        print('find Pos X%s Z%s' % (posX, posZ))
         return (posX, posZ)
 
     def placeIntoGrid(self, sprite, x, z):
@@ -262,7 +265,7 @@ class GardenDropGame(DirectObject.DirectObject):
             newX, newZ = self.findPos(x, z)
             sprite.setX(newX)
             sprite.setZ(newZ)
-            print 'Setting Final Pos X%s Z%s' % (newX, newZ)
+            print('Setting Final Pos X%s Z%s' % (newX, newZ))
         else:
             self.placeIntoGrid(sprite, x + 1, z - 1)
 
@@ -327,7 +330,7 @@ class GardenDropGame(DirectObject.DirectObject):
 
     def addSprite(self, image, size = 0.5, posX = 0, posZ = 0, found = 0):
         nodeObj = DirectLabel(parent=self.frame, relief=None, image=image, pos=(posX, 0.0, posZ), scale=size, image_color=(1.0, 1.0, 1.0, 1))
-        colorChoice = random.choice(range(0, 3))
+        colorChoice = random.choice(list(range(0, 3)))
         newSprite = GameSprite.GameSprite(nodeObj, colorChoice, found)
         self.sprites.append(newSprite)
         if found:
@@ -407,8 +410,8 @@ class GardenDropGame(DirectObject.DirectObject):
         if self.tick > 5:
             self.tick = 0
         sizeSprites = len(self.sprites)
-        for movingSpriteIndex in xrange(len(self.sprites)):
-            for testSpriteIndex in xrange(movingSpriteIndex, len(self.sprites)):
+        for movingSpriteIndex in range(len(self.sprites)):
+            for testSpriteIndex in range(movingSpriteIndex, len(self.sprites)):
                 movingSprite = self.getSprite(movingSpriteIndex)
                 testSprite = self.getSprite(testSpriteIndex)
                 if testSprite and movingSprite:

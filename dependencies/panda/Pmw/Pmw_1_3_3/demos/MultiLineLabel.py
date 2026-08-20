@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Multi-line label demonstration'
 
 # Import Pmw from this directory tree.
@@ -5,13 +6,13 @@ import sys
 sys.path[:0] = ['../../..']
 
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
 
-        frame = Tkinter.Frame(parent, background = '#eeeeee')
+        frame = six.moves.tkinter.Frame(parent, background = '#eeeeee')
         frame.pack(fill = 'both', expand = 1, padx = 5, pady = 5)
 
         stickys = ('n', 's', 'e', 'w', 'ns', 'ew', 'ne', 'nw', 'se', 'sw',
@@ -39,9 +40,9 @@ class Demo:
             if cls == Pmw.Counter or cls == Pmw.ComboBox:
                 dict['entryfield_value'] = sticky
                 dict['entry_width'] = 6
-            widget = apply(cls, (frame,), dict)
+            widget = cls(*(frame,), **dict)
             if cls == Pmw.LabeledWidget:
-                f = Tkinter.Button(widget.interior(), text = sticky)
+                f = six.moves.tkinter.Button(widget.interior(), text = sticky)
                 f.pack(fill = 'both', expand = 1)
             if cls == Pmw.MessageBar:
 		widget.message('state', sticky)
@@ -63,11 +64,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

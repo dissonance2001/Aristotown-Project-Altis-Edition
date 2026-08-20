@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 from direct.particles import Particles, ForceGroup
 from pandac.PandaModules import *
 
 ParticleTable = {}
 
 def particle(func):
-    ParticleTable[func.func_name] = func
+    ParticleTable[func.__name__] = func
 
 @particle
 def confetti(self):

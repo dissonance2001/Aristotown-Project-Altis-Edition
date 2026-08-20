@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -27,6 +29,7 @@ from otp.avatar import Emote
 from toontown.nametag import NametagGlobals
 from toontown.battle.BattleSounds import *
 from direct.interval.SoundInterval import SoundInterval
+from six.moves import range
 
 class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBase')
@@ -753,7 +756,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if int(movieHasBeenMade) == 1:
             self.TurnsElapsed += 1
 
-        print('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder)
+        print(('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder))
         if self.__battleCleanedUp:
             return
         self.notify.debug('setMovie()')

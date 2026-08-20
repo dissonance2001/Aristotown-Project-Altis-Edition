@@ -1,6 +1,7 @@
 """RelatedObjectMgr module: contains the RelatedObjectMgr class"""
 
 # from direct.showbase.ShowBaseGlobal import *
+from __future__ import absolute_import
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 

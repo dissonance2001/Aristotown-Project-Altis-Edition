@@ -1,5 +1,6 @@
 # DMENU VERSION 1.0
 
+from __future__ import absolute_import
 from direct.actor import Actor
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.gui.DirectGui import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.InputStateGlobal import inputState
 from direct.directnotify import DirectNotifyGlobal
 from direct.controls import NonPhysicsWalker

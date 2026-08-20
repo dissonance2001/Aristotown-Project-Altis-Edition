@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -228,8 +229,8 @@ class DistributedElevator(DistributedObject.DistributedObject):
             else:
                 animInFunc = Sequence(Func(toon.setAnimState, 'run', 1.0))
                 animFunc = Func(toon.setAnimState, 'neutral', 1.0)
-            toon.headsUp(self.getElevatorModel(), apply(Point3, self.elevatorPoints[index]))
-            track = Sequence(animInFunc, LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75, apply(Point3, self.elevatorPoints[index]), other=self.getElevatorModel()), LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25, Point3(self.BoardH, 0, 0), other=self.getElevatorModel()), Func(self.clearToonTrack, avId), animFunc, name=toon.uniqueName('fillElevator'), autoPause=1)
+            toon.headsUp(self.getElevatorModel(), Point3(*self.elevatorPoints[index]))
+            track = Sequence(animInFunc, LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75, Point3(*self.elevatorPoints[index]), other=self.getElevatorModel()), LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25, Point3(self.BoardH, 0, 0), other=self.getElevatorModel()), Func(self.clearToonTrack, avId), animFunc, name=toon.uniqueName('fillElevator'), autoPause=1)
             if wantBoardingShow:
                 boardingTrack, boardingTrackType = self.getBoardingTrack(toon, index, False)
                 track = Sequence(boardingTrack, track)
@@ -565,11 +566,11 @@ class DistributedElevator(DistributedObject.DistributedObject):
         return self.JumpOutOffsets[seatIndex]
 
     def getOffsetPosWrtToonParent(self, toon, seatIndex = 0):
-        self.offsetNP.setPos(apply(Point3, self.getOffsetPos(seatIndex)))
+        self.offsetNP.setPos(Point3(*self.getOffsetPos(seatIndex)))
         return self.offsetNP.getPos(toon.getParent())
 
     def getOffsetPosWrtRender(self, seatIndex = 0):
-        self.offsetNP.setPos(apply(Point3, self.getOffsetPos(seatIndex)))
+        self.offsetNP.setPos(Point3(*self.getOffsetPos(seatIndex)))
         return self.offsetNP.getPos(render)
 
     def canHideBoardingQuitBtn(self, avId):

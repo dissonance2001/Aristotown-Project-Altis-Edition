@@ -5,6 +5,9 @@ See the :ref:`directentry` page in the programming manual for a more in-depth
 explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
+import six
+from six.moves import range
 __all__ = ['DirectEntry']
 
 from panda3d.core import *
@@ -279,7 +282,7 @@ class DirectEntry(DirectFrame):
             self.unicodeText = True
             self.guiItem.setWtext(text)
         else:
-            self.unicodeText = isinstance(text, unicode)
+            self.unicodeText = isinstance(text, six.text_type)
             if self.unicodeText:
                 self.guiItem.setWtext(text)
             else:

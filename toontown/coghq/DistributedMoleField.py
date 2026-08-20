@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from otp.level.BasicEntities import DistributedNodePathEntity
 from direct.directnotify import DirectNotifyGlobal
@@ -13,6 +14,7 @@ import random
 from toontown.minigame import Trajectory
 from direct.interval.IntervalGlobal import *
 from toontown.battle import MovieUtil
+from six.moves import range
 
 class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMoleField')
@@ -99,8 +101,8 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
     def loadModel(self):
         moleIndex = 0
         self.moleHills = []
-        for indexY in xrange(self.numSquaresY):
-            for indexX in xrange(self.numSquaresX):
+        for indexY in range(self.numSquaresY):
+            for indexX in range(self.numSquaresX):
                 xPos = indexX * self.spacingX
                 yPos = indexY * self.spacingY
                 newMoleHill = MoleHill.MoleHill(xPos, yPos, 0, self, moleIndex)

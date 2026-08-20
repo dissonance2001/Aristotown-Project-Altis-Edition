@@ -26,9 +26,12 @@
 #  675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 class MultiColumnListbox(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
@@ -80,7 +83,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         # Create a frame widget to act as the border of the clipper. 
         self._borderframe = self.createcomponent('borderframe',
                                                  (), None,
-                                                 Tkinter.Frame,
+                                                 six.moves.tkinter.Frame,
                                                  (self.origInterior,),
                                                  relief = 'sunken',
                                                  borderwidth = 2,
@@ -91,7 +94,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         # Create the clipping windows.
         self._hclipper = self.createcomponent('hclipper',
                                               (), None,
-                                              Tkinter.Frame,
+                                              six.moves.tkinter.Frame,
                                               (self._borderframe,),
                                               width = 400,
                                               height = 300,
@@ -99,14 +102,14 @@ class MultiColumnListbox(Pmw.MegaWidget):
         self._hclipper.pack(fill = 'both', expand = 1)
 
         self._hsframe = self.createcomponent('hsframe', (), None,
-                                             Tkinter.Frame,
+                                             six.moves.tkinter.Frame,
                                              (self._hclipper,),
                                              )
                                              
 
         self._vclipper = self.createcomponent('vclipper',
                                               (), None,
-                                              Tkinter.Frame,
+                                              six.moves.tkinter.Frame,
                                               (self._hsframe,),
                                               #width = 400,
                                               #height = 300,
@@ -123,13 +126,13 @@ class MultiColumnListbox(Pmw.MegaWidget):
         gridcolumn = 0
         for labeltext in self._columnlabels:
             lframe = self.createcomponent(labeltext+'frame', (), None,
-                                          Tkinter.Frame,
+                                          six.moves.tkinter.Frame,
                                           (self._hsframe,),
                                           borderwidth = 1,
                                           relief = 'raised',
                                           )
             label = self.createcomponent(labeltext, (), None,
-                                         Tkinter.Label,
+                                         six.moves.tkinter.Label,
                                          (lframe,),
                                          text = labeltext,
                                          )
@@ -151,7 +154,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         # Create the horizontal scrollbar
         self._horizScrollbar = self.createcomponent('horizscrollbar',
                                                     (), 'Scrollbar',
-                                                    Tkinter.Scrollbar,
+                                                    six.moves.tkinter.Scrollbar,
                                                     (self.origInterior,),
                                                     orient='horizontal',
                                                     command=self._xview
@@ -160,7 +163,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         # Create the vertical scrollbar
         self._vertScrollbar = self.createcomponent('vertscrollbar',
                                                    (), 'Scrollbar',
-                                                   Tkinter.Scrollbar,
+                                                   six.moves.tkinter.Scrollbar,
                                                    (self.origInterior,),
                                                    #(self._hclipper,),
                                                    orient='vertical',
@@ -184,7 +187,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         # scrolled.
         self._vsframe = self.createcomponent('vsframe',
                                              (), None,
-                                             Tkinter.Frame,
+                                             six.moves.tkinter.Frame,
                                              (self._vclipper,),
                                              #height = 300,
                                              #borderwidth = 4,
@@ -237,7 +240,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
             cellframe = self.createcomponent(('cellframeid.%d.%s'%(self._lineid,
                                                                    columnlabel)),
                                              (), ('Cellframerowid.%d'%self._lineid),
-                                             Tkinter.Frame,
+                                             six.moves.tkinter.Frame,
                                              (self._vsframe,),
                                              background = self['background'],
                                              #borderwidth = 1,
@@ -251,7 +254,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
                 cell = self.createcomponent(('cellid.%d.%s'%(self._lineid,
                                                              columnlabel)),
                                             (), ('Cellrowid.%d'%self._lineid),
-                                            Tkinter.Label,
+                                            six.moves.tkinter.Label,
                                             (cellframe,),
                                             background = self['background'],
                                             foreground = self['foreground'],
@@ -335,7 +338,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
                 self._toggleHorizScrollbar()
         else:
             message = 'bad hscrollmode option "%s": should be static, dynamic, or none' % mode
-            raise ValueError, message
+            raise ValueError(message)
 
     def _vscrollMode(self):
         # The vertical scroll mode has been configured.
@@ -353,7 +356,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
                 self._toggleVertScrollbar()
         else:
             message = 'bad vscrollmode option "%s": should be static, dynamic, or none' % mode
-            raise ValueError, message
+            raise ValueError(message)
 
     def _horizflex(self):
         # The horizontal flex mode has been configured.
@@ -363,7 +366,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         if flex not in self._flexoptions:
             message = 'bad horizflex option "%s": should be one of %s' % \
                     mode, str(self._flexoptions)
-            raise ValueError, message
+            raise ValueError(message)
 
         self.reposition()
 
@@ -375,7 +378,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
         if flex not in self._flexoptions:
             message = 'bad vertflex option "%s": should be one of %s' % \
                     mode, str(self._flexoptions)
-            raise ValueError, message
+            raise ValueError(message)
 
         self.reposition()
 
@@ -636,7 +639,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
                 cfg['Cellframerowid.%d_background'%lineid] = self['background']
                 #cfg['Cellframerowid%d_relief'%cursel] = 'flat'
             
-        apply(self.configure, (), cfg)
+        self.configure(*(), **cfg)
         self._cursel = [row]
 
         cmd = self['command']
@@ -659,7 +662,7 @@ class MultiColumnListbox(Pmw.MegaWidget):
 
 if __name__ == '__main__':
 
-    rootWin = Tkinter.Tk()
+    rootWin = six.moves.tkinter.Tk()
 
     Pmw.initialise()
 
@@ -668,7 +671,7 @@ if __name__ == '__main__':
     rootWin.update()
 
     def dbl():
-        print listbox.getcurselection()
+        print(listbox.getcurselection())
 
     listbox = MultiColumnListbox(rootWin,
                                            #usehullsize = 1,
@@ -700,7 +703,7 @@ if __name__ == '__main__':
     listbox.pack(expand = 1, fill = 'both', padx = 10, pady = 10)
 
 
-    exitButton = Tkinter.Button(rootWin, text="Quit", command=rootWin.quit)
+    exitButton = six.moves.tkinter.Button(rootWin, text="Quit", command=rootWin.quit)
     exitButton.pack(side = 'left', padx = 10, pady = 10)
 
     rootWin.mainloop()

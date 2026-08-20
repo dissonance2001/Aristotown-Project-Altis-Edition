@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import TTLocalizer
 from toontown.coghq.SpecImports import *
 GlobalEntities = {1000: {'type': 'levelMgr',

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import calendar
 from datetime import datetime
 from datetime import timedelta
@@ -29,6 +30,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TTDialog
 from toontown.toontowngui.TeaserPanel import TeaserPanel
 from toontown.nametag import NametagGlobals
+from six.moves import range
 
 class PartyPlanner(DirectFrame, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('PartyPlanner')
@@ -585,7 +587,7 @@ class PartyPlanner(DirectFrame, FSM):
         return page
 
     def __handleHolidays(self):
-        self.inviteThemes = range(len(PartyGlobals.InviteTheme))
+        self.inviteThemes = list(range(len(PartyGlobals.InviteTheme)))
         if hasattr(base.cr, 'newsManager') and base.cr.newsManager:
             holidayIds = base.cr.newsManager.getHolidayIdList()
             if ToontownGlobals.VALENTINES_DAY not in holidayIds:

@@ -1,9 +1,12 @@
 """DistributedObject module: contains the DistributedObject class"""
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from panda3d.direct import *
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectBase import DistributedObjectBase
+from six.moves import range
 #from PyDatagram import PyDatagram
 #from PyDatagramIterator import PyDatagramIterator
 
@@ -83,7 +86,7 @@ class DistributedObject(DistributedObjectBase):
             """
             spaces = ' ' * (indent + 2)
             try:
-                print("%s%s:" % (' ' * indent, self.__class__.__name__))
+                print(("%s%s:" % (' ' * indent, self.__class__.__name__)))
 
                 flags = []
                 if self.activeState == ESGenerated:
@@ -99,10 +102,10 @@ class DistributedObject(DistributedObjectBase):
                 if len(flags):
                     flagStr = " (%s)" % (" ".join(flags))
 
-                print("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
-                    spaces, self.doId, self.parentId, self.zoneId, flagStr))
+                print(("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
+                    spaces, self.doId, self.parentId, self.zoneId, flagStr)))
             except Exception as e:
-                print("%serror printing status %s" % (spaces, e))
+                print(("%serror printing status %s" % (spaces, e)))
 
     def getAutoInterests(self):
         # returns the sub-zones under this object that are automatically
@@ -250,7 +253,7 @@ class DistributedObject(DistributedObjectBase):
             # we are going to crash, output the destroyDo stacktrace
             self.notify.warning('self.cr is none in _deactivateDO %d' % self.doId)
             if hasattr(self, 'destroyDoStackTrace'):
-                print(self.destroyDoStackTrace)
+                print((self.destroyDoStackTrace))
         self.__callbacks = {}
         self.cr.closeAutoInterests(self)
         self.setLocation(0,0)

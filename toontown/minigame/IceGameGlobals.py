@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from pandac.PandaModules import Point3
 from toontown.toonbase import ToontownGlobals

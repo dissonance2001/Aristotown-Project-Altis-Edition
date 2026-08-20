@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.distributed.OtpDoGlobals import *
 from toontown.toonbase.ToonPythonUtil import invertDictLossless
 OTP_SERVER_ROOT_DO_ID = 4007

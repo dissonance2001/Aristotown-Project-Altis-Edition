@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame, DirectButton
 from direct.gui import DirectGuiGlobals as DGG
 from toontown.toon.socialpanel.SocialPanelGlobals import *

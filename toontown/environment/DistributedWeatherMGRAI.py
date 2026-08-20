@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.fsm.FSM import FSM

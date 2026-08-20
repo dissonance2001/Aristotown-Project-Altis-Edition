@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
@@ -12,7 +13,7 @@ class VineHeadFrame(DirectFrame):
          'geom_scale': (0.5, 1, 0.5),
          'pos': (0, 0, 0)}
         opts.update(kwargs)
-        apply(DirectFrame.__init__, (self,) + args, opts)
+        DirectFrame.__init__(*(self,) + args, **opts)
         self.initialiseoptions(VineHeadFrame)
         if av:
             self.setAv(av)

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Python 2-safe Toon Profile data and pose helpers for Project Altis."""
 
+from __future__ import absolute_import
 from collections import OrderedDict
+from six.moves import range
 
 DEFAULT_POSE = 0
 DEFAULT_NAMEPLATE = 101
@@ -340,7 +342,7 @@ def applyPose(toon, poseId, notify=None):
     propHprs = data.get('PropHpr', [])
     propScales = data.get('PropScale', [])
     madeProps = []
-    for index in xrange(len(propNames)):
+    for index in range(len(propNames)):
         prop = _loadProp(propNames[index])
         if not prop:
             continue

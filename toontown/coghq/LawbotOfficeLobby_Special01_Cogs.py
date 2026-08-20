@@ -1,4 +1,5 @@
-from SpecImports import *
+from __future__ import absolute_import
+from .SpecImports import *
 CogParent = 10000
 BattleCellId = 0
 BattleCells = {BattleCellId: {'parentEntId': CogParent,

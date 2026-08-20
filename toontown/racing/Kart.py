@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
@@ -6,6 +8,7 @@ from direct.interval.IntervalGlobal import *
 from otp.avatar import ShadowCaster
 from toontown.racing.KartDNA import *
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class Kart(NodePath, ShadowCaster.ShadowCaster):
     notify = DirectNotifyGlobal.directNotify.newCategory('Kart')
@@ -68,13 +71,13 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
             levelIn[0] = base.config.GetInt('lod1-in', 2500)
             levelIn[1] = base.config.GetInt('lod1-out', 0)
         self.toonSeat = NodePath('toonSeat')
-        for level in xrange(lodRequired):
+        for level in range(lodRequired):
             self.__createLODKart(level)
             self.LODnode.addSwitch(levelIn[level], levelOut[level])
 
         self.setScale(self.baseScale)
         self.flattenMedium()
-        for level in xrange(lodRequired):
+        for level in range(lodRequired):
             self.toonSeat = self.toonSeat.instanceTo(self.toonNode[level])
 
         self.LODpath.reparentTo(self.rotateNode)
@@ -154,7 +157,7 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
                     self.__applyDecals()
                     self.__applyAccessoryColor()
                 else:
-                    raise StandardError, 'Kart::__update - Has this method been called before generateKart?'
+                    raise Exception('Kart::__update - Has this method been called before generateKart?')
             elif field == KartDNA.bodyColor:
                 self.__applyBodyColor()
             elif field == KartDNA.accColor:
@@ -436,7 +439,7 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
 
     def setDNA(self, dna):
         if self.kartDNA != [-1] * getNumFields():
-            for field in xrange(len(self.kartDNA)):
+            for field in range(len(self.kartDNA)):
                 if dna[field] != self.kartDNA[field]:
                     self.updateDNAField(field, dna[field])
 
@@ -527,7 +530,7 @@ class Kart(NodePath, ShadowCaster.ShadowCaster):
         length = self.kartStartSfx.length()
 
         def printVol():
-            print self.kartLoopSfx.getVolume()
+            print(self.kartLoopSfx.getVolume())
 
         track = Parallel(SoundInterval(self.kartStartSfx), Func(self.kartLoopSfx.play), LerpFunctionInterval(self.kartLoopSfx.setVolume, fromData=0, toData=0.4, duration=length))
         return Sequence(track, Func(printVol))

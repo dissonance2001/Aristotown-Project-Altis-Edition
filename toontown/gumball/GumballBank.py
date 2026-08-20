@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame
 from direct.gui.OnscreenText import OnscreenText
 from pandac.PandaModules import TextNode, Texture, TransparencyAttrib

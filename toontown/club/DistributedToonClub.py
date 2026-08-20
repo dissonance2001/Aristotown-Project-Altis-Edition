@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import os
 import time
@@ -37,7 +39,7 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
         self.cr.groupMgr = self.groupManager
         self.groupManager.start()
         taskMgr.doMethodLater(0.5, self._requestInitialState, self.uniqueName('requestClubState'))
-        print '[Clubs] Club manager loaded.'
+        print('[Clubs] Club manager loaded.')
 
     def groupReceiveState(self, groupJson):
         if self.groupManager:

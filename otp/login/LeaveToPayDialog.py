@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLauncherGlobals
 from otp.otpbase import OTPLocalizer

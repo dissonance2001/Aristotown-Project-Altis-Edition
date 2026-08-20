@@ -1,5 +1,6 @@
 # Not Based on iwidgets version.
 
+from __future__ import absolute_import
 import Pmw
 
 class SelectionDialog(Pmw.Dialog):

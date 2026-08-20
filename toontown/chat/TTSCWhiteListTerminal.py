@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from otp.speedchat.SCTerminal import SCTerminal
 from otp.otpbase.OTPLocalizer import SpeedChatStaticText
 SCStaticTextMsgEvent = 'SCStaticTextMsg'
@@ -13,7 +15,7 @@ class TTSCWhiteListTerminal(SCTerminal):
         self.parentClass = parentMenu
         self.textId = textId
         self.text = SpeedChatStaticText[self.textId]
-        print 'SpeedText %s %s' % (self.textId, self.text)
+        print('SpeedText %s %s' % (self.textId, self.text))
 
     def handleSelect(self):
         SCTerminal.handleSelect(self)

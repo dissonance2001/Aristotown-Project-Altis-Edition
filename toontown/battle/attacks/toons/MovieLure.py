@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -16,6 +17,7 @@ from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
 from toontown.battle.attacks.toons import MovieNPCSOS
 import random
+from six.moves import range
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieLures')
 
 def safeWrtReparentTo(nodePath, parent):
@@ -319,7 +321,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitTrack.append(Wait(suitDelay))
                 suitTrack.append(Func(showLureRounds, suit, battle, lure['level']))
                 suitTrack.append(ActorInterval(suit, 'magnet', startTime=2.37, endTime=1.82))
-                for i in xrange(0, numShakes):
+                for i in range(0, numShakes):
                     suitTrack.append(
                         ActorInterval(suit, 'magnet', startTime=1.82, endTime=1.16, duration=shakeDuration))
 
@@ -1007,7 +1009,7 @@ def getSplicedLerpAnimsTrack(object, animName, origDuration, newDuration, startT
     numIvals = origDuration * fps
     timeInterval = newDuration / numIvals
     animInterval = origDuration / numIvals
-    for i in xrange(0, int(numIvals)):
+    for i in range(0, int(numIvals)):
         track.append(Wait(timeInterval))
         track.append(ActorInterval(object, animName, startTime=startTime + addition, duration=animInterval))
         addition += animInterval

@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 import types
 import tkinter
 import Pmw
 import sys
 import collections
+from six.moves import range
 
 class OptionMenu(Pmw.MegaWidget):
 

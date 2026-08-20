@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import CollisionTube, CollisionNode
 from otp.nametag.NametagGroup import *
 from toontown.pets import Pet

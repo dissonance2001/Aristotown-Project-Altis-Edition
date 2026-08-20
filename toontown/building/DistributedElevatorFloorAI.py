@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.building import DistributedElevatorFSMAI
 from toontown.building.ElevatorConstants import *
 from direct.directnotify import DirectNotifyGlobal
@@ -6,6 +8,7 @@ from direct.fsm.FSM import FSM
 from direct.task import Task
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedElevatorFloorAI(DistributedElevatorFSMAI.DistributedElevatorFSMAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevatorFloorAI')
@@ -63,7 +66,7 @@ class DistributedElevatorFloorAI(DistributedElevatorFSMAI.DistributedElevatorFSM
         DistributedElevatorFSMAI.DistributedElevatorFSMAI.generateWithRequired(self, self.zoneId)
 
     def delete(self):
-        for seatIndex in xrange(len(self.seats)):
+        for seatIndex in range(len(self.seats)):
             avId = self.seats[seatIndex]
             if avId:
                 self.clearFullNow(seatIndex)
@@ -147,9 +150,9 @@ class DistributedElevatorFloorAI(DistributedElevatorFSMAI.DistributedElevatorFSM
 
     def enterWaitEmpty(self):
         self.lastState = self.state
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             self.seats[i] = None
-        print self.seats
+        print(self.seats)
         if self.wantState == 'closed':
             self.demand('Closing')
         else:
@@ -212,7 +215,7 @@ class DistributedElevatorFloorAI(DistributedElevatorFSMAI.DistributedElevatorFSM
                     players.append(i)
                     continue
             sittingAvIds = []
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     sittingAvIds.append(avId)

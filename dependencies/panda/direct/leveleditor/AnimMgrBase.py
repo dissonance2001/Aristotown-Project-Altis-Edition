@@ -2,12 +2,14 @@
 Defines AnimMgrBase
 """
 
+from __future__ import absolute_import
 import os, math
 
 from direct.interval.IntervalGlobal import *
 from panda3d.core import VBase3
 from . import ObjectGlobals as OG
 from . import AnimGlobals as AG
+from six.moves import range
 
 class AnimMgrBase:
     """ AnimMgr will create, manage, update animations in the scene """

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
@@ -5,6 +6,7 @@ from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 from toontown.estate import FlowerSpeciesPanel
 from toontown.estate import GardenGlobals
+from six.moves import map
 
 class FlowerBrowser(DirectScrolledList):
     notify = DirectNotifyGlobal.directNotify.newCategory('FlowerBrowser')
@@ -31,7 +33,7 @@ class FlowerBrowser(DirectScrolledList):
          ('decButton_pos', (0, 0, 0.525), None),
          ('decButton_image3_color', Vec4(0.8, 0.8, 0.8, 0.5), None),
          ('numItemsVisible', 1, None),
-         ('items', map(str, GardenGlobals.getFlowerSpecies()), None),
+         ('items', list(map(str, GardenGlobals.getFlowerSpecies())), None),
          ('scrollSpeed', 4, None),
          ('itemMakeFunction', FlowerSpeciesPanel.FlowerSpeciesPanel, None),
          ('itemMakeExtraArgs', base.localAvatar.flowerCollection, None))

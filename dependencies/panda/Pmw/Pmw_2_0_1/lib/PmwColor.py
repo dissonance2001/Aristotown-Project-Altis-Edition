@@ -1,10 +1,12 @@
 # Functions for converting colors and modifying the color scheme of
 # an application.
 
+from __future__ import absolute_import
 import math
 import string
 import sys
 import tkinter
+from six.moves import range
 
 _PI = math.pi
 _TWO_PI = _PI * 2

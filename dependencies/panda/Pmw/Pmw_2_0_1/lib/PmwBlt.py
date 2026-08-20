@@ -1,9 +1,11 @@
 # Python interface to some of the commands of the 2.4 version of the
 # BLT extension to tcl.
 
+from __future__ import absolute_import
 import string
 import types
 import tkinter
+from six.moves import map
 
 # Supported commands:
 _busyCommand = '::blt::busy'

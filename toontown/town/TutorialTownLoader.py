@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.town import TownLoader
 from toontown.town import TTTownLoader
 from toontown.town import TutorialStreet

@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 import re
+import six
 
 
 COMMANDS = (
@@ -377,10 +379,10 @@ def _discoverSpellbookCommands():
     except:
         return commands
     try:
-        iterator = spellbook.words.itervalues()
+        iterator = six.itervalues(spellbook.words)
     except:
         try:
-            iterator = spellbook.words.values()
+            iterator = list(spellbook.words.values())
         except:
             return commands
     seenObjects = set()

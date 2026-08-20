@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 
 from direct.distributed.ClockDelta import *
@@ -7,6 +8,7 @@ from panda3d.core import *
 from otp.ai.MagicWordGlobal import *
 from toontown.duckhuntbossbattle.DistributedRebornBossCogAI import DistributedRebornBossCogAI
 from toontown.toonbase import ToontownGlobals
+import six
 
 
 class DistributedCJBossAI(DistributedRebornBossCogAI):
@@ -77,7 +79,7 @@ class DistributedCJBossAI(DistributedRebornBossCogAI):
         else:
             targetDistance = sortedDistances[0]
 
-        for toonId, distance in toonToDistance.iteritems():
+        for toonId, distance in six.iteritems(toonToDistance):
             if distance == targetDistance:
                 targetId = toonId
                 break

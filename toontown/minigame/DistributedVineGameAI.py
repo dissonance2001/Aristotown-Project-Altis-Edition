@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.minigame import VineGameGlobals
+from six.moves import range
 
 class DistributedVineGameAI(DistributedMinigameAI):
 
@@ -286,10 +288,10 @@ class DistributedVineGameAI(DistributedMinigameAI):
 
         maxSpiders = VineGameGlobals.SpiderLimits[szId]
         curSpiders = 0
-        for i in xrange(4):
+        for i in range(4):
             spidersLeft = maxSpiders - curSpiders
             validChoices = []
-            for numSpiders in xrange(spidersLeft + 1):
+            for numSpiders in range(spidersLeft + 1):
                 validChoices += pool[numSpiders]
 
             if not validChoices:

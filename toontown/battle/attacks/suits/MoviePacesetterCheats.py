@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import MovieCamera
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
@@ -28,6 +29,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits import MovieIntervals
 from toontown.battle.attacks.toons import MovieZap
+from six.moves import range
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -420,9 +422,9 @@ def doCorporateRestructuring(attack):
         return Sequence(getSuitAnimTrack(attack))
     payload = int(attack.get('hp', 0))
     oldIndexes = []
-    for index in xrange(len(oldActiveSuits)):
+    for index in range(len(oldActiveSuits)):
         oldIndexes.append((payload >> (index * 3)) & 7)
-    if sorted(oldIndexes) != range(len(oldActiveSuits)):
+    if sorted(oldIndexes) != list(range(len(oldActiveSuits))):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
     suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))

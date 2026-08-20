@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from otp.level import BasicEntities
 from toontown.suit import GoonPathData
+from six.moves import range
 
 class PathEntity(BasicEntities.NodePathEntity):
     notify = DirectNotifyGlobal.directNotify.newCategory('PathEntity')
@@ -32,7 +34,7 @@ class PathEntity(BasicEntities.NodePathEntity):
             track.append(WaitInterval(1.0))
             return track
         path = self.path + [self.path[0]]
-        for pointIndex in xrange(len(path) - 1):
+        for pointIndex in range(len(path) - 1):
             startPoint = Point3(path[pointIndex]) * self.pathScale
             endPoint = Point3(path[pointIndex + 1]) * self.pathScale
             v = startPoint - endPoint

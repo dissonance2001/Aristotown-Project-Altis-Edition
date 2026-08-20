@@ -10,6 +10,7 @@
 # initializes Panda and creates the window. The run() command causes the
 # real-time simulation to begin
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 

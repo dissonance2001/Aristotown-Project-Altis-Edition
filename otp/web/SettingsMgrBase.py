@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
+import six
 
 class SettingsMgrBase:
     notify = directNotify.newCategory('SettingsMgrBase')
@@ -16,7 +18,7 @@ class SettingsMgrBase:
         pass
 
     def _iterSettingNames(self):
-        for name in self._settings.iterkeys():
+        for name in six.iterkeys(self._settings):
             yield name
 
     def _addSettings(self, *settings):

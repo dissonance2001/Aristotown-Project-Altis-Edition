@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath
 from direct.gui.DirectButton import DirectButton
 from toontown.catalog import CatalogGlobals

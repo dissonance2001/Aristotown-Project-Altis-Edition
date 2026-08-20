@@ -1,20 +1,22 @@
+from __future__ import absolute_import
+from six.moves import range
 title = 'Grid geometry manager demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
-	frame = Tkinter.Frame(parent)
+	frame = six.moves.tkinter.Frame(parent)
 	frame.pack(fill = 'both', expand = 1)
 
 	button = {}
 	for num in range(0, 10):
-	    button[num] = Tkinter.Button(frame, text = 'Button ' + str(num))
+	    button[num] = six.moves.tkinter.Button(frame, text = 'Button ' + str(num))
 
 	button[0].grid(column=0, row=0, rowspan=2, sticky='nsew')
 	button[1].grid(column=1, row=0, columnspan=3, sticky='nsew')
@@ -34,11 +36,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

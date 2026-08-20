@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from math import *
+from six.moves import range
 
 GEO_ID = 0
 

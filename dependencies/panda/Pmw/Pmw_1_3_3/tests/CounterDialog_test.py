@@ -1,4 +1,5 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -56,7 +57,7 @@ tests_1 = (
     ('entryfield_validate', 'alphabetic'),
     ('entry_width', 30),
     ('relief', 'bogus', 'KeyError: Unknown option "relief" for CounterDialog'),
-    (c.interior, (), Tkinter.Frame),
+    (c.interior, (), six.moves.tkinter.Frame),
     (c.insert, ('end', 69)),
     (c.increment, ()),
     (c.decrement, ()),

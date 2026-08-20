@@ -1,12 +1,15 @@
 # PanedWidget
 # a frame which may contain several resizable sub-frames
 
+from __future__ import absolute_import
 import string
 import sys
 import types
 import tkinter
 import Pmw
 import collections
+from six.moves import map
+from six.moves import range
 
 class PanedWidget(Pmw.MegaWidget):
 

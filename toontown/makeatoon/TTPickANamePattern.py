@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import listToItem2index
 from otp.namepanel.PickANamePattern import PickANamePatternTwoPartLastName
 from toontown.makeatoon.NameGenerator import NameGenerator

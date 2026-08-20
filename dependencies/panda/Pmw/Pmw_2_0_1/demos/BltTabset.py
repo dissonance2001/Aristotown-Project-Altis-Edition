@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Blt Tabset demonstration'
 
 # Import Pmw from this directory tree.

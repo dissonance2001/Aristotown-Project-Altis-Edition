@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.fishing import FishingTargetGlobals
 from toontown.fishing.DistributedFishingTargetAI import DistributedFishingTargetAI
+from six.moves import range
 
 class DistributedFishingPondAI(DistributedObjectAI):
     notify = directNotify.newCategory("DistributedFishingPondAI")
@@ -15,7 +17,7 @@ class DistributedFishingPondAI(DistributedObjectAI):
         self.bingoMgr = None
 
     def start(self):
-        for _ in xrange(FishingTargetGlobals.getNumTargets(self.area)):
+        for _ in range(FishingTargetGlobals.getNumTargets(self.area)):
             fishingTarget = DistributedFishingTargetAI(simbase.air)
             fishingTarget.setPondDoId(self.doId)
             fishingTarget.generateWithRequired(self.zoneId)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.pgui.DirectGui import *
 from pandac.PandaModules import *
 
@@ -55,5 +56,5 @@ class DirectCheckBox(DirectButton):
         
         if self['command']:
             # Pass any extra args to command
-            apply(self['command'], [self['isChecked']] + self['extraArgs'])
+            self['command'](*[self['isChecked']] + self['extraArgs'])
 

@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
 import sys
+from six.moves import range
 
 class OptionMenu(Pmw.MegaWidget):
 
@@ -27,7 +29,7 @@ class OptionMenu(Pmw.MegaWidget):
 
 	self._menubutton = self.createcomponent('menubutton',
 		(), None,
-		Tkinter.Menubutton, (interior,),
+		six.moves.tkinter.Menubutton, (interior,),
 		borderwidth = 2,
 		indicatoron = 1,
 		relief = 'raised',
@@ -40,7 +42,7 @@ class OptionMenu(Pmw.MegaWidget):
 
 	self._menu = self.createcomponent('menu',
 		(), None,
-		Tkinter.Menu, (self._menubutton,),
+		six.moves.tkinter.Menu, (self._menubutton,),
 		tearoff=0
 	)
 	self._menubutton.configure(menu = self._menu)
@@ -112,27 +114,26 @@ class OptionMenu(Pmw.MegaWidget):
 
     def index(self, index):
 	listLength = len(self._itemList)
-	if type(index) == types.IntType:
+	if type(index) == int:
 	    if index < listLength:
 		return index
 	    else:
-		raise ValueError, 'index "%s" is out of range' % index
+		raise ValueError('index "%s" is out of range' % index)
 	elif index is Pmw.END:
 	    if listLength > 0:
 		return listLength - 1
 	    else:
-		raise ValueError, 'OptionMenu has no items'
+		raise ValueError('OptionMenu has no items')
 	else:
 	    if index is Pmw.SELECT:
 		if listLength > 0:
 		    index = self.getcurselection()
 		else:
-		    raise ValueError, 'OptionMenu has no items'
+		    raise ValueError('OptionMenu has no items')
             if index in self._itemList:
                 return self._itemList.index(index)
-	    raise ValueError, \
-		    'bad index "%s": must be a ' \
-                    'name, a number, Pmw.END or Pmw.SELECT' % (index,)
+	    raise ValueError('bad index "%s": must be a ' \
+                    'name, a number, Pmw.END or Pmw.SELECT' % (index,))
 
     def invoke(self, index = Pmw.SELECT):
 	index = self.index(index)

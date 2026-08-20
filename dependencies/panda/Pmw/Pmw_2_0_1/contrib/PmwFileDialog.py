@@ -1,4 +1,6 @@
 #
+from __future__ import absolute_import
+from __future__ import print_function
 __version__ = '$Id: PmwFileDialog.py,v 1.2.2.1 2012/08/04 00:56:51 adyh Exp $'
 #
 # Filename dialogs using Pmw
@@ -488,7 +490,7 @@ if __name__=="__main__":
     f0=PmwFileDialog(root)
     f0.title('File name dialog')
     n=f0.askfilename()
-    print('\nFilename : ',repr(n),'\n')
+    print(('\nFilename : ',repr(n),'\n'))
 
     f1=PmwDirDialog(root,info='This is a directory dialog')
     f1.title('Directory name dialog')
@@ -496,4 +498,4 @@ if __name__=="__main__":
         n=f1.askfilename()
         if n is None:
             break
-        print("Dirname : ",repr(n))
+        print(("Dirname : ",repr(n)))

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import decimal
 from operator import itemgetter
 from direct.gui.DirectGui import *
@@ -10,6 +11,7 @@ from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
+from six.moves import range
 
 SORT_NONE = 0
 SORT_TRACK = 1
@@ -225,7 +227,7 @@ class NPCFriendPanel(DirectScrolledFrame):
             yOffset = 0.4
             frameLength = abs(self.defaultCanvasSize[0] - self.defaultCanvasSize[1])
             xSpacing = (frameLength / self.cardsPerRow) + self.spacingPerCard
-            for idx in xrange(cardCount):
+            for idx in range(cardCount):
                 card = NPCFriendCard(
                     parent=self.getCanvas(),
                     doneEvent=self['doneEvent'],

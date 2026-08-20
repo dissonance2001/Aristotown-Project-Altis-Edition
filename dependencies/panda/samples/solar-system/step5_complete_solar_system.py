@@ -11,6 +11,7 @@
 # in the next tutorial, but watching it move really shows what inheritance on
 # the scene graph is all about.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -8,6 +9,7 @@ from toontown.minigame import TwoDBlock
 from direct.gui import DirectGui
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class TwoDSectionMgr(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDSectionMgr')
@@ -56,7 +58,7 @@ class TwoDSectionMgr(DirectObject):
         self.startPipe.setPos(12, 0, 44)
         self.startArrow = self.game.assetMgr.arrow.copyTo(self.startSectionNP)
         self.startArrow.setPos(23, 1.5, 12.76)
-        for index in xrange(len(ToonBlitzGlobals.BlockListStart)):
+        for index in range(len(ToonBlitzGlobals.BlockListStart)):
             blockAttribs = ToonBlitzGlobals.BlockListStart[index]
             fileName = ToonBlitzGlobals.BlockTypes[blockAttribs[0]][0]
             blockIndex = int(fileName[-1])
@@ -99,7 +101,7 @@ class TwoDSectionMgr(DirectObject):
 
     def setupSections(self, sectionsSelected):
         self.incrementX = -24
-        for index in xrange(0, len(sectionsSelected)):
+        for index in range(0, len(sectionsSelected)):
             sectionNP = NodePath('Section' + str(index))
             sectionNP.reparentTo(self.game.assetMgr.world)
             sectionNP.setX(self.incrementX)

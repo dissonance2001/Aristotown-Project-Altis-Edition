@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -7,6 +8,7 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase import TTLocalizer
 from toontown.coghq.boardbothq import DistributedBoardOfficeRoom, BoardOfficeLayout, BoardOfficeRoom
+from six.moves import range
 
 class DistributedBoardOffice(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBoardOffice')
@@ -166,7 +168,7 @@ class DistributedBoardOffice(DistributedObject.DistributedObject):
         return
 
     def warpToRoom(self, roomId):
-        for i in xrange(len(self.rooms)):
+        for i in range(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break

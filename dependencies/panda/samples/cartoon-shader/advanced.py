@@ -8,6 +8,8 @@
 # effects like Toon Shading. It also shows how to implement
 # multiple buffers in Panda.
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import PandaNode, LightNode, TextNode
 from panda3d.core import Filename
@@ -136,24 +138,24 @@ class ToonMaker(ShowBase):
 
     def increaseSeparation(self):
         self.separation = self.separation * 1.11111111
-        print("separation: %f" % (self.separation))
+        print(("separation: %f" % (self.separation)))
         self.drawnScene.setShaderInput(
             "separation", LVecBase4(self.separation, 0, self.separation, 0))
 
     def decreaseSeparation(self):
         self.separation = self.separation * 0.90000000
-        print("separation: %f" % (self.separation))
+        print(("separation: %f" % (self.separation)))
         self.drawnScene.setShaderInput(
             "separation", LVecBase4(self.separation, 0, self.separation, 0))
 
     def increaseCutoff(self):
         self.cutoff = self.cutoff * 1.11111111
-        print("cutoff: %f" % (self.cutoff))
+        print(("cutoff: %f" % (self.cutoff)))
         self.drawnScene.setShaderInput("cutoff", LVecBase4(self.cutoff))
 
     def decreaseCutoff(self):
         self.cutoff = self.cutoff * 0.90000000
-        print("cutoff: %f" % (self.cutoff))
+        print(("cutoff: %f" % (self.cutoff)))
         self.drawnScene.setShaderInput("cutoff", LVecBase4(self.cutoff))
 
 t = ToonMaker()

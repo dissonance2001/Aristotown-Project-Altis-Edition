@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from otp.ai.MagicWordGlobal import *
@@ -25,6 +26,7 @@ from toontown.coghq import DistributedLawbotCannonAI
 from toontown.coghq import DistributedLawbotChairAI
 from toontown.toonbase import ToontownBattleGlobals
 import math
+from six.moves import range
 
 class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBossAI')
@@ -44,7 +46,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         self.chasingToon = False
         self.activeSuits = []
         self.reserveSuits = []
-        self.cagedToonNpcId = random.choice(NPCToons.npcFriends.keys())
+        self.cagedToonNpcId = random.choice(list(NPCToons.npcFriends.keys()))
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.recoverRate = 0
@@ -385,7 +387,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
             self.notify.debug('totalDisplacement=%s' % totalDisplacement)
             numToons = len(self.involvedToons)
             stepDisplacement = totalDisplacement / (numToons + 1)
-            for index in xrange(numToons):
+            for index in range(numToons):
                 newPos = stepDisplacement * (index + 1)
                 self.notify.debug('curDisplacement = %s' % newPos)
                 newPos += startPt
@@ -399,7 +401,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
     def __makeChairs(self):
         if self.chairs == None:
             self.chairs = []
-            for index in xrange(12):
+            for index in range(12):
                 chair = DistributedLawbotChairAI.DistributedLawbotChairAI(self.air, self, index)
                 chair.generateWithRequired(self.zoneId)
                 self.chairs.append(chair)
@@ -579,7 +581,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
     def __makeBattleThreeObjects(self):
         if self.gavels == None:
             self.gavels = []
-            for index in xrange(self.numGavels):
+            for index in range(self.numGavels):
                 gavel = DistributedLawbotBossGavelAI.DistributedLawbotBossGavelAI(self.air, self, index)
                 gavel.generateWithRequired(self.zoneId)
                 self.gavels.append(gavel)
@@ -668,7 +670,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                 if hasattr(toon, 'applyGumballBoosters'):
                     from toontown.gumball import GumballGlobals
                     rewardCount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_LAWBOT], rewardCount, True)
-                for x in xrange(max(1, rewardCount)):
+                for x in range(max(1, rewardCount)):
                     self.giveCogSummonReward(toon, preferredDept, preferredSummonType)
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CJ)
@@ -688,7 +690,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
             summonType = 'invasion'
         else:
             foundOne = False
-            for curDeptIndex in xrange(len(SuitDNA.suitDepts)):
+            for curDeptIndex in range(len(SuitDNA.suitDepts)):
                 if not toon.hasParticularCogSummons(curDeptIndex, cogLevel, prefSummonType):
                     deptIndex = curDeptIndex
                     foundOne = True
@@ -709,12 +711,12 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                     foundOne = True
                     break
 
-            possibleCogLevel = range(SuitDNA.suitsPerDept)
-            possibleDeptIndex = range(len(SuitDNA.suitDepts))
+            possibleCogLevel = list(range(SuitDNA.suitsPerDept))
+            possibleDeptIndex = list(range(len(SuitDNA.suitDepts)))
             possibleSummonType = ['single', 'building', 'invasion']
             typeWeights = ['single'] * 3 + ['building'] * 60 + ['invasion'] * 37
             if not foundOne:
-                 for i in xrange(5):
+                 for i in range(5):
                     randomCogLevel = random.choice(possibleCogLevel)
                     randomSummonType = random.choice(typeWeights)
                     randomDeptIndex = random.choice(possibleDeptIndex)
@@ -809,7 +811,7 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
                          'br',
                          'whistleb',
                          'clerk']
-        for i in xrange(self.numLawyers):
+        for i in range(self.numLawyers):
             suit = DistributedLawbotBossSuitAI.DistributedLawbotBossSuitAI(self.air, None)
             suit.dna = SuitDNA.SuitDNA()
             lawCog = random.choice(lawCogChoices)

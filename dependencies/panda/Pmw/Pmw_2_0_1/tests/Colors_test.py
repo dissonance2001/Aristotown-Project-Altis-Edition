@@ -1,8 +1,10 @@
 # Tests for Pmw color handling.
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw
+from six.moves import map
 
 Test.initialise()
 testData = ()

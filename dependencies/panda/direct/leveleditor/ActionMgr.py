@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from direct.showbase.PythonUtil import Functor
 from . import ObjectGlobals as OG

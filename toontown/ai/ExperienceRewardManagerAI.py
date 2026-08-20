@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals

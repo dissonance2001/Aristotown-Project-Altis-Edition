@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.suit import DistributedBossCogAI
 from toontown.suit import DistributedSuitAI
@@ -14,6 +15,7 @@ from toontown.building import SuitBuildingGlobals
 from toontown.battle import DistributedBattleMinibossAI
 from toontown.suit import DistributedMinibossAI
 from otp.ai.MagicWordGlobal import *
+from six.moves import range
 
 class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBoardbotBossAI')
@@ -27,11 +29,11 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
         self.doobers = []
         if ToontownGlobals.APRIL_FOOLS_COSTUMES in simbase.air.holidayManager.currentHolidays:
             if random.random() <= 0.25:
-                self.cagedToonNpcId = random.choice(NPCToons.AprilToonsFriends.keys())
+                self.cagedToonNpcId = random.choice(list(NPCToons.AprilToonsFriends.keys()))
             else:
-                self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+                self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         else:
-            self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+            self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.recoverRate = 0
@@ -463,7 +465,7 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
 
     def __makeDoobers(self):
         self.__resetDoobers()
-        for i in xrange(8):
+        for i in range(8):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
             level = random.randint(1, 14)
             suit.dna = SuitDNA.SuitDNA()

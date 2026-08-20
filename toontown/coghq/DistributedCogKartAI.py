@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import DistributedElevatorExtAI
 from toontown.building import ElevatorConstants
 from toontown.safezone import DistributedGolfKartAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedCogKartAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCogKartAI')
@@ -32,7 +34,7 @@ class DistributedCogKartAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
                 if i not in [None, 0]:
                     players.append(i)
             countryClubZone = self.bldg.createCountryClub(self.countryClubId, players)
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setCountryClubInteriorZone', [

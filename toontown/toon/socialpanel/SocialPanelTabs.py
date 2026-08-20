@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame, DirectButton
 from toontown.toon.socialpanel.SocialPanelGlobals import *
+from six.moves import range
 
 
 class SocialPanelTabs(DirectFrame):
@@ -83,7 +85,7 @@ class SocialPanelTabs(DirectFrame):
                    self.button_clubsTab,
                    self.button_closePanel]
         count = len(buttons)
-        for index in xrange(count):
+        for index in range(count):
             if count > 1:
                 amount = float(index) / float(count - 1)
             else:

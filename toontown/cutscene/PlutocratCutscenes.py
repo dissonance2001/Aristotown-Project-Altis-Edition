@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import Func, Parallel, Sequence, Wait
 from direct.particles.ParticleEffect import ParticleEffect
 from panda3d.core import NodePath

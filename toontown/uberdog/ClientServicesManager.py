@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import hmac
-import httplib
-import urllib
+import six.moves.http_client
+import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import json
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal

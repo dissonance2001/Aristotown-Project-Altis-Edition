@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Vec4
 from toontown.safezone.OZSafeZoneLoader import OZSafeZoneLoader
 from toontown.town.OZTownLoader import OZTownLoader

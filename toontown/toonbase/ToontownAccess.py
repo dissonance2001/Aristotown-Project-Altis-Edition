@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals

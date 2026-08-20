@@ -1,4 +1,5 @@
-import cPickle
+from __future__ import absolute_import
+import six.moves.cPickle
 import random
 from toontown.building import ToonInterior
 from toontown.building import ToonInteriorColors
@@ -17,6 +18,7 @@ from toontown.toon import ToonHead
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToonBaseGlobal import *
+from six.moves import range
 
 SIGN_LEFT = -4
 SIGN_RIGHT = 4
@@ -60,7 +62,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def replaceRandomInModel(self, model):
         baseTag = 'random_'
         npc = model.findAllMatches('**/' + baseTag + '???_*')
-        for i in xrange(npc.getNumPaths()):
+        for i in range(npc.getNumPaths()):
             np = npc.getPath(i)
             name = np.getName()
             b = len(baseTag)
@@ -147,7 +149,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
         self.block = block
 
     def setToonData(self, toonData):
-        savedBy = cPickle.loads(toonData)
+        savedBy = six.moves.cPickle.loads(toonData)
         self.savedBy = savedBy
 
     def buildTrophy(self):
@@ -167,7 +169,7 @@ class DistributedToonInterior(DistributedObject.DistributedObject):
     def buildFrame(self, name, dnaTuple):
         frame = loader.loadModel('phase_3.5/models/modules/trophy_frame')
         dna = ToonDNA.ToonDNA()
-        apply(dna.newToonFromProperties, dnaTuple)
+        dna.newToonFromProperties(*dnaTuple)
         head = ToonHead.ToonHead()
         head.setupHead(dna)
         head.setPosHprScale(0, -0.05, -0.05, 180, 0, 0, 0.55, 0.02, 0.55)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 from direct.fsm import StateData
 from toontown.toonbase.ToontownGlobals import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import CardMaker, NodePath, TransparencyAttrib, TextureStage, TextNode
 from direct.gui.DirectGui import *
 from toontown.toontowngui.TTGui import btnDn, btnRlvr, btnUp

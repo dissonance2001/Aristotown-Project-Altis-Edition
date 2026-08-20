@@ -2,6 +2,7 @@
 graphically transition between two scenes, such as by fading the screen to
 a particular color."""
 
+from __future__ import absolute_import
 __all__ = ['Transitions']
 
 from panda3d.core import *

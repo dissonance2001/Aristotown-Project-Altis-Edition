@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import copy, os, re, sys, token, tokenize
 from StringIO import StringIO
 from panda3d.core import *
@@ -80,7 +81,7 @@ def getLineOfTokens(gen):
     tokens = []
     nextNeg = 0
     try:
-        token = gen.next()
+        token = next(gen)
     except StopIteration:
         return None
     if token[0] == tokenize.ENDMARKER:
@@ -108,7 +109,7 @@ def getLineOfTokens(gen):
             notify.warning('Ignored token type: %s on line: %s' % (tokenize.tok_name[token[0]], token[2][0]))
 
         try:
-            token = gen.next()
+            token = next(gen)
         except StopIteration:
             break
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
@@ -16,6 +17,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from otp.otpbase import OTPGlobals
 from toontown.toontowngui import TTDialog
+from six.moves import range
 
 # Corporate Clash inventory reward text colours.
 _rewardTextPropertiesManager = TextPropertiesManager.getGlobalPtr()
@@ -2255,7 +2257,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         return
     
     def getDisplayTrackOrder(self):
-        defaultOrder = range(len(Tracks))
+        defaultOrder = list(range(len(Tracks)))
 
         if hasattr(base.localAvatar, 'battleConditions'):
             for cond, order in DISPLAY_CONTENT_SYNC_ORDERS.items():

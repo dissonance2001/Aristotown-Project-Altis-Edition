@@ -12,6 +12,7 @@
 # to give a rough simulation of the solar system.  You can see them move by
 # running step_5_complete_solar_system.py.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 

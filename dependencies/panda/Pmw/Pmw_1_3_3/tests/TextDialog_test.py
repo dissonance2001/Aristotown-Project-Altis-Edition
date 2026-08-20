@@ -1,4 +1,5 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -27,7 +28,7 @@ tests_1 = (
   ('label_image', ''),
   ('label_bitmap', ''),
   (c.title, 'TextDialog 1: new title', ''),
-  (c.interior, (), Tkinter.Frame),
+  (c.interior, (), six.moves.tkinter.Frame),
   ('defaultbutton', 'OK'), 
   (c.clear, ()),
   (c.get, (), '\n'),

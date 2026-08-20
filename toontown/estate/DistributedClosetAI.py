@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.estate.DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from toontown.toon.ToonDNA import ToonDNA
 from direct.distributed.ClockDelta import globalClockDelta

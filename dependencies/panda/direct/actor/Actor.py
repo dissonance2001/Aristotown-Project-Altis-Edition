@@ -1,5 +1,8 @@
 """Actor module: contains the Actor class"""
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['Actor']
 
 from panda3d.core import *
@@ -438,7 +441,7 @@ class Actor(DirectObject, NodePath):
                 part.outputValue(lineStream)
                 value = lineStream.getLine()
 
-            print(' '.join((' ' * indentLevel, part.getName(), value)))
+            print((' '.join((' ' * indentLevel, part.getName(), value))))
 
         for child in part.getChildren():
             self.__doListJoints(indentLevel + 2, child, isIncluded, subset)
@@ -484,19 +487,19 @@ class Actor(DirectObject, NodePath):
         Pretty print actor's details
         """
         for lodName, lodInfo in self.getActorInfo():
-            print('LOD: %s' % lodName)
+            print(('LOD: %s' % lodName))
             for partName, bundle, animInfo in lodInfo:
-                print('  Part: %s' % partName)
-                print('  Bundle: %r' % bundle)
+                print(('  Part: %s' % partName))
+                print(('  Bundle: %r' % bundle))
                 for animName, file, animControl in animInfo:
-                    print('    Anim: %s' % animName)
-                    print('      File: %s' % file)
+                    print(('    Anim: %s' % animName))
+                    print(('      File: %s' % file))
                     if animControl is None:
                         print(' (not loaded)')
                     else:
-                        print('      NumFrames: %d PlayRate: %0.2f' %
+                        print(('      NumFrames: %d PlayRate: %0.2f' %
                                (animControl.getNumFrames(),
-                                animControl.getPlayRate()))
+                                animControl.getPlayRate())))
 
     def cleanup(self):
         """
@@ -669,15 +672,15 @@ class Actor(DirectObject, NodePath):
     def printLOD(self):
         sortedKeys = self.__sortedLODNames
         for eachLod in sortedKeys:
-            print("python switches for %s: in: %d, out %d" % (eachLod,
+            print(("python switches for %s: in: %d, out %d" % (eachLod,
                                               self.switches[eachLod][0],
-                                              self.switches[eachLod][1]))
+                                              self.switches[eachLod][1])))
 
         switchNum = self.__LODNode.node().getNumSwitches()
         for eachSwitch in range(0, switchNum):
-            print("c++ switches for %d: in: %d, out: %d" % (eachSwitch,
+            print(("c++ switches for %d: in: %d, out: %d" % (eachSwitch,
                    self.__LODNode.node().getIn(eachSwitch),
-                   self.__LODNode.node().getOut(eachSwitch)))
+                   self.__LODNode.node().getOut(eachSwitch))))
 
 
     def resetLOD(self):
@@ -1155,7 +1158,7 @@ class Actor(DirectObject, NodePath):
 
         elif lodName is None:
             # Get all LOD's.
-            partBundleDicts = self.__partBundleDict.values()
+            partBundleDicts = list(self.__partBundleDict.values())
         else:
             # Get one LOD.
             partBundleDict = self.__partBundleDict.get(lodName)
@@ -1182,7 +1185,7 @@ class Actor(DirectObject, NodePath):
                 parts = [partDef]
             else:
                 subset = None
-                parts = partBundleDict.values()
+                parts = list(partBundleDict.values())
 
             for partData in parts:
                 partBundle = partData.getBundle()
@@ -1771,7 +1774,7 @@ class Actor(DirectObject, NodePath):
         # requested.
         if lodName is None or self.mergeLODBundles:
             # Get all LOD's
-            animControlDictItems = self.__animControlDict.items()
+            animControlDictItems = list(self.__animControlDict.items())
         else:
             partDict = self.__animControlDict.get(lodName)
             if partDict is None:
@@ -1831,7 +1834,7 @@ class Actor(DirectObject, NodePath):
                 for thisPart, animDict in animDictItems:
                     names = animNameList
                     if animNameList is True:
-                        names = animDict.keys()
+                        names = list(animDict.keys())
                     for animName in names:
                         anim = animDict.get(animName)
                         if anim is None and partName is not None:
@@ -2096,9 +2099,9 @@ class Actor(DirectObject, NodePath):
             partNames = [partName]
         else:
             if lodName:
-                partNames = self.__partBundleDict[lodName].keys()
+                partNames = list(self.__partBundleDict[lodName].keys())
             else:
-                partNames = next(iter(self.__partBundleDict.values())).keys()
+                partNames = list(next(iter(self.__partBundleDict.values())).keys())
 
         for partName in partNames:
             subJoints = set()
@@ -2173,7 +2176,7 @@ class Actor(DirectObject, NodePath):
         if self.mergeLODBundles:
             lodNames = ['common']
         else:
-            lodNames = self.__partBundleDict.keys()
+            lodNames = list(self.__partBundleDict.keys())
 
         for lod in lodNames:
             for part in partNames:
@@ -2199,7 +2202,7 @@ class Actor(DirectObject, NodePath):
         if self.mergeLODBundles:
             lodNames = ['common']
         else:
-            lodNames = self.__partBundleDict.keys()
+            lodNames = list(self.__partBundleDict.keys())
 
         for animName, filename in anims.items():
             # make sure this lod is in anim control dict
@@ -2248,13 +2251,13 @@ class Actor(DirectObject, NodePath):
                                   (anims, partName, lodName))
 
         if lodName is None or self.mergeLODBundles:
-            lodNames = self.__animControlDict.keys()
+            lodNames = list(self.__animControlDict.keys())
         else:
             lodNames = [lodName]
 
         if partName is None:
             if len(lodNames) > 0:
-                partNames = self.__animControlDict[next(iter(lodNames))].keys()
+                partNames = list(self.__animControlDict[next(iter(lodNames))].keys())
             else:
                 partNames = []
         else:
@@ -2479,7 +2482,7 @@ class Actor(DirectObject, NodePath):
             lodNames = [lodName]
 
         if partName is None and self.__subpartsComplete:
-            partNames = self.__subpartDict.keys()
+            partNames = list(self.__subpartDict.keys())
         else:
             partNames = [partName]
 
@@ -2503,13 +2506,13 @@ class Actor(DirectObject, NodePath):
 
     def printAnimBlends(self, animName=None, partName=None, lodName=None):
         for lodName, animList in self.getAnimBlends(animName, partName, lodName):
-            print('LOD %s:' % (lodName))
+            print(('LOD %s:' % (lodName)))
             for animName, blendList in animList:
 
                 list = []
                 for partName, effect in blendList:
                     list.append('%s:%.3f' % (partName, effect))
-                print('  %s: %s' % (animName, ', '.join(list)))
+                print(('  %s: %s' % (animName, ', '.join(list))))
 
     def osdAnimBlends(self, animName=None, partName=None, lodName=None):
         if not onScreenDebug.enabled:

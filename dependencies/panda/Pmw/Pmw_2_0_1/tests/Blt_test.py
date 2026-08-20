@@ -1,5 +1,6 @@
 # Tests for Blt widgets.
 
+from __future__ import absolute_import
 import os
 import tkinter
 import Test

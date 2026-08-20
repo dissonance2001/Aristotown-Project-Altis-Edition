@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from math import *
 import math
 import random
@@ -10,6 +11,7 @@ from direct.task import Task
 from otp.level import BasicEntities
 from pandac.PandaModules import *
 from pandac.PandaModules import NodePath
+from six.moves import range
 
 class DistributedMover(BasicEntities.DistributedNodePathEntity):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMover')
@@ -111,7 +113,7 @@ class DistributedMover(BasicEntities.DistributedNodePathEntity):
             firstIVal = LerpPosHprInterval(self.moverNode, timeJump, Vec3(target.getPos(self)[0], target.getPos(self)[1], target.getPos(self)[2]), Vec3(target.getHpr(self)[0], target.getHpr(self)[1], target.getHpr(self)[2]), blendType=myBlend, fluid=1)
             self.moverIval.append(firstIVal)
             if self.cycleType in 'linear':
-                for linearCycle in xrange(10):
+                for linearCycle in range(10):
                     self.moverIval.append(firstIVal)
 
             if self.cycleType != 'oneWay':

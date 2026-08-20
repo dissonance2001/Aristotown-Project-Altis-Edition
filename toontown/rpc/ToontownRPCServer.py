@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.stdpy import threading
 import errno
 from panda3d.core import TP_normal
 import select
 import socket
-import urlparse
+import six.moves.urllib.parse
 
 from toontown.rpc.ToontownRPCConnection import ToontownRPCConnection
 
@@ -16,7 +17,7 @@ class ToontownRPCServer:
         self.handler = handler
 
         # Parse the endpoint:
-        url = urlparse.urlparse(endpoint)
+        url = six.moves.urllib.parse.urlparse(endpoint)
 
         # We only support the http scheme:
         if url.scheme != 'http':
@@ -95,7 +96,7 @@ class ToontownRPCServer:
         Poll for incoming data once.
         """
         try:
-            rlist = select.select([self.listenerSocket] + self.connections.keys(), [], [])[0]
+            rlist = select.select([self.listenerSocket] + list(self.connections.keys()), [], [])[0]
         except:
             # It's likely that one or more of our sockets is no longer valid.
 
@@ -144,7 +145,7 @@ class ToontownRPCServer:
         """
         try:
             conn = self.listenerSocket.accept()[0]
-        except socket.error, e:
+        except socket.error as e:
             if e.args[0] != errno.EWOULDBLOCK:
                 raise e
         self.connections[conn] = ToontownRPCConnection(conn, self.handler)

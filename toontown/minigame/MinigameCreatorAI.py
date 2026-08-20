@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import copy, random, time
 from otp.ai.MagicWordGlobal import *
 from toontown.minigame import DistributedCannonGameAI
@@ -21,6 +23,7 @@ from toontown.minigame import DistributedVineGameAI
 from toontown.minigame import TravelGameGlobals
 from toontown.minigame.TempMinigameAI import *
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 simbase.forcedMinigameId = simbase.config.GetInt('force-minigame', 0)
 RequestMinigame = {}
@@ -96,13 +99,13 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone=None,
         ToontownGlobals.TwoDGameId: DistributedTwoDGameAI.DistributedTwoDGameAI,
         ToontownGlobals.TravelGameId: DistributedTravelGameAI.DistributedTravelGameAI,
     }
-    from TempMinigameAI import TempMgCtors
+    from .TempMinigameAI import TempMgCtors
     for key, value in TempMgCtors.items():
         mgCtors[key] = value
     try:
         mg = mgCtors[mgId](air, mgId)
     except KeyError:
-        raise Exception, 'unknown minigame ID: %s' % mgId
+        raise Exception('unknown minigame ID: %s' % mgId)
     mg.setExpectedAvatars(playerArray)
     mg.setNewbieIds(newbieIds)
     mg.setTrolleyZone(trolleyZone)
@@ -111,11 +114,11 @@ def createMinigame(air, playerArray, trolleyZone, minigameZone=None,
         for avId in playerArray:
             mg.setStartingVote(avId, TravelGameGlobals.DefaultStartingVotes)
     else:
-        for index in xrange(len(startingVotes)):
+        for index in range(len(startingVotes)):
             avId = playerArray[index]
             votes = startingVotes[index]
             if votes < 0:
-                print 'createMinigame negative votes, avId=%s votes=%s' % (avId, votes)
+                print('createMinigame negative votes, avId=%s votes=%s' % (avId, votes))
                 votes = 0
             mg.setStartingVote(avId, votes)
     mg.setMetagameRound(metagameRound)

@@ -1,4 +1,5 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Pmw
 
 class ScrolledField(Pmw.MegaWidget):
@@ -21,12 +22,12 @@ class ScrolledField(Pmw.MegaWidget):
 	interior = self.interior()
 	self._scrolledFieldEntry = self.createcomponent('entry',
 		(), None,
-		Tkinter.Entry, (interior,))
+		six.moves.tkinter.Entry, (interior,))
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
             self._scrolledFieldEntry.configure(state = 'readonly')
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             self._scrolledFieldEntry.configure(state = 'disabled')
 
 	self._scrolledFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
@@ -47,7 +48,7 @@ class ScrolledField(Pmw.MegaWidget):
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
             self._scrolledFieldEntry.configure(state = 'readonly')
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             self._scrolledFieldEntry.configure(state = 'disabled')
 
-Pmw.forwardmethods(ScrolledField, Tkinter.Entry, '_scrolledFieldEntry')
+Pmw.forwardmethods(ScrolledField, six.moves.tkinter.Entry, '_scrolledFieldEntry')

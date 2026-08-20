@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import ZoneEntityBase
 
 class ZoneEntityAI(ZoneEntityBase.ZoneEntityBase):

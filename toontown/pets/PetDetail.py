@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from otp.avatar import AvatarDetail
 from toontown.pets import DistributedPet

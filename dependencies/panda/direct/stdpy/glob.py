@@ -2,11 +2,13 @@
 vfs constructs.  This enables Python to interface more easily with Panda's
 virtual file system. """
 
+from __future__ import absolute_import
 import sys
 import os
 import fnmatch
 
 from direct.stdpy import file
+import six
 
 __all__ = ["glob", "iglob"]
 
@@ -52,8 +54,8 @@ def iglob(pathname):
 def glob1(dirname, pattern):
     if not dirname:
         dirname = os.curdir
-    if sys.version_info < (3, 0) and isinstance(pattern, unicode) and not isinstance(dirname, unicode):
-        dirname = unicode(dirname, sys.getfilesystemencoding() or
+    if sys.version_info < (3, 0) and isinstance(pattern, six.text_type) and not isinstance(dirname, six.text_type):
+        dirname = six.text_type(dirname, sys.getfilesystemencoding() or
                                    sys.getdefaultencoding())
     try:
         names = os.listdir(dirname)

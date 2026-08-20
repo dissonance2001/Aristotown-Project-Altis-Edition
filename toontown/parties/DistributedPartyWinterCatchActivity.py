@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath
 from toontown.toonbase import TTLocalizer
 from toontown.parties.DistributedPartyCatchActivity import DistributedPartyCatchActivity

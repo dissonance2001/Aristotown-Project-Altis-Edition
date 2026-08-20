@@ -6,6 +6,7 @@ Modified by gjeon.
 Modified by Summer 2010 Carnegie Mellon University ETC PandaLE team: fixed a bug in Viewport.Close
 """
 
+from __future__ import absolute_import
 __all__ = ["Viewport", "ViewportManager"]
 
 from direct.showbase.DirectObject import DirectObject

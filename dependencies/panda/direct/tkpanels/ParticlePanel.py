@@ -1,5 +1,8 @@
 """PANDA3D Particle Panel"""
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['ParticlePanel']
 
 # Import Tkinter, Pmw, and the floater code from this directory tree.
@@ -19,8 +22,8 @@ if sys.version_info >= (3, 0):
     from tkinter.filedialog import *
     from tkinter.simpledialog import askstring
 else:
-    from tkFileDialog import *
-    from tkSimpleDialog import askstring
+    from six.moves.tkinter_filedialog import *
+    from six.moves.tkinter_tksimpledialog import askstring
 
 from panda3d.core import *
 from panda3d.physics import *
@@ -1207,7 +1210,7 @@ class ParticlePanel(AppShell):
             self.mainNotebook.selectpage('System')
             self.updateInfo('System')
         else:
-            print('ParticlePanel: No effect named ' + name)
+            print(('ParticlePanel: No effect named ' + name))
 
     def toggleEffect(self, effect, var):
         if var.get():

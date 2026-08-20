@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.ClockDelta import *
@@ -7,6 +8,7 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
+from six.moves import range
 
 class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevatorExtAI')
@@ -18,7 +20,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         self.boardingParty = None
 
     def delete(self):
-        for seatIndex in xrange(len(self.seats)):
+        for seatIndex in range(len(self.seats)):
             avId = self.seats[seatIndex]
             if avId:
                 self.clearFullNow(seatIndex)
@@ -154,7 +156,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         numPlayers = self.countFullSeats()
         if numPlayers > 0:
             self._createInterior()
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.clearFullNow(seatIndex)

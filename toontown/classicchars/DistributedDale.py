@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.ShowBaseGlobal import *
 from toontown.classicchars import DistributedCCharBase
 from direct.directnotify import DirectNotifyGlobal

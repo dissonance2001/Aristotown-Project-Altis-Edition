@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.parties.PartyGlobals import *
@@ -149,7 +151,7 @@ class DistributedPartyAI(DistributedObjectAI):
         
     def removeAvatar(self, avId):
         if avId in self.avIdsAtParty:
-            print 'REMOVE FROM PARTTY!'
+            print('REMOVE FROM PARTTY!')
             self.air.globalPartyMgr.d_toonLeftParty(self.info.get('partyId', 0), avId)
             self.avIdsAtParty.remove(avId)
 

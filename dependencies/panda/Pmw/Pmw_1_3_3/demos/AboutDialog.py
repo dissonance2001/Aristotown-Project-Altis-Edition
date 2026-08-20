@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 title = 'Pmw.AboutDialog demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -22,7 +23,7 @@ class Demo:
 	self.about.withdraw()
 
 	# Create button to launch the dialog.
-	w = Tkinter.Button(parent, text = 'Show about dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Show about dialog',
 	        command = self.execute)
 	w.pack(padx = 8, pady = 8)
 
@@ -33,11 +34,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

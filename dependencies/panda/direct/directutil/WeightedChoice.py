@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 import random
 
 # DCR: I added a weightedChoice() function to PythonUtil that supports

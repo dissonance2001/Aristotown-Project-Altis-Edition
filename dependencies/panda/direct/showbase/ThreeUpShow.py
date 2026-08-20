@@ -1,6 +1,7 @@
 """ThreeUpShow is a variant of ShowBase that defines three cameras covering
 different parts of the window."""
 
+from __future__ import absolute_import
 __all__ = ['ThreeUpShow']
 
 

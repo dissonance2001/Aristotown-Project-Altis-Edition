@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.suit import DistributedBossCogAI
 from toontown.suit import DistributedSuitAI
@@ -14,6 +15,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.building import SuitBuildingGlobals
 from otp.ai.MagicWordGlobal import *
+from six.moves import range
 
 class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedSellbotBossMiniAI')
@@ -28,7 +30,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
         self.suits = []
         self.activeSuits = []
         self.reserveSuits = []
-        self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+        self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.battleOnePlanner = SuitBuildingGlobals.SUIT_PLANNER_VP
@@ -476,7 +478,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
 
     def __makeDoobers(self):
         self.__resetDoobers()
-        for i in xrange(12):
+        for i in range(12):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
             level = random.randint(7, 8)
             suit.dna = SuitDNA.SuitDNA()

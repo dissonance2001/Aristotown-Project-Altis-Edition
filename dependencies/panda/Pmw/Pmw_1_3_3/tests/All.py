@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
 import os
 import re
 import sys
-import Tkinter
+import six.moves.tkinter
 
 import Test
 Test.initialise()
@@ -19,7 +20,7 @@ Test.initialise()
 ignoreTests = ('Tkinter_test.py',)
 
 # Also ignore Blt test since it causes Blt 2.4z to core dump.
-if Tkinter.TkVersion >= 8.4:
+if six.moves.tkinter.TkVersion >= 8.4:
     ignoreTests = ignoreTests + ('Blt_test.py',)
 
 allTestData = ()
@@ -29,7 +30,7 @@ files.sort()
 for file in files:
     if file not in ignoreTests and re.search('^.+_test.py$', file) is not None:
 	test = file[:-3]
-	exec 'import ' + test
-	exec 'allTestData = allTestData + ' + test + '.testData'
+	exec('import ' + test)
+	exec('allTestData = allTestData + ' + test + '.testData')
 
 Test.runTests(allTestData)

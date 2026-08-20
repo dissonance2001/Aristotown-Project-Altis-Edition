@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
-import __builtin__
+import six.moves.builtins
 import json
 import random
+import six
 
 
 class ContentPackCompatibility:
@@ -17,7 +20,7 @@ class ContentPackCompatibility:
     @staticmethod
     def getManager():
         try:
-            return __builtin__.ContentPackMgr
+            return six.moves.builtins.ContentPackMgr
         except Exception:
             return None
 
@@ -70,10 +73,10 @@ class ContentPackCompatibility:
             )
 
             if resolvedPath:
-                print 'CONTENT PACK: Resolved font %s to %s' % (
+                print('CONTENT PACK: Resolved font %s to %s' % (
                     requestedPath,
                     resolvedPath
-                )
+                ))
                 return resolvedPath
 
         return fontPath
@@ -121,19 +124,19 @@ class ContentPackCompatibility:
 
                 if isinstance(parsedData, dict):
                     musicData = parsedData
-                    print 'CONTENT PACK: Loaded music mappings from %s' % (
+                    print('CONTENT PACK: Loaded music mappings from %s' % (
                         candidate
-                    )
+                    ))
                     break
 
-                print 'CONTENT PACK ERROR: %s is not a JSON object' % (
+                print('CONTENT PACK ERROR: %s is not a JSON object' % (
                     candidate
-                )
+                ))
             except Exception as error:
-                print 'CONTENT PACK ERROR: Failed to read %s: %s' % (
+                print('CONTENT PACK ERROR: Failed to read %s: %s' % (
                     candidate,
                     error
-                )
+                ))
 
         ContentPackCompatibility._musicJsonCache[cacheKey] = musicData
         return musicData
@@ -191,13 +194,13 @@ class ContentPackCompatibility:
 
     @staticmethod
     def _chooseMusicPath(value):
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             return value
 
         if isinstance(value, (list, tuple)):
             choices = [
                 item for item in value
-                if isinstance(item, basestring) and item
+                if isinstance(item, six.string_types) and item
             ]
             if choices:
                 return random.choice(choices)
@@ -415,7 +418,7 @@ class ContentPackCompatibility:
         try:
             oldTextures = model.findAllTextures()
         except Exception as error:
-            print 'CONTENT PACK ERROR: findAllTextures failed:', error
+            print('CONTENT PACK ERROR: findAllTextures failed:', error)
             return
 
         replaced = 0
@@ -443,12 +446,12 @@ class ContentPackCompatibility:
                 model.replaceTexture(oldTexture, newTexture)
                 replaced += 1
             except Exception as error:
-                print 'CONTENT PACK ERROR: replaceTexture failed:', error
+                print('CONTENT PACK ERROR: replaceTexture failed:', error)
 
-        print (
+        print((
             'CONTENT PACK: Applied Altis track order to %s '
             'gag atlas texture(s)' % replaced
-        )
+        ))
 
     @staticmethod
     def applyStatusEffectsCompatibility(model):
@@ -485,7 +488,7 @@ class ContentPackCompatibility:
         try:
             oldTextures = model.findAllTextures()
         except Exception as error:
-            print 'CONTENT PACK ERROR: status effects findAllTextures failed:', error
+            print('CONTENT PACK ERROR: status effects findAllTextures failed:', error)
             return
 
         replaced = 0
@@ -513,10 +516,10 @@ class ContentPackCompatibility:
                 model.replaceTexture(oldTexture, newTexture)
                 replaced += 1
             except Exception as error:
-                print 'CONTENT PACK ERROR: status effects replaceTexture failed:', error
+                print('CONTENT PACK ERROR: status effects replaceTexture failed:', error)
 
         if replaced:
-            print (
+            print((
                 'CONTENT PACK: Replaced %s status effect atlas texture(s)' %
                 replaced
-            )
+            ))

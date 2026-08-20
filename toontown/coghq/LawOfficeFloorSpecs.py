@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import invertDict
 from toontown.coghq import LabotOfficeFloor_01a_Cogs
 from toontown.coghq import LabotOfficeFloor_01b_Cogs

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from panda3d.core import *
 from direct.distributed.ClockDelta import *
@@ -19,6 +20,7 @@ from toontown.parties.PartyGlobals import PartyCannonCollisions
 from toontown.parties.DistributedPartyActivity import DistributedPartyActivity
 from toontown.parties.CannonGui import CannonGui
 from toontown.parties.PartyUtils import toRadians, toDegrees
+import six
 
 CANNON_ROTATION_VEL = 15.0
 CANNON_ANGLE_VEL = 15.0
@@ -338,7 +340,7 @@ class DistributedPartyCannonActivity(DistributedPartyActivity):
     def _remoteToonFlyTask(self, task = None):
         ids2del = []
         frameTime = globalClock.getFrameTime()
-        for avId, trajInfo in self._avId2trajectoryInfo.iteritems():
+        for avId, trajInfo in six.iteritems(self._avId2trajectoryInfo):
             trajectory = trajInfo.trajectory
             startTime = trajInfo.startT
             groundTime = trajectory.calcTimeOfImpactOnPlane(0.0) / self.TimeFactor + startTime

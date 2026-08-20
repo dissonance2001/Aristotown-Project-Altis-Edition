@@ -6,6 +6,9 @@ For more information about the task system, consult the
 :ref:`tasks-and-event-handling` page in the programming manual.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['Task', 'TaskManager',
            'cont', 'done', 'again', 'pickup', 'exit',
            'sequence', 'loop', 'pause']
@@ -53,9 +56,9 @@ def print_exc_plus():
     print("Locals by frame, innermost last")
     for frame in stack:
         print("")
-        print("Frame %s in %s at line %s" % (frame.f_code.co_name,
+        print(("Frame %s in %s at line %s" % (frame.f_code.co_name,
                                              frame.f_code.co_filename,
-                                             frame.f_lineno))
+                                             frame.f_lineno)))
         for key, value in list(frame.f_locals.items()):
             #We have to be careful not to cause a new error in our error
             #printer! Calling str() on an unknown object could cause an
@@ -64,7 +67,7 @@ def print_exc_plus():
                 valueStr = str(value)
             except:
                 valueStr = "<ERROR WHILE PRINTING VALUE>"
-            print("\t%20s = %s" % (key, valueStr))
+            print(("\t%20s = %s" % (key, valueStr)))
 
 # For historical purposes, we remap the C++-defined enumeration to
 # these Python names, and define them both at the module level, here,
@@ -1282,22 +1285,22 @@ if __debug__:
                 return task.done
         obj = TestClass()
         startRefCount = sys.getrefcount(obj)
-        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
+        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
         print('** addTask')
         t = obj.addTask(obj.doTask, 'test')
-        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
-        print('task.getRefCount(): %s' % t.getRefCount())
+        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
+        print(('task.getRefCount(): %s' % t.getRefCount()))
         print('** removeTask')
         obj.removeTask('test')
-        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
-        print('task.getRefCount(): %s' % t.getRefCount())
+        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
+        print(('task.getRefCount(): %s' % t.getRefCount()))
         print('** step')
         taskMgr.step()
         taskMgr.step()
         taskMgr.step()
-        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
-        print('task.getRefCount(): %s' % t.getRefCount())
+        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
+        print(('task.getRefCount(): %s' % t.getRefCount()))
         print('** task release')
         t = None
-        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
+        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
         assert sys.getrefcount(obj) == startRefCount

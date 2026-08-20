@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -13,6 +14,7 @@ from direct.task.Task import Task
 from otp.distributed.TelemetryLimiter import RotationLimitToH, TLGatherAllAvs
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
+from six.moves import range
 
 class SuitInterior(Place.Place):
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitInterior')
@@ -68,7 +70,7 @@ class SuitInterior(Place.Place):
         self.parentFSM.getStateNamed('suitInterior').addChild(self.fsm)
         self.townBattle = TownBattle.TownBattle('town-battle-done')
         self.townBattle.load()
-        for i in xrange(1, 3):
+        for i in range(1, 3):
             Suit.loadSuits(i)
 
     def unload(self):
@@ -82,7 +84,7 @@ class SuitInterior(Place.Place):
         self.townBattle.unload()
         self.townBattle.cleanup()
         del self.townBattle
-        for i in xrange(1, 3):
+        for i in range(1, 3):
             Suit.unloadSuits(i)
 
     def setState(self, state, battleEvent = None):

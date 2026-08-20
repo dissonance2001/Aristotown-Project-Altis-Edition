@@ -1,12 +1,13 @@
-import anydbm
+from __future__ import absolute_import
+import dbm as anydbm
 import base64
 import hashlib
 import hmac
 import json
 import time
 import random
-import urllib2
-import httplib
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+import six.moves.http_client
 import traceback
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
@@ -38,8 +39,8 @@ http.setVerifySsl(0)
 
 def executeHttpRequest(url, **extras):
     timestamp = str(int(time.time()))
-    signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
-    request = urllib2.Request(accountServerEndpoint + url)
+    signature = hmac.new(accountServerSecret.encode('utf-8'), timestamp.encode('utf-8'), hashlib.sha256)
+    request = six.moves.urllib.request.Request(accountServerEndpoint + url)
     request.add_header('User-Agent', 'Project Altis-CSM')
     request.add_header('X-CSM-Timestamp', timestamp)
     request.add_header('X-CSM-Signature', signature.hexdigest())
@@ -47,7 +48,7 @@ def executeHttpRequest(url, **extras):
         request.add_header('Project Altis-CSM-' + k, v)
 
     try:
-        return urllib2.urlopen(request).read()
+        return six.moves.urllib.request.urlopen(request).read()
     except:
         return None
 

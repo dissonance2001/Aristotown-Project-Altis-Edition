@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.notifications.gui.ClashGuiUtils import kwargsToOptionDefs
 from toontown.notifications.gui.windows.NotifWindowBase import NotifWindowBase
 

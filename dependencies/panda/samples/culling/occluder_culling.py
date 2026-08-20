@@ -9,7 +9,9 @@ occluder from an EGG file and adding them to a CullTraverser.
 """
 
 # Load PRC data
+from __future__ import absolute_import
 from panda3d.core import loadPrcFileData
+from six.moves import range
 loadPrcFileData('', 'window-title Occluder Demo')
 loadPrcFileData('', 'sync-video false')
 loadPrcFileData('', 'show-frame-rate-meter true')

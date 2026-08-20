@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.parties.DistributedPartyTeamActivityAI import DistributedPartyTeamActivityAI
 from toontown.parties import PartyGlobals

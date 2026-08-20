@@ -4,6 +4,8 @@ See the :ref:`actor-intervals` page in the programming manual for explanation
 of this class.
 """
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['ActorInterval', 'LerpAnimInterval']
 
 from panda3d.core import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 import math
 from direct.showbase.PythonUtil import lerp
@@ -15,12 +16,13 @@ from toontown.cutscene.CutsceneSequenceHelpers import NodePathWithState, getHprB
 from toontown.toonbase import TTLocalizer
 from otp.otpbase import OTPLocalizer
 from toontown.effects import DustCloud
+from six.moves import range
 try:
     from toontown.suit.SuitDNA import allSuitNames
 except ImportError:
     from toontown.suit import SuitDNA
     allSuitNames = []
-    for _deptList in SuitDNA.suitDeptCogs.values() + SuitDNA.suitDeptManagers.values():
+    for _deptList in list(SuitDNA.suitDeptCogs.values()) + list(SuitDNA.suitDeptManagers.values()):
         allSuitNames.extend(_deptList)
 
 def loopToonOrDisguise(toon, animName):
@@ -755,9 +757,9 @@ def _getTargetRange(targetGroup, toons, maxPlayers):
     :param toons: Should be cutsceneDict['toons'].
     """
     if targetGroup is ToonSubEventTargetGroup.All:
-        return range(len(toons))
+        return list(range(len(toons)))
     elif targetGroup is ToonSubEventTargetGroup.NPCs:
-        return range(maxPlayers, len(toons))
+        return list(range(maxPlayers, len(toons)))
     elif targetGroup is ToonSubEventTargetGroup.Players:
-        return range(0, maxPlayers)
+        return list(range(0, maxPlayers))
     raise CSEditorException('Got invalid ToonSubEventTargetGroup, or some other issue, while getting targetRange')

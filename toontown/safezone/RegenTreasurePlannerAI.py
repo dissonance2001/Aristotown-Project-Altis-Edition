@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from direct.distributed.ClockDelta import *
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 import random
 from toontown.safezone import TreasurePlannerAI
+from six.moves import range
 
 class RegenTreasurePlannerAI(TreasurePlannerAI.TreasurePlannerAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('RegenTreasurePlannerAI')
@@ -40,5 +42,5 @@ class RegenTreasurePlannerAI(TreasurePlannerAI.TreasurePlannerAI):
         self.placeTreasure(spawnPointIndex)
 
     def preSpawnTreasures(self):
-        for i in xrange(self.maxTreasures):
+        for i in range(self.maxTreasures):
             self.placeRandomTreasure()

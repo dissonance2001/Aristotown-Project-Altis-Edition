@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.ClockDelta import *
@@ -7,6 +8,7 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
+from six.moves import range
 
 class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedElevatorAI')
@@ -27,7 +29,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
             simbase.air.elevatorTripId += 1
         else:
             self.elevatorTripId = 0
-        for seat in xrange(numSeats):
+        for seat in range(numSeats):
             self.seats.append(None)
 
         self.accepting = 0
@@ -59,12 +61,12 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
         return self.bldgDoId
 
     def findAvailableSeat(self):
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             if self.seats[i] == None:
                 return i
 
     def findAvatar(self, avId):
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             if self.seats[i] == avId:
                 return i
 
@@ -77,7 +79,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
 
     def countOpenSeats(self):
         openSeats = 0
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             if self.seats[i] is None:
                 openSeats += 1
         return openSeats
@@ -206,7 +208,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
         self.timeOfBoarding = None
         self.timeOfGroupBoarding = None
         if hasattr(self, 'doId'):
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 taskMgr.remove(self.uniqueName('clearEmpty-' + str(seatIndex)))
 
     def exitOff(self):

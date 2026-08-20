@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.classicchars import DistributedDonaldAI
 from toontown.hood import HoodAI
 from toontown.safezone import DistributedTrolleyAI

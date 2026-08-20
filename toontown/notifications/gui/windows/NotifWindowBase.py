@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import TextNode
 from direct.gui.DirectGui import DirectButton, DirectFrame
 from direct.gui import DirectGuiGlobals as DGG

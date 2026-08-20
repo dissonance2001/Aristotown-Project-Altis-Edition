@@ -1,5 +1,8 @@
+from __future__ import absolute_import
 from toontown.fishing import FishBase
 from toontown.fishing import FishGlobals
+from six.moves import range
+from six.moves import zip
 
 class FishTank:
 
@@ -57,7 +60,7 @@ class FishTank:
         import random
         numFish = random.randint(1, 20)
         self.fishList = []
-        for i in xrange(numFish):
+        for i in range(numFish):
             genus, species = FishGlobals.getRandomFish()
             weight = FishGlobals.getRandomWeight(genus, species)
             fish = FishBase.FishBase(genus, species, weight)

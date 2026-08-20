@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import Parallel, Sequence, Func, Wait
 from pandac.PandaModules import Vec4, TransformState, NodePath, TransparencyAttrib
+from six.moves import range
 
 class HolidayDecorator:
 
@@ -41,7 +43,7 @@ class HolidayDecorator:
         loader = base.cr.playGame.hood.loader
         npl = render.findAllMatches('**/=DNARoot=holiday_prop;+s')
         p = Parallel()
-        for i in xrange(npl.getNumPaths()):
+        for i in range(npl.getNumPaths()):
             np = npl.getPath(i)
             np.setTransparency(TransparencyAttrib.MDual, 1)
             if not np.hasTag('DNACode'):

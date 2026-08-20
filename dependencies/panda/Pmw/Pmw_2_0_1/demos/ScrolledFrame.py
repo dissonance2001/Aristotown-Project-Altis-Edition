@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Pmw.ScrolledFrame demonstration'
 
 # Import Pmw from this directory tree.

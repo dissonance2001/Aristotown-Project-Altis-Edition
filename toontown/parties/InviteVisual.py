@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from datetime import datetime
 import calendar
 from direct.gui.DirectGui import DirectFrame, DirectLabel
@@ -7,6 +8,7 @@ from direct.fsm.FSM import FSM
 from toontown.parties import PartyGlobals
 from toontown.parties import PartyUtils
 from toontown.toonbase.ToontownGlobals import VALENTINES_DAY
+from six.moves import range
 
 class InviteVisual(DirectFrame):
     notify = directNotify.newCategory('InviteVisual')
@@ -94,7 +96,7 @@ class InviteVisual(DirectFrame):
         desiredNumberOfCharactersInLine = 42
         if len(stringLeft) < desiredNumberOfCharactersInLine:
             return stringDone + '\n' + stringLeft
-        for i in xrange(desiredNumberOfCharactersInLine - 6, len(stringLeft)):
+        for i in range(desiredNumberOfCharactersInLine - 6, len(stringLeft)):
             if stringLeft[i] == ' ':
                 return self.insertCarriageReturn(stringLeft[i:], stringDone + '\n' + stringLeft[:i])
 

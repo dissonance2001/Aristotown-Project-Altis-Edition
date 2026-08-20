@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import LVector4f, NodePath, DecalEffect, ModelNode
 from toontown.dna import DNAProp
 from toontown.dna import DNAUtil

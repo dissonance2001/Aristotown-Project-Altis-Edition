@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
@@ -5,6 +6,7 @@ from direct.fsm import State
 from toontown.minigame import RingGameGlobals
 import random
 import types
+from six.moves import range
 
 class DistributedRingGameAI(DistributedMinigameAI):
 
@@ -64,10 +66,10 @@ class DistributedRingGameAI(DistributedMinigameAI):
          None,
          None]
         chooseFrom = RingGameGlobals.ringColorSelection[:]
-        for i in xrange(0, 4):
+        for i in range(0, 4):
             c = random.choice(chooseFrom)
             chooseFrom.remove(c)
-            if isinstance(c, types.TupleType):
+            if isinstance(c, tuple):
                 c = random.choice(c)
             self.colorIndices[i] = c
 

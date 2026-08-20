@@ -2,6 +2,7 @@
 TwoDWalker.py is for controlling the avatars in a 2D scroller game environment.
 """
 
+from __future__ import absolute_import
 from .GravityWalker import *
 from panda3d.core import ConfigVariableBool
 

@@ -1,5 +1,6 @@
 """Instantiates a global :class:`~.Logger.Logger` object."""
 
+from __future__ import absolute_import
 from . import Logger
 
 #: Contains a global :class:`~.Logger.Logger` object.

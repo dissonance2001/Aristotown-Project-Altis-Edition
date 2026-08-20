@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase import DirectObject
 
 class InGameEditorElement(DirectObject.DirectObject):

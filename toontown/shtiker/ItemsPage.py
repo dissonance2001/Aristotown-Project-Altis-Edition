@@ -3,6 +3,7 @@ Created on Jan 30, 2017
 
 @author: Drew
 '''
+from __future__ import absolute_import
 from panda3d.core import *
 from toontown.shtiker import ShtikerPage
 from toontown.toonbase import ToontownGlobals

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import MySQLdb
 from MySQLdb.connections import *
 
@@ -83,8 +84,8 @@ class DirectMySQLdbConnection(Connection):
             self.converter[FIELD_TYPE.VAR_STRING].insert(-1, (None, string_decoder))
             self.converter[FIELD_TYPE.BLOB].insert(-1, (None, string_decoder))
 
-        self.encoders[types.StringType] = string_literal
-        self.encoders[types.UnicodeType] = unicode_literal
+        self.encoders[bytes] = string_literal
+        self.encoders[str] = unicode_literal
         self._transactional = self.server_capabilities & CLIENT.TRANSACTIONS
         if self._transactional:
             # PEP-249 requires autocommit to be initially off

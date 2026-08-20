@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *

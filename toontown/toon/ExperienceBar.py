@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Vec4
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectWaitBar, DGG, DirectLabel, DirectButton
 from direct.gui.OnscreenText import OnscreenText

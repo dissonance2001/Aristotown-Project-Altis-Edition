@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.classicchars import DistributedGoofySpeedwayAI
 from toontown.dna.DNAParser import DNAGroup, DNAVisGroup
 from toontown.hood import HoodAI
@@ -8,6 +9,8 @@ from toontown.racing.DistributedStartingBlockAI import DistributedStartingBlockA
 from toontown.racing.DistributedViewPadAI import DistributedViewPadAI
 from toontown.racing.DistributedStartingBlockAI import DistributedViewingBlockAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
+from six.moves import zip
 
 
 class GSHoodAI(HoodAI.HoodAI):
@@ -67,7 +70,7 @@ class GSHoodAI(HoodAI.HoodAI):
             racingPads.append(racingPad)
         elif isinstance(dnaGroup, DNAVisGroup):
             zoneId = ZoneUtil.getTrueZoneId(int(dnaGroup.getName().split(':')[0]), zoneId)
-        for i in xrange(dnaGroup.getNumChildren()):
+        for i in range(dnaGroup.getNumChildren()):
             (foundRacingPads, foundRacingPadGroups) = self.findRacingPads(dnaGroup.at(i), zoneId, area, padType=padType)
             racingPads.extend(foundRacingPads)
             racingPadGroups.extend(foundRacingPadGroups)
@@ -90,7 +93,7 @@ class GSHoodAI(HoodAI.HoodAI):
             startingBlock.generateWithRequired(racePad.zoneId)
 
             startingBlocks.append(startingBlock)
-        for i in xrange(dnaGroup.getNumChildren()):
+        for i in range(dnaGroup.getNumChildren()):
             foundStartingBlocks = self.findStartingBlocks(dnaGroup.at(i), racePad)
             startingBlocks.extend(foundStartingBlocks)
         return startingBlocks

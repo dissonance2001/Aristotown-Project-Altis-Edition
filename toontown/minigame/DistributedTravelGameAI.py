@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.minigame import TravelGameGlobals
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedTravelGameAI(DistributedMinigameAI):
     notify = directNotify.newCategory('DistributedTravelGameAI')
@@ -26,7 +28,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         self.destSwitch = 0
         self.gotBonus = {}
         self.desiredNextGame = -1
-        self.boardIndex = random.choice(range(len(TravelGameGlobals.BoardLayouts)))
+        self.boardIndex = random.choice(list(range(len(TravelGameGlobals.BoardLayouts))))
 
     def generate(self):
         self.notify.debug('generate')
@@ -92,7 +94,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
     def enterProcessChoices(self):
         self.directionVotes = []
-        for dir in xrange(TravelGameGlobals.MaxDirections):
+        for dir in range(TravelGameGlobals.MaxDirections):
             self.directionVotes.append([dir, 0])
 
         for key in self.avatarChoices:
@@ -313,7 +315,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         self.stateDict[avId] = EXITED
         allExited = True
         for avId in self.avIdList:
-            if avId in self.stateDict.keys() and self.stateDict[avId] != EXITED:
+            if avId in list(self.stateDict.keys()) and self.stateDict[avId] != EXITED:
                 allExited = False
                 break
 

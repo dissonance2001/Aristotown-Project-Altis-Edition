@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 from direct.actor import Actor
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
-from ChatBalloon import *
+from .ChatBalloon import *
 from direct.task import Task
 import random
 

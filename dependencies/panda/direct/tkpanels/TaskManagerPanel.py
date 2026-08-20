@@ -1,5 +1,6 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
 __all__ = ['TaskManagerPanel', 'TaskManagerWidget']
 
 from direct.tkwidgets.AppShell import *
@@ -10,8 +11,8 @@ if sys.version_info >= (3, 0):
     from tkinter import *
     from tkinter.messagebox import askokcancel
 else:
-    from Tkinter import *
-    from tkMessageBox import askokcancel
+    from six.moves.tkinter import *
+    from six.moves.tkinter_messagebox import askokcancel
 
 
 class TaskManagerPanel(AppShell):

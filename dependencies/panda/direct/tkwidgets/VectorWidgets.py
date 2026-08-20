@@ -1,5 +1,7 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['VectorEntry', 'Vector2Entry', 'Vector3Entry', 'Vector4Entry', 'ColorEntry']
 
 from direct.showbase.TkGlobal import *
@@ -10,7 +12,7 @@ import sys
 if sys.version_info >= (3, 0):
     from tkinter.colorchooser import askcolor
 else:
-    from tkColorChooser import askcolor
+    from six.moves.tkinter_colorchooser import askcolor
 
 
 class VectorEntry(Pmw.MegaWidget):

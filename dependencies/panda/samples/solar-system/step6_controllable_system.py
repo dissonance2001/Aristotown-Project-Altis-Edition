@@ -9,6 +9,8 @@
 # to count the number of orbits the Earth makes around the sun. This
 # tutorial uses the same base code from the solar system tutorial.
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 
@@ -179,10 +181,10 @@ class World(DirectObject):
     # Text is the OnscreenText object that needs to be updated
     def togglePlanet(self, planet, day, orbit=None, text=None):
         if day.isPlaying():
-            print("Pausing " + planet)
+            print(("Pausing " + planet))
             state = " [PAUSED]"
         else:
-            print("Resuming " + planet)
+            print(("Resuming " + planet))
             state = " [RUNNING]"
 
         # Update the onscreen text if it is given as an argument

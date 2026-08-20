@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from direct.fsm import FSM
@@ -18,6 +19,7 @@ from toontown.suit import BossCutsceneSkip
 from toontown.nametag import NametagGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 # This is an instance/controller object only.  The visible Pacesetter is the
@@ -266,7 +268,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
             return
 
         entries = []
-        for index in xrange(8):
+        for index in range(8):
             start = index * 9
             entries.append(tuple(args[start:start + 9]))
 
@@ -480,7 +482,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]

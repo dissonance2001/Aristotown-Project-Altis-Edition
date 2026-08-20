@@ -14,12 +14,15 @@
 # Megawidgets are built by creating a class that inherits from either
 # the MegaToplevel or MegaWidget class.
 
+from __future__ import absolute_import
 import os
 import string
 import sys
 import traceback
 import types
-import Tkinter
+import six.moves.tkinter
+from six.moves import map
+from six.moves import range
 
 # Special values used in index() methods of several megawidgets.
 END = ['end']
@@ -116,7 +119,7 @@ def __methods(cls):
 
     dict = {}
     __methodDict(cls, dict)
-    return dict.keys()
+    return list(dict.keys())
 	
 # Function body to resolve a forwarding given the target method name and the 
 # attribute name. The resulting lambda requires only self, but will forward 
@@ -175,14 +178,14 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
 
 
     # Allow an attribute name (String) or a function to determine the instance
-    if type(toPart) != types.StringType:
+    if type(toPart) != bytes:
 
 	# check that it is something like a function
 	if callable(toPart):
 
 	    # If a method is passed, use the function within it
 	    if hasattr(toPart, 'im_func'):
-		toPart = toPart.im_func
+		toPart = toPart.__func__
 		
 	    # After this is set up, forwarders in this class will use
 	    # the forwarding function. The forwarding function name is
@@ -192,7 +195,7 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
 
 	# It's not a valid type
 	else:
-	    raise TypeError, 'toPart must be attribute name, function or method'
+	    raise TypeError('toPart must be attribute name, function or method')
 
     # get the full set of candidate methods
     dict = {}
@@ -204,23 +207,23 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
 	    del dict[ex]
     # discard dangerous methods supplied by the caller
     for ex in exclude:
-	if dict.has_key(ex):
+	if ex in dict:
 	    del dict[ex]
     # discard methods already defined in fromClass
     for ex in __methods(fromClass):
-	if dict.has_key(ex):
+	if ex in dict:
 	    del dict[ex]
 
     for method, func in dict.items():
 	d = {'method': method, 'func': func}
-	if type(toPart) == types.StringType:
+	if type(toPart) == bytes:
 	    execString = \
 		__stringBody % {'method' : method, 'attribute' : toPart}
 	else:
 	    execString = \
 		__funcBody % {'forwardFunc' : forwardName, 'method' : method}
 
-	exec execString in d
+	exec(execString, d)
 
 	# this creates a method
 	fromClass.__dict__[method] = d[method]
@@ -344,7 +347,7 @@ class MegaArchetype:
 	    self._hull = None
 	else:
 	    if parent is None:
-		parent = Tkinter._default_root
+		parent = six.moves.tkinter._default_root
 
 	    # Create the hull.
 	    self._hull = self.createcomponent('hull',
@@ -457,12 +460,11 @@ class MegaArchetype:
             componentGroup, widgetClass, *widgetArgs, **kw):
 	# Create a component (during construction or later).
 
-	if self.__componentInfo.has_key(componentName):
-	    raise ValueError, 'Component "%s" already exists' % componentName
+	if componentName in self.__componentInfo:
+	    raise ValueError('Component "%s" already exists' % componentName)
 
 	if '_' in componentName:
-	    raise ValueError, \
-                    'Component name "%s" must not contain "_"' % componentName
+	    raise ValueError('Component name "%s" must not contain "_"' % componentName)
 
 	if hasattr(self, '_constructorKeywords'):
 	    keywords = self._constructorKeywords
@@ -511,17 +513,17 @@ class MegaArchetype:
 		    kw[rest] = keywords[option][0]
 		    keywords[option][1] = 1
 
-	if kw.has_key('pyclass'):
+	if 'pyclass' in kw:
 	    widgetClass = kw['pyclass']
 	    del kw['pyclass']
 	if widgetClass is None:
 	    return None
-        if len(widgetArgs) == 1 and type(widgetArgs[0]) == types.TupleType:
+        if len(widgetArgs) == 1 and type(widgetArgs[0]) == tuple:
             # Arguments to the constructor can be specified as either
             # multiple trailing arguments to createcomponent() or as a
             # single tuple argument.
             widgetArgs = widgetArgs[0]
-	widget = apply(widgetClass, widgetArgs, kw)
+	widget = widgetClass(*widgetArgs, **kw)
 	componentClass = widget.__class__.__name__
 	self.__componentInfo[componentName] = (widget, widget.configure,
 		componentClass, widget.cget, componentGroup)
@@ -546,7 +548,7 @@ class MegaArchetype:
 
 	label = self.createcomponent('label',
 		(), None,
-		Tkinter.Label, (parent,))
+		six.moves.tkinter.Label, (parent,))
 
 	if labelpos[0] in 'ns':
 	    # vertical layout
@@ -588,8 +590,8 @@ class MegaArchetype:
 		    text = 'Unknown option "'
 		else:
 		    text = 'Unknown options "'
-		raise KeyError, text + string.join(unusedOptions, ', ') + \
-			'" for ' + self.__class__.__name__
+		raise KeyError(text + string.join(unusedOptions, ', ') + \
+			'" for ' + self.__class__.__name__)
 
 	    # Call the configuration callback function for every option.
 	    FUNCTION = _OPT_FUNCTION
@@ -667,9 +669,8 @@ class MegaArchetype:
 		# This is one of the options of this megawidget. 
 		# Make sure it is not an initialisation option.
 		if optionInfo[option][FUNCTION] is INITOPT:
-		    raise KeyError, \
-			    'Cannot configure initialisation option "' \
-			    + option + '" for ' + self.__class__.__name__
+		    raise KeyError('Cannot configure initialisation option "' \
+			    + option + '" for ' + self.__class__.__name__)
 		optionInfo[option][VALUE] = value
 		directOptions.append(option)
 	    else:
@@ -702,8 +703,8 @@ class MegaArchetype:
 
                         if len(componentConfigFuncs) == 0 and \
                                 component not in self._dynamicGroups:
-			    raise KeyError, 'Unknown option "' + option + \
-				    '" for ' + self.__class__.__name__
+			    raise KeyError('Unknown option "' + option + \
+				    '" for ' + self.__class__.__name__)
 
 		    # Add the configure method(s) (may be more than
 		    # one if this is configuring a component group)
@@ -714,12 +715,12 @@ class MegaArchetype:
 			indirectOptions[componentConfigFunc][componentOption] \
 				= value
 		else:
-		    raise KeyError, 'Unknown option "' + option + \
-			    '" for ' + self.__class__.__name__
+		    raise KeyError('Unknown option "' + option + \
+			    '" for ' + self.__class__.__name__)
 
 	# Call the configure methods for any components.
-	map(apply, indirectOptions.keys(),
-		((),) * len(indirectOptions), indirectOptions.values())
+	list(map(apply, list(indirectOptions.keys()),
+		((),) * len(indirectOptions), list(indirectOptions.values())))
 
 	# Call the configuration callback function for each option.
 	for option in directOptions:
@@ -729,7 +730,7 @@ class MegaArchetype:
 	      func()
 
     def __setitem__(self, key, value):
-        apply(self.configure, (), {key: value})
+        self.configure(*(), **{key: value})
 
     #======================================================================
     # Methods used to query the megawidget.
@@ -750,7 +751,7 @@ class MegaArchetype:
 	    remainingComponents = name[(index + 1):]
 
 	# Expand component alias
-	if self.__componentAliases.has_key(component):
+	if component in self.__componentAliases:
 	    component, subComponent = self.__componentAliases[component]
 	    if subComponent is not None:
 		if remainingComponents is None:
@@ -769,7 +770,7 @@ class MegaArchetype:
 	return self._hull
 
     def hulldestroyed(self):
-	return not _hullToMegaWidget.has_key(self._hull)
+	return self._hull not in _hullToMegaWidget
 
     def __str__(self):
 	return str(self._hull)
@@ -779,7 +780,7 @@ class MegaArchetype:
 
 	# Return the value of an option, for example myWidget['font']. 
 
-	if self._optionInfo.has_key(option):
+	if option in self._optionInfo:
 	    return self._optionInfo[option][_OPT_VALUE]
 	else:
 	    index = string.find(option, '_')
@@ -788,7 +789,7 @@ class MegaArchetype:
 		componentOption = option[(index + 1):]
 
 		# Expand component alias
-		if self.__componentAliases.has_key(component):
+		if component in self.__componentAliases:
 		    component, subComponent = self.__componentAliases[component]
 		    if subComponent is not None:
 			componentOption = subComponent + '_' + componentOption
@@ -796,7 +797,7 @@ class MegaArchetype:
 		    # Expand option string to write on error
 		    option = component + '_' + componentOption
 
-		if self.__componentInfo.has_key(component):
+		if component in self.__componentInfo:
 		    # Call cget on the component.
 		    componentCget = self.__componentInfo[component][3]
 		    return componentCget(componentOption)
@@ -808,8 +809,8 @@ class MegaArchetype:
 			    componentCget = info[3]
 			    return componentCget(componentOption)
 
-	raise KeyError, 'Unknown option "' + option + \
-		'" for ' + self.__class__.__name__
+	raise KeyError('Unknown option "' + option + \
+		'" for ' + self.__class__.__name__)
 
     __getitem__ = cget
 
@@ -831,7 +832,7 @@ class MegaArchetype:
 
 	# This list includes the 'hull' component and all widget subcomponents
 
-	names = self.__componentInfo.keys()
+	names = list(self.__componentInfo.keys())
 	names.sort()
 	return names
 
@@ -840,7 +841,7 @@ class MegaArchetype:
 
 	componentAliases = self.__componentAliases
 
-	names = componentAliases.keys()
+	names = list(componentAliases.keys())
 	names.sort()
 	rtn = []
 	for alias in names:
@@ -909,17 +910,17 @@ def popgrab(window):
     if prevFocus != '':
         try:
             topWidget.tk.call('focus', prevFocus)
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             # Previous focus widget has been deleted. Set focus
             # to root window.
-            Tkinter._default_root.focus_set()
+            six.moves.tkinter._default_root.focus_set()
     else:
         # Make sure that focus does not remain on the released widget.
         if len(_grabStack) > 0:
             topWidget = _grabStack[-1]['grabWindow']
             topWidget.focus_set()
         else:
-            Tkinter._default_root.focus_set()
+            six.moves.tkinter._default_root.focus_set()
 
 def grabstacktopwindow():
     if len(_grabStack) == 0:
@@ -930,7 +931,7 @@ def grabstacktopwindow():
 def releasegrabs():
     # Release grab and clear the grab stack.
 
-    current = Tkinter._default_root.grab_current()
+    current = six.moves.tkinter._default_root.grab_current()
     if current is not None:
         current.grab_release()
     _grabStack[:] = []
@@ -950,7 +951,7 @@ def _grabtop():
             else:
                 topWidget.grab_set()
             break
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             # Another application has grab.  Keep trying until
             # grab can succeed.
             topWidget.after(100)
@@ -971,7 +972,7 @@ class MegaToplevel(MegaArchetype):
 	self.defineoptions(kw, optiondefs)
 
 	# Initialise the base class (after defining the options).
-	MegaArchetype.__init__(self, parent, Tkinter.Toplevel)
+	MegaArchetype.__init__(self, parent, six.moves.tkinter.Toplevel)
 
 	# Initialise instance.
 
@@ -1023,7 +1024,7 @@ class MegaToplevel(MegaArchetype):
 
     def destroy(self):
 	# Allow this to be called more than once.
-	if _hullToMegaWidget.has_key(self._hull):
+	if self._hull in _hullToMegaWidget:
 	    self.deactivate()
 
             # Remove circular references, so that object can get cleaned up.
@@ -1055,7 +1056,7 @@ class MegaToplevel(MegaArchetype):
                 parent = self.winfo_parent()
                 # winfo_parent() should return the parent widget, but the
                 # the current version of Tkinter returns a string.
-                if type(parent) == types.StringType:
+                if type(parent) == bytes:
                     parent = self._hull._nametowidget(parent)
                 master = parent.winfo_toplevel()
             self.transient(master)
@@ -1067,7 +1068,7 @@ class MegaToplevel(MegaArchetype):
 	# and one third down.)
 
         parent = self.winfo_parent()
-        if type(parent) == types.StringType:
+        if type(parent) == bytes:
             parent = self._hull._nametowidget(parent)
 
         # Find size of window.
@@ -1101,7 +1102,7 @@ class MegaToplevel(MegaArchetype):
 
     def activate(self, globalMode = 0, geometry = 'centerscreenfirst'):
 	if self._active:
-	    raise ValueError, 'Window is already active'
+	    raise ValueError('Window is already active')
 	if self.state() == 'normal':
 	    self.withdraw()
 
@@ -1110,7 +1111,7 @@ class MegaToplevel(MegaArchetype):
 	showbusycursor()
 
 	if self._wait is None:
-	    self._wait = Tkinter.IntVar()
+	    self._wait = six.moves.tkinter.IntVar()
 	self._wait.set(0)
 
 	if geometry == 'centerscreenalways':
@@ -1142,7 +1143,7 @@ class MegaToplevel(MegaArchetype):
                 parent = self.winfo_parent()
                 # winfo_parent() should return the parent widget, but the
                 # the current version of Tkinter returns a string.
-                if type(parent) == types.StringType:
+                if type(parent) == bytes:
                     parent = self._hull._nametowidget(parent)
                 master = parent.winfo_toplevel()
             self.transient(master)
@@ -1179,7 +1180,7 @@ class MegaToplevel(MegaArchetype):
     def active(self):
 	return self._active
 
-forwardmethods(MegaToplevel, Tkinter.Toplevel, '_hull')
+forwardmethods(MegaToplevel, six.moves.tkinter.Toplevel, '_hull')
 
 #=============================================================================
 
@@ -1192,12 +1193,12 @@ class MegaWidget(MegaArchetype):
 	self.defineoptions(kw, optiondefs)
 
 	# Initialise the base class (after defining the options).
-	MegaArchetype.__init__(self, parent, Tkinter.Frame)
+	MegaArchetype.__init__(self, parent, six.moves.tkinter.Frame)
 
 	# Check keywords and initialise options.
 	self.initialiseoptions()
 
-forwardmethods(MegaWidget, Tkinter.Frame, '_hull')
+forwardmethods(MegaWidget, six.moves.tkinter.Frame, '_hull')
 
 #=============================================================================
 
@@ -1211,7 +1212,7 @@ def tracetk(root = None, on = 1, withStackTrace = 0, file=None):
     global _traceTk
 
     if root is None:
-        root = Tkinter._default_root
+        root = six.moves.tkinter._default_root
 
     _withStackTrace = withStackTrace
     _traceTk = on
@@ -1234,7 +1235,7 @@ def tracetk(root = None, on = 1, withStackTrace = 0, file=None):
 def showbusycursor():
 
     _addRootToToplevelBusyInfo()
-    root = Tkinter._default_root
+    root = six.moves.tkinter._default_root
 
     busyInfo = {
         'newBusyWindows' : [],
@@ -1283,7 +1284,7 @@ def showbusycursor():
 def hidebusycursor(forceFocusRestore = 0):
 
     # Remember the focus as it is now, before it is changed.
-    root = Tkinter._default_root
+    root = six.moves.tkinter._default_root
     if _disableKeyboardWhileBusy:
         currentFocus = root.tk.call('focus')
 
@@ -1293,7 +1294,7 @@ def hidebusycursor(forceFocusRestore = 0):
 
     for window in busyInfo['newBusyWindows']:
         # If this window has not been deleted, release the busy cursor.
-        if _toplevelBusyInfo.has_key(window):
+        if window in _toplevelBusyInfo:
             winInfo = _toplevelBusyInfo[window]
             winInfo['isBusy'] = 0
             _busy_release(window)
@@ -1306,7 +1307,7 @@ def hidebusycursor(forceFocusRestore = 0):
                 if windowFocusNow == winInfo['busyWindow']:
                     try:
                         window.tk.call('focus', winInfo['windowFocus'])
-                    except Tkinter.TclError:
+                    except six.moves.tkinter.TclError:
                         # Previous focus widget has been deleted. Set focus
                         # to toplevel window instead (can't leave focus on
                         # busy window).
@@ -1322,7 +1323,7 @@ def hidebusycursor(forceFocusRestore = 0):
             if previousFocus is not None:
                 try:
                     root.tk.call('focus', previousFocus)
-                except Tkinter.TclError:
+                except six.moves.tkinter.TclError:
                     # Previous focus widget has been deleted; forget it.
                     pass
         else:
@@ -1342,24 +1343,23 @@ def setbusycursorattributes(window, **kw):
         elif name == 'cursorName':
             _toplevelBusyInfo[window]['busyCursorName'] = value
         else:
-            raise KeyError, 'Unknown busycursor attribute "' + name + '"'
+            raise KeyError('Unknown busycursor attribute "' + name + '"')
 
 def _addRootToToplevelBusyInfo():
     # Include the Tk root window in the list of toplevels.  This must
     # not be called before Tkinter has had a chance to be initialised by
     # the application.
 
-    root = Tkinter._default_root
+    root = six.moves.tkinter._default_root
     if root == None:
-        root = Tkinter.Tk()
-    if not _toplevelBusyInfo.has_key(root):
+        root = six.moves.tkinter.Tk()
+    if root not in _toplevelBusyInfo:
         _addToplevelBusyInfo(root)
 
 def busycallback(command, updateFunction = None):
     if not callable(command):
-	raise ValueError, \
-	    'cannot register non-command busy callback %s %s' % \
-	        (repr(command), type(command))
+	raise ValueError('cannot register non-command busy callback %s %s' % \
+	        (repr(command), type(command)))
     wrapper = _BusyWrapper(command, updateFunction)
     return wrapper.callback
 
@@ -1418,10 +1418,10 @@ def initialise(
     # If we haven't been given a root window, use the default or
     # create one.
     if root is None:
-	if Tkinter._default_root is None:
-	    root = Tkinter.Tk()
+	if six.moves.tkinter._default_root is None:
+	    root = six.moves.tkinter.Tk()
 	else:
-	    root = Tkinter._default_root
+	    root = six.moves.tkinter._default_root
 
     # If this call is initialising a different Tk interpreter than the
     # last call, then re-initialise all global variables.  Assume the
@@ -1443,17 +1443,17 @@ def initialise(
 
     # Trap Tkinter Toplevel constructors so that a list of Toplevels
     # can be maintained.
-    Tkinter.Toplevel.title = __TkinterToplevelTitle
+    six.moves.tkinter.Toplevel.title = __TkinterToplevelTitle
 
     # Trap Tkinter widget destruction so that megawidgets can be
     # destroyed when their hull widget is destoyed and the list of
     # Toplevels can be pruned.
-    Tkinter.Toplevel.destroy = __TkinterToplevelDestroy
-    Tkinter.Widget.destroy = __TkinterWidgetDestroy
+    six.moves.tkinter.Toplevel.destroy = __TkinterToplevelDestroy
+    six.moves.tkinter.Widget.destroy = __TkinterWidgetDestroy
 
     # Modify Tkinter's CallWrapper class to improve the display of
     # errors which occur in callbacks.
-    Tkinter.CallWrapper = __TkinterCallWrapper
+    six.moves.tkinter.CallWrapper = __TkinterCallWrapper
 
     # Make sure we get to know when the window manager deletes the
     # root window.  Only do this if the protocol has not yet been set. 
@@ -1465,7 +1465,7 @@ def initialise(
 
     # Set the base font size for the application and set the
     # Tk option database font resources.
-    import PmwLogicalFont
+    from . import PmwLogicalFont
     PmwLogicalFont._font_initialise(root, size, fontScheme)
 
     return root
@@ -1509,7 +1509,7 @@ class _TraceTk:
         global _recursionCounter
 
         _callToTkReturned = 0
-        if len(args) == 1 and type(args[0]) == types.TupleType:
+        if len(args) == 1 and type(args[0]) == tuple:
             argStr = str(args[0])
         else:
             argStr = str(args)
@@ -1517,8 +1517,8 @@ class _TraceTk:
                 (_recursionCounter, '  ' * _recursionCounter, argStr))
 	_recursionCounter = _recursionCounter + 1
         try:
-            result = apply(self.tclInterp.call, args, kw)
-	except Tkinter.TclError, errorString:
+            result = self.tclInterp.call(*args, **kw)
+	except six.moves.tkinter.TclError as errorString:
             _callToTkReturned = 1
             _recursionCounter = _recursionCounter - 1
             _traceTkFile.write('\nTK ERROR> %d:%s-> %s\n' %
@@ -1527,7 +1527,7 @@ class _TraceTk:
             if _withStackTrace:
                 _traceTkFile.write('CALL  TK> stack:\n')
                 traceback.print_stack()
-            raise Tkinter.TclError, errorString
+            raise six.moves.tkinter.TclError(errorString)
 
         _recursionCounter = _recursionCounter - 1
         if _callToTkReturned:
@@ -1591,18 +1591,18 @@ def __TkinterToplevelTitle(self, *args):
     # Toplevel in the list of toplevels and set the initial
     # WM_DELETE_WINDOW protocol to destroy() so that we get to know
     # about it.
-    if not _toplevelBusyInfo.has_key(self):
+    if self not in _toplevelBusyInfo:
         _addToplevelBusyInfo(self)
         self._Pmw_WM_DELETE_name = self.register(self.destroy, None, 0)
 	self.protocol('WM_DELETE_WINDOW', self._Pmw_WM_DELETE_name)
 
-    return apply(Tkinter.Wm.title, (self,) + args)
+    return six.moves.tkinter.Wm.title(*(self,) + args)
 
 _haveBltBusy = None
 def _havebltbusy(window):
     global _busy_hold, _busy_release, _haveBltBusy
     if _haveBltBusy is None:
-        import PmwBlt
+        from . import PmwBlt
         _haveBltBusy = PmwBlt.havebltbusy(window)
         _busy_hold = PmwBlt.busy_hold
         if os.name == 'nt':
@@ -1621,7 +1621,7 @@ class _BusyWrapper:
 
     def callback(self, *args):
 	showbusycursor()
-	rtn = apply(self._command, args)
+	rtn = self._command(*args)
 
 	# Call update before hiding the busy windows to clear any
 	# events that may have occurred over the busy windows.
@@ -1668,7 +1668,7 @@ def drawarrow(canvas, color, direction, tag, baseOffset = 0.25, edgeOffset = 0.1
     else:
         coords = (base, low, base, high, apex, middle)
     kw = {'fill' : color, 'outline' : color, 'tag' : tag}
-    apply(canvas.create_polygon, coords, kw)
+    canvas.create_polygon(*coords, **kw)
 
 #=============================================================================
 
@@ -1680,7 +1680,7 @@ def drawarrow(canvas, color, direction, tag, baseOffset = 0.25, edgeOffset = 0.1
 _hullToMegaWidget = {}
 
 def __TkinterToplevelDestroy(tkWidget):
-    if _hullToMegaWidget.has_key(tkWidget):
+    if tkWidget in _hullToMegaWidget:
         mega = _hullToMegaWidget[tkWidget]
         try:
 	    mega.destroy()
@@ -1690,22 +1690,22 @@ def __TkinterToplevelDestroy(tkWidget):
         # Delete the busy info structure for this toplevel (if the
         # window was created before Pmw.initialise() was called, it
         # will not have any.
-        if _toplevelBusyInfo.has_key(tkWidget):
+        if tkWidget in _toplevelBusyInfo:
             del _toplevelBusyInfo[tkWidget]
         if hasattr(tkWidget, '_Pmw_WM_DELETE_name'):
             tkWidget.tk.deletecommand(tkWidget._Pmw_WM_DELETE_name)
             del tkWidget._Pmw_WM_DELETE_name
-        Tkinter.BaseWidget.destroy(tkWidget)
+        six.moves.tkinter.BaseWidget.destroy(tkWidget)
 
 def __TkinterWidgetDestroy(tkWidget):
-    if _hullToMegaWidget.has_key(tkWidget):
+    if tkWidget in _hullToMegaWidget:
         mega = _hullToMegaWidget[tkWidget]
         try:
 	    mega.destroy()
         except:
 	    _reporterror(mega.destroy, ())
     else:
-        Tkinter.BaseWidget.destroy(tkWidget)
+        six.moves.tkinter.BaseWidget.destroy(tkWidget)
 
 #=============================================================================
 
@@ -1722,12 +1722,12 @@ class __TkinterCallWrapper:
     def __call__(self, *args):
 	try:
 	    if self.subst:
-		args = apply(self.subst, args)
+		args = self.subst(*args)
             if _traceTk:
                 if not _callToTkReturned:
                     _traceTkFile.write('\n')
                 if hasattr(self.func, 'im_class'):
-                    name = self.func.im_class.__name__ + '.' + \
+                    name = self.func.__self__.__class__.__name__ + '.' + \
                         self.func.__name__
                 else:
                     name = self.func.__name__
@@ -1744,9 +1744,9 @@ class __TkinterCallWrapper:
                 _traceTkFile.write('CALLBACK> %d:%s%s%s\n' %
                     (_recursionCounter, '  ' * _recursionCounter, name, argStr))
                 _traceTkFile.flush()
-	    return apply(self.func, args)
-	except SystemExit, msg:
-	    raise SystemExit, msg
+	    return self.func(*args)
+	except SystemExit as msg:
+	    raise SystemExit(msg)
 	except:
 	    _reporterror(self.func, args)
 
@@ -1771,14 +1771,14 @@ def _reporterror(func, args):
     exc_type, exc_value, exc_traceback = sys.exc_info()
 
     # Give basic information about the callback exception.
-    if type(exc_type) == types.ClassType:
+    if type(exc_type) == type:
 	# Handle python 1.5 class exceptions.
 	exc_type = exc_type.__name__
     msg = str(exc_type) + ' Exception in Tk callback\n'
     msg = msg + '  Function: %s (type: %s)\n' % (repr(func), type(func))
     msg = msg + '  Args: %s\n' % str(args)
 
-    if type(args) == types.TupleType and len(args) > 0 and \
+    if type(args) == tuple and len(args) > 0 and \
 	    hasattr(args[0], 'type'):
         eventArg = 1
     else:
@@ -1787,7 +1787,7 @@ def _reporterror(func, args):
     # If the argument to the callback is an event, add the event type.
     if eventArg:
 	eventNum = string.atoi(args[0].type)
-        if eventNum in _eventTypeToName.keys():
+        if eventNum in list(_eventTypeToName.keys()):
             msg = msg + '  Event type: %s (type num: %d)\n' % \
                     (_eventTypeToName[eventNum], eventNum)
         else:
@@ -1804,7 +1804,7 @@ def _reporterror(func, args):
     if eventArg:
 	msg = msg + '\n================================================\n'
 	msg = msg + '  Event contents:\n'
-	keys = args[0].__dict__.keys()
+	keys = list(args[0].__dict__.keys())
 	keys.sort()
 	for key in keys:
 	    msg = msg + '    %s: %s\n' % (key, args[0].__dict__[key])
@@ -1824,33 +1824,33 @@ class _ErrorWindow:
         self._firstShowing = 1
 
 	# Create the toplevel window
-	self._top = Tkinter.Toplevel()
+	self._top = six.moves.tkinter.Toplevel()
 	self._top.protocol('WM_DELETE_WINDOW', self._hide)
 	self._top.title('Error in background function')
 	self._top.iconname('Background error')
 
 	# Create the text widget and scrollbar in a frame
-	upperframe = Tkinter.Frame(self._top)
+	upperframe = six.moves.tkinter.Frame(self._top)
 
-	scrollbar = Tkinter.Scrollbar(upperframe, orient='vertical')
+	scrollbar = six.moves.tkinter.Scrollbar(upperframe, orient='vertical')
 	scrollbar.pack(side = 'right', fill = 'y')
 
-	self._text = Tkinter.Text(upperframe, yscrollcommand=scrollbar.set)
+	self._text = six.moves.tkinter.Text(upperframe, yscrollcommand=scrollbar.set)
 	self._text.pack(fill = 'both', expand = 1)
 	scrollbar.configure(command=self._text.yview)
 
 	# Create the buttons and label in a frame
-	lowerframe = Tkinter.Frame(self._top)
+	lowerframe = six.moves.tkinter.Frame(self._top)
 
-	ignore = Tkinter.Button(lowerframe,
+	ignore = six.moves.tkinter.Button(lowerframe,
 	        text = 'Ignore remaining errors', command = self._hide)
 	ignore.pack(side='left')
 
-	self._nextError = Tkinter.Button(lowerframe,
+	self._nextError = six.moves.tkinter.Button(lowerframe,
 	        text = 'Show next error', command = self._next)
 	self._nextError.pack(side='left')
 
-	self._label = Tkinter.Label(lowerframe, relief='ridge')
+	self._label = six.moves.tkinter.Label(lowerframe, relief='ridge')
 	self._label.pack(side='left', fill='x', expand=1)
 
 	# Pack the lower frame first so that it does not disappear

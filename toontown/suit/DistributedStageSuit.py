@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.suit import DistributedFactorySuit
 from toontown.suit.Suit import *
 from direct.directnotify import DirectNotifyGlobal

@@ -1,6 +1,8 @@
 """ This module contains code to freeze a number of Python modules
 into a single (mostly) standalone DLL or EXE. """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import modulefinder
 import sys
 import os
@@ -14,6 +16,7 @@ import zipfile
 import importlib
 
 from . import pefile
+from six.moves import range
 
 # Temporary (?) try..except to protect against unbuilt p3extend_frozen.
 try:
@@ -884,7 +887,7 @@ class Freezer:
         try:
             module = __import__(moduleName)
         except:
-            print("couldn't import %s" % (moduleName))
+            print(("couldn't import %s" % (moduleName)))
             module = None
 
         if module is not None:
@@ -923,7 +926,7 @@ class Freezer:
         try:
             module = __import__(moduleName)
         except:
-            print("couldn't import %s" % (moduleName))
+            print(("couldn't import %s" % (moduleName)))
             module = None
 
         if module is not None:
@@ -1174,7 +1177,7 @@ class Freezer:
 
         if missing:
             missing.sort()
-            print("There are some missing modules: %r" % missing)
+            print(("There are some missing modules: %r" % missing))
 
     def __sortModuleKey(self, mdef):
         """ A sort key function to sort a list of mdef's into order,
@@ -1513,10 +1516,10 @@ class Freezer:
             elif '.' in moduleName:
                 # Nothing we can do about this case except warn the user they
                 # are in for some trouble.
-                print('WARNING: Python cannot import extension modules under '
+                print(('WARNING: Python cannot import extension modules under '
                       'frozen Python packages; %s will be inaccessible.  '
                       'passing either -l to link in extension modules or use '
-                      '-x %s to exclude the entire package.' % (moduleName, moduleName.split('.')[0]))
+                      '-x %s to exclude the entire package.' % (moduleName, moduleName.split('.')[0])))
 
         text = programFile % {
             'moduleDefs': '\n'.join(moduleDefs),
@@ -2182,7 +2185,7 @@ class Freezer:
                             if rel >= 0 and rel < vmsize:
                                 # Yes, so return the symbol offset.
                                 return fileoff + rel
-                        print("Could not find memory address for symbol %s" % (symbol_name))
+                        print(("Could not find memory address for symbol %s" % (symbol_name)))
 
     def makeModuleDef(self, mangledName, code):
         result = ''
@@ -2514,4 +2517,4 @@ class PandaModuleFinder(modulefinder.ModuleFinder):
                         break
                 if mod and mod != "__init__":
                     modules[mod] = mod
-        return modules.keys()
+        return list(modules.keys())

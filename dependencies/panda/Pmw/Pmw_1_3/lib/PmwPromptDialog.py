@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/promptdialog.itk code.
 
+from __future__ import absolute_import
 import Pmw
 
 # A Dialog with an entryfield
@@ -29,7 +30,7 @@ class PromptDialog(Pmw.Dialog):
 	self._promptDialogEntry.pack(fill='x', expand=1,
 		padx = self['borderx'], pady = self['bordery'])
 	
-        if not kw.has_key('activatecommand'):
+        if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # EntryField's entry widget.
             tkentry = self.component('entry')

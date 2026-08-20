@@ -15,6 +15,7 @@ it does not:
 although it does send messages that allow a listener to play sounds or
 animations based on walker events.
 """
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase import DirectObject
 from direct.controls.ControlManager import CollisionHandlerRayStart

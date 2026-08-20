@@ -1,5 +1,6 @@
 """ProjectileInterval module: contains the ProjectileInterval class"""
 
+from __future__ import absolute_import
 __all__ = ['ProjectileInterval']
 
 from panda3d.core import *

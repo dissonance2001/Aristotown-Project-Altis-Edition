@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import DistributedEntity
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import NodePath

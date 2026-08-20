@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
 from toontown.speedchat.TTSCSingingTerminal import TTSCSingingTerminal
 from otp.otpbase import OTPLocalizer
+from six.moves import range
 SingingMenuGuide = [(OTPLocalizer.SingingMenuSections[0], [{9000: 25},
    {9001: 26},
    {9002: 27},
@@ -32,17 +35,17 @@ class TTSCSingingMenu(SCMenu):
         except:
             return
 
-        for count in xrange(len(SingingMenuGuide)):
+        for count in range(len(SingingMenuGuide)):
             section = SingingMenuGuide[count]
             if section[0] == -1:
                 for phrase in section[1]:
                     emote = None
                     if type(phrase) == type({}):
-                        item = phrase.keys()[0]
+                        item = list(phrase.keys())[0]
                         emote = phrase[item]
                         phrase = item
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print 'warning: tried to link a singing phrase %s which does not seem to exist' % phrase
+                        print('warning: tried to link a singing phrase %s which does not seem to exist' % phrase)
                         break
                     terminal = TTSCSingingTerminal(phrase)
                     if emote is not None:

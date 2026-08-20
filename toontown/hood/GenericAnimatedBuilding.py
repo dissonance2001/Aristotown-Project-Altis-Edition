@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.hood import GenericAnimatedProp
 
 class GenericAnimatedBuilding(GenericAnimatedProp.GenericAnimatedProp):

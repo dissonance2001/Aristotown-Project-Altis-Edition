@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import randFloat, normalDistrib, Enum
 from toontown.toonbase.ToonPythonUtil import clampScalar
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 import random, copy
+from six.moves import range
 TraitDivisor = 10000
 
 def getTraitNames():
@@ -185,7 +187,7 @@ class PetTraits:
         self.safeZoneId = safeZoneId
         self.rng = random.Random(self.traitSeed)
         self.traits = {}
-        for i in xrange(len(PetTraits.TraitDescs)):
+        for i in range(len(PetTraits.TraitDescs)):
             if i < len(traitValueList) and traitValueList[i] > 0.0:
                 trait = PetTraits.Trait(i, self, traitValueList[i])
             else:
@@ -235,7 +237,7 @@ class PetTraits:
                 total += value
                 numUsed += 1
 
-        value = total / len(self.traits.values())
+        value = total / len(list(self.traits.values()))
         return value
 
     def getExtremeTraitDescriptions(self):

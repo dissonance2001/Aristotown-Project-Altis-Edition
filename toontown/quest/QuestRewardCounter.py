@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.quest import Quests
@@ -7,6 +8,7 @@ from toontown.suit import SuitDNA
 from toontown.racing import RaceGlobals
 from toontown.estate import GardenGlobals
 from toontown.golf import GolfGlobals
+from six.moves import range
 
 class QuestRewardCounter:
     notify = directNotify.newCategory('QuestRewardCounter')
@@ -91,7 +93,7 @@ class QuestRewardCounter:
 
     def setRewardIndex(self, tier, rewardIds, rewardHistory):
         self.reset()
-        for tierNum in xrange(tier):
+        for tierNum in range(tier):
             for rewardId in Quests.getRewardsInTier(tierNum):
                 reward = Quests.getReward(rewardId)
                 reward.countReward(self)

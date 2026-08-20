@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import types
 import math
 from direct.interval.IntervalGlobal import Sequence, Wait, ActorInterval, Func, SoundInterval, Parallel
@@ -8,6 +9,8 @@ from toontown.hood import GenericAnimatedProp
 from toontown.hood import AnimatedProp
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
+import six
+from six.moves import range
 
 class ZeroAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('ZeroAnimatedProp')
@@ -31,8 +34,8 @@ class ZeroAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
 
     def loadPhaseAnims(self):
         animDict = {}
-        for key, info in self.phaseInfo.iteritems():
-            if type(info[0]) == types.TupleType:
+        for key, info in six.iteritems(self.phaseInfo):
+            if type(info[0]) == tuple:
                 for index, anims in enumerate(info[0]):
                     fullPath = self.path + '/' + anims
                     animName = 'phase%d_%d' % (key, index)
@@ -50,9 +53,9 @@ class ZeroAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
             self.notify.debug('not creating phase ivals again')
             return
         self.phaseIvals = []
-        for key, info in self.phaseInfo.iteritems():
+        for key, info in six.iteritems(self.phaseInfo):
             self.notify.debug('key=%s' % key)
-            if type(info[0]) == types.TupleType:
+            if type(info[0]) == tuple:
                 ival = Sequence()
                 for index, anims in enumerate(info[0]):
                     animName = 'phase%d_%d' % (key, index)
@@ -96,7 +99,7 @@ class ZeroAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
         result = self.curPhase
         if base.config.GetBool('anim-props-randomized', True):
             pairs = []
-            for i in xrange(self.curPhase + 1):
+            for i in range(self.curPhase + 1):
                 pairs.append((math.pow(2, i), i))
 
             sum = math.pow(2, self.curPhase + 1) - 1

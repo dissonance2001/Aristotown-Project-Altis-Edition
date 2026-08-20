@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -7,6 +8,7 @@ from toontown.minigame.PlayingCard import PlayingCardBase
 from toontown.minigame import PlayingCardDeck
 from toontown.minigame import PairingGameGlobals
 from toontown.ai.ToonBarrier import ToonBarrier
+from six.moves import range
 
 class DistributedPairingGameAI(DistributedMinigameAI):
     notify = directNotify.newCategory('DistributedPairingGameAI')
@@ -53,7 +55,7 @@ class DistributedPairingGameAI(DistributedMinigameAI):
             self.faceUpDict[avId] = []
 
         self.deck = PairingGameGlobals.createDeck(self.deckSeed, self.numPlayers)
-        for index in xrange(len(self.deck.cards)):
+        for index in range(len(self.deck.cards)):
             cardValue = self.deck.cards[index]
             oneCard = PlayingCardBase(cardValue)
             self.cards.append(oneCard)
@@ -151,9 +153,9 @@ class DistributedPairingGameAI(DistributedMinigameAI):
         for oneToonFaceUpList in self.faceUpDict.values():
             faceUpList += oneToonFaceUpList
 
-        for i in xrange(len(faceUpList)):
+        for i in range(len(faceUpList)):
             cardA = faceUpList[i]
-            for j in xrange(i + 1, len(faceUpList)):
+            for j in range(i + 1, len(faceUpList)):
                 cardB = faceUpList[j]
                 if self.cards[cardA].rank == self.cards[cardB].rank:
                     return (cardA, cardB)

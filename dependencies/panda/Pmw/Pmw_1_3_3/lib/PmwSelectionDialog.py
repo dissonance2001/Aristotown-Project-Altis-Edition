@@ -1,5 +1,6 @@
 # Not Based on iwidgets version.
 
+from __future__ import absolute_import
 import Pmw
 
 class SelectionDialog(Pmw.Dialog):
@@ -33,7 +34,7 @@ class SelectionDialog(Pmw.Dialog):
 	self._list.pack(side='top', expand='true', fill='both',
 		padx = self['borderx'], pady = self['bordery'])
 
-        if not kw.has_key('activatecommand'):
+        if 'activatecommand' not in kw:
             # Whenever this dialog is activated, set the focus to the
             # ScrolledListBox's listbox widget.
             listbox = self.component('listbox')

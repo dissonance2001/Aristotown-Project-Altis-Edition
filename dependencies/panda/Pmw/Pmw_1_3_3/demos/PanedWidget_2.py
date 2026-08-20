@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from six.moves import range
 title = 'Pmw.PanedWidget demonstration (pane factory)'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -12,7 +14,7 @@ class Demo:
 	self.paneCount = 0
 
 	# Create a "pane factory".
-	label = Tkinter.Label(parent,
+	label = six.moves.tkinter.Label(parent,
 		pady = 10,
 		text = 'Below is a simple "pane factory".\n' +
 			'Drag the handle on the left\nto create new panes.')
@@ -26,7 +28,7 @@ class Demo:
                 )
 	self.factory.add('starter', size = 0.0)
 	self.factory.add('main')
-	button = Tkinter.Button(self.factory.pane('main'),
+	button = six.moves.tkinter.Button(self.factory.pane('main'),
 		text = 'Pane\n0')
 	button.pack(expand = 1)
 	self.factory.pack(expand = 1, fill = 'both')
@@ -44,7 +46,7 @@ class Demo:
 	    # Add a button to the new pane.
 	    name = self.factory.panes()[0]
 	    text = 'Pane\n' + str(self.paneCount)
-	    button = Tkinter.Button(self.factory.pane(name), text = text)
+	    button = six.moves.tkinter.Button(self.factory.pane(name), text = text)
 	    button.pack(expand = 1)
 
 	    # Create a new starter pane.
@@ -55,11 +57,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

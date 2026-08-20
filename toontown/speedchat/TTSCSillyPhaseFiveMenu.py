@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
@@ -33,7 +35,7 @@ class TTSCSillyPhaseFiveMenu(SCMenu):
             if section[0] == -1:
                 for phrase in section[1]:
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print 'warning: tried to link Silly PhaseFive phrase %s which does not seem to exist' % phrase
+                        print('warning: tried to link Silly PhaseFive phrase %s which does not seem to exist' % phrase)
                         break
                     self.append(SCStaticTextTerminal(phrase))
 
@@ -41,7 +43,7 @@ class TTSCSillyPhaseFiveMenu(SCMenu):
                 menu = SCMenu()
                 for phrase in section[1]:
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print 'warning: tried to link Silly PhaseFive phrase %s which does not seem to exist' % phrase
+                        print('warning: tried to link Silly PhaseFive phrase %s which does not seem to exist' % phrase)
                         break
                     menu.append(SCStaticTextTerminal(phrase))
 

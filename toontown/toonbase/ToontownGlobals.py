@@ -1,4 +1,5 @@
-import TTLocalizer
+from __future__ import absolute_import
+from . import TTLocalizer
 from otp.otpbase.OTPGlobals import *
 from toontown.toonbase.ToonPythonUtil import Enum, invertDict
 from pandac.PandaModules import BitMask32, Vec4
@@ -556,7 +557,7 @@ factoryId2factoryType = {MockupFactoryId: FT_FullSuit,
  SellbotFactoryInt: FT_FullSuit,
  LawbotOfficeInt: FT_FullSuit}
 StreetNames = TTLocalizer.GlobalStreetNames
-StreetBranchZones = StreetNames.keys()
+StreetBranchZones = list(StreetNames.keys())
 Hoods = (DonaldsDock,
  ToontownCentral,
  TheBrrrgh,

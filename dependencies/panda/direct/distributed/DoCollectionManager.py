@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed import DoHierarchy
 import re
 
@@ -125,22 +127,22 @@ class DoCollectionManager:
     def doByDistance(self):
         objs = self.dosByDistance()
         for obj in objs:
-            print('%s\t%s\t%s' % (obj.doId, self._getDistanceFromLA(obj),
-                                  obj.dclass.getName()))
+            print(('%s\t%s\t%s' % (obj.doId, self._getDistanceFromLA(obj),
+                                  obj.dclass.getName())))
 
     if __debug__:
         def printObjects(self):
             format="%10s %10s %10s %30s %20s"
             title=format%("parentId", "zoneId", "doId", "dclass", "name")
             print(title)
-            print('-'*len(title))
+            print(('-'*len(title)))
             for distObj in self.doId2do.values():
-                print(format%(
+                print((format%(
                     distObj.__dict__.get("parentId"),
                     distObj.__dict__.get("zoneId"),
                     distObj.__dict__.get("doId"),
                     distObj.dclass.getName(),
-                    distObj.__dict__.get("name")))
+                    distObj.__dict__.get("name"))))
 
     def _printObjects(self, table):
         class2count = {}
@@ -155,7 +157,7 @@ class DoCollectionManager:
         for count in counts:
             count2classes[count].sort()
             for name in count2classes[count]:
-                print('%s %s' % (count, name))
+                print(('%s %s' % (count, name)))
         print('')
 
     def _returnObjects(self, table):

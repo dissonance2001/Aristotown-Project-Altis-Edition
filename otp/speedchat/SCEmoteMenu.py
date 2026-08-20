@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCEmoteTerminal import SCEmoteTerminal
+from six.moves import range
 
 class SCEmoteMenu(SCMenu):
 
@@ -18,6 +20,6 @@ class SCEmoteMenu(SCMenu):
         except:
             return
 
-        for i in xrange(len(lt.emoteAccess)):
+        for i in range(len(lt.emoteAccess)):
             if lt.emoteAccess[i]:
                 self.append(SCEmoteTerminal(i))

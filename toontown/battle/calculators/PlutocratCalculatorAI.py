@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
@@ -5,6 +6,8 @@ from toontown.battle import StatusEffects
 from toontown.battle import PlutocratBalanceGlobals
 import math
 import random
+from six.moves import range
+from six.moves import zip
 
 
 class PlutocratCalculatorAI:
@@ -373,7 +376,7 @@ class PlutocratCalculatorAI:
             'group': SuitBattleGlobals.ATK_TGT_GROUP if len(toonIds) > 1 else SuitBattleGlobals.ATK_TGT_SINGLE,
         }
         attack[SUIT_TGT_COL] = []
-        attack[SUIT_HP_COL] = [-1 for i in xrange(len(self.battle.activeToons))]
+        attack[SUIT_HP_COL] = [-1 for i in range(len(self.battle.activeToons))]
         attack[TOON_DIED_COL] = 0
         attack[SUIT_BEFORE_TOONS_COL] = 0
         attack[SUIT_TAUNT_COL] = 0
@@ -726,7 +729,7 @@ class PlutocratCalculatorAI:
         if not pcrat:
             controller.pendingDeepFreezeCount = 0
             return
-        for unused in xrange(count):
+        for unused in range(count):
             self._unlure(pcrat)
             for toonId in self.battle.activeToons:
                 self.setToonCondition(

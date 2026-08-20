@@ -6,6 +6,8 @@
 # of copy-to-texture: motion trails.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import GraphicsOutput
 from panda3d.core import Filename, Texture

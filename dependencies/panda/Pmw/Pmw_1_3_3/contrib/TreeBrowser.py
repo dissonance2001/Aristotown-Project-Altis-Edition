@@ -31,9 +31,12 @@
 #
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 
 class _Branching:
@@ -48,47 +51,39 @@ class _Branching:
 
     def addbranch(self, branchName = None, **kw):
         kw['indent'] = self['indent']
-        return apply(self._insertnode,
-                     ('tree', branchName, len(self._nodeNames),
-                      self._treeRoot),
-                     kw)
+        return self._insertnode(*('tree', branchName, len(self._nodeNames),
+                      self._treeRoot), **kw)
 
     def addleaf(self, leafName = None, **kw):
-        return apply(self._insertnode,
-                     ('leaf', leafName, len(self._nodeNames),
-                      self._treeRoot),
-                     kw)
+        return self._insertnode(*('leaf', leafName, len(self._nodeNames),
+                      self._treeRoot), **kw)
 
     def insertbranch(self, branchName = None, before = 0, **kw):
         kw['indent'] = self['indent']
-        return apply(self._insertnode,
-                     ('tree', branchName, before, self._treeRoot),
-                     kw)
+        return self._insertnode(*('tree', branchName, before, self._treeRoot), **kw)
     
     def insertleaf(self, leafName = None, before = 0, **kw):
-        return apply(self._insertnode,
-                     ('leaf', leafName, before, self._treeRoot),
-                     kw)
+        return self._insertnode(*('leaf', leafName, before, self._treeRoot), **kw)
 
     def _insertnode(self, type, nodeName, before, treeRoot, **kw):
-        if 'selectbackground' not in kw.keys():
+        if 'selectbackground' not in list(kw.keys()):
             kw['selectbackground'] = self['selectbackground']
 
-        if 'selectforeground' not in kw.keys():
+        if 'selectforeground' not in list(kw.keys()):
             kw['selectforeground'] = self['selectforeground']
 
-        if 'background' not in kw.keys():
+        if 'background' not in list(kw.keys()):
             kw['background'] = self['background']
 
-        if 'foreground' not in kw.keys():
+        if 'foreground' not in list(kw.keys()):
             kw['foreground'] = self['foreground']
 
         if nodeName == None:
             nodeName = self._nodeName + ".%d" % (len(self._nodeNames) + 1)
         
-	if self._nodeAttrs.has_key(nodeName):
+	if nodeName in self._nodeAttrs:
 	    msg = 'Node "%s" already exists.' % nodeName
-	    raise ValueError, msg
+	    raise ValueError(msg)
 
         # Do this early to catch bad <before> spec before creating any items.
 	beforeIndex = self.index(before, 1)
@@ -100,7 +95,7 @@ class _Branching:
             self._nodeAttrs[self._nodeNames[-1]]['branch']._setlast(0)
             
         if(type == 'tree'):
-            node = apply(self.createcomponent, ('branch%d'%len(self._nodeNames),
+            node = self.createcomponent(*('branch%d'%len(self._nodeNames),
                                                 (), None,
                                                 _BranchNode,
                                                 self._branchFrame,
@@ -108,10 +103,10 @@ class _Branching:
                                                 treeRoot,
                                                 self,
                                                 last,
-                                                ), kw)
+                                                ), **kw)
             attributes['nodetype'] = 'TreeNode'
         else:
-            node = apply(self.createcomponent, ('leaf%d'%len(self._nodeNames),
+            node = self.createcomponent(*('leaf%d'%len(self._nodeNames),
                                                 (), None,
                                                 _LeafNode,
                                                 self._branchFrame,
@@ -119,7 +114,7 @@ class _Branching:
                                                 treeRoot,
                                                 self,
                                                 last,
-                                                ), kw)
+                                                ), **kw)
             attributes['nodetype'] = 'LeafNode'
 
         if len(self._nodeNames) == beforeIndex:
@@ -157,32 +152,31 @@ class _Branching:
         if isinstance(index, _LeafNode):
             index = index._nodeName
 	listLength = len(self._nodeNames)
-	if type(index) == types.IntType:
+	if type(index) == int:
 	    if forInsert and index <= listLength:
 		return index
 	    elif not forInsert and index < listLength:
 		return index
 	    else:
-		raise ValueError, 'index "%s" is out of range' % index
-        elif type(index) == types.StringType:
+		raise ValueError('index "%s" is out of range' % index)
+        elif type(index) == bytes:
             if index in self._nodeNames:
                 return self._nodeNames.index(index)
-            raise ValueError, 'bad branch or leaf name: %s' % index
+            raise ValueError('bad branch or leaf name: %s' % index)
 	elif index is Pmw.END:
 	    if forInsert:
 		return listLength
 	    elif listLength > 0:
 		return listLength - 1
 	    else:
-		raise ValueError, 'TreeNode has no branches'
+		raise ValueError('TreeNode has no branches')
 	#elif index is Pmw.SELECT:
 	#    if listLength == 0:
 	#	raise ValueError, 'TreeNode has no branches'
         #    return self._pageNames.index(self.getcurselection())
 	else:
 	    validValues = 'a name, a number, Pmw.END, Pmw.SELECT, or a reference to a TreeBrowser Leaf or Branch'
-	    raise ValueError, \
-                'bad index "%s": must be %s' % (index, validValues)
+	    raise ValueError('bad index "%s": must be %s' % (index, validValues))
 
     def getnodenames(self):
         return self._nodeNames
@@ -256,7 +250,7 @@ class _LeafNode(Pmw.MegaWidget):
 
         self._lineCanvas = self.createcomponent('linecanvas',
                                                 (), None,
-                                                Tkinter.Canvas,
+                                                six.moves.tkinter.Canvas,
                                                 (interior,),
                                                 width = self._labelheight,
                                                 height = self._labelheight,
@@ -339,9 +333,7 @@ class _BranchNode(_LeafNode, _Branching): #Pmw.MegaWidget):
 	self.defineoptions(kw, optiondefs)
 
 	# Initialise the base class (after defining the options).
-        apply(_LeafNode.__init__,
-              (self, parent, nodeName, treeRoot, parentnode, last),
-              kw)
+        _LeafNode.__init__(*(self, parent, nodeName, treeRoot, parentnode, last), **kw)
         _Branching.__init__(self)
 
         # Create the components
@@ -349,7 +341,7 @@ class _BranchNode(_LeafNode, _Branching): #Pmw.MegaWidget):
 
         # Create the expand/collapse button
         self._viewButton = self.createcomponent('viewbutton', (), None,
-                                                Tkinter.Canvas,
+                                                six.moves.tkinter.Canvas,
                                                 (interior,),
                                                 background = self['background'],
                                                 width = self._labelheight - 4,
@@ -379,7 +371,7 @@ class _BranchNode(_LeafNode, _Branching): #Pmw.MegaWidget):
 
         # Create the branch frame that will contain all the branch/leaf nodes
         self._branchFrame = self.createcomponent('frame', (), None,
-                                                 Tkinter.Frame, (interior,),
+                                                 six.moves.tkinter.Frame, (interior,),
                                                  #borderwidth=2,
                                                  #relief='ridge',
                                                  )
@@ -565,7 +557,7 @@ class TreeBrowser(Pmw.MegaWidget, _Branching):
 
 if __name__ == '__main__':
 
-    rootWin = Tkinter.Tk()
+    rootWin = six.moves.tkinter.Tk()
 
     Pmw.initialise()
 
@@ -583,19 +575,19 @@ if __name__ == '__main__':
     def printselected(node):
         selection = treeBrowser.curselection()
         if selection != None:
-            print "Selected node name:", selection[1], "   label:", selection[2]
+            print("Selected node name:", selection[1], "   label:", selection[2])
 
 
     def printdeselected(node):
         selection = treeBrowser.curselection()
         if selection != None:
-            print "Deselected node name:", selection[1], "   label:", selection[2]
+            print("Deselected node name:", selection[1], "   label:", selection[2])
 
     def printexpanded(node):
-        print "Expanded node name:", node.getname(), "   label:", node.getlabel()
+        print("Expanded node name:", node.getname(), "   label:", node.getlabel())
 
     def printcollapsed(node):
-        print "Collapsed node name:", node.getname(), "   label:", node.getlabel()
+        print("Collapsed node name:", node.getname(), "   label:", node.getlabel())
 
 
 
@@ -639,7 +631,7 @@ if __name__ == '__main__':
                                            expandcommand = printexpanded,
                                            collapsecommand = printcollapsed,
                                            )
-    checkButton = Tkinter.Checkbutton(treeNodeLevel1.interior(),
+    checkButton = six.moves.tkinter.Checkbutton(treeNodeLevel1.interior(),
                                       text = 'Da Check Button',
                                       relief = 'ridge',
                                       command = treeNodeLevel1.select)
@@ -651,7 +643,7 @@ if __name__ == '__main__':
     leaf = treeNodeLevel1.addleaf(label = 'Labeled Leaf w/ Checkbutton',
                                   selectcommand = printselected,
                                   deselectcommand = printdeselected)
-    checkButton = Tkinter.Checkbutton(leaf.interior(),
+    checkButton = six.moves.tkinter.Checkbutton(leaf.interior(),
                                       text = 'Da Check Button',
                                       relief = 'ridge',
                                       command = leaf.select)
@@ -663,7 +655,7 @@ if __name__ == '__main__':
                                            expandcommand = printexpanded,
                                            collapsecommand = printcollapsed,
                                            )
-    checkButton = Tkinter.Checkbutton(treeNodeLevel1.interior(),
+    checkButton = six.moves.tkinter.Checkbutton(treeNodeLevel1.interior(),
                                       text = 'Check Button with no label',
                                       relief = 'ridge',
                                       command = treeNodeLevel1.select)
@@ -679,13 +671,13 @@ if __name__ == '__main__':
     # setup dynamic tree node insertion and removal
     class dynTree:
         def __init__(self):
-            self.dyn = Tkinter.IntVar()
+            self.dyn = six.moves.tkinter.IntVar()
             self.dtree = None
 
             self.dLeaf = treeBrowser.addleaf(selectcommand = self.dynSelected,
                                              deselectcommand = self.dynDeselected)
             
-            self.dCheckButton = Tkinter.Checkbutton(self.dLeaf.interior(),
+            self.dCheckButton = six.moves.tkinter.Checkbutton(self.dLeaf.interior(),
                                                     text = 'Enable Dynamic Tree',
                                                     variable = self.dyn,
                                                     command = self.ChkBtnHandler)
@@ -726,7 +718,7 @@ if __name__ == '__main__':
 
     treeBrowser.pack(expand = 1, fill='both')
 
-    exitButton = Tkinter.Button(rootWin, text="Quit", command=rootWin.quit)
+    exitButton = six.moves.tkinter.Button(rootWin, text="Quit", command=rootWin.quit)
     exitButton.pack()
 
     rootWin.mainloop()

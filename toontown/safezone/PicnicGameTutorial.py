@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import inspect
 from direct.fsm import FSM
 from direct.gui.DirectGui import *

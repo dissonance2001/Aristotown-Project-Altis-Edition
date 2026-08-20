@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath
 from toontown.toonbase import ToontownIntervals
 from toontown.toonbase.ToontownTimer import ToontownTimer

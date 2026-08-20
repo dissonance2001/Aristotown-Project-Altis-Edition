@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 import Test
 import Pmw
+from six.moves import range
 
 Test.initialise()
 
@@ -9,7 +11,7 @@ def _createInterior():
     w = Test.currentWidget()
     for i in range(3):
 	lb = Pmw.ScrolledListBox(w.interior(),
-		items = range(20), listbox_height = 6)
+		items = list(range(20)), listbox_height = 6)
 	lb.pack(padx = 10, pady = 10)
 
 def _testYView(doBottom):

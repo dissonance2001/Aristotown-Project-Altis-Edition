@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 __builtins__['simbase'] = AIBase()
 __builtins__['ostream'] = Notify.out()

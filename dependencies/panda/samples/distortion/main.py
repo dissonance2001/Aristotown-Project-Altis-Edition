@@ -2,6 +2,7 @@
 
 # Author: Tree Form starplant@gmail.com
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import FrameBufferProperties, TextNode, BitMask32, LPoint3
 from panda3d.core import WindowProperties, GraphicsOutput, Texture, GraphicsPipe

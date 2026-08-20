@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import random
 from otp.ai.MagicWordGlobal import *
 from toontown.fishing import FishGlobals
 from toontown.fishing.FishBase import FishBase
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class FishManagerAI:
 
@@ -21,7 +23,7 @@ class FishManagerAI:
         if trophies > curTrophies:
             av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
             av.toonUp(av.getMaxHp())
-            av.b_setFishingTrophies(range(trophies))
+            av.b_setFishingTrophies(list(range(trophies)))
             return True
         return False
 

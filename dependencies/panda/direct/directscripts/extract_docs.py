@@ -7,6 +7,8 @@ files in the lib/pandac/input directory. """
 
 from __future__ import print_function
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = []
 
 import os, sys

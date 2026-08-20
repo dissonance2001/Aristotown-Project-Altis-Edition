@@ -6,6 +6,7 @@ on how to use these commands.
 
 from __future__ import print_function
 
+from __future__ import absolute_import
 import collections
 import os
 import plistlib
@@ -28,10 +29,12 @@ from . import FreezeTool
 from . import pefile
 from .icon import Icon
 import panda3d.core as p3d
+import six
+from six.moves import range
 
 
 if 'basestring' not in globals():
-    basestring = str
+    six.string_types = str
 
 
 if sys.version_info < (3, 0):
@@ -48,7 +51,7 @@ if sys.version_info < (3, 0):
 
 
 def _parse_list(input):
-    if isinstance(input, basestring):
+    if isinstance(input, six.string_types):
         input = input.strip().replace(',', '\n')
         if input:
             return [item.strip() for item in input.split('\n') if item.strip()]

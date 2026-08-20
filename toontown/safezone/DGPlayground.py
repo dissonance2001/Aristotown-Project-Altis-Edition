@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 import random
 from toontown.classicchars import CCharPaths

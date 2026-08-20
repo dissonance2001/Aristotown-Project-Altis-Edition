@@ -3,6 +3,7 @@ WxSlider Class: Extended wx.Slider supporting floating point values
                 you should call Enable() after binding any event with this control
 """
 
+from __future__ import absolute_import
 __all__ = ['WxSlider']
 
 import wx

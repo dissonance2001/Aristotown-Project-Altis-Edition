@@ -11,6 +11,7 @@
 # we will load just the sun and and the sky-sphere we use to create the
 # star-field.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 

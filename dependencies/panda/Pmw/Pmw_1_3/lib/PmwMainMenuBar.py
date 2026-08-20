@@ -1,9 +1,11 @@
 # Main menubar
 
+from __future__ import absolute_import
 import string
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 class MainMenuBar(Pmw.MegaArchetype):
 
@@ -19,7 +21,7 @@ class MainMenuBar(Pmw.MegaArchetype):
         self.defineoptions(kw, optiondefs, dynamicGroups = ('Menu',))
 
         # Initialise the base class (after defining the options).
-        Pmw.MegaArchetype.__init__(self, parent, Tkinter.Menu)
+        Pmw.MegaArchetype.__init__(self, parent, six.moves.tkinter.Menu)
 
         self._menuInfo = {}
         self._menuInfo[None] = (None, [])
@@ -91,19 +93,19 @@ class MainMenuBar(Pmw.MegaArchetype):
             traverseSpec, kw):
 
         if (menuName) in self.components():
-            raise ValueError, 'menu "%s" already exists' % menuName
+            raise ValueError('menu "%s" already exists' % menuName)
 
         menukw = {}
-        if kw.has_key('tearoff'):
+        if 'tearoff' in kw:
             menukw['tearoff'] = kw['tearoff']
             del kw['tearoff']
         else:
             menukw['tearoff'] = 0
-        if kw.has_key('name'):
+        if 'name' in kw:
             menukw['name'] = kw['name']
             del kw['name']
 
-        if not kw.has_key('label'):
+        if 'label' not in kw:
             kw['label'] = menuName
 
         self._addHotkeyToOptions(parentMenuName, kw, traverseSpec)
@@ -117,11 +119,11 @@ class MainMenuBar(Pmw.MegaArchetype):
         else:
             parentMenu = self.component(parentMenuName)
 
-        apply(parentMenu.add_cascade, (), kw)
+        parentMenu.add_cascade(*(), **kw)
 
-        menu = apply(self.createcomponent, (menuName,
+        menu = self.createcomponent(*(menuName,
                 (), 'Menu',
-                Tkinter.Menu, (parentMenu,)), menukw)
+                six.moves.tkinter.Menu, (parentMenu,)), **menukw)
         parentMenu.entryconfigure('end', menu = menu)
 
         self._menuInfo[parentMenuName][1].append(statusHelp)
@@ -150,18 +152,18 @@ class MainMenuBar(Pmw.MegaArchetype):
         elif itemType == 'cascade':
             command = menu.add_cascade
         else:
-            raise ValueError, 'unknown menuitem type "%s"' % itemType
+            raise ValueError('unknown menuitem type "%s"' % itemType)
 
         self._menuInfo[menuName][1].append(statusHelp)
-        apply(command, (), kw)
+        command(*(), **kw)
 
     def _addHotkeyToOptions(self, menuName, kw, traverseSpec):
 
-        if (not self['hotkeys'] or kw.has_key('underline') or
-                not kw.has_key('label')):
+        if (not self['hotkeys'] or 'underline' in kw or
+                'label' not in kw):
             return
 
-        if type(traverseSpec) == types.IntType:
+        if type(traverseSpec) == int:
             kw['underline'] = traverseSpec
             return
 
@@ -185,7 +187,7 @@ class MainMenuBar(Pmw.MegaArchetype):
 
         name = kw['label']
 
-        if type(traverseSpec) == types.StringType:
+        if type(traverseSpec) == bytes:
             lowerLetter = string.lower(traverseSpec)
             if traverseSpec in name and lowerLetter not in hotkeyList:
                 kw['underline'] = string.index(name, traverseSpec)
@@ -222,4 +224,4 @@ class MainMenuBar(Pmw.MegaArchetype):
         if balloon is not None:
             balloon.clearstatus()
 
-Pmw.forwardmethods(MainMenuBar, Tkinter.Menu, '_hull')
+Pmw.forwardmethods(MainMenuBar, six.moves.tkinter.Menu, '_hull')

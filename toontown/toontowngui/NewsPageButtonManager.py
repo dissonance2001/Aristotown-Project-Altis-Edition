@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import VBase4, VBase3
 from direct.fsm import FSM
 from direct.directnotify import DirectNotifyGlobal

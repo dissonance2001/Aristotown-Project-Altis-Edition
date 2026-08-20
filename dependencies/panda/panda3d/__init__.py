@@ -1,5 +1,6 @@
 "Python bindings for the Panda3D libraries"
 
+from __future__ import absolute_import
 __version__ = '1.11.0'
 
 if __debug__:

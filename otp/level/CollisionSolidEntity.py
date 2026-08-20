@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 from direct.directnotify import DirectNotifyGlobal
@@ -39,5 +41,5 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
     if __dev__:
 
         def attribChanged(self, attrib, value):
-            print 'attribChanged'
+            print('attribChanged')
             self.initSolid()

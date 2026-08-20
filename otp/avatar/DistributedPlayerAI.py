@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase import GarbageReport
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import CLIENTAGENT_EJECT
@@ -278,7 +279,7 @@ def accessLevel(accessLevel, storage='PERSISTENT', showGM=1):
         if accessLevel not in accessName2Id:
             return 'Invalid access level!'
         accessLevel = accessName2Id[accessLevel]
-    if accessLevel not in accessName2Id.values():
+    if accessLevel not in list(accessName2Id.values()):
         return 'Invalid access level!'
     target = spellbook.getTarget()
     invoker = spellbook.getInvoker()

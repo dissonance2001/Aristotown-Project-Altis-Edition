@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from datetime import datetime, timedelta, tzinfo
 
 # In the U.S., DST starts at 2AM (standard time) on the first Sunday in April:

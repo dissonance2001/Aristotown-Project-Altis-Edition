@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 from direct.fsm import FSM, ClassicFSM, State
 from toontown.toonbase.ToonPythonUtil import randFloat, Functor

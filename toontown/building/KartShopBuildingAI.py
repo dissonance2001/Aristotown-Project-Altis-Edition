@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from pandac.PandaModules import *
 from toontown.building import DoorTypes

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame, DGG, DirectLabel
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -5,6 +6,7 @@ from pandac.PandaModules import Point3, TextNode, Vec4
 from toontown.minigame import TravelGameGlobals
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import Parallel, Sequence, LerpFunc, Func, Wait, SoundInterval
+from six.moves import range
 
 class VoteResultsTrolleyPanel(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('VoteResultsTrolleyPanel')
@@ -42,7 +44,7 @@ class VoteResultsTrolleyPanel(DirectFrame):
         self.resultFrame = DirectFrame(parent=self, relief=None, pos=self.getRowPos(0.5))
         self.resultLabel = DirectLabel(parent=self.resultFrame, text='', text_scale=0.06, pos=(0.7, 0, 0.0), text_align=TextNode.ACenter)
         self.setupResultLabel()
-        for index in xrange(self.numPlayers):
+        for index in range(self.numPlayers):
             frame = DirectFrame(parent=self, relief=None, pos=self.getRowPos(index))
             self.rowFrame.append(frame)
             nameLabel = DirectFrame(parent=frame, relief=None, pos=(0.46, 0.0, 0.0), text=self.namesList[index], text_fg=(0.0, 0.0, 0.0, 1.0), text_scale=0.05, text_align=TextNode.ACenter, text_font=DGG.getDefaultFont())
@@ -56,7 +58,7 @@ class VoteResultsTrolleyPanel(DirectFrame):
         matchingGameGui = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
         minnieArrow = matchingGameGui.find('**/minnieArrow')
         from toontown.minigame.DistributedTravelGame import map3dToAspect2d
-        for index in xrange(self.numPlayers):
+        for index in range(self.numPlayers):
             avId = self.avIdList[index]
             av = base.cr.doId2do.get(avId)
             if av:
@@ -100,7 +102,7 @@ class VoteResultsTrolleyPanel(DirectFrame):
         self.curArrowSfxIndex = 0
         self.upArrowSfx = []
         self.downArrowSfx = []
-        for i in xrange(5):
+        for i in range(5):
             self.upArrowSfx.append(base.loader.loadSfx('phase_4/audio/sfx/MG_sfx_travel_game_blue_arrow.ogg'))
             self.downArrowSfx.append(base.loader.loadSfx('phase_4/audio/sfx/MG_sfx_travel_game_red_arrow.ogg'))
 
@@ -159,7 +161,7 @@ class VoteResultsTrolleyPanel(DirectFrame):
 
         track = Parallel()
         startVotes = 0
-        for prev in xrange(index):
+        for prev in range(index):
             if self.directions[prev] == direction:
                 startVotes += self.votes[prev]
 
@@ -198,7 +200,7 @@ class VoteResultsTrolleyPanel(DirectFrame):
 
     def startMovie(self):
         self.movie = Sequence()
-        for index in xrange(self.numPlayers):
+        for index in range(self.numPlayers):
             track = self.createOnePlayerSequence(index, 1.25)
             self.movie.append(track)
             self.movie.append(Wait(0.75))

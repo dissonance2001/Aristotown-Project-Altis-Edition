@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from direct.fsm import FSM
@@ -14,6 +15,7 @@ from toontown.building import PlutocratInstanceGlobals
 from toontown.building import PlutocratEnvironment
 from toontown.friends import FriendsListManager
 from toontown.nametag import NametagGlobals
+from six.moves import range
 
 
 OnePlutocratController = None
@@ -693,7 +695,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds or not battleNode:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = self.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]
@@ -771,7 +773,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.introTrack.start()
             self.storeInterval(self.introTrack, intervalName)
             return Task.done
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Plutocrat introduction CTSC failed: %s' % error)
             self.__finishIntroductionTrack()
             return Task.done
@@ -851,7 +853,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                 name=intervalName)
             self.deathTrack.start()
             self.storeInterval(self.deathTrack, intervalName)
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Plutocrat death CTSC failed: %s' % error)
             self.doneBarrier('Reward')
         return Task.done

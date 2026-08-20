@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -6,6 +7,7 @@ from direct.task.Task import Task
 import copy
 from toontown.minigame import TugOfWarGameGlobals
 import math
+from six.moves import range
 
 class DistributedTugOfWarGameAI(DistributedMinigameAI):
 
@@ -222,7 +224,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
         if self.howManyReported == self.numPlayers:
             self.howManyReported = 0
             self.calculateOffsets()
-            self.sendUpdate('sendCurrentPosition', [self.offsetDict.keys(), self.offsetDict.values()])
+            self.sendUpdate('sendCurrentPosition', [list(self.offsetDict.keys()), list(self.offsetDict.values())])
             if self.gameType == TugOfWarGameGlobals.TOON_VS_COG:
                 self.sendUpdate('sendSuitPosition', [self.suitOffset])
 
@@ -244,7 +246,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
                     self.losers.append(self.suitId)
                 else:
                     self.winners.append(self.suitId)
-                for i in xrange(0, self.numPlayers):
+                for i in range(0, self.numPlayers):
                     avId = self.avIdList[i]
                     if self.side[avId] != self.losingSide:
                         self.scoreDict[avId] = self.suitJellybeanReward + TugOfWarGameGlobals.WIN_JELLYBEANS
@@ -254,7 +256,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
                         self.losers.append(avId)
 
             else:
-                for i in xrange(0, self.numPlayers):
+                for i in range(0, self.numPlayers):
                     avId = self.avIdList[i]
                     if self.side[avId] != self.losingSide:
                         self.scoreDict[avId] = TugOfWarGameGlobals.WIN_JELLYBEANS
@@ -264,7 +266,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
                         self.losers.append(avId)
 
         elif self.gameType == TugOfWarGameGlobals.TOON_VS_COG:
-            for i in xrange(0, self.numPlayers):
+            for i in range(0, self.numPlayers):
                 avId = self.avIdList[i]
                 if -self.offsetDict[avId] > self.suitOffset:
                     self.scoreDict[avId] = self.suitJellybeanReward / 2 + TugOfWarGameGlobals.TIE_WIN_JELLYBEANS
@@ -277,7 +279,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
         else:
             maxOffset = -100
             minOffset = 100
-            for i in xrange(0, self.numPlayers):
+            for i in range(0, self.numPlayers):
                 avId = self.avIdList[i]
                 if self.side[avId] == 0:
                     if -self.offsetDict[avId] > maxOffset:
@@ -290,7 +292,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
                     elif self.offsetDict[avId] < minOffset:
                         minOffset = self.offsetDict[avId]
 
-            for i in xrange(0, self.numPlayers):
+            for i in range(0, self.numPlayers):
                 avId = self.avIdList[i]
                 if maxOffset != minOffset:
                     if self.side[avId] == 0:

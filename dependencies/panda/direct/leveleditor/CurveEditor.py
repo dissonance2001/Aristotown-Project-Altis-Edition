@@ -2,6 +2,7 @@
 This is the module for curve edit
 """
 
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.wxwidgets.WxPandaShell import *
 from direct.showbase.DirectObject import *

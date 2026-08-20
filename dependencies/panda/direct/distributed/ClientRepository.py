@@ -1,11 +1,14 @@
 """ClientRepository module: contains the ClientRepository class"""
 
+from __future__ import absolute_import
+from __future__ import print_function
 from .ClientRepositoryBase import ClientRepositoryBase
 from direct.directnotify import DirectNotifyGlobal
 from .MsgTypesCMU import *
 from .PyDatagram import PyDatagram
 from .PyDatagramIterator import PyDatagramIterator
 from panda3d.core import UniqueIdAllocator
+from six.moves import range
 
 
 class ClientRepository(ClientRepositoryBase):

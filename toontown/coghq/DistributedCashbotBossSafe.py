@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from panda3d.physics import *
 from direct.interval.IntervalGlobal import *

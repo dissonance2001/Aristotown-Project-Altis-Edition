@@ -1,5 +1,6 @@
 # This tests Pmw option and component handling.
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw

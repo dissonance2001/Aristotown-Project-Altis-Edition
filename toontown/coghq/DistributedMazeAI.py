@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import DistributedEntityAI
 from toontown.coghq import DistributedBarrelBaseAI
 from direct.directnotify import DirectNotifyGlobal

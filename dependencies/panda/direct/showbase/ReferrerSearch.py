@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import inspect
 import sys
 import gc
 from direct.showbase.PythonUtil import _getSafeReprNotify
 from direct.showbase.Job import Job
+from six.moves import range
 
 class ReferrerSearch(Job):
     def __init__(self, obj, maxRefs = 100):
@@ -34,7 +37,7 @@ class ReferrerSearch(Job):
         self.info = safeReprNotify.getInfo()
         safeReprNotify.setInfo(0)
 
-        print('RefPath(%s): Beginning ReferrerSearch for %s' %(self._id, fastRepr(self.obj)))
+        print(('RefPath(%s): Beginning ReferrerSearch for %s' %(self._id, fastRepr(self.obj))))
 
         self.visited = set()
         for x in self.stepGenerator(0, [self.obj]):
@@ -45,7 +48,7 @@ class ReferrerSearch(Job):
         pass
 
     def finished(self):
-        print('RefPath(%s): Finished ReferrerSearch for %s' %(self._id, fastRepr(self.obj)))
+        print(('RefPath(%s): Finished ReferrerSearch for %s' %(self._id, fastRepr(self.obj))))
         self.obj = None
 
         safeReprNotify = _getSafeReprNotify()
@@ -192,8 +195,8 @@ class ReferrerSearch(Job):
     def printStats(self, path):
         path = list(reversed(path))
         path.insert(0,0)
-        print('RefPath(%s) - Stats - visited(%s) | found(%s) | depth(%s) | CurrentPath(%s)' % \
-              (self._id, len(self.visited), self.found, self.depth, ''.join(self.myrepr(path[x], path[x+1]) for x in range(len(path) - 1))))
+        print(('RefPath(%s) - Stats - visited(%s) | found(%s) | depth(%s) | CurrentPath(%s)' % \
+              (self._id, len(self.visited), self.found, self.depth, ''.join(self.myrepr(path[x], path[x+1]) for x in range(len(path) - 1)))))
         pass
 
     def isAtRoot(self, at, path):

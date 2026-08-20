@@ -5,6 +5,8 @@ Note:
     existing code.  New code should use the :mod:`.FSM` module instead.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['ClassicFSM']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -17,7 +19,7 @@ if __debug__:
     def printDebugFsmList():
         global _debugFsms
         for k in sorted(_debugFsms.keys()):
-            print("%s %s" % (k, _debugFsms[k]()))
+            print(("%s %s" % (k, _debugFsms[k]())))
     __builtins__['debugFsmList'] = printDebugFsmList
 
 

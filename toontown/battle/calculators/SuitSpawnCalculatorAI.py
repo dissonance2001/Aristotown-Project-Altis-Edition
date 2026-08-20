@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
 import random
 import math
+from six.moves import range
 
 class SuitSpawnCalculatorAI:
 
@@ -40,7 +42,7 @@ class SuitSpawnCalculatorAI:
         )
 
     def calculateSuitSpawns(self):
-        for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
+        for i in range(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # if self.battle.activeSuits[i].dna.name == 'stenog':
@@ -437,7 +439,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'bdlit'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -531,7 +533,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'amb'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -625,7 +627,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'pres'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -719,7 +721,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'lit'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -825,7 +827,7 @@ class SuitSpawnCalculatorAI:
 
                                     spawnCode = 'lit2'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -968,7 +970,7 @@ class SuitSpawnCalculatorAI:
 
                                             spawnCode = 'paceGrunts'
 
-                                            for spawnIndex in xrange(spawnAmount):
+                                            for spawnIndex in range(spawnAmount):
                                                 boss.appendSuitsToBattle(
                                                     boss.battleNumber,
                                                     spawnCode
@@ -1054,7 +1056,7 @@ class SuitSpawnCalculatorAI:
 
                                     spawnCode = 'videog'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode

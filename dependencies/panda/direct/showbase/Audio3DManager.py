@@ -1,5 +1,6 @@
 """Contains the Audio3DManager class."""
 
+from __future__ import absolute_import
 __all__ = ['Audio3DManager']
 
 from panda3d.core import Vec3, VBase3, WeakNodePath, ClockObject

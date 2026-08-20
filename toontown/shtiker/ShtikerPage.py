@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.shtiker import ShtikerBook
 from direct.fsm import StateData
 from direct.gui.DirectGui import *

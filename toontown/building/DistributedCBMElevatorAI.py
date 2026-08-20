@@ -1,5 +1,6 @@
-from ElevatorConstants import *
-import DistributedBossElevatorAI
+from __future__ import absolute_import
+from .ElevatorConstants import *
+from . import DistributedBossElevatorAI
 
 class DistributedCBMElevatorAI(DistributedBossElevatorAI.DistributedBossElevatorAI):
 

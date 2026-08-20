@@ -9,6 +9,8 @@
 #
 #    PmwBlt.py PmwColor.py
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import re
 import string
@@ -164,6 +166,6 @@ print('   Pmw.py has been created.')
 if needColor or needBlt:
     print('   Before running freeze, also copy the following file(s):')
     if needBlt:
-        print('   ' + os.path.join(srcdir, 'PmwBlt.py'))
+        print(('   ' + os.path.join(srcdir, 'PmwBlt.py')))
     if needColor:
-        print('   ' + os.path.join(srcdir, 'PmwColor.py'))
+        print(('   ' + os.path.join(srcdir, 'PmwColor.py')))

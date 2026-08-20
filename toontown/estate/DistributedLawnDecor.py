@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed import ClockDelta
@@ -14,6 +16,7 @@ from otp.avatar import ShadowCaster
 import random
 from otp.otpbase import OTPGlobals
 from toontown.estate import GardenGlobals
+from six.moves import range
 
 def recurseParent(intoNode, ParentName):
     parent = intoNode.getParent(0)
@@ -181,7 +184,7 @@ class DistributedLawnDecor(DistributedNode.DistributedNode, NodePath, ShadowCast
             picker.traverse(render)
             if queue.getNumEntries() > 0:
                 queue.sortEntries()
-                for index in xrange(queue.getNumEntries()):
+                for index in range(queue.getNumEntries()):
                     entry = queue.getEntry(index)
                     if recurseParent(entry.getIntoNode(), 'terrain_DNARoot'):
                         self.movieNode.setZ(entry.getSurfacePoint(self)[2])
@@ -190,7 +193,7 @@ class DistributedLawnDecor(DistributedNode.DistributedNode, NodePath, ShadowCast
         picker.traverse(render)
         if queue.getNumEntries() > 0:
             queue.sortEntries()
-            for index in xrange(queue.getNumEntries()):
+            for index in range(queue.getNumEntries()):
                 entry = queue.getEntry(index)
                 if recurseParent(entry.getIntoNode(), 'terrain_DNARoot'):
                     self.setZ(entry.getSurfacePoint(render)[2] + self.stickUp + 0.1)
@@ -271,7 +274,7 @@ class DistributedLawnDecor(DistributedNode.DistributedNode, NodePath, ShadowCast
         return toonTrack
 
     def unprint(self, string):
-        print string
+        print(string)
 
     def startInteraction(self):
         place = base.cr.playGame.getPlace()

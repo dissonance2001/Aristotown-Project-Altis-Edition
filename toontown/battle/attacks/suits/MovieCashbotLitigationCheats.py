@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import MovieCamera
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
@@ -22,6 +23,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits import MovieIntervals
+from six.moves import range
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -582,7 +584,7 @@ def doPeckingOrderGroup(attack):
         toon = t['toon']
         dmg = t['hp']
         soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
-        for i in xrange(0, numBirds):
+        for i in range(0, numBirds):
             next = globalPropPool.getProp('bird')
             #next.setScale(0.01)
            # next.reparentTo(suit.getRightHand())

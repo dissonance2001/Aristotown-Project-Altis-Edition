@@ -1,5 +1,7 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = []
 
 from direct.task.TaskManagerGlobal import *

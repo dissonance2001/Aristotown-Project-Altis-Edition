@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -16,7 +18,7 @@ from direct.showbase import RandomNumGen
 from toontown.toonbase import TTLocalizer
 import random
 import random
-import cPickle
+import six.moves.cPickle
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.estate import GameSprite
 from math import pi
@@ -35,7 +37,7 @@ class GardenProgressMeter(DirectObject.DirectObject):
         elif typePromotion == 'game':
             self.typePromotion == GAMEWIN
         else:
-            print 'No type of %s' % typePromotion
+            print('No type of %s' % typePromotion)
         self.level = level
         self.acceptErrorDialog = None
         self.doneEvent = 'game Done'

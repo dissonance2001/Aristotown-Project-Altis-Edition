@@ -1,4 +1,5 @@
 # SuitGlobals are used to set the appearance of Cogs.
+from __future__ import absolute_import
 from toontown.suit import SuitDNA
 from pandac.PandaModules import VBase4
 

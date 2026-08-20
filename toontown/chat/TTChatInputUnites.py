@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase import DirectObject
 from toontown.pgui import DirectGuiGlobals as DGG
 from otp.speedchat.SpeedChat import SpeedChat

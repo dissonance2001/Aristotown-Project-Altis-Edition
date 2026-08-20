@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.estate.DistributedFurnitureItemAI import DistributedFurnitureItemAI
 from toontown.toonbase import ToontownGlobals
 from toontown.catalog import CatalogItem

@@ -1,5 +1,6 @@
 # File: D (Python 2.4)
 
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from toontown.classicchars.DistributedCCharBaseAI import DistributedCCharBaseAI
 from direct.directnotify import DirectNotifyGlobal

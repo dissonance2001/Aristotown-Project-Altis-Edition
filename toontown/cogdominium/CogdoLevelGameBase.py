@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.fsm.StatePush import FunctionCall
 from otp.level.EntityStateVarSet import EntityStateVarSet
 from otp.level.LevelSpec import LevelSpec
+import six
 
 class CogdoLevelGameBase:
 
@@ -12,7 +14,7 @@ class CogdoLevelGameBase:
         def startHandleEdits(self):
             fcs = []
             Consts = self.getConsts()
-            for item in Consts.__dict__.itervalues():
+            for item in six.itervalues(Consts.__dict__):
                 if isinstance(item, EntityStateVarSet):
                     for attribName in item._getAttributeNames():
                         handler = getattr(self, '_handle%sChanged' % attribName, None)

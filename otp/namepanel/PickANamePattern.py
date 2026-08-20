@@ -1,3 +1,5 @@
+import six
+from six.moves import range
 
 class PickANamePattern:
 
@@ -14,11 +16,11 @@ class PickANamePattern:
     def getNameString(self, pattern, gender):
         nameParts = self._getNameParts(gender)
         invNameParts = []
-        for i in xrange(len(nameParts)):
+        for i in range(len(nameParts)):
             invNameParts.append(invertDict(nameParts[i]))
 
         name = ''
-        for i in xrange(len(pattern)):
+        for i in range(len(pattern)):
             if pattern[i] != -1:
                 if len(name):
                     name += ' '
@@ -108,9 +110,9 @@ class PickANamePatternTwoPartLastName(PickANamePattern):
         combinedIndex2indices = {}
         lastNamePrefixesCapped = set(self._getLastNameCapPrefixes())
         k = 0
-        for first, i in nameParts[-2].iteritems():
+        for first, i in six.iteritems(nameParts[-2]):
             capitalize = first in lastNamePrefixesCapped
-            for second, j in nameParts[-1].iteritems():
+            for second, j in six.iteritems(nameParts[-1]):
                 combinedLastName = first
                 if capitalize:
                     combinedLastName += second.capitalize()

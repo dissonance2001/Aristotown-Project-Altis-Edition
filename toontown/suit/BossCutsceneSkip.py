@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
 from direct.gui import DirectGuiGlobals as DGG
 from direct.interval.IntervalGlobal import Sequence, Func, LerpPosInterval
@@ -123,7 +124,7 @@ class BossCutsceneSkip(object):
         pressed = self.buttonModel.find('**/menubtn-press')
 
         if normal.isEmpty() or pressed.isEmpty():
-            raise StandardError, 'Missing ttcc_menu_buttons geometry'
+            raise Exception('Missing ttcc_menu_buttons geometry')
 
         self.voteButton = DirectButton(
             parent=self.gui,

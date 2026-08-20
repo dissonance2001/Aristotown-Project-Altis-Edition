@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from six.moves import zip
 
 MAX_LISTING = 10
 AV_ID_INDEX = 0
@@ -74,7 +76,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI):
 
     def reorganize(self):
         # Sort the leader info:
-        leaderInfo = zip(*reversed(self.leaderInfo))
+        leaderInfo = list(zip(*reversed(self.leaderInfo)))
         leaderInfo.sort(reverse=True)
 
         # Construct the new, truncated leader info:

@@ -1,6 +1,8 @@
 # Set the version of Pmw to use for the demonstrations based on the
 # directory name.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import imp
 import os
 import string
@@ -32,5 +34,5 @@ def setPmwVersion():
     if version in Pmw.installedversions():
 	Pmw.setversion(version)
     else:
-	print 'No such Pmw version', `version` + '.',
-	print 'Using default version', `Pmw.version()`
+	print('No such Pmw version', repr(version) + '.', end=' ')
+	print('Using default version', repr(Pmw.version()))

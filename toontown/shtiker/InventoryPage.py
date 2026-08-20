@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.shtiker import ShtikerPage
 from toontown.toonbase import ToontownBattleGlobals
 from direct.gui.DirectGui import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task.Task import Task
 from panda3d.core import VBase4, PandaNode
 from toontown.margins.MarginVisible import MarginVisible

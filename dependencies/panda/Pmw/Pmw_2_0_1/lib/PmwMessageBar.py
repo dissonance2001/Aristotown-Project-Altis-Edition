@@ -1,8 +1,10 @@
 # Class to display messages in an information line.
 
+from __future__ import absolute_import
 import string
 import tkinter
 import Pmw
+from six.moves import range
 
 class MessageBar(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):

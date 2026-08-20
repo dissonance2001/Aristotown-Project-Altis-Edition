@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import sys, types
 from panda3d.core import *
 from panda3d.direct import STInt16
@@ -5,6 +6,7 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from toontown.toonbase import TTLocalizer, ToontownGlobals
+from six.moves import range
 
 CatalogReverseType = None
 CatalogItemVersion = 8
@@ -328,17 +330,17 @@ class CatalogItem:
             matches = model.findAllMatches(partName)
             if color == None:
                 matches.hide()
-            elif isinstance(color, types.StringType):
+            elif isinstance(color, bytes):
                 tex = loader.loadTexture(color)
                 tex.setMinfilter(Texture.FTLinearMipmapLinear)
                 tex.setMagfilter(Texture.FTLinear)
-                for i in xrange(matches.getNumPaths()):
+                for i in range(matches.getNumPaths()):
                     matches.getPath(i).setTexture(tex, 1)
 
             else:
                 needsAlpha = color[3] != 1
                 color = VBase4(color[0], color[1], color[2], color[3])
-                for i in xrange(matches.getNumPaths()):
+                for i in range(matches.getNumPaths()):
                     matches.getPath(i).setColorScale(color, 1)
                     if needsAlpha:
                         matches.getPath(i).setTransparency(1)
@@ -397,7 +399,7 @@ class CatalogItem:
 
 
 def encodeCatalogItem(dg, item, store):
-    import CatalogItemTypes
+    from . import CatalogItemTypes
     flags = item.getTypeCode()
     if item.isSaleItem():
         flags |= CatalogItemTypes.CatalogItemSaleFlag
@@ -414,7 +416,7 @@ def encodeCatalogItem(dg, item, store):
 
 def decodeCatalogItem(di, versionNumber, store):
     global CatalogReverseType
-    import CatalogItemTypes
+    from . import CatalogItemTypes
     if CatalogReverseType == None:
         CatalogReverseType = {}
         for itemClass, index in CatalogItemTypes.CatalogItemTypes.items():
@@ -431,11 +433,11 @@ def decodeCatalogItem(di, versionNumber, store):
             code = di.getUint8()
         itemClass = CatalogReverseType[typeIndex]
         item = itemClass(di, versionNumber, store=store)
-    except Exception, e:
+    except Exception as e:
         CatalogItem.notify.warning('Invalid catalog item in stream: %s, %s' % (sys.exc_info()[0], e))
         d = Datagram(di.getDatagram().getMessage()[startIndex:])
         d.dumpHex(Notify.out())
-        import CatalogInvalidItem
+        from . import CatalogInvalidItem
         return CatalogInvalidItem.CatalogInvalidItem()
 
     if flags & CatalogItemTypes.CatalogItemSaleFlag:
@@ -451,8 +453,8 @@ def getItem(blob, store = 0):
     try:
         versionNumber = di.getUint8()
         return decodeCatalogItem(di, versionNumber, store)
-    except Exception, e:
+    except Exception as e:
         CatalogItem.notify.warning('Invalid catalog item: %s, %s' % (sys.exc_info()[0], e))
         dg.dumpHex(Notify.out())
-        import CatalogInvalidItem
+        from . import CatalogInvalidItem
         return CatalogInvalidItem.CatalogInvalidItem()

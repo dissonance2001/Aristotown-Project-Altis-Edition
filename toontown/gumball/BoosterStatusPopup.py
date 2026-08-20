@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import time
 from direct.gui.DirectGui import DirectFrame, DirectLabel
 from direct.gui import DirectGuiGlobals as DGG

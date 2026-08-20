@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 import tkinter
 import Pmw
+from six.moves import range
 
 class ThresholdScale(Pmw.MegaWidget):
     """ Megawidget containing a scale and an indicator.

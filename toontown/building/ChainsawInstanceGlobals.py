@@ -1,5 +1,6 @@
 # Routing identifiers for the Chainsaw Consultant dynamic instance.
 
+from __future__ import absolute_import
 from toontown.instances import InstanceGlobals
 
 CHAINSAW = InstanceGlobals.CHAINSAW

@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import random
 from direct.distributed import ClockDelta
 from direct.task import Task
 from toontown.coghq import LaserGameBase
+from six.moves import range
 
 class LaserGameAvoid(LaserGameBase.LaserGameBase):
     
@@ -39,8 +41,8 @@ class LaserGameAvoid(LaserGameBase.LaserGameBase):
 
     def startGrid(self):
         LaserGameBase.LaserGameBase.startGrid(self)
-        for column in xrange(0, self.gridNumX):
-            for row in xrange(0, self.gridNumY):
+        for column in range(0, self.gridNumX):
+            for row in range(0, self.gridNumY):
                 tile = random.choice([
                     0,
                     14,
@@ -55,8 +57,8 @@ class LaserGameAvoid(LaserGameBase.LaserGameBase):
         if not hasattr(self, 'gridNumX'):
             return Task.done
 
-        for column in xrange(0, self.gridNumX):
-            for row in xrange(0, self.gridNumY):
+        for column in range(0, self.gridNumX):
+            for row in range(0, self.gridNumY):
                 if self.gridData[column][row] == 0:
                     tile = random.choice([
                         0,

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals

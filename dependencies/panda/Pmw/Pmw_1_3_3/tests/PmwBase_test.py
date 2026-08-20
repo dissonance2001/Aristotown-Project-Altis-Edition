@@ -1,6 +1,7 @@
 # Tests for Pmw megawidgets
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -20,7 +21,7 @@ class TestWidget(Pmw.MegaWidget):
 	interior = self.interior()
 	self._label = self.createcomponent('label',
 		(), None,
-		Tkinter.Label, (interior,), text = 'test')
+		six.moves.tkinter.Label, (interior,), text = 'test')
 	self._label.pack(side='left', padx=2)
 
         # Check keywords and initialise options.
@@ -35,7 +36,7 @@ class TestWidget(Pmw.MegaWidget):
 	w = self.createcomponent('test',
 		(), None,
 		widget, (self.interior(),))
-	apply(self.configure, (), {'test_' + option : value})
+	self.configure(*(), **{'test_' + option : value})
 	if w.__class__.__name__ not in ('Menu', 'Toplevel'):
 	    w.pack()
 	if hasattr(widget, 'geometry'):
@@ -73,7 +74,7 @@ class TestComponent(Pmw.MegaWidget):
 	interior = self.interior()
 	self._label = self.createcomponent('label',
 		(), None,
-		Tkinter.Label, (interior,), text = 'test')
+		six.moves.tkinter.Label, (interior,), text = 'test')
 	self._label.pack(side='left', padx=2)
 
 	self._statusList = []
@@ -129,14 +130,14 @@ tests = (
 )
 
 # Test each of the standard widgets as components.
-for widget in [Tkinter.Button, Tkinter.Checkbutton, Tkinter.Entry, Tkinter.Label, Tkinter.Listbox, \
-  Tkinter.Menu, Tkinter.Menubutton, Tkinter.Message, Tkinter.Radiobutton, Tkinter.Scale, Tkinter.Text]:
+for widget in [six.moves.tkinter.Button, six.moves.tkinter.Checkbutton, six.moves.tkinter.Entry, six.moves.tkinter.Label, six.moves.tkinter.Listbox, \
+  six.moves.tkinter.Menu, six.moves.tkinter.Menubutton, six.moves.tkinter.Message, six.moves.tkinter.Radiobutton, six.moves.tkinter.Scale, six.moves.tkinter.Text]:
     tests = tests + (
       (c.addTestWidget, (widget, 'foreground', 'blue'), 'blue'),
       (c.deleteTestWidget, ())
     )
 
-for widget in [Tkinter.Canvas, Tkinter.Frame, Tkinter.Scrollbar, Tkinter.Toplevel]:
+for widget in [six.moves.tkinter.Canvas, six.moves.tkinter.Frame, six.moves.tkinter.Scrollbar, six.moves.tkinter.Toplevel]:
     tests = tests + (
       (c.addTestWidget, (widget, 'background', 'grey80'), 'grey80'),
       (c.deleteTestWidget, ())
@@ -169,7 +170,7 @@ fontList = (
 )
 
 for args, dict in fontList:
-    font = apply(Pmw.logicalfont, args, dict)
+    font = Pmw.logicalfont(*args, **dict)
     tests = tests + (
         ('label_text', 'Testing font\n' + str(args) + '\n' + str(dict)),
         ('label_font', font),

@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonBaseGlobal import *
 from panda3d.core import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
-import ToonInterior
-from DistributedToonInterior import DistributedToonInterior
+from . import ToonInterior
+from .DistributedToonInterior import DistributedToonInterior
 import ToonInteriorColors, random
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject

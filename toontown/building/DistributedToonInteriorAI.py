@@ -1,4 +1,5 @@
-import cPickle
+from __future__ import absolute_import
+import six.moves.cPickle
 from direct.distributed import DistributedObjectAI
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
@@ -42,7 +43,7 @@ class DistributedToonInteriorAI(DistributedObjectAI.DistributedObjectAI):
         return [self.zoneId, self.block]
 
     def getToonData(self):
-        return cPickle.dumps(self.building.savedBy, 1)
+        return six.moves.cPickle.dumps(self.building.savedBy, 1)
 
     def getState(self):
         return [self.fsm.getCurrentState().getName(), globalClockDelta.getRealNetworkTime()]

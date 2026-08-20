@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Component python class configuration demonstration'
 
 # Import Pmw from this directory tree.

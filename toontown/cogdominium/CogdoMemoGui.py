@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DGG, DirectFrame, DirectLabel
 from pandac.PandaModules import TextNode
 from toontown.toonbase import ToontownGlobals

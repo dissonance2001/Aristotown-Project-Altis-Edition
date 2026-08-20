@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math, random
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *

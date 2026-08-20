@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
-from DistributedFurnitureManagerAI import *
+from .DistributedFurnitureManagerAI import *
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogWindowItem import CatalogWindowItem
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem

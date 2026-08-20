@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.chat.WhiteList import WhiteList
 from toontown.toonbase import TTLocalizer
 from toontown.chat import WhiteListData

@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import time
-import cPickle
+import six.moves.cPickle
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
 class DistributedHQInteriorAI(DistributedObjectAI):
@@ -37,11 +38,11 @@ class DistributedHQInteriorAI(DistributedObjectAI):
         if self.air:
             self.isDirty = False
             self.sendUpdate('setLeaderBoard',
-                [cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)]
+                [six.moves.cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)]
             )
 
     def getLeaderBoard(self):
-        return cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)
+        return six.moves.cPickle.dumps(self.air.trophyMgr.getLeaderInfo(), 1)
 
     def getTutorial(self):
         return self.tutorial

@@ -8,6 +8,7 @@
 # since they get broken down to trianlges anyway.
 #
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from direct.showbase.DirectObject import DirectObject
 from direct.gui.DirectGui import *

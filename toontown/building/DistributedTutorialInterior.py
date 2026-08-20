@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
@@ -18,6 +19,7 @@ from toontown.quest import QuestParser
 from toontown.toon import DistributedNPCSpecialQuestGiver
 from toontown.toonbase import TTLocalizer
 from toontown.chat.ChatGlobals import CFSpeech
+from six.moves import range
 
 class DistributedTutorialInterior(DistributedObject.DistributedObject):
 
@@ -49,7 +51,7 @@ class DistributedTutorialInterior(DistributedObject.DistributedObject):
     def replaceRandomInModel(self, model):
         baseTag = 'random_'
         npc = model.findAllMatches('**/' + baseTag + '???_*')
-        for i in xrange(npc.getNumPaths()):
+        for i in range(npc.getNumPaths()):
             np = npc.getPath(i)
             name = np.getName()
             b = len(baseTag)

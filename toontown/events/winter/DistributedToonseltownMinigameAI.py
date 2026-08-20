@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 import time
 
@@ -8,6 +9,7 @@ from direct.task.TaskManagerGlobal import taskMgr
 from toontown.events.winter.DistributedWinterMinigameSuitAI import DistributedWinterMinigameSuitAI
 from toontown.suit import SuitDNA
 from toontown.toonbase import TTLocalizer, ToontownGlobals
+from six.moves import range
 
 MIN_PRESENT_ID = 100
 MAX_PRESENT_ID = 999
@@ -69,7 +71,7 @@ class DistributedToonseltownMinigameAI(DistributedObjectAI):
     def spawnStarterPresents(self):
         playerCount = len(self.getPlayersInTs())
         count = min(MAX_PRESENTS, max(9, playerCount * self.presentsPerToon))
-        for i in xrange(count):
+        for i in range(count):
             self.spawnFieldPresent()
 
     def spawnFieldPresent(self):
@@ -196,7 +198,7 @@ class DistributedToonseltownMinigameAI(DistributedObjectAI):
             totalToSpawn = min(MAX_COGS - activeCogsNum, totalToons - activeCogsNum)
             if totalToSpawn > 0:
                 random.shuffle(self.freeSuitLocations)
-                for i in xrange(totalToSpawn):
+                for i in range(totalToSpawn):
                     self.suitSpawnSerial += 1
                     taskName = self.uniqueName('cogSpawn-%s' % self.suitSpawnSerial)
                     self.spawnTaskNames.append(taskName)

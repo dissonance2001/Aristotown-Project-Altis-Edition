@@ -3,13 +3,16 @@
 # This is a rough collection of tests that can not be automated.
 # To add a new test, create a function with name ending in '_test'.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import string
 import time
 import sys
 import Test
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 # ----------------------------------------------------------------------
 
@@ -20,13 +23,13 @@ def scrolledframeflashing_test():
     # When this script is run, the two scrollbars will be continuously
     # mapped and unmapped and the window will continuously change size.
 
-    frame = Tkinter.Frame(root)
+    frame = six.moves.tkinter.Frame(root)
     frame.pack(fill = 'both', expand = 1)
 
     sf = Pmw.ScrolledFrame(frame, borderframe = 0)
     sf.pack(fill = 'both', expand = 1)
 
-    inner = Tkinter.Frame(sf.interior(),
+    inner = six.moves.tkinter.Frame(sf.interior(),
             width = 401,
             height = 300,
             borderwidth = 0,
@@ -43,7 +46,7 @@ def scrolledlistboxflashing_test():
     # When this script is run, the two scrollbars will be continuously
     # mapped and unmapped and the window will continuously change size.
 
-    frame = Tkinter.Frame(root)
+    frame = six.moves.tkinter.Frame(root)
     frame.pack(fill = 'both', expand = 1)
 
     sf = Pmw.ScrolledListBox(frame,
@@ -93,7 +96,7 @@ def scrolledtextflashing_test():
     # When this script is run, the two scrollbars will be continuously
     # mapped and unmapped and the window will continuously change size.
 
-    frame = Tkinter.Frame(root)
+    frame = six.moves.tkinter.Frame(root)
     frame.pack(fill = 'both', expand = 1)
 
     sf = Pmw.ScrolledText(frame,
@@ -117,7 +120,7 @@ def scrolledcanvasflashing_test():
     # When this script is run, the two scrollbars will be continuously
     # mapped and unmapped and the window will continuously change size.
 
-    frame = Tkinter.Frame(root)
+    frame = six.moves.tkinter.Frame(root)
     frame.pack(fill = 'both', expand = 1)
 
     sf = Pmw.ScrolledCanvas(frame,
@@ -136,13 +139,13 @@ def scrolledframeflashing2_test():
 
     root.geometry('550x500')
 
-    frame = Tkinter.Frame()
+    frame = six.moves.tkinter.Frame()
     frame.pack()
 
     sf = Pmw.ScrolledFrame(frame, borderframe = 0)
     sf.pack(fill = 'both')
 
-    inner = Tkinter.Frame(sf.interior(),
+    inner = six.moves.tkinter.Frame(sf.interior(),
             width = 401,
             height = 300,
             borderwidth = 0,
@@ -163,14 +166,14 @@ def reinitialise_test():
     """
     class test:
         def __init__(self):
-            root = Tkinter.Tk()
+            root = six.moves.tkinter.Tk()
             Pmw.initialise(root)
             self.messagedialog = Pmw.MessageDialog(message_text = 'Testing')
             self.messagedialog.withdraw()
-            button = Tkinter.Button(
+            button = six.moves.tkinter.Button(
                     text = text, command = self.messagedialog.activate)
             button.pack(pady = 20)
-            exit = Tkinter.Button(text = 'Exit', command = root.destroy)
+            exit = six.moves.tkinter.Button(text = 'Exit', command = root.destroy)
             exit.pack(pady = 20)
             root.mainloop()
 
@@ -240,13 +243,13 @@ def balloon_test():
 # ----------------------------------------------------------------------
 
 # A class which prints out a message when an instance is deleted.
-class MyToplevel(Tkinter.Toplevel):
+class MyToplevel(six.moves.tkinter.Toplevel):
 
     def __init__(self):
-        Tkinter.Toplevel.__init__(self)
+        six.moves.tkinter.Toplevel.__init__(self)
 
     def __del__(self):
-        print 'Window deleted'
+        print('Window deleted')
 
 def _runMemoryLeakTest():
     global top
@@ -292,26 +295,26 @@ The message "Window deleted" should be printed to
 standard output.
 """
 def memoryleak_test():
-    label = Tkinter.Label(text = memoryLeakMessage)
+    label = six.moves.tkinter.Label(text = memoryLeakMessage)
     label.pack()
-    run = Tkinter.Button(text = 'Run test', command = _runMemoryLeakTest)
+    run = six.moves.tkinter.Button(text = 'Run test', command = _runMemoryLeakTest)
     run.pack()
-    kill = Tkinter.Button(text = 'Destroy', command = _killMemoryLeakTest)
+    kill = six.moves.tkinter.Button(text = 'Destroy', command = _killMemoryLeakTest)
     kill.pack()
 
 # ----------------------------------------------------------------------
 
 def memoryleak2_test():
 
-    print 'This test continuously creates and deletes megawidgets and'
-    print 'their components.  It calls the "top" program, so'
-    print 'may not work on non-Unix operating systems. Run it for a long,'
-    print 'long time and check that the process memory size does not'
-    print 'continue to increase.  Kill with <Control-C>.'
+    print('This test continuously creates and deletes megawidgets and')
+    print('their components.  It calls the "top" program, so')
+    print('may not work on non-Unix operating systems. Run it for a long,')
+    print('long time and check that the process memory size does not')
+    print('continue to increase.  Kill with <Control-C>.')
 
     pid = os.getpid()
 
-    label = Tkinter.Label()
+    label = six.moves.tkinter.Label()
     label.pack()
 
     # Setup each test:
@@ -329,43 +332,43 @@ def memoryleak2_test():
     )
 
     # 2. Balloon binding:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     balloon = Pmw.Balloon(toplevel)
-    button = Tkinter.Button(toplevel)
+    button = six.moves.tkinter.Button(toplevel)
     button.pack()
-    canvas = Tkinter.Canvas(toplevel)
+    canvas = six.moves.tkinter.Canvas(toplevel)
     item = canvas.create_rectangle(0, 0, 100, 100)
     canvas.pack()
 
     # 3. Adding and deleting menu:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     mainmenu = Pmw.MainMenuBar(toplevel)
     mainmenu.addmenu('Foo', 'help')
     toplevel.configure(menu = mainmenu)
 
     # 4. Adding and deleting notebook page:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     notebook = Pmw.NoteBook(toplevel)
     notebook.pack()
 
     # 5. Adding and deleting panedwidget pane:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     panedwidget = Pmw.PanedWidget(toplevel)
     panedwidget.pack()
     panedwidget.insert('Foo', size = 100)
 
     # 6. Adding and deleting MenuBar menu:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     menubar = Pmw.MenuBar(toplevel)
     menubar.pack()
 
     # 7. Setting OptionMenu items:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     optionmenu = Pmw.OptionMenu(toplevel, items = ('XXX', 'YYY', 'ZZZ'))
     optionmenu.pack()
 
     # 8. Setting Tkinter.Canvas scrollcommand option:
-    toplevel = Tkinter.Toplevel()
+    toplevel = six.moves.tkinter.Toplevel()
     scrollcanvas = Pmw.ScrolledCanvas(toplevel)
     scrollcanvas.pack()
 
@@ -437,17 +440,17 @@ def memoryleak2_test():
         # size = string.atoi(string.lstrip(line[27:32]))
         size = string.atoi(string.lstrip(line[22:29]))
         if prevSize != size:
-            print time.strftime('%H:%M:%S', time.localtime(time.time())),
-            print line[:-1]
+            print(time.strftime('%H:%M:%S', time.localtime(time.time())), end=' ')
+            print(line[:-1])
             prevSize = size
 
 # ----------------------------------------------------------------------
 
 def usageExit():
-    print 'Usage:', sys.argv[0], '<test>'
-    print '  where <test> is one of:'
+    print('Usage:', sys.argv[0], '<test>')
+    print('  where <test> is one of:')
     for test in tests:
-        print '   ', test
+        print('   ', test)
     sys.exit()
 
 tests = []
@@ -461,7 +464,7 @@ if len(sys.argv) != 2:
 
 testName = sys.argv[1]
 if testName not in tests:
-    print 'Unknown test "' + testName + '"'
+    print('Unknown test "' + testName + '"')
     usageExit()
 
 if testName == 'reinitialise_test':

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed import DistributedObject
 from toontown.effects.FireworkShowMixin import FireworkShowMixin
 

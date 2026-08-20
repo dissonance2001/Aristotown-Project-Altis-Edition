@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.OrthoWalk import *
 
 class TwoDWalk(OrthoWalk):

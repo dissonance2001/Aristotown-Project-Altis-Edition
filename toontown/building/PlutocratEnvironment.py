@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import Fog, LinearJitterForce, LinearVectorForce, Vec3, Vec4
 from toontown.battle import BattleParticles

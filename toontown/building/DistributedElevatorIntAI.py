@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import copy
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals

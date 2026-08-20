@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 title = 'Pmw.NoteBook demonstration (with no tabs)'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 # Reuse the NoteBook with tabs demo.
@@ -16,11 +17,11 @@ class Demo(NoteBook_2.Demo):
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
     widget = Demo(root)
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack()
     root.mainloop()

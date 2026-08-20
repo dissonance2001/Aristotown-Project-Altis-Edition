@@ -4,6 +4,7 @@ This module contains functions to parse and access the arguments given
 to the program on the command line.
 """
 
+from __future__ import absolute_import
 import types
 import string
 import sys

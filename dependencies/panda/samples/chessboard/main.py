@@ -9,6 +9,7 @@
 # and points straight into the scene, and see what it collides with. We pick
 # the object with the closest collision
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
@@ -19,6 +20,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.DirectObject import DirectObject
 from direct.task.Task import Task
 import sys
+from six.moves import range
 
 # First we define some constants for the colors
 BLACK = (0, 0, 0, 1)

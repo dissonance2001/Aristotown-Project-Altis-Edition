@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.directnotify.DirectNotifyGlobal import directNotify

@@ -7,6 +7,8 @@ show some messages on screen.  Using the left stick on the controler will
 move the camera where the right stick will rotate the camera.
 '''
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode, InputDevice, loadPrcFileData, Vec3
 from panda3d.core import TextPropertiesManager
@@ -100,7 +102,7 @@ class App(ShowBase):
         # We're only interested if this is a gamepad and we don't have a
         # gamepad yet.
         if device.device_class == InputDevice.DeviceClass.gamepad and not self.gamepad:
-            print("Found %s" % (device))
+            print(("Found %s" % (device)))
             self.gamepad = device
 
             # Enable this device to ShowBase so that we can receive events.
@@ -118,7 +120,7 @@ class App(ShowBase):
             return
 
         # Tell ShowBase that the device is no longer needed.
-        print("Disconnected %s" % (device))
+        print(("Disconnected %s" % (device)))
         self.detachInputDevice(device)
         self.gamepad = None
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'More examples of subclassing'
 
 # Import Pmw from this directory tree.

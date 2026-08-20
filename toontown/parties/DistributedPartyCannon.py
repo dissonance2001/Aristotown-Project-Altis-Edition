@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.distributed.DistributedObject import DistributedObject
 from direct.task.Task import Task
@@ -257,12 +259,12 @@ class DistributedPartyCannon(DistributedObject, Cannon):
     def removeAvFromCannon(self, avId):
         place = base.cr.playGame.getPlace()
         av = base.cr.doId2do.get(avId)
-        print 'removeAvFromCannon'
+        print('removeAvFromCannon')
         if place:
             if not hasattr(place, 'fsm'):
                 return
             placeState = place.fsm.getCurrentState().getName()
-            print placeState
+            print(placeState)
             if placeState != 'fishing':
                 if av != None:
                     av.startSmooth()

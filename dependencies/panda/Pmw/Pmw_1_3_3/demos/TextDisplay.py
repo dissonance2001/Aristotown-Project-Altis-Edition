@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 title = 'Demonstration of how to create a megawidget'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class TextDisplay(Pmw.MegaWidget):
@@ -25,12 +26,12 @@ class TextDisplay(Pmw.MegaWidget):
 
 	self._text = self.createcomponent('text',
 		(), None,
-		Tkinter.Text, (interior,), state = 'disabled')
+		six.moves.tkinter.Text, (interior,), state = 'disabled')
 	self._text.pack(side='left', fill='both', expand='yes')
 
 	self._scrollbar = self.createcomponent('scrollbar',
 		(), None,
-		Tkinter.Scrollbar, (interior,), command = self._text.yview)
+		six.moves.tkinter.Scrollbar, (interior,), command = self._text.yview)
 	self._scrollbar.pack(side='right', fill='y')
 	self._text.configure(yscrollcommand = self._scrollbar.set)
 
@@ -68,11 +69,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

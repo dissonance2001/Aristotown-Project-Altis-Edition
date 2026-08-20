@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.makeatoon import ClothesGUI
 from toontown.toon import ToonDNA
 

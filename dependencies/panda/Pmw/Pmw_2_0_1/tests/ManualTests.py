@@ -3,6 +3,8 @@
 # This is a rough collection of tests that can not be automated.
 # To add a new test, create a function with name ending in '_test'.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import string
 import time
@@ -10,6 +12,7 @@ import sys
 import Test
 import tkinter
 import Pmw
+from six.moves import range
 
 # ----------------------------------------------------------------------
 
@@ -437,17 +440,17 @@ def memoryleak2_test():
         # size = string.atoi(string.lstrip(line[27:32]))
         size = string.atoi(string.lstrip(line[22:29]))
         if prevSize != size:
-            print(time.strftime('%H:%M:%S', time.localtime(time.time())),)
-            print(line[:-1])
+            print((time.strftime('%H:%M:%S', time.localtime(time.time())),))
+            print((line[:-1]))
             prevSize = size
 
 # ----------------------------------------------------------------------
 
 def usageExit():
-    print('Usage:', sys.argv[0], '<test>')
+    print(('Usage:', sys.argv[0], '<test>'))
     print('  where <test> is one of:')
     for test in tests:
-        print('   ', test)
+        print(('   ', test))
     sys.exit()
 
 tests = []
@@ -461,7 +464,7 @@ if len(sys.argv) != 2:
 
 testName = sys.argv[1]
 if testName not in tests:
-    print('Unknown test "' + testName + '"')
+    print(('Unknown test "' + testName + '"'))
     usageExit()
 
 if testName == 'reinitialise_test':

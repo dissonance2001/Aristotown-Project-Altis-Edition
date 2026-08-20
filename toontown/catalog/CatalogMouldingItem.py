@@ -1,4 +1,8 @@
-from CatalogSurfaceItem import *
+from __future__ import absolute_import
+from __future__ import print_function
+from .CatalogSurfaceItem import *
+from six.moves import range
+from six.moves import zip
 MTTextureName = 0
 MTColor = 1
 MTBasePrice = 2
@@ -85,7 +89,7 @@ class CatalogMouldingItem(CatalogSurfaceItem):
             if colorIndex < len(colors):
                 return colors[colorIndex]
             else:
-                print 'Warning: colorIndex not in colors. Returning white.'
+                print('Warning: colorIndex not in colors. Returning white.')
                 return CT_WHITE
         else:
             return CT_WHITE
@@ -119,7 +123,7 @@ def getAllMouldings(*indexList):
     for index in indexList:
         colors = MouldingTypes[index][MTColor]
         if colors:
-            for n in xrange(len(colors)):
+            for n in range(len(colors)):
                 list.append(CatalogMouldingItem(index, n))
 
         else:
@@ -143,7 +147,7 @@ def getMouldingRange(fromIndex, toIndex, *otherRanges):
             if patternIndex >= fromIndex and patternIndex <= toIndex:
                 colors = MouldingTypes[patternIndex][MTColor]
                 if colors:
-                    for n in xrange(len(colors)):
+                    for n in range(len(colors)):
                         list.append(CatalogMouldingItem(patternIndex, n))
 
                 else:

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import functools
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
@@ -5,6 +6,7 @@ from direct.fsm.FSM import FSM
 from toontown.estate.DistributedEstateAI import DistributedEstateAI
 from toontown.estate.DistributedHouseAI import DistributedHouseAI
 from toontown.estate import HouseGlobals
+from six.moves import range
 
 class LoadHouseFSM(FSM):
 
@@ -244,7 +246,7 @@ class LoadEstateFSM(FSM):
     def enterLoadHouses(self):
         self.houseFSMs = []
 
-        for houseIndex in xrange(6):
+        for houseIndex in range(6):
             fsm = LoadHouseFSM(self.mgr, self.estate, houseIndex,
                                self.toons[houseIndex], self.__houseDone)
             self.houseFSMs.append(fsm)

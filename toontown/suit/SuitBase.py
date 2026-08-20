@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.suit import SuitDNA
 from toontown.suit.SuitLegList import *
 from toontown.suit import SuitTimings
@@ -7,6 +9,7 @@ from pandac.PandaModules import *
 from pandac.PandaModules import Point3
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 
 TIME_BUFFER_PER_WPT = 0.25
@@ -149,10 +152,10 @@ class SuitBase:
         return self.path
 
     def printPath(self):
-        print '%d points in path' % self.pathLength
-        for currPathPt in xrange(self.pathLength):
+        print('%d points in path' % self.pathLength)
+        for currPathPt in range(self.pathLength):
             indexVal = self.path.getPointIndex(currPathPt)
-            print '\t', self.sp.dnaStore.getSuitPointWithIndex(indexVal)
+            print('\t', self.sp.dnaStore.getSuitPointWithIndex(indexVal))
 
     def makeLegList(self):
         self.legList = SuitLegList(self.path, self.sp.dnaStore)

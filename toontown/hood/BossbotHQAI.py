@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedBBElevatorAI
 from toontown.building import DistributedDirectorsElevatorAI
 from toontown.building import FADoorCodes
@@ -9,6 +10,7 @@ from toontown.suit import DistributedDirectorsMinibossAI
 from toontown.suit import DistributedDirectorsAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class BossbotHQAI(CogHQAI.CogHQAI):
     
@@ -42,7 +44,7 @@ class BossbotHQAI(CogHQAI.CogHQAI):
         posList = ((-26.5658, 237.459, 0), (132.197, 227.845, 0), (-28.725, -235.706, 0))
         hprList = ((-159, 0, 0), (172, 0, 0), (-21, 0, 0))
         mins = ToontownGlobals.FactoryLaffMinimums[3]
-        for cogCourse in xrange(len(posList)):
+        for cogCourse in range(len(posList)):
             pos = posList[cogCourse]
             hpr = hprList[cogCourse]
             cogKart = DistributedCogKartAI.DistributedCogKartAI(

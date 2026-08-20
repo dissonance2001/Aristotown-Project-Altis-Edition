@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 
 from toontown.battle import DistributedBattleMinibossAI
 from toontown.battle.BattleBase import SUIT_ATK_COL, SUIT_HP_COL, TOON_DIED_COL
+from six.moves import range
 
 
 class DistributedBattleChainsawAI(
@@ -154,7 +156,7 @@ class DistributedBattleChainsawAI(
             return
 
         deadwoodIndex = -1
-        for index in xrange(len(self.suitAttacks)):
+        for index in range(len(self.suitAttacks)):
             attack = self.suitAttacks[index]
             data = attack[SUIT_ATK_COL]
             if data and data.get('name', '').startswith('ChainsawCoreDeadwood'):
@@ -164,7 +166,7 @@ class DistributedBattleChainsawAI(
         if deadwoodIndex < 0:
             return
 
-        for toonIndex in xrange(len(self.activeToons)):
+        for toonIndex in range(len(self.activeToons)):
             toonId = self.activeToons[toonIndex]
             toon = self.getToon(toonId)
             if not toon:
@@ -180,7 +182,7 @@ class DistributedBattleChainsawAI(
             allowedDamage = 0
             excess = max(0, totalDamage - allowedDamage)
 
-            for attackIndex in xrange(len(self.suitAttacks) - 1, deadwoodIndex, -1):
+            for attackIndex in range(len(self.suitAttacks) - 1, deadwoodIndex, -1):
                 if excess <= 0:
                     break
                 attack = self.suitAttacks[attackIndex]
@@ -199,7 +201,7 @@ class DistributedBattleChainsawAI(
                     hps[toonIndex] -= reduction
                     excess -= reduction
 
-            for attackIndex in xrange(deadwoodIndex - 1, -1, -1):
+            for attackIndex in range(deadwoodIndex - 1, -1, -1):
                 if excess <= 0:
                     break
                 attack = self.suitAttacks[attackIndex]

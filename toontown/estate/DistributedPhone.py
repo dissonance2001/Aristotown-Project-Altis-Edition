@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from toontown.catalog import CatalogScreen, CatalogItem
 from toontown.toontowngui import TTDialog
@@ -15,6 +16,7 @@ from toontown.quest import Quests
 from direct.task import Task
 from toontown.toontowngui import TTDialog
 from toontown.toontowngui import FeatureComingSoonDialog
+from six.moves import range
 
 
 class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
@@ -372,7 +374,7 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
         w = 0.05
         shakeOnce = Sequence(Func(phone.setR, r), Wait(w), Func(phone.setR, -r), Wait(w))
         shakeSeq = Sequence()
-        for i in xrange(16):
+        for i in range(16):
             shakeSeq.append(shakeOnce)
 
         ringIval = Parallel(Func(base.playSfx, self.ringSfx), shakeSeq, Func(phone.setR, 0))

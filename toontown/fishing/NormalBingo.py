@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
+from six.moves import range
 
 class NormalBingo(BingoCardBase.BingoCardBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('NormalBingo')
@@ -27,7 +29,7 @@ class NormalBingo(BingoCardBase.BingoCardBase):
         id = self.cardSize / 2
         if self.checkForWin(id):
             return BingoGlobals.WIN
-        for i in xrange(BingoGlobals.CARD_ROWS):
+        for i in range(BingoGlobals.CARD_ROWS):
             if i != BingoGlobals.CARD_ROWS / 2:
                 rowResult = self.rowCheck(i)
                 colResult = self.colCheck(i)

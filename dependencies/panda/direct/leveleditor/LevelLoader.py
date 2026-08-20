@@ -10,6 +10,7 @@ Then declare them in initLoader function.
 You also need to define defaultPath in initLoader function, too.
 """
 
+from __future__ import absolute_import
 import os
 
 from direct.leveleditor.LevelLoaderBase import LevelLoaderBase

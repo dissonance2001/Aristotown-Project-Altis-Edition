@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.distributed import DistributedObjectAI
 from toontown.toonbase import ToontownGlobals

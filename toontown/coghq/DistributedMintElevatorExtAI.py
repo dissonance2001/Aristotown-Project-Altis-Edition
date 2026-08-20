@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.ClockDelta import *
@@ -7,6 +8,7 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
 from toontown.coghq import CogDisguiseGlobals
+from six.moves import range
 
 class DistributedMintElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
 
@@ -34,7 +36,7 @@ class DistributedMintElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorE
                     players.append(i)
 
             mintZone = self.bldg.createMint(self.mintId, players)
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setMintInteriorZone', [mintZone])

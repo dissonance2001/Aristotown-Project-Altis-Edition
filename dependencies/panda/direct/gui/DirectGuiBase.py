@@ -84,6 +84,10 @@ Code overview:
     see if any keywords are left unused.  If so, an error is raised.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+import six
+from six.moves import range
 __all__ = ['DirectGuiBase', 'DirectGuiWidget']
 
 
@@ -102,7 +106,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = basestring
+    stringType = six.string_types
 
 guiObjectCollector = PStatCollector("Client::GuiObjects")
 
@@ -363,8 +367,8 @@ class DirectGuiBase(DirectObject.DirectObject):
                 # This is one of the options of this gui item.
                 # Check it is an initialisation option.
                 if optionInfo[option][FUNCTION] is DGG.INITOPT:
-                    print('Cannot configure initialisation option "' \
-                          + option + '" for ' + self.__class__.__name__)
+                    print(('Cannot configure initialisation option "' \
+                          + option + '" for ' + self.__class__.__name__))
                     break
                     #raise KeyError, \
                 #           'Cannot configure initialisation option "' \
@@ -645,7 +649,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         if ShowBaseGlobal.config.GetBool('debug-directgui-msgs', False):
             from direct.showbase.PythonUtil import StackTrace
             print(gEvent)
-            print(StackTrace())
+            print((StackTrace()))
         self.accept(gEvent, command, extraArgs = extraArgs)
 
     def unbind(self, event):
@@ -1068,9 +1072,9 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
 
     def printConfig(self, indent = 0):
         space = ' ' * indent
-        print('%s%s - %s' % (space, self.guiId, self.__class__.__name__))
-        print('%sPos:   %s' % (space, tuple(self.getPos())))
-        print('%sScale: %s' % (space, tuple(self.getScale())))
+        print(('%s%s - %s' % (space, self.guiId, self.__class__.__name__)))
+        print(('%sPos:   %s' % (space, tuple(self.getPos()))))
+        print(('%sScale: %s' % (space, tuple(self.getScale()))))
         # Print out children info
         for child in self.getChildren():
             messenger.send(DGG.PRINT + child.getName(), [indent + 2])

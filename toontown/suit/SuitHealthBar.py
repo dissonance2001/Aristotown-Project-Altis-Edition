@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task.Task import Task
 from toontown.battle import BattleProps
 from panda3d.core import Vec4

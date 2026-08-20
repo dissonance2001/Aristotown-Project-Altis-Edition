@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed import DistributedObjectAI
 
 class DistributedGagshopInteriorAI(DistributedObjectAI.DistributedObjectAI):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone import MMPlayground
 from toontown.safezone import SafeZoneLoader
 from toontown.safezone.MMDrumTrampolines import MMDrumTrampolines

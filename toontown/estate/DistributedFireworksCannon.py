@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -102,5 +104,5 @@ class DistributedFireworksCannon(DistributedFireworkShow.DistributedFireworkShow
         dummy.setPos(0, 100, 60)
         pos = dummy.getPos(render)
         dummy.removeNode()
-        print 'lauFirework: %s, col=%s' % (index, col1)
+        print('lauFirework: %s, col=%s' % (index, col1))
         self.d_requestFirework(pos[0], pos[1], pos[2], style, col1, col2)

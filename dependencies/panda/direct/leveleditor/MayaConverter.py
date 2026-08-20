@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.wxwidgets.WxAppShell import *
 import os
 from . import ObjectGlobals as OG
+from six.moves import range
 
 CLOSE_STDIN = "<CLOSE STDIN>"
 

@@ -1,4 +1,7 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify.DirectNotifyGlobal import *
+from six.moves import range
 
 class PhasedObject:
     """

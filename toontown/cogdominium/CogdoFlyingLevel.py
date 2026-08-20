@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath, Plane, Vec3, Point3
 from pandac.PandaModules import CollisionPlane, CollisionNode
 from direct.showbase.RandomNumGen import RandomNumGen
@@ -10,6 +11,7 @@ from toontown.cogdominium.CogdoFlyingObjects import CogdoFlyingGatherableFactory
 from toontown.cogdominium.CogdoFlyingObstacles import CogdoFlyingObstacleFactory
 from toontown.cogdominium.CogdoGameExit import CogdoGameExit
 from otp.otpbase import OTPGlobals
+from six.moves import range
 
 class CogdoFlyingLevel(DirectObject):
     notify = directNotify.newCategory('CogdoFlyingLevel')
@@ -157,7 +159,7 @@ class CogdoFlyingLevel(DirectObject):
         if quadNum >= 0:
             if quadNum > 0:
                 self.quadrants[max(quadNum - self.quadVisibiltyBehind, 0)].onstage()
-            for i in xrange(quadNum, min(quadNum + self.quadVisibiltyAhead + 1, self._numQuads)):
+            for i in range(quadNum, min(quadNum + self.quadVisibiltyAhead + 1, self._numQuads)):
                 self.quadrants[i].onstage()
                 self.visibleQuadIndices.append(i)
                 if i == 0:
@@ -166,7 +168,7 @@ class CogdoFlyingLevel(DirectObject):
                     self.endPlatform.onstage()
 
         self._currentQuadNum = quadNum
-        for i in range(0, max(self._currentQuadNum - self.quadVisibiltyBehind, 0)) + range(min(self._currentQuadNum + self.quadVisibiltyAhead + 1, self._numQuads), self._numQuads):
+        for i in list(range(0, max(self._currentQuadNum - self.quadVisibiltyBehind, 0))) + list(range(min(self._currentQuadNum + self.quadVisibiltyAhead + 1, self._numQuads), self._numQuads)):
             self.quadrants[i].offstage()
             if i == 0:
                 self.startPlatform.offstage()

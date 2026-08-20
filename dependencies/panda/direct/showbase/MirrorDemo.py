@@ -19,6 +19,7 @@ surface are possible, like a funhouse mirror.  However, the reflection
 itself is always basically planar; for more accurate convex
 reflections, you will need to use a sphere map or a cube map."""
 
+from __future__ import absolute_import
 __all__ = ['setupMirror', 'showFrustum']
 
 from panda3d.core import *

@@ -2,6 +2,8 @@
 ## import os
 ## from wx.lib.agw import fourwaysplitter as FWS
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from direct.wxwidgets.WxPandaShell import *
 from direct.directtools.DirectSelection import SelectionRay
@@ -17,6 +19,7 @@ from .ActionMgr import *
 from .AnimControlUI import *
 from .CurveAnimUI import *
 from .GraphEditorUI import *
+from six.moves import range
 
 class PandaTextDropTarget(wx.TextDropTarget):
     def __init__(self, editor, view):
@@ -466,7 +469,7 @@ class LevelEditorUIBase(WxPandaShell):
                 input = 'control-%s'%chr(evt.GetKeyCode())
             elif evt.GetKeyCode() < 256:
                 input = chr(evt.GetKeyCode())
-        if input in base.direct.hotKeyMap.keys():
+        if input in list(base.direct.hotKeyMap.keys()):
             keyDesc = base.direct.hotKeyMap[input]
             messenger.send(keyDesc[1])
 

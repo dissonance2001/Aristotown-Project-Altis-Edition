@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.coghq import ActiveCellAI
 from direct.directnotify import DirectNotifyGlobal
 

@@ -14,6 +14,7 @@ Still need to implement:
 
 """
 
+from __future__ import absolute_import
 from panda3d.core import NodePath
 from panda3d.core import Texture
 from panda3d.core import CardMaker
@@ -24,6 +25,7 @@ from panda3d.core import OrthographicLens
 from panda3d.core import AuxBitplaneAttrib
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.showbase.DirectObject import DirectObject
+from six.moves import range
 
 __all__ = ["FilterManager"]
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from toontown.toonbase import ToontownGlobals
 from direct.distributed.ClockDelta import *
@@ -6,6 +7,7 @@ from toontown.building import DistributedElevatorExtAI
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
+from six.moves import range
 
 class DistributedFactoryElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
 
@@ -26,7 +28,7 @@ class DistributedFactoryElevatorExtAI(DistributedElevatorExtAI.DistributedElevat
                     players.append(i)
 
             factoryZone = self.bldg.createFactory(self.factoryId, self.entranceId, players)
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setFactoryInteriorZone', [factoryZone])

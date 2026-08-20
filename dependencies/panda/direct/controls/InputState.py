@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import DirectObject
 from direct.showbase.PythonUtil import SerialNumGen
@@ -7,7 +8,7 @@ class InputStateToken:
     _SerialGen = SerialNumGen()
     Inval = 'invalidatedToken'
     def __init__(self, inputState):
-        self._id = InputStateToken._SerialGen.next()
+        self._id = next(InputStateToken._SerialGen)
         self._hash = self._id
         self._inputState = inputState
     def release(self):

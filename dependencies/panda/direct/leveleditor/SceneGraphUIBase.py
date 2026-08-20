@@ -1,6 +1,8 @@
 """
 Defines Scene Graph tree UI Base
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import wx
 from panda3d.core import *
 from .ActionMgr import *
@@ -298,7 +300,7 @@ class SceneGraphUIBase(wx.Panel):
 
         if item != self.tree.GetRootItem(): # prevent dragging root item
             text = self.tree.GetItemText(item)
-            print("Starting SceneGraphUI drag'n'drop with %s..." % repr(text))
+            print(("Starting SceneGraphUI drag'n'drop with %s..." % repr(text)))
 
             tdo = wx.TextDataObject(text)
             tds = wx.DropSource(self.tree)

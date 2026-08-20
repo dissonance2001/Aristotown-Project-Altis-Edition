@@ -1,5 +1,6 @@
 """ServerRepository module: contains the ServerRepository class"""
 
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.distributed.MsgTypesCMU import *
@@ -8,6 +9,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.PyDatagram import PyDatagram
 
 import inspect
+from six.moves import range
 
 
 class ServerRepository:
@@ -186,7 +188,7 @@ class ServerRepository:
                 if hasattr(module, "__all__"):
                     importSymbols = module.__all__
                 else:
-                    importSymbols = module.__dict__.keys()
+                    importSymbols = list(module.__dict__.keys())
 
             for symbolName in importSymbols:
                 if hasattr(module, symbolName):

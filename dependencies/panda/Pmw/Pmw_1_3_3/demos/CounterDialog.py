@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Pmw.CounterDialog demonstration'
 
 # Import Pmw from this directory tree.
@@ -5,7 +8,7 @@ import sys
 sys.path[:0] = ['../../..']
 
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -26,20 +29,20 @@ class Demo:
 	self.dialog.withdraw()
 
 	# Create button to launch the dialog.
-	w = Tkinter.Button(parent, text = 'Show counter dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Show counter dialog',
 	        command = self.dialog.activate)
 	w.pack(padx = 8, pady = 8)
 
     def execute(self, result):
 	if result is None or result == 'Cancel':
-	    print 'Bell ringing cancelled'
+	    print('Bell ringing cancelled')
 	    self.dialog.deactivate()
 	else:
 	    count = self.dialog.get()
 	    if not self.dialog.valid():
-		print 'Invalid entry: "' + count + '"'
+		print('Invalid entry: "' + count + '"')
 	    else:
-		print 'Ringing the bell ' + count + ' times'
+		print('Ringing the bell ' + count + ' times')
 		for num in range(string.atoi(count)):
 		    if num != 0:
 			self.dialog.after(200)
@@ -50,11 +53,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

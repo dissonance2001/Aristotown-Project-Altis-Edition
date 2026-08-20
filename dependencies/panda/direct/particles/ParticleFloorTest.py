@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from panda3d.core import NodePath
 from panda3d.physics import LinearVectorForce
 from direct.particles import ParticleEffect

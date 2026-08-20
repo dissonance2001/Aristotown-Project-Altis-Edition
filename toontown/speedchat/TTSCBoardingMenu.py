@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
 from otp.speedchat.SCStaticTextTerminal import SCStaticTextTerminal
 from otp.otpbase import OTPLocalizer
+from six.moves import range
 BoardingMenuGuide = [(OTPLocalizer.BoardingMenuSections[0], []),
  (OTPLocalizer.BoardingMenuSections[1], []),
  (OTPLocalizer.BoardingMenuSections[2], []),
@@ -48,12 +51,12 @@ class TTSCBoardingMenu(SCMenu):
         except:
             return
 
-        for count in xrange(len(BoardingMenuGuide)):
+        for count in range(len(BoardingMenuGuide)):
             section = BoardingMenuGuide[count]
             if section[0] == -1:
                 for phrase in section[1]:
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print 'warning: tried to link boarding phrase %s which does not seem to exist' % phrase
+                        print('warning: tried to link boarding phrase %s which does not seem to exist' % phrase)
                         break
                     self.append(SCStaticTextTerminal(phrase))
 
@@ -62,7 +65,7 @@ class TTSCBoardingMenu(SCMenu):
                 phrases = ZoneIdsToMsgs[zoneId][count]
                 for phrase in phrases:
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print 'warning: tried to link boarding phrase %s which does not seem to exist' % phrase
+                        print('warning: tried to link boarding phrase %s which does not seem to exist' % phrase)
                         break
                     menu.append(SCStaticTextTerminal(phrase))
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 from otp.avatar import DistributedAvatarAI
@@ -12,6 +13,7 @@ from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 
 import random
+from six.moves import range
 
 
 class DistributedChainsawBossAI(
@@ -365,7 +367,7 @@ class DistributedChainsawBossAI(
                 pass
         amount = max(0, self.BATTLE_CAP - len(alive))
         reserves = []
-        for i in xrange(amount):
+        for i in range(amount):
             suit = self.__makeGrunt()
             if self.chainsawPreviousAttack == 'Scabbard':
                 newMax = int(round(suit.getMaxHP() * 1.5))

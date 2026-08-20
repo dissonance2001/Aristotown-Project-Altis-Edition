@@ -1,10 +1,13 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Pmw.ScrolledFrame demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -101,7 +104,7 @@ class Demo:
 	self.sf.configure(vertflex = tag)
 
     def addButton(self):
-	button = Tkinter.Button(self.frame,
+	button = six.moves.tkinter.Button(self.frame,
 	    text = '(%d,%d)' % (self.col, self.row))
 	button.grid(row = self.row, column = self.col, sticky = 'nsew')
 
@@ -122,7 +125,7 @@ class Demo:
 	    self.col = self.col + 1
 
     def showYView(self):
-        print self.sf.yview()
+        print(self.sf.yview())
 
     def pageDown(self):
         self.sf.yview('scroll', 1, 'page')
@@ -147,11 +150,11 @@ if __name__ == '__main__':
         size = 16
     else:
         size = 12
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root, size = size, fontScheme = 'pmw2')
     root.title(title)
  
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop() 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.parties import PartyCatchActivityToonSD
 from pandac.PandaModules import Vec4
 from direct.directnotify import DirectNotifyGlobal

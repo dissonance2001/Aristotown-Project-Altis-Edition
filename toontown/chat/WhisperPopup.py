@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import TextNode, PGButton, Point3, VBase4
 from toontown.chat import ChatGlobals
 from toontown.chat.ChatBalloon import ChatBalloon

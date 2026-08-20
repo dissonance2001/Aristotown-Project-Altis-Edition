@@ -16,6 +16,7 @@
 # control and set the camera position.
 
 # Initialize Panda and create a window
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 base = ShowBase()
 

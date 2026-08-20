@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
 import random
+from six.moves import range
 
 class NonRepeatableRandomSourceUD(DistributedObjectGlobalUD):
     notify = directNotify.newCategory('NonRepeatableRandomSourceUD')
@@ -44,8 +46,8 @@ class NonRepeatableRandomSourceUD(DistributedObjectGlobalUD):
             if needed > 0:
                 numRandoms = min(needed, len(self._randoms))
                 if self._fakeIt:
-                    for i in xrange(numRandoms):
-                        request.randoms.append(random.random() * 4294967295L)
+                    for i in range(numRandoms):
+                        request.randoms.append(random.random() * 4294967295)
 
                 else:
                     request.randoms += self._randoms[:numRandoms]

@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.interval.IntervalGlobal import *
@@ -10,6 +11,7 @@ from direct.gui import DirectGuiGlobals
 from direct.showbase.EventGroup import EventGroup
 from direct.showbase.PythonUtil import report
 from direct.distributed.GridParent import GridParent
+from six.moves import range
 
 if __debug__:
     # For grid drawing

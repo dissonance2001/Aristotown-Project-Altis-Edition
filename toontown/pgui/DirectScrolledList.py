@@ -1,13 +1,15 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['DirectScrolledListItem', 'DirectScrolledList']
 
 from pandac.PandaModules import *
-import DirectGuiGlobals as DGG
+from . import DirectGuiGlobals as DGG
 from direct.directnotify import DirectNotifyGlobal
 from direct.task.Task import Task
-from DirectFrame import *
-from DirectButton import *
+from .DirectFrame import *
+from .DirectButton import *
 import string, types
 
 
@@ -39,7 +41,7 @@ class DirectScrolledListItem(DirectButton):
 
     def select(self):
         assert self.notify.debugStateCall(self)
-        apply(self.nextCommand, self.nextCommandExtraArgs)
+        self.nextCommand(*self.nextCommandExtraArgs)
         self._parent.selectListItem(self)
 
 
@@ -251,7 +253,7 @@ class DirectScrolledList(DirectFrame):
             if item.__class__.__name__ == 'str':
                 if self['itemMakeFunction']:
                     # If there is a function to create the item
-                    item = apply(self['itemMakeFunction'], (item, i, self['itemMakeExtraArgs']))
+                    item = self['itemMakeFunction'](*(item, i, self['itemMakeExtraArgs']))
                 else:
                     item = DirectFrame(text = item,
                                        text_align = self['itemsAlign'],
@@ -269,7 +271,7 @@ class DirectScrolledList(DirectFrame):
 
         if self['command']:
             # Pass any extra args to command
-            apply(self['command'], self['extraArgs'])
+            self['command'](*self['extraArgs'])
         return ret
 
     def makeAllItems(self):
@@ -283,8 +285,7 @@ class DirectScrolledList(DirectFrame):
             if item.__class__.__name__ == 'str':
                 if self['itemMakeFunction']:
                     # If there is a function to create the item
-                    item = apply(self['itemMakeFunction'],
-                                 (item, i, self['itemMakeExtraArgs']))
+                    item = self['itemMakeFunction'](*(item, i, self['itemMakeExtraArgs']))
                 else:
                     item = DirectFrame(text = item,
                                        text_align = self['itemsAlign'],

@@ -1,5 +1,7 @@
 """RandomNumGen module: contains the RandomNumGen class"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['randHash', 'RandomNumGen']
 
 from direct.directnotify import DirectNotifyGlobal

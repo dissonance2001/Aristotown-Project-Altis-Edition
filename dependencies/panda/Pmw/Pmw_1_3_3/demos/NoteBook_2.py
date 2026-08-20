@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.NoteBook demonstration (more complex)'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -17,11 +19,11 @@ class Demo:
         self.withTabs = withTabs
 
         # Create a frame to put everything in
-        self.mainframe = Tkinter.Frame(parent)
+        self.mainframe = six.moves.tkinter.Frame(parent)
         self.mainframe.pack(fill = 'both', expand = 1)
 
         # Find current default colors
-        button = Tkinter.Button()
+        button = six.moves.tkinter.Button()
         defaultbg = button.cget('background')
         defaultfg = button.cget('foreground')
         button.destroy()
@@ -85,21 +87,21 @@ class Demo:
         page = self.notebook.add('Appearance')
         if self.withTabs:
             self.notebook.tab('Appearance').focus_set()
-        button = Tkinter.Button(page,
+        button = six.moves.tkinter.Button(page,
             text = 'Welcome\nto\nthe\nAppearance\npage')
         button.pack(expand = 1)
         page = self.notebook.add('Fonts')
-        button = Tkinter.Button(page,
+        button = six.moves.tkinter.Button(page,
             text = 'This is a very very very very wide Fonts page')
         button.pack(expand = 1)
         page = self.notebook.insert('Applications', before = 'Fonts')
-        button = Tkinter.Button(page, text = 'This is the Applications page')
+        button = six.moves.tkinter.Button(page, text = 'This is the Applications page')
         button.pack(expand = 1)
 
         # Initialise the first page and the initial colour.
         if not self.withTabs:
             self.optionmenu.setitems(self.notebook.pagenames())
-        apply(Pmw.Color.setscheme, (self.mainframe,), defaultPalette)
+        Pmw.Color.setscheme(*(self.mainframe,), **defaultPalette)
         self.pageCounter = 0
 
     def insertpage(self):
@@ -116,19 +118,19 @@ class Demo:
             tab_text = pageName + '\nline two'
         else:
             tab_text = pageName
-        classes = (None, Tkinter.Button, Tkinter.Label, Tkinter.Checkbutton)
+        classes = (None, six.moves.tkinter.Button, six.moves.tkinter.Label, six.moves.tkinter.Checkbutton)
         cls = self.randomchoice((None,) + classes)
         if cls is None:
-            print 'Adding', pageName, 'as a frame with a button'
+            print('Adding', pageName, 'as a frame with a button')
             if self.withTabs:
                 page = self.notebook.insert(pageName, before, tab_text = tab_text)
             else:
                 page = self.notebook.insert(pageName, before)
-            button = Tkinter.Button(page,
+            button = six.moves.tkinter.Button(page,
                     text = 'This is button %d' % self.pageCounter)
             button.pack(expand = 1)
         else:
-            print 'Adding', pageName, 'using', cls
+            print('Adding', pageName, 'using', cls)
             if self.withTabs:
                 page = self.notebook.insert(pageName, before,
                         tab_text = tab_text,
@@ -144,7 +146,7 @@ class Demo:
             self.optionmenu.setitems(
                 self.notebook.pagenames(), self.notebook.getcurselection())
 
-        apply(Pmw.Color.setscheme, (self.mainframe,), defaultPalette)
+        Pmw.Color.setscheme(*(self.mainframe,), **defaultPalette)
 
     def addbutton(self):
         # Add a button to a random page.
@@ -156,7 +158,7 @@ class Demo:
         framePages = []
         for pageName in self.notebook.pagenames():
             page = self.notebook.page(pageName)
-            if page.__class__ == Tkinter.Frame:
+            if page.__class__ == six.moves.tkinter.Frame:
                 framePages.append(pageName)
 
         if len(framePages) == 0:
@@ -164,12 +166,12 @@ class Demo:
             return
 
         pageName = self.randomchoice(framePages)
-        print 'Adding extra button to', pageName
+        print('Adding extra button to', pageName)
         page = self.notebook.page(pageName)
-        button = Tkinter.Button(page, text = 'This is an extra button')
+        button = six.moves.tkinter.Button(page, text = 'This is an extra button')
         button.pack(expand = 1)
 
-        apply(Pmw.Color.setscheme, (self.mainframe,), defaultPalette)
+        Pmw.Color.setscheme(*(self.mainframe,), **defaultPalette)
 
     def deletepage(self):
         # Delete a random page
@@ -180,7 +182,7 @@ class Demo:
             return
 
         pageName = self.randomchoice(pageNames)
-        print 'Deleting', pageName
+        print('Deleting', pageName)
         self.notebook.delete(pageName)
         if not self.withTabs:
             self.optionmenu.setitems(
@@ -192,7 +194,7 @@ class Demo:
             self.colorIndex = 0
 
         bg, fg = self.colorList[self.colorIndex]
-        print 'Changing color to', bg
+        print('Changing color to', bg)
         Pmw.Color.changecolor(self.mainframe, bg, foreground = fg)
         self.notebook.recolorborders()
 
@@ -208,17 +210,17 @@ class PrintOne:
         self.text = text
 
     def __call__(self, text):
-        print self.text, text
+        print(self.text, text)
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
     widget = Demo(root)
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack()
     root.mainloop()

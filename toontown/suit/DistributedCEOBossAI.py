@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import random
 
@@ -216,7 +217,7 @@ class DistributedCEOBossAI(DistributedRebornBossCogAI):
                 treasure.d_setReject()
 
     def __recycleTreasure(self, treasure):
-        if self.grabbingTreasures.has_key(treasure.doId):
+        if treasure.doId in self.grabbingTreasures:
             del self.grabbingTreasures[treasure.doId]
             self.recycledTreasures.append(treasure)
 

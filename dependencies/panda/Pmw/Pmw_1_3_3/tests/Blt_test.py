@@ -1,7 +1,8 @@
 # Tests for Blt widgets.
 
+from __future__ import absolute_import
 import os
-import Tkinter
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -126,7 +127,7 @@ def _axisCommand(graph, value):
 
 def _createMarkerButton():
     w = Test.currentWidget()
-    button = Tkinter.Button(w, text = 'This is\na button')
+    button = six.moves.tkinter.Button(w, text = 'This is\na button')
     w.marker_create('window', coords=(10, 200), window=button)
 
 def _axisNamesSorted(pattern = None):

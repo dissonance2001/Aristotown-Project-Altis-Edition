@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from direct.gui.DirectGui import DirectFrame
 from pandac.PandaModules import Point3

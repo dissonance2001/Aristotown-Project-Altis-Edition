@@ -1,5 +1,6 @@
 # A Dialog with a ScrolledText widget.
 
+from __future__ import absolute_import
 import Pmw
 
 class TextDialog(Pmw.Dialog):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.dna import DNAProp
 from toontown.dna.DNAUtil import *
 from panda3d.core import ModelNode

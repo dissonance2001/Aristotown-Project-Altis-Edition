@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 
 class CountryClubRoomBase:
@@ -18,7 +19,7 @@ class CountryClubRoomBase:
     if __dev__:
 
         def getCountryClubEntityTypeReg(self):
-            import FactoryEntityTypes
+            from . import FactoryEntityTypes
             from otp.level import EntityTypeRegistry
             typeReg = EntityTypeRegistry.EntityTypeRegistry(FactoryEntityTypes)
             return typeReg

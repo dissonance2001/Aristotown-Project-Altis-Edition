@@ -5,6 +5,7 @@ You should write your own LevelEditor class inheriting this.
 Refer LevelEditor.py for example.
 """
 
+from __future__ import absolute_import
 from direct.showbase.DirectObject import *
 from direct.directtools.DirectUtil import *
 from direct.gui.DirectGui import *
@@ -13,6 +14,7 @@ from .CurveEditor import *
 from .FileMgr import *
 from .ActionMgr import *
 from .MayaConverter import *
+from six.moves import range
 
 class LevelEditorBase(DirectObject):
     """ Base Class for Panda3D LevelEditor """
@@ -330,7 +332,7 @@ class LevelEditorBase(DirectObject):
                     overriddenKeys = []
                     for key in base.direct.hotKeyMap.keys():
                         desc = base.direct.hotKeyMap[key]
-                        if desc[1] in customHotKeyDict.keys():
+                        if desc[1] in list(customHotKeyDict.keys()):
                             overriddenKeys.append(key)
 
                     for key in overriddenKeys:

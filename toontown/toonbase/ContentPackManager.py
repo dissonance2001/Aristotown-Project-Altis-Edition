@@ -10,11 +10,15 @@ supply music without overriding button sounds. Packs without a role remain
 unrestricted, so one combined pack can still provide music, SFX, models,
 textures, fonts, and other assets at the same time.
 '''
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from panda3d.core import Multifile, Filename, VirtualFileSystem, getModelPath
 import fnmatch
 import os
 from toontown.pandautils import yaml
+import six
+from six.moves import range
 
 
 class ContentPackManager:
@@ -52,7 +56,7 @@ class ContentPackManager:
     def _normaliseList(self, value):
         if value is None:
             return []
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             value = [value]
         if not isinstance(value, (list, tuple)):
             return []
@@ -60,7 +64,7 @@ class ContentPackManager:
         result = []
         seen = set()
         for filename in value:
-            if not isinstance(filename, basestring):
+            if not isinstance(filename, six.string_types):
                 continue
             filename = self._normaliseFilename(filename)
             if not filename:
@@ -139,8 +143,8 @@ class ContentPackManager:
         self._readSortFile()
         loadedCount = 0
 
-        print('Content Pack Manager: reading %s' % self.sortFile)
-        print('Content Pack Manager: %s listed pack(s)' % len(self.sort))
+        print(('Content Pack Manager: reading %s' % self.sortFile))
+        print(('Content Pack Manager: %s listed pack(s)' % len(self.sort)))
 
         for filename in self.sort[:]:
             if not self.isValid(filename):
@@ -172,13 +176,13 @@ class ContentPackManager:
 
         self._writeSortFile()
 
-        print('Loaded %s content pack(s).' % loadedCount)
-        print('Content pack model path: %s' % self.modelPath)
+        print(('Loaded %s content pack(s).' % loadedCount))
+        print(('Content pack model path: %s' % self.modelPath))
         print('Content pack priority: later YAML entries override earlier entries.')
         if self.musicOnly:
-            print('Content pack music-only role: %s' % ', '.join(self.musicOnly))
+            print(('Content pack music-only role: %s' % ', '.join(self.musicOnly)))
         if self.sfxOnly:
-            print('Content pack SFX-only role: %s' % ', '.join(self.sfxOnly))
+            print(('Content pack SFX-only role: %s' % ', '.join(self.sfxOnly)))
 
         self._printGuiSfxResolution()
 
@@ -190,7 +194,7 @@ class ContentPackManager:
 
     def _buildSubfileMap(self, multifile):
         subfiles = {}
-        for index in xrange(multifile.getNumSubfiles()):
+        for index in range(multifile.getNumSubfiles()):
             realName = self._normaliseVirtualPath(
                 multifile.getSubfileName(index)
             )
@@ -230,13 +234,13 @@ class ContentPackManager:
         self.mountPoints.append(mountPoint)
         self.packEntries.append(entry)
 
-        print(
+        print((
             'Successfully Mounted Content Pack: %s (%s files at %s)' % (
                 filename,
                 multifile.getNumSubfiles(),
                 mountPoint
             )
-        )
+        ))
         return True
 
     def _findPackEntry(self, packName):
@@ -363,18 +367,18 @@ class ContentPackManager:
                     providers.append(entry['filename'])
 
             if providers:
-                print(
+                print((
                     'CONTENT PACK GUI SFX: %s -> %s' %
                     (path, providers[0])
-                )
+                ))
             else:
-                print('CONTENT PACK GUI SFX: %s -> default Altis' % path)
+                print(('CONTENT PACK GUI SFX: %s -> default Altis' % path))
 
             if skipped:
-                print(
+                print((
                     'CONTENT PACK GUI SFX: skipped music-only provider(s): %s' %
                     ', '.join(skipped)
-                )
+                ))
 
     def resolveMountedFile(self, virtualPath):
         resolved = self.resolveFile(virtualPath)

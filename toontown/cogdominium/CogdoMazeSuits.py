@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import Point3, VBase4
 from direct.fsm.FSM import FSM
@@ -9,6 +10,7 @@ from toontown.minigame.MazeSuit import MazeSuit
 from toontown.suit import SuitDNA
 from toontown.cogdominium.CogdoMazeGameObjects import CogdoMazeSplattable
 from toontown.cogdominium import CogdoMazeGameGlobals as Globals
+from six.moves import range
 
 class CogdoMazeSuit(MazeSuit, FSM, CogdoMazeSplattable):
     GagHitEventName = 'CogdoMazeSuit_GagHit'
@@ -239,8 +241,8 @@ class CogdoMazeBossSuit(CogdoMazeSuit):
 
     def pickRandomValidSpot(self, r = 5):
         validSpots = []
-        for x in xrange(self.TX - r, self.TX + r):
-            for y in xrange(self.TY - r, self.TY + r):
+        for x in range(self.TX - r, self.TX + r):
+            for y in range(self.TY - r, self.TY + r):
                 if self.maze.isWalkable(x, y):
                     validSpots.append([x, y])
 

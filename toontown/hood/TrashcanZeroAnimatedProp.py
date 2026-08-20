@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.hood import ZeroAnimatedProp
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal

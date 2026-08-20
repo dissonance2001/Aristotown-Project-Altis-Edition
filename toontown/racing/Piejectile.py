@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import math
 import random
 from toontown.toonbase.ToonPythonUtil import *
@@ -10,6 +12,7 @@ from otp.avatar import ShadowCaster
 from otp.otpbase import OTPGlobals
 from toontown.racing.FlyingGag import FlyingGag
 from toontown.battle import MovieUtil
+from six.moves import range
 
 class Piejectile(DirectObject, FlyingGag):
     physicsCalculationsPerSecond = 60
@@ -43,7 +46,7 @@ class Piejectile(DirectObject, FlyingGag):
         self.rotH = randFloat(-360, 360)
         self.rotP = randFloat(-90, 90)
         self.rotR = randFloat(-90, 90)
-        print 'generating Pie %s' % self.name
+        print('generating Pie %s' % self.name)
         self.ownerKart = base.cr.doId2do.get(base.race.kartMap.get(sourceId, None), None)
         if targetId != 0:
             self.targetKart = base.cr.doId2do.get(base.race.kartMap.get(targetId, None), None)
@@ -66,7 +69,7 @@ class Piejectile(DirectObject, FlyingGag):
         self.reparentTo(render)
 
     def delete(self):
-        print 'removing piejectile'
+        print('removing piejectile')
         taskMgr.remove(self.taskName)
         self.__undoCollisions()
         self.physicsMgr.clearLinearForces()
@@ -186,7 +189,7 @@ class Piejectile(DirectObject, FlyingGag):
                 self.engine.setVector(Vec3(0, 10 + 10 * self.timeRatio + targetSpeed * (0.5 + 0.5 * self.timeRatio) + self.d2t * (0.5 + 0.5 * self.timeRatio), 12))
         else:
             self.engine.setVector(Vec3(0, 100, 3))
-        for i in xrange(int(numFrames)):
+        for i in range(int(numFrames)):
             pitch = self.gagNode.getP()
             self.gagNode.setP(pitch + self.rotH * self.physicsDt)
             roll = self.gagNode.getR()

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Vec4
 from direct.gui.DirectGui import DirectFrame, DGG
 from direct.task import Task

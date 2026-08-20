@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import TextNode, Vec3
 from direct.gui.DirectGui import (DirectFrame, DirectLabel, DirectButton,
                                   DirectEntry, DirectScrolledFrame)

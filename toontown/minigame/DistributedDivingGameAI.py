@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -7,10 +8,11 @@ from direct.actor import Actor
 from toontown.minigame import DivingGameGlobals
 import random
 import types
+from six.moves import range
 
 class DistributedDivingGameAI(DistributedMinigameAI):
     fishProportions = []
-    for i in xrange(7):
+    for i in range(7):
         fishProportions.append([])
 
     n = 100
@@ -313,7 +315,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         self.REWARDMOD = self.difficultyPatternsAI[self.getSafezoneId()][2]
         DistributedMinigameAI.setGameReady(self)
         self.spawnings = []
-        for i in xrange(DivingGameGlobals.NUM_SPAWNERS):
+        for i in range(DivingGameGlobals.NUM_SPAWNERS):
             self.spawnings.append(Sequence(Func(self.spawnFish, i), Wait(self.SPAWNTIME + random.random()), Func(self.spawnFish, i), Wait(self.SPAWNTIME - 0.5 + random.random())))
             self.spawnings[i].loop()
 
@@ -360,7 +362,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         for someAvId in self.scoreDict.keys():
             if someAvId == avId:
                 self.scoreDict[avId] += 10 * (self.REWARDMOD * 0.25)
-            self.scoreDict[someAvId] += 10 * (self.REWARDMOD * 0.75 / float(len(self.scoreDict.keys())))
+            self.scoreDict[someAvId] += 10 * (self.REWARDMOD * 0.75 / float(len(list(self.scoreDict.keys()))))
 
         self.sendUpdate('incrementScore', [avId, newSpot, timestamp])
 
@@ -416,12 +418,12 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         return Task.done
 
     def exitSwimming(self):
-        for i in xrange(DivingGameGlobals.NUM_SPAWNERS):
+        for i in range(DivingGameGlobals.NUM_SPAWNERS):
             self.spawnings[i].pause()
 
     def enterCleanup(self):
         self.notify.debug('enterCleanup')
-        for i in xrange(DivingGameGlobals.NUM_SPAWNERS):
+        for i in range(DivingGameGlobals.NUM_SPAWNERS):
             self.spawnings[i].finish()
 
         del self.spawnings
@@ -457,7 +459,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         timestamp = globalClockDelta.getFrameNetworkTime()
         props = self.proportion[spawnerId]
         num = random.random()
-        for i in xrange(len(props)):
+        for i in range(len(props)):
             prop = props[i]
             low = prop[0]
             high = prop[1]

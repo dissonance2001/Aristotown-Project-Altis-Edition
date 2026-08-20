@@ -5,9 +5,11 @@ LevelEditor, ObjectHandler, ObjectPalette should be rewritten
 to be game specific.
 """
 
+from __future__ import absolute_import
 from direct.actor import Actor
 
 from . import ObjectGlobals as OG
+from six.moves import range
 
 class ObjectHandler:
     """ ObjectHandler will create and update objects """

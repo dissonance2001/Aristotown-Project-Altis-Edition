@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObjectAI
 from otp.level import DistributedLevelAI
@@ -6,6 +7,7 @@ from toontown.building import DistributedElevatorFloorAI
 from toontown.coghq import BattleExperienceAggregatorAI
 from toontown.coghq import StageLayout, DistributedStageRoomAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedStageAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStageAI')
@@ -28,7 +30,7 @@ class DistributedStageAI(DistributedObjectAI.DistributedObjectAI):
         self.rooms = []
         if self.battleExpAggreg is None:
             self.battleExpAggreg = BattleExperienceAggregatorAI.BattleExperienceAggregatorAI()
-        for i in xrange(self.layout.getNumRooms()):
+        for i in range(self.layout.getNumRooms()):
             room = DistributedStageRoomAI.DistributedStageRoomAI(self.air, self.stageId, self.doId, self.zoneId, self.layout.getRoomId(i), i * 2, self.avIds, self.battleExpAggreg)
             room.generateWithRequired(self.zoneId)
             self.rooms.append(room)

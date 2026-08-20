@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 import time
 
@@ -10,6 +11,7 @@ from toontown.building import DistributedElevatorExt
 from toontown.building.ElevatorConstants import *
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 from toontown.battle import BattleParticles
+from six.moves import range
 
 
 class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
@@ -86,7 +88,7 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
             shadowBase.setBin('shadow', -5)
             shadowBase.setDepthWrite(0)
 
-        for i in xrange(4):
+        for i in range(4):
             sigil = self.elevatorModel.find('**/SigilBase%s' % (i + 1))
             sigilTop = self.elevatorModel.find('**/SigilTop%s' % (i + 1))
             light = self.elevatorModel.find('**/Light%s' % (i + 1))
@@ -110,7 +112,7 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
                     particles = BattleParticles.createParticleEffect(
                         file='sigilSparkle')
                     particles.start(parent=sigil, renderParent=render)
-                except Exception, error:
+                except Exception as error:
                     self.notify.warning(
                         'Unable to start sigilSparkle particles: %s' % error)
             self.sigilParticles.append(particles)

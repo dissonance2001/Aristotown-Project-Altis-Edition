@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/tests/dialog.test code.
 
+from __future__ import absolute_import
 import sys
 import tkinter
 import Test

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from toontown.pgui.DirectGui import DirectFrame, DirectButton, DirectLabel

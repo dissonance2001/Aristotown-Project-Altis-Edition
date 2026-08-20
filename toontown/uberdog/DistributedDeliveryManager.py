@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.distributed.DistributedObject import DistributedObject
 from toontown.catalog import CatalogItemList
@@ -10,10 +12,10 @@ class DistributedDeliveryManager(DistributedObject):
         self.sendUpdate('hello', [message])
 
     def rejectHello(self, message):
-        print 'rejected', message
+        print('rejected', message)
 
     def helloResponse(self, message):
-        print 'accepted', message
+        print('accepted', message)
 
     def sendAck(self):
         self.sendUpdate('requestAck', [])
@@ -22,4 +24,4 @@ class DistributedDeliveryManager(DistributedObject):
         messenger.send('DeliveryManagerAck')
 
     def test(self):
-        print 'Distributed Delviery Manager Stub Test'
+        print('Distributed Delviery Manager Stub Test')

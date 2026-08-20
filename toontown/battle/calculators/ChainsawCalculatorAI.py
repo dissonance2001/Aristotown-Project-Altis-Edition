@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
@@ -6,6 +7,8 @@ from toontown.toonbase import ToontownBattleGlobals
 
 import math
 import random
+from six.moves import range
+from six.moves import zip
 
 
 class ChainsawCalculatorAI:
@@ -127,7 +130,7 @@ class ChainsawCalculatorAI:
                       if len(toonIds) > 1 else SuitBattleGlobals.ATK_TGT_SINGLE),
         }
         attack[SUIT_TGT_COL] = []
-        attack[SUIT_HP_COL] = [-1 for i in xrange(len(self.battle.activeToons))]
+        attack[SUIT_HP_COL] = [-1 for i in range(len(self.battle.activeToons))]
         attack[TOON_DIED_COL] = 0
         attack[SUIT_BEFORE_TOONS_COL] = 0
         attack[SUIT_TAUNT_COL] = 0
@@ -239,7 +242,7 @@ class ChainsawCalculatorAI:
                     hits += 1
 
             if track not in (HEAL, PETSOS):
-                for index in xrange(min(len(hpList), len(self.battle.activeSuits))):
+                for index in range(min(len(hpList), len(self.battle.activeSuits))):
                     suit = self.battle.activeSuits[index]
                     if suit is boss:
                         continue
@@ -668,7 +671,7 @@ class ChainsawCalculatorAI:
         targetCount = min(len(orderedSupports), len(toons))
         targetToons = list(toons[:targetCount])
         damages = []
-        for index in xrange(targetCount):
+        for index in range(targetCount):
             support = orderedSupports[index]
             hpRatio = float(max(0, support.getHP())) / max(1.0, float(support.getMaxHP()))
             hpRatio = min(max(hpRatio, 0.1), 1.2)

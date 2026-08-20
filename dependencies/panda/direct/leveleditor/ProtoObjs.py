@@ -1,6 +1,8 @@
 """
 Palette for Prototyping
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import imp
 
@@ -19,7 +21,7 @@ class ProtoObjs:
             module = imp.load_module(moduleName, file, pathname, description)
             self.data = module.protoData
         except:
-            print("%s doesn't exist"%(self.name))
+            print(("%s doesn't exist"%(self.name)))
             return
 
     def saveProtoData(self, f):

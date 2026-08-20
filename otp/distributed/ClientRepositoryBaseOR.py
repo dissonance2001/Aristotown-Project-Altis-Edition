@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from panda3d.direct import *
 from direct.distributed.MsgTypes import *
@@ -605,5 +607,5 @@ class ClientRepositoryBaseOR(ConnectionRepository):
         print('DelayDeletes:')
         print('=============')
         for obj in self._delayDeletedDOs.values():
-            print('%s\t%s (%s)\tdelayDeletes=%s' % (
-                obj.doId, safeRepr(obj), itype(obj), obj.getDelayDeleteNames()))
+            print(('%s\t%s (%s)\tdelayDeletes=%s' % (
+                obj.doId, safeRepr(obj), itype(obj), obj.getDelayDeleteNames())))

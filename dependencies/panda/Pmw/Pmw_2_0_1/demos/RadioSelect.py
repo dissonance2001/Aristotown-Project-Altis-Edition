@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.RadioSelect demonstration'
 
 # Import Pmw from this directory tree.

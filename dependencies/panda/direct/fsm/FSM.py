@@ -5,6 +5,8 @@ For more information on FSMs, consult the :ref:`finite-state-machines` section
 of the programming manual.
 """
 
+from __future__ import absolute_import
+from six.moves import filter
 __all__ = ['FSMException', 'FSM']
 
 
@@ -322,7 +324,7 @@ class FSM(DirectObject):
                 self._name, request, str(args)[1:]))
 
             filter = self.getCurrentFilter()
-            result = filter(request, args)
+            result = list(filter(request, args))
             if result:
                 if isinstance(result, str):
                     # If the return value is a string, it's just the name

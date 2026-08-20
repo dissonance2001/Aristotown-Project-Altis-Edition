@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import re
 
 from toontown.pgui.DirectGui import *
@@ -8,6 +10,8 @@ from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager, Keyboard
 from toontown.toonbase import ToontownGlobals
 from toontown.stickers import StickerMenu
 from toontown.toon.AltisCommandShortcuts import getCommandShortcuts
+import six
+from six.moves import range
 
 
 class ChatLog(DirectFrame, DirectObject):
@@ -655,14 +659,14 @@ class ChatLog(DirectFrame, DirectObject):
             try:
                 objects = base.cr.getObjectsOfExactClass(DistributedToon)
                 try:
-                    iterator = objects.itervalues()
+                    iterator = six.itervalues(objects)
                 except:
-                    iterator = objects.values()
+                    iterator = list(objects.values())
             except:
                 try:
-                    iterator = base.cr.doId2do.itervalues()
+                    iterator = six.itervalues(base.cr.doId2do)
                 except:
-                    iterator = base.cr.doId2do.values()
+                    iterator = list(base.cr.doId2do.values())
 
             for toon in iterator:
                 if toon is None or toon is getattr(base, 'localAvatar', None):
@@ -1551,7 +1555,7 @@ class ChatLog(DirectFrame, DirectObject):
                 try:
                     self._showClashAlert(msg)
                 except Exception as error:
-                    print('[ChatLog] Could not show Clash alert: %s' % error)
+                    print(('[ChatLog] Could not show Clash alert: %s' % error))
                     if self.isHidden or self.currentTab != self.TAB_MAIN:
                         self._showNotification(self.TAB_MAIN)
                     if self.isHidden or self.currentTab != self.TAB_ALERTS:

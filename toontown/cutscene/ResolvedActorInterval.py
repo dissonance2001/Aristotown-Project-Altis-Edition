@@ -7,6 +7,7 @@ providers preflight and cache the exact controls, so this interval consumes
 those controls directly and never performs a second Actor dictionary lookup.
 """
 
+from __future__ import absolute_import
 import math
 
 from direct.interval.Interval import Interval

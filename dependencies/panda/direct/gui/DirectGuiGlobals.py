@@ -3,6 +3,7 @@ Global definitions used by Direct Gui Classes and handy constants
 that can be used during widget construction
 """
 
+from __future__ import absolute_import
 __all__ = []
 
 from panda3d.core import *

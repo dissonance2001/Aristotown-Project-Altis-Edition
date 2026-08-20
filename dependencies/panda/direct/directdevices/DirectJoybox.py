@@ -1,10 +1,12 @@
 """ Class used to create and control joybox device """
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from .DirectDeviceManager import *
 from direct.directtools.DirectUtil import *
 from direct.gui import OnscreenText
 from direct.task import Task
 import math
+from six.moves import range
 
 """
 TODO:

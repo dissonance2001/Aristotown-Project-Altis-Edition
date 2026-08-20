@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import ZoneEntityBase
 from otp.level import BasicEntities
 
@@ -23,7 +24,7 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
         return self.nodePath
 
     def getVisibleZoneNums(self):
-        return self.visibleZoneNums.keys()
+        return list(self.visibleZoneNums.keys())
 
     def incrementRefCounts(self, zoneNumList):
         for zoneNum in zoneNumList:

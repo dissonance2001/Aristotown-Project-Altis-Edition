@@ -1,4 +1,5 @@
-import ShtikerPage
+from __future__ import absolute_import
+from . import ShtikerPage
 from toontown.toonbase import ToontownBattleGlobals
 from direct.gui.DirectGui import *
 from panda3d.core import *

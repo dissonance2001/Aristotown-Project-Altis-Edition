@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.task.Task import Task
@@ -8,6 +9,7 @@ from toontown.shtiker import ShtikerPage
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TTDialog
+from six.moves import range
 
 ICON_COLORS = (Vec4(0.863, 0.776, 0.769, 1.0), Vec4(0.749, 0.776, 0.824, 1.0),
                Vec4(0.749, 0.769, 0.749, 1.0), Vec4(0.843, 0.745, 0.745, 1.0), Vec4(1, 1, 1, 1))
@@ -246,7 +248,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
         currentMap = {}
         self.shardButtons = []
 
-        for i in xrange(len(curShardTuples)):
+        for i in range(len(curShardTuples)):
 
             shardId, name, pop, WVPop, invasionStatus = curShardTuples[i]
 

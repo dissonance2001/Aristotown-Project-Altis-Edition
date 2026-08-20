@@ -1,6 +1,8 @@
 """Defines the IntervalManager class as well as the global instance of
 this class, ivalMgr."""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['IntervalManager', 'ivalMgr']
 
 from panda3d.core import *

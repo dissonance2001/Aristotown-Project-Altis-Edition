@@ -1,8 +1,7 @@
 @echo off
-title Project Altis Mongo
-mode con: cols=60 lines=20
+title Aristotown - Server Cluster (Astron)
+cd ..
+cd dependencies/astron
 
-cd ../dependencies/astron
-
-astrond --loglevel info config/cluster.yml
-pause
+astrond.exe --loglevel debug config/astrond.yml
+PAUSE

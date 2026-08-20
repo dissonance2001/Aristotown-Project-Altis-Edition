@@ -1,5 +1,6 @@
 """DistributedSmoothNodeBase module: contains the DistributedSmoothNodeBase class"""
 
+from __future__ import absolute_import
 from .ClockDelta import *
 from direct.task import Task
 from direct.showbase.PythonUtil import randFloat, Enum

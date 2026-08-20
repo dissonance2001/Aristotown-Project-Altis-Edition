@@ -1,5 +1,6 @@
 """LerpBlendHelpers module: contains LerpBlendHelpers class"""
 
+from __future__ import absolute_import
 __all__ = ['getBlend']
 
 from panda3d.direct import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import CollisionSphere, CollisionNode, CollisionTube, TextNode, NodePath, Vec3, Point3
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.distributed import DistributedObject
@@ -192,7 +193,7 @@ class DistributedPartyActivity(DistributedObject.DistributedObject):
     def disable(self):
         self.notify.debug('BASE: disable')
         DistributedObject.DistributedObject.disable(self)
-        rorToonIds = self._toonId2ror.keys()
+        rorToonIds = list(self._toonId2ror.keys())
         for toonId in rorToonIds:
             self.cr.relatedObjectMgr.abortRequest(self._toonId2ror[toonId])
             del self._toonId2ror[toonId]

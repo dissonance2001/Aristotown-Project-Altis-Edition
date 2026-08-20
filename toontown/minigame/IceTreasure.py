@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3, CollisionSphere, CollisionNode, BitMask32
 from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval, Parallel, Func, SoundInterval
 from direct.directnotify import DirectNotifyGlobal

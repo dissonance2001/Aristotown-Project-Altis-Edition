@@ -1,5 +1,6 @@
 """IndirectInterval module: contains the IndirectInterval class"""
 
+from __future__ import absolute_import
 __all__ = ['IndirectInterval']
 
 from panda3d.core import *

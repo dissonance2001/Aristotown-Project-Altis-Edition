@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from .DistributedCogHQDoor import *
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete

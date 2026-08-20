@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal

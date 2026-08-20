@@ -1,8 +1,10 @@
 # Class to display messages in an information line.
 
+from __future__ import absolute_import
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 class MessageBar(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
@@ -35,12 +37,12 @@ class MessageBar(Pmw.MegaWidget):
 	interior = self.interior()
 	self._messageBarEntry = self.createcomponent('entry',
 		(), None,
-		Tkinter.Entry, (interior,))
+		six.moves.tkinter.Entry, (interior,))
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
             self._messageBarEntry.configure(state = 'readonly')
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             self._messageBarEntry.configure(state = 'disabled')
 
 	self._messageBarEntry.grid(column=2, row=2, sticky=self['sticky'])
@@ -137,7 +139,7 @@ class MessageBar(Pmw.MegaWidget):
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
             self._messageBarEntry.configure(state = 'readonly')
-        except Tkinter.TclError:
+        except six.moves.tkinter.TclError:
             self._messageBarEntry.configure(state = 'disabled')
 
-Pmw.forwardmethods(MessageBar, Tkinter.Entry, '_messageBarEntry')
+Pmw.forwardmethods(MessageBar, six.moves.tkinter.Entry, '_messageBarEntry')

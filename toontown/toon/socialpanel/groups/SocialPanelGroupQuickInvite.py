@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectButton, DirectFrame, DirectLabel, DirectScrolledFrame
 from direct.gui import DirectGuiGlobals as DGG
 from pandac.PandaModules import TextNode
@@ -235,7 +236,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                     result[avId] = str(obj.getName())
         except:
             pass
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _onlineFriends(self):
         memberIds = self._memberIds()
@@ -262,7 +263,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                 handle = getattr(base.cr, 'doId2do', {}).get(avId)
             if handle is not None and hasattr(handle, 'getName'):
                 result[avId] = str(handle.getName())
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _onlineClubmates(self):
         memberIds = self._memberIds()
@@ -290,7 +291,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                     online = False
             if online:
                 result[avId] = str(member.get('name', 'Toon'))
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _availableSelectionCount(self):
         if self.createMode:

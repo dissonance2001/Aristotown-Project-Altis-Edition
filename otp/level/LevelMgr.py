@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import Functor
 from otp.level import LevelMgrBase
+from six.moves import range
 
 class LevelMgr(LevelMgrBase.LevelMgrBase):
 
@@ -37,7 +39,7 @@ class LevelMgr(LevelMgrBase.LevelMgrBase):
 
     def privAssignZoneIds(self):
         self.zoneNums.sort()
-        for i in xrange(len(self.zoneNums)):
+        for i in range(len(self.zoneNums)):
             zoneNum = self.zoneNums[i]
             zoneEnt = self.level.getEntity(zoneNum)
             zoneId = self.level.zoneIds[i]

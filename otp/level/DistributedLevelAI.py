@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
@@ -5,6 +6,8 @@ from otp.level import Level
 from direct.directnotify import DirectNotifyGlobal
 from otp.level import EntityCreatorAI
 from toontown.toonbase.ToonPythonUtil import Functor, weightedChoice
+from six.moves import range
+from six.moves import zip
 
 class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLevelAI')
@@ -62,7 +65,7 @@ class DistributedLevelAI(DistributedObjectAI.DistributedObjectAI, Level.Level):
     def initializeLevel(self, levelSpec):
         self.startTime = globalClock.getRealTime()
         self.startTimestamp = globalClockDelta.localToNetworkTime(self.startTime, bits=32)
-        lol = zip([1] * levelSpec.getNumScenarios(), range(levelSpec.getNumScenarios()))
+        lol = list(zip([1] * levelSpec.getNumScenarios(), list(range(levelSpec.getNumScenarios()))))
         scenarioIndex = weightedChoice(lol)
         Level.Level.initializeLevel(self, self.doId, levelSpec, scenarioIndex)
         if __dev__:

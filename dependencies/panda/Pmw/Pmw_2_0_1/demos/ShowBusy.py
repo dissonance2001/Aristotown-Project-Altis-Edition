@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Blt busy cursor demonstration'
 
 # Import Pmw from this directory tree.

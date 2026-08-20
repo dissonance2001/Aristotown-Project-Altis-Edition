@@ -1,3 +1,6 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Test of the speed of creating Pmw megawidgets'
 
 # Import Pmw from this directory tree.
@@ -5,7 +8,7 @@ import sys
 sys.path[:0] = ['../../..']
 
 import time
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -15,17 +18,17 @@ class Demo:
 	message = 'This is a test of the time\n' + \
 		'it takes to create 20 Pmw\nEntryField megawidgets.\n' + \
 		'Click on the button to create them.'
-	w = Tkinter.Label(parent, text = message)
+	w = six.moves.tkinter.Label(parent, text = message)
 	w.pack(padx = 8, pady = 8)
 
 	# Create button to run speed test.
-	w = Tkinter.Button(parent,
+	w = six.moves.tkinter.Button(parent,
 		text = 'Create 20 EntryFields',
 	        command = self.createEntries)
 	w.pack(padx = 8, pady = 8)
 
     def createEntries(self):
-      entryTop = Tkinter.Toplevel(self.parent)
+      entryTop = six.moves.tkinter.Toplevel(self.parent)
 
       startClock = time.clock()
       fields = []
@@ -43,18 +46,18 @@ class Demo:
 	fields.append(field)
 
       Pmw.alignlabels(fields)
-      print 'Time to create 20 EntryFields:', \
-	      time.clock() - startClock, 'seconds'
+      print('Time to create 20 EntryFields:', \
+	      time.clock() - startClock, 'seconds')
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

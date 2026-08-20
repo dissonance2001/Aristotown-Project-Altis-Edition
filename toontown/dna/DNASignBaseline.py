@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 import math
 from panda3d.core import BamFile, NodePath, TextNode, DecalEffect
 from toontown.dna import DNANode, DNAUtil, DNAError
+from six.moves import range
 
 class DNASignBaseline(DNANode.DNANode):
     COMPONENT_CODE = 6

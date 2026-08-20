@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from pandac.PandaModules import Vec4
+from six.moves import range
 Up = 1
 Down = 0
 MaxRank = 13
@@ -59,9 +61,9 @@ def initCardImages():
         cardModel = loader.loadModel(modelPath)
         cardModel.hide()
         CardImages[style] = {}
-        for suitIndex in xrange(MaxSuit):
+        for suitIndex in range(MaxSuit):
             CardImages[style][suitIndex] = {}
-            for rankIndex in xrange(MaxRank):
+            for rankIndex in range(MaxRank):
                 track, level = convertRankToGagTrackAndLevel(rankIndex)
                 propName = ToontownBattleGlobals.AvPropsNew[track][level]
                 cardNode = cardModel.find('**/%s' % propName)

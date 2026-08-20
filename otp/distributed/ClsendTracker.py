@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import StringStream
 from direct.distributed.PyDatagram import PyDatagram
+from six.moves import range
 
 class ClsendTracker:
     clsendNotify = directNotify.newCategory('clsend')
@@ -34,7 +36,7 @@ class ClsendTracker:
             self._trimClsend()
 
     def _trimClsend(self):
-        for i in xrange(self._clsendFlushNum):
+        for i in range(self._clsendFlushNum):
             if self._logClsendOverflow:
                 self._logClsend(*self._clsendMsgs[0])
             self._clsendMsgs = self._clsendMsgs[1:]

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import BitMask32, CollisionHandlerFloor, CollisionHandlerQueue
 from panda3d.core import CollisionNode, CollisionRay, CollisionSegment
 from panda3d.core import CollisionTraverser, NodePath, Point3, Vec3
@@ -10,6 +11,7 @@ from direct.interval.IntervalGlobal import LerpPosHprInterval, Parallel
 from direct.showbase.InputStateGlobal import inputState
 from direct.task import Task
 from direct.task.TaskManagerGlobal import taskMgr
+from six.moves import range
 
 try:
     from otp.otpbase.PythonUtil import fitSrcAngle2Dest, lerp, reduceAngle

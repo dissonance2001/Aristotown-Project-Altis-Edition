@@ -1,6 +1,7 @@
 """
    This is the GUI for the Curve Animation
 """
+from __future__ import absolute_import
 import wx
 
 from direct.interval.IntervalGlobal import *

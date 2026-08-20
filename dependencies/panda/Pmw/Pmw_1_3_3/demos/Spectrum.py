@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from six.moves import range
 title = 'Color spectrum demonstration'
 
 # Import Pmw from this directory tree.
@@ -5,16 +7,16 @@ import sys
 sys.path[:0] = ['../../..']
 
 import string
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
-	parent = Tkinter.Frame(parent)
+	parent = six.moves.tkinter.Frame(parent)
 	parent.pack(padx=10, pady=10, fill='both', expand=1)
 	self.width = 350
 	self.height = 250
-	self.canvas = Tkinter.Canvas(parent,
+	self.canvas = six.moves.tkinter.Canvas(parent,
 		width = self.width, height = self.height)
 	self.canvas.grid(row = 0, column = 0, columnspan = 2, sticky = 'news')
 
@@ -156,11 +158,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

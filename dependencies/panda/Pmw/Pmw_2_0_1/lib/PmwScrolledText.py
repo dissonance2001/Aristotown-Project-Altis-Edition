@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/scrolledtext.itk code.
 
+from __future__ import absolute_import
 import tkinter
 import Pmw
 

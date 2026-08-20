@@ -3,6 +3,7 @@ scene graph using the tkinter GUI system.
 
 Requires Pmw."""
 
+from __future__ import absolute_import
 __all__ = ['SceneGraphExplorer', 'SceneGraphExplorerItem', 'explore']
 
 from direct.showbase.DirectObject import DirectObject

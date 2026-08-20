@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import Point3
 from direct.fsm import ClassicFSM
@@ -7,6 +8,7 @@ from direct.task import Task
 from toontown.minigame import DistributedMinigameAI
 from toontown.minigame import MinigameGlobals
 from toontown.minigame import CogThiefGameGlobals
+from six.moves import range
 CTGG = CogThiefGameGlobals
 
 class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
@@ -91,14 +93,14 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
         pass
 
     def initCogInfo(self):
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             self.cogInfo[cogIndex] = {'pos': Point3(CogThiefGameGlobals.CogStartingPositions[cogIndex]),
              'goal': CTGG.NoGoal,
              'goalId': CTGG.InvalidGoalId,
              'barrel': CTGG.NoBarrelCarried}
 
     def initBarrelInfo(self):
-        for barrelIndex in xrange(CogThiefGameGlobals.NumBarrels):
+        for barrelIndex in range(CogThiefGameGlobals.NumBarrels):
             self.barrelInfo[barrelIndex] = {'pos': Point3(CogThiefGameGlobals.BarrelStartingPositions[barrelIndex]),
              'carriedBy': CTGG.BarrelOnGround,
              'stolen': False}
@@ -165,11 +167,11 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
 
     def startSuitGoals(self):
         delayTimes = []
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             delayTimes.append(cogIndex * 1.0)
 
         random.shuffle(delayTimes)
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             self.doMethodLater(delayTimes[cogIndex], self.chooseSuitGoal, self.uniqueName('choseSuitGoal-%d-' % cogIndex), extraArgs=[cogIndex])
 
     def chaseToon(self, suitNum, avId):
@@ -281,7 +283,7 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
     def chooseReturnPos(self, cogIndex, cogPos):
         shortestDistance = 10000
         shortestReturnIndex = -1
-        for retIndex in xrange(len(CTGG.CogReturnPositions)):
+        for retIndex in range(len(CTGG.CogReturnPositions)):
             retPos = CTGG.CogReturnPositions[retIndex]
             distance = (cogPos - retPos).length()
             if distance < shortestDistance:

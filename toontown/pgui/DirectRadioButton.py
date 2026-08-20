@@ -1,11 +1,13 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['DirectRadioButton']
 
 from pandac.PandaModules import *
-import DirectGuiGlobals as DGG
-from DirectButton import *
-from DirectLabel import *
+from . import DirectGuiGlobals as DGG
+from .DirectButton import *
+from .DirectLabel import *
 
 class DirectRadioButton(DirectButton):
     """
@@ -203,7 +205,7 @@ class DirectRadioButton(DirectButton):
 
         if self['command']:
             # Pass any extra args to command
-            apply(self['command'], self['extraArgs'])
+            self['command'](*self['extraArgs'])
 
     def setOthers(self, others):
         self['others'] = others

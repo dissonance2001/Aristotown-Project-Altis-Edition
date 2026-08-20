@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 from otp.ai.MagicWordGlobal import *
@@ -23,7 +25,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         if magicWord.lower() == '~acc':
             localAvatar = getattr(base, 'localAvatar', None)
             if localAvatar is None or getattr(localAvatar, 'controlManager', None) is None:
-                print 'Accessory editor: load a Toon before using ~acc.'
+                print('Accessory editor: load a Toon before using ~acc.')
                 if localAvatar is not None:
                     try:
                         localAvatar.setSystemMessage(

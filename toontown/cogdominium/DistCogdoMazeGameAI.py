@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.cogdominium.DistCogdoGameAI import DistCogdoGameAI
 from toontown.cogdominium import CogdoMazeGameGlobals
@@ -5,6 +6,7 @@ from direct.distributed.ClockDelta import *
 from direct.task import Timer
 from toontown.battle import BattleBase
 from toontown.building.ElevatorConstants import *
+from six.moves import range
 
 ALL_ABOARD_LAG = 3.5
 

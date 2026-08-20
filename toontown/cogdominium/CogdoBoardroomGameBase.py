@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.cogdominium import CogdoBoardroomGameSpec
 from toontown.cogdominium import CogdoBoardroomGameConsts as Consts
 

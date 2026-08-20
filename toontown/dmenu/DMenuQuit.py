@@ -4,6 +4,7 @@ Created on Jan 2, 2017
 @author: Drew
 '''
 
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import Wait, Func, Sequence, LerpScaleInterval
 from direct.showbase.DirectObject import DirectObject

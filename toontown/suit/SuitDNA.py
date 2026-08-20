@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
@@ -7,6 +8,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from toontown.battle import SuitBattleGlobals
 from otp.avatar import AvatarDNA
+from six.moves import range
 notify = directNotify.newCategory('SuitDNA')
 suitDeptCogs = {
     'c': [
@@ -312,7 +314,7 @@ def getSuitsForTier(dept, tier):
 def getRandomSuitTierSpawn(level, dept, rng=random):
     possibleTiers = []
 
-    for tier in xrange(1, 8):
+    for tier in range(1, 8):
         for suitName in getSuitsForTier(dept, tier):
             minLevel = SuitBattleGlobals.getSuitMinLevel(suitName)
             maxLevel = SuitBattleGlobals.getSuitMaxLevel(suitName)
@@ -547,7 +549,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         if tier is None:
             availableTiers = []
 
-            for testTier in xrange(1, 9):
+            for testTier in range(1, 9):
                 if getSuitsForTier(dept, testTier):
                     availableTiers.append(testTier)
 

@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from toontown.suit import SuitPlannerBase
 from direct.distributed import DistributedObject
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import *
 from toontown.dna.DNAParser import DNASuitPoint
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBase.SuitPlannerBase):
 
@@ -97,7 +99,7 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
         self.pathViz.attachNewNode(cn)
         adjacent = self.dnaStore.getAdjacentPoints(p)
         numPoints = adjacent.getNumPoints()
-        for i in xrange(numPoints):
+        for i in range(numPoints):
             qi = adjacent.getPointIndex(i)
             q = self.dnaStore.getSuitPointWithIndex(qi)
             pp = p.getPos()

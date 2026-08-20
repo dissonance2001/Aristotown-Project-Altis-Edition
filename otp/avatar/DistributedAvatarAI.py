@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from otp.otpbase import OTPGlobals
 from direct.fsm import ClassicFSM

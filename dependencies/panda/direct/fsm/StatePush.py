@@ -1,6 +1,7 @@
 # classes for event-driven programming
 # http://en.wikipedia.org/wiki/Event-driven_programming
 
+from __future__ import absolute_import
 __all__ = ['StateVar', 'FunctionCall', 'EnterExit', 'Pulse', 'EventPulse',
            'EventArgument', ]
 

@@ -4,6 +4,8 @@ See the :ref:`directwaitbar` page in the programming manual for a more
 in-depth explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
+import six
 __all__ = ['DirectWaitBar']
 
 from panda3d.core import *
@@ -14,7 +16,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = basestring
+    stringType = six.string_types
 
 """
 import DirectWaitBar

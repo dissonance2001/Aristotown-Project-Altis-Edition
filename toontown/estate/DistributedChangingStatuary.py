@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.estate import DistributedStatuary
 from toontown.estate import GardenGlobals
+from six.moves import range
 
 class DistributedChangingStatuary(DistributedStatuary.DistributedStatuary):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedChangingStatuary')
@@ -41,7 +43,7 @@ class DistributedChangingStatuary(DistributedStatuary.DistributedStatuary):
         if stage == -1:
             stage = len(growthThresholds)
         self.notify.debug('growth Stage=%d' % stage)
-        for index in xrange(len(growthThresholds) + 1):
+        for index in range(len(growthThresholds) + 1):
             if index != stage:
                 partName = '**/growthStage_%d' % index
                 self.notify.debug('trying to remove %s' % partName)

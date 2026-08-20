@@ -6,6 +6,8 @@ that immediately continues into Battle One.  No temporary Suit and no BossCog
 character are involved.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.interval.IntervalGlobal import Func, Parallel, Sequence, Wait
 
 from toontown.cutscene.AltisCutsceneCompat import (
@@ -187,7 +189,7 @@ class PacesetterIntroSetup(object):
                 else:
                     print('[Pacesetter CTSC] Pace Corner texture failed to load')
         except Exception as error:
-            print('[Pacesetter CTSC] Could not apply Pace Corner texture: %s' % error)
+            print(('[Pacesetter CTSC] Could not apply Pace Corner texture: %s' % error))
 
     def _prepareActors(self):
         self._fixPaceCornerSignTexture()

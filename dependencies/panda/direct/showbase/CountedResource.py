@@ -1,4 +1,5 @@
 
+from __future__ import print_function
 class CountedResource(object):
     """
     This class is an attempt to combine the RAIA idiom with reference

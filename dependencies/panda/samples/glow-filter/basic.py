@@ -3,6 +3,7 @@
 # Author: Kwasi Mensah (kmensah@andrew.cmu.edu)
 # Date: 7/25/2005
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Filename, Shader
 from panda3d.core import PandaNode, NodePath

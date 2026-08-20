@@ -1,4 +1,5 @@
-import urlparse
+from __future__ import absolute_import
+import six.moves.urllib.parse
 from direct.distributed.PyDatagram import *
 from otp.distributed.DistributedDirectoryAI import DistributedDirectoryAI
 from otp.distributed.OtpDoGlobals import *
@@ -26,7 +27,7 @@ class ToontownUberRepository(ToontownInternalRepository):
                 self.mongo = pymongo.MongoClient(url, replicaset=replicaset)
             else:
                 self.mongo = pymongo.MongoClient(url)
-            db = (urlparse.urlparse(url).path or '/test')[1:]
+            db = (six.moves.urllib.parse.urlparse(url).path or '/test')[1:]
             self.mongodb = self.mongo[db]
 
         self.notify.setInfo(True)

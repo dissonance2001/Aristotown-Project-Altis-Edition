@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.gui.DirectScrolledList import *
@@ -6,6 +7,7 @@ from toontown.estate import FireworkItemPanel
 from direct.directnotify import DirectNotifyGlobal
 from toontown.effects import FireworkGlobals
 from toontown.effects import Fireworks
+from six.moves import range
 NUM_ITEMS_SHOWN = 4
 
 class FireworksGui(DirectFrame):
@@ -79,7 +81,7 @@ class FireworksGui(DirectFrame):
 
     def __handleColor(self, index):
         color = Fireworks.colors[index]
-        for i in xrange(len(self.colorButtons)):
+        for i in range(len(self.colorButtons)):
             self.colorButtons[i][1]['geom_color'] = self.bgColor
             self.colorButtons[i][1].setScale(1)
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.suit import Suit
 from toontown.town import DGStreet
 from toontown.town import TownLoader

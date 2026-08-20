@@ -6,6 +6,7 @@
 # This tutorial shows how to load, play, and manipulate sounds
 # and sound intervals in a panda project.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import NodePath, TextNode
 from panda3d.core import PointLight, AmbientLight

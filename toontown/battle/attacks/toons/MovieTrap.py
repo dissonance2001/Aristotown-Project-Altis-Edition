@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -12,6 +13,7 @@ from toontown.battle import BattleParticles
 from toontown.battle import BattleProps
 from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle.attacks.toons.MovieSound import createSuitResetPosTrack
+from six.moves import range
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieTrap')
 
 def doTraps(traps):
@@ -30,11 +32,11 @@ def doTraps(traps):
         else:
             suitTrapsDict[suitId] = [trap]
 
-    suitTrapLists = suitTrapsDict.values()
+    suitTrapLists = list(suitTrapsDict.values())
     mtrack = Parallel()
     for trapList in suitTrapLists:
         trapPropList = []
-        for i in xrange(len(trapList)):
+        for i in range(len(trapList)):
             trap = trapList[i]
             level = trap['level']
             if level == 0:
@@ -74,7 +76,7 @@ def doTraps(traps):
                 mtrack.append(ival)
         else:
             subMtrack = Parallel()
-            for i in xrange(len(trapList)):
+            for i in range(len(trapList)):
                 trap = trapList[i]
                 trapProps = trapPropList[i]
                 ival = __doTrapLevel(trap, trapProps, explode=1)

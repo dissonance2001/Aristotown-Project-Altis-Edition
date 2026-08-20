@@ -67,6 +67,8 @@
 # OF THIS SOFTWARE.
 # --------------------------------------------------------------------
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = [
     # public symbols
     "Comment",
@@ -389,7 +391,7 @@ class _ElementInterface:
     # @defreturn list of strings
 
     def keys(self):
-        return self.attrib.keys()
+        return list(self.attrib.keys())
 
     ##
     # Gets element attributes, as a sequence.  The attributes are
@@ -399,7 +401,7 @@ class _ElementInterface:
     # @defreturn list of (string, string) tuples
 
     def items(self):
-        return self.attrib.items()
+        return list(self.attrib.items())
 
     ##
     # Creates a tree iterator.  The iterator loops over this element
@@ -667,7 +669,7 @@ class ElementTree:
         elif tag is ProcessingInstruction:
             file.write("<?%s?>" % _escape_cdata(node.text, encoding))
         else:
-            items = node.items()
+            items = list(node.items())
             xmlns_items = [] # new namespaces in this scope
             try:
                 if isinstance(tag, QName) or tag[:1] == "{":
@@ -942,7 +944,7 @@ class iterparse:
             return self
     except NameError:
         def __getitem__(self, index):
-            return self.next()
+            return next(self)
 
 ##
 # Parses an XML document from a string constant.  This function can

@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from panda3d.core import PNMImage, Filename, PNMFileTypeRegistry, StringStream
 import struct
+from six.moves import range
 
 
 class Icon:
@@ -233,7 +235,7 @@ class Icon:
 
         pngtype = PNMFileTypeRegistry.getGlobalPtr().getTypeFromExtension("png")
 
-        for size, image in sorted(self.images.items(), key=lambda item:item[0]):
+        for size, image in sorted(list(self.images.items()), key=lambda item:item[0]):
             if size in png_types and pngtype is not None:
                 stream = StringStream()
                 image.write(stream, "", pngtype)

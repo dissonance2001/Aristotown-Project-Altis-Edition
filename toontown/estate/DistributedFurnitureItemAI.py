@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedSmoothNodeAI import DistributedSmoothNodeAI
 from toontown.catalog import CatalogItem

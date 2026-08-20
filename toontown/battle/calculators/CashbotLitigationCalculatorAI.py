@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
 import random
 import math
+from six.moves import range
 
 class CashbotLitigationCalculatorAI:
 
@@ -40,7 +42,7 @@ class CashbotLitigationCalculatorAI:
 
     def calculateSuitAttacksCashbotLitigation(self):
             x = self.TurnsElapsed
-            for i in xrange(len(self.battle.activeSuits)):
+            for i in range(len(self.battle.activeSuits)):
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'racket':
                     if self.suitHasCondition(suitId, 'extortioncalculator') and not self.__suitCanAttack(suitId) and \
@@ -115,7 +117,7 @@ class CashbotLitigationCalculatorAI:
             #             if attack[SUIT_ATK_COL]:
             #                 self.battle.suitAttacks.append(attack)
 
-            for i in xrange(len(self.battle.activeSuits)):
+            for i in range(len(self.battle.activeSuits)):
                 suitId = self.battle.activeSuits[i].doId
                 # if self.battle.activeSuits[i].dna.name == 'payman':
                 #     if self.suitHasCondition(suitId, 'processcalculator') and not len(self.battle.activeSuits) > 1 and self.battle.activeSuits[i].currHP > 0 and self.__suitCanAttack(suitId):
@@ -202,7 +204,7 @@ class CashbotLitigationCalculatorAI:
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
 
-            for i in xrange(len(self.battle.activeSuits)):
+            for i in range(len(self.battle.activeSuits)):
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'racket':
                     if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId,

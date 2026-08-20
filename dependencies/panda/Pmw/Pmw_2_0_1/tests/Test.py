@@ -1,5 +1,7 @@
 # Functions used by widget tests.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import imp
 import os
 import re
@@ -10,6 +12,7 @@ import types
 import tkinter
 import _tkinter
 import inspect
+from six.moves import range
 
 def afterTk85():
     return tkinter.TkVersion > 8.5

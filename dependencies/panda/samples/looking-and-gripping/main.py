@@ -12,6 +12,7 @@
 # parenting an object to a hand joint, the object will stay in the character's
 # hand even if the hand is moving through an animation.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import AmbientLight, DirectionalLight
 from panda3d.core import TextNode, NodePath, LightAttrib

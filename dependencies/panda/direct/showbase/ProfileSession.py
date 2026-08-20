@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import absolute_import
 from panda3d.core import TrueClock
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.PythonUtil import (
@@ -11,7 +12,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import __builtin__ as builtins
+    import six.moves.builtins as builtins
 
 
 class PercentStats(pstats.Stats):

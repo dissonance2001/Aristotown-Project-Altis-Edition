@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toon import ToonDNA
 from direct.fsm import StateData
@@ -8,6 +9,7 @@ from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toontowngui import TeaserPanel
 from toontown.makeatoon import ShuffleButton
+from six.moves import range
 
 class BodyShop(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('BodyShop')
@@ -264,7 +266,7 @@ class BodyShop(StateData.StateData):
                (.3, 0, -.5), (.6, 0, -.5), (.9, 0, -.5), (1.2, 0, -.5)
               )
         
-        for x in xrange(len(ToonDNA.toonSpeciesTypes)):
+        for x in range(len(ToonDNA.toonSpeciesTypes)):
             name = TTLocalizer.AllSpecies[x]
             btn = DirectButton(relief = None, text_style = 3, image = (shuffleUp, shuffleDown, shuffleUp, shuffleDown), 
             image_scale = (0.6, 0.7, 0.7), image1_scale = (0.63, 0.7, 0.7), image2_scale = (0.63, 0.7, 0.7),

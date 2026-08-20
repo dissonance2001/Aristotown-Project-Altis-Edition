@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
 from toontown.minigame import Trajectory

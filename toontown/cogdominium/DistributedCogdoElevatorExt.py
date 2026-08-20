@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building.DistributedElevatorExt import DistributedElevatorExt
 
 class DistributedCogdoElevatorExt(DistributedElevatorExt):

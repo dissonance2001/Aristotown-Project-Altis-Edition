@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
+from six.moves import range
 
 class BlockoutBingo(BingoCardBase.BingoCardBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('BlockoutBingo')
@@ -10,7 +12,7 @@ class BlockoutBingo(BingoCardBase.BingoCardBase):
         self.gameType = BingoGlobals.BLOCKOUT_CARD
 
     def checkForWin(self, id = 0):
-        for i in xrange(self.rowSize):
+        for i in range(self.rowSize):
             if not self.rowCheck(i):
                 return BingoGlobals.NO_UPDATE
 

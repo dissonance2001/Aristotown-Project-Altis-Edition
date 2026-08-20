@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedCJElevatorAI
 from toontown.building import DistributedCountErclaimElevatorAI
 from toontown.building import FADoorCodes
@@ -8,6 +9,7 @@ from toontown.suit import DistributedLawbotBossAI
 from toontown.suit import DistributedCountErclaimBossAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class LawbotHQAI(CogHQAI.CogHQAI):
 
@@ -75,7 +77,7 @@ class LawbotHQAI(CogHQAI.CogHQAI):
             ToontownGlobals.LawbotStageIntD
         )
         mins = ToontownGlobals.FactoryLaffMinimums[2]
-        for i in xrange(len(destZones)):
+        for i in range(len(destZones)):
             lawOfficeElevator = DistributedLawOfficeElevatorExtAI(
                 self.air, self.air.lawOfficeMgr, destZones[i], i,
                 antiShuffle=0, minLaff=mins[i])

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import ActorInterval, Func, LerpPosInterval, Parallel, Sequence, Wait
 from panda3d.core import Point3
@@ -225,7 +227,7 @@ class ChainsawDeathSetup(object):
             scene.loop('laying')
             scene.hide()
         except Exception as error:
-            print('[Chainsaw Death CTSC] Could not preserve ending actor: %s' % error)
+            print(('[Chainsaw Death CTSC] Could not preserve ending actor: %s' % error))
 
     def _cleanup(self):
         self._snapshotEndingActor()

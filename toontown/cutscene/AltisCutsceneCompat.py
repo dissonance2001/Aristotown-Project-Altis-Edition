@@ -6,6 +6,8 @@ Panda3D Actor runtime.  Boss-specific actors, resources, positions, dialogue,
 and cleanup remain in each cutscene provider.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 
 from panda3d.core import Filename, VirtualFileSystem
@@ -131,8 +133,8 @@ def validateExistingSuitAnimations(actor, animNames, label,
             '%s %s existing animation validation failed:\n  %s' %
             (prefix, label, '\n  '.join(failures)))
 
-    print('%s Preserved Altis %s: %s' %
-          (prefix, label, ', '.join(sorted(validated))))
+    print(('%s Preserved Altis %s: %s' %
+          (prefix, label, ', '.join(sorted(validated)))))
 
 
 def loadAndValidateAdditionalAnimations(actor, animMap, label,
@@ -173,8 +175,8 @@ def loadAndValidateAdditionalAnimations(actor, animMap, label,
             '%s %s animation binding failed:\n  %s' %
             (prefix, label, '\n  '.join(failures)))
 
-    print('%s Added Clash %s: %s' %
-          (prefix, label, ', '.join(sorted(animMap.keys()))))
+    print(('%s Added Clash %s: %s' %
+          (prefix, label, ', '.join(sorted(animMap.keys())))))
 
 
 def cacheResolvedControls(actor, animNames, label,
@@ -197,8 +199,8 @@ def cacheResolvedControls(actor, animNames, label,
             '%s Could not cache exact %s controls:\n  %s' %
             (prefix, label, '\n  '.join(failures)))
 
-    print('%s Cached exact %s controls: %s' %
-          (prefix, label, ', '.join(sorted(controls.keys()))))
+    print(('%s Cached exact %s controls: %s' %
+          (prefix, label, ', '.join(sorted(controls.keys())))))
     return controls
 
 
@@ -251,8 +253,8 @@ def validateExistingMultipartAnimations(actor, animNames, label,
             '%s %s is missing required existing animations:\n  %s' %
             (prefix, label, '\n  '.join(failures)))
 
-    print('%s Validated multipart %s: %s' %
-          (prefix, label, ', '.join(validated)))
+    print(('%s Validated multipart %s: %s' %
+          (prefix, label, ', '.join(validated))))
 
 
 def configureSuitNametag(suit, visible=False):

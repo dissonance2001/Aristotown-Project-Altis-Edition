@@ -1,4 +1,5 @@
-import DistributedLawnDecor
+from __future__ import absolute_import
+from . import DistributedLawnDecor
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.ShowBase import *

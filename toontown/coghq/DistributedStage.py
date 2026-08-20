@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
@@ -12,6 +14,7 @@ from toontown.coghq import DistributedStageRoom, StageLayout, StageRoom
 import random
 from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
+from six.moves import range
 
 class DistributedStage(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStage')
@@ -118,7 +121,7 @@ class DistributedStage(DistributedObject.DistributedObject):
                     DistributedLevel.notify.warning('Invalid zone floor collision node: %s' % name)
                 else:
                     self.camEnterRoom(roomNum)
-                    print collEntry
+                    print(collEntry)
 
         self.accept('on-floor', handleCameraRayFloorCollision)
         if bboard.has('stageRoom'):
@@ -213,7 +216,7 @@ class DistributedStage(DistributedObject.DistributedObject):
         return
 
     def warpToRoom(self, roomId):
-        for i in xrange(len(self.rooms)):
+        for i in range(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break

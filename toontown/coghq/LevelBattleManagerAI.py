@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import BattleManagerAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import BattleExperienceAggregatorAI
@@ -15,7 +16,7 @@ class LevelBattleManagerAI(BattleManagerAI.BattleManagerAI):
         self.battleExpAggreg = battleExpAggreg
 
     def destroyBattleMgr(self):
-        battles = self.cellId2battle.values()
+        battles = list(self.cellId2battle.values())
         for battle in battles:
             self.destroy(battle)
 

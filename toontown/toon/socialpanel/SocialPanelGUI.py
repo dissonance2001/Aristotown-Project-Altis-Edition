@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from pandac.PandaModules import TextNode
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel
 from direct.gui import DirectGuiGlobals as DGG
 from direct.interval.IntervalGlobal import Sequence, LerpScaleInterval
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
+from six.moves import zip
 
 
 class SelectorButton(DirectFrame):

@@ -6,6 +6,7 @@
 # This project demonstrates how to use various types of
 # lighting
 #
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import PerspectiveLens
 from panda3d.core import NodePath

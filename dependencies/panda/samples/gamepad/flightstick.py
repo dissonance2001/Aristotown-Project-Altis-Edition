@@ -6,6 +6,8 @@ In this sample you can use a flight stick to control the camera and show some
 messages on screen.  You can accelerate using the throttle.
 '''
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode, InputDevice, loadPrcFileData, Vec3
 from direct.gui.OnscreenText import OnscreenText
@@ -75,7 +77,7 @@ class App(ShowBase):
         # We're only interested if this is a flight stick and we don't have a
         # flight stick yet.
         if device.device_class == InputDevice.DeviceClass.flight_stick and not self.flightStick:
-            print("Found %s" % (device))
+            print(("Found %s" % (device)))
             self.flightStick = device
 
             # Enable this device to ShowBase so that we can receive events.
@@ -93,7 +95,7 @@ class App(ShowBase):
             return
 
         # Tell ShowBase that the device is no longer needed.
-        print("Disconnected %s" % (device))
+        print(("Disconnected %s" % (device)))
         self.detachInputDevice(device)
         self.flightStick = None
 

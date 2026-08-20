@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownGlobals import *
 # [Holiday, Weekday]
 WEEKLY_HOLIDAYS = [

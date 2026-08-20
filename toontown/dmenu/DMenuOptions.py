@@ -4,6 +4,7 @@ Created on Apr 2, 2016
 @author: Drew
 '''
 
+from __future__ import absolute_import
 from decimal import Decimal
 from direct.fsm.FSM import FSM
 from direct.gui.DirectGui import *

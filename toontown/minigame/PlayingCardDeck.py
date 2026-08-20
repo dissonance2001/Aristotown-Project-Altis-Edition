@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 import random
 from toontown.minigame import PlayingCardGlobals
 from toontown.minigame.PlayingCard import PlayingCardBase
+from six.moves import range
 
 class PlayingCardDeck:
 
@@ -8,13 +10,13 @@ class PlayingCardDeck:
         self.shuffle()
 
     def shuffle(self):
-        self.cards = range(0, PlayingCardGlobals.MaxSuit * PlayingCardGlobals.MaxRank)
+        self.cards = list(range(0, PlayingCardGlobals.MaxSuit * PlayingCardGlobals.MaxRank))
         random.shuffle(self.cards)
 
     def shuffleWithSeed(self, seed):
         generator = random.Random()
         generator.seed(seed)
-        self.cards = range(0, PlayingCardGlobals.MaxSuit * PlayingCardGlobals.MaxRank)
+        self.cards = list(range(0, PlayingCardGlobals.MaxSuit * PlayingCardGlobals.MaxRank))
         generator.shuffle(self.cards)
 
     def dealCard(self):
@@ -22,7 +24,7 @@ class PlayingCardDeck:
 
     def dealCards(self, num):
         cardList = []
-        for i in xrange(num):
+        for i in range(num):
             cardList.append(self.cards.pop(0))
 
         return cardList

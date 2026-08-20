@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.level.DistributedLevel import DistributedLevel
 from otp.level import LevelConstants

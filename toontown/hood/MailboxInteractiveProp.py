@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.actor import Actor
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Sequence, Func

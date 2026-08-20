@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIMsgTypes import *
 TTAIMsgName2Id = {'DBSERVER_GET_ESTATE': 1040,
  'DBSERVER_GET_ESTATE_RESP': 1041,

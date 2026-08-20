@@ -1,4 +1,5 @@
-import cPickle
+from __future__ import absolute_import
+import six.moves.cPickle
 from toontown.coghq import CogDisguiseGlobals
 from toontown.coghq import FactoryEntityCreatorAI
 from toontown.coghq import FactorySpecs

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 from otp.avatar import DistributedAvatarAI
@@ -10,6 +11,7 @@ from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from toontown.building import PlutocratInstanceGlobals
 import random
+from six.moves import range
 
 
 class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
@@ -117,7 +119,7 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
             return []
         result = []
         living = [suit for suit in self.activeSuits if suit.getHP() > 0]
-        for unused in xrange(count):
+        for unused in range(count):
             if len(living) + len(self.reserveSuits) >= self.battle.maxSuits:
                 break
             actualLevel = random.randint(12, 15)

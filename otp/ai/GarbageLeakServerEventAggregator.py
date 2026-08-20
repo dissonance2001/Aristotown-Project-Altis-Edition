@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase import GarbageReport
+import six
 
 class GarbageLeakServerEventAggregator(DirectObject):
 
@@ -31,7 +33,7 @@ class GarbageLeakServerEventAggregator(DirectObject):
         self._doLaterName = None
 
     def _sendLeaks(self, task = None):
-        for desc, curNum in self._curLeakDesc2num.iteritems():
+        for desc, curNum in six.iteritems(self._curLeakDesc2num):
             self._sentLeakDesc2num.setdefault(desc, 0)
             num = curNum - self._sentLeakDesc2num[desc]
             if num > 0:

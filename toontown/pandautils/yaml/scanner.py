@@ -24,10 +24,14 @@
 # Read comments in the Scanner code for more details.
 #
 
+from __future__ import absolute_import
+from six import unichr
+import six
+from six.moves import range
 __all__ = ['Scanner', 'ScannerError']
 
-from error import MarkedYAMLError
-from tokens import *
+from .error import MarkedYAMLError
+from .tokens import *
 
 class ScannerError(MarkedYAMLError):
     pass
@@ -1423,8 +1427,8 @@ class Scanner(object):
             bytes.append(chr(int(self.prefix(2), 16)))
             self.forward(2)
         try:
-            value = unicode(''.join(bytes), 'utf-8')
-        except UnicodeDecodeError, exc:
+            value = six.text_type(''.join(bytes), 'utf-8')
+        except UnicodeDecodeError as exc:
             raise ScannerError("while scanning a %s" % name, start_mark, str(exc), mark)
         return value
 

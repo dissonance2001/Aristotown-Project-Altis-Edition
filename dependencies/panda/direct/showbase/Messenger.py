@@ -2,6 +2,8 @@
 event handling that happens on the Python side.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['Messenger']
 
 
@@ -317,7 +319,7 @@ class Messenger:
             if not acceptorDict:
                 if __debug__:
                     if foundWatch:
-                        print("Messenger: \"%s\" was sent, but no function in Python listened."%(event,))
+                        print(("Messenger: \"%s\" was sent, but no function in Python listened."%(event,)))
                 return
 
             if taskChain:
@@ -399,10 +401,10 @@ class Messenger:
 
                 if __debug__:
                     if foundWatch:
-                        print("Messenger: \"%s\" --> %s%s"%(
+                        print(("Messenger: \"%s\" --> %s%s"%(
                             event,
                             self.__methodRepr(method),
-                            tuple(extraArgs + sentArgs)))
+                            tuple(extraArgs + sentArgs))))
 
                 #print "Messenger: \"%s\" --> %s%s"%(
                 #            event,
@@ -476,8 +478,8 @@ class Messenger:
         isVerbose = 1 - Messenger.notify.getDebug()
         Messenger.notify.setDebug(isVerbose)
         if isVerbose:
-            print("Verbose mode true.  quiet list = %s"%(
-                list(self.quieting.keys()),))
+            print(("Verbose mode true.  quiet list = %s"%(
+                list(self.quieting.keys()),)))
 
     if __debug__:
         def watch(self, needle):

@@ -1,5 +1,6 @@
 """FunctionInterval module: contains the FunctionInterval class"""
 
+from __future__ import absolute_import
 __all__ = ['FunctionInterval', 'EventInterval', 'AcceptInterval', 'IgnoreInterval', 'ParentInterval', 'WrtParentInterval', 'PosInterval', 'HprInterval', 'ScaleInterval', 'PosHprInterval', 'HprScaleInterval', 'PosHprScaleInterval', 'Func', 'Wait']
 
 from panda3d.core import *

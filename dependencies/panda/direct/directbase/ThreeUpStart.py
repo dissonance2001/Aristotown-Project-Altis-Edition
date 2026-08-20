@@ -1,4 +1,6 @@
 
+from __future__ import absolute_import
+from __future__ import print_function
 print('ThreeUpStart: Starting up environment.')
 
 from panda3d.core import *

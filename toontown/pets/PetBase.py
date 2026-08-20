@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.pets.PetConstants import AnimMoods
 from toontown.pets import PetMood
 

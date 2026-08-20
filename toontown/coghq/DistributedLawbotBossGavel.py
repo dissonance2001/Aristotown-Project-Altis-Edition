@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -10,6 +11,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from direct.actor import Actor
+from six.moves import range
 
 class DistributedLawbotBossGavel(DistributedObject.DistributedObject, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotBossGavel')
@@ -135,7 +137,7 @@ class DistributedLawbotBossGavel(DistributedObject.DistributedObject, FSM.FSM):
         seqName = 'LawbotBossGavel-%s' % self.doId
         self.ival = Sequence(name=seqName)
         downAngle = -80
-        for index in xrange(len(myHeadings)):
+        for index in range(len(myHeadings)):
             nextIndex = index + 1
             if nextIndex == len(myHeadings):
                 nextIndex = 0

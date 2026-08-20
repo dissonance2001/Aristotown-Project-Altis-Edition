@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/tests/combobox.test code.
 
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw

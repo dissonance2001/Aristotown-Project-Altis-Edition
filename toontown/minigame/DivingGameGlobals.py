@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 
 ENDLESS_GAME = config.GetBool('endless-maze-game', 0)

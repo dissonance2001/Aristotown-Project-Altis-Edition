@@ -15,10 +15,12 @@ Monash Medical Centre
 Clayton. VIC Australia
 """
 
+from __future__ import absolute_import
 import sys
 import tkinter
 import Pmw
 import time
+from six.moves import range
 
 
 if sys.platform == 'win32':

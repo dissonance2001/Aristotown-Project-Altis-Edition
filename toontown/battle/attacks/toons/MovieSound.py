@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -11,6 +12,7 @@ from toontown.battle import MovieUtil
 from toontown.battle.attacks.toons import MovieNPCSOS
 
 from toontown.toonbase import ToontownBattleGlobals
+from six.moves import range
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
 soundFiles = (
     'AA_sound_kazoo.ogg', 'AA_sound_bikehorn.ogg', 'AA_sound_whistle.ogg', 'AA_sound_bugle.ogg', 'AA_sound_aoogah.ogg',
@@ -39,7 +41,7 @@ def doSounds(sounds):
     prevLevel = 0
     soundHitsCount = 0
     prevSounds = {}
-    for i in xrange(MAX_LEVEL_INDEX + 1):
+    for i in range(MAX_LEVEL_INDEX + 1):
         prevSounds[i] = []
     for sound in sounds:
         level = sound['level']

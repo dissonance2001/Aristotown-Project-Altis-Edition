@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from otp.ai.MagicWordGlobal import *
 from direct.task import Task

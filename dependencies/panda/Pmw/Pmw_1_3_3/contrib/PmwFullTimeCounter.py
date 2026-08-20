@@ -1,10 +1,13 @@
 # Authors: Joe VanAndel, Greg McFarlane and Daniel Michelson
 
+from __future__ import absolute_import
+from __future__ import print_function
 import string
 import sys
 import time
-import Tkinter
+import six.moves.tkinter
 import Pmw
+from six.moves import range
 
 class FullTimeCounter(Pmw.MegaWidget):
     """Up-down counter
@@ -64,7 +67,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	else:
 	    frame = self.createcomponent('frame',
 		    (), None,
-		    Tkinter.Frame, (interior,))
+		    six.moves.tkinter.Frame, (interior,))
 	    frame.grid(column=2, row=2, sticky='nsew')
 	    interior.grid_columnconfigure(2, weight=1)
 	    interior.grid_rowconfigure(2, weight=1)
@@ -76,7 +79,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the year down arrow.
 	self._downYearArrowBtn = self.createcomponent('downyeararrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._downYearArrowBtn] = 0
 	self._downYearArrowBtn.grid(column = 0, row = 2)
@@ -84,7 +87,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the month down arrow.
 	self._downMonthArrowBtn = self.createcomponent('downmontharrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._downMonthArrowBtn] = 0
 	self._downMonthArrowBtn.grid(column = 1, row = 2)
@@ -92,7 +95,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the day down arrow.
 	self._downDayArrowBtn = self.createcomponent('downdayarrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._downDayArrowBtn] = 0
 	self._downDayArrowBtn.grid(column = 2, row = 2)
@@ -100,7 +103,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the hour down arrow.
 	self._downHourArrowBtn = self.createcomponent('downhourarrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._downHourArrowBtn] = 0
 	self._downHourArrowBtn.grid(column = 3, row = 2)
@@ -108,7 +111,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the minute down arrow.
 	self._downMinuteArrowBtn = self.createcomponent('downminutearrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._downMinuteArrowBtn] = 0
 	self._downMinuteArrowBtn.grid(column = 4, row = 2)
@@ -150,7 +153,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the year up arrow.
 	self._upYearArrowBtn = self.createcomponent('upyeararrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._upYearArrowBtn] = 1
 	self._upYearArrowBtn.grid(column = 0, row = 0)
@@ -158,7 +161,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the month up arrow.
 	self._upMonthArrowBtn = self.createcomponent('upmontharrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._upMonthArrowBtn] = 1
 	self._upMonthArrowBtn.grid(column = 1, row = 0)
@@ -166,7 +169,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the day up arrow.
 	self._upDayArrowBtn = self.createcomponent('updayarrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._upDayArrowBtn] = 1
 	self._upDayArrowBtn.grid(column = 2, row = 0)
@@ -174,7 +177,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the hour up arrow.
 	self._upHourArrowBtn = self.createcomponent('uphourarrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._upHourArrowBtn] = 1
 	self._upHourArrowBtn.grid(column = 3, row = 0)
@@ -182,7 +185,7 @@ class FullTimeCounter(Pmw.MegaWidget):
 	# Create the minute up arrow.
 	self._upMinuteArrowBtn = self.createcomponent('upminutearrow',
 		(), 'Arrow',
-		Tkinter.Canvas, (frame,),
+		six.moves.tkinter.Canvas, (frame,),
 		width = 16, height = 16, relief = 'raised', borderwidth = 2)
     	self.arrowDirection[self._upMinuteArrowBtn] = 1
 	self._upMinuteArrowBtn.grid(column = 4, row = 0)
@@ -371,7 +374,7 @@ class FullTimeCounter(Pmw.MegaWidget):
     def _setTimeFromStr(self, str):
         list = string.split(str, ':')
 	if len(list) != 5:
-	    raise ValueError, 'invalid value: ' + str
+	    raise ValueError('invalid value: ' + str)
 
 	self._year = string.atoi(list[0])
 	self._month = string.atoi(list[1])
@@ -473,13 +476,13 @@ if __name__=="__main__":
 
     def showString():
         stringVal = _time.getstring()
-        print stringVal
+        print(stringVal)
 
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title('FullTimeCounter')
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
 
     _time = FullTimeCounter(root,
@@ -487,6 +490,6 @@ if __name__=="__main__":
             label_text = 'YYYY:MM:DD:HH:mm')
     _time.pack(fill = 'both', expand = 1, padx=10, pady=5)
 
-    button = Tkinter.Button(root, text = 'Show', command = showString)
+    button = six.moves.tkinter.Button(root, text = 'Show', command = showString)
     button.pack()
     root.mainloop()

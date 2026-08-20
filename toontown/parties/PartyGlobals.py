@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import BitMask32
 from pandac.PandaModules import Point3, VBase4
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 KICK_TO_PLAYGROUND_EVENT = 'parties_kickToPlayground'
 MaxSetInvites = 1000
@@ -651,9 +654,9 @@ for type in DropObjectTypes:
     Name2DropObjectType[type.name] = type
 
 Name2DOTypeId = {}
-names = Name2DropObjectType.keys()
+names = list(Name2DropObjectType.keys())
 names.sort()
-for i in xrange(len(names)):
+for i in range(len(names)):
     Name2DOTypeId[names[i]] = i
 
 DOTypeId2Name = names
@@ -818,12 +821,12 @@ def countMusic():
     for key in PhaseToMusicData:
         numMusic += len(PhaseToMusicData[key])
 
-    print 'PhaseToMusicData %d' % numMusic
+    print('PhaseToMusicData %d' % numMusic)
     numMusic = 0
     for key in PhaseToMusicData40:
         numMusic += len(PhaseToMusicData40[key])
 
-    print 'PhaseToMusicData40 %d' % numMusic
+    print('PhaseToMusicData40 %d' % numMusic)
 
 
 def getMusicRepeatTimes(length, minLength = MUSIC_MIN_LENGTH_SECONDS):

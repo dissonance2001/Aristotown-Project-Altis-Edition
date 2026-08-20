@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import *
 import random
@@ -7,6 +8,7 @@ from toontown.toonbase import ToontownBattleGlobals
 
 
 from toontown.battle import BattleParticles
+from six.moves import range
 
 
 try:
@@ -179,13 +181,13 @@ def doEffect(textId, speakingToon, nearbyToons):
         invModel.flattenLight()
         icons = []
         if itemValue != -1:
-            for item in xrange(6):
+            for item in range(6):
                 iconName = ToontownBattleGlobals.AvPropsNew[itemValue][item]
                 icons.append(invModel.find('**/%s' % iconName))
         else:
-            tracks = range(8)
+            tracks = list(range(8))
             random.shuffle(tracks)
-            for i in xrange(6):
+            for i in range(6):
                 track = tracks[i]
                 item = random.randint(0, 5)
                 iconName = ToontownBattleGlobals.AvPropsNew[track][item]

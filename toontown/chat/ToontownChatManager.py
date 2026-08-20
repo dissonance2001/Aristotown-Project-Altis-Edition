@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import sys
 from direct.showbase import DirectObject
 from toontown.toonbase.ToonPythonUtil import traceFunctionCall
@@ -10,11 +11,12 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.chat import ChatManager
-from TTChatInputSpeedChat import TTChatInputSpeedChat
-from TTChatInputUnites import TTChatInputUnites
-from TTChatInputNormal import TTChatInputNormal
-from TTChatInputWhiteList import TTChatInputWhiteList
+from .TTChatInputSpeedChat import TTChatInputSpeedChat
+from .TTChatInputUnites import TTChatInputUnites
+from .TTChatInputNormal import TTChatInputNormal
+from .TTChatInputWhiteList import TTChatInputWhiteList
 from toontown.toon.AltisCommandShortcuts import translateCommandText
+import six
 
 class HackedDirectRadioButton(DirectCheckButton):
 
@@ -473,14 +475,14 @@ class ToontownChatManager(ChatManager.ChatManager):
             try:
                 objects = base.cr.getObjectsOfExactClass(DistributedToon)
                 try:
-                    iterator = objects.itervalues()
+                    iterator = six.itervalues(objects)
                 except:
-                    iterator = objects.values()
+                    iterator = list(objects.values())
             except:
                 try:
-                    iterator = base.cr.doId2do.itervalues()
+                    iterator = six.itervalues(base.cr.doId2do)
                 except:
-                    iterator = base.cr.doId2do.values()
+                    iterator = list(base.cr.doId2do.values())
 
             for toon in iterator:
                 if toon is None or toon is getattr(base, 'localAvatar', None):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone.TrolleyConstants import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObjectAI
@@ -13,6 +14,7 @@ from toontown.minigame import MinigameCreatorAI
 from toontown.quest import Quests
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
+from six.moves import range
 
 class DistributedPicnicBasketAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPicnicBasketAI')
@@ -42,12 +44,12 @@ class DistributedPicnicBasketAI(DistributedObjectAI.DistributedObjectAI):
         DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def findAvailableSeat(self):
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             if self.seats[i] is None:
                 return i
 
     def findAvatar(self, avId):
-        for i in xrange(len(self.seats)):
+        for i in range(len(self.seats)):
             if self.seats[i] == avId:
                 return i
 
@@ -179,7 +181,7 @@ class DistributedPicnicBasketAI(DistributedObjectAI.DistributedObjectAI):
     def enterOff(self):
         self.accepting = 0
         if hasattr(self, 'doId'):
-            for seatIndex in xrange(4):
+            for seatIndex in range(4):
                 taskMgr.remove(self.uniqueName('clearEmpty-' + str(seatIndex)))
 
     def exitOff(self):
@@ -215,7 +217,7 @@ class DistributedPicnicBasketAI(DistributedObjectAI.DistributedObjectAI):
     def timeToGoTask(self, task):
         self.accepting = 0
         if self.countFullSeats() > 0:
-            for x in xrange(len(self.seats)):
+            for x in range(len(self.seats)):
                 if not self.seats[x] == None:
                     self.sendUpdateToAvatarId(self.seats[x], 'setPicnicDone', [])
                     self.acceptExiter(self.seats[x])

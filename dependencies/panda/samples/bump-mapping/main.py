@@ -7,6 +7,7 @@
 # This is a tutorial to show how to do normal mapping
 # in panda3d using the Shader Generator.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import loadPrcFileData
 from panda3d.core import WindowProperties

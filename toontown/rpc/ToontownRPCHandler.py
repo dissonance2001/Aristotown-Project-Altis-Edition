@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import datetime
 from direct.distributed.MsgTypes import CLIENTAGENT_EJECT
 from direct.distributed.PyDatagram import PyDatagram
@@ -235,7 +236,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             [int accountId] = The ID of the account to send the message to.
             [str message] = The message to send.
         """
-        channel = accountId + (1003L<<32)
+        channel = accountId + (1003<<32)
         self.rpc_messageChannel(channel, message)
 
     @rpcmethod(accessLevel=MODERATOR)
@@ -249,7 +250,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             [int avId] = The ID of the avatar to send the message to.
             [str message] = The message to send.
         """
-        channel = avId + (1001L<<32)
+        channel = avId + (1001<<32)
         self.rpc_messageChannel(channel, message)
 
     # --- KICKS ---
@@ -325,7 +326,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             [int code] = The code for the kick.
             [str reason] = The reason for the kick.
         """
-        channel = accountId + (1003L<<32)
+        channel = accountId + (1003<<32)
         self.rpc_kickChannel(channel, code, reason)
 
     @rpcmethod(accessLevel=MODERATOR)
@@ -338,7 +339,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             [int code] = The code for the kick.
             [str reason] = The reason for the kick.
         """
-        channel = avId + (1001L<<32)
+        channel = avId + (1001<<32)
         self.rpc_kickChannel(channel, code, reason)
 
     # --- BANS ---

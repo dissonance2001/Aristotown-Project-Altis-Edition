@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from direct.gui.DirectGui import DirectFrame, DirectButton
 from direct.gui import DirectGuiGlobals as DGG

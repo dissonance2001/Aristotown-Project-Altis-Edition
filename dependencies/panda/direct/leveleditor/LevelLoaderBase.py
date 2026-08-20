@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import imp
 
 class LevelLoaderBase:
@@ -33,5 +35,5 @@ class LevelLoaderBase:
             module = imp.load_module(fileName, file, pathname, description)
             return True
         except:
-            print('failed to load %s'%fileName)
+            print(('failed to load %s'%fileName))
             return None

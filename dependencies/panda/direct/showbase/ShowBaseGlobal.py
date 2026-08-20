@@ -6,6 +6,7 @@ Note that you cannot directly import `base` from this module since ShowBase
 may not have been created yet; instead, ShowBase dynamically adds itself to
 this module's scope when instantiated."""
 
+from __future__ import absolute_import
 __all__ = []
 
 from .ShowBase import ShowBase, WindowControls
@@ -54,7 +55,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import __builtin__ as builtins
+    import six.moves.builtins as builtins
 builtins.inspect = inspect
 del sys
 

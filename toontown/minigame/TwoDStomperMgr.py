@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
 from toontown.minigame import ToonBlitzGlobals
 from toontown.minigame import TwoDStomper
+from six.moves import range
 
 class TwoDStomperMgr(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDStomperMgr')
@@ -26,7 +28,7 @@ class TwoDStomperMgr(DirectObject):
             self.stompersNP = NodePath('Stompers')
             self.stompersNP.reparentTo(self.section.sectionNP)
         self.stompers = []
-        for index in xrange(len(self.stomperList)):
+        for index in range(len(self.stomperList)):
             stomperAttribs = self.stomperList[index]
             self.createNewStomper(stomperAttribs)
 

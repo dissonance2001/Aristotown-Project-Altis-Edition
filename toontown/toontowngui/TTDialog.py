@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.otpgui.OTPDialog import *
 from direct.interval.IntervalGlobal import *
 

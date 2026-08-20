@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase import PythonUtil
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT

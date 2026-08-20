@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.CachedDOData import CachedDOData
 from panda3d.core import ConfigVariableInt
 

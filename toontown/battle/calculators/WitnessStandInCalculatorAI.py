@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
 import random
 import math
+from six.moves import range
 
 class WitnessStandInCalculatorAI:
 
@@ -42,7 +44,7 @@ class WitnessStandInCalculatorAI:
         x = self.TurnsElapsed
 
             # Primary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'wsi': #witness stand-in
                 if (self.suitHasCondition(suitId, 'soakedcalculator') and not (x % 3 == 0)) or (x + 2) % 3 == 0 and len(self.battle.activeSuits) >= 6  and not self.calculator.deadSuits >= 4 and self.__suitCanAttack(suitId):

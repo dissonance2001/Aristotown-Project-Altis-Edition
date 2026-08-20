@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.minigame.DistributedMinigame import *
@@ -26,6 +28,8 @@ from toontown.minigame.CatchGameGlobals import DropObjectTypes
 from toontown.minigame.CatchGameGlobals import Name2DropObjectType
 from toontown.minigame.DropPlacer import *
 from toontown.minigame.DropScheduler import *
+from six.moves import range
+from functools import reduce
 
 class DistributedCatchGame(DistributedMinigame):
     DropTaskName = 'dropSomething'
@@ -207,7 +211,7 @@ class DistributedCatchGame(DistributedMinigame):
         self.DropPeriod /= scaledNumPlayers
         typeProbs = {'fruit': 3,
          'anvil': 1}
-        probSum = reduce(lambda x, y: x + y, typeProbs.values())
+        probSum = reduce(lambda x, y: x + y, list(typeProbs.values()))
         for key in typeProbs.keys():
             typeProbs[key] = float(typeProbs[key]) / probSum
 
@@ -287,7 +291,7 @@ class DistributedCatchGame(DistributedMinigame):
          Toon.Toon(),
          Toon.Toon(),
          Toon.Toon()]
-        for i in xrange(len(self.posts)):
+        for i in range(len(self.posts)):
             toon = self.posts[i]
             toon.setDNA(base.localAvatar.getStyle())
             toon.reparentTo(render)
@@ -309,12 +313,12 @@ class DistributedCatchGame(DistributedMinigame):
     def showDropGrid(self):
         self.hideDropGrid()
         self.dropMarkers = []
-        print 'dropRows: %s' % self.DropRows
-        print 'dropCols: %s' % self.DropColumns
-        for row in xrange(self.DropRows):
+        print('dropRows: %s' % self.DropRows)
+        print('dropCols: %s' % self.DropColumns)
+        for row in range(self.DropRows):
             self.dropMarkers.append([])
             rowList = self.dropMarkers[row]
-            for column in xrange(self.DropColumns):
+            for column in range(self.DropColumns):
                 toon = Toon.Toon()
                 toon.setDNA(base.localAvatar.getStyle())
                 toon.reparentTo(render)
@@ -481,7 +485,7 @@ class DistributedCatchGame(DistributedMinigame):
 
         self.scores = [0] * self.numPlayers
         spacing = 0.4
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)

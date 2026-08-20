@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 import random
 from direct.distributed import ClockDelta
 from direct.task import Task
+from six.moves import range
 
 class LaserGameBase:
 
@@ -28,7 +30,7 @@ class LaserGameBase:
 
     def blankGrid(self):
         self.gridData = []
-        for i in xrange(0, self.gridNumX):
+        for i in range(0, self.gridNumX):
             self.gridData.append([
                 0] * self.gridNumY)
 

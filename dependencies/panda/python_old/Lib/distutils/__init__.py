@@ -1,0 +1,14 @@
+"""distutils
+
+The main package for the Python Module Distribution Utilities.  Normally
+used from a setup script as
+
+   from distutils.core import setup
+
+   setup (...)
+"""
+
+from __future__ import absolute_import
+import sys
+
+__version__ = sys.version[:sys.version.index(' ')]

@@ -5,6 +5,8 @@ Calling the :func:`register()` function to register the import hooks should be
 sufficient to enable this functionality.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['register', 'sharedPackages',
            'reloadSharedPackage', 'reloadSharedPackages']
 
@@ -455,7 +457,7 @@ class VFSSharedLoader:
                 mod = loader.load_module(fullname, loadingShared = True)
             except ImportError:
                 etype, evalue, etraceback = sys.exc_info()
-                print("%s on %s: %s" % (etype.__name__, fullname, evalue))
+                print(("%s on %s: %s" % (etype.__name__, fullname, evalue)))
                 if not message:
                     message = '%s: %s' % (fullname, evalue)
                 continue

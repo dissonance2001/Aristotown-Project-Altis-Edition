@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import ClassicFSM, State
 from toontown.toonbase.ToontownGlobals import OptionsPageHotkey
 from toontown.toontowngui import TTDialog

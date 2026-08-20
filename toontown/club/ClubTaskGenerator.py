@@ -9,11 +9,13 @@ Altis does not contain Clash's Quest3 runtime, so the generated objective pool
 uses the Club progress events already emitted by Altis gameplay systems.
 """
 
+from __future__ import absolute_import
 import math
 import random
 import time
 
 from toontown.club import ClubTaskPricing
+from six.moves import range
 
 
 TASK_VERSION = 2

@@ -48,7 +48,11 @@
 #
 ########################################################################
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os, sys, parser, symbol, token, re
+from six.moves import map
+from six.moves import range
 
 ########################################################################
 #
@@ -195,8 +199,8 @@ class InterrogateTokenizer:
             neg = 1
             self.pos += 1
         if (self.data[self.pos].isdigit()==0):
-            print("File position " + str(self.pos))
-            print("Text: " + self.data[self.pos:self.pos+50])
+            print(("File position " + str(self.pos)))
+            print(("Text: " + self.data[self.pos:self.pos+50]))
             sys.exit("Syntax error in interrogate file format 0")
         value = 0
         while (self.data[self.pos].isdigit()):
@@ -344,16 +348,16 @@ def printTree(tree, indent):
         if tree[0] in symbol.sym_name:
             for i in range(len(tree)):
                 if (i==0):
-                    print(spacing + "(symbol." + symbol.sym_name[tree[0]] + ",")
+                    print((spacing + "(symbol." + symbol.sym_name[tree[0]] + ","))
                 else:
                     printTree(tree[i], indent+1)
-            print(spacing + "),")
+            print((spacing + "),"))
         elif tree[0] in token.tok_name:
-            print(spacing + "(token." + token.tok_name[tree[0]] + ", '" + tree[1] + "'),")
+            print((spacing + "(token." + token.tok_name[tree[0]] + ", '" + tree[1] + "'),"))
         else:
-            print(spacing + str(tree))
+            print((spacing + str(tree)))
     else:
-        print(spacing + str(tree))
+        print((spacing + str(tree)))
 
 
 COMPOUND_STMT_PATTERN = (
@@ -455,7 +459,7 @@ class ParseTreeInfo:
                     if found:
                         self.docstring = vars["docstring"]
             except:
-                print("CAUTION --- Parse failed: " + name)
+                print(("CAUTION --- Parse failed: " + name))
         if isinstance(tree, tuple):
             self.extract_info(tree)
 
@@ -968,9 +972,9 @@ def expandImports(indirlist, directdirlist, fixdirlist):
                 varExports = code.getVarExports(module)
                 if (len(typeExports)+len(funcExports)+len(varExports)==0):
                     result.append(line)
-                    print(fixfile + " : " + module + " : no exports")
+                    print((fixfile + " : " + module + " : no exports"))
                 else:
-                    print(fixfile + " : " + module + " : repairing")
+                    print((fixfile + " : " + module + " : repairing"))
                     for x in funcExports:
                         fn = code.getFunctionName(x)
                         if fn in used:

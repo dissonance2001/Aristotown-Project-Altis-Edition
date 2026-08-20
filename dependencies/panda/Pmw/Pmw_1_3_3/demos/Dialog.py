@@ -1,28 +1,30 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.Dialog demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
 	# Create two buttons to launch the dialog.
-	w = Tkinter.Button(parent, text = 'Show application modal dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Show application modal dialog',
 	        command = self.showAppModal)
 	w.pack(padx = 8, pady = 8)
 
-	w = Tkinter.Button(parent, text = 'Show global modal dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Show global modal dialog',
 	        command = self.showGlobalModal)
 	w.pack(padx = 8, pady = 8)
 
-	w = Tkinter.Button(parent, text = 'Show dialog with "no grab"',
+	w = six.moves.tkinter.Button(parent, text = 'Show dialog with "no grab"',
 	        command = self.showDialogNoGrab)
 	w.pack(padx = 8, pady = 8)
 
-	w = Tkinter.Button(parent, text =
+	w = six.moves.tkinter.Button(parent, text =
                     'Show toplevel window which\n' +
                     'will not get a busy cursor',
 	        command = self.showExcludedWindow)
@@ -37,7 +39,7 @@ class Demo:
 	self.dialog.withdraw()
 
 	# Add some contents to the dialog.
-	w = Tkinter.Label(self.dialog.interior(),
+	w = six.moves.tkinter.Label(self.dialog.interior(),
 	    text = 'Pmw Dialog\n(put your widgets here)',
 	    background = 'black',
 	    foreground = 'white',
@@ -71,7 +73,7 @@ class Demo:
         self.excluded.show()
 
     def execute(self, result):
-	print 'You clicked on', result
+	print('You clicked on', result)
 	if result not in ('Apply', 'Help'):
 	    self.dialog.deactivate(result)
 
@@ -79,11 +81,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

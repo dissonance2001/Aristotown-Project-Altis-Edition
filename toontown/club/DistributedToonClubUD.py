@@ -1,4 +1,6 @@
-import cPickle
+from __future__ import absolute_import
+from __future__ import print_function
+import six.moves.cPickle
 import json
 import os
 import random
@@ -34,7 +36,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         self.nextClubId = 100000
         self._load()
         self.groupManager = DistributedGroupManagerUD(self)
-        print '[Clubs] Persistent Club service loaded (%s Clubs).' % len(self.clubs)
+        print('[Clubs] Persistent Club service loaded (%s Clubs).' % len(self.clubs))
 
     def groupHeartbeat(self, avName, zoneId):
         self.groupManager.heartbeat(avName, zoneId)
@@ -290,7 +292,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             if not dclass:
                 return
             boosters = self._getClubRewardBoosters(self._clubForAv(avId))
-            data = cPickle.dumps(boosters, 1)
+            data = six.moves.cPickle.dumps(boosters, 1)
             try:
                 current = fields.get('setClubBoosters', [None])[0]
             except:

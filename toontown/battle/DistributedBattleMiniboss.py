@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import random
 from panda3d.core import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track
@@ -27,6 +29,7 @@ from toontown.suit.DistributedVideographerBoss import DistributedVideographerBos
 from toontown.suit.DistributedSellbotBossMini import DistributedSellbotBossMini
 from direct.interval.IntervalGlobal import *
 from direct.particles import ParticleEffect
+from six.moves import range
 
 class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleMiniboss')
@@ -147,7 +150,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     except:
                         pass
 
-        print '[Pacesetter] Finalized lethal round confirmed before Movie.play(): forcing x1'
+        print('[Pacesetter] Finalized lethal round confirmed before Movie.play(): forcing x1')
 
     def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks):
         result = DistributedBattleFinal.DistributedBattleFinal.setMovie(
@@ -279,7 +282,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             speed = 1.0
         else:
             speed = pacesetterTimescale
-            print '[Pacesetter] Reserve Cog arrival timescale: x%s' % speed
+            print('[Pacesetter] Reserve Cog arrival timescale: x%s' % speed)
 
         suitTracks = Parallel()
         delay = 0

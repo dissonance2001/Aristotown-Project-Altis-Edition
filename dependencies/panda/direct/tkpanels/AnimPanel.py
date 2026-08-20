@@ -1,5 +1,7 @@
 """DIRECT Animation Control Panel"""
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['AnimPanel', 'ActorControl']
 
 
@@ -17,8 +19,8 @@ if sys.version_info >= (3, 0):
     from tkinter.simpledialog import askfloat
     from tkinter.filedialog import askopenfilename
 else:
-    from tkSimpleDialog import askfloat
-    from tkFileDialog import askopenfilename
+    from six.moves.tkinter_tksimpledialog import askfloat
+    from six.moves.tkinter_filedialog import askopenfilename
 
 
 FRAMES = 0
@@ -207,7 +209,7 @@ class AnimPanel(AppShell):
         self.actorControlList = []
         for actor in self['actorList']:
             anims = actor.getAnimNames()
-            print("actor animnames: %s"%anims)
+            print(("actor animnames: %s"%anims))
             topAnims = []
             if 'neutral' in anims:
                 i = anims.index('neutral')

@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 import random
 from toontown.catalog import CatalogAtticItem
 from toontown.catalog import CatalogItem
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 FTModelName = 0
 FTColor = 1
@@ -1076,7 +1078,7 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
         self.applyColor(model, type[FTColor])
         if type[FTColorOptions] != None:
             if self.colorOption == None:
-                option = random.choice(type[FTColorOptions].values())
+                option = random.choice(list(type[FTColorOptions].values()))
             else:
                 option = type[FTColorOptions].get(self.colorOption)
             self.applyColor(model, option)
@@ -1188,7 +1190,7 @@ def getMaxTrunks():
 def getAllFurnitures(index):
     list = []
     colors = FurnitureTypes[index][FTColorOptions]
-    for n in xrange(len(colors)):
+    for n in range(len(colors)):
         list.append(CatalogFurnitureItem(index, n))
 
     return list

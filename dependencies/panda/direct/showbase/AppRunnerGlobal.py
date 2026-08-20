@@ -11,6 +11,7 @@ the AppRunner at startup.
    system.  See the :ref:`distribution` manual section.
 """
 
+from __future__ import print_function
 if __debug__:
     print('AppRunner has been removed and AppRunnerGlobal has been deprecated')
 

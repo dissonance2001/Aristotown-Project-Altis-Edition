@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import string
 NORMAL_CHAT = 1
 WHISPER_CHAT = 2

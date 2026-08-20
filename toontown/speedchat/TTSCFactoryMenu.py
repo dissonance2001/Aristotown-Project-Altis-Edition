@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat import SCMenuHolder
 from otp.speedchat.SCStaticTextTerminal import SCStaticTextTerminal

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from toontown.suit.GoonGlobals import *
 from direct.directnotify import DirectNotifyGlobal
@@ -7,6 +8,7 @@ from toontown.suit import GoonPathData
 from direct.distributed import ClockDelta
 import random
 from direct.task import Task
+from six.moves import range
 
 class DistributedGoonAI(DistributedCrushableEntityAI.DistributedCrushableEntityAI):
     UPDATE_TIMESTAMP_INTERVAL = 180.0
@@ -132,7 +134,7 @@ class DistributedGoonAI(DistributedCrushableEntityAI.DistributedCrushableEntityA
         t = 0
         self.tSeg = [t]
         self.pathSeg = []
-        for i in xrange(len(pathPts) - 1):
+        for i in range(len(pathPts) - 1):
             ptA = pathPts[i]
             ptB = pathPts[i + 1]
             t += T_TURN
@@ -149,7 +151,7 @@ class DistributedGoonAI(DistributedCrushableEntityAI.DistributedCrushableEntityA
         self.parameterized = 1
 
     def getPathPoint(self, t):
-        for i in xrange(len(self.tSeg) - 1):
+        for i in range(len(self.tSeg) - 1):
             if t >= self.tSeg[i] and t < self.tSeg[i + 1]:
                 tSeg = t - self.tSeg[i]
                 t = tSeg / (self.tSeg[i + 1] - self.tSeg[i])

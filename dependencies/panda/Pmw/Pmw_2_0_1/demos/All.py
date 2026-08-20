@@ -4,6 +4,8 @@
 # Display a splash screen as quickly as possible (before importing
 # modules and initialising Pmw).
 
+from __future__ import absolute_import
+from __future__ import print_function
 import tkinter
 root = tkinter.Tk(className = 'Demo')
 root.withdraw()

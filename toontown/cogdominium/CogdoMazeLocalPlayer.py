@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3, CollisionNode, CollisionSphere, CollisionHandlerEvent
 from direct.interval.IntervalGlobal import Func, Sequence, Wait
 from toontown.toonbase.ToonPythonUtil import bound as clamp

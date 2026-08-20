@@ -4,6 +4,8 @@ Created on Mar 21, 2017
 @author: Drew
 '''
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed.DistributedObject import DistributedObject
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from datetime import datetime
@@ -18,7 +20,7 @@ class TTCodeRedemptionMgr(DistributedObject):
     def announceGenerate(self):
         DistributedObject.announceGenerate(self)
         base.cr.codeRedemptionMgr = self
-        self._contextGen = SerialMaskedGen(4294967295L)
+        self._contextGen = SerialMaskedGen(4294967295)
         self._context2callback = {}
 
     def delete(self):
@@ -31,8 +33,8 @@ class TTCodeRedemptionMgr(DistributedObject):
         DistributedObject.delete(self)
 
     def redeemCode(self, code, callback):
-        context = self._contextGen.next()
-        print(datetime.now())
+        context = next(self._contextGen)
+        print((datetime.now()))
         self._context2callback[context] = callback
         self.notify.debug('redeemCode(%s, %s)' % (context, code))
         self.sendUpdate('redeemCode', [context, code])

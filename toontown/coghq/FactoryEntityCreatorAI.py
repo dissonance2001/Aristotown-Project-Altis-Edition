@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.level import EntityCreatorAI
 from toontown.toonbase.ToonPythonUtil import Functor
 from toontown.coghq import DistributedBeanBarrelAI

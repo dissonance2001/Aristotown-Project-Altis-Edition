@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
@@ -6,6 +7,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
 import random
+from six.moves import range
 
 class TrackPoster(DirectFrame):
     normalTextColor = (0.3, 0.25, 0.2, 1)
@@ -70,7 +72,7 @@ class TrackChoiceGui(DirectFrame):
         self.timer.countdown(timeout, self.timeout)
         self.trackChoicePosters = []
         trackAccess = base.localAvatar.getTrackAccess()
-        for trackId in xrange(ToontownBattleGlobals.NUM_GAG_TRACKS):
+        for trackId in range(ToontownBattleGlobals.NUM_GAG_TRACKS):
             if trackAccess[trackId] == 0:
                 self.choices.append(trackId)
                 tp = TrackPoster(trackId, self.chooseTrack)

@@ -3,6 +3,8 @@ Dial Class: Velocity style controller for floating point values with
              a label, entry (validated), and scale
 """
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['Dial', 'AngleDial', 'DialWidget']
 
 from direct.showbase.TkGlobal import *

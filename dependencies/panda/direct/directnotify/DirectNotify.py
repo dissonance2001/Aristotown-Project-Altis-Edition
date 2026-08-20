@@ -2,6 +2,8 @@
 DirectNotify module: this module contains the DirectNotify class
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from . import Notifier
 from . import Logger
 
@@ -97,8 +99,8 @@ class DirectNotify:
             category.setInfo(1)
             category.setDebug(1)
         else:
-            print("DirectNotify: unknown notify level: " + str(level)
-                   + " for category: " + str(categoryName))
+            print(("DirectNotify: unknown notify level: " + str(level)
+                   + " for category: " + str(categoryName)))
 
 
     def setDconfigLevels(self):

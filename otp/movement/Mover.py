@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from otp.movement.PyVec3 import PyVec3
 from toontown.toonbase import ToonPythonUtil as PythonUtil
-import __builtin__
+import six.moves.builtins
+from six.moves import range
 
 class Mover:
     notify = DirectNotifyGlobal.directNotify.newCategory('Mover')
@@ -39,12 +41,12 @@ class Mover:
         if Mover.Profile and not profile:
 
             def func(doMove = self.move):
-                for i in xrange(10000):
+                for i in range(10000):
                     doMove(dt, profile=1)
 
-            __builtin__.func = func
+            six.moves.builtins.func = func
             PythonUtil.startProfile(cmd='func()', filename='profile', sorts=['cumulative'], callInfo=0)
-            del __builtin__.func
+            del six.moves.builtins.func
             return
 
         if Mover.Pstats:

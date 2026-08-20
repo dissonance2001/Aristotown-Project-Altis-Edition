@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.effects.EffectController import EffectController
 from toontown.effects.PooledEffect import PooledEffect
 from toontown.effects.SparksTrailLong import SparksTrailLong
 import random
+from six.moves import range
 
 class TrailExplosion(PooledEffect, EffectController):
     trailsVel = [[Vec3(150, -50, 100), Vec3(-150, -50, 100), Vec3(0, 150, 100)], [Vec3(120, 120, 100),
@@ -32,7 +34,7 @@ class TrailExplosion(PooledEffect, EffectController):
         vels = None
         if self.numTrails >= 3 and self.numTrails <= 5:
             vels = self.trailsVel[self.numTrails - 3]
-        for i in xrange(self.numTrails):
+        for i in range(self.numTrails):
             self.trails.append(self.attachNewNode('trail'))
             vel = Vec3(0, 0, 0)
             if vels:

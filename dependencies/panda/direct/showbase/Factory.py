@@ -1,5 +1,6 @@
 """Contains the Factory class."""
 
+from __future__ import absolute_import
 __all__ = ['Factory']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify

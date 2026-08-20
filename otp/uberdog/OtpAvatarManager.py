@@ -1,4 +1,5 @@
-from cPickle import loads, dumps
+from __future__ import absolute_import
+from six.moves.cPickle import loads, dumps
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 

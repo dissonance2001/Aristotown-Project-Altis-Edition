@@ -3,6 +3,8 @@ This module hooks into Python's import mechanism to print out all imports to
 the standard output as they happen.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = []
 
 

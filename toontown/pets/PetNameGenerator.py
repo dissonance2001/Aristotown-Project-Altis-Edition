@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -7,7 +8,7 @@ from direct.directnotify import DirectNotifyGlobal
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.pets import PetNamesEnglish
-from StringIO import StringIO
+from io import StringIO
 
 class PetNameGenerator:
     notify = DirectNotifyGlobal.directNotify.newCategory('PetNameGenerator')

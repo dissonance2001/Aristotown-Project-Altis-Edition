@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.DirectObject import DirectObject
 from .DirectGlobals import *
 from .DirectUtil import *
 from .DirectGeometry import *
+from six.moves import range
 
 COA_ORIGIN = 0
 COA_CENTER = 1

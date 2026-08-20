@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task.Task import Task
 from pandac.PandaModules import TextNode, VBase4
 from toontown.chat.ChatBalloon import ChatBalloon

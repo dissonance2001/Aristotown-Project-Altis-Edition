@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import traceback
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
@@ -21,7 +23,7 @@ class DistributedPartyGateAI(DistributedObjectAI):
         try:
             self.sendUpdateToAvatarId(avId, 'listAllPublicParties', [partyManager.getPublicParties()])
         except:
-            print(traceback.format_exc())
+            print((traceback.format_exc()))
             
     def partyChoiceRequest(self, avId, shardId, zoneId):
         # Try to get a spot for them in the party

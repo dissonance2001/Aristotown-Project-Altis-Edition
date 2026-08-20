@@ -1,5 +1,8 @@
 """OnscreenGeom module: contains the OnscreenGeom class"""
 
+from __future__ import absolute_import
+from __future__ import print_function
+import six
 __all__ = ['OnscreenGeom']
 
 from panda3d.core import *
@@ -9,7 +12,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = basestring
+    stringType = six.string_types
 
 class OnscreenGeom(DirectObject, NodePath):
     def __init__(self, geom = None,
@@ -127,7 +130,7 @@ class OnscreenGeom(DirectObject, NodePath):
                 else:
                     setter(value)
             except AttributeError:
-                print('OnscreenText.configure: invalid option: %s' % option)
+                print(('OnscreenText.configure: invalid option: %s' % option))
 
     # Allow index style references
     def __setitem__(self, key, value):

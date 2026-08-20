@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DGG
 from direct.interval.IntervalGlobal import Parallel, LerpFunc
 from panda3d.core import Vec3

@@ -1,6 +1,7 @@
 """
 UI for object property control
 """
+from __future__ import absolute_import
 import wx
 import os
 import math
@@ -12,6 +13,7 @@ from direct.wxwidgets.WxSlider import *
 from panda3d.core import *
 from . import ObjectGlobals as OG
 from . import AnimGlobals as AG
+from six.moves import range
 
 #----------------------------------------------------------------------
 Key = PyEmbeddedImage(

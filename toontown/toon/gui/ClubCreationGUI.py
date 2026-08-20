@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 
 from direct.gui.DirectGui import DirectButton, DirectEntry, DirectFrame, DirectLabel
@@ -8,6 +9,7 @@ from toontown.club.ClubClasses import ClubIcon
 from toontown.club.ClubIconGUI import ClubIconGUI
 from toontown.club import ClubGlobals
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 def _normalizedNodeName(name):

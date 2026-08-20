@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from toontown.minigame import PhotoGameGlobals
 import random
+from six.moves import range
 
 class PhotoGameBase:
 
@@ -17,7 +19,7 @@ class PhotoGameBase:
         if numPathes == 0:
             return assignmentTemplates
         while len(assignmentTemplates) < numAssignments:
-            subjectIndex = random.choice(range(numPathes))
+            subjectIndex = random.choice(list(range(numPathes)))
             pose = (None, None)
             while pose[0] == None:
                 animSetIndex = self.data['PATHANIMREL'][subjectIndex]

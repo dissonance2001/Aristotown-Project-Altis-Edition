@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.showbase import DirectObject

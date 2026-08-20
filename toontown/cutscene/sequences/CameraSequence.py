@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence

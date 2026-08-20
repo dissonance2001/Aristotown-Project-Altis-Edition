@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import json
 from io import open as io_open
 import os
@@ -12,6 +13,7 @@ from datetime import datetime
 from toontown.discord import DiscordPresets
 from toontown.hood import ZoneUtil
 from direct.directnotify.DirectNotifyGlobal import directNotify
+import six
 
 # Corporate Clash's public Discord application ID. Replace this with an
 # Altis-owned Discord application ID when one is available.
@@ -218,7 +220,7 @@ class Activity(object):
 
         if isinstance(self.state, list):
             self.state = self.state[min(imageIndex, len(self.state) - 1)]
-        if fillin is not None and isinstance(self.state, basestring) and '%s' in self.state:
+        if fillin is not None and isinstance(self.state, six.string_types) and '%s' in self.state:
             try:
                 self.state = self.state % fillin
             except TypeError:

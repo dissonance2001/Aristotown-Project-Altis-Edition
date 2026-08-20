@@ -1,19 +1,21 @@
 # Tests for Pmw color handling.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
+from six.moves import map
 
 Test.initialise()
 testData = ()
 
 defaultPalette = Pmw.Color.getdefaultpalette(Test.root)
 
-c = Tkinter.Button
+c = six.moves.tkinter.Button
 
 colors = ('red', 'orange', 'yellow', 'green', 'blue', 'purple', 'white')
-normalcolors = map(Pmw.Color.changebrightness,
-	(Test.root,) * len(colors), colors, (0.85,) * len(colors))
+normalcolors = list(map(Pmw.Color.changebrightness,
+	(Test.root,) * len(colors), colors, (0.85,) * len(colors)))
 
 kw = {}
 tests = (

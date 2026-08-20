@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObject import DistributedObject
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton, DGG
 from direct.interval.IntervalGlobal import Sequence, Func, LerpPosInterval, Wait

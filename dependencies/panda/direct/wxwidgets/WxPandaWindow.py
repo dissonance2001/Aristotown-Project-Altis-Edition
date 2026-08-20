@@ -5,6 +5,7 @@ wxgl.GLCanvas, with Panda directed to draw into it, depending on the
 platform.  In either case, you may simply embed this window into a
 wx.Frame of your choosing, using sizers or whatever you like. """
 
+from __future__ import absolute_import
 import wx
 import platform
 

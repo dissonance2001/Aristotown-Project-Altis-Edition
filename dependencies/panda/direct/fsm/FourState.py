@@ -1,5 +1,6 @@
 """Contains the FourState class."""
 
+from __future__ import absolute_import
 __all__ = ['FourState']
 
 from direct.directnotify import DirectNotifyGlobal

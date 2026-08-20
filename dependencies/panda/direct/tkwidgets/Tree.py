@@ -1,5 +1,7 @@
 """Defines tree widgets for the tkinter GUI system."""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['TreeNode', 'TreeItem']
 
 # ADAPTED FROM IDLE TreeWidget.py

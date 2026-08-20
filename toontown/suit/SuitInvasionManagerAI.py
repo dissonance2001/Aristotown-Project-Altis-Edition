@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import time
 import random
 
@@ -26,15 +27,14 @@ class SuitInvasionManagerAI(DirectObject):
         self.suitTypeIndex = None
         self.flags = 0
 
-        self.air.netMessenger.accept(
-            'startInvasion', self, self.handleStartInvasion)
-        self.air.netMessenger.accept(
-            'stopInvasion', self, self.handleStopInvasion)
+        # self.air.netMessenger.accept('startInvasion', self, self.handleStartInvasion)
+        # self.air.netMessenger.accept('stopInvasion', self, self.handleStopInvasion)
 
         # We want to handle shard status queries so that a ShardStatusReceiver
         # being created after we're created will know where we're at:
-        self.air.netMessenger.accept('queryShardStatus', self, self.sendInvasionStatus)
+        # self.air.netMessenger.accept('queryShardStatus', self, self.sendInvasionStatus)
         self.accept('requestShards', self.sendRequestResponse)
+
 
         self.sendInvasionStatus()
 
@@ -320,4 +320,4 @@ class SuitInvasionManagerAI(DirectObject):
         else:
             status = {'invasion': None}
         
-        self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])
+       # self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])

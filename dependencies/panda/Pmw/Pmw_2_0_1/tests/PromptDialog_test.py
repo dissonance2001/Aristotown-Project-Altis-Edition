@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/tests/promptdialog.test code.
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw

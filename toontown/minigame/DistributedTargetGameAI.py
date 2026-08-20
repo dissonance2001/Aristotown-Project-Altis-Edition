@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
@@ -5,6 +6,7 @@ from direct.fsm import State
 from toontown.minigame import TargetGameGlobals
 import random
 import types
+from six.moves import range
 
 def checkPlace(placeX, placeY, fillSize, placeList):
     goodPlacement = 1
@@ -76,8 +78,8 @@ class DistributedTargetGameAI(DistributedMinigameAI):
         self.placeValue = highestValue * 0.5
         self.targetsPlaced = []
         placeList = []
-        for typeIndex in xrange(len(self.targetList)):
-            for targetIndex in xrange(self.targetList[typeIndex]):
+        for typeIndex in range(len(self.targetList)):
+            for targetIndex in range(self.targetList[typeIndex]):
                 goodPlacement = 0
                 while not goodPlacement:
                     placeX = random.random() * (fieldWidth * 0.6) - fieldWidth * 0.6 * 0.5
@@ -220,7 +222,7 @@ class DistributedTargetGameAI(DistributedMinigameAI):
                 self.scoreDict[entry] = 1
 
         self.scoreTrack.append(self.getScoreList())
-        statMessage = 'MiniGame Stats : Target Game' + '\nScores' + '%s' % self.scoreTrack + '\nAvIds' + '%s' % self.scoreDict.keys() + '\nSafeZone' + '%s' % self.getSafezoneId()
+        statMessage = 'MiniGame Stats : Target Game' + '\nScores' + '%s' % self.scoreTrack + '\nAvIds' + '%s' % list(self.scoreDict.keys()) + '\nSafeZone' + '%s' % self.getSafezoneId()
         self.air.writeServerEvent('MiniGame Stats', None, statMessage)
         self.sendUpdate('setGameDone', [])
         self.gameFSM.request('cleanup')

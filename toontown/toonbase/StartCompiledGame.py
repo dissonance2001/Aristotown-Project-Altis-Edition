@@ -2,7 +2,9 @@
 # before handing everything over to ToontownStart
 
 # Replace some modules that do exec:
+from __future__ import absolute_import
 import collections
+from six.moves import range
 collections.namedtuple = lambda *x: tuple
 
 # This is included in the package by the client preparation script. It contains the
@@ -37,7 +39,7 @@ class ConnectionRepository_override(ConnectionRepository.ConnectionRepository):
         self.dclassesByNumber = {}
         self.hashVal = 0
 
-        if isinstance(dcFileNames, types.StringTypes):
+        if isinstance(dcFileNames, (str,)):
             # If we were given a single string, make it a list.
             dcFileNames = [dcFileNames]
 
@@ -105,7 +107,7 @@ class ConnectionRepository_override(ConnectionRepository.ConnectionRepository):
                         continue
                     classDef = getattr(classDef, className)
 
-                if type(classDef) != types.ClassType and type(classDef) != types.TypeType:
+                if type(classDef) != type and type(classDef) != type:
                     self.notify.error("Symbol %s is not a class name." % (className))
                 else:
                     dclass.setClassDef(classDef)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame.MazeBase import MazeBase
 from toontown.minigame import MazeData
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track, LerpPosInterval, ProjectileInterval, SoundInterval, ActorInterval
@@ -6,6 +7,7 @@ from toontown.battle import DistributedBattleFinal
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from toontown.battle import BattleProps
+from six.moves import range
 
 class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleDiners')
@@ -40,7 +42,7 @@ class DistributedBattleDiners(DistributedBattleFinal.DistributedBattleFinal):
 
     def moveSuitsToInitialPos(self):
         battlePts = self.suitPoints[len(self.suitPendingPoints) - 1]
-        for i in xrange(len(self.suits)):
+        for i in range(len(self.suits)):
             suit = self.suits[i]
             suit.reparentTo(self)
             destPos, destHpr = self.getActorPosHpr(suit, self.suits)

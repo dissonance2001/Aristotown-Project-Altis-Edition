@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 AllSuits = (('golf-club-swing', 'golf-club-swing'), ('pen-squirt', 'fountain-pen'), ('pickpocket', 'pickpocket'), ('effort', 'effort'), ('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'),
             ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), 
             ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'),
@@ -302,7 +304,7 @@ def loadSuitAnims(suit, modelDict, flag=1):
     animList = getSuitAnimList(suitName)
 
     if not animList:
-        print ':SuitAnimations(warning): No animations for %s' % suitName
+        print(':SuitAnimations(warning): No animations for %s' % suitName)
         return -1
 
     animations = {}

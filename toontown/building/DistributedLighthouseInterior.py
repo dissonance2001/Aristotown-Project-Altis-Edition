@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonBaseGlobal import *
 from panda3d.core import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
-import ToonInterior
-from DistributedToonInterior import DistributedToonInterior
+from . import ToonInterior
+from .DistributedToonInterior import DistributedToonInterior
 import ToonInteriorColors, random
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
@@ -15,6 +16,7 @@ from toontown.char import Char
 from toontown.quest import QuestParser
 from toontown.dna.DNAParser import DNADoor
 from toontown.hood import ZoneUtil
+from six.moves import range
 
 class DistributedLighthouseInterior(DistributedToonInterior):
 
@@ -104,7 +106,7 @@ class DistributedLighthouseInterior(DistributedToonInterior):
         door = self.chooseDoor()
         doorOrigins = render.findAllMatches('**/door_origin*')
         numDoorOrigins = doorOrigins.getNumPaths()
-        for npIndex in xrange(numDoorOrigins):
+        for npIndex in range(numDoorOrigins):
             doorOrigin = doorOrigins[npIndex]
             doorOriginNPName = doorOrigin.getName()
             doorOriginIndexStr = doorOriginNPName[len('door_origin_'):]

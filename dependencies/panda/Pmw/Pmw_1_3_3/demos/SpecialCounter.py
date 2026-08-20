@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Subclassing Pmw.Counter'
 
 # Import Pmw from this directory tree.
@@ -7,7 +8,7 @@ sys.path[:0] = ['../../..']
 import string
 import time
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class LabeledDateCounter(Pmw.Counter):
@@ -16,7 +17,7 @@ class LabeledDateCounter(Pmw.Counter):
 
 	# Need to use long ints here because on the Macintosh the maximum size
 	# of an integer is smaller than the value returned by time.time().
-	now = (long(time.time()) / 300) * 300
+	now = (int(time.time()) / 300) * 300
         text = time.strftime('%y/%m/%d', time.localtime(now))
 
         kw['datatype'] = 'date'
@@ -24,7 +25,7 @@ class LabeledDateCounter(Pmw.Counter):
         kw['entryfield_value'] = text
         kw['labelpos'] = 'w'
 
-	apply(Pmw.Counter.__init__, (self, parent), kw)
+	Pmw.Counter.__init__(*(self, parent), **kw)
 
 class LabeledRealCounter(Pmw.Counter):
 
@@ -38,7 +39,7 @@ class LabeledRealCounter(Pmw.Counter):
         kw['entryfield_value'] = 50.0
         kw['labelpos'] = 'w'
 
-	apply(Pmw.Counter.__init__, (self, parent), kw)
+	Pmw.Counter.__init__(*(self, parent), **kw)
 
 class Demo:
     def __init__(self, parent):
@@ -58,11 +59,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

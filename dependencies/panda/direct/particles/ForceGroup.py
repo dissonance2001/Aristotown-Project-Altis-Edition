@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.physics import *
 from direct.showbase.DirectObject import DirectObject
@@ -5,6 +6,7 @@ from direct.showbase.PhysicsManagerGlobal import *
 
 from direct.directnotify import DirectNotifyGlobal
 import sys
+from six.moves import range
 
 
 class ForceGroup(DirectObject):

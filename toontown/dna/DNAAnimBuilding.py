@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.dna import DNALandmarkBuilding
 from toontown.dna import DNAError
 from toontown.dna import DNAUtil

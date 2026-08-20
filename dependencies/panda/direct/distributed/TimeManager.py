@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import *
 from panda3d.core import *
 from direct.task import Task

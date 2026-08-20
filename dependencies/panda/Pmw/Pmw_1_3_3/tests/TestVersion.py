@@ -1,6 +1,7 @@
 # Set the version of Pmw to use for the tests based on the directory
 # name.
 
+from __future__ import absolute_import
 import imp
 import os
 import string

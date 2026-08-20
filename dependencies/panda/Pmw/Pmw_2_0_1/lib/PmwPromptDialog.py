@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/promptdialog.itk code.
 
+from __future__ import absolute_import
 import Pmw
 
 # A Dialog with an entryfield

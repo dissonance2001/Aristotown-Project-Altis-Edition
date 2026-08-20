@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Vec3
 from direct.interval.IntervalGlobal import Sequence, Parallel, Wait, Func
 from direct.interval.IntervalGlobal import LerpScaleInterval

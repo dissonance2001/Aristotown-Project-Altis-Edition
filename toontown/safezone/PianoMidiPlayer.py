@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import os
 import struct
 
 from direct.task.Task import Task
+from six.moves import range
 
 
 class MidiParseError(Exception):
@@ -120,7 +122,7 @@ class PianoMidiFile(object):
                 raise MidiParseError('Unsupported MIDI status 0x%02X.' % status)
 
             values = []
-            for unused in xrange(dataLength):
+            for unused in range(dataLength):
                 if offset >= len(data):
                     raise MidiParseError('Truncated MIDI channel event.')
                 values.append(self.__byteValue(data[offset]))
@@ -171,7 +173,7 @@ class PianoMidiFile(object):
             raise MidiParseError('Invalid MIDI timing division.')
 
         rawEvents = []
-        for trackIndex in xrange(self.trackCount):
+        for trackIndex in range(self.trackCount):
             if offset + 8 > len(data) or data[offset:offset + 4] != b'MTrk':
                 raise MidiParseError('Missing MIDI track %d.' % (trackIndex + 1))
             trackLength, trackDataOffset = self.__readUInt32(data, offset + 4)

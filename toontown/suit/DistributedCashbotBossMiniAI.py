@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -8,8 +9,8 @@ from toontown.coghq import DistributedCashbotBossTreasureAI
 from toontown.battle import BattleExperienceAI
 from toontown.chat import ResistanceChat
 from direct.fsm import FSM
-import DistributedMinibossAI
-import SuitDNA
+from . import DistributedMinibossAI
+from . import SuitDNA
 import random
 import math
 

@@ -4,6 +4,7 @@ This is a class Roger needs for the server to be able to display these values
 appropriately in the db web interface.
 """
 
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 

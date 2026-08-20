@@ -2,6 +2,8 @@
 Methods to extend functionality of the VBase4 class
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import VBase4
 from .extension_native_helpers import Dtool_funcToMethod
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.shtiker import ShtikerPage
 from direct.gui.DirectGui import *
@@ -5,6 +6,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
+from six.moves import range
 
 
 class TrackPage(ShtikerPage.ShtikerPage):
@@ -84,7 +86,7 @@ class TrackPage(ShtikerPage.ShtikerPage):
         self.trackStarFallback = {}
 
         zPositions = [0.48, 0.1866667, -0.1066667, -0.4]
-        for index in xrange(len(self.TrackOrder)):
+        for index in range(len(self.TrackOrder)):
             track = self.TrackOrder[index]
             column = index / 4
             row = index % 4

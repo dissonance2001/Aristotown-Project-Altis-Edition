@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.coghq.LawbotCogHQLoader import LawbotCogHQLoader
 from toontown.toonbase import ToontownGlobals
 from toontown.hood.CogHood import CogHood

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import invertDict
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import NullCogs

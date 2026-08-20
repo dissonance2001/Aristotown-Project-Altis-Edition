@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import DirectObject
 from pandac.PandaModules import *
 import random
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class HoodMgr(DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('HoodMgr')
@@ -311,7 +313,7 @@ class HoodMgr(DirectObject.DirectObject):
         tunnelOriginList = []
         for i in nodeList:
             linkTunnelNPC = i.findAllMatches('**/linktunnel*')
-            for p in xrange(linkTunnelNPC.getNumPaths()):
+            for p in range(linkTunnelNPC.getNumPaths()):
                 linkTunnel = linkTunnelNPC.getPath(p)
                 name = linkTunnel.getName()
                 nameParts = name.split('_')

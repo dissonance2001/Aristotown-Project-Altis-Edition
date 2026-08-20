@@ -7,6 +7,7 @@
 # The PmwLoader class also supports runtime selection of the Pmw
 # version(s) to use.
 
+from __future__ import absolute_import
 import sys
 import os
 import string
@@ -33,15 +34,14 @@ class PmwLoader:
 	if self._version == version:
 	    return
 	if self._initialised:
-	    raise ValueError, 'Cannot change Pmw version after initialisation'
+	    raise ValueError('Cannot change Pmw version after initialisation')
 	self._version = version
 
     def setalphaversions(self, *alpha_versions):
 	if self._alpha_versions == alpha_versions:
 	    return
 	if self._initialised:
-	    raise ValueError, \
-		    'Cannot change Pmw alpha versions after initialisation'
+	    raise ValueError('Cannot change Pmw alpha versions after initialisation')
 	self._alpha_versions = alpha_versions
 
     def version(self, alpha = 0):
@@ -53,7 +53,7 @@ class PmwLoader:
     def installedversions(self, alpha = 0):
 	rtn = []
 	if alpha:
-	    dirs = filter(lambda x: x[:5] == 'Alpha', self._dirs)
+	    dirs = [x for x in self._dirs if x[:5] == 'Alpha']
 	    dirs.sort()
 	    dirs.reverse()
 	    for dir in dirs:
@@ -87,10 +87,10 @@ class PmwLoader:
 	    try:
 		basemodule = self._getmodule(path + '.Pmw' + _BASEMODULE)
 		break
-	    except ImportError, msg:
+	    except ImportError as msg:
 		if path == searchpath[-1]:
 		    # No PmwBase module found.
-		    raise ImportError, msg
+		    raise ImportError(msg)
 
 	for k,v in basemodule.__dict__.items():
 	    if k[0] is not '_' and type(v) != types.ModuleType:
@@ -107,25 +107,25 @@ class PmwLoader:
 	    self.__dict__[name] = {}
 	searchpath.reverse()
 	for path in searchpath:
-	    pathbit = apply(os.path.join, tuple(string.split(path[5:], '.')))
+	    pathbit = os.path.join(*tuple(string.split(path[5:], '.')))
 	    lpath = os.path.join(self._dirpath, pathbit)
 	    d = {}
-	    execfile(os.path.join(lpath,_PMW_DEF), d)
+	    exec(compile(open(os.path.join(lpath,_PMW_DEF), "rb").read(), os.path.join(lpath,_PMW_DEF), 'exec'), d)
 	    for k,v in d.items():
-		if dict.has_key(k):
-		    if type(v) == types.TupleType:
+		if k in dict:
+		    if type(v) == tuple:
 			for item in v:
 			    modpath = path + '.Pmw' + item
 			    dict[k][item] = modpath
-		    elif type(v) == types.DictionaryType:
+		    elif type(v) == dict:
 			for k1, v1 in v.items():
 			    modpath = path + '.Pmw' + v1
 			    dict[k][k1] = modpath
 	self.__dict__.update(dict)
-	self._widgets_keys = self._widgets.keys()
-	self._extraWidgets_keys = self._extraWidgets.keys()
-	self._functions_keys = self._functions.keys()
-	self._modules_keys = self._modules.keys()
+	self._widgets_keys = list(self._widgets.keys())
+	self._extraWidgets_keys = list(self._extraWidgets.keys())
+	self._functions_keys = list(self._functions.keys())
+	self._modules_keys = list(self._modules.keys())
 
 	self._initialised = 1
 
@@ -133,7 +133,7 @@ class PmwLoader:
 	if not self._initialised:
 	    self._initialise()
 	    # Beware: _initialise may have defined 'name'
-	    if name in self.__dict__.keys():
+	    if name in list(self.__dict__.keys()):
 		return self.__dict__[name]
 
 	# The requested attribute is not yet set. Look it up in the
@@ -171,4 +171,4 @@ class PmwLoader:
             return cls
 
 	# The attribute is not known by Pmw, report an error.
-	raise AttributeError, name
+	raise AttributeError(name)

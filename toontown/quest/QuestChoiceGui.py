@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.quest import QuestPoster
@@ -5,6 +6,8 @@ from toontown.toonbase import ToontownTimer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
+from six.moves import map
+from six.moves import range
 
 class QuestChoiceGui(DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestChoiceGui')
@@ -24,7 +27,7 @@ class QuestChoiceGui(DirectFrame):
             base.setCellsActive(base.bottomCells[:2], 0)
 
     def setQuests(self, quests, fromNpcId, timeout):
-        for i in xrange(0, len(quests), 3):
+        for i in range(0, len(quests), 3):
             questId, rewardId, toNpcId = quests[i:i + 3]
             qp = QuestPoster.QuestPoster()
             qp.reparentTo(self)
@@ -44,7 +47,7 @@ class QuestChoiceGui(DirectFrame):
             self.timer.setPos(-0.2, 0, -0.6)
         elif len(quests) == 3 * 3:
             self['geom_scale'] = (1.85, 1, 0.9)
-            map(lambda x: x.setScale(0.95), self.questChoicePosters)
+            list(map(lambda x: x.setScale(0.95), self.questChoicePosters))
             self.questChoicePosters[0].setPos(0, 0, -0.4)
             self.questChoicePosters[1].setPos(0, 0, 0.125)
             self.questChoicePosters[2].setPos(0, 0, 0.65)

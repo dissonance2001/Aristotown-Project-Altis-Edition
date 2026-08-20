@@ -1,8 +1,9 @@
-import CatalogItem
-import CatalogAtticItem
+from __future__ import absolute_import
+from . import CatalogItem
+from . import CatalogAtticItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from CatalogSurfaceColors import *
+from .CatalogSurfaceColors import *
 
 
 STWallpaper = 0

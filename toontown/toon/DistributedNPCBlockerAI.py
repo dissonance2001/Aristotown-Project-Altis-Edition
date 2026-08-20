@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
-from DistributedNPCToonBaseAI import *
+from .DistributedNPCToonBaseAI import *
 from toontown.toon import NPCToons
 from direct.task.Task import Task
 

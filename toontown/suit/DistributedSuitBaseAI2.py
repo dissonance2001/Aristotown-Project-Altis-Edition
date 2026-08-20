@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from otp.avatar import DistributedAvatarAI
 from toontown.suit import SuitPlannerBase

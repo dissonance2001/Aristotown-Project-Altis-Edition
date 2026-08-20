@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from direct.fsm.StatePush import StateVar
 from otp.level.EntityStateVarSet import EntityStateVarSet
 from toontown.cogdominium.CogdoEntityTypes import CogdoCraneGameSettings, CogdoCraneCogSettings
+from six.moves import range
 Settings = EntityStateVarSet(CogdoCraneGameSettings)
 CogSettings = EntityStateVarSet(CogdoCraneCogSettings)
 CranePosHprs = [(13.4, -136.6, 6, -45, 0, 0),
@@ -55,5 +57,5 @@ MoneyBagPosHprs = [[77.2 - 84,
   180,
   0,
   0]]
-for i in xrange(len(MoneyBagPosHprs)):
+for i in range(len(MoneyBagPosHprs)):
     MoneyBagPosHprs[i][2] += 6

@@ -1,4 +1,5 @@
 """ Class used to create and control radamec device """
+from __future__ import absolute_import
 from math import *
 from direct.showbase.DirectObject import DirectObject
 from .DirectDeviceManager import *

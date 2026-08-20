@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleProps import globalPropPool
+from six.moves import range
 
 class Wake(NodePath):
     wakeCount = 0
@@ -42,7 +44,7 @@ class Wake(NodePath):
         self.rippleCount = (self.rippleCount + 1) % 20
 
     def stop(self):
-        for i in xrange(len(self.doLaters)):
+        for i in range(len(self.doLaters)):
             if self.doLaters[i]:
                 taskMgr.remove(self.doLaters[i])
                 self.doLaters[i] = None

@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/tests/scrolledlistbox.test code.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 

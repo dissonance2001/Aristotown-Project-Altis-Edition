@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Pmw.NoteBook demonstration (with no tabs)'
 
 # Import Pmw from this directory tree.

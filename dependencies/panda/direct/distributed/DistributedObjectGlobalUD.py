@@ -1,5 +1,6 @@
 
 
+from __future__ import absolute_import
 from .DistributedObjectUD import DistributedObjectUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
 

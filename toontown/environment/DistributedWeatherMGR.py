@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObject import DistributedObject
 from direct.fsm.FSM import FSM
 

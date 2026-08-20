@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.safezone.RegenTreasurePlannerAI import RegenTreasurePlannerAI
 from direct.directnotify import DirectNotifyGlobal
 

@@ -2,6 +2,7 @@
 Contains the TestInterval class
 """
 
+from __future__ import absolute_import
 __all__ = ['TestInterval']
 
 from panda3d.core import *

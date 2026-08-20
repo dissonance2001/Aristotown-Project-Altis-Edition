@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
+from six.moves import zip
 
 class RingTrack:
     notify = DirectNotifyGlobal.directNotify.newCategory('RingTrack')

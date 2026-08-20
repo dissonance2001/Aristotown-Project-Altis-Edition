@@ -1,5 +1,6 @@
 """DistributedSmoothNode module: contains the DistributedSmoothNode class"""
 
+from __future__ import absolute_import
 from panda3d.core import NodePath
 from panda3d.direct import SmoothMover
 from .ClockDelta import *

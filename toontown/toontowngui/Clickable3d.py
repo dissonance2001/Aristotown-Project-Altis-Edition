@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Quat, Point3, Point2
 from toontown.toontowngui.Clickable import Clickable
 

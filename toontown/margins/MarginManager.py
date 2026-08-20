@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from pandac.PandaModules import PandaNode
 from toontown.margins.MarginCell import MarginCell

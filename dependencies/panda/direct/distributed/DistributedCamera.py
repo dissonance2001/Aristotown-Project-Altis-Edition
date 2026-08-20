@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import *
 from direct.distributed.DistributedObject import DistributedObject
+from six.moves import range
 
 class Fixture(NodePath, FSM):
     def __init__(self, id, parent, pos, hpr, fov):

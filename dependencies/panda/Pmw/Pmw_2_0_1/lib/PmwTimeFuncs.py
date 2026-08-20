@@ -1,5 +1,6 @@
 # Functions for dealing with dates and times.
 
+from __future__ import absolute_import
 import re
 import string
 

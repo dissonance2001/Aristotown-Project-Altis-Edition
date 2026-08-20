@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
@@ -13,6 +14,7 @@ from toontown.minigame import TwoDSectionMgr, ToonBlitzGlobals, TwoDGameToonSD
 from toontown.toonbase import ToontownTimer
 from toontown.minigame.TwoDWalk import *
 from toontown.minigame.TwoDDrive import *
+from six.moves import range
 
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
@@ -155,7 +157,7 @@ class DistributedTwoDGame(DistributedMinigame):
         self.twoDWalk = TwoDWalk(self.twoDDrive, broadcast=not self.isSinglePlayer())
         self.scores = [0] * self.numPlayers
         spacing = 0.4
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)
@@ -234,7 +236,7 @@ class DistributedTwoDGame(DistributedMinigame):
           (lX, bY),
           (rX, bY)))
         scorePanelLocs = scorePanelLocs[self.numPlayers - 1]
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
             panel.wrtReparentTo(aspect2d)

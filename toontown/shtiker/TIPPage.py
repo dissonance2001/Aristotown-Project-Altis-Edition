@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.shtiker import ShtikerPage
 from direct.gui.DirectGui import *

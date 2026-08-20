@@ -1,4 +1,5 @@
 # Altis Clubs Build 85: working Club invite selector for nearby Toons and friends.
+from __future__ import absolute_import
 import time
 import textwrap
 
@@ -15,6 +16,8 @@ from toontown.toon.gui.ClubJellybeanDonationGUI import ClubJellybeanDonationGUI
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
 from toontown.toon.socialpanel.clubs.general.ClubLevelShield import ClubLevelShield
 from toontown.toonbase import ToontownGlobals
+import six
+from six.moves import range
 
 
 class SocialPanelClubsTab(DirectFrame):
@@ -129,7 +132,7 @@ class SocialPanelClubsTab(DirectFrame):
             pass
         try:
             textures = model.findAllTextures()
-            for index in xrange(textures.getNumTextures()):
+            for index in range(textures.getNumTextures()):
                 texture = textures.getTexture(index)
                 texture.setMinfilter(Texture.FTLinear)
                 texture.setMagfilter(Texture.FTLinear)
@@ -1464,7 +1467,7 @@ class SocialPanelClubsTab(DirectFrame):
                 'online': online,
             }
 
-        result = candidates.values()
+        result = list(candidates.values())
         try:
             result = list(result)
         except:
@@ -1768,7 +1771,7 @@ class SocialPanelClubsTab(DirectFrame):
                 continue
             value = member.get(key)
             try:
-                if isinstance(value, basestring):
+                if isinstance(value, six.string_types):
                     value = value.strip().lower()
                     if value in ('1', 'true', 'yes', 'online'):
                         return True

@@ -1,5 +1,6 @@
 """SoundInterval module: contains the SoundInterval class"""
 
+from __future__ import absolute_import
 __all__ = ['SoundInterval']
 
 from panda3d.core import *

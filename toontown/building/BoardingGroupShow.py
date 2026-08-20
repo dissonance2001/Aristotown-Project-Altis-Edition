@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -5,6 +6,7 @@ from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import TTLocalizer
 from toontown.effects import DustCloud
+from six.moves import range
 TRACK_TYPE_TELEPORT = 1
 TRACK_TYPE_RUN = 2
 TRACK_TYPE_POOF = 3
@@ -176,7 +178,7 @@ class BoardingGroupShow:
         base.cTrav.traverse(render)
         queue.sortEntries()
         if queue.getNumEntries():
-            for entryNum in xrange(queue.getNumEntries()):
+            for entryNum in range(queue.getNumEntries()):
                 entry = queue.getEntry(entryNum)
                 hitObject = entry.getIntoNodePath()
                 if hitObject.getNetTag('pieCode') != '3':

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import Vec3, Point3, Point4, TextNode, NodePath
 from pandac.PandaModules import CollisionHandlerEvent, CollisionNode, CollisionSphere
 from direct.distributed.ClockDelta import globalClockDelta
@@ -23,6 +25,7 @@ from toontown.parties.DistributedPartyActivity import DistributedPartyActivity
 from toontown.parties.DistributedPartyCatchActivityBase import DistributedPartyCatchActivityBase
 from toontown.parties.DistributedPartyCannonActivity import DistributedPartyCannonActivity
 from toontown.parties.activityFSMs import CatchActivityFSM
+from six.moves import range
 
 class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCatchActivityBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyCatchActivity')
@@ -118,23 +121,23 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
         DistributedPartyCatchActivity.notify.debug('PartyCatch: load')
         self.activityFSM = CatchActivityFSM(self)
         if __dev__:
-            for o in xrange(3):
-                print {0: 'SPOTS PER PLAYER',
+            for o in range(3):
+                print({0: 'SPOTS PER PLAYER',
                  1: 'DROPS PER MINUTE PER SPOT DURING NORMAL DROP PERIOD',
-                 2: 'DROPS PER MINUTE PER PLAYER DURING NORMAL DROP PERIOD'}[o]
-                for i in xrange(1, self.FallRateCap_Players + 10):
+                 2: 'DROPS PER MINUTE PER PLAYER DURING NORMAL DROP PERIOD'}[o])
+                for i in range(1, self.FallRateCap_Players + 10):
                     self.defineConstants(forceNumPlayers=i)
                     numDropLocations = self.DropRows * self.DropColumns
                     numDropsPerMin = 60.0 / self.DropPeriod
                     if o == 0:
                         spotsPerPlayer = numDropLocations / float(i)
-                        print '%2d PLAYERS: %s' % (i, spotsPerPlayer)
+                        print('%2d PLAYERS: %s' % (i, spotsPerPlayer))
                     elif o == 1:
                         numDropsPerMinPerSpot = numDropsPerMin / numDropLocations
-                        print '%2d PLAYERS: %s' % (i, numDropsPerMinPerSpot)
+                        print('%2d PLAYERS: %s' % (i, numDropsPerMinPerSpot))
                     elif i > 0:
                         numDropsPerMinPerPlayer = numDropsPerMin / i
-                        print '%2d PLAYERS: %s' % (i, numDropsPerMinPerPlayer)
+                        print('%2d PLAYERS: %s' % (i, numDropsPerMinPerPlayer))
 
         self.defineConstants()
         self.treesAndFence = loader.loadModel('phase_13/models/parties/%s' % arenaModel)
@@ -398,7 +401,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
          Toon.Toon(),
          Toon.Toon(),
          Toon.Toon()]
-        for i in xrange(len(self.posts)):
+        for i in range(len(self.posts)):
             tree = self.posts[i]
             tree.reparentTo(render)
             x = self.StageHalfWidth
@@ -419,10 +422,10 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
     def showDropGrid(self):
         self.hideDropGrid()
         self.dropMarkers = []
-        for row in xrange(self.DropRows):
+        for row in range(self.DropRows):
             self.dropMarkers.append([])
             rowList = self.dropMarkers[row]
-            for column in xrange(self.DropColumns):
+            for column in range(self.DropColumns):
                 toon = Toon.Toon()
                 toon.setDNA(base.localAvatar.getStyle())
                 toon.reparentTo(self.root)
@@ -601,7 +604,7 @@ class DistributedPartyCatchActivity(DistributedPartyActivity, DistributedPartyCa
             gen2nt[id] = timestamp32
             gen2np[id] = numPlayers
 
-        ids = self._id2gen.keys()
+        ids = list(self._id2gen.keys())
         for id in ids:
             if id not in gen2t:
                 self._removeGeneration(id)

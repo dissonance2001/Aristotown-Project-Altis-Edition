@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from toontown.racing.DistributedKartPadAI import DistributedKartPadAI
 from toontown.racing.DistributedRaceAI import DistributedRaceAI
@@ -6,6 +7,7 @@ from direct.fsm.FSM import FSM
 from direct.distributed.ClockDelta import *
 from direct.task import *
 from toontown.racing.KartShopGlobals import KartGlobals
+from six.moves import range
 
 #TODO - change race type
 
@@ -126,7 +128,7 @@ class DistributedRacePadAI(DistributedKartPadAI, FSM):
         race.setRaceType(self.trackType)
         race.setCircuitLoop([])
         race.setAvatars(avatars)
-        race.setStartingPlaces(range(len(avatars)))
+        race.setStartingPlaces(list(range(len(avatars))))
         race.setLapCount(3)
         race.generateWithRequired(self.raceZone)
         for avId in avatars:

@@ -2,6 +2,8 @@
 Defines ObjectMgrBase
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os, time, copy
 
 from direct.task import Task
@@ -9,6 +11,7 @@ from direct.actor.Actor import Actor
 from panda3d.core import *
 from .ActionMgr import *
 from . import ObjectGlobals as OG
+from six.moves import range
 
 # python wrapper around a panda.NodePath object
 class PythonNodePath(NodePath):
@@ -511,7 +514,7 @@ class ObjectMgrBase:
             else:
                 newobjModel = loader.loadModel(model, okMissing=True)
                 if newobjModel is None:
-                    print("Can't load model %s"%model)
+                    print(("Can't load model %s"%model))
                     return
                 self.flatten(newobjModel, model, objDef, uid)
                 newobj = PythonNodePath(newobjModel)

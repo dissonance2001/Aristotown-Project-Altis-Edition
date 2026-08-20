@@ -1,5 +1,6 @@
 """State module: contains State class"""
 
+from __future__ import absolute_import
 __all__ = ['State']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify

@@ -1,6 +1,7 @@
 """Contains the SfxPlayer class, a thin utility class for playing sounds at
 a particular location."""
 
+from __future__ import absolute_import
 __all__ = ['SfxPlayer']
 
 import math

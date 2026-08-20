@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.MetaInterval import Sequence, Parallel, Track
 from direct.interval.FunctionInterval import Func, Wait
 from direct.interval.SoundInterval import SoundInterval
@@ -17,6 +18,7 @@ from toontown.parties.PartyCog import PartyCogManager
 from toontown.parties.PartyCogActivityPlayer import PartyCogActivityPlayer
 from toontown.parties.PartyCogActivityPlayer import PartyCogActivityLocalPlayer
 from toontown.parties.StretchingArrow import StretchingArrow
+from six.moves import range
 
 class PartyCogActivity(DirectObject):
     notify = directNotify.newCategory('PartyCogActivity')
@@ -71,7 +73,7 @@ class PartyCogActivity(DirectObject):
         self.arrows = []
         self.distanceLabels = []
         self.teamColors = list(PartyGlobals.CogActivityColors) + [PartyGlobals.TeamActivityStatusColor]
-        for i in xrange(3):
+        for i in range(3):
             start = self.arena.find('**/cog%d_start_locator' % (i + 1))
             end = self.arena.find('**/cog%d_end_locator' % (i + 1))
             cog = self.cogManager.generateCog(self.arena)
@@ -106,13 +108,13 @@ class PartyCogActivity(DirectObject):
     def _initArenaDoors(self):
         self._arenaDoors = (self.arena.find('**/doorL'), self.arena.find('**/doorR'))
         arenaDoorLocators = (self.arena.find('**/doorL_locator'), self.arena.find('**/doorR_locator'))
-        for i in xrange(len(arenaDoorLocators)):
+        for i in range(len(arenaDoorLocators)):
             arenaDoorLocators[i].wrtReparentTo(self._arenaDoors[i])
 
         self._arenaDoorTimers = (self.createDoorTimer(PartyGlobals.TeamActivityTeams.LeftTeam), self.createDoorTimer(PartyGlobals.TeamActivityTeams.RightTeam))
         self._arenaDoorIvals = [None, None]
         self._doorStartPos = []
-        for i in xrange(len(self._arenaDoors)):
+        for i in range(len(self._arenaDoors)):
             door = self._arenaDoors[i]
             timer = self._arenaDoorTimers[i]
             timer.reparentTo(arenaDoorLocators[i])
@@ -219,7 +221,7 @@ class PartyCogActivity(DirectObject):
             if ival is not None and ival.isPlaying():
                 try:
                     ival.finish()
-                except Exception, theException:
+                except Exception as theException:
                     self.notify.warning('Ival could not finish:\n %s \nException %s ' % (str(ival), str(theException)))
 
         self.toonPieTracks = {}
@@ -227,7 +229,7 @@ class PartyCogActivity(DirectObject):
             if ival is not None and ival.isPlaying():
                 try:
                     ival.finish()
-                except Exception, theException:
+                except Exception as theException:
                     self.notify.warning('Ival could not finish:\n %s \nException %s ' % (str(ival), str(theException)))
 
         self.pieIvals = []
@@ -271,12 +273,12 @@ class PartyCogActivity(DirectObject):
 
     def openArenaDoors(self):
         self.enableEnterGateCollision()
-        for i in xrange(len(self._arenaDoors)):
+        for i in range(len(self._arenaDoors)):
             self.openArenaDoorForTeam(i)
 
     def closeArenaDoors(self):
         self.disableEnterGateCollision()
-        for i in xrange(len(self._arenaDoors)):
+        for i in range(len(self._arenaDoors)):
             self.closeArenaDoorForTeam(i)
 
     def showArenaDoorTimers(self, duration):
@@ -636,7 +638,7 @@ class PartyCogActivity(DirectObject):
         for point in points:
             point.setY(Y)
 
-        for i in xrange(len(arrows)):
+        for i in range(len(arrows)):
             arrow = arrows[i]
             arrow.draw(points[i].getPos(), cog.root.getPos(), animate=False)
             arrow.unstash()

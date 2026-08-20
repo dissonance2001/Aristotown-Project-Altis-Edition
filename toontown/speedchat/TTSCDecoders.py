@@ -1,2 +1,3 @@
+from __future__ import absolute_import
 from toontown.speedchat.TTSCToontaskTerminal import decodeTTSCToontaskMsg
 from toontown.speedchat.TTSCResistanceTerminal import decodeTTSCResistanceMsg

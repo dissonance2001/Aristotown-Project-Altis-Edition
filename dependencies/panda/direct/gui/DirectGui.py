@@ -1,5 +1,6 @@
 """Imports all of the :ref:`directgui` classes."""
 
+from __future__ import absolute_import
 from . import DirectGuiGlobals as DGG
 from .OnscreenText import *
 from .OnscreenGeom import *

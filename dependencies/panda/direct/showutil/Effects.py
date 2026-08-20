@@ -1,7 +1,10 @@
 """ Showutil Effects module: contains code for useful showcode effects. """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
+from six.moves import range
 
 # bounce types
 SX_BOUNCE = 0
@@ -105,7 +108,7 @@ def createBounce(nodeObj, numBounces, startValues, totalTime, amplitude,
 
         newVec3 = Vec3(startValues)
         newVec3.setCell(index, currBounceVal)
-        print("### newVec3 = %s" % newVec3)
+        print(("### newVec3 = %s" % newVec3))
 
         # create the right type of lerp
         if ((bounceType == SX_BOUNCE) or (bounceType == SY_BOUNCE) or

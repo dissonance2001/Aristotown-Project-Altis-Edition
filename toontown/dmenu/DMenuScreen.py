@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from toontown.menu import MainMenu
 

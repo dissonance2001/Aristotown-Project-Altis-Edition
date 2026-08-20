@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities

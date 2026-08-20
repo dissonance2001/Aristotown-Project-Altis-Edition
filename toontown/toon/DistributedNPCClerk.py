@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import Sequence
 from direct.task.Task import Task
 from pandac.PandaModules import *

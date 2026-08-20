@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from toontown.minigame import RingTrack
 from toontown.minigame import RingAction

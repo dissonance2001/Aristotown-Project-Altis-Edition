@@ -3,6 +3,7 @@ by the CMU ServerRepository/ClientRepository code in this directory.
 It replaces the MsgTypes module, which is not used by the CMU
 implementation. """
 
+from __future__ import absolute_import
 from direct.showbase.PythonUtil import invertDictLossless
 
 MsgName2Id = {

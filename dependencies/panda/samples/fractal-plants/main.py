@@ -7,6 +7,8 @@
 # Its primarily meant to be a more complex example on how to use
 # Panda's Geom interface.
 #
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Filename, InternalName
 from panda3d.core import GeomVertexArrayFormat, GeomVertexFormat
@@ -26,6 +28,7 @@ import random
 import time
 import sys
 import os
+from six.moves import range
 
 random.seed()
 base = ShowBase()

@@ -3,6 +3,7 @@ Created on Nov 16, 2016
 
 @author: Drew
 '''
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
@@ -16,6 +17,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TTDialog
 import random
+from six.moves import range
 POP_COLORS = (Vec4(0.4, 0.4, 1.0, 1.0), Vec4(0.4, 1.0, 0.4, 1.0), Vec4(1.0, 0.4, 0.4, 1.0))
 def setupInvasionMarker(node, invasionStatus):
     if node.find('**/*invasion-marker'):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import types
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -17,7 +18,7 @@ class MovingPlatform(NodePath, DirectObject.DirectObject):
         if floorNodeName is None:
             floorNodeName = 'floor'
         
-        if type(parentToken) == types.IntType:
+        if type(parentToken) == int:
             parentToken = ToontownGlobals.SPDynamic + parentToken
         
         self.parentToken = parentToken

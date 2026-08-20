@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 __all__ = ['DirectEntryScroll']
 
 from pandac.PandaModules import *
-import DirectGuiGlobals as DGG
-from DirectScrolledFrame import *
-from DirectFrame import *
-from DirectEntry import *
+from . import DirectGuiGlobals as DGG
+from .DirectScrolledFrame import *
+from .DirectFrame import *
+from .DirectEntry import *
 
 class DirectEntryScroll(DirectFrame):
     def __init__(self, entry, parent = None, **kw):

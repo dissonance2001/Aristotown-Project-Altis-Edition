@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 from direct.actor.DistributedActor import DistributedActor
 from direct.distributed import DistributedNode
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task import Task
 from pandac.PandaModules import *
-from Avatar import Avatar
+from .Avatar import Avatar
 from direct.interval.SoundInterval import SoundInterval
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import AudioSound

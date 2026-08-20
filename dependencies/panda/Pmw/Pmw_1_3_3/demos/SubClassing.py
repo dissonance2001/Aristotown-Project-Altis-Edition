@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 title = 'More examples of subclassing'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class ExtraMethods(Pmw.EntryField):
@@ -22,7 +23,7 @@ class OverrideInit(Pmw.EntryField):
 
     def __init__(self, textToAdd, parent = None, **kw):
         self._textToAdd = textToAdd
-	apply(Pmw.EntryField.__init__, (self, parent), kw)
+	Pmw.EntryField.__init__(*(self, parent), **kw)
 
     def addtext(self):
 	self.setvalue(self.getvalue() + ' ' + self._textToAdd)
@@ -35,7 +36,7 @@ class DefaultOptions(Pmw.EntryField):
     def __init__(self, parent = None, **kw):
         kw['label_foreground'] = 'blue'
         kw['entry_background'] = 'white'
-	apply(Pmw.EntryField.__init__, (self, parent), kw)
+	Pmw.EntryField.__init__(*(self, parent), **kw)
 
 class NewOptions(Pmw.EntryField):
 
@@ -118,11 +119,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

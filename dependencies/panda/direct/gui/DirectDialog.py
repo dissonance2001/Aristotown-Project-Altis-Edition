@@ -4,6 +4,9 @@ See the :ref:`directdialog` page in the programming manual for a more
 in-depth explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
+from six.moves import range
+from six.moves import zip
 __all__ = [
     'findDialog', 'cleanupDialog', 'DirectDialog', 'OkDialog',
     'OkCancelDialog', 'YesNoDialog', 'YesNoCancelDialog', 'RetryCancelDialog',
@@ -188,8 +191,8 @@ class DirectDialog(DirectFrame):
 
     def configureDialog(self):
         # Set up hot key bindings
-        bindList = zip(self.buttonList, self['buttonHotKeyList'],
-                       self['buttonValueList'])
+        bindList = list(zip(self.buttonList, self['buttonHotKeyList'],
+                       self['buttonValueList']))
         for button, hotKey, value in bindList:
             if ((type(hotKey) == list) or
                 (type(hotKey) == tuple)):

@@ -8,6 +8,7 @@ Mat3-extensions module: contains methods to extend functionality
 of the LMatrix3f class.
 """
 
+from __future__ import absolute_import
 from panda3d.core import Mat3
 from .extension_native_helpers import Dtool_funcToMethod
 

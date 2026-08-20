@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import BattlePlace
 from toontown.building import ChainsawInstanceGlobals
 from toontown.coghq import CogHQBossBattle

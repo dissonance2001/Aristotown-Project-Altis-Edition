@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.classicchars import DistributedDaisyAI
 from toontown.hood import HoodAI
 from toontown.safezone import ButterflyGlobals
@@ -10,6 +11,7 @@ from toontown.ai import DistributedSofieListenerMgrAI
 from toontown.ai import DistributedTrickOrTreatTargetAI
 from toontown.ai import DistributedWinterCarolingTargetAI
 from direct.showbase.DirectObject import DirectObject
+from six.moves import range
 
 class DGHoodAI(HoodAI.HoodAI, DirectObject):
     def __init__(self, air):
@@ -84,8 +86,8 @@ class DGHoodAI(HoodAI.HoodAI, DirectObject):
 
     def createButterflies(self, playground):
         ButterflyGlobals.generateIndexes(self.zoneId, ButterflyGlobals.DG)
-        for i in xrange(0, ButterflyGlobals.NUM_BUTTERFLY_AREAS[ButterflyGlobals.DG]):
-            for _ in xrange(0, ButterflyGlobals.NUM_BUTTERFLIES[ButterflyGlobals.DG]):
+        for i in range(0, ButterflyGlobals.NUM_BUTTERFLY_AREAS[ButterflyGlobals.DG]):
+            for _ in range(0, ButterflyGlobals.NUM_BUTTERFLIES[ButterflyGlobals.DG]):
                 butterfly = DistributedButterflyAI(self.air, playground, i, self.zoneId)
                 butterfly.generateWithRequired(self.zoneId)
                 butterfly.start()

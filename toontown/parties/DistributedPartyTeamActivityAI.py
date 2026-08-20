@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import globalClockDelta
 from toontown.parties.DistributedPartyActivityAI import DistributedPartyActivityAI
 from toontown.parties.activityFSMs import TeamActivityAIFSM
 from toontown.parties import PartyGlobals
+from six.moves import range
 
 class DistributedPartyTeamActivityAI(DistributedPartyActivityAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyTeamActivityAI")
@@ -100,7 +102,7 @@ class DistributedPartyTeamActivityAI(DistributedPartyActivityAI):
 
     def __areTeamsCorrect(self):
         minPlayers = self.getPlayersPerTeam()[0]
-        return all(len(self.toonIds[i]) >= minPlayers for i in xrange(2))
+        return all(len(self.toonIds[i]) >= minPlayers for i in range(2))
 
     def getDuration(self):
         raise NotImplementedError('getDuration() -- pure virtual')

@@ -1,5 +1,7 @@
 # Functions used by widget tests.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import imp
 import os
 import re
@@ -7,10 +9,11 @@ import string
 import sys
 import traceback
 import types
-import Tkinter
+import six.moves.tkinter
 import _tkinter
+from six.moves import range
 
-if Tkinter.TkVersion >= 8.4:
+if six.moves.tkinter.TkVersion >= 8.4:
   refcountafterdestroy = 7
 else:
   refcountafterdestroy = 6
@@ -61,7 +64,7 @@ def initialise():
     global _initialised, font, flagup, earthris, emptyimage, \
             stringvar, floatvar, root, reliefs
     if not _initialised:
-	root = Tkinter.Tk(className = 'PmwTest')
+	root = six.moves.tkinter.Tk(className = 'PmwTest')
 	root.withdraw()
         if os.name == 'nt':
             size = 16
@@ -72,12 +75,12 @@ def initialise():
 	font['small'] = '6x13'
 	font['large'] = '10x20'
 	font['variable'] = '-Adobe-Helvetica-Bold-R-Normal--*-120-*-*-*-*-*-*'
-	flagup = Tkinter.BitmapImage(file = 'flagup.bmp')
-	earthris = Tkinter.PhotoImage(file = 'earthris.gif')
-	emptyimage = Tkinter.PhotoImage()
-	stringvar = Tkinter.StringVar()
+	flagup = six.moves.tkinter.BitmapImage(file = 'flagup.bmp')
+	earthris = six.moves.tkinter.PhotoImage(file = 'earthris.gif')
+	emptyimage = six.moves.tkinter.PhotoImage()
+	stringvar = six.moves.tkinter.StringVar()
 	stringvar.set('this is some text')
-	floatvar = Tkinter.DoubleVar()
+	floatvar = six.moves.tkinter.DoubleVar()
 	floatvar.set(50.0)
 	if haveBlt():
 	    global vectorSize, vector_x, vector_y
@@ -93,7 +96,7 @@ def initialise():
 		vector_y[2].append(random() % 100 + 300)
 
 	# "solid" relief type was added to 8.0
-	if Tkinter.TkVersion >= 8.0:
+	if six.moves.tkinter.TkVersion >= 8.0:
 	  reliefs = 'flat, groove, raised, ridge, solid, or sunken'
 	else:
 	  reliefs = 'flat, groove, raised, ridge, or sunken'
@@ -162,7 +165,7 @@ _pattern = None
 # Private functions:
 
 def _print_results(result, expected, description):
-    if type(expected) == types.ClassType:
+    if type(expected) == type:
 	if hasattr(result, '__class__'):
 	    ok = (result.__class__ == expected)
 	else:
@@ -181,8 +184,8 @@ def _print_results(result, expected, description):
               elif hasattr(_tkinter, 'Tcl_Obj') and \
                     type(result) == _tkinter.Tcl_Obj:
                   ok = (str(stringvar) == result.string)
-	    elif type(expected) == types.IntType:
-		if type(result) is types.StringType:
+	    elif type(expected) == int:
+		if type(result) is bytes:
 		    try:
 			ok = (string.atoi(result) == expected)
 		    except ValueError:
@@ -190,8 +193,8 @@ def _print_results(result, expected, description):
                 elif hasattr(_tkinter, 'Tcl_Obj') and \
                         type(result) == _tkinter.Tcl_Obj:
                     ok = (string.atoi(str(result)) == expected)
-	    elif type(expected) == types.FloatType:
-		if type(result) is types.StringType:
+	    elif type(expected) == float:
+		if type(result) is bytes:
 		    try:
 			ok = (string.atof(result) == expected)
 		    except ValueError:
@@ -207,54 +210,54 @@ def _print_results(result, expected, description):
 		ok = re.search('^[0-9]*L?actioncallback$',str(result)) is not None
         
     if not ok or _verbose > 0:
-	print '====', description
+	print('====', description)
 	if not ok or _verbose > 1:
-	    print '==== result was:'
-	    print result, type(result)
+	    print('==== result was:')
+	    print(result, type(result))
     if ok:
 	if _verbose > 1:
-	    print '++++ PASSED'
+	    print('++++ PASSED')
     else:
-        print '---- result should have been:'
-	print expected, type(expected)
+        print('---- result should have been:')
+	print(expected, type(expected))
 	if _printTraceback:
 	    traceback.print_exc()
-	print '---- FAILED'
-	print
+	print('---- FAILED')
+	print()
 
 def _destroyToplevel(top, title):
     if _verbose > 0:
-	print '==== destruction of Toplevel for', title
+	print('==== destruction of Toplevel for', title)
     top.destroy()
 
 def _Toplevel(title):
     if _verbose > 0:
-	print '==== construction of Toplevel for', title
-    top = Tkinter.Toplevel()
+	print('==== construction of Toplevel for', title)
+    top = six.moves.tkinter.Toplevel()
     top.geometry('+100+100')
     top.title(title)
     return top
 
 def _constructor(isWidget, top, classCmd, kw):
     if _verbose > 0:
-	print '====', classCmd.__name__, 'construction'
+	print('====', classCmd.__name__, 'construction')
     if isWidget:
 	if dont_even_try:
-	    w = apply(classCmd, (top,), kw)
+	    w = classCmd(*(top,), **kw)
 	else:
 	    try:
-		w = apply(classCmd, (top,), kw)
+		w = classCmd(*(top,), **kw)
 	    except:
-		print 'Could not construct', classCmd.__name__
+		print('Could not construct', classCmd.__name__)
 		traceback.print_exc()
-		print 'Can not continue'
-		print 'Bye'
+		print('Can not continue')
+		print('Bye')
 		return None
 
 	isMegaWidget = hasattr(classCmd, 'defineoptions')
 	# Check the option types:
 	options = w.configure()
-	option_list = options.keys()
+	option_list = list(options.keys())
 	option_list.sort()
 	for option in option_list:
 	    # Some of the options (like bd, bg and fg) have only two parts
@@ -264,24 +267,24 @@ def _constructor(isWidget, top, classCmd, kw):
 		if dont_even_try:
 		    value = w.cget(option)
 		    if option not in ('class', 'container') and not initoption:
-		      apply(w.configure, (), {option : value})
+		      w.configure(*(), **{option : value})
 		      newvalue = w.cget(option)
 		      if newvalue != value:
-			print '====', classCmd.__name__, 'widget', \
-			  '\'' + option + '\'', 'option'
-			print '---- setting option returns different value'
-                        print '==== new value was:'
-                        print newvalue, type(newvalue)
-                        print '---- set value was:'
-                        print value, type(value)
-			print '---- FAILED'
-			print
+			print('====', classCmd.__name__, 'widget', \
+			  '\'' + option + '\'', 'option')
+			print('---- setting option returns different value')
+                        print('==== new value was:')
+                        print(newvalue, type(newvalue))
+                        print('---- set value was:')
+                        print(value, type(value))
+			print('---- FAILED')
+			print()
 		else:
 		    try:
 			value = w.cget(option)
 			if option not in ('class', 'container') and not initoption:
 			  try:
-			      apply(w.configure, (), {option : value})
+			      w.configure(*(), **{option : value})
 			      newvalue = w.cget(option)
                               if hasattr(_tkinter, 'Tcl_Obj') and \
                               (
@@ -295,38 +298,38 @@ def _constructor(isWidget, top, classCmd, kw):
                                   not hasattr(_tkinter, 'Tcl_Obj') and
                                     newvalue != value
                               ):
-				print '====', classCmd.__name__, 'widget', \
-				  '\'' + option + '\'', 'option'
-				print '---- setting option returns different value'
-                                print '==== new value was:'
-                                print `newvalue`, type(newvalue)
-                                print '---- set value was:'
-                                print `value`, type(value)
-				print '---- FAILED'
-				print
+				print('====', classCmd.__name__, 'widget', \
+				  '\'' + option + '\'', 'option')
+				print('---- setting option returns different value')
+                                print('==== new value was:')
+                                print(repr(newvalue), type(newvalue))
+                                print('---- set value was:')
+                                print(repr(value), type(value))
+				print('---- FAILED')
+				print()
 			  except:
-			    print '====', classCmd.__name__, 'widget', \
-			      '\'' + option + '\'', 'option'
-			    print '---- could not set option'
-			    print '---- FAILED'
-			    print
+			    print('====', classCmd.__name__, 'widget', \
+			      '\'' + option + '\'', 'option')
+			    print('---- could not set option')
+			    print('---- FAILED')
+			    print()
 		    except KeyError:
-			print '====', classCmd.__name__, 'widget', \
-			    '\'' + option + '\'', 'option'
-			print '---- unknown option'
-			print '---- FAILED'
-			print
+			print('====', classCmd.__name__, 'widget', \
+			    '\'' + option + '\'', 'option')
+			print('---- unknown option')
+			print('---- FAILED')
+			print()
 
 	if hasattr(classCmd, 'geometry'):
 	    w.geometry('+100+100')
 	    w.title(classCmd.__name__)
     else:
-	w = apply(classCmd, (), kw)
+	w = classCmd(*(), **kw)
     return w
 
 def _destructor(widget, isWidget):
     if _verbose > 0:
-        print '====', widget.__class__.__name__, 'destruction'
+        print('====', widget.__class__.__name__, 'destruction')
     if isWidget:
 	if dont_even_try:
 	    widget.destroy()
@@ -335,15 +338,15 @@ def _destructor(widget, isWidget):
 		widget.destroy()
                 ref = sys.getrefcount(widget)
                 if ref != refcountafterdestroy:
-                    print '====', widget.__class__.__name__, 'destructor'
-                    print '---- refcount', ref, 'not zero after destruction'
-                    print '---- FAILED'
-                    print
+                    print('====', widget.__class__.__name__, 'destructor')
+                    print('---- refcount', ref, 'not zero after destruction')
+                    print('---- FAILED')
+                    print()
 	    except:
-		print 'Could not destroy', widget.__class__.__name__
+		print('Could not destroy', widget.__class__.__name__)
 		traceback.print_exc()
-		print 'Can not continue'
-		print 'Bye'
+		print('Can not continue')
+		print('Bye')
 		return None
     return 1
 
@@ -409,7 +412,7 @@ def _runTest(top, w, allTestData, index0, index1, index2):
 	root.quit()
 	return
     classCmd, fileTests = allTestData[index0]
-    if classCmd == Tkinter.Menu:
+    if classCmd == six.moves.tkinter.Menu:
 	isToplevel = 1
     else:
 	isToplevel = hasattr(classCmd, 'userdeletefunc')
@@ -447,7 +450,7 @@ def _runTest(top, w, allTestData, index0, index1, index2):
 	    index1 = index1 + 1
 	else:
 	    methodTestData = methodTests[index2]
-	    if type(methodTestData[0]) == types.StringType:
+	    if type(methodTestData[0]) == bytes:
 		_configureTest(w, methodTestData)
 	    else:
 		_methodTest(w, methodTestData)
@@ -459,11 +462,11 @@ def _configureTest(w, testData):
     option = testData[0]
     value = testData[1]
     if dont_even_try:
-	apply(w.configure, (), {option: value})
+	w.configure(*(), **{option: value})
 	result = w.cget(option)
     else:
 	try:
-	    apply(w.configure, (), {option: value})
+	    w.configure(*(), **{option: value})
 	    result = w.cget(option)
 	except:
 	    result = _getErrorValue()
@@ -484,7 +487,7 @@ def _getErrorValue():
     #	# Handle python 1.5 class exceptions.
     #	exc_type = exc_type.__name__
     exc_type = exc_type.__name__
-    if type(exc_value) == types.StringType:
+    if type(exc_value) == bytes:
 	return exc_type + ': ' + exc_value
     else:
         exc_value_str = str(exc_value)
@@ -498,30 +501,30 @@ def _methodTest(w, testData):
     kw = {}
     expected = None
     if len(testData) == 3:
-	if type(testData[2]) == types.DictionaryType:
+	if type(testData[2]) == dict:
 	    kw = testData[2]
 	else:
 	    expected = testData[2]
     elif len(testData) > 3:
 	kw = testData[2]
 	expected = testData[3]
-    if type(args) != types.TupleType:
+    if type(args) != tuple:
 	args = (args,)
     if func is num_options:
 	args = (w,) + args
     origArgs = args
-    if type(func) == types.MethodType and func.im_self is None:
+    if type(func) == types.MethodType and func.__self__ is None:
 	args = (w,) + args
     if dont_even_try:
-	result = apply(func, args, kw)
+	result = func(*args, **kw)
     else:
 	try:
-	    result = apply(func, args, kw)
+	    result = func(*args, **kw)
 	except:
 	    result = _getErrorValue()
     if hasattr(func, 'im_func'):
 	name = w.__class__.__name__ + ' method ' + \
-	    func.im_func.func_code.co_name
+	    func.__func__.__code__.co_name
     else:
 	name = 'function ' + func.__name__
     name = name + ' ' + str(origArgs)

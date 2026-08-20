@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
 from toontown.minigame import ToonBlitzGlobals
 from toontown.minigame import TwoDEnemy
+from six.moves import range
 
 class TwoDEnemyMgr(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDEnemyMgr')
@@ -26,7 +28,7 @@ class TwoDEnemyMgr(DirectObject):
             self.enemiesNP = NodePath('Enemies')
             self.enemiesNP.reparentTo(self.section.sectionNP)
         self.enemies = []
-        for index in xrange(len(self.enemyList)):
+        for index in range(len(self.enemyList)):
             enemyId = self.section.getSectionizedId(index)
             suitAttribs = self.enemyList[index]
             newEnemy = TwoDEnemy.TwoDEnemy(self, enemyId, suitAttribs)

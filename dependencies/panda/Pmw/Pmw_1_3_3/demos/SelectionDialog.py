@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.SelectionDialog demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -21,27 +23,27 @@ class Demo:
 	self.dialog.withdraw()
 
 	# Create button to launch the dialog.
-	w = Tkinter.Button(parent, text = 'Show selection dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Show selection dialog',
 	        command = self.dialog.activate)
 	w.pack(padx = 8, pady = 8)
 
     def execute(self, result):
 	sels = self.dialog.getcurselection()
 	if len(sels) == 0:
-	    print 'You clicked on', result, '(no selection)'
+	    print('You clicked on', result, '(no selection)')
 	else:
-	    print 'You clicked on', result, sels[0]
+	    print('You clicked on', result, sels[0])
 	self.dialog.deactivate(result)
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

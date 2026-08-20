@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import CompassEffect, NodePath
 from direct.task.Task import Task
 

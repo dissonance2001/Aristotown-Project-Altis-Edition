@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
 from toontown.coghq import MovingPlatform

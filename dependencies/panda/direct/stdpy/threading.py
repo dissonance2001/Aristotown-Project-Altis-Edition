@@ -21,11 +21,14 @@ easier to use and understand.
 It is permissible to mix-and-match both threading and threading2
 within the same application. """
 
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d import core
 from direct.stdpy import thread as _thread
 import sys as _sys
 
 import weakref
+from six.moves import range
 
 __all__ = [
     'Thread',

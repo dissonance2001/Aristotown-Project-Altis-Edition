@@ -1,11 +1,12 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
-import DistributedMiniboss
+from . import DistributedMiniboss
 from direct.task.Task import Task
-import DistributedCashbotBossGoon
-import SuitDNA
+from . import DistributedCashbotBossGoon
+from . import SuitDNA
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from direct.fsm import FSM
@@ -27,6 +28,7 @@ from panda3d.direct import *
 from otp.otpbase import OTPLocalizerEnglish
 import random
 import math
+from six.moves import range
 OneBossCog = None
 TTL = TTLocalizer
 
@@ -207,7 +209,7 @@ class DistributedCashbotBossMini(DistributedMiniboss.DistributedMiniboss, FSM.FS
                 self.notify.warning('Not a collision node: %s' % repr(cnp))
                 break
             newCollideMask = newCollideMask | cn.getIntoCollideMask()
-            for i in xrange(cn.getNumSolids()):
+            for i in range(cn.getNumSolids()):
                 solid = cn.getSolid(i)
                 if isinstance(solid, CollisionPolygon):
                     plane = Plane(solid.getPlane())
@@ -333,7 +335,7 @@ class DistributedCashbotBossMini(DistributedMiniboss.DistributedMiniboss, FSM.FS
         radius = 7
         numToons = len(self.involvedToons)
         center = (numToons - 1) / 2.0
-        for i in xrange(numToons):
+        for i in range(numToons):
             toon = self.cr.doId2do.get(self.involvedToons[i])
             if toon:
                 angle = 90 - 15 * (i - center)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import boolEqual
 from otp.speedchat.SpeedChatTypes import *
 from otp.speedchat.SCSettings import SCSettings

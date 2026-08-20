@@ -31,10 +31,13 @@
 #
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import types
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 
 class _Branching:
@@ -573,19 +576,19 @@ if __name__ == '__main__':
     def printselected(node):
         selection = treeBrowser.curselection()
         if selection != None:
-            print("Selected node name:", selection[1], "   label:", selection[2])
+            print(("Selected node name:", selection[1], "   label:", selection[2]))
 
 
     def printdeselected(node):
         selection = treeBrowser.curselection()
         if selection != None:
-            print("Deselected node name:", selection[1], "   label:", selection[2])
+            print(("Deselected node name:", selection[1], "   label:", selection[2]))
 
     def printexpanded(node):
-        print("Expanded node name:", node.getname(), "   label:", node.getlabel())
+        print(("Expanded node name:", node.getname(), "   label:", node.getlabel()))
 
     def printcollapsed(node):
-        print("Collapsed node name:", node.getname(), "   label:", node.getlabel())
+        print(("Collapsed node name:", node.getname(), "   label:", node.getlabel()))
 
 
 

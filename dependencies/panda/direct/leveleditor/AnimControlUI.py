@@ -1,12 +1,14 @@
 """
    This is the GUI for the Animation Control Panel
 """
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from direct.actor.Actor import *
 from . import ObjectGlobals as OG
 
 import os, wx
 from wx.lib.embeddedimage import PyEmbeddedImage
+from six.moves import range
 
 #----------------------------------------------------------------------
 FirstFrame = PyEmbeddedImage(

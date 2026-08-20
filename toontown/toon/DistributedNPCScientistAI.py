@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import ClassicFSM, State
 from direct.task.Task import Task
 from direct.directnotify import DirectNotifyGlobal

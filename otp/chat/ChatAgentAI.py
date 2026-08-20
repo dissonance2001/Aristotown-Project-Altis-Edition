@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectGlobalAI import DistributedObjectGlobalAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.chat.ChatGlobals import *
@@ -6,7 +7,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from time import gmtime, strftime
 import json
-import httplib
+import six.moves.http_client
 import six
 
 def to_bool(boolorstr):
@@ -58,7 +59,7 @@ class ChatAgentAI(DistributedObjectGlobalAI):
         self.sendUpdate('chatMessageAiToUd', [sender, message, chatMode])
 
     def chatMessageResponse(self, sender, message, modifications, chatMode):
-        if sender not in self.air.doId2do.keys():
+        if sender not in list(self.air.doId2do.keys()):
             # found an invalid sender!
             return
 

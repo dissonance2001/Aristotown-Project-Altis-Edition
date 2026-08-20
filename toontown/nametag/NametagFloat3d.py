@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task.Task import Task
 from toontown.nametag.Nametag3d import Nametag3d
 

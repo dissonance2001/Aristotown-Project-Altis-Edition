@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import calendar
 from copy import deepcopy
 from pandac.PandaModules import *
@@ -12,6 +14,8 @@ from toontown.ai import HalloweenHolidayDecorator
 from toontown.ai import CrashedLeaderBoardDecorator
 from direct.interval.IntervalGlobal import *
 from toontown.suit import SuitDNA
+from six.moves import filter
+from six.moves import range
 
 decorationHolidays = [ToontownGlobals.WINTER_DECORATIONS,
  ToontownGlobals.WACKY_WINTER_DECORATIONS,
@@ -44,7 +48,7 @@ class NewsManager(DistributedObject.DistributedObject):
                 try:
                     self.decorationHolidayIds.append(decorationHolidays[int(HID)])
                 except:
-                    print 'holidayId value error: "%s"... skipping' %HID
+                    print('holidayId value error: "%s"... skipping' %HID)
 
         self.holidayDecorator = None
         self.holidayIdList = []
@@ -397,11 +401,11 @@ class NewsManager(DistributedObject.DistributedObject):
         def isStarting(id):
             return id not in self.holidayIdList
 
-        toEnd = filter(isEnding, self.holidayIdList)
+        toEnd = list(filter(isEnding, self.holidayIdList))
         for endingHolidayId in toEnd:
             self.endHoliday(endingHolidayId)
 
-        toStart = filter(isStarting, holidayIdList)
+        toStart = list(filter(isStarting, holidayIdList))
         for startingHolidayId in toStart:
             self.startHoliday(startingHolidayId)
 
@@ -657,7 +661,7 @@ class NewsManager(DistributedObject.DistributedObject):
         self.weekDaysInMonth = []
         self.numDaysCorMatrix = [(28, 0), (29, 1), (30, 2), (31, 3)]
 
-        for i in xrange(7):
+        for i in range(7):
             self.weekDaysInMonth.append((i, 4))
 
         for holidayItem in self.relativelyCalendarHolidays:
@@ -723,18 +727,18 @@ class NewsManager(DistributedObject.DistributedObject):
         return monthDays[repNum - 1][weekday]
 
     def initRepMatrix(self, year, month):
-        for i in xrange(7):
+        for i in range(7):
             self.weekDaysInMonth[i] = (i, 4)
 
         startingWeekDay, numDays = calendar.monthrange(year, month)
         if startingWeekDay > 6:
             import pdb
             pdb.set_trace()
-        for i in xrange(4):
+        for i in range(4):
             if numDays == self.numDaysCorMatrix[i][0]:
                 break
 
-        for j in xrange(self.numDaysCorMatrix[i][1]):
+        for j in range(self.numDaysCorMatrix[i][1]):
             self.weekDaysInMonth[startingWeekDay] = (self.weekDaysInMonth[startingWeekDay][0], self.weekDaysInMonth[startingWeekDay][1] + 1)
             startingWeekDay = (startingWeekDay + 1) % 7
 

@@ -1,6 +1,7 @@
 """Defines the DirectObject class, a convenient class to inherit from if the
 object needs to be able to respond to events."""
 
+from __future__ import absolute_import
 __all__ = ['DirectObject']
 
 

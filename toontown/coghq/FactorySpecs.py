@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import SellbotLegFactorySpec
 from toontown.coghq import SellbotLegFactoryCogs
@@ -17,7 +18,7 @@ FactorySpecModules = {ToontownGlobals.SellbotFactoryInt: SellbotLegFactorySpec,
 CogSpecModules = {ToontownGlobals.SellbotFactoryInt: SellbotLegFactoryCogs,
  ToontownGlobals.LawbotOfficeInt: LawbotLegFactoryCogs}
 if __dev__:
-    import FactoryMockupSpec
+    from . import FactoryMockupSpec
     FactorySpecModules[ToontownGlobals.MockupFactoryId] = FactoryMockupSpec
-    import FactoryMockupCogs
+    from . import FactoryMockupCogs
     CogSpecModules[ToontownGlobals.MockupFactoryId] = FactoryMockupCogs

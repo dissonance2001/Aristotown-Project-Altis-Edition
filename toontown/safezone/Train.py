@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import *
@@ -11,6 +12,7 @@ from direct.fsm import State
 from direct.directutil import Mopath
 from toontown.toonbase import ToontownGlobals
 from direct.actor import Actor
+from six.moves import range
 
 class Train(DirectObject):
     notify = directNotify.newCategory('Train')
@@ -97,7 +99,7 @@ class Train(DirectObject):
     def __getCars(self):
         self.__cleanupCars()
         numCarsThisRun = random.randrange(1, 10)
-        for nCar in xrange(numCarsThisRun):
+        for nCar in range(numCarsThisRun):
             carType = random.randrange(0, self.numCars)
             car = loader.loadModel(self.CarFiles[carType])
             car.flattenStrong()

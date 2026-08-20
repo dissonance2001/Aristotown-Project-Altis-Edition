@@ -1,5 +1,6 @@
 """SampleObject module: contains the SampleObject class"""
 
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed.DistributedObject import *
 

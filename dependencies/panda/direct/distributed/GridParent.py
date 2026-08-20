@@ -8,6 +8,7 @@
 # that the object is broadcasting its position relative to the gridCell
 # it lies in.
 
+from __future__ import absolute_import
 from panda3d.core import NodePath
 
 class GridParent:

@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import sys
 import time
 import types
+from six.moves import range
 
 ltime = 1 and time.localtime()
 logSuffix = '%02d%02d%02d_%02d%02d%02d' % (ltime[0] - 2000,  ltime[1], ltime[2],
@@ -33,9 +36,9 @@ sys.stderr = logErr
 print('\n\nStarting Toontown...')
 
 if 1:
-    print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
-    print 'sys.path = ', sys.path
-    print 'sys.argv = ', sys.argv
+    print('Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0])
+    print('sys.path = ', sys.path)
+    print('sys.argv = ', sys.argv)
 
 from otp.launcher.LauncherBase import LauncherBase
 from otp.otpbase import OTPLauncherGlobals
@@ -61,7 +64,7 @@ class ToontownLauncher(LauncherBase):
             self.accountServer = sys.argv[3]
             self.testServerFlag = int(sys.argv[4])
         else:
-            print 'Error: Launcher: incorrect number of parameters'
+            print('Error: Launcher: incorrect number of parameters')
             sys.exit()
 
         self.toontownBlueKey = 'TOONTOWN_BLUE'
@@ -108,7 +111,7 @@ class ToontownLauncher(LauncherBase):
         l = s.split('&')
         length = len(l)
         dict = {}
-        for index in xrange(0, len(l)):
+        for index in range(0, len(l)):
             args = l[index].split('=')
             if len(args) == 3:
                 [name, value] = args[-2:]
@@ -150,9 +153,9 @@ class ToontownLauncher(LauncherBase):
             return
 
         t = type(value)
-        if t == types.IntType:
+        if t == int:
             WindowsRegistry.setIntValue(self.toontownRegistryKey, name, value)
-        elif t == types.StringType:
+        elif t == bytes:
             WindowsRegistry.setStringValue(self.toontownRegistryKey, name, value)
         else:
             self.notify.warning('setRegistry: Invalid type for registry value: ' + repr(value))

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
@@ -6,6 +7,7 @@ from otp.ai.AIBase import *
 from toontown.building import DistributedElevatorExtAI
 from toontown.building.ElevatorConstants import *
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedLawOfficeElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorExtAI):
     def __init__(self, air, bldg, lawOfficeId, entranceId, antiShuffle = 0, minLaff = 0):
@@ -27,7 +29,7 @@ class DistributedLawOfficeElevatorExtAI(DistributedElevatorExtAI.DistributedElev
                     players.append(i)
                     continue
             lawOfficeZone = self.bldg.createLawOffice(self.lawOfficeId, self.entranceId, players)
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setLawOfficeInteriorZone', [lawOfficeZone])

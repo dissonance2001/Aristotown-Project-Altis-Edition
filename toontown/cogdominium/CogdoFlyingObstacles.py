@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import LerpFunc, ActorInterval, LerpPosInterval

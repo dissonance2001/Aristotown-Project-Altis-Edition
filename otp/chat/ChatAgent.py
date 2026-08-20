@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from panda3d.core import *
 from panda3d.direct import *

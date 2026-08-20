@@ -1,3 +1,4 @@
+from __future__ import print_function
 TrackSignDuration = 15
 RaceCountdown = 3
 MaxRacers = 4
@@ -356,7 +357,7 @@ TrackDict = {RT_Speedway_1: (TrackPath + 'RT_SpeedwayA',
                   1.0,
                   'GS_Race_CC.ogg',
                   (0.002, 0.003))}
-TrackIds = TrackDict.keys()
+TrackIds = list(TrackDict.keys())
 TrackIds.sort()
 
 def getEntryFee(trackId, raceType):
@@ -382,7 +383,7 @@ AllTime = 2
 PeriodDict = {Daily: 10,
  Weekly: 100,
  AllTime: 1000}
-PeriodIds = PeriodDict.keys()
+PeriodIds = list(PeriodDict.keys())
 NumRecordPeriods = len(PeriodIds)
 NumRecordsPerPeriod = 10
 Winnings = [4.0,
@@ -539,7 +540,7 @@ def getCircuitLoop(startingTrack):
     circuitLoop = [startingTrack]
     for loop in CircuitLoops:
         if startingTrack in loop:
-            print loop
+            print(loop)
             numTracks = len(loop)
             tempLoop = loop * 2
             startingIndex = tempLoop.index(startingTrack)

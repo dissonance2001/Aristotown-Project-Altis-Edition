@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.minigame import PlayingCardDeck
 
 EasiestGameDuration = 120

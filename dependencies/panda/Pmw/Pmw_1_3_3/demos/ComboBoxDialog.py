@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.ComboBoxDialog demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -20,24 +22,24 @@ class Demo:
 	self.dialog.withdraw()
 
 	# Create button to launch the dialog.
-	w = Tkinter.Button(parent,
+	w = six.moves.tkinter.Button(parent,
 		text = 'Show combo box dialog',
 		command = self.doit)
 	w.pack(padx = 8, pady = 8)
 
     def doit(self):
         result = self.dialog.activate()
-	print 'You clicked on', result, self.dialog.get()
+	print('You clicked on', result, self.dialog.get())
 
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

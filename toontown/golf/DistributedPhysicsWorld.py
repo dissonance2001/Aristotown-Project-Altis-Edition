@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random, time, math
 from panda3d.core import *
 from direct.distributed import DistributedObject

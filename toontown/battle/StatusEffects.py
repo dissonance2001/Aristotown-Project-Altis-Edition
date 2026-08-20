@@ -1,8 +1,10 @@
 '''
 Use this file to hold all status effect data.
 '''
+from __future__ import absolute_import
 from toontown.toonbase.ToonPythonUtil import getBase
 from toontown.toonbase.ToontownBattleGlobals import HEAL_TRACK, TRAP_TRACK, LURE_TRACK, THROW_TRACK, SQUIRT_TRACK, ZAP_TRACK, SOUND_TRACK, DROP_TRACK, AvPropsNew, AvPropStrings
+from six.moves import range
 DEFAULT_STATUS_ICON_PATH = 'phase_3.5/models/gui/battlegui/status_effects.bam'
 TRACK_2_CONSTANT = {HEAL_TRACK: 'Toon-up',
  TRAP_TRACK: 'Trap',

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.classicchars import DistributedPlutoAI
 from toontown.hood import HoodAI
 from toontown.hood import ZoneUtil

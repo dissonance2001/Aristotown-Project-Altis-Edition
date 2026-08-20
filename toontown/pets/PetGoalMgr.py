@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.directnotify import DirectNotifyGlobal
@@ -25,7 +26,7 @@ class PetGoalMgr(DirectObject.DirectObject):
             del self.pscSetup
             del self.pscFindPrimary
             del self.pscSetPrimary
-        goals = self.goals.keys()
+        goals = list(self.goals.keys())
         for goal in goals:
             self.removeGoal(goal)
             goal.destroy()

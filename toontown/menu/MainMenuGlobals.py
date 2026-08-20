@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Vec4
 
 TT_PLAY_AV_BOX_COLORS = (

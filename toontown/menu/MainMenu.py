@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import *
 from panda3d.core import *

@@ -1,5 +1,7 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = ['ClassicStyle', 'NewStyle', 'ToonEyes']
 
 from . import FSM
@@ -18,61 +20,61 @@ class ClassicStyle(FSM.FSM):
             }
 
     def enterRed(self):
-        print("enterRed(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterRed(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def exitRed(self):
-        print("exitRed(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitRed(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def enterYellow(self):
-        print("enterYellow(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterYellow(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def exitYellow(self):
-        print("exitYellow(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitYellow(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def enterGreen(self):
-        print("enterGreen(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterGreen(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def exitGreen(self):
-        print("exitGreen(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitGreen(self, '%s', '%s')" % (self.oldState, self.newState)))
 
 
 class NewStyle(FSM.FSM):
 
     def enterRed(self):
-        print("enterRed(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterRed(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def filterRed(self, request, args):
-        print("filterRed(self, '%s', %s)" % (request, args))
+        print(("filterRed(self, '%s', %s)" % (request, args)))
         if request == 'advance':
             return 'Green'
         return self.defaultFilter(request, args)
 
     def exitRed(self):
-        print("exitRed(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitRed(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def enterYellow(self):
-        print("enterYellow(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterYellow(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def filterYellow(self, request, args):
-        print("filterYellow(self, '%s', %s)" % (request, args))
+        print(("filterYellow(self, '%s', %s)" % (request, args)))
         if request == 'advance':
             return 'Red'
         return self.defaultFilter(request, args)
 
     def exitYellow(self):
-        print("exitYellow(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitYellow(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def enterGreen(self):
-        print("enterGreen(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("enterGreen(self, '%s', '%s')" % (self.oldState, self.newState)))
 
     def filterGreen(self, request, args):
-        print("filterGreen(self, '%s', %s)" % (request, args))
+        print(("filterGreen(self, '%s', %s)" % (request, args)))
         if request == 'advance':
             return 'Yellow'
         return self.defaultFilter(request, args)
 
     def exitGreen(self):
-        print("exitGreen(self, '%s', '%s')" % (self.oldState, self.newState))
+        print(("exitGreen(self, '%s', '%s')" % (self.oldState, self.newState)))
 
 
 class ToonEyes(FSM.FSM):

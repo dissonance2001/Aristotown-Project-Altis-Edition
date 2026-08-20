@@ -3,6 +3,7 @@ Slider Class: Velocity style controller for floating point values with
                a label, entry (validated), and min/max slider
 """
 
+from __future__ import absolute_import
 __all__ = ['Slider', 'SliderWidget', 'rgbPanel']
 
 from direct.showbase.TkGlobal import *

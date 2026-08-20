@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -50,7 +51,7 @@ class DistributedChainsawSigilvator(DistributedSigilvator):
             return DistributedSigilvator.getPortInterval(self)
 
         toons = []
-        for avId in sorted(self.boardedAvIds.keys(), key=lambda item: self.boardedAvIds[item]):
+        for avId in sorted(list(self.boardedAvIds.keys()), key=lambda item: self.boardedAvIds[item]):
             av = base.cr.doId2do.get(avId)
             if av:
                 toons.append(av)

@@ -2,6 +2,7 @@
 A  basic widget for showing the progress being made in a task.
 """
 
+from __future__ import absolute_import
 __all__ = ['ProgressBar']
 
 from direct.showbase.TkGlobal import *

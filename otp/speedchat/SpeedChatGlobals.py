@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.speedchat.SCTerminal import SCTerminalSelectedEvent
 from otp.speedchat.SCTerminal import SCTerminalLinkedEmoteEvent
 from otp.speedchat.SCStaticTextTerminal import SCStaticTextMsgEvent

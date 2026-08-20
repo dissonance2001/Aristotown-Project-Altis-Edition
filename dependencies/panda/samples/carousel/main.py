@@ -17,6 +17,7 @@
 # will turn on and off by switching their texture with intervals in Sequence
 # and Parallel
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import AmbientLight, DirectionalLight, LightAttrib
 from panda3d.core import NodePath
@@ -26,6 +27,7 @@ from direct.gui.DirectGui import *
 
 # Importing math constants and functions
 from math import pi, sin
+from six.moves import range
 
 
 class CarouselDemo(ShowBase):

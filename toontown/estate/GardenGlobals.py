@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 import random
+from six.moves import range
 
 FLOWERS_PER_BONUS = 10
 ACCELERATOR_USED_FROM_SHTIKER_BOOK = True
@@ -76,9 +78,9 @@ FLOWER_PINK = 4
 FLOWER_YELLOW = 5
 FLOWER_WHITE = 6
 FLOWER_GREEN = 7
-ToonStatuaryTypeIndices = range(205, 209)
-ChangingStatuaryTypeIndices = range(230, 232)
-AnimatedStatuaryTypeIndices = range(234, 238)
+ToonStatuaryTypeIndices = list(range(205, 209))
+ChangingStatuaryTypeIndices = list(range(230, 232))
+AnimatedStatuaryTypeIndices = list(range(234, 238))
 PlantAttributes = {49: {'name': TTLocalizer.FlowerSpeciesNames[49],
       'plantType': FLOWER_TYPE,
       'growthThresholds': (1, 1, 1),
@@ -306,10 +308,10 @@ if ACCELERATOR_USED_FROM_SHTIKER_BOOK:
     del PlantAttributes[202]
 
 def getTreeTrackAndLevel(typeIndex):
-    track = typeIndex / 7
+    typeIndex = int(typeIndex)
+    track = typeIndex // 7
     level = typeIndex % 7
     return (track, level)
-
 
 def getTreeTypeIndex(track, level):
     return track * 7 + level
@@ -562,7 +564,7 @@ def getNumberOfFlowerSpecies():
 
 def getFlowerVarieties(species):
     retval = ()
-    if species in PlantAttributes.keys():
+    if species in list(PlantAttributes.keys()):
         attrib = PlantAttributes[species]
         if attrib['plantType'] == FLOWER_TYPE:
             retval = attrib['varieties']
@@ -587,7 +589,7 @@ def getRandomFlower():
 
 def getFlowerVarietyName(species, variety):
     retVal = TTLocalizer.FlowerUnknown
-    if species in PlantAttributes.keys():
+    if species in list(PlantAttributes.keys()):
         attrib = PlantAttributes[species]
         if variety < len(attrib['varieties']):
             funnySpeciesNameList = TTLocalizer.FlowerFunnyNames.get(species)

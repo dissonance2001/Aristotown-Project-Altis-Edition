@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from direct.gui.DirectGui import *
 from toontown.toon import DistributedToon
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.cogdominium import CogdoBarrelRoomConsts
+from six.moves import range
 
 class CogdoBarrelRoomRewardPanel(DirectFrame):
 
@@ -12,7 +14,7 @@ class CogdoBarrelRoomRewardPanel(DirectFrame):
         self.initialiseoptions(CogdoBarrelRoomRewardPanel)
         self.avNameLabel = DirectLabel(parent=self, relief=None, pos=(0, 0, 0.3), text='Toon Ups', text_scale=0.08)
         self.rewardLines = []
-        for i in xrange(CogdoBarrelRoomConsts.MaxToons):
+        for i in range(CogdoBarrelRoomConsts.MaxToons):
             rewardLine = {}
             rewardLine['frame'] = DirectFrame(parent=self, relief=None, frameSize=(-0.5,
              0.5,

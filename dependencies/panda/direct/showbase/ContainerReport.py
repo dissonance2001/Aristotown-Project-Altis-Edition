@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.PythonUtil import Queue, invertDictLossless
 from direct.showbase.PythonUtil import safeRepr
@@ -84,7 +86,7 @@ class ContainerReport(Job):
             except:
                 pass
 
-            if type(parentObj) in (types.StringType, types.UnicodeType):
+            if type(parentObj) in (bytes, str):
                 continue
 
             if type(parentObj) in (types.ModuleType, types.InstanceType):
@@ -196,11 +198,11 @@ class ContainerReport(Job):
             self._type2id2len[type(obj)][objId] = length
     def _examine(self, obj):
         # return False if it's an object that can't contain or lead to other objects
-        if type(obj) in (types.BooleanType, types.BuiltinFunctionType,
-                         types.BuiltinMethodType, types.ComplexType,
-                         types.FloatType, types.IntType, types.LongType,
-                         types.NoneType, types.NotImplementedType,
-                         types.TypeType, types.CodeType, types.FunctionType):
+        if type(obj) in (bool, types.BuiltinFunctionType,
+                         types.BuiltinMethodType, complex,
+                         float, int, int,
+                         type(None), type(NotImplemented),
+                         type, types.CodeType, types.FunctionType):
             return False
         # if it's an internal object, ignore it
         if id(obj) in ContainerReport.PrivateIds:
@@ -217,7 +219,7 @@ class ContainerReport(Job):
         lengths.sort()
         lengths.reverse()
         print('=====')
-        print('===== %s' % type)
+        print(('===== %s' % type))
         count = 0
         stop = False
         for l in lengths:
@@ -232,12 +234,12 @@ class ContainerReport(Job):
                     yield None
             pathStrList.sort()
             for pathstr in pathStrList:
-                print('%s: %s' % (l, pathstr))
+                print(('%s: %s' % (l, pathstr)))
             if limit is not None and count >= limit:
                 return
 
     def _output(self, **kArgs):
-        print("===== ContainerReport: \'%s\' =====" % (self._name,))
+        print(("===== ContainerReport: \'%s\' =====" % (self._name,)))
         initialTypes = (dict, list, tuple)
         for type in initialTypes:
             for i in self._outputType(type, **kArgs):

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 CRATE_CLEAR = 0
 CRATE_POWERUP = 1

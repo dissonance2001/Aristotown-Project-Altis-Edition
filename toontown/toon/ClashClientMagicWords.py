@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from otp.ai.MagicWordGlobal import *
 from pandac.PandaModules import Filename
 import sys
 
 try:
-    import __builtin__ as _builtins
+    import six.moves.builtins as _builtins
 except ImportError:
     import builtins as _builtins
 try:

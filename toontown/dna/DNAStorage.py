@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from toontown.dna import DNASuitEdge
 from toontown.dna import DNASuitPath
 from toontown.dna import DNASuitPoint
 from toontown.dna import DNAError
+from six.moves import range
 
 class DNAStorage(object):
     __slots__ = ('visGroups', 'DNAGroups', 'textures', 'fonts', 'fontFilenames', 'catalogCodes', 'nodes', 'hoodNodes', 'placeNodes', 
@@ -137,7 +140,7 @@ class DNAStorage(object):
         try:
            model = loader.pdnaModel(Filename(filename))
         except:
-           print "DNAStorage: Failed to load %s!" % (filename)
+           print("DNAStorage: Failed to load %s!" % (filename))
            return
         
         if search:
@@ -291,7 +294,7 @@ class DNAStorage(object):
         endPoint = self.getSuitPointWithIndex(endIndex)
 
         if not startPoint or not endPoint:
-            print "DNAStorage: Attempted to add edge with unknown startPoint(%s) and/or endPoint(%s)" % (startIndex, endIndex)
+            print("DNAStorage: Attempted to add edge with unknown startPoint(%s) and/or endPoint(%s)" % (startIndex, endIndex))
 
         if not startIndex in self.suitEdges:
             self.suitEdges[startIndex] = []

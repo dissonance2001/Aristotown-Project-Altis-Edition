@@ -1,5 +1,6 @@
 """Contains the BulletinBoard class."""
 
+from __future__ import absolute_import
 __all__ = ['BulletinBoard']
 
 from direct.directnotify import DirectNotifyGlobal

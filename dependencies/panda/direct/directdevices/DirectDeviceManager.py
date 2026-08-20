@@ -1,8 +1,10 @@
 """Class used to create and control VRPN devices."""
 
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from panda3d.core import *
 from panda3d.vrpn import *
+from six.moves import range
 
 ANALOG_MIN = -0.95
 ANALOG_MAX = 0.95

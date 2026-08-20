@@ -1,5 +1,6 @@
 """Contains the TaskThreaded and TaskThread classes."""
 
+from __future__ import absolute_import
 __all__ = ['TaskThreaded', 'TaskThread']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -54,7 +55,7 @@ class TaskThreaded:
             callback()
         else:
             taskName = ('%s-ThreadedTask-%s' %
-                        (self.__name, TaskThreaded._Serial.next()))
+                        (self.__name, next(TaskThreaded._Serial)))
             assert taskName not in self.__taskNames
             self.__taskNames.add(taskName)
             taskMgr.add(Functor(self.__doCallback, callback, taskName),
@@ -78,7 +79,7 @@ class TaskThreaded:
                 self.__threads.add(thread)
                 taskName = ('%s-ThreadedTask-%s-%s' %
                             (self.__name, thread.__class__.__name__,
-                             TaskThreaded._Serial.next()))
+                             next(TaskThreaded._Serial)))
                 assert taskName not in self.__taskNames
                 self.__taskNames.add(taskName)
                 self.__threads.add(thread)

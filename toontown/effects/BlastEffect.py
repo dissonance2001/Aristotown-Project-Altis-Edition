@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-from EffectController import EffectController
+from .EffectController import EffectController
 
 class BlastEffect(NodePath, EffectController):
 

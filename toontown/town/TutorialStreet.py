@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.town import TTStreet
 
 class TutorialStreet(TTStreet.TTStreet):

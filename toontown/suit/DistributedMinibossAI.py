@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from otp.avatar import DistributedAvatarAI
 from toontown.battle import BattleExperienceAI
@@ -10,7 +12,9 @@ from toontown.battle import BattleBase
 from toontown.coghq import CogDisguiseGlobals
 from toontown.suit import BossCutsceneSkipAI
 from panda3d.core import *
-import SuitDNA, random
+from . import SuitDNA
+import random
+from six.moves import map
 AllBossCogs = []
 
 class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
@@ -50,9 +54,9 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def printCurrentStats(self):
         print('*****')
-        print('suits: %s' % self.suits)
-        print('reser: %s' % self.reserveSuits)
-        print('activ: %s' % self.activeSuits)
+        print(('suits: %s' % self.suits))
+        print(('reser: %s' % self.reserveSuits))
+        print(('activ: %s' % self.activeSuits))
 
     def delete(self):
         self.ignoreAll()
@@ -235,8 +239,8 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def formatLaffLevels(self):
         try:
-            return map(lambda id: simbase.air.doId2do.get(id).getMaxHp(), self.involvedToons)
-        except Exception, e:
+            return [simbase.air.doId2do.get(id).getMaxHp() for id in self.involvedToons]
+        except Exception as e:
             self.notify.warning(e)
             return []
 
@@ -249,8 +253,8 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
                 else:
                     return 0
 
-            return map(hasSuit, self.involvedToons)
-        except Exception, e:
+            return list(map(hasSuit, self.involvedToons))
+        except Exception as e:
             self.notify.warning(e)
             return []
 

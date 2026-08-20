@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import random
 from toontown.hood import GenericAnimatedProp
@@ -8,6 +9,7 @@ from toontown.toonbase.ToonPythonUtil import weightedChoice
 from pandac.PandaModules import TextNode, Vec3
 from toontown.toonbase import ToontownGlobals
 from toontown.hood import ZoneUtil
+from six.moves import range
 
 def clearPythonIvals(ival):
     if hasattr(ival, 'function'):
@@ -334,7 +336,7 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
             numberOfLoops = random.randrange(minLoop, maxLoop + 1)
             pauseTime = random.randrange(minPauseTime, maxPauseTime + 1)
             result = Sequence()
-            for i in xrange(numberOfLoops):
+            for i in range(numberOfLoops):
                 result.append(idleAnimAndSound)
 
             if self.getSettleName(whichIdleAnim):
@@ -495,7 +497,7 @@ class InteractiveAnimatedProp(GenericAnimatedProp.GenericAnimatedProp, FSM.FSM):
                 baseAnimName = animName.split('/')[-1]
                 if localAvatar.zoneId == self.visId:
                     self.notify.info('playing %s' % baseAnimName)
-            except Exception, e:
+            except Exception as e:
                 self.notify.warning('Unknown error in printAnimIfClose, giving up:\n%s' % str(e))
 
     def clearCurIval(self):

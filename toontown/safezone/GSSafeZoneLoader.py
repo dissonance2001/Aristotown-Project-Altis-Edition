@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -9,6 +11,7 @@ from toontown.safezone.GSPlayground import GSPlayground
 from toontown.effects.CarSmoke import CarSmoke
 from toontown.toonbase import ToontownGlobals
 import random
+from six.moves import map
 if (__debug__):
     import pdb
 
@@ -36,7 +39,7 @@ class GSSafeZoneLoader(SafeZoneLoader):
             holidayIds = base.cr.newsManager.getDecorationHolidayId()
             if ToontownGlobals.CRASHED_LEADERBOARD in holidayIds:
                 self.startSmokeEffect()
-        self.birdSound = map(base.loader.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])
+        self.birdSound = list(map(base.loader.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg']))
 
     def unload(self):
         del self.birdSound
@@ -86,7 +89,7 @@ class GSSafeZoneLoader(SafeZoneLoader):
         del self.trackId
 
     def handleRaceOver(self):
-        print 'you done!!'
+        print('you done!!')
 
     def handleLeftRace(self):
         req = {'loader': 'safeZoneLoader',

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedElevator
 from toontown.building import DistributedBossElevator
 from toontown.building.ElevatorConstants import *

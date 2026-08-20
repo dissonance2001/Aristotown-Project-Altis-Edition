@@ -1,11 +1,14 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from six.moves import range
+from six.moves import zip
 __all__ = ['findDialog', 'cleanupDialog', 'DirectDialog', 'OkDialog', 'OkCancelDialog', 'YesNoDialog', 'YesNoCancelDialog', 'RetryCancelDialog']
 
 from pandac.PandaModules import *
-import DirectGuiGlobals as DGG
-from DirectFrame import *
-from DirectButton import *
+from . import DirectGuiGlobals as DGG
+from .DirectFrame import *
+from .DirectButton import *
 import types
 
 def findDialog(uniqueName):
@@ -182,11 +185,11 @@ class DirectDialog(DirectFrame):
 
     def configureDialog(self):
         # Set up hot key bindings
-        bindList = zip(self.buttonList, self['buttonHotKeyList'],
-                       self['buttonValueList'])
+        bindList = list(zip(self.buttonList, self['buttonHotKeyList'],
+                       self['buttonValueList']))
         for button, hotKey, value in bindList:
-            if ((type(hotKey) == types.ListType) or
-                (type(hotKey) == types.TupleType)):
+            if ((type(hotKey) == list) or
+                (type(hotKey) == tuple)):
                 for key in hotKey:
                     button.bind('press-' + key + '-', self.buttonCommand,
                                 extraArgs = [value])
@@ -261,12 +264,12 @@ class DirectDialog(DirectFrame):
             scale = self['button_scale']
             # Can either be a Vec3 or a tuple of 3 values
             if (isinstance(scale, Vec3) or
-                (type(scale) == types.ListType) or
-                (type(scale) == types.TupleType)):
+                (type(scale) == list) or
+                (type(scale) == tuple)):
                 sx = scale[0]
                 sz = scale[2]
-            elif ((type(scale) == types.IntType) or
-                  (type(scale) == types.FloatType)):
+            elif ((type(scale) == int) or
+                  (type(scale) == float)):
                 sx = sz = scale
             else:
                 sx = sz = 1

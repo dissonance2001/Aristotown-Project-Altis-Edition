@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toon.DistributedNPCToonAI import *
 
 class DistributedNPCFlippyInToonHallAI(DistributedNPCToonAI):

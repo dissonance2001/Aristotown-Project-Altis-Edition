@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.suit import SuitDNA
 from toontown.battle import SuitBattleGlobals
 from toontown.nametag import NametagGlobals
 from panda3d.core import TransparencyAttrib
 from toontown.nametag import NametagGroup
+from six.moves import range
 
 class SuitGenerator(object):
 

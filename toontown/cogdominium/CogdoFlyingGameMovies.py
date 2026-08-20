@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3, PlaneNode
 from direct.showbase.ShowBase import Plane
 from direct.showbase.RandomNumGen import RandomNumGen

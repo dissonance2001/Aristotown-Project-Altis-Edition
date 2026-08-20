@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.pets import PetTraits
 from toontown.pets import PetUtil
 from toontown.hood import ZoneUtil
@@ -5,6 +6,7 @@ from toontown.pets import PetNameGenerator
 import random
 import time
 from toontown.toon.DistributedToonAI import dna
+from six.moves import range
 
 class PetCreator:
     def __init__(self, air, avId, petSeed, nameIndex, gender, zoneId):
@@ -80,7 +82,7 @@ class PetManagerAI:
         self.air = air
 
     def getAvailablePets(self, numPets=5):
-        return random.sample(xrange(256), numPets)
+        return random.sample(range(256), numPets)
 
     def createNewPetFromSeed(self, avId, petSeeds, nameIndex, gender, safeZoneId):
         creator = PetCreator(self.air, avId, petSeeds, nameIndex, gender, safeZoneId)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.uberdog.ScavengerHuntDataStore import *
 from toontown.uberdog.DataStore import *
 SH = 1

@@ -1,11 +1,13 @@
 # Authors: Joe VanAndel and Greg McFarlane
 
+from __future__ import absolute_import
 import string
 import sys
 import time
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 class TimeCounter(Pmw.MegaWidget):
     """Up-down counter

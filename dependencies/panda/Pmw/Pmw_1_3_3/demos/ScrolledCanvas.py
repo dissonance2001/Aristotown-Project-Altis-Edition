@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw.ScrolledCanvas demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -55,13 +57,13 @@ class Demo:
 
 	self.sc.component('canvas').bind('<1>', self.addcircle)
 
-        testEntry = Tkinter.Entry(parent)
+        testEntry = six.moves.tkinter.Entry(parent)
 	self.sc.create_line(20, 20, 100, 100)
 	self.sc.create_oval(100, 100, 200, 200, fill = 'green')
 	self.sc.create_text(100, 20, anchor = 'nw',
 		text = 'Click in the canvas\nto draw ovals',
                 font = testEntry.cget('font'))
-	button = Tkinter.Button(self.sc.interior(),
+	button = six.moves.tkinter.Button(self.sc.interior(),
 		text = 'Hello,\nWorld!\nThis\nis\na\nbutton.')
 	self.sc.create_window(200, 200,
                 anchor='nw',
@@ -99,7 +101,7 @@ class Demo:
         return self.rand
 
     def showYView(self):
-        print self.sc.yview()
+        print(self.sc.yview())
 
     def pageDown(self):
         self.sc.yview('scroll', 1, 'page')
@@ -114,11 +116,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

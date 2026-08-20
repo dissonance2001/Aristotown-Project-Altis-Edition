@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Vec4
 
 DAY_NIGHT_PERIOD = 2700

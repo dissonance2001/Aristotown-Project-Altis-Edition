@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.gui import DirectGuiGlobals as DGG
@@ -17,6 +18,7 @@ from toontown.suit import Suit
 from toontown.battle import SuitBattleGlobals
 from toontown.coghq import CogDisguiseGlobals
 from toontown.quest import QuestBookPoster
+from six.moves import range
 
 
 IGNORE_SCALE = 0.06

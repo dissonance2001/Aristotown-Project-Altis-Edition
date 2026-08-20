@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import PandaNode, LightNode, TextNode
 from panda3d.core import Filename, NodePath
@@ -110,12 +112,12 @@ class ToonMaker(ShowBase):
 
     def increaseSeparation(self):
         self.separation = self.separation * 1.11111111
-        print("separation: %f" % (self.separation))
+        print(("separation: %f" % (self.separation)))
         self.filters.setCartoonInk(separation=self.separation)
 
     def decreaseSeparation(self):
         self.separation = self.separation * 0.90000000
-        print("separation: %f" % (self.separation))
+        print(("separation: %f" % (self.separation)))
         self.filters.setCartoonInk(separation=self.separation)
 
 t = ToonMaker()

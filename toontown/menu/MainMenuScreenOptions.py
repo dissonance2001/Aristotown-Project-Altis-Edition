@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import copy
 import math
 
@@ -12,6 +13,7 @@ from toontown.menu import MainMenuGui, MainMenuGlobals
 from toontown.settings import ToontownSettings
 from toontown.shtiker import ControlRemapDialog
 from toontown.toontowngui import TTDialog
+from six.moves import range
 
 try:
     _wheelUpButton = MouseButton.wheelUp()
@@ -52,7 +54,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
             images.append(MainMenuGui._node(gui, name))
         if not images or images[0] is None:
             return None
-        for i in xrange(len(images)):
+        for i in range(len(images)):
             if images[i] is None:
                 images[i] = images[0]
         return tuple(images)

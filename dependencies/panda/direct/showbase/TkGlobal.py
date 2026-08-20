@@ -1,11 +1,12 @@
 """ This module is now vestigial.  """
 
+from __future__ import absolute_import
 import sys, Pmw
 
 if sys.version_info >= (3, 0):
     from tkinter import *
 else:
-    from Tkinter import *
+    from six.moves.tkinter import *
 
 # This is required by the ihooks.py module used by Squeeze (used by
 # pandaSqueezer.py) so that Pmw initializes properly

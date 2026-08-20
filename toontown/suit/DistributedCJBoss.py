@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 
 from direct.distributed.ClockDelta import *
@@ -9,6 +10,7 @@ from toontown.battle import BattleProps
 from toontown.duckhuntbossbattle import FourBossBattleGlobals
 from toontown.duckhuntbossbattle.DistributedRebornBossCog import DistributedRebornBossCog
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 class DistributedCJBoss(DistributedRebornBossCog):
@@ -335,7 +337,7 @@ class DistributedCJBoss(DistributedRebornBossCog):
                     self.quatInterval(0.5, hpr=Vec3(cjEndH, 0, 0))
                 )
             )
-            for move in xrange(dist + 10):
+            for move in range(dist + 10):
                 y = -(move / dist + 1)
                 self.track.append(
                     Sequence(

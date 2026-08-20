@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 title = 'Blt busy cursor demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -22,12 +23,12 @@ class Demo:
 		'for one second but will not display\n' \
 		'the busy cursor.'
 
-	button = Tkinter.Button(parent,
+	button = six.moves.tkinter.Button(parent,
 	        text = text,
 		command = Pmw.busycallback(self.sleep, parent.update))
 	button.pack(padx = 10, pady = 10)
 
-	entry = Tkinter.Entry(parent, width = 30)
+	entry = six.moves.tkinter.Entry(parent, width = 30)
 	entry.insert('end', 'Try to enter some text while busy.')
 	entry.pack(padx = 10, pady = 10)
 
@@ -38,11 +39,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

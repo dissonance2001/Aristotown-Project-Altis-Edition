@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DoorTypes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq import DistributedCogHQDoorAI

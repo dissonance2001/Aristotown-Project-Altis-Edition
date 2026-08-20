@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3
 from pandac.PandaModules import Vec3
 import copy
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 __mickeyPaths = {'a': (Point3(17, -17, 4.025), ('b', 'e')),
  'b': (Point3(17.5, 7.6, 4.025), ('c', 'e')),
  'c': (Point3(85, 11.5, 4.025), ('d',)),
@@ -438,7 +440,7 @@ def getPointsFromTo(fromNode, toNode, paths):
 def getWalkDuration(fromNode, toNode, velocity, paths):
     posPoints = getPointsFromTo(fromNode, toNode, paths)
     duration = 0
-    for pointIndex in xrange(len(posPoints) - 1):
+    for pointIndex in range(len(posPoints) - 1):
         startPoint = posPoints[pointIndex]
         endPoint = posPoints[pointIndex + 1]
         distance = Vec3(endPoint - startPoint).length()
@@ -450,7 +452,7 @@ def getWalkDuration(fromNode, toNode, velocity, paths):
 def getWalkDistance(fromNode, toNode, velocity, paths):
     posPoints = getPointsFromTo(fromNode, toNode, paths)
     retval = 0
-    for pointIndex in xrange(len(posPoints) - 1):
+    for pointIndex in range(len(posPoints) - 1):
         startPoint = posPoints[pointIndex]
         endPoint = posPoints[pointIndex + 1]
         distance = Vec3(endPoint - startPoint).length()

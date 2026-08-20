@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.DirectObject import DirectObject
 from direct.directnotify.DirectNotifyGlobal import directNotify
 
@@ -23,11 +25,11 @@ class DistributedObjectBase(DirectObject):
             """
             spaces = ' ' * (indent + 2)
             try:
-                print("%s%s:" % (' ' * indent, self.__class__.__name__))
-                print("%sfrom DistributedObject doId:%s, parent:%s, zone:%s" % (
-                    spaces, self.doId, self.parentId, self.zoneId))
+                print(("%s%s:" % (' ' * indent, self.__class__.__name__)))
+                print(("%sfrom DistributedObject doId:%s, parent:%s, zone:%s" % (
+                    spaces, self.doId, self.parentId, self.zoneId)))
             except Exception as e:
-                print("%serror printing status %s" % (spaces, e))
+                print(("%serror printing status %s" % (spaces, e)))
 
     def getLocation(self):
         try:

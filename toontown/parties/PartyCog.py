@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from direct.actor.Actor import Actor
 from direct.interval.ActorInterval import ActorInterval
@@ -14,6 +15,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds import globalBattleSoundCache
 from toontown.parties import PartyGlobals
+from six.moves import range
 
 class PartyCogManager:
 
@@ -30,7 +32,7 @@ class PartyCogManager:
             cog.unload()
 
     def updateDistances(self, distances):
-        for i in xrange(len(distances)):
+        for i in range(len(distances)):
             self.cogs[i].updateDistance(distances[i])
 
 

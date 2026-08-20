@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from math import *
 from toontown.minigame.DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
@@ -137,7 +138,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
         self.rewardArray = []
         for avId in self.avIdList:
             choice = self.avatarChoices[avId]
-            freq = self.avatarChoices.values().count(choice)
+            freq = list(self.avatarChoices.values()).count(choice)
             self.processChoice(avId, choice, freq)
 
         masterList = []
@@ -231,7 +232,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
             choice = self.avatarChoices[avId]
             reward = -1
             if choice != 0:
-                freq = self.avatarChoices.values().count(choice)
+                freq = list(self.avatarChoices.values()).count(choice)
                 if recurse or freq == 1:
                     self.avatarPositions[avId] += choice
                     if self.avatarPositions[avId] < 0:

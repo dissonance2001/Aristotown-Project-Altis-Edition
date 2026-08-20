@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import wx
 from wx.lib.agw import fourwaysplitter as FWS
 
 from panda3d.core import *
 from direct.showbase.ShowBase import *
 from direct.directtools.DirectGlobals import *
+from six.moves import range
 
 try:
     base

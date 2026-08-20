@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.DirectObject import DirectObject
@@ -7,6 +8,7 @@ from toontown.minigame import TwoDEnemyMgr
 from toontown.minigame import TwoDTreasureMgr
 from toontown.minigame import TwoDSpawnPointMgr
 from toontown.minigame import TwoDStomperMgr
+from six.moves import range
 
 class TwoDSection(DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TwoDSection')
@@ -74,7 +76,7 @@ class TwoDSection(DirectObject):
         self.blocksNP.reparentTo(self.sectionNP)
         if self.blockList[0][1][0] != (0, 0, 12):
             self.notify.warning('First block of section %s does not start at (0, 0, 12)' % self.sectionTypeNum)
-        for index in xrange(0, len(self.blockList)):
+        for index in range(0, len(self.blockList)):
             blockAttribs = self.blockList[index]
             fileName = ToonBlitzGlobals.BlockTypes[blockAttribs[0]][0]
             blockIndex = int(fileName[-1])

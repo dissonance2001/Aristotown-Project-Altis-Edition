@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import StateData
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal

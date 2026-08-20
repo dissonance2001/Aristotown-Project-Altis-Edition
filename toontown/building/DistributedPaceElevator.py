@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from pandac.PandaModules import Point3
 from direct.interval.IntervalGlobal import Func, Sequence, SoundInterval, Wait, LerpPosInterval
 from toontown.building import DistributedElevator
@@ -8,6 +9,7 @@ from toontown.building.ElevatorUtils import getCloseInterval
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.building import PacesetterInstanceGlobals
+from six.moves import range
 
 
 class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
@@ -193,15 +195,15 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
             self.rideHiddenGeom = place.loader.geom
             self.rideHiddenGeom.hide()
 
-        for seatIndex in xrange(len(self.elevatorPoints)):
+        for seatIndex in range(len(self.elevatorPoints)):
             avId = 0
-            if seatIndex < len(self.boardedAvIds.keys()):
-                avId = self.boardedAvIds.keys()[seatIndex]
+            if seatIndex < len(list(self.boardedAvIds.keys())):
+                avId = list(self.boardedAvIds.keys())[seatIndex]
 
             toon = self.cr.doId2do.get(avId)
             if toon:
                 toon.reparentTo(self.elevatorModel)
-                toon.setPos(apply(Point3, self.elevatorPoints[seatIndex]))
+                toon.setPos(Point3(*self.elevatorPoints[seatIndex]))
                 toon.setHpr(180, 0, 0)
                 toon.setAnimState('neutral', 1.0)
                 toon.show()

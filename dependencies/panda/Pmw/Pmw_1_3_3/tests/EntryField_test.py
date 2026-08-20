@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/tests/entryfield.test code.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -61,7 +62,7 @@ tests_1 = (
 	"validators ()"),
   ('relief', 'bogus', 'KeyError: Unknown option "relief" for EntryField'),
   (c.invoke, (), 1),
-  (c.interior, (), Tkinter.Frame),
+  (c.interior, (), six.moves.tkinter.Frame),
   (c.clear, ()),
   (c.get, (), ''),
   (c.insert, ('end', 'Test String')),

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.shtiker import ShtikerPage
 from direct.gui.DirectGui import *
@@ -12,6 +13,8 @@ from toontown.quest.QuestPoster import QuestPoster
 from toontown.club import ClubGlobals
 from direct.gui import DirectGuiGlobals as DGG
 from direct.directnotify import DirectNotifyGlobal
+import six
+from six.moves import range
 
 class QuestPage(ShtikerPage.ShtikerPage):
     notify = DirectNotifyGlobal.directNotify.newCategory('QuestPage')
@@ -53,7 +56,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
     def load(self):
         self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.QuestPageToonTasks, text_scale=0.12, textMayChange=0, pos=(0, 0, 0.6))
         self.questFrames = []
-        for i in xrange(ToontownGlobals.MaxQuestCarryLimit):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
             frame = QuestBookPoster.QuestBookPoster(reverse=i > 1, mapIndex=i + 1)
             frame.reparentTo(self)
             frame.setPosHpr(*self.normalQuestFramePlaceList[i])
@@ -306,7 +309,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         self.quests[index] = questDesc
 
     def getLowestUnusedIndex(self):
-        for i in xrange(ToontownGlobals.MaxQuestCarryLimit):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
             if self.quests[i] == None:
                 return i
 
@@ -316,7 +319,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         self.notify.debug('updatePage()')
         newQuests = base.localAvatar.quests
         carryLimit = base.localAvatar.getQuestCarryLimit()
-        for i in xrange(ToontownGlobals.MaxQuestCarryLimit):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
             if i < carryLimit:
                 self.questFrames[i].show()
             else:
@@ -328,11 +331,11 @@ class QuestPage(ShtikerPage.ShtikerPage):
 
         for questDesc in newQuests:
             newQuestDesc = tuple(questDesc)
-            if newQuestDesc not in self.quests.values():
+            if newQuestDesc not in list(self.quests.values()):
                 index = self.getLowestUnusedIndex()
                 self.fillQuestFrame(newQuestDesc, index)
 
-        for i, questDesc in self.quests.iteritems():
+        for i, questDesc in six.iteritems(self.quests):
             if questDesc:
                 if self.canDeleteQuest(questDesc):
                     self.questFrames[i].setDeleteCallback(self.__deleteQuest)
@@ -366,7 +369,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         if self.onscreen or base.localAvatar.invPage.onscreen:
             return
         self.onscreen = 1
-        for i in xrange(ToontownGlobals.MaxQuestCarryLimit):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
             if hasattr(self.questFrames[i], 'mapIndex'):
                 self.questFrames[i].mapIndex.show()
 
@@ -383,7 +386,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         if not self.onscreen:
             return
         self.onscreen = 0
-        for i in xrange(ToontownGlobals.MaxQuestCarryLimit):
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
             if hasattr(self.questFrames[i], 'mapIndex'):
                 self.questFrames[i].mapIndex.hide()
 

@@ -1,4 +1,5 @@
-from SpecImports import *
+from __future__ import absolute_import
+from .SpecImports import *
 from toontown.toonbase import ToontownGlobals
 import random
 CogParent = 20000

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from pandac.PandaModules import *
 from direct.interval.MetaInterval import Sequence, Parallel

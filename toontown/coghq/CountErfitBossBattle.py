@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle import BattlePlace
 from toontown.building import CountErfitInstanceGlobals
 from toontown.coghq import CogHQBossBattle
 from toontown.suit import DistributedCountErfitBoss
 from toontown.suit import Suit
+from six.moves import range
 
 class CountErfitBossBattle(CogHQBossBattle.CogHQBossBattle):
     notify = directNotify.newCategory('CountErfitBossBattle')
@@ -16,7 +18,7 @@ class CountErfitBossBattle(CogHQBossBattle.CogHQBossBattle):
         BattlePlace.BattlePlace.load(self)
         self.parentFSM.getStateNamed(self.ParentStateName).addChild(self.fsm)
         self.townBattle = self.loader.townBattle
-        for i in xrange(1, 3):
+        for i in range(1, 3):
             Suit.loadSuits(i)
 
     def unload(self):
@@ -25,7 +27,7 @@ class CountErfitBossBattle(CogHQBossBattle.CogHQBossBattle):
         del self.parentFSM
         del self.fsm
         self.ignoreAll()
-        for i in xrange(1, 3):
+        for i in range(1, 3):
             Suit.unloadSuits(i)
 
     def _setArenaTeleportPosition(self, controller):

@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import random
 from toontown.coghq import DistributedCountryClubAI
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import DirectObject
 from toontown.coghq import CountryClubLayout
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 CountryClubId2Layouts = {
     ToontownGlobals.BossbotCountryClubIntA: (0, 1, 2),
@@ -40,7 +42,7 @@ class CountryClubManagerAI(DirectObject.DirectObject):
         for avId in players:
             if bboard.has('countryClubRoom-%s' % avId):
                 roomId = bboard.get('countryClubRoom-%s' % avId)
-                for i in xrange(numFloors):
+                for i in range(numFloors):
                     layout = CountryClubLayout.CountryClubLayout(countryClubId, i)
                     if roomId in layout.getRoomIds():
                         floor = i

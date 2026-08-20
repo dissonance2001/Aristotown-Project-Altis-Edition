@@ -1,10 +1,12 @@
 """
 Defines Layer UI
 """
+from __future__ import absolute_import
 import wx
 from panda3d.core import *
 
 from . import ObjectGlobals as OG
+from six.moves import range
 
 class LayerEditorUI(wx.Panel):
     def __init__(self, parent, editor):

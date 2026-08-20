@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 import random
+from six.moves import range
 HILL_MOLE = 0
 HILL_BOMB = 1
 HILL_WHACKED = 2
@@ -31,7 +33,7 @@ class MoleFieldBase:
         curTimeBetweenPopup = self.TimeBetweenPopupMax
         curStayUpTime = self.StayUpTimeMax
         curTime = 3
-        eligibleMoles = range(self.numMoles)
+        eligibleMoles = list(range(self.numMoles))
         self.getRng().shuffle(eligibleMoles)
         usedMoles = []
         self.notify.debug('eligibleMoles=%s' % eligibleMoles)

@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from pandac.PandaModules import NodePath, BillboardEffect, Vec3, Point3, TextureStage, TransparencyAttrib, DecalEffect, VBase4
 from direct.fsm import FSM
 from direct.gui.DirectGui import DirectFrame, DGG
 from direct.interval.IntervalGlobal import LerpScaleInterval, LerpColorScaleInterval, Parallel, Sequence, Wait
+from six.moves import range
 
 class DinerStatusIndicator(NodePath, FSM.FSM):
 
@@ -105,7 +107,7 @@ class DinerStatusIndicator(NodePath, FSM.FSM):
         flashDuration = 10
         if time > flashDuration:
             flashingTrack.append(Wait(time - flashDuration))
-            for i in xrange(10):
+            for i in range(10):
                 flashingTrack.append(Parallel(LerpColorScaleInterval(icon, 0.5, VBase4(1, 0, 0, 1)), icon.scaleInterval(0.5, 1.25)))
                 flashingTrack.append(Parallel(LerpColorScaleInterval(icon, 0.5, VBase4(1, 1, 1, 1)), icon.scaleInterval(0.5, 1)))
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import math
 
 from direct.gui.DirectGui import DirectButton, DirectFrame, DirectLabel
@@ -9,6 +11,7 @@ from toontown.club.ClubClasses import ClubIcon
 from toontown.club.ClubIconGUI import ClubIconGUI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.socialpanel.clubs.general.ClubLevelShield import ClubLevelShield
+from six.moves import range
 
 
 class ClubShopGUI(DirectFrame):
@@ -175,7 +178,7 @@ class ClubShopGUI(DirectFrame):
         nodes = []
         try:
             matches = model.findAllMatches('**/*')
-            for index in xrange(matches.getNumPaths()):
+            for index in range(matches.getNumPaths()):
                 nodes.append(matches.getPath(index))
         except:
             pass
@@ -375,7 +378,7 @@ class ClubShopGUI(DirectFrame):
         targets = [node]
         try:
             matches = node.findAllMatches('**/*')
-            for index in xrange(matches.getNumPaths()):
+            for index in range(matches.getNumPaths()):
                 targets.append(matches.getPath(index))
         except:
             pass
@@ -422,7 +425,7 @@ class ClubShopGUI(DirectFrame):
             return
         self._assetLog[label] = True
         name = '<fallback>' if node is None else node.getName()
-        print('[Clubs] Club Shop asset %s: %s' % (label, name))
+        print(('[Clubs] Club Shop asset %s: %s' % (label, name)))
 
     # ------------------------------------------------------------------
     # Main layout
@@ -576,7 +579,7 @@ class ClubShopGUI(DirectFrame):
         lines.setColor(0.94, 0.12, 0.08, 0.76)
         lines.setThickness(2.7)
         pointCount = 48
-        for index in xrange(pointCount + 1):
+        for index in range(pointCount + 1):
             angle = (math.pi * 2.0 * index) / float(pointCount)
             x = math.cos(angle) * 0.205
             z = math.sin(angle) * 0.088
@@ -934,7 +937,7 @@ class ClubShopGUI(DirectFrame):
         try:
             children = node.findAllMatches('**/*')
             childLimit = min(children.getNumPaths(), 48)
-            for index in xrange(childLimit):
+            for index in range(childLimit):
                 parts.append(self._normaliseName(children.getPath(index).getName()))
         except:
             pass
@@ -943,7 +946,7 @@ class ClubShopGUI(DirectFrame):
         # names were flattened during conversion.
         try:
             textures = node.findAllTextures()
-            for index in xrange(textures.getNumTextures()):
+            for index in range(textures.getNumTextures()):
                 texture = textures.getTexture(index)
                 parts.append(self._normaliseName(texture.getName()))
                 try:

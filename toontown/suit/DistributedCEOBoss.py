@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 
 from direct.directnotify import DirectNotifyGlobal
@@ -10,6 +11,7 @@ from toontown.duckhuntbossbattle import FourBossBattleGlobals
 from toontown.duckhuntbossbattle.DistributedRebornBossCog import DistributedRebornBossCog
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 class DoorBool:

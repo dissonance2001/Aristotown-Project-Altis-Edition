@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.instances import InstanceGlobals
 
 PLUTOCRAT = InstanceGlobals.PLUTOCRAT

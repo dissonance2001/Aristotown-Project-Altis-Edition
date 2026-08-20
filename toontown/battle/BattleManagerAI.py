@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle import DistributedBattleAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.dna import DNABattleCell

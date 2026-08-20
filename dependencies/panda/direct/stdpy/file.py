@@ -4,6 +4,8 @@ virtual file system, and it also better-supports Panda's
 SIMPLE_THREADS model, by avoiding blocking all threads while waiting
 for I/O to complete. """
 
+from __future__ import absolute_import
+import six
 __all__ = [
     'open', 'listdir', 'walk', 'join',
     'isfile', 'isdir', 'exists', 'lexists', 'getmtime', 'getsize',
@@ -26,7 +28,7 @@ if sys.version_info < (3, 0):
     FileExistsError = IOError
     PermissionError = IOError
 
-    unicodeType = unicode
+    unicodeType = six.text_type
     strType = str
 else:
     unicodeType = str

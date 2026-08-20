@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math, random, time
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
@@ -15,6 +16,7 @@ from toontown.toontowngui import TTDialog
 from toontown.parties import PartyGlobals, PartyUtils
 from toontown.parties.DistributedPartyActivity import DistributedPartyActivity
 from toontown.parties.activityFSMs import TrampolineActivityFSM
+from six.moves import range
 
 class DistributedPartyTrampolineActivity(DistributedPartyActivity):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPartyTrampolineActivity')
@@ -71,7 +73,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
          VBase4(0.4, 0.4, 1.0, 1.0),
          VBase4(1.0, 0.5, 1.0, 1.0)]
         delta = (self.jellyBeanStopHeight - self.jellyBeanStartHeight) / (self.numJellyBeans - 1)
-        self.jellyBeanPositions = [ self.jellyBeanStartHeight + n * delta for n in xrange(self.numJellyBeans) ]
+        self.jellyBeanPositions = [ self.jellyBeanStartHeight + n * delta for n in range(self.numJellyBeans) ]
         self.doSimulateStep = False
 
     def load(self):
@@ -99,7 +101,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         self.surface.setZ(self.trampHeight)
         self.trampActor.controlJoint(self.surface, 'modelRoot', 'trampoline_joint1')
         self.sign.setPos(PartyGlobals.TrampolineSignOffset)
-        self.beans = [ loader.loadModelCopy('phase_4/models/props/jellybean4') for i in xrange(self.numJellyBeans) ]
+        self.beans = [ loader.loadModelCopy('phase_4/models/props/jellybean4') for i in range(self.numJellyBeans) ]
         for bean in self.beans:
             bean.find('**/jellybean').setP(-35.0)
             bean.setScale(3.0)
@@ -133,7 +135,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         jumpLineLocator = self.gui.find('**/jumpLine_locator')
         guiBean = self.gui.find('**/trampolineGUI_GreenJellyBean')
         self.gui.find('**/trampolineGUI_GreenJellyBean').stash()
-        self.guiBeans = [ guiBean.instanceUnderNode(jumpLineLocator, self.uniqueName('guiBean%d' % i)) for i in xrange(self.numJellyBeans) ]
+        self.guiBeans = [ guiBean.instanceUnderNode(jumpLineLocator, self.uniqueName('guiBean%d' % i)) for i in range(self.numJellyBeans) ]
         self.guiBeans[-1].setScale(1.5)
         heightTextNode = TextNode(self.uniqueName('TrampolineActivity.heightTextNode'))
         heightTextNode.setFont(ToontownGlobals.getSignFont())
@@ -295,7 +297,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         self.beansToCollect = []
         self.beanDetails = []
         self.numBeansCollected = 0
-        for i in xrange(self.numJellyBeans):
+        for i in range(self.numJellyBeans):
             bean = self.beans[i]
             guiBean = self.guiBeans[i]
             height = self.jellyBeanPositions[i]
@@ -319,7 +321,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
              guiBean,
              beanAnim))
 
-        self.beansToCollect = range(self.numJellyBeans)
+        self.beansToCollect = list(range(self.numJellyBeans))
 
     def cleanupJellyBeans(self):
         for bean in self.beans:

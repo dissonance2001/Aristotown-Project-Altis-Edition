@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm.FSM import FSM
 from direct.directnotify import DirectNotifyGlobal
 

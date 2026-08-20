@@ -1,5 +1,6 @@
 """Contains the FourStateAI class.  See also :mod:`.FourState`."""
 
+from __future__ import absolute_import
 __all__ = ['FourStateAI']
 
 from direct.directnotify import DirectNotifyGlobal

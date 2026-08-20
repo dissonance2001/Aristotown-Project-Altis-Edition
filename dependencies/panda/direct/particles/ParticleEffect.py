@@ -1,4 +1,5 @@
 
+from __future__ import absolute_import
 from panda3d.core import *
 
 # Leave these imports in, they may be used by ptf files.
@@ -8,6 +9,7 @@ from . import ForceGroup
 
 from direct.directnotify import DirectNotifyGlobal
 import sys
+from six.moves import range
 
 
 if sys.version_info < (3, 0):

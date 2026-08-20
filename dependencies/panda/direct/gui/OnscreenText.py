@@ -4,6 +4,9 @@ See the :ref:`onscreentext` page in the programming manual for explanation of
 this class.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+import six
 __all__ = ['OnscreenText', 'Plain', 'ScreenTitle', 'ScreenPrompt', 'NameConfirm', 'BlackOnWhite']
 
 from panda3d.core import *
@@ -285,7 +288,7 @@ class OnscreenText(NodePath):
             assert not isinstance(text, bytes)
             self.unicodeText = True
         else:
-            self.unicodeText = isinstance(text, unicode)
+            self.unicodeText = isinstance(text, six.text_type)
 
         if self.unicodeText:
             self.textNode.setWtext(text)
@@ -297,7 +300,7 @@ class OnscreenText(NodePath):
             assert not isinstance(text, bytes)
             self.unicodeText = True
         else:
-            self.unicodeText = isinstance(text, unicode)
+            self.unicodeText = isinstance(text, six.text_type)
 
         if self.unicodeText:
             self.textNode.appendWtext(text)
@@ -451,7 +454,7 @@ class OnscreenText(NodePath):
                 else:
                     setter(value)
             except AttributeError:
-                print('OnscreenText.configure: invalid option: %s' % option)
+                print(('OnscreenText.configure: invalid option: %s' % option))
 
     # Allow index style references
     def __setitem__(self, key, value):

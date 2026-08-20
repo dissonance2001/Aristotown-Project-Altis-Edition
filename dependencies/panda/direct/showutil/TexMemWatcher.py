@@ -1,7 +1,10 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from direct.showbase.DirectObject import DirectObject
 import math
 import copy
+from six.moves import map
+from six.moves import range
 
 class TexMemWatcher(DirectObject):
     """
@@ -389,7 +392,7 @@ class TexMemWatcher(DirectObject):
 
     def enterRegion(self, region, buttonName):
         """ the mouse has rolled over a texture. """
-        key, pi = map(int, region.getName().split(':'))
+        key, pi = list(map(int, region.getName().split(':')))
         tr = self.texRecordsByKey.get(key)
         if not tr:
             return
@@ -398,7 +401,7 @@ class TexMemWatcher(DirectObject):
 
     def leaveRegion(self, region, buttonName):
         """ the mouse is no longer over a texture. """
-        key, pi = map(int, region.getName().split(':'))
+        key, pi = list(map(int, region.getName().split(':')))
         tr = self.texRecordsByKey.get(key)
         if tr != self.rollover:
             return

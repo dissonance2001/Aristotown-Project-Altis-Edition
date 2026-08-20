@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import ctypes
 from ctypes.wintypes import *
 TH32CS_SNAPPROCESS = 2

@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from toontown.dna.DNAParser import DNASuitPoint
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class SuitLeg:
     TWalkFromStreet = 0
@@ -120,7 +122,7 @@ class SuitLegList:
         self.add(self.path.getPoint(0), self.path.getPoint(1), self.getFirstLegType())
 
         # Next, connect each of the points in our path through SuitLegs:
-        for i in xrange(self.path.getNumPoints() - 1):
+        for i in range(self.path.getNumPoints() - 1):
             pointA = self.path.getPoint(i)
             pointB = self.path.getPoint(i + 1)
             pointTypeA = pointA.getPointType()

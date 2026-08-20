@@ -1,5 +1,7 @@
 """Contains the NotifyPanel class."""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['NotifyPanel']
 
 

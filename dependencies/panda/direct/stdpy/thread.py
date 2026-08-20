@@ -5,6 +5,7 @@ in some compilation models, Panda's threading constructs are
 incompatible with the OS-provided threads used by Python's thread
 module. """
 
+from __future__ import absolute_import
 __all__ = [
     'error', 'LockType',
     'start_new_thread',

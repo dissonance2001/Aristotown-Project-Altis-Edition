@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
@@ -25,6 +26,7 @@ from toontown.minigame import TreasureScorePanel
 from otp.distributed.TelemetryLimiter import TelemetryLimiter, TLGatherAllAvs
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class DivingGameRotationLimiter(TelemetryLimiter):
 
@@ -324,7 +326,7 @@ class DistributedDivingGame(DistributedMinigame):
             del crab
 
         if hasattr(self, 'treasures') and self.treasures:
-            for i in xrange(self.NUMTREASURES):
+            for i in range(self.NUMTREASURES):
                 self.treasures[i].destroy()
 
             del self.treasures
@@ -403,10 +405,10 @@ class DistributedDivingGame(DistributedMinigame):
         self.SPEEDMULT = pattern[1]
         self.TIME = pattern[2]
         loadBase = 'phase_4/models/char/'
-        for i in xrange(self.NUMCRABS):
+        for i in range(self.NUMCRABS):
             self.crabs.append(Actor.Actor(loadBase + 'kingCrab-zero.bam', {'anim': loadBase + 'kingCrab-swimLOOP.bam'}))
 
-        for i in xrange(len(self.crabs)):
+        for i in range(len(self.crabs)):
             crab = self.crabs[i]
             crab.reparentTo(render)
             crab.name = 'king'
@@ -439,7 +441,7 @@ class DistributedDivingGame(DistributedMinigame):
         loadBase = 'phase_4/models/minigames/'
         self.treasures = []
         self.chestIcons = {}
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             self.chestIcons[i] = loader.loadModel(loadBase + 'treasure_chest.bam')
             self.chestIcons[i].reparentTo(self.mapModel)
             self.chestIcons[i].setScale(1.5)
@@ -606,7 +608,7 @@ class DistributedDivingGame(DistributedMinigame):
         taskMgr.remove(self.TREASURE_BOUNDS_TASK)
 
     def __treasureBoundsTask(self, task):
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             self.chestIcons[i].setPos(self.treasures[i].chest.getPos(render) / self.MAP_DIV)
             self.chestIcons[i].setZ(self.chestIcons[i].getZ() + self.MAP_OFF)
             if self.treasures[i].treasureNode.getZ() < -36:
@@ -627,7 +629,7 @@ class DistributedDivingGame(DistributedMinigame):
         if avId == self.localAvId:
             self.reachedFlag = 0
         if toonSD.status == 'treasure' and self.treasures and self.chestIcons:
-            for i in xrange(self.NUMTREASURES):
+            for i in range(self.NUMTREASURES):
                 if self.treasures[i].grabbedId == avId:
                     self.treasures[i].treasureNode.wrtReparentTo(render)
                     self.treasures[i].grabbedId = 0
@@ -667,7 +669,7 @@ class DistributedDivingGame(DistributedMinigame):
         if not hasattr(self, 'treasures'):
             return
         ts = globalClockDelta.localElapsedTime(timestamp)
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             if self.treasures[i].grabbedId == avId:
                 self.treasures[i].grabbedId = 0
                 toonSD = self.toonSDs[avId]
@@ -827,7 +829,7 @@ class DistributedDivingGame(DistributedMinigame):
         crab = self.crabs[crabId]
         ts = globalClockDelta.localElapsedTime(timestamp)
         x = 0
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             x += self.treasures[i].treasureNode.getX(render)
 
         x /= self.NUMTREASURES
@@ -916,7 +918,7 @@ class DistributedDivingGame(DistributedMinigame):
         pos[1] = -2
         pos[2] += self.zVel * dt
         found = 0
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             if self.treasures[i].grabbedId == self.localAvId:
                 found = 1
                 i = self.NUMTREASURES + 1
@@ -973,7 +975,7 @@ class DistributedDivingGame(DistributedMinigame):
         self.treasurePanel.cleanup()
         self.mapAvatars[self.localAvId].destroy()
         del self.mapAvatars
-        for i in xrange(self.NUMTREASURES):
+        for i in range(self.NUMTREASURES):
             del self.chestIcons[i]
 
         del self.timer

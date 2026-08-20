@@ -14,6 +14,7 @@
 # Megawidgets are built by creating a class that inherits from either
 # the MegaToplevel or MegaWidget class.
 
+from __future__ import absolute_import
 import os
 import string
 import sys
@@ -21,6 +22,7 @@ import traceback
 import types
 import tkinter
 import collections
+from six.moves import range
 
 # tkinter 8.5 -> 8.6 fixed a problem in which selected indexes
 # were reported as strings instead of ints

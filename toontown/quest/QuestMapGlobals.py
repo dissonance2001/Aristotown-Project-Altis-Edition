@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3
 CogInfoPosTable = {'toontown_central_2100_english': Point3(-0.3, 0, -0.2),
  'toontown_central_2200_english': Point3(0.2, 0, -0.2),

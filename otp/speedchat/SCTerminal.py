@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 from otp.speedchat.SCElement import SCElement
 from otp.speedchat.SCObject import SCObject
 from otp.speedchat.SCMenu import SCMenu
 from direct.fsm.StatePush import StateVar, FunctionCall
 from direct.showbase.DirectObject import DirectObject
 from otp.avatar import Emote
+from six.moves import range
 
 SCTerminalSelectedEvent = 'SCTerminalSelected'
 SCTerminalLinkedEmoteEvent = 'SCTerminalLinkedEmoteEvent'
@@ -125,7 +127,7 @@ class SCTerminal(SCElement):
     def updateEmoteIcon(self):
         if hasattr(self, 'button'):
             self.lastEmoteIconColor = self.getEmoteIconColor()
-            for i in xrange(self.button['numStates']):
+            for i in range(self.button['numStates']):
                 self.button['image%s_image' % i].setColorScale(*self.lastEmoteIconColor)
 
         else:

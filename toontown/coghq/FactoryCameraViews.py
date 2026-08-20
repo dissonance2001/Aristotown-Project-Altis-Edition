@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.toonbase.ToonPythonUtil import Functor
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
+from six.moves import range
 
 class FactoryCameraViews:
     notify = DirectNotifyGlobal.directNotify.newCategory('FactoryCameraViews')
@@ -24,7 +26,7 @@ class FactoryCameraViews:
            Point3(0.0, 1.5, -3.9375),
            1), []]]
         camHeight = av.getClampedAvatarHeight()
-        for i in xrange(len(self.views)):
+        for i in range(len(self.views)):
             camPos = self.views[i][1]
             av.auxCameraPositions.append(camPos)
             factory.accept('enter' + self.views[i][0], Functor(self.switchCamPos, i))
@@ -34,7 +36,7 @@ class FactoryCameraViews:
         return
 
     def delete(self):
-        for i in xrange(len(self.views)):
+        for i in range(len(self.views)):
             base.localAvatar.auxCameraPositions.remove(self.views[i][1])
             self.factory.ignore('enter' + self.views[i][0])
             self.factory.ignore('exit' + self.views[i][0])

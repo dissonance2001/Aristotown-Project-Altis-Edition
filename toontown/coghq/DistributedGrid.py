@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
@@ -48,7 +49,7 @@ class DistributedGrid(BasicEntities.DistributedNodePathEntity):
             long = self.numRow
             short = self.numCol
             h = 90
-        self.model.setScale(scale * long, scale * short, 1)
+        self.model.setScale(scale * int, scale * short, 1)
         self.model.setHpr(h, 180, 0)
         self.model.setPos(self.cellSize * self.numCol / 2.0, self.cellSize * self.numRow / 2.0, 0.025)
         self.model.setColor(0.588, 0.588, 0.459, 0.4)

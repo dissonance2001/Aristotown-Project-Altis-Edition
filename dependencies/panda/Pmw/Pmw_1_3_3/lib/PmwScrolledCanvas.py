@@ -1,4 +1,5 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Pmw
 
 class ScrolledCanvas(Pmw.MegaWidget):
@@ -31,7 +32,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	    # Create a frame widget to act as the border of the canvas. 
 	    self._borderframe = self.createcomponent('borderframe',
 		    (), None,
-		    Tkinter.Frame, (self.origInterior,),
+		    six.moves.tkinter.Frame, (self.origInterior,),
 		    relief = 'sunken',
 		    borderwidth = 2,
 	    )
@@ -40,7 +41,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	    # Create the canvas widget.
 	    self._canvas = self.createcomponent('canvas',
 		    (), None,
-		    Tkinter.Canvas, (self._borderframe,),
+		    six.moves.tkinter.Canvas, (self._borderframe,),
 		    highlightthickness = 0,
 		    borderwidth = 0,
 	    )
@@ -49,7 +50,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	    # Create the canvas widget.
 	    self._canvas = self.createcomponent('canvas',
 		    (), None,
-		    Tkinter.Canvas, (self.origInterior,),
+		    six.moves.tkinter.Canvas, (self.origInterior,),
 		    relief = 'sunken',
 		    borderwidth = 2,
 	    )
@@ -61,7 +62,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	# Create the horizontal scrollbar
 	self._horizScrollbar = self.createcomponent('horizscrollbar',
 		(), 'Scrollbar',
-		Tkinter.Scrollbar, (self.origInterior,),
+		six.moves.tkinter.Scrollbar, (self.origInterior,),
 	        orient='horizontal',
 		command=self._canvas.xview
 	)
@@ -69,7 +70,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	# Create the vertical scrollbar
 	self._vertScrollbar = self.createcomponent('vertscrollbar',
 		(), 'Scrollbar',
-		Tkinter.Scrollbar, (self.origInterior,),
+		six.moves.tkinter.Scrollbar, (self.origInterior,),
 		orient='vertical',
 		command=self._canvas.yview
 	)
@@ -128,7 +129,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 		self._toggleHorizScrollbar()
 	else:
 	    message = 'bad hscrollmode option "%s": should be static, dynamic, or none' % mode
-	    raise ValueError, message
+	    raise ValueError(message)
 
         self._configureScrollCommands()
 
@@ -148,7 +149,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 		self._toggleVertScrollbar()
 	else:
 	    message = 'bad vscrollmode option "%s": should be static, dynamic, or none' % mode
-	    raise ValueError, message
+	    raise ValueError(message)
 
         self._configureScrollCommands()
 
@@ -284,6 +285,6 @@ class ScrolledCanvas(Pmw.MegaWidget):
     # Need to explicitly forward this to override the stupid
     # (grid_)bbox method inherited from Tkinter.Frame.Grid.
     def bbox(self, *args):
-	return apply(self._canvas.bbox, args)
+	return self._canvas.bbox(*args)
 
-Pmw.forwardmethods(ScrolledCanvas, Tkinter.Canvas, '_canvas')
+Pmw.forwardmethods(ScrolledCanvas, six.moves.tkinter.Canvas, '_canvas')

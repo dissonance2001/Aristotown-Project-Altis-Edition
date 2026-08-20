@@ -15,6 +15,8 @@ to and may be replaced by the following code:
    base = ShowBase()
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 __all__ = []
 
 if __debug__:

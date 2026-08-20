@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.battle.BattleGlobals import *
@@ -19,6 +20,7 @@ from direct.interval.IntervalGlobal import *
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase import TTLocalizer
+from six.moves import range
 
 class ToonStatusInformationPanel(DirectFrame):
     def __init__(self, toon, statusEffects, closeCommand=None):
@@ -1221,7 +1223,7 @@ class TownBattleToonPanel(DirectFrame):
 
         self.hoveredToonStatusSlot = None
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             slot = self.toonStatusSlots[slotIndex]
 
             self._stopToonStatusPulse(slot)
@@ -1237,7 +1239,7 @@ class TownBattleToonPanel(DirectFrame):
             for child in slot['iconRoot'].getChildren():
                 child.detachNode()
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             effectIndex = self.toonStatusOffset + slotIndex
 
             if effectIndex >= len(self.toonStatusIconNodes):
@@ -1332,7 +1334,7 @@ class TownBattleToonPanel(DirectFrame):
 
         self.toonStatusSlots = [None] * len(slotLayouts)
 
-        for i in reversed(range(len(slotLayouts))):
+        for i in reversed(list(range(len(slotLayouts)))):
             x, y, z = slotLayouts[i]
 
             bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -3160,7 +3162,7 @@ class TownBattleToonPanel(DirectFrame):
 
     def determineWhichText(self, numTargets, targetIndex, localNum, index, track):
         returnStr = ''
-        targetList = range(numTargets)
+        targetList = list(range(numTargets))
         targetList.reverse()
         try:
             if self.avatar.hasToonStatusEffect('confused'):

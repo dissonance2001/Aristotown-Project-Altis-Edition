@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.FunctionInterval import Func
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.MetaInterval import Sequence

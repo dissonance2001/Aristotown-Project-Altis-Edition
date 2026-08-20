@@ -1,6 +1,8 @@
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
+from six.moves import range
 
 Test.initialise()
 
@@ -68,7 +70,7 @@ tests_1 = (
     ('entry_width', 30),
     ('relief', 'bogus', 'KeyError: Unknown option "relief" for Counter'),
     (c.invoke, (), 1),
-    (c.interior, (), Tkinter.Frame),
+    (c.interior, (), six.moves.tkinter.Frame),
     (c.increment, ()),
     (c.get, (), '70'),
     ('increment', 5),

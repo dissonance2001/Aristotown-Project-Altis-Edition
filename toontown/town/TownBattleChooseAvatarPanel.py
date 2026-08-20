@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownBattleGlobals import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
@@ -14,6 +15,7 @@ from toontown.toon import IOURegistry
 from toontown.toon import NPCToons
 from toontown.toon import ToonHead
 from toontown.toon import ToonDNA
+from six.moves import range
 
 class TownBattleChooseAvatarPanel(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('ChooseAvatarPanel')
@@ -39,7 +41,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
         else:
             self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarCogTitle
         self.avatarButtons = []
-        for i in xrange(7):
+        for i in range(7):
             button = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')), command=self.__handleAvatar, extraArgs=[i])
             if self.toon:
                 button.setScale(.675, .675, -.675)
@@ -167,7 +169,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
                 else:
                     trackColor = Vec4(TrackColors[gagTrack][0], TrackColors[gagTrack][1], TrackColors[gagTrack][2], 1)
                     if avatars is not None:
-                        for i in xrange(min(numAvatars, len(avatars))):
+                        for i in range(min(numAvatars, len(avatars))):
                             avatar = avatars[i]
                             if avatar is not None and not avatar.hasTrackAccess(gagTrack):
                                 invalidTargets.append(i)
@@ -264,14 +266,14 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
             definition = IOURegistry.getIOU(self.level)
             if definition is not None and definition.getGagTrack() != -1 and avatars is not None:
                 gagTrack = definition.getGagTrack()
-                for i in xrange(min(numToons, len(avatars))):
+                for i in range(min(numToons, len(avatars))):
                     avatar = avatars[i]
                     if avatar is not None and not avatar.hasTrackAccess(gagTrack):
                         invalidTargets.append(i)
         self.__placeButtons(numToons, invalidTargets, localNum)
 
     def __placeButtons(self, numAvatars, invalidTargets, localNum):
-        for i in xrange(7):
+        for i in range(7):
             if numAvatars > i and i not in invalidTargets and i != localNum:
                 self.avatarButtons[i].show()
             else:
@@ -299,7 +301,7 @@ class TownBattleChooseAvatarPanel(StateData.StateData):
             self.notify.error('Invalid number of avatars: %s' % numAvatars)
             return None
 
-        indices = range(numAvatars)
+        indices = list(range(numAvatars))
 
         if confused:
             random.shuffle(indices)

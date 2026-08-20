@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.DirectObject import DirectObject
 from .DirectGlobals import *
 from .DirectUtil import *
@@ -5,6 +6,7 @@ from .DirectGeometry import *
 from .DirectSelection import SelectionRay
 from direct.task import Task
 from copy import deepcopy
+from six.moves import range
 
 class DirectManipulationControl(DirectObject):
     def __init__(self):

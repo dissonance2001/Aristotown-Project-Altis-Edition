@@ -13,6 +13,7 @@
 # most games so it seemed appropriate to show what a full game in Panda
 # could look like.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode, TransparencyAttrib
 from panda3d.core import LPoint3, LVector3
@@ -23,6 +24,7 @@ from random import randint, choice, random
 from direct.interval.MetaInterval import Sequence
 from direct.interval.FunctionInterval import Wait, Func
 import sys
+from six.moves import range
 
 # Constants that will control the behavior of the game. It is good to
 # group constants like this so that they can be changed once without

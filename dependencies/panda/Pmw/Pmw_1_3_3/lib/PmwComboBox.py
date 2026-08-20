@@ -1,9 +1,10 @@
 # Based on iwidgets2.2.0/combobox.itk code.
 
+from __future__ import absolute_import
 import os
 import string
 import types
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class ComboBox(Pmw.MegaWidget):
@@ -46,7 +47,7 @@ class ComboBox(Pmw.MegaWidget):
 	    # Create the arrow button.
 	    self._arrowBtn = self.createcomponent('arrowbutton',
 		    (), None,
-		    Tkinter.Canvas, (interior,), borderwidth = 2,
+		    six.moves.tkinter.Canvas, (interior,), borderwidth = 2,
 		    relief = 'raised',
 		    width = 16, height = 16)
             if 'n' in self['sticky']:
@@ -64,7 +65,7 @@ class ComboBox(Pmw.MegaWidget):
 	    # Create the dropdown window.
 	    self._popup = self.createcomponent('popup',
 		    (), None,
-		    Tkinter.Toplevel, (interior,))
+		    six.moves.tkinter.Toplevel, (interior,))
 	    self._popup.withdraw()
 	    self._popup.overrideredirect(1)
 
@@ -167,13 +168,13 @@ class ComboBox(Pmw.MegaWidget):
 	    return self._selectCmd()
 
     def selectitem(self, index, setentry=1):
-	if type(index) == types.StringType:
+	if type(index) == bytes:
 	    text = index
 	    items = self._list.get(0, 'end')
 	    if text in items:
 		index = list(items).index(text)
 	    else:
-	    	raise IndexError, 'index "%s" not found' % text
+	    	raise IndexError('index "%s" not found' % text)
 	elif setentry:
 	    text = self._list.get(0, 'end')[index]
 

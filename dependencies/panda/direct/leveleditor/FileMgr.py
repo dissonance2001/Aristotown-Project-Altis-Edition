@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import imp
 
@@ -35,7 +37,7 @@ class FileMgr:
             self.editor.updateStatusReadout('Sucessfully saved to %s'%fileName)
             self.editor.fNeedToSave = False
         except IOError:
-            print('failed to save %s'%fileName)
+            print(('failed to save %s'%fileName))
             if f:
                 f.close()
 
@@ -49,4 +51,4 @@ class FileMgr:
             self.editor.updateStatusReadout('Sucessfully opened file %s'%fileName)
             self.editor.fNeedToSave = False
         except:
-            print('failed to load %s'%fileName)
+            print(('failed to load %s'%fileName))

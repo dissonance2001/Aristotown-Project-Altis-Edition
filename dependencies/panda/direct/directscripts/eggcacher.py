@@ -8,6 +8,8 @@
 #
 ##############################################################################
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os,sys,gc
 from panda3d.core import *
 
@@ -45,7 +47,7 @@ class EggCacher:
 
     def scanPath(self, eggs, path):
         if (os.path.exists(path)==0):
-            print("No such file or directory: " + path)
+            print(("No such file or directory: " + path))
             return
         if (os.path.isdir(path)):
             for f in os.listdir(path):
@@ -78,7 +80,7 @@ class EggCacher:
             percent = (progress * 100) / total
             report = path
             if (self.concise): report = os.path.basename(report)
-            print("Preprocessing Models %2d%% %s" % (percent, report))
+            print(("Preprocessing Models %2d%% %s" % (percent, report)))
             sys.stdout.flush()
             if (cached) and (cached.hasData()==0):
                 self.pandaloader.loadSync(fn, self.loaderopts)

@@ -1,12 +1,13 @@
 # Tests for basic Tkinter widgets.
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 
 Test.initialise()
 testData = ()
 
-if Tkinter.TkVersion >= 8.0:
+if six.moves.tkinter.TkVersion >= 8.0:
   button_num = 31
   frame_num = 16
   menu_num = 20
@@ -17,7 +18,7 @@ else:
   menu_num = 19
   menubutton_num = 31
 
-c = Tkinter.Button
+c = six.moves.tkinter.Button
 tests = (
   (c.pack, ()),
   (Test.num_options, (), button_num),
@@ -30,7 +31,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Canvas
+c = six.moves.tkinter.Canvas
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 27),
@@ -71,7 +72,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Checkbutton
+c = six.moves.tkinter.Checkbutton
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 36),
@@ -84,7 +85,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Entry
+c = six.moves.tkinter.Entry
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 28),
@@ -100,7 +101,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Frame
+c = six.moves.tkinter.Frame
 tests = (
   (c.pack, ()),
   (Test.num_options, (), frame_num),
@@ -111,7 +112,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Label
+c = six.moves.tkinter.Label
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 25),
@@ -122,7 +123,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Listbox
+c = six.moves.tkinter.Listbox
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 23),
@@ -142,7 +143,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Menu
+c = six.moves.tkinter.Menu
 tests = (
   (Test.num_options, (), menu_num),
   ('background', 'lightsteelblue1'),
@@ -169,7 +170,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Menubutton
+c = six.moves.tkinter.Menubutton
 tests = (
   (c.pack, ()),
   (Test.num_options, (), menubutton_num),
@@ -179,7 +180,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Message
+c = six.moves.tkinter.Message
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 21),
@@ -194,7 +195,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Radiobutton
+c = six.moves.tkinter.Radiobutton
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 35),
@@ -214,7 +215,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Scale
+c = six.moves.tkinter.Scale
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 33),
@@ -232,7 +233,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Scrollbar
+c = six.moves.tkinter.Scrollbar
 tests = (
   (c.pack, (), {'fill': 'x'}),
   (Test.num_options, (), 20),
@@ -249,7 +250,7 @@ tests = (
 )
 testData = testData + ((c, ((tests, {}),)),)
 
-c = Tkinter.Text
+c = six.moves.tkinter.Text
 tests = (
   (c.pack, ()),
   (Test.num_options, (), 35),
@@ -304,14 +305,14 @@ testData = testData + ((c, ((tests, {}),)),)
 
 def _makeGridButtons():
   w = Test.currentWidget()
-  b1 = Tkinter.Button(w, text = 'Button 1')
-  b2 = Tkinter.Button(w, text = 'Button 2')
-  b3 = Tkinter.Button(w, text = 'Button 3')
-  b4 = Tkinter.Button(w, text = 'Button 4')
-  b5 = Tkinter.Button(w, text = 'Button 5')
-  b6 = Tkinter.Button(w, text = 'Button 6')
-  b7 = Tkinter.Button(w, text = 'Button 7')
-  b8 = Tkinter.Button(w, text = 'Button 8')
+  b1 = six.moves.tkinter.Button(w, text = 'Button 1')
+  b2 = six.moves.tkinter.Button(w, text = 'Button 2')
+  b3 = six.moves.tkinter.Button(w, text = 'Button 3')
+  b4 = six.moves.tkinter.Button(w, text = 'Button 4')
+  b5 = six.moves.tkinter.Button(w, text = 'Button 5')
+  b6 = six.moves.tkinter.Button(w, text = 'Button 6')
+  b7 = six.moves.tkinter.Button(w, text = 'Button 7')
+  b8 = six.moves.tkinter.Button(w, text = 'Button 8')
 
   b1.grid(column=0, row=0)
   b2.grid(column=1, row=0)
@@ -346,7 +347,7 @@ def _checkGridForget():
 
 # The -pad grid option was added in Tk 4.2.
 # Could not do columnconfigure(0) before Tk 4.2.
-if Tkinter.TkVersion >= 4.2:
+if six.moves.tkinter.TkVersion >= 4.2:
   padTest = {'pad': 25}
   colTest = {'minsize': 100, 'pad': 25, 'weight': 1}
   rowTest = {'minsize': 100, 'pad': 0, 'weight': 1}
@@ -355,7 +356,7 @@ else:
   colTest = 'TclError: wrong # args: should be "grid columnconfigure master index ?-option value...?"'
   rowTest = 'TclError: wrong # args: should be "grid rowconfigure master index ?-option value...?"'
 
-c = Tkinter.Frame
+c = six.moves.tkinter.Frame
 tests = (
   (c.pack, (), {'fill': 'both', 'expand': 1}),
   (_makeGridButtons, ()),

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 title = 'Subclassing Pmw.Counter'
 
 # Import Pmw from this directory tree.

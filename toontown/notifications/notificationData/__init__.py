@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.notifications.notificationData.NotificationData import NotificationData
 from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification
 from toontown.notifications.notificationData.GenericYesNoNotification import GenericYesNoNotification

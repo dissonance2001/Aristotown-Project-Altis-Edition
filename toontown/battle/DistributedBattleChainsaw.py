@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Point3, VBase3
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import Func, LerpHprInterval, LerpPosInterval, Parallel, Sequence, Track, Wait
@@ -5,6 +6,7 @@ from direct.interval.IntervalGlobal import Func, LerpHprInterval, LerpPosInterva
 from toontown.battle import DistributedBattleMiniboss
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 
 class DistributedBattleChainsaw(
@@ -102,7 +104,7 @@ class DistributedBattleChainsaw(
             pass
 
         multipliers = linkedIncoming[1:]
-        for index in xrange(len(supports)):
+        for index in range(len(supports)):
             suit = supports[index]
             defense = int(round((1.0 - multipliers[index]) * 100.0))
             try:

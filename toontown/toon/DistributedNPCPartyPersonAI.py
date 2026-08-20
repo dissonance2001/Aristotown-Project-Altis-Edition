@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
 from toontown.toonbase import TTLocalizer
 from direct.task import Task

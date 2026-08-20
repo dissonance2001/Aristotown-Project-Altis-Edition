@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleCalculatorAI import *
 from toontown.battle import DistributedBattleBaseAI

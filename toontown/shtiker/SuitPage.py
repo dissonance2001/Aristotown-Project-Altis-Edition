@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.shtiker import ShtikerPage
 from direct.task.Task import Task
 from toontown.shtiker import SummonCogDialog
@@ -8,7 +10,9 @@ from toontown.toonbase import TTLocalizer
 from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from toontown.battle import SuitBattleGlobals
-from CogPageGlobals import *
+from .CogPageGlobals import *
+import six
+from six.moves import range
 SCALE_FACTOR = 1.5
 RADAR_DELAY = 0.2
 BUILDING_RADAR_POS = (0.4,
@@ -467,9 +471,9 @@ class SuitPage(ShtikerPage.ShtikerPage):
         rowGeom = suitPageStatic.find('**/row')
 
         if rowGeom.isEmpty():
-            print 'SuitPage: could not find **/row'
+            print('SuitPage: could not find **/row')
         else:
-            for rowIndex in xrange(self.visibleRows):
+            for rowIndex in range(self.visibleRows):
                 rowFrame = DirectFrame(
                     parent=self.backgroundFrame,
                     relief=None,
@@ -605,7 +609,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         #self.panelModel = gui.find('**/card')
         self.shadowModels = []
 
-        for index in xrange(
+        for index in range(
             1,
             len(SuitDNA.suitHeadTypes) + 1
         ):
@@ -654,11 +658,11 @@ class SuitPage(ShtikerPage.ShtikerPage):
         image = suitPageSplash.find(path)
 
         if image.isEmpty():
-            print (
+            print((
                 'Missing department splash image:',
                 dept,
                 path
-            )
+            ))
             return None
 
         return image
@@ -947,7 +951,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel = self.getPanelForSuit(suitName)
 
             if panel is None:
-                print 'No panel for suit:', suitName
+                print('No panel for suit:', suitName)
                 continue
 
             column = (
@@ -1008,10 +1012,10 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel.head.show()
 
         except Exception as error:
-            print (
+            print((
                 'Could not create visible Cog head %s: %s'
                 % (suitName, error)
-            )
+            ))
 
     def resetEnlargedPanel(self):
         if not self.bigPanel:
@@ -1193,11 +1197,11 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def grow(self, panel, pos):
         if self.bigPanel:
-            print 'setting next panel - ' + str(panel)
+            print('setting next panel - ' + str(panel))
             self.nextPanel = panel
             self.nextPanelPos = pos
             return
-        print 'big panel - ' + str(panel)
+        print('big panel - ' + str(panel))
         self.bigPanel = panel
         panel.reparentTo(self.enlargedPanelNode)
         panel.setScale(panel.getScale() * SCALE_FACTOR)
@@ -1206,11 +1210,11 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel.summonButton['state'] = DGG.NORMAL
 
     def shrink(self, panel, pos):
-        print 'trying to shrink - ' + str(panel)
+        print('trying to shrink - ' + str(panel))
         if panel != self.bigPanel:
             self.nextPanel = None
             return
-        print 'shrink panel - ' + str(panel)
+        print('shrink panel - ' + str(panel))
         self.bigPanel = None
         panel.setScale(panel.scale)
         panel.reparentTo(self.panelNode)
@@ -1411,7 +1415,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
         hpType = attrs.get('hp', 'normal')
 
-        if isinstance(hpType, basestring):
+        if isinstance(hpType, six.string_types):
             hpType = hpType.lower()
 
             if hpType == 'field':
@@ -1444,7 +1448,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
         hpType = attrs.get('hp', 'normal')
 
-        if isinstance(hpType, basestring):
+        if isinstance(hpType, six.string_types):
             hpType = hpType.lower()
 
             if hpType == 'field':
@@ -1932,10 +1936,10 @@ class SuitPage(ShtikerPage.ShtikerPage):
                 self.cogHeads.append(headNode)
 
             except Exception as error:
-                print (
+                print((
                     'Could not load cog head %s: %s'
                     % (suitName, error)
-                )
+                ))
 
                 headNode.removeNode()
                 self.cogHeads.append(None)
@@ -1973,19 +1977,19 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def setPanelStatus(self, panel, status):
         if panel is None:
-            print 'SuitPage.setPanelStatus: panel is None'
+            print('SuitPage.setPanelStatus: panel is None')
             return
 
         suitName = getattr(panel, 'suitName', None)
 
         if not suitName:
-            print 'SuitPage.setPanelStatus: panel has no suitName'
+            print('SuitPage.setPanelStatus: panel has no suitName')
             return
 
         attrs = SuitBattleGlobals.SuitAttributes.get(suitName)
 
         if attrs is None:
-            print 'SuitPage.setPanelStatus: missing attributes for', suitName
+            print('SuitPage.setPanelStatus: missing attributes for', suitName)
             panel['text'] = '???'
             return
 
@@ -2000,7 +2004,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
             self.addQuotaLabel(panel)
     
     def updateAllCogs(self, status):
-        for index in xrange(0, len(base.localAvatar.cogs)):
+        for index in range(0, len(base.localAvatar.cogs)):
             base.localAvatar.cogs[index] = status
         self.updatePage()
 
@@ -2015,15 +2019,15 @@ class SuitPage(ShtikerPage.ShtikerPage):
                 try:
                     index = suitHeadTypes.index(suitName)
                 except ValueError:
-                    print 'SuitPage: suit not in suitHeadTypes:', suitName
+                    print('SuitPage: suit not in suitHeadTypes:', suitName)
                     continue
 
                 if index < 0 or index >= len(avatarCogs):
-                    print (
+                    print((
                         'SuitPage: avatar cog index out of range: '
                         'suit=%s index=%s cogsLength=%s'
                         % (suitName, index, len(avatarCogs))
-                    )
+                    ))
                     continue
 
                 self.updateCogStatus(
@@ -2034,31 +2038,31 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def updateCogStatus(self, dept, type, status):
         if dept < 0 or dept >= len(DEPT_ORDER):
-            print 'ucs: bad cog dept:', dept
+            print('ucs: bad cog dept:', dept)
             return
 
         deptName = DEPT_ORDER[dept]
         cogList = CogIndexDepartments.get(deptName, [])
 
         if type < 0 or type >= len(cogList):
-            print (
+            print((
                 'ucs: bad cog type: %s for department %s, size %s'
                 % (type, deptName, len(cogList))
-            )
+            ))
             return
 
         if status < COG_UNSEEN or status > COG_COMPLETE2:
-            print 'ucs: bad status:', status
+            print('ucs: bad status:', status)
             return
 
         suitName = cogList[type]
         panel = self.panelBySuitName.get(suitName)
 
         if panel is None:
-            print (
+            print((
                 'SuitPage: no panel for suit %s in department %s'
                 % (suitName, deptName)
-            )
+            ))
             return
 
         self.resetPanel(dept, type)
@@ -2077,14 +2081,14 @@ class SuitPage(ShtikerPage.ShtikerPage):
             panel.count = 0
         for cogIndex in cogList:
             if cogIndex < 0 or cogIndex >= len(SuitDNA.suitHeadTypes):
-                print 'SuitPage radar: bad suitHeadTypes index:', cogIndex
+                print('SuitPage radar: bad suitHeadTypes index:', cogIndex)
                 continue
 
             suitName = SuitDNA.suitHeadTypes[cogIndex]
             panel = self.panelBySuitName.get(suitName)
 
             if panel is None:
-                print 'SuitPage radar: no panel for:', suitName
+                print('SuitPage radar: no panel for:', suitName)
                 continue
 
             panel.count += 1

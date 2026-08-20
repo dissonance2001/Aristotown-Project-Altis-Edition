@@ -1,5 +1,6 @@
 """Contains the Timer class."""
 
+from __future__ import absolute_import
 __all__ = ['Timer']
 
 from . import Task

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import math
 import sys
 
@@ -21,6 +23,8 @@ from direct.cluster.ClusterServer import ClusterServer
 ## from direct.tkwidgets import SceneGraphExplorer
 from direct.gui import OnscreenText
 from direct.interval.IntervalGlobal import *
+from six.moves import map
+from six.moves import range
 
 class DirectSession(DirectObject):
 
@@ -945,7 +949,7 @@ class DirectSession(DirectObject):
         if sys.version_info >= (3, 0):
             from tkinter.simpledialog import askstring
         else:
-            from tkSimpleDialog import askstring
+            from six.moves.tkinter_tksimpledialog import askstring
         newName = askstring('Node Path: ' + nodePath.getName(),
                             'Enter new name:')
         if newName:

@@ -56,6 +56,8 @@ Options::
 
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import getopt
 import sys
 import os
@@ -105,7 +107,7 @@ def main(args=None):
         elif opt == '-h':
             usage(0)
         else:
-            print('illegal option: ' + flag)
+            print(('illegal option: ' + flag))
             sys.exit(1)
 
     if not basename:

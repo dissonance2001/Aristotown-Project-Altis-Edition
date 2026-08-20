@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from toontown.minigame.PlayingCard import PlayingCardNodePath
 from toontown.minigame import PlayingCardGlobals
 from pandac.PandaModules import NodePath, Vec3
 from direct.interval.IntervalGlobal import LerpHprInterval, Parallel, SoundInterval
+from six.moves import range
 
 class PairingGameCard(PlayingCardNodePath):
     DoIntervalDefault = True
@@ -32,7 +34,7 @@ class PairingGameCard(PlayingCardNodePath):
         prop.setScale(7)
         oneCard.find('**/glow').removeNode()
         cs = oneCard.find('**/collision')
-        for solidIndex in xrange(cs.node().getNumSolids()):
+        for solidIndex in range(cs.node().getNumSolids()):
             cs.node().modifySolid(solidIndex).setTangible(False)
 
         cs.node().setName('cardCollision-%d' % self.value)

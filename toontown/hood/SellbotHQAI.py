@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedVPElevatorAI
 from toontown.building import DistributedMultislackerElevatorAI
 from toontown.building import FADoorCodes
@@ -8,6 +9,7 @@ from toontown.suit import DistributedSellbotBossAI
 from toontown.suit import DistributedSellbotBossMiniAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class SellbotHQAI(CogHQAI.CogHQAI):
     
@@ -59,7 +61,7 @@ class SellbotHQAI(CogHQAI.CogHQAI):
 
     def createFactoryElevators(self):
         # We only have two factory elevators: the front, and side elevators.
-        for i in xrange(2):
+        for i in range(2):
             factoryElevator = DistributedFactoryElevatorExtAI(
                 self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, i)
             factoryElevator.generateWithRequired(ToontownGlobals.SellbotFactoryExt)

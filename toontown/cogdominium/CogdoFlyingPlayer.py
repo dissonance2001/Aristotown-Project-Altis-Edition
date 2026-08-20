@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import DepthOffsetAttrib, NodePath, Vec3, Vec4, TextNode
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm.FSM import FSM
@@ -11,6 +12,7 @@ from toontown.cogdominium import CogdoFlyingGameGlobals as Globals
 from toontown.cogdominium import CogdoUtil
 from toontown.cogdominium.CogdoFlyingObjects import CogdoFlyingGatherable
 from toontown.cogdominium.CogdoFlyingUtil import swapAvatarShadowPlacer
+from six.moves import range
 
 class CogdoFlyingPlayer(FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoFlyingPlayer')
@@ -233,14 +235,14 @@ class CogdoFlyingPlayer(FSM):
             return
         numBlades = fuelState - 1
         if len(self.activeBlades) != numBlades:
-            for i in xrange(len(self.activeBlades)):
+            for i in range(len(self.activeBlades)):
                 blade = self.activeBlades.pop()
                 blade.stash()
 
             if numBlades > len(self.blades):
                 numBlades = len(self.blades)
             if numBlades > 0:
-                for i in xrange(numBlades):
+                for i in range(numBlades):
                     blade = self.blades[i]
                     self.activeBlades.append(blade)
                     blade.unstash()

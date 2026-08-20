@@ -1,6 +1,8 @@
 
 "This module is deprecated.  Import from panda3d.core and other panda3d.* modules instead."
 
+from __future__ import absolute_import
+from __future__ import print_function
 if __debug__:
     print("Warning: pandac.PandaModules is deprecated, import from panda3d.core instead")
 

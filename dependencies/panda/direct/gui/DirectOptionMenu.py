@@ -4,6 +4,8 @@ See the :ref:`directoptionmenu` page in the programming manual for a more
 in-depth explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['DirectOptionMenu']
 
 from panda3d.core import *

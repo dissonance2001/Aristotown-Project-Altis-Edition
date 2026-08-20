@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.otpbase import OTPGlobals
@@ -18,7 +20,7 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         self.ignoreAll()
 
     def sendRequestInvite(self, playerId):
-        print 'PFM sendRequestInvite id:%s' % playerId
+        print('PFM sendRequestInvite id:%s' % playerId)
         self.sendUpdate('requestInvite', [0, playerId, True])
 
     def sendRequestDecline(self, playerId):
@@ -72,15 +74,15 @@ class PlayerFriendsManager(DistributedObjectGlobal):
         messenger.send(OTPGlobals.PlayerFriendRejectRemoveEvent, [playerId, reason])
 
     def secretResponse(self, secret):
-        print 'secretResponse %s' % secret
+        print('secretResponse %s' % secret)
         messenger.send(OTPGlobals.PlayerFriendNewSecretEvent, [secret])
 
     def rejectSecret(self, reason):
-        print 'rejectSecret %s' % reason
+        print('rejectSecret %s' % reason)
         messenger.send(OTPGlobals.PlayerFriendRejectNewSecretEvent, [reason])
 
     def rejectUseSecret(self, reason):
-        print 'rejectUseSecret %s' % reason
+        print('rejectUseSecret %s' % reason)
         messenger.send(OTPGlobals.PlayerFriendRejectUseSecretEvent, [reason])
 
     def invitationResponse(self, playerId, respCode, context):

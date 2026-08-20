@@ -26,10 +26,13 @@
 #  675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import string
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 class MultiColumnListbox(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
@@ -669,7 +672,7 @@ if __name__ == '__main__':
     rootWin.update()
 
     def dbl():
-        print(listbox.getcurselection())
+        print((listbox.getcurselection()))
 
     listbox = MultiColumnListbox(rootWin,
                                            #usehullsize = 1,

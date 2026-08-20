@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/scrolledlistbox.itk code.
 
+from __future__ import absolute_import
 import types
 import tkinter
 import Pmw

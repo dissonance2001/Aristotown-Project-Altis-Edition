@@ -6,10 +6,12 @@
 # sequence ::= SEQUENCE-START node* SEQUENCE-END
 # mapping ::= MAPPING-START (node node)* MAPPING-END
 
+from __future__ import absolute_import
+import six
 __all__ = ['Emitter', 'EmitterError']
 
-from error import YAMLError
-from events import *
+from .error import YAMLError
+from .events import *
 
 class EmitterError(YAMLError):
     pass
@@ -185,7 +187,7 @@ class Emitter(object):
                 self.write_version_directive(version_text)
             self.tag_prefixes = self.DEFAULT_TAG_PREFIXES.copy()
             if self.event.tags:
-                handles = self.event.tags.keys()
+                handles = list(self.event.tags.keys())
                 handles.sort()
                 for handle in handles:
                     prefix = self.event.tags[handle]
@@ -586,7 +588,7 @@ class Emitter(object):
             return tag
         handle = None
         suffix = tag
-        prefixes = self.tag_prefixes.keys()
+        prefixes = list(self.tag_prefixes.keys())
         prefixes.sort()
         for prefix in prefixes:
             if tag.startswith(prefix)   \
@@ -983,7 +985,7 @@ class Emitter(object):
         hints = u''
         if text:
             if text[0] in u' \n\x85\u2028\u2029':
-                hints += unicode(self.best_indent)
+                hints += six.text_type(self.best_indent)
             if text[-1] not in u'\n\x85\u2028\u2029':
                 hints += u'-'
             elif len(text) == 1 or text[-2] in u'\n\x85\u2028\u2029':

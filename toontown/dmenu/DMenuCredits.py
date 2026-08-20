@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import Vec4, TransparencyAttrib, Point3, VBase3, VBase4, TextNode
 from direct.interval.IntervalGlobal import *
 from toontown.toon import Toon, ToonDNA

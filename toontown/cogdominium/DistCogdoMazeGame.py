@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.ClockDelta import globalClockDelta
 from toontown.toonbase import TTLocalizer
 from toontown.cogdominium.DistCogdoGame import DistCogdoGame
@@ -6,6 +7,7 @@ from toontown.cogdominium.CogdoMazeGame import CogdoMazeGame
 from toontown.cogdominium.CogdoMaze import CogdoMazeFactory
 from toontown.cogdominium import CogdoMazeGameGlobals
 from toontown.cogdominium import CogdoMazeGameGlobals as Globals
+from six.moves import range
 
 class DistCogdoMazeGame(DistCogdoGame, DistCogdoMazeGameBase):
     notify = directNotify.newCategory('DistCogdoMazeGame')
@@ -43,7 +45,7 @@ class DistCogdoMazeGame(DistCogdoGame, DistCogdoMazeGameBase):
         bossCode = None
         if self._numSuits[0] > 0:
             bossCode = ''
-            for u in xrange(self._numSuits[0]):
+            for u in range(self._numSuits[0]):
                 bossCode += '%X' % self.randomNumGen.randint(0, 15)
 
         self.game.load(mazeFactory, self._numSuits, bossCode)

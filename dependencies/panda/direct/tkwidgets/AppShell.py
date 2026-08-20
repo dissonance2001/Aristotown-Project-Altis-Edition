@@ -5,6 +5,7 @@ by John E. Grayson which is a streamlined adaptation of GuiAppD.py, originally
 created by Doug Hellmann (doughellmann@mindspring.com).
 """
 
+from __future__ import absolute_import
 __all__ = ['AppShell']
 
 from direct.showbase.DirectObject import DirectObject
@@ -20,7 +21,7 @@ from . import ProgressBar
 if sys.version_info >= (3, 0):
     from tkinter.filedialog import *
 else:
-    from tkFileDialog import *
+    from six.moves.tkinter_filedialog import *
 
 
 """

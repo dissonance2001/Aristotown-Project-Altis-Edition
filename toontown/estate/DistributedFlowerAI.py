@@ -1,10 +1,12 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 import time
 
-from FlowerBase import FlowerBase
+from .FlowerBase import FlowerBase
 from otp.ai.MagicWordGlobal import *
 from toontown.estate.DistributedPlantBaseAI import DistributedPlantBaseAI
-import GardenGlobals
+from . import GardenGlobals
+from six.moves import map
 
 
 class DistributedFlowerAI(DistributedPlantBaseAI, FlowerBase):
@@ -41,7 +43,7 @@ class DistributedFlowerAI(DistributedPlantBaseAI, FlowerBase):
         self.update()
 
     def update(self):
-        mdata = map(list, self.mgr.data['flowers'])
+        mdata = list(map(list, self.mgr.data['flowers']))
         mdata[self.flowerIndex] = [self.getSpecies(), self.waterLevel, self.lastCheck, self.getGrowthLevel(), self.getVariety()]
         self.mgr.data['flowers'] = mdata
         self.mgr.update()
@@ -82,7 +84,7 @@ class DistributedFlowerAI(DistributedPlantBaseAI, FlowerBase):
 
             self.mgr.flowers.remove(self)
 
-            mdata = map(list, self.mgr.data['flowers'])
+            mdata = list(map(list, self.mgr.data['flowers']))
             mdata[self.flowerIndex] = self.mgr.getNullPlant()
             self.mgr.data['flowers'] = mdata
             self.mgr.update()

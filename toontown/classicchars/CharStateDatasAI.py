@@ -1,5 +1,6 @@
 # File: C (Python 2.4)
 
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import StateData

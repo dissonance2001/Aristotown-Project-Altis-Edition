@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random
 from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *

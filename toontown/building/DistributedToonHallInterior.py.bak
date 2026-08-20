@@ -14,9 +14,6 @@ from pandac.PandaModules import DecalEffect
 class DistributedToonHallInterior(DistributedToonInterior):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonHallInterior')
 
-    def __init__(self, cr):
-        DistributedToonInterior.__init__(self, cr)
-
     def setup(self):
         self.dnaStore = base.cr.playGame.dnaStore
         self.randomGenerator = random.Random()
@@ -127,9 +124,6 @@ class DistributedToonHallInterior(DistributedToonInterior):
         self.setupCollisions(2.5)
         self.firstEnter = 1
         self.accept('CamChangeColl-into', self.handleCloseToWall)
-
-    def exitToon(self):
-        pass
 
     def handleCloseToWall(self, collEntry):
         if self.firstEnter == 0:

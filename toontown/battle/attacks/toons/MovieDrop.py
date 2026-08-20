@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -10,6 +11,7 @@ from otp.otpbase import OTPLocalizerEnglish
 from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle.MovieUtil import calcAvgSuitPos
 from direct.showutil import Effects
+from six.moves import range
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieDrop')
 hitSoundFiles = ('AA_drop_flowerpot.ogg', 'AA_drop_sandbag.ogg', 'AA_drop_bowling_ball.ogg', 'AA_drop_anvil.ogg', 'AA_drop_bigweight.ogg', 'AA_drop_safe.ogg', 'AA_drop_boulder.ogg', 'AA_drop_piano.ogg')
@@ -63,7 +65,7 @@ def doDrops(drops):
                 else:
                     suitDropsDict[suitId] = [(drop, target)]
 
-    suitDrops = suitDropsDict.values()
+    suitDrops = list(suitDropsDict.values())
 
     def compFunc(a, b):
         if len(a) > len(b):

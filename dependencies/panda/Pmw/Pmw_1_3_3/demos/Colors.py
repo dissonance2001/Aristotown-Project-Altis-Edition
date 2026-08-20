@@ -1,15 +1,17 @@
+from __future__ import absolute_import
+from six.moves import range
 title = 'Colorscheme demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
-	frame = Tkinter.Frame(parent)
+	frame = six.moves.tkinter.Frame(parent)
 	frame.pack(fill = 'both', expand = 1)
 
 	defaultPalette = Pmw.Color.getdefaultpalette(parent)
@@ -32,7 +34,7 @@ class Demo:
 		    entryfield_value = items[0])
 	    combo.grid(sticky='nsew', row = count, column = 1)
 
-	apply(Pmw.Color.setscheme, (parent,), defaultPalette)
+	Pmw.Color.setscheme(*(parent,), **defaultPalette)
 	#normalcolor = Pmw.Color.changebrightness(parent, 'red', 0.85)
 	#Pmw.Color.setscheme(parent, normalcolor)
 
@@ -40,11 +42,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

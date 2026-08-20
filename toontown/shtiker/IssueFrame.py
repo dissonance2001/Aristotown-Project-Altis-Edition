@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os
 from pandac.PandaModules import VirtualFileSystem, Filename, DSearchPath
 from pandac.PandaModules import Texture, CardMaker, PNMImage, TextureStage
@@ -8,6 +9,7 @@ from direct.gui.DirectGui import DirectFrame, DirectButton, DGG, DirectLabel
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 WEB_WIDTH_PIXELS = 784
 WEB_HEIGHT_PIXELS = 451
@@ -187,7 +189,7 @@ class IssueFrame(DirectFrame):
         image_scale = float(desiredXSize) / xSize
         image_scale *= float(69) / 70
         self.sectionBtns = []
-        for section in xrange(1, len(self.SectionIdents)):
+        for section in range(1, len(self.SectionIdents)):
             image = self.gui.find('**/%s' % buttonNames[section])
             rolloverImage = self.gui.find('**/%s' % rolloverButtonNames[section])
             if image.isEmpty():
@@ -311,7 +313,7 @@ class IssueFrame(DirectFrame):
          frameSize2,
          frameSize2)
         self.sectionBtns = []
-        for section in xrange(0, len(self.SectionIdents)):
+        for section in range(0, len(self.SectionIdents)):
             image = self.guiNav.find('**/%s' % buttonNames[section])
             rolloverImage = self.guiNav.find('**/%s' % rolloverButtonNames[section])
             if image.isEmpty():

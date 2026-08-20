@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.otpbase import OTPGlobals
 from otp.ai import BanManagerAI
 from toontown.toonbase import ToontownGlobals

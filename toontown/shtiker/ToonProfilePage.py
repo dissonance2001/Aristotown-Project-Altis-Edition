@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.gui import DirectGuiGlobals as DGG
@@ -9,6 +10,7 @@ from toontown.toon import Toon
 from toontown.toon import ToonProfileGlobals as TPG
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 if not hasattr(TTLocalizer, 'ToonProfilePageTitle'):
     TTLocalizer.ToonProfilePageTitle = 'Profile'
@@ -166,7 +168,7 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
         self.backgroundIndex = self._indexForId(TPG.BACKGROUNDS, TPG.normaliseBackgroundId(backgroundId))
 
     def _indexForId(self, entries, itemId):
-        for index in xrange(len(entries)):
+        for index in range(len(entries)):
             if entries[index]['id'] == itemId:
                 return index
         return 0
@@ -201,7 +203,7 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
             base.localAvatar.setToonProfile(poseId, nameplateId, backgroundId)
             base.localAvatar.requestToonProfile(poseId, nameplateId, backgroundId)
             self.statusLabel['text'] = 'Profile applied!'
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Unable to apply Toon Profile: %s' % error)
             self.statusLabel['text'] = 'Unable to apply profile.'
 
@@ -284,7 +286,7 @@ class ToonProfilePage(ShtikerPage.ShtikerPage):
                 if poseId == 43:
                     toon.setZ(toon.getZ() + 0.04)
             self.previewToon = toon
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Unable to build Toon Profile preview: %s' % error)
 
     def _fitSelectedPoseOnBookPage(self, toon, neutralBounds, dimension):

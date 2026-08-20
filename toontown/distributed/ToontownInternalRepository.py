@@ -1,10 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed.AstronInternalRepository import *
 from otp.distributed.OtpDoGlobals import *
 from toontown.distributed.ToontownNetMessengerAI import ToontownNetMessengerAI
 from direct.distributed.PyDatagram import PyDatagram
 import direct.distributed.MsgTypes
 import traceback
-import sys
 
 class ToontownInternalRepository(AstronInternalRepository):
     GameGlobalsId = OTP_DO_ID_TOONTOWN
@@ -16,10 +17,10 @@ class ToontownInternalRepository(AstronInternalRepository):
             self, baseChannel, serverId=serverId, dcFileNames=dcFileNames,
             dcSuffix=dcSuffix, connectMethod=connectMethod, threadedNet=threadedNet)
 
-        self.netMessenger.register(0, 'shardStatus')
-        self.netMessenger.register(1, 'queryShardStatus')
-        self.netMessenger.register(2, 'startInvasion')
-        self.netMessenger.register(3, 'stopInvasion')
+        #self.netMessenger.register(0, 'shardStatus')
+        #self.netMessenger.register(1, 'queryShardStatus')
+        #self.netMessenger.register(2, 'startInvasion')
+        #self.netMessenger.register(3, 'stopInvasion')
         
         self.__messenger = ToontownNetMessengerAI(self)
 
@@ -69,6 +70,6 @@ class ToontownInternalRepository(AstronInternalRepository):
                 self.send(dg)
             self.writeServerEvent('EXCEPTION-POTENTIAL-CRASH', self.getAvatarIdFromSender(), self.getAccountIdFromSender(), repr(e), traceback.format_exc())
             self.notify.warning('EXCEPTION-POTENTIAL-CRASH: %s (%s)' % (repr(e), self.getAvatarIdFromSender()))
-            print traceback.format_exc()
+            print(traceback.format_exc())
             
         return 1

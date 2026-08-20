@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence
 from direct.interval.IntervalGlobal import *
+import six
 
 
 def _playCutsceneMusic(music, loop=True, volume=1.0, startTime=0.0):
@@ -13,7 +15,7 @@ def _playCutsceneMusic(music, loop=True, volume=1.0, startTime=0.0):
         except TypeError:
             musicMgr.playMusic(music, looping=loop, volume=volume)
             return
-    if isinstance(music, basestring):
+    if isinstance(music, six.string_types):
         music = loader.loadMusic(music)
     try:
         base.playMusic(music, looping=loop, volume=volume, time=startTime)

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building import DistributedCMElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
@@ -6,6 +7,7 @@ from toontown.hood import CogHQAI
 from toontown.suit import DistributedBoardbotBossAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class TechbotHQAI(CogHQAI.CogHQAI):
     
@@ -48,7 +50,7 @@ class TechbotHQAI(CogHQAI.CogHQAI):
             ToontownGlobals.BoardOfficeIntC
         )
         mins = ToontownGlobals.FactoryLaffMinimums[1]
-        for i in xrange(len(destZones)):
+        for i in range(len(destZones)):
             boardofficeElevator = DistributedBoardOfficeElevatorExtAI(
                 self.air, self.air.boardofficeMgr, destZones[i],
                 antiShuffle=0, minLaff=mins[i])

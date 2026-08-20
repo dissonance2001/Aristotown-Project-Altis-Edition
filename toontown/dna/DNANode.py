@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import LVector3f, PandaNode
 from toontown.dna import DNAGroup
 

@@ -1,5 +1,6 @@
 "This module contains a deprecated shim emulating the old DConfig API."
 
+from __future__ import absolute_import
 __all__ = []
 
 from panda3d.core import (ConfigFlags, ConfigVariableBool, ConfigVariableInt,

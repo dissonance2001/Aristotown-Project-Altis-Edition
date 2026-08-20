@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
 import random
 import math
+from six.moves import range
 
 class HighRollerCalculatorAI:
 
@@ -37,11 +39,11 @@ class HighRollerCalculatorAI:
 
     
     def calculateSuitAttacksHighRoller(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
 
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # Initial Cheats
@@ -294,12 +296,12 @@ class HighRollerCalculatorAI:
                         # self.battle.suitAttacks.append(attack)
 
         # Secondary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
 
 
                 # End Of Round High Roller Attacks
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hroller' and self.suitHasCondition(suitId, 'phase3'):
                 self.highRollerAttacks = [1, 2, 3, 4]
@@ -519,7 +521,7 @@ class HighRollerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 if self.suitHasCondition(suitId, 'hollywoodHijinks') and self.getSuitConditionTurns(suitId, 'hollywoodHijinks') == 1 and not self.suitHasCondition(suitId, 'phase3'):

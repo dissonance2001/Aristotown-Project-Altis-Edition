@@ -1,5 +1,6 @@
 # Tests for Pmw megawidgets
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac import PandaModules as PM
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.task.Task import Task
@@ -9,6 +10,8 @@ from toontown.cogdominium.CogdoCraneGameBase import CogdoCraneGameBase
 from toontown.toonbase import ToontownTimer
 from toontown.toonbase import TTLocalizer as TTL
 from toontown.toonbase import ToontownGlobals
+import six
+from six.moves import range
 
 class DistCogdoCraneGame(CogdoCraneGameBase, DistCogdoLevelGame):
     notify = directNotify.newCategory('DistCogdoCraneGame')
@@ -101,7 +104,7 @@ class DistCogdoCraneGame(CogdoCraneGameBase, DistCogdoLevelGame):
                 self.notify.warning('Not a collision node: %s' % repr(cnp))
                 break
             newCollideMask = newCollideMask | cn.getIntoCollideMask()
-            for i in xrange(cn.getNumSolids()):
+            for i in range(cn.getNumSolids()):
                 solid = cn.getSolid(i)
                 if isinstance(solid, PM.CollisionPolygon):
                     plane = PM.Plane(solid.getPlane())
@@ -194,17 +197,17 @@ class DistCogdoCraneGame(CogdoCraneGameBase, DistCogdoLevelGame):
             self._gravityForceNode.addForce(self._gravityForce)
 
         def _handleEmptyFrictionCoefChanged(self, coef):
-            for crane in self.cranes.itervalues():
+            for crane in six.itervalues(self.cranes):
                 crane._handleEmptyFrictionCoefChanged(coef)
 
         def _handleRopeLinkMassChanged(self, mass):
-            for crane in self.cranes.itervalues():
+            for crane in six.itervalues(self.cranes):
                 crane._handleRopeLinkMassChanged(mass)
 
         def _handleMagnetMassChanged(self, mass):
-            for crane in self.cranes.itervalues():
+            for crane in six.itervalues(self.cranes):
                 crane._handleMagnetMassChanged(mass)
 
         def _handleMoneyBagGrabHeightChanged(self, height):
-            for moneyBag in self.moneyBags.itervalues():
+            for moneyBag in six.itervalues(self.moneyBags):
                 moneyBag._handleMoneyBagGrabHeightChanged(height)

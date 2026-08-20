@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.task import Task
 from otp.otpbase import OTPLocalizer
 from direct.gui.DirectGui import *

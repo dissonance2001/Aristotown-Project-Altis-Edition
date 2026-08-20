@@ -1,4 +1,5 @@
-import cPickle
+from __future__ import absolute_import
+import six.moves.cPickle
 import random
 from toontown.building import ToonInteriorColors
 from direct.directnotify import DirectNotifyGlobal
@@ -10,6 +11,7 @@ from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import *
 from toontown.dna.DNAParser import DNADoor
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
+from six.moves import range
 
 class DistributedHQInterior(DistributedObject.DistributedObject):
     
@@ -40,7 +42,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         try:
             from toontown.gumball.GumballMachine import GumballMachine
             self.gumballMachine = GumballMachine(self)
-        except Exception, e:
+        except Exception as e:
             self.notify.warning('Unable to load Gumball Machine: %s' % e)
 
     def setTutorial(self, flag):
@@ -70,7 +72,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         self.nameTextNodes = []
         self.scoreTextNodes = []
         self.trophyStars = []
-        for i in xrange(self.numLeaders):
+        for i in range(self.numLeaders):
             (row, nameText, scoreText, trophyStar) = self.buildLeaderRow()
             self.nameTextNodes.append(nameText)
             self.scoreTextNodes.append(scoreText)
@@ -81,13 +83,13 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
 
     def updateLeaderBoard(self):
         taskMgr.remove(self.uniqueName('starSpinHQ'))
-        for i in xrange(len(self.leaderNames)):
+        for i in range(len(self.leaderNames)):
             name = self.leaderNames[i]
             score = self.leaderScores[i]
             self.nameTextNodes[i].setText(name)
             self.scoreTextNodes[i].setText(str(score))
             self.updateTrophyStar(self.trophyStars[i], score)
-        for i in xrange(len(self.leaderNames), self.numLeaders):
+        for i in range(len(self.leaderNames), self.numLeaders):
             self.nameTextNodes[i].setText('-')
             self.scoreTextNodes[i].setText('-')
             self.trophyStars[i].hide()
@@ -125,7 +127,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         return (row, nameText, scoreText, trophyStar)
 
     def setLeaderBoard(self, leaderData):
-        (avIds, names, scores) = cPickle.loads(leaderData)
+        (avIds, names, scores) = six.moves.cPickle.loads(leaderData)
         self.notify.debug('setLeaderBoard: avIds: %s, names: %s, scores: %s' % (avIds, names, scores))
         self.leaderAvIds = avIds
         self.leaderNames = names
@@ -148,7 +150,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         door = self.chooseDoor()
         doorOrigins = render.findAllMatches('**/door_origin*')
         numDoorOrigins = doorOrigins.getNumPaths()
-        for npIndex in xrange(numDoorOrigins):
+        for npIndex in range(numDoorOrigins):
             doorOrigin = doorOrigins[npIndex]
             doorOriginNPName = doorOrigin.getName()
             doorOriginIndexStr = doorOriginNPName[len('door_origin_'):]

@@ -1,5 +1,6 @@
 """StateData module: contains StateData class"""
 
+from __future__ import absolute_import
 __all__ = ['StateData']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify

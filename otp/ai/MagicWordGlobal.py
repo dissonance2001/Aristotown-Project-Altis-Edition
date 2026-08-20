@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from toontown.toonbase import ToonPythonUtil as PythonUtil
+from six.moves import zip
 
 class MagicError(Exception):
     pass
@@ -107,8 +109,8 @@ class MagicWord:
         self.doc = doc
 
     def parseArgs(self, string):
-        maxArgs = self.func.func_code.co_argcount
-        minArgs = maxArgs - (len(self.func.func_defaults) if self.func.func_defaults else 0)
+        maxArgs = self.func.__code__.co_argcount
+        minArgs = maxArgs - (len(self.func.__defaults__) if self.func.__defaults__ else 0)
 
         args = string.split(None, maxArgs-1)[:maxArgs]
         if len(args) < minArgs:
@@ -153,7 +155,7 @@ class MagicWordDecorator:
 
         name = self.name
         if name is None:
-            name = mw.func_name
+            name = mw.__name__
 
         word = MagicWord(name, mw, self.types, self.access, mw.__doc__)
         spellbook.addWord(word)

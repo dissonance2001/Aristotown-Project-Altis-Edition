@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import Point3
 from toontown.nametag.NametagFloat3d import NametagFloat3d
 

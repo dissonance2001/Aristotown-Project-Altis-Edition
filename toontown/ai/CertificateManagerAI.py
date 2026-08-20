@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import random
-import httplib
+import six.moves.http_client
+from six.moves import range
 
 class CertificateManagerAI():
     def __init__(self, air):
@@ -17,7 +20,7 @@ class CertificateManagerAI():
 
     def generateCode(self):
         code = ''
-        for i in xrange(12):
+        for i in range(12):
             number = random.randint(0, 9)
             code += str(number)
             if (i - 3) % 4 == 0 and i != 11:
@@ -27,6 +30,6 @@ class CertificateManagerAI():
     def sendCode(self, code):
         domain = str(ConfigVariableString('ws-domain', 'localhost'))
         key = str(ConfigVariableString('ws-key', 'secretkey'))
-        request = httplib.HTTPSConnection(domain)
+        request = six.moves.http_client.HTTPSConnection(domain)
         request.request('GET', '/api/addbetacert/%s/%s' % (key, code))
-        print request.getresponse().read()
+        print(request.getresponse().read())

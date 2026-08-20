@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 
 from direct.showbase.ShowBase import ShowBase
@@ -15,6 +17,7 @@ from direct.gui.DirectGui import (
     DirectScrolledFrame,
     DirectSlider,
 )
+from six.moves import range
 
 
 class Main(ShowBase):
@@ -98,7 +101,7 @@ class DeviceConnectivityMonitor(DirectObject):
             0,
         )
         self.devices_frame.setCanvasSize()
-        sorted_buttons = sorted(self.buttons.items(), key=lambda i: i[0].name)
+        sorted_buttons = sorted(list(self.buttons.items()), key=lambda i: i[0].name)
         for idx, (dev, button) in enumerate(sorted_buttons):
             button.set_pos(
                 0,
@@ -127,7 +130,7 @@ class DeviceConnectivityMonitor(DirectObject):
             self.current_panel = None
             if len(self.devices) > 0:
                 active_device = sorted(
-                    self.devices.keys(),
+                    list(self.devices.keys()),
                     key=lambda d: d.name,
                 )[0]
                 self.switch_to_panel(active_device)
@@ -146,17 +149,17 @@ class DeviceMonitor(DirectObject):
 
     def activate(self):
         print("Device connected")
-        print("  Name        : {}".format(self.device.name))
-        print("  Type        : {}".format(self.device.device_class.name))
-        print("  Manufacturer: {}".format(self.device.manufacturer))
-        print("  ID          : {:04x}:{:04x}".format(self.device.vendor_id,
-                                                     self.device.product_id))
+        print(("  Name        : {}".format(self.device.name)))
+        print(("  Type        : {}".format(self.device.device_class.name)))
+        print(("  Manufacturer: {}".format(self.device.manufacturer)))
+        print(("  ID          : {:04x}:{:04x}".format(self.device.vendor_id,
+                                                     self.device.product_id)))
         axis_names = [axis.axis.name for axis in self.device.axes]
-        print("  Axes        : {} ({})".format(len(self.device.axes),
-                                               ', '.join(axis_names)))
+        print(("  Axes        : {} ({})".format(len(self.device.axes),
+                                               ', '.join(axis_names))))
         button_names = [button.handle.name for button in self.device.buttons]
-        print("  Buttons     : {} ({})".format(len(self.device.buttons),
-                                               ', '.join(button_names)))
+        print(("  Buttons     : {} ({})".format(len(self.device.buttons),
+                                               ', '.join(button_names))))
 
         base.attachInputDevice(self.device)
 
@@ -167,7 +170,7 @@ class DeviceMonitor(DirectObject):
         )
 
     def deactivate(self):
-        print("\"{}\" disconnected".format(self.device.name))
+        print(("\"{}\" disconnected".format(self.device.name)))
         base.taskMgr.remove(self.task)
         self.panel.detach_node()
 

@@ -2,6 +2,9 @@
 sound, music, shaders and fonts from disk.
 """
 
+from __future__ import absolute_import
+from six.moves import range
+from six.moves import zip
 __all__ = ['Loader']
 
 from panda3d.core import *

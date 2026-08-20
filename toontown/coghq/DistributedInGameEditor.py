@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonPythonUtil import lineInfo, Functor
@@ -19,10 +21,10 @@ class InGameEditorEntityBase(InGameEditorElement):
 
     def attribChanged(self, attrib, value):
         Entity.Entity.attribChanged(self, attrib, value)
-        print 'attribChange: %s %s, %s = %s' % (self.level.getEntityType(self.entId),
+        print('attribChange: %s %s, %s = %s' % (self.level.getEntityType(self.entId),
          self.entId,
          attrib,
-         repr(value))
+         repr(value)))
 
     def getTypeName(self):
         return self.level.getEntityType(self.entId)
@@ -123,7 +125,7 @@ def getInGameEditorEntityCreatorClass(level):
 
         def __init__(self, editor):
             EntCreatorClass.__init__(self, editor)
-            entTypes = self.entType2Ctor.keys()
+            entTypes = list(self.entType2Ctor.keys())
             for type in entTypes:
                 self.entType2Ctor[type] = InGameEditorEntity
 
@@ -206,7 +208,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
         self.entTypes = entCreator.getEntityTypes()
         self.selectedEntity = None
         base.startTk()
-        import InGameEditor
+        from . import InGameEditor
         doneEvent = self.uniqueName('editorDone')
         saveAsEvent = self.uniqueName('saveSpec')
         requestSaveEvent = self.uniqueName('requestSpecSave')
@@ -317,7 +319,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
 
     def buildEntityTree(self):
         self.setChildren([])
-        entIds = self.entities.keys()
+        entIds = list(self.entities.keys())
         entIds.sort()
         for entId in entIds:
             ent = self.getEntity(entId)
@@ -488,7 +490,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
     def setEntityCreatorUsername(self, entId, editUsername):
         Level.Level.setEntityCreatorUsername(self, entId, editUsername)
         if editUsername == self.getEditUsername():
-            print 'entity %s about to be created; we requested it' % entId
+            print('entity %s about to be created; we requested it' % entId)
             callback = self.entCreateHandlerQ[0]
             del self.entCreateHandlerQ[:1]
             callback(entId)
@@ -576,7 +578,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
                     if oldName[i] != ' ':
                         hasSuffix = False
                     else:
-                        print 'numString: %s' % numString
+                        print('numString: %s' % numString)
                         copyNum = int(numString) + 1
             if hasSuffix:
                 newName = oldName[:i] + suffix % copyNum
@@ -638,8 +640,8 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
             self.editor.showWarning('Please select a valid entity first.', 'error')
             return
 
-        import tkFileDialog
-        filename = tkFileDialog.askopenfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
+        import six.moves.tkinter_filedialog
+        filename = six.moves.tkinter_filedialog.askopenfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
         if len(filename) == 0:
             return
         try:
@@ -690,8 +692,8 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
             self.editor.showWarning('Please select a valid entity first.', 'error')
             return
 
-        import tkFileDialog
-        filename = tkFileDialog.asksaveasfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
+        import six.moves.tkinter_filedialog
+        filename = six.moves.tkinter_filedialog.asksaveasfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
         if len(filename) == 0:
             return
         eTree = {selectedEntId: {}}
@@ -716,8 +718,8 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
             self.editor.showWarning('Please select a valid entity first.', 'error')
             return
 
-        import tkFileDialog
-        filename = tkFileDialog.asksaveasfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
+        import six.moves.tkinter_filedialog
+        filename = six.moves.tkinter_filedialog.asksaveasfilename(parent=self.editor.parent, defaultextension='.egroup', filetypes=[('Entity Group', '.egroup'), ('All Files', '*')])
         if len(filename) == 0:
             return
         eTree = {}
@@ -767,7 +769,7 @@ class DistributedInGameEditor(DistributedObject.DistributedObject, Level.Level, 
 
     def setAttribChange(self, entId, attrib, valueStr, username):
         if username == self.editUsername:
-            print 'we got our own edit back!'
+            print('we got our own edit back!')
         value = eval(valueStr)
         self.levelSpec.setAttribChange(entId, attrib, value, username)
 

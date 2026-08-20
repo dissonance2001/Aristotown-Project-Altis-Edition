@@ -6,8 +6,11 @@ classes.  Colours use wall-clock time, so every GUI displaying the same Club
 colour remains synchronized without storing animation state in Astron.
 """
 
+from __future__ import absolute_import
 import math
 import time
+from six.moves import range
+from six.moves import zip
 
 try:
     xrange
@@ -80,7 +83,7 @@ class ClubColorPulser(ClubColor):
     def getColorAtTime(self, currentTime, fancy=False):
         currentTime = float(currentTime) % self.getDuration()
         colors = self.optimizedColors
-        for index in xrange(len(colors) - 1):
+        for index in range(len(colors) - 1):
             thisColor, duration = colors[index]
             nextColor = colors[index + 1][0]
             if currentTime < duration:

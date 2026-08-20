@@ -3,6 +3,7 @@
 Demonstrate how a simple button mapping gui can be written
 '''
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.DirectGui import (
     DGG,
@@ -316,7 +317,7 @@ class MappingGUIDemo(ShowBase):
         # fill it with all available controls
         for device in devices:
             for axis in device.axes:
-                if device not in self.axisStates.keys():
+                if device not in list(self.axisStates.keys()):
                     self.axisStates.update({device: {axis.axis: axis.value}})
                 else:
                     self.axisStates[device].update({axis.axis: axis.value})

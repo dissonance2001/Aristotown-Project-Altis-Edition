@@ -1,5 +1,6 @@
 """MsgTypes module: contains distributed object message types"""
 
+from __future__ import absolute_import
 from direct.showbase.PythonUtil import invertDictLossless
 
 MsgName2Id = {

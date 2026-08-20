@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os
 from direct.particles.ParticleEffect import *
 from direct.directnotify import DirectNotifyGlobal

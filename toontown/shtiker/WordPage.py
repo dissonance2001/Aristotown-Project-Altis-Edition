@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui import DirectGuiGlobals
 import json
 import os
@@ -12,6 +13,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from . import ShtikerPage
+from six.moves import range
 
 
 

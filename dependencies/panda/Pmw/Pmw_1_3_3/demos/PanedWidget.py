@@ -1,10 +1,13 @@
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 title = 'Pmw.PanedWidget demonstration'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
@@ -24,9 +27,9 @@ class Demo:
 	    else:
 		name = 'Pane ' + str(self.numPanes)
 		pane = self.pw.add(name, min = .1, size = .25)
-	    label = Tkinter.Label(pane, text = name)
+	    label = six.moves.tkinter.Label(pane, text = name)
 	    label.pack(side = 'left', expand = 1)
-	    button = Tkinter.Button(pane, text = 'Delete',
+	    button = six.moves.tkinter.Button(pane, text = 'Delete',
                     command = lambda s=self, n=name: s.deletePane(n))
 	    button.pack(side = 'left', expand = 1)
             # TODO: add buttons to invoke self.moveOneUp and self.moveOneUp.
@@ -44,14 +47,14 @@ class Demo:
     def move(self):
         numPanes = len(self.pw.panes())
         if numPanes == 0:
-            print 'No panes to move!'
+            print('No panes to move!')
             return
 
         if self.moveSrc >= numPanes:
             self.moveSrc = numPanes - 1
         if self.moveNewPos >= numPanes:
             self.moveNewPos = numPanes - 1
-        print 'Moving pane', self.moveSrc, 'to new position', self.moveNewPos
+        print('Moving pane', self.moveSrc, 'to new position', self.moveNewPos)
         self.pw.move(self.moveSrc, self.moveNewPos)
 
         self.moveSrc, self.moveNewPos = self.moveNewPos, self.moveSrc
@@ -69,17 +72,17 @@ class Demo:
     def addPane(self):
         self.numPanes = self.numPanes + 1
         name = 'Pane ' + str(self.numPanes)
-        print 'Adding', name
+        print('Adding', name)
         pane = self.pw.add(name, min = .1, size = .25)
-        label = Tkinter.Label(pane, text = name)
+        label = six.moves.tkinter.Label(pane, text = name)
         label.pack(side = 'left', expand = 1)
-        button = Tkinter.Button(pane, text = 'Delete',
+        button = six.moves.tkinter.Button(pane, text = 'Delete',
                 command = lambda s=self, n=name: s.deletePane(n))
         button.pack(side = 'left', expand = 1)
 	self.pw.updatelayout()
 
     def deletePane(self, name):
-        print 'Deleting', name
+        print('Deleting', name)
         self.pw.delete(name)
 	self.pw.updatelayout()
 
@@ -93,11 +96,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

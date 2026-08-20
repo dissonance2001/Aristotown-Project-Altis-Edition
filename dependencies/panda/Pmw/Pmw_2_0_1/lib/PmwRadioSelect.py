@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import types
 import tkinter
 import Pmw
 import collections
+from six.moves import range
 
 class RadioSelect(Pmw.MegaWidget):
     # A collection of several buttons.  In single mode, only one

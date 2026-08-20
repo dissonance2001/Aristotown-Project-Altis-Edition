@@ -6,6 +6,7 @@
 # This file contians the minimum code needed to load the particle panel tool
 # See readme.txt for more information
 
+from __future__ import absolute_import
 import sys
 try:
     import _tkinter

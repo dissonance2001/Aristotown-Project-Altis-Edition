@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectLabel import DirectLabel
 from direct.gui.DirectGui import DirectFrame, DGG
 from direct.task.Task import Task
@@ -10,6 +11,7 @@ from toontown.toonbase import ToontownIntervals
 from toontown.minigame.MazeMapGui import MazeMapGui
 from toontown.cogdominium import CogdoMazeGameGlobals as Globals
 from toontown.cogdominium import CogdoUtil
+from six.moves import range
 
 class CogdoMazeMapGui(MazeMapGui):
 
@@ -187,7 +189,7 @@ class CogdoMazeBossGui(DirectFrame):
         self._openDoor.stash()
         spacingX = codeFrameWidth + codeFrameGap
         startX = -0.5 * ((self._codeLength - 1) * spacingX - codeFrameGap)
-        for i in xrange(self._codeLength):
+        for i in range(self._codeLength):
             marker = CogdoMazeBossCodeFrame(i, self._code[i], bossCard)
             marker.reparentTo(self)
             marker.setPos(bossCard, startX + spacingX * i, 0, 0)

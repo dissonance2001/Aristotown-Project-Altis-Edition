@@ -1,5 +1,6 @@
 # Based on itk2.2/tests/widget.test code.
 
+from __future__ import absolute_import
 import tkinter
 import Test
 import Pmw

@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/tests/scrolledtext.test code.
 
+from __future__ import absolute_import
 import Test
 import Pmw
 

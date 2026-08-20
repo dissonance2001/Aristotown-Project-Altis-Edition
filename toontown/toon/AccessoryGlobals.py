@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import json
 
@@ -10106,7 +10108,7 @@ def loadAccessoryPlacementOverrides():
     placementPath = _findAccessoryPlacementsPath()
 
     if placementPath is None:
-        print 'AccessoryGlobals: accessory_placements.json not found.'
+        print('AccessoryGlobals: accessory_placements.json not found.')
         return 0
 
     try:
@@ -10116,7 +10118,7 @@ def loadAccessoryPlacementOverrides():
         finally:
             placementFile.close()
     except Exception as error:
-        print 'AccessoryGlobals: failed to read placement file:', error
+        print('AccessoryGlobals: failed to read placement file:', error)
         return 0
 
     tableInfo = (
@@ -10162,11 +10164,11 @@ def loadAccessoryPlacementOverrides():
                     tuple(scale)
                 )
 
-                print 'AccessoryGlobals: loaded override:', typeName, accessoryId, dnaKey
+                print('AccessoryGlobals: loaded override:', typeName, accessoryId, dnaKey)
                 loadedCount += 1
 
-    print 'AccessoryGlobals: loaded placement overrides:', loadedCount
-    print 'AccessoryGlobals: placement file:', placementPath
+    print('AccessoryGlobals: loaded placement overrides:', loadedCount)
+    print('AccessoryGlobals: placement file:', placementPath)
 
     return loadedCount
 

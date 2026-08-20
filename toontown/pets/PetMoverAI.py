@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import random, math
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *

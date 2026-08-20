@@ -3,6 +3,9 @@ Floater Class: Velocity style controller for floating point values with
                 a label, entry (validated), and scale
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['Floater', 'FloaterWidget', 'FloaterGroup']
 
 from direct.showbase.TkGlobal import *

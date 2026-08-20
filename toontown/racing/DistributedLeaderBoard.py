@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from otp.otpbase import OTPTimer
@@ -7,7 +8,8 @@ from toontown.toonbase.ToonBaseGlobal import *
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownGlobals import *
 import random
-import cPickle
+import six.moves.cPickle
+from six.moves import range
 
 class DistributedLeaderBoard(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DisributedLeaderBoard')
@@ -52,7 +54,7 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
 
     def setDisplay(self, pData):
         self.notify.debug('setDisplay: changing leaderboard text on local side')
-        trackName, recordTitle, scores = cPickle.loads(pData)
+        trackName, recordTitle, scores = six.moves.cPickle.loads(pData)
         self.display(trackName, recordTitle, scores)
 
     def buildListParts(self):
@@ -72,7 +74,7 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
         z = zListTop
         self.nameTextNodes = []
         self.timeTextNodes = []
-        for i in xrange(10):
+        for i in range(10):
             row, nameText, timeText, placeText = self.buildLeaderRow()
             self.nameTextNodes.append(nameText)
             placeText.setText(str(len(self.nameTextNodes)) + '.')
@@ -92,7 +94,7 @@ class DistributedLeaderBoard(DistributedObject.DistributedObject):
         self.titleTextNode.setText(pPeriodTitle)
         self.trackNameNode.setText(pTrackTitle)
         self.updateCount += 1
-        for i in xrange(10):
+        for i in range(10):
             if i > len(pLeaderList):
                 self.nameTextNodes[i].setText('-')
                 self.timeTextNodes[i].setText('-')

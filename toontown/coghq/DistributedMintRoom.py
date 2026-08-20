@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
@@ -151,7 +153,7 @@ class DistributedMintRoom(DistributedLevel.DistributedLevel, MintRoomBase.MintRo
             pos = base.localAvatar.getPos(thisZone)
             h = base.localAvatar.getH(thisZone)
             roomName = MintRoomSpecs.CashbotMintRoomId2RoomName[self.roomId]
-            print 'mint pos: %s, h: %s, room: %s' % (repr(pos), h, roomName)
+            print('mint pos: %s, h: %s, room: %s' % (repr(pos), h, roomName))
             if self.mint is not None:
                 floorNum = self.mint.floorNum
             else:

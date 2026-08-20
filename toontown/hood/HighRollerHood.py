@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.fsm import ClassicFSM, State
 from toontown.hood.Hood import Hood
 from toontown.toonbase import ToontownGlobals

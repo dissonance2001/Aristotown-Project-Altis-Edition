@@ -1,5 +1,7 @@
 """Interval module: contains the Interval class"""
 
+from __future__ import absolute_import
+from six.moves import range
 __all__ = ['Interval']
 
 from direct.directnotify.DirectNotifyGlobal import directNotify

@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 import random
+from six.moves import range
 OFF = 0
 FLYING = 1
 LANDED = 2
@@ -190,7 +192,7 @@ def generateIndexes(doId, playground):
     usedI = []
     unusedI = []
     for area in ButterflyPoints[playground]:
-        usedI.append(range(0, len(area)))
+        usedI.append(list(range(0, len(area))))
         unusedI.append([])
 
     allocatedIndexes[doId] = (usedI, unusedI)

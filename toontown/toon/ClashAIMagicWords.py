@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.MagicWordGlobal import *
 from toontown.battle import SuitBattleGlobals
 from toontown.shtiker import CogPageGlobals

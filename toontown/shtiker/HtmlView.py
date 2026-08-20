@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import array, sys
 from direct.showbase.DirectObject import DirectObject
 from direct.task.Task import Task
@@ -13,6 +14,7 @@ from pandac.PandaModules import WindowProperties
 from direct.interval.IntervalGlobal import *
 from pandac.PandaModules import AwWebView
 from pandac.PandaModules import AwWebCore
+from six.moves import range
 
 WEB_WIDTH_PIXELS = 784
 WEB_HEIGHT_PIXELS = 451
@@ -39,14 +41,14 @@ class HtmlView(DirectObject):
         else:
             GlobalWebcore = AwWebCore(AwWebCore.LOGVERBOSE, True, AwWebCore.PFBGRA)
             GlobalWebcore.setBaseDirectory('.')
-            for errResponse in xrange(400, 600):
+            for errResponse in range(400, 600):
                 GlobalWebcore.setCustomResponsePage(errResponse, 'error.html')
 
         self.webView = GlobalWebcore.createWebView(WEB_WIDTH, WEB_HEIGHT, self.transparency, False, 70)
         frameName = ''
         inGameNewsUrl = self.getInGameNewsUrl()
         self.imgBuffer = array.array('B')
-        for i in xrange(WEB_WIDTH * WEB_HEIGHT):
+        for i in range(WEB_WIDTH * WEB_HEIGHT):
             self.imgBuffer.append(0)
             self.imgBuffer.append(0)
             self.imgBuffer.append(0)
@@ -54,14 +56,14 @@ class HtmlView(DirectObject):
 
         if self.useHalfTexture:
             self.leftBuffer = array.array('B')
-            for i in xrange(WEB_HALF_WIDTH * WEB_HEIGHT):
+            for i in range(WEB_HALF_WIDTH * WEB_HEIGHT):
                 self.leftBuffer.append(0)
                 self.leftBuffer.append(0)
                 self.leftBuffer.append(0)
                 self.leftBuffer.append(255)
 
             self.rightBuffer = array.array('B')
-            for i in xrange(WEB_HALF_WIDTH * WEB_HEIGHT):
+            for i in range(WEB_HALF_WIDTH * WEB_HEIGHT):
                 self.rightBuffer.append(0)
                 self.rightBuffer.append(0)
                 self.rightBuffer.append(0)

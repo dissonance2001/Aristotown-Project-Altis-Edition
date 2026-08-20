@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import types
 import os
 import string
@@ -13,7 +14,7 @@ class EntityTypeRegistry:
     def __init__(self, entityTypeModule):
         self.entTypeModule = entityTypeModule
         hv = HashVal()
-        import EntityTypes
+        from . import EntityTypes
         reload(EntityTypes)
         reload(self.entTypeModule)
 
@@ -23,18 +24,18 @@ class EntityTypeRegistry:
                 filename = base + '.py'
             return filename
 
-        fileLines = file(getPyExtVersion(EntityTypes.__file__)).readlines()
+        fileLines = open(getPyExtVersion(EntityTypes.__file__)).readlines()
         hv.hashString(string.join(fileLines, ''))
         s = str(hv.asHex())
         s += '.'
-        fileLines = file(getPyExtVersion(self.entTypeModule.__file__)).readlines()
+        fileLines = open(getPyExtVersion(self.entTypeModule.__file__)).readlines()
         hv.hashString(string.join(fileLines, ''))
         s += str(hv.asHex())
         self.hashStr = s
         getPyExtVersion = None
         classes = []
         for key, value in entityTypeModule.__dict__.items():
-            if type(value) is types.ClassType:
+            if type(value) is type:
                 if issubclass(value, EntityTypeDesc.EntityTypeDesc):
                     classes.append(value)
 
@@ -70,7 +71,7 @@ class EntityTypeRegistry:
             self.typeName2derivedTypeNames[typename] = typenames
 
     def getAllTypeNames(self):
-        return self.entTypeName2typeDesc.keys()
+        return list(self.entTypeName2typeDesc.keys())
 
     def getTypeDesc(self, entTypeName):
         return self.entTypeName2typeDesc[entTypeName]

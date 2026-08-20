@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGuiGlobals import NO_FADE_SORT_INDEX
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *

@@ -5,6 +5,8 @@ existing Altis actors, exact Clash animation aliases, nodes, props and helper
 objects expected by highroller_intro.ctsc.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 
 from direct.actor.Actor import Actor
@@ -17,6 +19,7 @@ from toontown.cutscene.repository.CutsceneRuntime import buildCutscene
 from toontown.cutscene.ResolvedActorInterval import (
     ResolvedActorInterval, resolveControl)
 from toontown.distributed import DelayDelete
+from six.moves import zip
 
 
 CUTSCENE_PATH = 'phase_13/data/cutscenes/highroller/highroller_intro.ctsc'
@@ -246,8 +249,8 @@ def _validateExistingSuitAnimations(actor, animNames, label):
             '[HighRoller CTSC] %s existing animation validation failed:\n  %s' %
             (label, '\n  '.join(failures)))
 
-    print('[HighRoller CTSC] Preserved Altis %s: %s' %
-          (label, ', '.join(sorted(validated))))
+    print(('[HighRoller CTSC] Preserved Altis %s: %s' %
+          (label, ', '.join(sorted(validated)))))
 
 
 def _loadAndValidateAdditionalAnimations(actor, animMap, label):
@@ -283,8 +286,8 @@ def _loadAndValidateAdditionalAnimations(actor, animMap, label):
             '[HighRoller CTSC] %s animation binding failed:\n  %s' %
             (label, '\n  '.join(failures)))
 
-    print('[HighRoller CTSC] Added Clash %s: %s' %
-          (label, ', '.join(sorted(animMap.keys()))))
+    print(('[HighRoller CTSC] Added Clash %s: %s' %
+          (label, ', '.join(sorted(animMap.keys())))))
 
 
 
@@ -304,8 +307,8 @@ def _cacheResolvedControls(actor, animNames, label):
         raise RuntimeError(
             '[HighRoller CTSC] Could not cache exact %s controls:\n  %s' %
             (label, '\n  '.join(failures)))
-    print('[HighRoller CTSC] Cached exact %s controls: %s' %
-          (label, ', '.join(sorted(controls.keys()))))
+    print(('[HighRoller CTSC] Cached exact %s controls: %s' %
+          (label, ', '.join(sorted(controls.keys())))))
     return controls
 
 def _getToonAnimControls(toon, animName):
@@ -355,8 +358,8 @@ def _validateExistingAnimations(actor, animNames, label):
         raise RuntimeError(
             '[HighRoller CTSC] %s is missing required existing animations:\n  %s' %
             (label, '\n  '.join(failures)))
-    print('[HighRoller CTSC] Validated multipart %s: %s' %
-          (label, ', '.join(validated)))
+    print(('[HighRoller CTSC] Validated multipart %s: %s' %
+          (label, ', '.join(validated))))
 
 
 def _configureSuitNametag(suit, visible=False):
@@ -740,24 +743,24 @@ class HighRollerIntroSetup(object):
         # lookup.
         self.suitAnimationControls = [
             _cacheResolvedControls(
-                self.suits[0], HIGH_ROLLER_BODY_ANIMS.keys(),
+                self.suits[0], list(HIGH_ROLLER_BODY_ANIMS.keys()),
                 'High Roller body'),
             _cacheResolvedControls(
-                self.suits[1], DUCK_SHUFFLER_BODY_ANIMS.keys(),
+                self.suits[1], list(DUCK_SHUFFLER_BODY_ANIMS.keys()),
                 'Duck Shuffler body'),
             _cacheResolvedControls(
-                self.suits[2], MAJOR_PLAYER_BODY_ANIMS.keys(),
+                self.suits[2], list(MAJOR_PLAYER_BODY_ANIMS.keys()),
                 'Major Player body'),
         ]
         self.suitHeadAnimationControls = [
             _cacheResolvedControls(
-                self.heads[0], HIGH_ROLLER_HEAD_ANIMS.keys(),
+                self.heads[0], list(HIGH_ROLLER_HEAD_ANIMS.keys()),
                 'High Roller head'),
             _cacheResolvedControls(
-                self.heads[1], DUCK_SHUFFLER_HEAD_ANIMS.keys(),
+                self.heads[1], list(DUCK_SHUFFLER_HEAD_ANIMS.keys()),
                 'Duck Shuffler head'),
             _cacheResolvedControls(
-                self.heads[2], MAJOR_PLAYER_HEAD_ANIMS.keys(),
+                self.heads[2], list(MAJOR_PLAYER_HEAD_ANIMS.keys()),
                 'Major Player head'),
         ]
 
@@ -915,7 +918,7 @@ class HighRollerIntroSetup(object):
         _loadAndValidateAdditionalAnimations(
             self.cameraMover, CAMERA_ANIMS, 'High Roller fusion camera')
         self.cameraAnimationControls = _cacheResolvedControls(
-            self.cameraMover, CAMERA_ANIMS.keys(),
+            self.cameraMover, list(CAMERA_ANIMS.keys()),
             'High Roller fusion camera')
         self.cameraBone = self.cameraMover.find('**/CameraBone')
         if self.cameraBone.isEmpty():

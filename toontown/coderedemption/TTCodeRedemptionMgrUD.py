@@ -4,6 +4,7 @@ Created on Mar 21, 2017
 @author: Drew
 '''
 
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectUD import DistributedObjectUD
 

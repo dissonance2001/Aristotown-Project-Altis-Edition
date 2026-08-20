@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.controls import ControlManager
 from direct.showbase.InputStateGlobal import inputState
 

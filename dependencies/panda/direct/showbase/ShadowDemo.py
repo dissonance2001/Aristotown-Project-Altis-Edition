@@ -9,6 +9,7 @@ multitexture rendering techniques.  It's not a particularly great
 way to do shadows.
 """
 
+from __future__ import absolute_import
 __all__ = ['ShadowCaster', 'avatarShadow', 'piratesAvatarShadow', 'arbitraryShadow']
 
 from panda3d.core import *

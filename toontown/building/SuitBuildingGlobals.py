@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.building.ElevatorConstants import *
 from toontown.toonbase import ToontownGlobals
 import random, sys

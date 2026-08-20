@@ -1,7 +1,10 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase.TkGlobal import *
 from .Tree import *
 import Pmw
+from six.moves import range
 
 #--------------------------------------------------------------------------
 #--------------------------------------------------------------------------
@@ -344,7 +347,7 @@ class MemoryExplorerItem:
             self.numFaces += child.numFaces
 
     def ls(self, indent = ""):
-        print(indent + self.nodePath.getName() + " " + str(self.vertexBytes) + " " + str(self.numFaces) + " " + str(self.textureBytes))
+        print((indent + self.nodePath.getName() + " " + str(self.vertexBytes) + " " + str(self.numFaces) + " " + str(self.textureBytes)))
         indent = indent +  " "
 
         for child in self.children:

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
@@ -15,6 +16,7 @@ from toontown.suit import SuitDNA
 import random
 from toontown.battle import BattleProps
 from toontown.toon import NPCToons
+from six.moves import range
 
 class DistributedLawbotChair(DistributedObject.DistributedObject, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotChair')
@@ -310,7 +312,7 @@ class DistributedLawbotChair(DistributedObject.DistributedObject, FSM.FSM):
         seqName = 'LawbotBossChair-%s' % self.doId
         self.ival = Sequence(name=seqName)
         downAngle = -80
-        for index in xrange(len(myHeadings)):
+        for index in range(len(myHeadings)):
             nextIndex = index + 1
             if nextIndex == len(myHeadings):
                 nextIndex = 0

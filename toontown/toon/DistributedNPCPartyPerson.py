@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed import ClockDelta
 from direct.distributed.DistributedObject import DistributedObject
 from direct.task.Task import Task

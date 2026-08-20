@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from panda3d.core import NodePath, DecalEffect, LPoint3f
 from toontown.dna import DNANode
 from toontown.dna import DNAWall
 import random
+from six.moves import range
 
 class DNAFlatBuilding(DNANode.DNANode):
     __slots__ = (

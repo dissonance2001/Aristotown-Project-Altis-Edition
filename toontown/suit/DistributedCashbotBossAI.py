@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -18,6 +19,7 @@ from otp.ai.MagicWordGlobal import *
 from toontown.building import SuitBuildingGlobals
 from toontown.building import SuitPlannerInteriorAI
 import math
+from six.moves import range
 
 class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossAI')
@@ -78,15 +80,15 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         # 14, while this source's extended SuitDNA registry only accepts
         # explicit spawn tiers 1 through 8.  Keep valid tiers unchanged and
         # translate legacy values before the planner constructs the Cog DNA.
-        if tier in xrange(1, 9) and SuitDNA.getSuitsForTier(dept, tier):
+        if tier in range(1, 9) and SuitDNA.getSuitsForTier(dept, tier):
             return tier
 
         tier = SuitDNA.getRandomSuitTierSpawn(level, dept)
-        if tier in xrange(1, 9) and SuitDNA.getSuitsForTier(dept, tier):
+        if tier in range(1, 9) and SuitDNA.getSuitsForTier(dept, tier):
             return tier
 
         availableTiers = []
-        for candidate in xrange(1, 9):
+        for candidate in range(1, 9):
             if SuitDNA.getSuitsForTier(dept, candidate):
                 availableTiers.append(candidate)
 
@@ -177,14 +179,14 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def __makeBattleThreeObjects(self):
         if self.cranes == None:
             self.cranes = []
-            for index in xrange(len(ToontownGlobals.CashbotBossCranePosHprs)):
+            for index in range(len(ToontownGlobals.CashbotBossCranePosHprs)):
                 crane = DistributedCashbotBossCraneAI.DistributedCashbotBossCraneAI(self.air, self, index)
                 crane.generateWithRequired(self.zoneId)
                 self.cranes.append(crane)
 
         if self.safes == None:
             self.safes = []
-            for index in xrange(len(ToontownGlobals.CashbotBossSafePosHprs)):
+            for index in range(len(ToontownGlobals.CashbotBossSafePosHprs)):
                 safe = DistributedCashbotBossSafeAI.DistributedCashbotBossSafeAI(self.air, self, index)
                 safe.generateWithRequired(self.zoneId)
                 self.safes.append(safe)
@@ -725,7 +727,7 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                     from toontown.gumball import GumballGlobals
                     rewardCount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_CASHBOT], rewardCount, True)
                 toon.addResistanceMessage(self.rewardId)
-                for x in xrange(max(0, rewardCount - 1)):
+                for x in range(max(0, rewardCount - 1)):
                     toon.addResistanceMessage(ResistanceChat.getRandomId())
                 toon.b_promote(self.deptIndex)
                 toon.addStat(ToontownGlobals.STATS_CFO)

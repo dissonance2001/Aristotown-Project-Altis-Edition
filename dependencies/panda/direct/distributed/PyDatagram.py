@@ -3,6 +3,7 @@
 # class variable FuncDict and so we can import DCSubatomicType at the top
 # of the file rather than every time we call the putArg function.
 
+from __future__ import absolute_import
 from panda3d.core import Datagram
 from panda3d.direct import *
 # Import the type numbers

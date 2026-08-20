@@ -4,14 +4,16 @@
 # Display a splash screen as quickly as possible (before importing
 # modules and initialising Pmw).
 
-import Tkinter
-root = Tkinter.Tk(className = 'Demo')
+from __future__ import absolute_import
+from __future__ import print_function
+import six.moves.tkinter
+root = six.moves.tkinter.Tk(className = 'Demo')
 root.withdraw()
 
-splash = Tkinter.Toplevel()
+splash = six.moves.tkinter.Toplevel()
 splash.withdraw()
 splash.title('Welcome to the Pmw demos')
-text = Tkinter.Label(splash,
+text = six.moves.tkinter.Label(splash,
     font=('Helvetica', 16, 'bold'),
     relief = 'raised',
     borderwidth = 2,
@@ -55,7 +57,7 @@ import re
 import string
 import sys
 import types
-import Tkinter
+import six.moves.tkinter
 import DemoVersion
 import Args
 
@@ -111,10 +113,10 @@ class Demo(Pmw.MegaWidget):
 	self._widgetlist.pack(fill = 'both', expand = 1, padx = 8)
 
 	panes.add('info')
-	self._status = Tkinter.Label(panes.pane('info'))
+	self._status = six.moves.tkinter.Label(panes.pane('info'))
 	self._status.pack(padx = 8, anchor = 'w')
 
-	self._example = Tkinter.Frame(panes.pane('info'),
+	self._example = six.moves.tkinter.Frame(panes.pane('info'),
 		borderwidth = 2,
 		relief = 'sunken',
 	        background = 'white')
@@ -153,7 +155,7 @@ class Demo(Pmw.MegaWidget):
 
 	sels = self._widgetlist.getcurselection()
 	if len(sels) == 0:
-	    print 'No demonstrations to display'
+	    print('No demonstrations to display')
 	    return
 	demoName = sels[0]
 
@@ -178,9 +180,9 @@ class Demo(Pmw.MegaWidget):
 	for window in self._example.winfo_children():
 	    window.destroy()
 
-	frame = Tkinter.Frame(self._example)
+	frame = six.moves.tkinter.Frame(self._example)
 	frame.pack(expand = 1)
-	exec 'import ' + demoName
+	exec('import ' + demoName)
         # Need to keep a reference to the widget, so that variables, etc
         # are not deleted.
 	self.widget = eval(demoName + '.Demo(frame)')
@@ -196,7 +198,7 @@ class Demo(Pmw.MegaWidget):
     def showCode(self):
 	if self.codeWindow.state() != 'normal':
 	    if self.demoName is None:
-		print 'No demonstration selected'
+		print('No demonstration selected')
 		return
 	    self.insertCode()
 
@@ -276,7 +278,7 @@ commandLineArgSpecs = (
 program = 'All.py'
 msg = Args.parseArgs(program, sys.argv, commandLineArgSpecs, 0)
 if msg is not None:
-    print msg 
+    print(msg) 
     sys.exit()
 
 size = Args.get('fontsize')

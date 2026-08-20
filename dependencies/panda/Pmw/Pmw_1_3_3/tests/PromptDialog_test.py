@@ -1,6 +1,7 @@
 # Based on iwidgets2.2.0/tests/promptdialog.test code. 
 
-import Tkinter
+from __future__ import absolute_import
+import six.moves.tkinter
 import Test
 import Pmw
 
@@ -37,7 +38,7 @@ tests_1 = (
   ('entryfield_validate', 'alphabetic'),
   ('entryfield_validate', 'alphanumeric'),
   ('entry_width', 30),
-  (c.interior, (), Tkinter.Frame),
+  (c.interior, (), six.moves.tkinter.Frame),
   (c.insertentry, ('end', 'Test String')),
   (c.get, (), 'Test String'),
   (c.deleteentry, (0, 'end')),

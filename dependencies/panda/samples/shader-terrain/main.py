@@ -6,6 +6,7 @@
 #
 # This tutorial provides an example of using the ShaderTerrainMesh class
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import ShaderTerrainMesh, Shader, load_prc_file_data
 from panda3d.core import SamplerState

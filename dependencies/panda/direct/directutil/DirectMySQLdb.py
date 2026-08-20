@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from MySQLdb import *
 
 ### DCR: from MySQLdb __init__.py

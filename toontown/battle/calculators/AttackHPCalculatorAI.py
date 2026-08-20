@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleGlobals import *
 from toontown.battle import SuitBattleGlobals
@@ -5,6 +6,7 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import StatusEffects
 import random
 import math
+from six.moves import range
 
 class AttackHPCalculatorAI(object):
 
@@ -292,7 +294,7 @@ class AttackHPCalculatorAI(object):
                                     )
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
 
                                     break
@@ -362,7 +364,7 @@ class AttackHPCalculatorAI(object):
                                 )
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'videoPhase1')
 
                                 break
@@ -461,7 +463,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = maxSuits - aliveCount
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         if self.suitHasCondition(theSuit.doId, 'desperation'):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'litDesperation')
                                         else:
@@ -657,7 +659,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = maxSuits - aliveCount
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
 
                                 break
@@ -706,7 +708,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = min(4, 7 - aliveCount)
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         if theSuit.currHP <= (theSuit.maxHP * .25):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'erclaim2')
                                         else:
@@ -1840,7 +1842,7 @@ class AttackHPCalculatorAI(object):
                         projectedHP = max(1, targetSuit.currHP - damage)
                         hpPercent = float(projectedHP) / float(targetSuit.maxHP)
 
-                        for i in xrange(spawnAmount):
+                        for i in range(spawnAmount):
                             if hpPercent <= .25:
                                 boss.appendSuitsToBattle(boss.battleNumber, 'erfit5')
                             elif hpPercent <= .375:
@@ -2125,7 +2127,7 @@ class AttackHPCalculatorAI(object):
         Professor Control: I'm sorry, but the original method is actually a pigstye and I cannot work in that.  I'm using an alternate form for now.
         '''
         targetList = self.__createSuitTargetList(attack)
-        for currTarget in xrange(len(targetList)):
+        for currTarget in range(len(targetList)):
             toonId = targetList[currTarget]
             toon = self.battle.getToon(toonId)
             result = 0
@@ -2618,7 +2620,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = maxSuits - aliveCount
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if self.suitHasCondition(theSuit.doId, 'desperation'):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'litDesperation')
                                             else:
@@ -2653,7 +2655,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = min(4, maxSuits - aliveCount)
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if theSuit.currHP <= (theSuit.maxHP * .25):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'erfit5')
                                             elif theSuit.currHP <= (theSuit.maxHP * .375):
@@ -2687,7 +2689,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = min(4, 7 - aliveCount)
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if theSuit.currHP <= (theSuit.maxHP * .25):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'erclaim2')
                                             else:
@@ -2872,7 +2874,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = maxSuits - aliveCount
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
 
                                     break
@@ -7122,7 +7124,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(random.randint(1, 4)):
+                                    for i in range(random.randint(1, 4)):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crfMinigame')
 
                                     break
@@ -7169,7 +7171,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
 
                                     break
@@ -7213,7 +7215,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(random.randint(1, 4)):
+                                    for i in range(random.randint(1, 4)):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crfMinigame')
 
                                     break
@@ -9810,7 +9812,7 @@ class AttackHPCalculatorAI(object):
         # PER-TARGET CALCULATION
         # ---------------------------------------------------------
 
-        for currTarget in xrange(len(targetList)):
+        for currTarget in range(len(targetList)):
             toonId = targetList[currTarget]
             toon = self.battle.getToon(toonId)
 

@@ -2,6 +2,9 @@
 for opening a graphical display, setting up input devices and creating
 the scene graph. """
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['ShowBase', 'WindowControls']
 
 # This module redefines the builtin import function with one
@@ -22,7 +25,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import __builtin__ as builtins
+    import six.moves.builtins as builtins
 builtins.config = DConfig
 
 from direct.directnotify.DirectNotifyGlobal import directNotify, giveNotify
@@ -515,7 +518,7 @@ class ShowBase(DirectObject.DirectObject):
         if self.config.GetBool('want-env-debug-info', 0):
            print("\n\nEnvironment Debug Info {")
            print("* model path:")
-           print(getModelPath())
+           print((getModelPath()))
            #print "* dna path:"
            #print getDnaPath()
            print("}")

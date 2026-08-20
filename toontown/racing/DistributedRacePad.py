@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from direct.task.Task import Task
 from direct.distributed.ClockDelta import *
@@ -9,6 +10,7 @@ from toontown.toonbase.ToontownTimer import ToontownTimer
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.racing.KartShopGlobals import KartGlobals
+from six.moves import range
 
 class DistributedRacePad(DistributedKartPad, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedRacePad')
@@ -206,7 +208,7 @@ class DistributedRacePad(DistributedKartPad, FSM):
         if self.tunnelSign:
             textNodePaths = self.tunnelSign.findAllMatches('**/+TextNode')
             numTextNodePaths = textNodePaths.getNumPaths()
-            for i in xrange(numTextNodePaths):
+            for i in range(numTextNodePaths):
                 textNodePath = textNodePaths.getPath(i)
                 textNodePath.hide()
 
@@ -214,7 +216,7 @@ class DistributedRacePad(DistributedKartPad, FSM):
         if self.tunnelSign:
             textNodePaths = self.tunnelSign.findAllMatches('**/+TextNode')
             numTextNodePaths = textNodePaths.getNumPaths()
-            for i in xrange(numTextNodePaths):
+            for i in range(numTextNodePaths):
                 textNodePath = textNodePaths.getPath(i)
                 textNodePath.show()
 
@@ -265,7 +267,7 @@ class DistributedRacePad(DistributedKartPad, FSM):
         if self.tunnelSign:
             textNodePaths = self.tunnelSign.findAllMatches('**/+TextNode')
             numTextNodePaths = textNodePaths.getNumPaths()
-            for i in xrange(numTextNodePaths):
+            for i in range(numTextNodePaths):
                 textNodePath = textNodePaths.getPath(i)
                 textNodePath.removeNode()
                 textNodePath = None

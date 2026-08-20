@@ -1,5 +1,7 @@
+from __future__ import absolute_import
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from toontown.toonbase import ToonPythonUtil as PythonUtil
+import six
 
 
 class ToontownRPCDispatcher:
@@ -12,7 +14,7 @@ class ToontownRPCDispatcher:
         """
         Handle a JSON-RPC 2.0 request.
         """
-        if (not isinstance(request.method, basestring)) or \
+        if (not isinstance(request.method, six.string_types)) or \
            (not isinstance(request.params, (tuple, list, dict))):
             request.error(-32600, 'Invalid Request')
             return
@@ -32,7 +34,7 @@ class ToontownRPCDispatcher:
         elif len(request.params) > 0:
             token = request.params[0]
             params = request.params[1:]
-        if not isinstance(token, basestring):
+        if not isinstance(token, six.string_types):
             request.error(-32000, 'No token provided')
             return
         error = self.handler.authenticate(token, method)

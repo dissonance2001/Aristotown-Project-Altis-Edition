@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 import string

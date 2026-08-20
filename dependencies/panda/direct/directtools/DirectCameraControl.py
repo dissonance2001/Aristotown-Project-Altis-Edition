@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.showbase.DirectObject import DirectObject
 from .DirectUtil import *
 from .DirectGeometry import *
@@ -6,6 +8,7 @@ from .DirectSelection import SelectionRay
 from direct.interval.IntervalGlobal import Sequence, Func
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
+from six.moves import range
 
 CAM_MOVE_DURATION = 1.2
 COA_MARKER_SF = 0.0075

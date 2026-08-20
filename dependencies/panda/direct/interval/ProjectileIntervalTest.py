@@ -1,5 +1,6 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
 __all__ = ['doTest']
 
 from panda3d.core import *

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.particles.ParticleEffect import ParticleEffect
 from panda3d.core import *
 from panda3d.physics import *

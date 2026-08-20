@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectButton, DirectFrame, DirectLabel, DirectScrolledFrame
 from direct.gui import DirectGuiGlobals as DGG
 from pandac.PandaModules import TextNode
@@ -8,6 +9,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui, sp_gui_icons, getSocialPanelGroupBg
 from toontown.toon.socialpanel.SocialPanelGUI import SocialPanelContextDropdown
 from toontown.toon.socialpanel.groups.SocialPanelText import ExtendedOnscreenText
+from six.moves import range
 
 
 class SocialPanelGroupViewer(DirectFrame):

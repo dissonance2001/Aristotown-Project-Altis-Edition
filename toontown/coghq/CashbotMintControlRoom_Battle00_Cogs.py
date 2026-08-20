@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.coghq.SpecImports import *
 import random, sys
 from toontown.toonbase import ToontownGlobals

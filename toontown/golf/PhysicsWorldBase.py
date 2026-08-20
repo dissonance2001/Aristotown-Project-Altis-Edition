@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import math, random, time
 from panda3d.core import *
 from panda3d.ode import *
@@ -9,6 +11,7 @@ from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.golf import BuildGeometry, GolfGlobals
+from six.moves import range
 
 def scalp(vec, scal):
     vec0 = vec[0] * scal
@@ -142,7 +145,7 @@ class PhysicsWorldBase:
         self.DTA = 0.0
         self.frameCounter = 0
         if self.canRender:
-            for count in xrange(self.jointMarkerCount):
+            for count in range(self.jointMarkerCount):
                 testMarker = render.attachNewNode('Joint Marker')
                 ballmodel = loader.loadModel('phase_3/models/misc/sphere')
                 ballmodel.reparentTo(testMarker)
@@ -159,7 +162,7 @@ class PhysicsWorldBase:
     def getCycleTime(self, doprint = 0):
         cycleTime = (globalClock.getRealTime() + self.timingCycleOffset) % self.timingCycleLength
         if doprint:
-            print 'Get Cycle Time %s' % cycleTime
+            print('Get Cycle Time %s' % cycleTime)
         return cycleTime
 
     def setTimeIntoCycle(self, time, doprint = 0):
@@ -231,7 +234,7 @@ class PhysicsWorldBase:
 
     def postStep(self):
         if self.showContacts and self.canRender:
-            for count in xrange(self.jointMarkerCount):
+            for count in range(self.jointMarkerCount):
                 pandaNodePathGeom = self.jointMarkers[count]
                 if count < self.colCount:
                     pandaNodePathGeom.setPos(self.space.getContactData(count * 3 + 0), self.space.getContactData(count * 3 + 1), self.space.getContactData(count * 3 + 2))
@@ -253,7 +256,7 @@ class PhysicsWorldBase:
                 eventData = entry[6]
                 model = entry[7]
                 force = 0.0
-                for index in xrange(len(timeData)):
+                for index in range(len(timeData)):
                     if index == len(timeData) - 1 and timeData[index] < time or timeData[index] < time and timeData[index + 1] > time:
                         force = forceData[index]
                         event = eventData[index]
@@ -324,7 +327,7 @@ class PhysicsWorldBase:
         self.setTimeIntoCycle(time[2])
         if time[2] > self.timingCycleLength:
             pass
-        for dataIndex in xrange(1, len(objectData)):
+        for dataIndex in range(1, len(objectData)):
             data = objectData[dataIndex]
             commonObject = self.commonObjectDict[data[0]]
             commonObject[2].setPosition(data[2], data[3], data[4])
@@ -489,22 +492,22 @@ class PhysicsWorldBase:
         if ballIndex == 1:
             self.notify.debug('1')
             geom.setCollideBits(BitMask32(16777215))
-            geom.setCategoryBits(BitMask32(4278190080L))
+            geom.setCategoryBits(BitMask32(4278190080))
         elif ballIndex == 2:
             self.notify.debug('2')
             geom.setCollideBits(BitMask32(16777215))
-            geom.setCategoryBits(BitMask32(4278190080L))
+            geom.setCategoryBits(BitMask32(4278190080))
         elif ballIndex == 3:
             self.notify.debug('3')
             geom.setCollideBits(BitMask32(16777215))
-            geom.setCategoryBits(BitMask32(4278190080L))
+            geom.setCategoryBits(BitMask32(4278190080))
         elif ballIndex == 4:
             self.notify.debug('4')
             geom.setCollideBits(BitMask32(16777215))
-            geom.setCategoryBits(BitMask32(4278190080L))
+            geom.setCategoryBits(BitMask32(4278190080))
         else:
-            geom.setCollideBits(BitMask32(4294967295L))
-            geom.setCategoryBits(BitMask32(4294967295L))
+            geom.setCollideBits(BitMask32(4294967295))
+            geom.setCategoryBits(BitMask32(4294967295))
         geom.setBody(body)
         if self.notify.getDebug():
             self.notify.debug('golf ball geom id')
@@ -685,7 +688,7 @@ class PhysicsWorldBase:
             someNodePathGeom = render.attachNewNode('pinwheel')
         else:
             someNodePathGeom = self.root.attachNewNode('pinwheel')
-        for num in xrange(numBoxes):
+        for num in range(numBoxes):
             spin = 360.0 * float(num) / float(numBoxes) + float(offRot)
             self.placerNode.setH(spin)
             geom = OdeBoxGeom(space, boxsize)

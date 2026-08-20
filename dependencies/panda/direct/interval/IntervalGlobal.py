@@ -7,6 +7,7 @@ single convenient module from which all interval types can be imported.
 # since the purpose of this module is to add up the contributions
 # of a number of other modules.
 
+from __future__ import absolute_import
 from .Interval import *
 from .ActorInterval import *
 from .FunctionInterval import *

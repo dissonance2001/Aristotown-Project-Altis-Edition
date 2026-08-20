@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from panda3d.core import NodePath, DecalEffect
 from toontown.dna import DNADoor
 

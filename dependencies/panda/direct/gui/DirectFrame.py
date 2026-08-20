@@ -16,6 +16,9 @@ See the :ref:`directframe` page in the programming manual for a more in-depth
 explanation and an example of how to use this class.
 """
 
+from __future__ import absolute_import
+import six
+from six.moves import range
 __all__ = ['DirectFrame']
 
 from panda3d.core import *
@@ -29,7 +32,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = basestring
+    stringType = six.string_types
 
 
 class DirectFrame(DirectGuiWidget):

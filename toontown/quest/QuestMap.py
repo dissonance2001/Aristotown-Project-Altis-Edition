@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from pandac.PandaModules import CardMaker, TextNode
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
@@ -9,6 +10,7 @@ from toontown.quest import Quests
 from toontown.suit import SuitPlannerBase
 from toontown.suit import SuitDNA
 from toontown.quest import QuestMapGlobals
+from six.moves import range
 
 class QuestMap(DirectFrame):
 
@@ -249,7 +251,7 @@ class QuestMap(DirectFrame):
             if (self.hoodId != hoodId) or (self.zoneId != branchId):
                 continue
 
-            for blockIndex in xrange(base.cr.playGame.dnaStore.getNumBlockNumbers()):
+            for blockIndex in range(base.cr.playGame.dnaStore.getNumBlockNumbers()):
                 blockNumber = base.cr.playGame.dnaStore.getBlockNumberAt(blockIndex)
                 zoneId = base.cr.playGame.dnaStore.getZoneFromBlockNumber(blockNumber)
                 interiorZoneId = (zoneId - (zoneId%100)) + 500 + blockNumber
@@ -262,7 +264,7 @@ class QuestMap(DirectFrame):
                         isSuitBlock=base.cr.playGame.dnaStore.isSuitBlock(blockNumber))
                     continue
                     
-        for blockIndex in xrange(base.cr.playGame.dnaStore.getNumBlockNumbers()):
+        for blockIndex in range(base.cr.playGame.dnaStore.getNumBlockNumbers()):
             blockNumber = base.cr.playGame.dnaStore.getBlockNumberAt(blockIndex)
             if base.cr.playGame.dnaStore.isSuitBlock(blockNumber) and blockNumber not in self.questBlocks:
                 self.putSuitBuildingMarker(

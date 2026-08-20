@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.estate import DistributedStatuary
 from toontown.estate import DistributedLawnDecor
 from direct.directnotify import DirectNotifyGlobal
@@ -10,6 +11,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import NodePath
 from pandac.PandaModules import Point3
+from six.moves import range
 
 def dnaCodeFromToonDNA(dna):
 
@@ -112,7 +114,7 @@ class DistributedToonStatuary(DistributedStatuary.DistributedStatuary):
                 if sleeves:
                     sleeves.setTexture(desatSleeveTex, 1)
                 bottoms = torso.findAllMatches('**/torso-bot*')
-                for bottomNum in xrange(0, bottoms.getNumPaths()):
+                for bottomNum in range(0, bottoms.getNumPaths()):
                     bottom = bottoms.getPath(bottomNum)
                     if bottom:
                         if self.toon.style.torso[1] == 's':

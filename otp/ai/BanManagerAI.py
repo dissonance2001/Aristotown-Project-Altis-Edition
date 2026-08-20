@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import datetime
 from direct.directnotify import DirectNotifyGlobal
 from toontown.uberdog.ClientServicesManagerUD import executeHttpRequest
@@ -7,7 +9,7 @@ from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
 import threading
-import httplib
+import six.moves.http_client
 
 class BanFSM(FSM):
 
@@ -23,7 +25,7 @@ class BanFSM(FSM):
 
     def performBan(self):
         self.ejectPlayer()
-        print(self.accountId)
+        print((self.accountId))
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)

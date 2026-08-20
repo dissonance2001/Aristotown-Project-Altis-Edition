@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 title = 'Pmw LogicalFont demonstration'
 
 # Import Pmw from this directory tree.

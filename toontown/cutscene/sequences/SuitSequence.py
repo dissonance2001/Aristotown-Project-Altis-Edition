@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.showbase.PythonUtil import lerp
 from toontown.battle import BattleProps, MovieUtil
 from toontown.battle.BattleProps import globalPropPool
@@ -13,6 +14,7 @@ from toontown.cutscene.AltisCutsceneCompat import (
     applySuitVisualEffect, unapplySuitVisualEffect)
 from direct.interval.IntervalGlobal import *
 from toontown.effects import DustCloud
+from six.moves import range
 '\nMethods to help generate positions/etc for sequences.\n'
 
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Filename, Texture
 from panda3d.core import AmbientLight, DirectionalLight, PointLight

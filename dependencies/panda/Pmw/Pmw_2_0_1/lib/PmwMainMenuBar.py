@@ -1,9 +1,11 @@
 # Main menubar
 
+from __future__ import absolute_import
 import string
 import types
 import tkinter
 import Pmw
+from six.moves import range
 
 class MainMenuBar(Pmw.MegaArchetype):
 

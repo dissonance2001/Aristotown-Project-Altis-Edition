@@ -5,6 +5,10 @@ line: idle.py -c "from inspector import inspect"
 so that I can just type: inspect(anObject) any time."""
 
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import map
+from six.moves import range
 __all__ = ['inspect', 'inspectorFor', 'Inspector', 'ModuleInspector', 'ClassInspector', 'InstanceInspector', 'FunctionInspector', 'InstanceMethodInspector', 'CodeInspector', 'ComplexInspector', 'DictionaryInspector', 'SequenceInspector', 'SliceInspector', 'InspectorWindow']
 
 from direct.showbase.TkGlobal import *

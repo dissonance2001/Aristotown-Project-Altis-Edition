@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
+from six.moves import range
 
 class HTTPUtilException(Exception):
 
@@ -29,7 +31,7 @@ def getHTTPResponse(url, http, body = ''):
     stream = hd.openReadBody()
     sr = StreamReader(stream, 1)
     response = sr.readlines()
-    for i in xrange(len(response)):
+    for i in range(len(response)):
         if response[i][-1] == '\n':
             response[i] = response[i][:-1]
 

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 import random
 from pandac.PandaModules import Vec3
@@ -13,14 +14,14 @@ from otp.otpbase import OTPGlobals
 from toontown.minigame.OrthoDrive import OrthoDrive
 from toontown.minigame.OrthoWalk import OrthoWalk
 from toontown.toonbase import TTLocalizer
-from CogdoFlyingCollisions import CogdoFlyingCollisions
-from CogdoFlyingPlayer import CogdoFlyingPlayer
-from CogdoFlyingGuiManager import CogdoFlyingGuiManager
-from CogdoFlyingInputManager import CogdoFlyingInputManager
-from CogdoFlyingCameraManager import CogdoFlyingCameraManager
-from CogdoFlyingObjects import CogdoFlyingPlatform, CogdoFlyingGatherable
-from CogdoFlyingLegalEagle import CogdoFlyingLegalEagle
-import CogdoFlyingGameGlobals as Globals
+from .CogdoFlyingCollisions import CogdoFlyingCollisions
+from .CogdoFlyingPlayer import CogdoFlyingPlayer
+from .CogdoFlyingGuiManager import CogdoFlyingGuiManager
+from .CogdoFlyingInputManager import CogdoFlyingInputManager
+from .CogdoFlyingCameraManager import CogdoFlyingCameraManager
+from .CogdoFlyingObjects import CogdoFlyingPlatform, CogdoFlyingGatherable
+from .CogdoFlyingLegalEagle import CogdoFlyingLegalEagle
+from . import CogdoFlyingGameGlobals as Globals
 
 class CogdoFlyingLocalPlayer(CogdoFlyingPlayer):
     notify = DirectNotifyGlobal.directNotify.newCategory('CogdoFlyingLocalPlayer')

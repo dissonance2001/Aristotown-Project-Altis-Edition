@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase.ToonPythonUtil import reduceAngle
@@ -61,7 +63,7 @@ class PetCollider(Impulse.Impulse):
         return 'petFeeler-%s' % self._getSerialNum()
 
     def handleCollision(self, collEntry):
-        print 'collision!'
+        print('collision!')
         cPoint = collEntry.getSurfacePoint(self.cLineNodePath)
         cNormal = collEntry.getSurfaceNormal(self.cLineNodePath)
         messenger.send(self.mover.getCollisionEventName(), [cPoint, cNormal])

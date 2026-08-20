@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
@@ -9,6 +10,7 @@ from toontown.estate import DistributedHouseItem
 from direct.distributed import DistributedSmoothNode
 from direct.task import Task
 from toontown.estate import HouseGlobals
+from six.moves import range
 
 class DistributedFurnitureItem(DistributedHouseItem.DistributedHouseItem, DistributedSmoothNode.DistributedSmoothNode):
     notify = directNotify.newCategory('DistributedFurnitureItem')
@@ -117,7 +119,7 @@ class DistributedFurnitureItem(DistributedHouseItem.DistributedHouseItem, Distri
         return (pos[0], pos[1], pos[2], hpr[0], 0, 0)
 
     def __comparePosHpr(self, a, b, threshold):
-        for i in xrange(len(a)):
+        for i in range(len(a)):
             if abs(a[i] - b[i]) >= threshold:
                 return 1
 

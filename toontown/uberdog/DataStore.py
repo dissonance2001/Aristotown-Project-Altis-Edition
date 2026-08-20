@@ -1,24 +1,27 @@
+from __future__ import absolute_import
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import ConfigVariableBool
 from direct.task import Task
 from string import maketrans
-import cPickle
+import six.moves.cPickle
 import os
 import sys
 import dumbdbm
 import anydbm
 import time
+from six.moves import range
+from six.moves import zip
 
 class DataStore:
     QueryTypes = []
-    QueryTypes = dict(zip(QueryTypes, range(len(QueryTypes))))
+    QueryTypes = dict(zip(QueryTypes, list(range(len(QueryTypes)))))
 
     @classmethod
     def addQueryTypes(cls, typeStrings):
-        superTypes = zip(cls.QueryTypes.values(), cls.QueryTypes.keys())
+        superTypes = list(zip(list(cls.QueryTypes.values()), list(cls.QueryTypes.keys())))
         superTypes.sort()
         newTypes = [ item[1] for item in superTypes ] + typeStrings
-        newTypes = dict(zip(newTypes, range(1 + len(newTypes))))
+        newTypes = dict(zip(newTypes, list(range(1 + len(newTypes)))))
         return newTypes
 
     notify = DirectNotifyGlobal.directNotify.newCategory('DataStore')
@@ -63,7 +66,7 @@ class DataStore:
                     self.notify.debug('New pickle data file will be written to %s.' % (self.filepath,))
 
             if file:
-                data = cPickle.load(file)
+                data = six.moves.cPickle.load(file)
                 file.close()
                 self.data = data
             else:
@@ -81,7 +84,7 @@ class DataStore:
                     if os.path.exists(self.filepath):
                         os.rename(self.filepath, backuppath)
                     outfile = open(self.filepath, 'w')
-                    cPickle.dump(self.data, outfile)
+                    six.moves.cPickle.dump(self.data, outfile)
                     outfile.close()
                     if os.path.exists(backuppath):
                         os.remove(backuppath)
@@ -165,12 +168,12 @@ class DataStore:
 
     def query(self, query):
         if self.data is not None:
-            qData = cPickle.loads(query)
+            qData = six.moves.cPickle.loads(query)
             results = self.handleQuery(qData)
-            qResults = cPickle.dumps(results)
+            qResults = six.moves.cPickle.dumps(results)
         else:
             results = None
-            qResults = cPickle.dumps(results)
+            qResults = six.moves.cPickle.dumps(results)
         return qResults
 
     def handleQuery(self, query):

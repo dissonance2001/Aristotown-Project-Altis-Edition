@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.gui.DirectGui import DirectButton, DirectLabel
 from panda3d.core import TextNode, Vec4
 

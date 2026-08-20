@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from direct.distributed.MsgTypes import *
 OTP_DO_ID_SERVER_ROOT = 4007
 OTP_DO_ID_FRIEND_MANAGER = 4501

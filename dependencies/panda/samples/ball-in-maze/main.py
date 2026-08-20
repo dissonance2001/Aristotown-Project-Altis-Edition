@@ -9,6 +9,7 @@
 # on the collisions. All of this is put together to simulate a labyrinth-style
 # game
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import CollisionTraverser, CollisionNode
 from panda3d.core import CollisionHandlerQueue, CollisionRay
@@ -22,6 +23,7 @@ from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
 from direct.task.Task import Task
 import sys
+from six.moves import range
 
 # Some constants for the program
 ACCEL = 70         # Acceleration in ft/sec/sec

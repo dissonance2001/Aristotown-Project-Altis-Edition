@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.chat.ChatInputWhiteListFrame import ChatInputWhiteListFrame
 from toontown.chat.TTWhiteList import TTWhiteList
 from direct.showbase import DirectObject

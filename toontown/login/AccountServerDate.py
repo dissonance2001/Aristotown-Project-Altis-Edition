@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from otp.login.HTTPUtil import *
 from direct.directnotify import DirectNotifyGlobal
@@ -28,12 +29,12 @@ class AccountServerDate:
         response = getHTTPResponse(url, http)
         if response[0] != 'ACCOUNT SERVER DATE':
             self.notify.debug('invalid response header')
-            raise UnexpectedResponse, 'unexpected response, response=%s' % response
+            raise UnexpectedResponse('unexpected response, response=%s' % response)
         try:
             epoch = int(response[1])
-        except ValueError, e:
+        except ValueError as e:
             self.notify.debug(str(e))
-            raise UnexpectedResponse, 'unexpected response, response=%s' % response
+            raise UnexpectedResponse('unexpected response, response=%s' % response)
 
         timeTuple = time.gmtime(epoch)
         self.year = timeTuple[0]

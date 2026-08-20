@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.speedchat.SCTerminal import SCTerminal
 from toontown.chat import ResistanceChat
 TTSCResistanceMsgEvent = 'TTSCResistanceMsg'

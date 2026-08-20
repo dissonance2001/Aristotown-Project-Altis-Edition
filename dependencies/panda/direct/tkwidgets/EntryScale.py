@@ -2,6 +2,9 @@
 EntryScale Class: Scale with a label, and a linked and validated entry
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['EntryScale', 'EntryScaleGroup']
 
 from direct.showbase.TkGlobal import *
@@ -11,8 +14,8 @@ if sys.version_info >= (3, 0):
     from tkinter.simpledialog import *
     from tkinter.colorchooser import askcolor
 else:
-    from tkSimpleDialog import *
-    from tkColorChooser import askcolor
+    from six.moves.tkinter_tksimpledialog import *
+    from six.moves.tkinter_colorchooser import askcolor
 
 """
 Change Min/Max buttons to labels, add highlight binding
@@ -506,7 +509,7 @@ def rgbPanel(nodePath, callback = None):
                         command = popupColorPicker)
     def printToLog(nodePath=nodePath):
         c=nodePath.getColor()
-        print("Vec4(%.3f, %.3f, %.3f, %.3f)"%(c[0], c[1], c[2], c[3]))
+        print(("Vec4(%.3f, %.3f, %.3f, %.3f)"%(c[0], c[1], c[2], c[3])))
     menu.insert_command(index = 5, label = 'Print to log',
                         command = printToLog)
 

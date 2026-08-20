@@ -1,8 +1,10 @@
 # Based on iwidgets2.2.0/buttonbox.itk code.
 
+from __future__ import absolute_import
 import types
 import tkinter
 import Pmw
+from six.moves import range
 
 class ButtonBox(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):

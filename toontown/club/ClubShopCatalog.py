@@ -6,6 +6,7 @@ The tuple format is:
     (name, category, cost, requiredLevel, payload, currency, description)
 """
 
+from __future__ import absolute_import
 CURRENCY_CLUB_COINS = 'clubCoins'
 CURRENCY_JELLYBEANS = 'jellybeans'
 COLOR_PAYLOAD_OFFSET = 1000

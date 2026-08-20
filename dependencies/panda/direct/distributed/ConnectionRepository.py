@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from panda3d.core import *
 from panda3d.direct import *
 from direct.task import Task
@@ -9,6 +11,7 @@ from .PyDatagramIterator import PyDatagramIterator
 
 import inspect
 import gc
+from six.moves import range
 
 __all__ = ["ConnectionRepository", "GCTrigger"]
 
@@ -411,7 +414,7 @@ class ConnectionRepository(
                 if hasattr(module, "__all__"):
                     importSymbols = module.__all__
                 else:
-                    importSymbols = module.__dict__.keys()
+                    importSymbols = list(module.__dict__.keys())
 
             for symbolName in importSymbols:
                 if hasattr(module, symbolName):

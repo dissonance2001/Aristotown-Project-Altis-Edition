@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBase import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleCalculatorAI import *

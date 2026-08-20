@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import time
 from direct.distributed.DistributedObjectGlobalAI import DistributedObjectGlobalAI
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -21,7 +23,7 @@ class DistributedToonClubAI(DistributedObjectGlobalAI):
         DistributedObjectGlobalAI.announceGenerate(self)
         self._groupSuitTeleports = {}
         self.accept('GroupTrackerLogicalChangeZone-all', self._groupAvatarChangedZone)
-        print '[Clubs] Club AI proxy loaded.'
+        print('[Clubs] Club AI proxy loaded.')
 
     def groupPrepareSuitTeleport(self, targetZone, deptIndex):
         try:

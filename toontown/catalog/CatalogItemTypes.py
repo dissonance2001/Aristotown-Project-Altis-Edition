@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.catalog import CatalogFurnitureItem
 from toontown.catalog import CatalogChatItem
 from toontown.catalog import CatalogClothingItem

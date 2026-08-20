@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import math
 from direct.task.Task import Task
 from panda3d.core import BillboardEffect, Vec3, Point3, PGButton, VBase4

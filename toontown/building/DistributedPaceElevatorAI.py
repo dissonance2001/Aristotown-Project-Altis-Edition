@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from direct.task import Task
 from toontown.building.ElevatorConstants import *
 from toontown.building import DistributedBossElevatorAI
 from toontown.building import DistributedElevatorExtAI
+from six.moves import range
 
 
 class DistributedPaceElevatorAI(
@@ -42,7 +44,7 @@ class DistributedPaceElevatorAI(
             self.fsm.request('opening')
             return
 
-        for seatIndex in xrange(len(self.seats)):
+        for seatIndex in range(len(self.seats)):
             avId = self.seats[seatIndex]
             if avId:
                 self.sendUpdateToAvatarId(

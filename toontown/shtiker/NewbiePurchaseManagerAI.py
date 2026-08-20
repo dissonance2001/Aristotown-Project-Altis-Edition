@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.shtiker import PurchaseManagerAI
 
 class NewbiePurchaseManagerAI(PurchaseManagerAI.PurchaseManagerAI):

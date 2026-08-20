@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from pandac.PandaModules import *
 from toontown.hood import Place, ZoneUtil
 from toontown.toon import Toon

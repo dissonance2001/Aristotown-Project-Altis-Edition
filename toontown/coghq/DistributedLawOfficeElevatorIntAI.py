@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
@@ -7,6 +9,7 @@ from toontown.building import DistributedElevatorAI
 from toontown.building import DistributedElevatorFloorAI
 from toontown.building.ElevatorConstants import *
 from toontown.toonbase import ToontownGlobals
+from six.moves import range
 
 class DistributedLawOfficeElevatorIntAI(DistributedElevatorFloorAI.DistributedElevatorFloorAI):
     
@@ -25,20 +28,20 @@ class DistributedLawOfficeElevatorIntAI(DistributedElevatorFloorAI.DistributedEl
                 if i not in [None, 0]:
                     players.append(i)
             sittingAvIds = []
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     sittingAvIds.append(avId)
             for avId in self.avIds:
                 if avId not in sittingAvIds:
-                    print 'THIS AV ID %s IS NOT ON BOARD' % avId
+                    print('THIS AV ID %s IS NOT ON BOARD' % avId)
             self.bldg.startNextFloor()
         else:
             self.notify.warning('The elevator left, but was empty.')
         self.fsm.request('closed')
 
     def enterClosed(self):
-        print 'DistributedLawOfficeElevatorIntAI.elevatorClosed %s' % self.doId
+        print('DistributedLawOfficeElevatorIntAI.elevatorClosed %s' % self.doId)
         DistributedElevatorFloorAI.DistributedElevatorFloorAI.enterClosed(self)
         if not (self.hasOpenedLocked) or not (self.isLocked):
             self.fsm.request('opening')

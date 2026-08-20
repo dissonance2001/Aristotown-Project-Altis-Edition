@@ -1,17 +1,18 @@
+from __future__ import absolute_import
 title = 'Using Tk option database to configure Pmw megawidgets'
 
 # Import Pmw from this directory tree.
 import sys
 sys.path[:0] = ['../../..']
 
-import Tkinter
+import six.moves.tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
 	self.parent = parent
 
-	header = Tkinter.Label(parent, text = 'Select some Tk option ' +
+	header = six.moves.tkinter.Label(parent, text = 'Select some Tk option ' +
 		'database values from\nthe lists, then click ' +
 		'\'Create dialog\' to create\na MessageDialog with ' +
 		'these values as defaults.')
@@ -25,7 +26,7 @@ class Demo:
 	    "('OK', 'Apply', 'Cancel', 'Help')",
 	)
 
-        if Tkinter.TkVersion >= 8.4:
+        if six.moves.tkinter.TkVersion >= 8.4:
           disabledState = 'readonly'
         else:
           disabledState = 'disabled'
@@ -56,7 +57,7 @@ class Demo:
 	Pmw.alignlabels((self._buttons, self._buttonboxpos, self._pad))
 
 	# Create button to launch the dialog.
-	w = Tkinter.Button(parent, text = 'Create dialog',
+	w = six.moves.tkinter.Button(parent, text = 'Create dialog',
 	        command = self._createDialog)
 	w.pack(padx = 8, pady = 8)
 
@@ -100,11 +101,11 @@ class Demo:
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
-    root = Tkinter.Tk()
+    root = six.moves.tkinter.Tk()
     Pmw.initialise(root, useTkOptionDb = 1)
     root.title(title)
 
-    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton = six.moves.tkinter.Button(root, text = 'Exit', command = root.destroy)
     exitButton.pack(side = 'bottom')
     widget = Demo(root)
     root.mainloop()

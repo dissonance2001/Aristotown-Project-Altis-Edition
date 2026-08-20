@@ -6,6 +6,7 @@
 # This tutorial shows how to take an existing particle effect taken from a
 # .ptf file and run it in a general Panda project.
 
+from __future__ import absolute_import
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode
 from panda3d.core import AmbientLight, DirectionalLight

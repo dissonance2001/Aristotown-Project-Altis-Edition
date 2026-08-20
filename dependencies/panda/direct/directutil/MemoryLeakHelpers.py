@@ -8,10 +8,12 @@
 
 # You may also want to run pyo-shell so __debug__ is False and assert code is removed.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import gc
 gc.set_debug(gc.DEBUG_LEAK)
 gc.collect()
-print(gc.garbage)
+print((gc.garbage))
 
 # Inside DistributedObjectAI, you can uncomment the __del__ function to
 # see when your objects are being deleted (or not)

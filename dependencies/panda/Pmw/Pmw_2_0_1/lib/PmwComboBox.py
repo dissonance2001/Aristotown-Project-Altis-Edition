@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/combobox.itk code.
 
+from __future__ import absolute_import
 import os
 import string
 import types

@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -22,7 +24,7 @@ class DistributedTimer(DistributedObject.DistributedObject):
 
     def setStartTime(self, time):
         self.startTime = time
-        print 'TIMER startTime %s' % time
+        print('TIMER startTime %s' % time)
 
     def getStartTime(self):
         return self.startTime

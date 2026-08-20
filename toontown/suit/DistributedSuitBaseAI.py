@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from otp.ai.AIBaseGlobal import *
 import random
 from otp.avatar import DistributedAvatarAI

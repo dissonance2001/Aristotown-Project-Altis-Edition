@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from toontown.toon.ClubVinciNPCBase import ClubVinciNPCBase
 from toontown.nametag.NametagGlobals import CFSpeech, CFTimeout
 

@@ -1,8 +1,10 @@
+from __future__ import absolute_import
 from direct.interval.IntervalGlobal import Func, LerpScaleInterval, Sequence
 from direct.showbase import DirectObject
 
 import random
 import time
+from six.moves import range
 
 
 class MMDrumTrampolines(DirectObject.DirectObject):
