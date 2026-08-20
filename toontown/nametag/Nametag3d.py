@@ -6,6 +6,7 @@ from toontown.chat.ChatBalloon import ChatBalloon
 from toontown.nametag import NametagGlobals
 from toontown.nametag.Nametag import Nametag
 from toontown.toontowngui.Clickable3d import Clickable3d
+from direct.interval.IntervalGlobal import Sequence
 
 class Nametag3d(Nametag, Clickable3d):
     SCALING_MIN_DISTANCE = 1
@@ -142,6 +143,7 @@ class Nametag3d(Nametag, Clickable3d):
             button=self.chatButton[self.clickState])
         self.chatBalloon.reparentTo(self.contents)
 
+        self.chatBalloon.setScale(1.2, 1.2, 1.2)
 
     def drawNametag(self):
         if self.font is None:
@@ -152,10 +154,7 @@ class Nametag3d(Nametag, Clickable3d):
         if self.icon is not None:
             self.contents.attachNewNode(self.icon)
 
-        if self.isClickable():
-            foreground, background = self.nametagColor[self.clickState]
-        else:
-            foreground, background = self.nametagColor[PGButton.SInactive]
+        foreground, background = self.nametagColor[self.clickState]
 
         # Set the color of the TextNode:
         self.textNode.setTextColor(foreground)

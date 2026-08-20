@@ -210,10 +210,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
         if self.icon is not None:
             self.contents.attachNewNode(self.icon)
 
-        if self.isClickable():
-            foreground, background = self.nametagColor[self.clickState]
-        else:
-            foreground, background = self.nametagColor[PGButton.SInactive]
+        foreground, background = self.nametagColor[self.clickState]
 
         # Set the color of the TextNode:
         self.textNode.setTextColor(foreground)

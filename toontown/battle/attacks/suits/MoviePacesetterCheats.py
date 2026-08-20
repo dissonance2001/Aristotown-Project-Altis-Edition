@@ -467,7 +467,7 @@ def doCorporateRestructuring(attack):
             Wait(0.5),
             ActorInterval(otherSuit, 'slip-backward', playRate=1.0, startFrame=flailFrame),
             Wait(0.05),
-            Func(otherSuit.loop, 'neutral'))
+            Func(otherSuit.setNeutralAnimationDrop))
         moveTrack = Sequence(
             LerpPosInterval(otherSuit, 1.1, raisedStart, startPos=startPos, other=battle, fluid=1),
             Parallel(
@@ -480,5 +480,5 @@ def doCorporateRestructuring(attack):
     return Sequence(
         Parallel(suitTrack, soundTrack, Sequence(Wait(1.5), suitTracks)),
         Func(battle.setClientSuitOrder, newActiveSuits),
-        Func(suit.loop, 'neutral'))
+        Func(suit.setNeutralAnimationDrop))
 

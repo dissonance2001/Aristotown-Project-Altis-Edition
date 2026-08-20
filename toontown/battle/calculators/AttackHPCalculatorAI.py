@@ -1236,6 +1236,28 @@ class AttackHPCalculatorAI(object):
             elif atkType['name'] == 'DirectorActionCog':
                 self.calculator.setSuitCondition(targetSuit.doId, 'greenLight', 1, 2, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'retaliationcalculator2', 1, 2, 'setBoth')
+            elif atkType['name'] == 'FilmmakerCameraRewind':
+                self.setSuitCondition(theSuit.doId, 'filmmakercalculator', 0, 0, 'setBoth')
+
+                if targetSuit.currHP <= 0:
+                    continue
+
+                if targetSuit.dna.name not in ('director', 'fmaker', 'cinema', 'choreo'):
+                    continue
+
+                hpCap = targetSuit.maxHP * targetSuit.hardMaxHP
+
+                if targetSuit.currHP < targetSuit.maxHP:
+                    healAmount = min(225, hpCap - targetSuit.currHP)
+
+                    if healAmount > 0:
+                        attack[SUIT_HP_COL][targetIndex] = 0
+                        attack[SUIT_HEAL_COL][targetIndex] = healAmount
+                    else:
+                        attack[SUIT_HP_COL][targetIndex] = 0
+                        attack[SUIT_HEAL_COL][targetIndex] = healAmount
+
+                continue
             elif atkType['name'] == 'VideographerStarOfTheShow':
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(targetId, 'bellowattack', 1, 1, 'setBoth')
@@ -1281,7 +1303,7 @@ class AttackHPCalculatorAI(object):
 
                 continue
             elif attackName == 'DirectorBackToOnes':
-                healAmount = theSuit.maxHP - theSuit.currHP
+                healAmount = max(0, targetSuit.maxHP - targetSuit.currHP)
 
                 attack[SUIT_HP_COL][targetIndex] = 0
                 attack[SUIT_HEAL_COL][targetIndex] = healAmount
@@ -1472,6 +1494,14 @@ class AttackHPCalculatorAI(object):
 
                 continue
             elif atkType['name'] == 'DirectorAction':
+
+                result = 500
+
+                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HEAL_COL][targetIndex] = 0
+
+                continue
+            elif atkType['name'] == 'RecordkeeperPhantomEntryDamage':
 
                 result = 500
 
@@ -7443,6 +7473,10 @@ class AttackHPCalculatorAI(object):
                     toon = self.battle.getToon(t)
                     toon.b_setHp(200)
                     toon.b_setMaxHp(200)
+            elif atkType['name'] == 'FilmmakerWrappedInTheFilm':
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'dodgy', -100, 3, 'setBoth')
             elif atkType['name'] == 'HighRollerPhase3':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -7924,6 +7958,7 @@ class AttackHPCalculatorAI(object):
                 result = self.calculator.directorMultiplier
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'costscalculator', 0, 0, 'setBoth')
+                continue
             elif atkType['name'] == 'DirectorBudgetExpansion':
                 self.calculator.directorMultiplier += (20 * self.deadSuits)
                 result = self.calculator.directorMultiplier

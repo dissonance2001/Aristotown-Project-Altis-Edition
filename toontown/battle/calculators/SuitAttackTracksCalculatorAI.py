@@ -352,7 +352,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -361,6 +361,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Lure')
             self.__queueAbsorbMovieForTrack(suit, 'Lure', LURE)
@@ -450,7 +459,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -459,6 +468,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Throw')
             self.__queueAbsorbMovieForTrack(suit, 'Throw', THROW)
@@ -568,7 +586,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -577,6 +595,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Squirt')
             self.__queueAbsorbMovieForTrack(suit, 'Squirt', SQUIRT)
@@ -683,7 +710,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -692,6 +719,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             suitId = suit.doId
             self.__queueGagBanRetaliation(suit, 'Zap')
@@ -745,7 +781,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -754,6 +790,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Sound')
             self.__queueAbsorbMovieForTrack(suit, 'Sound', SOUND)
@@ -831,7 +876,7 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'hroller2':
+            if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
                 for suit in self.battle.activeSuits:
                     if suit.dna.name != 'hrollers':
@@ -840,6 +885,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'HRdamagereduction', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'director':
+                damageCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name not in ['choreo', 'fmaker', 'cinema']:
+                        continue
+                    if suit.getHP() > 0 and suit.dna.name in ['choreo', 'fmaker', 'cinema']:
+                        damageCogs = 1
+                if damageCogs == 0:
+                    self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Drop')
             self.__queueAbsorbMovieForTrack(suit, 'Drop', DROP)

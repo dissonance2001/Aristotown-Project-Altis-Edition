@@ -66,12 +66,12 @@ class MotoroomInstanceSessionAI(DirectObject):
         self.sakamoreo.b_setHat(136, 0, 0)
         self.sakamoreo.b_setGlasses(50, 0, 0)
         self.sakamoreo.setPosHpr(
-            -16.120, 38.579, -4.602,
-            78.787, 0.0, 0.0
-        )
+                -16.120, 34.579, -4.02,
+                78.787, 0.0, 0.0
+            )
         if hasattr(self.sakamoreo, 'd_setPosHpr'):
             self.sakamoreo.d_setPosHpr(
-                -16.120, 38.579, -4.602,
+                -16.120, 34.579, -4.02,
                 78.787, 0.0, 0.0
             )
 

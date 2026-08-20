@@ -894,7 +894,7 @@ def doSuitAttack(attack):
     elif name == 'RecordkeeperPhantomEntrySpawn':
         suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySpawn(attack)
     elif name == 'RecordkeeperPhantomEntryDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
     elif name == 'RecordkeeperPhantomEntrySacrifice':
         suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySacrifice(attack)
         # corporate butcherer
@@ -1492,10 +1492,14 @@ def doSuitAttack(attack):
     elif name == 'BroadcasterViralSensation':
         suitTrack = MovieHighRollerCheats.doViralSensation(attack)
     #filmmaker cheats
+    elif name == 'ChoreoPlacesEveryone':
+        suitTrack = MovieHighRollerCheats.doPlacesEveryone(attack)
     elif name == 'ChoreoChoreography':
         suitTrack = MovieHighRollerCheats.doChoreography(attack)
     elif name == 'FilmmakerCameraFlash':
         suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
+    elif name == 'FilmmakerWrappedInTheFilm':
+        suitTrack = MovieHighRollerCheats.doWrappedInTheFilm(attack)
     elif name == 'FilmmakerCameraRewind':
         suitTrack = MovieHighRollerCheats.doCameraRewind(attack)
     elif name == 'FilmmakerBudgetCuts':
@@ -1979,6 +1983,7 @@ def doSuitAttack(attack):
         if name in suitTrack2ResetNames:
             resetSuitTrack = Sequence(suitTrack)
         else:
+            suit.setPendingQueuedLured(False)
             resetSuitTrack = Sequence(Parallel(targetHprTrack, suitTrack, Func(suit.clearSuitStatusEffect, 'lured'), Func(suit.setDizzy, 0), Func(battle.unlureSuit, suit)))
     else:
         resetSuitTrack = Parallel(suitTrack, targetHprTrack) # Make sure we play the movie and, if necessary, reset the Toon's position.
@@ -5990,8 +5995,8 @@ def doRedTape(attack):
     targets = attack['target']
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     suitName = suit.getStyleName()
-    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
-    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
+    tapeScaleUpPoint = Point3(.9, .9, .9)
     propTracks = Parallel()
     allTubeTracks = Parallel()
     for t in targets:

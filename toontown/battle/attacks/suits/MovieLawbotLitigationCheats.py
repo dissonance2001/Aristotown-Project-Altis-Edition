@@ -1368,8 +1368,8 @@ def doLegalBindings2(attack):
     tape.setColorScale(0.25, 0.25, 1.0, 1.0)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
-    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
+    tapeScaleUpPoint = Point3(.9, .9, .9)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()
@@ -1428,8 +1428,8 @@ def doLegalBindings(attack):
     tape.setColor(0.129, 0, 0.329, 1)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
-    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
+    tapeScaleUpPoint = Point3(.9, .9, .9)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()
@@ -2106,7 +2106,7 @@ def doShieldsUp(attack):
                               LerpColorScaleInterval(node, duration=.5, colorScale=(1, 1, 1, 1),
                                                      blendType='easeInOut'))
     soundTrack = Sequence(Wait(suit.getDuration('neutral-enraged-return')), getSoundTrack('SA_defense.ogg'))
-    suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), getSuitAnimTrack(attack))
+    suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), getSuitAnimTrack(attack), Func(suit.setNeutralAnimationDrop))
     suitTrack.append(Wait(2.0))
     makeShielding = Parallel(Func(suit.setSuitStatusEffect, 'rageBuilding', modifier=0), Func(suit.clearSuitStatusEffect, 'enraged'), Func(suit.removeRageBuilding))
     return Parallel(suitTrack, soundTrack, suitColorTrack, makeShielding)

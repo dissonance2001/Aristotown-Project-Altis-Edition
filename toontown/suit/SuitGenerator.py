@@ -610,7 +610,7 @@ class SuitGenerator(object):
             self.handColor = VBase4(0.714, 0.714, 0.808, 1)
             self.generateBody()
             self.generateHead2('twoface')
-            texture = loader.loadTexture('phase_4/maps/double-talker.png')
+            texture = loader.loadTexture('phase_4/maps/double-talker.jpg')
             for headPart in self.headParts:
                 headPart.setTexture(texture, 1)
             self.setHeight(5.63)
@@ -2130,6 +2130,7 @@ class SuitGenerator(object):
                 headPart.setTexture(texture, 1)
             self.setHeight(10.05)
             #self.isSkelecogDialogue = 1
+            self.setSuitStatusEffect('directorShielding', modifier=50)
         # DUMMY BOSSES
         elif dna.name == 'ceo':
             self.scale = 7.0 / aSize

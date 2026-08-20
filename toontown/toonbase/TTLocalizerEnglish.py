@@ -4433,6 +4433,7 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
 'PowerhouseZapImmune',
                   'BookkeeperMandatoryFiling',
 'ChoreoChoreography',
+'ChoreoPlacesEveryone',
                   'GovernaughtDeath',
 'SafetyHighPressure',
 'MintUsury',
@@ -4780,6 +4781,7 @@ SuitCheatNames = ('PowerhouseAbsorb', 'PowerhouseSoakImmune', 'PowerhouseGenerat
                   'BroadcasterDonation2',
                   'BroadcasterViralSensation',
  'FilmmakerCameraFlash',
+ 'FilmmakerWrappedInTheFilm',
  'FilmmakerCameraRewind',
  'FilmmakerBudgetCuts',
  'DirectorCut',
@@ -5264,10 +5266,12 @@ SuitCheatDescription = {
  'BroadcasterDonation2': "The Videographer receives a refresh from his Silhouette!",
  'BroadcasterViralSensation': "The Major Player Silhouette applies a damage buff to Toons at random!",
     # Choreographer Cheats
+ 'ChoreoPlacesEveryone': "The Choreographer rearranges the cog order!",
  'ChoreoChoreography': "The Choreographer applies a damage vulnerability to all Toons who can't keep up with him!",
     # Filmmaker Cheats
+ 'FilmmakerWrappedInTheFilm': "The Filmmaker reduces a Toon's defense!",
  'FilmmakerCameraFlash': "The Photographer disrupts a Toon's vision!",
- 'FilmmakerCameraRewind': "The Filmmaker strengthens the producers!",
+ 'FilmmakerCameraRewind': "The Filmmaker heals damaged producers!",
  'FilmmakerBudgetCuts': "The Filmmaker attacks when damaged!",
     # Director Cheats
  'DirectorCut': "The Director punishes the Toons who didn't follow his direction!",
@@ -5275,7 +5279,7 @@ SuitCheatDescription = {
  'DirectorActionRetaliation': "The Director punishes the Toons who didn't follow his direction!",
  'DirectorActionCog': "The Director requires all Toons to attack the cog!",
  'DirectorActionPartner': "The Director partners himself up with a Toon!",
- 'DirectorBackToOnes': "The Director heals back to full while all Producers are still standing!",
+ 'DirectorBackToOnes': "The Director heals all remaining producers back to full when one is destroyed!",
  'DirectorBudgetExpansion': "The Director inflates the budget whenever cogs are destroyed!",
  'DirectorProductionBudget': "The budget is growing!",
     # Factory Foreman Cheats
@@ -6100,7 +6104,9 @@ SuitAttackNames = {
     'BroadcasterViralSensation': "Viral Sensation!",
     # Choreographer Cheats
     'ChoreoChoreography': "Out Of Step!",
+    'ChoreoPlacesEveryone': "Showtime Shuffle!",
     # Filmmaker Cheats
+    'FilmmakerWrappedInTheFilm': "Wrapped In The Film!",
     'FilmmakerCameraFlash': "Flash Coverage!",
     'FilmmakerCameraRewind': "Rewind The Reel!",
     'FilmmakerBudgetCuts': "Cut From The Deal!",
@@ -7890,7 +7896,7 @@ SuitAttackTaunts = {
                 "Thanks for the photo opportunity.",
                 "I couldn't have staged that better.",
                 "You provice the moment and I'll take the credit."],
-'fmaker': ["Mind if I borrow that shot?"
+'fmaker': ["Mind if I borrow that shot?",
                 "This belongs in my cut.",
                 "That's going straight into the final edit.",
                 "Consider this an unauthorized adaptation.",
@@ -7912,7 +7918,7 @@ SuitAttackTaunts = {
                 "Bad lighting can hide anything.",
                 "You should've checked the reflection.",
                 "Stay out of focus."],
-'fmaker': ["I've got what I need."
+'fmaker': ["I've got what I need.",
                 "This scene needs a rewrite.",
                 "Consider that scene deleted.",
                 "We'll fix it in the post.",
@@ -10049,6 +10055,10 @@ SuitAttackTaunts = {
                               "Millions of views, zero royalties.",
                             "The spotlight loves you, for now."],
     # Choreographer Cheats
+ 'ChoreoPlacesEveryone': ["You know the steps, don't you?",
+                            "Let's see some footwork!",
+                            "Let's make this a showstopper!",
+                            "Everyone has a part to play."],
 'ChoreoChoreography': ["This is a performance, not a free-for-all!",
                             "Miss a step, and you'll regret it.",
                             "Precision is everything, don't embarrass me!",
@@ -10062,6 +10072,9 @@ SuitAttackTaunts = {
 'FilmmakerCameraRewind': ["Cut! Let's take it from the top.",
                             "I don't allow damage in my final cut.",
                             "You can't hurt what I can edit out."],
+'FilmmakerWrappedInTheFilm': ["You're not getting out of this shot.",
+                            "This scene requir3es your full participation.",
+                            "You can't run from your own scene!"],
 'FilmmakerBudgetCuts': ["This note wasn't in your script.",
                             "You'll pay for that performance.",
                             "Final edit; you're out of the scene."],

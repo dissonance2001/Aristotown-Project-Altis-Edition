@@ -378,12 +378,32 @@ class TownBattle(StateData.StateData):
             self.toonPanels[3].show()
         else:
             self.notify.error('Bad number of toons: %s' % num)
+            
 
     def updateChosenAttacks(self, battleIndices, tracks, levels, targets):
-        self.notify.debug('updateChosenAttacks bi=%s tracks=%s levels=%s targets=%s' % (battleIndices,
-         tracks,
-         levels,
-         targets))
+        self.notify.debug('updateChosenAttacks bi=%s tracks=%s levels=%s targets=%s' % (battleIndices, tracks, levels, targets))
+
+        COMBO_MULTIPLIERS = {
+            SQUIRT_TRACK: {
+                THROW_TRACK: (1.1, 'marked'),
+            },
+
+            ZAP_TRACK: {
+                THROW_TRACK: (1.1, 'marked'),
+            },
+
+            SOUND_TRACK: {
+                THROW_TRACK: (1.1, 'marked'),
+            },
+
+            DROP_TRACK: {
+                THROW_TRACK:  (1.1, 'marked'),
+                SQUIRT_TRACK: (1.1, 'soaked'),
+                ZAP_TRACK:    (1.1, 'zapped'),
+                SOUND_TRACK:  (1.1, 'dazed'),
+            },
+        }
+
         for i in range(4):
             if battleIndices[i] == -1:
                 pass
@@ -391,36 +411,133 @@ class TownBattle(StateData.StateData):
                 if tracks[i] == BattleBase.NO_ATTACK:
                     numTargets = 0
                     target = -2
+
                 elif tracks[i] == BattleBase.PASS_ATTACK:
                     numTargets = 0
                     target = -2
+
                 elif tracks[i] == BattleBase.NPCSOS:
                     numTargets = self.numToons
+
                     if targets[i] == -1:
                         numTargets = None
                         target = -1
                     else:
                         target = [targets[i]]
+
                         if battleIndices[i] not in target:
                             target.append(battleIndices[i])
+
                 elif tracks[i] == BattleBase.SOS or tracks[i] == BattleBase.PETSOS:
                     numTargets = 0
                     target = -2
+
                 elif tracks[i] == HEAL_TRACK:
                     numTargets = self.numToons
+
                     if self.__isGroupHeal(levels[i]):
                         target = -2
                     else:
                         target = targets[i]
+
                 else:
                     numTargets = self.numCogs
+
                     if self.__isGroupAttack(tracks[i], levels[i]):
                         target = -1
                     else:
                         target = targets[i]
+
                         if target == -1:
                             numTargets = None
-                self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum)
+
+                targetSuit = None
+
+                if isinstance(target, int) and target >= 0 and target < len(self.battle.activeSuits):
+                    targetSuit = self.battle.activeSuits[target]
+
+                # =====================================================
+                # SAME-ROUND GAG COMBO PREVIEW
+                # =====================================================
+                comboMultiplier = 1.0
+                comboCount = 0
+                dropThrowMultiplier = 1.0
+                countedConditions = set()
+
+                currentTrack = tracks[i]
+                currentTarget = targets[i]
+
+                incomingThrowTargets = set()
+
+                for x in range(4):
+                    if battleIndices[x] == -1:
+                        continue
+
+                    if tracks[x] == THROW_TRACK:
+                        throwTarget = targets[x]
+
+                        if isinstance(throwTarget, int) and throwTarget >= 0:
+                            incomingThrowTargets.add(throwTarget)
+
+                wetTargets = set()
+
+                for x in range(4):
+                    if battleIndices[x] == -1:
+                        continue
+
+                    if tracks[x] == SQUIRT_TRACK:
+                        squirtTarget = targets[x]
+
+                        if isinstance(squirtTarget, int) and squirtTarget >= 0:
+                            wetTargets.add(squirtTarget)
+
+                            leftIndex = squirtTarget - 1
+                            rightIndex = squirtTarget + 1
+
+                            if leftIndex >= 0:
+                                wetTargets.add(leftIndex)
+
+                            if rightIndex < len(self.battle.activeSuits):
+                                wetTargets.add(rightIndex)
+
+                for cogIndex, cog in enumerate(self.battle.activeSuits):
+                    if cog.hasSuitStatusEffect('soaked') or cog.hasSuitStatusEffect('drenched'):
+                        wetTargets.add(cogIndex)
+
+                if currentTrack in COMBO_MULTIPLIERS:
+                    requiredTracks = COMBO_MULTIPLIERS[currentTrack]
+
+                    for x in range(4):
+                        if x == i:
+                            continue
+
+                        if battleIndices[x] == -1:
+                            continue
+
+                        otherTrack = tracks[x]
+                        otherTarget = targets[x]
+
+                        if otherTarget != currentTarget:
+                            continue
+
+                        if otherTrack in requiredTracks:
+                            multiplier, condition = requiredTracks[otherTrack]
+
+                            if condition in countedConditions:
+                                continue
+
+                            if targetSuit and not targetSuit.hasSuitStatusEffect(condition):
+                                if currentTrack == DROP_TRACK:
+                                    if otherTrack == THROW_TRACK:
+                                        dropThrowMultiplier = 1.1
+                                    else:
+                                        comboCount += 1
+                                else:
+                                    comboMultiplier *= multiplier
+
+                                countedConditions.add(condition)
+
+                self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum, targetSuit, comboMultiplier, comboCount, dropThrowMultiplier, wetTargets, self.battle.activeSuits, incomingThrowTargets)
 
     def chooseDefaultTarget(self):
         if self.track > -1:

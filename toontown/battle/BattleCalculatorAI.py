@@ -1367,11 +1367,11 @@ class BattleCalculatorAI:
     def __removeSuitTrap(self, suitId):
         if suitId in self.traps:
             del self.traps[suitId]
-        for suit in self.battle.activeSuits:
-            if suit.doId == suitId:
-                suit.battleTrap = NO_TRAP
-                suit.battleTrapIsFresh = 0
-                break
+        # for suit in self.battle.activeSuits:
+        #     if suit.doId == suitId:
+        #         suit.battleTrap = NO_TRAP
+        #         suit.battleTrapIsFresh = 0
+        #         break
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:
@@ -5309,6 +5309,9 @@ class BattleCalculatorAI:
         requiredManagerNames = atkType.get('requiredManagerNames', ())
         excludedManagerNames = atkType.get('excludedManagerNames', ())
         priorityManagerNames = atkType.get('priorityManagerNames', ())
+        requiredSuitNames = atkType.get('requiredSuitNames', ())
+        excludedSuitNames = atkType.get('excludedSuitNames', ())
+        prioritySuitNames = atkType.get('prioritySuitNames', ())
         managerWeights = atkType.get('managerWeights', {})
 
         requireDamaged = atkType.get('requireDamaged', False)
@@ -5400,6 +5403,12 @@ class BattleCalculatorAI:
                 continue
 
             if targetName in excludedManagerNames:
+                continue
+
+            if requiredSuitNames and targetName not in requiredSuitNames:
+                continue
+
+            if targetName in excludedSuitNames:
                 continue
 
             # ==================================================
@@ -7795,6 +7804,10 @@ class BattleCalculatorAI:
                 #         self.setSuitCondition(s.doId, 'overseer', 1, 1, 'setBoth')
                 if suit.dna.name == 'hrollers':
                     self.setSuitCondition(suit.doId, 'directorDamageReduction', .9, -1, 'setBoth')
+                if suit.dna.name == 'director':
+                    if not self.suitHasCondition(suit.doId, 'alreadyBeginning'):
+                        self.setSuitCondition(suit.doId, 'directorDamageReduction', .5, -1, 'setBoth')
+                        self.setSuitCondition(suit.doId, 'alreadyBeginning', 1, -1, 'setBoth')
                 if suit.dna.name == 'hroller':
                     #suit.setHP(1)
                     if not self.TurnsElapsed == 0:

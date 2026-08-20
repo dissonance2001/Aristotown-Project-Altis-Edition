@@ -260,7 +260,7 @@ class BaseSuitAttackCalculatorAI:
                 for s in self.battle.activeSuits:
                     if s.dna.name == 'cbutcher':
                         if s.currHP <= 0:
-                            self.setSuitCondition(suitId, 'phantomDeath', 1, 10, 'setBoth')
+                            self.setSuitCondition(suitId, 'phantomDeath', 1, 1, 'setBoth')
                 if self.suitHasCondition(suitId, 'phantomDeath') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RecordkeeperPhantomEntryDamage',  # Snap Bindings Retaliation
@@ -268,7 +268,12 @@ class BaseSuitAttackCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': True,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):

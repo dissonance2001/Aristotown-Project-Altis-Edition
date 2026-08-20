@@ -33,6 +33,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         self.geom = loader.loadModel(MotoroomInstanceGlobals.MODEL_PATH)
         self.geom.reparentTo(render)
         self.geom.setTwoSided(True)
+        self.geom.setScale(.875)
         self._setupRoomEffects()
         self._setupRoomLighting()
         self._setupStageLightBeams()
@@ -454,7 +455,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         if locator.isEmpty():
             self.lavaLamp.setPosHpr(
                 render,
-                -48.547, 18.078, -1.000,
+                -43.547, 15.078, -0.875,
                 177.820, 0.0, 0.0)
         else:
             self.lavaLamp.setMat(render, locator.getMat(render))

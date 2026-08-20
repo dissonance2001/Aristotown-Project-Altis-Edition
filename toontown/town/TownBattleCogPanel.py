@@ -3457,14 +3457,31 @@ class TownBattleCogPanel(DirectFrame):
             slot = self._claimNextStatusSlot()
             damageText = self.getColoredText(
                 '-%s%%' % self.cog.getSuitStatusModifier('shielding'),
-                'positiveText',
-                (0, 1, 0.016, 1),
+                'negativeText',
+                (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
             )
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Damage Reduction', 
                                    tooltipDescription="This Cog will take %s less damage from each Gag!" % damageText,  
+                                   tooltipBuff=True, 
+                                   slotColor=(1, 0.984, 0, 1), scale=(.9, .9, .9))
+
+        if self.cog.hasSuitStatusEffect('directorShielding'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/shield_icon')
+            slot = self._claimNextStatusSlot()
+            damageText = self.getColoredText(
+                '-%s%%' % self.cog.getSuitStatusModifier('directorShielding'),
+               'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            self._attachStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="Director's Cut", 
+                                   tooltipDescription="The Director is currently taking %s less damage from each Gag!" % damageText,  
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1), scale=(.9, .9, .9))
 

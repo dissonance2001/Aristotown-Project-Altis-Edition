@@ -544,6 +544,15 @@ class TownBattleToonPanel(DirectFrame):
         self.zappedRounds = None
         self.choiceOrganicStage = None
         self.iouChoiceHead = None
+        self.extraDamageTextLeft = DirectLabel(parent=self, relief=None, pos=(-0.275, 0.05, 0.25), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
+        self.extraDamageTextMid = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.4), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
+        self.extraDamageTextRight = DirectLabel(parent=self, relief=None, pos=(0.275, 0.05, 0.25), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
+
+        self.extraDamageTextLeft.hide()
+        self.extraDamageTextMid.hide()
+        self.extraDamageTextRight.hide()
+        # self.extraDamageText = DirectLabel(parent=self, relief=None, pos=(0.3, 0.05, 0.25), text='', text_scale=0.08, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ALeft, text_font=getSignFont())
+        # self.extraDamageText.hide()
         # self.snapped = status.find('**/vulnerable_icon')
         # self.snapped.setPosHprScale(-0.25, 0, 0.03, -180, 0, 0, .125, .125, .125)
         # self.snapped.reparentTo(self)
@@ -2631,6 +2640,23 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
+        if avatar.hasToonStatusEffect('wrapped'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/damage_over_time_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('wrapped'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle='Wrapped In The Film', 
+                                   tooltipDescription="While wrapped, this Toon will not be able to dodge any incoming cog attacks.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
         if avatar.hasToonStatusEffect('confused'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
@@ -2908,13 +2934,111 @@ class TownBattleToonPanel(DirectFrame):
         self.setHealthText(hp, maxHp)
         self.setStatusEffects(self.avatar)
 
-    def setValues(self, index, track, level = None, numTargets = None, targetIndex = None, localNum = None):
-        self.notify.debug('Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s' % (index,
-         track,
-         level,
-         numTargets,
-         targetIndex,
-         localNum))
+    def getConditionCount(self, targetSuit, conds):
+        return sum(1 for cond in conds if targetSuit.hasSuitStatusEffect(cond))
+
+    def getTargetDamage(self, damage, targetSuit, track):
+        if targetSuit is None:
+            return damage
+
+        result = damage
+
+        if targetSuit.hasSuitStatusEffect('videoStatic'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('videoStatic') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('contingencyOverride'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('contingencyOverride') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('powerhouseGeneration'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('powerhouseGeneration') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('silhouetteShielding'):
+            result *= .1
+
+        if targetSuit.hasSuitStatusEffect('soakResist') and (targetSuit.hasSuitStatusEffect('soaked') or targetSuit.hasSuitStatusEffect('drenched')):
+            result *= .4
+
+        if targetSuit.hasSuitStatusEffect('directorShielding'):
+            result *= .5
+
+        if targetSuit.hasSuitStatusEffect('refractionBarrier'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('refractionBarrier') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('brokenConnection'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('brokenConnection') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('shielding'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('shielding') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('scopeCreep'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('scopeCreep') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('directorShielding'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('directorShielding') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('compensationClaims'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('compensationClaims') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('vulnerable'):
+            result *= (1.0 + self.avatar.getToonStatusModifier('vulnerable') * 0.01)
+
+        if targetSuit.hasSuitStatusEffect('oilRain'):
+            result *= .9
+
+        if targetSuit.hasSuitStatusEffect('marked') and track != THROW_TRACK:
+            result *= 1.1
+
+        if targetSuit.hasSuitStatusEffect('contingencyOverrideBroken'):
+            result *= .75
+
+        if (targetSuit.getManager() or targetSuit.getGovernaught() or targetSuit.getExecutive()) and track == TRAP_TRACK:
+            result *= 1.3
+
+        return result
+
+    def setValues(self, index, track, level=None, numTargets=None, targetIndex=None, localNum=None, targetSuit=None, comboMultiplier=1.0, comboCount=0, dropThrowMultiplier=1.0, wetTargets=None, targetSuits=None, incomingThrowTargets=None):
+        self.notify.debug('Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s' % (index, track, level, numTargets, targetIndex, localNum))
+
+        if wetTargets is None:
+            wetTargets = set()
+
+        if incomingThrowTargets is None:
+            incomingThrowTargets = set()
+
+        extraTargets = []
+
+        zapJumpTargets = []
+
+        if track == ZAP_TRACK and isinstance(targetIndex, int) and targetIndex >= 0:
+            if targetIndex in wetTargets:
+                # Check every Cog to the LEFT first, nearest to farthest.
+                for cogIndex in range(targetIndex - 1, -1, -1):
+                    if cogIndex in wetTargets:
+                        extraTargets.append(cogIndex)
+
+                        if len(extraTargets) >= 3:
+                            break
+
+                # Only after exhausting wet Cogs on the left,
+                # continue looking to the RIGHT.
+                if len(extraTargets) < 3:
+                    for cogIndex in range(targetIndex + 1, numTargets):
+                        if cogIndex in wetTargets:
+                            extraTargets.append(cogIndex)
+
+                            if len(extraTargets) >= 3:
+                                break
+
+        elif track == SQUIRT_TRACK and isinstance(targetIndex, int) and targetIndex >= 0:
+            leftIndex = targetIndex - 1
+            rightIndex = targetIndex + 1
+
+            if leftIndex >= 0:
+                extraTargets.append(leftIndex)
+
+            if rightIndex < numTargets:
+                extraTargets.append(rightIndex)
+            
         self.hideChoiceIcons()
         self.roundsText.hide()
         self.damageText.hide()
@@ -2927,6 +3051,9 @@ class TownBattleToonPanel(DirectFrame):
         self.whichText.hide()
         self.undecidedText.hide()
         self.passNode.hide()
+        for extraText in (self.extraDamageTextLeft, self.extraDamageTextMid, self.extraDamageTextRight):
+            extraText.hide()
+            extraText['text'] = ''
         if self.hasGag:
             self.gag.removeNode()
             self.hasGag = 0
@@ -3006,8 +3133,25 @@ class TownBattleToonPanel(DirectFrame):
             if 'raisedAnte' in self.avatar.battleConditions:
                 raisedAnte = True
             damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
+            if track == ZAP_TRACK and isinstance(targetIndex, int) and targetIndex >= 0:
+                if targetIndex not in wetTargets:
+                    damage *= 0
             lureValue = int(
                 ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+            if targetSuit:
+                if self.avatar.trackBonusLevel[track] >= 1 and track == DROP_TRACK:
+                    conditionCount = self.getConditionCount(targetSuit, ['dazed', 'soaked', 'zapped', 'drenched'])
+
+                    totalCount = conditionCount + comboCount
+
+                    if totalCount > 0:
+                        mult = 1.1 + ((totalCount - 1) * 0.05)
+                        damage *= mult
+
+                    if targetSuit.hasSuitStatusEffect('marked'):
+                        damage *= 1.1
+                    else:
+                        damage *= dropThrowMultiplier
             if self.avatar.hasToonStatusEffect('toonupBoost') and track == HEAL_TRACK:
                 damage *= (1.0 + self.avatar.getToonStatusModifier('toonupBoost') * 0.01)
                 lureValue *= (1.0 + self.avatar.getToonStatusModifier('toonupBoost') * 0.01)
@@ -3099,11 +3243,66 @@ class TownBattleToonPanel(DirectFrame):
                     or (track == ZAP_TRACK) or (track == HEAL_TRACK and level == 1) or (track == HEAL_TRACK and level == 3) or (track == HEAL_TRACK and level == 5) or (track == HEAL_TRACK and level == 7) or (track == SQUIRT_TRACK)):
                 damage *= (1.0 + -50 * 0.01)
                 lureValue *= (1.0 + -50 * 0.01)
+            baseTargetDamage = damage
+            if targetSuit != None:
+                if targetSuit.hasSuitStatusEffect('videoStatic'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('videoStatic') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('videoStatic') * 0.01)
+                if targetSuit.hasSuitStatusEffect('contingencyOverride'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('contingencyOverride') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('contingencyOverride') * 0.01)
+                if targetSuit.hasSuitStatusEffect('powerhouseGeneration'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('powerhouseGeneration') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('powerhouseGeneration') * 0.01)
+                if targetSuit.hasSuitStatusEffect('silhouetteShielding'):
+                    damage *= .1
+                    lureValue *= .1
+                if targetSuit.hasSuitStatusEffect('soakResist') and (targetSuit.hasSuitStatusEffect('soaked') or targetSuit.hasSuitStatusEffect('drenched')):
+                    damage *= .4
+                    lureValue *= .4
+                if targetSuit.hasSuitStatusEffect('refractionBarrier'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('refractionBarrier') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('refractionBarrier') * 0.01)
+                if targetSuit.hasSuitStatusEffect('brokenConnection'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('brokenConnection') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('brokenConnection') * 0.01)
+                if targetSuit.hasSuitStatusEffect('shielding'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('shielding') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('shielding') * 0.01)
+                if targetSuit.hasSuitStatusEffect('directorShielding'):
+                    damage *= .5
+                    lureValue *= .5
+                if targetSuit.hasSuitStatusEffect('scopeCreep'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('scopeCreep') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('scopeCreep') * 0.01)
+                if targetSuit.hasSuitStatusEffect('directorShielding'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('directorShielding') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('directorShielding') * 0.01)
+                if targetSuit.hasSuitStatusEffect('compensationClaims'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('compensationClaims') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('compensationClaims') * 0.01)
+                if targetSuit.hasSuitStatusEffect('vulnerable'):
+                    damage *= (1.0 + self.avatar.getToonStatusModifier('vulnerable') * 0.01)
+                    lureValue *= (1.0 + self.avatar.getToonStatusModifier('vulnerable') * 0.01)
+                if targetSuit.hasSuitStatusEffect('oilRain'):
+                    damage *= .9
+                    lureValue *= .9
+                if targetSuit.hasSuitStatusEffect('marked') and not track == THROW_TRACK:
+                    damage *= 1.1
+                    lureValue *= 1.1
+                if targetSuit.hasSuitStatusEffect('contingencyOverrideBroken'):
+                    damage *= .75
+                    lureValue *= .75
+                if (targetSuit.getManager() or targetSuit.getGovernaught() or targetSuit.getExecutive()) and track == TRAP_TRACK:
+                    damage *= 1.3
+                    lureValue *= 1.3
+            damage *= comboMultiplier
             if numTargets is not None and targetIndex is not None and localNum is not None:
                 self.whichText.show()
-                self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
+                self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track, extraTargets=extraTargets)
             if track == LURE_TRACK:
                 self.roundsText.show()
+                self.damageText.setPos(0, 0.05, 0.25)
                 if self.avatar.trackBonusLevel[track] >= 1:
                     self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(math.ceil(lureValue * 1.2))) + '%'
                 else:
@@ -3112,6 +3311,7 @@ class TownBattleToonPanel(DirectFrame):
                 # self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
             if track == HEAL_TRACK:
                 self.roundsText.show()
+                self.damageText.setPos(0, 0.05, 0.25)
                 if self.avatar.trackBonusLevel[track] >= 1:
                     self.roundsText['text'] = '+' + str(int(math.ceil(damage))) + '/' + str(int(math.ceil(damage / 2.22)))
                 else:
@@ -3122,63 +3322,153 @@ class TownBattleToonPanel(DirectFrame):
                 # self.selfHealText.setColor(0.176, 1, 0, 1)
             if track == TRAP_TRACK:
                 self.damageText.show()
+                self.damageText.setPos(0, 0.05, 0.25)
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(math.ceil(damage * 1.15))) + '/' + str(
-                        int(math.ceil(math.ceil(damage * 1.15) * 1.3)))
+                    self.damageText['text'] = '-' + str(int(math.ceil(damage * 1.15)))
                 else:
-                    self.damageText['text'] = '-' + str(int(math.ceil(damage))) + '/' + str(int(math.ceil(damage * 1.3)))
+                    self.damageText['text'] = '-' + str(int(math.ceil(damage)))
                 # self.exeDamageText.show()
                 # self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
+            if track == SQUIRT_TRACK and extraTargets and targetSuits:
+                for extraIndex in extraTargets:
+                    if extraIndex < 0 or extraIndex >= len(targetSuits):
+                        continue
+
+                    extraSuit = targetSuits[extraIndex]
+
+                    if self.avatar.trackBonusLevel[track] >= 1:
+                        splashDamage = (baseTargetDamage * comboMultiplier) * 0.75
+                    else:
+                        splashDamage = (baseTargetDamage * comboMultiplier) * 0.33
+
+                    if extraIndex in incomingThrowTargets and not extraSuit.hasSuitStatusEffect('marked'):
+                        splashDamage *= 1.1
+
+                    splashDamage = self.getTargetDamage(splashDamage, extraSuit, track)
+
+                    splashText = '-' + str(int(math.ceil(splashDamage)))
+
+                    # Splash Cog is to the left of the primary target.
+                    if extraIndex > targetIndex:
+                        self.damageText.setPos(0, 0.05, 0.32)
+                        self.extraDamageTextLeft['text'] = splashText
+                        self.extraDamageTextLeft.show()
+
+                    # Splash Cog is to the right of the primary target.
+                    elif extraIndex < targetIndex:
+                        self.damageText.setPos(0, 0.05, 0.32)
+                        self.extraDamageTextRight['text'] = splashText
+                        self.extraDamageTextRight.show()
+
+                    else:
+                        self.damageText.setPos(-0.17, 0.05, 0.32)
+                        
             if track == SOUND_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(int(math.ceil(damage)))
+                self.damageText.setPos(0, 0.05, 0.25)
             if track == THROW_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(int(math.ceil(damage)))
-                # self.selfHealText.show()
-                # self.selfHealText['text'] = 'Self Heal: ' + str(damage/5)
+                self.damageText.setPos(0, 0.05, 0.25)
             if track == DROP_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(int(math.ceil(damage)))
+                self.damageText.setPos(0, 0.05, 0.25)
             if track == SQUIRT_TRACK:
                 self.damageText.show()
-                if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(math.ceil(damage * .75))) + '/ -' + str(int(math.ceil(damage))) + '/ -' + str(
-                        int(math.ceil(damage * .75)))
-                else:
-                    self.damageText['text'] = '-' + str(int(damage / 3)) + '/ -' + str(int(damage)) + '/ -' + str(
-                        int(math.ceil(damage / 3)))
-                # self.soakedRoundsText.show()
-                # self.soakedRoundsText['text'] = 'Rounds: ' + str(ToontownBattleGlobals.AvSoakRounds[level])
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
             if track == ZAP_TRACK:
                 self.damageText.show()
                 self.damageText['text'] = '-' + str(int(math.ceil(damage)))
-                # self.soakedDamageText.show()
-                # self.soakedDamageText['text'] = 'If Soaked: ' + str(damage * 3)
+            if track == ZAP_TRACK and extraTargets and targetSuits:
+                jumpMultipliers = (0.9, 0.8, 0.7)
+
+                leftDamageParts = []
+                rightDamageParts = []
+
+                for jumpIndex, extraIndex in enumerate(extraTargets):
+                    if jumpIndex >= len(jumpMultipliers):
+                        break
+
+                    if extraIndex < 0 or extraIndex >= len(targetSuits):
+                        continue
+
+                    extraSuit = targetSuits[extraIndex]
+
+                    jumpDamage = (baseTargetDamage * comboMultiplier) * jumpMultipliers[jumpIndex]
+
+                    if extraIndex in incomingThrowTargets and not extraSuit.hasSuitStatusEffect('marked'):
+                        jumpDamage *= 1.1
+
+                    jumpDamage = self.getTargetDamage(jumpDamage, extraSuit, track)
+
+                    jumpText = '-' + str(int(math.ceil(jumpDamage)))
+
+                    if extraIndex > targetIndex:
+                        leftDamageParts.append(jumpText)
+
+                    elif extraIndex < targetIndex:
+                        rightDamageParts.append(jumpText)
+
+                leftCount = len(leftDamageParts)
+                rightCount = len(rightDamageParts)
+
+                if leftDamageParts:
+                    self.extraDamageTextLeft['text'] = '/'.join(leftDamageParts)
+
+                    if leftCount > 0:
+                        self.damageText.setPos(0, 0.05, 0.32)
+
+                    self.extraDamageTextLeft.show()
+
+                if rightDamageParts:
+                    self.extraDamageTextRight['text'] = '/'.join(rightDamageParts)
+
+                    if rightCount > 0:
+                        self.damageText.setPos(0, 0.05, 0.32)
+
+                    self.extraDamageTextRight.show()
+
+                if not rightDamageParts and not leftDamageParts:
+                    self.damageText.setPos(0, 0.05, 0.25)
         else:
             self.notify.error('Bad track value: %s' % track)
 
-    def determineWhichText(self, numTargets, targetIndex, localNum, index, track):
+    def determineWhichText(self, numTargets, targetIndex, localNum, index, track, immuneTargets=None, extraTargets=None):
+        if immuneTargets is None:
+            immuneTargets = []
+
+        if extraTargets is None:
+            extraTargets = []
+
         returnStr = ''
         targetList = range(numTargets)
         targetList.reverse()
+
         try:
             if self.avatar.hasToonStatusEffect('confused'):
                 marker = '-'
+                extraMarker = '-'
             elif self.avatar.trackBonusLevel[track] >= 1:
                 marker = 'O'
+                extraMarker = 'o'
             else:
                 marker = 'X'
+                extraMarker = 'x'
         except:
             marker = 'X'
-        if isinstance(targetIndex, (list, tuple)):
-            for i in targetList:
-                if i in targetIndex:
-                    returnStr += marker
-                else:
-                    returnStr += '-'
-            return returnStr
+            extraMarker = 'x'
+
         for i in targetList:
+            if i in immuneTargets:
+                returnStr += '-'
+                continue
+
+            if i in extraTargets:
+                returnStr += extraMarker
+                continue
+
             if targetIndex == -1:
                 returnStr += marker
             elif targetIndex == -2:

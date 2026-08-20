@@ -2364,9 +2364,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'BroadcasterViralSensation':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     #filmmaker cheats
+    elif name == 'ChoreoPlacesEveryone':
+        camTrack.append(allGroupHighShot(suit, attackDuration))
     elif name == 'ChoreoChoreography':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'FilmmakerCameraFlash':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'FilmmakerWrappedInTheFilm':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'FilmmakerCameraRewind':
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'),

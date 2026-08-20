@@ -909,7 +909,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                                                                                    'damage': str(
                                                                                        int(math.ceil(damage * 1.15))) + damageAppendStr,
                                                                                    'bonus': '\nExe./Gov./Mgr.: %s%s\nDaze Rounds: %i' % (
-                                                                                  str(int(math.ceil(math.ceil(damage * 1.15) * 1.3))),
+                                                                                  str(int(math.ceil((damage * 1.15) * 1.3))),
                                                                                    damageAppendStr, ToontownBattleGlobals.AvDazeRounds[level]),
                                                                                    'singleOrGroup': self.getSingleGroupStr(
                                                                                        track, level)})

@@ -35,6 +35,13 @@ class VideographerCalculatorAI:
             **kwargs
         )
 
+    def __encodeSuitOrder(self, oldSuits, newSuits):
+        value = 0
+        for newIndex in xrange(len(newSuits)):
+            oldIndex = oldSuits.index(newSuits[newIndex])
+            value |= oldIndex << (newIndex * 3)
+        return value
+
     
     def calculateSuitAttacksVideographer(self):
         for i in xrange(len(self.battle.activeSuits)):
@@ -54,19 +61,20 @@ class VideographerCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director':
-                if not self.suitHasCondition(suitId, 'deadproducer') and len(self.battle.activeSuits) == 6 and not self.deadSuits > 0 and self.__suitCanAttack(suitId):
+                if self.calculator.deadSuits > 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'DirectorBackToOnes',
                                             'animName': 'nothing',
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
                         'targetType': 'suit',
                         'allowSelfTarget': True,
-                        'targetSelf': True,
+                        'targetSelf': False,
                         'damageTarget': 'target',
-                        'healTarget': 'target'})
+                        'healTarget': 'target',
+                        'requiredManagerNames': ('choreo', 'fmaker', 'director', 'cinema')})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'mplayers':  # broadcaster
@@ -81,11 +89,11 @@ class VideographerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'cinema':  
-                if self.__suitCanAttack(suitId):
+                if self.TurnsElapsed % 2 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                              'name': 'FilmmakerCameraFlash',
                                             'animName': 'glower',
-                                            'hp': 30,
+                                            'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
@@ -190,14 +198,38 @@ class VideographerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'filmmakercalculator') and self.__suitCanAttack(suitId):
+                if self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                             'name': 'FilmmakerCameraRewind',
-                                                           'animName': 'throw-object',
-                                            'hp': 30,
+                                            'name': 'FilmmakerWrappedInTheFilm',  # Video Static Upon Death
+                                            'animName': 'throw-object',
+                                            'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'excludeToonConditions': (
+                            'dodgy',
+                        )})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if (self.TurnsElapsed + 1) % 2 == 0 and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'FilmmakerCameraRewind',
+                                                            'animName': 'throw-object',
+                                                            'hp': 30,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                                            'targetType': 'suit',
+                                                            'allowSelfTarget': True,
+                                                            'requireDamaged': True,
+                                                            'targetSelf': False,
+                                                            'excludeManagers': False, 
+                                                            'requiredManagerNames': ('choreo', 'fmaker', 'director', 'cinema')})
+
+                    if not attack[SUIT_ATK_COL]:
+                        ability = self.__getAbilityQueued(suitId)
+                        self.battle.suitAttacks.append(ability)
+
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 # if self.battle.activeSuits[i].currHP < self.battle.activeSuits[i].maxHP and self.__suitCanAttack(
@@ -235,7 +267,7 @@ class VideographerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.__suitCanAttack(suitId):
+                if (self.TurnsElapsed + 1) % 2 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                              'name': 'ChoreoChoreography',
                                                            'animName': 'song-and-dance',
@@ -436,7 +468,7 @@ class VideographerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if not self.suitHasCondition(suitId, 'phase2') and self.battle.activeSuits[
-                                i].currHP <= 18888 and self.__suitCanAttack(suitId):
+                                i].currHP <= 28888 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerDirectorCuts',  # Director Cuts
                                                         'animName': 'song-and-dance',
@@ -472,7 +504,7 @@ class VideographerCalculatorAI:
                                         'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'electricshockcalculator') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'electricshockcalculator') and not self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerStarOfTheShow',  # Electric Shock
                                                         'animName': 'snap',
@@ -491,5 +523,72 @@ class VideographerCalculatorAI:
 
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+
+        for suit in self.battle.activeSuits[:]:
+            suitId = suit.doId
+
+            if (
+                suit.dna.name == 'choreo' and
+                suit.currHP > 0
+            ):
+
+                # If he cannot attack, use the queued ability instead.
+                if not self.__suitCanAttack(suitId):
+                    continue
+
+                # Otherwise do the Failsafe Protocol shuffle.
+                oldActiveSuits = self.battle.activeSuits[:]
+                oldLivingSuits = []
+                livingPositions = []
+
+                for index in xrange(len(oldActiveSuits)):
+                    otherSuit = oldActiveSuits[index]
+
+                    if (
+                        otherSuit.currHP > 0 and
+                        not self.suitHasCondition(otherSuit.doId, 'dead')
+                    ):
+                        oldLivingSuits.append(otherSuit)
+                        livingPositions.append(index)
+
+                if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
+                    continue
+
+                newLivingSuits = oldLivingSuits[:]
+                random.shuffle(newLivingSuits)
+
+                if newLivingSuits == oldLivingSuits:
+                    newLivingSuits.reverse()
+
+                newActiveSuits = oldActiveSuits[:]
+
+                for index in xrange(len(livingPositions)):
+                    newActiveSuits[livingPositions[index]] = newLivingSuits[index]
+
+                payload = self.__encodeSuitOrder(
+                    oldActiveSuits,
+                    newActiveSuits
+                )
+
+                attack = self.__getCheatAttack(
+                    suitId,
+                    {
+                        'suitName': suit.dna.name,
+                        'name': 'ChoreoPlacesEveryone',
+                        'animName': 'song-and-dance',
+                        'hp': payload,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                        'targetType': 'none'
+                    }
+                )
+
+                if attack[SUIT_ATK_COL]:
+                    self.battle.suitAttacks.append(attack)
+
+                self.battle.queueSuitOrder(
+                    [otherSuit.doId for otherSuit in newActiveSuits]
+                )
 
 
