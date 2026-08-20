@@ -298,7 +298,6 @@ class Playground(BattlePlace.BattlePlace):
         if self.screen:
             self.screen.delete()
 
-        del self.tunnelOriginList1
         self.loader.geom.reparentTo(hidden)
 
         def __lightDecorationOff__():
