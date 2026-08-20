@@ -1,16 +1,21 @@
 from direct.fsm import State
+from toontown.suit import Suit
 from toontown.town import DLStreet
 from toontown.town import TownLoader
+from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
+from toontown.building import PacesetterInstanceGlobals
+from toontown.building import MotoroomInstanceGlobals
 
 
 class DLTownLoader(TownLoader.TownLoader):
+
     def __init__(self, hood, parentFSM, doneEvent):
         TownLoader.TownLoader.__init__(self, hood, parentFSM, doneEvent)
         self.streetClass = DLStreet.DLStreet
         self.musicFile = 'phase_8/audio/bgm/DL_SZ.ogg'
         self.activityMusicFile = 'phase_8/audio/bgm/DL_SZ_activity.ogg'
         self.townStorageDNAFile = 'phase_8/dna/storage_DL_town.dna'
-        self.playgroundTexPath = 'phase_8/maps/drowsy_dreamland'
 
         # Pacesetter's lobby is on Lullaby Lane.  The dynamic encounter stays
         # inside this already-loaded town loader instead of being handed to a
@@ -39,32 +44,80 @@ class DLTownLoader(TownLoader.TownLoader):
 
     def load(self, zoneId):
         TownLoader.TownLoader.load(self, zoneId)
-        dnaFile = 'phase_8/dna/donalds_dreamland_' + str(self.canonicalBranchZone) + '.pdna'
+        Suit.loadSuits(3)
+        dnaFile = ('phase_8/dna/donalds_dreamland_' +
+                   str(self.canonicalBranchZone) + '.dna')
         self.createHood(dnaFile)
-        self.setupTunnelTexture()
 
     def unload(self):
         TownLoader.TownLoader.unload(self)
-        del self.playgroundTexPath
+        Suit.unloadSuits(3)
 
-    def _safeReplaceTexture(self, node, oldTexName, newTex):
-        if newTex is None:
-            print("Warning: new texture is None, skipping replace for '%s'" % oldTexName)
-            return
-        oldTex = node.findTexture(oldTexName)
-        if oldTex is None:
-            print("Warning: could not find texture '%s' on %s" % (oldTexName, node.getName()))
-            return
-        node.replaceTexture(oldTex, newTex)
 
-    def setupTunnelTexture(self):
-        if not hasattr(self, 'geom') or not self.geom:
-            return
-        tunnels = self.geom.findAllMatches("**/linktunnel_dl_*")
-        if not tunnels:
-            return
-        tex1 = loader.loadTexture(self.playgroundTexPath + "/cc_t_gen_prp_tunnel_ddl.png")
-        tex2 = loader.loadTexture(self.playgroundTexPath + "/ttcc_ddl_floor_1.png")
-        for tunnel in tunnels:
-            self._safeReplaceTexture(tunnel, "cc_t_gen_prp_tunnel_ttc", tex1)
-            self._safeReplaceTexture(tunnel, "cc_t_ara_ttc_floor_cobble_1", tex2)
+    def enterMotoroom(self, requestStatus):
+        from toontown.instances import MotoroomPlace
+
+        self.acceptOnce(self.placeDoneEvent, self.handleMotoroomDone)
+        state = self.fsm.getStateNamed(MotoroomInstanceGlobals.INSTANCE_STATE)
+        self.place = MotoroomPlace.MotoroomPlace(
+            self, state, self.placeDoneEvent)
+        base.cr.playGame.setPlace(self.place)
+        self.place.load()
+        self.place.enter(requestStatus)
+
+    def exitMotoroom(self):
+        self.ignore(self.placeDoneEvent)
+        if self.place:
+            self.place.exit()
+            self.place.unload()
+            self.place = None
+            base.cr.playGame.setPlace(None)
+
+    def handleMotoroomDone(self):
+        status = self.place.doneStatus
+        if (ZoneUtil.getBranchZone(status['zoneId']) == self.branchZone and
+                status['shardId'] is None):
+            self.fsm.request('quietZone', [status])
+        else:
+            self.doneStatus = status
+            messenger.send(self.doneEvent)
+
+    def enterPacesetterBossBattle(self, requestStatus):
+        from toontown.coghq import PacesetterBossBattle
+
+        self.acceptOnce(
+            self.placeDoneEvent, self.handlePacesetterBossBattleDone)
+        self.place = PacesetterBossBattle.PacesetterBossBattle(
+            self, self.fsm, self.placeDoneEvent)
+        base.cr.playGame.setPlace(self.place)
+        self.place.load()
+
+        base.localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
+        base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear,
+                               ToontownGlobals.DefaultCameraFar)
+        base.cr.forbidCheesyEffects(1)
+        self.place.enter(requestStatus)
+
+    def exitPacesetterBossBattle(self):
+        self.ignore(self.placeDoneEvent)
+        if self.place:
+            self.place.exit()
+            self.place.unload()
+            self.place = None
+            base.cr.playGame.setPlace(None)
+
+        base.cr.forbidCheesyEffects(0)
+        base.localAvatar.setCameraFov(settings['fieldofview'])
+        base.camLens.setNearFar(ToontownGlobals.DefaultCameraNear,
+                               ToontownGlobals.DefaultCameraFar)
+
+    def handlePacesetterBossBattleDone(self):
+        status = self.place.doneStatus
+        if (status.get('loader') ==
+                PacesetterInstanceGlobals.INSTANCE_LOADER and
+                ZoneUtil.getBranchZone(status['zoneId']) == self.branchZone and
+                status.get('shardId') is None):
+            self.fsm.request('quietZone', [status])
+        else:
+            self.doneStatus = status
+            messenger.send(self.doneEvent)
