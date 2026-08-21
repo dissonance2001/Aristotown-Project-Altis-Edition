@@ -56,7 +56,7 @@ class ToonBase(OTPBase.OTPBase):
             parent=base.a2dTopRight,
             frameColor=(0, 0, 0, 0.45),
             frameSize=(-0.18, 0, -0.042, 0),
-            pos=(-0.006, 0, -0.006),
+            pos=(0, 0, 0.),
             relief=DGG.FLAT
         )
 
