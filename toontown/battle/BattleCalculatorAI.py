@@ -1122,39 +1122,22 @@ class BattleCalculatorAI:
                 if self.toonHasCondition(toon.doId, 'useTrap'):
                     self.setToonCondition(toon.doId, 'rushJobCompleted', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'usedTrap', 1, 3, 'setBoth')
-                if organicBonus:
-                    damage = (getTrapDamage(trapLvl, toon, suit) * 1.15)
-                    self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
-                else:
-                    damage = getTrapDamage(trapLvl, toon, suit)
-                    self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
+                damage = getTrapDamage(trapLvl, toon, suit)
+                self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
                 damage += self.getIOUFlatBoost(attackerId, TRAP)
                 if self.suitHasCondition(suitId, 'sued'):
                     self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'lured'):
                     self.setSuitCondition(suitId, 'lured', 0, 0, 'setBoth')
-                if self.toonHasCondition(attackerId, 'highStakesBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'highStakesBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'trapBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'trapBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'encore'):
-                    damage *= 1.2
-                if self.toonHasCondition(attackerId, 'encore2'):
-                    damage *= 1.1
-                if self.toonHasCondition(attackerId, 'allGagBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'allGagBoost2'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
-                if self.toonHasCondition(attackerId, 'yellowLight'):
-                    damage *= (1.0 + (self.getToonConditionModifier(attackerId, 'yellowLight') * 0.01))
-                if self.toonHasCondition(attackerId, 'viralSensation'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'viralSensation') * 0.01)
-                if self.toonHasCondition(attackerId, 'energized'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'energized') * 0.01)
-                if self.toonHasCondition(attackerId, 'governaughtBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'raisedAnte'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'raisedAnte') * 0.01)
+
+                damage = self.applyToonGagDamageMultipliers(
+                    damage,
+                    attackerId,
+                    suitId,
+                    TRAP,
+                    trapLvl,
+                    organicBonus=organicBonus
+                )
                 if suit.dna.name == 'hustle' and self.toonHasCondition(attackerId, 'hustlerTarget'):
                     damage *= 0.5
                 if self.toonHasCondition(attackerId, 'partnered'):
@@ -1186,6 +1169,15 @@ class BattleCalculatorAI:
                     damage = min(instakillDamage, 32767)
                 else:
                     self.instakillTraps.pop(suitId, None)
+                # damage has already been fully calculated above here
+
+                damage = int(math.ceil(damage))
+
+                targetIndex = self.battle.activeSuits.index(suit)
+
+                # Send the calculated Trap damage through the movie packet.
+                attack[TOON_HP_COL][targetIndex] = damage
+
                 if self.itemIsCredit(TRAP, trapLvl):
                     self.traps[suitId] = [trapLvl, attackerId, damage]
                 else:
@@ -1295,38 +1287,20 @@ class BattleCalculatorAI:
                 if self.toonHasCondition(toon.doId, 'useTrap'):
                     self.setToonCondition(toon.doId, 'rushJobCompleted', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'usedTrap', 1, 3, 'setBoth')
-                if organicBonus:
-                    damage = (getTrapDamage(trapLvl, toon, suit) * 1.15)
-                    self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
-                else:
-                    damage = getTrapDamage(trapLvl, toon, suit)
-                    self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
+                damage = getTrapDamage(trapLvl, toon, suit)
+                self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
                 if self.suitHasCondition(suitId, 'sued'):
                     self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'lured'):
                     self.setSuitCondition(suitId, 'lured', 0, 0, 'setBoth')
-                if self.toonHasCondition(attackerId, 'highStakesBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'highStakesBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'trapBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'trapBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'encore'):
-                    damage *= 1.2
-                if self.toonHasCondition(attackerId, 'encore2'):
-                    damage *= 1.1
-                if self.toonHasCondition(attackerId, 'allGagBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'allGagBoost2'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'allGagBoost2') * 0.01)
-                if self.toonHasCondition(attackerId, 'yellowLight'):
-                    damage *= (1.0 + (self.getToonConditionModifier(attackerId, 'yellowLight') * 0.01))
-                if self.toonHasCondition(attackerId, 'viralSensation'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'viralSensation') * 0.01)
-                if self.toonHasCondition(attackerId, 'energized'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'energized') * 0.01)
-                if self.toonHasCondition(attackerId, 'governaughtBoost'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'governaughtBoost') * 0.01)
-                if self.toonHasCondition(attackerId, 'raisedAnte'):
-                    damage *= (1.0 + self.getToonConditionModifier(attackerId, 'raisedAnte') * 0.01)
+                damage = self.applyToonGagDamageMultipliers(
+                    damage,
+                    attackerId,
+                    suitId,
+                    TRAP,
+                    trapLvl,
+                    organicBonus=organicBonus
+                )
                 if not self.suitHasCondition(suitId, 'alreadyTargeted'):
                     self.setSuitCondition(suitId, 'alreadyTargeted', 1, 1, 'setBoth')
                     self.targets += 1
@@ -1347,9 +1321,17 @@ class BattleCalculatorAI:
                     damage = min(instakillDamage, 32767)
                 else:
                     self.instakillTraps.pop(suitId, None)
+                # damage has already been fully calculated above here
+
+                damage = int(math.ceil(damage))
+
+                targetIndex = self.battle.activeSuits.index(suit)
+
+                # Send the calculated Trap damage through the movie packet.
+                attack[TOON_HP_COL][targetIndex] = damage
+
                 if self.itemIsCredit(TRAP, trapLvl):
-                    self.traps[suitId] = [
-                        trapLvl, attackerId, damage]
+                    self.traps[suitId] = [trapLvl, attackerId, damage]
                 else:
                     self.traps[suitId] = [trapLvl, 0, damage]
         else:
@@ -1367,11 +1349,19 @@ class BattleCalculatorAI:
     def __removeSuitTrap(self, suitId):
         if suitId in self.traps:
             del self.traps[suitId]
-        # for suit in self.battle.activeSuits:
-        #     if suit.doId == suitId:
-        #         suit.battleTrap = NO_TRAP
-        #         suit.battleTrapIsFresh = 0
-        #         break
+
+        self.instakillTraps.pop(suitId, None)
+        self.npcTraps.pop(suitId, None)
+
+        suit = self.battle.findSuit(suitId)
+
+        if suit is not None:
+            suit.battleTrap = NO_TRAP
+            suit.battleTrapIsFresh = 0
+
+    def clearAllSuitTraps(self):
+        for suit in self.battle.activeSuits:
+            self.__removeSuitTrap(suit.doId)
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:
@@ -1987,6 +1977,7 @@ class BattleCalculatorAI:
         mult = 1.0
         suit = self.battle.findSuit(suitId)
         trackBoosts = {
+            TRAP: 'trapBoost',
             THROW: 'throwBoost',
             SQUIRT: 'squirtBoost',
             SOUND: 'soundBoost',
@@ -1995,16 +1986,16 @@ class BattleCalculatorAI:
         }
 
         boostCond = trackBoosts.get(atkTrack)
-        if boostCond and self.toonHasCondition(toonId, boostCond) and atkTrack != TRAP:
+        if boostCond and self.toonHasCondition(toonId, boostCond):
             mult *= 1.0 + self.getToonConditionModifier(toonId, boostCond) * 0.01
 
-        if atkTrack not in (SOUND, LURE, TRAP):
+        if atkTrack not in (SOUND, LURE):
             if self.toonHasCondition(toonId, 'encore'):
                 mult *= 1.2
             if self.toonHasCondition(toonId, 'encore2'):
                 mult *= 1.1
         else:
-            if atkTrack not in (LURE, TRAP):
+            if not atkTrack == LURE:
                 if self.getToonConditionTurns(toonId, 'encore') == 1 and self.toonHasCondition(toonId, 'encore'):
                     mult *= 1.2
                 if self.getToonConditionTurns(toonId, 'encore2') == 1 and self.toonHasCondition(toonId, 'encore2'):
@@ -2013,7 +2004,7 @@ class BattleCalculatorAI:
                     mult *= .5
 
         for cond in ('allGagBoost', 'allGagBoost2', 'yellowLight', 'viralSensation', 'energized', 'raisedAnte', 'governaughtBoost', 'highStakesBoost'):
-            if self.toonHasCondition(toonId, cond) and atkTrack != LURE and atkTrack != TRAP:
+            if self.toonHasCondition(toonId, cond) and atkTrack != LURE:
                 mult *= 1.0 + self.getToonConditionModifier(toonId, cond) * 0.01
 
         if self.toonHasCondition(toonId, 'groupDamageDown'):
@@ -2028,7 +2019,7 @@ class BattleCalculatorAI:
         if self.toonHasCondition(toonId, 'noDamage'):
             return 0
 
-        if self.toonHasCondition(toonId, 'partnered') and atkTrack not in (LURE, TRAP):
+        if self.toonHasCondition(toonId, 'partnered') and not atkTrack == LURE:
             if self.suitHasCondition(suitId, 'partnered'):
                 mult *= 1.5
             else:
@@ -2057,7 +2048,7 @@ class BattleCalculatorAI:
         if self.suitHasCondition(suitId, 'HRdamagereduction'):
             mult *= 0.1
 
-        if self.suitHasCondition(suitId, 'trapRushJob') and atkTrack != LURE:
+        if self.suitHasCondition(suitId, 'trapRushJob') and atkTrack != TRAP:
             mult *= 0.6
 
         if self.suitHasCondition(suitId, 'lureRushJob') and atkTrack != LURE:
@@ -2137,7 +2128,7 @@ class BattleCalculatorAI:
             if isinstance(effect.defenseMod, float): # Check all decimal damage reductions.  TODO: Flat damage modification.
                 mult *= effect.defenseMod
 
-        return damage * mult
+        return int(math.ceil(damage * mult))
 
     def applySoundEncoreChecks(self, toonId, atkTrack, atkLevel):
         hasTrackBonus = self.__toonCheckGagBonus(toonId, atkTrack, atkLevel)
@@ -2413,7 +2404,7 @@ class BattleCalculatorAI:
                                 self.applyToonGagUseEffects(toonId, LURE)
 
                                 organicBonus = self.__toonCheckGagBonus(attack[TOON_ID_COL], atkTrack, atkLevel)
-                                lureKBValue = ToontownBattleGlobals.AvLureKnockback[atkLevel] * 100
+                                lureKBValue = (ToontownBattleGlobals.AvLureKnockback[atkLevel] * 100)
 
                                 if organicBonus:
                                     lureKBValue *= 1.2
@@ -2424,12 +2415,18 @@ class BattleCalculatorAI:
                                     targetId,
                                     atkLevel
                                 )
+                                print 'AI LURE KB VALUE:', lureKBValue
 
                                 self.applyLureHitEffects(
                                     toon,
                                     toonId,
                                     theSuit,
                                     targetId
+                                )
+                                targetIndex = self.battle.activeSuits.index(theSuit)
+
+                                attack[TOON_LURE_KB_COL][targetIndex] = int(
+                                    math.ceil(lureKBValue)
                                 )
                                 if theSuit.dna.name == 'redd':
                                     self.setSuitCondition(targetId, 'lured', lureKBValue / 2, self.NumRoundsLured[atkLevel] + 1,
@@ -2463,9 +2460,17 @@ class BattleCalculatorAI:
                                 npcLurer = attack[TOON_TRACK_COL] == NPCSOS
                                 if not self.suitHasCondition(targetId, 'immune') and not self.suitHasCondition(targetId, 'lureImmune') \
                                         and not (theSuit.dna.name == 'sgoat' and self.suitHasCondition(targetId, 'desperation') and self.suitHasCondition(targetId, 'enraged')):
-                                    currLureId = self.__addLuredSuitInfo(targetId, -1, rounds, wakeupChance, toonId,
-                                                                     atkLevel,
-                                                                     lureId=currLureId, npc=npcLurer)
+                                    currLureId = self.__addLuredSuitInfo(
+                                                        targetId,
+                                                        -1,
+                                                        rounds,
+                                                        wakeupChance,
+                                                        toonId,
+                                                        atkLevel,
+                                                        lureKBValue=lureKBValue,
+                                                        lureId=currLureId,
+                                                        npc=npcLurer
+                                                    )
                                 if self.notify.getDebug():
                                     self.notify.debug('Suit lured for ' + str(rounds) + ' rounds max with ' + str(
                                         wakeupChance) + '% chance to wake up each round')
@@ -2548,7 +2553,7 @@ class BattleCalculatorAI:
                         if theSuit is not None and theSuit.dna.name == 'psetter':
                             if attackLevel == UBER_GAG_LEVEL_INDEX:
                                 self.trainTrapTriggered = True
-                            self.__removeSuitTrap(targetId)
+                        self.__removeSuitTrap(targetId)
                         if self.suitHasCondition(targetId, 'immune'):
                             lureDidDamage = 0
                         elif self.suitHasCondition(targetId, 'dead'):
@@ -4418,13 +4423,13 @@ class BattleCalculatorAI:
                             self.setSuitCondition(suit, 'lured', 0, 0, 'setBoth')
                         if self.suitHasCondition(suit, 'overseer'):
                             attack[TOON_KBBONUS_COL][tgtPos] = 1
-                            self.knockbackDamage += math.ceil(totalDmgs * (lureKBValue / 2))
+                            self.knockbackDamage += math.ceil(totalDmgs * (lureKBValue))
                             self.setSuitCondition(suit, 'overseerKB', 1, 1, 'setBoth')
                         elif self.suitHasCondition(suit, 'noKB'):
                             attack[TOON_KBBONUS_COL][tgtPos] = 0
-                            self.knockbackDamage += math.ceil(totalDmgs * (lureKBValue / 2))
+                            self.knockbackDamage += math.ceil(totalDmgs * (lureKBValue))
                         else:
-                            attack[TOON_KBBONUS_COL][tgtPos] = math.ceil(totalDmgs * (lureKBValue / 2))
+                            attack[TOON_KBBONUS_COL][tgtPos] = math.ceil(totalDmgs * (lureKBValue))
                         if self.notify.getDebug():
                             self.notify.debug(
                                 'Applying kb bonus to track ' + str(attack[TOON_TRACK_COL]) + ' of ' + str(
@@ -4515,9 +4520,11 @@ class BattleCalculatorAI:
 
             longest = max(len(self.battle.activeToons), len(self.battle.activeSuits))
             taList = self.battle.toonAttacks
-            for j in xrange(longest):
-                taList[attackIdx][TOON_HP_COL].append(-1)
-                taList[attackIdx][TOON_KBBONUS_COL].append(-1)
+            for t in self.battle.activeToons:
+                for j in xrange(longest):
+                    self.battle.toonAttacks[t][TOON_HP_COL].append(-1)
+                    self.battle.toonAttacks[t][TOON_KBBONUS_COL].append(-1)
+                    self.battle.toonAttacks[t][TOON_LURE_KB_COL].append(-1)
 
     def __rememberToonAttack(self, suitId, toonId, damage):
         if not suitId in self.SuitAttackers:
@@ -7733,6 +7740,7 @@ class BattleCalculatorAI:
             for j in xrange(longest):
                 self.battle.toonAttacks[t][TOON_HP_COL].append(-1)
                 self.battle.toonAttacks[t][TOON_KBBONUS_COL].append(-1)
+                self.battle.toonAttacks[t][TOON_LURE_KB_COL].append(-1)
 
         #for i in xrange(6):'rkeeper
            # for j in xrange(len(self.battle.activeToons)):
@@ -8214,7 +8222,7 @@ class BattleCalculatorAI:
 
         return currId
 
-    def __addLuredSuitInfo(self, suitId, currRounds, maxRounds, wakeChance, lurer, lureLvl, lureId = -1, npc = 0):
+    def __addLuredSuitInfo(self, suitId, currRounds, maxRounds, wakeChance, lurer, lureLvl, lureKBValue=0, lureId=-1, npc=0):
         if lureId == -1:
             availLureId = self.__findAvailLureId(lurer)
         else:
@@ -8229,9 +8237,9 @@ class BattleCalculatorAI:
                 lureInfo[1] += maxRounds
                 if wakeChance < lureInfo[2]:
                     lureInfo[2] = wakeChance
-                lureInfo[3][lurer] = [lureLvl, availLureId, credit]
+                lureInfo[3][lurer] = [lureLvl, availLureId, credit, lureKBValue]
         else:
-            lurerInfo = {lurer: [lureLvl, availLureId, credit]}
+            lurerInfo = {lurer: [lureLvl, availLureId, credit, lureKBValue]}
             self.currentlyLuredSuits[suitId] = [currRounds,
              maxRounds,
              wakeChance,

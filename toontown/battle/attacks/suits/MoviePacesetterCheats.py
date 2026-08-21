@@ -412,6 +412,14 @@ def doMovingGoalposts(attack):
 
     return Parallel(suitTrack, sprayTracks, toonTracks, toonAnimTracks, toonSpinTracks, spinTracks1, spinTracks2, spinTracks3, soundTracks)
 
+def clearCorporateRestructuringTraps(battle):
+    for suit in battle.activeSuits:
+        suit.battleTrap = NO_TRAP
+        suit.battleTrapIsFresh = 0
+
+        if suit.hasSuitStatusEffect('trapped'):
+            suit.clearSuitStatusEffect('trapped')
+
 def doCorporateRestructuring(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -425,7 +433,7 @@ def doCorporateRestructuring(attack):
     if sorted(oldIndexes) != range(len(oldActiveSuits)):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
-    suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
+    suitTrack = Sequence(Func(clearCorporateRestructuringTraps, battle), Func(suit.stop), getSuitAnimTrack(attack))
     suitTracks = Parallel()
     for otherSuit in oldActiveSuits:
         pendingDeath = False

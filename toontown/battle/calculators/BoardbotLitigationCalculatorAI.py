@@ -950,6 +950,9 @@ class BoardbotLitigationCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
-                self.battle.queueSuitOrder(
-                    [otherSuit.doId for otherSuit in newActiveSuits]
-                )
+                    # Corporate Restructuring invalidates all existing trap positions.
+                    self.calculator.clearAllSuitTraps()
+
+                    self.battle.queueSuitOrder(
+                        [otherSuit.doId for otherSuit in newActiveSuits]
+                    )

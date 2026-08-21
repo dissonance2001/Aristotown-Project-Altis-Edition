@@ -1525,6 +1525,7 @@ struct ToonAttack {
   int16[] kbBonus;
   int8 suitDied;
   int8 suitRevive;
+  int16[] lureKB;
 };
 
 struct AttackData {

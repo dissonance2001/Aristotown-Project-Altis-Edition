@@ -17,6 +17,7 @@ TOON_HPBONUS_COL = 6
 TOON_KBBONUS_COL = 7
 SUIT_DIED_COL = 8
 SUIT_REVIVE_COL = 9
+TOON_LURE_KB_COL = 10
 SUIT_ID_COL = 0
 SUIT_ATK_COL = 1
 SUIT_TGT_COL = 2
@@ -85,17 +86,20 @@ def attackAffectsGroup(track, level, type = None):
         return 0
 
 
-def getToonAttack(id, track = NO_ATTACK, level = -1, target = -1):
-    return [id,
-     track,
-     level,
-     target,
-     [],
-     0,
-     0,
-     [],
-     0,
-     0]
+def getToonAttack(id, track=NO_ATTACK, level=-1, target=-1):
+    return [
+        id,      # 0
+        track,   # 1
+        level,   # 2
+        target,  # 3
+        [],      # 4 HP
+        0,       # 5 ACC bonus
+        0,       # 6 HP bonus
+        [],      # 7 KB bonus
+        0,       # 8 died
+        0,       # 9 revived
+        []       # 10 Lure KB percentage
+    ]
 
 
 def getDefaultSuitAttacks():

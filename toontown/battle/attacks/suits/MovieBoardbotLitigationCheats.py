@@ -277,7 +277,7 @@ def doLiquidationEvent(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 8)
         cloudPropTrack.append(Wait(0.6))
-        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
         cloudPropTrack.append(Parallel(
             Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=4.1, cleanup=True, softStopT=-1)),
             Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=4.0, cleanup=True, softStopT=-1)),

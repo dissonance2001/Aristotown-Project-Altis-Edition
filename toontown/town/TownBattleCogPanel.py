@@ -3943,7 +3943,13 @@ class TownBattleCogPanel(DirectFrame):
                 (1, 0, 0.996, 1),
                 ToontownGlobals.getSignFont()
             )
-            if self.cog.isLured == 1:
+            lureKB = self.getColoredText(
+               '-%s%%' % self.cog.getSuitStatusModifier('lureKB'),
+                 'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
+            if self.cog.getSuitStatusModifier('lured') == 1:
                 self.statusIcon = status.find('**/lured_icon')
                 self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % self.cog.getSuitStatusTurns('lured'),
                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
@@ -3955,7 +3961,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='Lured (Unprestige)', 
-                                    tooltipDescription="%s Cogs cannot attack and take more damage from each %s or %s Gag that's used." % (gagText, gagText2, gagText3),
+                                    tooltipDescription="%s Cogs cannot attack and take %s more damage from each %s or %s Gag that's used." % (gagText, lureKB, gagText2, gagText3),
                                     tooltipBuff=False, 
                                     slotColor=(0, 0.902, 1, 1))
             else:
@@ -3970,7 +3976,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                     slot, 
                                     tooltipTitle='Lured (Prestige)', 
-                                    tooltipDescription="%s Cogs cannot attack and take more damage from each %s or %s Gag that's used." % (gagText, gagText2, gagText3),
+                                    tooltipDescription="%s Cogs cannot attack and take %s more damage from each %s or %s Gag that's used." % (gagText, lureKB, gagText2, gagText3),
                                     tooltipBuff=False, 
                                     slotColor=(0, 0.902, 1, 1))
 
@@ -4282,6 +4288,12 @@ class TownBattleCogPanel(DirectFrame):
                 (0, 1, 0.016, 1),
                 ToontownGlobals.getInterfaceFont()
             )
+            damageText2 = self.getColoredText(
+               '-%s' % self.cog.getSuitStatusModifier('trapDamage'),
+                 'negativeText',
+                (1, 0, 0, 1),
+                ToontownGlobals.getInterfaceFont()
+            )
             status = loader.loadModel('phase_3.5/models/gui/inventory_icons')
             if self.cog.getSuitStatusModifier('trapped') == 8:
                 self.statusIcon = status.find('**/inventory_tnt')
@@ -4289,7 +4301,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by a TNT! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
+                                   tooltipDescription='This Cog is %s by a TNT! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 7:
@@ -4298,7 +4310,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by a Wrecking Ball! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2),  
+                                   tooltipDescription='This Cog is %s by a Wrecking Ball! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2),  
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 6:
@@ -4307,7 +4319,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by a Trap Door! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
+                                   tooltipDescription='This Cog is %s by a Trap Door! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 5:
@@ -4316,7 +4328,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by a Quicksand! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
+                                   tooltipDescription='This Cog is %s by a Quicksand! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 4:
@@ -4325,7 +4337,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by a Springboard! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2), 
+                                   tooltipDescription='This Cog is %s by a Springboard! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2), 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 3:
@@ -4334,7 +4346,7 @@ class TownBattleCogPanel(DirectFrame):
                 self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Trapped', 
-                                   tooltipDescription='This Cog is %s by Marbles! %s gags are %s more accurate against this Cog. Once %s, they will take damage.' % (gagText, gagText3, damageText, gagText2),  
+                                   tooltipDescription='This Cog is %s by Marbles! %s gags are %s more accurate against this Cog. Once %s, they will take %s damage.' % (gagText, gagText3, damageText, gagText2, damageText2),  
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1), scale=(5.5, 5.5, 5.5))
             elif self.cog.getSuitStatusModifier('trapped') == 2:

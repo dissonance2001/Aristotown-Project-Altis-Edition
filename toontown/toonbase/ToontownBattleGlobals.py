@@ -298,7 +298,7 @@ AvPropTargetCat = ((ATK_SINGLE_TARGET, ATK_GROUP_TARGET, ATK_SINGLE_TARGET, ATK_
 (ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET, ATK_SINGLE_TARGET),
 (ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET, ATK_GROUP_TARGET))
 LURE_KNOCKBACK_VALUE = 1
-AvLureKnockback = (1.3, 1, 1.3, 1, 1.3, 1, 1.7, 1.5)
+AvLureKnockback = (.75, .5, .75, .5, .75, .5, .95, .85)
 AvPropTarget = (0, 3, 0, 2, 3, 3, 3, 3, 3)
 AvLureRounds = (1, 1, 2, 2, 3, 3, 4, 4)
 AvZapJumps = ((3, 2.25, 1.5),
@@ -315,20 +315,21 @@ AvSoakDefReduction = 15
 AvDazeDefReduction = 10
 AvMarkBoost = 10
 AvZapBoost = 300
-TRAP_EXECUTIVE_BONUS = 0.3
+TRAP_EXECUTIVE_BONUS = 1.3
 TRAP_HEALTHY_BONUS = 0.2
 
 
 def getTrapDamage(trapLevel, toon, suit = None, executive = None):
     if suit:
         executive = suit.getExecutive() or suit.getGovernaught() or suit.getManager()
-    damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
     organicBonus = toon.checkGagBonus(TRAP_TRACK, trapLevel)
-    if executive and organicBonus:
-        damage += math.ceil((damage * TRAP_EXECUTIVE_BONUS) + 1)
-    elif executive:
-        damage += math.ceil(damage * TRAP_EXECUTIVE_BONUS)
-    return int(damage)
+    if organicBonus:
+        damage = int(math.ceil(getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK)) * 1.15))
+    else:
+        damage = getAvPropDamage(TRAP_TRACK, trapLevel, toon.experience.getExp(TRAP_TRACK))
+    if executive:
+        damage = int(math.ceil(damage * TRAP_EXECUTIVE_BONUS))
+    return int(math.ceil(damage))
 
 def getAvPropDamage(attackTrack, attackLevel, exp, organicBonus = False, propBonus = False, propAndOrganicBonusStack = False):
     minD = AvPropDamage[attackTrack][attackLevel][0][0]

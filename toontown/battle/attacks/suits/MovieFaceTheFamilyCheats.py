@@ -1217,7 +1217,8 @@ def _doPacesetterRushJob(attack, modifier):
         Func(targetSuit.setDizzy, 0),
         Func(targetSuit.clearSuitStatusEffect, 'marked'),
         Func(targetSuit.clearSuitStatusEffect, 'zapped'),
-        Func(targetSuit.clearSuitStatusEffect, 'dazed')
+        Func(targetSuit.clearSuitStatusEffect, 'dazed'),
+        Func(targetSuit.clearSuitStatusEffect, 'lured')
     )
 
     suitTrack = Sequence(

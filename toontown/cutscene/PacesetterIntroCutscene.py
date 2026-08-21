@@ -138,7 +138,7 @@ class PacesetterIntroSetup(object):
             'Pacesetter head',
             logPrefix='[Pacesetter CTSC]')]
 
-        configureSuitNametag(pace, visible=False)
+        configureSuitNametag(pace, visible=True)
         try:
             pace.setActiveShadow(0)
             pace.hideShadow()
@@ -236,7 +236,7 @@ class PacesetterIntroSetup(object):
         if not pace:
             return
         pace.show()
-        configureSuitNametag(pace, visible=False)
+        configureSuitNametag(pace, visible=True)
 
     def _startIntroMusic(self):
         if self.introMusic is None:

@@ -910,6 +910,14 @@ def doSingingBluesMegaphone(attack):
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(3.0), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     return Parallel(suitTrack, toonTracks, notifyTracks, soundTrack1, throwTrack, suitTrack2, highRollerHeadTrack, sprayTrack)
 
+def clearCorporateRestructuringTraps(battle):
+    for suit in battle.activeSuits:
+        suit.battleTrap = NO_TRAP
+        suit.battleTrapIsFresh = 0
+
+        if suit.hasSuitStatusEffect('trapped'):
+            suit.clearSuitStatusEffect('trapped')
+
 def doPlacesEveryone(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -923,7 +931,7 @@ def doPlacesEveryone(attack):
     if sorted(oldIndexes) != range(len(oldActiveSuits)):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
-    suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
+    suitTrack = Sequence(Func(clearCorporateRestructuringTraps, battle), Func(suit.stop), getSuitAnimTrack(attack))
     suitTracks = Parallel()
     for otherSuit in oldActiveSuits:
         pendingDeath = False

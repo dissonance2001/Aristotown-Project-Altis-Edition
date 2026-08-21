@@ -545,7 +545,7 @@ class TownBattleToonPanel(DirectFrame):
         self.choiceOrganicStage = None
         self.iouChoiceHead = None
         self.extraDamageTextLeft = DirectLabel(parent=self, relief=None, pos=(-0.275, 0.05, 0.25), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
-        self.extraDamageTextMid = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.4), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
+        self.extraDamageTextMid = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.35), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
         self.extraDamageTextRight = DirectLabel(parent=self, relief=None, pos=(0.275, 0.05, 0.25), text='', text_scale=0.1, text_fg=(0.871, 0.827, 1, 1), text_align=TextNode.ACenter, text_font=getSignFont())
 
         self.extraDamageTextLeft.hide()
@@ -569,7 +569,7 @@ class TownBattleToonPanel(DirectFrame):
         self.fireText.hide()
         self.sueText = DirectLabel(parent=self, relief=None, pos=(0.22, 0, 0.03), text=TTLocalizer.TownBattleToonSue, text_fg=(0.75, 0.75, 0.95, 1), text_scale=0.1, text_font=getSignFont())
         self.sueText.hide()
-        self.roundsText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
+        self.roundsText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.1, text_fg=(0.176, 1, 0, 1), text_font=getSignFont())
         self.roundsText.hide()
         self.damageText = DirectLabel(parent=self, relief=None, pos=(0, 0.05, 0.25), text='', text_scale=0.15, text_fg=(1, 0, 0, 1), text_font=getSignFont())
         self.damageText.hide()
@@ -2994,9 +2994,9 @@ class TownBattleToonPanel(DirectFrame):
         if (targetSuit.getManager() or targetSuit.getGovernaught() or targetSuit.getExecutive()) and track == TRAP_TRACK:
             result *= 1.3
 
-        return result
+        return int(math.ceil(result))
 
-    def setValues(self, index, track, level=None, numTargets=None, targetIndex=None, localNum=None, targetSuit=None, comboMultiplier=1.0, comboCount=0, dropThrowMultiplier=1.0, wetTargets=None, targetSuits=None, incomingThrowTargets=None):
+    def setValues(self, index, track, level=None, numTargets=None, targetIndex=None, localNum=None, targetSuit=None, comboMultiplier=1.0, comboCount=0, dropThrowMultiplier=1.0, wetTargets=None, targetSuits=None, incomingThrowTargets=None, trapTargets=None):
         self.notify.debug('Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s' % (index, track, level, numTargets, targetIndex, localNum))
 
         if wetTargets is None:
@@ -3004,6 +3004,9 @@ class TownBattleToonPanel(DirectFrame):
 
         if incomingThrowTargets is None:
             incomingThrowTargets = set()
+
+        if trapTargets is None:
+            trapTargets = set()
 
         extraTargets = []
 
@@ -3044,6 +3047,7 @@ class TownBattleToonPanel(DirectFrame):
         self.damageText.hide()
         self.exeDamageText.hide()
         self.soakedDamageText.hide()
+        self.extraDamageTextMid.hide()
         self.soakedRoundsText.hide()
         self.knockbackText.hide()
         self.selfHealText.hide()
@@ -3133,14 +3137,28 @@ class TownBattleToonPanel(DirectFrame):
             if 'raisedAnte' in self.avatar.battleConditions:
                 raisedAnte = True
             damage = int(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))))
+            if self.avatar.trackBonusLevel[track] >= 1 and track == TRAP_TRACK:
+                damage = int(math.ceil(math.ceil(getAvPropDamage(track, level, self.avatar.experience.getExp(track))) * 1.15))
             if track == ZAP_TRACK and isinstance(targetIndex, int) and targetIndex >= 0:
                 if targetIndex not in wetTargets:
                     damage *= 0
             lureValue = int(
-                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) / 2))
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100)))
             if targetSuit:
                 if self.avatar.trackBonusLevel[track] >= 1 and track == DROP_TRACK:
-                    conditionCount = self.getConditionCount(targetSuit, ['dazed', 'soaked', 'zapped', 'drenched'])
+                    conditionCount = 0
+
+                    if targetSuit.hasSuitStatusEffect('dazed'):
+                        conditionCount += 1
+
+                    if targetSuit.hasSuitStatusEffect('soaked') or targetSuit.hasSuitStatusEffect('drenched'):
+                        conditionCount += 1
+
+                    if targetSuit.hasSuitStatusEffect('zapped'):
+                        conditionCount += 1
+
+                    if targetSuit.hasSuitStatusEffect('trapped'):
+                        conditionCount += 1
 
                     totalCount = conditionCount + comboCount
 
@@ -3302,11 +3320,13 @@ class TownBattleToonPanel(DirectFrame):
                 self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track, extraTargets=extraTargets)
             if track == LURE_TRACK:
                 self.roundsText.show()
+                self.extraDamageTextMid.show()
                 self.damageText.setPos(0, 0.05, 0.25)
                 if self.avatar.trackBonusLevel[track] >= 1:
-                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(math.ceil(lureValue * 1.2))) + '%'
+                    self.roundsText['text'] = "Knockback: " + str(int(math.ceil(lureValue * 1.2))) + '%'
                 else:
-                    self.roundsText['text'] = str(NumRoundsLured[level] + 1) + '/' + str(int(math.ceil(lureValue))) + '%'
+                    self.roundsText['text'] = "Knockback: " + str(int(math.ceil(lureValue))) + '%'
+                self.extraDamageTextMid['text'] = "Rounds: " + str(NumRoundsLured[level] + 1)
                 # self.knockbackText.show()
                 # self.knockbackText['text'] = 'Knockback: ' + str(lureValue)+'%'
             if track == HEAL_TRACK:
@@ -3323,10 +3343,7 @@ class TownBattleToonPanel(DirectFrame):
             if track == TRAP_TRACK:
                 self.damageText.show()
                 self.damageText.setPos(0, 0.05, 0.25)
-                if self.avatar.trackBonusLevel[track] >= 1:
-                    self.damageText['text'] = '-' + str(int(math.ceil(damage * 1.15)))
-                else:
-                    self.damageText['text'] = '-' + str(int(math.ceil(damage)))
+                self.damageText['text'] = '-' + str(int(math.ceil(damage)))
                 # self.exeDamageText.show()
                 # self.exeDamageText['text'] = 'Exe./Gov.: ' + str(damage * 1.3)
             if track == SQUIRT_TRACK and extraTargets and targetSuits:
@@ -3460,6 +3477,26 @@ class TownBattleToonPanel(DirectFrame):
             marker = 'X'
             extraMarker = 'x'
 
+        # =====================================================
+        # LIST / TUPLE TARGETS
+        # Used for things like Toon targeting: [0], [0, 1], etc.
+        # =====================================================
+        if isinstance(targetIndex, (list, tuple)):
+            for i in targetList:
+                if i in immuneTargets:
+                    returnStr += '-'
+                elif i in extraTargets:
+                    returnStr += extraMarker
+                elif i in targetIndex:
+                    returnStr += marker
+                else:
+                    returnStr += '-'
+
+            return returnStr
+
+        # =====================================================
+        # NORMAL INTEGER TARGETS
+        # =====================================================
         for i in targetList:
             if i in immuneTargets:
                 returnStr += '-'
@@ -3471,16 +3508,19 @@ class TownBattleToonPanel(DirectFrame):
 
             if targetIndex == -1:
                 returnStr += marker
+
             elif targetIndex == -2:
                 if i == index:
                     returnStr += '-'
                 else:
                     returnStr += marker
-            elif targetIndex >= 0 and targetIndex <= 6:
+
+            elif isinstance(targetIndex, int) and 0 <= targetIndex <= 6:
                 if i == targetIndex:
                     returnStr += marker
                 else:
                     returnStr += '-'
+
             else:
                 self.notify.error('Bad target index: %s' % targetIndex)
 

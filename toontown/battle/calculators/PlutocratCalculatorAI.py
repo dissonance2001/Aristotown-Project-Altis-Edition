@@ -190,19 +190,58 @@ class PlutocratCalculatorAI:
 
         addLuredName = '_BattleCalculatorAI__addLuredSuitInfo'
         baseAddLured = getattr(calculator, addLuredName, None)
+
         if baseAddLured:
-            def addLuredSuitInfo(suitId, currRounds, maxRounds, wakeChance, lurer, lureLvl, lureId=-1, npc=0):
+            def addLuredSuitInfo(
+                suitId,
+                currRounds,
+                maxRounds,
+                wakeChance,
+                lurer,
+                lureLvl,
+                lureKBValue=0,
+                lureId=-1,
+                npc=0
+            ):
                 suit = self.battle.findSuit(suitId)
-                investor = bool(suit and getattr(getattr(suit, 'dna', None), 'name', '') in self.Investors)
+
+                investor = bool(
+                    suit and
+                    getattr(getattr(suit, 'dna', None), 'name', '') in self.Investors
+                )
+
                 if investor and maxRounds > 0:
                     maxRounds = 2
-                result = baseAddLured(suitId, currRounds, maxRounds, wakeChance, lurer, lureLvl, lureId, npc)
+
+                result = baseAddLured(
+                    suitId,
+                    currRounds,
+                    maxRounds,
+                    wakeChance,
+                    lurer,
+                    lureLvl,
+                    lureKBValue=lureKBValue,
+                    lureId=lureId,
+                    npc=npc
+                )
+
                 if investor:
-                    info = getattr(calculator, 'currentlyLuredSuits', {}).get(suitId)
+                    info = getattr(
+                        calculator,
+                        'currentlyLuredSuits',
+                        {}
+                    ).get(suitId)
+
                     if info and info[1] > 2:
                         info[1] = 2
+
                 return result
-            setattr(calculator, addLuredName, addLuredSuitInfo)
+
+            setattr(
+                calculator,
+                addLuredName,
+                addLuredSuitInfo
+            )
 
         applySuitName = '_BattleCalculatorAI__applySuitAttackDamages'
         baseApplySuit = getattr(calculator, applySuitName, None)

@@ -1194,6 +1194,7 @@ class Movie(DirectObject.DirectObject):
                 adict['level'] = level
                 hps = ta[TOON_HP_COL]
                 kbbonuses = ta[TOON_KBBONUS_COL]
+                lureKBValues = ta[TOON_LURE_KB_COL]
                 iouAttack = 0
                 if track == NPCSOS:
                     definition = IOURegistry.getIOU(level)
@@ -1330,6 +1331,10 @@ class Movie(DirectObject.DirectObject):
                             sdict['kbbonus'] = kbbonuses[targetIndex]
                             sdict['died'] = ta[SUIT_DIED_COL] & 1 << targetIndex
                             sdict['revived'] = ta[SUIT_REVIVE_COL] & 1 << targetIndex
+                            if targetIndex < len(lureKBValues):
+                                sdict['lureKB'] = lureKBValues[targetIndex]
+                            else:
+                                sdict['lureKB'] = -1
                             if sdict['died'] != 0:
                                 pass
                             sdict['leftSuits'] = []
@@ -1369,6 +1374,10 @@ class Movie(DirectObject.DirectObject):
                         sdict['rightSuits'] = rightSuits
                         sdict['hp'] = hps[targetIndex]
                         sdict['kbbonus'] = kbbonuses[targetIndex]
+                        if targetIndex < len(lureKBValues):
+                            sdict['lureKB'] = lureKBValues[targetIndex]
+                        else:
+                            sdict['lureKB'] = -1
                         sdict['died'] = ta[SUIT_DIED_COL] & 1 << targetIndex
                         sdict['revived'] = ta[SUIT_REVIVE_COL] & 1 << targetIndex
                         if sdict['revived'] != 0:

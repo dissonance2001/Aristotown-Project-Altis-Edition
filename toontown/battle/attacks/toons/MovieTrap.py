@@ -128,6 +128,9 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
     battle = trap['battle']
     target = trap['target']
     suit = trap['target'][0]['suit']
+    targetData = trap['target'][0]
+    suit = targetData['suit']
+    trapDamage = int(targetData.get('hp', 0))
     targetPos = suit.getPos(battle)
     thrownProp = propList[0]
     unthrownProp = propList[1]
@@ -160,6 +163,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos = None, propH
     throwTrack = Sequence()
     throwTrack.append(Wait(throwDelay))
     throwTrack.append(Func(suit.setSuitStatusEffect, 'trapped', modifier=level + 1))
+    throwTrack.append(Func(suit.setSuitStatusEffect, 'trapDamage', modifier=trapDamage))
     if suit.getSuitStatusModifier('rushJob') == 1:
         throwTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     throwTrack.append(Func(unthrownProp.reparentTo, hidden))
@@ -313,6 +317,9 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTracks = Parallel()
     firstTime = 1
     suit = trap['target'][0]['suit']
+    targetData = trap['target'][0]
+    suit = targetData['suit']
+    trapDamage = int(targetData.get('hp', 0))
     suitPos = suit.getPos(battle)
     targetPos = suitPos
     trapProp = MovieUtil.copyProp(prop)
@@ -331,6 +338,7 @@ def __createPlacedTrapMultiTrack(trap, prop, propName, propPos = None, propHpr =
     trapTrack.append(Func(trapProp.reparentTo, suit))
     trapTrack.append(Func(trapProp.setPos, trapPoint))
     trapTrack.append(Func(suit.setSuitStatusEffect, 'trapped', modifier=level + 1))
+    trapTrack.append(Func(suit.setSuitStatusEffect, 'trapDamage', modifier=trapDamage))
     if suit.getSuitStatusModifier('rushJob') == 1:
         trapTrack.append(Func(suit.clearSuitStatusEffect, 'rushJob'))
     if propName == 'wreckingball':

@@ -398,9 +398,9 @@ class TownBattle(StateData.StateData):
 
             DROP_TRACK: {
                 THROW_TRACK:  (1.1, 'marked'),
-                SQUIRT_TRACK: (1.1, 'soaked'),
+                SQUIRT_TRACK: (1.1, ('soaked', 'drenched')),
                 ZAP_TRACK:    (1.1, 'zapped'),
-                SOUND_TRACK:  (1.1, 'dazed'),
+                TRAP_TRACK:  (1.1, ('trapped', 'dazed')),
             },
         }
 
@@ -479,6 +479,18 @@ class TownBattle(StateData.StateData):
                         if isinstance(throwTarget, int) and throwTarget >= 0:
                             incomingThrowTargets.add(throwTarget)
 
+                trapTargets = set()
+
+                for x in range(4):
+                    if battleIndices[x] == -1:
+                        continue
+
+                    if tracks[x] == TRAP_TRACK:
+                        trapTarget = targets[x]
+
+                        if isinstance(trapTarget, int) and trapTarget >= 0:
+                            trapTargets.add(trapTarget)
+
                 wetTargets = set()
 
                 for x in range(4):
@@ -529,7 +541,9 @@ class TownBattle(StateData.StateData):
                             if targetSuit and not targetSuit.hasSuitStatusEffect(condition):
                                 if currentTrack == DROP_TRACK:
                                     if otherTrack == THROW_TRACK:
-                                        dropThrowMultiplier = 1.1
+                                        dropThrowMultiplier = 1.2
+                                    elif otherTrack == TRAP_TRACK:
+                                        comboCount += 1
                                     else:
                                         comboCount += 1
                                 else:
@@ -537,7 +551,7 @@ class TownBattle(StateData.StateData):
 
                                 countedConditions.add(condition)
 
-                self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum, targetSuit, comboMultiplier, comboCount, dropThrowMultiplier, wetTargets, self.battle.activeSuits, incomingThrowTargets)
+                self.toonPanels[battleIndices[i]].setValues(battleIndices[i], tracks[i], levels[i], numTargets, target, self.localNum, targetSuit, comboMultiplier, comboCount, dropThrowMultiplier, wetTargets, self.battle.activeSuits, incomingThrowTargets, trapTargets)
 
     def chooseDefaultTarget(self):
         if self.track > -1:

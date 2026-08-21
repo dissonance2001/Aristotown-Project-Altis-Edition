@@ -30,6 +30,7 @@ class PacesetterCalculatorAI:
 
     def __getAbilityQueued(self, suitId):
         return self.calculator.getAbilityQueued(suitId)
+    
 
     def __appendToonConditionDamageAndRetaliation(
             self,
@@ -198,41 +199,6 @@ class PacesetterCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                         rushJobsQueued.add(suitId)
 
-
-        for suit in self.battle.activeSuits[:]:
-            if suit.dna.name != 'psetter' or suit.currHP <= 0:
-                continue
-            oldActiveSuits = self.battle.activeSuits[:]
-            oldLivingSuits = []
-            livingPositions = []
-            for index in xrange(len(oldActiveSuits)):
-                otherSuit = oldActiveSuits[index]
-                if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
-                    oldLivingSuits.append(otherSuit)
-                    livingPositions.append(index)
-            if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
-                continue
-            newLivingSuits = oldLivingSuits[:]
-            random.shuffle(newLivingSuits)
-            if newLivingSuits == oldLivingSuits:
-                newLivingSuits.reverse()
-            newActiveSuits = oldActiveSuits[:]
-            for index in xrange(len(livingPositions)):
-                newActiveSuits[livingPositions[index]] = newLivingSuits[index]
-            payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
-            attack = self.__getCheatAttack(suit.doId, {
-                'suitName': suit.dna.name,
-                'name': 'PacesetterCorporateRestructuring',
-                'animName': 'quick-jump',
-                'hp': payload,
-                'acc': 100,
-                'freq': 0,
-                'group': SuitBattleGlobals.ATK_TGT_GROUP
-            })
-            if attack[SUIT_ATK_COL]:
-                self.battle.suitAttacks.append(attack)
-            self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])
-
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
@@ -285,42 +251,41 @@ class PacesetterCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                             self.setSuitCondition(suitId, 'turn1', 1, -1, 'setBoth')
-                    if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'PacesetterEarlyOverclocked',
-                                                                    'animName': 'overclocked',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                                        'targetType': 'none'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if (self.battle.activeSuits[i].currHP <= 5100 and
-                            not self.suitHasCondition(suitId, 'overclocked') and
-                            suitId in rushJobsQueued):
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'PacesetterOverclocked',
-                                                                    'animName': 'overclocked',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                                        'targetType': 'none'})
-                        if attack[SUIT_ATK_COL]:
-                            self.setSuitCondition(suitId, 'battleSpeed', 6, -1, 'setBoth')
-                            self.battle.suitAttacks.append(attack)
-                    if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked') and not self.battle.activeSuits[i].currHP >= 12750:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                    'name': 'PacesetterComeOn',
-                                                                    'animName': 'come-on',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                                        'targetType': 'none'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
+
+
+        # for suit in self.battle.activeSuits[:]:
+        #     if suit.dna.name != 'psetter' or suit.currHP <= 0:
+        #         continue
+        #     oldActiveSuits = self.battle.activeSuits[:]
+        #     oldLivingSuits = []
+        #     livingPositions = []
+        #     for index in xrange(len(oldActiveSuits)):
+        #         otherSuit = oldActiveSuits[index]
+        #         if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
+        #             oldLivingSuits.append(otherSuit)
+        #             livingPositions.append(index)
+        #     if suit not in oldLivingSuits or len(oldLivingSuits) < 2:
+        #         continue
+        #     newLivingSuits = oldLivingSuits[:]
+        #     random.shuffle(newLivingSuits)
+        #     if newLivingSuits == oldLivingSuits:
+        #         newLivingSuits.reverse()
+        #     newActiveSuits = oldActiveSuits[:]
+        #     for index in xrange(len(livingPositions)):
+        #         newActiveSuits[livingPositions[index]] = newLivingSuits[index]
+        #     payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
+        #     attack = self.__getCheatAttack(suit.doId, {
+        #         'suitName': suit.dna.name,
+        #         'name': 'PacesetterCorporateRestructuring',
+        #         'animName': 'quick-jump',
+        #         'hp': payload,
+        #         'acc': 100,
+        #         'freq': 0,
+        #         'group': SuitBattleGlobals.ATK_TGT_GROUP
+        #     })
+        #     if attack[SUIT_ATK_COL]:
+        #         self.battle.suitAttacks.append(attack)
+        #     self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])
 
         for suit in self.battle.activeSuits[:]:
             if suit.dna.name != 'psetter' or suit.currHP <= 0:
@@ -355,4 +320,51 @@ class PacesetterCalculatorAI:
             })
             if attack[SUIT_ATK_COL]:
                 self.battle.suitAttacks.append(attack)
-            self.battle.queueSuitOrder([otherSuit.doId for otherSuit in newActiveSuits])
+
+                # Corporate Restructuring invalidates all existing trap positions.
+                self.calculator.clearAllSuitTraps()
+
+                self.battle.queueSuitOrder(
+                    [otherSuit.doId for otherSuit in newActiveSuits]
+                )
+
+        for i in xrange(len(self.battle.activeSuits)):
+            suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
+                if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'PacesetterEarlyOverclocked',
+                                                                'animName': 'overclocked',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                    'targetType': 'none'})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if (self.battle.activeSuits[i].currHP <= 5100 and
+                        not self.suitHasCondition(suitId, 'overclocked') and
+                        suitId in rushJobsQueued):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'PacesetterOverclocked',
+                                                                'animName': 'overclocked',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                    'targetType': 'none'})
+                    if attack[SUIT_ATK_COL]:
+                        self.setSuitCondition(suitId, 'battleSpeed', 6, -1, 'setBoth')
+                        self.battle.suitAttacks.append(attack)
+                if not self.getSuitConditionModifier(suitId, 'battleSpeed') >= 4 and not self.suitHasCondition(suitId, 'overclocked') and not self.battle.activeSuits[i].currHP >= 12750:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'PacesetterComeOn',
+                                                                'animName': 'come-on',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                    'targetType': 'none'})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+

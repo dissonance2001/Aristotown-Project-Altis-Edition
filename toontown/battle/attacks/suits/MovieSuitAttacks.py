@@ -2255,7 +2255,7 @@ def doGoldDust(attack):
         cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 3)
-        cloudPropTrack.append(LerpPosInterval(cloud, .25, pos=targetPoint))
+        cloudPropTrack.append(LerpPosInterval(cloud, .25, pos=targetPoint, blendType='easeInOut'))
         cloudPropTrack.append(Wait(partDelay))
         cloudPropTrack.append(
             ParticleInterval(snowEffect, cloud, worldRelative=0, duration=3.5, cleanup=True, softStopT=-1))
@@ -2786,7 +2786,7 @@ def doHostileTakeover(attack):
     targetPoint = __toonFacePoint(toon)
     targetPoint.setZ(targetPoint[2] + 3)
     cloudPropTrack.append(Wait(1.1))
-    cloudPropTrack.append(LerpPosInterval(cloud, 1, pos=targetPoint))
+    cloudPropTrack.append(LerpPosInterval(cloud, 1, pos=targetPoint, blendType='easeInOut'))
     cloudPropTrack.append(Wait(partDelay))
     cloudPropTrack.append(Parallel(Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=2.1, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=2.0, cleanup=True)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
     cloudPropTrack.append(Wait(0.4))
@@ -3816,7 +3816,7 @@ def doBrainStorm(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 3)
         cloudPropTrack.append(Wait(0.5))
-        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
         cloudPropTrack.append(Parallel(ParticleInterval(snowEffect, cloud, worldRelative=0, duration=3.2, cleanup=True, softStopT=-1), Sequence(Wait(0.5), ParticleInterval(snowEffect2, cloud, worldRelative=0, duration=2.7, cleanup=True, softStopT=-1)), Sequence(Wait(1.0), ParticleInterval(snowEffect3, cloud, worldRelative=0, duration=2.2, cleanup=True, softStopT=-1)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=2.5, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=1, duration=1.5))))
         cloudPropTrack.append(Wait(0.4))
         cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
@@ -4307,7 +4307,7 @@ def doReOrg(attack):
                 h = part.getH()
                 p = part.getP()
                 r = part.getR()
-                headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)), LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)), LerpHprInterval(part, 0.25, VBase3(360, 0, 180)), LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)), LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1), LerpHprInterval(part, 0.35, VBase3(-745, 0, 180), startHpr=VBase3(0, 0, 180)), LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)), LerpPosInterval(part, 0.15, Point3(x, y, z + 1)), LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2), LerpPosInterval(part, 0.1, Point3(x, y, z)), Wait(0.1)))
+                headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)), LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)), LerpHprInterval(part, 0.25, VBase3(360, 0, 180)), LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)), LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1), LerpHprInterval(part, 0.35, VBase3(-745, 0, 180), startHpr=VBase3(0, 0, 180)), LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)), LerpPosInterval(part, 0.15, Point3(x, y, z + 1)), LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2), LerpPosInterval(part, 0.1, Point3(x, y, z), blendType='easeInOut'), Wait(0.1)))
             
             allHeadTracks.append(headTracks)
 
@@ -4955,9 +4955,9 @@ def doEvilEye(attack):
         eyeAppearTrack = Sequence(Wait(suitHoldStart), Func(__showProp, eye, suit, posPoints[0], posPoints[1]), LerpScaleInterval(eye, suitHoldDuration, Point3(11, 11, 11)), Wait(eyeHoldDuration * 0.3), LerpHprInterval(eye, 0.02, Point3(205, 40, 0)), Wait(eyeHoldDuration * 0.7), Func(battle.movie.needRestoreRenderProp, eye), Func(eye.wrtReparentTo, battle))
         toonFace = __toonFacePoint(toon, parent=battle)
         if dmg > 0:
-            lerpInterval = LerpPosInterval(eye, moveDuration, toonFace)
+            lerpInterval = LerpPosInterval(eye, moveDuration, toonFace, blendType='easeInOut')
         else:
-            lerpInterval = LerpPosInterval(eye, moveDuration, Point3(toonFace.getX(), toonFace.getY() - 5, toonFace.getZ() - 2))
+            lerpInterval = LerpPosInterval(eye, moveDuration, Point3(toonFace.getX(), toonFace.getY() - 5, toonFace.getZ() - 2), blendType='easeInOut')
         eyeMoveTrack = lerpInterval
         eyeRollTrack = LerpHprInterval(eye, moveDuration, Point3(0, 0, -180))
         eyePropTrack = Sequence(eyeAppearTrack, Parallel(eyeMoveTrack, eyeRollTrack), Func(battle.movie.clearRenderProp, eye), Func(MovieUtil.removeProp, eye))
@@ -5214,7 +5214,7 @@ def doCloseTheLoop(attack):
     suitName = suit.getStyleName()
 
     def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), LerpFunctionInterval(effect.setAlphaScale, fromData=0, toData=1, duration=1.0), Wait(1.5), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+        partTrack = Sequence(Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), LerpFunctionInterval(effect.setAlphaScale, fromData=0, toData=1, duration=1.0), Wait(1.5), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
     partTrack1 = getPowerTrack(powerBar1)
@@ -5321,7 +5321,7 @@ def doFreezeAssets(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 3)
         cloudPropTrack.append(Wait(0.6))
-        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
         cloudPropTrack.append(ParticleInterval(snowEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1))
         cloudPropTrack.append(Wait(0.4))
         cloudPropTrack.append(LerpScaleInterval(cloud, 0.25, MovieUtil.PNT3_NEARZERO))
@@ -6153,7 +6153,7 @@ def doPowerTrip(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
 
     def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
     partTrack1 = getPowerTrack(powerBar1)
@@ -7101,7 +7101,7 @@ def doLiquidate(attack):
         targetPoint = __toonFacePoint(toon)
         targetPoint.setZ(targetPoint[2] + 3)
         cloudPropTrack.append(Wait(0.6))
-        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
         cloudPropTrack.append(Parallel(
             Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1)),
             Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)),
@@ -7152,7 +7152,7 @@ def doAcidRain(attack):
     targetPoint = __toonFacePoint(toon)
     targetPoint.setZ(targetPoint[2] + 3)
     cloudPropTrack.append(Wait(0.6))
-    cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint))
+    cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
     cloudPropTrack.append(Parallel(Sequence(ParticleInterval(rainEffect, cloud, worldRelative=0, duration=3.1, cleanup=True, softStopT=-1)), Sequence(Wait(0.1), ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)), Sequence(Wait(0.1), ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=3.0, cleanup=True, softStopT=-1)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.1), ActorInterval(cloud, 'stormcloud', startTime=1, duration=2.3))))
     cloudPropTrack.append(Wait(0.4))
     cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
@@ -7643,7 +7643,7 @@ def doSmokeAndMirrors(attack):
         particleTrack = Parallel()
         particleTrack.append(Sequence(Wait(2), Wait(i * .25), Func(particles[i].start, suit),
                                 Func(particles[i].wrtReparentTo, render), 
-                                LerpPosInterval(particles[i], 1.5, pos=hitPoint), 
+                                LerpPosInterval(particles[i], 1.5, pos=hitPoint, blendType='easeInOut'), 
                                 Func(particles[i].cleanup),
                                 Func(battle.movie.clearRestoreParticleEffect, particles[i])))
         particleTracks.append(particleTrack)
@@ -8210,7 +8210,7 @@ def doCloudStorage(attack):
     paperTrack.append(Func(paper.wrtReparentTo, battle))
     paperTrack.append(getThrowTrack(paper, hitPoint, duration=throwDuration, parent=battle))
     paperTrack.append(Wait(0.6))
-    paperTrack.append(LerpPosInterval(paper, 0.1, movePoint))
+    paperTrack.append(LerpPosInterval(paper, 0.1, movePoint, blendType='easeInOut'))
     spinTrack = Sequence(Wait(propDelay + suitDelay + 0.2), LerpHprInterval(paper, throwDuration, Point3(-360, 0, 0)))
     sizeTrack = Sequence(Wait(propDelay + suitDelay + 0.2), Parallel(LerpScaleInterval(paper, throwDuration, Point3(8, 8, 8)), Func(paper.loop, 'stormcloud')), LerpScaleInterval(paper, 1, MovieUtil.PNT3_NEARZERO))
     propTrack = Sequence(Parallel(paperTrack, sizeTrack), Func(MovieUtil.removeProp, paper), Func(battle.movie.clearRenderProp, paper))
@@ -8434,7 +8434,7 @@ def doGuiltTrip(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
 
     def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
     partTrack1 = getPowerTrack(powerBar1)

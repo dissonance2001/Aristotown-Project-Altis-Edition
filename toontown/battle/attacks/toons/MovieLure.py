@@ -155,6 +155,8 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
+                lureKB = max(0, int(target.get('lureKB', 0)))
+                suitTrack.append(Func(suit.setSuitStatusEffect, 'lureKB', modifier=lureKB))
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
                     if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
@@ -268,6 +270,8 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                 suitDelay = 2.6
                 suitMoveDuration = 0.8
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
+                lureKB = max(0, int(target.get('lureKB', 0)))
+                suitTrack.append(Func(suit.setSuitStatusEffect, 'lureKB', modifier=lureKB))
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
                     if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
@@ -382,6 +386,8 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
+                lureKB = max(0, int(target.get('lureKB', 0)))
+                suitTrack.append(Func(suit.setSuitStatusEffect, 'lureKB', modifier=lureKB))
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
                     if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
@@ -943,7 +949,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             result.append(Func(suit.setNeutralAnimationTrap))
-    result.append(Func(clearConsumedTrapState, suit))
+    #result.append(Func(clearConsumedTrapState, suit))
     return result
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
@@ -1185,6 +1191,8 @@ def __createSlideshowMultiTrack(lure, npcs = []):
             if kbbonus == 1 or hp > 0:
                 suitTrack = Sequence()
                 makeUnLured = Func(suit.clearSuitStatusEffect, 'lured')
+                lureKB = max(0, int(target.get('lureKB', 0)))
+                suitTrack.append(Func(suit.setSuitStatusEffect, 'lureKB', modifier=lureKB))
                 if toon.getTrackBonusLevel(LURE_TRACK) > 1:
                     if suit.getManager() and not getattr(suit, 'chainsawCutSlackTarget', False) and not trapProp:
                         makeLured = Func(suit.setSuitStatusEffect, 'lured', modifier=2, turns=2)
