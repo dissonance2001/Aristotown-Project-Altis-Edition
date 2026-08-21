@@ -83,6 +83,17 @@ class ToonBase(OTPBase.OTPBase):
         self.fpsText.setDepthWrite(False)
         self.fpsText.setDepthTest(False)
 
+        # Values used to keep fpsFrame sized to fit fpsText. Kept in sync
+        # with the pos/scale/frameSize passed in above.
+        self._fpsTextRightEdge = -0.015
+        self._fpsTextScale = 0.038
+        self._fpsFrameTop = 0.0
+        self._fpsFrameBottom = -0.042
+        self._fpsFrameRightPad = 0.02
+        self._fpsFrameLeftPad = 0.01
+        self._fpsFrameMinWidth = 0.18
+        self._resizeFpsFrame()
+
         self._fpsAccum = 0.0
         self._fpsFrames = 0
         self._fpsSamples = []
@@ -920,6 +931,15 @@ class ToonBase(OTPBase.OTPBase):
         else:
             self.fpsFrame.hide()
 
+    def _resizeFpsFrame(self):
+        textWidth = self.fpsText.textNode.calcWidth(self.fpsText.text) * self._fpsTextScale
+
+        frameRight = self._fpsTextRightEdge + self._fpsFrameRightPad
+        neededLeft = self._fpsTextRightEdge - textWidth - self._fpsFrameLeftPad
+        frameLeft = min(neededLeft, -self._fpsFrameMinWidth)
+
+        self.fpsFrame["frameSize"] = (frameLeft, frameRight, self._fpsFrameBottom, self._fpsFrameTop)
+
     def updateFPS(self, task):
         dt = globalClock.getDt()
         localAvatar = getattr(self, 'localAvatar', None)
@@ -967,10 +987,12 @@ class ToonBase(OTPBase.OTPBase):
                 self._fpsReady = True
                 self._fpsJustLoaded = False
                 self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+                self._resizeFpsFrame()
             elif not self._fpsReady and len(self._fpsSamples) >= 5:
                 self._displayedFPS = self._targetFPS
                 self._fpsReady = True
                 self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+                self._resizeFpsFrame()
 
         if self._fpsReady:
             difference = self._targetFPS - self._displayedFPS
@@ -985,6 +1007,7 @@ class ToonBase(OTPBase.OTPBase):
                 self._displayedFPS = self._targetFPS
 
             self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
+            self._resizeFpsFrame()
 
         return Task.cont
 
