@@ -3046,7 +3046,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setGumballBoosters(self, data):
         try:
-            boosters = six.moves.cPickle.loads(data) if isinstance(data, str) else data
+            boosters = six.moves.cPickle.loads(data) if isinstance(data, bytes) else data
         except:
             boosters = []
         from toontown.gumball import GumballGlobals
@@ -3062,7 +3062,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setClubBoosters(self, data):
         try:
-            boosters = six.moves.cPickle.loads(data) if isinstance(data, str) else data
+            boosters = six.moves.cPickle.loads(data) if isinstance(data, bytes) else data
         except:
             boosters = []
         from toontown.gumball import GumballGlobals
@@ -3095,7 +3095,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setGumballBounties(self, data):
         try:
-            bounties = six.moves.cPickle.loads(data) if isinstance(data, str) else data
+            bounties = six.moves.cPickle.loads(data) if isinstance(data, bytes) else data
             self.gumballBounties = dict(bounties or [])
         except:
             self.gumballBounties = {}

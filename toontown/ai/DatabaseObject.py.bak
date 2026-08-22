@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import types
 from panda3d.core import * 
 from toontown.ai.ToontownAIMsgTypes import *
@@ -5,6 +6,7 @@ from direct.directnotify.DirectNotifyGlobal import *
 from toontown.toon import DistributedToonAI
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
+from six.moves import range
 
 class DatabaseObject:
     notify = directNotify.newCategory('DatabaseObject')
@@ -87,7 +89,7 @@ class DatabaseObject:
             return
         count = di.getUint16()
         fields = []
-        for i in xrange(count):
+        for i in range(count):
             name = di.getString()
             fields.append(name)
 
@@ -96,11 +98,11 @@ class DatabaseObject:
             self.notify.warning('Failed to retrieve data for object %d' % self.doId)
         else:
             values = []
-            for i in xrange(count):
+            for i in range(count):
                 value = di.getString()
                 values.append(value)
 
-            for i in xrange(count):
+            for i in range(count):
                 found = di.getUint8()
                 if not found:
                     self.notify.info('field %s is not found' % fields[i])
@@ -124,7 +126,7 @@ class DatabaseObject:
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_SET_STORED_VALUES)
         dg.addUint32(self.doId)
         dg.addUint16(len(values))
-        items = values.items()
+        items = list(values.items())
         for field, value in items:
             dg.addString(field)
 
@@ -135,7 +137,7 @@ class DatabaseObject:
 
     def getDatabaseFields(self, dclass):
         fields = []
-        for i in xrange(dclass.getNumInheritedFields()):
+        for i in range(dclass.getNumInheritedFields()):
             dcf = dclass.getInheritedField(i)
             af = dcf.asAtomicField()
             if af:
@@ -202,5 +204,5 @@ class DatabaseObject:
         dg = PyDatagram()
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_DELETE_STORED_OBJECT)
         dg.addUint32(self.doId)
-        dg.addUint32(3735928559L)
+        dg.addUint32(3735928559)
         self.air.send(dg)

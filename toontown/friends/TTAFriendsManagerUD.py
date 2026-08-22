@@ -331,7 +331,7 @@ class TTAFriendsManagerUD(DistributedObjectGlobalUD):
         dgcleanup = self.dclass.aiFormatUpdate('goingOffline', self.doId, self.doId, self.air.ourChannel, [doId])
         dg = PyDatagram()
         dg.addServerHeader(channel, self.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
-        dg.addString(dgcleanup.getMessage())
+        dg.addBlob(dgcleanup.getMessage())
         self.air.send(dg)
 
         for friend in friendsList:

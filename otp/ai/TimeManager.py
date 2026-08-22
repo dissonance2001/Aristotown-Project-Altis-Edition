@@ -16,6 +16,24 @@ from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 from toontown.chat.ChatGlobals import *
 
+
+def _safeUtf8(value):
+    """Force arbitrary platform/hardware strings (which on Windows are often
+    raw Latin-1/CP1252 bytes, e.g. the (R)/(TM) glyphs in CPU brand strings)
+    into text that is guaranteed to be valid UTF-8. Panda3D's Python 3
+    DCPacker asserts ('Unable to decode UTF-8 string') instead of raising a
+    catchable Python exception, so this must be sanitized before it ever
+    reaches sendUpdate() for a dc 'string' field."""
+    if isinstance(value, bytes):
+        return value.decode('utf-8', 'replace')
+    if isinstance(value, str):
+        # Round-trip through UTF-8 so any lone surrogates / mis-decoded
+        # bytes masquerading as a str get replaced instead of crashing
+        # the C++ packer.
+        return value.encode('utf-8', 'replace').decode('utf-8', 'replace')
+    return _safeUtf8(str(value))
+
+
 class TimeManager(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('TimeManager')
     neverDisable = 1
@@ -156,6 +174,7 @@ class TimeManager(DistributedObject.DistributedObject):
 
     def setExceptionInfo(self):
         info = PythonUtil.describeException()
+        info = _safeUtf8(info)
         self.notify.info('Client exception: %s' % info)
         self.sendUpdate('setExceptionInfo', [info])
         self.cr.flush()
@@ -196,12 +215,14 @@ class TimeManager(DistributedObject.DistributedObject):
         cpuSpeed = (di.getMaximumCpuFrequency() * ooghz, di.getCurrentCpuFrequency() * ooghz)
         numCpuCores = di.getNumCpuCores()
         numLogicalCpus = di.getNumLogicalCpus()
-        info = '%s|%s|%d|%d|%s|%s cpus' % (di.getCpuVendorString(),
-         di.getCpuBrandString(),
+        info = '%s|%s|%d|%d|%s|%s cpus' % (_safeUtf8(di.getCpuVendorString()),
+         _safeUtf8(di.getCpuBrandString()),
          di.getCpuVersionInformation(),
          di.getCpuBrandIndex(),
          '%0.03f,%0.03f' % cpuSpeed,
          '%d,%d' % (numCpuCores, numLogicalCpus))
+        info = _safeUtf8(info)
+        cacheStatus = _safeUtf8(cacheStatus)
         self.notify.debug('setCpuInfo: "%s"' % info)
         self.sendUpdate('setCpuInfo', [info, cacheStatus])
 
@@ -253,6 +274,7 @@ class TimeManager(DistributedObject.DistributedObject):
             numCpuCores = di.getNumCpuCores()
             numLogicalCpus = di.getNumLogicalCpus()
             apiName = base.pipe.getInterfaceName()
+        apiName = _safeUtf8(apiName)
         self.d_setFrameRate(max(0, globalClock.getAverageFrameRate()), max(0, globalClock.calcFrameRateDeviation()), len(Avatar.ActiveAvatars), base.locationCode or '', max(0, time.time() - base.locationCodeChanged), max(0, globalClock.getRealTime()), base.gameOptionsCode, vendorId, deviceId, processMemory, pageFileUsage, physicalMemory, pageFaultCount, osInfo, cpuSpeed, numCpuCores, numLogicalCpus, apiName)
         return task.again
 

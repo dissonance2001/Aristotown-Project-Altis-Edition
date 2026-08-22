@@ -1,13 +1,16 @@
 """Undocumented Module"""
 
+from __future__ import absolute_import
+from __future__ import print_function
+from six.moves import range
 __all__ = ['DirectGuiBase', 'DirectGuiWidget']
 
 
 from pandac.PandaModules import *
-import DirectGuiGlobals as DGG
-from OnscreenText import *
-from OnscreenGeom import *
-from OnscreenImage import *
+from . import DirectGuiGlobals as DGG
+from .OnscreenText import *
+from .OnscreenGeom import *
+from .OnscreenImage import *
 from direct.directtools.DirectUtil import ROUND_TO
 from direct.showbase import DirectObject
 from direct.task import Task
@@ -260,8 +263,8 @@ class DirectGuiBase(DirectObject.DirectObject):
                     text = 'Unknown option "'
                 else:
                     text = 'Unknown options "'
-                raise KeyError, text + ', '.join(unusedOptions) + \
-                        '" for ' + myClass.__name__
+                raise KeyError(text + ', '.join(unusedOptions) + \
+                        '" for ' + myClass.__name__)
             # Can now call post init func
             self.postInitialiseFunc()
 
@@ -352,8 +355,8 @@ class DirectGuiBase(DirectObject.DirectObject):
                 # This is one of the options of this gui item.
                 # Check it is an initialisation option.
                 if optionInfo[option][FUNCTION] is DGG.INITOPT:
-                    print 'Cannot configure initialisation option "' \
-                          + option + '" for ' + self.__class__.__name__
+                    print('Cannot configure initialisation option "' \
+                          + option + '" for ' + self.__class__.__name__)
                     break
                     #raise KeyError, \
                 #           'Cannot configure initialisation option "' \
@@ -401,8 +404,8 @@ class DirectGuiBase(DirectObject.DirectObject):
 
                         if len(componentConfigFuncs) == 0 and \
                                 component not in self._dynamicGroups:
-                            raise KeyError, 'Unknown option "' + option + \
-                                    '" for ' + self.__class__.__name__
+                            raise KeyError('Unknown option "' + option + \
+                                    '" for ' + self.__class__.__name__)
 
                     # Add the configure method(s) (may be more than
                     # one if this is configuring a component group)
@@ -415,8 +418,8 @@ class DirectGuiBase(DirectObject.DirectObject):
                         indirectOptions[componentConfigFunc][componentOption] \
                                 = value
                 else:
-                    raise KeyError, 'Unknown option "' + option + \
-                            '" for ' + self.__class__.__name__
+                    raise KeyError('Unknown option "' + option + \
+                            '" for ' + self.__class__.__name__)
 
         # Call the configure methods for any components.
         # Pass in the dictionary of keyword/values created above
@@ -470,8 +473,8 @@ class DirectGuiBase(DirectObject.DirectObject):
                             return componentCget(componentOption)
 
         # Option not found
-        raise KeyError, 'Unknown option "' + option + \
-                '" for ' + self.__class__.__name__
+        raise KeyError('Unknown option "' + option + \
+                '" for ' + self.__class__.__name__)
 
     # Allow index style refererences
     __getitem__ = cget
@@ -483,8 +486,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         """
         # Check for invalid component name
         if '_' in componentName:
-            raise ValueError, \
-                    'Component name "%s" must not contain "_"' % componentName
+            raise ValueError('Component name "%s" must not contain "_"' % componentName)
 
         # Get construction keywords
         if hasattr(self, '_constructorKeywords'):
@@ -553,7 +555,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         if widgetClass is None:
             return None
         # Get arguments for widget constructor
-        if len(widgetArgs) == 1 and type(widgetArgs[0]) == types.TupleType:
+        if len(widgetArgs) == 1 and type(widgetArgs[0]) == tuple:
             # Arguments to the constructor can be specified as either
             # multiple trailing arguments to createcomponent() or as a
             # single tuple argument.
@@ -603,7 +605,7 @@ class DirectGuiBase(DirectObject.DirectObject):
 
     def components(self):
         # Return a list of all components.
-        names = self.__componentInfo.keys()
+        names = list(self.__componentInfo.keys())
         names.sort()
         return names
 
@@ -634,8 +636,8 @@ class DirectGuiBase(DirectObject.DirectObject):
         gEvent = event + self.guiId
         if base.config.GetBool('debug-directgui-msgs', False):
             from toontown.toonbase.ToonPythonUtil import StackTrace
-            print gEvent
-            print StackTrace()
+            print(gEvent)
+            print(StackTrace())
         self.accept(gEvent, command, extraArgs = extraArgs)
 
     def unbind(self, event):
@@ -955,7 +957,7 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
         # Convert None, and string arguments
         if relief == None:
             relief = PGFrameStyle.TNone
-        elif isinstance(relief, types.StringTypes):
+        elif isinstance(relief, (str,)):
             # Convert string to frame style int
             relief = DGG.FrameStyleDict[relief]
         # Set style
@@ -980,8 +982,8 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
     def setFrameColor(self):
         # this might be a single color or a list of colors
         colors = self['frameColor']
-        if type(colors[0]) == types.IntType or \
-           type(colors[0]) == types.FloatType:
+        if type(colors[0]) == int or \
+           type(colors[0]) == float:
             colors = (colors,)
         for i in range(self['numStates']):
             if i >= len(colors):
@@ -996,14 +998,14 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
         textures = self['frameTexture']
         if textures == None or \
            isinstance(textures, Texture) or \
-           isinstance(textures, types.StringTypes):
+           isinstance(textures, (str,)):
             textures = (textures,) * self['numStates']
         for i in range(self['numStates']):
             if i >= len(textures):
                 texture = textures[-1]
             else:
                 texture = textures[i]
-            if isinstance(texture, types.StringTypes):
+            if isinstance(texture, (str,)):
                 texture = loader.loadTexture(texture)
             if texture:
                 self.frameStyle[i].setTexture(texture)
@@ -1068,9 +1070,9 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
 
     def printConfig(self, indent = 0):
         space = ' ' * indent
-        print space + self.guiId, '-', self.__class__.__name__
-        print space + 'Pos:   ' + self.getPos().pPrintValues()
-        print space + 'Scale: ' + self.getScale().pPrintValues()
+        print(space + self.guiId, '-', self.__class__.__name__)
+        print(space + 'Pos:   ' + self.getPos().pPrintValues())
+        print(space + 'Scale: ' + self.getScale().pPrintValues())
         # Print out children info
         for child in self.getChildren():
             messenger.send(DGG.PRINT + child.getName(), [indent + 2])

@@ -99,7 +99,7 @@ class DatabaseObject:
         else:
             values = []
             for i in range(count):
-                value = di.getString()
+                value = di.getBlob()
                 values.append(value)
 
             for i in range(count):
@@ -131,7 +131,7 @@ class DatabaseObject:
             dg.addString(field)
 
         for field, value in items:
-            dg.addString(value.getMessage())
+            dg.addBlob(value.getMessage())
 
         self.air.send(dg)
 
@@ -185,7 +185,7 @@ class DatabaseObject:
             dg.addString(field)
 
         for value in values.values():
-            dg.addString(value.getMessage())
+            dg.addBlob(value.getMessage())
 
         self.air.send(dg)
 

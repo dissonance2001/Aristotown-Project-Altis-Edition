@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from toontown.dna import DNASuitPoint
 from toontown.dna import DNAError
 from toontown.dna import DNAGroup
@@ -24,6 +26,7 @@ import zlib
 from panda3d.core import *
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 from direct.distributed.PyDatagram import PyDatagram
+from six.moves import range
 
 COMPCODE_RETURN = 255
 
@@ -71,7 +74,7 @@ class DNALoader(object):
         self.loadDNAFileBase(store, _file)
 
         if not self.curComp:
-            print "DNA has no component, returning empty nodepath"
+            print("DNA has no component, returning empty nodepath")
             return NodePath()
 
         np = NodePath("dna")
@@ -178,7 +181,7 @@ class DNALoader(object):
                     new_comp = DNAVisGroup.DNAVisGroup("unnamed_comp")
                     self.curStore.storeDNAVisGroup(new_comp)
                 else:
-                    if comp_code in compClassTable.keys():
+                    if comp_code in list(compClassTable.keys()):
                         new_comp = compClassTable[comp_code]("unnamed_comp")
                     else:
                         raise DNAError.DNAError("Invalid comp code %s" % comp_code)
@@ -212,6 +215,11 @@ class DNALoader(object):
         dg = PyDatagram(dnaData)
         dgi = PyDatagramIterator(dg)
         header = dgi.extractBytes(5)
+        
+        # On décode les octets en texte pour Python 3 :
+        if isinstance(header, bytes):
+            header = header.decode('utf-8', 'ignore')
+
         if header != 'PDNA\n':
             raise DNAError.DNAError('Invalid header: %s' % (header))
 

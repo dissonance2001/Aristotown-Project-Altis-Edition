@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import string
 import random
 import functools
@@ -8,6 +9,7 @@ from direct.task import Task
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from otp.distributed.OtpDoGlobals import *
 from direct.fsm.FSM import FSM
+from six.moves import range
 
 
 class OperationFSM(FSM):
@@ -106,12 +108,12 @@ class RemoveFriendOperation(OperationFSM):
 
     def enterRetrieved(self, friendsList, trueFriendsList):
         newList = []
-        for i in xrange(len(friendsList)):
+        for i in range(len(friendsList)):
             if friendsList[i][0] == self.target:
                 continue
             newList.append(friendsList[i])
         newTFList = []
-        for i in xrange(len(trueFriendsList)):
+        for i in range(len(trueFriendsList)):
             if trueFriendsList[i] == self.target:
                 continue
             newTFList.append(trueFriendsList[i])
@@ -367,7 +369,7 @@ class TTAFriendsManagerUD(DistributedObjectGlobalUD):
     def routeTeleportQuery(self, toId):
         fromId = self.air.getAvatarIdFromSender()
 
-        if fromId in self.tpRequests.values():
+        if fromId in list(self.tpRequests.values()):
             return
         self.tpRequests[fromId] = toId
         self.sendUpdateToAvatarId(toId, 'teleportQuery', [fromId])
@@ -453,7 +455,7 @@ class TTAFriendsManagerUD(DistributedObjectGlobalUD):
         avId = self.air.getAvatarIdFromSender()
         allowed = string.lowercase + string.digits
         secret = ''
-        for i in xrange(6):
+        for i in range(6):
             secret += random.choice(allowed)
             if i == 2:
                 secret += ' '

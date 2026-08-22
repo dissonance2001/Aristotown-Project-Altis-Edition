@@ -7,6 +7,14 @@ six.moves.builtins.__dict__.update(__import__('panda3d.core', fromlist = ['*']).
 
 from direct.extensions_native import HTTPChannel_extensions
 
+# --- TEMPORARY DIAGNOSTIC PATCH -------------------------------------------
+# Logs every outgoing DC field write to dc_sendupdate_log.txt so we can find
+# the exact field causing the "Unable to decode UTF-8 string" crash.
+# Remove these two lines once the bug is found and fixed.
+from toontown.ai import dc_sendupdate_logger
+dc_sendupdate_logger.install()
+# ---------------------------------------------------------------------------
+
 
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 

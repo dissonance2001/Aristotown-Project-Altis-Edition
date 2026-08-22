@@ -511,7 +511,7 @@ class DirectGuiBase(DirectObject.DirectObject):
             # with corresponding keys beginning with *component*.
             alias = alias + '_'
             aliasLen = len(alias)
-            for option in keywords.keys():
+            for option in list(keywords.keys()):
                 if len(option) > aliasLen and option[:aliasLen] == alias:
                     newkey = component + '_' + option[aliasLen:]
                     keywords[newkey] = keywords[option]
@@ -543,7 +543,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         # specific than the group arguments, above; we walk through
         # the list afterwards so they will override.
 
-        for option in keywords.keys():
+        for option in list(keywords.keys()):
             if len(option) > nameLen and option[:nameLen] == componentPrefix:
                 # The keyword argument refers to this component, so add
                 # this to the options to use when constructing the widget.
