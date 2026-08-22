@@ -8,8 +8,8 @@ class GameShaderManager(NodeShaderManager):
     Implements shader effect fallbacks if necessary.
     """
 
-    def __init__(self, node, active: bool = True):
-        super().__init__(node=node, active=active)
+    def __init__(self, node, active=True):
+        super(GameShaderManager, self).__init__(node=node, active=active)
         self.cgShader = None
 
     def onShaderFail(self):

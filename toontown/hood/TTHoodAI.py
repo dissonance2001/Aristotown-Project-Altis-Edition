@@ -1,6 +1,7 @@
 from toontown.classicchars import DistributedMickeyAI
 from toontown.hood import HoodAI
 from toontown.safezone import ButterflyGlobals
+from toontown.instances.elevators.mercs.DistributedPrethinkerSigilvatorAI import DistributedPrethinkerSigilvatorAI
 from toontown.building import DistributedCountErfitElevatorAI
 from toontown.safezone import DistributedButterflyAI
 from toontown.safezone import DistributedTrolleyAI
@@ -20,6 +21,11 @@ class TTHoodAI(HoodAI.HoodAI):
         self.trolley = None
         self.classicChar = None
 
+        # Make Prethinker Sigilvator
+        self.pSigil = DistributedPrethinkerSigilvatorAI(self.air, self.air.instanceZoneManager,
+                                                        self.canonicalHoodId)
+        self.pSigil.generateWithRequired(self.zoneId)
+
         self.startup()
         self.countErfitElevator = None
 
@@ -33,7 +39,6 @@ class TTHoodAI(HoodAI.HoodAI):
                 self.createClassicChar()
         if simbase.config.GetBool('want-butterflies', True):
             self.createButterflies()
-                
         if simbase.air.wantHalloween:
             self.TrickOrTreatTargetManager = DistributedTrickOrTreatTargetAI.DistributedTrickOrTreatTargetAI(self.air)
             self.TrickOrTreatTargetManager.generateWithRequired(2649)

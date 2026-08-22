@@ -11405,6 +11405,9 @@ FADoorCodes_LB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon
 FADoorCodes_BB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Bossbot Disguise first!\n\nBuild your Bossbot Disguise out of parts from the Cog Golf Courses."
 FADoorCodes_BD_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Boardbot Disguise first!\n\nBuild your Boardbot Disguise out of parts from the Board Offices."
 FADoorCodes_TB_DISGUISE_INCOMPLETE = "You'll get caught going in there as a Toon! You need to complete your Techbot Disguise first!\n\nBuild your Techbot Disguise out of parts from the Board Offices."
+FADoorCodes_GAGSOLINE_LOCKED = "Hmm. This door seems to be locked. Perhaps Wacky Wally knows how to get in?"
+FADoorCodes_BLIZZARD_WIZARD_LOCKED = "This is odd... This knock knock door doesn't seem to be saying anything at all!"
+FADoorCodes_CLOTHING_SHOP_LOCKED = "The Clothing Shop is currently closed for renovations. Check back later!"
 KnockKnockJokes = [['Who', "Bad echo in here, isn't there?"],
  ['Dozen', 'Dozen anybody want to let me in?'],
  ['Freddie', 'Freddie or not, here I come.'],

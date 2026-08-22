@@ -9,6 +9,7 @@ from toontown.battle import DistributedBattleMinibossAI
 from toontown.suit import DistributedMinibossAI
 from otp.ai.AIBaseGlobal import *
 from toontown.battle import BattleExperienceAI
+from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
@@ -41,6 +42,9 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
 
     def delete(self):
         return DistributedBossCogAI.DistributedBossCogAI.delete(self)
+
+    def getContentSync(self):
+        return ContentSyncType.SBHQ
 
     def getHoodId(self):
         return ToontownGlobals.SellbotHQ

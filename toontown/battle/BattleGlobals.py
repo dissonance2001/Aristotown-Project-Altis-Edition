@@ -1,3 +1,13 @@
+from enum import IntEnum
+
+class BattleStateEnum(IntEnum):
+ INACTIVE = 1
+ JOINING = 2
+ JOINING_NOT_PENDING = 3
+ PENDING = 4
+ ACTIVE = 5
+ RUNNING = 6
+
 AccuracyBonuses = [0,
  20,
  40,

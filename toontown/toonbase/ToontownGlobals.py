@@ -163,6 +163,23 @@ BucketCosts = {20: 0,
  80: 6000,
  90: 7000,
  100: 8000}
+Gagsoline           = 2921
+ToonHall            = 2513
+SchoolHouse         = 2516
+Library             = 2518
+Gagsoline           = 2921
+OldeToontownDungeon = 7507
+RandomTunes         = 4507
+BlizzardWizard      = 3607
+TellTaleCarp        = 1511
+Pizzeria            = 3740
+AllStarSuites       = 9613
+ChainsawLogging     = 6837
+MajorPlayerLobby    = 4874
+LighthouseInt       = 1836
+
+DerrickManLobby     = 2921
+DOLAExtZone         = 1410  # remember, it's out on a street
 TTLocalizer.InterfaceFont = ContentPackCompatibility.resolveFontPath(
     TTLocalizer.InterfaceFont
 )
@@ -187,6 +204,11 @@ def getToonFont():
     if ToonFont == None:
         ToonFont = loader.loadFont(TTLocalizer.ToonFont, lineHeight = 1.0)
     return ToonFont
+
+def getNewReservedZoneId():
+    global ZoneIdrLastNum
+    ZoneIdrLastNum += 1
+    return ZoneIdrLastNum
 
 
 def getBuildingNametagFont():
@@ -260,6 +282,18 @@ ToontownCentralOld = 20000
 SchoolHouse = 2516
 OTGagShop = 7502
 Dungeon = 7507
+GagShops      = [1506, 2519, 3507, 4503, 5501, 6505, 7502, 9504]
+PetShops      = [2522, 1510, 3511, 4508, 5504, 9508, 6506, 7503]
+ClothingShops = [2521, 3509, 1508, 4506, 5505, 9506, 6503, 7506]
+ToonHeadquarters = [2520,
+                    1507, 1922,  # Second one is Anchor avenue HQ
+                    7501,
+                    5502,
+                    4504,
+                    3508,
+                    6508,
+                    9505]
+
 CountErfitLobby = 25200
 CountErfitBattle = 25201
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),

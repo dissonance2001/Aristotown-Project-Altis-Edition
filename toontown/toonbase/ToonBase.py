@@ -16,6 +16,8 @@ from toontown.toonbase.ToonPythonUtil import *
 from direct.showbase.Transitions import Transitions
 from direct.task import *
 from pandac.PandaModules import *
+from toontown.audio.ToontownAudio import ToontownAudio
+from toontown.audio.ToontownMusic import ToontownMusic
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownLoader
 from otp.otpbase import OTPBase
@@ -35,6 +37,9 @@ from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
 from toontown.discord import DiscordManager
+from toontown.shader.GameShaderManager import GameShaderManager
+from toontown.shader.NodeShader import NodeShader
+from toontown.shader.NodeShaderManager import NodeShaderManager
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
@@ -178,6 +183,8 @@ class ToonBase(OTPBase.OTPBase):
         self.camLens.setMinFov(settings['fieldofview']/(4./3.))
         self.camLens.setNearFar(ToontownGlobals.DefaultCameraNear, ToontownGlobals.DefaultCameraFar)
         self.musicManager.setVolume(settings.get("musicVol"))
+        self.audioMgr = ToontownAudio(self)  # Audio Effects manager
+        self.musicMgr = ToontownMusic()  # Music Manager
         for sfm in self.sfxManagerList:
             sfm.setVolume(settings.get("sfxVol"))
         self.sfxActive = settings.get("sfxVol") >= 0.0
@@ -212,6 +219,10 @@ class ToonBase(OTPBase.OTPBase):
         self.accept('f3', self.toggleGui)
         self.accept('panda3d-render-error', self.panda3dRenderError)
         oldLoader = self.loader
+        self.currHoliday = ConfigVariableString('current-seasonal-holiday', 'None').getValue()
+        self.wantHalloween = self.currHoliday == 'halloween'
+        self.wantChristmas = self.currHoliday == 'christmas'
+        self.wantAprilFools = self.currHoliday == 'april-fools'
         self.loader = ToontownLoader.ToontownLoader(self)
         __builtins__['loader'] = self.loader
         
@@ -600,6 +611,30 @@ class ToonBase(OTPBase.OTPBase):
         if len(self.screenshotStr):
             self.screenshotStr += '\n'
         self.screenshotStr += str
+
+    def initScreenShaderManagers(self):
+        self.renderNsm = GameShaderManager(node=render)
+        self.render2dNsm = NodeShaderManager(node=render2d)
+
+    def addGameShader(self, nodeShader, affect3d=True, affect2d=False):
+        if affect3d:
+            self.renderNsm.addShader(nodeShader)
+        if affect2d:
+            self.render2dNsm.addShader(nodeShader)
+        return nodeShader
+
+    def removeGameShader(self, nodeShader):
+        self.renderNsm.removeShader(nodeShader)
+        self.render2dNsm.removeShader(nodeShader)
+        return nodeShader
+
+    def clearGameShaders(self):
+        self.renderNsm.clearShaders()
+        self.render2dNsm.clearShaders()
+
+    def updateGameShaders(self):
+        self.renderNsm.updateShaders()
+        self.render2dNsm.updateShaders()
 
     def initNametagGlobals(self):
         NametagGlobals.setMe(base.cam)

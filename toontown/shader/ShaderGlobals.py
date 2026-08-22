@@ -4,15 +4,15 @@ from toontown.shader.ShaderEnums import ShaderType
 import sys
 
 
-class __ShaderDefinitions:
+class __ShaderDefinitions(object):
     """
     The container class for shader definitions.
     """
 
-    def __init__(self, definitions: dict):
+    def __init__(self, definitions):
         self.definitions = definitions
 
-    def getShaderDef(self, shaderType: ShaderType = ShaderType.Passthrough) -> ShaderDefinition:
+    def getShaderDef(self, shaderType=ShaderType.Passthrough):
         return self.definitions.get(shaderType, self.definitions.get(ShaderType.Passthrough))
 
 

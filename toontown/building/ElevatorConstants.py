@@ -1,4 +1,5 @@
 from pandac.PandaModules import *
+from enum import IntEnum
 
 ELEVATOR_NORMAL = 0
 ELEVATOR_VP = 1
@@ -18,6 +19,9 @@ ELEVATOR_CBM = 11
 ELEVATOR_PACE = 12
 ELEVATOR_ERFIT = 13
 ELEVATOR_SIGIL = 45
+ELEVATOR_DERRICK_MAN = 14
+ELEVATOR_INSTANCE_MERC = 16
+ELEVATOR_INSTANCE_MERC_SIGIL = 17
 REJECT_NOREASON = 0
 REJECT_SHUFFLE = 1
 REJECT_MINLAFF = 2
@@ -28,6 +32,20 @@ REJECT_NOT_YET_AVAILABLE = 6
 REJECT_BOARDINGPARTY = 7
 REJECT_NOTPAID = 8
 MAX_GROUP_BOARDING_TIME = 6.0
+
+class ElevatorResponse(IntEnum):
+    """Reasons for rejecting a Toon from an elevator."""
+    Success           = 1  # no reject, we're good
+    Shuffle           = 2
+    MinLaff           = 3
+    MinLaffSigil      = 4
+    NoSeat            = 5
+    Promotion         = 6
+    BlockedRoom       = 7  # room must be defeated first
+    NotYetAvailable   = 8  # blocked by the devs
+    BoardingParty     = 9  # reject came from boarding party
+    MissingQuest      = 10
+    OtherElevatorBusy = 11
 
 if __dev__:
     try:
@@ -87,6 +105,30 @@ ELEVATOR_ERCLAIM: {
         'width': 3.5,
         'countdown': bboard.get('elevatorCountdown', 15.0),
         'sfxVolume': 1.0,
+        'collRadius': 5
+    },
+ELEVATOR_INSTANCE_MERC: {
+        'openTime': 2.0,
+        'closeTime': 2.0,
+        'width': 3.5,
+        'countdown': bboard.get('elevatorCountdown', 15.0),
+        'sfxVolume': 1.0,
+        'collRadius': 5
+    },
+ELEVATOR_INSTANCE_MERC_SIGIL: {
+        'openTime': 2.0,
+        'closeTime': 2.0,
+        'width': 3.5,
+        'countdown': bboard.get('elevatorCountdown', 15.0),
+        'sfxVolume': 1.0,
+        'collRadius': 3.6,
+    },
+ELEVATOR_DERRICK_MAN: {
+        'openTime': 2.0,
+        'closeTime': 2.0,
+        'width': 3.5,
+        'countdown': bboard.get('elevatorCountdown', 15.0),
+        'sfxVolume': 15.0,
         'collRadius': 5
     },
  ELEVATOR_STAGE: {'openTime': 4.0,

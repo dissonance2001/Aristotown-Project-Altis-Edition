@@ -1,0 +1,7 @@
+{
+    "instructions": "A custom LUT (Lookup Table) will activate when their corresponding music.json key is played! If you want the LUT to affect all GUI elements, wrap it in []s. If you would like for a music.json key to not modify the currently applied LUT, give it the string 'pass'.",
+
+    "example_lut": "phase_3/luts/def_lut.png",
+    "example_lut_with_ui": ["phase_3/luts/def_lut.png"],
+    "example_lut_dont_change": "pass"
+}

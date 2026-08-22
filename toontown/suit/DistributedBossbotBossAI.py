@@ -14,6 +14,7 @@ from toontown.building import SuitBuildingGlobals
 from toontown.coghq import DistributedBanquetTableAI
 from toontown.coghq import DistributedFoodBeltAI
 from toontown.coghq import DistributedGolfSpotAI
+from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.suit import DistributedBossCogAI
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA

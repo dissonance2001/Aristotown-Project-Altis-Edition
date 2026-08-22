@@ -4,11 +4,6 @@ from toontown.building import DistributedDoorAI
 from toontown.building import DistributedElevatorExtAI
 from toontown.building import DistributedKnockKnockDoorAI
 from toontown.building import DistributedSuitInteriorAI
-from toontown.building import DistributedToonHallInteriorAI
-from toontown.building import DistributedPaceLobbyInteriorAI
-from toontown.building import DistributedPizzeriaInteriorAI
-from toontown.building import DistributedDungeonInteriorAI
-from toontown.building import DistributedChainsawLobbyInteriorAI
 from toontown.building import DistributedToonInteriorAI
 from toontown.building import DoorTypes
 from toontown.building import FADoorCodes
@@ -465,20 +460,19 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def enterToon(self):
         self.d_setState('toon')
         (exteriorZoneId, interiorZoneId) = self.getExteriorAndInteriorZoneId()
-        if simbase.config.GetBool('want-new-toonhall', 1) and ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.ToonHall:
-            self.interior = DistributedToonHallInteriorAI.DistributedToonHallInteriorAI(self.block, self.air, interiorZoneId, self)
-        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PacesetterLobby:
-            self.interior = DistributedPaceLobbyInteriorAI.DistributedPaceLobbyInteriorAI(self.block, self.air, interiorZoneId, self)
-        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.PizzariaInterior:(
-            self.interior) = DistributedPizzeriaInteriorAI.DistributedPizzeriaInteriorAI(self.block, self.air, interiorZoneId, self)
-        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.Dungeon:(
-            self.interior) = DistributedDungeonInteriorAI.DistributedDungeonInteriorAI(self.block, self.air, interiorZoneId, self)
-        elif ZoneUtil.getCanonicalZoneId(interiorZoneId) == ToontownGlobals.ChainsawLobby:
-            self.interior = DistributedChainsawLobbyInteriorAI.DistributedChainsawLobbyInteriorAI(self.block, self.air, interiorZoneId, self)
 
+        # Use the custom interiors dictionary when available
+        from toontown.building.interior.ToonInteriorClassesAI import CustomToonInteriors
+        canonical = ZoneUtil.getCanonicalZoneId(interiorZoneId)
+
+        if canonical in CustomToonInteriors:
+            self.interior = CustomToonInteriors[canonical](self.block, self.air, interiorZoneId, self)
         else:
-            self.interior = DistributedToonInteriorAI.DistributedToonInteriorAI(self.block, self.air, interiorZoneId, self)
+            self.interior = DistributedToonInteriorAI.DistributedToonInteriorAI(
+                self.block, self.air, interiorZoneId, self)
+
         self.interior.generateWithRequired(interiorZoneId)
+
         door = self.createExteriorDoor()
         insideDoor = DistributedDoorAI.DistributedDoorAI(self.air, self.block, DoorTypes.INT_STANDARD)
         door.setOtherDoor(insideDoor)

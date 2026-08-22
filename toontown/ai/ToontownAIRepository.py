@@ -189,6 +189,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         # Shared manager for temporary custom/Kudos boss instances.
         # It is server-side only; the boss object itself is the distributed DO.
         self.instanceZoneManager = InstanceZoneManagerAI(self)
+        self.instanceZoneManager.generateWithRequired(OTP_ZONE_ID_MANAGEMENT)
         self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         self.clubManager = self.generateGlobalObject(OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
 

@@ -25,6 +25,7 @@ from otp.avatar.Avatar import teleportNotify
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLocalizer
 from toontown.battle import SuitBattleGlobals
+from toontown.shader.NodeShaderManager import NodeShaderManager
 from toontown.chat.ChatGlobals import *
 from toontown.distributed import DelayDelete
 from toontown.effects import DustCloud
@@ -789,6 +790,9 @@ class Toon(Avatar.Avatar, ToonHead):
         self.emoteTrack = None
         self.emote = None
         self.stunTrack = None
+
+        self.nsm = NodeShaderManager(node=self.getGeomNode())
+
         self.__bookActors = []
         self.__holeActors = []
         self.holeClipPath = None

@@ -206,6 +206,8 @@ class Hood(StateData.StateData):
         status = self.quietZoneStateData.getRequestStatus()
         teleportDebug(status, 'handleLeftQuietZone, status=%s' % status)
         teleportDebug(status, 'requesting %s' % status['loader'])
+        print("STATUS:", status)
+        print("FSM states:", self.fsm.getStates())  # already a list
         self.fsm.request(status['loader'], [status])
 
     def handleQuietZoneDone(self):

@@ -608,17 +608,12 @@ from toontown.building import DistributedHQInterior/AI
 from toontown.building import DistributedGagshopInterior/AI
 from toontown.building import DistributedPetshopInterior/AI
 from toontown.building import DistributedKartShopInterior/AI
-from toontown.building import DistributedSchoolHouseInterior/AI
-from toontown.building import DistributedLighthouseInterior/AI
-from toontown.building import DistributedDerrickmanInterior/AI
 from toontown.building import DistributedChainsawInterior/AI
 from toontown.building import DistributedChainsawLobbyInterior/AI
-from toontown.building import DistributedMajorPlayerInterior/AI
 from toontown.building import DistributedPizzeriaInterior/AI
-from toontown.building import DistributedPaceLobbyInterior/AI
-from toontown.building import DistributedDungeonInterior/AI
 from toontown.building import DistributedDoor/AI
 from toontown.building import DistributedAnimDoor/AI
+from toontown.building.interior.ToonInteriorClasses/AI import DistributedPacesetterLobby/AI
 from toontown.building import DistributedLightSwitch/AI
 from toontown.estate import DistributedHouseDoor/AI
 from toontown.coghq import DistributedCogHQDoor/AI
@@ -655,6 +650,12 @@ from toontown.building import DistributedSigilvator/AI
 from toontown.building import DistributedHighRollerSigilvator/AI
 from toontown.building import DistributedChainsawSigilvator/AI
 from toontown.instances.elevators.mercs import DistributedPlutocratSigilvator/AI
+from toontown.instances.elevators.mercs import DistributedPrethinkerSigilvator/AI
+from toontown.instances.elevators import DistributedInstanceElevator/AI
+from toontown.building import DistributedToonInterior/AI
+from toontown.instances import InstanceZoneManager/AI
+from toontown.instances.elevators.mercs import DistributedInstanceMercElevator/AI
+from toontown.instances.elevators.mercs import DistributedInstanceMercSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
 from toontown.building import DistributedCountErfitElevator/AI
@@ -668,7 +669,6 @@ from toontown.suit import DistributedPlutocratBoss/AI
 from toontown.instances import DistributedCutsceneSkipButton/AI
 from toontown.building import DistributedBBElevator/AI
 from toontown.building import DistributedMultislackerElevator/AI
-from toontown.building import DistributedPaceElevator/AI
 from toontown.building import DistributedCMElevator/AI
 from toontown.building import DistributedDirectorsElevator/AI
 from toontown.building import DistributedBoardingParty/AI
@@ -1673,6 +1673,7 @@ dclass DistributedBattle : DistributedBattleBase {
 dclass DistributedBattleBldg : DistributedBattleBase {
 };
 
+
 dclass DistributedBattleTutorial : DistributedBattle {
 };
 
@@ -2372,23 +2373,13 @@ dclass DistributedToonHallInterior : DistributedToonInterior {
 dclass DistributedPizzeriaInterior : DistributedToonInterior {
 };
 
-dclass DistributedPaceLobbyInterior : DistributedToonInterior {
+
+dclass DistributedPacesetterLobby : DistributedToonInterior {
+  doBellSound() broadcast clsend;
 };
 
-dclass DistributedSchoolHouseInterior : DistributedToonInterior {
-};
 
-dclass DistributedDerrickmanInterior : DistributedToonInterior {
-};
 
-dclass DistributedLighthouseInterior : DistributedToonInterior {
-};
-
-dclass DistributedDungeonInterior : DistributedToonInterior {
-};
-
-dclass DistributedMajorPlayerInterior : DistributedToonInterior {
-};
 
 dclass DistributedChainsawInterior : DistributedToonInterior {
 };
@@ -2829,11 +2820,30 @@ dclass DistributedHighRollerSigilvator : DistributedSigilvator {
   setEntranceId(uint8) required broadcast ram;
 };
 
+dclass DistributedInstanceElevator : DistributedElevatorExt {
+  setBossOfficeZone(uint32);
+  setBossOfficeZoneForce(uint32);
+};
+
+dclass DistributedInstanceMercElevator : DistributedInstanceElevator {
+  setMercDefEnum(uint8) required broadcast ram;
+};
+
+dclass DistributedInstanceMercSigilvator : DistributedInstanceMercElevator {
+};
+
 dclass DistributedChainsawSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedPlutocratSigilvator : DistributedSigilvator {
 };
+
+dclass DistributedPrethinkerSigilvator : DistributedSigilvator {
+};
+
+dclass InstanceZoneManager : DistributedObject {
+};
+
 
 dclass DistributedVPElevator : DistributedBossElevator {
 };
@@ -2860,9 +2870,6 @@ dclass DistributedMultislackerElevator : DistributedBossElevator {
 };
 
 dclass DistributedCMElevator : DistributedBossElevator {
-};
-
-dclass DistributedPaceElevator : DistributedBossElevator {
 };
 
 dclass DistributedDirectorsElevator : DistributedBossElevator {

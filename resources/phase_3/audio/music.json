@@ -425,6 +425,7 @@
     "erfit_run_to_elevator_cutscene": "phase_13/audio/bgm/april_toons/erfit/ctsc_postErfitSkelecogs.ogg",
     "count_erfit_cutscene": "phase_13/audio/bgm/april_toons/erfit/ctsc_countErfit.ogg",
     "erfit_battle_two": "phase_13/audio/bgm/april_toons/erfit/encntr_countErfit.ogg",
+    "erfit_supreme": "phase_13/audio/bgm/april_toons/erfit/GOLDENFLEX.ogg",
     "erfit_victory": "phase_13/audio/bgm/april_toons/erfit/erfit_vict.ogg",
     "bd_elevator": "phase_13/audio/bgm/april_toons/coo/BD_elevator.ogg",
     "new_years_fireworks": "phase_13/audio/bgm/new_years_music.ogg",
@@ -513,7 +514,6 @@
 	"highroller_end": "phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_end.ogg",
     "highroller_victory": "phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_ara_hroller_int_victory.ogg",
 	"highroller_lowballer": "phase_13/audio/bgm/april_toons/highroller/cc_s_bgm_gen_lowBaller.ogg",
-	"directors_cuts": "phase_13/audio/bgm/directorscuts/cc_s_bgm_promo_directors_cuts.ogg",
     "error": "phase_3/audio/bgm/error.ogg",
     "null_example": "None",
 	"None": "None"

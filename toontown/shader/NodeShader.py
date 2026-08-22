@@ -3,17 +3,17 @@ from toontown.shader.ShaderEnums import ShaderType
 from toontown.shader.ShaderGlobals import ShaderDefinitions
 
 
-class NodeShader:
+class NodeShader(object):
     """
     NodeShader is a container class for shader data for nodes.
     They can be applied directly to a node by using a NodeShaderManager.
     """
 
     def __init__(self,
-                 shaderType: ShaderType,
-                 priority: int = 0,
-                 uniformOverrides: dict = None,
-                 useCondition: callable = None):
+                 shaderType,
+                 priority=0,
+                 uniformOverrides=None,
+                 useCondition=None):
         """
         Initializes a NodeShader.
 
@@ -30,31 +30,31 @@ class NodeShader:
     Setters
     """
 
-    def setUniform(self, uniform: str, value):
+    def setUniform(self, uniform, value):
         self.uniformOverrides[uniform] = value
 
-    def updateUniforms(self, uniformDict: dict):
+    def updateUniforms(self, uniformDict):
         self.uniformOverrides.update(uniformDict)
 
     """
     Getters
     """
 
-    def getShaderDefinition(self) -> ShaderDefinition:
+    def getShaderDefinition(self):
         return ShaderDefinitions.getShaderDef(self.getShaderType())
 
-    def getShaderType(self) -> ShaderType:
+    def getShaderType(self):
         return self.shaderType
 
-    def getPriority(self) -> int:
+    def getPriority(self):
         return self.priority
 
-    def getUniformOverrides(self) -> dict:
+    def getUniformOverrides(self):
         if self.uniformOverrides:
             return self.uniformOverrides
         return {}
 
-    def canUse(self) -> bool:
+    def canUse(self):
         if self.useCondition is None:
             return True
         return self.useCondition()

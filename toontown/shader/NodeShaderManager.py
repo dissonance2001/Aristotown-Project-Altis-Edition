@@ -13,7 +13,7 @@ class NodeShaderManager(DirectObject):
     A class to help manage shaders on a given node.
     """
 
-    def __init__(self, node, active: bool = True):
+    def __init__(self, node, active=True):
         self.node = node
         self.active = active
         self.nodeShaders = []
@@ -37,7 +37,7 @@ class NodeShaderManager(DirectObject):
     Various external settings
     """
 
-    def setActive(self, mode: bool = None):
+    def setActive(self, mode=None):
         """
         Sets the active level of the NSM.
         """
@@ -52,7 +52,7 @@ class NodeShaderManager(DirectObject):
     Shader interface
     """
 
-    def addShader(self, nodeShader: NodeShader = None, update: bool = True) -> NodeShader:
+    def addShader(self, nodeShader=None, update=True):
         """
         Adds a shader to the NSM.
         """
@@ -61,7 +61,7 @@ class NodeShaderManager(DirectObject):
             self.updateShaders()
         return nodeShader
 
-    def removeShader(self, nodeShader: NodeShader = None, update: bool = True) -> bool:
+    def removeShader(self, nodeShader=None, update=True):
         """
         Removes a shader from the NSM.
         """
@@ -83,7 +83,7 @@ class NodeShaderManager(DirectObject):
         # Shader could not be found.
         return False
 
-    def clearShaders(self) -> None:
+    def clearShaders(self):
         """
         Clears all shaders from the NSM.
         """
@@ -95,13 +95,13 @@ class NodeShaderManager(DirectObject):
     Node manipulation
     """
 
-    def updateShaders(self) -> None:
+    def updateShaders(self):
         """
         Updates the currently active shaders on the node.
         """
         if not self.node:
             # There is no node. This is a problem.
-            return self.notify.warning(f'NodeShaderManager tried to update, but the node didn\'t exist?')
+            return self.notify.warning('NodeShaderManager tried to update, but the node didn\'t exist?')
 
         if not canUseShaders():
             # Don't bother doing anything -- we can't use shaders.
@@ -123,7 +123,13 @@ class NodeShaderManager(DirectObject):
             shaderDefinition = nodeShader.getShaderDefinition()
             shader = shaderDefinition.loadShader()
             if shader is None:
-                return self.notify.warning(f'Shader for {self.node} could not be loaded. Vertex: {shaderDefinition.getVertexFilename()} | Fragment: {shaderDefinition.getFragmentFilename()}')
+                return self.notify.warning(
+                    'Shader for {0} could not be loaded. Vertex: {1} | Fragment: {2}'.format(
+                        self.node,
+                        shaderDefinition.getVertexFilename(),
+                        shaderDefinition.getFragmentFilename()
+                    )
+                )
             self.node.setShader(shader)
 
             # Set the uniform inputs on the shader.
@@ -141,7 +147,7 @@ class NodeShaderManager(DirectObject):
         for uniform, value in self.uniforms.items():
             self.node.setShaderInput(uniform, value if not callable(value) else value())
 
-    def setUniformOverrides(self, overrides: dict, update: bool = True):
+    def setUniformOverrides(self, overrides, update=True):
         # Updates the uniform overrides.
         self.uniformOverrides = overrides
         if update:
@@ -167,10 +173,10 @@ class NodeShaderManager(DirectObject):
     """
 
     def lerpUniformInterval(self,
-                            uniform: str, duration: float,
-                            fromData: float = 0.0,
-                            toData: float = 1.0,
-                            blendType: str = 'easeInOut') -> LerpFunctionInterval:
+                            uniform, duration,
+                            fromData=0.0,
+                            toData=1.0,
+                            blendType='easeInOut'):
         def updateInput(t):
             if hasattr(self, 'node'):
                 self.node.setShaderInput(uniform, t)
@@ -179,4 +185,3 @@ class NodeShaderManager(DirectObject):
             fromData=fromData, toData=toData,
             blendType=blendType,
         )
-

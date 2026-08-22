@@ -1,30 +1,30 @@
-class ShaderDefinition:
+class ShaderDefinition(object):
     """
     The definitions of a shader.
     """
 
     def __init__(self,
-                 fragmentFilename: str = 'passthrough',
-                 vertexFilename: str = 'passthrough',
-                 uniformDefinitions: dict = None) -> None:
+                 fragmentFilename='passthrough',
+                 vertexFilename='passthrough',
+                 uniformDefinitions=None):
         if uniformDefinitions is None:
             uniformDefinitions = {}
         self.fragmentFilename = fragmentFilename
         self.vertexFilename = vertexFilename
         self.uniformDefinitions = uniformDefinitions
 
-    def loadShader(self) -> Shader:
+    def loadShader(self):
         return Shader.load(
             Shader.SLGLSL,
-            f'phase_3/shaders/{self.getVertexFilename()}.vert',
-            f'phase_3/shaders/{self.getFragmentFilename()}.frag',
+            'phase_3/shaders/{0}.vert'.format(self.getVertexFilename()),
+            'phase_3/shaders/{0}.frag'.format(self.getFragmentFilename()),
         )
 
-    def getFragmentFilename(self) -> str:
+    def getFragmentFilename(self):
         return self.fragmentFilename
 
-    def getVertexFilename(self) -> str:
+    def getVertexFilename(self):
         return self.vertexFilename
 
-    def getUniformDefinitions(self) -> dict:
+    def getUniformDefinitions(self):
         return self.uniformDefinitions

@@ -137,8 +137,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         self.bldgRequest = None
         self.bldg = buildingList[0]
         if not self.bldg:
-            self.notify.error('setBldgDoId: elevator %d cannot find bldg %d!' % (self.doId, self.bldgDoId))
-            return
+            self.notify.warning('setBldgDoId: elevator %d cannot find bldg %d!' % (self.doId, self.bldgDoId))
         self.setupElevator()
         return
 

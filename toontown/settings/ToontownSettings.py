@@ -24,6 +24,7 @@ DefaultSettings = {
 'language': 'English',
 'aspect-ratio': 0,
 'streamerMode': False,
+'want-shaders': True,
 'lastNametag': {},
 'lastEffect': {},
 'lastRod': {},

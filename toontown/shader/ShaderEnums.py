@@ -1,35 +1,32 @@
-from enum import IntEnum, auto
-
-
-class ShaderType(IntEnum):
+class ShaderType:
     """
     A class for defining the different types of shaders.
     """
-    Passthrough = auto()
-    Wobble      = auto()
-    LowPoly     = auto()
+    Passthrough = 1
+    Wobble      = 2
+    LowPoly     = 3
 
-    Waterfall = auto()
-    Ripple    = auto()
+    Waterfall = 4
+    Ripple    = 5
 
-    LUT_Default    = auto()
-    LUT_Augusta    = auto()
-    LUT_Bloomy     = auto()
-    LUT_Dark       = auto()
-    LUT_Dramatic   = auto()
-    LUT_Contrast   = auto()
-    LUT_Monochrome = auto()
-    LUT_StrongMono = auto()
-    LUT_Moody      = auto()
-    LUT_Pop        = auto()
-    LUT_RedBlack   = auto()
-    LUT_Sunset     = auto()
+    LUT_Default    = 6
+    LUT_Augusta    = 7
+    LUT_Bloomy     = 8
+    LUT_Dark       = 9
+    LUT_Dramatic   = 10
+    LUT_Contrast   = 11
+    LUT_Monochrome = 12
+    LUT_StrongMono = 13
+    LUT_Moody      = 14
+    LUT_Pop        = 15
+    LUT_RedBlack   = 16
+    LUT_Sunset     = 17
 
-    LUT_Monochromacy  = auto()
-    LUT_Deuteranomaly = auto()
-    LUT_Protanomaly   = auto()
-    LUT_Tritanomaly   = auto()
-    LUT_BlueCone      = auto()
-    LUT_Deuteranopia  = auto()
-    LUT_Protanopia    = auto()
-    LUT_Tritanopia    = auto()
+    LUT_Monochromacy  = 18
+    LUT_Deuteranomaly = 19
+    LUT_Protanomaly   = 20
+    LUT_Tritanomaly   = 21
+    LUT_BlueCone      = 22
+    LUT_Deuteranopia  = 23
+    LUT_Protanopia    = 24
+    LUT_Tritanopia    = 25
