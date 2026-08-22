@@ -157,13 +157,22 @@ class LocalAccountDB(AccountDB):
             callback(response)
             return response
         else:
-            # We have an account already, let's return what we've got:
-            response = {
-                'success': True,
-                'userId': cookie,
-                'accountId': int(self.dbm[str(cookie)]),
-                'accessLevel': 500
-            }
+            try:
+                # We have an account already, let's return what we've got:
+                response = {
+                    'success': True,
+                    'userId': cookie,
+                    'accountId': int(self.dbm[str(cookie)]),
+                    'accessLevel': int(response['powerlevel'])
+                }
+            except:
+                # We have an account already, but power level isn't an int. Let's give them 150
+                response = {
+                    'success': True,
+                    'userId': cookie,
+                    'accountId': int(self.dbm[str(cookie)]),
+                    'accessLevel': int(500)
+                }
 
             callback(response)
             return response
@@ -313,7 +322,7 @@ class LoginAccountFSM(OperationFSM):
         self.csm.air.send(datagram)
 
         # Subscribe to any "staff" channels that the account has access to.
-        access = self.account.get(b'ACCESS_LEVEL', self.account.get('ACCESS_LEVEL', 500))
+        access = self.account.get('ACCESS_LEVEL', 500)
         if access >= 200:
             # Subscribe to the moderator channel.
             dg = PyDatagram()
@@ -637,13 +646,10 @@ class DeleteAvatarFSM(GetAvatarsFSM):
         index = self.avList.index(self.avId)
         self.avList[index] = 0
 
-        oldAvSet = self.account.get(b'ACCOUNT_AV_SET', self.account.get('ACCOUNT_AV_SET', []))
-        oldAvSetDel = self.account.get(b'ACCOUNT_AV_SET_DEL', self.account.get('ACCOUNT_AV_SET_DEL', []))
-
-        avsDeleted = list(oldAvSetDel)
+        avsDeleted = list(self.account.get('ACCOUNT_AV_SET_DEL', []))
         avsDeleted.append([self.avId, int(time.time())])
 
-        estateId = self.account.get(b'ESTATE_ID', self.account.get('ESTATE_ID', 0))
+        estateId = self.account.get('ESTATE_ID', 0)
 
         if estateId != 0:
             # This assumes that the house already exists, but it shouldn't
@@ -662,8 +668,8 @@ class DeleteAvatarFSM(GetAvatarsFSM):
             self.csm.air.dclassesByName['AccountUD'],
             {'ACCOUNT_AV_SET': self.avList,
              'ACCOUNT_AV_SET_DEL': avsDeleted},
-            {'ACCOUNT_AV_SET': oldAvSet,
-             'ACCOUNT_AV_SET_DEL': oldAvSetDel},
+            {'ACCOUNT_AV_SET': self.account['ACCOUNT_AV_SET'],
+             'ACCOUNT_AV_SET_DEL': self.account['ACCOUNT_AV_SET_DEL']},
             self.__handleDelete)
         self.csm.accountDB.removeNameRequest(self.avId)
 
@@ -892,12 +898,12 @@ class LoadAvatarFSM(AvatarOperationFSM):
         datagramCleanup.addUint32(self.avId)
         datagram = PyDatagram()
         datagram.addServerHeader( channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
-        datagram.addBlob(datagramCleanup.getMessage())
+        datagram.addString(datagramCleanup.getMessage())
         self.csm.air.send(datagram)
 
         # Activate the avatar on the DBSS:
         self.csm.air.sendActivate(self.avId, 0, 0, self.csm.air.dclassesByName['DistributedToonUD'], {'setAdminAccess': \
-            [self.account.get(b'ACCESS_LEVEL', self.account.get('ACCESS_LEVEL', 500))]})
+            [self.account.get('ACCESS_LEVEL', 500)]})
 
         # Next, add them to the avatar channel:
         datagram = PyDatagram()

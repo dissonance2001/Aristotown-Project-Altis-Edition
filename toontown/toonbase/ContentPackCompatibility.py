@@ -344,7 +344,7 @@ class ContentPackCompatibility:
         if height % 2:
             return None
 
-        halfHeight = height / 2
+        halfHeight = height // 2
 
         altisAtlas3 = PNMImage(
             width,
