@@ -1,18 +1,31 @@
+from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
-from direct.showbase.DirectObject import DirectObject
 
 from toontown.instances import InstanceGlobals
 
 
-class InstanceZoneManagerAI(DirectObject):
+class InstanceZoneManagerAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('InstanceZoneManagerAI')
 
     def __init__(self, air):
-        DirectObject.__init__(self)
+        DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.air = air
         self.instanceTypes = {}
         self.activeInstances = {}
         self._registerBuiltins()
+
+    def generate(self):
+        DistributedObjectAI.DistributedObjectAI.generate(self)
+        self.notify.debug('generate')
+
+    def delete(self):
+        self.notify.debug('delete')
+        for zoneId in list(self.activeInstances.keys()):
+            self.destroyInstance(zoneId)
+        self.ignoreAll()
+        self.instanceTypes = {}
+        self.air = None
+        DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def _registerBuiltins(self):
         from toontown.suit import DistributedHighRollerBossAI
@@ -143,10 +156,3 @@ class InstanceZoneManagerAI(DirectObject):
             'Destroyed %s instance in dynamic zone %s' %
             (current.get('instanceId'), zoneId))
         self.air.deallocateZone(zoneId)
-
-    def delete(self):
-        for zoneId in list(self.activeInstances.keys()):
-            self.destroyInstance(zoneId)
-        self.ignoreAll()
-        self.instanceTypes = {}
-        self.air = None

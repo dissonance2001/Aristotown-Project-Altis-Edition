@@ -23,7 +23,7 @@ place_model "phase_4/models/modules/library" [
 	store_node [ "toon_landmark" "toon_landmark_TT_library" "" ]
         ]
 
-place_model "phase_4/models/modules/school_house" [
+place_model "areas/toontown_central/models/cc_m_ara_sch_ext" [
 	store_node [ "toon_landmark" "toon_landmark_TT_school_house" "" ]
         ]
 
