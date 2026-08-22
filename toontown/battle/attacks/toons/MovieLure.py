@@ -24,16 +24,23 @@ def safeWrtReparentTo(nodePath, parent):
 
 def clearConsumedTrapState(suit):
     trapProp = getattr(suit, 'battleTrapProp', None)
+
     if trapProp:
         try:
             if not trapProp.isEmpty():
                 MovieUtil.removeProp(trapProp)
         except:
             pass
+
     suit.battleTrapProp = None
     suit.battleTrap = NO_TRAP
     suit.battleTrapIsFresh = 0
-    suit.clearSuitStatusEffect('trapped')
+
+    if suit.hasSuitStatusEffect('trapped'):
+        suit.clearSuitStatusEffect('trapped')
+
+    if suit.hasSuitStatusEffect('trapDamage'):
+        suit.clearSuitStatusEffect('trapDamage')
 
 
 def doLures(lures):
@@ -217,7 +224,6 @@ def __createFishingPoleMultiTrack(lure, dollarName, npcs = []):
 
                 if trapProp:
                     suitTrack.append(Func(safeWrtReparentTo, trapProp, suit))
-                    suit.battleTrapProp = trapProp
                 suitTrack.append(Func(suit.setDizzy, 1))
                 suitTrack.append(Func(suit.loopSyncedLuredAnimations))
                 suitTrack.append(Func(battle.lureSuit, suit))
@@ -551,9 +557,14 @@ def showDazeRounds(suit):
 
 def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0):
     if trapProp is None or trapProp.isEmpty():
-        return Func(suit.loop, 'lured')
+        return Sequence(
+            Func(clearConsumedTrapState, suit),
+            Func(suit.loop, 'lured')
+        )
+
     toon = lure['toon']
     safeWrtReparentTo(trapProp, battle)
+
     trapTrack = ToontownBattleGlobals.TRAP_TRACK
     trapLevel = suit.battleTrap
     trapTrackNames = ToontownBattleGlobals.AvProps[trapTrack]
@@ -949,7 +960,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             result.append(Func(suit.setNeutralAnimationTrap))
-    #result.append(Func(clearConsumedTrapState, suit))
+    result.append(Func(clearConsumedTrapState, suit))
     return result
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
@@ -1029,7 +1040,6 @@ def lerpSuit(suit, delay, duration, reachPos, battle, trapProp, blendType='noBle
     track.append(LerpPosInterval(suit, duration, reachPos, other=battle, blendType=blendType))
     if trapProp:
         track.append(Func(safeWrtReparentTo, trapProp, suit))
-        suit.battleTrapProp = trapProp
     return track
 
 

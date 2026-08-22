@@ -588,7 +588,6 @@ class VideographerCalculatorAI:
                     self.battle.suitAttacks.append(attack)
 
                     # Corporate Restructuring invalidates all existing trap positions.
-                    self.calculator.clearAllSuitTraps()
 
                     self.battle.queueSuitOrder(
                         [otherSuit.doId for otherSuit in newActiveSuits]

@@ -621,33 +621,68 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         index = 0
         oldSuitTraps = self.suitTraps
         self.suitTraps = suitTraps
+
         for s in suitTraps:
             trapid = int(s)
+
             if trapid == 9:
-                trapid = -1
+                trapid = NO_TRAP
+
             suit = self.suits[index]
             index += 1
-            if suit != None:
-                if str(suit.doId) in suitsLured and trapid != NO_TRAP:
-                    self.notify.debug('clearing stale trap from lured suit=%d' % suit.doId)
-                    self.removeTrap(suit)
-                    trapid = NO_TRAP
-                    suitTraps[index - 1] = '9'
-                if (trapid == NO_TRAP or trapid != suit.battleTrap) and suit.battleTrapProp != None:
-                    self.notify.debug('569 calling self.removeTrap, suit=%d' % suit.doId)
-                    self.removeTrap(suit)
-                if trapid == NO_TRAP and suit.battleTrapProp == None:
-                    suit.battleTrap = NO_TRAP
-                    suit.battleTrapIsFresh = 0
-                if trapid != NO_TRAP and suit.battleTrapProp == None:
+
+            if suit is None:
+                continue
+
+            if trapid == NO_TRAP:
+                # Server is authoritative: this Cog has NO trap.
+                trapProp = getattr(suit, 'battleTrapProp', None)
+
+                if trapProp is not None:
+                    self.notify.debug(
+                        'authoritative trap cleanup for suit=%d' % suit.doId
+                    )
+
+                    try:
+                        self.removeTrap(suit)
+                    except:
+                        try:
+                            if not trapProp.isEmpty():
+                                MovieUtil.removeProp(trapProp)
+                        except:
+                            pass
+
+                # Always wipe every remaining piece of local trap state.
+                suit.battleTrapProp = None
+                suit.battleTrap = NO_TRAP
+                suit.battleTrapIsFresh = 0
+
+                if suit.hasSuitStatusEffect('trapped'):
+                    suit.clearSuitStatusEffect('trapped')
+
+                if suit.hasSuitStatusEffect('trapDamage'):
+                    suit.clearSuitStatusEffect('trapDamage')
+
+            else:
+                # Server says this Cog DOES have a trap.
+
+                # Wrong trap currently attached: remove the old visual first.
+                if suit.battleTrap != trapid:
+                    if getattr(suit, 'battleTrapProp', None) is not None:
+                        self.removeTrap(suit)
+
+                # Recreate the prop only if one is genuinely missing.
+                if getattr(suit, 'battleTrapProp', None) is None:
                     if self.fsm.getCurrentState().getName() != 'PlayMovie':
                         self.loadTrap(suit, trapid)
+
 
         if len(oldSuitTraps) != len(self.suitTraps):
             self.needAdjustTownBattle = 1
         else:
             for i in range(len(oldSuitTraps)):
-                if oldSuitTraps[i] == '9' and self.suitTraps[i] != '9' or oldSuitTraps[i] != '9' and self.suitTraps[i] == '9':
+                if ((oldSuitTraps[i] == '9' and self.suitTraps[i] != '9') or
+                        (oldSuitTraps[i] != '9' and self.suitTraps[i] == '9')):
                     self.needAdjustTownBattle = 1
                     break
 

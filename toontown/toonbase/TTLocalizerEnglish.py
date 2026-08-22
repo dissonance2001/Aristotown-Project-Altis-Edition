@@ -10073,7 +10073,7 @@ SuitAttackTaunts = {
                             "I don't allow damage in my final cut.",
                             "You can't hurt what I can edit out."],
 'FilmmakerWrappedInTheFilm': ["You're not getting out of this shot.",
-                            "This scene requir3es your full participation.",
+                            "This scene requires your full participation.",
                             "You can't run from your own scene!"],
 'FilmmakerBudgetCuts': ["This note wasn't in your script.",
                             "You'll pay for that performance.",

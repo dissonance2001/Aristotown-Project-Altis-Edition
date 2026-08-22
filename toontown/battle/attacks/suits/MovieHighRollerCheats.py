@@ -931,7 +931,7 @@ def doPlacesEveryone(attack):
     if sorted(oldIndexes) != range(len(oldActiveSuits)):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
-    suitTrack = Sequence(Func(clearCorporateRestructuringTraps, battle), Func(suit.stop), getSuitAnimTrack(attack))
+    suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
     suitTracks = Parallel()
     for otherSuit in oldActiveSuits:
         pendingDeath = False
