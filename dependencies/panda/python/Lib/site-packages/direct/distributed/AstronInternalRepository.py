@@ -10,6 +10,7 @@ from .PyDatagramIterator import PyDatagramIterator
 from .AstronDatabaseInterface import AstronDatabaseInterface
 from .NetMessenger import NetMessenger
 import collections
+import socket
 
 # Helper functions for logging output:
 def msgpack_length(dg, length, fix, maxfix, tag8, tag16, tag32):
@@ -651,13 +652,12 @@ class AstronInternalRepository(ConnectionRepository):
             self.eventSocket = None
             return
 
-        address = SocketAddress()
-        if not address.setHost(host, port):
-            self.notify.warning('Invalid Event Log host specified: %s:%s' % (host, port))
+        try:
+            self.eventSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.eventSocket.connect((host, port))
+        except OSError as e:
+            self.notify.warning('Invalid Event Log host specified: %s:%s (%s)' % (host, port, e))
             self.eventSocket = None
-        else:
-            self.eventSocket = SocketUDPOutgoing()
-            self.eventSocket.InitToAddress(address)
 
     def writeServerEvent(self, logtype, *args, **kwargs):
         """
@@ -683,7 +683,7 @@ class AstronInternalRepository(ConnectionRepository):
 
         dg = PyDatagram()
         msgpack_encode(dg, log)
-        self.eventSocket.Send(dg.getMessage().decode('latin-1'))
+        self.eventSocket.send(dg.getMessage())
 
     def setAI(self, doId, aiChannel):
         """

@@ -35,6 +35,7 @@ class ToontownInternalRepository(AstronInternalRepository):
 
     def handleDatagram(self, di):
         msgType = self.getMsgType()
+        print('[DEBUG] handleDatagram msgType=%r' % (msgType,))
 
         if msgType == self.__messenger.msgType:
             self.__messenger.handle(msgType, di)
@@ -46,6 +47,7 @@ class ToontownInternalRepository(AstronInternalRepository):
             port = di.getUint16()
             localIp = di.getString()
             localPort = di.getUint16()
+            print('[DEBUG] Received CLIENTAGENT_GET_NETWORK_ADDRESS_RESP: context=%r remoteIp=%r port=%r localIp=%r localPort=%r self.csm=%r' % (context, remoteIp, port, localIp, localPort, getattr(self, 'csm', 'NO-CSM-ATTR')))
             if self.csm:
                 self.csm.completeLogin(context, remoteIp)
 
