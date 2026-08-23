@@ -18,7 +18,7 @@ class ToontownDistrictAI(DistributedDistrictAI):
 
         # We want to handle shard status queries so that a ShardStatusReceiver
         # being created after we're generated will know where we're at:
-        self.air.netMessenger.accept('queryShardStatus', self, self.handleShardStatusQuery)
+        self.accept('queryShardStatus', self.handleShardStatusQuery)
 
         # Send a shard status update with the information we have:
         status = {
@@ -26,11 +26,11 @@ class ToontownDistrictAI(DistributedDistrictAI):
             'name': self.name,
             'created': int(time.time())
         }
-        self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])
+        self.air.sendNetEvent('shardStatus', [self.air.ourChannel, status])
 
         # Add a post remove shard status update in-case we go down:
         status = {'available': False}
-        datagram = self.air.netMessenger.prepare('shardStatus', [self.air.ourChannel, status])
+        datagram = self.air.prepareNetEvent('shardStatus', [self.air.ourChannel, status])
         self.air.addPostRemove(datagram)
 
     def handleShardStatusQuery(self):
@@ -40,7 +40,7 @@ class ToontownDistrictAI(DistributedDistrictAI):
             'name': self.name,
             'created': int(time.time())
         }
-        self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])
+        self.air.sendNetEvent('shardStatus', [self.air.ourChannel, status])
 
     def allowAHNNLog(self, ahnnLog):
         self.ahnnLog = ahnnLog
@@ -62,12 +62,12 @@ class ToontownDistrictAI(DistributedDistrictAI):
         DistributedDistrictAI.setName(self, name)
 
         # Send a shard status update containing our name:
-        self.air.netMessenger.send('shardStatus', [self.air.ourChannel, {'name': \
+        self.air.sendNetEvent('shardStatus', [self.air.ourChannel, {'name': \
             name}])
 
     def setAvailable(self, available):
         DistributedDistrictAI.setAvailable(self, available)
 
         # Send a shard status update containing our availability:
-        self.air.netMessenger.send('shardStatus', [self.air.ourChannel, {'available': \
+        self.air.sendNetEvent('shardStatus', [self.air.ourChannel, {'available': \
             bool(available)}])

@@ -51,7 +51,12 @@ class BaseRepresenter(object):
             #self.represented_objects[alias_key] = None
             self.object_keeper.append(data)
         data_types = type(data).__mro__
-        if type(data) is types.InstanceType:
+        # types.InstanceType only existed for Python 2 old-style classes
+        # ("class Foo:" without inheriting object). Python 3 has no such
+        # concept -- every class is new-style -- so this branch is simply
+        # unreachable there. Guard it instead of referencing the removed
+        # attribute directly.
+        if getattr(types, 'InstanceType', None) is not None and type(data) is types.InstanceType:
             data_types = self.get_classobj_bases(data.__class__)+list(data_types)
         if data_types[0] in self.yaml_representers:
             node = self.yaml_representers[data_types[0]](self, data)
@@ -476,8 +481,13 @@ Representer.add_representer(types.BuiltinFunctionType,
 Representer.add_representer(types.ModuleType,
         Representer.represent_module)
 
-Representer.add_multi_representer(types.InstanceType,
-        Representer.represent_instance)
+# Only register the old-style-class ("classic instance") representer on
+# Python 2, where types.InstanceType exists. On Python 3 every object
+# already goes through the plain `object` multi-representer below, so
+# this registration would do nothing useful even if it didn't crash.
+if getattr(types, 'InstanceType', None) is not None:
+    Representer.add_multi_representer(types.InstanceType,
+            Representer.represent_instance)
 
 Representer.add_multi_representer(object,
         Representer.represent_object)

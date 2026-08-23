@@ -27,7 +27,7 @@ def _getCameraToggleLock():
     return bool(getCameraSetting('cam-toggle-lock', False))
 
 
-class CameraMode(DirectObject.DirectObject, FSM):
+class CameraMode(FSM, DirectObject.DirectObject):
     MouseControl = WindowProperties()
     MouseControl.setMouseMode(WindowProperties.MRelative)
     HideCursor = WindowProperties()

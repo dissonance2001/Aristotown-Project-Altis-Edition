@@ -16,11 +16,6 @@ class ToontownInternalRepository(AstronInternalRepository):
             self, baseChannel, serverId=serverId, dcFileNames=dcFileNames,
             dcSuffix=dcSuffix, connectMethod=connectMethod, threadedNet=threadedNet)
 
-        self.netMessenger.register(0, 'shardStatus')
-        self.netMessenger.register(1, 'queryShardStatus')
-        self.netMessenger.register(2, 'startInvasion')
-        self.netMessenger.register(3, 'stopInvasion')
-        
         self.__messenger = ToontownNetMessengerAI(self)
 
     def getAvatarIdFromSender(self):
@@ -34,6 +29,9 @@ class ToontownInternalRepository(AstronInternalRepository):
         
     def sendNetEvent(self, message, sentArgs=[], channels=None):
         self.__messenger.send(message, sentArgs, channels)
+
+    def prepareNetEvent(self, message, sentArgs=[], channels=None):
+        return self.__messenger.prepare(message, sentArgs, channels)
 
     def handleDatagram(self, di):
         msgType = self.getMsgType()

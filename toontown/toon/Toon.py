@@ -695,12 +695,7 @@ def loadDialog():
     global DeerDialogueArray
     for file in deerDialogueFiles:
         DeerDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
-		
-    beaverDialogFiles = ('AV_beaver_short', 'AV_beaver_med', 'AV_beaver_long', 'AV_beaver_question', 'AV_beaver_exclaim', 'AV_beaver_howl', 'AV_beaver_indifferent')
-    global BeaverDialogueArray
-    for file in beaverDialogFiles:
-        BeaverDialogueArray.append(base.loader.loadSfx(loadPath + file + '.ogg'))
-		
+	
     gatorDialogFiles = ('AV_gator_short', 'AV_gator_med', 'AV_gator_long', 'AV_gator_question', 'AV_gator_exclaim', 'AV_gator_howl', 'AV_gator_indifferent')
     global AlligatorDialogueArray
     for file in gatorDialogFiles:

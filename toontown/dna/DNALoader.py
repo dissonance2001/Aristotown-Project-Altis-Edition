@@ -212,7 +212,7 @@ class DNALoader(object):
         dg = PyDatagram(dnaData)
         dgi = PyDatagramIterator(dg)
         header = dgi.extractBytes(5)
-        if header != 'PDNA\n':
+        if header != b'PDNA\n':
             raise DNAError.DNAError('Invalid header: %s' % (header))
 
         compressed = dgi.getBool()

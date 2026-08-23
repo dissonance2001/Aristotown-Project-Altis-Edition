@@ -29,7 +29,7 @@ class ToontownNetMessengerAI:
         dg.addChannel(self.msgType)
         dg.addUint16(self.msgType)
         dg.addString(message)
-        dg.addString(zlib.compress(pickle.dumps(sentArgs)))
+        dg.addBlob(zlib.compress(pickle.dumps(sentArgs)))
         return dg
         
     def send(self, message, sentArgs=[], channels=None):
@@ -39,6 +39,6 @@ class ToontownNetMessengerAI:
         
     def handle(self, msgType, di):
         message = di.getString()
-        data = zlib.decompress(di.getString())
+        data = zlib.decompress(di.getBlob())
         sentArgs = pickle.loads(data)
         messenger.send(message, sentArgs)

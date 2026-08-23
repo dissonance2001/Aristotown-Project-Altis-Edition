@@ -42,11 +42,19 @@ from otp.ai.AIBaseGlobal import *
 from toontown.uberdog.ToontownUberRepository import ToontownUberRepository
 simbase.air = ToontownUberRepository(config.GetInt('air-base-channel', 400000000),
                                      config.GetInt('air-stateserver', 4002))
-builtins.eval = __runfunc
-builtins.compile = __runfunc
-builtins.execfile = __runfunc
-builtins.globals = __runfunc
-builtins.locals = __runfunc
+# Temporary hack patch — DISABLED for testing.
+# This was globally shadowing builtins.eval/compile/execfile/globals/locals
+# with a function that raises SystemExit. Panda3D/engine internals (and
+# Python's own library code) call globals()/locals() routinely for
+# introspection, so the moment run() below touched engine internals that
+# called one of these, it raised SystemExit silently (no traceback, exit
+# code 0) — matching the exact symptom of the UberDOG dying right after
+# "Connected successfully." with no error output.
+# builtins.eval = __runfunc
+# builtins.compile = __runfunc
+# builtins.execfile = __runfunc
+# builtins.globals = __runfunc
+# builtins.locals = __runfunc
 host = config.GetString('air-connect', '127.0.0.1')
 port = 7100
 if ':' in host:

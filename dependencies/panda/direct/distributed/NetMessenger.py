@@ -76,24 +76,25 @@ class NetMessenger(Messenger):
         messageType=MESSAGE_STRINGS.get(message, 0)
         datagram.addUint16(messageType)
         if messageType:
-            datagram.addString(str(dumps(sentArgs)))
+            datagram.addBlob(dumps(sentArgs))
         else:
-            datagram.addString(str(dumps((message, sentArgs))))
+            datagram.addBlob(dumps((message, sentArgs)))
         self.air.send(datagram)
 
-    def handle(self, pickleData):
+    def handle(self, msgType, di):
         """
-        Send pickleData from the net on the local netMessenger.
-        The internal data in pickleData should have a tuple of
-        (messageString, sendArgsList).
+        Handle a NetMessenger-style message read off the wire.
+        msgType is the message-type field already parsed by the caller;
+        di is the PyDatagramIterator positioned at the pickled payload.
+        The payload should be either just sentArgs (if msgType names a
+        pre-registered message) or a (messageString, sentArgsList) tuple.
         """
         assert self.notify.debugCall()
-        messageType=self.air.getMsgType()
-        if messageType:
-            message=MESSAGE_TYPES[messageType-1]
-            sentArgs=loads(pickleData)
+        if msgType:
+            message=MESSAGE_TYPES[msgType-1]
+            sentArgs=loads(di.getBlob())
         else:
-            (message, sentArgs) = loads(pickleData)
+            (message, sentArgs) = loads(di.getBlob())
         Messenger.send(self, message, sentArgs=sentArgs)
 
 

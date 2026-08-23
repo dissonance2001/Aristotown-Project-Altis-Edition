@@ -10,7 +10,8 @@ from toontown.battle import BattleBase
 from toontown.coghq import CogDisguiseGlobals
 from toontown.suit import BossCutsceneSkipAI
 from panda3d.core import *
-import SuitDNA, random
+from toontown.suit import SuitDNA
+import random
 AllBossCogs = []
 
 class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):

@@ -189,7 +189,7 @@ class ConnectionRepository(
                         packer.endPack()
 
                         unpacker = DCPacker()
-                        unpacker.setUnpackData(packer.getString())
+                        unpacker.setUnpackData(packer.getBytes())
                         unpacker.beginUnpack(field)
                         value = unpacker.unpackObject()
                         unpacker.endUnpack()

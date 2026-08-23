@@ -1013,7 +1013,11 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         del self.pendingLogins[context]
 
         # Time to check this login to see if its authentic
-        digest_maker = hmac.new(self.key.encode('utf-8'))
+        # Python 3 requires an explicit digestmod (Python 2 silently
+        # defaulted to MD5). Must match ClientServicesManager.performLogin()
+        # on the client exactly, or every login will fail authentication
+        # instead of crashing outright -- a much harder bug to spot.
+        digest_maker = hmac.new(self.key.encode('utf-8'), digestmod=hashlib.md5)
         digest_maker.update(backupCookie.encode('utf-8'))
 
         if not hmac.compare_digest(digest_maker.hexdigest(), authKey):

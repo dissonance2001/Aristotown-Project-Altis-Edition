@@ -1,4 +1,5 @@
 import hmac
+import hashlib
 import http.client
 import urllib.request, urllib.parse, urllib.error
 import json
@@ -20,8 +21,14 @@ class ClientServicesManager(DistributedObjectGlobal):
         self.doneEvent = doneEvent
         cookie = base.launcher.getUsername()
         key = 'oa1qt8fwc0r750gkse3fgt6k3scyhzptudk422u5'
-        digest_maker = hmac.new(key)
-        digest_maker.update(cookie)
+        # Python 3's hmac requires a bytes key and an explicit digestmod
+        # (Python 2 silently defaulted to MD5 when digestmod was omitted).
+        # MD5 is used here specifically to match that old implicit default,
+        # since ClientServicesManagerUD.completeLogin() on the server hashes
+        # this same shared key/cookie pair and must produce an identical
+        # digest for login authentication to succeed.
+        digest_maker = hmac.new(key.encode('utf-8'), digestmod=hashlib.md5)
+        digest_maker.update(cookie.encode('utf-8'))
         import uuid
         cookie = cookie + ("#%s" % uuid.getnode())
         del uuid
