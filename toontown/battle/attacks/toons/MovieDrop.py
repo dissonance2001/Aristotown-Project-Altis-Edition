@@ -63,7 +63,7 @@ def doDrops(drops):
                 else:
                     suitDropsDict[suitId] = [(drop, target)]
 
-    suitDrops = suitDropsDict.values()
+    suitDrops = list(suitDropsDict.values())
 
     def compFunc(a, b):
         if len(a) > len(b):

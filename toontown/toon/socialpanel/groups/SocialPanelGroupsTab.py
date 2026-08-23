@@ -343,7 +343,7 @@ class SocialPanelGroupsTab(DirectFrame):
         except:
             toonDClass = None
         try:
-            for avId, obj in base.cr.doId2do.items():
+            for avId, obj in list(base.cr.doId2do.items()):
                 if int(avId) == int(base.localAvatar.doId) or not hasattr(obj, 'getName'):
                     continue
                 isToon = False
@@ -378,7 +378,7 @@ class SocialPanelGroupsTab(DirectFrame):
                 entries.setdefault(avId, str(handle.getName()))
         group = getattr(self.mgr, 'group', None) or {}
         memberIds = set(int(member.get('avId', 0)) for member in group.get('members', []))
-        return [(avId, name) for avId, name in entries.items() if avId not in memberIds]
+        return [(avId, name) for avId, name in list(entries.items()) if avId not in memberIds]
 
     def _stateUpdated(self, group):
         if group and self.pendingCreateInvites:

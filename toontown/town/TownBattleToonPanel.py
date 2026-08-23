@@ -1230,7 +1230,7 @@ class TownBattleToonPanel(DirectFrame):
 
         self.hoveredToonStatusSlot = None
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             slot = self.toonStatusSlots[slotIndex]
 
             self._stopToonStatusPulse(slot)
@@ -1246,7 +1246,7 @@ class TownBattleToonPanel(DirectFrame):
             for child in slot['iconRoot'].getChildren():
                 child.detachNode()
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             effectIndex = self.toonStatusOffset + slotIndex
 
             if effectIndex >= len(self.toonStatusIconNodes):
@@ -1341,7 +1341,7 @@ class TownBattleToonPanel(DirectFrame):
 
         self.toonStatusSlots = [None] * len(slotLayouts)
 
-        for i in reversed(range(len(slotLayouts))):
+        for i in reversed(list(range(len(slotLayouts)))):
             x, y, z = slotLayouts[i]
 
             bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -1460,7 +1460,7 @@ class TownBattleToonPanel(DirectFrame):
     def _attachIOUBattleStatusEffects(self, avatar):
         conditions = self._getBattleConditionsForToon(avatar)
         bestByTrack = {}
-        for conditionName, conditionData in conditions.items():
+        for conditionName, conditionData in list(conditions.items()):
             parsed = IOURegistry.parseConditionName(conditionName)
             if parsed is None or len(conditionData) < 2:
                 continue
@@ -3460,7 +3460,7 @@ class TownBattleToonPanel(DirectFrame):
             extraTargets = []
 
         returnStr = ''
-        targetList = range(numTargets)
+        targetList = list(range(numTargets))
         targetList.reverse()
 
         try:

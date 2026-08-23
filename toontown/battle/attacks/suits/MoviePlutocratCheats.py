@@ -207,7 +207,7 @@ def _splicedThinkTrack(toon):
     timeInterval = newDuration / (origDuration * fps)
     animInterval = origDuration / (origDuration * fps)
     addition = 0.0
-    for unused in xrange(numAnims):
+    for unused in range(numAnims):
         track.append(Wait(timeInterval))
         track.append(ActorInterval(
             toon, 'think', startTime=2.06 + addition,
@@ -234,7 +234,7 @@ def _shortSqueezeToonTrack(toon, battle, nix):
     y = ground.getY()
     z = ground.getZ()
     shake = Sequence(Wait(1.0))
-    for unused in xrange(5):
+    for unused in range(5):
         shake.append(LerpPosInterval(
             toon, 0.15, Point3(x, y, z + 3.0), other=battle))
         shake.append(LerpPosInterval(
@@ -263,7 +263,7 @@ def _shortSqueezeToonTrack(toon, battle, nix):
 
     coins = Parallel()
     coinTypes = ('bronze', 'silver', 'gold')
-    for i in xrange(20):
+    for i in range(20):
         coin = loader.loadModel(
             'phase_3.5/models/props/cc_m_prp_gen_coin_%s.bam' %
             random.choice(coinTypes))

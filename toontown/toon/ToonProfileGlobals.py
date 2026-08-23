@@ -340,7 +340,7 @@ def applyPose(toon, poseId, notify=None):
     propHprs = data.get('PropHpr', [])
     propScales = data.get('PropScale', [])
     madeProps = []
-    for index in xrange(len(propNames)):
+    for index in range(len(propNames)):
         prop = _loadProp(propNames[index])
         if not prop:
             continue

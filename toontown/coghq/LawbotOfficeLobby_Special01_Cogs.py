@@ -1,4 +1,4 @@
-from SpecImports import *
+from .SpecImports import *
 CogParent = 10000
 BattleCellId = 0
 BattleCells = {BattleCellId: {'parentEntId': CogParent,

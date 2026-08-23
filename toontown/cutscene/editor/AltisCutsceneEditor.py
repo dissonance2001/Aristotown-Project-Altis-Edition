@@ -167,7 +167,7 @@ def _displayValue(value):
 def _cleanJsonData(value):
     if isinstance(value, dict):
         result = {}
-        for key, item in value.items():
+        for key, item in list(value.items()):
             if key == 'cutsceneDict':
                 continue
             result[key] = _cleanJsonData(item)
@@ -227,7 +227,7 @@ def _collectionForArg(name):
 def _labelCollection(values):
     labels = []
     for index, value in enumerate(values):
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             text = value
         else:
             text = _safeName(value, str(index))
@@ -280,7 +280,7 @@ class AltisCutsceneEditor(DirectObject):
             self.baselineFov = None
 
     def _restoreBaseline(self):
-        for obj, parent, transform, hiddenState in self.baseline.values():
+        for obj, parent, transform, hiddenState in list(self.baseline.values()):
             try:
                 obj.reparentTo(parent)
                 obj.setTransform(transform)
@@ -429,7 +429,7 @@ class AltisCutsceneEditor(DirectObject):
     def _buildTypeMenus(self):
         self.typeByFriendly = {}
         self.typesByCategory = {}
-        for enumName, data in cutsceneMethodDefs.items():
+        for enumName, data in list(cutsceneMethodDefs.items()):
             if data.get('hidden'):
                 continue
             friendly = data.get('name', enumName)
@@ -527,7 +527,7 @@ class AltisCutsceneEditor(DirectObject):
             self._writeJsonFile('cutscene_editor_autosave.ctsc', self._workspaceData())
             return True
         except Exception as error:
-            print('[Cutscene Editor] Autosave error: %s' % error)
+            print(('[Cutscene Editor] Autosave error: %s' % error))
             return False
 
     def loadFromEntry(self):
@@ -566,7 +566,7 @@ class AltisCutsceneEditor(DirectObject):
                 self._reloadSavedResources()
                 self._applyManifestOrdering(manifest)
             except Exception as error:
-                print('[Cutscene Editor] Setup manifest error: %s' % error)
+                print(('[Cutscene Editor] Setup manifest error: %s' % error))
         self.events = data
         self.selectedEvent = self.events[0] if self.events else None
         keys = self._subeventKeys(self.selectedEvent) if self.selectedEvent else []
@@ -586,7 +586,7 @@ class AltisCutsceneEditor(DirectObject):
             self._writeJsonFile(manifestPath, self._manifestData())
         except Exception as error:
             self.resourceStatus['text'] = 'Export failed: %s' % error
-            print('[Cutscene Editor] Export error: %s' % error)
+            print(('[Cutscene Editor] Export error: %s' % error))
             return
         self.autosave()
         self.resourceStatus['text'] = 'Exported CTSC + setup manifest.'
@@ -700,7 +700,7 @@ class AltisCutsceneEditor(DirectObject):
         for name, default in _getMethodArgs(data['method']):
             kwargs[name] = default
         subevents = self.selectedEvent.setdefault('subEvents', {})
-        newKey = str(max([int(k) for k in subevents.keys()] + [-1]) + 1)
+        newKey = str(max([int(k) for k in list(subevents.keys())] + [-1]) + 1)
         subevents[newKey] = {'eventDefEnum': enumName, 'kwargs': kwargs}
         self.selectedSubeventKey = newKey
         self._refreshAll()
@@ -944,7 +944,7 @@ class AltisCutsceneEditor(DirectObject):
             suit.loop('neutral')
         except Exception as error:
             self.resourceStatus['text'] = 'Could not spawn Cog: %s' % error
-            print('[Cutscene Editor] Cog spawn error: %s' % error)
+            print(('[Cutscene Editor] Cog spawn error: %s' % error))
             return
         self.spawnedSuits.append(suit)
         self.spawnedSuitTypes.append(suitType)
@@ -1129,7 +1129,7 @@ class AltisCutsceneEditor(DirectObject):
             self.playing = False
             self.playButton['text'] = 'Play'
             self.resourceStatus['text'] = 'Preview error: %s' % error
-            print('[Cutscene Editor] Preview error: %s' % error)
+            print(('[Cutscene Editor] Preview error: %s' % error))
 
     def _handleEscape(self):
         if self.previewMode:

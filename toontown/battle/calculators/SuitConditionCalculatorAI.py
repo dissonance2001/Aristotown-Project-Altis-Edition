@@ -39,7 +39,7 @@ class SuitConditionCalculatorAI:
         )
 
     def calculateSuitConditions(self):
-        for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
+        for i in range(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # if x % 99 == 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn2'):

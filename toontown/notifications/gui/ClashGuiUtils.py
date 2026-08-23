@@ -4,7 +4,7 @@ from direct.gui.DirectGui import OnscreenText
 def kwargsToOptionDefs(**kwargs):
     """Python 2-compatible copy of Clash's kwargsToOptionDefs helper."""
     optionDefs = []
-    for key, value in kwargs.items():
+    for key, value in list(kwargs.items()):
         if type(value) is not list:
             optionDefs.append((key, value, None))
         else:

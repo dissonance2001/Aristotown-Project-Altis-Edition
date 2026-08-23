@@ -33,14 +33,14 @@ class PianoSoundBank(object):
         playRate = 2.0 ** ((float(note) - float(sourceNote)) / 12.0)
         return sourceNote, playRate
     def __load(self):
-        for note in xrange(self.MIN_NOTE, self.MAX_NOTE + 1):
+        for note in range(self.MIN_NOTE, self.MAX_NOTE + 1):
             sourceNote, playRate = self.__sampleForNote(note)
             sampleIndex = sourceNote - self.SOURCE_MIN_NOTE + 1
             filename = '%s/key%02d.ogg' % (
                 self.audioDirectory.rstrip('/\\'), sampleIndex)
             filename = filename.replace('\\', '/')
             noteVoices = []
-            for unused in xrange(self.VOICES_PER_NOTE):
+            for unused in range(self.VOICES_PER_NOTE):
                 sound = loader.loadSfx(filename)
                 if sound:
                     try:
@@ -130,10 +130,10 @@ class PianoSoundBank(object):
     def isPlaying(self, note):
         return bool(self.activeVoices.get(note, []))
     def stopAll(self):
-        for taskName in self.releaseTasks.values():
+        for taskName in list(self.releaseTasks.values()):
             taskMgr.remove(taskName)
         self.releaseTasks = {}
-        for note, voices in self.voices.items():
+        for note, voices in list(self.voices.items()):
             for sound in voices:
                 try:
                     sound.stop()
@@ -519,7 +519,7 @@ class PianoGui(DirectFrame):
         startX = -1.04
         spacing = 0.148
         whiteIndex = 0
-        for slot in xrange(self.WINDOW_SIZE):
+        for slot in range(self.WINDOW_SIZE):
             note = self.windowStartNote + slot
             pitchClass = note % 12
             keyName = self.slotKeyLabels.get(slot, '')
@@ -614,9 +614,9 @@ class PianoGui(DirectFrame):
             return 'qwerty'
         return 'azerty'
     def __makeKeyboardLayout(self):
-        whiteSlots = [slot for slot in xrange(self.WINDOW_SIZE)
+        whiteSlots = [slot for slot in range(self.WINDOW_SIZE)
                       if (self.windowStartNote + slot) % 12 in self.WHITE_CLASSES]
-        blackSlots = [slot for slot in xrange(self.WINDOW_SIZE)
+        blackSlots = [slot for slot in range(self.WINDOW_SIZE)
                       if (self.windowStartNote + slot) % 12 not in self.WHITE_CLASSES]
         mainWhiteSlots = whiteSlots[2:-2]
         extraWhiteSlots = whiteSlots[:2] + whiteSlots[-2:]
@@ -649,7 +649,7 @@ class PianoGui(DirectFrame):
         value = label.lower()
         if label == '%':
             return ('%', 'shift-u_grave')
-        if label == u'\u00a8':
+        if label == '\u00a8':
             return ('^', 'shift-^', 'asciicircum')
         return (value,)
     def __unbindKeyboardNotes(self):
@@ -710,7 +710,7 @@ class PianoGui(DirectFrame):
         if newIndex == self.windowIndex:
             return False
         if clearHeld:
-            for note in self.heldKeys.values():
+            for note in list(self.heldKeys.values()):
                 self.__setKeyHighlighted(note, False)
             self.heldKeys = {}
         self.windowIndex = newIndex
@@ -780,7 +780,7 @@ class PianoGui(DirectFrame):
             count = self.activeMidiNotes.get(note, 0)
             if count <= 1:
                 self.activeMidiNotes.pop(note, None)
-                if note not in self.heldKeys.values():
+                if note not in list(self.heldKeys.values()):
                     self.__setKeyHighlighted(note, False)
             else:
                 self.activeMidiNotes[note] = count - 1
@@ -800,7 +800,7 @@ class PianoGui(DirectFrame):
         taskMgr.doMethodLater(
             0.12, self.__releaseFlashedKey, taskName, extraArgs=[note])
     def __releaseFlashedKey(self, note):
-        if note not in self.heldKeys.values():
+        if note not in list(self.heldKeys.values()):
             self.__setKeyHighlighted(note, False)
         return Task.done
     def __noteIsVisible(self, note):
@@ -945,7 +945,7 @@ class PianoGui(DirectFrame):
         self.pendingMidiNotes = []
         self.activeMidiNotes = {}
         self.midiFollowScheduled = False
-        for note in xrange(self.MIN_NOTE, self.MAX_NOTE + 1):
+        for note in range(self.MIN_NOTE, self.MAX_NOTE + 1):
             taskMgr.remove('PianoGui-keyFlash-%s-%s' % (id(self), note))
         if self.midiPlayer is not None:
             self.midiPlayer.destroy()

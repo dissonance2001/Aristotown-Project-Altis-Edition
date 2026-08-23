@@ -599,7 +599,7 @@ class ChainsawBattleCutsceneSetup(object):
 
     def build(self):
         path = CUTSCENES[self.key]
-        print('[Chainsaw Battle CTSC] Building original unchanged %s' % path)
+        print(('[Chainsaw Battle CTSC] Building original unchanged %s' % path))
         try:
             track = buildCutscene(path, self._makeDict())
         except:
@@ -627,7 +627,7 @@ class ChainsawBattleCutsceneSetup(object):
                         Wait(8.0),
                         self.controller.makeChainsawPhaseTwoMusicHandoff()))
                 except Exception as error:
-                    print('[Chainsaw Battle CTSC] Could not build phase-two music handoff: %s' % error)
+                    print(('[Chainsaw Battle CTSC] Could not build phase-two music handoff: %s' % error))
         elif self.key == 'phasethree':
             extras.append(Sequence(Wait(7.5), Func(self.head.endSemiGlitchFreakout)))
             extras.append(Sequence(Wait(7.6), Func(self._phaseVisual, 3)))

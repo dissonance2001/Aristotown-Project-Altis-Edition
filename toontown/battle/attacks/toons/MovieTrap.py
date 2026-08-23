@@ -30,11 +30,11 @@ def doTraps(traps):
         else:
             suitTrapsDict[suitId] = [trap]
 
-    suitTrapLists = suitTrapsDict.values()
+    suitTrapLists = list(suitTrapsDict.values())
     mtrack = Parallel()
     for trapList in suitTrapLists:
         trapPropList = []
-        for i in xrange(len(trapList)):
+        for i in range(len(trapList)):
             trap = trapList[i]
             level = trap['level']
             if level == 0:
@@ -74,7 +74,7 @@ def doTraps(traps):
                 mtrack.append(ival)
         else:
             subMtrack = Parallel()
-            for i in xrange(len(trapList)):
+            for i in range(len(trapList)):
                 trap = trapList[i]
                 trapProps = trapPropList[i]
                 ival = __doTrapLevel(trap, trapProps, explode=1)

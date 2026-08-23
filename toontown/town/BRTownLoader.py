@@ -55,9 +55,9 @@ class BRTownLoader(TownLoader.TownLoader):
         self.loadCountErfitBuilding()
         self.loadCountErfitWalls()
         self.loadCountErfitDecorations()
-        self.windSound = map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_TB_wind_1.ogg',
+        self.windSound = list(map(base.loader.loadSfx, ['phase_8/audio/sfx/SZ_TB_wind_1.ogg',
                                             'phase_8/audio/sfx/SZ_TB_wind_2.ogg',
-                                            'phase_8/audio/sfx/SZ_TB_wind_3.ogg'])
+                                            'phase_8/audio/sfx/SZ_TB_wind_3.ogg']))
         self.snow = BattleParticles.loadParticleFile('snowdisk.ptf')
         self.snow.setPos(0, 0, 5)
         self.snowRender = self.geom.attachNewNode('snowRender')
@@ -72,7 +72,7 @@ class BRTownLoader(TownLoader.TownLoader):
 
     def _findCountErfitNode(self, pattern, x, y, z, h = None):
         candidates = self.geom.findAllMatches(pattern + ';+s')
-        for i in xrange(candidates.getNumPaths()):
+        for i in range(candidates.getNumPaths()):
             node = candidates.getPath(i)
             pos = node.getPos(self.geom)
             if abs(pos.getX() - x) > 0.08:

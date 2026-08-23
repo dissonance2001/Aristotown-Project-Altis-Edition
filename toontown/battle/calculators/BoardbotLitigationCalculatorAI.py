@@ -41,13 +41,13 @@ class BoardbotLitigationCalculatorAI:
 
     def __encodeSuitOrder(self, oldSuits, newSuits):
         value = 0
-        for newIndex in xrange(len(newSuits)):
+        for newIndex in range(len(newSuits)):
             oldIndex = oldSuits.index(newSuits[newIndex])
             value |= oldIndex << (newIndex * 3)
         return value
 
     def calculateSuitAttacksBoardbotLitigation(self):
-        for i in xrange(len(self.battle.activeSuits)):  # Cheats before Cog Attacks
+        for i in range(len(self.battle.activeSuits)):  # Cheats before Cog Attacks
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'rkeeper':
                 if self.suitHasCondition(suitId, 'bannedGagUsed') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -80,7 +80,7 @@ class BoardbotLitigationCalculatorAI:
                                             'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'cdirector':
                 if self.battle.activeSuits[i].currHP < 6000 and not self.suitHasCondition(suitId, 'alreadyRisk1'):
@@ -240,7 +240,7 @@ class BoardbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
                 attack = self.__getCheatAttack(suitId, {'suitName': '',
@@ -294,7 +294,7 @@ class BoardbotLitigationCalculatorAI:
             #          'group': SuitBattleGlobals.ATK_TGT_GROUP})
             #         if attack[SUIT_ATK_COL]:
             #             self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 if self.suitHasCondition(suitId, 'tollmasterHit') and not self.suitHasCondition(suitId, 'finalToll') and self.battle.activeSuits[
@@ -362,7 +362,7 @@ class BoardbotLitigationCalculatorAI:
                         'targetSelf': False})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                for i in range(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
                     suitId = self.battle.activeSuits[i].doId
                     if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -430,7 +430,7 @@ class BoardbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 for suit in self.battle.activeSuits:
@@ -502,7 +502,7 @@ class BoardbotLitigationCalculatorAI:
                 #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'dking':
                 if self.deadSuits == 1 and self.battle.activeSuits[i].currHP > 0:
@@ -581,7 +581,7 @@ class BoardbotLitigationCalculatorAI:
             #     if attack[SUIT_ATK_COL]:
             #         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'cdirector':
                 if self.suitHasCondition(suitId, 'markedcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
@@ -631,7 +631,7 @@ class BoardbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'dking':
                 # if self.suitHasCondition(suitId, 'scabbardcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
@@ -712,7 +712,7 @@ class BoardbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'dking':
                 if self.suitHasCondition(suitId, 'liquidationcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
@@ -855,7 +855,7 @@ class BoardbotLitigationCalculatorAI:
 
 
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'cdirector':
                 if self.suitHasCondition(suitId, 'alreadyRisk8') and self.suitHasCondition(suitId, 'contingencyOverride') and not self.suitHasCondition(suitId, 'contingencyOverrideBroken') and self.battle.activeSuits[i].currHP > 0:
@@ -904,7 +904,7 @@ class BoardbotLitigationCalculatorAI:
                 oldLivingSuits = []
                 livingPositions = []
 
-                for index in xrange(len(oldActiveSuits)):
+                for index in range(len(oldActiveSuits)):
                     otherSuit = oldActiveSuits[index]
 
                     if (
@@ -925,7 +925,7 @@ class BoardbotLitigationCalculatorAI:
 
                 newActiveSuits = oldActiveSuits[:]
 
-                for index in xrange(len(livingPositions)):
+                for index in range(len(livingPositions)):
                     newActiveSuits[livingPositions[index]] = newLivingSuits[index]
 
                 payload = self.__encodeSuitOrder(

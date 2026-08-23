@@ -4,8 +4,8 @@ from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
-import ToonInterior
-from DistributedToonInterior import DistributedToonInterior
+from . import ToonInterior
+from .DistributedToonInterior import DistributedToonInterior
 import ToonInteriorColors, random
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
@@ -104,7 +104,7 @@ class DistributedLighthouseInterior(DistributedToonInterior):
         door = self.chooseDoor()
         doorOrigins = render.findAllMatches('**/door_origin*')
         numDoorOrigins = doorOrigins.getNumPaths()
-        for npIndex in xrange(numDoorOrigins):
+        for npIndex in range(numDoorOrigins):
             doorOrigin = doorOrigins[npIndex]
             doorOriginNPName = doorOrigin.getName()
             doorOriginIndexStr = doorOriginNPName[len('door_origin_'):]

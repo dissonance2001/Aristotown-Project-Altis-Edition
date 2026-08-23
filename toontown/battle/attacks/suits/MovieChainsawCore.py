@@ -393,7 +393,7 @@ def _parseScabbardStates(attack):
         return []
     values = suffix.split('_')
     result = []
-    for offset in xrange(0, len(values) - 3, 4):
+    for offset in range(0, len(values) - 3, 4):
         try:
             index = int(values[offset])
             finalHP = int(values[offset + 1])

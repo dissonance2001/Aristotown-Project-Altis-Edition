@@ -69,7 +69,7 @@ class DistributedToonseltownMinigameAI(DistributedObjectAI):
     def spawnStarterPresents(self):
         playerCount = len(self.getPlayersInTs())
         count = min(MAX_PRESENTS, max(9, playerCount * self.presentsPerToon))
-        for i in xrange(count):
+        for i in range(count):
             self.spawnFieldPresent()
 
     def spawnFieldPresent(self):
@@ -196,7 +196,7 @@ class DistributedToonseltownMinigameAI(DistributedObjectAI):
             totalToSpawn = min(MAX_COGS - activeCogsNum, totalToons - activeCogsNum)
             if totalToSpawn > 0:
                 random.shuffle(self.freeSuitLocations)
-                for i in xrange(totalToSpawn):
+                for i in range(totalToSpawn):
                     self.suitSpawnSerial += 1
                     taskName = self.uniqueName('cogSpawn-%s' % self.suitSpawnSerial)
                     self.spawnTaskNames.append(taskName)
@@ -302,7 +302,7 @@ class DistributedToonseltownMinigameAI(DistributedObjectAI):
 
     def getPlayersInTs(self):
         players = set()
-        for obj in self.air.doId2do.values():
+        for obj in list(self.air.doId2do.values()):
             if obj.__class__.__name__ != 'DistributedToonAI':
                 continue
             try:

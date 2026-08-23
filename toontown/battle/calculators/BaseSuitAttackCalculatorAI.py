@@ -91,7 +91,7 @@ class BaseSuitAttackCalculatorAI:
         return self.calculator.getLureRemovalDrop(suitId)
 
     def calculateSuitAttacks(self):
-        for i in xrange(len(self.battle.activeSuits)): # Cheats before Cog Attacks
+        for i in range(len(self.battle.activeSuits)): # Cheats before Cog Attacks
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             attack = self.__getGenericSuitAttack(suitId)
@@ -287,7 +287,7 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):  # Cheats before Cog Attacks
+        for i in range(len(self.battle.activeSuits)):  # Cheats before Cog Attacks
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'cbutcher':
                 for s in self.battle.activeSuits:
@@ -715,7 +715,7 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         
-        for i in xrange(len(self.battle.activeSuits)): # Regular Manager Attacks
+        for i in range(len(self.battle.activeSuits)): # Regular Manager Attacks
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             #attack = self.__getGenericSuitAttack(suitId)
@@ -765,7 +765,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)): # Regular Manager Attacks
+        for i in range(len(self.battle.activeSuits)): # Regular Manager Attacks
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             #attack = self.__getGenericSuitAttack(suitId)
@@ -820,7 +820,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)): # Regular Manager Attacks
+        for i in range(len(self.battle.activeSuits)): # Regular Manager Attacks
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # #attack = self.__getGenericSuitAttack(suitId)
@@ -972,7 +972,7 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-            for i in xrange(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
+            for i in range(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'radiog':  # Sniper Factory Foreman
                     attack = self.__getCheatAttack(suitId, {'suitName': 'radiog',
@@ -1045,7 +1045,7 @@ class BaseSuitAttackCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             #if i < len(self.battle.activeSuits):
                 suitId = self.battle.activeSuits[i].doId
 
@@ -1100,7 +1100,7 @@ class BaseSuitAttackCalculatorAI:
 
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                for i in xrange(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
+                for i in range(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
                     suitId = self.battle.activeSuits[i].doId
                     if self.battle.activeSuits[i].dna.name == 'radiog':  # Sniper Factory Foreman
                         attack = self.__getCheatAttack(suitId, {'suitName': 'radiog',
@@ -1178,7 +1178,7 @@ class BaseSuitAttackCalculatorAI:
                 elif False: # Keep checking for other corresponding Cog names; False is a placeholder.
                     pass
 
-        for i in xrange(len(self.battle.activeSuits)): # Desperation for Litigation Managers
+        for i in range(len(self.battle.activeSuits)): # Desperation for Litigation Managers
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             if self.battle.activeSuits[i].currHP <= 0 and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
@@ -1192,7 +1192,7 @@ class BaseSuitAttackCalculatorAI:
                  'targetType': 'none'})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+            for i in range(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
                 suitId = self.battle.activeSuits[i].doId
                 if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -1207,7 +1207,7 @@ class BaseSuitAttackCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
         # Extra Attacks
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suit = self.battle.activeSuits[i]
             suitId = suit.doId
             x = self.TurnsElapsed
@@ -1231,7 +1231,7 @@ class BaseSuitAttackCalculatorAI:
                     StatusEffects.ExtraAttacks,
                     toon=False
                 )
-                for extraIndex in xrange(condition.extraAttacks):
+                for extraIndex in range(condition.extraAttacks):
                     if not extraSuit:
                         continue
                     attack = self.__getGenericSuitAttack(extraSuitId)
@@ -1301,7 +1301,7 @@ class BaseSuitAttackCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
 
-                    for i in xrange(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
+                    for i in range(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
                         suitId = self.battle.activeSuits[i].doId
                         if self.battle.activeSuits[i].dna.name == 'radiog':  # Sniper Factory Foreman
                             attack = self.__getCheatAttack(suitId, {'suitName': 'radiog',
@@ -1376,7 +1376,7 @@ class BaseSuitAttackCalculatorAI:
 
     def calculatePreToonSuitAttacks(self):
         x = self.TurnsElapsed
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'zapped') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {
@@ -1414,7 +1414,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.battle.activeSuits[i].dna.name in ['cdirector', 'dking', 'rkeeper', 'liquid']:
             #     if not self.suitHasCondition(suitId, 'boardbotLit') and self.__suitCanAttack(suitId):
@@ -1502,7 +1502,7 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'silhouetteUnlure') and self.suitHasCondition(suitId, 'unlureSuit') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemovalPreToon(suitId)
@@ -1815,7 +1815,7 @@ class BaseSuitAttackCalculatorAI:
             #         if attack[SUIT_ATK_COL]:
             #             self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.suitHasCondition(suitId, 'deadpower') and not self.suitHasCondition(suitId, 'dotfinished') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and not \
             # self.battle.activeSuits[i].dna.name == 'phouse':
@@ -1829,7 +1829,7 @@ class BaseSuitAttackCalculatorAI:
             #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'cdirector' and self.suitHasCondition(suitId, 'alreadyContent'):  # High Stakes President
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -1862,7 +1862,7 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'deepfreeze') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemovalPreToon(suitId)
@@ -1909,7 +1909,7 @@ class BaseSuitAttackCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
     def calculateEndOfRoundAttacks(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'bellowattack') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getLureRemoval(suitId)
@@ -1923,7 +1923,7 @@ class BaseSuitAttackCalculatorAI:
                 attack = self.__getGenericSuitAttack(suitId) # Extra Attack for Lured Cogs affected by Bayou Bellow
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
-            for i in xrange(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
+            for i in range(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
                 suitId = self.battle.activeSuits[i].doId
                 if self.suitHasCondition(suitId, 'guestVerse') and self.suitHasCondition(suitId, 'guestVerseComplete') and self.battle.activeSuits[i].currHP > 0: 
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -1935,7 +1935,7 @@ class BaseSuitAttackCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            for i in xrange(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
+            for i in range(len(self.battle.activeSuits)):  # Now, how about the other Cogs, including the one that just attacked?
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'radiog':  # Sniper Factory Foreman
                     attack = self.__getCheatAttack(suitId, {'suitName': 'radiog',
@@ -2039,7 +2039,7 @@ class BaseSuitAttackCalculatorAI:
         #             if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'zapped') and self.suitHasCondition(suitId, 'drenched') and not self.getSuitConditionTurns(suitId, 'drenched') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2075,7 +2075,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'oilRain') and not self.suitHasCondition(suitId, 'alreadyOil') and self.getSuitConditionTurns(suitId, 'oilRain') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2089,7 +2089,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'marked') and self.getSuitConditionTurns(suitId, 'marked') == 1 and not self.battle.activeSuits[i].dna.name == 'bcaster' and not self.battle.activeSuits[i].dna.name == 'mplayers' and not self.battle.activeSuits[i].dna.name == 'hrollers' and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2103,7 +2103,7 @@ class BaseSuitAttackCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.suitHasCondition(suitId, 'sued') and self.getSuitConditionTurns(suitId, 'sued') == 1 and self.battle.activeSuits[i].currHP > 0:
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,

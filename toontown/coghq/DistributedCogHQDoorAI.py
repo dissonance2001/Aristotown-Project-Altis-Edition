@@ -19,7 +19,7 @@ class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
         :type doorIndex: int
         :type hardmode: bool
         """
-        print 'DOOR AI INIT', destinationZone, doorIndex, hardmode
+        print('DOOR AI INIT', destinationZone, doorIndex, hardmode)
         self.notify.debug("init")
         DistributedDoorAI.DistributedDoorAI.__init__(self, air, blockNumber, doorType, doorIndex, lockValue, swing)
         self.destinationZone = destinationZone

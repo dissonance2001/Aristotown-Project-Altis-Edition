@@ -276,7 +276,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                     caps.getPath(index).setColor(darkBottomColor)
 
             return applied
-        except Exception, error:
+        except Exception as error:
             self.notify.warning(
                 'Could not apply extended custom NPC clothing for %s: %s' %
                 (data.get('name', 'unknown NPC'), error)
@@ -357,7 +357,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                     sleeves.setTexture(sleeveTex, 1)
                     sleeves.setColor(color)
                 bottoms = torso.findAllMatches('**/torso-bot')
-                for index in xrange(bottoms.getNumPaths()):
+                for index in range(bottoms.getNumPaths()):
                     bottom = bottoms.getPath(index)
                     bottom.setTexture(bottomTex, 1)
                     bottom.setColor(color)
@@ -870,7 +870,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         potentialQuests = []
         nyaQuests = []
         av = base.localAvatar
-        for quest in Quests.QuestDict.keys():
+        for quest in list(Quests.QuestDict.keys()):
             questEntry = Quests.QuestDict.get(quest)
             if NPCToons.getNPCName(questEntry[Quests.QuestDictFromNpcIndex]) == self.getName():
                 if questEntry[1] == Quests.Start:

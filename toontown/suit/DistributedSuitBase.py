@@ -539,7 +539,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         actorNode = self.find('**/__Actor_modelRoot')
         actorCollection = actorNode.findAllMatches('*')
         parts = ()
-        for thingIndex in xrange(0, actorCollection.getNumPaths()):
+        for thingIndex in range(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                 if not self.dna.name == 'cbutcher' and not self.isShadow:
@@ -585,7 +585,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         actorCollection = actorNode.findAllMatches('*')
         texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
         parts = ()
-        for thingIndex in xrange(0, actorCollection.getNumPaths()):
+        for thingIndex in range(0, actorCollection.getNumPaths()):
             thing = actorCollection[thingIndex]
             if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                 if not self.dna.name == 'cbutcher' and not self.isShadow:
@@ -1789,7 +1789,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         actorCollection = actorNode.findAllMatches('*')
         self._splatParts = []
 
-        for i in xrange(actorCollection.getNumPaths()):
+        for i in range(actorCollection.getNumPaths()):
             thing = actorCollection[i]
             if thing.getName() not in ('joint_Rhold', 'joint_Lhold', 'joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                 self._splatParts.append(thing)
@@ -1802,7 +1802,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         sampleTex = loader.loadTexture(sampleFilename)
         if not sampleTex:
-            print
+            print()
             'Failed to load sample splat texture:', sampleFilename
             return
 
@@ -1810,7 +1810,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         sampleTex.store(sampleImage)
 
         if sampleImage.getNumChannels() < 1:
-            print
+            print()
             'Sample splat image invalid:', sampleFilename
             return
 
@@ -1847,14 +1847,14 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         splatTex = loader.loadTexture(filename)
         if not splatTex:
-            print 'Failed to load splat texture:', filename
+            print('Failed to load splat texture:', filename)
             return
 
         splatImage = PNMImage()
         splatTex.store(splatImage)
 
         if splatImage.getNumChannels() < 1:
-            print 'Invalid splat image:', filename
+            print('Invalid splat image:', filename)
             return
 
         compositeWidth = self._splatImage.getXSize()
@@ -1864,7 +1864,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             splatImage.getXSize() != compositeWidth or
             splatImage.getYSize() != compositeHeight
         ):
-            print 'Splat size mismatch:', filename
+            print('Splat size mismatch:', filename)
             return
 
         # Randomly shift the splat within the composite texture.
@@ -1940,7 +1940,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             actorNode = self.find('**/__Actor_modelRoot')
             actorCollection = actorNode.findAllMatches('*')
             parts = ()
-            for thingIndex in xrange(0, actorCollection.getNumPaths()):
+            for thingIndex in range(0, actorCollection.getNumPaths()):
                 thing = actorCollection[thingIndex]
                 if thing.getName() not in ('joint_Rhold', 'joint_Lhold', 'joint_attachMeter', 'joint_nameTag', 'joint_shadow', 'def_nameTag'):
                     if stage.getName().startswith('splat_wedding'):
@@ -4557,7 +4557,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             actorNode = self.find('**/__Actor_modelRoot')
             actorCollection = actorNode.findAllMatches('*')
             parts = ()
-            for thingIndex in xrange(0, actorCollection.getNumPaths()):
+            for thingIndex in range(0, actorCollection.getNumPaths()):
                 thing = actorCollection[thingIndex]
                 if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
                     thing.setColor(0, 1, 0.063, 1)
@@ -5630,7 +5630,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
     def makePathTrack(self, nodePath, posPoints, velocity, name):
         track = Sequence(name=name)
         nodePath.setPos(posPoints[0])
-        for pointIndex in xrange(len(posPoints) - 1):
+        for pointIndex in range(len(posPoints) - 1):
             startPoint = posPoints[pointIndex]
             endPoint = posPoints[pointIndex + 1]
             track.append(Func(nodePath.headsUp, endPoint[0], endPoint[1], endPoint[2]))

@@ -18,7 +18,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         self.boardingParty = None
 
     def delete(self):
-        for seatIndex in xrange(len(self.seats)):
+        for seatIndex in range(len(self.seats)):
             avId = self.seats[seatIndex]
             if avId:
                 self.clearFullNow(seatIndex)
@@ -154,7 +154,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         numPlayers = self.countFullSeats()
         if numPlayers > 0:
             self._createInterior()
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.clearFullNow(seatIndex)

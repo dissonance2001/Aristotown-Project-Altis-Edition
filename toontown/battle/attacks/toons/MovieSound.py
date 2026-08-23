@@ -39,7 +39,7 @@ def doSounds(sounds):
     prevLevel = 0
     soundHitsCount = 0
     prevSounds = {}
-    for i in xrange(MAX_LEVEL_INDEX + 1):
+    for i in range(MAX_LEVEL_INDEX + 1):
         prevSounds[i] = []
     for sound in sounds:
         level = sound['level']
@@ -51,7 +51,7 @@ def doSounds(sounds):
 
     totalDamage = [0] * len(sounds[0]['target'])
     lastSound = None
-    for soundList in prevSounds.values():
+    for soundList in list(prevSounds.values()):
         if len(soundList) > 0:
             mainTrack.append(__doSoundsLevel(soundList))
 

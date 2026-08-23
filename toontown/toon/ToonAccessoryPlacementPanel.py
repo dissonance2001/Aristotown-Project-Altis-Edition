@@ -69,7 +69,7 @@ def _getNextCustomAccessoryId(accessories, accessoryType):
 
     nextId = startIds[accessoryType]
 
-    for accessoryData in accessories.values():
+    for accessoryData in list(accessories.values()):
         if not isinstance(accessoryData, dict):
             continue
         if accessoryData.get('type') != accessoryType:
@@ -85,7 +85,7 @@ def _getNextCustomAccessoryId(accessories, accessoryType):
 def _rescanCustomAccessories():
     registryPath = _findAccessoryRegistryPath()
     if not registryPath:
-        print 'Accessory editor rescan failed: registry path not found.'
+        print('Accessory editor rescan failed: registry path not found.')
         return False
 
     accessoryRoot = os.path.dirname(registryPath)
@@ -119,7 +119,7 @@ def _rescanCustomAccessories():
     try:
         rootEntries = sorted(os.listdir(accessoryRoot))
     except Exception as error:
-        print 'Accessory editor rescan failed:', error
+        print('Accessory editor rescan failed:', error)
         return False
 
     for folderName in rootEntries:
@@ -205,7 +205,7 @@ def _rescanCustomAccessories():
                 os.remove(registryPath)
             os.rename(temporaryPath, registryPath)
         except Exception as error:
-            print 'Accessory editor registry rescan write failed:', error
+            print('Accessory editor registry rescan write failed:', error)
             try:
                 if os.path.isfile(temporaryPath):
                     os.remove(temporaryPath)
@@ -213,10 +213,10 @@ def _rescanCustomAccessories():
                 pass
             return False
 
-    print 'Accessory editor rescan complete: %s model(s), changed=%s' % (
+    print('Accessory editor rescan complete: %s model(s), changed=%s' % (
         foundCount,
         changed
-    )
+    ))
     return True
 
 
@@ -235,7 +235,7 @@ def _getCustomAccessories(kind):
         return []
 
     result = []
-    for data in reg.get('accessories', {}).values():
+    for data in list(reg.get('accessories', {}).values()):
         if not isinstance(data, dict):
             continue
         if data.get('type') != kind:
@@ -244,7 +244,7 @@ def _getCustomAccessories(kind):
         internalName = data.get('name', 'Unknown')
         displayName = data.get('display_name')
 
-        if not isinstance(displayName, basestring) or not displayName.strip():
+        if not isinstance(displayName, str) or not displayName.strip():
             displayName = internalName.replace('_', ' ').title()
 
         result.append((
@@ -280,7 +280,7 @@ def _loadAccessoryPlacements():
         if isinstance(data, dict):
             return data
     except Exception as error:
-        print 'Accessory editor placement read failed:', error
+        print('Accessory editor placement read failed:', error)
 
     return {}
 
@@ -306,7 +306,7 @@ def _registerCustomAccessoriesForEditorOnce():
         ToonDNA.registerCustomAccessoriesAsNative()
         _EDITOR_CUSTOM_ACCESSORIES_REGISTERED = True
     except Exception as error:
-        print 'Accessory editor native rescan failed:', error
+        print('Accessory editor native rescan failed:', error)
 
 
 
@@ -542,7 +542,7 @@ class ToonAccessoryPlacementPanel(object):
             except:
                 pass
         except Exception as error:
-            print 'Accessory editor preview creation failed:', error
+            print('Accessory editor preview creation failed:', error)
             self.previewToon = None
 
     def refreshPreviewAccessory(self):
@@ -569,7 +569,7 @@ class ToonAccessoryPlacementPanel(object):
                 elif self.selectedName is not None:
                     self.previewToon.setBackpack(*ToonDNA.BackpackStyles[self.selectedName])
         except Exception as error:
-            print 'Accessory editor preview refresh failed:', error
+            print('Accessory editor preview refresh failed:', error)
 
     def _makeButton(self, text, pos, command, extraArgs=None):
         if extraArgs is None:
@@ -888,10 +888,10 @@ class ToonAccessoryPlacementPanel(object):
                     shoes[0], shoes[1], shoes[2]
                 ]
             )
-            print 'Accessory editor save request sent:', hat, glasses, backpack, shoes
+            print('Accessory editor save request sent:', hat, glasses, backpack, shoes)
             return True
         except Exception as error:
-            print 'Accessory editor could not save equipped accessories:', error
+            print('Accessory editor could not save equipped accessories:', error)
             return False
 
     def selectAccessory(self, name, isCustom=False):
@@ -912,7 +912,7 @@ class ToonAccessoryPlacementPanel(object):
                     finally:
                         registryFile.close()
 
-                    for accessoryData in reg.get('accessories', {}).values():
+                    for accessoryData in list(reg.get('accessories', {}).values()):
                         if not isinstance(accessoryData, dict):
                             continue
                         if accessoryData.get('name') != name:
@@ -921,7 +921,7 @@ class ToonAccessoryPlacementPanel(object):
                         self.selectedId = accessoryData.get('id')
                         break
                 except Exception as error:
-                    print 'Accessory editor registry read failed:', error
+                    print('Accessory editor registry read failed:', error)
 
             if self.selectedId is not None:
                 placementData = _loadAccessoryPlacements()
@@ -948,7 +948,7 @@ class ToonAccessoryPlacementPanel(object):
                         )
 
             if self.selectedId is None:
-                print 'Accessory editor could not find custom accessory:', name
+                print('Accessory editor could not find custom accessory:', name)
                 self.info['text'] = '[Custom] %s (not found)' % name
                 return
 
@@ -980,7 +980,7 @@ class ToonAccessoryPlacementPanel(object):
                     base.localAvatar.backpack = (self.selectedId, 0, 0)
                     base.localAvatar.generateBackpack()
             except Exception as error:
-                print 'Accessory editor could not equip custom accessory:', error
+                print('Accessory editor could not equip custom accessory:', error)
 
             self._saveEquippedAccessories()
             self.refreshPreviewAccessory()
@@ -1182,7 +1182,7 @@ class ToonAccessoryPlacementPanel(object):
                         child.setHpr(*hpr)
                         child.setScale(*scale)
                 except Exception as error:
-                    print 'Accessory editor direct custom placement failed:', error
+                    print('Accessory editor direct custom placement failed:', error)
 
             return
 
@@ -1199,13 +1199,13 @@ class ToonAccessoryPlacementPanel(object):
 
     def savePlacement(self):
         if self.selectedId is None or self.currentPlacement is None:
-            print 'Accessory editor: select and move an accessory before saving.'
+            print('Accessory editor: select and move an accessory before saving.')
             self.info['text'] = 'Nothing to save'
             return
 
         path = _findAccessoryPlacementsPath()
         if not path:
-            print 'Accessory placement path could not be resolved.'
+            print('Accessory placement path could not be resolved.')
             self.info['text'] = 'Placement path missing'
             return
 
@@ -1241,11 +1241,11 @@ class ToonAccessoryPlacementPanel(object):
                 os.remove(path)
             os.rename(temporaryPath, path)
 
-            print 'Saved accessory placement to:', path
-            print 'Accessory:', self.selectedName
-            print 'ID:', self.selectedId
-            print 'DNA key:', key
-            print 'Placement:', repr(self.currentPlacement)
+            print('Saved accessory placement to:', path)
+            print('Accessory:', self.selectedName)
+            print('ID:', self.selectedId)
+            print('DNA key:', key)
+            print('Placement:', repr(self.currentPlacement))
             self._saveEquippedAccessories()
             self.info['text'] = 'Saved %s' % self.selectedName
         except Exception as error:
@@ -1255,7 +1255,7 @@ class ToonAccessoryPlacementPanel(object):
             except:
                 pass
 
-            print 'Failed to save placement:', error
+            print('Failed to save placement:', error)
             self.info['text'] = 'Placement write failed'
 
     def exportPlacement(self):
@@ -1289,16 +1289,16 @@ class ToonAccessoryPlacementPanel(object):
 
     def printPlacement(self):
         if self.selectedName is None or self.currentPlacement is None:
-            print 'Accessory editor: no accessory selected.'
+            print('Accessory editor: no accessory selected.')
             return
 
-        print '========== ACCESSORY PLACEMENT =========='
-        print 'Mode:', self.mode
-        print 'Name:', self.selectedName
-        print 'ID:', self.selectedId
-        print 'DNA key:', self.getPlacementKey()
-        print 'Placement:', repr(self.currentPlacement)
-        print '========================================='
+        print('========== ACCESSORY PLACEMENT ==========')
+        print('Mode:', self.mode)
+        print('Name:', self.selectedName)
+        print('ID:', self.selectedId)
+        print('DNA key:', self.getPlacementKey())
+        print('Placement:', repr(self.currentPlacement))
+        print('=========================================')
 
     def destroy(self):
         if self.destroyed:

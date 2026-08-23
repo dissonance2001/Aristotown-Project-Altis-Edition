@@ -59,7 +59,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
 
         for pattern in patterns:
             matches = self.geom.findAllMatches(pattern)
-            for index in xrange(matches.getNumPaths()):
+            for index in range(matches.getNumPaths()):
                 node = matches.getPath(index)
                 node.setColorScaleOff(1)
                 node.setLightOff(100)
@@ -111,10 +111,10 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         )
         color = None
         geomPaths = lens.findAllMatches('**/+GeomNode')
-        for pathIndex in xrange(geomPaths.getNumPaths()):
+        for pathIndex in range(geomPaths.getNumPaths()):
             geomPath = geomPaths.getPath(pathIndex)
             geomNode = geomPath.node()
-            for geomIndex in xrange(geomNode.getNumGeoms()):
+            for geomIndex in range(geomNode.getNumGeoms()):
                 state = geomNode.getGeomState(geomIndex)
                 try:
                     materialAttrib = state.getAttrib(MaterialAttrib.getClassSlot())
@@ -167,11 +167,11 @@ class MotoroomPlace(ToonInterior.ToonInterior):
     def _setupStageLightBeams(self):
         sourceRoom = loader.loadModel('phase_6/models/areas/ttcc_int_mplayer_boss')
         if not sourceRoom or sourceRoom.isEmpty():
-            print 'MOTOROOM STAGELIGHTS: source room missing'
+            print('MOTOROOM STAGELIGHTS: source room missing')
             return
 
         created = 0
-        for lensIndex in xrange(5):
+        for lensIndex in range(5):
             sourceFixture = sourceRoom.find('**/stagelight_%d' % lensIndex)
             targetFixture = self.geom.find('**/stagelight_%d' % lensIndex)
             targetLens = self.geom.find('**/spotlight_%d' % lensIndex)
@@ -207,7 +207,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
             created += 1
 
         sourceRoom.removeNode()
-        print 'MOTOROOM STAGELIGHTS: created', created
+        print('MOTOROOM STAGELIGHTS: created', created)
 
     def _copyToRender(self, node):
         copied = node.copyTo(render)
@@ -218,7 +218,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         exportedWindows = self.geom.findAllMatches('**/bg_glass*')
         exportedSky = self.geom.find('**/sky')
 
-        for index in xrange(exportedWindows.getNumPaths()):
+        for index in range(exportedWindows.getNumPaths()):
             window = exportedWindows.getPath(index)
             window.show()
             window.setTransparency(TransparencyAttrib.MAlpha, 100)
@@ -249,7 +249,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
     def _setupFloatingOreos(self):
         source = loader.loadModel('phase_8/models/props/motoroom_oreo')
         if not source or source.isEmpty():
-            print 'MOTOROOM OREOS: source model missing'
+            print('MOTOROOM OREOS: source model missing')
             return
 
         sourceNode = source.find('**/Sketchfab_model')
@@ -265,7 +265,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
 
         if not roomBounds:
             source.removeNode()
-            print 'MOTOROOM OREOS: room bounds missing'
+            print('MOTOROOM OREOS: room bounds missing')
             return
 
         roomCenter = (roomBounds[0] + roomBounds[1]) * 0.5
@@ -273,7 +273,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         windowData = []
         seen = set()
 
-        for index in xrange(windows.getNumPaths()):
+        for index in range(windows.getNumPaths()):
             window = windows.getPath(index)
             try:
                 bounds = window.getTightBounds(render)
@@ -303,14 +303,14 @@ class MotoroomPlace(ToonInterior.ToonInterior):
 
         if not windowData:
             source.removeNode()
-            print 'MOTOROOM OREOS: no usable windows found'
+            print('MOTOROOM OREOS: no usable windows found')
             return
 
         self.oreoRoot = render.attachNewNode('motoroom_floating_oreos')
         rng = Random(120826)
 
         for center, outward, side, sideExtent, zExtent in windowData:
-            for cookieIndex in xrange(6):
+            for cookieIndex in range(6):
                 depth = rng.uniform(12.0, 58.0)
                 basePos = Point3(center)
                 basePos += side * rng.uniform(-0.82, 0.82) * sideExtent
@@ -344,7 +344,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         source.removeNode()
         taskMgr.remove(self.oreoTaskName)
         taskMgr.add(self._updateFloatingOreos, self.oreoTaskName)
-        print 'MOTOROOM OREOS: created', len(self.oreoNodes)
+        print('MOTOROOM OREOS: created', len(self.oreoNodes))
 
     def _updateFloatingOreos(self, task):
         t = task.time
@@ -389,7 +389,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
                 if bounds:
                     low = bounds[0].getZ()
                     high = bounds[1].getZ()
-                    print 'MOTOROOM FLOOR BOUNDS:', name, 'LOW=', low, 'HIGH=', high
+                    print('MOTOROOM FLOOR BOUNDS:', name, 'LOW=', low, 'HIGH=', high)
                     return low + 0.15
             except:
                 try:
@@ -397,7 +397,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
                     if bounds:
                         lowPoint = render.getRelativePoint(node, bounds[0])
                         highPoint = render.getRelativePoint(node, bounds[1])
-                        print 'MOTOROOM FLOOR BOUNDS:', name, 'LOW=', lowPoint.getZ(), 'HIGH=', highPoint.getZ()
+                        print('MOTOROOM FLOOR BOUNDS:', name, 'LOW=', lowPoint.getZ(), 'HIGH=', highPoint.getZ())
                         return lowPoint.getZ() + 0.15
                 except:
                     pass
@@ -462,7 +462,7 @@ class MotoroomPlace(ToonInterior.ToonInterior):
 
         collisionNodes = self.lavaLamp.findAllMatches('**/+CollisionNode')
         collisionPaths = []
-        for index in xrange(collisionNodes.getNumPaths()):
+        for index in range(collisionNodes.getNumPaths()):
             collisionPaths.append(collisionNodes.getPath(index))
 
         for collisionPath in collisionPaths:
@@ -483,8 +483,8 @@ class MotoroomPlace(ToonInterior.ToonInterior):
         except:
             pass
 
-        print '[Motoroom Spawn Applied] (%.3f, %.3f, %.3f, %.3f)' % (
-            x, y, z, h)
+        print('[Motoroom Spawn Applied] (%.3f, %.3f, %.3f, %.3f)' % (
+            x, y, z, h))
 
     def _applyEntryTransformTask(self, task):
         self._applyEntryTransform()

@@ -117,7 +117,7 @@ class DistributedPlutocratBossAI(DistributedMinibossAI.DistributedMinibossAI, FS
             return []
         result = []
         living = [suit for suit in self.activeSuits if suit.getHP() > 0]
-        for unused in xrange(count):
+        for unused in range(count):
             if len(living) + len(self.reserveSuits) >= self.battle.maxSuits:
                 break
             actualLevel = random.randint(12, 15)

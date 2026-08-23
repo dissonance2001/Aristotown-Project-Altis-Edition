@@ -52,7 +52,7 @@ class DLSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         """Replace a texture by name, logging a warning if not found."""
         oldTex = node.findTexture(oldTexName)
         if oldTex is None:
-            print("Warning: could not find texture '%s' on %s" % (oldTexName, node.getName()))
+            print(("Warning: could not find texture '%s' on %s" % (oldTexName, node.getName())))
             return
         node.replaceTexture(oldTex, newTex)
 

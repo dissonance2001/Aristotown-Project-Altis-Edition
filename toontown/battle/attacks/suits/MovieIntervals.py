@@ -812,7 +812,7 @@ def getPartTracks(attack, particleEffects, startDelay, durationDelay, worldRelat
     origPos, origHpr = battle.getActorPosHpr(suit)
     origHpr = battle.getActorPosHpr(suit)[1]
     origPos2 = suit.getPos(battle)
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         origHpr = battle.getActorPosHpr(suit)[1] # We only want the rotation.
@@ -876,7 +876,7 @@ def getToonTrack(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay
 def getToonTracks(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
     toonTracks = Parallel()
     targets = attack['target']
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         tgt = targets[i]
         toonTracks.append(getToonTrack(attack, damageDelay, damageAnimNames, dodgeDelay, dodgeAnimNames, splicedDamageAnims, splicedDodgeAnims, target=tgt, showDamageExtraTime=showDamageExtraTime, showMissedExtraTime=showMissedExtraTime))
 
@@ -1018,7 +1018,7 @@ def getToonDodgeTrackCheat2(attack, target, dodgeDelay, dodgeAnimNames, splicedD
 def getToonTracksCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodgeDelay = 1e-06, dodgeAnimNames = None, splicedDamageAnims = None, splicedDodgeAnims = None, showDamageExtraTime = 0.01, showMissedExtraTime = 0.5):
     toonTracks = Parallel()
     targets = attack['target']
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         tgt = targets[i]
         toonTracks.append(getToonTrackCheat(attack, damageDelay, damageAnimNames, dodgeDelay, dodgeAnimNames, splicedDamageAnims, splicedDodgeAnims, target=tgt, showDamageExtraTime=showDamageExtraTime, showMissedExtraTime=showMissedExtraTime))
 
@@ -1079,7 +1079,7 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
     battle = attack['battle']
 
     def getLambdas(list, prop, toon):
-        for i in xrange(len(list)):
+        for i in range(len(list)):
             if list[i] == 'face':
                 list[i] = lambda toon = toon: __toonFacePoint(toon)
             elif list[i] == 'miss':
@@ -1101,12 +1101,12 @@ def getPropThrowTrack(attack, prop, hitPoints = [], missPoints = [], hitDuration
     if lookAt != 'none':
         propTrack.append(Func(prop.lookAt, lookAt))
     if dmg > 0:
-        for i in xrange(len(hitPoints)):
+        for i in range(len(hitPoints)):
             pos = hitPoints[i]
             propTrack.append(LerpPosInterval(prop, hitDuration, pos=pos))
 
     else:
-        for i in xrange(len(missPoints)):
+        for i in range(len(missPoints)):
             pos = missPoints[i]
             propTrack.append(LerpPosInterval(prop, missDuration, pos=pos))
 
@@ -1226,7 +1226,7 @@ def getSplicedLerpAnims(animName, origDuration, newDuration, startTime = 0, fps 
     animInterval = origDuration / numAnims
     if reverse == 1:
         animInterval = -animInterval
-    for i in xrange(0, int(numAnims)):
+    for i in range(0, int(numAnims)):
         anims.append([animName,
          timeInterval,
          startTime + addition,

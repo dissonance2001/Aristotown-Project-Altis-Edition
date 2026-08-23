@@ -335,7 +335,7 @@ class DistributedCJBoss(DistributedRebornBossCog):
                     self.quatInterval(0.5, hpr=Vec3(cjEndH, 0, 0))
                 )
             )
-            for move in xrange(dist + 10):
+            for move in range(dist + 10):
                 y = -(move / dist + 1)
                 self.track.append(
                     Sequence(

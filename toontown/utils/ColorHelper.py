@@ -89,7 +89,7 @@ HSV Conversion Methods
 """
 def hsvToPCol(hue, sat, val, a=255):
     rgb = colorsys.hsv_to_rgb(hue, sat, val)
-    return rgbToPCol(*tuple(map(lambda x: int(round(x * 255)), rgb)), a=a)
+    return rgbToPCol(*tuple([int(round(x * 255)) for x in rgb]), a=a)
 
 def pcolToHsv(pcol):
     r, g, b, a = pcol
@@ -104,7 +104,7 @@ def dict_hexToRGB(d, a=255):
     Converts the keys within a passed dictionary
     into RGB format.
     """
-    return {hexToRGB(key, a=a): value for key, value in d.items()}
+    return {hexToRGB(key, a=a): value for key, value in list(d.items())}
 
 """
 Random color generation

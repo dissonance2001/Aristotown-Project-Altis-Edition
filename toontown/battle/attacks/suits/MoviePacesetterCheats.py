@@ -213,7 +213,7 @@ def doComeOn(attack):
     from toontown.suit.DistributedPacesetterBoss import DistributedPacesetterBoss
     musicTrack = Parallel()
     suitTrack = Sequence(musicTrack)
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, DistributedPacesetterBoss):
             musicTrack.append(Func(obj.setBattleMusicSpeed))
     speedTrack = Parallel()
@@ -428,9 +428,9 @@ def doCorporateRestructuring(attack):
         return Sequence(getSuitAnimTrack(attack))
     payload = int(attack.get('hp', 0))
     oldIndexes = []
-    for index in xrange(len(oldActiveSuits)):
+    for index in range(len(oldActiveSuits)):
         oldIndexes.append((payload >> (index * 3)) & 7)
-    if sorted(oldIndexes) != range(len(oldActiveSuits)):
+    if sorted(oldIndexes) != list(range(len(oldActiveSuits))):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
     suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))

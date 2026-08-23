@@ -42,7 +42,7 @@ class DistributedPaceElevatorAI(
             self.fsm.request('opening')
             return
 
-        for seatIndex in xrange(len(self.seats)):
+        for seatIndex in range(len(self.seats)):
             avId = self.seats[seatIndex]
             if avId:
                 self.sendUpdateToAvatarId(

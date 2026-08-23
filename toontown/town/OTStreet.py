@@ -1,6 +1,6 @@
 from direct.task.Task import Task
 import random
-import Street
+from . import Street
 from toontown.battle import BattleParticles
 
 class OTStreet(Street.Street):

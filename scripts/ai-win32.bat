@@ -12,7 +12,7 @@ set DISTRICT_NAME=Nuttyriver
 set BASE_CHANNEL=402000000
 
 :main
-"dependencies/panda/python/python.exe" -m toontown.ai.ServiceStart --base-channel %BASE_CHANNEL% ^
+"dependencies\panda\python\python.exe" -m toontown.ai.ServiceStart --base-channel %BASE_CHANNEL% ^
                --max-channels %MAX_CHANNELS% --stateserver %STATESERVER% ^
                --astron-ip %ASTRON_IP% --eventlogger-ip %EVENTLOGGER_IP% ^
                --district-name "%DISTRICT_NAME%"

@@ -80,7 +80,7 @@ class ClubColorPulser(ClubColor):
     def getColorAtTime(self, currentTime, fancy=False):
         currentTime = float(currentTime) % self.getDuration()
         colors = self.optimizedColors
-        for index in xrange(len(colors) - 1):
+        for index in range(len(colors) - 1):
             thisColor, duration = colors[index]
             nextColor = colors[index + 1][0]
             if currentTime < duration:

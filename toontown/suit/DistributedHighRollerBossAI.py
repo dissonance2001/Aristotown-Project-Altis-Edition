@@ -284,11 +284,11 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             self.recycledTreasures.append(treasure)
 
     def deleteAllTreasures(self):
-        for treasure in self.treasures.values():
+        for treasure in list(self.treasures.values()):
             treasure.requestDelete()
 
         self.treasures = {}
-        for treasure in self.grabbingTreasures.values():
+        for treasure in list(self.grabbingTreasures.values()):
             taskMgr.remove(treasure.uniqueName('recycleTreasure'))
             treasure.requestDelete()
 
@@ -652,7 +652,7 @@ def restartHighRollerRound():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedHighRollerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -670,7 +670,7 @@ def skipHighRoller():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedHighRollerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -687,7 +687,7 @@ def highRoller2():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedHighRollerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -705,7 +705,7 @@ def highRollerCutscene1():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedHighRollerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -723,7 +723,7 @@ def killHighRoller():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedHighRollerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do

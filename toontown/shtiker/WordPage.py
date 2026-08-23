@@ -1492,7 +1492,7 @@ class AccTabPage1(DirectFrame):
 
     def _getDefaultAccessoryTexture(self, styleDict, modelId):
         validTextures = []
-        for style in styleDict.values():
+        for style in list(styleDict.values()):
             if (isinstance(style, (list, tuple)) and len(style) >= 2 and
                     style[0] == modelId and isinstance(style[1], int)):
                 validTextures.append(style[1])
@@ -1996,7 +1996,7 @@ class AccTabPage2(DirectFrame):
 
     def _getDefaultAccessoryTexture(self, styleDict, modelId):
         validTextures = []
-        for style in styleDict.values():
+        for style in list(styleDict.values()):
             if (isinstance(style, (list, tuple)) and len(style) >= 2 and
                     style[0] == modelId and isinstance(style[1], int)):
                 validTextures.append(style[1])

@@ -115,7 +115,7 @@ class PacesetterDeathSetup(object):
             self.suit.specialHead.pose('neutral-hurt', 0)
             self.suit.specialHead.ignoreNeutral = True
         except Exception as error:
-            print '[Pacesetter Death CTSC] fixHead warning: %s' % error
+            print('[Pacesetter Death CTSC] fixHead warning: %s' % error)
 
     def _getDeathEntrySpeed(self):
         # Movie.play() decides the outer battle movie play-rate before it asks
@@ -192,7 +192,7 @@ class PacesetterDeathSetup(object):
         # movie immediately.  This is what makes the already-running lethal
         # round, including the death CTSC, continue at real x1.
         # Do NOT touch this state for misses/non-lethal hits.
-        print '[Pacesetter Death CTSC] Confirmed lethal hit: x%s -> x1' % self.deathEntrySpeed
+        print('[Pacesetter Death CTSC] Confirmed lethal hit: x%s -> x1' % self.deathEntrySpeed)
         try:
             self.suit.makeUnBattleSpeed()
         except:
@@ -212,9 +212,9 @@ class PacesetterDeathSetup(object):
                         movie.setTrackPlayRate(liveTrack, 1.0)
                     except:
                         pass
-                    print '[Pacesetter Death CTSC] Live battle movie retimed to x1'
+                    print('[Pacesetter Death CTSC] Live battle movie retimed to x1')
         except Exception as error:
-            print '[Pacesetter Death CTSC] Live movie x1 reset warning: %s' % error
+            print('[Pacesetter Death CTSC] Live movie x1 reset warning: %s' % error)
 
         configureSuitNametag(self.suit, visible=False)
 
@@ -231,7 +231,7 @@ class PacesetterDeathSetup(object):
         for cacheList in (self.suitAnimationControls,
                           self.suitHeadAnimationControls):
             for controls in cacheList:
-                for control in controls.values():
+                for control in list(controls.values()):
                     if control is None:
                         continue
                     try:
@@ -255,7 +255,7 @@ class PacesetterDeathSetup(object):
                 except:
                     pass
 
-        print '[Pacesetter Death CTSC] Reset %s cached animation controls to x1' % resetCount
+        print('[Pacesetter Death CTSC] Reset %s cached animation controls to x1' % resetCount)
 
     def _resetDeathSoundRates(self):
         # Movie.setTrackPlayRate() recursively accelerates SoundIntervals when
@@ -298,7 +298,7 @@ class PacesetterDeathSetup(object):
                 pass
 
     def build(self):
-        print '[Pacesetter Death CTSC] Building original unchanged pacesetter_death.ctsc'
+        print('[Pacesetter Death CTSC] Building original unchanged pacesetter_death.ctsc')
         self.deathEntrySpeed = self._getDeathEntrySpeed()
         self._prepareAnimations()
         self.cutsceneTrack = buildCutscene(CUTSCENE_PATH, self._makeCutsceneDict())

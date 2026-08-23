@@ -102,7 +102,7 @@ class DistributedCFOBoss(DistributedRebornBossCog):
         self.healthBar.hide()
 
         # Create the wood pile...
-        for i in xrange(len(FourBossBattleGlobals.WoodPilePosHprs)):
+        for i in range(len(FourBossBattleGlobals.WoodPilePosHprs)):
             wood = loader.loadModel('phase_14/models/props/table-wood')
             wood.setPosHpr(*FourBossBattleGlobals.WoodPilePosHprs[i])
             wood.reparentTo(render)
@@ -589,7 +589,7 @@ class DistributedCFOBoss(DistributedRebornBossCog):
             for i in range(self.numKeys):
                 key = self.keys[i]
                 key.setTwoSided(1)
-                ref = trolley.attachNewNode('key' + `i` + 'ref')
+                ref = trolley.attachNewNode('key' + repr(i) + 'ref')
                 ref.setPosHpr(key, 0, 0, 0, 0, 0, 0)
                 self.keyRef.append(ref)
                 self.keyInit.append(key.getTransform())
@@ -600,7 +600,7 @@ class DistributedCFOBoss(DistributedRebornBossCog):
             self.frontWheelRef = []
             for i in range(self.numFrontWheels):
                 wheel = self.frontWheels[i]
-                ref = trolley.attachNewNode('frontWheel' + `i` + 'ref')
+                ref = trolley.attachNewNode('frontWheel' + repr(i) + 'ref')
                 ref.setPosHpr(wheel, 0, 0, 0, 0, 0, 0)
                 self.frontWheelRef.append(ref)
                 self.frontWheelInit.append(wheel.getTransform())
@@ -611,7 +611,7 @@ class DistributedCFOBoss(DistributedRebornBossCog):
             self.backWheelRef = []
             for i in range(self.numBackWheels):
                 wheel = self.backWheels[i]
-                ref = trolley.attachNewNode('backWheel' + `i` + 'ref')
+                ref = trolley.attachNewNode('backWheel' + repr(i) + 'ref')
                 ref.setPosHpr(wheel, 0, 0, 0, 0, 0, 0)
                 self.backWheelRef.append(ref)
                 self.backWheelInit.append(wheel.getTransform())

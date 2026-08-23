@@ -246,7 +246,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def cleanupIntervals(self):
         self.cutsceneSkip.intervalsCleaned()
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
             DelayDelete.cleanupDelayDeletes(interval)
 
@@ -562,7 +562,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.cqueue.sortEntries()
         numEntries = self.cqueue.getNumEntries()
         if numEntries != 0:
-            for i in xrange(self.cqueue.getNumEntries() - 1, -1, -1):
+            for i in range(self.cqueue.getNumEntries() - 1, -1, -1):
                 entry = self.cqueue.getEntry(i)
                 solid = entry.getFrom()
                 if solid == self.ray1:
@@ -720,7 +720,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
     def toonsToBattlePosition(self, toonIds, battleNode):
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
         self.notify.debug('toonsToBattlePosition: points = %s' % points[0][0])
-        for i in xrange(len(toonIds)):
+        for i in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[i])
             if toon:
                 toon.reparentTo(render)
@@ -948,7 +948,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         self.notify.debug('backupToonsToBattlePosition:')
         ival = Parallel()
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for i in xrange(len(toonIds)):
+        for i in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[i])
             if toon:
                 pos, h = points[i]
@@ -1049,7 +1049,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             gearRoot.setTag('attackCode', str(ToontownGlobals.BossCogGolfAreaAttack))
             gearRoot.lookAt(toon)
             gearTrack = Parallel()
-            for i in xrange(10):
+            for i in range(10):
                 nodeName = '%s-%s' % (str(i), globalClock.getFrameTime())
                 node = gearRoot.attachNewNode(nodeName)
                 node.hide()
@@ -1129,7 +1129,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             if not self.twoFaced:
                 neutral = 'Ff_neutral'
             gearTrack = Parallel()
-            for i in xrange(8):
+            for i in range(8):
                 nodeName = '%s-%s' % (str(i), globalClock.getFrameTime())
                 node = gearRoot.attachNewNode(nodeName)
                 node.hide()
@@ -1226,7 +1226,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
             gearRoot.setZ(10)
             gearRoot.setTag('attackCode', str(ToontownGlobals.BossCogGolfAreaAttack))
             gearRoot.lookAt(toon)
-            for i in xrange(8):
+            for i in range(8):
                 nodeName = '%s-%s' % (str(i), globalClock.getFrameTime())
                 node = gearRoot.attachNewNode(nodeName)
                 node.hide()
@@ -1659,7 +1659,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
         pass
 
     def setToonsToNeutral(self, toonIds):
-        for i in xrange(len(toonIds)):
+        for i in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[i])
             if toon:
                 if toon.isDisguised:

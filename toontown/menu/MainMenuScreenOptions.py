@@ -52,7 +52,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
             images.append(MainMenuGui._node(gui, name))
         if not images or images[0] is None:
             return None
-        for i in xrange(len(images)):
+        for i in range(len(images)):
             if images[i] is None:
                 images[i] = images[0]
         return tuple(images)
@@ -490,7 +490,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
     def setDefaultSettings(self, resetAll):
         socialKeys = ('acceptingNewFriends', 'acceptingNonFriendWhispers')
         if resetAll:
-            for key, value in ToontownSettings.DefaultSettings.items():
+            for key, value in list(ToontownSettings.DefaultSettings.items()):
                 if key in socialKeys and getattr(base, 'localAvatar', None):
                     MainMenuGui.applySetting(key, True)
                 else:
@@ -529,7 +529,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
             except:
                 pass
             self.confirm = None
-        for sequence in self.buttonSeqs.values():
+        for sequence in list(self.buttonSeqs.values()):
             try:
                 sequence.pause()
             except:

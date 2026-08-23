@@ -85,7 +85,7 @@ class DistributedCFOBossAI(DistributedRebornBossCogAI):
         if avId not in self._parent.involvedToons:
             return
 
-        if index not in xrange(len(FourBossBattleGlobals.WoodPilePosHprs)):
+        if index not in range(len(FourBossBattleGlobals.WoodPilePosHprs)):
             return
 
         currState = self._parent.getCurrentOrNextState()
@@ -113,7 +113,7 @@ class DistributedCFOBossAI(DistributedRebornBossCogAI):
         if avId not in self._parent.involvedToons:
             return
 
-        if index not in xrange(len(FourBossBattleGlobals.WoodPilePosHprs)):
+        if index not in range(len(FourBossBattleGlobals.WoodPilePosHprs)):
             return
 
         currState = self._parent.getCurrentOrNextState()
@@ -172,7 +172,7 @@ class DistributedCFOBossAI(DistributedRebornBossCogAI):
         if avId not in self._parent.involvedToons:
             return
 
-        if index not in xrange(len(FourBossBattleGlobals.WoodPilePosHprs)):
+        if index not in range(len(FourBossBattleGlobals.WoodPilePosHprs)):
             return
 
         currState = self._parent.getCurrentOrNextState()

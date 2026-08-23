@@ -41,7 +41,7 @@ class LawbotLitigationCalculatorAI:
         )
 
     def calculateSuitAttacksLawbotLitigation(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'snappedcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -79,7 +79,7 @@ class LawbotLitigationCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
 
             # Gag Ban Retaliations & DOT
@@ -114,7 +114,7 @@ class LawbotLitigationCalculatorAI:
                 )
 
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if not self.suitHasCondition(suitId, 'dotfinished'):
                 self.__appendToonConditionDamageAndRetaliation(
@@ -164,7 +164,7 @@ class LawbotLitigationCalculatorAI:
                         # self.battle.suitAttacks.append(attack)
 
             # Primary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.suitHasCondition(suitId, 'deadcase') and not self.suitHasCondition(suitId, 'dotfinished') and not self.battle.activeSuits[i].dna.name == 'caseman':
             #     attack = self.__getCheatAttack(suitId, {'suitName': '',
@@ -197,7 +197,7 @@ class LawbotLitigationCalculatorAI:
                 if attack[SUIT_ATK_COL]:
                     self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'caseman':
                 if self.suitHasCondition(suitId, 'insurancecalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -415,7 +415,7 @@ class LawbotLitigationCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
             # Secondary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'throwbookcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -491,7 +491,7 @@ class LawbotLitigationCalculatorAI:
                             self.battle.suitAttacks.append(attack)
 
             # Legal Bindings
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'caseman':
                 if self.suitHasCondition(suitId, 'bindingscalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -539,7 +539,7 @@ class LawbotLitigationCalculatorAI:
                         self.setSuitCondition(suitId, 'bindingscalculator2', 0, 0, 'setBoth')
 
             # Gag Banning & End Of Round Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'sgoat':
                 if self.suitHasCondition(suitId, 'gavelcalculator') and not self.__suitCanAttack(suitId) and \
@@ -654,7 +654,7 @@ class LawbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'bellowcalculator') and self.calculator.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:

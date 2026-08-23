@@ -123,7 +123,7 @@ class BossCutsceneSkip(object):
         pressed = self.buttonModel.find('**/menubtn-press')
 
         if normal.isEmpty() or pressed.isEmpty():
-            raise StandardError, 'Missing ttcc_menu_buttons geometry'
+            raise Exception('Missing ttcc_menu_buttons geometry')
 
         self.voteButton = DirectButton(
             parent=self.gui,

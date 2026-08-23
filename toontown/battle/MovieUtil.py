@@ -451,7 +451,7 @@ def virtualize(deathsuit):
     actorNode = deathsuit.find('**/__Actor_modelRoot')
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
             thing.setColorScale(1.0, 1.0, 1.0, 1.0)
@@ -1004,7 +1004,7 @@ def createErfitReviveTrack(suit, battle):
    # suitTrack.append(Func(suit.setSkelecog2, True))
   #  suitTrack.append(Func(suit.show))
     from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, DistributedCountErclaimBoss):
             suitTrack.append(Func(obj.stopPhaseOneMusic))
             suitTrack.append(Func(obj.erfitRevive))
@@ -1646,7 +1646,7 @@ def _createPlutocratFrozenDeathTrack(suit, battle):
             pass
 
     trembleTrack = Sequence()
-    for unused in xrange(50):
+    for unused in range(50):
         offset = Vec3(
             random.uniform(-0.1, 0.1),
             random.uniform(-0.1, 0.1),
@@ -1741,7 +1741,7 @@ def createSuitDeathTrack(suit, battle):
                 controller = None
         if controller is None or not hasattr(controller, 'chainsawPhase'):
             try:
-                for candidate in base.cr.doId2do.values():
+                for candidate in list(base.cr.doId2do.values()):
                     if not hasattr(candidate, 'chainsawPhase'):
                         continue
                     if (getattr(candidate, 'battle', None) is battle or
@@ -1999,14 +1999,14 @@ def createSuitDeathTrackExplosiveForeman(suit, battle):
     explosionTrack2 = Sequence()
     explosionTrack2.append(createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint2, scale=3))
     explode = []
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodePosPoints = [Point3(0, 15, 5), PNT3_ZERO]
     explodePosPoints1 = [Point3(0, 15, 5), PNT3_ZERO]
     explodeHprPoints = [Point3(180, 0, 0), PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), PNT3_ZERO]
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(
             getPropAppearTrack(explode[i], suit, explodePosPoints, 1e-06, Point3(1.7, 1.7, 1.7), scaleUpTime=0.1))
@@ -3611,7 +3611,7 @@ def calcAvgSuitPos(throw):
     battle = throw['battle']
     avgSuitPos = Point3(0, 0, 0)
     numTargets = len(throw['target'])
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         suit = throw['target'][i]['suit']
         avgSuitPos += suit.getPos(battle)
 
@@ -3622,7 +3622,7 @@ def calcAvgToonPos(attack):
     battle = attack['battle']
     avgToonPos = Point3(0, 0, 0)
     numTargets = len(attack['target'])
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         toon = attack['target'][i]['toon']
         avgToonPos += toon.getPos(battle)
 
@@ -3630,7 +3630,7 @@ def calcAvgToonPos(attack):
     return avgToonPos
 
 def sortAttacks(attacksDict):
-    attacks = attacksDict.values()
+    attacks = list(attacksDict.values())
 
     def compFunc(a, b):
         if len(a) > len(b):

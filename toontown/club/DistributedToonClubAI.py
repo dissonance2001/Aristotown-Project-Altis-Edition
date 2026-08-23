@@ -21,7 +21,7 @@ class DistributedToonClubAI(DistributedObjectGlobalAI):
         DistributedObjectGlobalAI.announceGenerate(self)
         self._groupSuitTeleports = {}
         self.accept('GroupTrackerLogicalChangeZone-all', self._groupAvatarChangedZone)
-        print '[Clubs] Club AI proxy loaded.'
+        print('[Clubs] Club AI proxy loaded.')
 
     def groupPrepareSuitTeleport(self, targetZone, deptIndex):
         try:

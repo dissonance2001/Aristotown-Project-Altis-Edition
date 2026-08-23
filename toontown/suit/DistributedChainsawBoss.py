@@ -261,7 +261,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
                 'Invalid Chainsaw battle experience payload: %s' % len(args))
             return
         entries = []
-        for index in xrange(8):
+        for index in range(8):
             start = index * 9
             entries.append(tuple(args[start:start + 9]))
         self.deathList = args[72]
@@ -406,7 +406,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
     def cleanupIntervals(self):
         if getattr(self, 'cutsceneSkip', None):
             self.cutsceneSkip.intervalsCleaned()
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             try:
                 interval.pause()
             except:
@@ -576,7 +576,7 @@ class DistributedChainsawBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds or not battleNode:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]

@@ -40,7 +40,7 @@ class SuitSpawnCalculatorAI:
         )
 
     def calculateSuitSpawns(self):
-        for i in xrange(len(self.battle.activeSuits)): # Cheat Calculators
+        for i in range(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # if self.battle.activeSuits[i].dna.name == 'stenog':
@@ -381,7 +381,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedBoardbotBossAI):
                                     continue
 
@@ -437,7 +437,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'bdlit'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -475,7 +475,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedDirectorsAI):
                                     continue
 
@@ -531,7 +531,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'amb'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -569,7 +569,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedSellbotBossMiniAI):
                                     continue
 
@@ -625,7 +625,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'pres'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -663,7 +663,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedLawbotBossAI):
                                     continue
 
@@ -719,7 +719,7 @@ class SuitSpawnCalculatorAI:
                                     else:
                                         spawnCode = 'lit'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -774,7 +774,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedLawbotBossAI):
                                     continue
 
@@ -825,7 +825,7 @@ class SuitSpawnCalculatorAI:
 
                                     spawnCode = 'lit2'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode
@@ -860,7 +860,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedPacesetterBossAI):
                                     continue
 
@@ -968,7 +968,7 @@ class SuitSpawnCalculatorAI:
 
                                             spawnCode = 'paceGrunts'
 
-                                            for spawnIndex in xrange(spawnAmount):
+                                            for spawnIndex in range(spawnAmount):
                                                 boss.appendSuitsToBattle(
                                                     boss.battleNumber,
                                                     spawnCode
@@ -1003,7 +1003,7 @@ class SuitSpawnCalculatorAI:
                             boss = None
 
                             # Find the boss controlling this battle.
-                            for do in simbase.air.doId2do.values():
+                            for do in list(simbase.air.doId2do.values()):
                                 if not isinstance(do, DistributedHighRollerBossAI):
                                     continue
 
@@ -1054,7 +1054,7 @@ class SuitSpawnCalculatorAI:
 
                                     spawnCode = 'videog'
 
-                                    for spawnIndex in xrange(spawnAmount):
+                                    for spawnIndex in range(spawnAmount):
                                         boss.appendSuitsToBattle(
                                             boss.battleNumber,
                                             spawnCode

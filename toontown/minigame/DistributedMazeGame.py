@@ -641,11 +641,11 @@ class DistributedMazeGame(DistributedMinigame):
         camera.setPos(self.camOffset)
         self.__spawnCameraTask()
         self.toonRNGs = []
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             self.toonRNGs.append(RandomNumGen.RandomNumGen(self.randomNumGen))
 
         self.treasures = []
-        for i in xrange(self.maze.numTreasures):
+        for i in range(self.maze.numTreasures):
             self.treasures.append(MazeTreasure.MazeTreasure(self.treasureModel, self.maze.treasurePosList[i], i, self.doId))
 
         self.__loadSuits()
@@ -654,12 +654,12 @@ class DistributedMazeGame(DistributedMinigame):
 
         self.sndTable = {'hitBySuit': [None] * self.numPlayers,
          'falling': [None] * self.numPlayers}
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             self.sndTable['hitBySuit'][i] = base.loader.loadSfx('phase_4/audio/sfx/MG_Tag_C.ogg')
             self.sndTable['falling'][i] = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.ogg')
 
         self.grabSounds = []
-        for i in xrange(5):
+        for i in range(5):
             self.grabSounds.append(base.loader.loadSfx('phase_4/audio/sfx/MG_maze_pickup.ogg'))
 
         self.grabSoundIndex = 0
@@ -682,7 +682,7 @@ class DistributedMazeGame(DistributedMinigame):
         if self.introTrack.isPlaying():
             self.introTrack.finish()
         del self.introTrack
-        for avId in self.toonHitTracks.keys():
+        for avId in list(self.toonHitTracks.keys()):
             track = self.toonHitTracks[avId]
             if track.isPlaying():
                 track.finish()
@@ -766,7 +766,7 @@ class DistributedMazeGame(DistributedMinigame):
 
     def enterPlay(self):
         self.notify.debug('enterPlay')
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = MinigameAvatarScorePanel.MinigameAvatarScorePanel(avId, avName)
@@ -1083,7 +1083,7 @@ class DistributedMazeGame(DistributedMinigame):
         suitPeriods = slowerPeriods + fasterPeriods
         self.notify.debug('suit periods: ' + repr(suitPeriods))
         self.randomNumGen.shuffle(suitPeriods)
-        for i in xrange(self.numSuits):
+        for i in range(self.numSuits):
             self.suits.append(MazeSuit(i, self.maze, self.randomNumGen, suitPeriods[i], self.getDifficulty()))
 
     def __unloadSuits(self):
@@ -1111,14 +1111,14 @@ class DistributedMazeGame(DistributedMinigame):
         curT = globalClock.getFrameTime() - self.gameStartTime
         curTic = int(curT * float(MazeGameGlobals.SUIT_TIC_FREQ))
         suitUpdates = []
-        for i in xrange(len(self.suits)):
+        for i in range(len(self.suits)):
             updateTics = self.suits[i].getThinkTimestampTics(curTic)
-            suitUpdates.extend(zip(updateTics, [i] * len(updateTics)))
+            suitUpdates.extend(list(zip(updateTics, [i] * len(updateTics))))
 
         suitUpdates.sort(lambda a, b: a[0] - b[0])
         if len(suitUpdates) > 0:
             curTic = 0
-            for i in xrange(len(suitUpdates)):
+            for i in range(len(suitUpdates)):
                 update = suitUpdates[i]
                 tic = update[0]
                 suitIndex = update[1]
@@ -1133,10 +1133,10 @@ class DistributedMazeGame(DistributedMinigame):
                         j += 1
 
                 unwalkables = []
-                for si in xrange(suitIndex):
+                for si in range(suitIndex):
                     unwalkables.extend(self.suits[si].occupiedTiles)
 
-                for si in xrange(suitIndex + 1, len(self.suits)):
+                for si in range(suitIndex + 1, len(self.suits)):
                     unwalkables.extend(self.suits[si].occupiedTiles)
 
                 suit.think(curTic, curT, unwalkables)
@@ -1161,7 +1161,7 @@ class DistributedMazeGame(DistributedMinigame):
           (lX, bY),
           (rX, bY)))
         scorePanelLocs = scorePanelLocs[self.numPlayers - 1]
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
             panel.wrtReparentTo(aspect2d)

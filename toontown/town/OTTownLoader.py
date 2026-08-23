@@ -1,5 +1,5 @@
-import TownLoader
-import OTStreet
+from . import TownLoader
+from . import OTStreet
 from toontown.suit import Suit
 from toontown.battle import BattleParticles
 

@@ -277,11 +277,11 @@ class DistributedVideographerBossAI(DistributedMinibossAI.DistributedMinibossAI,
             self.recycledTreasures.append(treasure)
 
     def deleteAllTreasures(self):
-        for treasure in self.treasures.values():
+        for treasure in list(self.treasures.values()):
             treasure.requestDelete()
 
         self.treasures = {}
-        for treasure in self.grabbingTreasures.values():
+        for treasure in list(self.grabbingTreasures.values()):
             taskMgr.remove(treasure.uniqueName('recycleTreasure'))
             treasure.requestDelete()
 
@@ -635,7 +635,7 @@ def restartVideographerRound():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -652,7 +652,7 @@ def skipVideographer():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -669,7 +669,7 @@ def videographer2():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -687,7 +687,7 @@ def videographerCutscene1():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -705,7 +705,7 @@ def killVideographer():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedVideographerBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do

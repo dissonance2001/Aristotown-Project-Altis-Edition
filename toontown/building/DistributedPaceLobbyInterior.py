@@ -46,8 +46,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
             return
         pos = base.localAvatar.getPos(render)
         hpr = base.localAvatar.getHpr(render)
-        print('[Pace Lobby Position] (%.3f, %.3f, %.3f, %.3f)' %
-              (pos.getX(), pos.getY(), pos.getZ(), hpr.getX()))
+        print(('[Pace Lobby Position] (%.3f, %.3f, %.3f, %.3f)' %
+              (pos.getX(), pos.getY(), pos.getZ(), hpr.getX())))
 
     def doMusic(self, task):
         base.musicManager.stopAllSounds()

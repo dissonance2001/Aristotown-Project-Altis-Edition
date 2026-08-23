@@ -77,7 +77,7 @@ class DistributedCJBossAI(DistributedRebornBossCogAI):
         else:
             targetDistance = sortedDistances[0]
 
-        for toonId, distance in toonToDistance.iteritems():
+        for toonId, distance in toonToDistance.items():
             if distance == targetDistance:
                 targetId = toonId
                 break
@@ -205,7 +205,7 @@ def toggleBooks():
     """
 
     invoker = spellbook.getInvoker()
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedCJBossAI):
             if invoker.doId in do._parent.involvedToons:
                 do.dontDoLargeAttack = not do.dontDoLargeAttack

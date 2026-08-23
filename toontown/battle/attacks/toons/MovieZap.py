@@ -95,7 +95,7 @@ def doZaps(zaps):
             lastZapTargetBySuit[suit.doId] = target
 
     # Now mark exactly ONE target dictionary per Cog.
-    for target in lastZapTargetBySuit.values():
+    for target in list(lastZapTargetBySuit.values()):
         target['lastZapForSuit'] = 1
 
     suitZapsDict = {}
@@ -121,7 +121,7 @@ def doZaps(zaps):
             else:
                 suitZapsDict[suitId] = [zap]
 
-    suitZaps = suitZapsDict.values()
+    suitZaps = list(suitZapsDict.values())
 
     def compFunc(a, b):
         if len(a) > len(b):
@@ -260,7 +260,7 @@ def __doZap(zap, delay, fShowStun, lastZap, uberClone=0, npcs=[]):
             combinedTrack.append(mainTrack)
 
         # The other Cogs are chained Zap hits only.
-        for chainIndex in xrange(len(chainTargets)):
+        for chainIndex in range(len(chainTargets)):
             target = chainTargets[chainIndex]
 
             if chainIndex == 0:
@@ -696,7 +696,7 @@ def shortCircuitTrack(suit, battle):
 
 
 def say(statement):
-    print statement
+    print(statement)
 
 
 def __ScapegoatAbsorb(suitIndex, suits, hp, battle):
@@ -1739,7 +1739,7 @@ def getBeamGeomStages(beam):
     for geomNp in beam.findAllMatches('**/+GeomNode'):
         stages = geomNp.findAllTextureStages()
 
-        for i in xrange(stages.getNumTextureStages()):
+        for i in range(stages.getNumTextureStages()):
             ts = stages.getTextureStage(i)
 
             tex = geomNp.getTexture(ts)
@@ -1767,7 +1767,7 @@ def makeZapBeamTrack2(battle, coil, suit, tDelay, duration):
         for geomNp in beam.findAllMatches('**/+GeomNode'):
             stages = geomNp.findAllTextureStages()
 
-            for i in xrange(stages.getNumTextureStages()):
+            for i in range(stages.getNumTextureStages()):
                 ts = stages.getTextureStage(i)
 
                 tex = geomNp.getTexture(ts)

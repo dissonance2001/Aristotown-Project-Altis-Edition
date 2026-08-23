@@ -304,7 +304,7 @@ class SocialPanelFriendsTab(DirectFrame):
         except:
             pass
 
-        for avId, obj in base.cr.doId2do.items():
+        for avId, obj in list(base.cr.doId2do.items()):
             if not hasattr(obj, 'getName'):
                 continue
 

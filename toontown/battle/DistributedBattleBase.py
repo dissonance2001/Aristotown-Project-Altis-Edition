@@ -114,7 +114,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.activeIntervals[name] = interval
 
     def __cleanupIntervals(self):
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
             DelayDelete.cleanupDelayDeletes(interval)
 
@@ -788,7 +788,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         if int(movieHasBeenMade) == 1:
             self.TurnsElapsed += 1
 
-        print('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder)
+        print(('CLIENT RECEIVED TRACK ORDER:', self.toonTrackOrder))
         if self.__battleCleanedUp:
             return
         self.notify.debug('setMovie()')

@@ -93,7 +93,7 @@ class PacesetterCalculatorAI:
 
     def __encodeSuitOrder(self, oldSuits, newSuits):
         value = 0
-        for newIndex in xrange(len(newSuits)):
+        for newIndex in range(len(newSuits)):
             oldIndex = oldSuits.index(newSuits[newIndex])
             value |= oldIndex << (newIndex * 3)
         return value
@@ -116,7 +116,7 @@ class PacesetterCalculatorAI:
         return False
 
     def calculatePacesetterAttacks(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter': 
                 if self.battle.activeSuits[i].currHP > 0:
@@ -142,7 +142,7 @@ class PacesetterCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
         rushJobsQueued = set()
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':
                 self.__cancelOpeningChallengeIfNeeded(suitId)
@@ -199,7 +199,7 @@ class PacesetterCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                         rushJobsQueued.add(suitId)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
                 self.__cancelOpeningChallengeIfNeeded(suitId)
@@ -293,7 +293,7 @@ class PacesetterCalculatorAI:
             oldActiveSuits = self.battle.activeSuits[:]
             oldLivingSuits = []
             livingPositions = []
-            for index in xrange(len(oldActiveSuits)):
+            for index in range(len(oldActiveSuits)):
                 otherSuit = oldActiveSuits[index]
                 if otherSuit.currHP > 0 and not self.suitHasCondition(otherSuit.doId, 'dead'):
                     oldLivingSuits.append(otherSuit)
@@ -305,7 +305,7 @@ class PacesetterCalculatorAI:
             if newLivingSuits == oldLivingSuits:
                 newLivingSuits.reverse()
             newActiveSuits = oldActiveSuits[:]
-            for index in xrange(len(livingPositions)):
+            for index in range(len(livingPositions)):
                 newActiveSuits[livingPositions[index]] = newLivingSuits[index]
             payload = self.__encodeSuitOrder(oldActiveSuits, newActiveSuits)
             attack = self.__getCheatAttack(suit.doId, {
@@ -327,7 +327,7 @@ class PacesetterCalculatorAI:
                     [otherSuit.doId for otherSuit in newActiveSuits]
                 )
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'psetter':  # Pacesetter
                 if self.battle.activeSuits[i].currHP >= 12750 and not openingChallengeCancelled and not self.suitHasCondition(suitId, 'overclocked') and self.suitHasCondition(suitId, 'turn2') and self.suitHasCondition(suitId, 'turn1'):

@@ -17,7 +17,7 @@ If you want to implement new filters of your own, see Filter (and the various ex
 
 """
 
-
+from __future__ import print_function
 
 import sys
 from functools import wraps

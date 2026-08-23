@@ -109,7 +109,7 @@ HIGH_ROLLER_HEAD_ANIMS = {
 # creates a second control that writes the same duck joints out of phase.
 # Preserve that original neutral control and add only the CTSC fusion clips.
 HIGH_ROLLER_FUSION_HEAD_ANIMS = {
-    name: path for name, path in HIGH_ROLLER_HEAD_ANIMS.items()
+    name: path for name, path in list(HIGH_ROLLER_HEAD_ANIMS.items())
     if name != 'neutral'
 }
 
@@ -246,8 +246,8 @@ def _validateExistingSuitAnimations(actor, animNames, label):
             '[HighRoller CTSC] %s existing animation validation failed:\n  %s' %
             (label, '\n  '.join(failures)))
 
-    print('[HighRoller CTSC] Preserved Altis %s: %s' %
-          (label, ', '.join(sorted(validated))))
+    print(('[HighRoller CTSC] Preserved Altis %s: %s' %
+          (label, ', '.join(sorted(validated)))))
 
 
 def _loadAndValidateAdditionalAnimations(actor, animMap, label):
@@ -283,8 +283,8 @@ def _loadAndValidateAdditionalAnimations(actor, animMap, label):
             '[HighRoller CTSC] %s animation binding failed:\n  %s' %
             (label, '\n  '.join(failures)))
 
-    print('[HighRoller CTSC] Added Clash %s: %s' %
-          (label, ', '.join(sorted(animMap.keys()))))
+    print(('[HighRoller CTSC] Added Clash %s: %s' %
+          (label, ', '.join(sorted(animMap.keys())))))
 
 
 
@@ -304,8 +304,8 @@ def _cacheResolvedControls(actor, animNames, label):
         raise RuntimeError(
             '[HighRoller CTSC] Could not cache exact %s controls:\n  %s' %
             (label, '\n  '.join(failures)))
-    print('[HighRoller CTSC] Cached exact %s controls: %s' %
-          (label, ', '.join(sorted(controls.keys()))))
+    print(('[HighRoller CTSC] Cached exact %s controls: %s' %
+          (label, ', '.join(sorted(controls.keys())))))
     return controls
 
 def _getToonAnimControls(toon, animName):
@@ -355,8 +355,8 @@ def _validateExistingAnimations(actor, animNames, label):
         raise RuntimeError(
             '[HighRoller CTSC] %s is missing required existing animations:\n  %s' %
             (label, '\n  '.join(failures)))
-    print('[HighRoller CTSC] Validated multipart %s: %s' %
-          (label, ', '.join(validated)))
+    print(('[HighRoller CTSC] Validated multipart %s: %s' %
+          (label, ', '.join(validated))))
 
 
 def _configureSuitNametag(suit, visible=False):
@@ -694,17 +694,17 @@ class HighRollerIntroSetup(object):
 
         _loadAndValidateAdditionalAnimations(
             self.suits[0], dict((name, path) for name, path in
-                                HIGH_ROLLER_BODY_ANIMS.items()
+                                list(HIGH_ROLLER_BODY_ANIMS.items())
                                 if name.startswith('hr-fusion-')),
             'High Roller fusion body aliases')
         _loadAndValidateAdditionalAnimations(
             self.suits[1], dict((name, path) for name, path in
-                                DUCK_SHUFFLER_BODY_ANIMS.items()
+                                list(DUCK_SHUFFLER_BODY_ANIMS.items())
                                 if name.startswith('ds-fusion-')),
             'Duck Shuffler fusion body aliases')
         _loadAndValidateAdditionalAnimations(
             self.suits[2], dict((name, path) for name, path in
-                                MAJOR_PLAYER_BODY_ANIMS.items()
+                                list(MAJOR_PLAYER_BODY_ANIMS.items())
                                 if name.startswith('mp-fusion-')),
             'Major Player fusion body aliases')
 
@@ -740,24 +740,24 @@ class HighRollerIntroSetup(object):
         # lookup.
         self.suitAnimationControls = [
             _cacheResolvedControls(
-                self.suits[0], HIGH_ROLLER_BODY_ANIMS.keys(),
+                self.suits[0], list(HIGH_ROLLER_BODY_ANIMS.keys()),
                 'High Roller body'),
             _cacheResolvedControls(
-                self.suits[1], DUCK_SHUFFLER_BODY_ANIMS.keys(),
+                self.suits[1], list(DUCK_SHUFFLER_BODY_ANIMS.keys()),
                 'Duck Shuffler body'),
             _cacheResolvedControls(
-                self.suits[2], MAJOR_PLAYER_BODY_ANIMS.keys(),
+                self.suits[2], list(MAJOR_PLAYER_BODY_ANIMS.keys()),
                 'Major Player body'),
         ]
         self.suitHeadAnimationControls = [
             _cacheResolvedControls(
-                self.heads[0], HIGH_ROLLER_HEAD_ANIMS.keys(),
+                self.heads[0], list(HIGH_ROLLER_HEAD_ANIMS.keys()),
                 'High Roller head'),
             _cacheResolvedControls(
-                self.heads[1], DUCK_SHUFFLER_HEAD_ANIMS.keys(),
+                self.heads[1], list(DUCK_SHUFFLER_HEAD_ANIMS.keys()),
                 'Duck Shuffler head'),
             _cacheResolvedControls(
-                self.heads[2], MAJOR_PLAYER_HEAD_ANIMS.keys(),
+                self.heads[2], list(MAJOR_PLAYER_HEAD_ANIMS.keys()),
                 'Major Player head'),
         ]
 
@@ -782,7 +782,7 @@ class HighRollerIntroSetup(object):
                 mapping = suit.generateAnimDict().copy()
             except:
                 mapping = {}
-            for name, path in additional.items():
+            for name, path in list(additional.items()):
                 if 'fusion-' in name:
                     mapping[name] = path
             self.suitAnimationMaps.append(mapping)
@@ -915,7 +915,7 @@ class HighRollerIntroSetup(object):
         _loadAndValidateAdditionalAnimations(
             self.cameraMover, CAMERA_ANIMS, 'High Roller fusion camera')
         self.cameraAnimationControls = _cacheResolvedControls(
-            self.cameraMover, CAMERA_ANIMS.keys(),
+            self.cameraMover, list(CAMERA_ANIMS.keys()),
             'High Roller fusion camera')
         self.cameraBone = self.cameraMover.find('**/CameraBone')
         if self.cameraBone.isEmpty():

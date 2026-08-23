@@ -57,7 +57,7 @@ def doSues(sues):
         else:
             suitSuesDict[suitId] = [sue]
 
-    suitSues = suitSuesDict.values()
+    suitSues = list(suitSuesDict.values())
     def compFunc(a, b):
         if len(a) > len(b):
             return 1
@@ -159,7 +159,7 @@ def __doSuitSues(sues):
                 showSuitCannon = 0
             else:
                 suitList.remove(sue['target'][i]['suit'])
-            for x in xrange(len(sue['target'])):
+            for x in range(len(sue['target'])):
                 tracks = __throwPie(sue, delay, hitCount)
                 i = i + 1
                 if tracks:
@@ -215,7 +215,7 @@ def __propPreflight(props, suit, toon, battle):
     toon.update(0)
     prop.wrtReparentTo(battle)
     props[1].reparentTo(hidden)
-    for ci in xrange(prop.getNumChildren()):
+    for ci in range(prop.getNumChildren()):
         prop.getChild(ci).setHpr(0, -90, 0)
 
     targetPnt = MovieUtil.avatarFacePoint(suit, other=battle)
@@ -227,7 +227,7 @@ def __propPreflightGroup(props, suits, toon, battle):
     toon.update(0)
     prop.wrtReparentTo(battle)
     props[1].reparentTo(hidden)
-    for ci in xrange(prop.getNumChildren()):
+    for ci in range(prop.getNumChildren()):
         prop.getChild(ci).setHpr(0, -90, 0)
 
     avgTargetPt = Point3(0, 0, 0)

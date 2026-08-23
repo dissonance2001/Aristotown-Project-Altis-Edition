@@ -39,7 +39,7 @@ class SellbotLitigationCalculatorAI:
         )
 
     def calculateSuitAttacksSellbotLitigation(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hustle':
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -85,7 +85,7 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'safesupervis':
                 if self.suitHasCondition(suitId, 'highpressurecalculator') and not self.__suitCanAttack(suitId) and \
@@ -119,7 +119,7 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if not self.suitHasCondition(suitId, 'dotfinished'):
                 self.__appendToonConditionDamageAndRetaliation(
@@ -201,7 +201,7 @@ class SellbotLitigationCalculatorAI:
 
 
             # Primary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hustle':
                 if self.suitHasCondition(suitId, 'unionbustercalculator') and not self.__suitCanAttack(suitId) and \
@@ -251,7 +251,7 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ubuster':
                 if self.suitHasCondition(suitId, 'breachvulnerable') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -297,7 +297,7 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ubuster':
                 self.__appendToonConditionDamageAndRetaliation(
@@ -382,7 +382,7 @@ class SellbotLitigationCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
             # Secondary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ubuster':
                 if self.suitHasCondition(suitId, 'unionbustercalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -513,7 +513,7 @@ class SellbotLitigationCalculatorAI:
                                         'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                    for i in xrange(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
+                    for i in range(len(self.battle.activeSuits)):  # Desperation for Litigation Managers
                         suitId = self.battle.activeSuits[i].doId
                         if self.suitHasCondition(suitId, 'desperationcalculator') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.LitigationManagers and not self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyDesperation2'):
                             attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -528,7 +528,7 @@ class SellbotLitigationCalculatorAI:
                                 self.battle.suitAttacks.append(attack)
 
             # Gag Bans & End Of Round Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hustle':
                 if self.suitHasCondition(suitId, 'contractenforcementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[

@@ -31,7 +31,7 @@ class InjectorShader:
             self.node.clearShader()
         else:
             self.node.setShader(self.shader)
-            for key, val in self.uniformInputs.items():
+            for key, val in list(self.uniformInputs.items()):
                 self.node.setShaderInput(key, val)
 
         # Render a frame and see if something messed up.

@@ -1,14 +1,14 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
-import CogHQLoader
+from . import CogHQLoader
 from toontown.toonbase import ToontownGlobals
 from direct.gui import DirectGui
 from toontown.toonbase import TTLocalizer
 from toontown.battle.BattleProps import *
 from toontown.toon import Toon
 from direct.fsm import State
-import BoardbotHQExterior
-import BoardbotOfficeExterior
+from . import BoardbotHQExterior
+from . import BoardbotOfficeExterior
 from toontown.coghq.boardbothq import BoardOfficeInterior
 from toontown.coghq import CashbotHQBossBattle
 

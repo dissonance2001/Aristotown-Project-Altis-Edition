@@ -125,7 +125,7 @@ class TownBattle(StateData.StateData):
                            TownBattleToonPanel.TownBattleToonPanel(3),
                            TownBattleToonPanel.TownBattleToonPanel(4),
                            TownBattleToonPanel.TownBattleToonPanel(5)]
-        self.cogPanels = [TownBattleCogPanel.TownBattleCogPanel(self) for i in xrange(7)]
+        self.cogPanels = [TownBattleCogPanel.TownBattleCogPanel(self) for i in range(7)]
         self.timer = ToontownTimer.ToontownTimer()
         self.timer.reparentTo(base.a2dTopRight)
         self.timer.setPos(-0.151, 0, -1.808)
@@ -198,7 +198,7 @@ class TownBattle(StateData.StateData):
         self.parentFSMState.addChild(self.fsm)
         if not self.isLoaded:
             self.load()
-        print 'Battle Event %s' % event
+        print('Battle Event %s' % event)
         self.battleEvent = event
         self.fsm.enterInitialState()
         base.localAvatar.laffMeter.start()
@@ -290,7 +290,7 @@ class TownBattle(StateData.StateData):
 
         scale = self.timer.getScale()
 
-        for i in xrange(20):
+        for i in range(20):
             pulse.append(
                 LerpScaleInterval(
                     self.timer,
@@ -706,11 +706,11 @@ class TownBattle(StateData.StateData):
 
     def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons, battle):
         self.battle = battle
-        cogIds = map(lambda cog: cog.doId, cogs)
+        cogIds = [cog.doId for cog in cogs]
         # self.notify.debug('adjustCogsAndToons() cogIds: %s self.cogs: %s' % (cogIds, self.cogs))
         # self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
         # self.notify.debug('adjustCogsAndToons() trappedIndices: %s self.trappedIndices: %s' % (trappedIndices, self.trappedIndices))
-        toonIds = map(lambda toon: toon.doId, toons)
+        toonIds = [toon.doId for toon in toons]
         # self.notify.debug('adjustCogsAndToons() toonIds: %s self.toons: %s' % (toonIds, self.toons))
         maxSuitLevel = 0
         cogFireCostIndex = 0

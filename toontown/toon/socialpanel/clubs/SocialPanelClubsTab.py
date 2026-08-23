@@ -129,7 +129,7 @@ class SocialPanelClubsTab(DirectFrame):
             pass
         try:
             textures = model.findAllTextures()
-            for index in xrange(textures.getNumTextures()):
+            for index in range(textures.getNumTextures()):
                 texture = textures.getTexture(index)
                 texture.setMinfilter(Texture.FTLinear)
                 texture.setMagfilter(Texture.FTLinear)
@@ -840,7 +840,7 @@ class SocialPanelClubsTab(DirectFrame):
         boosters = club.get('boosters', {})
         activeBoosters = []
         now = int(time.time())
-        for key, endTime in boosters.items():
+        for key, endTime in list(boosters.items()):
             remaining = max(0, int(endTime) - now)
             if remaining:
                 activeBoosters.append((key, remaining))
@@ -1421,7 +1421,7 @@ class SocialPanelClubsTab(DirectFrame):
 
         # Nearby Toons are shown first. This uses the same filtering as the
         # Friends tab, but clicking a row sends the Club invite immediately.
-        for avId, obj in base.cr.doId2do.items():
+        for avId, obj in list(base.cr.doId2do.items()):
             try:
                 avId = int(avId)
             except:
@@ -1464,7 +1464,7 @@ class SocialPanelClubsTab(DirectFrame):
                 'online': online,
             }
 
-        result = candidates.values()
+        result = list(candidates.values())
         try:
             result = list(result)
         except:
@@ -1768,7 +1768,7 @@ class SocialPanelClubsTab(DirectFrame):
                 continue
             value = member.get(key)
             try:
-                if isinstance(value, basestring):
+                if isinstance(value, str):
                     value = value.strip().lower()
                     if value in ('1', 'true', 'yes', 'online'):
                         return True

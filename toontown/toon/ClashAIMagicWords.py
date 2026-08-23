@@ -10,7 +10,7 @@ def _resolveSuitName(value):
     value = value.lower()
     if value in SuitBattleGlobals.SuitAttributes:
         return value
-    for suitName, attributes in SuitBattleGlobals.SuitAttributes.items():
+    for suitName, attributes in list(SuitBattleGlobals.SuitAttributes.items()):
         if attributes.get('name', '').lower() == value:
             return suitName
     return None
@@ -126,7 +126,7 @@ def clashDance():
     """Makes every Toon in your current zone dance."""
     invoker = spellbook.getInvoker()
     count = 0
-    for toon in simbase.air.doId2do.values():
+    for toon in list(simbase.air.doId2do.values()):
         if toon.__class__.__name__ != 'DistributedToonAI':
             continue
         if toon.zoneId != invoker.zoneId:

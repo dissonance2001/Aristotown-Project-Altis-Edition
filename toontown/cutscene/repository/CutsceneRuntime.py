@@ -62,7 +62,7 @@ def _orderedSubevents(subEvents):
             return int(item[0])
         except (TypeError, ValueError):
             return item[0]
-    return [value for key, value in sorted(subEvents.items(), key=sortKey)]
+    return [value for key, value in sorted(list(subEvents.items()), key=sortKey)]
 
 
 def _makeSubeventInterval(subeventData, cutsceneDict, resourcePath,

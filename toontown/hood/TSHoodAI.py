@@ -25,9 +25,9 @@ class TSHoodAI(HoodAI.HoodAI):
     def startup(self):
         HoodAI.HoodAI.startup(self)
 
-        existingNpcIds = set([getattr(obj, 'npcId', None) for obj in self.air.doId2do.values()])
+        existingNpcIds = set([getattr(obj, 'npcId', None) for obj in list(self.air.doId2do.values())])
         npcIdList = NPCToons.zone2NpcDict.get(self.zoneId, [])
-        for i in xrange(len(npcIdList)):
+        for i in range(len(npcIdList)):
             npcId = npcIdList[i]
             if npcId not in existingNpcIds:
                 npcDesc = NPCToons.NPCToonDict.get(npcId)

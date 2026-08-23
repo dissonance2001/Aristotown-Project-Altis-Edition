@@ -103,7 +103,7 @@ class DistributedGroupManagerUD(object):
 
     def _sendBrowse(self, avId):
         groups = []
-        for group in self.groups.values():
+        for group in list(self.groups.values()):
             if not group.get('published', False):
                 continue
             groups.append(self._publicGroup(group))
@@ -169,7 +169,7 @@ class DistributedGroupManagerUD(object):
                 self.pendingInvites[targetId] = active
             else:
                 self.pendingInvites.pop(targetId, None)
-        for group in changedGroups.values():
+        for group in list(changedGroups.values()):
             self._broadcastState(group)
 
     def heartbeat(self, avName, zoneId):

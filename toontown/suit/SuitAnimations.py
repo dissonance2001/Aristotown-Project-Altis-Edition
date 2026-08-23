@@ -302,7 +302,7 @@ def loadSuitAnims(suit, modelDict, flag=1):
     animList = getSuitAnimList(suitName)
 
     if not animList:
-        print ':SuitAnimations(warning): No animations for %s' % suitName
+        print(':SuitAnimations(warning): No animations for %s' % suitName)
         return -1
 
     animations = {}

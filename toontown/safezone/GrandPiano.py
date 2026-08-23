@@ -30,7 +30,7 @@ class GrandPiano(DirectObject):
         try:
             self.model = globalPropPool.getProp('piano')
         except Exception as error:
-            print('[GrandPiano] Could not load gag piano: %s' % error)
+            print(('[GrandPiano] Could not load gag piano: %s' % error))
             self.model = None
         if self.model is None or self.model.isEmpty():
             print('[GrandPiano] Could not load BattleProps piano.')

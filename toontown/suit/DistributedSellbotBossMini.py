@@ -145,7 +145,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.piesRestockSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_pies_restock.ogg')
         self.rampSlideSfx = loader.loadSfx('phase_9/audio/sfx/CHQ_VP_ramp_slide.ogg')
         self.strafeSfx = []
-        for i in xrange(10):
+        for i in range(10):
             self.strafeSfx.append(loader.loadSfx('phase_3.5/audio/sfx/SA_shred.ogg'))
 
         render.setTag('pieCode', str(ToontownGlobals.PieCodeNotBossCog))
@@ -424,7 +424,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             return radiographerNode.getPos(render)
 
         dooberTrack2 = Parallel()
-        for i in xrange(len(self.doobers)):
+        for i in range(len(self.doobers)):
             suit = self.doobers[i]
             dooberTrack2.append(Parallel(Sequence(ActorInterval(suit, 'slip-forward'), Func(suit.loop, 'neutral')), Sequence(Func(suit.setChatAbsolute, "We will not let you down, Sir!", CFSpeech), Wait(5.0), Func(suit.setChatAbsolute, "", CFSpeech))))
 
@@ -1309,7 +1309,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         radius = 15
         numToons = len(self.involvedToons)
         center = (numToons - 1) / 2.0
-        for i in xrange(numToons):
+        for i in range(numToons):
             toon = base.cr.doId2do.get(self.involvedToons[i])
             if toon:
                 angle = 270 - 15 * (i - center)
@@ -1340,7 +1340,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
 
     def __toonsToPromotionPosition(self, toonIds, battleNode):
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for i in xrange(len(toonIds)):
+        for i in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[i])
             if toon:
                 toon.reparentTo(render)
@@ -1364,7 +1364,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             (35, 60, 18, 180),
         ]
 
-        for i in xrange(len(doobers)):
+        for i in range(len(doobers)):
             suit = doobers[i]
             suit.fsm.request('neutral')
             suit.loop('neutral')
@@ -1475,7 +1475,7 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
             spread = -spread
         dist = 50
         rate = time / numGears
-        for i in xrange(numGears):
+        for i in range(numGears):
             node = gearRoot.attachNewNode(str(i))
             node.hide()
             node.setPos(0, 0, 0)

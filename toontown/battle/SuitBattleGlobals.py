@@ -1,5 +1,5 @@
 import random
-import StatusEffects
+from . import StatusEffects
 from toontown.battle.BattleBase import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
@@ -50,7 +50,7 @@ def getSuitHP(name, actualLevel, relativeLevel):
     #
     # 'hp': 5000
     #
-    if isinstance(hpData, (int, long, float)):
+    if isinstance(hpData, (int, float)):
         return max(1, int(hpData))
 
     # Formula name:
@@ -58,7 +58,7 @@ def getSuitHP(name, actualLevel, relativeLevel):
     # 'hp': 'normal'
     # 'hp': 'specialist'
     #
-    if isinstance(hpData, basestring):
+    if isinstance(hpData, str):
         formulaName = hpData.lower()
 
         if formulaName == 'operations':
@@ -307,7 +307,7 @@ def getAttackIndex(attackName, suitName):
     attackName: The attack (e.g. 'ClipOnTie', 'SnapWet', etc.).
     '''
     attacks = SuitAttributes[suitName]['attacks']
-    for i in xrange(len(attacks)):
+    for i in range(len(attacks)):
         attack = attacks[i]
         if attack.name == attackName:
             return i
@@ -346,7 +346,7 @@ def getAttackIndexSoak(attackName):
     attackName: The attack (e.g. 'ClipOnTie', 'SnapWet', etc.).
     '''
     attacks = SuitAttributes['pob']['attacks']
-    for i in xrange(len(attacks)):
+    for i in range(len(attacks)):
         attack = attacks[i]
         if attack.name == attackName:
             return i
@@ -415,14 +415,14 @@ def pickSuitCheat(cheats, suitLevel):
     if configAttackName == 'random':
         return attackNum
     elif configAttackName == 'sequence':
-        for i in xrange(len(attacks)):
+        for i in range(len(attacks)):
             if cheats[i] not in debugAttackSequence:
                 debugAttackSequence[cheats[i]] = 1
                 return i
 
         return cheatNum
     else:
-        for i in xrange(len(cheats)):
+        for i in range(len(cheats)):
             if cheats[i][0] == configAttackName:
                 return i
 
@@ -448,7 +448,7 @@ def getSuitCheat(suitName, suitLevel, cheatNum = -1):
     cdict['suitName'] = suitName
     name = attack[0]
     cdict['name'] = name
-    cdict['id'] = SuitAttacks.keys().index(name)
+    cdict['id'] = list(SuitAttacks.keys()).index(name)
     cdict['animName'] = SuitAttacks[name][0]
     cdict['hp'] = cheat[1][suitLevel]
     cdict['acc'] = cheat[2][suitLevel]
@@ -7644,11 +7644,11 @@ def setupSuitAttackTaunts(attackName, suitName):
         # Check to see if the attack has any custom phrases, which will be denoted by a dict object rather than a list.
         if isinstance(SuitAttackTaunts[attackName], dict):
             # Did we find the Cog in the dict?
-            if suitName in SuitAttackTaunts[attackName].keys():
+            if suitName in list(SuitAttackTaunts[attackName].keys()):
                 # Then these are the taunts we are using.
                 return SuitAttackTaunts[attackName][suitName]
             # We should be using the None key if it exists.
-            elif None in SuitAttackTaunts[attackName].keys():
+            elif None in list(SuitAttackTaunts[attackName].keys()):
                 # It does, so use those phrases.
                 return SuitAttackTaunts[attackName][None]
         else:
@@ -7662,10 +7662,10 @@ def setupSuitAttackTaunts(attackName, suitName):
 def getAttackTauntIndex(attackName, suitName):
     if attackName in SuitAttackTaunts:
         if isinstance(SuitAttackTaunts[attackName], dict):
-            if suitName in SuitAttackTaunts[attackName].keys():
+            if suitName in list(SuitAttackTaunts[attackName].keys()):
                 taunts = SuitAttackTaunts[attackName][suitName]
                 return random.randint(0, len(taunts) - 1)
-            elif None in SuitAttackTaunts[attackName].keys():
+            elif None in list(SuitAttackTaunts[attackName].keys()):
                 taunts = SuitAttackTaunts[attackName][None]
                 return random.randint(0, len(taunts) - 1)
 

@@ -27,11 +27,11 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
         self.doobers = []
         if ToontownGlobals.APRIL_FOOLS_COSTUMES in simbase.air.holidayManager.currentHolidays:
             if random.random() <= 0.25:
-                self.cagedToonNpcId = random.choice(NPCToons.AprilToonsFriends.keys())
+                self.cagedToonNpcId = random.choice(list(NPCToons.AprilToonsFriends.keys()))
             else:
-                self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+                self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         else:
-            self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+            self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.recoverRate = 0
@@ -463,7 +463,7 @@ class DistributedBoardbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM
 
     def __makeDoobers(self):
         self.__resetDoobers()
-        for i in xrange(8):
+        for i in range(8):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
             level = random.randint(1, 14)
             suit.dna = SuitDNA.SuitDNA()
@@ -555,7 +555,7 @@ def skipChairman():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBoardbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -575,7 +575,7 @@ def skipChairman2():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBoardbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -595,7 +595,7 @@ def skipbdlitcutscene():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBoardbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -615,7 +615,7 @@ def killChairman():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBoardbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do

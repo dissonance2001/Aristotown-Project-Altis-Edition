@@ -89,7 +89,7 @@ class SelectorButton(DirectFrame):
         if not texts:
             texts = ['']
         self.options = list(values)
-        self.option2Text = dict(zip(self.options, list(texts)))
+        self.option2Text = dict(list(zip(self.options, list(texts))))
         self.wraparound = wraparound
         self.currentIndex = setIndex if setIndex != -1 else len(self.options) - 1
         if self.currentIndex < 0:

@@ -218,7 +218,7 @@ class Activity(object):
 
         if isinstance(self.state, list):
             self.state = self.state[min(imageIndex, len(self.state) - 1)]
-        if fillin is not None and isinstance(self.state, basestring) and '%s' in self.state:
+        if fillin is not None and isinstance(self.state, str) and '%s' in self.state:
             try:
                 self.state = self.state % fillin
             except TypeError:

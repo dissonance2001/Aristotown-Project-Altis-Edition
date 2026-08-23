@@ -175,7 +175,7 @@ def _refreshHealthMeters():
     if not cr:
         return
     try:
-        avatars = cr.doId2do.values()
+        avatars = list(cr.doId2do.values())
     except:
         return
     for avatar in avatars:
@@ -581,7 +581,7 @@ class DropdownOption(BaseOption):
             pos=(0, 0, -0.1)
         )
         self.dropdownButtons.append(backBtn)
-        for item in xrange(len(self.options)):
+        for item in range(len(self.options)):
             isLast = item == len(self.options) - 1
             paper = paperBottom if isLast else paperMiddle
             btn = DirectButton(
@@ -710,7 +710,7 @@ class ResolutionPicker(BaseOption):
             pos=(0, 0, -0.1)
         )
         self.dropdownButtons.append(backBtn)
-        for item in xrange(len(self.resolutions)):
+        for item in range(len(self.resolutions)):
             isLast = item == len(self.resolutions) - 1
             paper = paperBottom if isLast else paperMiddle
             resolution = self.resolutions[item]
@@ -796,7 +796,7 @@ def staggeredFadeUp(items):
 
 def staggeredFadePopin(items, scales=None):
     if settings.get('reduce-gui-movement', False):
-        for i in xrange(len(items)):
+        for i in range(len(items)):
             item = items[i]
             if item:
                 scale = scales[i] if scales else item.getScale()
@@ -804,7 +804,7 @@ def staggeredFadePopin(items, scales=None):
                 item.setColorScale(1, 1, 1, 1)
         return
     seq = Sequence()
-    for i in xrange(len(items)):
+    for i in range(len(items)):
         item = items[i]
         if item:
             scale = scales[i] if scales else item.getScale()

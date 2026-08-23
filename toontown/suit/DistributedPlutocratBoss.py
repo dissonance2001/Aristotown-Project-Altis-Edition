@@ -234,7 +234,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                 except:
                     pass
 
-        for obj in self.cr.doId2do.values():
+        for obj in list(self.cr.doId2do.values()):
             try:
                 if obj.doId in seen:
                     continue
@@ -422,7 +422,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def advanceFrozenSuitVisuals(self):
         expired = []
-        for suitId, rounds in self.frozenSuitRounds.items():
+        for suitId, rounds in list(self.frozenSuitRounds.items()):
             if rounds > 0:
                 rounds -= 1
                 if rounds <= 0:
@@ -658,7 +658,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
     def cleanupIntervals(self):
         if getattr(self, 'cutsceneSkip', None):
             self.cutsceneSkip.intervalsCleaned()
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             try:
                 interval.pause()
             except:
@@ -693,7 +693,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds or not battleNode:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = self.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]
@@ -771,7 +771,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.introTrack.start()
             self.storeInterval(self.introTrack, intervalName)
             return Task.done
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Plutocrat introduction CTSC failed: %s' % error)
             self.__finishIntroductionTrack()
             return Task.done
@@ -830,7 +830,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def __waitForDeathSuit(self, task):
         plutocrat = None
-        for obj in self.cr.doId2do.values():
+        for obj in list(self.cr.doId2do.values()):
             try:
                 if getattr(getattr(obj, 'dna', None), 'name', '') == 'pcrat':
                     plutocrat = obj
@@ -851,7 +851,7 @@ class DistributedPlutocratBoss(DistributedObject.DistributedObject, FSM.FSM):
                 name=intervalName)
             self.deathTrack.start()
             self.storeInterval(self.deathTrack, intervalName)
-        except Exception, error:
+        except Exception as error:
             self.notify.warning('Plutocrat death CTSC failed: %s' % error)
             self.doneBarrier('Reward')
         return Task.done

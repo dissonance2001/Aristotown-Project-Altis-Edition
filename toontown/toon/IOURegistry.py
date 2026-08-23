@@ -73,10 +73,10 @@ IOURegistry = {
 }
 
 NPCIDToIOUSubtype = {}
-for subtype, definition in IOURegistry.items():
+for subtype, definition in list(IOURegistry.items()):
     NPCIDToIOUSubtype[definition.getNpcId()] = subtype
 
-ObtainableIOUSubtypes = [subtype for subtype, definition in IOURegistry.items() if definition.obtainable]
+ObtainableIOUSubtypes = [subtype for subtype, definition in list(IOURegistry.items()) if definition.obtainable]
 ObtainableIOUSubtypes.sort()
 ObtainableIOUNPCIds = [IOURegistry[subtype].getNpcId() for subtype in ObtainableIOUSubtypes]
 

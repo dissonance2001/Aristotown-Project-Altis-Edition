@@ -1,12 +1,12 @@
 #!/usr/bin/env python2
-import __builtin__
+import builtins
 import os
 import sys
 
-__builtin__.process = 'client'
+builtins.process = 'client'
 
 # Temporary hack patch:
-__builtin__.__dict__.update(__import__('pandac.PandaModules', fromlist = ['*']).__dict__)
+builtins.__dict__.update(__import__('pandac.PandaModules', fromlist = ['*']).__dict__)
 from direct.extensions_native import HTTPChannel_extensions
 from direct.extensions_native import Mat3_extensions
 from direct.extensions_native import VBase3_extensions
@@ -19,7 +19,7 @@ loadPrcFile('dependencies/config/release/dev.prc')
 if sys.platform == 'darwin':
     loadPrcFile('dependencies/config/macos.prc')
 
-import StringIO
+import io
 vfs = VirtualFileSystem.getGlobalPtr()
 import glob
 
@@ -35,9 +35,9 @@ notify.setInfo(True)
 preferencesFilename = ConfigVariableString(
     'preferences-filename', 'user/preferences.json').getValue()
 notify.info('Reading %s...' % preferencesFilename)
-__builtin__.settings = Settings(preferencesFilename)
+builtins.settings = Settings(preferencesFilename)
 from toontown.settings import ToontownSettings
-__builtin__.ttsettings = ToontownSettings
+builtins.ttsettings = ToontownSettings
 
 hadDisplayMode = 'display-mode' in settings
 for setting in ttsettings.DefaultSettings:
@@ -76,7 +76,7 @@ vfs = VirtualFileSystem.getGlobalPtr()
 DefaultPhases = (3, 3.5, 4, 5, 5.5, 6, 7, 8, 9, 10, 11, 12, 13)
 import glob
 notify.info("Loading Default Pack...")
-__builtin__.defaultPhaseMultifiles = []
+builtins.defaultPhaseMultifiles = []
 for file in glob.glob('resources/default/*.mf'):
     phaseName = os.path.splitext(os.path.basename(file))[0]
     if not phaseName.startswith('phase_'):
@@ -99,7 +99,7 @@ for file in glob.glob('resources/default/*.mf'):
         notify.info('Successfully Mounted:' + file)
 notify.info("Default Pack Loaded!")
 from toontown.toonbase.ContentPackManager import ContentPackManager
-__builtin__.ContentPackMgr = ContentPackManager()
+builtins.ContentPackMgr = ContentPackManager()
 ContentPackMgr.loadAll()
 
 loadPrcFileData('', 'load-display %s' % loadDisplay)
@@ -108,12 +108,12 @@ import os
 import time
 import sys
 import random
-import __builtin__
+import builtins
 
 try:
     from toontown.launcher.TTALauncher import TTALauncher
     launcher = TTALauncher()
-    __builtin__.launcher = launcher
+    builtins.launcher = launcher
 except Exception as e:
     raise (e)
 
@@ -212,25 +212,25 @@ del tempLoader
 version.cleanup()
 del version
 base.loader = base.loader
-__builtin__.loader = base.loader
+builtins.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
 
 def printCameraPos():
-    print(camera.getPos())
-    print(camera.getHpr())
+    print((camera.getPos()))
+    print((camera.getHpr()))
 
 # base.accept('[', printCameraPos)
 
 def printOobePos():
-    print(base.oobeCameraTrackball.getPos())
-    print(base.oobeCameraTrackball.getHpr())
-    print
+    print((base.oobeCameraTrackball.getPos()))
+    print((base.oobeCameraTrackball.getHpr()))
+    print()
 
 # base.accept(']', printOobePos)
 
 def printToonPos():
-    print(camera.getPos())
-    print(camera.getHpr())
+    print((camera.getPos()))
+    print((camera.getHpr()))
 
 # base.accept('[', printCameraPos)
 
@@ -307,5 +307,5 @@ if autoRun:
         raise
     except:
         from toontown.toonbase import ToonPythonUtil as PythonUtil
-        print PythonUtil.describeException()
+        print(PythonUtil.describeException())
         raise

@@ -23,7 +23,7 @@ class MagicWordManager(DistributedObject.DistributedObject):
         if magicWord.lower() == '~acc':
             localAvatar = getattr(base, 'localAvatar', None)
             if localAvatar is None or getattr(localAvatar, 'controlManager', None) is None:
-                print 'Accessory editor: load a Toon before using ~acc.'
+                print('Accessory editor: load a Toon before using ~acc.')
                 if localAvatar is not None:
                     try:
                         localAvatar.setSystemMessage(

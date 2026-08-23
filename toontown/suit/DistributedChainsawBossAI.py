@@ -365,7 +365,7 @@ class DistributedChainsawBossAI(
                 pass
         amount = max(0, self.BATTLE_CAP - len(alive))
         reserves = []
-        for i in xrange(amount):
+        for i in range(amount):
             suit = self.__makeGrunt()
             if self.chainsawPreviousAttack == 'Scabbard':
                 newMax = int(round(suit.getMaxHP() * 1.5))
@@ -436,7 +436,7 @@ class DistributedChainsawBossAI(
                     self.chainsawPendingKickbackMultiplier = max(
                         self.chainsawPendingKickbackMultiplier, multiplier)
 
-        for suitId in self.chainsawCutSlackTargets.keys():
+        for suitId in list(self.chainsawCutSlackTargets.keys()):
             self.chainsawCutSlackTargets[suitId] += 1
 
         self.__removeDeadFromController(deadSuits)

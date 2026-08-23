@@ -1,4 +1,4 @@
-import cPickle
+import pickle
 import operator, copy, random, time, gc
 from toontown.toon import Experience, InventoryNewOLD, InventoryNewNEW, TTEmote, Toon
 from direct.controls.GravityWalker import GravityWalker
@@ -1008,7 +1008,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getNearbyPlayers(self, radius, includeSelf = True):
         nearbyToons = []
         toonIds = self.cr.getObjectsOfExactClass(DistributedToon)
-        for toonId, toon in toonIds.items():
+        for toonId, toon in list(toonIds.items()):
             if toon is not self:
                 dist = toon.getDistance(self)
                 if dist < radius:
@@ -1088,7 +1088,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def updateGMNameTag(self, tagString, color, state):
         try:
-            unicode(tagString, 'utf-8')
+            str(tagString, 'utf-8')
         except UnicodeDecodeError:
             self.sendUpdate('logSuspiciousEvent', ['invalid GM name tag: %s from %s' % (tagString, self.doId)])
             return
@@ -1221,7 +1221,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         newText, scrubbed = self.scrubTalk(chat, mods, fromAV)
         self.displayTalkWhisper(fromAV, avatarName, chat, mods)
         timestamp = time.strftime('%m-%d-%Y %H:%M:%S', time.localtime())
-        print ':%s: receiveWhisperTalk: %r, %r, %r, %r, %r, %r, %r' % (timestamp, fromAV, avatarName, fromAC, None, self.doId, self.getName(), newText)
+        print(':%s: receiveWhisperTalk: %r, %r, %r, %r, %r, %r, %r' % (timestamp, fromAV, avatarName, fromAC, None, self.doId, self.getName(), newText))
         base.talkAssistant.receiveWhisperTalk(fromAV, avatarName, fromAC, None, self.doId, self.getName(), newText)
 
     def setSleepAutoReply(self, fromId):
@@ -1811,7 +1811,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setQuests(self, flattenedQuests):
         questList = []
         questLen = 5
-        for i in xrange(0, len(flattenedQuests), questLen):
+        for i in range(0, len(flattenedQuests), questLen):
             questList.append(flattenedQuests[i:i + questLen])
 
         self.quests = questList
@@ -1839,7 +1839,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return
 
         offers = []
-        for i in xrange(0, len(flattenedOffers), 3):
+        for i in range(0, len(flattenedOffers), 3):
             offer = flattenedOffers[i:i + 3]
             if len(offer) == 3:
                 offers.append(offer)
@@ -1976,7 +1976,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def getResistanceMessageCharges(self, textId):
         msgs = self.resistanceMessages
-        for i in xrange(len(msgs)):
+        for i in range(len(msgs)):
             if msgs[i][0] == textId:
                 return msgs[i][1]
 
@@ -2101,8 +2101,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return [self.trackProgressId, self.trackProgress]
 
     def getTrackProgressAsArray(self, maxLength = 15):
-        shifts = map(operator.rshift, maxLength * [self.trackProgress], xrange(maxLength - 1, -1, -1))
-        digits = map(operator.mod, shifts, maxLength * [2])
+        shifts = list(map(operator.rshift, maxLength * [self.trackProgress], range(maxLength - 1, -1, -1)))
+        digits = list(map(operator.mod, shifts, maxLength * [2]))
         digits.reverse()
         return digits
 
@@ -2229,7 +2229,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setGumballBoosters(self, data):
         try:
-            boosters = cPickle.loads(data) if isinstance(data, str) else data
+            boosters = pickle.loads(data) if isinstance(data, str) else data
         except:
             boosters = []
         from toontown.gumball import GumballGlobals
@@ -2243,7 +2243,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setClubBoosters(self, data):
         try:
-            boosters = cPickle.loads(data) if isinstance(data, str) else data
+            boosters = pickle.loads(data) if isinstance(data, str) else data
         except:
             boosters = []
         from toontown.gumball import GumballGlobals
@@ -2264,7 +2264,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setGumballBounties(self, data):
         try:
-            bounties = cPickle.loads(data) if isinstance(data, str) else data
+            bounties = pickle.loads(data) if isinstance(data, str) else data
             self.gumballBounties = dict(bounties or [])
         except:
             self.gumballBounties = {}
@@ -2474,11 +2474,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         splat.start(startTime)'''
 
     def cleanupPies(self):
-        for track in self.pieTracks.values():
+        for track in list(self.pieTracks.values()):
             track.finish()
 
         self.pieTracks = {}
-        for track in self.splatTracks.values():
+        for track in list(self.splatTracks.values()):
             track.finish()
 
         self.splatTracks = {}
@@ -2954,7 +2954,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getMyTrees(self):
         treeDict = self.cr.getObjectsOfClass(DistributedGagTree.DistributedGagTree)
         trees = []
-        for tree in treeDict.values():
+        for tree in list(treeDict.values()):
             if tree.getOwnerId() == self.doId:
                 trees.append(tree)
 
@@ -2975,7 +2975,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             trackAndLevelList.append((tree.gagTrack, tree.gagLevel))
 
         haveRequired = True
-        for curLevel in xrange(level):
+        for curLevel in range(level):
             testTuple = (track, curLevel)
             if testTuple not in trackAndLevelList:
                 haveRequired = False
@@ -3417,7 +3417,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setHostedParties(self, hostedParties):
         DistributedToon.partyNotify.debug('setHostedParties called passing in %d parties.' % len(hostedParties))
         self.hostedParties = []
-        for i in xrange(len(hostedParties)):
+        for i in range(len(hostedParties)):
             hostedInfo = hostedParties[i]
             newParty = PartyInfo(*hostedInfo)
             self.hostedParties.append(newParty)
@@ -3425,7 +3425,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setPartiesInvitedTo(self, partiesInvitedTo):
         DistributedToon.partyNotify.debug('setPartiesInvitedTo called passing in %d parties.' % len(partiesInvitedTo))
         self.partiesInvitedTo = []
-        for i in xrange(len(partiesInvitedTo)):
+        for i in range(len(partiesInvitedTo)):
             partyInfo = partiesInvitedTo[i]
             newParty = PartyInfo(*partyInfo)
             self.partiesInvitedTo.append(newParty)
@@ -3434,7 +3434,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def getOnePartyInvitedTo(self, partyId):
         result = None
-        for i in xrange(len(self.partiesInvitedTo)):
+        for i in range(len(self.partiesInvitedTo)):
             partyInfo = self.partiesInvitedTo[i]
             if partyInfo.partyId == partyId:
                 result = partyInfo
@@ -3454,7 +3454,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setPartyReplies(self, replies):
         DistributedToon.partyNotify.debug('setPartyReplies called passing in %d parties.' % len(replies))
         self.partyReplyInfoBases = []
-        for i in xrange(len(replies)):
+        for i in range(len(replies)):
             partyReply = replies[i]
             repliesForOneParty = PartyReplyInfoBase(*partyReply)
             self.partyReplyInfoBases.append(repliesForOneParty)
@@ -4157,7 +4157,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return self.uniqueName('zombieCheck')
     
     def _doZombieCheck(self, task = None):
-        self._lastZombieContext = self._zombieCheckSerialGen.next()
+        self._lastZombieContext = next(self._zombieCheckSerialGen)
         #self.cr.timeManager.checkAvOnDistrict(self, self._lastZombieContext)
         taskMgr.doMethodLater(60.0, self._doZombieCheck, self._getZombieCheckTaskName())
 
@@ -4188,7 +4188,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 		
     def fixStats(self, stats):
         badStatLen = len(stats)
-        for i in xrange(ToontownGlobals.TOTAL_STATS - badStatLen):
+        for i in range(ToontownGlobals.TOTAL_STATS - badStatLen):
             stats.append(0)
         return stats
 

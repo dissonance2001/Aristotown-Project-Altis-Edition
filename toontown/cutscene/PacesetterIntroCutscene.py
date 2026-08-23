@@ -187,7 +187,7 @@ class PacesetterIntroSetup(object):
                 else:
                     print('[Pacesetter CTSC] Pace Corner texture failed to load')
         except Exception as error:
-            print('[Pacesetter CTSC] Could not apply Pace Corner texture: %s' % error)
+            print(('[Pacesetter CTSC] Could not apply Pace Corner texture: %s' % error))
 
     def _prepareActors(self):
         self._fixPaceCornerSignTexture()

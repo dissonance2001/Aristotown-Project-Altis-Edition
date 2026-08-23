@@ -168,7 +168,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
 
     def getInvitedAvIds(self):
         result = []
-        for avId, selected in self.selected.items():
+        for avId, selected in list(self.selected.items()):
             if selected:
                 result.append(avId)
         return result
@@ -219,7 +219,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
         except:
             toonDClass = None
         try:
-            for avId, obj in base.cr.doId2do.items():
+            for avId, obj in list(base.cr.doId2do.items()):
                 avId = int(avId)
                 if avId == localId or avId in memberIds or not hasattr(obj, 'getName'):
                     continue
@@ -235,7 +235,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                     result[avId] = str(obj.getName())
         except:
             pass
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _onlineFriends(self):
         memberIds = self._memberIds()
@@ -262,7 +262,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                 handle = getattr(base.cr, 'doId2do', {}).get(avId)
             if handle is not None and hasattr(handle, 'getName'):
                 result[avId] = str(handle.getName())
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _onlineClubmates(self):
         memberIds = self._memberIds()
@@ -290,7 +290,7 @@ class SocialPanelGroupQuickInvite(DirectFrame):
                     online = False
             if online:
                 result[avId] = str(member.get('name', 'Toon'))
-        return sorted(result.items(), key=lambda item: item[1].lower())
+        return sorted(list(result.items()), key=lambda item: item[1].lower())
 
     def _availableSelectionCount(self):
         if self.createMode:

@@ -195,7 +195,7 @@ class _ChainsawIntroHead(Actor.Actor):
         self.freakoutOriginalHpr = None
 
         allAnims = dict(_HEAD_NORMAL)
-        for name, path in _HEAD_GLITCH.items():
+        for name, path in list(_HEAD_GLITCH.items()):
             allAnims['glitch-' + name] = path
 
         Actor.Actor.__init__(self, _HEAD_PREFIX + '-zero', allAnims)
@@ -323,7 +323,7 @@ class _ChainsawIntroHead(Actor.Actor):
         repeatCount = self._chooseFreakoutRepeatCount()
         seq = Sequence()
 
-        for index in xrange(repeatCount):
+        for index in range(repeatCount):
             twitchTime = random.uniform(0.07, 0.12)
             useHeading = random.random() < 0.5
             if useHeading:

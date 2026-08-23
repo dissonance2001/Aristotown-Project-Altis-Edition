@@ -138,7 +138,7 @@ class NodeShaderManager(DirectObject):
         """
         if not canUseShaders():
             return
-        for uniform, value in self.uniforms.items():
+        for uniform, value in list(self.uniforms.items()):
             self.node.setShaderInput(uniform, value if not callable(value) else value())
 
     def setUniformOverrides(self, overrides: dict, update: bool = True):

@@ -10106,7 +10106,7 @@ def loadAccessoryPlacementOverrides():
     placementPath = _findAccessoryPlacementsPath()
 
     if placementPath is None:
-        print 'AccessoryGlobals: accessory_placements.json not found.'
+        print('AccessoryGlobals: accessory_placements.json not found.')
         return 0
 
     try:
@@ -10116,7 +10116,7 @@ def loadAccessoryPlacementOverrides():
         finally:
             placementFile.close()
     except Exception as error:
-        print 'AccessoryGlobals: failed to read placement file:', error
+        print('AccessoryGlobals: failed to read placement file:', error)
         return 0
 
     tableInfo = (
@@ -10133,7 +10133,7 @@ def loadAccessoryPlacementOverrides():
         if not isinstance(typeData, dict):
             continue
 
-        for accessoryIdText, dnaPlacements in typeData.items():
+        for accessoryIdText, dnaPlacements in list(typeData.items()):
             try:
                 accessoryId = int(accessoryIdText)
             except:
@@ -10145,7 +10145,7 @@ def loadAccessoryPlacementOverrides():
             if accessoryId not in targetTable:
                 targetTable[accessoryId] = {}
 
-            for dnaKey, placementDataEntry in dnaPlacements.items():
+            for dnaKey, placementDataEntry in list(dnaPlacements.items()):
                 if not isinstance(placementDataEntry, dict):
                     continue
 
@@ -10162,11 +10162,11 @@ def loadAccessoryPlacementOverrides():
                     tuple(scale)
                 )
 
-                print 'AccessoryGlobals: loaded override:', typeName, accessoryId, dnaKey
+                print('AccessoryGlobals: loaded override:', typeName, accessoryId, dnaKey)
                 loadedCount += 1
 
-    print 'AccessoryGlobals: loaded placement overrides:', loadedCount
-    print 'AccessoryGlobals: placement file:', placementPath
+    print('AccessoryGlobals: loaded placement overrides:', loadedCount)
+    print('AccessoryGlobals: placement file:', placementPath)
 
     return loadedCount
 

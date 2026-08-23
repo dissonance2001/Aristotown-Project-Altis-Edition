@@ -159,7 +159,7 @@ class NPCFriendPanel(DirectScrolledFrame):
             self.searchBar.set(prompt)
         else:
             searchText = searchText.lower().replace(' ', '')
-            for npcId in self.friendDict.keys():
+            for npcId in list(self.friendDict.keys()):
                 definition = IOURegistry.getIOUByNPCId(npcId)
                 if definition is None:
                     continue
@@ -183,7 +183,7 @@ class NPCFriendPanel(DirectScrolledFrame):
         self.friendDict = dict(friendDict)
         self.fCallable = fCallable
         definitions = []
-        for npcId in self.friendDict.keys():
+        for npcId in list(self.friendDict.keys()):
             definition = IOURegistry.getIOUByNPCId(npcId)
             if definition is not None:
                 definitions.append(definition)
@@ -225,7 +225,7 @@ class NPCFriendPanel(DirectScrolledFrame):
             yOffset = 0.4
             frameLength = abs(self.defaultCanvasSize[0] - self.defaultCanvasSize[1])
             xSpacing = (frameLength / self.cardsPerRow) + self.spacingPerCard
-            for idx in xrange(cardCount):
+            for idx in range(cardCount):
                 card = NPCFriendCard(
                     parent=self.getCanvas(),
                     doneEvent=self['doneEvent'],

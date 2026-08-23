@@ -50,9 +50,9 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def printCurrentStats(self):
         print('*****')
-        print('suits: %s' % self.suits)
-        print('reser: %s' % self.reserveSuits)
-        print('activ: %s' % self.activeSuits)
+        print(('suits: %s' % self.suits))
+        print(('reser: %s' % self.reserveSuits))
+        print(('activ: %s' % self.activeSuits))
 
     def delete(self):
         self.ignoreAll()
@@ -235,8 +235,8 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def formatLaffLevels(self):
         try:
-            return map(lambda id: simbase.air.doId2do.get(id).getMaxHp(), self.involvedToons)
-        except Exception, e:
+            return [simbase.air.doId2do.get(id).getMaxHp() for id in self.involvedToons]
+        except Exception as e:
             self.notify.warning(e)
             return []
 
@@ -249,8 +249,8 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
                 else:
                     return 0
 
-            return map(hasSuit, self.involvedToons)
-        except Exception, e:
+            return list(map(hasSuit, self.involvedToons))
+        except Exception as e:
             self.notify.warning(e)
             return []
 

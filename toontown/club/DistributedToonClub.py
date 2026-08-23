@@ -37,7 +37,7 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
         self.cr.groupMgr = self.groupManager
         self.groupManager.start()
         taskMgr.doMethodLater(0.5, self._requestInitialState, self.uniqueName('requestClubState'))
-        print '[Clubs] Club manager loaded.'
+        print('[Clubs] Club manager loaded.')
 
     def groupReceiveState(self, groupJson):
         if self.groupManager:
@@ -295,7 +295,7 @@ class DistributedToonClub(DistributedObjectGlobal, DirectObject):
             base.localAvatar.guildName = self.club.get('name', '')
             base.localAvatar.guildRank = int(member.get('rank', ClubGlobals.RANK_MEMBER))
             now = int(time.time())
-            for key, endTime in self.club.get('boosters', {}).items():
+            for key, endTime in list(self.club.get('boosters', {}).items()):
                 try:
                     endTime = int(endTime)
                     boosterType = ClubGlobals.getClubBoosterType(key)

@@ -4,7 +4,7 @@ from direct.showbase import Loader as nLoader
 from toontown.toontowngui import ToontownLoadingScreen
 from toontown.dna.DNAParser import *
 import traceback
-import __builtin__
+import builtins
 from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 
 class ToontownLoader(nLoader.Loader):
@@ -162,7 +162,7 @@ class ToontownLoader(nLoader.Loader):
 
     def _resolveContentPackAudio(self, soundPath, category):
         try:
-            manager = __builtin__.ContentPackMgr
+            manager = builtins.ContentPackMgr
         except Exception:
             manager = None
 
@@ -170,10 +170,10 @@ class ToontownLoader(nLoader.Loader):
             try:
                 return manager.resolveFile(soundPath, category)
             except Exception as error:
-                print 'CONTENT PACK AUDIO RESOLVE ERROR (%s): %s' % (
+                print('CONTENT PACK AUDIO RESOLVE ERROR (%s): %s' % (
                     category,
                     error
-                )
+                ))
 
         return soundPath
 

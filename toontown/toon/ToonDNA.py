@@ -798,16 +798,16 @@ def _getKnownClothingPaths():
         'skirt': set(),
     }
     for assetPath in Shirts:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, str):
             knownPaths['shirt'].add(_normalizeClothingAssetPath(assetPath))
     for assetPath in Sleeves:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, str):
             knownPaths['sleeves'].add(_normalizeClothingAssetPath(assetPath))
     for assetPath in BoyShorts:
-        if isinstance(assetPath, basestring):
+        if isinstance(assetPath, str):
             knownPaths['shorts'].add(_normalizeClothingAssetPath(assetPath))
     for bottomData in GirlBottoms:
-        if isinstance(bottomData, tuple) and bottomData and isinstance(bottomData[0], basestring):
+        if isinstance(bottomData, tuple) and bottomData and isinstance(bottomData[0], str):
             if len(bottomData) > 1 and bottomData[1] == SKIRT:
                 pieceName = 'skirt'
             else:
@@ -904,7 +904,7 @@ def _getPhase4OutfitKey(clothingRoot, fullPath):
 
 def _nextRegistryId(registry, idName, minimumId):
     usedIds = []
-    for outfitData in registry['outfits'].values():
+    for outfitData in list(registry['outfits'].values()):
         if isinstance(outfitData, dict):
             value = outfitData.get(idName)
             if isinstance(value, int):
@@ -1044,19 +1044,19 @@ def loadCustomClothing():
             continue
         shirtPath = outfitData.get('shirt')
         shirtId = outfitData.get('shirt_id')
-        if isinstance(shirtPath, basestring) and isinstance(shirtId, int):
+        if isinstance(shirtPath, str) and isinstance(shirtId, int):
             _setListItemAtId(Shirts, shirtId, shirtPath, defaultShirt)
         sleevesPath = outfitData.get('sleeves')
         sleevesId = outfitData.get('sleeves_id')
-        if isinstance(sleevesPath, basestring) and isinstance(sleevesId, int):
+        if isinstance(sleevesPath, str) and isinstance(sleevesId, int):
             _setListItemAtId(Sleeves, sleevesId, sleevesPath, defaultSleeves)
         shortsPath = outfitData.get('shorts')
         shortsId = outfitData.get('shorts_id')
-        if isinstance(shortsPath, basestring) and isinstance(shortsId, int):
+        if isinstance(shortsPath, str) and isinstance(shortsId, int):
             _setListItemAtId(BoyShorts, shortsId, shortsPath, defaultShorts)
         skirtPath = outfitData.get('skirt')
         skirtId = outfitData.get('skirt_id')
-        if isinstance(skirtPath, basestring) and isinstance(skirtId, int):
+        if isinstance(skirtPath, str) and isinstance(skirtId, int):
             _setListItemAtId(GirlBottoms, skirtId, (skirtPath, SKIRT), defaultGirlBottom)
     if registryChanged or not os.path.isfile(registryPath):
         _saveClothingRegistry(registryPath, registry)
@@ -2219,10 +2219,10 @@ def getRandomBottom(gender, tailorId = MAKE_A_TOON, generator = None, girlBottom
     elif girlBottomType is None:
         style = generator.choice(collection[GIRL_BOTTOMS])
     elif girlBottomType == SKIRT:
-        skirtCollection = filter(lambda style: GirlBottoms[BottomStyles[style][0]][1] == SKIRT, collection[GIRL_BOTTOMS])
+        skirtCollection = [style for style in collection[GIRL_BOTTOMS] if GirlBottoms[BottomStyles[style][0]][1] == SKIRT]
         style = generator.choice(skirtCollection)
     elif girlBottomType == SHORTS:
-        shortsCollection = filter(lambda style: GirlBottoms[BottomStyles[style][0]][1] == SHORTS, collection[GIRL_BOTTOMS])
+        shortsCollection = [style for style in collection[GIRL_BOTTOMS] if GirlBottoms[BottomStyles[style][0]][1] == SHORTS]
         style = generator.choice(shortsCollection)
     else:
         notify.error('Bad girlBottomType: %s' % girlBottomType)
@@ -2248,7 +2248,7 @@ def getRandomGirlBottomAndColor(type):
         typeStr = 'gsh'
     else:
         typeStr = 'gsk'
-    for bottom in BottomStyles.keys():
+    for bottom in list(BottomStyles.keys()):
         if bottom.find(typeStr) >= 0:
             bottoms.append(bottom)
 
@@ -2336,7 +2336,7 @@ def getTopStyles(gender, tailorId = MAKE_A_TOON):
  
 def getAllTops(gender):
     tops = []
-    for style in ShirtStyles.keys():
+    for style in list(ShirtStyles.keys()):
         if gender == 'm':
             if style[0] == 'g' or style[:3] == 'c_g':
                 continue
@@ -2388,7 +2388,7 @@ def getBottomColors(gender, bottom, tailorId = MAKE_A_TOON):
  
 def getAllBottoms(gender, output = 'both'):
     bottoms = []
-    for style in BottomStyles.keys():
+    for style in list(BottomStyles.keys()):
         if gender == 'm':
             if style[0] == 'g' or style[:3] == 'c_g' or style[:4] == 'vd_g' or style[:4] == 'sd_g' or style[:4] == 'j4_g' or style[:4] == 'pj_g' or style[:4] == 'wh_g' or style[:4] == 'sa_g' or style[:4] == 'sc_g' or style[:5] == 'sil_g' or style[:4] == 'hw_g':
                 continue
@@ -4003,7 +4003,7 @@ def _appendManualAccessoryTexture(textureList, texturePath):
     normalizedPath = texturePath.replace('\\', '/').lower()
 
     for textureId, existingPath in enumerate(textureList):
-        if (isinstance(existingPath, basestring) and
+        if (isinstance(existingPath, str) and
                 existingPath.replace('\\', '/').lower() == normalizedPath):
             return textureId
 
@@ -4347,7 +4347,7 @@ def _getRegistryCandidateIds(oldAccessories, group, minimumId):
         for candidate in group['candidates']
     )
 
-    for registryKey, accessoryData in oldAccessories.items():
+    for registryKey, accessoryData in list(oldAccessories.items()):
         if not isinstance(accessoryData, dict):
             continue
         if accessoryData.get('type') != group['type']:
@@ -4358,7 +4358,7 @@ def _getRegistryCandidateIds(oldAccessories, group, minimumId):
             matches = accessoryData.get('fingerprint') == group['fingerprint']
         if not matches:
             oldName = accessoryData.get('name')
-            if isinstance(oldName, basestring):
+            if isinstance(oldName, str):
                 matches = oldName.lower() in groupNames
         if not matches:
             oldBaseName = os.path.splitext(os.path.basename(registryKey))[0].lower()
@@ -4376,7 +4376,7 @@ def _getRegistryCandidateIds(oldAccessories, group, minimumId):
 def _getPreservedAccessoryDisplayName(oldAccessories, group):
     groupKeys = set(candidate['registry_key'] for candidate in group['candidates'])
 
-    for registryKey, accessoryData in oldAccessories.items():
+    for registryKey, accessoryData in list(oldAccessories.items()):
         if not isinstance(accessoryData, dict):
             continue
         if accessoryData.get('type') != group['type']:
@@ -4388,7 +4388,7 @@ def _getPreservedAccessoryDisplayName(oldAccessories, group):
 
         if matches:
             displayName = accessoryData.get('display_name')
-            if isinstance(displayName, basestring) and displayName.strip():
+            if isinstance(displayName, str) and displayName.strip():
                 return displayName.strip()
 
     return None
@@ -4572,7 +4572,7 @@ registerCustomAccessoriesAsNative()
 
 
 def isValidHat(itemIdx, textureIdx, colorIdx):
-    for style in HatStyles.values():
+    for style in list(HatStyles.values()):
         if itemIdx == style[0] and textureIdx == style[1] and colorIdx == style[2]:
             return True
 
@@ -4580,7 +4580,7 @@ def isValidHat(itemIdx, textureIdx, colorIdx):
 
 
 def isValidGlasses(itemIdx, textureIdx, colorIdx):
-    for style in GlassesStyles.values():
+    for style in list(GlassesStyles.values()):
         if itemIdx == style[0] and textureIdx == style[1] and colorIdx == style[2]:
             return True
 
@@ -4588,7 +4588,7 @@ def isValidGlasses(itemIdx, textureIdx, colorIdx):
 
 
 def isValidBackpack(itemIdx, textureIdx, colorIdx):
-    for style in BackpackStyles.values():
+    for style in list(BackpackStyles.values()):
         if itemIdx == style[0] and textureIdx == style[1] and colorIdx == style[2]:
             return True
 
@@ -4596,7 +4596,7 @@ def isValidBackpack(itemIdx, textureIdx, colorIdx):
 
 
 def isValidShoes(itemIdx, textureIdx, colorIdx):
-    for style in ShoesStyles.values():
+    for style in list(ShoesStyles.values()):
         if itemIdx == style[0] and textureIdx == style[1] and colorIdx == style[2]:
             return True
 

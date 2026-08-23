@@ -39,7 +39,7 @@ class OZSafeZoneLoader(SafeZoneLoader):
     def load(self):
         self.done = 0
         SafeZoneLoader.load(self)
-        self.birdSound = map(base.loader.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg'])
+        self.birdSound = list(map(base.loader.loadSfx, ['phase_4/audio/sfx/SZ_TC_bird1.ogg', 'phase_4/audio/sfx/SZ_TC_bird2.ogg', 'phase_4/audio/sfx/SZ_TC_bird3.ogg']))
         self.underwaterSound = base.loader.loadSfx('phase_4/audio/sfx/AV_ambient_water.ogg')
         self.swimSound = base.loader.loadSfx('phase_4/audio/sfx/AV_swim_single_stroke.ogg')
         self.submergeSound = base.loader.loadSfx('phase_5.5/audio/sfx/AV_jump_in_water.ogg')
@@ -47,7 +47,7 @@ class OZSafeZoneLoader(SafeZoneLoader):
         binMgr = CullBinManager.getGlobalPtr()
         binMgr.addBin('water', CullBinManager.BTFixed, 29)
         waterNodes = self.geom.findAllMatches('**/Water*')
-        for i in xrange(waterNodes.getNumPaths()):
+        for i in range(waterNodes.getNumPaths()):
             water = waterNodes.getPath(i)
             water.setTransparency(1)
             water.setBin('water', 51, 1)
@@ -84,20 +84,20 @@ class OZSafeZoneLoader(SafeZoneLoader):
         waterRoots = self.geom.findAllMatches('**/river*')
         if waterRoots.getNumPaths() == 0:
             waterRoots = self.geom.findAllMatches('**/Water*')
-        for rootIndex in xrange(waterRoots.getNumPaths()):
+        for rootIndex in range(waterRoots.getNumPaths()):
             waterRoot = waterRoots.getPath(rootIndex)
             geomNodes = waterRoot.findAllMatches('**/+GeomNode')
             if geomNodes.getNumPaths() == 0 and isinstance(waterRoot.node(), GeomNode):
                 self._addWakeWaterGeom(waterRoot)
             else:
-                for geomIndex in xrange(geomNodes.getNumPaths()):
+                for geomIndex in range(geomNodes.getNumPaths()):
                     self._addWakeWaterGeom(geomNodes.getPath(geomIndex))
 
     def _addWakeWaterGeom(self, geomNodePath):
         geomNode = geomNodePath.node()
         if not isinstance(geomNode, GeomNode):
             return
-        for geomIndex in xrange(geomNode.getNumGeoms()):
+        for geomIndex in range(geomNode.getNumGeoms()):
             geom = geomNode.getGeom(geomIndex)
             reader = GeomVertexReader(geom.getVertexData(), 'vertex')
             vertices = []
@@ -105,9 +105,9 @@ class OZSafeZoneLoader(SafeZoneLoader):
                 point = reader.getData3f()
                 point = self.geom.getRelativePoint(geomNodePath, point)
                 vertices.append((point[0], point[1], point[2]))
-            for primitiveIndex in xrange(geom.getNumPrimitives()):
+            for primitiveIndex in range(geom.getNumPrimitives()):
                 primitive = geom.getPrimitive(primitiveIndex).decompose()
-                for triangleIndex in xrange(primitive.getNumPrimitives()):
+                for triangleIndex in range(primitive.getNumPrimitives()):
                     start = primitive.getPrimitiveStart(triangleIndex)
                     end = primitive.getPrimitiveEnd(triangleIndex)
                     if end - start != 3:

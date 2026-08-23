@@ -62,7 +62,7 @@ class MMDrumTrampolines(DirectObject.DirectObject):
     def unload(self):
         self.ignoreAll()
 
-        for sequence in self.jumpSequences.values():
+        for sequence in list(self.jumpSequences.values()):
             if sequence:
                 sequence.finish()
         self.jumpSequences = {}

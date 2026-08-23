@@ -2,7 +2,7 @@ from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from direct.actor.Actor import Actor
 from otp.otpbase.PythonUtil import deprecated
-from CogAnimations import *
+from .CogAnimations import *
 
 @deprecated("Use toontown.avatar.ToontownAvatarUtils instead")
 class CogMaker:

@@ -174,7 +174,7 @@ class AccuracyModifier(StatusEffect):
         '''
         self.good = self.accuracyMod > 0
         self.name = 'Accuracy {}'.format('Up' if self.good else 'Down')
-        self.desc = u"This combatant's attacks are {}\u0025 {} accurate.".format(str(abs(self.accuracyMod)), 'more' if self.good else 'less')
+        self.desc = "This combatant's attacks are {}\u0025 {} accurate.".format(str(abs(self.accuracyMod)), 'more' if self.good else 'less')
         self.icon = getIcon('toon_accuracy_{}_icon'.format('up' if self.good else 'down'))
 
 class DamageAbsorption(StatusEffect):
@@ -269,7 +269,7 @@ class Cheer(AccuracyModifier):
         '''
         AccuracyModifier.__init__(self, roundsLeft, 10)
         self.name = 'Cheer'
-        self.desc = u"This Toon's attack accuracy is increased by {}\u0025.".format(self.accuracyMod)
+        self.desc = "This Toon's attack accuracy is increased by {}\u0025.".format(self.accuracyMod)
         self.icon = getIcon('cheer_icon')
 
 class Trapped(StatusEffect):
@@ -285,7 +285,7 @@ class Trapped(StatusEffect):
         '''
         StatusEffect.__init__(self, -1, name='Trapped', icon=AvPropsNew[TRAP_TRACK][level], iconPath='phase_3.5/models/gui/inventory_icons')
         self.damage = damage
-        self.desc = u'This Cog is TRAPPED by a {}! LURE Gags are 20\u0025 more accurate against this Cog. Once LURED, they will take {} damage.'.format(AvPropStrings[TRAP_TRACK][level], self.damage)
+        self.desc = 'This Cog is TRAPPED by a {}! LURE Gags are 20\u0025 more accurate against this Cog. Once LURED, they will take {} damage.'.format(AvPropStrings[TRAP_TRACK][level], self.damage)
         self.good = False # Trapped is in a weird place for "good"...  On one hand, it technically is a bad status effect, but we don't want it to be removed forcefully, right?
 
 class MarkedForLaugh(DefenseModifier):
@@ -296,7 +296,7 @@ class MarkedForLaugh(DefenseModifier):
     def __init__(self):
         DefenseModifier.__init__(self, 0, 1.1)
         self.name = 'Marked for Laugh'
-        self.desc = u'This Cog is more vulnerable, and will take {}\u0025 more damage.'.format((self.defenseMod - 1.0) * 100)
+        self.desc = 'This Cog is more vulnerable, and will take {}\u0025 more damage.'.format((self.defenseMod - 1.0) * 100)
         self.icon = getIcon('marked_icon')
 
 # Cogs' status effects.
@@ -355,7 +355,7 @@ class Overcharged(DamageModifier, LureResistance, ManagerBeneficiary):
         self.damageMod = 1.5
         self.maxLureRounds = 2
         self.name = 'Overcharged'
-        self.desc = u'This Cog is Overcharged!\n\nWhile Overcharged, they have high Lure Resistance, deal 50\u0025 more damage, and receive the same benefits as Manager Cogs.'
+        self.desc = 'This Cog is Overcharged!\n\nWhile Overcharged, they have high Lure Resistance, deal 50\u0025 more damage, and receive the same benefits as Manager Cogs.'
         self.icon = getIcon('overcharge_icon')
 
 class FocusedDefense(DefenseModifier):
@@ -490,7 +490,7 @@ class Pyromaniac(DamageModifier, DefenseModifier):
     
     def updateEffect(self):
         self.hidden = self.damageMod > 0
-        self.desc = u'The Firestarter is taking {}\u0025 less damage and dealing {} more damage!'.format(1.0 - self.defenseMod, self.damageMod)
+        self.desc = 'The Firestarter is taking {}\u0025 less damage and dealing {} more damage!'.format(1.0 - self.defenseMod, self.damageMod)
 
 # Featherbedder
 class Overhire(DamageModifier, DefenseModifier):
@@ -515,7 +515,7 @@ class PowerNap(DamageModifier, DefenseModifier):
     def updateEffect(self):
         self.defenseMod += 0.2
         self.damageMod += 0.2
-        self.desc = u'This Cog is taking a power nap, and will take time to wake up. Currently, they will take {}\u0025 less damage and deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100, (1.0 - self.damageMod) * 100)
+        self.desc = 'This Cog is taking a power nap, and will take time to wake up. Currently, they will take {}\u0025 less damage and deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100, (1.0 - self.damageMod) * 100)
 
 class PeacefulSlumber(DefenseModifier):
     '''
@@ -530,7 +530,7 @@ class PeacefulSlumber(DefenseModifier):
     
     def updateEffect(self):
         self.hidden = self.defenseMod <= 1.0
-        self.desc = u'The Featherbedder is taking {}\u0025 less damage.\n\nEvery round that they are alone, they will gain a 25\u0025 damage resistance.'.format(str((1.0 - self.defenseMod) * 100))
+        self.desc = 'The Featherbedder is taking {}\u0025 less damage.\n\nEvery round that they are alone, they will gain a 25\u0025 damage resistance.'.format(str((1.0 - self.defenseMod) * 100))
 
 # Major Player
 class RisingStarSuit(DamageModifier, ManagerBeneficiary):
@@ -621,13 +621,13 @@ class RevvingUp(DamageModifier, DefenseModifier):
         if self.reforesting:
             difference = int(round(abs(self.defenseMod - 1.0) * 100.0))
             if difference:
-                self.desc += u' He will take {}\u0025 {} damage!'.format(difference, 'less' if self.defenseMod < 1.0 else 'more')
+                self.desc += ' He will take {}\u0025 {} damage!'.format(difference, 'less' if self.defenseMod < 1.0 else 'more')
             else:
-                self.desc += u' He will take normal damage!'
+                self.desc += ' He will take normal damage!'
         elif self.rpm > 10:
-            self.desc += u' He will deal {}\u0025 more damage!'.format(str((self.damageMod - 1.0) * 100))
+            self.desc += ' He will deal {}\u0025 more damage!'.format(str((self.damageMod - 1.0) * 100))
         self.desc += '\n'
-        for milestone in self.abilities[self.reforesting].keys():
+        for milestone in list(self.abilities[self.reforesting].keys()):
             self.desc += '\nAt {},000 RPM: '.format(milestone)
             if self.milestonesReached[self.reforesting][milestone]:
                 self.desc += "Can use '{}'".format(self.abilities[self.reforesting][milestone])
@@ -645,7 +645,7 @@ class Kickback(DefenseModifier):
         '''
         DefenseModifier.__init__(self, 2, defenseMod)
         self.name = 'Kickback'
-        self.desc = u'The Chainsaw Consultant will take {}\u0025 more damage.'.format(str((defenseMod - 1.0) * 100))
+        self.desc = 'The Chainsaw Consultant will take {}\u0025 more damage.'.format(str((defenseMod - 1.0) * 100))
         self.icon = getIcon('kickback_icon')
 
 class MarkedWood(StatusEffect):
@@ -654,7 +654,7 @@ class MarkedWood(StatusEffect):
     '''
 
     def __init__(self):
-        StatusEffect.__init__(self, 1, name='Marked Wood', desc=u'The Chainsaw Consultant has marked this Toon, and unless interrupted by a different Toon, will target them this turn! They will take 75\u0025 more damage from his next attack.', icon='marked_wood_icon')
+        StatusEffect.__init__(self, 1, name='Marked Wood', desc='The Chainsaw Consultant has marked this Toon, and unless interrupted by a different Toon, will target them this turn! They will take 75\u0025 more damage from his next attack.', icon='marked_wood_icon')
         self.defenseMod = 1.75
         self.good = False
 
@@ -748,7 +748,7 @@ class WillOfThePeople(DefenseModifier):
     
     def updateEffect(self):
         # I'm going to trust in BattleCalculatorAI shenanigans to fix up the damage resistances.
-        self.desc = u"The Witch Hunter is taking {}\u0025 less damage! Each time another Cog is defeated, this bonus decreases by 5\u0025. Each time 'Mob Mentality' is used, this bonus increases by 10\u0025.".format((1.0 - self.defenseMod) * 100)
+        self.desc = "The Witch Hunter is taking {}\u0025 less damage! Each time another Cog is defeated, this bonus decreases by 5\u0025. Each time 'Mob Mentality' is used, this bonus increases by 10\u0025.".format((1.0 - self.defenseMod) * 100)
         self.hidden = self.defenseMod >= 1.0
 
 class Bewitchment(DefenseModifier):
@@ -759,7 +759,7 @@ class Bewitchment(DefenseModifier):
     def __init__(self, defenseMod = 1.1):
         DefenseModifier.__init__(self, 1, defenseMod)
         self.name = 'Bewitchment'
-        self.desc = u'This Toon is Bewitched! Cogs are 75\u0025 more likely to target them, but they will deal 1.3x more damage to the Witch Hunter. Additionally, they will take {}x more damage.'.format(self.defenseMod)
+        self.desc = 'This Toon is Bewitched! Cogs are 75\u0025 more likely to target them, but they will deal 1.3x more damage to the Witch Hunter. Additionally, they will take {}x more damage.'.format(self.defenseMod)
         self.icon = getIcon('bewitched_icon')
 
 # Count Erclaim
@@ -775,7 +775,7 @@ class ScopeCreep(DefenseModifier):
 
     def updateEffect(self):
         self.hidden = self.defenseMod < 1.0
-        self.desc = u"The Count's damage resistance is creeping up, taking {}\u0025 less damage.".format((1.0 - self.defenseMod) * 100)
+        self.desc = "The Count's damage resistance is creeping up, taking {}\u0025 less damage.".format((1.0 - self.defenseMod) * 100)
 
 # Litigation Team
 class Overconfidence(DamageModifier):
@@ -789,7 +789,7 @@ class Overconfidence(DamageModifier):
         self.updateEffect()
     
     def updateEffect(self):
-        self.desc = u'The Litigation Team overestimates their chances. They deal {}\u0025 less damage with their attacks'.format((1.0 - self.defenseMod) * 100)
+        self.desc = 'The Litigation Team overestimates their chances. They deal {}\u0025 less damage with their attacks'.format((1.0 - self.defenseMod) * 100)
 
 class Snapped(DefenseModifier):
     '''
@@ -802,7 +802,7 @@ class Snapped(DefenseModifier):
         '''
         DefenseModifier.__init__(self, 2, defenseMod)
         self.icon = getIcon('vulnerable_icon')
-        self.desc = u'This Toon takes {}\u0025 more damage while vulnerable.'.format(str((defenseMod - 1.0) * 100))
+        self.desc = 'This Toon takes {}\u0025 more damage while vulnerable.'.format(str((defenseMod - 1.0) * 100))
 
 class Sanctioned(DamageModifier):
     '''
@@ -867,7 +867,7 @@ class RageBuilding(DamageAbsorption):
     def __init__(self):
         DamageAbsorption.__init__(self, -1, 0.3)
         self.rage = 0.0 # Every 10 damage is 1 rage, so every 1 damage is 0.1 rage; we can still do ints, we just have to do a little more conversion.
-        self.desc = u"Scapegoat's rage is building...\n\nScapegoat will absorb {}\u0025 of the damage dealt to other Cogs while in this mode!".format(self.intercepting * 100)
+        self.desc = "Scapegoat's rage is building...\n\nScapegoat will absorb {}\u0025 of the damage dealt to other Cogs while in this mode!".format(self.intercepting * 100)
         self.icon = getIcon('defense_mode_icon')
         self.updateEffect()
     
@@ -875,7 +875,7 @@ class RageBuilding(DamageAbsorption):
         '''
         We know how easily angered the Scapegoat gets, causing his rage to rise.  Update the name every turn.
         '''
-        self.name = u'Rage Building: {}\u0025'.format(self.rage)
+        self.name = 'Rage Building: {}\u0025'.format(self.rage)
 
 class Enraged(DamageModifier, DefenseModifier):
     '''
@@ -889,7 +889,7 @@ class Enraged(DamageModifier, DefenseModifier):
         DamageModifier.__init__(self, 2, 1.3)
         self.defenseMod = defenseMod
         self.name = 'Enraged'
-        self.desc = u"The Scapegoat is enraged!\n\nScapegoat will deal {}\u0025 more damage while in this mode!".format((self.damageMod - 1.0) * 100)
+        self.desc = "The Scapegoat is enraged!\n\nScapegoat will deal {}\u0025 more damage while in this mode!".format((self.damageMod - 1.0) * 100)
         self.icon = getIcon('rage_mode_icon')
 
 class EvidenceSuppression(StatusEffect):
@@ -919,7 +919,7 @@ class LayLow(DefenseModifier):
     def __init__(self):
         DefenseModifier.__init__(self, -1, 0.8)
         self.name = 'Lay Low'
-        self.desc = u'Charon takes +300\u0025 Shatter damage but -{}\u0025 damage from Gags.'.format(str((1.0 - self.defenseMod) * 100))
+        self.desc = 'Charon takes +300\u0025 Shatter damage but -{}\u0025 damage from Gags.'.format(str((1.0 - self.defenseMod) * 100))
 
 class GhostPayroll(DamageModifier):
     '''
@@ -941,7 +941,7 @@ class SlushFund(DefenseModifier):
 
     def __init__(self):
         DefenseModifier.__init__(self, 2, 0.8)
-        self.desc = u'This Cog will take {}\u0025 {} damage!'.format(str((1.0 - self.defenseMod) * 100), 'less' if self.good else 'more')
+        self.desc = 'This Cog will take {}\u0025 {} damage!'.format(str((1.0 - self.defenseMod) * 100), 'less' if self.good else 'more')
         self.icon = getIcon('slush_fund_icon')
 
 class MarketBubble(DamageModifier, DefenseModifier):
@@ -959,9 +959,9 @@ class MarketBubble(DamageModifier, DefenseModifier):
     def updateEffect(self):
         self.crashTurns -= 1 # Reduce the crash turns every round.
         if self.damageMod > 0:
-            self.desc = u"The Market Bubble is growing! The Plutocrat's attacks will deal {} more damage. SHATTER damage dealt to the Plutocrat is increased by {}\u0025, and will burst the Market bubble.".format(self.damageMod, self.damageMod / 3 * 5)
+            self.desc = "The Market Bubble is growing! The Plutocrat's attacks will deal {} more damage. SHATTER damage dealt to the Plutocrat is increased by {}\u0025, and will burst the Market bubble.".format(self.damageMod, self.damageMod / 3 * 5)
         elif self.crashTurns > 0:
-            self.desc = u'The Market Bubble has crashed! The Plutocrat will take {}\u0025 more damage per attack.'.format((1.0 - self.defenseMod) * 100)
+            self.desc = 'The Market Bubble has crashed! The Plutocrat will take {}\u0025 more damage per attack.'.format((1.0 - self.defenseMod) * 100)
         else:
             self.desc = 'The Market Bubble is currently inactive.'
 
@@ -994,7 +994,7 @@ class Hydrated(AccuracyModifier):
         self.updateEffect()
     
     def updateEffect(self):
-        self.desc = u'This combatant is hydrated, and their accuracy is {} by {}\u0025.'.format('increased' if self.good else 'decreased', abs(self.accuracyMod))
+        self.desc = 'This combatant is hydrated, and their accuracy is {} by {}\u0025.'.format('increased' if self.good else 'decreased', abs(self.accuracyMod))
 
 class DriedOut(AccuracyModifier):
     '''
@@ -1003,7 +1003,7 @@ class DriedOut(AccuracyModifier):
 
     def __init__(self):
         AccuracyModifier.__init__(self, 3, -50)
-        self.desc = u'This toon has been wrung dry and has {}\u0025 accuracy!'.format(self.accuracyMod)
+        self.desc = 'This toon has been wrung dry and has {}\u0025 accuracy!'.format(self.accuracyMod)
 
 # High Roller
 class RaisingTheAnte(DamageModifier):
@@ -1037,7 +1037,7 @@ class HarmoniousColors(DefenseModifier):
         '''
         if self.defenseMod < 0.05:
             self.defenseMod = 0.05
-        self.desc = u"The colors, they are so pretty... High Roller's Silhouettes are causing him to take {}\u0025 less damage.".format(str((1.0 - self.defenseMod) * 100))
+        self.desc = "The colors, they are so pretty... High Roller's Silhouettes are causing him to take {}\u0025 less damage.".format(str((1.0 - self.defenseMod) * 100))
 
 class RefractionBarrier(DefenseModifier):
     '''
@@ -1075,7 +1075,7 @@ class OffTheClock(DefenseModifier):
     def __init__(self):
         DefenseModifier.__init__(self, -1, 0.3)
         self.name = 'Off the Clock'
-        self.desc = u'While other Cogs are in battle, the Multislacker takes {}\u0025 less damage!'.format(str((1.0 - self.defenseMod) * 100))
+        self.desc = 'While other Cogs are in battle, the Multislacker takes {}\u0025 less damage!'.format(str((1.0 - self.defenseMod) * 100))
 
 # Pacesetter
 class RushJob(StatusEffect):
@@ -1097,7 +1097,7 @@ class RushJob(StatusEffect):
         self.desc = 'The Pacesetter will punish ALL Toons if you do not use {} on this Cog!! This Cog cannot be fired, but the right Gag used against this Cog will be much more likely to hit.'.format(TRACK_2_CONSTANT[self.trackToUse])
         if True: # TODO: Figure out a proper way to check whether or not the Cog that has the Rush Job is the Pacesetter.
             self.defenseMod = 0.6 # This class does not inherit the DefenseModifier class, so it should not really matter for now.
-            self.desc += u'\n\nThe wrong Gag will deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100)
+            self.desc += '\n\nThe wrong Gag will deal {}\u0025 less damage.'.format((1.0 - self.defenseMod) * 100)
         else:
             self.defenseMod = 1.0
         self.icon = getIcon(AvPropsNew[trackToUse][6], fromPath='phase_3.5/models/gui/inventory_icons')
@@ -1110,7 +1110,7 @@ class HurrySickness(DamageModifier):
     def __init__(self):
         DamageModifier.__init__(self, 2, 0.6)
         self.name = 'Hurry Sickness'
-        self.desc = u"This Toon couldn't keep up with the Pacesetter and thus will deal {}\u0025 less damage.".format(str((1.0 - self.damageMod) * 100))
+        self.desc = "This Toon couldn't keep up with the Pacesetter and thus will deal {}\u0025 less damage.".format(str((1.0 - self.damageMod) * 100))
         self.icon = getIcon('hurry_sickness_icon')
 
 class MovingGoalposts(BanGags):
@@ -1183,7 +1183,7 @@ class InkDrain(DamageModifier):
         self.updateEffect()
     
     def updateEffect(self):
-        self.desc = u'All gags are {}\u0025 {} effective.'.format((1.0 - self.damageMod) * 100, 'more' if self.good else 'less')
+        self.desc = 'All gags are {}\u0025 {} effective.'.format((1.0 - self.damageMod) * 100, 'more' if self.good else 'less')
 
 # Gatekeeper
 class CoreCompetency(DamageModifier, LureResistance):

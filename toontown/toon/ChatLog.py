@@ -655,14 +655,14 @@ class ChatLog(DirectFrame, DirectObject):
             try:
                 objects = base.cr.getObjectsOfExactClass(DistributedToon)
                 try:
-                    iterator = objects.itervalues()
+                    iterator = iter(objects.values())
                 except:
-                    iterator = objects.values()
+                    iterator = list(objects.values())
             except:
                 try:
-                    iterator = base.cr.doId2do.itervalues()
+                    iterator = iter(base.cr.doId2do.values())
                 except:
-                    iterator = base.cr.doId2do.values()
+                    iterator = list(base.cr.doId2do.values())
 
             for toon in iterator:
                 if toon is None or toon is getattr(base, 'localAvatar', None):
@@ -1272,12 +1272,12 @@ class ChatLog(DirectFrame, DirectObject):
         if tab not in self.lists:
             return
         self.currentTab = tab
-        for tabName, chatList in self.lists.items():
+        for tabName, chatList in list(self.lists.items()):
             if tabName == tab:
                 chatList.show()
             else:
                 chatList.hide()
-        for tabName, button in self.tabButtons.items():
+        for tabName, button in list(self.tabButtons.items()):
             button['image_color'] = (1, 1, 1, 1) if tabName == tab else (0.74, 0.74, 0.74, 1)
             # Each unselected tab image remains tucked behind the main frame.
             # The selected tab image is hidden so the matching coloured panel's
@@ -1551,7 +1551,7 @@ class ChatLog(DirectFrame, DirectObject):
                 try:
                     self._showClashAlert(msg)
                 except Exception as error:
-                    print('[ChatLog] Could not show Clash alert: %s' % error)
+                    print(('[ChatLog] Could not show Clash alert: %s' % error))
                     if self.isHidden or self.currentTab != self.TAB_MAIN:
                         self._showNotification(self.TAB_MAIN)
                     if self.isHidden or self.currentTab != self.TAB_ALERTS:
@@ -1721,7 +1721,7 @@ class ChatLog(DirectFrame, DirectObject):
             self.TAB_NPC: 'Cog and NPC dialogue is shown here.',
             self.TAB_CLUBS: 'Club messages are shown here when club chat is available.',
         }
-        for tab, text in tutorials.items():
+        for tab, text in list(tutorials.items()):
             self._addMessageItem(tab, text, textColor=tutorialColour, tutorial=True)
 
     def _scrollCurrent(self, amount):

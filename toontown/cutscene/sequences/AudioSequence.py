@@ -13,7 +13,7 @@ def _playCutsceneMusic(music, loop=True, volume=1.0, startTime=0.0):
         except TypeError:
             musicMgr.playMusic(music, looping=loop, volume=volume)
             return
-    if isinstance(music, basestring):
+    if isinstance(music, str):
         music = loader.loadMusic(music)
     try:
         base.playMusic(music, looping=loop, volume=volume, time=startTime)

@@ -135,7 +135,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             del suit.battleTrap
 
         del self.finishCallback
-        for petProxy in self.pets.values():
+        for petProxy in list(self.pets.values()):
             petProxy.requestDelete()
 
         DistributedObjectAI.DistributedObjectAI.delete(self)
@@ -420,7 +420,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return self.zoneId
 
     def d_setMovie(self):
-        print('D_SETMOVIE RAW TOONATTACKS:', self.toonAttacks)
+        print(('D_SETMOVIE RAW TOONATTACKS:', self.toonAttacks))
         self.notify.debug('network:setMovie()')
         movie = self.getMovie()
         self.sendUpdate('setMovie', movie)
@@ -542,7 +542,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         toonTrackOrder = getattr(self, 'toonTrackOrder',
                          [HEAL, TRAP, LURE, THROW, SQUIRT, ZAP, SOUND, DROP])
 
-        print('SERVER SENDING TRACK ORDER:', toonTrackOrder)
+        print(('SERVER SENDING TRACK ORDER:', toonTrackOrder))
 
         p.append(toonAttacks)
         p.append(toonTrackOrder)
@@ -679,7 +679,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.newSuits.append(suit)
         self.suits.append(suit)
         # Add a Cog's initial status effects, if there are any.
-        if 'initEffects' in SuitBattleGlobals.SuitAttributes[suit.getStyleName()].keys():
+        if 'initEffects' in list(SuitBattleGlobals.SuitAttributes[suit.getStyleName()].keys()):
             self.battleCalc.suitStatusConditionsNew[suit.doId] = copy(SuitBattleGlobals.SuitAttributes[suit.getStyleName()]['initEffects'])
         else:
             self.battleCalc.suitStatusConditionsNew[suit.doId] = []
@@ -1199,7 +1199,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
     def __addJoinResponse(self, avId, taskName, toon = 0):
         if toon == 1:
-            for jr in self.joinResponses.values():
+            for jr in list(self.joinResponses.values()):
                 jr[avId] = 0
 
         self.joinResponses[avId] = {}
@@ -1211,7 +1211,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def __removeJoinResponses(self, avId):
         self.__removeJoinResponse(avId)
         removedOne = 0
-        for j in self.joinResponses.values():
+        for j in list(self.joinResponses.values()):
             if avId in j:
                 del j[avId]
                 removedOne = 1
@@ -1235,7 +1235,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return 1
 
     def __cleanupJoinResponses(self):
-        for jr in self.joinResponses.values():
+        for jr in list(self.joinResponses.values()):
             taskMgr.remove(jr['taskName'])
             del jr
 
@@ -1258,10 +1258,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def timeout(self):
         toonId = self.air.getAvatarIdFromSender()
 
-        print('TIMEOUT CALLED:', toonId, self.toonAttacks.get(toonId))
+        print(('TIMEOUT CALLED:', toonId, self.toonAttacks.get(toonId)))
 
         if toonId in self.toonAttacks:
-            print('IGNORING TIMEOUT, TOON ALREADY HAS ATTACK:', self.toonAttacks[toonId])
+            print(('IGNORING TIMEOUT, TOON ALREADY HAS ATTACK:', self.toonAttacks[toonId]))
             return
 
         self.toonAttacks[toonId] = getToonAttack(toonId)
@@ -1412,7 +1412,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.toonAttacks[toonId] = getToonAttack(toonId, track=FIRE, target=av)
         elif track == SUE:
             self.toonAttacks[toonId] = getToonAttack(toonId, track=SUE, target=av)
-            print('SET SUE ATTACK:', self.toonAttacks[toonId])
+            print(('SET SUE ATTACK:', self.toonAttacks[toonId]))
         else:
             if not self.validate(toonId, track >= 0 and track <= MAX_TRACK_INDEX, 'requestAttack: invalid track %s' % track):
                 return
@@ -1583,7 +1583,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 conditionValues.append(conditions[condition]['modifier'])
                 conditionTurns.append(conditions[condition]['turnsRemaining'])
 
-            if toon in self.battleCalc.toonStatusConditions and not conditions.keys():
+            if toon in self.battleCalc.toonStatusConditions and not list(conditions.keys()):
                 del self.battleCalc.toonStatusConditions[toon]
 
             for viewer in self.activeToons:
@@ -1959,7 +1959,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                                         deadSuits.append(target)
 
         self.exitedToons = []
-        for suitKey in trapDict.keys():
+        for suitKey in list(trapDict.keys()):
             attackList = trapDict[suitKey]
             attack = attackList[0]
             target = self.findSuit(attack[TOON_TGT_COL])
@@ -2115,7 +2115,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             # =========================================================
             if targetType == 'toon':
                 if attack.get('group', ATK_TGT_SINGLE) == ATK_TGT_GROUP:
-                    for targetIndex in xrange(len(self.activeToons)):
+                    for targetIndex in range(len(self.activeToons)):
                         if targetIndex >= len(hps):
                             continue
 
@@ -2269,7 +2269,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                 eventMsg[msgName] = 1
 
         msgText = ''
-        for msgName, count in eventMsg.items():
+        for msgName, count in list(eventMsg.items()):
             if msgText != '':
                 msgText += ','
             msgText += '%s%s' % (count, msgName)

@@ -468,7 +468,7 @@ def doPeckingOrder(attack):
             notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'vulnerable', modifier=25, turns=3, mode='keepHighest')))
             notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'damageUp', modifier=25, turns=3, mode='keepHighest')))
             notifyTracks.append(notifyTrack)
-        for i in xrange(0, numBirds):
+        for i in range(0, numBirds):
             next = globalPropPool.getProp('bird')
             #next.setScale(0.01)
             #next.reparentTo(suit.getRightHand())
@@ -995,7 +995,7 @@ def __soakRemoval(suit, remove=0):
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
     texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             if suit.dna.name != 'cbutcher' and not suit.isShadow:
@@ -1075,7 +1075,7 @@ def __soakRemoval(suit, remove=0):
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
     texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             suitInterval.append(Func(thing.setColor, color))
@@ -1381,7 +1381,7 @@ def doLegalBindings2(attack):
         tape = globalPropPool.getProp('redtape')
         tape.setColorScale(0.25, 0.25, 1.0, 1.0)
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
             tubes[i].setColorScale(0.25, 0.25, 1.0, 1.0)
 
@@ -1410,7 +1410,7 @@ def doLegalBindings2(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
@@ -1441,7 +1441,7 @@ def doLegalBindings(attack):
         tape = globalPropPool.getProp('redtape')
         tape.setColor(0.129, 0, 0.329, 1)
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
             tubes[i].setColor(0.129, 0, 0.329, 1)
 
@@ -1470,7 +1470,7 @@ def doLegalBindings(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 

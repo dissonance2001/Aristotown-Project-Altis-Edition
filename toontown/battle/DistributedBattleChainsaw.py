@@ -102,7 +102,7 @@ class DistributedBattleChainsaw(
             pass
 
         multipliers = linkedIncoming[1:]
-        for index in xrange(len(supports)):
+        for index in range(len(supports)):
             suit = supports[index]
             defense = int(round((1.0 - multipliers[index]) * 100.0))
             try:

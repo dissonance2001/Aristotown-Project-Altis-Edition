@@ -213,12 +213,12 @@ def getNextWeeklyBountyReset():
 
 def getOffers(zoneId=0):
     rng = random.Random(_nextMidnight() + (int(zoneId) * 20))
-    pool = dict([(boosterType, data) for boosterType, data in NORMAL_OFFER_DATA.items() if boosterType in ALTIS_FUNCTIONAL_TYPES])
+    pool = dict([(boosterType, data) for boosterType, data in list(NORMAL_OFFER_DATA.items()) if boosterType in ALTIS_FUNCTIONAL_TYPES])
     offers = []
     daily = DAILY_OFFERS.get(time.localtime().tm_wday)
     hasDaily = daily and daily[0] in ALTIS_FUNCTIONAL_TYPES
     count = min(4 if hasDaily else 5, len(pool))
-    for index in xrange(count):
+    for index in range(count):
         pairs = [(boosterType, pool[boosterType][1]) for boosterType in sorted(pool.keys())]
         boosterType = _weightedPick(rng, pairs)
         cost = pool[boosterType][0]
@@ -313,7 +313,7 @@ def applyBoosters(rawBoosters, boosterTypes, value, applyRound=False):
     gagTypes = [EXP_GAGS_GLOBAL, EXP_GAGS_SUPPORT, EXP_GAGS_POWER]
     meritTypes = [MERIT_GLOBAL, MERIT_SELLBOT, MERIT_CASHBOT, MERIT_LAWBOT, MERIT_BOSSBOT, MERIT_BOARDBOT]
     deptTypes = [EXP_DEPT_GLOBAL, EXP_DEPT_SELLBOT, EXP_DEPT_CASHBOT, EXP_DEPT_LAWBOT, EXP_DEPT_BOSSBOT, EXP_DEPT_BOARDBOT]
-    for unused in xrange(active.count(ALL_STAR)):
+    for unused in range(active.count(ALL_STAR)):
         if any([x in boosterTypes for x in gagTypes]):
             applying.append(EXP_GAGS_POWER)
         if JELLYBEANS_GLOBAL in boosterTypes:

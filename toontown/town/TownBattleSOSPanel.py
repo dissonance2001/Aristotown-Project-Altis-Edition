@@ -104,7 +104,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
 
     def __updateNPCFriendsPanel(self):
         ious = {}
-        for npcId, count in base.localAvatar.NPCFriendsDict.items():
+        for npcId, count in list(base.localAvatar.NPCFriendsDict.items()):
             if IOURegistry.getIOUByNPCId(npcId) is not None:
                 ious[npcId] = count
         self.NPCFriendPanel.update(ious, fCallable=1)

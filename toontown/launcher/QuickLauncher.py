@@ -55,7 +55,7 @@ class QuickLauncher(LauncherBase):
     PatchExt = 'pch'
 
     def __init__(self):
-        print 'Running: ToontownQuickLauncher'
+        print('Running: ToontownQuickLauncher')
         self.toontownBlueKey = 'TOONTOWN_BLUE'
         self.launcherMessageKey = 'LAUNCHER_MESSAGE'
         self.game1DoneKey = 'GAME1_DONE'
@@ -64,7 +64,7 @@ class QuickLauncher(LauncherBase):
         LauncherBase.__init__(self)
         self.useTTSpecificLogin = config.GetBool('tt-specific-login', 0)
         self.toontownPlayTokenKey = 'TTI_PLAYCOOKIE'
-        print 'useTTSpecificLogin=%s' % self.useTTSpecificLogin
+        print('useTTSpecificLogin=%s' % self.useTTSpecificLogin)
         self.contentDir = '/'
         self.serverDbFileHash = HashVal()
         self.launcherFileDbHash = HashVal()
@@ -141,7 +141,7 @@ class QuickLauncher(LauncherBase):
             self.downloadMultifile(serverFilename, localFilename, self.currentMfname, self.downloadMultifileDone, 0, 0, self.downloadMultifileWriteToDisk)
 
     def resumeInstall(self):
-        for self.currentPhaseIndex in xrange(len(self.LauncherPhases)):
+        for self.currentPhaseIndex in range(len(self.LauncherPhases)):
             self.currentPhase = self.LauncherPhases[self.currentPhaseIndex]
             self.currentPhaseName = self.Localizer.LauncherPhaseNames[self.currentPhase]
             self.currentMfname = 'phase_%s.mf' % self.currentPhase
@@ -179,7 +179,7 @@ class QuickLauncher(LauncherBase):
             messenger.send('launcherAllPhasesComplete')
             self.cleanup()
             return
-        raise StandardError, 'Some phases not listed in LauncherPhases: %s' % self.requiredInstallFiles
+        raise Exception('Some phases not listed in LauncherPhases: %s' % self.requiredInstallFiles)
 
     def getDecompressMultifile(self, mfname):
         if not self.DecompressMultifiles:
@@ -293,7 +293,7 @@ class QuickLauncher(LauncherBase):
         l = s.split('&')
         length = len(l)
         dict = {}
-        for index in xrange(0, len(l)):
+        for index in range(0, len(l)):
             args = l[index].split('=')
             if len(args) == 3:
                 name, value = args[-2:]

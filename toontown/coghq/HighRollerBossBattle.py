@@ -43,7 +43,7 @@ class HighRollerBossBattle(InstanceBossBattle.InstanceBossBattle):
         self.teleportInPosHpr = (pos[0], pos[1], pos[2] + 0.05, hpr[0], hpr[1], hpr[2])
 
     def _getInstanceController(self, zoneId):
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if not isinstance(obj, (DistributedHighRollerBoss.DistributedHighRollerBoss, DistributedVideographerBoss.DistributedVideographerBoss)):
                 continue
             try:

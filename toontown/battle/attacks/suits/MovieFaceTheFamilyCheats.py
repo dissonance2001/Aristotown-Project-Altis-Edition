@@ -202,7 +202,7 @@ def doOverheat(attack):
 
         def changeColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
@@ -210,7 +210,7 @@ def doOverheat(attack):
 
         def resetColor(parts):
             track = Parallel()
-            for partNum in xrange(0, parts.getNumPaths()):
+            for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(Func(nextPart.clearColorScale))
 
@@ -406,7 +406,7 @@ def doRedTape(attack):
         dmg = t['hp']
         tape = globalPropPool.getProp('redtape')
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
 
         propTrack = Sequence(getPropAppearTrack(tape, suit.getRightHand(), tapePosPoints, 0.25, tapeScaleUpPoint, scaleUpTime=0.25))
@@ -434,7 +434,7 @@ def doRedTape(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
@@ -1152,7 +1152,7 @@ def doShakedownCooldown(attack):
             shakeTrack.append(Wait(damageDelay + 0.25))
             shakeTrack.append(Func(shadow.hide))
             shakeTrack.append(LerpPosInterval(toon, 1.1, risePoint))
-            for i in xrange(0, 17):
+            for i in range(0, 17):
                 shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
                 shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
 
@@ -1520,7 +1520,7 @@ def doShakedownVulnerable(attack):
             shakeTrack.append(Wait(damageDelay + 0.25))
             shakeTrack.append(Func(shadow.hide))
             shakeTrack.append(LerpPosInterval(toon, 1.1, risePoint))
-            for i in xrange(0, 17):
+            for i in range(0, 17):
                 shakeTrack.append(LerpPosInterval(toon, 0.03, shakeLeft))
                 shakeTrack.append(LerpPosInterval(toon, 0.03, shakeRight))
 

@@ -147,7 +147,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     except:
                         pass
 
-        print '[Pacesetter] Finalized lethal round confirmed before Movie.play(): forcing x1'
+        print('[Pacesetter] Finalized lethal round confirmed before Movie.play(): forcing x1')
 
     def setMovie(self, movieHasBeenMade, avIds, suitIds, toonAttacks, toonTrackOrder, suitAttacks):
         result = DistributedBattleFinal.DistributedBattleFinal.setMovie(
@@ -279,73 +279,73 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
             speed = 1.0
         else:
             speed = pacesetterTimescale
-            print '[Pacesetter] Reserve Cog arrival timescale: x%s' % speed
+            print('[Pacesetter] Reserve Cog arrival timescale: x%s' % speed)
 
         suitTracks = Parallel()
         delay = 0
         for suit in suits:
             if suit.dna.name == 'cdirector':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedBoardbotBoss):
                         obj.hideContingency()
             if suit.dna.name == 'dking':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedBoardbotBoss):
                         obj.hideDividend()
             if suit.dna.name == 'rkeeper':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedBoardbotBoss):
                         obj.hideRecordkeeper()
             if suit.dna.name == 'liquid':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedBoardbotBoss):
                         obj.hideTollmaster()
             if suit.dna.name == 'ambass':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedDirectors):
                         obj.hideAmbassador()
             if suit.dna.name == 'wtapper':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedDirectors):
                         obj.hideWiretapper()
             if suit.dna.name == 'phouse':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedDirectors):
                         obj.hidePowerhouse()
             if suit.dna.name == 'bkeeper':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedDirectors):
                         obj.hideVaultmaster()
             if suit.dna.name == 'lgator':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedLawbotBoss):
                         obj.hideLitigator()
             if suit.dna.name == 'stenog':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedLawbotBoss):
                         obj.hideStenographer()
             if suit.dna.name == 'caseman':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedLawbotBoss):
                         obj.hideCaseManager()
             if suit.dna.name == 'sgoat':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedLawbotBoss):
                         obj.hideScapegoat()
             if suit.dna.name == 'safesupervis':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hidePressurizer()
             if suit.dna.name == 'ubuster':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideUnionBuster()
             if suit.dna.name == 'hustle':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideRacketeer()
             if suit.dna.name == 'radiog':
-                for obj in base.cr.doId2do.values():
+                for obj in list(base.cr.doId2do.values()):
                     if isinstance(obj, DistributedSellbotBossMini):
                         obj.hideRadiographer()
             if suit.dna.name == 'hroller':
@@ -447,7 +447,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     else:
                         camera.setPosHpr(0, -15, 7, 0, 0, 0)
                 continue
-            boss = next((obj for obj in base.cr.doId2do.values()
+            boss = next((obj for obj in list(base.cr.doId2do.values())
             if isinstance(obj, DistributedCountErclaimBoss)), None)
             if boss:
                 if suit.isSkeleton:

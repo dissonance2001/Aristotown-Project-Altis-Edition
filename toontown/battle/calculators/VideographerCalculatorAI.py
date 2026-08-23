@@ -37,14 +37,14 @@ class VideographerCalculatorAI:
 
     def __encodeSuitOrder(self, oldSuits, newSuits):
         value = 0
-        for newIndex in xrange(len(newSuits)):
+        for newIndex in range(len(newSuits)):
             oldIndex = oldSuits.index(newSuits[newIndex])
             value |= oldIndex << (newIndex * 3)
         return value
 
     
     def calculateSuitAttacksVideographer(self):
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             # if self.battle.activeSuits[i].dna.name == 'videog':  # videographer
             #     if self.battle.activeSuits[i].currHP <= 0 and not self.__suitCanAttack(suitId):
@@ -58,7 +58,7 @@ class VideographerCalculatorAI:
             #         if attack[SUIT_ATK_COL]:
             #             self.battle.suitAttacks.append(attack)
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director':
                 if self.calculator.deadSuits > 0 and self.__suitCanAttack(suitId):
@@ -101,7 +101,7 @@ class VideographerCalculatorAI:
                         self.battle.suitAttacks.append(attack)
 
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             x = self.TurnsElapsed
             # Initial Cheats
@@ -184,7 +184,7 @@ class VideographerCalculatorAI:
                         'healTarget': 'target'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
                 if self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'killedbyvideo') and not self.__suitCanAttack(
@@ -338,7 +338,7 @@ class VideographerCalculatorAI:
                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director': 
                 if self.calculator.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
@@ -367,7 +367,7 @@ class VideographerCalculatorAI:
                         self.battle.suitAttacks.append(attack)
                         self.calculator.directorMultiplier += 2
 
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog' and not self.suitHasCondition(suitId, 'immune'):
                 if self.calculator.deadSuits == 1 and self.__suitCanAttack(suitId):
@@ -423,7 +423,7 @@ class VideographerCalculatorAI:
     
 
         # Secondary Cheats
-        for i in xrange(len(self.battle.activeSuits)):
+        for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
                 if self.suitHasCondition(suitId, 'hollywoodcalculator') and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(suitId):
@@ -541,7 +541,7 @@ class VideographerCalculatorAI:
                 oldLivingSuits = []
                 livingPositions = []
 
-                for index in xrange(len(oldActiveSuits)):
+                for index in range(len(oldActiveSuits)):
                     otherSuit = oldActiveSuits[index]
 
                     if (
@@ -562,7 +562,7 @@ class VideographerCalculatorAI:
 
                 newActiveSuits = oldActiveSuits[:]
 
-                for index in xrange(len(livingPositions)):
+                for index in range(len(livingPositions)):
                     newActiveSuits[livingPositions[index]] = newLivingSuits[index]
 
                 payload = self.__encodeSuitOrder(

@@ -120,7 +120,7 @@ class PianoMidiFile(object):
                 raise MidiParseError('Unsupported MIDI status 0x%02X.' % status)
 
             values = []
-            for unused in xrange(dataLength):
+            for unused in range(dataLength):
                 if offset >= len(data):
                     raise MidiParseError('Truncated MIDI channel event.')
                 values.append(self.__byteValue(data[offset]))
@@ -171,7 +171,7 @@ class PianoMidiFile(object):
             raise MidiParseError('Invalid MIDI timing division.')
 
         rawEvents = []
-        for trackIndex in xrange(self.trackCount):
+        for trackIndex in range(self.trackCount):
             if offset + 8 > len(data) or data[offset:offset + 4] != b'MTrk':
                 raise MidiParseError('Missing MIDI track %d.' % (trackIndex + 1))
             trackLength, trackDataOffset = self.__readUInt32(data, offset + 4)
@@ -225,7 +225,7 @@ class PianoMidiFile(object):
                                     offKind, valueA, 0))
                 eventSequence += 1
 
-        for key, starts in activeStarts.items():
+        for key, starts in list(activeStarts.items()):
             note = key[2]
             for startTime in starts:
                 eventTime = max(currentSeconds,

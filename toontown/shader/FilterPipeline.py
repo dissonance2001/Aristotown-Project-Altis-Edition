@@ -152,19 +152,19 @@ class FilterPipeline(object):
         ind = (indent * " ")
         nrp = len(self.stages)
         if nrp < 1:
-            print("%sFilterPipeline %s: <inactive>" % (ind, self.name))
+            print(("%sFilterPipeline %s: <inactive>" % (ind, self.name)))
         else:
             hpsStatus = ", HalfPixelShift enabled" if self.halfPixelShift else ""
             rpplural = "es" if nrp != 1 else ""
             nf = len(self.filters)
             fplural = "s" if nf != 1 else ""
-            print("%sFilterPipeline %s: <active>, %d render pass%s, %d filter%s total%s" % (
-            ind, self.name, nrp, rpplural, nf, fplural, hpsStatus))
+            print(("%sFilterPipeline %s: <active>, %d render pass%s, %d filter%s total%s" % (
+            ind, self.name, nrp, rpplural, nf, fplural, hpsStatus)))
             # sort by texture name for human-readability
-            print("%s  Scene textures: %s" % (ind, sorted(self.sceneTextures.keys())))
+            print(("%s  Scene textures: %s" % (ind, sorted(self.sceneTextures.keys()))))
             # stages have an ordering; present them in their correct order.
             for i, stage in enumerate(self.stages):
-                print("%s  Render pass %d/%d:" % (ind, i + 1, nrp))
+                print(("%s  Render pass %d/%d:" % (ind, i + 1, nrp)))
                 stage.ls(indent = indent + 4)
 
     def cleanup(self):

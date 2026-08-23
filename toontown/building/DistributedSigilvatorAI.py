@@ -55,7 +55,7 @@ class DistributedSigilvatorAI(
                     'Unable to create the Major Player miniboss destination zone.')
                 self.fsm.request('closed')
                 return
-            for seatIndex in xrange(len(self.seats)):
+            for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
                     self.sendUpdateToAvatarId(

@@ -49,7 +49,7 @@ def doThrows(throws):
             else:
                 suitThrowsDict[suitId] = [throw]
 
-    suitThrows = suitThrowsDict.values()
+    suitThrows = list(suitThrowsDict.values())
 
     def compFunc(a, b):
         if len(a) > len(b):
@@ -64,7 +64,7 @@ def doThrows(throws):
     groupHitDict = {}
     for throw in throws:
         if attackAffectsGroup(throw['track'], throw['level']):
-            for i in xrange(len(throw['target'])):
+            for i in range(len(throw['target'])):
                 target = throw['target'][i]
                 suitId = target['suit'].doId
                 if target['hp'] > 0:
@@ -175,7 +175,7 @@ def __propPreflight(props, suit, toon, battle):
     toon.update(0)
     prop.wrtReparentTo(battle)
     props[1].reparentTo(hidden)
-    for ci in xrange(prop.getNumChildren()):
+    for ci in range(prop.getNumChildren()):
         prop.getChild(ci).setHpr(0, -90, 0)
 
     targetPnt = MovieUtil.avatarFacePoint(suit, other=battle)
@@ -187,7 +187,7 @@ def __propPreflightGroup(props, suits, toon, battle):
     toon.update(0)
     prop.wrtReparentTo(battle)
     props[1].reparentTo(hidden)
-    for ci in xrange(prop.getNumChildren()):
+    for ci in range(prop.getNumChildren()):
         prop.getChild(ci).setHpr(0, -90, 0)
 
     avgTargetPt = Point3(0, 0, 0)
@@ -572,7 +572,7 @@ def __createWeddingCakeFlight(throw, groupHitDict, pie, pies):
         splatName = 'splat-birthday-cake'
     splat = globalPropPool.getProp(splatName)
     splats = [splat]
-    for i in xrange(numTargets - 1):
+    for i in range(numTargets - 1):
         splats.append(MovieUtil.copyProp(splat))
 
     splatType = globalPropPool.getPropType(splatName)
@@ -597,7 +597,7 @@ def __createWeddingCakeFlight(throw, groupHitDict, pie, pies):
      [cakeParts[3]]]
     cakePartDivToUse = cakePartDivisions[len(throw['target'])]
     groupPieTracks = Parallel()
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         target = throw['target'][i]
         suit = target['suit']
         hitSuit = target['hp'] > 0
@@ -666,7 +666,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
     if not 'npc' in throw:
         toonTrack.append(Func(toon.setHpr, battle, origHpr))
     suits = []
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         suits.append(throw['target'][i]['suit'])
 
     pieName = pieNames[level]
@@ -688,7 +688,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
         notify.error('unhandled throw level %d' % level)
     pieTrack.append(groupPieTracks)
     didThrowHitAnyone = False
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         target = throw['target'][i]
         hitSuit = target['hp'] > 0
         if hitSuit:
@@ -696,7 +696,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
 
     soundTrack = __getSoundTrack(level, didThrowHitAnyone, toon)
     groupSuitResponseTrack = Parallel()
-    for i in xrange(numTargets):
+    for i in range(numTargets):
         target = throw['target'][i]
         suit = target['suit']
         hitSuit = target['hp'] > 0
@@ -754,7 +754,7 @@ def __throwGroupPie(throw, delay, groupHitDict, npcs):
                 singleSuitResponseTrack.append(Func(suit.setNeutralAnimation))
             singleSuitResponseTrack = Parallel(singleSuitResponseTrack, bonusTrack)
         else:
-            groupHitValues = groupHitDict.values()
+            groupHitValues = list(groupHitDict.values())
             if groupHitValues.count(0) == len(groupHitValues):
                 singleSuitResponseTrack = MovieUtil.createSuitDodgeMultitrack(battle, delay + tSuitDodges, suit, leftSuits, rightSuits)
             else:

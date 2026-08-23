@@ -377,10 +377,10 @@ def _discoverSpellbookCommands():
     except:
         return commands
     try:
-        iterator = spellbook.words.itervalues()
+        iterator = iter(spellbook.words.values())
     except:
         try:
-            iterator = spellbook.words.values()
+            iterator = list(spellbook.words.values())
         except:
             return commands
     seenObjects = set()

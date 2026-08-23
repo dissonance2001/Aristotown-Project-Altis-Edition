@@ -36,7 +36,7 @@ class ToontownContentLuts:
         Loads up all the luts from the content pack manager.
         """
         self.affect2d = ContentPackManager.lutsAffectUI
-        for key, str in ContentPackManager.luts.items():
+        for key, str in list(ContentPackManager.luts.items()):
             # The ContentPackMgr will have already filtered out bad luts.
             self.luts[key] = str
 

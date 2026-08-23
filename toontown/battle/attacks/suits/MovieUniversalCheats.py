@@ -179,7 +179,7 @@ def __soakRemoval(suit, remove=0):
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
     texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             if suit.dna.name != 'cbutcher' and not suit.isShadow:

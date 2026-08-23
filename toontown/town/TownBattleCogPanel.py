@@ -1351,7 +1351,7 @@ class TownBattleCogPanel(DirectFrame):
 
         self.statusSlots = [None] * len(slotLayouts)
 
-        for i in reversed(range(len(slotLayouts))):
+        for i in reversed(list(range(len(slotLayouts)))):
             x, y, z = slotLayouts[i]
 
             bgModel = loader.loadModel('phase_3.5/models/gui/status_effects')
@@ -4418,7 +4418,7 @@ class TownBattleCogPanel(DirectFrame):
 
         self.hoveredStatusSlot = None
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             slot = self.statusSlots[slotIndex]
 
             self._stopSlotPulse(slot)
@@ -4433,7 +4433,7 @@ class TownBattleCogPanel(DirectFrame):
             for child in slot['iconRoot'].getChildren():
                 child.detachNode()
 
-        for slotIndex in xrange(visibleSlots):
+        for slotIndex in range(visibleSlots):
             effectIndex = self.statusOffset + slotIndex
 
             if effectIndex >= len(self.statusIconNodes):

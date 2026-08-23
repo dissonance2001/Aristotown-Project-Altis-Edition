@@ -190,7 +190,7 @@ class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCas
         self.demand('Off')
         print("///////////")
         print(self)
-        print(self.boss.goons)
+        print((self.boss.goons))
         print("///////////")
         if self in self.boss.goons:
             self.boss.goons.remove(self)

@@ -312,7 +312,7 @@ def getSuitsForTier(dept, tier):
 def getRandomSuitTierSpawn(level, dept, rng=random):
     possibleTiers = []
 
-    for tier in xrange(1, 8):
+    for tier in range(1, 8):
         for suitName in getSuitsForTier(dept, tier):
             minLevel = SuitBattleGlobals.getSuitMinLevel(suitName)
             maxLevel = SuitBattleGlobals.getSuitMaxLevel(suitName)
@@ -365,8 +365,8 @@ def getSuitDeptFullname(name):
 
 
 def getSuitType(name):
-    for dept, tiers in suitTierPools.items():
-        for tier, names in tiers.items():
+    for dept, tiers in list(suitTierPools.items()):
+        for tier, names in list(tiers.items()):
             if name in names:
                 return tier
 
@@ -547,7 +547,7 @@ class SuitDNA(AvatarDNA.AvatarDNA):
         if tier is None:
             availableTiers = []
 
-            for testTier in xrange(1, 9):
+            for testTier in range(1, 9):
                 if getSuitsForTier(dept, testTier):
                     availableTiers.append(testTier)
 

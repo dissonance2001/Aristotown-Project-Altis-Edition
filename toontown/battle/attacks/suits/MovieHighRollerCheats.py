@@ -386,7 +386,7 @@ def doPhase2(attack):
         headTrack.append(Func(headPart.setH, 0))
         headTrack.append(Func(headPart.loop, 'neutral-hurt'))
     suitTrack = Sequence(musicTrack)
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.phase2Intro))
     suitTrack.append(Func(suit.setChatAbsolute, "WhAHAHAHAt a ffhow!", CFSpeech | CFTimeout))
@@ -413,7 +413,7 @@ def doPhase2(attack):
     suitTrack.append(Func(suit.setSuitStatusEffect, 'highRollerHijinks', turns=6, modifier=1))
     musicTrack2 = Parallel()
     suitTrack.append(musicTrack2)
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack2.append(Func(obj.startPhase2Music))
     return Parallel(suitTrack)
@@ -425,7 +425,7 @@ def doPuzzleBan(attack):
     battle = attack['battle']
     musicTrack = Parallel()
     suitTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.shuffle))
     suitTrack.append(Wait(3.0))
@@ -444,7 +444,7 @@ def doPuzzle(attack):
         toon = t['toon']
         dmg = t['hp']
     suitTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.puzzle))
     suitTrack.append(Wait(3.0))
@@ -457,7 +457,7 @@ def doGameOver(attack):
     battle = attack['battle']
     soundTrack3 = getSoundTrack('cc_s_bgm_ara_hroller_int_stinger.ogg', node=suit)
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.stinger))
     suitTrack = Sequence(Parallel(getSuitAnimTrackAttack(attack), musicTrack, Sequence(Wait(4.0), Func(suit.setChatAbsolute, "Ha-HA!", CFSpeech | CFTimeout))))
@@ -663,7 +663,7 @@ def doBudgetCuts(attack):
         tape = globalPropPool.getProp('redtape')
         tape.setColor(0, 0, 0, 1)
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
             tubes[i].setColor(0, 0, 0, 1)
 
@@ -688,7 +688,7 @@ def doBudgetCuts(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 0, 3, scaleUpPoint=scaleUpPoint))
 
@@ -814,10 +814,10 @@ def doCut(attack):
             autoFinish=1
         )
     ))
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         rightKnives.append(globalPropPool.getProp('dagger'))
     for t in targets:
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             rightTrack = Sequence()
             rightTrack.append(Wait(0.5))
@@ -926,9 +926,9 @@ def doPlacesEveryone(attack):
         return Sequence(getSuitAnimTrack(attack))
     payload = int(attack.get('hp', 0))
     oldIndexes = []
-    for index in xrange(len(oldActiveSuits)):
+    for index in range(len(oldActiveSuits)):
         oldIndexes.append((payload >> (index * 3)) & 7)
-    if sorted(oldIndexes) != range(len(oldActiveSuits)):
+    if sorted(oldIndexes) != list(range(len(oldActiveSuits))):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
     suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
@@ -1147,7 +1147,7 @@ def doWrappedInTheFilm(attack):
         tape = globalPropPool.getProp('redtape')
         tape.setColor(0, 0, 0, 1)
         tubes = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             tubes.append(globalPropPool.getProp('redtape-tube'))
             tubes[i].setColor(0, 0, 0, 1)
 
@@ -1176,7 +1176,7 @@ def doWrappedInTheFilm(attack):
         tubePosPoints = [Point3(0, 0, tubeHeight), MovieUtil.PNT3_ZERO]
         tubeTracks = Parallel()
         tubeTracks.append(Func(battle.movie.needRestoreHips))
-        for partNum in xrange(0, hips.getNumPaths()):
+        for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
@@ -1391,7 +1391,7 @@ def doPhase3Videographer(attack):
     soundTrack = getSoundTrack('SA_bash.ogg', delay=.25, node=suit)
     from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, DistributedVideographerBoss):
             musicTrack.append(Func(obj.startPhase2Particles))
     suitTrack = Sequence(ActorInterval(theSuit, 'snap'), Func(theSuit.setNeutralAnimationDrop), Wait(5.0 - theSuit.getDuration('snap')))
@@ -1464,7 +1464,7 @@ def doDirectorCuts(attack):
     soundTrack = getSoundTrack('SA_bash.ogg', delay=.25, node=suit)
     from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, DistributedVideographerBoss):
             musicTrack.append(Func(obj.startPhase2Particles))
     suitTrack = Sequence(ActorInterval(theSuit, 'snap'), Func(theSuit.setNeutralAnimationDrop), Wait(5.0 - theSuit.getDuration('snap')))
@@ -1836,19 +1836,19 @@ def doDesperation(attack):
     battle = attack['battle']
     suitTrack = Sequence()
     if suit.dna.name == 'caseman':
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if isinstance(obj, DistributedLawbotBoss):
                 suitTrack.append(Func(obj.stopCaseManagerMusic))
     if suit.dna.name == 'sgoat':
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if isinstance(obj, DistributedLawbotBoss):
                 suitTrack.append(Func(obj.stopScapegoatMusic))
     if suit.dna.name == 'stenog':
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if isinstance(obj, DistributedLawbotBoss):
                 suitTrack.append(Func(obj.stopStenographerMusic))
     if suit.dna.name == 'lgator':
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if isinstance(obj, DistributedLawbotBoss):
                 suitTrack.append(Func(obj.stopLitigatorMusic))
     if suit.dna.name == 'liquid':
@@ -1993,11 +1993,11 @@ def doSnipeMegaphone(attack):
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         leftKnives = []
         rightKnives = []
-        for i in xrange(0, 5):
+        for i in range(0, 5):
             leftKnives.append(globalPropPool.getProp('dagger'))
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
             leftTrack.append(Wait(1.1))
@@ -2158,11 +2158,11 @@ def doSnipe(attack):
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         leftKnives = []
         rightKnives = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             leftKnives.append(globalPropPool.getProp('dagger'))
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
             leftTrack.append(Wait(1.1))
@@ -2320,11 +2320,11 @@ def doSnipeCut(attack):
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         leftKnives = []
         rightKnives = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             leftKnives.append(globalPropPool.getProp('dagger'))
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
             leftTrack.append(Wait(1.1))
@@ -2386,11 +2386,11 @@ def doSnipeDamageReduction(attack): #UNUSED
         explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         leftKnives = []
         rightKnives = []
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             leftKnives.append(globalPropPool.getProp('dagger'))
             rightKnives.append(globalPropPool.getProp('dagger'))
 
-        for i in xrange(0, 3):
+        for i in range(0, 3):
             knifeDelay = 0.11
             leftTrack = Sequence()
             leftTrack.append(Wait(1.1))
@@ -2454,10 +2454,10 @@ def doSingingBlues(attack):
     explodePosPoints1 = [Point3(0, 10, 1), MovieUtil.PNT3_ZERO]
     explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(Wait(2.7))
         explodeTrack.append(
@@ -2707,7 +2707,7 @@ def doBar(attack):
     closestTarget = -1
     explodeTracks = Parallel()
     nearestDistance = 100000.0
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         toon = targets[i]['toon']
         toonPos = toon.getPos(battle)
         displacement = Vec3(MovieUtil.calcAvgToonPos(attack))
@@ -2911,7 +2911,7 @@ def doFreeCruise(attack):
     shipTrack.append(Wait(2.86 + freeCruiseDelay))
     closestTarget = -1
     nearestDistance = 100000.0
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         toon = targets[i]['toon']
         toonPos = toon.getPos(battle)
         displacement = Vec3(MovieUtil.calcAvgToonPos(attack))
@@ -3044,7 +3044,7 @@ def doAceInTheHoleOLD(attack):
         object.setZ(object.getPos(battle)[2] + objZOffset)
     closestTarget = -1
     nearestDistance = 100000.0
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         toon = targets[i]['toon']
         toonPos = toon.getPos(battle)
         displacement = Vec3(MovieUtil.calcAvgToonPos(attack))
@@ -3136,7 +3136,7 @@ def doAceInTheHole(attack):
         ActorInterval(card, 'cc_a_prp_bat_playcard'),
         Func(MovieUtil.removeProp, card))
     toonTracks = Parallel()
-    for i in xrange(len(targets)):
+    for i in range(len(targets)):
         tgt = targets[i]
         toon = tgt['toon']
         dmg = tgt['hp']
@@ -3189,7 +3189,7 @@ def __soakRemoval(suit, remove=0):
     actorCollection = actorNode.findAllMatches('*')
     parts = ()
     texture = loader.loadTexture('phase_3.5/maps/ttcc_ene_suittex_unemployed.png')
-    for thingIndex in xrange(0, actorCollection.getNumPaths()):
+    for thingIndex in range(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_shadow', 'joint_nameTag', 'def_nameTag'):
             if suit.dna.name != 'cbutcher' and not suit.isShadow:
@@ -3235,10 +3235,10 @@ def doPhase3(attack):
     from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicIntroTrack = Parallel()
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicIntroTrack.append(Func(obj.phase3Intro))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.startPhase3Music))
     suit = attack['suit']
@@ -3308,14 +3308,14 @@ def doExplodingDocument(attack):
     explosionTrack = Sequence()
     explosionTrack.append(Wait(2.25))
     explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explode.append(globalPropPool.getProp('explosion'))
     explodePosPoints = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
     explodePosPoints1 = [Point3(0, 15, 5), MovieUtil.PNT3_ZERO]
     explodeHprPoints = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeHprPoints1 = [Point3(180, 0, 0), MovieUtil.PNT3_ZERO]
     explodeTracks = Parallel()
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         explodeTrack = Sequence()
         explodeTrack.append(Wait(2.25))
         explodeTrack.append(
@@ -3349,11 +3349,11 @@ def doExplodingDocument(attack):
     rightKnifeTracks = Parallel()
     leftKnives = []
     rightKnives = []
-    for i in xrange(0, 5):
+    for i in range(0, 5):
         leftKnives.append(globalPropPool.getProp('dagger'))
         rightKnives.append(globalPropPool.getProp('dagger'))
 
-    for i in xrange(0, 5):
+    for i in range(0, 5):
         knifeDelay = 0.07
         leftTrack = Sequence()
         leftTrack.append(Wait(2.0))
@@ -3396,12 +3396,12 @@ def doContentSync(attack):
                                          color=Vec4(1, 0, 0, 1))
         partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
         partTracks.append(partTrack)
-        print
+        print()
         '***********headParts pos=', headParts[0].getPos()
-        print
+        print()
         '***********headParts hpr=', headParts[0].getHpr()
         headTracks = Parallel()
-        for partNum in xrange(0, headParts.getNumPaths()):
+        for partNum in range(0, headParts.getNumPaths()):
             part = headParts.getPath(partNum)
             x = part.getX()
             y = part.getY()
@@ -3446,9 +3446,9 @@ def doContentSync(attack):
         arms = toon.findAllMatches('**/arms')
         sleeves = toon.findAllMatches('**/sleeves')
         hands = toon.findAllMatches('**/hands')
-        print
+        print()
         '*************arms hpr=', arms[0].getHpr()
-        for partNum in xrange(0, arms.getNumPaths()):
+        for partNum in range(0, arms.getNumPaths()):
             chestTracks.append(getChestTrack(arms.getPath(partNum)))
             chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
             chestTracks.append(getChestTrack(hands.getPath(partNum)))
@@ -3527,12 +3527,12 @@ def doHardCut(attack):
                                          color=Vec4(random.random(), random.random(), random.random(), 1))
         partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
         partTracks.append(partTrack)
-        print
+        print()
         '***********headParts pos=', headParts[0].getPos()
-        print
+        print()
         '***********headParts hpr=', headParts[0].getHpr()
         headTracks = Parallel()
-        for partNum in xrange(0, headParts.getNumPaths()):
+        for partNum in range(0, headParts.getNumPaths()):
             part = headParts.getPath(partNum)
             x = part.getX()
             y = part.getY()
@@ -3567,9 +3567,9 @@ def doHardCut(attack):
         arms = toon.findAllMatches('**/arms')
         sleeves = toon.findAllMatches('**/sleeves')
         hands = toon.findAllMatches('**/hands')
-        print
+        print()
         '*************arms hpr=', arms[0].getHpr()
-        for partNum in xrange(0, arms.getNumPaths()):
+        for partNum in range(0, arms.getNumPaths()):
             chestTracks.append(getChestTrack(arms.getPath(partNum)))
             chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
             chestTracks.append(getChestTrack(hands.getPath(partNum)))
@@ -3619,12 +3619,12 @@ def doViralSensation(attack):
             toonTrack.append(Parallel(Func(toon.setToonStatusEffect, 'viralSensation', modifier=50, turns=2)))
             toonTrack.append(Func(toon.showHpStringViral, "VIRAL SENSATION!"))
             toonTracks2.append(toonTrack)
-            print
+            print()
             '***********headParts pos=', headParts[0].getPos()
-            print
+            print()
             '***********headParts hpr=', headParts[0].getHpr()
             headTracks = Parallel()
-            for partNum in xrange(0, headParts.getNumPaths()):
+            for partNum in range(0, headParts.getNumPaths()):
                 part = headParts.getPath(partNum)
                 x = part.getX()
                 y = part.getY()
@@ -3659,9 +3659,9 @@ def doViralSensation(attack):
             arms = toon.findAllMatches('**/arms')
             sleeves = toon.findAllMatches('**/sleeves')
             hands = toon.findAllMatches('**/hands')
-            print
+            print()
             '*************arms hpr=', arms[0].getHpr()
-            for partNum in xrange(0, arms.getNumPaths()):
+            for partNum in range(0, arms.getNumPaths()):
                 chestTracks.append(getChestTrack(arms.getPath(partNum)))
                 chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
                 chestTracks.append(getChestTrack(hands.getPath(partNum)))
@@ -3924,7 +3924,7 @@ def doWheelSpin(attack):
     from toontown.suit.DistributedHighRollerBoss import DistributedHighRollerBoss
     from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
     musicIntroTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicIntroTrack.append(Func(obj.makeHighRollerWheelSpin, duration=4.0, spinCount=20))
     suitTrack = Sequence(MovieUtil.createSuitLaughInterval(suit))
@@ -5317,11 +5317,11 @@ def doGameTimeCog(attack, ind):
     targetSuit = battle.activeSuits[dmg]
     soundTrack3 = Parallel()
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     QUIZ_VARIANTS = [
@@ -5516,11 +5516,11 @@ def doGameTimeCog2(attack, ind):
                                     targetSuit,
                                     steadyLightDuration=14
                                 ))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack))
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     QUIZ_VARIANTS = [
@@ -5706,7 +5706,7 @@ def doGameTimeCog2OLD(attack, ind):
     dmg = attack['target'][0]['hp']
     targetSuit = battle.activeSuits[dmg]
     soundTrack3 = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     taunt = random.choice(("Well, babe, let'ff not keep them waiting! HAHAHA!!!",
@@ -5748,7 +5748,7 @@ def doGameTimeCog2OLD(attack, ind):
         Func(MovieUtil.removeProp, cage)
         )
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack), Func(manager.setNeutralAnimation), Wait(18.0))
@@ -5875,7 +5875,7 @@ def doGameTimeCogOLD(attack, ind):
     dmg = attack['target'][0]['hp']
     targetSuit = battle.activeSuits[dmg]
     soundTrack3 = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             soundTrack3.append(Func(obj.stinger))
     taunt = random.choice(("Well, babe, let'ff not keep them waiting! HAHAHA!!!",
@@ -5917,7 +5917,7 @@ def doGameTimeCogOLD(attack, ind):
         Func(MovieUtil.removeProp, cage)
     )
     musicTrack = Parallel()
-    for obj in base.cr.doId2do.values():
+    for obj in list(base.cr.doId2do.values()):
         if isinstance(obj, (DistributedHighRollerBoss, DistributedVideographerBoss)):
             musicTrack.append(Func(obj.trivia))
     managerTrack = Sequence(musicTrack, getSuitAnimTrack(attack), Func(manager.setNeutralAnimation), Wait(18.0))
@@ -6046,7 +6046,7 @@ def doConduction(attack):
     for t in attack['target']:
         toon = t['toon']
         duckTracks = Parallel()
-        for i in xrange(0, random.randint(7, 10)):
+        for i in range(0, random.randint(7, 10)):
             x = random.random() / 5
             if random.choice([False, True]):
                 x *= -1
@@ -6103,7 +6103,7 @@ def doRaisingTheAnte(attack):
 
     def changeColor(parts):
         track = Parallel()
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             nextPart = parts.getPath(partNum)
             track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
 
@@ -6111,7 +6111,7 @@ def doRaisingTheAnte(attack):
 
     def resetColor(parts):
         track = Parallel()
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             nextPart = parts.getPath(partNum)
             track.append(Func(nextPart.clearColorScale))
 
@@ -6125,7 +6125,7 @@ def doRaisingTheAnte(attack):
         numArrows = 15  # I don't know how long we want the particle effect to go on for, but we can change that depending on how many arrows we want.
         radius = 2.0
         partTrack = Parallel()
-        for i in xrange(numArrows):
+        for i in range(numArrows):
             # Create the arrow.
             arrow = loader.loadModel('phase_3.5/models/gui/matching_game_gui').find(
                 '**/minnieArrow')  # Get an arrow immediately.

@@ -54,12 +54,12 @@ class FilterStage(object):
         hpsStatus = ", HalfPixelShift enabled" if self.halfPixelShift else ""
 
         if nf < 1:
-            print("%sFilterStage %s: <no filters%s>" % (ind, self.name, hpsStatus))
+            print(("%sFilterStage %s: <no filters%s>" % (ind, self.name, hpsStatus)))
         else:
             # Even with only HalfPixelShift, there is always the StageInitializer.
 
             fplural = "s" if nf != 1 else ""
-            print("%sFilterStage %s: <%d filter%s%s>" % (ind, self.name, nf, fplural, hpsStatus))
+            print(("%sFilterStage %s: <%d filter%s%s>" % (ind, self.name, nf, fplural, hpsStatus)))
 
             if len(self.registeredTextures) > 0:
                 # Find out which filters enabled which textures
@@ -82,9 +82,9 @@ class FilterStage(object):
                     textureslist.append( "%s (reg. by %s)" % (texName, filternames) )
 
                 if len(textureslist) > 0:
-                    print("%s  Textures registered to compositing shader: %s" % (ind, textureslist) )
+                    print(("%s  Textures registered to compositing shader: %s" % (ind, textureslist) ))
                 else:
-                    print("%s  No textures registered to compositing shader" % ind )
+                    print(("%s  No textures registered to compositing shader" % ind ))
 
             if len(self.registeredCustomInputs) > 0:
                 # These are uniquely named, so each custom input corresponds only to one filter.
@@ -104,7 +104,7 @@ class FilterStage(object):
                 for key in sorted(inputsByName.keys()):
                     inputslist.append( inputsByName[key] )
 
-                print("%s  Custom inputs registered to compositing shader: %s" % (ind, inputslist) )
+                print(("%s  Custom inputs registered to compositing shader: %s" % (ind, inputslist) ))
 
             for f in self.filters:
                 f.ls(indent=indent+4)

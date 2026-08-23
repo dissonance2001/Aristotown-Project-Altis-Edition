@@ -251,7 +251,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -270,7 +270,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -292,7 +292,7 @@ class AttackHPCalculatorAI(object):
                                     )
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
 
                                     break
@@ -320,7 +320,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -340,7 +340,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -362,7 +362,7 @@ class AttackHPCalculatorAI(object):
                                 )
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'videoPhase1')
 
                                 break
@@ -389,7 +389,7 @@ class AttackHPCalculatorAI(object):
                     self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                 continue
-            for suit in self.currentlyLuredSuits.keys():
+            for suit in list(self.currentlyLuredSuits.keys()):
                 self.setSuitCondition(suit, 'bellowattack', 1, 1, 'setBoth')
                 self.__removeLured(suit)
         elif atkType['name'] == 'ScapegoatShieldsUp':
@@ -446,7 +446,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedLawbotBossAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -461,7 +461,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = maxSuits - aliveCount
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         if self.suitHasCondition(theSuit.doId, 'desperation'):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'litDesperation')
                                         else:
@@ -642,7 +642,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedLawbotBossAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -657,7 +657,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = maxSuits - aliveCount
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
 
                                 break
@@ -682,7 +682,7 @@ class AttackHPCalculatorAI(object):
                 if self.suitHasCondition(suit.doId, 'lured'):
                     self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
-            for suit in self.currentlyLuredSuits.keys():
+            for suit in list(self.currentlyLuredSuits.keys()):
                 self.__removeLured(suit)
         elif atkType['name'] == 'ErclaimScopeCreep':
             if not self.suitHasCondition(theSuit.doId, 'directorDamageReduction'):
@@ -693,7 +693,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedCountErclaimBossAI import DistributedCountErclaimBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedCountErclaimBossAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -706,7 +706,7 @@ class AttackHPCalculatorAI(object):
                                 spawnAmount = min(4, 7 - aliveCount)
 
                                 if spawnAmount > 0:
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         if theSuit.currHP <= (theSuit.maxHP * .25):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'erclaim2')
                                         else:
@@ -717,7 +717,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedBoardbotBossAI):
                     for t in self.battle.activeToons:
                         if t in do.involvedToons:
@@ -869,7 +869,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedLawbotBossAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -898,7 +898,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedDirectorsAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -927,7 +927,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedBoardbotBossAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -956,7 +956,7 @@ class AttackHPCalculatorAI(object):
             from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
             boss = None
-            for do in simbase.air.doId2do.values():
+            for do in list(simbase.air.doId2do.values()):
                 if isinstance(do, DistributedSellbotBossMiniAI):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
@@ -1851,7 +1851,7 @@ class AttackHPCalculatorAI(object):
 
                 boss = None
 
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if not isinstance(do, DistributedCountErclaimBossAI):
                         continue
 
@@ -1870,7 +1870,7 @@ class AttackHPCalculatorAI(object):
                         projectedHP = max(1, targetSuit.currHP - damage)
                         hpPercent = float(projectedHP) / float(targetSuit.maxHP)
 
-                        for i in xrange(spawnAmount):
+                        for i in range(spawnAmount):
                             if hpPercent <= .25:
                                 boss.appendSuitsToBattle(boss.battleNumber, 'erfit5')
                             elif hpPercent <= .375:
@@ -2155,7 +2155,7 @@ class AttackHPCalculatorAI(object):
         Professor Control: I'm sorry, but the original method is actually a pigstye and I cannot work in that.  I'm using an alternate form for now.
         '''
         targetList = self.__createSuitTargetList(attack)
-        for currTarget in xrange(len(targetList)):
+        for currTarget in range(len(targetList)):
             toonId = targetList[currTarget]
             toon = self.battle.getToon(toonId)
             result = 0
@@ -2595,7 +2595,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.setSuitCondition(suit, 'bellowattack', 1, 1, 'setBoth')
                     self.__removeLured(suit)
             elif atkType['name'] == 'LitigatorBayouBellow':
@@ -2623,7 +2623,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.setSuitCondition(suit, 'bellowattack', 1, 1, 'setBoth')
                     self.__removeLured(suit)
             elif atkType['name'] == 'LitigatorBayouBash':
@@ -2633,7 +2633,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedLawbotBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -2648,7 +2648,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = maxSuits - aliveCount
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if self.suitHasCondition(theSuit.doId, 'desperation'):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'litDesperation')
                                             else:
@@ -2668,7 +2668,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedCountErclaimBossAI import DistributedCountErclaimBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedCountErclaimBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -2683,7 +2683,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = min(4, maxSuits - aliveCount)
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if theSuit.currHP <= (theSuit.maxHP * .25):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'erfit5')
                                             elif theSuit.currHP <= (theSuit.maxHP * .375):
@@ -2704,7 +2704,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedCountErclaimBossAI import DistributedCountErclaimBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedCountErclaimBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -2717,7 +2717,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = min(4, 7 - aliveCount)
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             if theSuit.currHP <= (theSuit.maxHP * .25):
                                                 boss.appendSuitsToBattle(boss.battleNumber, 'erclaim2')
                                             else:
@@ -2887,7 +2887,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedLawbotBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -2902,7 +2902,7 @@ class AttackHPCalculatorAI(object):
                                     spawnAmount = maxSuits - aliveCount
 
                                     if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
+                                        for i in range(spawnAmount):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'lit2')
 
                                     break
@@ -2930,7 +2930,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                         self.setSuitCondition(suit.doId, 'unlureSuit', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.__removeLured(suit)
             elif atkType['name'] == 'ErfitHydrationCheck':
                 roll = random.randint(0, 100)
@@ -4104,7 +4104,7 @@ class AttackHPCalculatorAI(object):
 
                 for t in self.battle.activeToons:
 
-                    for cond in self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys():
+                    for cond in list(self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys()):
                         self.setToonCondition(t, cond, 0, 0, 'setBoth')
 
                     self.setToonCondition(t, syncCond, 1, -1, 'setBoth')
@@ -4845,7 +4845,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedBoardbotBossAI):
                         for t in self.battle.activeToons:
                             if t in do.involvedToons:
@@ -5968,7 +5968,7 @@ class AttackHPCalculatorAI(object):
 
                 for t in self.battle.activeToons:
 
-                    for cond in self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys():
+                    for cond in list(self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys()):
                         self.setToonCondition(t, cond, 0, 0, 'setBoth')
 
                     self.setToonCondition(t, syncCond, 1, -1, 'setBoth')
@@ -6457,7 +6457,7 @@ class AttackHPCalculatorAI(object):
 
                 for t in self.battle.activeToons:
 
-                    for cond in self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys():
+                    for cond in list(self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys()):
                         self.setToonCondition(t, cond, 0, 0, 'setBoth')
 
                     self.setToonCondition(t, syncCond, 1, -1, 'setBoth')
@@ -7113,7 +7113,7 @@ class AttackHPCalculatorAI(object):
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.__removeLured(suit)
             elif atkType['name'] == 'HighRollerDamageReduction':
                 result = random.randint(1, 8)
@@ -7126,7 +7126,7 @@ class AttackHPCalculatorAI(object):
 
                 for t in self.battle.activeToons:
 
-                    for cond in self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys():
+                    for cond in list(self.calculator.CONTENT_SYNC_CONDITION_ORDERS.keys()):
                         self.setToonCondition(t, cond, 0, 0, 'setBoth')
 
                     self.setToonCondition(t, syncCond, 1, -1, 'setBoth')
@@ -7138,7 +7138,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7152,7 +7152,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(random.randint(1, 4)):
+                                    for i in range(random.randint(1, 4)):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crfMinigame')
 
                                     break
@@ -7185,7 +7185,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7199,7 +7199,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(spawnAmount):
+                                    for i in range(spawnAmount):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crf1')
 
                                     break
@@ -7212,7 +7212,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7229,7 +7229,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7243,7 +7243,7 @@ class AttackHPCalculatorAI(object):
                                     aliveCount = len(self.battle.activeSuits) - self.deadSuits
                                     spawnAmount = maxSuits - aliveCount
 
-                                    for i in xrange(random.randint(1, 4)):
+                                    for i in range(random.randint(1, 4)):
                                         boss.appendSuitsToBattle(boss.battleNumber, 'crfMinigame')
 
                                     break
@@ -7263,7 +7263,7 @@ class AttackHPCalculatorAI(object):
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.__removeLured(suit)
                 if not self.toonHasCondition(toon.doId, 'rushJobCompleted') or self.deadSuits != (len(self.battle.activeSuits) - 1):
                     result = 35
@@ -7282,7 +7282,7 @@ class AttackHPCalculatorAI(object):
                     if self.suitHasCondition(suit.doId, 'lured'):
                         self.setSuitCondition(suit.doId, 'lured', 0, 0, 'setBoth')
                     continue
-                for suit in self.currentlyLuredSuits.keys():
+                for suit in list(self.currentlyLuredSuits.keys()):
                     self.__removeLured(suit)
                 if self.toonHasCondition(toon.doId, 'banned') or self.toonHasCondition(toon.doId, 'banned2') or self.deadSuits != (len(self.battle.activeSuits) - 1):
                     self.setToonCondition(toon.doId, 'banned2', 1, 1, 'setBoth')
@@ -7452,7 +7452,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7494,7 +7494,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7561,7 +7561,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7581,7 +7581,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7618,7 +7618,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7638,7 +7638,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -7656,7 +7656,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -8178,7 +8178,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedLawbotBossAI import DistributedLawbotBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedLawbotBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -8207,7 +8207,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedDirectorsAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -8236,7 +8236,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedBoardbotBossAI import DistributedBoardbotBossAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedBoardbotBossAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -8265,7 +8265,7 @@ class AttackHPCalculatorAI(object):
                 from toontown.suit.DistributedSellbotBossMiniAI import DistributedSellbotBossMiniAI
 
                 boss = None
-                for do in simbase.air.doId2do.values():
+                for do in list(simbase.air.doId2do.values()):
                     if isinstance(do, DistributedSellbotBossMiniAI):
                         for s in self.battle.activeSuits:
                             if s in do.activeSuits:
@@ -9845,7 +9845,7 @@ class AttackHPCalculatorAI(object):
         # PER-TARGET CALCULATION
         # ---------------------------------------------------------
 
-        for currTarget in xrange(len(targetList)):
+        for currTarget in range(len(targetList)):
             toonId = targetList[currTarget]
             toon = self.battle.getToon(toonId)
 

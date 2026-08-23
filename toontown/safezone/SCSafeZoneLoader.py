@@ -1,7 +1,7 @@
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
-import SafeZoneLoader
-import SCPlayground
+from . import SafeZoneLoader
+from . import SCPlayground
 
 class SCSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 

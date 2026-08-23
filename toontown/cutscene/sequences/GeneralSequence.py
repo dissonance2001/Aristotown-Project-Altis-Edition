@@ -258,10 +258,10 @@ def _startProjectedDialogueBubble(holder, actor, message, source, offset, scale)
     try:
         holder[0] = _ProjectedDialogueBubble(
             actor, message, source, offset, scale)
-        print('[HighRoller CTSC] Visible projected speech bubble: %s' % message)
+        print(('[HighRoller CTSC] Visible projected speech bubble: %s' % message))
     except Exception as error:
         holder[0] = None
-        print('[HighRoller CTSC] Projected speech bubble failed: %s' % error)
+        print(('[HighRoller CTSC] Projected speech bubble failed: %s' % error))
 
 
 def _updateProjectedDialogueBubble(value, holder):

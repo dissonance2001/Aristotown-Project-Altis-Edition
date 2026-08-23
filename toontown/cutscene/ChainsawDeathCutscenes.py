@@ -225,7 +225,7 @@ class ChainsawDeathSetup(object):
             scene.loop('laying')
             scene.hide()
         except Exception as error:
-            print('[Chainsaw Death CTSC] Could not preserve ending actor: %s' % error)
+            print(('[Chainsaw Death CTSC] Could not preserve ending actor: %s' % error))
 
     def _cleanup(self):
         self._snapshotEndingActor()

@@ -1,4 +1,4 @@
-import cPickle
+import pickle
 import json
 import os
 import random
@@ -34,7 +34,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         self.nextClubId = 100000
         self._load()
         self.groupManager = DistributedGroupManagerUD(self)
-        print '[Clubs] Persistent Club service loaded (%s Clubs).' % len(self.clubs)
+        print('[Clubs] Persistent Club service loaded (%s Clubs).' % len(self.clubs))
 
     def groupHeartbeat(self, avName, zoneId):
         self.groupManager.heartbeat(avName, zoneId)
@@ -122,7 +122,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             self.notify.warning('Could not save Club storage: %s' % error)
 
     def _normaliseLoadedData(self):
-        for club in self.clubs.values():
+        for club in list(self.clubs.values()):
             club.setdefault('members', [])
             club.setdefault('coins', 0)
             club.setdefault('jellybeans', 0)
@@ -159,14 +159,14 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             club.setdefault('created', int(time.time()))
             defaultPermissions = ClubGlobals.getDefaultClubPermissions()
             savedPermissions = club.setdefault('permissions', defaultPermissions)
-            for rankKey, rankDefaults in defaultPermissions.items():
+            for rankKey, rankDefaults in list(defaultPermissions.items()):
                 rankPermissions = savedPermissions.setdefault(rankKey, {})
-                for permission, enabled in rankDefaults.items():
+                for permission, enabled in list(rankDefaults.items()):
                     rankPermissions.setdefault(permission, enabled)
 
     def _rebuildMemberMap(self):
         self.memberToClub = {}
-        for clubId, club in self.clubs.items():
+        for clubId, club in list(self.clubs.items()):
             for member in club.get('members', []):
                 self.memberToClub[str(int(member.get('avId', 0)))] = str(clubId)
 
@@ -268,7 +268,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
         result = []
         if not club:
             return result
-        for key, endTime in club.get('boosters', {}).items():
+        for key, endTime in list(club.get('boosters', {}).items()):
             try:
                 endTime = int(endTime)
                 if endTime <= now:
@@ -290,7 +290,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             if not dclass:
                 return
             boosters = self._getClubRewardBoosters(self._clubForAv(avId))
-            data = cPickle.dumps(boosters, 1)
+            data = pickle.dumps(boosters, 1)
             try:
                 current = fields.get('setClubBoosters', [None])[0]
             except:
@@ -355,7 +355,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
 
     def _nameExists(self, name):
         lowered = name.lower()
-        for club in self.clubs.values():
+        for club in list(self.clubs.values()):
             if club.get('name', '').lower() == lowered:
                 return True
         return False
@@ -445,7 +445,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             try:
                 self.air.dbInterface.updateObject(self.air.dbId, avId, dclass, updates)
                 # Update an online Toon immediately as well.
-                for fieldName, args in updates.items():
+                for fieldName, args in list(updates.items()):
                     dg = dclass.aiFormatUpdate(fieldName, avId, avId, self.air.ourChannel, args)
                     self.air.send(dg)
                 callback(True)
@@ -479,7 +479,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
             updates = {'setMoney': [wallet], 'setBankMoney': [bank]}
             try:
                 self.air.dbInterface.updateObject(self.air.dbId, int(avId), dclass, updates)
-                for fieldName, args in updates.items():
+                for fieldName, args in list(updates.items()):
                     dg = dclass.aiFormatUpdate(
                         fieldName, int(avId), int(avId), self.air.ourChannel, args)
                     self.air.send(dg)
@@ -509,7 +509,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
 
     def _hasActiveBooster(self, club, categories):
         now = int(time.time())
-        for key, endTime in club.get('boosters', {}).items():
+        for key, endTime in list(club.get('boosters', {}).items()):
             if int(endTime) <= now:
                 continue
             if self._boosterCategoryForKey(key) in categories:
@@ -518,7 +518,7 @@ class DistributedToonClubUD(DistributedObjectGlobalUD):
 
     def _hasActiveClubBoosterType(self, club, boosterTypes):
         now = int(time.time())
-        for key, endTime in club.get('boosters', {}).items():
+        for key, endTime in list(club.get('boosters', {}).items()):
             if int(endTime) <= now:
                 continue
             if ClubGlobals.getClubBoosterType(key) in boosterTypes:

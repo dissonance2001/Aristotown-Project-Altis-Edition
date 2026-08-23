@@ -2,7 +2,7 @@ import sys
 import os
 import time
 import string
-import __builtin__
+import builtins
 from panda3d.core import *
 from direct.showbase.MessengerGlobal import *
 from direct.showbase.DirectObject import DirectObject
@@ -132,25 +132,25 @@ class LauncherBase(DirectObject):
             os.system('cat /proc/cpuinfo >>' + logfile)
             os.system('cat /proc/meminfo >>' + logfile)
             os.system('/sbin/ifconfig -a >>' + logfile)
-        print '\n\nStarting %s...' % self.GameName
-        print 'Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0]
-        print 'sys.path = ', sys.path
-        print 'sys.argv = ', sys.argv
+        print('\n\nStarting %s...' % self.GameName)
+        print('Current time: ' + time.asctime(time.localtime(time.time())) + ' ' + time.tzname[0])
+        print('sys.path = ', sys.path)
+        print('sys.argv = ', sys.argv)
         if len(sys.argv) >= self.ArgCount:
             Configrc_args = sys.argv[self.ArgCount - 1]
-            print "generating configrc using: '" + Configrc_args + "'"
+            print("generating configrc using: '" + Configrc_args + "'")
         else:
             Configrc_args = ''
-            print 'generating standard configrc'
+            print('generating standard configrc')
         os.environ['CONFIG_CONFIG'] = ':_:configdir_.:configpath_:configname_Configrc.exe:configexe_1:configargs_-stdout ' + Configrc_args
         cpMgr = ConfigPageManager.getGlobalPtr()
         cpMgr.reloadImplicitPages()
         launcherConfig = getConfigExpress()
-        __builtin__.config = launcherConfig
+        builtins.config = launcherConfig
         if config.GetBool('log-private-info', 0):
-            print 'os.environ = ', os.environ
+            print('os.environ = ', os.environ)
         elif '__COMPAT_LAYER' in os.environ:
-            print '__COMPAT_LAYER = %s' % (os.environ['__COMPAT_LAYER'],)
+            print('__COMPAT_LAYER = %s' % (os.environ['__COMPAT_LAYER'],))
         self.miniTaskMgr = MiniTaskManager()
         self.VerifyFiles = self.getVerifyFiles()
         self.setServerVersion(launcherConfig.GetString('server-version', 'no_version_set'))
@@ -795,7 +795,7 @@ class LauncherBase(DirectObject):
             self.notify.info('extract: Unable to open multifile %s' % task.localFilename.cStr())
             sys.exit()
         numFiles = self.dldb.getServerNumFiles(mfname)
-        for i in xrange(numFiles):
+        for i in range(numFiles):
             subfile = self.dldb.getServerFileName(mfname, i)
             if not task.extractor.requestSubfile(Filename(subfile)):
                 self.setPandaErrorCode(6)
@@ -910,7 +910,7 @@ class LauncherBase(DirectObject):
 
     def getProgressSum(self, phase):
         sum = 0
-        for i in xrange(0, len(self.linesInProgress)):
+        for i in range(0, len(self.linesInProgress)):
             if self.linesInProgress[i].find(phase) > -1:
                 nameSizeTuple = self.linesInProgress[i].split()
                 numSize = nameSizeTuple[1].split('L')
@@ -1038,7 +1038,7 @@ class LauncherBase(DirectObject):
             self.notify.info('maybeStartGame: starting game')
             self.launcherMessage(self.Localizer.LauncherStartingGame)
             self.background()
-            __builtin__.launcher = self
+            builtins.launcher = self
             self.startGame()
 
     def _runTaskManager(self):
@@ -1103,7 +1103,7 @@ class LauncherBase(DirectObject):
         self.setPercentPhaseComplete(self.currentPhase, 0)
         self.phaseMultifileNames = []
         numfiles = self.dldb.getServerNumMultifiles()
-        for i in xrange(self.dldb.getServerNumMultifiles()):
+        for i in range(self.dldb.getServerNumMultifiles()):
             mfname = self.dldb.getServerMultifileName(i)
             if self.dldb.getServerMultifilePhase(mfname) == phase:
                 self.phaseMultifileNames.append(mfname)
@@ -1118,10 +1118,10 @@ class LauncherBase(DirectObject):
         else:
             if self.currentMfname is None:
                 self.notify.warning('no multifile found! See below for debug info:')
-                for i in xrange(self.dldb.getServerNumMultifiles()):
+                for i in range(self.dldb.getServerNumMultifiles()):
                     mfname = self.dldb.getServerMultifileName(i)
                     phase = self.dldb.getServerMultifilePhase(mfname)
-                    print i, mfname, phase
+                    print(i, mfname, phase)
 
                 self.handleGenericMultifileError()
             decompressedMfname = os.path.splitext(self.currentMfname)[0]
@@ -1187,7 +1187,7 @@ class LauncherBase(DirectObject):
                 compressedFilename.unlink()
                 extractedOk = True
                 numFiles = self.dldb.getServerNumFiles(mfname)
-                for i in xrange(numFiles):
+                for i in range(numFiles):
                     subfile = self.dldb.getServerFileName(mfname, i)
                     fn = Filename(self.mfDir, Filename(subfile))
                     if fn.compareTimestamps(decompressedFilename) <= 0:
@@ -1270,7 +1270,7 @@ class LauncherBase(DirectObject):
                     compressedFilename.unlink()
                     extractedOk = True
                     numFiles = self.dldb.getServerNumFiles(mfname)
-                    for i in xrange(numFiles):
+                    for i in range(numFiles):
                         subfile = self.dldb.getServerFileName(mfname, i)
                         fn = Filename(self.mfDir, Filename(subfile))
                         if fn.compareTimestamps(decompressedFilename) <= 0:
@@ -1458,7 +1458,7 @@ class LauncherBase(DirectObject):
             self.maybeStartGame()
             self.totalPatchDownload = 0
             self.patchDownloadSoFar = 0
-            for ver in xrange(1, clientVer):
+            for ver in range(1, clientVer):
                 patch = self.getPatchFilename(decompressedMfname, ver + 1)
                 patchee = decompressedMfname
                 patchVersion = ver + 1
@@ -1784,29 +1784,29 @@ class LauncherBase(DirectObject):
     def scanForHacks(self):
         if not self.WIN32:
             return
-        import _winreg
+        import winreg
         hacksInstalled = {}
         hacksRunning = {}
         hackName = ['!xSpeed.net', 'A Speeder', 'Speed Gear']
         knownHacksRegistryKeys = {
             hackName[0] : [
-                [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Run\\!xSpeed'],
-                [_winreg.HKEY_CURRENT_USER, 'Software\\!xSpeednethy'],
-                [_winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MenuOrder\\Start Menu\\Programs\\!xSpeednet'],
-                [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Gentee\\Paths\\!xSpeednet'],
-                [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\!xSpeed.net 2.0']],
+                [winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Run\\!xSpeed'],
+                [winreg.HKEY_CURRENT_USER, 'Software\\!xSpeednethy'],
+                [winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MenuOrder\\Start Menu\\Programs\\!xSpeednet'],
+                [winreg.HKEY_LOCAL_MACHINE, 'Software\\Gentee\\Paths\\!xSpeednet'],
+                [winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\!xSpeed.net 2.0']],
             hackName[1] : [
-                [_winreg.HKEY_CURRENT_USER, 'Software\\aspeeder'],
-                [_winreg.HKEY_LOCAL_MACHINE, 'Software\\aspeeder'],
-                [_winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\aspeeder']]
+                [winreg.HKEY_CURRENT_USER, 'Software\\aspeeder'],
+                [winreg.HKEY_LOCAL_MACHINE, 'Software\\aspeeder'],
+                [winreg.HKEY_LOCAL_MACHINE, 'Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\aspeeder']]
         }
         try:
-            for prog in knownHacksRegistryKeys.keys():
+            for prog in list(knownHacksRegistryKeys.keys()):
                 for key in knownHacksRegistryKeys[prog]:
                     try:
-                        h = _winreg.OpenKey(key[0], key[1])
+                        h = winreg.OpenKey(key[0], key[1])
                         hacksInstalled[prog] = 1
-                        _winreg.CloseKey(h)
+                        winreg.CloseKey(h)
                         break
                     except:
                         pass
@@ -1815,9 +1815,9 @@ class LauncherBase(DirectObject):
         knownHacksMUI = {'!xspeednet': hackName[0], 'aspeeder': hackName[1], 'speed gear': hackName[2]}
         i = 0
         try:
-            rh = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache')
+            rh = winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache')
             while 1:
-                name, value, type = _winreg.EnumValue(rh, i)
+                name, value, type = winreg.EnumValue(rh, i)
                 i += 1
                 if type == 1:
                     val = value.lower()
@@ -1825,7 +1825,7 @@ class LauncherBase(DirectObject):
                         if val.find(hackprog) != -1:
                             hacksInstalled[knownHacksMUI[hackprog]] = 1
                             break
-            _winreg.CloseKey(rh)
+            winreg.CloseKey(rh)
         except:
             pass
 
@@ -1845,12 +1845,12 @@ class LauncherBase(DirectObject):
 
         if len(hacksInstalled) > 0:
             self.notify.info("Third party programs installed:")
-            for hack in hacksInstalled.keys():
+            for hack in list(hacksInstalled.keys()):
                 self.notify.info(hack)
 
         if len(hacksRunning) > 0:
             self.notify.info("Third party programs running:")
-            for hack in hacksRunning.keys():
+            for hack in list(hacksRunning.keys()):
                 self.notify.info(hack)
             self.setPandaErrorCode(8)
             sys.exit()

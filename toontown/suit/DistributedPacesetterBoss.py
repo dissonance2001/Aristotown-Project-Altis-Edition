@@ -266,7 +266,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
             return
 
         entries = []
-        for index in xrange(8):
+        for index in range(8):
             start = index * 9
             entries.append(tuple(args[start:start + 9]))
 
@@ -399,7 +399,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def cleanupIntervals(self):
         self.cutsceneSkip.intervalsCleaned()
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             try:
                 interval.finish()
             except:
@@ -480,7 +480,7 @@ class DistributedPacesetterBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]

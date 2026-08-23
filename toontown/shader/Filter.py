@@ -316,14 +316,14 @@ class Filter(object):
             intplural = "es" if nints != 1 else ""
             internal_passes = "; %s internal render pass%s" % (nints, intplural)
 
-        print("%s%s %s%s" % (ind, self.__class__.__name__, self.name, internal_passes))
+        print(("%s%s %s%s" % (ind, self.__class__.__name__, self.name, internal_passes)))
 
         if len(self.get('texture')) > 0:
             # sort by texture name for human-readability
-            print("%s  Internal textures: %s" % (ind, sorted(self.get('texture').keys())))
+            print(("%s  Internal textures: %s" % (ind, sorted(self.get('texture').keys()))))
 
         for key, value in sorted(list(self.getConfiguration().items())):
-            print("%s    %s: %s" % (ind, key, value))
+            print(("%s    %s: %s" % (ind, key, value)))
 
     @property
     def name(self):

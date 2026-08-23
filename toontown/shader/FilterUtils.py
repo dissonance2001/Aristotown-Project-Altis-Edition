@@ -1,6 +1,6 @@
 """Module for common functions needed by components of the postprocessing filter system."""
 
-
+from __future__ import print_function
 
 # legacy API error reporting
 import sys

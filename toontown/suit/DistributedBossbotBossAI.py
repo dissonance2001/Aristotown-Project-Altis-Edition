@@ -240,7 +240,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def createFoodBelts(self):
         if self.foodBelts:
             return
-        for i in xrange(2):
+        for i in range(2):
             newBelt = DistributedFoodBeltAI.DistributedFoodBeltAI(self.air, self, i)
             self.foodBelts.append(newBelt)
             newBelt.generateWithRequired(self.zoneId)
@@ -260,7 +260,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.numTables = diffInfo[0]
         self.numDinersPerTable = diffInfo[1]
         dinerLevel = diffInfo[2]
-        for i in xrange(self.numTables):
+        for i in range(self.numTables):
             newTable = DistributedBanquetTableAI.DistributedBanquetTableAI(self.air, self, i, self.numDinersPerTable, dinerLevel)
             self.tables.append(newTable)
             newTable.generateWithRequired(self.zoneId)
@@ -286,7 +286,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'BattleTwo':
             grantRequest = False
-        elif (beltIndex, foodNum) not in self.toonFoodStatus.values():
+        elif (beltIndex, foodNum) not in list(self.toonFoodStatus.values()):
             if avId not in self.toonFoodStatus:
                 grantRequest = True
             elif self.toonFoodStatus[avId] == None:
@@ -333,7 +333,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
     def generateDinerSuits(self):
         diners = []
-        for i in xrange(len(self.notDeadList)):
+        for i in range(len(self.notDeadList)):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -348,7 +348,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             diners.append((suit, 100))
 
         active = []
-        for i in xrange(2):
+        for i in range(2):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -543,7 +543,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def createGolfSpots(self):
         if self.golfSpots:
             return
-        for i in xrange(self.numGolfSpots):
+        for i in range(self.numGolfSpots):
             newGolfSpot = DistributedGolfSpotAI.DistributedGolfSpotAI(self.air, self, i)
             self.golfSpots.append(newGolfSpot)
             newGolfSpot.generateWithRequired(self.zoneId)
@@ -951,7 +951,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 def skipCEO():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBossbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -968,7 +968,7 @@ def skipCEO():
 def skipCEOFirst():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBossbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -986,7 +986,7 @@ def skipCEOFirst():
 def skipCEOFinal():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBossbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -1004,7 +1004,7 @@ def skipCEOFinal():
 def killCEO():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedBossbotBossAI):
             if invoker.doId in do.involvedToons:
                 boss = do

@@ -668,7 +668,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         accString = AvTrackAccStrings[track]
 
         iouBoosts = {}
-        for condition, conditionData in base.localAvatar.battleConditions.items():
+        for condition, conditionData in list(base.localAvatar.battleConditions.items()):
             parsedIOU = IOURegistry.parseConditionName(condition)
             if parsedIOU is None:
                 continue
@@ -2255,10 +2255,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         return
     
     def getDisplayTrackOrder(self):
-        defaultOrder = range(len(Tracks))
+        defaultOrder = list(range(len(Tracks)))
 
         if hasattr(base.localAvatar, 'battleConditions'):
-            for cond, order in DISPLAY_CONTENT_SYNC_ORDERS.items():
+            for cond, order in list(DISPLAY_CONTENT_SYNC_ORDERS.items()):
                 if cond in base.localAvatar.battleConditions:
                     return order
 

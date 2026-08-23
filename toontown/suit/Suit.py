@@ -176,7 +176,7 @@ Preloaded = {}
 def loadModels():
     global Preloaded
     if not Preloaded:
-        print 'Preloading suits...'
+        print('Preloading suits...')
 
         def preload(task):
             for filepath in SuitParts:
@@ -205,7 +205,7 @@ def unloadSuits(level):
     SuitVoices.unloadDialog(level)
 
 def loadSuitModelsAndAnims(level, flag = 0):
-    for key in ModelDict.keys():
+    for key in list(ModelDict.keys()):
         model, phase = ModelDict[key]
         if flag:
             filepath = 'phase_3.5' + model + 'mod'
@@ -2712,7 +2712,7 @@ class Suit(Avatar.Avatar):
         if headType == 'numbercruncher' and self.style.body == 'c':
             headModel = loader.loadModel('phase_4/models/char/suitA-heads')
         headReferences = headModel.findAllMatches('**/' + headType)
-        for i in xrange(0, headReferences.getNumPaths()):
+        for i in range(0, headReferences.getNumPaths()):
             headPart = self.instance(headReferences.getPath(i), 'modelRoot', 'joint_head')
             headPart.setTwoSided(True)
             if self.style.name == 'ang' and headType == 'angel_wings':
@@ -4011,7 +4011,7 @@ class Suit(Avatar.Avatar):
         self.setBlend(frameBlend=base.wantSmoothAnims)
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         parts = self.findAllMatches('**/pPlane*')
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             bb = parts.getPath(partNum)
             bb.setTwoSided(1)
 
@@ -4280,7 +4280,7 @@ class Suit(Avatar.Avatar):
                 headPart.setScale(1)
 
         parts = self.zapActor.findAllMatches('**/pPlane*')
-        for partNum in xrange(parts.getNumPaths()):
+        for partNum in range(parts.getNumPaths()):
             parts.getPath(partNum).setTwoSided(1)
 
         # Hands / joints on zap actor
@@ -4436,7 +4436,7 @@ class Suit(Avatar.Avatar):
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = self.zapActor.findAllMatches('**/joint_head*')
-        for i in xrange(headParts.getNumPaths()):
+        for i in range(headParts.getNumPaths()):
             headPart = headParts.getPath(i)
 
             if self.style.name == 'derrhand':
@@ -4660,7 +4660,7 @@ class Suit(Avatar.Avatar):
             applyHeadPartDefaults()
 
         parts = self.zapActorPowerhouse.findAllMatches('**/pPlane*')
-        for partNum in xrange(parts.getNumPaths()):
+        for partNum in range(parts.getNumPaths()):
             parts.getPath(partNum).setTwoSided(1)
 
         self.zapActorPowerhouse.leftHand = self.zapActorPowerhouse.find('**/joint_Lhold')
@@ -4763,7 +4763,7 @@ class Suit(Avatar.Avatar):
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = self.zapActorPowerhouse.findAllMatches('**/joint_head*')
-        for i in xrange(headParts.getNumPaths()):
+        for i in range(headParts.getNumPaths()):
             headPart = headParts.getPath(i)
 
             if self.style.name == 'derrhand':
@@ -4996,7 +4996,7 @@ class Suit(Avatar.Avatar):
             applyHeadPartDefaults()
 
         parts = zapActor.findAllMatches('**/pPlane*')
-        for partNum in xrange(parts.getNumPaths()):
+        for partNum in range(parts.getNumPaths()):
             parts.getPath(partNum).setTwoSided(1)
 
         zapActor.leftHand = zapActor.find('**/joint_Lhold')
@@ -5099,7 +5099,7 @@ class Suit(Avatar.Avatar):
         textureDirector = loader.loadTexture('phase_12/maps/ttcc_ene_chainsaw_boardbot.png')
 
         headParts = zapActor.findAllMatches('**/joint_head*')
-        for i in xrange(headParts.getNumPaths()):
+        for i in range(headParts.getNumPaths()):
             headPart = headParts.getPath(i)
 
             if self.style.name == 'derrhand':
@@ -5180,7 +5180,7 @@ class Suit(Avatar.Avatar):
         self.setBlend(frameBlend=base.wantSmoothAnims)
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         parts = self.findAllMatches('**/pPlane*')
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             bb = parts.getPath(partNum)
             bb.setTwoSided(1)
 
@@ -5265,7 +5265,7 @@ class Suit(Avatar.Avatar):
         self.setBlend(frameBlend=base.wantSmoothAnims)
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         parts = self.findAllMatches('**/pPlane*')
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             bb = parts.getPath(partNum)
             bb.setTwoSided(1)
 
@@ -5302,7 +5302,7 @@ class Suit(Avatar.Avatar):
         self.setBlend(frameBlend=base.wantSmoothAnims)
         self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
         parts = self.findAllMatches('**/pPlane*')
-        for partNum in xrange(0, parts.getNumPaths()):
+        for partNum in range(0, parts.getNumPaths()):
             bb = parts.getPath(partNum)
             bb.setTwoSided(1)
 
@@ -5645,7 +5645,7 @@ class Suit(Avatar.Avatar):
             spark.setAlphaScale(1)
             spark.setColor(1, 0.988, 0.408, 1.0)
 
-        for i in xrange(12):
+        for i in range(12):
             spark = loader.loadModel(
                 'phase_3.5/models/gui/matching_game_gui'
             ).find('**/minnieArrow').copyTo(auraNode)
@@ -6971,7 +6971,7 @@ class Suit(Avatar.Avatar):
             createdParts.append(headPart)
             return createdParts
 
-        for i in xrange(headReferences.getNumPaths()):
+        for i in range(headReferences.getNumPaths()):
             src = headReferences.getPath(i)
 
             # IMPORTANT: do NOT use self.instance here.
@@ -7772,7 +7772,7 @@ class Suit(Avatar.Avatar):
             node.setScale(self.getScale(render) * 0.999)
             node.setColorScale(1, 1, 1, 0.6)
 
-        for i in xrange(numImages):
+        for i in range(numImages):
             node = render.attachNewNode('%s-afterImage-%d' % (self.uniqueName('erfit'), i))
             node.setTransparency(TransparencyAttrib.MDual)
             node.setDepthWrite(False)
@@ -7952,7 +7952,7 @@ class Suit(Avatar.Avatar):
 
         self.headFreakoutSeq = Sequence()
 
-        for i in xrange(twitchRepeatAmount):
+        for i in range(twitchRepeatAmount):
             lastTwitch = i == twitchRepeatAmount - 1
 
             twitchTime = random.uniform(
@@ -9115,7 +9115,7 @@ class Suit(Avatar.Avatar):
         return self.suitStatusEffects
 
     def decrementStatusEffects(self):
-        for name in self.suitStatusEffects.keys():
+        for name in list(self.suitStatusEffects.keys()):
             turns = self.suitStatusEffects[name].get('turns')
 
             # Permanent effect

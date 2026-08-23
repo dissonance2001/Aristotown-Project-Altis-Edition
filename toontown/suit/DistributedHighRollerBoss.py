@@ -344,7 +344,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
             self.notify.warning('Invalid High Roller battle experience payload: %s' % (len(args),))
             return
         entries = []
-        for index in xrange(8):
+        for index in range(8):
             start = index * 9
             entries.append(tuple(args[start:start + 9]))
         self.deathList = args[72]
@@ -388,7 +388,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def cleanupIntervals(self):
         if self.cutsceneSkip:
             self.cutsceneSkip.intervalsCleaned()
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             try:
                 interval.finish()
             except:
@@ -467,7 +467,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         if not toonIds:
             return
         points = BattleBase.BattleBase.toonPoints[len(toonIds) - 1]
-        for index in xrange(len(toonIds)):
+        for index in range(len(toonIds)):
             toon = base.cr.doId2do.get(toonIds[index])
             if toon:
                 pos, h = points[index]
@@ -1126,7 +1126,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
                 self.notify.warning('Not a collision node: %s' % repr(cnp))
                 break
             newCollideMask = newCollideMask | cn.getIntoCollideMask()
-            for i in xrange(cn.getNumSolids()):
+            for i in range(cn.getNumSolids()):
                 solid = cn.getSolid(i)
                 if isinstance(solid, CollisionPolygon):
                     plane = Plane(solid.getPlane())
@@ -1220,7 +1220,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
           VBase3(231, 0, 0)]]
         mainGoon = self.fakeGoons[0]
         goonLoop = Parallel()
-        for i in xrange(1, self.numFakeGoons):
+        for i in range(1, self.numFakeGoons):
             goon = self.fakeGoons[i]
             goonLoop.append(Sequence(goon.posHprInterval(8, goonPosHprs[i][0], goonPosHprs[i][1]), goon.posHprInterval(8, goonPosHprs[i][2], goonPosHprs[i][3])))
 
@@ -1298,7 +1298,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def moveToonsToBattleThreePos(self, toons):
         track = Parallel()
-        for i in xrange(len(toons)):
+        for i in range(len(toons)):
             toon = base.cr.doId2do.get(toons[i])
             if toon:
                 posHpr = ToontownGlobals.HighRollerToonsBattleThreeStartPosHpr[i]
@@ -1459,17 +1459,17 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
                 goon.b_destroyGoon()
 
     def deactivateCranes(self):
-        for crane in self.cranes.values():
+        for crane in list(self.cranes.values()):
             crane.demand('Free')
 
     def hideBattleThreeObjects(self):
         for goon in self.goons:
             goon.demand('Off')
 
-        for safe in self.safes.values():
+        for safe in list(self.safes.values()):
             safe.demand('Off')
 
-        for crane in self.cranes.values():
+        for crane in list(self.cranes.values()):
             crane.demand('Off')
 
     def __doPhysics(self, task):
@@ -1493,7 +1493,7 @@ class DistributedHighRollerBoss(DistributedObject.DistributedObject, FSM.FSM):
         radius = 7
         numToons = len(self.involvedToons)
         center = (numToons - 1) / 2.0
-        for i in xrange(numToons):
+        for i in range(numToons):
             toon = self.cr.doId2do.get(self.involvedToons[i])
             if toon:
                 angle = 90 - 15 * (i - center)

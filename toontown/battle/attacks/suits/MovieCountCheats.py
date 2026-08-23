@@ -228,7 +228,7 @@ def doHydrationCheck(attack):
         boss = None
         from toontown.suit.DistributedCountErclaimBoss import DistributedCountErclaimBoss
 
-        for obj in base.cr.doId2do.values():
+        for obj in list(base.cr.doId2do.values()):
             if isinstance(obj, DistributedCountErclaimBoss):
                 boss = obj
                 break

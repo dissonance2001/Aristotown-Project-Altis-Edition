@@ -381,7 +381,7 @@ class ControlRemap(DirectFrame):
             image=gui.find('**/hotkeys'), parent=canvas, relief=None,
             scale=(1.8, 1, 0.2), pos=(0.285, 0, -1.15), image_pos=(-0.03, 0, 0)
         )
-        for controlNum in xrange(len(CONTROL_KEYS)):
+        for controlNum in range(len(CONTROL_KEYS)):
             if controlNum <= MOVEMENT_END:
                 parent = self.movement
                 spacing = controlNum

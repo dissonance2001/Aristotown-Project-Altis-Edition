@@ -193,15 +193,15 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
             self.rideHiddenGeom = place.loader.geom
             self.rideHiddenGeom.hide()
 
-        for seatIndex in xrange(len(self.elevatorPoints)):
+        for seatIndex in range(len(self.elevatorPoints)):
             avId = 0
-            if seatIndex < len(self.boardedAvIds.keys()):
-                avId = self.boardedAvIds.keys()[seatIndex]
+            if seatIndex < len(list(self.boardedAvIds.keys())):
+                avId = list(self.boardedAvIds.keys())[seatIndex]
 
             toon = self.cr.doId2do.get(avId)
             if toon:
                 toon.reparentTo(self.elevatorModel)
-                toon.setPos(apply(Point3, self.elevatorPoints[seatIndex]))
+                toon.setPos(Point3(*self.elevatorPoints[seatIndex]))
                 toon.setHpr(180, 0, 0)
                 toon.setAnimState('neutral', 1.0)
                 toon.show()
@@ -278,7 +278,7 @@ class DistributedPaceElevator(DistributedBossElevator.DistributedBossElevator):
 
     def restoreRideScene(self):
         if self.rideRoot:
-            for avId in self.boardedAvIds.keys():
+            for avId in list(self.boardedAvIds.keys()):
                 toon = self.cr.doId2do.get(avId)
                 if toon:
                     toon.wrtReparentTo(render)

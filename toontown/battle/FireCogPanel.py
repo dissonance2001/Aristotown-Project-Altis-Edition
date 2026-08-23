@@ -45,7 +45,7 @@ class FireCogPanel(StateData.StateData):
         self.frame.hide()
         self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), text_scale=0.075, pos=(0, 0, -0.275))
         self.avatarButtons = []
-        for i in xrange(7):
+        for i in range(7):
             button = DirectButton(parent=self.frame, relief=None, image=(
             gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')),
                                   command=self.__handleAvatar, extraArgs=[i])
@@ -149,7 +149,7 @@ class FireCogPanel(StateData.StateData):
 
     def __placeButtons(self, numAvatars, invalidTargets, localNum, fireCosts):
         canfire = 0
-        for i in xrange(7):
+        for i in range(7):
             if numAvatars > i and i not in invalidTargets and i != localNum:
                 self.avatarButtons[i].show()
                 self.avatarButtons[i]['text'] = ''
@@ -177,7 +177,7 @@ class FireCogPanel(StateData.StateData):
             self.notify.error('Invalid number of avatars: %s' % numAvatars)
             return None
 
-        indices = range(numAvatars)
+        indices = list(range(numAvatars))
 
         if confused:
             random.shuffle(indices)

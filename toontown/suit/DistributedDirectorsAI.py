@@ -207,7 +207,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
     def createFoodBelts(self):
         if self.foodBelts:
             return
-        for i in xrange(2):
+        for i in range(2):
             newBelt = DistributedFoodBeltAI.DistributedFoodBeltAI(self.air, self, i)
             self.foodBelts.append(newBelt)
             newBelt.generateWithRequired(self.zoneId)
@@ -221,7 +221,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
     def createBanquetTables(self):
         if self.tables:
             return
-        for i in xrange(15):
+        for i in range(15):
             newTable = DistributedBanquetTableAI.DistributedBanquetTableAI(self.air, self, i, 0, 1)
             self.tables.append(newTable)
             newTable.generateWithRequired(self.zoneId)
@@ -247,7 +247,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'BattleTwo':
             grantRequest = False
-        elif (beltIndex, foodNum) not in self.toonFoodStatus.values():
+        elif (beltIndex, foodNum) not in list(self.toonFoodStatus.values()):
             if avId not in self.toonFoodStatus:
                 grantRequest = True
             elif self.toonFoodStatus[avId] == None:
@@ -293,7 +293,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
 
     def generateDinerSuits(self):
         diners = []
-        for i in xrange(len(self.notDeadList)):
+        for i in range(len(self.notDeadList)):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -308,7 +308,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
             diners.append((suit, 100))
 
         active = []
-        for i in xrange(2):
+        for i in range(2):
             if simbase.config.GetBool('bossbot-boss-cheat', 0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -500,7 +500,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
     def createGolfSpots(self):
         if self.golfSpots:
             return
-        for i in xrange(self.numGolfSpots):
+        for i in range(self.numGolfSpots):
             newGolfSpot = DistributedGolfSpotAI.DistributedGolfSpotAI(self.air, self, i)
             self.golfSpots.append(newGolfSpot)
             newGolfSpot.generateWithRequired(self.zoneId)
@@ -904,7 +904,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
 def skipDirectors():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -921,7 +921,7 @@ def skipDirectors():
 def skipDirectorsCutscene():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -938,7 +938,7 @@ def skipDirectorsCutscene():
 def skipDirectorsFirst():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -956,7 +956,7 @@ def skipDirectorsFirst():
 def skipDirectorsFinal():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -973,7 +973,7 @@ def skipDirectorsFinal():
 def skipexecutscene():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -992,7 +992,7 @@ def skipexecutscene():
 def killDirectors():
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedDirectorsAI):
             if invoker.doId in do.involvedToons:
                 boss = do

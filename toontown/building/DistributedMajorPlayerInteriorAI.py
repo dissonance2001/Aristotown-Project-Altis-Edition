@@ -56,7 +56,7 @@ class DistributedMajorPlayerInteriorAI(DistributedToonInteriorAI):
         return manager.createInstance(avIdList, instanceId)
 
     def delete(self):
-        for sigilvator in self.sigilvators.values():
+        for sigilvator in list(self.sigilvators.values()):
             sigilvator.requestDelete()
         self.sigilvators = {}
         self.sigilvator = None

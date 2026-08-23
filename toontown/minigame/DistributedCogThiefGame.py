@@ -62,7 +62,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         DistributedMinigame.load(self)
         self.music = base.loader.loadMusic('phase_4/audio/bgm/MG_CogThief.ogg')
         self.initCogInfo()
-        for barrelIndex in xrange(CTGG.NumBarrels):
+        for barrelIndex in range(CTGG.NumBarrels):
             barrel = loader.loadModel('phase_4/models/minigames/cogthief_game_gagTank')
             barrel.setPos(CTGG.BarrelStartingPositions[barrelIndex])
             barrel.setScale(self.BarrelScale)
@@ -144,7 +144,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             barrel.removeNode()
 
         del self.barrels
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             toonSD = self.toonSDs[avId]
             toonSD.unload()
 
@@ -170,7 +170,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         toonSD.enter()
         toonSD.fsm.request('normal')
         self.stopGameWalk()
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             suit = self.cogInfo[cogIndex]['suit'].suit
             pos = self.cogInfo[cogIndex]['pos']
             suit.reparentTo(self.gameBoard)
@@ -182,12 +182,12 @@ class DistributedCogThiefGame(DistributedMinigame):
             self.toonHitTracks[avId] = Wait(0.1)
 
         self.toonRNGs = []
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             self.toonRNGs.append(RandomNumGen.RandomNumGen(self.randomNumGen))
 
         self.sndTable = {'hitBySuit': [None] * self.numPlayers,
          'falling': [None] * self.numPlayers}
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             self.sndTable['hitBySuit'][i] = base.loader.loadSfx('phase_4/audio/sfx/MG_Tag_C.ogg')
             self.sndTable['falling'][i] = base.loader.loadSfx('phase_4/audio/sfx/MG_cannon_whizz.ogg')
 
@@ -202,7 +202,7 @@ class DistributedCogThiefGame(DistributedMinigame):
         for barrel in self.barrels:
             barrel.hide()
 
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             self.toonSDs[avId].exit()
 
         for avId in self.avIdList:
@@ -350,7 +350,7 @@ class DistributedCogThiefGame(DistributedMinigame):
             base.mouseInterfaceNode.setRotateSpeed(ToontownGlobals.ToonRotateSpeed * 4)
 
     def initCogInfo(self):
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             self.cogInfo[cogIndex] = {'pos': Point3(CTGG.CogStartingPositions[cogIndex]),
              'goal': CTGG.NoGoal,
              'goalId': CTGG.InvalidGoalId,
@@ -359,7 +359,7 @@ class DistributedCogThiefGame(DistributedMinigame):
     def loadCogs(self):
         suitTypes = SuitDNA.suitHeadTypes
 		
-        for suitIndex in xrange(self.getNumCogs()):
+        for suitIndex in range(self.getNumCogs()):
             st = self.randomNumGen.choice(suitTypes)
             suit = CogThief.CogThief(suitIndex, st, self, self.getCogSpeed())
             self.cogInfo[suitIndex]['suit'] = suit

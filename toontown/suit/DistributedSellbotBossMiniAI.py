@@ -28,7 +28,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
         self.suits = []
         self.activeSuits = []
         self.reserveSuits = []
-        self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())
+        self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
         self.bossMaxDamage = ToontownGlobals.SellbotBossMaxDamage
         self.maxHP = self.bossMaxDamage
         self.battleOnePlanner = SuitBuildingGlobals.SUIT_PLANNER_VP
@@ -476,7 +476,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
 
     def __makeDoobers(self):
         self.__resetDoobers()
-        for i in xrange(12):
+        for i in range(12):
             suit = DistributedSuitAI.DistributedSuitAI(self.air, None)
             level = random.randint(7, 8)
             suit.dna = SuitDNA.SuitDNA()
@@ -569,7 +569,7 @@ def skipVP():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -589,7 +589,7 @@ def skipVP2():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -609,7 +609,7 @@ def skipsblitcutscene():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do
@@ -629,7 +629,7 @@ def killVP():
     """
     invoker = spellbook.getInvoker()
     boss = None
-    for do in simbase.air.doId2do.values():
+    for do in list(simbase.air.doId2do.values()):
         if isinstance(do, DistributedSellbotBossMiniAI):
             if invoker.doId in do.involvedToons:
                 boss = do

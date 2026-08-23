@@ -20,7 +20,7 @@ class OutlineText(object):
             kwargs['font'] = font
         if wordwrap:
             kwargs['wordwrap'] = wordwrap
-        for index in xrange(precision):
+        for index in range(precision):
             angle = math.radians((float(index) / precision) * 360.0)
             item = OnscreenText(**kwargs)
             item.setPos(pos[0] + math.cos(angle) * dist, pos[1] + math.sin(angle) * dist)
@@ -163,7 +163,7 @@ class GumballMachineGUI(DirectFrame):
             self.categoryButton['image_scale'] = (1, 1, 128.0 / 124.0)
         self.listingRoot = DirectFrame(parent=self, relief=None, pos=(-0.32922, 0, 0.08437), scale=0.15344)
         slotPositions = [(0, 0, 0), (1.25, 0, 0), (0, 0, -1.0), (1.25, 0, -1.0), (0, 0, -2.0), (1.25, 0, -2.0)]
-        for index in xrange(6):
+        for index in range(6):
             button = DirectButton(parent=self.listingRoot, relief=None, frameSize=(-0.45914, 0.45914, -0.44151, 0.47678), pos=slotPositions[index], command=self.selectOffer, extraArgs=[index], pressEffect=0)
             costText = OutlineText(parent=button, text='', pos=(-0.00588, -0.32922), scale=0.25873, fg=(1, 1, 1, 1), outline=(0, 0, 0, 1), dist=0.018, precision=8, font=ToontownGlobals.getSignFont())
             self.offerButtons.append(button)
@@ -206,7 +206,7 @@ class GumballMachineGUI(DirectFrame):
         self.balance = OutlineText(parent=self, pos=(-0.57, 0.68), scale=0.055, fg=(1.0, 0.8549, 0.5882, 1), outline=(0.2823, 0.1411, 0.098, 1), font=ToontownGlobals.getSignFont())
         self.closeButton = DirectButton(parent=self, text='X', text_scale=0.08, pos=(0.95, 0, 0.70), command=self.close)
         slotPositions = [(-0.78, 0, 0.31), (-0.45, 0, 0.31), (-0.78, 0, 0.0), (-0.45, 0, 0.0), (-0.78, 0, -0.31), (-0.45, 0, -0.31)]
-        for index in xrange(6):
+        for index in range(6):
             button = DirectButton(parent=self, relief=DGG.RAISED, frameSize=(-0.13, 0.13, -0.12, 0.12), pos=slotPositions[index], command=self.selectOffer, extraArgs=[index])
             costText = OutlineText(parent=button, text='', pos=(0, -0.16), scale=0.05, fg=(1, 1, 1, 1), outline=(0, 0, 0, 1), font=ToontownGlobals.getSignFont())
             self.offerButtons.append(button)
@@ -267,7 +267,7 @@ class GumballMachineGUI(DirectFrame):
         gumballs = av.getGumballs() if av and hasattr(av, 'getGumballs') else 0
         self.balance.setText(str(gumballs))
         offers = self.machine.getOffers() if self.machine else []
-        for index in xrange(6):
+        for index in range(6):
             button = self.offerButtons[index]
             costText = self.offerCostTexts[index]
             if index >= len(offers):

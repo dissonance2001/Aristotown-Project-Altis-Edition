@@ -86,7 +86,7 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
             shadowBase.setBin('shadow', -5)
             shadowBase.setDepthWrite(0)
 
-        for i in xrange(4):
+        for i in range(4):
             sigil = self.elevatorModel.find('**/SigilBase%s' % (i + 1))
             sigilTop = self.elevatorModel.find('**/SigilTop%s' % (i + 1))
             light = self.elevatorModel.find('**/Light%s' % (i + 1))
@@ -110,7 +110,7 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
                     particles = BattleParticles.createParticleEffect(
                         file='sigilSparkle')
                     particles.start(parent=sigil, renderParent=render)
-                except Exception, error:
+                except Exception as error:
                     self.notify.warning(
                         'Unable to start sigilSparkle particles: %s' % error)
             self.sigilParticles.append(particles)
@@ -324,7 +324,7 @@ class DistributedSigilvator(DistributedElevatorExt.DistributedElevatorExt):
 
     def getIndexToAvIdDict(self):
         result = {}
-        for avId, index in self.boardedAvIds.items():
+        for avId, index in list(self.boardedAvIds.items()):
             result[index] = avId
         return result
 
