@@ -4,5 +4,5 @@ mode con: cols=60 lines=20
 
 cd ../dependencies/astron
 
-"mongo\Server\3.0\bin\mongod.exe" --dbpath mongo/astrondb
+"mongo\Server\3.6\bin\mongod.exe" --dbpath mongo/astrondb-3.6
 pause
