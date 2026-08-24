@@ -244,9 +244,46 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', 1.15, -1, 'setBoth')
             else:
                 self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 1.15), -1, 'setBoth')
+        elif atkType['name'] == 'VideographerPhase3':
+            self.setSuitCondition(theSuit.doId, 'immunecalculator', 0, 0, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'phase3', 1, -1, 'setBoth')
+            if not self.suitHasCondition(theSuit.doId, 'vulnerablevideographer'):
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', 2, -1, 'setBoth')
+            else:
+                self.setSuitCondition(theSuit.doId, 'vulnerablevideographer', (self.getSuitConditionModifier(theSuit.doId, 'vulnerablevideographer') * 2), -1, 'setBoth')
+            theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 2)
+            from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+            from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
+
+            boss = None
+            for do in simbase.air.doId2do.values():
+                if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            boss = do
+                            break
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            if s.dna.name == 'videog':
+                                maxSuits = 5
+                                maxSpawnPerTurn = 4
+
+                                aliveCount = len(self.battle.activeSuits) - self.deadSuits
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                if spawnAmount > 0:
+                                    for i in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
+
+                                break
         elif atkType['name'] == 'VideographerRisingStarsSilhouette':
-            result = 0
-            attack[SUIT_HP_COL][targetIndex] = result
             from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
             from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
@@ -261,41 +298,40 @@ class AttackHPCalculatorAI(object):
                         if s in do.activeSuits:
                             if s.dna.name == 'videog':
                                 boss.appendSuitsToBattle(boss.battleNumber, 'videog4')
+                                boss.appendSuitsToBattle(boss.battleNumber, 'videog5')
         elif atkType['name'] == 'VideographerRisingStars2':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                self.setSuitCondition(theSuit.doId, 'immunecalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
-                from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
-                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
+            self.setSuitCondition(theSuit.doId, 'immunecalculator', 0, 0, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'immune', 0, 0, 'setBoth')
+            from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
+            from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
 
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
-                        for s in self.battle.activeSuits:
-                            if s in do.activeSuits:
-                                boss = do
+            boss = None
+            for do in simbase.air.doId2do.values():
+                if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            boss = do
+                            break
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            if s.dna.name == 'videog':
+                                maxSuits = 5
+                                maxSpawnPerTurn = 3
+
+                                aliveCount = len(self.battle.activeSuits) - self.deadSuits
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                if spawnAmount > 0:
+                                    for i in xrange(spawnAmount):
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
+
                                 break
-                        for s in self.battle.activeSuits:
-                            if s in do.activeSuits:
-                                if s.dna.name == 'videog':
-                                    maxSuits = 5
-                                    maxSpawnPerTurn = 3
-
-                                    aliveCount = len(self.battle.activeSuits) - self.deadSuits
-                                    availableSlots = maxSuits - aliveCount
-
-                                    # Never summon more than three at once.
-                                    spawnAmount = min(
-                                        maxSpawnPerTurn,
-                                        availableSlots
-                                    )
-
-                                    if spawnAmount > 0:
-                                        for i in xrange(spawnAmount):
-                                            boss.appendSuitsToBattle(boss.battleNumber, 'videog2')
-
-                                    break
         elif atkType['name'] == 'VideographerDirectorCuts':
             self.setSuitCondition(theSuit.doId, 'phase2', 1, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'immune', 1, -1, 'setBoth')
@@ -1279,11 +1315,7 @@ class AttackHPCalculatorAI(object):
                     self.suitStatusConditionsNew[targetId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'VideographerElectricShock4':
-                result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
-                for suit in self.battle.activeSuits:
-                    if not suit.dna.name == 'bcaster' and not suit.dna.name == 'videog' and not suit.dna.name == 'mplayers':
-                        suit.setDamageMultiplier(suit.getDamageMultiplier() * 1.1)
+                targetSuit.setDamageMultiplier(suit.getDamageMultiplier() * 1.1)
             elif attackName == 'ContingencySelfRepair':
                 if theSuit.currHP < 2000:
                     healAmount = 750

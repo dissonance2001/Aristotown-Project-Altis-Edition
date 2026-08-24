@@ -2335,6 +2335,26 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerVideoStatic':
         camTrack.append(heldShot(0.0, -15.0, 12.5, 0, -20, 0, attackDuration))
+    elif name == 'VideographerPhase3':
+        camTrack2 = Sequence(motionShot(0, 15, 9, 180, 0, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 20, 9, 3 + suit.getDuration('frustrated') + 4, suit, p=0, startP=0, h=180, startH=180),
+                             motionShot(0, 5, 3, 180, 50, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 10, 9, 4, suit, h=180, p=0, startP=50, startH=180),
+                             moveCameraOnly(0, 15, 9, .5, suit, h=180, p=0, startP=0, startH=180), Wait(1.5),
+                             motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-4.0, 9.0, suit.height - 1, .5 + 2.5 + (suit.getDuration('throttletwo') - 3) + 4, suit, h=210, p=0, startH=150, startP=0),
+                             motionShot(0, -50.0, suit.height - 1, 0, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, -15.0, suit.height - 1, suit.getDuration('finger-wag') + (suit.getDuration('rake-react') / 2) + 2 + 2 + suit.getDuration('pie-small-react'), suit, h=0, p=0, startH=0, startP=0),
+                             motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, suit.getDuration('effort'), suit, h=180, p=-30),
+                             motionShot(0, 15, 9, 180, 0, 0.0, 0, suit),
+                             moveCameraOnly(0, 20, 9, 4, suit, h=180, p=0, startP=0, startH=180),
+                             motionShot(0, 10, 10, 180, 0, -35, 0, suit), Wait(2.0),
+                             motionShot(0, 8, 10, 180, 0, 35, 0, suit), Wait(2.0),
+                              motionShot(0, 6, 10, 180, 0, 0, 0, suit), Wait(4.0),
+                              motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-4.0, 9.0, suit.height - 1, 8, suit, h=210, p=0, startH=150, startP=0),
+                             motionShot(0, 6, 10, 180, 0, 0, 0, suit), Wait(4.0))
+        return camTrack2
     elif name == 'VideographerElectricShock':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock2':

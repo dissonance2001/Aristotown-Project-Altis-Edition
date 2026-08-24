@@ -1278,12 +1278,10 @@ def createRisingStars(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier'))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
-    suitTrack.append(Func(suit.setNeutralAnimation))
     returnval = Parallel(suitTrack)
     return returnval
 

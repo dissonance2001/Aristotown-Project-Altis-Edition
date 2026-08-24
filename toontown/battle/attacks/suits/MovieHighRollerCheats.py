@@ -1473,9 +1473,9 @@ def doDirectorCuts(attack):
     suitTrack.append(Sequence(musicTrack, Func(theSuit.reparentTo, battle), Func(theSuit.setPos, startPos), Func(theSuit.headsUp, battle),
                               Parallel(Sequence(ActorInterval(theSuit, 'frustrated'), Func(theSuit.loop, 'neutral2')), Func(theSuit.setChatAbsolute, "Cut! Cut!", CFSpeech | CFTimeout)), 
                               Parallel(Func(theSuit.setChatAbsolute, "Something's missing here.", CFSpeech | CFTimeout)), Wait(4.0), 
-                              Parallel(Func(theSuit.nametag3d.setScale, 2.5), Func(theSuit.setChatAbsolute, "Of course!", CFSpeech | CFTimeout)), Wait(2.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "Of course!", CFSpeech | CFTimeout)), Wait(2.0), 
                               Parallel(Sequence(ActorInterval(theSuit, 'finger-wag'), Func(theSuit.loop, 'neutral2')), Func(theSuit.setChatAbsolute, "Every great production needs a good crew!", CFSpeech | CFTimeout)), 
-                              Parallel(Func(theSuit.setChatAbsolute, "And lucky for me...", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.nametag3d.setScale, 2.5), Func(theSuit.setChatAbsolute, "And lucky for me...", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Sequence(ActorInterval(theSuit, 'summon'), Func(theSuit.loop, 'rolled')), Func(theSuit.setChatAbsolute, "I brought my Producers.", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Func(theSuit.nametag3d.setScale, 1.0), Func(theSuit.setChatAbsolute, "Places everyone! Let's give our guests some proper direction!", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Func(theSuit.setChatAbsolute, "Now...", CFSpeech | CFTimeout)), Wait(4.0), 
@@ -1707,6 +1707,73 @@ def doRemand(attack):
         return Sequence(Func(detachTraps), remandTrack, targetSuitMoveTrack, Func(finishRemand))
     return remandTrack
 
+def doVideographerPhase3(attack):
+    suit = attack['suit']
+    theSuit = attack['suit']
+    battle = attack['battle']
+    from toontown.suit.DistributedVideographerBoss import DistributedVideographerBoss
+    musicTrack = Parallel()
+    for obj in base.cr.doId2do.values():
+        if isinstance(obj, DistributedVideographerBoss):
+            musicTrack.append(Func(obj.startPhase3Particles))
+    notifyTracks = Sequence(Wait(0.5))
+    headTracks = Parallel()
+    suitTrack = Sequence()
+    soundTrack = getSoundTrack('tv_static.ogg', node=suit)
+    soundTrack2 = getSoundTrack('tv_static.ogg', delay=1.5, node=suit)
+    soundTrack4 = getSoundTrack('SA_hit.ogg', node=suit)
+    texture2 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer4.png')
+    texture3 = loader.loadTexture('phase_9/maps/ttcc_ene_videographer3.png')
+    texture = loader.loadTexture('phase_9/maps/ttcc_ene_videographer2.png')
+    headTrack = Sequence()
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(Func(suit.stopHeadFreakout))
+        headTrack.append(Wait(1))
+        headTrack.append(Func(headPart.loop, 'stun'))
+        headTrack.append(Func(headPart.setTexture, texture2, 1))
+        headTrack.append(Wait(suit.getDuration('throttletwo') - 4.25))
+        headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
+        headTrack.append(Func(suit.setupHeadFreakout, headPart, texture, texture3, texture2))
+        headTrack.append(Func(suit.startHeadFreakout))
+    notifyTrack = Sequence(ActorInterval(suit, 'chainsaw-cutscene-leap', startTime=2, endTime=2.5), Parallel(Parallel(soundTrack, soundTrack2), Sequence(ActorInterval(suit, 'sound-react-nt', endTime=2.5), ActorInterval(suit, 'throttletwo', startTime=3),
+                            Func(suit.setSuitStatusEffect, 'videoStatic', modifier=100, mode='refreshModifier'),
+                            Func(suit.loop, 'neutral2'))))
+    destPos, h = battle.suitPendingPointsSilhouettesHighRoller[7]
+    startPos = destPos + Point3(0, 0, 0)
+    headTrackLook = Sequence()
+    for headPart in suit.animatedHeadParts:
+        headTrackLook.append(Sequence(LerpHprInterval(headPart, 1, VBase3(-80, 0, 0), blendType='easeInOut'), LerpHprInterval(headPart, 2, VBase3(80, 0, 0), blendType='easeInOut'),
+                             LerpHprInterval(headPart, 1, VBase3(0, 0, 0), blendType='easeInOut')))
+    suitTrack.append(Sequence(Func(theSuit.clearSuitStatusEffect, 'videographerImmune'), Func(theSuit.reparentTo, battle), Func(theSuit.setPos, startPos), Func(theSuit.headsUp, battle),
+                              Parallel(headTrackLook, Sequence(Func(theSuit.loop, 'neutral2')), Func(theSuit.setChatAbsolute, "My Producers...", CFSpeech | CFTimeout)),
+                              Parallel(Func(theSuit.setChatAbsolute, "You've cleared the entire set?!", CFSpeech | CFTimeout)), Wait(3.0), 
+                              Parallel(Sequence(ActorInterval(theSuit, 'frustrated'), Func(theSuit.loop, 'neutral2')), Func(theSuit.setChatAbsolute, "Do you have ANY idea what you've just done?!", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.setChatAbsolute, "You took ALL of my producers off the air!!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "Do you know how much work goes into a production like this?!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "All of the planning, the staging, the shooting... and you just TRASHED IT!!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "...What's this??", CFSpeech | CFTimeout), ActorInterval(suit, 'chainsaw-cutscene-leap', duration=2)),
+                              Parallel(notifyTrack, headTrack),
+                              Func(theSuit.setChatAbsolute, "We-we're getting inter-fer-ference...", CFSpeech | CFTimeout), Wait(4.0),
+                              Parallel(Func(theSuit.nametag3d.setScale, 2.5), Sequence(ActorInterval(theSuit, 'finger-wag'), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "I M-M-MUST keep the feed rol-l-l-ling!!", CFSpeech | CFTimeout)), 
+                              Parallel(Sequence(ActorInterval(theSuit, 'rake-react', playRate=2.0), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "I d-didn't come ---KZZZZT--- this far j-j-just to...", CFSpeech | CFTimeout)), Wait(2.0),
+                              Parallel(Sequence(ActorInterval(theSuit, 'small-zap', duration=2), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "KZZZT---", CFSpeech | CFTimeout)), 
+                              Parallel(Sequence(ActorInterval(theSuit, 'pie-small-react'), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "...CUT TO STATIC!!", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.nametag3d.setScale, 1.0), musicTrack, LerpScaleInterval(theSuit, suit.getDuration('effort'), 1.125, startScale=1, blendType='easeInOut'), 
+                                       Func(theSuit.makeSwole), LerpColorScaleInterval(suit.getGeomNode(), suit.getDuration('effort'), (0.58, 0.2, 1, 1), blendType='easeIn'),
+                                       Sequence(ActorInterval(theSuit, 'effort'), Func(theSuit.loop, 'rolled')), Func(theSuit.setChatAbsolute, "Oh... now THIS is an effect!!", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.setChatAbsolute, "Well Toons, you've made it to the part of the show nobody was supposed to see...", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Func(theSuit.setChatAbsolute, "Forget the Producers.", CFSpeech | CFTimeout), Wait(2.0),
+                              Func(theSuit.setChatAbsolute, "Forget the script.", CFSpeech | CFTimeout), Wait(2.0),
+                              Func(theSuit.setChatAbsolute, "Forget everything you thought you were watching!", CFSpeech | CFTimeout), Wait(4.0),
+                              Parallel(Func(theSuit.setChatAbsolute, "The cameras are rolling, the signal is breaking, and I'm going off-script!!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "You wanted all the attention? Then keep your eyes on ME!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "WELCOME TO THE FINAL ACT!!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              ))
+    headTracks.append(headTrack)
+    cameraTrack = Sequence(MovieCamera.motionShot(0.0, 14.0, 10.0, -180, 0, 0.0, 0, theSuit), Wait(3.0))
+
+    return Parallel(suitTrack)
+
 
 def doVideoStatic(attack):
     suit = attack['suit']
@@ -1733,15 +1800,9 @@ def doVideoStatic(attack):
                 headTrack.append(Parallel(Func(headPart.setTexture, texture, 1), soundTrack4, Func(headPart.loop, 'neutral')))
                 headTrack.append(Func(theSuit.setupHeadFreakout, headPart, texture, texture3, texture2))
                 headTrack.append(Func(theSuit.startHeadFreakout))
-            if suit.dna.name == 'bcaster':
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3),
+            notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3),
                                        Func(theSuit.showHpStringVideographer20),
                                        Func(theSuit.setSuitStatusEffect, 'videoStatic', modifier=20, mode='refreshModifier'),
-                                       Func(theSuit.setNeutralAnimation), Wait(2.0))
-            else:
-                notifyTrack = Sequence(ActorInterval(theSuit, 'sound-react-nt', endTime=2.5), ActorInterval(theSuit, 'throttletwo', startTime=3),
-                                       Func(theSuit.showHpStringVideographer5),
-                                       Func(theSuit.setSuitStatusEffect, 'videoStatic', modifier=5, mode='refreshModifier'),
                                        Func(theSuit.setNeutralAnimation), Wait(2.0))
             headTracks.append(headTrack)
             cameraTrack = Sequence(MovieCamera.motionShot(0.0, 14.0, 10.0, -180, 0, 0.0, 0, theSuit), Wait(3.0))
@@ -1755,52 +1816,62 @@ def doVideoStatic(attack):
 def doRisingStarsSacrifice(attack):
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = target[0]['hp']
-    hollywoods = []
-    puddleTracks = Parallel()
-    moveTracks = Parallel()
-    managerHealTracks = Parallel()
-    animTracks = Parallel()
-    for s in battle.activeSuits:
-        if not s.dna.name in ['director', 'fmaker', 'videog', 'bcaster', 'mplayers', 'hroller', 'hrollers', 'hroller2']:
-            puddle = globalPropPool.getProp('quicksand')
-            puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
-            puddle.setHpr(Point3(120, 0, 0))
-            puddle.setScale(0.01)
-            puddleTrack = Sequence(Func(battle.movie.needRestoreRenderProp, puddle),
-                                   Func(puddle.reparentTo, s), Func(puddle.wrtReparentTo, render),
-                                   LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7),
-                                                     startScale=MovieUtil.PNT3_NEARZERO), Wait(3.0),
-                                   LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
-                                   Func(puddle.removeNode))
-            sinkPos1 = s.getPos(battle)
-            sinkPos2 = s.getPos(battle)
-            dropPos = s.getPos(battle)
-            landPos = s.getPos(battle)
-            sinkPos1.setZ(sinkPos1.getZ() - 3.1)
-            sinkPos2.setZ(sinkPos2.getZ() - 9.1)
-            dropPos.setZ(dropPos.getZ())
-            landPos.setY(dropPos.getY())
-            moveTrack = Sequence(Wait(1.8), LerpPosInterval(s, 0.9, Point3(0, 0, -3.1), other=puddle),
-                                 LerpPosInterval(s, 0.4, Point3(0, 0, -9.1), other=puddle), MovieUtil.createRisingStars(s, battle), Func(s.setPos, puddle, Point3(0, 0, 0)),
-                                 Wait(2), LerpColorScaleInterval(s, 2, (1, 1, 1, 1)), Wait(1.1),
-                                 Func(s.showHpString, '+50% Damage'))
-            animTrack = Sequence(Wait(0.9), ActorInterval(s, 'flail-qs', endTime=1.75),
-                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.75),
-                                 ActorInterval(s, 'flail-qs', startTime=1.25, endTime=1.25), Func(s.setNeutralAnimation))
-            managerHealTrack = Sequence(Wait(3), Func(suit.showHpTextCheat, + (s.maxHP / 2)),
-                                        Func(suit.setHealthForMe, + (s.maxHP / 2)),
-                                        Func(suit.updateHealthBar, 0))
-            managerHealTracks.append(managerHealTrack)
-            animTracks.append(animTrack)
-            moveTracks.append(moveTrack)
-            puddleTracks.append(puddleTrack)
-            hollywoods.append(s)
+    targets = attack['target']
+
+    if not targets:
+        return Sequence()
+
+    targetSuit = targets[0].get('suit')
+
+    if targetSuit is None:
+        return Sequence()
+
+    dmg = targets[0].get('hp', 0)
+
+    puddle = globalPropPool.getProp('quicksand')
+    puddle.setColor(Vec4(0.0, 0.0, 1.0, 1))
+    puddle.setHpr(Point3(120, 0, 0))
+    puddle.setScale(0.01)
+
+    puddleTrack = Sequence(
+        Func(battle.movie.needRestoreRenderProp, puddle),
+        Func(puddle.reparentTo, targetSuit),
+        Func(puddle.wrtReparentTo, render),
+        LerpScaleInterval(puddle, 0.9, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
+        Wait(3.0),
+        LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.8),
+        Func(puddle.removeNode)
+    )
+
+    moveTrack = Sequence(
+        Wait(1.8),
+        LerpPosInterval(targetSuit, 0.9, Point3(0, 0, -3.1), other=puddle),
+        LerpPosInterval(targetSuit, 0.4, Point3(0, 0, -9.1), other=puddle),
+        MovieUtil.createRisingStars(targetSuit, battle),
+        Func(targetSuit.setPos, puddle, Point3(0, 0, 0)),
+        Wait(2),
+        LerpColorScaleInterval(targetSuit, 2, (1, 1, 1, 1)),
+        Wait(1.1),
+        Func(targetSuit.showHpString, '+50% Damage')
+    )
+
+    animTrack = Sequence(
+        Wait(0.9),
+        ActorInterval(targetSuit, 'flail-qs', endTime=1.75),
+        ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.75),
+        ActorInterval(targetSuit, 'flail-qs', startTime=1.25, endTime=1.25), Func(targetSuit.setNeutralAnimationDrop),
+    )
 
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
-    return Parallel(suitTrack, moveTracks, animTracks, soundTrack, puddleTracks)
+
+    return Parallel(
+        suitTrack,
+        moveTrack,
+        animTrack,
+        soundTrack,
+        puddleTrack
+    )
 
 def __createSuitResetPosTrack(suit, battle):
     resetPos, resetHpr = battle.getActorPosHpr(suit)

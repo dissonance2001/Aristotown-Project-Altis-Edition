@@ -232,14 +232,14 @@ class BattleBase:
         (Point3(-15, 15, 0), 179),
         (Point3(-20, 15, 0), 170))
     suitPendingPointsSilhouettes = (
-        (Point3(0, 10, 0), 190),
-        (Point3(-4, 10, 0), 179),
-        (Point3(4, 10, 0), 170),
-        (Point3(8, 10, 0), 160),
-        (Point3(-8, 10, 0), 165),
-        (Point3(12, 10, 0), 170),
-        (Point3(-12, 10, 0), 179),
-        (Point3(-16, 7.5, 0), 170))
+        (Point3(0, 0, 0), 190),
+        (Point3(-4, 0, 0), 179),
+        (Point3(4, 0, 0), 170),
+        (Point3(8, 0, 0), 160),
+        (Point3(-8, 0, 0), 165),
+        (Point3(12, 0, 0), 170),
+        (Point3(-12, 0, 0), 179),
+        (Point3(-16, 0, 0), 170))
     suitPendingPointsSilhouettesHighRoller = (
         (Point3(-4, 5, 0), 179),
         (Point3(4, 5, 0), 170),

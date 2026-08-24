@@ -1871,12 +1871,16 @@ class BattleCalculatorAI:
                 atkTrack not in (FIRE, HEAL, SUE) and
                 s.getHP() > 0 and not self.suitHasCondition(s.doId, 'dead')
             ):
+                originalDamage = attackDamage
+
                 attackDamage *= 0.7
-                absorbed = math.ceil(attackDamage * 0.5)
+                absorbed = math.ceil(originalDamage * 0.3)
+
                 self.absorbDamage += absorbed
 
                 if atkTrack in self.absorbDamageByTrack:
                     self.absorbDamageByTrack[atkTrack] += absorbed
+
                 self.setSuitCondition(
                     s.doId,
                     'rageBuilding',
@@ -1904,8 +1908,11 @@ class BattleCalculatorAI:
                     s.getHP() > 0 and
                     not self.suitHasCondition(s.doId, 'dead')
                 ):
+                    originalDamage = attackDamage
+
                     attackDamage *= 0.7
-                    absorbed = math.ceil(attackDamage * 0.5)
+                    absorbed = math.ceil(originalDamage * 0.3)
+
                     self.absorbDamage += absorbed
 
                     if atkTrack in self.absorbDamageByTrack:
@@ -1986,7 +1993,7 @@ class BattleCalculatorAI:
         }
 
         boostCond = trackBoosts.get(atkTrack)
-        if boostCond and self.toonHasCondition(toonId, boostCond):
+        if boostCond and self.toonHasCondition(toonId, boostCond) and not atkTrack == LURE:
             mult *= 1.0 + self.getToonConditionModifier(toonId, boostCond) * 0.01
 
         if atkTrack not in (SOUND, LURE):
@@ -2045,28 +2052,28 @@ class BattleCalculatorAI:
         if atkTrack == ZAP and self.suitHasCondition(suitId, 'zapImmune'):
             return 0
 
-        if self.suitHasCondition(suitId, 'HRdamagereduction'):
+        if self.suitHasCondition(suitId, 'HRdamagereduction') and atkTrack != TRAP:
             mult *= 0.1
 
-        if self.suitHasCondition(suitId, 'trapRushJob') and atkTrack != TRAP:
+        if self.suitHasCondition(suitId, 'trapRushJob') and atkTrack != TRAP and atkTrack != LURE:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'lureRushJob') and atkTrack != LURE:
+        if self.suitHasCondition(suitId, 'lureRushJob') and atkTrack != LURE and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'throwRushJob') and atkTrack != THROW:
+        if self.suitHasCondition(suitId, 'throwRushJob') and atkTrack != THROW and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'squirtRushJob') and atkTrack != SQUIRT:
+        if self.suitHasCondition(suitId, 'squirtRushJob') and atkTrack != SQUIRT and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'soundRushJob') and atkTrack != SOUND:
+        if self.suitHasCondition(suitId, 'soundRushJob') and atkTrack != SOUND and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'dropRushJob') and atkTrack != DROP:
+        if self.suitHasCondition(suitId, 'dropRushJob') and atkTrack != DROP and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'zapRushJob') and atkTrack != ZAP:
+        if self.suitHasCondition(suitId, 'zapRushJob') and atkTrack != ZAP and atkTrack != TRAP:
             mult *= 0.6
         
         for effect in self.getAllRelevantConditions(suitId, StatusEffects.RushJob, toon=False): # Get all Rush Job status effects from the Cog.
@@ -2074,54 +2081,54 @@ class BattleCalculatorAI:
                 mult *= effect.defenseMod # Apply the damage reduction.
                 break # We'll break because we probably do not want repeated damage reduction if, for some reason, two or more Rush Jobs are placed on the same Cog.
 
-        if self.suitHasCondition(suitId, 'damageReduction'):
+        if self.suitHasCondition(suitId, 'damageReduction') and atkTrack != TRAP:
             mult *= 0.7
 
-        if self.suitHasCondition(suitId, 'monsoon'):
+        if self.suitHasCondition(suitId, 'monsoon') and atkTrack != TRAP:
             mult *= 0.1
 
-        if self.suitHasCondition(suitId, 'enraged') and not self.suitHasCondition(suitId, 'desperation'):
+        if self.suitHasCondition(suitId, 'enraged') and not self.suitHasCondition(suitId, 'desperation') and atkTrack != TRAP:
             mult *= 0.7
 
-        if self.suitHasCondition(suitId, 'vulnerable'):
+        if self.suitHasCondition(suitId, 'vulnerable') and atkTrack != TRAP:
             mult *= 1.3
 
-        if self.suitHasCondition(suitId, 'dancesession'):
+        if self.suitHasCondition(suitId, 'dancesession') and atkTrack != TRAP:
             mult *= 0.7
 
-        if self.suitHasCondition(suitId, 'vulnerablebroadcaster'):
+        if self.suitHasCondition(suitId, 'vulnerablebroadcaster') and atkTrack != TRAP:
             mult *= 2.0
 
-        if self.suitHasCondition(suitId, 'vulnerablesilhouette1'):
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette1') and atkTrack != TRAP:
             mult *= 1.5
 
-        if self.suitHasCondition(suitId, 'vulnerablesilhouette2'):
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette2') and atkTrack != TRAP:
             mult *= 2.0
 
-        if self.suitHasCondition(suitId, 'vulnerablesilhouette3'):
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette3') and atkTrack != TRAP:
             mult *= 3.0
 
-        if self.suitHasCondition(suitId, 'marked') and atkTrack != THROW:
+        if self.suitHasCondition(suitId, 'marked') and atkTrack != THROW and atkTrack != TRAP:
             mult *= 1.1
 
-        if self.suitHasCondition(suitId, 'markedThrow') and atkTrack == THROW:
+        if self.suitHasCondition(suitId, 'markedThrow') and atkTrack == THROW and atkTrack != TRAP:
             mult *= 1.1
 
-        if self.suitHasCondition(suitId, 'soakImmune') and (self.suitHasCondition(suitId, 'soaked') or self.suitHasCondition(suitId, 'drenched')):
+        if self.suitHasCondition(suitId, 'soakImmune') and (self.suitHasCondition(suitId, 'soaked') or self.suitHasCondition(suitId, 'drenched')) and atkTrack != TRAP:
             mult *= 0.4
 
-        if suit.dna.name == 'hustle' and self.toonHasCondition(toonId, 'hustlerTarget'):
+        if suit.dna.name == 'hustle' and self.toonHasCondition(toonId, 'hustlerTarget') and atkTrack != TRAP:
             mult *= 0.5
 
-        if self.getSuitConditionTurns(suitId, 'sleepy') == 2 and self.suitHasCondition(suitId, 'sleepy'):
+        if self.getSuitConditionTurns(suitId, 'sleepy') == 2 and self.suitHasCondition(suitId, 'sleepy') and atkTrack != TRAP:
             mult *= 0.3
-        elif self.getSuitConditionTurns(suitId, 'sleepy') == 1 and self.suitHasCondition(suitId, 'sleepy'):
+        elif self.getSuitConditionTurns(suitId, 'sleepy') == 1 and self.suitHasCondition(suitId, 'sleepy') and atkTrack != TRAP:
             mult *= 0.6
 
-        if self.suitHasCondition(suitId, 'directorDamageReduction'):
+        if self.suitHasCondition(suitId, 'directorDamageReduction') and atkTrack != TRAP:
             mult *= self.getSuitConditionModifier(suitId, 'directorDamageReduction')
 
-        if self.suitHasCondition(suitId, 'vulnerablevideographer'):
+        if self.suitHasCondition(suitId, 'vulnerablevideographer') and atkTrack != TRAP:
             mult *= self.getSuitConditionModifier(suitId, 'vulnerablevideographer')
         
         for effect in self.getAllRelevantConditions(suitId, StatusEffects.DefenseModifier, toon=False): # Find all DefenseModifier effects.
@@ -5296,6 +5303,17 @@ class BattleCalculatorAI:
 
         atkType = attack[SUIT_ATK_COL]
         attackerId = attack[SUIT_ID_COL]
+        if atkType.get('name') in ('BroadcasterDonation', 'BroadcasterDonation2'):
+            targets = []
+
+            for index, suit in enumerate(self.battle.activeSuits):
+                if suit is None or suit.currHP <= 0:
+                    continue
+
+                if suit.dna.name in ('bcaster', 'videog'):
+                    targets.append(index)
+
+            return targets
 
         allowSelfTarget = atkType.get('allowSelfTarget', False)
         targetSelf = atkType.get('targetSelf', False)

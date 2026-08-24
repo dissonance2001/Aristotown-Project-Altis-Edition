@@ -208,6 +208,20 @@ class BaseSuitAttackCalculatorAI:
                                         'group': SuitBattleGlobals.ATK_TGT_GROUP})
                 if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name in ['director', 'fmaker', 'choreo', 'cinema'] and self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyGovDeath'):
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
+                        if suit.currHP <= 0:
+                            self.calculator.governaughtCogs += 5
+                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'mh2' and self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyGovDeath'):
                 for suit in self.battle.activeSuits:
                     if suit.getGovernaught():

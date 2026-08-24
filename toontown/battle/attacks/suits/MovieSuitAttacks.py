@@ -1470,6 +1470,8 @@ def doSuitAttack(attack):
         suitTrack = MovieHighRollerCheats.doRisingStarsSacrifice(attack)
     elif name == 'VideographerVideoStatic':
         suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
+    elif name == 'VideographerPhase3':
+        suitTrack = MovieHighRollerCheats.doVideographerPhase3(attack)
     elif name == 'VideographerElectricShock':
         suitTrack = MovieHighRollerCheats.doPhase3Videographer(attack)
     elif name == 'VideographerElectricShock2':
@@ -3309,7 +3311,7 @@ def doRazzleDazzle(attack):
             hitPoint = lambda toon = toon: __toonFacePoint(toon)
         else:
             hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
-        signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
+        signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint, blendType='easeInOut'), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
         signPropAnimTrack = ActorInterval(sign, 'smile', duration=2.5, startTime=1)
         signPropTracks.append(signPropTrack)
         signPropAnimTracks.append(signPropAnimTrack)
@@ -4923,7 +4925,7 @@ def doEvilEye(attack):
             "dl": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
             "txm": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
             "br": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
-            "itn": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
+            "itn": [Point3(-0.4, 5.0, 6.0), VBase3(-155.0, -20.0, 0.0)],
             "lgator": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
             "ubuster": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
             "wsi": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],

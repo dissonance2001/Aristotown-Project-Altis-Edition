@@ -1712,6 +1712,8 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='bcaster'
             )
+            reserveSuits.append(suit)
+        if specialCode == 'videog5':
             suit2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='c',
@@ -1719,7 +1721,6 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='mplayers'
             )
-            reserveSuits.append(suit)
             reserveSuits.append(suit2)
         if specialCode == 'choreo':
             suit = self.__genSuitObject(

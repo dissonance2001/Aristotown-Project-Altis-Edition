@@ -289,7 +289,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.battle.activeSuits[i].getActualLevel() == 32 and not self.battle.activeSuits[i].currHP <= 0:
@@ -316,7 +316,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.suitHasCondition(suitId, 'barcalculator') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and not \
@@ -350,7 +350,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -457,7 +457,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -584,7 +584,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -708,7 +708,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -779,7 +779,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -874,7 +874,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0

@@ -812,9 +812,9 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         # Alternatively, define them as their own variables and have them do their own
         # color scale changes during cutscenes.
         lightGeometry = [
-            # "rainbow_backdrop",
-            # "crossbeams_rainbow",
-            "discofloor_base",
+            "rainbow_backdrop",
+            "crossbeams_rainbow",
+            # "discofloor_base",
             "wall_lights",
              "stage_floorlights",
             # "stage_background",

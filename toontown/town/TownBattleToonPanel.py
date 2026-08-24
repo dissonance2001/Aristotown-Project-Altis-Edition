@@ -2796,7 +2796,7 @@ class TownBattleToonPanel(DirectFrame):
 
         if avatar.hasToonStatusEffect('actionPartner'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
-            self.statusIcon = status.find('**/counterfeit_icon')
+            self.statusIcon = status.find('**/encore_icon')
             self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="1",
                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
                                          text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
@@ -2990,6 +2990,22 @@ class TownBattleToonPanel(DirectFrame):
 
         if targetSuit.hasSuitStatusEffect('contingencyOverrideBroken'):
             result *= .75
+
+        if targetSuit.hasSuitStatusEffect('rushJob'):
+            if targetSuit.getSuitStatusModifier('rushJob') == 1 and track != TRAP_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 2 and track != LURE_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 3 and track != THROW_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 4 and track != SQUIRT_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 5 and track != ZAP_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 6 and track != SOUND_TRACK:
+                result *= .6
+            if targetSuit.getSuitStatusModifier('rushJob') == 7 and track != DROP_TRACK:
+                result *= .6
 
         if (targetSuit.getManager() or targetSuit.getGovernaught() or targetSuit.getExecutive()) and track == TRAP_TRACK:
             result *= 1.3
@@ -3311,6 +3327,31 @@ class TownBattleToonPanel(DirectFrame):
                 if targetSuit.hasSuitStatusEffect('contingencyOverrideBroken'):
                     damage *= .75
                     lureValue *= .75
+                if targetSuit.hasSuitStatusEffect('enraged') and not targetSuit.hasSuitStatusEffect('desperation'):
+                    damage *= .7
+                    lureValue *= .7
+                if targetSuit.hasSuitStatusEffect('rushJob'):
+                    if targetSuit.getSuitStatusModifier('rushJob') == 1 and track != TRAP_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 2 and track != LURE_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 3 and track != THROW_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 4 and track != SQUIRT_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 5 and track != ZAP_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 6 and track != SOUND_TRACK:
+                        damage *= .6
+                        lureValue *= .6
+                    if targetSuit.getSuitStatusModifier('rushJob') == 7 and track != DROP_TRACK:
+                        damage *= .6
+                        lureValue *= .6
                 if (targetSuit.getManager() or targetSuit.getGovernaught() or targetSuit.getExecutive()) and track == TRAP_TRACK:
                     damage *= 1.3
                     lureValue *= 1.3
