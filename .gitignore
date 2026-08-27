@@ -47,3 +47,4 @@ resources/contentpacks/pack-load-order.yaml
 resources/contentpacks/pack-load-order.yaml
 *.zip
 *.mid
+/.venv

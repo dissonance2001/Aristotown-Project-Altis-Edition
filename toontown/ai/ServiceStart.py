@@ -1,4 +1,5 @@
 import builtins
+import sys
 
 builtins.process = 'ai'
 
@@ -11,6 +12,10 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 
 import argparse
 
+defaultConfig = ['dependencies/config/general.prc', 'dependencies/config/release/dev.prc']
+if sys.platform == 'darwin':
+    defaultConfig.append('dependencies/config/macos.prc')
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-channel', help='The base channel that the server may use.')
 parser.add_argument('--max-channels', help='The number of channels the server may use.')
@@ -19,7 +24,7 @@ parser.add_argument('--district-name', help="What this AI Server's district will
 parser.add_argument('--astron-ip', help="The IP address of the Astron Message Director to connect to.")
 parser.add_argument('--eventlogger-ip', help="The IP address of the Astron Event Logger to log to.")
 parser.add_argument('--start-time', help="The time of day to start at")
-parser.add_argument('config', nargs='*', default=['dependencies/config/general.prc', 'dependencies/release/dev.prc'], help="PRC file(s) to load.")
+parser.add_argument('config', nargs='*', default=defaultConfig, help="PRC file(s) to load.")
 args = parser.parse_args()
 
 for prc in args.config:
@@ -44,7 +49,7 @@ simbase.air = ToontownAIRepository(config.GetInt('air-base-channel', 401000000),
                                    config.GetString('district-name', 'Devhaven'),
                                    config.GetInt('start-time', 6))
 host = config.GetString('air-connect', '127.0.0.1')
-port = 7100
+port = 7199
 if ':' in host:
     host, port = host.split(':', 1)
     port = int(port)

@@ -11,6 +11,17 @@ import traceback
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.PyDatagram import *
+from direct.distributed.MsgTypes import (
+    CLIENTAGENT_ADD_POST_REMOVE,
+    CLIENTAGENT_CLEAR_POST_REMOVES,
+    CLIENTAGENT_CLOSE_CHANNEL,
+    CLIENTAGENT_EJECT,
+    CLIENTAGENT_OPEN_CHANNEL,
+    CLIENTAGENT_SET_CLIENT_ID,
+    CLIENTAGENT_SET_STATE,
+    STATESERVER_OBJECT_DELETE_RAM,
+    STATESERVER_OBJECT_SET_OWNER,
+)
 from direct.fsm.FSM import FSM
 from pandac.PandaModules import *
 from otp.ai.MagicWordGlobal import *
