@@ -58,7 +58,7 @@ class DiscordConnector(object):
     def _read_response(self):
         """Read one Discord IPC response without Python 3-only APIs."""
         if self.platform == 'nt':
-            header = ''
+            header = b''
             while len(header) < 8:
                 chunk = self.socket.read(8 - len(header))
                 if not chunk:
@@ -71,7 +71,7 @@ class DiscordConnector(object):
             raise IOError('Incomplete Discord IPC header')
 
         opcode, length = struct.unpack('<ii', header[:8])
-        data = ''
+        data = b''
         while len(data) < length:
             if self.platform == 'nt':
                 chunk = self.socket.read(length - len(data))

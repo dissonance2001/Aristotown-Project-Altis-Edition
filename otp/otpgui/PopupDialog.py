@@ -12,7 +12,10 @@ class PopupDialog:
     def __init__(self):
         self.popupGui = aspect2d.attachNewNode('popupGui')
         self.popupGui.reparentTo(aspect2d, 3000)
-        gui = base.matGui
+        if base.hasattr("matGui") and base.matGui:
+            gui = base.matGui
+        else:
+            gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui')
         shuffleUp = gui.find('**/tt_t_gui_mat_shuffleUp')
         shuffleDown = gui.find('**/tt_t_gui_mat_shuffleDown')
         self.dialogText = OnscreenText(text='put text here', font = ToontownGlobals.getMinnieFont(), style = 3, align=TextNode.ACenter, scale=0.1, pos=(0, .2, 0), wordwrap = 20)
