@@ -630,7 +630,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def startPhase2Particles(self):
         self.__playHighRollerMusic(self.phaseTwoMusic, looping=1, volume=1)
         self.battleOneMusic.stop()
-        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
+        self.highRollerArena.setColor(0.1, 0.1, 0.1, 1)
         self.stopHighRollerParticles()
 
         BattleParticles.loadParticles()

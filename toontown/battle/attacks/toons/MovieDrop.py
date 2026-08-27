@@ -487,12 +487,12 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         anim = 'flatten'
     else:
         anim = 'drop-react'
-    if visualDied and (suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ('erclaim', 'erfit')):
+    if visualDied and (suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ('erclaim', 'videog', 'erfit')):
         suitReact = ActorInterval(suit, anim)
 
     elif visualDied and majorObject \
             and not suit.hasSuitStatusEffect('overpressured') \
-            and suit.dna.name not in ('erclaim', 'erfit'):
+            and suit.dna.name not in ('erclaim', 'erfit', 'videog'):
 
         suitReact = ActorInterval(suit, anim, endTime=0.55)
 
@@ -520,7 +520,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         gotHitSound = globalBattleSoundCache.getSound('AA_drop_piano.ogg')
         suitGettingHit.append(SoundInterval(gotHitSound, node=toon))
     bonusTrack = None
-    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim', 'psetter'):
+    if visualDied and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim', 'psetter'):
         if majorObject:
             bonusTrack = Sequence(Wait(delay + tObjectAppears + 1),
                                       Func(suit.showHpText, -hpbonus, 1),
@@ -547,7 +547,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
     elif visualDied != 0 and suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-    elif visualDied != 0 and suit.dna.name in ('erfit', 'erclaim', 'psetter'):
+    elif visualDied != 0 and suit.dna.name in ('erfit', 'erclaim', 'videog', 'psetter'):
         suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
     elif visualDied != 0 and not suit.isVirtual and not suit.isOverpressured:
         suitTrack.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))

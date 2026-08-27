@@ -1704,6 +1704,7 @@ class Movie(DirectObject.DirectObject):
                     'SueApplication',
                     'AbilityQueuedPreToon',
                     'BookkeeperPaperCut',
+                    'FilmmakerInFocus',
                     'AmbassadorAdvancement3',
                     'ContingencyMarkRevisedFiling',
                     'ContingencyRiskThresholdBreach50',

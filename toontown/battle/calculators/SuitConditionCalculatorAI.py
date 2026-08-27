@@ -302,17 +302,22 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
                 if x % 2 == 0:
-                    self.setSuitCondition(suitId, 'filmmakercalculator', 1, 10, 'setBoth')
+                    self.setSuitCondition(suitId, 'rewindcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'director':  # director
-                self.directorMultiplier += 4
                 if x % 3 == 0:
                     self.setSuitCondition(suitId, 'directorcalculator', 1, 10, 'setBoth')
+                if (x + 1) % 3 == 0:
+                    self.setSuitCondition(suitId, 'actioncogcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'choreo':  # choreographer
-                if x % 2 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'choreocalculator', 1, 10, 'setBoth')
+                if (x + 2) % 3 == 0:
+                    self.setSuitCondition(suitId, 'partnercalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'cinema':  # photographer
-                if x % 2 == 0:
-                    self.setSuitCondition(suitId, 'cinemacalculator', 1, 10, 'setBoth')
+                if (x + 1) % 2 == 0:
+                    self.setSuitCondition(suitId, 'focuscalculator', 1, 10, 'setBoth')
+                if (x + 1) % 3 == 0:
+                    self.setSuitCondition(suitId, 'flashcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':  # high roller phase 1
                 self.setSuitCondition(suitId, 'gametimecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'videog':  # videographer

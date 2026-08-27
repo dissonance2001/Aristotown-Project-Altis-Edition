@@ -1915,7 +1915,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RecordkeeperRedlinedClauseMissedPayment':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperAuditCycle':
-        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration - 3, suit, h=210, p=0, startH=150, startP=0), Wait(3)))
+        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntryDamage':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntrySpawn':
@@ -2331,6 +2331,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration, suit, h=210, p=0, startH=150, startP=0)))
     elif name == 'VideographerRisingStarsSacrifice':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerStagelightsCogs':
+        for headPart in suit.animatedHeadParts:
+            camTrack.append(Sequence(motionShot(0, 9, suit.height - 1, 180, 0, 0.0, 0, suit), moveCameraOnly(0, 3, 1, 1, headPart, h=180, p=0, startH=180, startP=0),
+                                     moveCameraOnly(0, 3, 1, 4.5, headPart, h=180, p=0, startH=180, startP=0), 
+                                     heldShot(0.0, -15.0, 12.5, 0, -20, 0, attackDuration - 5.5)))
+    elif name == 'VideographerStagelightsToons':
+        for headPart in suit.animatedHeadParts:
+            camTrack.append(Sequence(motionShot(0, 9, suit.height - 1, 180, 0, 0.0, 0, suit), moveCameraOnly(0, 3, 1, 1, headPart, h=180, p=0, startH=180, startP=0),
+                                     moveCameraOnly(0, 3, 1, 4.5, headPart, h=180, p=0, startH=180, startP=0), 
+                                     heldShot(0.0, -20.0, 12.5, 0, -20, 0, attackDuration - 5.5)))
     elif name == 'VideographerRisingStarsSilhouette':
         camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerVideoStatic':
@@ -2364,7 +2374,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'VideographerElectricShock4':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerDeath':
-        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
+        camTrack2 = Sequence(motionShot(0, 30, 3, 180, 0, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 15, 8, 19, suit, p=0, startP=0, h=180, startH=180),
+                             motionShot(0, -10.0, suit.height - 1, 0, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, -25.0, suit.height - 1, 28, suit, h=0, p=0, startH=0, startP=0),
+                             motionShot(6.0, 12.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-6.0, 12.0, suit.height - 1, 12, suit, h=210, p=0, startH=150, startP=0),
+                            motionShot(5, -10.0, 3, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-5.0, -10.0, 3, 18, suit, h=0, p=0, startH=0, startP=0), 
+                             motionShot(0, 15.0, 8, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, 10.0, 8, 18, suit, h=180, p=0, startH=180, startP=0), Wait(10))
         return camTrack2
     elif name == 'VideographerAttackRewind':
         camTrack.append(defaultCamera(openShotDuration=1.0))
@@ -2387,6 +2406,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ChoreoPlacesEveryone':
         camTrack.append(allGroupHighShot(suit, attackDuration))
     elif name == 'ChoreoChoreography':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'FilmmakerInFocus':
+        target = attack['target']
+        toon = target[0]['toon']
+        camTrack.append(Sequence(motionShot(0, -6, suit.height + 2, 0, 0, 0.0, 0, suit), Wait(1), moveCameraOnly(0, 4, 2, 1, toon, h=180, p=0, startH=180, startP=0), Wait(attackDuration - 2)))
+    elif name == 'FilmmakerCaughtOnCamera':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'FilmmakerCameraFlash':
         camTrack.append(defaultCamera(openShotDuration=1.5))

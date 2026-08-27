@@ -2794,6 +2794,23 @@ class TownBattleToonPanel(DirectFrame):
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
+        if avatar.hasToonStatusEffect('target'):
+            status = loader.loadModel('phase_3.5/models/gui/status_effects')
+            self.statusIcon = status.find('**/worker_management_icon')
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('noDodge'),
+                                         text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                         text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
+                                         pos=(0.25, 0, -0.45),
+                                         text_scale=.6)
+            self.extraText.show()
+            slot = self._claimNextToonStatusSlot()
+            self._attachToonStatusIcon(self.statusIcon, 
+                                   slot, 
+                                   tooltipTitle="In Focus", 
+                                   tooltipDescription="Cogs are more likely to attack this Toon.", 
+                                   tooltipBuff=False, 
+                                   slotColor=(0, 0.902, 1, 1))
+
         if avatar.hasToonStatusEffect('actionPartner'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/encore_icon')

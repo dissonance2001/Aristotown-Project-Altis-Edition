@@ -1294,6 +1294,41 @@ class AttackHPCalculatorAI(object):
                         attack[SUIT_HEAL_COL][targetIndex] = healAmount
 
                 continue
+            elif attackName == 'VideographerStagelightsCogs':
+                damage = random.randint(50, 500)
+                if self.suitHasCondition(targetId, 'vulnerable'):
+                    damage *= 1.3
+
+                if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
+                    damage *= 2.0
+
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette1'):
+                    damage *= 1.5
+
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette2'):
+                    damage *= 2.0
+
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette3'):
+                    damage *= 3.0
+
+                if self.suitHasCondition(targetId, 'vulnerablevideographer'):
+                    damage *= self.getSuitConditionModifier(targetId, 'vulnerablevideographer')
+
+                if self.suitHasCondition(targetId, 'directorDamageReduction'):
+                    damage *= self.getSuitConditionModifier(targetId, 'directorDamageReduction')
+
+                if self.suitHasCondition(targetId, 'damageReduction'):
+                    damage *= 0.7
+
+                if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
+                    damage *= 0.7
+
+                for effect in self.getAllRelevantConditions(targetId, StatusEffects.DefenseModifier, toon=False):
+                    if isinstance(effect.defenseMod, float):
+                        damage *= effect.defenseMod
+                attack[SUIT_HP_COL][targetIndex] = damage
+                attack[SUIT_HEAL_COL][targetIndex] = 0
+                continue
             elif atkType['name'] == 'VideographerStarOfTheShow':
                 self.setSuitCondition(theSuit.doId, 'electricshockcalculator', 0, 0, 'setBoth')
                 self.setSuitCondition(targetId, 'bellowattack', 1, 1, 'setBoth')
@@ -1315,7 +1350,7 @@ class AttackHPCalculatorAI(object):
                     self.suitStatusConditionsNew[targetId].append(StatusEffects.ExtraAttacks(1))
                 self.__removeLured(targetSuit.doId)
             elif atkType['name'] == 'VideographerElectricShock4':
-                targetSuit.setDamageMultiplier(suit.getDamageMultiplier() * 1.1)
+                targetSuit.setDamageMultiplier(targetSuit.getDamageMultiplier() * 1.1)
             elif attackName == 'ContingencySelfRepair':
                 if theSuit.currHP < 2000:
                     healAmount = 750
@@ -4849,7 +4884,7 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'papertrailcalculator', 0, 0, 'setBoth')
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
-                self.setToonCondition(toon.doId, 'highTargetChance', 4, 3, 'setBoth')
+                self.setToonCondition(toon.doId, 'inFocus', 8, 3, 'setBoth')
             elif atkType['name'] == 'RecordkeeperMinutesTaken':
                 for s in self.battle.activeSuits:
                     if s.dna.name == 'cbutcher':
@@ -7581,6 +7616,9 @@ class AttackHPCalculatorAI(object):
                     self.setToonCondition(toon.doId, 'snapped', self.getToonConditionModifier(toonId, 'snapped'), -1, 'setBoth')
                 else:
                     self.setToonCondition(toon.doId, 'snapped', 1.15, -1, 'setBoth')
+            elif atkType['name'] == 'VideographerStagelightsToons':
+                result = random.randint(5, 50)
+                attack[SUIT_HP_COL][targetIndex] = result
             elif atkType['name'] == 'VideographerRisingStars':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -7684,20 +7722,6 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(0)
-                from toontown.suit.DistributedHighRollerBossAI import DistributedHighRollerBossAI
-                from toontown.suit.DistributedVideographerBossAI import DistributedVideographerBossAI
-
-                boss = None
-                for do in simbase.air.doId2do.values():
-                    if isinstance(do, (DistributedHighRollerBossAI, DistributedVideographerBossAI)):
-                        for s in self.battle.activeSuits:
-                            if s in do.activeSuits:
-                                boss = do
-                                break
-                        for s in self.battle.activeSuits:
-                            if s in do.activeSuits:
-                                if s.dna.name == 'hroller':
-                                    boss.appendSuitsToBattle(boss.battleNumber, 'hrollerPhase3')
                 for suit in self.battle.activeSuits:
                     if suit.dna.name not in ('hroller', 'videog'):
                         managerTarget = suit
@@ -7979,7 +8003,63 @@ class AttackHPCalculatorAI(object):
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'confused', 1, 2, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'cinemacalculator', 0, 0, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'flashcalculator', 0, 0, 'setBoth')
+            elif atkType['name'] == 'FilmmakerCaughtOnCamera':
+                # if self.toonHasCondition(toon.doId, 'usedDrop'):
+                #     self.setToonCondition(toon.doId, 'noDropGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedDrop', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedThrow'):
+                #     self.setToonCondition(toon.doId, 'noThrowGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedThrow', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedSquirt'):
+                #     self.setToonCondition(toon.doId, 'noSquirtGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedSquirt', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedSound'):
+                #     self.setToonCondition(toon.doId, 'noSoundGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedSound', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedTrap'):
+                #     self.setToonCondition(toon.doId, 'noTrapGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedTrap', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedLure'):
+                #     self.setToonCondition(toon.doId, 'noLureGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedLure', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedHeal'):
+                #     self.setToonCondition(toon.doId, 'noToonUpGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedHeal', 1, 1, 'setBoth')
+                # if self.toonHasCondition(toon.doId, 'usedZap'):
+                #     self.setToonCondition(toon.doId, 'noZapGags', 1, 2, 'setBoth')
+                #     self.setToonCondition(toon.doId, 'usedZap', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedDrop'):
+                    self.setToonCondition(toon.doId, 'disableDrop', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedDrop', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedThrow'):
+                    self.setToonCondition(toon.doId, 'disableThrow', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedThrow', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedSquirt'):
+                    self.setToonCondition(toon.doId, 'disableSquirt', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedSquirt', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedSound'):
+                    self.setToonCondition(toon.doId, 'disableSound', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedSound', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedTrap'):
+                    self.setToonCondition(toon.doId, 'disableTrap', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedTrap', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedLure'):
+                    self.setToonCondition(toon.doId, 'disableLure', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedLure', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedHeal'):
+                    self.setToonCondition(toon.doId, 'disableToonUp', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedHeal', 1, 1, 'setBoth')
+                if self.toonHasCondition(toon.doId, 'usedZap'):
+                    self.setToonCondition(toon.doId, 'disableZap', 1, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'usedZap', 1, 1, 'setBoth')
+                result = 0
+                attack[SUIT_HP_COL][targetIndex] = result
+            elif atkType['name'] == 'FilmmakerInFocus':
+                result = 25
+                attack[SUIT_HP_COL][targetIndex] = result
+                self.setToonCondition(toon.doId, 'inFocus', 11, 3, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'focuscalculator', 0, 0, 'setBoth')
             elif atkType['name'] == 'ChoreoChoreography':
                 result = random.choice((0, 20))
                 attack[SUIT_HP_COL][targetIndex] = result

@@ -110,6 +110,16 @@ class BaseSuitAttackCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                if  self.battle.activeSuits[i].currHP <= 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'VideographerDeath',  # Snap Bindings Retaliation
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'erfit':
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (x + 2) % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
@@ -1430,6 +1440,19 @@ class BaseSuitAttackCalculatorAI:
 
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'cinema':
+                if self.suitHasCondition(suitId, 'focuscalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                        'name': 'FilmmakerInFocus',
+                                                        # Rising Stars Sacrifice
+                                                        'animName': 'glower',
+                                                        'hp': 0,
+                                                        'acc': 100,
+                                                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_SINGLE
+                    })
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             # if self.battle.activeSuits[i].dna.name in ['cdirector', 'dking', 'rkeeper', 'liquid']:
             #     if not self.suitHasCondition(suitId, 'boardbotLit') and self.__suitCanAttack(suitId):
             #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,

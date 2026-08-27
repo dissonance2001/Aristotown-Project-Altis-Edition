@@ -13,6 +13,7 @@ from toontown.battle.attacks.suits import MovieUniversalCheats
 from toontown.battle.attacks.suits import MovieFaceTheFamilyCheats
 from toontown.battle.attacks.suits import MovieCountCheats
 from toontown.battle.attacks.suits import MovieIntervals
+from toontown.battle.attacks.suits import MovieVideographerCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
 from direct.directnotify import DirectNotifyGlobal
@@ -1456,73 +1457,83 @@ def doSuitAttack(attack):
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #videographer cheats
-    elif name == 'VideographerStarOfTheShow':
-        suitTrack = MovieHighRollerCheats.doStarOfTheShow(attack)
+    elif name == 'VideographerStagelightsCogs':
+        suitTrack = MovieVideographerCheats.doSignalLost(attack)
+    elif name == 'VideographerStagelightsToons':
+        suitTrack = MovieVideographerCheats.doSignalLost(attack)
     elif name == 'VideographerHardCut':
-        suitTrack = MovieHighRollerCheats.doHardCut(attack)
+        suitTrack = MovieVideographerCheats.doHardCut(attack)
+    elif name == 'VideographerStarOfTheShow':
+        suitTrack = MovieVideographerCheats.doStarOfTheShow(attack)
+    elif name == 'VideographerHardCut':
+        suitTrack = MovieVideographerCheats.doHardCut(attack)
     elif name == 'VideographerRisingStars':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStars2':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStarsSilhouette':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStarsSacrifice':
-        suitTrack = MovieHighRollerCheats.doRisingStarsSacrifice(attack)
+        suitTrack = MovieVideographerCheats.doRisingStarsSacrifice(attack)
     elif name == 'VideographerVideoStatic':
-        suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
+        suitTrack = MovieVideographerCheats.doVideoStatic(attack)
     elif name == 'VideographerPhase3':
-        suitTrack = MovieHighRollerCheats.doVideographerPhase3(attack)
+        suitTrack = MovieVideographerCheats.doVideographerPhase3(attack)
     elif name == 'VideographerElectricShock':
-        suitTrack = MovieHighRollerCheats.doPhase3Videographer(attack)
+        suitTrack = MovieVideographerCheats.doPhase3Videographer(attack)
     elif name == 'VideographerElectricShock2':
-        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
     elif name == 'VideographerElectricShock3':
-        suitTrack = MovieHighRollerCheats.doHardCutBan(attack)
+        suitTrack = MovieVideographerCheats.doHardCutBan(attack)
     elif name == 'VideographerElectricShock4':
-        suitTrack = MovieHighRollerCheats.doTouchUp(attack)
+        suitTrack = MovieVideographerCheats.doTouchUp(attack)
     elif name == 'VideographerAttackRewind':
-        suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
+        suitTrack = MovieVideographerCheats.doAttackRewind(attack)
     elif name == 'VideographerDirectorCuts':
-        suitTrack = MovieHighRollerCheats.doDirectorCuts(attack)
+        suitTrack = MovieVideographerCheats.doDirectorCuts(attack)
     elif name == 'VideographerDeath':
-        suitTrack = MovieHighRollerCheats.doVideographerDeath(attack)
+        suitTrack = MovieUtil.createVideographerDeathMovie(attack)
     # broadcaster cheats
     elif name == 'BroadcasterDonation':
-        suitTrack = MovieHighRollerCheats.doDonation2(attack)
+        suitTrack = MovieVideographerCheats.doDonation2(attack)
     elif name == 'BroadcasterDonation2':
-        suitTrack = MovieHighRollerCheats.doDonationFail(attack)
+        suitTrack = MovieVideographerCheats.doDonationFail(attack)
     elif name == 'BroadcasterViralSensation':
-        suitTrack = MovieHighRollerCheats.doViralSensation(attack)
+        suitTrack = MovieVideographerCheats.doViralSensation(attack)
     #filmmaker cheats
     elif name == 'ChoreoPlacesEveryone':
-        suitTrack = MovieHighRollerCheats.doPlacesEveryone(attack)
+        suitTrack = MovieVideographerCheats.doPlacesEveryone(attack)
     elif name == 'ChoreoChoreography':
-        suitTrack = MovieHighRollerCheats.doChoreography(attack)
+        suitTrack = MovieVideographerCheats.doChoreography(attack)
     elif name == 'FilmmakerCameraFlash':
-        suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
+        suitTrack = MovieVideographerCheats.doCameraFlash(attack)
+    elif name == 'FilmmakerCaughtOnCamera':
+        suitTrack = MovieVideographerCheats.doCaughtOnCamera(attack)
+    elif name == 'FilmmakerInFocus':
+        suitTrack = MovieVideographerCheats.doInFocus(attack)
     elif name == 'FilmmakerWrappedInTheFilm':
-        suitTrack = MovieHighRollerCheats.doWrappedInTheFilm(attack)
+        suitTrack = MovieVideographerCheats.doWrappedInTheFilm(attack)
     elif name == 'FilmmakerCameraRewind':
-        suitTrack = MovieHighRollerCheats.doCameraRewind(attack)
+        suitTrack = MovieVideographerCheats.doCameraRewind(attack)
     elif name == 'FilmmakerBudgetCuts':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     #director cheats
     elif name == 'DirectorCut':
-        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
+        suitTrack = MovieVideographerCheats.doRecordCut(attack)
     elif name == 'DirectorAction':
-        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
     elif name == 'DirectorActionCog':
-        suitTrack = MovieHighRollerCheats.doActionCog(attack)
+        suitTrack = MovieVideographerCheats.doActionCog(attack)
     elif name == 'DirectorActionRetaliation':
-        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
+        suitTrack = MovieVideographerCheats.doRecordCut(attack)
     elif name == 'DirectorActionPartner':
-        suitTrack = MovieHighRollerCheats.doActionPartner(attack)
+        suitTrack = MovieVideographerCheats.doActionPartner(attack)
     elif name == 'DirectorBackToOnes':
-        suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
+        suitTrack = MovieVideographerCheats.doBackToOnes(attack)
     elif name == 'DirectorProductionBudget':
-        suitTrack = MovieHighRollerCheats.doSynergy(attack)
+        suitTrack = MovieVideographerCheats.doSynergy(attack)
     elif name == 'DirectorBudgetExpansion':
-        suitTrack = MovieHighRollerCheats.doBudgetExpansion(attack)
+        suitTrack = MovieVideographerCheats.doBudgetExpansion(attack)
     #universal cheats
     elif name == 'TargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -7633,7 +7644,7 @@ def doSmokeAndMirrors(attack):
     for i in xrange(0, 5):
         particleEffect = BattleParticles.createParticleEffect('Smile')
         particleEffect.setZ(suit.height - 1)
-        particleEffect.setScale(2)
+        particleEffect.setScale(.01)
         particles.append(particleEffect)
 
     if hitSuit:
@@ -7645,7 +7656,8 @@ def doSmokeAndMirrors(attack):
         particleTrack = Parallel()
         particleTrack.append(Sequence(Wait(2), Wait(i * .25), Func(particles[i].start, suit),
                                 Func(particles[i].wrtReparentTo, render), 
-                                LerpPosInterval(particles[i], 1.5, pos=hitPoint, blendType='easeInOut'), 
+                                Parallel(LerpPosInterval(particles[i], 1.5, pos=hitPoint, blendType='easeInOut'),
+                                         LerpScaleInterval(particles[i], 1.5, Point3(2), startScale=Point3(0.01), blendType='easeInOut')),
                                 Func(particles[i].cleanup),
                                 Func(battle.movie.clearRestoreParticleEffect, particles[i])))
         particleTracks.append(particleTrack)

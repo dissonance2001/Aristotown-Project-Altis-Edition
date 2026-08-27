@@ -2360,7 +2360,6 @@ class BattleCalculatorAI:
                                                     'wsi',
                                                     'redd',
                                                     'ddiver',
-                                                    'director',
                                                     'duckshfl',
                                                     'gatekeep',
                                                 ]:
@@ -5037,6 +5036,28 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
         return atk
 
+    def __pickWeightedToonTarget(self, targetIndexes):
+        weightedTargets = []
+
+        for targetIndex in targetIndexes:
+            toonId = self.battle.activeToons[targetIndex]
+
+            weight = 1
+
+            for condition, value in toonTargetWeights.items():
+                if self.toonHasCondition(toonId, condition):
+                    weight += value
+
+            if self.toonHasCondition(toonId, 'inFocus'):
+                weight += self.getToonConditionModifier(toonId, 'inFocus')
+
+            weightedTargets.extend([targetIndex] * weight)
+
+        if not weightedTargets:
+            return None
+
+        return random.choice(weightedTargets)
+
     def __calcSuitTarget(self, attack):
         atkType = attack[SUIT_ATK_COL]
 
@@ -5191,13 +5212,14 @@ class BattleCalculatorAI:
             # =====================================================
             # TARGET WEIGHT
             # =====================================================
-            weight = 0
+            weight = 1
 
             for condition, value in toonTargetWeights.items():
-                if self.toonHasCondition(
-                        toonId,
-                        condition):
+                if self.toonHasCondition(toonId, condition):
                     weight += value
+
+            if self.toonHasCondition(toonId, 'inFocus'):
+                weight += self.getToonConditionModifier(toonId, 'inFocus')
 
             targetEntry = (
                 targetIndex,
@@ -5277,21 +5299,27 @@ class BattleCalculatorAI:
         #
         # Randomize ties, then highest weight wins.
         # =========================================================
-        random.shuffle(
-            targetPool
-        )
-
-        targetPool.sort(
-            key=lambda entry: entry[1],
-            reverse=True
-        )
-
         targets = []
+        remainingTargets = targetPool[:]
 
-        for targetIndex, weight in targetPool[:targetCount]:
-            targets.append(
-                targetIndex
-            )
+        while remainingTargets and len(targets) < targetCount:
+            totalWeight = sum(max(1, entry[1]) for entry in remainingTargets)
+            roll = random.uniform(0, totalWeight)
+            runningWeight = 0
+            chosenEntry = None
+
+            for entry in remainingTargets:
+                runningWeight += max(1, entry[1])
+
+                if roll <= runningWeight:
+                    chosenEntry = entry
+                    break
+
+            if chosenEntry is None:
+                chosenEntry = remainingTargets[-1]
+
+            targets.append(chosenEntry[0])
+            remainingTargets.remove(chosenEntry)
 
         return targets
 

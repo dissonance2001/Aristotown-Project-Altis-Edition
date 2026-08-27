@@ -67,7 +67,7 @@ def showLureRounds(suit, battle, level):
     if trapProp:
         suit.showHpStringRed("TRAPPED")
     elif suit.dna.name in ['hroller2', 'videog', 'bcaster', 'mplayers', 'hroller', 'fires', 'fbed', 'psetter', 'mouthp', 'rainmake', 'chainsaw',
-                         'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep', 'director']:
+                         'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep']:
         suit.showHpStringGreen("LURED 1 ROUND")
     elif suit.hasSuitStatusEffect('unionBusterNoAttack'):
         suit.showHpStringGreen("LURED 2 ROUNDS")
@@ -688,7 +688,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.75), ActorInterval(suit, 'flail-qs', startTime=1.25, endTime=1.25), Wait(0.7))
         soundTrack = Sequence(Wait(0.7),
                               SoundInterval(globalBattleSoundCache.getSound('TL_quicksand.ogg'), node=suit))
-        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -728,7 +728,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         animTrack = Sequence(ActorInterval(suit, 'flail-qs', endTime=1.375), Wait(1.1))
         soundTrack = Sequence(Wait(1.25),
                               SoundInterval(globalBattleSoundCache.getSound('AA_spring_activate.ogg'), node=suit))
-        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.75), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -762,7 +762,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                              ActorInterval(suit, 'flail-qs', startTime=0.7, endTime=0),
                              ActorInterval(suit, 'lured', duration=0.5), ActorInterval(suit, 'flail-qs', startTime=1.1, endTime=1.375))
         soundTrack = Sequence(Wait(0.8), SoundInterval(globalBattleSoundCache.getSound('TL_trap_door.ogg'), node=suit))
-        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(3.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -813,7 +813,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
         sinkPos.setY(sinkPos.getY() + 12.5)
         dropPos.setZ(dropPos.getZ() + 40)
         #landPos.setY(dropPos.getY() + 4)
-        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.5), Func(suit.updateHealthBar, hp))
             damageTrack.append(Func(suit.makeDead))
@@ -907,7 +907,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
                 Func(trapProp.sparksEffect.cleanup),
                 Func(battle.movie.clearRestoreColor)
             ))
-        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'erclaim'):
+        if died and not specialBossDeath and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and suit.dna.name not in ('erfit', 'videog', 'erclaim'):
             suitGone = 1
             damageTrack = Sequence(Wait(2.4), Func(suit.showHpTextNew, -hp, colorCode=1), Func(suit.updateHealthBar, hp), MovieUtil.midairSuitExplodeTrack(suit, battle))
             explosionSound = base.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
@@ -956,7 +956,7 @@ def __createSuitDamageTrack(battle, suit, hp, lure, trapProp, revived=0, died=0)
             result.append(MovieUtil.createSuitReviveTrack(suit, battle))
         elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             result.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual and not suitGone and not suit.hasSuitStatusEffect('overpressured'):
+        elif died != 0 and not suit.isVirtual and not suitGone and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'videog':
             result.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             result.append(Func(suit.setNeutralAnimationTrap))
