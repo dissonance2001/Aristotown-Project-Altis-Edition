@@ -3,11 +3,32 @@
 # class variable FuncDict and so we can import DCSubatomicType at the top
 # of the file rather than every time we call the putArg function.
 
-from panda3d.core import Datagram
-from panda3d.direct import *
+from panda3d.core import Datagram, ConfigVariableBool
+from panda3d.direct import (
+    STInt8,
+    STInt16,
+    STInt32,
+    STInt64,
+    STUint8,
+    STUint16,
+    STUint32,
+    STUint64,
+    STFloat64,
+    STString,
+    STBlob,
+    STBlob32,
+    STInt16array,
+    STInt32array,
+    STUint16array,
+    STUint32array,
+    STInt8array,
+    STUint8array,
+    STUint32uint8array,
+)
 # Import the type numbers
 
-from direct.distributed.MsgTypes import *
+if ConfigVariableBool('astron-support', True):
+    from direct.distributed.MsgTypes import CONTROL_CHANNEL
 
 
 class PyDatagram(Datagram):
@@ -28,7 +49,7 @@ class PyDatagram(Datagram):
         STString: (Datagram.addString, None),
         STBlob: (Datagram.addBlob, None),
         STBlob32: (Datagram.addBlob32, None),
-        }
+    }
 
     addChannel = Datagram.addUint64
 
@@ -44,13 +65,14 @@ class PyDatagram(Datagram):
         self.addChannel('A')
         self.addUint16(code)
 
-    def addServerControlHeader(self, code):
-        self.addInt8(1)
-        self.addChannel(CONTROL_CHANNEL)
-        self.addUint16(code)
+    if ConfigVariableBool('astron-support', True):
+        def addServerControlHeader(self, code):
+            self.addInt8(1)
+            self.addChannel(CONTROL_CHANNEL)
+            self.addUint16(code)
 
     def putArg(self, arg, subatomicType, divisor=1):
-        if (divisor == 1):
+        if divisor == 1:
             funcSpecs = self.FuncDict.get(subatomicType)
             if funcSpecs:
                 addFunc, argFunc = funcSpecs

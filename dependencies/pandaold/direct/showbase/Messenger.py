@@ -1,5 +1,5 @@
 """This defines the Messenger class, which is responsible for most of the
-event handling that happens on the Python side.
+:ref:`event handling <event-handlers>` that happens on the Python side.
 """
 
 __all__ = ['Messenger']
@@ -8,6 +8,7 @@ __all__ = ['Messenger']
 from .PythonUtil import *
 from direct.directnotify import DirectNotifyGlobal
 import types
+import sys
 
 from direct.stdpy.threading import Lock
 
@@ -91,7 +92,7 @@ class Messenger:
         self.lock.acquire()
         try:
             objs = []
-            for refCount, obj in list(self._id2object.values()):
+            for refCount, obj in self._id2object.values():
                 objs.append(obj)
             return objs
         finally:
@@ -309,7 +310,7 @@ class Messenger:
             foundWatch=0
             if __debug__:
                 if self.__isWatching:
-                    for i in list(self.__watching.keys()):
+                    for i in self.__watching.keys():
                         if str(event).find(i) >= 0:
                             foundWatch=1
                             break
@@ -317,7 +318,7 @@ class Messenger:
             if not acceptorDict:
                 if __debug__:
                     if foundWatch:
-                        print(("Messenger: \"%s\" was sent, but no function in Python listened."%(event,)))
+                        print("Messenger: \"%s\" was sent, but no function in Python listened."%(event,))
                 return
 
             if taskChain:
@@ -399,10 +400,10 @@ class Messenger:
 
                 if __debug__:
                     if foundWatch:
-                        print(("Messenger: \"%s\" --> %s%s"%(
+                        print("Messenger: \"%s\" --> %s%s"%(
                             event,
                             self.__methodRepr(method),
-                            tuple(extraArgs + sentArgs))))
+                            tuple(extraArgs + sentArgs)))
 
                 #print "Messenger: \"%s\" --> %s%s"%(
                 #            event,
@@ -464,8 +465,11 @@ class Messenger:
                 #       'oldMethod: ' + repr(oldMethod) + '\n' +
                 #       'newFunction: ' + repr(newFunction) + '\n')
                 if (function == oldMethod):
-                    newMethod = types.MethodType(
-                        newFunction, method.__self__, method.__self__.__class__)
+                    if sys.version_info >= (3, 0):
+                        newMethod = types.MethodType(newFunction, method.__self__)
+                    else:
+                        newMethod = types.MethodType(
+                            newFunction, method.__self__, method.__self__.__class__)
                     params[0] = newMethod
                     # Found it retrun true
                     retFlag += 1
@@ -476,8 +480,8 @@ class Messenger:
         isVerbose = 1 - Messenger.notify.getDebug()
         Messenger.notify.setDebug(isVerbose)
         if isVerbose:
-            print(("Verbose mode true.  quiet list = %s"%(
-                list(self.quieting.keys()),)))
+            print("Verbose mode true.  quiet list = %s"%(
+                list(self.quieting.keys()),))
 
     if __debug__:
         def watch(self, needle):

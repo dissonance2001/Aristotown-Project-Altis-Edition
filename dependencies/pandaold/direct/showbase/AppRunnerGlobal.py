@@ -11,9 +11,6 @@ the AppRunner at startup.
    system.  See the :ref:`distribution` manual section.
 """
 
-if __debug__:
-    print('AppRunner has been removed and AppRunnerGlobal has been deprecated')
-
 #: Contains the global :class:`~.AppRunner.AppRunner` instance, or None
 #: if this application was not run from the runtime environment.
 appRunner = None

@@ -5,13 +5,15 @@ LevelEditor, ObjectHandler, ObjectPalette should be rewritten
 to be game specific.
 """
 
-from .LevelEditorUI import *
-from .LevelEditorBase import *
-from .ObjectMgr import *
-from .AnimMgr import *
-from .ObjectHandler import *
-from .ObjectPalette import *
-from .ProtoPalette import *
+import os
+import wx
+from .LevelEditorUI import LevelEditorUI
+from .LevelEditorBase import LevelEditorBase
+from .ObjectMgr import ObjectMgr
+from .AnimMgr import AnimMgr
+from .ObjectHandler import ObjectHandler
+from .ObjectPalette import ObjectPalette
+from .ProtoPalette import ProtoPalette
 
 class LevelEditor(LevelEditorBase):
     """ Class for Panda3D LevelEditor """
@@ -31,7 +33,7 @@ class LevelEditor(LevelEditorBase):
 
         # Populating uderlined data-structures
         self.ui = LevelEditorUI(self)
-        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+        self.ui.SetCursor(wx.Cursor(wx.CURSOR_WAIT))
         self.objectPalette.populate()
         self.protoPalette.populate()
 
@@ -42,4 +44,4 @@ class LevelEditor(LevelEditorBase):
         # When you define your own LevelEditor class inheriting LevelEditorBase
         # you should call self.initialize() at the end of __init__() function
         self.initialize()
-        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        self.ui.SetCursor(wx.Cursor(wx.CURSOR_ARROW))

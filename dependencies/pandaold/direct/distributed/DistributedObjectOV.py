@@ -42,7 +42,7 @@ class DistributedObjectOV(DistributedObjectBase):
             """
             spaces = ' ' * (indent + 2)
             try:
-                print(("%s%s:" % (' ' * indent, self.__class__.__name__)))
+                print("%s%s:" % (' ' * indent, self.__class__.__name__))
 
                 flags = []
                 if self.activeState == ESGenerated:
@@ -54,10 +54,10 @@ class DistributedObjectOV(DistributedObjectBase):
                 if len(flags):
                     flagStr = " (%s)" % (" ".join(flags))
 
-                print(("%sfrom DistributedObjectOV doId:%s, parent:%s, zone:%s%s" % (
-                    spaces, self.doId, self.parentId, self.zoneId, flagStr)))
+                print("%sfrom DistributedObjectOV doId:%s, parent:%s, zone:%s%s" % (
+                    spaces, self.doId, self.parentId, self.zoneId, flagStr))
             except Exception as e:
-                print(("%serror printing status %s" % (spaces, e)))
+                print("%serror printing status %s" % (spaces, e))
 
 
     def getDelayDeleteCount(self):

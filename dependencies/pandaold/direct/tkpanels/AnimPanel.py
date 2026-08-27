@@ -17,8 +17,8 @@ if sys.version_info >= (3, 0):
     from tkinter.simpledialog import askfloat
     from tkinter.filedialog import askopenfilename
 else:
-    from tkinter.simpledialog import askfloat
-    from tkinter.filedialog import askopenfilename
+    from tkSimpleDialog import askfloat
+    from tkFileDialog import askopenfilename
 
 
 FRAMES = 0
@@ -207,7 +207,7 @@ class AnimPanel(AppShell):
         self.actorControlList = []
         for actor in self['actorList']:
             anims = actor.getAnimNames()
-            print(("actor animnames: %s"%anims))
+            print("actor animnames: %s"%anims)
             topAnims = []
             if 'neutral' in anims:
                 i = anims.index('neutral')

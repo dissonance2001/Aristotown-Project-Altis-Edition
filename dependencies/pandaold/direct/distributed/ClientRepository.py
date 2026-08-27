@@ -66,7 +66,7 @@ class ClientRepository(ClientRepositoryBase):
         # that particular zone.
 
         zone = di.getUint32()
-        for obj in list(self.doId2do.values()):
+        for obj in self.doId2do.values():
             if obj.zoneId == zone:
                 if (self.isLocalId(obj.doId)):
                     self.resendGenerate(obj)

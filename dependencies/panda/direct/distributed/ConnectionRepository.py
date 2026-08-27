@@ -1,16 +1,18 @@
-from panda3d.core import *
-from panda3d.direct import *
+from panda3d.core import DocumentSpec, Filename, VirtualFileSystem, getModelPath
+from panda3d.direct import CConnectionRepository, DCPacker
 from direct.task import Task
+from direct.task.TaskManagerGlobal import taskMgr
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DoInterestManager import DoInterestManager
 from direct.distributed.DoCollectionManager import DoCollectionManager
 from direct.showbase import GarbageReport
+from direct.showbase.MessengerGlobal import messenger
 from .PyDatagramIterator import PyDatagramIterator
 
-import inspect
 import gc
 
 __all__ = ["ConnectionRepository", "GCTrigger"]
+
 
 class ConnectionRepository(
         DoInterestManager, DoCollectionManager, CConnectionRepository):
@@ -119,7 +121,7 @@ class ConnectionRepository(
 
         self._serverAddress = ''
 
-        if self.config.GetBool('gc-save-all', 1):
+        if self.config.GetBool('gc-save-all', 0):
             # set gc to preserve every object involved in a cycle, even ones that
             # would normally be freed automatically during garbage collect
             # allows us to find and fix these cycles, reducing or eliminating the
@@ -172,35 +174,6 @@ class ConnectionRepository(
         return retVal
 
     def generateGlobalObject(self, doId, dcname, values=None):
-        def applyFieldValues(distObj, dclass, values):
-            for i in range(dclass.getNumInheritedFields()):
-                field = dclass.getInheritedField(i)
-                if field.asMolecularField() == None:
-                    value = values.get(field.getName(), None)
-                    if value is None and field.isRequired():
-                        # Gee, this could be better.  What would really be
-                        # nicer is to get value from field.getDefaultValue
-                        # or similar, but that returns a binary string, not
-                        # a python tuple, like the following does.  If you
-                        # want to change something better, please go ahead.
-                        packer = DCPacker()
-                        packer.beginPack(field)
-                        packer.packDefaultValue()
-                        packer.endPack()
-
-                        unpacker = DCPacker()
-                        unpacker.setUnpackData(packer.getBytes())
-                        unpacker.beginUnpack(field)
-                        value = unpacker.unpackObject()
-                        unpacker.endUnpack()
-                    if value is not None:
-                        function = getattr(distObj, field.getName())
-                        if function is not None:
-                            function(*value)
-                        else:
-                            self.notify.error("\n\n\nNot able to find %s.%s"%(
-                                distObj.__class__.__name__, field.getName()))
-
         # Look up the dclass
         dclass = self.dclassesByName.get(dcname+self.dcSuffix)
         if dclass is None:
@@ -214,7 +187,7 @@ class ConnectionRepository(
 
         # Construct a new one
         classDef = dclass.getClassDef()
-        if classDef == None:
+        if classDef is None:
             self.notify.error("Could not create an undefined %s object."%(
                 dclass.getName()))
         distObj = classDef(self)
@@ -227,12 +200,42 @@ class ConnectionRepository(
         distObj.generateInit()  # Only called when constructed
         distObj.generate()
         if values is not None:
-            applyFieldValues(distObj, dclass, values)
+            for i in range(dclass.getNumInheritedFields()):
+                field = dclass.getInheritedField(i)
+                if field.asMolecularField() is None:
+                    value = values.get(field.getName(), None)
+                    if value is None and field.isRequired():
+                        # Gee, this could be better.  What would really be
+                        # nicer is to get value from field.getDefaultValue
+                        # or similar, but that returns a binary string, not
+                        # a python tuple, like the following does.  If you
+                        # want to change something better, please go ahead.
+                        packer = DCPacker()
+                        packer.beginPack(field)
+                        packer.packDefaultValue()
+                        packer.endPack()
+
+                        unpacker = DCPacker()
+                        unpacker.setUnpackData(packer.getString())
+                        unpacker.beginUnpack(field)
+                        value = unpacker.unpackObject()
+                        unpacker.endUnpack()
+                    if value is not None:
+                        function = getattr(distObj, field.getName())
+                        if function is not None:
+                            function(*value)
+                        else:
+                            self.notify.error(
+                                "\n\n\nNot able to find %s.%s" % (
+                                    distObj.__class__.__name__,
+                                    field.getName()
+                                )
+                            )
         distObj.announceGenerate()
         distObj.parentId = 0
         distObj.zoneId = 0
         # updateRequiredFields calls announceGenerate
-        return  distObj
+        return distObj
 
     def readDCFile(self, dcFileNames = None):
         """
@@ -252,7 +255,7 @@ class ConnectionRepository(
             dcFileNames = [dcFileNames]
 
         dcImports = {}
-        if dcFileNames == None:
+        if dcFileNames is None:
             readResult = dcFile.readAll()
             if not readResult:
                 self.notify.error("Could not read dc file.")
@@ -309,6 +312,8 @@ class ConnectionRepository(
 
         # Now get the class definition for the classes named in the DC
         # file.
+        import inspect
+
         for i in range(dcFile.getNumClasses()):
             dclass = dcFile.getClass(i)
             number = dclass.getNumber()
@@ -322,7 +327,7 @@ class ConnectionRepository(
                 classDef = dcImports.get(className)
 
             # Also try it without the dcSuffix.
-            if classDef == None:
+            if classDef is None:
                 className = dclass.getName()
                 classDef = dcImports.get(className)
             if classDef is None:
@@ -379,7 +384,7 @@ class ConnectionRepository(
             # in the DC file.
             for i in range(dcFile.getNumClasses()):
                 dclass = dcFile.getClass(i)
-                if ((dclass.getName()+ownerDcSuffix) in ownerImportSymbols):
+                if dclass.getName() + ownerDcSuffix in ownerImportSymbols:
                     number = dclass.getNumber()
                     className = dclass.getName() + ownerDcSuffix
 
@@ -463,7 +468,7 @@ class ConnectionRepository(
         hasProxy = 0
         if self.checkHttp():
             proxies = self.http.getProxiesForUrl(serverList[0])
-            hasProxy = (proxies != 'DIRECT')
+            hasProxy = proxies != 'DIRECT'
 
         if hasProxy:
             self.notify.info("Connecting to gameserver via proxy list: %s" % (proxies))
@@ -583,10 +588,11 @@ class ConnectionRepository(
         # available.  Returns the HTTPClient (also self.http), or None
         # if not set.
 
-        if self.http == None:
+        if self.http is None:
             try:
+                from panda3d.core import HTTPClient
                 self.http = HTTPClient()
-            except:
+            except Exception:
                 pass
 
         return self.http
@@ -662,7 +668,8 @@ class ConnectionRepository(
             self.setSimulatedDisconnect(0)
 
     def uniqueName(self, idString):
-        return ("%s-%s" % (idString, self.uniqueId))
+        return "%s-%s" % (idString, self.uniqueId)
+
 
 class GCTrigger:
     # used to trigger garbage collection

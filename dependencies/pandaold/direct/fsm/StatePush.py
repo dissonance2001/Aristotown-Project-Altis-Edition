@@ -209,7 +209,7 @@ class FunctionCall(ReceivesMultipleStateChanges, PushesStateChanges):
                 self._subscribeTo(arg, key)
             else:
                 self._bakedArgs.append(self._args[i])
-        for key, arg in list(self._kArgs.items()):
+        for key, arg in self._kArgs.items():
             if isinstance(arg, PushesStateChanges):
                 self._bakedKargs[key] = arg.getState()
                 self._subscribeTo(arg, key)

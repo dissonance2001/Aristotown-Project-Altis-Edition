@@ -15,7 +15,7 @@ class DirectMySQLdbConnection(Connection):
 
         conv = kwargs.get('conv', conversions)
 
-        kwargs2['conv'] = dict([ (k, v) for k, v in list(conv.items())
+        kwargs2['conv'] = dict([ (k, v) for k, v in conv.items()
                                  if type(k) is int ])
 
         self.cursorclass = kwargs2.pop('cursorclass', self.default_cursor)
@@ -43,7 +43,7 @@ class DirectMySQLdbConnection(Connection):
         #super(Connection, self).__init__(*args, **kwargs2)
         MySQLdb._mysql.connection.__init__(self, *args, **kwargs2)
 
-        self.encoders = dict([ (k, v) for k, v in list(conv.items())
+        self.encoders = dict([ (k, v) for k, v in conv.items()
                                if type(k) is not int ])
 
         self._server_version = tuple([ int(n) for n in self.get_server_info().split('.')[:2] ])
@@ -83,8 +83,8 @@ class DirectMySQLdbConnection(Connection):
             self.converter[FIELD_TYPE.VAR_STRING].insert(-1, (None, string_decoder))
             self.converter[FIELD_TYPE.BLOB].insert(-1, (None, string_decoder))
 
-        self.encoders[bytes] = string_literal
-        self.encoders[str] = unicode_literal
+        self.encoders[types.StringType] = string_literal
+        self.encoders[types.UnicodeType] = unicode_literal
         self._transactional = self.server_capabilities & CLIENT.TRANSACTIONS
         if self._transactional:
             # PEP-249 requires autocommit to be initially off

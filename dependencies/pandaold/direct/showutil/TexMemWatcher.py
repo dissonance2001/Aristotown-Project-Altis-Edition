@@ -327,7 +327,10 @@ class TexMemWatcher(DirectObject):
 
         if self.dynamicLimit:
             # Choose a suitable limit by rounding to the next power of two.
-            self.limit = Texture.upToPower2(self.totalSize)
+            limit = 1
+            while limit < self.totalSize:
+                limit *= 2
+            self.limit = limit
 
         # Set our GSG to limit itself to no more textures than we
         # expect to display onscreen, so we don't go crazy with
@@ -389,7 +392,7 @@ class TexMemWatcher(DirectObject):
 
     def enterRegion(self, region, buttonName):
         """ the mouse has rolled over a texture. """
-        key, pi = list(map(int, region.getName().split(':')))
+        key, pi = map(int, region.getName().split(':'))
         tr = self.texRecordsByKey.get(key)
         if not tr:
             return
@@ -398,7 +401,7 @@ class TexMemWatcher(DirectObject):
 
     def leaveRegion(self, region, buttonName):
         """ the mouse is no longer over a texture. """
-        key, pi = list(map(int, region.getName().split(':')))
+        key, pi = map(int, region.getName().split(':'))
         tr = self.texRecordsByKey.get(key)
         if tr != self.rollover:
             return
@@ -613,7 +616,7 @@ class TexMemWatcher(DirectObject):
 
         # Now go through and make sure we unplace (and remove!) any
         # textures that we didn't visit at all this pass.
-        for tex, tr in list(neverVisited.items()):
+        for tex, tr in neverVisited.items():
             self.unplaceTexture(tr)
             del self.texRecordsByTex[tex]
             del self.texRecordsByKey[tr.key]
@@ -627,7 +630,7 @@ class TexMemWatcher(DirectObject):
             self.repack()
 
         else:
-            overflowCount = sum([tp.overflowed for tp in list(self.texPlacements.keys())])
+            overflowCount = sum([tp.overflowed for tp in self.texPlacements.keys()])
             if totalSize <= self.limit and overflowCount:
                 # Shouldn't be overflowing any more.  Better repack.
                 self.repack()
@@ -883,7 +886,7 @@ class TexMemWatcher(DirectObject):
             matches.append((match, tp))
 
         if matches:
-            return max(matches)[1]
+            return max(matches, key=lambda match: match[0])[1]
         return None
 
     def findHolePieces(self, area):
@@ -937,7 +940,7 @@ class TexMemWatcher(DirectObject):
     def findLargestHole(self):
         holes = self.findAvailableHoles(0)
         if holes:
-            return max(holes)[1]
+            return max(holes, key=lambda hole: hole[0])[1]
         return None
 
     def findAvailableHoles(self, area, w = None, h = None):

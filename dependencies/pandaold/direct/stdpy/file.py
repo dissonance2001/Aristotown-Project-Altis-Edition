@@ -26,7 +26,7 @@ if sys.version_info < (3, 0):
     FileExistsError = IOError
     PermissionError = IOError
 
-    unicodeType = str
+    unicodeType = unicode
     strType = str
 else:
     unicodeType = str

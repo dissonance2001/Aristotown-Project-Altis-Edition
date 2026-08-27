@@ -98,7 +98,7 @@ if __debug__:
     assert 'testCachedData2' in data
     assert data['testCachedData'].foo == 34
     assert data['testCachedData2'].bar == 45
-    for cd in list(data.values()):
+    for cd in data.values():
         cd.flush()
     del data
     dc._checkMemLeaks()

@@ -10,6 +10,7 @@ from .PyDatagramIterator import PyDatagramIterator
 from .AstronDatabaseInterface import AstronDatabaseInterface
 from .NetMessenger import NetMessenger
 import collections
+import socket
 
 # Helper functions for logging output:
 def msgpack_length(dg, length, fix, maxfix, tag8, tag16, tag32):
@@ -76,8 +77,9 @@ def msgpack_encode(dg, element):
         # 0xd9 is str 8 in all recent versions of the MsgPack spec, but somehow
         # Logstash bundles a MsgPack implementation SO OLD that this isn't
         # handled correctly so this function avoids it too
-        msgpack_length(dg, len(element), 0xa0, 0x20, None, 0xda, 0xdb)
-        dg.appendData(element)
+        encoded = element.encode('utf-8')
+        msgpack_length(dg, len(encoded), 0xa0, 0x20, None, 0xda, 0xdb)
+        dg.appendData(encoded)
     elif isinstance(element, float):
         # Python does not distinguish between floats and doubles, so we send
         # everything as a double in MsgPack:
@@ -123,12 +125,12 @@ class AstronInternalRepository(ConnectionRepository):
 
         self.__contextCounter = 0
 
-        self.netMessenger = NetMessenger(self)
-
         self.dbInterface = AstronDatabaseInterface(self)
         self.__callbacks = {}
 
         self.ourChannel = self.allocateChannel()
+
+        self.netMessenger = NetMessenger(self, [self.ourChannel])
 
         self.eventLogId = self.config.GetString('eventlog-id', 'AIR:%d' % self.ourChannel)
         self.eventSocket = None
@@ -207,7 +209,7 @@ class AstronInternalRepository(ConnectionRepository):
         dg2 = PyDatagram()
         dg2.addServerControlHeader(CONTROL_ADD_POST_REMOVE)
         dg2.addUint64(self.ourChannel)
-        dg2.addString(dg.getMessage())
+        dg2.appendData(dg.getMessage())
         self.send(dg2)
 
     def clearPostRemove(self):
@@ -522,7 +524,7 @@ class AstronInternalRepository(ConnectionRepository):
             dg.addServerHeader(doId, self.ourChannel, STATESERVER_OBJECT_SET_FIELDS)
             dg.addUint32(doId)
             dg.addUint16(fieldCount)
-            dg.appendData(fieldPacker.getString())
+            dg.appendData(fieldPacker.getBytes())
             self.send(dg)
             # Now slide it into the zone we expect to see it in (so it
             # generates onto us with all of the fields in place)
@@ -650,13 +652,12 @@ class AstronInternalRepository(ConnectionRepository):
             self.eventSocket = None
             return
 
-        address = SocketAddress()
-        if not address.setHost(host, port):
-            self.notify.warning('Invalid Event Log host specified: %s:%s' % (host, port))
+        try:
+            self.eventSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.eventSocket.connect((host, port))
+        except OSError as e:
+            self.notify.warning('Invalid Event Log host specified: %s:%s (%s)' % (host, port, e))
             self.eventSocket = None
-        else:
-            self.eventSocket = SocketUDPOutgoing()
-            self.eventSocket.InitToAddress(address)
 
     def writeServerEvent(self, logtype, *args, **kwargs):
         """
@@ -682,7 +683,7 @@ class AstronInternalRepository(ConnectionRepository):
 
         dg = PyDatagram()
         msgpack_encode(dg, log)
-        self.eventSocket.Send(dg.getMessage())
+        self.eventSocket.send(dg.getMessage())
 
     def setAI(self, doId, aiChannel):
         """

@@ -43,7 +43,7 @@ class DoHierarchy:
             return []
         if zoneId is None:
             r = []
-            for zone in list(parent.values()):
+            for zone in parent.values():
                 for obj in zone:
                     r.append(obj)
         else:

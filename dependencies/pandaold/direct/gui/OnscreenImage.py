@@ -13,7 +13,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = str
+    stringType = basestring
 
 
 class OnscreenImage(DirectObject, NodePath):
@@ -54,8 +54,9 @@ class OnscreenImage(DirectObject, NodePath):
         # We ARE a node path.  Initially, we're an empty node path.
         NodePath.__init__(self)
 
-        if parent == None:
-            parent = aspect2d
+        if parent is None:
+            from direct.showbase import ShowBaseGlobal
+            parent = ShowBaseGlobal.aspect2d
         self.setImage(image, parent = parent, sort = sort)
 
         # Adjust pose
@@ -113,7 +114,9 @@ class OnscreenImage(DirectObject, NodePath):
                 tex = image
             else:
                 # It's a Texture file name
-                tex = loader.loadTexture(image)
+                tex = TexturePool.loadTexture(image)
+                if not tex:
+                    raise IOError('Could not load texture: %s' % (image))
             cm = CardMaker('OnscreenImage')
             cm.setFrame(-1, 1, -1, 1)
             self.assign(parent.attachNewNode(cm.generate(), sort))
@@ -126,9 +129,9 @@ class OnscreenImage(DirectObject, NodePath):
                 if node:
                     self.assign(node.copyTo(parent, sort))
                 else:
-                    print(('OnscreenImage: node %s not found' % image[1]))
+                    print('OnscreenImage: node %s not found' % image[1])
             else:
-                print(('OnscreenImage: model %s not found' % image[0]))
+                print('OnscreenImage: model %s not found' % image[0])
 
         if transform and not self.isEmpty():
             self.setTransform(transform)
@@ -137,7 +140,7 @@ class OnscreenImage(DirectObject, NodePath):
         return self
 
     def configure(self, option=None, **kw):
-        for option, value in list(kw.items()):
+        for option, value in kw.items():
             # Use option string to access setter function
             try:
                 setter = getattr(self, 'set' + option[0].upper() + option[1:])
@@ -150,7 +153,7 @@ class OnscreenImage(DirectObject, NodePath):
                 else:
                     setter(value)
             except AttributeError:
-                print(('OnscreenImage.configure: invalid option: %s' % option))
+                print('OnscreenImage.configure: invalid option: %s' % option)
 
     # Allow index style references
     def __setitem__(self, key, value):

@@ -5,9 +5,9 @@ intervals either in parallel or in a specified sequential order.
 
 __all__ = ['MetaInterval', 'Sequence', 'Parallel', 'ParallelEndTogether', 'Track']
 
-from panda3d.core import *
-from panda3d.direct import *
-from direct.directnotify.DirectNotifyGlobal import *
+from panda3d.core import PStatCollector, ostream
+from panda3d.direct import CInterval, CMetaInterval
+from direct.directnotify.DirectNotifyGlobal import directNotify
 from .IntervalManager import ivalMgr
 from . import Interval
 from direct.task.Task import TaskManager
@@ -91,7 +91,7 @@ class MetaInterval(CMetaInterval):
 
         self.__ivalsDirty = 1
 
-        if name == None:
+        if name is None:
             name = self.__class__.__name__ + '-%d'
 
         if '%' in name:
@@ -106,7 +106,7 @@ class MetaInterval(CMetaInterval):
         self.pstats = None
         if __debug__ and TaskManager.taskTimerVerbose:
             self.pname = name.split('-', 1)[0]
-            self.pstats = PStatCollector("App:Show code:ivalLoop:%s" % (self.pname))
+            self.pstats = PStatCollector("App:Tasks:ivalLoop:%s" % (self.pname))
 
         self.pythonIvals = []
 
@@ -155,7 +155,7 @@ class MetaInterval(CMetaInterval):
         if isinstance(self.ivals, tuple):
             self.ivals = list(self.ivals)
         self.__ivalsDirty = 1
-        if index == None:
+        if index is None:
             return self.ivals.pop()
         else:
             return self.ivals.pop(index)
@@ -179,7 +179,7 @@ class MetaInterval(CMetaInterval):
         if isinstance(self.ivals, tuple):
             self.ivals = list(self.ivals)
         self.__ivalsDirty = 1
-        if cmpfunc == None:
+        if cmpfunc is None:
             self.ivals.sort()
         else:
             self.ivals.sort(cmpfunc)
@@ -375,7 +375,7 @@ class MetaInterval(CMetaInterval):
 
     def resume(self, startT = None):
         self.__updateIvals()
-        if startT != None:
+        if startT is not None:
             self.setT(startT)
         self.setupResume()
         self.__manager.addInterval(self)
@@ -492,7 +492,7 @@ class MetaInterval(CMetaInterval):
 
         ival = None
         try:
-            while (self.isEventReady()):
+            while self.isEventReady():
                 index = self.getEventIndex()
                 t = self.getEventT()
                 eventType = self.getEventType()
@@ -503,7 +503,7 @@ class MetaInterval(CMetaInterval):
                 ival.privPostEvent()
                 ival = None
         except:
-            if ival != None:
+            if ival is not None:
                 print("Exception occurred while processing %s of %s:" % (ival.getName(), self.getName()))
             else:
                 print("Exception occurred while processing %s:" % (self.getName()))
@@ -577,7 +577,7 @@ class MetaInterval(CMetaInterval):
         # update the interval list first, if necessary.
 
         self.__updateIvals()
-        if out == None:
+        if out is None:
             out = ostream
         CMetaInterval.timeline(self, out)
 

@@ -22,7 +22,7 @@ from direct.tkwidgets import VectorWidgets
 if sys.version_info >= (3, 0):
     from tkinter.filedialog import *
 else:
-    from tkinter.filedialog import *
+    from tkFileDialog import *
 
 
 PRF_UTILITIES = [
@@ -666,7 +666,7 @@ class MopathRecorder(AppShell, DirectObject):
         marker if subnode selected
         """
         taskMgr.remove(self.name + '-curveEditTask')
-        print((nodePath.getKey()))
+        print(nodePath.getKey())
         if nodePath.id() in self.playbackMarkerIds:
             base.direct.select(self.playbackMarker)
         elif nodePath.id() in self.tangentMarkerIds:

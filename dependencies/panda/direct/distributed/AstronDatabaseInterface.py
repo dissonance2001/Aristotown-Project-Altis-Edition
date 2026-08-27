@@ -58,15 +58,7 @@ class AstronDatabaseInterface:
         dg.addUint16(dclass.getNumber())
         dg.addUint16(fieldCount)
         dg.appendData(fieldPacker.getBytes())
-        print('[DEBUG] createObject: about to send, databaseId=%r ourChannel=%r ctx=%r datagram_len=%r'
-              % (databaseId, self.air.ourChannel, ctx, dg.getMessage() and len(dg.getMessage())))
-        try:
-            self.air.send(dg)
-            print('[DEBUG] createObject: send() returned normally')
-        except Exception as e:
-            import traceback
-            print('[DEBUG] createObject: send() RAISED: %r' % (e,))
-            traceback.print_exc()
+        self.air.send(dg)
 
     def handleCreateObjectResp(self, di):
         ctx = di.getUint32()

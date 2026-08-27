@@ -33,7 +33,7 @@ class DistributedObjectGlobalUD(DistributedObjectUD):
             # Import some useful variables into the ExecNamespace initially.
             import panda3d.core
 
-            for key, value in list(panda3d.core.__dict__.items()):
+            for key, value in panda3d.core.__dict__.items():
                 if not key.startswith('__'):
                     self.ExecNamespace[key] = value
             #self.importExecNamespace()

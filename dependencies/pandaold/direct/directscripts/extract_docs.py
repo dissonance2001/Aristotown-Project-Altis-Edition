@@ -5,7 +5,7 @@ You need to run this before invoking Doxyfile.python.
 It requires a valid makepanda installation with interrogatedb .in
 files in the lib/pandac/input directory. """
 
-
+from __future__ import print_function
 
 __all__ = []
 
@@ -273,7 +273,6 @@ def processModule(handle, package):
             if "panda3d." + package == module_name:
                 processType(handle, type)
         else:
-            typename = interrogate_type_name(type)
             print("Type %s has no module name" % typename)
 
     for i_func in range(interrogate_number_of_global_functions()):
@@ -284,8 +283,7 @@ def processModule(handle, package):
             if "panda3d." + package == module_name:
                 processFunction(handle, func)
         else:
-            funcname = interrogate_function_name(func)
-            print("Function %s has no module name" % funcname)
+            print("Type %s has no module name" % typename)
 
     print("}", file=handle)
 

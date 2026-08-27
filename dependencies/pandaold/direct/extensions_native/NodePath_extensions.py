@@ -33,7 +33,7 @@ def printChildren(self):
         """Deprecated.  Prints out the children of the bottom node of a node path"""
         print("Warning: NodePath.printChildren() is deprecated.")
         for child in self.getChildren():
-            print((child.getName()))
+            print(child.getName())
 Dtool_funcToMethod(printChildren, NodePath)
 del printChildren
 #####################################################################
@@ -120,7 +120,7 @@ def lsNames(self):
         else:
             type = self.node().getType().getName()
             name = self.getName()
-            print((type + "  " + name))
+            print(type + "  " + name)
             self.lsNamesRecurse()
 
 Dtool_funcToMethod(lsNames, NodePath)
@@ -132,7 +132,7 @@ def lsNamesRecurse(self, indentString=' '):
         for nodePath in self.getChildren():
             type = nodePath.node().getType().getName()
             name = nodePath.getName()
-            print((indentString + type + "  " + name))
+            print(indentString + type + "  " + name)
             nodePath.lsNamesRecurse(indentString + " ")
 
 Dtool_funcToMethod(lsNamesRecurse, NodePath)
@@ -147,7 +147,7 @@ def reverseLsNames(self):
         for nodePath in ancestry:
             type = nodePath.node().getType().getName()
             name = nodePath.getName()
-            print((indentString + type + "  " + name))
+            print(indentString + type + "  " + name)
             indentString = indentString + " "
 
 Dtool_funcToMethod(reverseLsNames, NodePath)
@@ -323,23 +323,23 @@ def printTransform(self, other = None, sd = 2, fRecursive = 0):
         pos = transform.getPos()
         if not pos.almostEqual(Vec3(0)):
             outputString = '%s.setPos(%s, %s, %s)' % (name, fmtStr, fmtStr, fmtStr)
-            print((outputString % (pos[0], pos[1], pos[2])))
+            print(outputString % (pos[0], pos[1], pos[2]))
     if transform.hasHpr():
         hpr = transform.getHpr()
         if not hpr.almostEqual(Vec3(0)):
             outputString = '%s.setHpr(%s, %s, %s)' % (name, fmtStr, fmtStr, fmtStr)
-            print((outputString % (hpr[0], hpr[1], hpr[2])))
+            print(outputString % (hpr[0], hpr[1], hpr[2]))
     if transform.hasScale():
         if transform.hasUniformScale():
             scale = transform.getUniformScale()
             if scale != 1.0:
                 outputString = '%s.setScale(%s)' % (name, fmtStr)
-                print((outputString % scale))
+                print(outputString % scale)
         else:
             scale = transform.getScale()
             if not scale.almostEqual(Vec3(1)):
                 outputString = '%s.setScale(%s, %s, %s)' % (name, fmtStr, fmtStr, fmtStr)
-                print((outputString % (scale[0], scale[1], scale[2])))
+                print(outputString % (scale[0], scale[1], scale[2]))
     if fRecursive:
         for child in self.getChildren():
             child.printTransform(other, sd, fRecursive)
@@ -432,8 +432,8 @@ def rgbPanel(self, cb = None):
         # Don't use a regular import, to prevent ModuleFinder from picking
         # it up as a dependency when building a .p3d package.
         import importlib
-        Slider = importlib.import_module('direct.tkwidgets.Slider')
-        return Slider.rgbPanel(self, cb)
+        Valuator = importlib.import_module('direct.tkwidgets.Valuator')
+        return Valuator.rgbPanel(self, cb)
 
 Dtool_funcToMethod(rgbPanel, NodePath)
 del rgbPanel
@@ -789,6 +789,7 @@ def r_subdivideCollisions(self, solids, numSolidsInLeaves):
         return newSolids
 
 def r_constructCollisionTree(self, solidTree, parentNode, colName):
+        from panda3d.core import CollisionNode
         for item in solidTree:
             if type(item[0]) == type([]):
                 newNode = parentNode.attachNewNode('%s-branch' % colName)

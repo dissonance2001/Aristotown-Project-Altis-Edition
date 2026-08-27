@@ -1,4 +1,5 @@
-import imp
+import importlib.util
+
 
 class LevelLoaderBase:
     """
@@ -7,6 +8,7 @@ class LevelLoaderBase:
     which you will use to load level editor data in your game.
     Refer LevelLoader.py for example.
     """
+
     def __init__(self):
         self.defaultPath = None # this should be set in your LevelLoader.py
         self.initLoader()
@@ -28,10 +30,15 @@ class LevelLoaderBase:
 
         if fileName.endswith('.py'):
             fileName = fileName[:-3]
-        file, pathname, description = imp.find_module(fileName, [filePath])
+
         try:
-            module = imp.load_module(fileName, file, pathname, description)
+            spec = importlib.util.spec_from_file_location(fileName, filePath)
+            if spec is None or spec.loader is None:
+                raise ImportError
+
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
             return True
-        except:
-            print('failed to load %s'%fileName)
+        except Exception:
+            print(f'failed to load {fileName}')
             return None

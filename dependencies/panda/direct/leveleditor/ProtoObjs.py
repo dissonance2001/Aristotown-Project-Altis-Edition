@@ -2,32 +2,37 @@
 Palette for Prototyping
 """
 import os
-import imp
+import importlib.util
 
 
 class ProtoObjs:
     def __init__(self, name):
         self.dirname = os.path.dirname(__file__)
-        self.name = name;
-        self.filename = "/%s.py"%(name)
+        self.name = name
+        self.filename = f"/{name}.py"
         self.data = {}
 
     def populate(self):
         moduleName = self.name
         try:
-            file, pathname, description = imp.find_module(moduleName, [self.dirname])
-            module = imp.load_module(moduleName, file, pathname, description)
+            pathname = self.dirname + self.filename
+            spec = importlib.util.spec_from_file_location(moduleName, pathname)
+            if spec is None or spec.loader is None:
+                raise ImportError
+
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
             self.data = module.protoData
-        except:
-            print("%s doesn't exist"%(self.name))
+        except Exception:
+            print(f"{self.name} doesn't exist")
             return
 
     def saveProtoData(self, f):
         if not f:
-           return
+            return
 
-        for key in self.data.keys():
-            f.write("\t'%s':'%s',\n"%(key, self.data[key]))
+        for key, value in self.data.items():
+            f.write(f"\t'{key}':'{value}',\n")
 
     def saveToFile(self):
         try:
@@ -36,5 +41,5 @@ class ProtoObjs:
             self.saveProtoData(f)
             f.write("}\n")
             f.close()
-        except:
+        except Exception:
             pass

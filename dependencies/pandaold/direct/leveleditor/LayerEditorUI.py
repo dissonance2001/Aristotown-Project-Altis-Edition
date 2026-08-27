@@ -2,7 +2,7 @@
 Defines Layer UI
 """
 import wx
-from panda3d.core import *
+from pandac.PandaModules import *
 
 from . import ObjectGlobals as OG
 

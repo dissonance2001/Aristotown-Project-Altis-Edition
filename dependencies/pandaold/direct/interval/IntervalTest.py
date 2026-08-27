@@ -144,20 +144,20 @@ if __name__ == "__main__":
     def printPreviousStart():
         global startTime
         currTime = globalClock.getFrameTime()
-        print(('PREVIOUS_END %0.2f' % (currTime - startTime)))
+        print('PREVIOUS_END %0.2f' % (currTime - startTime))
 
     def printPreviousEnd():
         global startTime
         currTime = globalClock.getFrameTime()
-        print(('PREVIOUS_END %0.2f' % (currTime - startTime)))
+        print('PREVIOUS_END %0.2f' % (currTime - startTime))
 
     def printTrackStart():
         global startTime
         currTime = globalClock.getFrameTime()
-        print(('TRACK_START %0.2f' % (currTime - startTime)))
+        print('TRACK_START %0.2f' % (currTime - startTime))
 
     def printArguments(a, b, c):
-        print(('My args were %d, %d, %d' % (a, b, c)))
+        print('My args were %d, %d, %d' % (a, b, c))
 
     i1 = FunctionInterval(printStart)
     # Just to take time

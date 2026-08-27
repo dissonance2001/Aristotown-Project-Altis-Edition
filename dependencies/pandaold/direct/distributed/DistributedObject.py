@@ -83,7 +83,7 @@ class DistributedObject(DistributedObjectBase):
             """
             spaces = ' ' * (indent + 2)
             try:
-                print(("%s%s:" % (' ' * indent, self.__class__.__name__)))
+                print("%s%s:" % (' ' * indent, self.__class__.__name__))
 
                 flags = []
                 if self.activeState == ESGenerated:
@@ -99,10 +99,10 @@ class DistributedObject(DistributedObjectBase):
                 if len(flags):
                     flagStr = " (%s)" % (" ".join(flags))
 
-                print(("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
-                    spaces, self.doId, self.parentId, self.zoneId, flagStr)))
+                print("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
+                    spaces, self.doId, self.parentId, self.zoneId, flagStr))
             except Exception as e:
-                print(("%serror printing status %s" % (spaces, e)))
+                print("%serror printing status %s" % (spaces, e))
 
     def getAutoInterests(self):
         # returns the sub-zones under this object that are automatically
@@ -125,7 +125,7 @@ class DistributedObject(DistributedObjectBase):
                     if field is not None:
                         p = DCPacker()
                         p.setUnpackData(field.getDefaultValue())
-                        len = p.rawUnpackUint16()/4
+                        len = p.rawUnpackUint16() // 4
                         for i in range(len):
                             zone = int(p.rawUnpackUint32())
                             autoInterests.add(zone)
@@ -250,7 +250,7 @@ class DistributedObject(DistributedObjectBase):
             # we are going to crash, output the destroyDo stacktrace
             self.notify.warning('self.cr is none in _deactivateDO %d' % self.doId)
             if hasattr(self, 'destroyDoStackTrace'):
-                print((self.destroyDoStackTrace))
+                print(self.destroyDoStackTrace)
         self.__callbacks = {}
         self.cr.closeAutoInterests(self)
         self.setLocation(0,0)
@@ -266,7 +266,7 @@ class DistributedObject(DistributedObjectBase):
         # check for leftover cached data that was not retrieved or flushed by this object
         # this will catch typos in the data name in calls to get/setCachedData
         if hasattr(self, '_cachedData'):
-            for name, cachedData in list(self._cachedData.items()):
+            for name, cachedData in self._cachedData.items():
                 self.notify.warning('flushing unretrieved cached data: %s' % name)
                 cachedData.flush()
             del self._cachedData

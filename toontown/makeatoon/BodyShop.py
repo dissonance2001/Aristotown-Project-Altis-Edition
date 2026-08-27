@@ -254,7 +254,7 @@ class BodyShop(StateData.StateData):
         self.__updateHead()
         
     def createSpeciesButtons(self):
-        gui = base.matGui
+        gui = self.gui
         shuffleUp = gui.find('**/tt_t_gui_mat_shuffleUp')
         shuffleDown = gui.find('**/tt_t_gui_mat_shuffleDown')
         pos = ((.3, 0, .3),  (.6, 0, .3),  (.9, 0, .3),  (1.2, 0, .3),

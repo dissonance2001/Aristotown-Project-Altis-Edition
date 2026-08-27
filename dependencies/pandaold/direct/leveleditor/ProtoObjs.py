@@ -19,14 +19,14 @@ class ProtoObjs:
             module = imp.load_module(moduleName, file, pathname, description)
             self.data = module.protoData
         except:
-            print(("%s doesn't exist"%(self.name)))
+            print("%s doesn't exist"%(self.name))
             return
 
     def saveProtoData(self, f):
         if not f:
            return
 
-        for key in list(self.data.keys()):
+        for key in self.data.keys():
             f.write("\t'%s':'%s',\n"%(key, self.data[key]))
 
     def saveToFile(self):

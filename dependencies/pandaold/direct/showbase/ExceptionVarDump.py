@@ -101,13 +101,13 @@ def _excepthookDumpVars(eType, eValue, tb):
         # prime the stack with the variables we should visit from the frame's data structures
         # grab all of the local, builtin and global variables that appear in the code's name list
         name2obj = {}
-        for name, obj in list(frame.f_builtins.items()):
+        for name, obj in frame.f_builtins.items():
             if name in codeNames:
                 name2obj[name] = obj
-        for name, obj in list(frame.f_globals.items()):
+        for name, obj in frame.f_globals.items():
             if name in codeNames:
                 name2obj[name] = obj
-        for name, obj in list(frame.f_locals.items()):
+        for name, obj in frame.f_locals.items():
             if name in codeNames:
                 name2obj[name] = obj
         # show them in alphabetical order

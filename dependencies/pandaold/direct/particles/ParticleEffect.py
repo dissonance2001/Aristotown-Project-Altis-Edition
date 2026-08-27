@@ -7,12 +7,6 @@ from . import Particles
 from . import ForceGroup
 
 from direct.directnotify import DirectNotifyGlobal
-import sys
-
-
-if sys.version_info < (3, 0):
-    FileNotFoundError = IOError
-
 
 
 class ParticleEffect(NodePath):
@@ -36,17 +30,13 @@ class ParticleEffect(NodePath):
             self.addParticles(particles)
         self.renderParent = None
 
-    def birthLitter(self):
-        for p in list(self.particlesDict.values()):
-            p.birthLitter()
-
     def cleanup(self):
         self.removeNode()
         self.disable()
         if self.__isValid():
-            for f in list(self.forceGroupDict.values()):
+            for f in self.forceGroupDict.values():
                 f.cleanup()
-            for p in list(self.particlesDict.values()):
+            for p in self.particlesDict.values():
                 p.cleanup()
             del self.forceGroupDict
             del self.particlesDict
@@ -73,11 +63,11 @@ class ParticleEffect(NodePath):
         # band-aid added for client crash - grw
         if self.__isValid():
             if self.renderParent:
-                for p in list(self.particlesDict.values()):
+                for p in self.particlesDict.values():
                     p.setRenderParent(self.renderParent.node())
-            for f in list(self.forceGroupDict.values()):
+            for f in self.forceGroupDict.values():
                 f.enable()
-            for p in list(self.particlesDict.values()):
+            for p in self.particlesDict.values():
                 p.enable()
             self.fEnabled = 1
 
@@ -85,11 +75,11 @@ class ParticleEffect(NodePath):
         self.detachNode()
         # band-aid added for client crash - grw
         if self.__isValid():
-            for p in list(self.particlesDict.values()):
+            for p in self.particlesDict.values():
                 p.setRenderParent(p.node)
-            for f in list(self.forceGroupDict.values()):
+            for f in self.forceGroupDict.values():
                 f.disable()
-            for p in list(self.particlesDict.values()):
+            for p in self.particlesDict.values():
                 p.disable()
             self.fEnabled = 0
 
@@ -211,14 +201,10 @@ class ParticleEffect(NodePath):
               f.write('self.addForceGroup(%s)\n' % target)
 
     def loadConfig(self, filename):
-        fn = Filename(filename)
         vfs = VirtualFileSystem.getGlobalPtr()
+        data = vfs.readFile(filename, 1)
+        data = data.replace(b'\r', b'')
         try:
-            if not vfs.resolveFilename(fn, getModelPath().value) and not fn.isRegularFile():
-                raise FileNotFoundError("could not find particle file: %s" % (filename))
-
-            data = vfs.readFile(fn, True)
-            data = data.replace(b'\r', b'')
             exec(data)
         except:
             self.notify.warning('loadConfig: failed to load particle file: '+ repr(filename))
@@ -273,4 +259,3 @@ class ParticleEffect(NodePath):
     clear_to_initial = clearToInitial
     soft_stop = softStop
     soft_start = softStart
-    birth_litter = birthLitter

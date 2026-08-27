@@ -17,7 +17,7 @@ if __debug__:
     def printDebugFsmList():
         global _debugFsms
         for k in sorted(_debugFsms.keys()):
-            print(("%s %s" % (k, _debugFsms[k]())))
+            print("%s %s" % (k, _debugFsms[k]()))
     __builtins__['debugFsmList'] = printDebugFsmList
 
 

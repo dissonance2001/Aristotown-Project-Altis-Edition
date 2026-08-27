@@ -189,7 +189,7 @@ class ConnectionRepository(
                         packer.endPack()
 
                         unpacker = DCPacker()
-                        unpacker.setUnpackData(packer.getString())
+                        unpacker.setUnpackData(packer.getBytes())
                         unpacker.beginUnpack(field)
                         value = unpacker.unpackObject()
                         unpacker.endUnpack()
@@ -260,6 +260,7 @@ class ConnectionRepository(
             searchPath = getModelPath().getValue()
             for dcFileName in dcFileNames:
                 pathname = Filename(dcFileName)
+                vfs = VirtualFileSystem.getGlobalPtr()
                 vfs.resolveFilename(pathname, searchPath)
                 readResult = dcFile.read(pathname)
                 if not readResult:
@@ -411,7 +412,7 @@ class ConnectionRepository(
                 if hasattr(module, "__all__"):
                     importSymbols = module.__all__
                 else:
-                    importSymbols = list(module.__dict__.keys())
+                    importSymbols = module.__dict__.keys()
 
             for symbolName in importSymbols:
                 if hasattr(module, symbolName):

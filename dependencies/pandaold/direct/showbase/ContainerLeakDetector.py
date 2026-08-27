@@ -15,15 +15,15 @@ if sys.version_info >= (3, 0):
                     type, types.CodeType, types.FunctionType,
                     bytes, str, tuple)
 else:
-    import builtins
+    import __builtin__
 
-    intTypes = (int, int)
-    deadEndTypes = (bool, types.BuiltinFunctionType,
-                    types.BuiltinMethodType, complex,
-                    float, int, int,
-                    type(None), type(NotImplemented),
-                    type, types.CodeType, types.FunctionType,
-                    bytes, str, tuple)
+    intTypes = (int, long)
+    deadEndTypes = (types.BooleanType, types.BuiltinFunctionType,
+                    types.BuiltinMethodType, types.ComplexType,
+                    types.FloatType, types.IntType, types.LongType,
+                    types.NoneType, types.NotImplementedType,
+                    types.TypeType, types.CodeType, types.FunctionType,
+                    types.StringType, types.UnicodeType, types.TupleType)
 
 
 def _createContainerLeak():
@@ -369,17 +369,17 @@ class FindContainers(Job):
         ContainerLeakDetector.addPrivateObj(self.__dict__)
 
         # set up the base containers, the ones that hold most objects
-        ref = ObjectRef(Indirection(evalStr='__builtin__.__dict__'), id(builtins.__dict__))
-        self._id2baseStartRef[id(builtins.__dict__)] = ref
+        ref = ObjectRef(Indirection(evalStr='__builtin__.__dict__'), id(__builtin__.__dict__))
+        self._id2baseStartRef[id(__builtin__.__dict__)] = ref
         # container for objects that want to make sure they are found by
         # the object exploration algorithm, including objects that exist
         # just to measure things such as C++ memory usage, scene graph size,
         # framerate, etc. See LeakDetectors.py
         if not hasattr(__builtin__, "leakDetectors"):
-            builtins.leakDetectors = {}
+            __builtin__.leakDetectors = {}
         ref = ObjectRef(Indirection(evalStr='leakDetectors'), id(leakDetectors))
         self._id2baseStartRef[id(leakDetectors)] = ref
-        for i in self._addContainerGen(builtins.__dict__, ref):
+        for i in self._addContainerGen(__builtin__.__dict__, ref):
             pass
         try:
             base
@@ -605,7 +605,7 @@ class FindContainers(Job):
                                 # don't yield, container might lose this element
                                 pass
                             if not goesThrough:
-                                if curObj is builtins.__dict__:
+                                if curObj is __builtin__.__dict__:
                                     objRef = ObjectRef(Indirection(evalStr='%s' % key),
                                                        id(curObj[key]))
                                 else:
@@ -674,7 +674,7 @@ class FindContainers(Job):
                         continue
 
         except Exception as e:
-            print(('FindContainers job caught exception: %s' % e))
+            print('FindContainers job caught exception: %s' % e)
             if __dev__:
                 raise
         yield Job.Done
@@ -818,7 +818,7 @@ class CheckContainers(Job):
                                             import pdb;pdb.set_trace()
                                             pass
         except Exception as e:
-            print(('CheckContainers job caught exception: %s' % e))
+            print('CheckContainers job caught exception: %s' % e)
             if __dev__:
                 raise
         yield Job.Done
@@ -872,9 +872,9 @@ class FPTObjsOfType(Job):
                         except:
                             pass
                         else:
-                            print(('GPTC(' + self._otn + '):' + self.getJobName() + ': ' + ptc))
+                            print('GPTC(' + self._otn + '):' + self.getJobName() + ': ' + ptc)
         except Exception as e:
-            print(('FPTObjsOfType job caught exception: %s' % e))
+            print('FPTObjsOfType job caught exception: %s' % e)
             if __dev__:
                 raise
         yield Job.Done
@@ -926,9 +926,9 @@ class FPTObjsNamed(Job):
                         except:
                             pass
                         else:
-                            print(('GPTCN(' + self._on + '):' + self.getJobName() + ': ' + ptc))
+                            print('GPTCN(' + self._on + '):' + self.getJobName() + ': ' + ptc)
         except Exception as e:
-            print(('FPTObjsNamed job caught exception: %s' % e))
+            print('FPTObjsNamed job caught exception: %s' % e)
             if __dev__:
                 raise
         yield Job.Done
@@ -987,7 +987,7 @@ class PruneObjectRefs(Job):
                     # reference is invalid, remove it
                     del _id2discoveredStartRef[id]
         except Exception as e:
-            print(('PruneObjectRefs job caught exception: %s' % e))
+            print('PruneObjectRefs job caught exception: %s' % e)
             if __dev__:
                 raise
         yield Job.Done

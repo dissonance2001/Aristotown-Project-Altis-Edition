@@ -6,7 +6,7 @@ import os, time, copy
 
 from direct.task import Task
 from direct.actor.Actor import Actor
-from panda3d.core import *
+from pandac.PandaModules import *
 from .ActionMgr import *
 from . import ObjectGlobals as OG
 
@@ -135,7 +135,7 @@ class ObjectMgrBase:
 
         # populate obj data using default values
         properties = {}
-        for key in list(objDef.properties.keys()):
+        for key in objDef.properties.keys():
             properties[key] = objDef.properties[key][OG.PROP_DEFAULT]
 
         properties['Degree'] = degree
@@ -253,7 +253,7 @@ class ObjectMgrBase:
 
             # populate obj data using default values
             properties = {}
-            for key in list(objDef.properties.keys()):
+            for key in objDef.properties.keys():
                 properties[key] = objDef.properties[key][OG.PROP_DEFAULT]
 
             # insert obj data to main repository
@@ -333,7 +333,7 @@ class ObjectMgrBase:
 
     def findObjectsByTypeName(self, typeName):
         results = []
-        for uid in list(self.objects.keys()):
+        for uid in self.objects.keys():
             obj = self.objects[uid]
             if obj[OG.OBJ_DEF].name == typeName:
                 results.append(obj)
@@ -511,7 +511,7 @@ class ObjectMgrBase:
             else:
                 newobjModel = loader.loadModel(model, okMissing=True)
                 if newobjModel is None:
-                    print(("Can't load model %s"%model))
+                    print("Can't load model %s"%model)
                     return
                 self.flatten(newobjModel, model, objDef, uid)
                 newobj = PythonNodePath(newobjModel)
@@ -667,7 +667,7 @@ class ObjectMgrBase:
                 # populate keyword arguments
                 kwargs = {}
                 undoKwargs = {}
-                for key in list(funcArgs.keys()):
+                for key in funcArgs.keys():
                     if funcArgs[key] == OG.ARG_VAL:
                         kwargs[key] = val
                         undoKwargs[key] = oldVal

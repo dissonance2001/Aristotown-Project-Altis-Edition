@@ -116,7 +116,7 @@ class Particles(ParticleSystem):
         elif (type == "OrientedParticleFactory"):
             self.factory = OrientedParticleFactory()
         else:
-            print(("unknown factory type: %s" % type))
+            print("unknown factory type: %s" % type)
             return None
         self.factory.setLifespanBase(0.5)
         ParticleSystem.setFactory(self, self.factory)
@@ -147,7 +147,7 @@ class Particles(ParticleSystem):
             self.renderer = SpriteParticleRendererExt.SpriteParticleRendererExt()
             # self.renderer.setTextureFromFile()
         else:
-            print(("unknown renderer type: %s" % type))
+            print("unknown renderer type: %s" % type)
             return None
         ParticleSystem.setRenderer(self, self.renderer)
 
@@ -179,7 +179,7 @@ class Particles(ParticleSystem):
         elif (type == "TangentRingEmitter"):
             self.emitter = TangentRingEmitter()
         else:
-            print(("unknown emitter type: %s" % type))
+            print("unknown emitter type: %s" % type)
             return None
         ParticleSystem.setEmitter(self, self.emitter)
 
@@ -576,11 +576,11 @@ class Particles(ParticleSystem):
                          self.factory.getLifespanBase()+self.factory.getLifespanSpread()]
         birthRateRange = [self.getBirthRate()] * 3
 
-        print(('Litter Ranges:    %s' % litterRange))
-        print(('LifeSpan Ranges:  %s' % lifespanRange))
-        print(('BirthRate Ranges: %s' % birthRateRange))
+        print('Litter Ranges:    %s' % litterRange)
+        print('LifeSpan Ranges:  %s' % lifespanRange)
+        print('BirthRate Ranges: %s' % birthRateRange)
 
-        return dict(list(zip(('min','median','max'),[l*s/b for l,s,b in zip(litterRange,lifespanRange,birthRateRange)])))
+        return dict(zip(('min','median','max'),[l*s/b for l,s,b in zip(litterRange,lifespanRange,birthRateRange)]))
 
     def accelerate(self,time,stepCount = 1,stepTime=0.0):
         if time > 0.0:

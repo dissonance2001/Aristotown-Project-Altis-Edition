@@ -66,13 +66,13 @@ class FrameProfiler:
         else:
             self._task.remove()
             del self._task
-            for session in list(self._period2aggregateProfile.values()):
+            for session in self._period2aggregateProfile.values():
                 session.release()
             del self._period2aggregateProfile
-            for task in list(self._id2task.values()):
+            for task in self._id2task.values():
                 task.remove()
             del self._id2task
-            for session in list(self._id2session.values()):
+            for session in self._id2session.values():
                 session.release()
             del self._id2session
             self.notify.info('frame profiler stopped')

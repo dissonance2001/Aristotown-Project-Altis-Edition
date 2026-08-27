@@ -54,7 +54,7 @@ class DirectLights(NodePath):
 
     def getNameList(self):
         # Return a sorted list of all lights in the light dict
-        nameList = [x.getName() for x in list(self.lightDict.values())]
+        nameList = [x.getName() for x in self.lightDict.values()]
         nameList.sort()
         return nameList
 
@@ -98,7 +98,7 @@ class DirectLights(NodePath):
         """
         Turn on all DIRECT lights
         """
-        for light in list(self.lightDict.values()):
+        for light in self.lightDict.values():
             self.setOn(light)
         # Make sure there is a default material
         render.setMaterial(Material())
@@ -107,7 +107,7 @@ class DirectLights(NodePath):
         """
         Turn off all DIRECT lights
         """
-        for light in list(self.lightDict.values()):
+        for light in self.lightDict.values():
             self.setOff(light)
 
     def toggle(self):

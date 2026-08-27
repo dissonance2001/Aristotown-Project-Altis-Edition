@@ -14,7 +14,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = str
+    stringType = basestring
 
 """
 import DirectWaitBar
