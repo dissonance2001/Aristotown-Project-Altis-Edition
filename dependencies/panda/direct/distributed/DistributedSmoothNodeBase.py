@@ -1,20 +1,30 @@
 """DistributedSmoothNodeBase module: contains the DistributedSmoothNodeBase class"""
 
-from .ClockDelta import *
+from .ClockDelta import globalClockDelta
 from direct.task import Task
-from direct.showbase.PythonUtil import randFloat, Enum
+from direct.task.TaskManagerGlobal import taskMgr
+from direct.showbase.PythonUtil import randFloat
 from panda3d.direct import CDistributedSmoothNodeBase
+
+from enum import IntEnum
+
 
 class DummyTaskClass:
     def setDelay(self, blah):
         pass
 
+
 DummyTask = DummyTaskClass()
+
 
 class DistributedSmoothNodeBase:
     """common base class for DistributedSmoothNode and DistributedSmoothNodeAI
     """
-    BroadcastTypes = Enum('FULL, XYH, XY')
+
+    class BroadcastTypes(IntEnum):
+        FULL = 0
+        XYH = 1
+        XY = 2
 
     def __init__(self):
         self.__broadcastPeriod = None
@@ -35,6 +45,7 @@ class DistributedSmoothNodeBase:
     def b_clearSmoothing(self):
         self.d_clearSmoothing()
         self.clearSmoothing()
+
     def d_clearSmoothing(self):
         self.sendUpdate("clearSmoothing", [0])
 
@@ -58,26 +69,28 @@ class DistributedSmoothNodeBase:
         self.d_broadcastPosHpr = None
 
     def posHprBroadcastStarted(self):
-        return self.d_broadcastPosHpr != None
+        return self.d_broadcastPosHpr is not None
 
     def wantSmoothPosBroadcastTask(self):
         return True
 
     def startPosHprBroadcast(self, period=.2, stagger=0, type=None):
-        if self.cnode == None:
-            self.initializeCnode()
+        if not hasattr(self, 'cnode') or self.cnode is None:
+            if hasattr(self, 'initializeCnode'):
+                self.initializeCnode()
+            else:
+                return
 
         BT = DistributedSmoothNodeBase.BroadcastTypes
         if type is None:
             type = BT.FULL
-        # set the broadcast type
         self.broadcastType = type
 
         broadcastFuncs = {
             BT.FULL: self.cnode.broadcastPosHprFull,
             BT.XYH:  self.cnode.broadcastPosHprXyh,
             BT.XY:  self.cnode.broadcastPosHprXy,
-            }
+        }
         # this comment is here so it will show up in a grep for 'def d_broadcastPosHpr'
         self.d_broadcastPosHpr = broadcastFuncs[self.broadcastType]
 
@@ -117,4 +130,3 @@ class DistributedSmoothNodeBase:
         if self.d_broadcastPosHpr is None:
             self.cnode.initialize(self, self.dclass, self.doId)
         self.cnode.sendEverything()
-

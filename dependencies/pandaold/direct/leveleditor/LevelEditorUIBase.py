@@ -2,7 +2,7 @@
 ## import os
 ## from wx.lib.agw import fourwaysplitter as FWS
 
-from panda3d.core import *
+from pandac.PandaModules import *
 from direct.wxwidgets.WxPandaShell import *
 from direct.directtools.DirectSelection import SelectionRay
 
@@ -332,11 +332,11 @@ class LevelEditorUIBase(WxPandaShell):
 
     def updateMenu(self):
         hotKeyDict = {}
-        for hotKey in list(base.direct.hotKeyMap.keys()):
+        for hotKey in base.direct.hotKeyMap.keys():
             desc = base.direct.hotKeyMap[hotKey]
             hotKeyDict[desc[1]] = hotKey
 
-        for id in list(self.MENU_TEXTS.keys()):
+        for id in self.MENU_TEXTS.keys():
             desc = self.MENU_TEXTS[id]
             if desc[1]:
                 menuItem = self.menuBar.FindItemById(id)
@@ -466,7 +466,7 @@ class LevelEditorUIBase(WxPandaShell):
                 input = 'control-%s'%chr(evt.GetKeyCode())
             elif evt.GetKeyCode() < 256:
                 input = chr(evt.GetKeyCode())
-        if input in list(base.direct.hotKeyMap.keys()):
+        if input in base.direct.hotKeyMap.keys():
             keyDesc = base.direct.hotKeyMap[input]
             messenger.send(keyDesc[1])
 
@@ -478,7 +478,7 @@ class LevelEditorUIBase(WxPandaShell):
         self.editor.reset()
 
     def onOpen(self, evt=None):
-        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.py", style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.py", wx.OPEN)
         if dialog.ShowModal() == wx.ID_OK:
             self.editor.load(dialog.GetPath())
             self.editor.setTitleWithFilename(dialog.GetPath())
@@ -492,7 +492,7 @@ class LevelEditorUIBase(WxPandaShell):
             self.editor.save()
 
     def onSaveAs(self, evt):
-        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.py", style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.py", wx.SAVE)
         result = True
         if dialog.ShowModal() == wx.ID_OK:
             self.editor.saveAs(dialog.GetPath())
@@ -503,7 +503,7 @@ class LevelEditorUIBase(WxPandaShell):
         return result
 
     def onExportToMaya(self, evt):
-        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.mb", style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.FileDialog(None, "Choose a file", os.getcwd(), "", "*.mb", wx.SAVE)
         if dialog.ShowModal() == wx.ID_OK:
             self.editor.exportToMaya(dialog.GetPath())
         dialog.Destroy()

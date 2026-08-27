@@ -109,7 +109,7 @@ class CartesianGridBase:
         for currCol in range(int(rightOffset + leftOffset + 1)):
             if ((currCol == 0 and leftOffset == radius) or (currCol == rightOffset + leftOffset and rightOffset == radius)):
                 # at either left or right edge of area, look at all rows
-                possibleRows = list(range(int(bottomOffset + topOffset + 1)))
+                possibleRows = range(int(bottomOffset + topOffset + 1))
             else:
                 # in a middle column, only look at top and bottom rows
                 possibleRows = []

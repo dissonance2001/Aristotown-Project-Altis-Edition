@@ -670,6 +670,8 @@ class DirectSession(DirectObject):
         if not taskMgr.hasTaskNamed('resizeObjectHandles'):
             dnp = self.selected.last
             if dnp:
+                direct = base.direct
+
                 if self.manipulationControl.fMultiView:
                     for i in range(3):
                         sf = 30.0 * direct.drList[i].orthoFactor
@@ -945,7 +947,7 @@ class DirectSession(DirectObject):
         if sys.version_info >= (3, 0):
             from tkinter.simpledialog import askstring
         else:
-            from tkinter.simpledialog import askstring
+            from tkSimpleDialog import askstring
         newName = askstring('Node Path: ' + nodePath.getName(),
                             'Enter new name:')
         if newName:

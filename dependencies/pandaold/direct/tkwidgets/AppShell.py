@@ -20,7 +20,7 @@ from . import ProgressBar
 if sys.version_info >= (3, 0):
     from tkinter.filedialog import *
 else:
-    from tkinter.filedialog import *
+    from tkFileDialog import *
 
 
 """

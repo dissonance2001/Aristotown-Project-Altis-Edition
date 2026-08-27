@@ -175,7 +175,11 @@ class TimeManager(DistributedObject.DistributedObject):
             self.cr.flush()
 
     def d_setSignature(self, signature, hash, pyc):
-        self.sendUpdate('setSignature', [signature, hash, pyc])
+        clean_signature = signature.encode('latin1') if isinstance(signature, str) else signature
+        clean_hash = hash.encode('latin1') if isinstance(hash, str) else hash
+        clean_pyc = pyc.encode('latin1') if isinstance(pyc, str) else pyc
+
+        self.sendUpdate('setSignature', [clean_signature, clean_hash, clean_pyc])
 
     def sendCpuInfo(self):
         if not base.pipe:

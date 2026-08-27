@@ -13,7 +13,6 @@
 # when that fails, the next aux-display line, and so on.
 
 load-display pandagl
-#load-display pandadx9
 #load-display p3tinydisplay
 
 # These control the placement and size of the default rendering window.
@@ -88,7 +87,7 @@ hardware-animated-vertices #f
 
 # Enable the model-cache, but only for models, not textures.
 
-model-cache-dir $USER_APPDATA/Panda3D-1.10
+model-cache-dir $USER_APPDATA/Panda3D-1.11
 model-cache-textures #f
 
 # This option specifies the default profiles for Cg shaders.

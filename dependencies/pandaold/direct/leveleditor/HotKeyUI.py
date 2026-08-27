@@ -90,7 +90,7 @@ class EditHotKeyDialog(wx.Dialog):
 
         if newKeyStr != self.currKey:
             if newKeyStr in list(base.direct.hotKeyMap.keys()):
-                print(('a hotkey is to be overridden with %s' % newKeyStr))
+                print('a hotkey is to be overridden with %s' % newKeyStr)
                 oldKeyDesc = base.direct.hotKeyMap[newKeyStr]
                 msg = 'The hotkey is already assigned to %s\n'%oldKeyDesc[0] +\
                       'Do you want to override this?'

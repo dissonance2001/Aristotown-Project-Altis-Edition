@@ -1,4 +1,4 @@
-from panda3d.core import *
+from pandac.PandaModules import *
 
 if hasattr(base, 'le'):
     objectMgr = base.le.objectMgr

@@ -769,10 +769,10 @@ class Placer(AppShell):
             posString = '%.2f, %.2f, %.2f' % (pos[0], pos[1], pos[2])
             hprString = '%.2f, %.2f, %.2f' % (hpr[0], hpr[1], hpr[2])
             scaleString = '%.2f, %.2f, %.2f' % (scale[0], scale[1], scale[2])
-            print(('NodePath: %s' % name))
-            print(('Pos: %s' % posString))
-            print(('Hpr: %s' % hprString))
-            print(('Scale: %s' % scaleString))
+            print('NodePath: %s' % name)
+            print('Pos: %s' % posString)
+            print('Hpr: %s' % hprString)
+            print('Scale: %s' % scaleString)
             print(('%s.setPosHprScale(%s, %s, %s)' %
                    (name, posString, hprString, scaleString)))
 

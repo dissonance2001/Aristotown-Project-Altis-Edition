@@ -326,11 +326,13 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         del self.ccSphereNodePath2
         del self.camPusher2
 
-    def collisionsOff(self):
-        self.controlManager.collisionsOff()
-
     def collisionsOn(self):
-        self.controlManager.collisionsOn()
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.collisionsOn()
+
+    def collisionsOff(self):
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.collisionsOff()
 
     def recalcCameraSphere(self):
         nearPlaneDist = base.camLens.getNear()
@@ -366,7 +368,12 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.camFloorRayNode.setPos(self.ccSphereNodePath, 0, 0, 0)
 
     def attachCamera(self):
-        camera.reparentTo(self)
+        if not camera or camera.isEmpty():
+            return
+        try:
+            camera.reparentTo(self)
+        except Exception:
+            return
         base.enableMouse()
         base.setMouseOnNode(self.node())
         self.ignoreMouse = not self.wantMouse
@@ -444,25 +451,29 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             return
         self.avatarControlsEnabled = 1
         self.setupAnimationEvents()
-        self.controlManager.enable()
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.enable()
 
     def disableAvatarControls(self):
         if not self.avatarControlsEnabled:
             return
         self.avatarControlsEnabled = 0
         self.ignoreAnimationEvents()
-        self.controlManager.disable()
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.disable()
         self.clearPageUpDown()
 
     def setWalkSpeedNormal(self):
-        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeed, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeed, OTPGlobals.ToonRotateSpeed)
 
     def setWalkSpeedFast(self):
-        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeedFast, OTPGlobals.ToonJumpForce,
-                                      OTPGlobals.ToonReverseSpeedFast, OTPGlobals.ToonRotateSpeedFast)
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSpeedFast, OTPGlobals.ToonJumpForce, OTPGlobals.ToonReverseSpeedFast, OTPGlobals.ToonRotateSpeedFast)
 
     def setWalkSpeedSlow(self):
-        self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce, OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
+        if hasattr(self, 'controlManager') and self.controlManager is not None:
+            self.controlManager.setSpeeds(OTPGlobals.ToonForwardSlowSpeed, OTPGlobals.ToonJumpSlowForce, OTPGlobals.ToonReverseSlowSpeed, OTPGlobals.ToonRotateSlowSpeed)
 
     def pageUp(self):
         if not (self.avatarControlsEnabled or self.preventCameraDisable):
@@ -1259,10 +1270,11 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         pass
 
     def trackAnimToSpeed(self, task):
-        speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
+        if not hasattr(self, 'controlManager') or self.controlManager is None:
+            speed, rotSpeed, slideSpeed = 0.0, 0.0, 0.0
+        else:
+            speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
 
-        # FOV Trigger: Only zoom out if speed exceeds normal run speed (handles toggle + shift)
-        # and ensure the transition only triggers when a change occurs.
         isSprinting = speed > (OTPGlobals.ToonForwardSpeed + 1.0)
         targetFov = self.sprintFov if isSprinting else self.fov
 
@@ -1368,6 +1380,8 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         print('cam pos = ', repr(pos), ', cam hpr = ', repr(hpr))
 
     def d_broadcastPositionNow(self):
+        if not self.cr:
+            return
         self.d_clearSmoothing()
         self.d_broadcastPosHpr()
 

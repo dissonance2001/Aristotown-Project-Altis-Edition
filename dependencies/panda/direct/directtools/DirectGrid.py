@@ -1,8 +1,10 @@
-
-from panda3d.core import *
+import math
+from panda3d.core import NodePath, Point3, VBase4
 from direct.showbase.DirectObject import DirectObject
-from .DirectUtil import *
-from .DirectGeometry import *
+from direct.showbase import ShowBaseGlobal
+from .DirectUtil import ROUND_TO, useDirectRenderStyle
+from .DirectGeometry import LineNodePath
+
 
 class DirectGrid(NodePath, DirectObject):
     def __init__(self,gridSize=100.0,gridSpacing=5.0,planeColor=(0.5,0.5,0.5,0.5),parent = None):
@@ -13,7 +15,7 @@ class DirectGrid(NodePath, DirectObject):
 
         # Load up grid parts to initialize grid object
         # Polygon used to mark grid plane
-        self.gridBack = loader.loadModel('models/misc/gridBack')
+        self.gridBack = ShowBaseGlobal.loader.loadModel('models/misc/gridBack')
         self.gridBack.reparentTo(self)
         self.gridBack.setColor(*planeColor)
 
@@ -31,11 +33,11 @@ class DirectGrid(NodePath, DirectObject):
 
         self.centerLines = LineNodePath(self.lines)
         self.centerLines.lineNode.setName('centerLines')
-        self.centerLines.setColor(VBase4(1, 0, 0, 0))
+        self.centerLines.setColor(VBase4(1, 0, 0, 1))
         self.centerLines.setThickness(3)
 
         # Small marker to hilight snap-to-grid point
-        self.snapMarker = loader.loadModel('models/misc/sphere')
+        self.snapMarker = ShowBaseGlobal.loader.loadModel('models/misc/sphere')
         self.snapMarker.node().setName('gridSnapMarker')
         self.snapMarker.reparentTo(self)
         self.snapMarker.setColor(1, 0, 0, 1)
@@ -54,7 +56,7 @@ class DirectGrid(NodePath, DirectObject):
         if parent:
             self.reparentTo(parent)
         else:
-            self.reparentTo(base.direct.group)
+            self.reparentTo(ShowBaseGlobal.direct.group)
 
         self.updateGrid()
         self.fEnabled = 1
@@ -107,7 +109,7 @@ class DirectGrid(NodePath, DirectObject):
         center.create()
         minor.create()
         major.create()
-        if (self.gridBack):
+        if self.gridBack:
             self.gridBack.setScale(scaledSize)
 
     def setXyzSnap(self, fSnap):

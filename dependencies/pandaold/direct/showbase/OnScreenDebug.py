@@ -35,7 +35,7 @@ class OnScreenDebug:
 
         font = loader.loadFont(fontPath)
         if not font.isValid():
-            print(("failed to load OnScreenDebug font %s" % fontPath))
+            print("failed to load OnScreenDebug font %s" % fontPath)
             font = TextNode.getDefaultFont()
         self.onScreenText = OnscreenText.OnscreenText(
                 pos = (-1.0, 0.9), fg=fgColor, bg=bgColor,

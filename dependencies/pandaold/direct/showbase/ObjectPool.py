@@ -12,11 +12,11 @@ class Diff:
         self.lost=lost
         self.gained=gained
     def printOut(self, full=False):
-        print(('lost %s objects, gained %s objects' % (len(self.lost), len(self.gained))))
+        print('lost %s objects, gained %s objects' % (len(self.lost), len(self.gained)))
         print('\n\nself.lost\n')
-        print((self.lost.typeFreqStr()))
+        print(self.lost.typeFreqStr())
         print('\n\nself.gained\n')
-        print((self.gained.typeFreqStr()))
+        print(self.gained.typeFreqStr())
         if full:
             self.gained.printObjsByType()
             print('\n\nGAINED-OBJECT REFERRERS\n')
@@ -60,7 +60,7 @@ class ObjectPool:
 
     def printObjsOfType(self, type):
         for obj in self._type2objs.get(type, []):
-            print((repr(obj)))
+            print(repr(obj))
 
     def diff(self, other):
         """print difference between this pool and 'other' pool"""
@@ -107,8 +107,8 @@ class ObjectPool:
         for count in counts:
             types = makeList(self._count2types[count])
             for typ in types:
-                print(('TYPE: %s, %s objects' % (repr(typ), len(self._type2objs[typ]))))
-                print((getNumberedTypedSortedString(self._type2objs[typ])))
+                print('TYPE: %s, %s objects' % (repr(typ), len(self._type2objs[typ])))
+                print(getNumberedTypedSortedString(self._type2objs[typ]))
 
     def printReferrers(self, numEach=3):
         """referrers of the first few of each type of object"""
@@ -118,15 +118,15 @@ class ObjectPool:
         for count in counts:
             types = makeList(self._count2types[count])
             for typ in types:
-                print(('\n\nTYPE: %s' % repr(typ)))
+                print('\n\nTYPE: %s' % repr(typ))
                 for i in range(min(numEach, len(self._type2objs[typ]))):
                     obj = self._type2objs[typ][i]
-                    print(('\nOBJ: %s\n' % safeRepr(obj)))
+                    print('\nOBJ: %s\n' % safeRepr(obj))
                     referrers = gc.get_referrers(obj)
-                    print(('%s REFERRERS:\n' % len(referrers)))
+                    print('%s REFERRERS:\n' % len(referrers))
                     if len(referrers):
-                        print((getNumberedTypedString(referrers, maxLen=80,
-                                                    numPrefix='REF')))
+                        print(getNumberedTypedString(referrers, maxLen=80,
+                                                    numPrefix='REF'))
                     else:
                         print('<No Referrers>')
 

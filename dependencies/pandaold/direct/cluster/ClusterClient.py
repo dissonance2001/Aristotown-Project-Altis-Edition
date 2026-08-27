@@ -147,7 +147,7 @@ class ClusterClient(DirectObject.DirectObject):
     def sendNamedMovementDone(self, serverList = None):
 
         if (serverList == None):
-            serverList = list(range(len(self.serverList)))
+            serverList = range(len(self.serverList))
 
         for server in serverList:
             self.serverList[server].sendNamedMovementDone()
@@ -220,7 +220,7 @@ class ClusterClient(DirectObject.DirectObject):
                           offset = None, priority = 0):
         if (objectName not in self.controlMappings):
             if (serverList == None):
-                serverList = list(range(len(self.serverList)))
+                serverList = range(len(self.serverList))
             if (offset == None):
                 offset = Vec3(0,0,0)
 

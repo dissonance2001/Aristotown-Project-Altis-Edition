@@ -186,7 +186,7 @@ class ServerRepository:
                 if hasattr(module, "__all__"):
                     importSymbols = module.__all__
                 else:
-                    importSymbols = list(module.__dict__.keys())
+                    importSymbols = module.__dict__.keys()
 
             for symbolName in importSymbols:
                 if hasattr(module, symbolName):
@@ -225,6 +225,7 @@ class ServerRepository:
             searchPath = getModelPath().getValue()
             for dcFileName in dcFileNames:
                 pathname = Filename(dcFileName)
+                vfs = VirtualFileSystem.getGlobalPtr()
                 vfs.resolveFilename(pathname, searchPath)
                 readResult = dcFile.read(pathname)
                 if not readResult:
@@ -612,7 +613,7 @@ class ServerRepository:
             else:
                 self.zonesToClients[zoneId].remove(client)
 
-        for object in list(client.objectsByDoId.values()):
+        for object in client.objectsByDoId.values():
             #create and send delete message
             datagram = NetDatagram()
             datagram.addUint16(OBJECT_DELETE_CMU)
@@ -628,7 +629,7 @@ class ServerRepository:
         del self.clientsByConnection[client.connection]
         del self.clientsByDoIdBase[client.doIdBase]
 
-        id = client.doIdBase / self.doIdRange
+        id = client.doIdBase // self.doIdRange
         self.idAllocator.free(id)
 
         self.qcr.removeConnection(client.connection)
@@ -720,7 +721,7 @@ class ServerRepository:
                 "ServerRepository sending to all except %s:" % ([c.doIdBase for c in exceptionList],))
             #datagram.dumpHex(ostream)
 
-        for client in list(self.clientsByConnection.values()):
+        for client in self.clientsByConnection.values():
             if client not in exceptionList:
                 if self.notify.getDebug():
                     self.notify.debug(

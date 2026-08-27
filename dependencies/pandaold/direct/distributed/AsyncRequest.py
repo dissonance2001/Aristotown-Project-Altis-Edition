@@ -223,7 +223,7 @@ class AsyncRequest(DirectObject):
             self.neededObjects[name] = distObj
         else:
             self.neededObjects[distObj.doId] = distObj
-        for i in list(self.neededObjects.values()):
+        for i in self.neededObjects.values():
             if i is None:
                 return
         self.finish()
@@ -251,9 +251,9 @@ class AsyncRequest(DirectObject):
             if __debug__:
                 if _breakOnTimeout:
                     if hasattr(self, "avatarId"):
-                        print(("\n\nself.avatarId =", self.avatarId))
-                    print(("\nself.neededObjects =", self.neededObjects))
-                    print(("\ntimed out after %s seconds.\n\n"%(task.delayTime,)))
+                        print("\n\nself.avatarId =", self.avatarId)
+                    print("\nself.neededObjects =", self.neededObjects)
+                    print("\ntimed out after %s seconds.\n\n"%(task.delayTime,))
                     import pdb; pdb.set_trace()
             self.delete()
             return Task.done

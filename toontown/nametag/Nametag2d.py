@@ -133,8 +133,15 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
         if (self.cell is None) or (self.arrow is None):
             return Task.cont
 
-        location = self.avatar.getPos(NametagGlobals.me)
-        rotation = NametagGlobals.me.getQuat(base.cam)
+        if NametagGlobals.me is None or NametagGlobals.me.isEmpty():
+            return Task.cont
+
+        try:
+            location = self.avatar.getPos(NametagGlobals.me)
+            rotation = NametagGlobals.me.getQuat(base.cam)
+        except Exception:
+            return Task.cont
+
         camSpacePos = rotation.xform(location)
 
         arrowRadians = math.atan2(camSpacePos[0], camSpacePos[1])

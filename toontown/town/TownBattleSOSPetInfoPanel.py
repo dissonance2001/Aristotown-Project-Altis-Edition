@@ -59,7 +59,8 @@ class TownBattleSOSPetInfoPanel(StateData.StateData):
         self.trickMenu.setScale(0.055)
         self.trickMenu.setBin('gui-popup', 0)
         self.trickMenu.finalizeAll()
-        localAvatar.chatMgr.chatInputSpeedChat.whisperAvatarId = None
+        if hasattr(localAvatar, 'chatMgr') and localAvatar.chatMgr is not None:
+            localAvatar.chatMgr.chatInputSpeedChat.whisperAvatarId = None
         self.petDetailPanel = None
 
     def unload(self):

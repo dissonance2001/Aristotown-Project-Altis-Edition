@@ -4,9 +4,8 @@ See the :ref:`distribution` section of the programming manual for information
 on how to use these commands.
 """
 
+from __future__ import print_function
 
-
-import collections
 import os
 import plistlib
 import sys
@@ -26,12 +25,12 @@ import distutils.log
 
 from . import FreezeTool
 from . import pefile
-from .icon import Icon
+from direct.p3d.DeploymentTools import Icon
 import panda3d.core as p3d
 
 
 if 'basestring' not in globals():
-    str = str
+    basestring = str
 
 
 if sys.version_info < (3, 0):
@@ -48,7 +47,7 @@ if sys.version_info < (3, 0):
 
 
 def _parse_list(input):
-    if isinstance(input, str):
+    if isinstance(input, basestring):
         input = input.strip().replace(',', '\n')
         if input:
             return [item.strip() for item in input.split('\n') if item.strip()]
@@ -113,18 +112,24 @@ PACKAGE_DATA_DIRS = {
         ('cefpython3/Chromium Embedded Framework.framework/Resources', 'Chromium Embedded Framework.framework/Resources', {}),
         ('cefpython3/Chromium Embedded Framework.framework/Chromium Embedded Framework', '', {'PKG_DATA_MAKE_EXECUTABLE'}),
     ],
+    'pytz': [('pytz/zoneinfo/*', 'zoneinfo', ())],
+    'certifi': [('certifi/cacert.pem', '', {})],
+    '_tkinter_ext': [('_tkinter_ext/tcl/**', 'tcl', {})],
 }
 
 # Some dependencies have extra directories that need to be scanned for DLLs.
 # This dictionary maps wheel basenames (ie. the part of the .whl basename
-# before the first hyphen) to a list of directories inside the .whl.
+# before the first hyphen) to a list of tuples, the first value being the
+# directory inside the wheel, the second being which wheel to look in (or
+# None to look in its own wheel).
 
 PACKAGE_LIB_DIRS = {
-    'scipy':  ['scipy/extra-dll'],
+    'scipy':  [('scipy/extra-dll', None)],
+    'PyQt5':  [('PyQt5/Qt5/bin', 'PyQt5_Qt5')],
 }
 
 # site.py for Python 2.
-SITE_PY2 = """
+SITE_PY2 = u"""
 import sys
 
 sys.frozen = True
@@ -143,25 +148,10 @@ import __builtin__
 __builtin__.__import__ = __import__
 __builtin__.__file__ = sys.executable
 del __builtin__
-
-# Set the TCL_LIBRARY directory to the location of the Tcl/Tk/Tix files.
-import os
-tcl_dir = os.path.join(os.path.dirname(sys.executable), 'tcl')
-if os.path.isdir(tcl_dir):
-    for dir in os.listdir(tcl_dir):
-        sub_dir = os.path.join(tcl_dir, dir)
-        if os.path.isdir(sub_dir):
-            if dir.startswith('tcl'):
-                os.environ['TCL_LIBRARY'] = sub_dir
-            if dir.startswith('tk'):
-                os.environ['TK_LIBRARY'] = sub_dir
-            if dir.startswith('tix'):
-                os.environ['TIX_LIBRARY'] = sub_dir
-del os
 """
 
 # site.py for Python 3.
-SITE_PY3 = """
+SITE_PY3 = u"""
 import sys
 from _frozen_importlib import _imp, FrozenImporter
 
@@ -192,7 +182,11 @@ def get_data(path):
 
 FrozenImporter.find_spec = find_spec
 FrozenImporter.get_data = get_data
+"""
 
+# This addendum is only needed for legacy tkinter handling, since the new
+# tkinter package already contains this logic.
+SITE_PY_TKINTER_ADDENDUM = """
 # Set the TCL_LIBRARY directory to the location of the Tcl/Tk/Tix files.
 import os
 tcl_dir = os.path.join(os.path.dirname(sys.executable), 'tcl')
@@ -200,7 +194,7 @@ if os.path.isdir(tcl_dir):
     for dir in os.listdir(tcl_dir):
         sub_dir = os.path.join(tcl_dir, dir)
         if os.path.isdir(sub_dir):
-            if dir.startswith('tcl'):
+            if dir.startswith('tcl') and os.path.isfile(os.path.join(sub_dir, 'init.tcl')):
                 os.environ['TCL_LIBRARY'] = sub_dir
             if dir.startswith('tk'):
                 os.environ['TK_LIBRARY'] = sub_dir
@@ -236,15 +230,22 @@ class build_apps(setuptools.Command):
         self.icons = {}
         self.platforms = [
             'manylinux1_x86_64',
-            'macosx_10_9_x86_64',
+            'macosx_10_6_x86_64',
             'win_amd64',
         ]
+        if sys.version_info >= (3, 10):
+            # manylinux1 is not offered for Python 3.10 anymore
+            self.platforms[0] = 'manylinux2010_x86_64'
+        if sys.version_info >= (3, 8):
+            # This version of Python is only available for 10.9+.
+            self.platforms[1] = 'macosx_10_9_x86_64'
         self.plugins = []
         self.embed_prc_data = True
         self.extra_prc_files = []
         self.extra_prc_data = ''
         self.default_prc_dir = None
         self.log_filename = None
+        self.log_filename_strftime = False
         self.log_append = False
         self.requirements_path = os.path.join(os.getcwd(), 'requirements.txt')
         self.use_optimized_wheels = True
@@ -262,22 +263,70 @@ class build_apps(setuptools.Command):
             'dciman32.dll', 'comdlg32.dll', 'comctl32.dll', 'ole32.dll',
             'oleaut32.dll', 'gdiplus.dll', 'winmm.dll', 'iphlpapi.dll',
             'msvcrt.dll', 'kernelbase.dll', 'msimg32.dll', 'msacm32.dll',
+            'setupapi.dll', 'version.dll', 'userenv.dll', 'netapi32.dll',
+            'crypt32.dll',
 
             # manylinux1/linux
             'libdl.so.*', 'libstdc++.so.*', 'libm.so.*', 'libgcc_s.so.*',
             'libpthread.so.*', 'libc.so.*', 'ld-linux-x86-64.so.*',
-            'libgl.so.*', 'libx11.so.*', 'libreadline.so.*', 'libncursesw.so.*',
-            'libbz2.so.*', 'libz.so.*', 'liblzma.so.*', 'librt.so.*', 'libutil.so.*',
+            'libgl.so.*', 'libx11.so.*', 'libncursesw.so.*', 'libz.so.*',
+            'librt.so.*', 'libutil.so.*', 'libnsl.so.1', 'libXext.so.6',
+            'libXrender.so.1', 'libICE.so.6', 'libSM.so.6', 'libEGL.so.1',
+            'libOpenGL.so.0', 'libGLdispatch.so.0', 'libGLX.so.0',
+            'libgobject-2.0.so.0', 'libgthread-2.0.so.0', 'libglib-2.0.so.0',
 
             # macOS
+            '/usr/lib/libc++.1.dylib',
             '/usr/lib/libstdc++.*.dylib',
             '/usr/lib/libz.*.dylib',
             '/usr/lib/libobjc.*.dylib',
             '/usr/lib/libSystem.*.dylib',
             '/usr/lib/libbz2.*.dylib',
             '/usr/lib/libedit.*.dylib',
+            '/usr/lib/libffi.dylib',
+            '/usr/lib/libauditd.0.dylib',
+            '/usr/lib/libgermantok.dylib',
+            '/usr/lib/liblangid.dylib',
+            '/usr/lib/libarchive.2.dylib',
+            '/usr/lib/libipsec.A.dylib',
+            '/usr/lib/libpanel.5.4.dylib',
+            '/usr/lib/libiodbc.2.1.18.dylib',
+            '/usr/lib/libhunspell-1.2.0.0.0.dylib',
+            '/usr/lib/libsqlite3.dylib',
+            '/usr/lib/libpam.1.dylib',
+            '/usr/lib/libtidy.A.dylib',
+            '/usr/lib/libDHCPServer.A.dylib',
+            '/usr/lib/libpam.2.dylib',
+            '/usr/lib/libXplugin.1.dylib',
+            '/usr/lib/libxslt.1.dylib',
+            '/usr/lib/libiodbcinst.2.1.18.dylib',
+            '/usr/lib/libBSDPClient.A.dylib',
+            '/usr/lib/libsandbox.1.dylib',
+            '/usr/lib/libform.5.4.dylib',
+            '/usr/lib/libbsm.0.dylib',
+            '/usr/lib/libMatch.1.dylib',
+            '/usr/lib/libresolv.9.dylib',
+            '/usr/lib/libcharset.1.dylib',
+            '/usr/lib/libxml2.2.dylib',
+            '/usr/lib/libiconv.2.dylib',
+            '/usr/lib/libScreenReader.dylib',
+            '/usr/lib/libdtrace.dylib',
+            '/usr/lib/libicucore.A.dylib',
+            '/usr/lib/libsasl2.2.dylib',
+            '/usr/lib/libpcap.A.dylib',
+            '/usr/lib/libexslt.0.dylib',
+            '/usr/lib/libcurl.4.dylib',
+            '/usr/lib/libncurses.5.4.dylib',
+            '/usr/lib/libxar.1.dylib',
+            '/usr/lib/libmenu.5.4.dylib',
             '/System/Library/**',
         ]
+
+        if sys.version_info >= (3, 5):
+            # Python 3.5+ requires at least Windows Vista to run anyway, so we
+            # shouldn't warn about DLLs that are shipped with Vista.
+            self.exclude_dependencies += ['bcrypt.dll']
+
         self.package_data_dirs = {}
 
         # We keep track of the zip files we've opened.
@@ -302,11 +351,11 @@ class build_apps(setuptools.Command):
         self.exclude_patterns = _parse_list(self.exclude_patterns)
         self.include_modules = {
             key: _parse_list(value)
-            for key, value in list(_parse_dict(self.include_modules).items())
+            for key, value in _parse_dict(self.include_modules).items()
         }
         self.exclude_modules = {
             key: _parse_list(value)
-            for key, value in list(_parse_dict(self.exclude_modules).items())
+            for key, value in _parse_dict(self.exclude_modules).items()
         }
         self.icons = _parse_dict(self.icons)
         self.platforms = _parse_list(self.platforms)
@@ -369,7 +418,7 @@ class build_apps(setuptools.Command):
         self.package_data_dirs = tmp
 
         self.icon_objects = {}
-        for app, iconpaths in list(self.icons.items()):
+        for app, iconpaths in self.icons.items():
             if not isinstance(iconpaths, list) and not isinstance(iconpaths, tuple):
                 iconpaths = (iconpaths,)
 
@@ -411,7 +460,8 @@ class build_apps(setuptools.Command):
             abi_tag += 'u'
 
         whldir = os.path.join(whlcache, '_'.join((platform, abi_tag)))
-        os.makedirs(whldir, exist_ok=True)
+        if not os.path.isdir(whldir):
+            os.makedirs(whldir)
 
         # Remove any .zip files. These are built from a VCS and block for an
         # interactive prompt on subsequent downloads.
@@ -421,13 +471,22 @@ class build_apps(setuptools.Command):
                     os.remove(os.path.join(whldir, whl))
 
         pip_args = [
+            '--disable-pip-version-check',
             'download',
             '-d', whldir,
             '-r', self.requirements_path,
             '--only-binary', ':all:',
+            '--abi', abi_tag,
             '--platform', platform,
-            '--abi', abi_tag
         ]
+
+        if platform.startswith('linux_'):
+            # Also accept manylinux.
+            arch = platform[6:]
+            if sys.version_info >= (3, 10):
+                pip_args += ['--platform', 'manylinux2010_' + arch]
+            else:
+                pip_args += ['--platform', 'manylinux1_' + arch]
 
         if self.use_optimized_wheels:
             pip_args += [
@@ -530,6 +589,8 @@ class build_apps(setuptools.Command):
 
         path = sys.path[:]
         p3dwhl = None
+        wheelpaths = []
+        has_tkinter_wheel = False
 
         if use_wheels:
             wheelpaths = self.download_wheels(platform)
@@ -539,6 +600,8 @@ class build_apps(setuptools.Command):
                     p3dwhlfn = whl
                     p3dwhl = self._get_zip_file(p3dwhlfn)
                     break
+                elif os.path.basename(whl).startswith('tkinter-'):
+                    has_tkinter_wheel = True
             else:
                 raise RuntimeError("Missing panda3d wheel for platform: {}".format(platform))
 
@@ -550,6 +613,11 @@ class build_apps(setuptools.Command):
                         'Could not find an optimized wheel (using index {}) for platform: {}'.format(self.optimized_wheel_index, platform),
                         distutils.log.WARN
                     )
+
+            for whl in wheelpaths:
+                if os.path.basename(whl).startswith('tkinter-'):
+                    has_tkinter_wheel = True
+                    break
 
             #whlfiles = {whl: self._get_zip_file(whl) for whl in wheelpaths}
 
@@ -570,15 +638,19 @@ class build_apps(setuptools.Command):
             libdir = os.path.dirname(dtool_fn.to_os_specific())
             etcdir = os.path.join(libdir, '..', 'etc')
 
-            for fn in os.listdir(etcdir):
+            etcfiles = os.listdir(etcdir)
+            etcfiles.sort(reverse=True)
+            for fn in etcfiles:
                 if fn.lower().endswith('.prc'):
                     with open(os.path.join(etcdir, fn)) as f:
                         prcstring += f.read()
         else:
             etcfiles = [i for i in p3dwhl.namelist() if i.endswith('.prc')]
+            etcfiles.sort(reverse=True)
             for fn in etcfiles:
                 with p3dwhl.open(fn) as f:
                     prcstring += f.read().decode('utf8')
+
         user_prcstring = self.extra_prc_data
         for fn in self.extra_prc_files:
             with open(fn) as f:
@@ -597,12 +669,39 @@ class build_apps(setuptools.Command):
             for ln in prcstr.split('\n'):
                 ln = ln.strip()
                 useline = True
+
                 if ln.startswith('#') or not ln:
                     continue
-                if 'model-cache-dir' in ln:
-                    ln = ln.replace('/panda3d', '/{}'.format(self.distribution.get_name()))
+
+                words = ln.split(None, 1)
+                if not words:
+                    continue
+                var = words[0]
+                value = words[1] if len(words) > 1 else ''
+
+                # Strip comment after value.
+                c = value.find(' #')
+                if c > 0:
+                    value = value[:c].rstrip()
+
+                if var == 'model-cache-dir' and value:
+                    value = value.replace('/panda3d', '/{}'.format(self.distribution.get_name()))
+
+                if var == 'audio-library-name':
+                    # We have the default set to p3fmod_audio on macOS in 1.10,
+                    # but this can be unexpected as other platforms use OpenAL
+                    # by default.  Switch it up if FMOD is not included.
+                    if value not in self.plugins and value == 'p3fmod_audio' and 'p3openal_audio' in self.plugins:
+                        self.warn("Missing audio plugin p3fmod_audio referenced in PRC data, replacing with p3openal_audio")
+                        value = 'p3openal_audio'
+
+                if var == 'aux-display':
+                    # Silently remove aux-display lines for missing plugins.
+                    if value not in self.plugins:
+                        continue
+
                 for plugin in check_plugins:
-                    if plugin in ln and plugin not in self.plugins:
+                    if plugin in value and plugin not in self.plugins:
                         useline = False
                         if warn_on_missing_plugin:
                             self.warn(
@@ -610,7 +709,10 @@ class build_apps(setuptools.Command):
                             )
                         break
                 if useline:
-                    out.append(ln)
+                    if value:
+                        out.append(var + ' ' + value)
+                    else:
+                        out.append(var)
             return out
         prcexport = parse_prc(prcstring, 0) + parse_prc(user_prcstring, 1)
 
@@ -642,18 +744,32 @@ class build_apps(setuptools.Command):
                     rootdir = wf.split(os.path.sep, 1)[0]
                     search_path.append(os.path.join(whl, rootdir, '.libs'))
 
+                    # Also look for eg. numpy.libs or Pillow.libs in the root
+                    whl_name = os.path.basename(whl).split('-', 1)[0]
+                    search_path.append(os.path.join(whl, whl_name + '.libs'))
+
                     # Also look for more specific per-package cases, defined in
                     # PACKAGE_LIB_DIRS at the top of this file.
-                    whl_name = os.path.basename(whl).split('-', 1)[0]
                     extra_dirs = PACKAGE_LIB_DIRS.get(whl_name, [])
-                    for extra_dir in extra_dirs:
-                        search_path.append(os.path.join(whl, extra_dir.replace('/', os.path.sep)))
+                    for extra_dir, search_in in extra_dirs:
+                        if not search_in:
+                            search_path.append(os.path.join(whl, extra_dir.replace('/', os.path.sep)))
+                        else:
+                            for whl2 in wheelpaths:
+                                if os.path.basename(whl2).startswith(search_in + '-'):
+                                    search_path.append(os.path.join(whl2, extra_dir.replace('/', os.path.sep)))
+
             return search_path
 
         def create_runtime(appname, mainscript, use_console):
+            site_py = SITE_PY
+            if not has_tkinter_wheel:
+                # Legacy handling for Tcl data files
+                site_py += SITE_PY_TKINTER_ADDENDUM
+
             freezer = FreezeTool.Freezer(platform=platform, path=path)
             freezer.addModule('__main__', filename=mainscript)
-            freezer.addModule('site', filename='site.py', text=SITE_PY)
+            freezer.addModule('site', filename='site.py', text=site_py)
             for incmod in self.include_modules.get(appname, []) + self.include_modules.get('*', []):
                 freezer.addModule(incmod)
             for exmod in self.exclude_modules.get(appname, []) + self.exclude_modules.get('*', []):
@@ -702,7 +818,7 @@ class build_apps(setuptools.Command):
                 'prc_executable_args_envvar': None,
                 'main_dir': None,
                 'log_filename': self.expand_path(self.log_filename, platform),
-            }, self.log_append)
+            }, self.log_append, self.log_filename_strftime)
             stub_file.close()
 
             if temp_file:
@@ -724,11 +840,17 @@ class build_apps(setuptools.Command):
                 if suffix[2] == imp.C_EXTENSION:
                     ext_suffixes.add(suffix[0])
 
-        for appname, scriptname in list(self.gui_apps.items()):
+        for appname, scriptname in self.gui_apps.items():
             create_runtime(appname, scriptname, False)
 
-        for appname, scriptname in list(self.console_apps.items()):
+        for appname, scriptname in self.console_apps.items():
             create_runtime(appname, scriptname, True)
+
+        # Warn if tkinter is used but hasn't been added to requirements.txt
+        if not has_tkinter_wheel and '_tkinter' in freezer_modules:
+            # The on-windows-for-windows case is handled as legacy below
+            if sys.platform != "win32" or not platform.startswith('win'):
+                self.warn("Detected use of tkinter, but tkinter is not specified in requirements.txt!")
 
         # Copy extension modules
         whl_modules = []
@@ -742,6 +864,11 @@ class build_apps(setuptools.Command):
                     continue
 
                 if not any(i.endswith(suffix) for suffix in ext_suffixes):
+                    continue
+
+                if has_tkinter_wheel and i.startswith('deploy_libs/_tkinter.'):
+                    # Ignore this one, we have a separate tkinter package
+                    # nowadays that contains all the dependencies.
                     continue
 
                 base = os.path.basename(i)
@@ -772,6 +899,7 @@ class build_apps(setuptools.Command):
         for module, source_path in freezer_extras:
             if source_path is not None:
                 # Rename panda3d/core.pyd to panda3d.core.pyd
+                source_path = os.path.normpath(source_path)
                 basename = os.path.basename(source_path)
                 if '.' in module:
                     basename = module.rsplit('.', 1)[0] + '.' + basename
@@ -782,6 +910,20 @@ class build_apps(setuptools.Command):
                     if len(parts) >= 3 and '-' in parts[-2]:
                         parts = parts[:-2] + parts[-1:]
                         basename = '.'.join(parts)
+
+                # Was this not found in a wheel?  Then we may have a problem,
+                # since it may be for the current platform instead of the target
+                # platform.
+                if use_wheels:
+                    found_in_wheel = False
+                    for whl in wheelpaths:
+                        whl = os.path.normpath(whl)
+                        if source_path.lower().startswith(os.path.join(whl, '').lower()):
+                            found_in_wheel = True
+                            break
+
+                    if not found_in_wheel:
+                        self.warn('{} was not found in any downloaded wheel, is a dependency missing from requirements.txt?'.format(basename))
             else:
                 # Builtin module, but might not be builtin in wheel libs, so double check
                 if module in whl_modules:
@@ -797,8 +939,8 @@ class build_apps(setuptools.Command):
             self.copy_with_dependencies(source_path, target_path, search_path)
 
         # Copy over the tcl directory.
-        #TODO: get this to work on non-Windows platforms.
-        if sys.platform == "win32" and platform.startswith('win'):
+        # This is legacy, we nowadays recommend the separate tkinter wheel.
+        if sys.platform == "win32" and platform.startswith('win') and not has_tkinter_wheel:
             tcl_dir = os.path.join(sys.prefix, 'tcl')
             tkinter_name = 'tkinter' if sys.version_info >= (3, 0) else 'Tkinter'
 
@@ -814,7 +956,7 @@ class build_apps(setuptools.Command):
                         shutil.copytree(sub_dir, target_dir)
 
         # Extract any other data files from dependency packages.
-        for module, datadesc in list(self.package_data_dirs.items()):
+        for module, datadesc in self.package_data_dirs.items():
             if module not in freezer_modules:
                 continue
 
@@ -832,9 +974,14 @@ class build_apps(setuptools.Command):
                     target_dir = os.path.join(builddir, target_dir)
 
                     for wf in filenames:
+                        if wf.endswith('/'):
+                            # Skip directories.
+                            continue
+
                         if wf.lower().startswith(source_dir.lower() + '/'):
                             if not srcglob.matches(wf.lower()):
                                 continue
+
                             wf = wf.replace('/', os.sep)
                             relpath = wf[len(source_dir) + 1:]
                             source_path = os.path.join(whl, wf)
@@ -886,6 +1033,27 @@ class build_apps(setuptools.Command):
             return check_pattern(fname, include_copy_list) and \
                 not check_pattern(fname, ignore_copy_list)
 
+        def skip_directory(src):
+            # Provides a quick-out for directory checks.  NOT recursive.
+            fn = p3d.Filename.from_os_specific(os.path.normpath(src))
+            path = fn.get_fullpath()
+            fn.make_absolute()
+            abspath = fn.get_fullpath()
+
+            for pattern in ignore_copy_list:
+                if not pattern.pattern.endswith('/*') and \
+                   not pattern.pattern.endswith('/**'):
+                    continue
+
+                pattern_dir = p3d.Filename(pattern.pattern).get_dirname()
+                if abspath.startswith(pattern_dir + '/'):
+                    return True
+
+                if path.startswith(pattern_dir + '/'):
+                    return True
+
+            return False
+
         def copy_file(src, dst):
             src = os.path.normpath(src)
             dst = os.path.normpath(dst)
@@ -918,14 +1086,19 @@ class build_apps(setuptools.Command):
 
         def update_path(path):
             normpath = p3d.Filename.from_os_specific(os.path.normpath(src)).c_str()
-            for inputpath, outputpath in list(self.rename_paths.items()):
+            for inputpath, outputpath in self.rename_paths.items():
                 if normpath.startswith(inputpath):
                     normpath = normpath.replace(inputpath, outputpath, 1)
             return p3d.Filename(normpath).to_os_specific()
 
         rootdir = os.getcwd()
         for dirname, subdirlist, filelist in os.walk(rootdir):
+            subdirlist.sort()
             dirpath = os.path.relpath(dirname, rootdir)
+            if skip_directory(dirpath):
+                self.announce('skipping directory {}'.format(dirpath))
+                continue
+
             for fname in filelist:
                 src = os.path.join(dirpath, fname)
                 dst = os.path.join(builddir, update_path(src))
@@ -1036,7 +1209,10 @@ class build_apps(setuptools.Command):
         source_dir = os.path.dirname(source_path)
         target_dir = os.path.dirname(target_path)
         base = os.path.basename(target_path)
-        self.copy_dependencies(target_path, target_dir, search_path + [source_dir], base)
+
+        if source_dir not in search_path:
+            search_path = search_path + [source_dir]
+        self.copy_dependencies(target_path, target_dir, search_path, base)
 
     def copy_dependencies(self, target_path, target_dir, search_path, referenced_by):
         """ Copies the dependencies of target_path into target_dir. """
@@ -1051,8 +1227,7 @@ class build_apps(setuptools.Command):
             pe = pefile.PEFile()
             pe.read(fp)
             for lib in pe.imports:
-                if not lib.lower().startswith('api-ms-win-'):
-                    deps.append(lib)
+                deps.append(lib)
 
         elif magic == b'\x7FELF':
             # Elf magic.  Used on (among others) Linux and FreeBSD.
@@ -1107,7 +1282,7 @@ class build_apps(setuptools.Command):
                 string_tables[link] = None
 
         # Read the relevant string tables.
-        for idx in list(string_tables.keys()):
+        for idx in string_tables.keys():
             elf.seek(shoff + idx * shentsize)
             type, offset, size, link, entsize = struct.unpack_from(section_struct, elf.read(shentsize))
             if type != 3: continue
@@ -1249,6 +1424,8 @@ class bdist_apps(setuptools.Command):
     DEFAULT_INSTALLERS = {
         'manylinux1_x86_64': ['gztar'],
         'manylinux1_i686': ['gztar'],
+        'manylinux2010_x86_64': ['gztar'],
+        'manylinux2010_i686': ['gztar'],
         # Everything else defaults to ['zip']
     }
 
@@ -1273,7 +1450,7 @@ class bdist_apps(setuptools.Command):
         # setup.cfg file.
         self.installers = {
             key: _parse_list(value)
-            for key, value in list(_parse_dict(self.installers).items())
+            for key, value in _parse_dict(self.installers).items()
         }
 
     def _get_archive_basedir(self):
@@ -1288,7 +1465,8 @@ class bdist_apps(setuptools.Command):
             zf.write(build_dir, base_dir)
 
             for dirpath, dirnames, filenames in os.walk(build_dir):
-                for name in sorted(dirnames):
+                dirnames.sort()
+                for name in dirnames:
                     path = os.path.normpath(os.path.join(dirpath, name))
                     zf.write(path, path.replace(build_dir, base_dir, 1))
                 for name in filenames:
@@ -1303,15 +1481,38 @@ class bdist_apps(setuptools.Command):
         build_cmd = self.get_finalized_command('build_apps')
         binary_names = list(build_cmd.console_apps.keys()) + list(build_cmd.gui_apps.keys())
 
+        source_date = os.environ.get('SOURCE_DATE_EPOCH', '').strip()
+        if source_date:
+            max_mtime = int(source_date)
+        else:
+            max_mtime = None
+
         def tarfilter(tarinfo):
             if tarinfo.isdir() or os.path.basename(tarinfo.name) in binary_names:
                 tarinfo.mode = 0o755
             else:
                 tarinfo.mode = 0o644
+
+            # This isn't interesting information to retain for distribution.
+            tarinfo.uid = 0
+            tarinfo.gid = 0
+            tarinfo.uname = ""
+            tarinfo.gname = ""
+
+            if max_mtime is not None and tarinfo.mtime >= max_mtime:
+                tarinfo.mtime = max_mtime
+
             return tarinfo
 
-        with tarfile.open('{}.tar.{}'.format(basename, tar_compression), 'w|{}'.format(tar_compression)) as tf:
+        filename = '{}.tar.{}'.format(basename, tar_compression)
+        with tarfile.open(filename, 'w|{}'.format(tar_compression)) as tf:
             tf.add(build_dir, base_dir, filter=tarfilter)
+
+        if tar_compression == 'gz' and max_mtime is not None:
+            # Python provides no elegant way to overwrite the gzip timestamp.
+            with open(filename, 'r+b') as fp:
+                fp.seek(4)
+                fp.write(struct.pack("<L", max_mtime))
 
     def create_nsis(self, basename, build_dir, is_64bit):
         # Get a list of build applications
@@ -1371,17 +1572,23 @@ class bdist_apps(setuptools.Command):
         nsi.write('Section "" SecCore\n')
         nsi.write('  SetOutPath "$INSTDIR"\n')
         curdir = ""
+        nsi_dir = p3d.Filename.fromOsSpecific(build_cmd.build_base)
+        build_root_dir = p3d.Filename.fromOsSpecific(build_dir)
         for root, dirs, files in os.walk(build_dir):
+            dirs.sort()
             for name in files:
                 basefile = p3d.Filename.fromOsSpecific(os.path.join(root, name))
                 file = p3d.Filename(basefile)
                 file.makeAbsolute()
-                file.makeRelativeTo(build_dir)
-                outdir = file.getDirname().replace('/', '\\')
+                file.makeRelativeTo(nsi_dir)
+                outdir = p3d.Filename(basefile)
+                outdir.makeAbsolute()
+                outdir.makeRelativeTo(build_root_dir)
+                outdir = outdir.getDirname().replace('/', '\\')
                 if curdir != outdir:
                     nsi.write('  SetOutPath "$INSTDIR\\%s"\n' % outdir)
                     curdir = outdir
-                nsi.write('  File "%s"\n' % (basefile.toOsSpecific()))
+                nsi.write('  File "%s"\n' % (file.toOsSpecific()))
         nsi.write('  SetOutPath "$INSTDIR"\n')
         nsi.write('  WriteUninstaller "$INSTDIR\\Uninstall.exe"\n')
         nsi.write('  ; Start menu items\n')

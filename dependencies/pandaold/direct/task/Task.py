@@ -53,9 +53,9 @@ def print_exc_plus():
     print("Locals by frame, innermost last")
     for frame in stack:
         print("")
-        print(("Frame %s in %s at line %s" % (frame.f_code.co_name,
+        print("Frame %s in %s at line %s" % (frame.f_code.co_name,
                                              frame.f_code.co_filename,
-                                             frame.f_lineno)))
+                                             frame.f_lineno))
         for key, value in list(frame.f_locals.items()):
             #We have to be careful not to cause a new error in our error
             #printer! Calling str() on an unknown object could cause an
@@ -64,7 +64,7 @@ def print_exc_plus():
                 valueStr = str(value)
             except:
                 valueStr = "<ERROR WHILE PRINTING VALUE>"
-            print(("\t%20s = %s" % (key, valueStr)))
+            print("\t%20s = %s" % (key, valueStr))
 
 # For historical purposes, we remap the C++-defined enumeration to
 # these Python names, and define them both at the module level, here,
@@ -130,6 +130,8 @@ class TaskManager:
         self.destroyed = False
         self.fKeyboardInterrupt = False
         self.interruptCount = 0
+        if signal:
+            self.__prevHandler = signal.default_int_handler
 
         self._frameProfileQueue = []
 
@@ -171,7 +173,7 @@ class TaskManager:
         print('*** allowing mid-frame keyboard interrupt.')
         # Restore default interrupt handler
         if signal:
-            signal.signal(signal.SIGINT, signal.default_int_handler)
+            signal.signal(signal.SIGINT, self.__prevHandler)
         # and invoke it
         raise KeyboardInterrupt
 
@@ -333,7 +335,7 @@ class TaskManager:
 
     def add(self, funcOrTask, name = None, sort = None, extraArgs = None,
             priority = None, uponDeath = None, appendTask = False,
-            taskChain = None, owner = None):
+            taskChain = None, owner = None, delay = None):
         """
         Add a new task to the taskMgr.  The task will begin executing
         immediately, or next frame if its sort value has already
@@ -386,22 +388,30 @@ class TaskManager:
                 is called when the task terminates.  This is all the
                 ownermeans.
 
+            delay: an optional amount of seconds to wait before starting
+                the task (equivalent to doMethodLater).
+
         Returns:
             The new Task object that has been added, or the original
             Task object that was passed in.
         """
 
         task = self.__setupTask(funcOrTask, name, priority, sort, extraArgs, taskChain, appendTask, owner, uponDeath)
+        if delay is not None:
+            task.setDelay(delay)
         self.mgr.add(task)
         return task
 
     def __setupTask(self, funcOrTask, name, priority, sort, extraArgs, taskChain, appendTask, owner, uponDeath):
         if isinstance(funcOrTask, AsyncTask):
             task = funcOrTask
-        elif hasattr(funcOrTask, '__call__') or \
-                hasattr(funcOrTask, 'cr_await') or \
-                type(funcOrTask) == types.GeneratorType:
-            # It's a function, coroutine, or something emulating a coroutine.
+        elif hasattr(funcOrTask, '__call__'):
+            task = PythonTask(funcOrTask)
+            if name is None:
+                name = getattr(funcOrTask, '__qualname__', None) or \
+                       getattr(funcOrTask, '__name__', None)
+        elif hasattr(funcOrTask, 'cr_await') or type(funcOrTask) == types.GeneratorType:
+            # It's a coroutine, or something emulating one.
             task = PythonTask(funcOrTask)
             if name is None:
                 name = getattr(funcOrTask, '__qualname__', None) or \
@@ -479,25 +489,30 @@ class TaskManager:
         chains that are in sub-threads or that have frame budgets
         might execute their tasks differently. """
 
+        startFrameTime = self.globalClock.getRealTime()
+
         # Replace keyboard interrupt handler during task list processing
         # so we catch the keyboard interrupt but don't handle it until
         # after task list processing is complete.
         self.fKeyboardInterrupt = 0
         self.interruptCount = 0
+
         if signal:
-            signal.signal(signal.SIGINT, self.keyboardInterruptHandler)
+            self.__prevHandler = signal.signal(signal.SIGINT, self.keyboardInterruptHandler)
 
-        startFrameTime = self.globalClock.getRealTime()
+        try:
+            self.mgr.poll()
 
-        self.mgr.poll()
+            # This is the spot for an internal yield function
+            nextTaskTime = self.mgr.getNextWakeTime()
+            self.doYield(startFrameTime, nextTaskTime)
 
-        # This is the spot for an internal yield function
-        nextTaskTime = self.mgr.getNextWakeTime()
-        self.doYield(startFrameTime, nextTaskTime)
+        finally:
+            # Restore previous interrupt handler
+            if signal:
+                signal.signal(signal.SIGINT, self.__prevHandler)
+                self.__prevHandler = signal.default_int_handler
 
-        # Restore default interrupt handler
-        if signal:
-            signal.signal(signal.SIGINT, signal.default_int_handler)
         if self.fKeyboardInterrupt:
             raise KeyboardInterrupt
 
@@ -596,9 +611,13 @@ class TaskManager:
         else:
             function = method
         if (function == oldMethod):
-            newMethod = types.MethodType(newFunction,
-                                         method.__self__,
-                                         method.__self__.__class__)
+            if sys.version_info >= (3, 0):
+                newMethod = types.MethodType(newFunction,
+                                             method.__self__)
+            else:
+                newMethod = types.MethodType(newFunction,
+                                             method.__self__,
+                                             method.__self__.__class__)
             task.setFunction(newMethod)
             # Found a match
             return 1
@@ -1282,22 +1301,22 @@ if __debug__:
                 return task.done
         obj = TestClass()
         startRefCount = sys.getrefcount(obj)
-        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
+        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
         print('** addTask')
         t = obj.addTask(obj.doTask, 'test')
-        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
-        print(('task.getRefCount(): %s' % t.getRefCount()))
+        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
+        print('task.getRefCount(): %s' % t.getRefCount())
         print('** removeTask')
         obj.removeTask('test')
-        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
-        print(('task.getRefCount(): %s' % t.getRefCount()))
+        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
+        print('task.getRefCount(): %s' % t.getRefCount())
         print('** step')
         taskMgr.step()
         taskMgr.step()
         taskMgr.step()
-        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
-        print(('task.getRefCount(): %s' % t.getRefCount()))
+        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
+        print('task.getRefCount(): %s' % t.getRefCount())
         print('** task release')
         t = None
-        print(('sys.getrefcount(obj): %s' % sys.getrefcount(obj)))
+        print('sys.getrefcount(obj): %s' % sys.getrefcount(obj))
         assert sys.getrefcount(obj) == startRefCount

@@ -498,7 +498,7 @@ class CreateAvatarFSM(OperationFSM):
             return
 
         # Otherwise, we're done!
-        self.csm.air.writeServerEvent('avatarCreated', self.avId, self.target, self.dna.encode('hex'), self.index)
+        self.csm.air.writeServerEvent('avatarCreated', self.avId, self.target, self.dna.hex(), self.index)
         self.csm.sendUpdateToAccountId(self.target, 'createAvatarResp', [self.avId])
         self.demand('Off')
 
@@ -862,15 +862,15 @@ class LoadAvatarFSM(AvatarOperationFSM):
     def enterSetAvatar(self):
         channel = self.csm.GetAccountConnectionChannel(self.target)
 
-        # First, give them a POSTREMOVE to unload the avatar, just in case they
-        # disconnect while we're working.
         datagramCleanup = PyDatagram()
         datagramCleanup.addServerHeader(self.avId, channel, STATESERVER_OBJECT_DELETE_RAM)
         datagramCleanup.addUint32(self.avId)
+        
         datagram = PyDatagram()
-        datagram.addServerHeader( channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
-        datagram.addString(datagramCleanup.getMessage())
+        datagram.addServerHeader(channel, self.csm.air.ourChannel, CLIENTAGENT_ADD_POST_REMOVE)
+        datagram.addBlob(datagramCleanup.getMessage())
         self.csm.air.send(datagram)
+
 
         # Activate the avatar on the DBSS:
         self.csm.air.sendActivate(self.avId, 0, 0, self.csm.air.dclassesByName['DistributedToonUD'], {'setAdminAccess': \

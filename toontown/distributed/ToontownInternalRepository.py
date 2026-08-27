@@ -41,7 +41,6 @@ class ToontownInternalRepository(AstronInternalRepository):
 
     def handleDatagram(self, di):
         msgType = self.getMsgType()
-        print('[DEBUG] handleDatagram msgType=%r' % (msgType,))
 
         if msgType == self.__messenger.msgType:
             self.__messenger.handle(msgType, di)

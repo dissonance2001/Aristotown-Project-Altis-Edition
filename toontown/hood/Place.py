@@ -209,9 +209,12 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
             base.localAvatar.chatMgr.normalButton.show()
         self.accept('teleportQuery', self.handleTeleportQuery)
         base.localAvatar.setTeleportAvailable(1)
-        base.localAvatar.questPage.acceptOnscreenHooks()
-        base.localAvatar.invPage.acceptOnscreenHooks()
-        base.localAvatar.questMap.acceptOnscreenHooks()
+        if hasattr(base.localAvatar, 'questPage') and base.localAvatar.questPage is not None:
+            base.localAvatar.questPage.acceptOnscreenHooks()
+        if hasattr(base.localAvatar, 'invPage') and base.localAvatar.invPage is not None:
+            base.localAvatar.invPage.acceptOnscreenHooks()
+        if hasattr(base.localAvatar, 'questMap') and base.localAvatar.questMap is not None:
+            base.localAvatar.questMap.acceptOnscreenHooks()
         self.walkStateData.fsm.request('walking')
         self.enablePeriodTimer()
 
@@ -227,12 +230,15 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         self.ignore('teleportQuery')
         if base.cr.playGame.hood != None:
             base.cr.playGame.hood.hideTitleText()
-        base.localAvatar.questPage.hideQuestsOnscreen()
-        base.localAvatar.questPage.ignoreOnscreenHooks()
-        base.localAvatar.invPage.ignoreOnscreenHooks()
-        base.localAvatar.invPage.hideInventoryOnscreen()
-        base.localAvatar.questMap.hide()
-        base.localAvatar.questMap.ignoreOnscreenHooks()
+        if hasattr(base.localAvatar, 'questPage') and base.localAvatar.questPage is not None:
+            base.localAvatar.questPage.hideQuestsOnscreen()
+            base.localAvatar.questPage.ignoreOnscreenHooks()
+        if hasattr(base.localAvatar, 'invPage') and base.localAvatar.invPage is not None:
+            base.localAvatar.invPage.ignoreOnscreenHooks()
+            base.localAvatar.invPage.hideInventoryOnscreen()
+        if hasattr(base.localAvatar, 'questMap') and base.localAvatar.questMap is not None:
+            base.localAvatar.questMap.hide()
+            base.localAvatar.questMap.ignoreOnscreenHooks()
         return
 
     def handleWalkDone(self, doneStatus):
@@ -736,7 +742,8 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
     def _continueTeleportInPostZoneComplete(self, requestStatus):
         teleportDebug(requestStatus, '_placeTeleportInPostZoneComplete(%s)' % (requestStatus,))
         NametagGlobals.setWant2dNametags(False)
-        base.localAvatar.laffMeter.start()
+        if hasattr(base.localAvatar, 'laffMeter') and base.localAvatar.laffMeter is not None:
+            base.localAvatar.laffMeter.start()
         base.localAvatar.startQuestMap()
         base.localAvatar.reconsiderCheesyEffect()
         base.localAvatar.obscureMoveFurnitureButton(1)

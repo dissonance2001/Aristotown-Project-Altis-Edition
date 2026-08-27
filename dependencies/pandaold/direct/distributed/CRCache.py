@@ -28,7 +28,7 @@ class CRCache:
         # track each object that is delayDeleted after it gets its chance to delete,
         # and check them after all objects have had a chance to delete
         delayDeleted = []
-        for distObj in list(self.dict.values()):
+        for distObj in self.dict.values():
             distObj.deleteOrDelay()
             if distObj.getDelayDeleteCount() != 0:
                 delayDeleted.append(distObj)
@@ -123,7 +123,7 @@ class CRCache:
         # For debugging; this verifies that the cache is sensible and
         # returns true if so.
         from panda3d.core import NodePath
-        for obj in list(self.dict.values()):
+        for obj in self.dict.values():
             if isinstance(obj, NodePath):
                 assert not obj.isEmpty() and obj.getTopNode() != render.node()
         return 1

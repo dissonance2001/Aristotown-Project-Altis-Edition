@@ -6,12 +6,11 @@ in-depth explanation and an example of how to use this class.
 
 __all__ = ['DirectOptionMenu']
 
-from panda3d.core import *
+from panda3d.core import OmniBoundingVolume, TextNode, VBase3
 from direct.showbase import ShowBaseGlobal
 from . import DirectGuiGlobals as DGG
-from .DirectButton import *
-from .DirectLabel import *
-from .DirectFrame import *
+from .DirectButton import DirectButton
+from .DirectFrame import DirectFrame
 
 
 class DirectOptionMenu(DirectButton):
@@ -22,6 +21,7 @@ class DirectOptionMenu(DirectButton):
     To cancel the popup menu click anywhere on the screen outside of the
     popup menu.  No command is executed in this case.
     """
+
     def __init__(self, parent = None, **kw):
         # Inherits from DirectButton
         optiondefs = (
@@ -43,7 +43,7 @@ class DirectOptionMenu(DirectButton):
             ('text_align',  TextNode.ALeft, None),
             # Remove press effect because it looks a bit funny
             ('pressEffect',     0,          DGG.INITOPT),
-           )
+        )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
         # Initialize superclasses
@@ -104,7 +104,7 @@ class DirectOptionMenu(DirectButton):
         Create new popup menu to reflect specified set of items
         """
         # Remove old component if it exits
-        if self.popupMenu != None:
+        if self.popupMenu is not None:
             self.destroycomponent('popupMenu')
         # Create new component
         self.popupMenu = self.createcomponent('popupMenu', (), None,
@@ -128,19 +128,19 @@ class DirectOptionMenu(DirectButton):
                 text = item, text_align = TextNode.ALeft,
                 command = lambda i = itemIndex: self.set(i))
             bounds = c.getBounds()
-            if self.minX == None:
+            if self.minX is None:
                 self.minX = bounds[0]
             elif bounds[0] < self.minX:
                 self.minX = bounds[0]
-            if self.maxX == None:
+            if self.maxX is None:
                 self.maxX = bounds[1]
             elif bounds[1] > self.maxX:
                 self.maxX = bounds[1]
-            if self.minZ == None:
+            if self.minZ is None:
                 self.minZ = bounds[2]
             elif bounds[2] < self.minZ:
                 self.minZ = bounds[2]
-            if self.maxZ == None:
+            if self.maxZ is None:
                 self.maxZ = bounds[3]
             elif bounds[3] > self.maxZ:
                 self.maxZ = bounds[3]
@@ -309,4 +309,3 @@ class DirectOptionMenu(DirectButton):
         Override popup menu button's command func
         Command is executed in response to selecting menu items
         """
-        pass

@@ -137,7 +137,7 @@ class ControlManager:
     def setSpeeds(self, forwardSpeed, jumpForce,
             reverseSpeed, rotateSpeed, strafeLeft=0, strafeRight=0):
         assert self.notify.debugCall(id(self))
-        for controls in list(self.controls.values()):
+        for controls in self.controls.values():
             controls.setWalkSpeed(
                 forwardSpeed, jumpForce, reverseSpeed, rotateSpeed)
 
@@ -170,12 +170,12 @@ class ControlManager:
 
     def setTag(self, key, value):
         assert self.notify.debugCall(id(self))
-        for controls in list(self.controls.values()):
+        for controls in self.controls.values():
             controls.setTag(key, value)
 
     def deleteCollisions(self):
         assert self.notify.debugCall(id(self))
-        for controls in list(self.controls.values()):
+        for controls in self.controls.values():
             controls.deleteCollisions()
 
     def collisionsOn(self):

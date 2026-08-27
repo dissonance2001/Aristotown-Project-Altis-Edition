@@ -46,14 +46,14 @@ class GridChild:
         self._gridInterestEnabled = enabled
         if enabled and self.isOnAGrid():
             # enable all grid interests I may have
-            for currGridId, interestInfo in list(self._gridInterests.items()):
+            for currGridId, interestInfo in self._gridInterests.items():
                 currGrid = getBase().getRepository().doId2do.get(currGridId)
                 if currGrid:
                     self.__setGridInterest(currGrid, interestInfo[1])
                 else:
                     self.notify.warning("unknown grid interest %s"%currGridId)
         else:
-            for currGridId, interestInfo in list(self._gridInterests.items()):
+            for currGridId, interestInfo in self._gridInterests.items():
                 self.cr.removeTaggedInterest(interestInfo[0])
             #self.__clearGridInterest()
             pass
@@ -113,7 +113,7 @@ class GridChild:
 
     def __clearGridInterest(self):
         if self._gridInterestEnabled:
-            for currGridId, interestInfo in list(self._gridInterests.items()):
+            for currGridId, interestInfo in self._gridInterests.items():
                 self.cr.removeTaggedInterest(interestInfo[0])
         self._gridInterests = {}
 

@@ -222,9 +222,9 @@ class DirectEntry(DirectFrame):
     def _autoCapitalize(self):
         name = self.guiItem.getWtext()
         # capitalize each word, allowing for things like McMutton
-        capName = ''
+        capName = u''
         # track each individual word to detect prefixes like Mc
-        wordSoFar = ''
+        wordSoFar = u''
         # track whether the previous character was part of a word or not
         wasNonWordChar = True
         for i, character in enumerate(name):
@@ -233,9 +233,9 @@ class DirectEntry(DirectFrame):
             #   This assumes that string.lower and string.upper will return different
             #   values for all unicode letters.
             # - Don't count apostrophes as a break between words
-            if character.lower() == character.upper() and character != "'":
+            if character.lower() == character.upper() and character != u"'":
                 # we are between words
-                wordSoFar = ''
+                wordSoFar = u''
                 wasNonWordChar = True
             else:
                 capitalize = False
@@ -279,7 +279,7 @@ class DirectEntry(DirectFrame):
             self.unicodeText = True
             self.guiItem.setWtext(text)
         else:
-            self.unicodeText = isinstance(text, str)
+            self.unicodeText = isinstance(text, unicode)
             if self.unicodeText:
                 self.guiItem.setWtext(text)
             else:

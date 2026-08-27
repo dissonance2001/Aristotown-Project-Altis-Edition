@@ -11,7 +11,7 @@ def findClass(className):
     Look in sys.modules dictionary for a module that defines a class
     with this className.
     """
-    for moduleName, module in list(sys.modules.items()):
+    for moduleName, module in sys.modules.items():
         # Some modules are None for some reason
         if module:
             # print "Searching in ", moduleName
@@ -22,8 +22,8 @@ def findClass(className):
             # the matching class and a good module namespace to redefine
             # our class in.
             if (classObj and
-                ((type(classObj) == type) or
-                 (type(classObj) == type)) and
+                ((type(classObj) == types.ClassType) or
+                 (type(classObj) == types.TypeType)) and
                 (classObj.__module__ == moduleName)):
                 return [classObj, module.__dict__]
     return None
@@ -50,7 +50,7 @@ def rebindClass(filename):
                     file.close()
                     os.remove(filename)
                     return
-            print(('Rebinding class name: ' + className))
+            print('Rebinding class name: ' + className)
             break
 
     # Try to find the original class with this class name
@@ -92,7 +92,7 @@ def copyFuncs(fromClass, toClass):
     newFuncList = []
 
     # Copy the functions from fromClass into toClass dictionary
-    for funcName, newFunc in list(fromClass.__dict__.items()):
+    for funcName, newFunc in fromClass.__dict__.items():
         # Filter out for functions
         if (type(newFunc) == types.FunctionType):
             # See if we already have a function with this name
@@ -156,7 +156,7 @@ def replaceMessengerFunc(replaceFuncList):
     for oldFunc, funcName, newFunc in replaceFuncList:
         res = messenger.replaceMethod(oldFunc, newFunc)
         if res:
-            print(('replaced %s messenger function(s): %s' % (res, funcName)))
+            print('replaced %s messenger function(s): %s' % (res, funcName))
 
 def replaceTaskMgrFunc(replaceFuncList):
     try:
@@ -165,7 +165,7 @@ def replaceTaskMgrFunc(replaceFuncList):
         return
     for oldFunc, funcName, newFunc in replaceFuncList:
         if taskMgr.replaceMethod(oldFunc, newFunc):
-            print(('replaced taskMgr function: %s' % funcName))
+            print('replaced taskMgr function: %s' % funcName)
 
 def replaceStateFunc(replaceFuncList):
     if not sys.modules.get('base.direct.fsm.State'):
@@ -174,7 +174,7 @@ def replaceStateFunc(replaceFuncList):
     for oldFunc, funcName, newFunc in replaceFuncList:
         res = State.replaceMethod(oldFunc, newFunc)
         if res:
-            print(('replaced %s FSM transition function(s): %s' % (res, funcName)))
+            print('replaced %s FSM transition function(s): %s' % (res, funcName))
 
 def replaceCRFunc(replaceFuncList):
     try:
@@ -187,7 +187,7 @@ def replaceCRFunc(replaceFuncList):
         return
     for oldFunc, funcName, newFunc in replaceFuncList:
         if base.cr.replaceMethod(oldFunc, newFunc):
-            print(('replaced DistributedObject function: %s' % funcName))
+            print('replaced DistributedObject function: %s' % funcName)
 
 def replaceAIRFunc(replaceFuncList):
     try:
@@ -196,7 +196,7 @@ def replaceAIRFunc(replaceFuncList):
         return
     for oldFunc, funcName, newFunc in replaceFuncList:
         if simbase.air.replaceMethod(oldFunc, newFunc):
-            print(('replaced DistributedObject function: %s' % funcName))
+            print('replaced DistributedObject function: %s' % funcName)
 
 def replaceIvalFunc(replaceFuncList):
     # Make sure we have imported IntervalManager and thus created
@@ -207,4 +207,4 @@ def replaceIvalFunc(replaceFuncList):
     for oldFunc, funcName, newFunc in replaceFuncList:
         res = FunctionInterval.replaceMethod(oldFunc, newFunc)
         if res:
-            print(('replaced %s interval function(s): %s' % (res, funcName)))
+            print('replaced %s interval function(s): %s' % (res, funcName))

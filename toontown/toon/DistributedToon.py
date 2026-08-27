@@ -995,7 +995,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.sendUpdate('setSCSinging', [msgIndex])
 
     def sendLogSuspiciousEvent(self, msg):
-        localAvatar.sendUpdate('logSuspiciousEvent', ['%s for %s' % (msg, self.doId)])
+        return
 
     def setSCSinging(self, msgIndex):
         self.sendUpdate('logSuspiciousEvent', ['invalid msgIndex in setSCSinging: %s from %s' % (msgIndex, self.doId)])
@@ -1620,7 +1620,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def d_setAnimState(self, animName, animMultiplier = 1.0, timestamp = None, extraArgs = []):
         timestamp = globalClockDelta.getFrameNetworkTime()
-        self.sendUpdate('setAnimState', [animName, animMultiplier, timestamp])
+        if self.cr:
+            self.sendUpdate('setAnimState', [animName, animMultiplier, timestamp])
 
     def setAnimState(self, animName, animMultiplier = 1.0, timestamp = None, animType = None, callback = None, extraArgs = []):
         if not animName or animName == 'None':
@@ -1635,6 +1636,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             if animMultiplier > 1.0 and animName in ['neutral']:
                 animMultiplier = 1.0
         
+        if not hasattr(self, 'animFSM') or self.animFSM is None:
+            if callback:
+                callback(*extraArgs)
+            return
+            
         if self.animFSM.getStateNamed(animName):
             self.animFSM.request(animName, [animMultiplier,
              ts,
@@ -2135,7 +2141,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         return Task.cont
 
     def d_setParent(self, parentToken):
-        DistributedSmoothNode.DistributedSmoothNode.d_setParent(self, parentToken)
+        if self.cr:
+            DistributedSmoothNode.DistributedSmoothNode.d_setParent(self, parentToken)
 
     def setEmoteAccess(self, bits):
         self.emoteAccess = bits

@@ -7,7 +7,7 @@ class InputStateToken:
     _SerialGen = SerialNumGen()
     Inval = 'invalidatedToken'
     def __init__(self, inputState):
-        self._id = next(InputStateToken._SerialGen)
+        self._id = InputStateToken._SerialGen.next()
         self._hash = self._id
         self._inputState = inputState
     def release(self):

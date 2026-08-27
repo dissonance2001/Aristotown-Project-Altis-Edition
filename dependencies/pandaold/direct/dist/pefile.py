@@ -13,8 +13,8 @@ from io import BytesIO
 import sys
 
 if sys.version_info >= (3, 0):
-    str = str
-    chr = chr
+    unicode = str
+    unichr = chr
 
 # Define some internally used structures.
 RVASize = namedtuple('RVASize', ('addr', 'size'))
@@ -38,7 +38,7 @@ def _unpack_wstring(mem, offs=0):
     name = ""
     for i in range(name_len):
         offs += 2
-        name += chr(*unpack('<H', mem[offs:offs+2]))
+        name += unichr(*unpack('<H', mem[offs:offs+2]))
     return name
 
 def _padded(n, boundary):
@@ -208,7 +208,7 @@ class VersionInfoResource(object):
         if isinstance(value, dict):
             type = 1
             value_length = 0
-        elif isinstance(value, bytes) or isinstance(value, str):
+        elif isinstance(value, bytes) or isinstance(value, unicode):
             type = 1
             value_length = len(value) * 2 + 2
         else:
@@ -225,9 +225,9 @@ class VersionInfoResource(object):
         assert len(data) & 3 == 0
 
         if isinstance(value, dict):
-            for key2, value2 in sorted(list(value.items()), key=lambda x:x[0]):
+            for key2, value2 in sorted(value.items(), key=lambda x:x[0]):
                 self._pack_info(data, key2, value2)
-        elif isinstance(value, bytes) or isinstance(value, str):
+        elif isinstance(value, bytes) or isinstance(value, unicode):
             for c in value:
                 data += pack('<H', ord(c))
             data += b'\x00\x00'
@@ -246,7 +246,11 @@ class VersionInfoResource(object):
         length, value_length = unpack('<HH', data[0:4])
         offset = 40 + value_length + (value_length & 1)
         dwords = array('I')
-        dwords.fromstring(bytes(data[40:offset]))
+        if sys.version_info >= (3, 2):
+            dwords.frombytes(bytes(data[40:offset]))
+        else:
+            dwords.fromstring(bytes(data[40:offset]))
+
         if len(dwords) > 0:
             self.signature = dwords[0]
         if len(dwords) > 1:
@@ -294,7 +298,7 @@ class VersionInfoResource(object):
         c, = unpack('<H', data[offset:offset+2])
         offset += 2
         while c:
-            key += chr(c)
+            key += unichr(c)
             c, = unpack('<H', data[offset:offset+2])
             offset += 2
 
@@ -305,11 +309,11 @@ class VersionInfoResource(object):
             # It contains a value.
             if type:
                 # It's a wchar array value.
-                value = ""
+                value = u""
                 c, = unpack('<H', data[offset:offset+2])
                 offset += 2
                 while c:
-                    value += chr(c)
+                    value += unichr(c)
                     c, = unpack('<H', data[offset:offset+2])
                     offset += 2
             else:
@@ -648,7 +652,7 @@ class PEFile(object):
         group = IconGroupResource()
         self.resources[group.type][ordinal][1033] = group
 
-        images = sorted(list(icon.images.items()), key=lambda x:-x[0])
+        images = sorted(icon.images.items(), key=lambda x:-x[0])
         id = 1
 
         # Write 8-bpp image headers for sizes under 256x256.
@@ -705,7 +709,7 @@ class PEFile(object):
 
         Returns the newly created Section object. """
 
-        if isinstance(name, str):
+        if isinstance(name, unicode):
             name = name.encode('ascii')
 
         section = Section()

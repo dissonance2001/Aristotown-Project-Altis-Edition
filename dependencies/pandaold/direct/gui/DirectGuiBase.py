@@ -102,7 +102,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = str
+    stringType = basestring
 
 guiObjectCollector = PStatCollector("Client::GuiObjects")
 
@@ -184,7 +184,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         # override those in the base class.
         if not hasattr(self, '_constructorKeywords'):
             tmp = {}
-            for option, value in list(keywords.items()):
+            for option, value in keywords.items():
                 tmp[option] = [value, 0]
             self._constructorKeywords = tmp
             self._optionInfo = {}
@@ -247,7 +247,7 @@ class DirectGuiBase(DirectObject.DirectObject):
             # Call the configuration callback function for every option.
             FUNCTION = DGG._OPT_FUNCTION
             self.fInit = 1
-            for info in list(self._optionInfo.values()):
+            for info in self._optionInfo.values():
                 func = info[FUNCTION]
                 if func is not None and func is not DGG.INITOPT:
                     func()
@@ -293,7 +293,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         """
         options = []
         if hasattr(self, '_optionInfo'):
-            for option, info in list(self._optionInfo.items()):
+            for option, info in self._optionInfo.items():
                 isinit = info[DGG._OPT_FUNCTION] is DGG.INITOPT
                 default = info[DGG._OPT_DEFAULT]
                 options.append((option, default, isinit))
@@ -326,7 +326,7 @@ class DirectGuiBase(DirectObject.DirectObject):
             #     (optionName, default, value)
             if option is None:
                 rtn = {}
-                for option, config in list(self._optionInfo.items()):
+                for option, config in self._optionInfo.items():
                     rtn[option] = (option,
                                    config[DGG._OPT_DEFAULT],
                                    config[DGG._OPT_VALUE])
@@ -358,13 +358,13 @@ class DirectGuiBase(DirectObject.DirectObject):
         indirectOptions = {}
         indirectOptions_has_key = indirectOptions.__contains__
 
-        for option, value in list(kw.items()):
+        for option, value in kw.items():
             if optionInfo_has_key(option):
                 # This is one of the options of this gui item.
                 # Check it is an initialisation option.
                 if optionInfo[option][FUNCTION] is DGG.INITOPT:
-                    print(('Cannot configure initialisation option "' \
-                          + option + '" for ' + self.__class__.__name__))
+                    print('Cannot configure initialisation option "' \
+                          + option + '" for ' + self.__class__.__name__)
                     break
                     #raise KeyError, \
                 #           'Cannot configure initialisation option "' \
@@ -404,7 +404,7 @@ class DirectGuiBase(DirectObject.DirectObject):
                         # components in the group.
                         componentConfigFuncs = []
                         # For each component
-                        for info in list(componentInfo.values()):
+                        for info in componentInfo.values():
                             # Check if it is a member of this group
                             if info[4] == component:
                                 # Yes, append its config func
@@ -431,7 +431,7 @@ class DirectGuiBase(DirectObject.DirectObject):
 
         # Call the configure methods for any components.
         # Pass in the dictionary of keyword/values created above
-        for func, options in list(indirectOptions.items()):
+        for func, options in indirectOptions.items():
             func(**options)
 
         # Call the configuration callback function for each option.
@@ -475,7 +475,7 @@ class DirectGuiBase(DirectObject.DirectObject):
                 else:
                     # If this is a group name, call cget for one of
                     # the components in the group.
-                    for info in list(self.__componentInfo.values()):
+                    for info in self.__componentInfo.values():
                         if info[4] == component:
                             componentCget = info[3]
                             return componentCget(componentOption)
@@ -645,7 +645,7 @@ class DirectGuiBase(DirectObject.DirectObject):
         if ShowBaseGlobal.config.GetBool('debug-directgui-msgs', False):
             from direct.showbase.PythonUtil import StackTrace
             print(gEvent)
-            print((StackTrace()))
+            print(StackTrace())
         self.accept(gEvent, command, extraArgs = extraArgs)
 
     def unbind(self, event):
@@ -1068,9 +1068,9 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
 
     def printConfig(self, indent = 0):
         space = ' ' * indent
-        print(('%s%s - %s' % (space, self.guiId, self.__class__.__name__)))
-        print(('%sPos:   %s' % (space, tuple(self.getPos()))))
-        print(('%sScale: %s' % (space, tuple(self.getScale()))))
+        print('%s%s - %s' % (space, self.guiId, self.__class__.__name__))
+        print('%sPos:   %s' % (space, tuple(self.getPos())))
+        print('%sScale: %s' % (space, tuple(self.getScale())))
         # Print out children info
         for child in self.getChildren():
             messenger.send(DGG.PRINT + child.getName(), [indent + 2])
@@ -1079,7 +1079,7 @@ class DirectGuiWidget(DirectGuiBase, NodePath):
         """
         Copy other's options into our self so we look and feel like other
         """
-        for key, value in list(other._optionInfo.items()):
+        for key, value in other._optionInfo.items():
             self[key] = value[1]
 
     def taskName(self, idString):

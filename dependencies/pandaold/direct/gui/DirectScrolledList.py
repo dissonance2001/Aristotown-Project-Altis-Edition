@@ -18,7 +18,7 @@ import sys
 if sys.version_info >= (3,0):
     stringType = str
 else:
-    stringType = str
+    stringType = basestring
 
 
 class DirectScrolledListItem(DirectButton):
@@ -210,7 +210,7 @@ class DirectScrolledList(DirectFrame):
         numItemsVisible = self["numItemsVisible"]
         numItemsTotal = len(self["items"])
         if(centered):
-            self.index = index - (numItemsVisible/2)
+            self.index = index - (numItemsVisible // 2)
         else:
             self.index = index
 

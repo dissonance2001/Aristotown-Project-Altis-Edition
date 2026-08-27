@@ -20,7 +20,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import builtins as builtins
+    import __builtin__ as builtins
 
 class ExclusiveObjectPool(DirectObject.DirectObject):
     # ObjectPool specialization that excludes particular objects
@@ -52,7 +52,7 @@ class ExclusiveObjectPool(DirectObject.DirectObject):
         self._objects = list(objects)
         self._postFilterObjs = []
         self._sync = Sync('%s-%s' % (self.__class__.__name__,
-                                     next(self._SerialNumGen)),
+                                     self._SerialNumGen.next()),
                           self._SyncMaster)
         self._sync.invalidate()
         ExclusiveObjectPool.addExclObjs(self._objects, self._postFilterObjs,

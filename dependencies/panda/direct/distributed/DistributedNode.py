@@ -9,9 +9,7 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
     """Distributed Node class:"""
 
     def __init__(self, cr):
-        try:
-            self.DistributedNode_initialized
-        except:
+        if not hasattr(self, 'DistributedNode_initialized'):
             self.DistributedNode_initialized = 1
             self.gotStringParentToken = 0
             DistributedObject.DistributedObject.__init__(self, cr)
@@ -28,9 +26,7 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
             DistributedObject.DistributedObject.disable(self)
 
     def delete(self):
-        try:
-            self.DistributedNode_deleted
-        except:
+        if not hasattr(self, 'DistributedNode_deleted'):
             self.DistributedNode_deleted = 1
             if not self.isEmpty():
                 self.removeNode()
@@ -43,13 +39,11 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
         self.gotStringParentToken = 0
 
     def setLocation(self, parentId, zoneId, teleport=0):
-        # Redefine DistributedObject setLocation, so that when
-        # location is set to the ocean grid, we can update our parenting
-        # under gridParent
         DistributedObject.DistributedObject.setLocation(self, parentId, zoneId)
+        if not self.cr:
+            return
         parentObj = self.cr.doId2do.get(parentId)
         if parentObj:
-            # Make sure you in a zone that is in the grid before making a GridParent
             if (parentObj.isGridParent() and (zoneId >= parentObj.startingZone)):
                 if not self.gridParent:
                     self.gridParent = GridParent.GridParent(self)
@@ -78,7 +72,7 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
     ### setParent ###
 
     def b_setParent(self, parentToken):
-        if type(parentToken) == str:
+        if isinstance(parentToken, str):
             self.setParentStr(parentToken)
         else:
             self.setParent(parentToken)
@@ -86,7 +80,7 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
         self.d_setParent(parentToken)
 
     def d_setParent(self, parentToken):
-        if type(parentToken) == str:
+        if isinstance(parentToken, str):
             self.sendUpdate("setParentStr", [parentToken])
         else:
             self.sendUpdate("setParent", [parentToken])

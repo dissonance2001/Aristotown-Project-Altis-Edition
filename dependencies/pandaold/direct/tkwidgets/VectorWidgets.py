@@ -10,7 +10,7 @@ import sys
 if sys.version_info >= (3, 0):
     from tkinter.colorchooser import askcolor
 else:
-    from tkinter.colorchooser import askcolor
+    from tkColorChooser import askcolor
 
 
 class VectorEntry(Pmw.MegaWidget):

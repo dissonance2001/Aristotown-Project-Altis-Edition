@@ -38,7 +38,7 @@ class EventGroup(DirectObject.DirectObject):
         if doneEvent is None:
             # no doneEvent provided, allocate a unique event name
             doneEvent = 'EventGroup-%s-%s-Done' % (
-                next(EventGroup._SerialNumGen), self._name)
+                EventGroup._SerialNumGen.next(), self._name)
         self._doneEvent = doneEvent
         self._completed = False
 
@@ -85,7 +85,7 @@ class EventGroup(DirectObject.DirectObject):
         name that is already in the name of the EventGroup object.
         Returns the new event name. """
         return self.addEvent('%s-SubEvent-%s-%s' % (
-            self._name, next(EventGroup._SerialNumGen), name))
+            self._name, EventGroup._SerialNumGen.next(), name))
 
     def _subEventComplete(self, subEventName, *args, **kwArgs):
         if subEventName in self._completedEvents:

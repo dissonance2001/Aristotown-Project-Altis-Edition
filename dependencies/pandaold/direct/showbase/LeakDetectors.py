@@ -10,7 +10,7 @@ import gc, sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import builtins as builtins
+    import __builtin__ as builtins
 
 
 class LeakDetector:
@@ -60,7 +60,7 @@ class ObjectTypesLeakDetector(LeakDetector):
         self._thisLdGen = 0
 
     def destroy(self):
-        for ld in list(self._type2ld.values()):
+        for ld in self._type2ld.values():
             ld.destroy()
         LeakDetector.destroy(self)
 
@@ -173,7 +173,7 @@ class TaskLeakDetector(LeakDetector, TaskLeakDetectorBase):
         self._taskName2collector = {}
 
     def destroy(self):
-        for taskName, collector in list(self._taskName2collector.items()):
+        for taskName, collector in self._taskName2collector.items():
             collector.destroy()
         del self._taskName2collector
         LeakDetector.destroy(self)
@@ -274,7 +274,7 @@ class MessageTypesLeakDetector(LeakDetector, MessageLeakDetectorBase):
         if self._createJob:
             self._createJob.destroy()
         self._createJob = None
-        for msgName, detector in list(self._msgName2detector.items()):
+        for msgName, detector in self._msgName2detector.items():
             detector.destroy()
         del self._msgName2detector
         LeakDetector.destroy(self)
@@ -350,7 +350,7 @@ class MessageListenerTypesLeakDetector(LeakDetector):
         if self._createJob:
             self._createJob.destroy()
         self._createJob = None
-        for typeName, detector in list(self._typeName2detector.items()):
+        for typeName, detector in self._typeName2detector.items():
             detector.destroy()
         del self._typeName2detector
         LeakDetector.destroy(self)

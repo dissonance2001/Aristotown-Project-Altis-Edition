@@ -46,16 +46,20 @@ class PublicWalk(Walk.Walk):
 
     def enter(self, slowWalk=0):
         Walk.Walk.enter(self, slowWalk)
-        base.localAvatar.book.showButton()
+        if hasattr(base.localAvatar, 'book') and base.localAvatar.book is not None:
+            base.localAvatar.book.showButton()
         self._acceptActionKeys()
-        base.localAvatar.laffMeter.start()
+        if hasattr(base.localAvatar, 'laffMeter') and base.localAvatar.laffMeter is not None:
+            base.localAvatar.laffMeter.start()
         base.localAvatar.beginAllowPies()
 
     def exit(self):
         Walk.Walk.exit(self)
-        base.localAvatar.book.hideButton()
+        if hasattr(base.localAvatar, 'book') and base.localAvatar.book is not None:
+            base.localAvatar.book.hideButton()
         self._ignoreActionKeys()
-        base.localAvatar.laffMeter.stop()
+        if hasattr(base.localAvatar, 'laffMeter') and base.localAvatar.laffMeter is not None:
+            base.localAvatar.laffMeter.stop()
         base.localAvatar.endAllowPies()
 
     def __handleStickerBookEntry(self):

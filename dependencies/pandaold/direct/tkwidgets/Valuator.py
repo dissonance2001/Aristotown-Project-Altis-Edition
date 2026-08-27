@@ -13,7 +13,7 @@ import sys
 if sys.version_info >= (3, 0):
     from tkinter.colorchooser import askcolor
 else:
-    from tkinter.colorchooser import askcolor
+    from tkColorChooser import askcolor
 
 VALUATOR_MINI = 'mini'
 VALUATOR_FULL = 'full'
@@ -621,7 +621,7 @@ def rgbPanel(nodePath, callback = None, style = 'mini'):
 
     def printToLog():
         c=nodePath.getColor()
-        print(("Vec4(%.3f, %.3f, %.3f, %.3f)"%(c[0], c[1], c[2], c[3])))
+        print("Vec4(%.3f, %.3f, %.3f, %.3f)"%(c[0], c[1], c[2], c[3]))
 
     # Check init color
     if nodePath.hasColor():
@@ -713,8 +713,8 @@ def lightRGBPanel(light, style = 'mini'):
     def printToLog():
         n = light.getName()
         c=light.getColor()
-        print((n + (".setColor(Vec4(%.3f, %.3f, %.3f, %.3f))" %
-                   (c[0], c[1], c[2], c[3]))))
+        print(n + (".setColor(Vec4(%.3f, %.3f, %.3f, %.3f))" %
+                   (c[0], c[1], c[2], c[3])))
     # Check init color
     initColor = light.getColor() * 255.0
     # Create entry scale group

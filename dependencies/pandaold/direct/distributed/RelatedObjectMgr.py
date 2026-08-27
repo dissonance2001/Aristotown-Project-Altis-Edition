@@ -157,7 +157,7 @@ class RelatedObjectMgr(DirectObject.DirectObject):
 
         # Iterate through all the pendingObjects and stop any pending
         # tasks.
-        for pendingList in list(self.pendingObjects.values()):
+        for pendingList in self.pendingObjects.values():
             for tuple in pendingList:
                 allCallback, eachCallback, timeoutCallback, doIdsPending, doIdList, doLaterName = tuple
                 if doLaterName:

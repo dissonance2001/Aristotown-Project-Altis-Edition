@@ -57,8 +57,16 @@ class AstronDatabaseInterface:
         dg.addUint32(ctx)
         dg.addUint16(dclass.getNumber())
         dg.addUint16(fieldCount)
-        dg.appendData(fieldPacker.getString())
-        self.air.send(dg)
+        dg.appendData(fieldPacker.getBytes())
+        print('[DEBUG] createObject: about to send, databaseId=%r ourChannel=%r ctx=%r datagram_len=%r'
+              % (databaseId, self.air.ourChannel, ctx, dg.getMessage() and len(dg.getMessage())))
+        try:
+            self.air.send(dg)
+            print('[DEBUG] createObject: send() returned normally')
+        except Exception as e:
+            import traceback
+            print('[DEBUG] createObject: send() RAISED: %r' % (e,))
+            traceback.print_exc()
 
     def handleCreateObjectResp(self, di):
         ctx = di.getUint32()
@@ -239,7 +247,7 @@ class AstronDatabaseInterface:
         dg.addUint32(doId)
         if fieldCount != 1:
             dg.addUint16(fieldCount)
-        dg.appendData(fieldPacker.getString())
+        dg.appendData(fieldPacker.getBytes())
         self.air.send(dg)
 
         if oldFields is None and callback is not None:

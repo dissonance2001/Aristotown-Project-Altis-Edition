@@ -10,8 +10,8 @@ if sys.version_info >= (3, 0):
     from tkinter import *
     from tkinter.messagebox import askokcancel
 else:
-    from tkinter import *
-    from tkinter.messagebox import askokcancel
+    from Tkinter import *
+    from tkMessageBox import askokcancel
 
 
 class TaskManagerPanel(AppShell):

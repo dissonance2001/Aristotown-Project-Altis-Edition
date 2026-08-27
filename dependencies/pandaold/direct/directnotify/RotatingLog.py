@@ -4,7 +4,7 @@ import time
 
 class RotatingLog:
     """
-    A file() (or open()) replacement that will automatically open and write
+    An `open()` replacement that will automatically open and write
     to a new file if the prior file is too large or after a time interval.
     """
 
@@ -91,7 +91,7 @@ class RotatingLog:
                 self.timeLimit=time.time()+self.timeInterval
         else:
             # We'll keep writing to the old file, if available.
-            print(("RotatingLog error: Unable to open new log file \"%s\"." % (path,)))
+            print("RotatingLog error: Unable to open new log file \"%s\"." % (path,))
 
     def write(self, data):
         """
@@ -129,7 +129,7 @@ class RotatingLog:
         return self.file.readlines(sizehint)
 
     def xreadlines(self):
-        return self.file
+        return self.file.xreadlines()
 
     def seek(self, offset, whence=0):
         return self.file.seek(offset, whence)

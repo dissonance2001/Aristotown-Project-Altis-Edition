@@ -29,7 +29,7 @@ class Job(DirectObject):
     def __init__(self, name):
         self._name = name
         self._generator = None
-        self._id = next(Job._SerialGen)
+        self._id = Job._SerialGen.next()
         self._printing = False
         self._priority = Job.Priorities.Normal
         self._finished = False
@@ -120,7 +120,7 @@ if __debug__: # __dev__ not yet available at this point
             while True:
                 while self._accum < 100:
                     self._accum += 1
-                    print(('counter = %s, accum = %s' % (self._counter, self._accum)))
+                    print('counter = %s, accum = %s' % (self._counter, self._accum))
                     yield None
 
                 self._accum = 0

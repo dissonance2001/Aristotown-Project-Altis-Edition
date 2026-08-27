@@ -15,5 +15,7 @@ class StreamerMode(DirectObject):
         
     def updateDistrictName(self):
         name = base.cr.getShardName(base.localAvatar.defaultShard)
-        districtFile = open("streamerinfo_district.txt", 'w')
-        districtFile.write(name)
+        if name is None:
+            name = "Unknown District"
+        with open("streamerinfo_district.txt", 'w') as districtFile:
+            districtFile.write(str(name))

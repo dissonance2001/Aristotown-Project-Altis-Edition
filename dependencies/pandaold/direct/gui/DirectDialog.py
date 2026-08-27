@@ -188,8 +188,8 @@ class DirectDialog(DirectFrame):
 
     def configureDialog(self):
         # Set up hot key bindings
-        bindList = list(zip(self.buttonList, self['buttonHotKeyList'],
-                       self['buttonValueList']))
+        bindList = zip(self.buttonList, self['buttonHotKeyList'],
+                       self['buttonValueList'])
         for button, hotKey, value in bindList:
             if ((type(hotKey) == list) or
                 (type(hotKey) == tuple)):

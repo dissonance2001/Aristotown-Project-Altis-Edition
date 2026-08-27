@@ -54,7 +54,7 @@ class TaskThreaded:
             callback()
         else:
             taskName = ('%s-ThreadedTask-%s' %
-                        (self.__name, next(TaskThreaded._Serial)))
+                        (self.__name, TaskThreaded._Serial.next()))
             assert taskName not in self.__taskNames
             self.__taskNames.add(taskName)
             taskMgr.add(Functor(self.__doCallback, callback, taskName),
@@ -78,7 +78,7 @@ class TaskThreaded:
                 self.__threads.add(thread)
                 taskName = ('%s-ThreadedTask-%s-%s' %
                             (self.__name, thread.__class__.__name__,
-                             next(TaskThreaded._Serial)))
+                             TaskThreaded._Serial.next()))
                 assert taskName not in self.__taskNames
                 self.__taskNames.add(taskName)
                 self.__threads.add(thread)

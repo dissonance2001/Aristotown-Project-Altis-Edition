@@ -195,8 +195,8 @@ class InterrogateTokenizer:
             neg = 1
             self.pos += 1
         if (self.data[self.pos].isdigit()==0):
-            print(("File position " + str(self.pos)))
-            print(("Text: " + self.data[self.pos:self.pos+50]))
+            print("File position " + str(self.pos))
+            print("Text: " + self.data[self.pos:self.pos+50])
             sys.exit("Syntax error in interrogate file format 0")
         value = 0
         while (self.data[self.pos].isdigit()):
@@ -344,16 +344,16 @@ def printTree(tree, indent):
         if tree[0] in symbol.sym_name:
             for i in range(len(tree)):
                 if (i==0):
-                    print((spacing + "(symbol." + symbol.sym_name[tree[0]] + ","))
+                    print(spacing + "(symbol." + symbol.sym_name[tree[0]] + ",")
                 else:
                     printTree(tree[i], indent+1)
-            print((spacing + "),"))
+            print(spacing + "),")
         elif tree[0] in token.tok_name:
-            print((spacing + "(token." + token.tok_name[tree[0]] + ", '" + tree[1] + "'),"))
+            print(spacing + "(token." + token.tok_name[tree[0]] + ", '" + tree[1] + "'),")
         else:
-            print((spacing + str(tree)))
+            print(spacing + str(tree))
     else:
-        print((spacing + str(tree)))
+        print(spacing + str(tree))
 
 
 COMPOUND_STMT_PATTERN = (
@@ -455,7 +455,7 @@ class ParseTreeInfo:
                     if found:
                         self.docstring = vars["docstring"]
             except:
-                print(("CAUTION --- Parse failed: " + name))
+                print("CAUTION --- Parse failed: " + name)
         if isinstance(tree, tuple):
             self.extract_info(tree)
 
@@ -568,13 +568,13 @@ class CodeDatabase:
         for cxx in cxxlist:
             tokzr = InterrogateTokenizer(cxx)
             idb = InterrogateDatabase(tokzr)
-            for type in list(idb.types.values()):
+            for type in idb.types.values():
                 if (type.flags & 8192) or type.scopedname not in self.types:
                     self.types[type.scopedname] = type
                 if (type.flags & 8192) and (type.atomictype == 0) and (type.scopedname.count(" ")==0) and (type.scopedname.count(":")==0):
                     self.goodtypes[type.scopedname] = type
                     self.typeExports.setdefault("pandac.PandaModules", []).append(type.scopedname)
-            for func in list(idb.functions.values()):
+            for func in idb.functions.values():
                 type = idb.types.get(func.classindex)
                 func.pyname = convertToPythonFn(func.componentname)
                 if (type == None):
@@ -587,18 +587,18 @@ class CodeDatabase:
         for py in pylist:
             pyinf = ParseTreeInfo(readFile(py), py, py)
             mod = pathToModule(py)
-            for type in list(pyinf.class_info.keys()):
+            for type in pyinf.class_info.keys():
                 typinf = pyinf.class_info[type]
                 self.types[type] = typinf
                 self.goodtypes[type] = typinf
                 self.typeExports.setdefault(mod, []).append(type)
-                for func in list(typinf.function_info.keys()):
+                for func in typinf.function_info.keys():
                     self.funcs[type+"."+func] = typinf.function_info[func]
-            for func in list(pyinf.function_info.keys()):
+            for func in pyinf.function_info.keys():
                 self.funcs["GLOBAL."+func] = pyinf.function_info[func]
                 self.globalfn.append("GLOBAL."+func)
                 self.funcExports.setdefault(mod, []).append(func)
-            for var in list(pyinf.assign_info.keys()):
+            for var in pyinf.assign_info.keys():
                 self.varExports.setdefault(mod, []).append(var)
 
     def getClassList(self):
@@ -683,7 +683,7 @@ class CodeDatabase:
                 if (func.classindex == type.index):
                     result.append(type.scopedname+"."+func.pyname)
         elif (isinstance(type, ParseTreeInfo)):
-            for method in list(type.function_info.keys()):
+            for method in type.function_info.keys():
                 result.append(type.name + "." + method)
         return result
 
@@ -715,7 +715,7 @@ class CodeDatabase:
                 proto = proto.replace("basic_string< char >", "string")
                 proto = textToHTML(proto,"")
                 if "." in fn:
-                    for c in list(self.goodtypes.keys()):
+                    for c in self.goodtypes.keys():
                         if c != fn.split(".")[0] and (c in proto):
                             proto = re.sub("\\b%s\\b" % c, linkTo(urlprefix+c+urlsuffix, c), proto)
                 self.formattedprotos[fn] = proto
@@ -968,9 +968,9 @@ def expandImports(indirlist, directdirlist, fixdirlist):
                 varExports = code.getVarExports(module)
                 if (len(typeExports)+len(funcExports)+len(varExports)==0):
                     result.append(line)
-                    print((fixfile + " : " + module + " : no exports"))
+                    print(fixfile + " : " + module + " : no exports")
                 else:
-                    print((fixfile + " : " + module + " : repairing"))
+                    print(fixfile + " : " + module + " : repairing")
                     for x in funcExports:
                         fn = code.getFunctionName(x)
                         if fn in used:

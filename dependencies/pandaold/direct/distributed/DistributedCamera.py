@@ -184,13 +184,13 @@ class DistributedCamera(DistributedObject):
 
     def __str__(self):
         out = ''
-        for fixture in list(self.fixtures.values()):
+        for fixture in self.fixtures.values():
             out = '%s\n%s' % (out, fixture)
         return out[1:]
 
     def pack(self):
         out = ''
-        for fixture in list(self.fixtures.values()):
+        for fixture in self.fixtures.values():
             out = '%s\n%s' % (out, fixture.pack())
         return out[1:]
 
@@ -199,7 +199,7 @@ class DistributedCamera(DistributedObject):
 
         self.parent = None
 
-        for fixture in list(self.fixtures.values()):
+        for fixture in self.fixtures.values():
             fixture.cleanup()
             fixture.detachNode()
         self.fixtures = {}
@@ -216,7 +216,7 @@ class DistributedCamera(DistributedObject):
             else:
                 self.parent = self.cr.getDo(doId)
 
-            for fix in list(self.fixtures.values()):
+            for fix in self.fixtures.values():
                 fix.reparentTo(self.parent)
 
     def getCamParent(self):

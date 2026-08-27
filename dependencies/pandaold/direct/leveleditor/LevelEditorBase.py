@@ -305,7 +305,7 @@ class LevelEditorBase(DirectObject):
         if self.settingsFile is None:
             return
 
-        self.ui.SetCursor(wx.Cursor(wx.CURSOR_WAIT))
+        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
         try:
             f = open(self.settingsFile, 'r')
             configLines = f.readlines()
@@ -323,14 +323,14 @@ class LevelEditorBase(DirectObject):
                 elif line.startswith('hotKey'):
                     customHotKeyMap = eval(configLines[i])
                     customHotKeyDict = {}
-                    for hotKey in list(customHotKeyMap.keys()):
+                    for hotKey in customHotKeyMap.keys():
                         desc = customHotKeyMap[hotKey]
                         customHotKeyDict[desc[1]] = hotKey
 
                     overriddenKeys = []
-                    for key in list(base.direct.hotKeyMap.keys()):
+                    for key in base.direct.hotKeyMap.keys():
                         desc = base.direct.hotKeyMap[key]
-                        if desc[1] in list(customHotKeyDict.keys()):
+                        if desc[1] in customHotKeyDict.keys():
                             overriddenKeys.append(key)
 
                     for key in overriddenKeys:
@@ -342,7 +342,7 @@ class LevelEditorBase(DirectObject):
             self.ui.updateMenu()
         except:
             pass
-        self.ui.SetCursor(wx.Cursor(wx.CURSOR_ARROW))
+        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
     def convertMaya(self, modelname, callBack, obj=None, isAnim=False):
         if obj and isAnim:

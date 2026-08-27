@@ -3,13 +3,13 @@ Defines ProtoPalette tree UI
 """
 import wx
 import os
-from panda3d.core import *
+from pandac.PandaModules import *
 from .PaletteTreeCtrl import *
 
-class UniversalDropTarget(wx.DropTarget):
+class UniversalDropTarget(wx.PyDropTarget):
    """Implements drop target functionality to receive files, bitmaps and text"""
    def __init__(self, editor):
-       wx.DropTarget.__init__(self)
+       wx.PyDropTarget.__init__(self)
        self.editor = editor
        self.do = wx.DataObjectComposite()  # the dataobject that gets filled with the appropriate data
        self.filedo = wx.FileDataObject()

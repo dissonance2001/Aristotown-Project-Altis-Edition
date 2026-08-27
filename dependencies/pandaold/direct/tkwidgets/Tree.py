@@ -19,14 +19,14 @@ __all__ = ['TreeNode', 'TreeItem']
 # - keep track of object ids to allow more careful cleaning
 # - optimize tree redraw after expand of subnode
 
-import os, sys
+import os
 from direct.showbase.TkGlobal import *
 from panda3d.core import *
 
-
-if sys.version_info < (3, 0):
-    FileNotFoundError = IOError
-
+# Initialize icon directory
+ICONDIR = ConfigVariableSearchPath('model-path').findFile(Filename('icons')).toOsSpecific()
+if not os.path.isdir(ICONDIR):
+    raise RuntimeError("can't find DIRECT icon directory (%s)" % repr(ICONDIR))
 
 class TreeNode:
 
@@ -70,14 +70,14 @@ class TreeNode:
         self.parent = None
 
     def geticonimage(self, name):
-        if name in self.iconimages:
+        try:
             return self.iconimages[name]
-
-        fn = Filename("icons", name)
-        if not fn.resolveFilename(getModelPath().value, "gif"):
-            raise FileNotFoundError("couldn't find \"%s\"" % (fn))
-
-        image = PhotoImage(master=self.canvas, file=fn.toOsSpecific())
+        except KeyError:
+            pass
+        file, ext = os.path.splitext(name)
+        ext = ext or ".gif"
+        fullname = os.path.join(ICONDIR, file + ext)
+        image = PhotoImage(master=self.canvas, file=fullname)
         self.iconimages[name] = image
         return image
 

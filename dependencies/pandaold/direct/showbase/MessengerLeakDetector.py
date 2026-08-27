@@ -6,7 +6,7 @@ import gc, sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import builtins as builtins
+    import __builtin__ as builtins
 
 
 class MessengerLeakObject(DirectObject):

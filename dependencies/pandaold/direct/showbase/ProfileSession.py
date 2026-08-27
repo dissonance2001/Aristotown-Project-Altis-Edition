@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 from panda3d.core import TrueClock
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.showbase.PythonUtil import (
@@ -11,7 +11,7 @@ import sys
 if sys.version_info >= (3, 0):
     import builtins
 else:
-    import builtins as builtins
+    import __builtin__ as builtins
 
 
 class PercentStats(pstats.Stats):
@@ -204,7 +204,7 @@ class ProfileSession:
             # calculate the duration (this is dependent on the internal Python profile data format.
             # see profile.py and pstats.py, this was copied from pstats.Stats.strip_dirs)
             maxTime = 0.
-            for cc, nc, tt, ct, callers in list(profData[1].values()):
+            for cc, nc, tt, ct, callers in profData[1].values():
                 if ct > maxTime:
                     maxTime = ct
             self._duration = maxTime

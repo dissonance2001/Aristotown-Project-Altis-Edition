@@ -9,7 +9,7 @@ import sys
 if sys.version_info >= (3, 0):
     stringType = str
 else:
-    stringType = str
+    stringType = basestring
 
 class OnscreenGeom(DirectObject, NodePath):
     def __init__(self, geom = None,
@@ -47,8 +47,9 @@ class OnscreenGeom(DirectObject, NodePath):
         """
         # We ARE a node path.  Initially, we're an empty node path.
         NodePath.__init__(self)
-        if parent == None:
-            parent = aspect2d
+        if parent is None:
+            from direct.showbase import ShowBaseGlobal
+            parent = ShowBaseGlobal.aspect2d
 
         self.setGeom(geom, parent = parent, sort = sort, color = color)
 
@@ -114,7 +115,7 @@ class OnscreenGeom(DirectObject, NodePath):
         return self
 
     def configure(self, option=None, **kw):
-        for option, value in list(kw.items()):
+        for option, value in kw.items():
             # Use option string to access setter function
             try:
                 setter = getattr(self, 'set' + option[0].upper() + option[1:])
@@ -127,7 +128,7 @@ class OnscreenGeom(DirectObject, NodePath):
                 else:
                     setter(value)
             except AttributeError:
-                print(('OnscreenText.configure: invalid option: %s' % option))
+                print('OnscreenText.configure: invalid option: %s' % option)
 
     # Allow index style references
     def __setitem__(self, key, value):

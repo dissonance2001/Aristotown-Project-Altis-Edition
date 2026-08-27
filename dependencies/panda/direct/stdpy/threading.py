@@ -21,11 +21,16 @@ easier to use and understand.
 It is permissible to mix-and-match both threading and threading2
 within the same application. """
 
+from __future__ import annotations
+
 from panda3d import core
 from direct.stdpy import thread as _thread
 import sys as _sys
 
 import weakref
+
+from collections.abc import Callable, Iterable, Mapping
+from typing import Any, NoReturn
 
 __all__ = [
     'Thread',
@@ -41,7 +46,7 @@ __all__ = [
     'enumerate', 'active_count',
     'settrace', 'setprofile', 'stack_size',
     'TIMEOUT_MAX',
-    ]
+]
 
 TIMEOUT_MAX = _thread.TIMEOUT_MAX
 
@@ -49,14 +54,19 @@ local = _thread._local
 _newname = _thread._newname
 ThreadError = _thread.error
 
+
 class ThreadBase:
     """ A base class for both Thread and ExternalThread in this
     module. """
 
-    def __init__(self):
+    name: str
+    ident: int
+    daemon: bool
+
+    def __init__(self) -> None:
         pass
 
-    def getName(self):
+    def getName(self) -> str:
         return self.name
 
     def isDaemon(self):
@@ -78,18 +88,28 @@ class ThreadBase:
         else:
             self.__dict__[key] = value
 
+
 # Copy these static methods from Panda's Thread object.  These are
 # useful if you may be running in Panda's SIMPLE_THREADS compilation
 # mode.
-ThreadBase.forceYield = core.Thread.forceYield
-ThreadBase.considerYield = core.Thread.considerYield
+ThreadBase.forceYield = core.Thread.forceYield  # type: ignore[attr-defined]
+ThreadBase.considerYield = core.Thread.considerYield  # type: ignore[attr-defined]
+
 
 class Thread(ThreadBase):
     """ This class provides a wrapper around Panda's PythonThread
     object.  The wrapper is designed to emulate Python's own
     threading.Thread object. """
 
-    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, daemon=None):
+    def __init__(
+        self,
+        group: None = None,
+        target: Callable[..., object] | None = None,
+        name: str | None = None,
+        args: Iterable[Any] = (),
+        kwargs: Mapping[str, Any] = {},
+        daemon: bool | None = None,
+    ) -> None:
         ThreadBase.__init__(self)
 
         assert group is None
@@ -120,10 +140,7 @@ class Thread(ThreadBase):
         self.__dict__['ident'] = threadId
 
     def __del__(self):
-        # On interpreter shutdown, the _thread module might have
-        # already been cleaned up.
-        if _thread and _thread._remove_thread_id:
-            _thread._remove_thread_id(self.ident)
+        _thread._remove_thread_id(self.ident)
 
     def is_alive(self):
         thread = self.__thread
@@ -131,7 +148,7 @@ class Thread(ThreadBase):
 
     isAlive = is_alive
 
-    def start(self):
+    def start(self) -> None:
         thread = self.__thread
         if thread is None or thread.is_started():
             raise RuntimeError
@@ -147,7 +164,7 @@ class Thread(ThreadBase):
 
         self.__target(*self.__args, **self.__kwargs)
 
-    def join(self, timeout = None):
+    def join(self, timeout: float | None = None) -> None:
         # We don't support a timed join here, sorry.
         assert timeout is None
         thread = self.__thread
@@ -157,15 +174,16 @@ class Thread(ThreadBase):
             self.__thread = None
             _thread._remove_thread_id(self.ident)
 
-    def setName(self, name):
+    def setName(self, name: str) -> None:
         self.__dict__['name'] = name
         self.__thread.setName(name)
+
 
 class ExternalThread(ThreadBase):
     """ Returned for a Thread object that wasn't created by this
     interface. """
 
-    def __init__(self, extThread, threadId):
+    def __init__(self, extThread: core.Thread, threadId: int) -> None:
         ThreadBase.__init__(self)
 
         self.__thread = extThread
@@ -191,32 +209,23 @@ class ExternalThread(ThreadBase):
     def setDaemon(self, daemon):
         raise RuntimeError
 
+
 class MainThread(ExternalThread):
     """ Returned for the MainThread object. """
 
-    def __init__(self, extThread, threadId):
+    def __init__(self, extThread: core.Thread, threadId: int) -> None:
         ExternalThread.__init__(self, extThread, threadId)
         self.__dict__['daemon'] = False
+
 
 class Lock(core.Mutex):
     """ This class provides a wrapper around Panda's Mutex object.
     The wrapper is designed to emulate Python's own threading.Lock
     object. """
 
-    def __init__(self, name = "PythonLock"):
+    def __init__(self, name: str = "PythonLock") -> None:
         core.Mutex.__init__(self, name)
 
-    def acquire(self, blocking = True):
-        if blocking:
-            core.Mutex.acquire(self)
-            return True
-        else:
-            return core.Mutex.tryAcquire(self)
-
-    __enter__ = acquire
-
-    def __exit__(self, t, v, tb):
-        self.release()
 
 class RLock(core.ReMutex):
     """ This class provides a wrapper around Panda's ReMutex object.
@@ -226,25 +235,13 @@ class RLock(core.ReMutex):
     def __init__(self, name = "PythonRLock"):
         core.ReMutex.__init__(self, name)
 
-    def acquire(self, blocking = True):
-        if blocking:
-            core.ReMutex.acquire(self)
-            return True
-        else:
-            return core.ReMutex.tryAcquire(self)
 
-    __enter__ = acquire
-
-    def __exit__(self, t, v, tb):
-        self.release()
-
-
-class Condition(core.ConditionVarFull):
-    """ This class provides a wrapper around Panda's ConditionVarFull
+class Condition(core.ConditionVar):
+    """ This class provides a wrapper around Panda's ConditionVar
     object.  The wrapper is designed to emulate Python's own
     threading.Condition object. """
 
-    def __init__(self, lock = None):
+    def __init__(self, lock: Lock | RLock | None = None) -> None:
         if not lock:
             lock = Lock()
 
@@ -253,7 +250,7 @@ class Condition(core.ConditionVarFull):
         assert isinstance(lock, Lock)
 
         self.__lock = lock
-        core.ConditionVarFull.__init__(self, self.__lock)
+        core.ConditionVar.__init__(self, self.__lock)
 
     def acquire(self, *args, **kw):
         return self.__lock.acquire(*args, **kw)
@@ -261,14 +258,14 @@ class Condition(core.ConditionVarFull):
     def release(self):
         self.__lock.release()
 
-    def wait(self, timeout = None):
+    def wait(self, timeout: float | None = None) -> None:
         if timeout is None:
-            core.ConditionVarFull.wait(self)
+            core.ConditionVar.wait(self)
         else:
-            core.ConditionVarFull.wait(self, timeout)
+            core.ConditionVar.wait(self, timeout)
 
     def notifyAll(self):
-        core.ConditionVarFull.notifyAll(self)
+        core.ConditionVar.notifyAll(self)
 
     notify_all = notifyAll
 
@@ -276,6 +273,7 @@ class Condition(core.ConditionVarFull):
 
     def __exit__(self, t, v, tb):
         self.release()
+
 
 class Semaphore(core.Semaphore):
     """ This class provides a wrapper around Panda's Semaphore
@@ -297,6 +295,7 @@ class Semaphore(core.Semaphore):
     def __exit__(self, t, v, tb):
         self.release()
 
+
 class BoundedSemaphore(Semaphore):
     """ This class provides a wrapper around Panda's Semaphore
     object.  The wrapper is designed to emulate Python's own
@@ -312,13 +311,14 @@ class BoundedSemaphore(Semaphore):
 
         Semaphore.release(self)
 
+
 class Event:
     """ This class is designed to emulate Python's own threading.Event
     object. """
 
     def __init__(self):
         self.__lock = core.Mutex("Python Event")
-        self.__cvar = core.ConditionVarFull(self.__lock)
+        self.__cvar = core.ConditionVar(self.__lock)
         self.__flag = False
 
     def is_set(self):
@@ -362,6 +362,7 @@ class Event:
         finally:
             self.__lock.release()
 
+
 class Timer(Thread):
     """Call a function after a specified number of seconds:
 
@@ -388,8 +389,10 @@ class Timer(Thread):
             self.function(*self.args, **self.kwargs)
         self.finished.set()
 
-def _create_thread_wrapper(t, threadId):
+
+def _create_thread_wrapper(t: core.Thread, threadId: int) -> ExternalThread:
     """ Creates a thread wrapper for the indicated external thread. """
+    pyt: ExternalThread
     if isinstance(t, core.MainThread):
         pyt = MainThread(t, threadId)
     else:
@@ -397,15 +400,19 @@ def _create_thread_wrapper(t, threadId):
 
     return pyt
 
-def current_thread():
+
+def current_thread() -> ThreadBase:
     t = core.Thread.getCurrentThread()
     return _thread._get_thread_wrapper(t, _create_thread_wrapper)
+
 
 def main_thread():
     t = core.Thread.getMainThread()
     return _thread._get_thread_wrapper(t, _create_thread_wrapper)
 
+
 currentThread = current_thread
+
 
 def enumerate():
     tlist = []
@@ -418,125 +425,28 @@ def enumerate():
     finally:
         _thread._threadsLock.release()
 
+
 def active_count():
     return len(enumerate())
+
 
 activeCount = active_count
 
 _settrace_func = None
+
+
 def settrace(func):
     global _settrace_func
     _settrace_func = func
 
+
 _setprofile_func = None
+
+
 def setprofile(func):
     global _setprofile_func
     _setprofile_func = func
 
-def stack_size(size = None):
+
+def stack_size(size: object = None) -> NoReturn:
     raise ThreadError
-
-if __debug__:
-    def _test():
-        from collections import deque
-
-        _sleep = core.Thread.sleep
-
-        _VERBOSE = False
-
-        class _Verbose(object):
-
-            def __init__(self, verbose=None):
-                if verbose is None:
-                    verbose = _VERBOSE
-                self.__verbose = verbose
-
-            def _note(self, format, *args):
-                if self.__verbose:
-                    format = format % args
-                    format = "%s: %s\n" % (
-                        currentThread().getName(), format)
-                    _sys.stderr.write(format)
-
-        class BoundedQueue(_Verbose):
-
-            def __init__(self, limit):
-                _Verbose.__init__(self)
-                self.mon = Lock(name = "BoundedQueue.mon")
-                self.rc = Condition(self.mon)
-                self.wc = Condition(self.mon)
-                self.limit = limit
-                self.queue = deque()
-
-            def put(self, item):
-                self.mon.acquire()
-                while len(self.queue) >= self.limit:
-                    self._note("put(%s): queue full", item)
-                    self.wc.wait()
-                self.queue.append(item)
-                self._note("put(%s): appended, length now %d",
-                           item, len(self.queue))
-                self.rc.notify()
-                self.mon.release()
-
-            def get(self):
-                self.mon.acquire()
-                while not self.queue:
-                    self._note("get(): queue empty")
-                    self.rc.wait()
-                item = self.queue.popleft()
-                self._note("get(): got %s, %d left", item, len(self.queue))
-                self.wc.notify()
-                self.mon.release()
-                return item
-
-        class ProducerThread(Thread):
-
-            def __init__(self, queue, quota):
-                Thread.__init__(self, name="Producer")
-                self.queue = queue
-                self.quota = quota
-
-            def run(self):
-                from random import random
-                counter = 0
-                while counter < self.quota:
-                    counter = counter + 1
-                    self.queue.put("%s.%d" % (self.getName(), counter))
-                    _sleep(random() * 0.00001)
-
-
-        class ConsumerThread(Thread):
-
-            def __init__(self, queue, count):
-                Thread.__init__(self, name="Consumer")
-                self.queue = queue
-                self.count = count
-
-            def run(self):
-                while self.count > 0:
-                    item = self.queue.get()
-                    print(item)
-                    self.count = self.count - 1
-
-        NP = 3
-        QL = 4
-        NI = 5
-
-        Q = BoundedQueue(QL)
-        P = []
-        for i in range(NP):
-            t = ProducerThread(Q, NI)
-            t.setName("Producer-%d" % (i+1))
-            P.append(t)
-        C = ConsumerThread(Q, NI*NP)
-        for t in P:
-            t.start()
-            _sleep(0.000001)
-        C.start()
-        for t in P:
-            t.join()
-        C.join()
-
-    if __name__ == '__main__':
-        _test()

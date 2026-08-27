@@ -4205,7 +4205,7 @@ dclass DistributedMailManager : DistributedObject {
 struct PotentialToon {
   uint32 avNum;
   string avName;
-  string avDNA;
+  blob avDNA;
   uint8 avPosition;
   uint8 aname;
   int16 hp;

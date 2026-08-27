@@ -66,7 +66,7 @@ class TestInterval(Interval):
             for p in self.particleEffect.particlesDict.values():
                 p.setRenderParent(self.particleEffect.renderParent.node())
         """
-        for f in list(self.particleEffect.forceGroupDict.values()):
+        for f in self.particleEffect.forceGroupDict.values():
             f.enable()
         """
         for p in self.particleEffect.particlesDict.values():

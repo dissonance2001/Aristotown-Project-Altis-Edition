@@ -339,7 +339,7 @@ class HoodMgr(DirectObject.DirectObject):
                 tunnelOriginList.append(tunnelOriginPlaceHolder)
                 tunnelOriginPlaceHolder.setPos(tunnelOrigin.getPos(render))
                 tunnelOriginPlaceHolder.setHpr(tunnelOrigin.getHpr(render))
-                hood = base.localAvatar.cr.playGame.hood
+                hood = base.cr.playGame.hood
                 if ZoneUtil.tutorialDict:
                     how = 'teleportIn'
                     tutorialFlag = 1

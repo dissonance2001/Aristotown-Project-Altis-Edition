@@ -44,9 +44,10 @@ from panda3d.core import ConfigVariableBool
 
 if sys.version_info >= (3, 0):
     import builtins
+    from functools import reduce
     xrange = range
 else:
-    import builtins as builtins
+    import __builtin__ as builtins
 
 
 """
@@ -67,7 +68,7 @@ except ImportError:
         if not hasattr(package, 'rindex'):
             raise ValueError("'package' not set to a string")
         dot = len(package)
-        for x in range(level, 1, -1):
+        for x in xrange(level, 1, -1):
             try:
                 dot = package.rindex('.', 0, dot)
             except ValueError:
@@ -238,13 +239,13 @@ if __debug__:
             return r
 
     def printStack():
-        print((StackTrace(start=1).compact()))
+        print(StackTrace(start=1).compact())
         return True
     def printReverseStack():
-        print((StackTrace(start=1).reverseCompact()))
+        print(StackTrace(start=1).reverseCompact())
         return True
     def printVerboseStack():
-        print((StackTrace(start=1)))
+        print(StackTrace(start=1))
         return True
 
     #-----------------------------------------------------------------------------
@@ -291,7 +292,7 @@ if __debug__:
         return traceFunctionCall(sys._getframe(2))
 
     def printThisCall():
-        print((traceFunctionCall(sys._getframe(1))))
+        print(traceFunctionCall(sys._getframe(1)))
         return 1 # to allow "assert printThisCall()"
 
 # Magic numbers: These are the bit masks in func_code.co_flags that
@@ -302,7 +303,7 @@ _KEY_DICT = 8
 def doc(obj):
     if (isinstance(obj, types.MethodType)) or \
        (isinstance(obj, types.FunctionType)):
-        print((obj.__doc__))
+        print(obj.__doc__)
 
 def adjust(command = None, dim = 1, parent = None, **kw):
     """
@@ -445,7 +446,7 @@ def invertDict(D, lossy=False):
     {1: 'key1', 2: 'key2'}
     """
     n = {}
-    for key, value in list(D.items()):
+    for key, value in D.items():
         if not lossy and value in n:
             raise Exception('duplicate key in invertDict: %s' % value)
         n[value] = key
@@ -460,7 +461,7 @@ def invertDictLossless(D):
     {1: ['key1'], 2: ['key2', 'keyA']}
     """
     n = {}
-    for key, value in list(D.items()):
+    for key, value in D.items():
         n.setdefault(value, [])
         n[value].append(key)
     return n
@@ -506,7 +507,7 @@ def replace(list, old, new, all=0):
         return 1
     else:
         numReplaced = 0
-        for i in range(len(list)):
+        for i in xrange(len(list)):
             if list[i] == old:
                 numReplaced += 1
                 list[i] = new
@@ -1172,8 +1173,6 @@ def normalDistrib(a, b, gauss=random.gauss):
     uniformly onto the curve inside [a, b]
 
     ------------------------------------------------------------------------
-    https://statweb.stanford.edu/~naras/jsm/NormalDensity/NormalDensity.html
-
     The 68-95-99.7% Rule
     ====================
     All normal density curves satisfy the following property which is often
@@ -1244,25 +1243,31 @@ class SerialNumGen:
         if start is None:
             start = 0
         self.__counter = start-1
-    def __next__(self):
+
+    def next(self):
         self.__counter += 1
         return self.__counter
+
+    __next__ = next
 
 class SerialMaskedGen(SerialNumGen):
     def __init__(self, mask, start=None):
         self._mask = mask
         SerialNumGen.__init__(self, start)
-    def __next__(self):
+
+    def next(self):
         v = SerialNumGen.next(self)
         return v & self._mask
+
+    __next__ = next
 
 _serialGen = SerialNumGen()
 def serialNum():
     global _serialGen
-    return next(_serialGen)
+    return _serialGen.next()
 def uniqueName(name):
     global _serialGen
-    return '%s-%s' % (name, next(_serialGen))
+    return '%s-%s' % (name, _serialGen.next())
 
 class EnumIter:
     def __init__(self, enum):
@@ -1428,7 +1433,7 @@ def printListEnumGen(l):
         n //= 10
     format = '%0' + '%s' % digits + 'i:%s'
     for i in range(len(l)):
-        print((format % (i, l[i])))
+        print(format % (i, l[i]))
         yield None
 
 def printListEnum(l):
@@ -1573,15 +1578,15 @@ def r_convertTree(oldTree, newTree, idList):
 
 
 def pretty_print(tree):
-    for name in list(tree.keys()):
+    for name in tree.keys():
         print(name)
         r_pretty_print(tree[name], 0)
 
 
 def r_pretty_print(tree, num):
     num+=1
-    for name in list(tree.keys()):
-        print(("  "*num,name))
+    for name in tree.keys():
+        print("  "*num,name)
         r_pretty_print(tree[name],num)
 
 
@@ -1599,7 +1604,10 @@ def appendStr(obj, st):
             return s
         oldStr = Functor(stringer, str(obj))
         stringer = None
-    obj.__str__ = types.MethodType(Functor(appendedStr, oldStr, st), obj, obj.__class__)
+    if sys.version_info >= (3, 0):
+        obj.__str__ = types.MethodType(Functor(appendedStr, oldStr, st), obj)
+    else:
+        obj.__str__ = types.MethodType(Functor(appendedStr, oldStr, st), obj, obj.__class__)
     appendedStr = None
     return obj
 
@@ -1607,11 +1615,11 @@ def appendStr(obj, st):
 class ScratchPad:
     """empty class to stick values onto"""
     def __init__(self, **kArgs):
-        for key, value in list(kArgs.items()):
+        for key, value in kArgs.items():
             setattr(self, key, value)
         self._keys = set(kArgs.keys())
     def add(self, **kArgs):
-        for key, value in list(kArgs.items()):
+        for key, value in kArgs.items():
             setattr(self, key, value)
         self._keys.update(list(kArgs.keys()))
     def destroy(self):
@@ -1632,7 +1640,7 @@ class Sync:
     def __init__(self, name, other=None):
         self._name = name
         if other is None:
-            self._series = next(self._SeriesGen)
+            self._series = self._SeriesGen.next()
             self._value = 0
         else:
             self._series = other._series
@@ -1728,7 +1736,7 @@ def getNumberedTypedString(items, maxLen=5000, numPrefix=''):
     first = True
     s = ''
     snip = '<SNIP>'
-    for i in range(len(items)):
+    for i in xrange(len(items)):
         if not first:
             s += '\n'
         first = False
@@ -1759,7 +1767,7 @@ def getNumberedTypedSortedString(items, maxLen=5000, numPrefix=''):
     first = True
     s = ''
     strs.sort()
-    for i in range(len(strs)):
+    for i in xrange(len(strs)):
         if not first:
             s += '\n'
         first = False
@@ -1777,12 +1785,12 @@ def printNumberedTyped(items, maxLen=5000):
         n //= 10
     digits = digits
     format = '%0' + '%s' % digits + 'i:%s \t%s'
-    for i in range(len(items)):
+    for i in xrange(len(items)):
         objStr = fastRepr(items[i])
         if len(objStr) > maxLen:
             snip = '<SNIP>'
             objStr = '%s%s' % (objStr[:(maxLen-len(snip))], snip)
-        print((format % (i, itype(items[i]), objStr)))
+        print(format % (i, itype(items[i]), objStr))
 
 def printNumberedTypesGen(items, maxLen=5000):
     digits = 0
@@ -1792,8 +1800,8 @@ def printNumberedTypesGen(items, maxLen=5000):
         n //= 10
     digits = digits
     format = '%0' + '%s' % digits + 'i:%s'
-    for i in range(len(items)):
-        print((format % (i, itype(items[i]))))
+    for i in xrange(len(items)):
+        print(format % (i, itype(items[i])))
         yield None
 
 def printNumberedTypes(items, maxLen=5000):
@@ -2099,7 +2107,7 @@ def report(types = [], prefix = '', xform = None, notifyFunc = None, dConfigPara
 
             if 'args' in types:
                 rArgs += [repr(x)+', ' for x in args[1:]] + \
-                         [ x + ' = ' + '%s, ' % repr(y) for x,y in list(kwargs.items())]
+                         [ x + ' = ' + '%s, ' % repr(y) for x,y in kwargs.items()]
 
             if not rArgs:
                 rArgs = '()'
@@ -2138,18 +2146,18 @@ def report(types = [], prefix = '', xform = None, notifyFunc = None, dConfigPara
                     if notifyFunc:
                         notifyFunc(outStr % (prefix,))
                     else:
-                        print((indent(outStr % (prefix,))))
+                        print(indent(outStr % (prefix,)))
             else:
                 if notifyFunc:
                     notifyFunc(outStr)
                 else:
-                    print((indent(outStr)))
+                    print(indent(outStr))
 
             if 'interests' in types:
                 base.cr.printInterestSets()
 
             if 'stackTrace' in types:
-                print((StackTrace()))
+                print(StackTrace())
 
             global __report_indent
             rVal = None
@@ -2159,7 +2167,7 @@ def report(types = [], prefix = '', xform = None, notifyFunc = None, dConfigPara
             finally:
                 __report_indent -= 1
                 if rVal is not None:
-                    print((indent(' -> '+repr(rVal))))
+                    print(indent(' -> '+repr(rVal)))
                     pass
                 pass
             return rVal
@@ -2287,14 +2295,14 @@ def makeFlywheelGen(objects, countList=None, countFunc=None, scale=None):
             countList.append(countFunc(object))
     if scale is not None:
         # scale the counts if we've got a scale factor
-        for i in range(len(countList)):
+        for i in xrange(len(countList)):
             yield None
             if countList[i] > 0:
                 countList[i] = max(1, int(countList[i] * scale))
     # create a dict for the flywheel to use during its iteration to efficiently select
     # the objects for the sequence
     index2objectAndCount = {}
-    for i in range(len(countList)):
+    for i in xrange(len(countList)):
         yield None
         index2objectAndCount[i] = [objects[i], countList[i]]
     # create the flywheel generator
@@ -2329,7 +2337,7 @@ if __debug__:
                     st=globalClock.getRealTime()
                     f(*args,**kArgs)
                     s=globalClock.getRealTime()-st
-                    print(("Function %s.%s took %s seconds"%(f.__module__, f.__name__,s)))
+                    print("Function %s.%s took %s seconds"%(f.__module__, f.__name__,s))
                 else:
                     import profile as prof, pstats
 
@@ -2354,7 +2362,7 @@ if __debug__:
 
 def getTotalAnnounceTime():
     td=0
-    for objs in list(base.stats.values()):
+    for objs in base.stats.values():
         for stat in objs:
             td+=getAnnounceGenerateTime(stat)
     return td
@@ -2382,7 +2390,7 @@ class MiniLog:
 
     def enterFunction(self, funcName, *args, **kw):
         rArgs = [repr(x)+', ' for x in args] + \
-                [ x + ' = ' + '%s, ' % repr(y) for x,y in list(kw.items())]
+                [ x + ' = ' + '%s, ' % repr(y) for x,y in kw.items()]
 
         if not rArgs:
             rArgs = '()'
@@ -2425,9 +2433,9 @@ class MiniLogSentry:
         del self.log
 
 def logBlock(id, msg):
-    print(('<< LOGBLOCK(%03d)' % id))
-    print((str(msg)))
-    print(('/LOGBLOCK(%03d) >>' % id))
+    print('<< LOGBLOCK(%03d)' % id)
+    print(str(msg))
+    print('/LOGBLOCK(%03d) >>' % id)
 
 class HierarchyException(Exception):
     JOSWILSO = 0
@@ -2513,7 +2521,8 @@ class AlphabetCounter:
     # object that produces 'A', 'B', 'C', ... 'AA', 'AB', etc.
     def __init__(self):
         self._curCounter = ['A']
-    def __next__(self):
+
+    def next(self):
         result = ''.join([c for c in self._curCounter])
         index = -1
         while True:
@@ -2536,12 +2545,14 @@ class AlphabetCounter:
                 break
         return result
 
+    __next__ = next
+
 if __debug__ and __name__ == '__main__':
     def testAlphabetCounter():
         tempList = []
         ac = AlphabetCounter()
-        for i in range(26*3):
-            tempList.append(next(ac))
+        for i in xrange(26*3):
+            tempList.append(ac.next())
         assert tempList == [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                             'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN','AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
                             'BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN','BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ',]
@@ -2551,8 +2562,8 @@ if __debug__ and __name__ == '__main__':
         num += 26 # AAZ
         num += 1 # ABA
         num += 2 # ABC
-        for i in range(num):
-            x = next(ac)
+        for i in xrange(num):
+            x = ac.next()
         assert x == 'ABC'
     testAlphabetCounter()
     del testAlphabetCounter

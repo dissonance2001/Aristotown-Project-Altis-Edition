@@ -111,7 +111,7 @@ import Pmw, math, operator, sys
 if sys.version_info >= (3, 0):
     from tkinter.simpledialog import askstring
 else:
-    from tkinter.simpledialog import askstring
+    from tkSimpleDialog import askstring
 
 
 DELTA = (5.0 / 360.) * 2.0 * math.pi
@@ -248,16 +248,16 @@ class FSMInspector(AppShell):
         angle = self.findAngle(fromCenter, toCenter)
 
         # Compute offset fromState point
-        newFromPt = list(map(operator.__add__,
+        newFromPt = map(operator.__add__,
                         fromCenter,
                         self.computePoint(fromState.radius,
-                                           angle + DELTA)))
+                                           angle + DELTA))
 
         # Compute offset toState point
-        newToPt = list(map(operator.__sub__,
+        newToPt = map(operator.__sub__,
                       toCenter,
                       self.computePoint(toState.radius,
-                                         angle - DELTA)))
+                                         angle - DELTA))
         return list(newFromPt) + list(newToPt)
 
     def computePoint(self, radius, angle):
@@ -362,25 +362,25 @@ class FSMInspector(AppShell):
         dict = self.stateInspectorDict
         keys = list(dict.keys())
         keys.sort()
-        print(("ClassicFSM.ClassicFSM('%s', [" % self.name))
+        print("ClassicFSM.ClassicFSM('%s', [" % self.name)
         for key in keys[:-1]:
             si = dict[key]
             center = si.center()
-            print(("    State.State('%s'," % si.state.getName()))
-            print(("                %s," % si.state.getEnterFunc().__name__))
-            print(("                %s," % si.state.getExitFunc().__name__))
-            print(("                %s," % si.state.getTransitions()))
-            print(("                inspectorPos = [%.1f, %.1f])," % (center[0], center[1])))
+            print("    State.State('%s'," % si.state.getName())
+            print("                %s," % si.state.getEnterFunc().__name__)
+            print("                %s," % si.state.getExitFunc().__name__)
+            print("                %s," % si.state.getTransitions())
+            print("                inspectorPos = [%.1f, %.1f])," % (center[0], center[1]))
         for key in keys[-1:]:
             si = dict[key]
             center = si.center()
-            print(("    State.State('%s'," % si.state.getName()))
-            print(("                %s," % si.state.getEnterFunc().__name__))
-            print(("                %s," % si.state.getExitFunc().__name__))
-            print(("                %s," % si.state.getTransitions()))
-            print(("                inspectorPos = [%.1f, %.1f])]," % (center[0], center[1])))
-        print(("        '%s'," % self.fsm.getInitialState().getName()))
-        print(("        '%s')" % self.fsm.getFinalState().getName()))
+            print("    State.State('%s'," % si.state.getName())
+            print("                %s," % si.state.getEnterFunc().__name__)
+            print("                %s," % si.state.getExitFunc().__name__)
+            print("                %s," % si.state.getTransitions())
+            print("                inspectorPos = [%.1f, %.1f])]," % (center[0], center[1]))
+        print("        '%s'," % self.fsm.getInitialState().getName())
+        print("        '%s')" % self.fsm.getFinalState().getName())
 
     def toggleBalloon(self):
         if self.toggleBalloonVar.get():
@@ -391,7 +391,7 @@ class FSMInspector(AppShell):
     def onDestroy(self, event):
         """ Called on ClassicFSM Panel shutdown """
         self.fsm.inspecting = 0
-        for si in list(self.stateInspectorDict.values()):
+        for si in self.stateInspectorDict.values():
             self.ignore(self.name + '_' + si.getName() + '_entered')
             self.ignore(self.name + '_' + si.getName() + '_exited')
 
@@ -525,7 +525,7 @@ class StateInspector(Pmw.MegaArchetype):
     def mouseMotion(self, event):
         dx = self._canvas.canvasx(event.x) - self.lastx
         dy = self._canvas.canvasy(event.y) - self.lasty
-        newx, newy = list(map(operator.__add__, (self.startx, self.starty), (dx, dy)))
+        newx, newy = map(operator.__add__, (self.startx, self.starty), (dx, dy))
         self.setPos(newx, newy)
 
     def mouseRelease(self, event):
@@ -539,7 +539,7 @@ class StateInspector(Pmw.MegaArchetype):
         self.fsm.request(self.getName())
 
     def inspectSubMachine(self):
-        print(('inspect ' + self.tag + ' subMachine'))
+        print('inspect ' + self.tag + ' subMachine')
         for childFSM in self.state.getChildren():
             FSMInspector(childFSM)
 

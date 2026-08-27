@@ -35,8 +35,8 @@ class WidgetPropertiesDialog(Toplevel):
                 import tkinter
                 parent = tkinter._default_root
             else:
-                import tkinter
-                parent = tkinter._default_root
+                import Tkinter
+                parent = Tkinter._default_root
         # Create toplevel window
         Toplevel.__init__(self, parent)
         self.transient(parent)

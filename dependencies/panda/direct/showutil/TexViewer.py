@@ -1,5 +1,7 @@
-from panda3d.core import *
+from panda3d.core import CardMaker, LineSegs, TextNode, Texture, TransparencyAttrib
 from direct.showbase.DirectObject import DirectObject
+from direct.showbase import ShowBaseGlobal
+
 
 class TexViewer(DirectObject):
     """ A simple class to pop up a card onscreen to see the contents
@@ -9,14 +11,14 @@ class TexViewer(DirectObject):
         self.tex = tex
         self.cleanedUp = False
 
-        self.root = aspect2d.attachNewNode('texViewer')
+        self.root = ShowBaseGlobal.aspect2d.attachNewNode('texViewer')
         self.root.setBin('gui-popup', 10000)
 
         cards = self.root.attachNewNode('cards')
 
         # We'll put the full-resolution texture on the left.
         cm = CardMaker('left')
-        l, r, b, t = (-1, -0.1, 0, 0.9)
+        l, r, b, t = (-1.0, -0.1, 0.0, 0.9)
         cm.setFrame(l, r, b, t)
         left = cards.attachNewNode(cm.generate())
         left.setTexture(self.tex)
