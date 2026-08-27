@@ -1465,7 +1465,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__furnitureGui.show()
 
     def hideFurnitureGui(self):
-        if self.__furnitureGui:
+        if hasattr(self, '_LocalToon__furnitureGui') and self.__furnitureGui:
             self.__furnitureGui.hide()
 
     def clarabelleNewsPageCollision(self, show = True):
@@ -1522,9 +1522,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__clarabelleFlash.resume()
 
     def hideClarabelleGui(self):
-        if self.__clarabelleButton:
+        if hasattr(self, '_LocalToon__clarabelleButton') and self.__clarabelleButton:
             self.__clarabelleButton.hide()
-            self.__clarabelleFlash.pause()
+            if hasattr(self, '_LocalToon__clarabelleFlash') and self.__clarabelleFlash:
+                self.__clarabelleFlash.pause()
 
     def __handleClarabelleButton(self):
         self.stopMoveFurniture()
@@ -1628,28 +1629,24 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.refreshOnscreenButtons()
 
     def refreshOnscreenButtons(self):
-        self.bFriendsList.hide()
+        if hasattr(self, 'bFriendsList') and self.bFriendsList is not None:
+            self.bFriendsList.hide()
         self.hideFurnitureGui()
-        # The old circular Clarabelle/New Cattlelog alert is replaced by the
-        # Clash notification ribbon, so it must never be shown as a duplicate.
         self.hideClarabelleGui()
         self.ignore(ToontownGlobals.FriendsListHotkey)
-        if self.friendsListButtonActive and self.friendsListButtonObscured <= 0:
-            self.bFriendsList.show()
-            self.accept(ToontownGlobals.FriendsListHotkey,
-                        self.sendFriendsListEvent)
+        if hasattr(self, 'bFriendsList') and self.bFriendsList is not None:
+            if self.friendsListButtonActive and self.friendsListButtonObscured <= 0:
+                self.bFriendsList.show()
+                self.accept(ToontownGlobals.FriendsListHotkey, self.sendFriendsListEvent)
 
-        # Clash shows/hides its notification panel with the social interface.
-        # This also prevents it from appearing over Altis loading screens.
         if self.notificationManager is not None:
             self.notificationManager.setInterfaceVisible(
                 self.friendsListButtonActive)
 
-        if self.__catalogNotifyDialog:
+        if hasattr(self, '_LocalToon__catalogNotifyDialog') and self.__catalogNotifyDialog:
             self.__catalogNotifyDialog.cleanup()
             self.__catalogNotifyDialog = None
 
-        # Queue catalog/mail alerts independently of the friends-list button.
         self.newCatalogNotify()
 
         if self.moveFurnitureButtonObscured <= 0:
@@ -1829,7 +1826,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         base.setCellsActive([base.leftCells[2]], 0)
 
     def hideGardeningGui(self):
-        if self.__gardeningGui:
+        if hasattr(self, '_LocalToon__gardeningGui') and self.__gardeningGui:
             self.__gardeningGui.hide()
             base.setCellsActive([base.leftCells[2]], 1)
 

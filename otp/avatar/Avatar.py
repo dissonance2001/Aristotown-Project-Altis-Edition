@@ -576,12 +576,13 @@ class Avatar(Actor, ShadowCaster):
         nametag3d.update()
 
     def showName(self):
-        if self.__nameVisible and (not self.ghostMode):
-            nametag3d = self.nametag.getNametag3d()
-            nametag3d.showNametag()
-            nametag3d.showChat()
-            nametag3d.showThought()
-            nametag3d.update()
+        if hasattr(self, 'nametag') and self.nametag is not None:
+            if self.__nameVisible and (not self.ghostMode):
+                nametag3d = self.nametag.getNametag3d()
+                nametag3d.showNametag()
+                nametag3d.showChat()
+                nametag3d.showThought()
+                nametag3d.update()
 
     def hideNametag2d(self):
         nametag2d = self.nametag.getNametag2d()

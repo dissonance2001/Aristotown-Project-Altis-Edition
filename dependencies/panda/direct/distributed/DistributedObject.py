@@ -493,7 +493,8 @@ class DistributedObject(DistributedObjectBase):
         self.cr.sendSetLocation(self.doId, parentId, zoneId)
 
     def setLocation(self, parentId, zoneId):
-        self.cr.storeObjectLocation(self, parentId, zoneId)
+        if self.cr:
+            self.cr.storeObjectLocation(self, parentId, zoneId)
 
     def getLocation(self):
         try:

@@ -39,13 +39,11 @@ class DistributedNode(DistributedObject.DistributedObject, NodePath):
         self.gotStringParentToken = 0
 
     def setLocation(self, parentId, zoneId, teleport=0):
-        # Redefine DistributedObject setLocation, so that when
-        # location is set to the ocean grid, we can update our parenting
-        # under gridParent
         DistributedObject.DistributedObject.setLocation(self, parentId, zoneId)
+        if not self.cr:
+            return
         parentObj = self.cr.doId2do.get(parentId)
         if parentObj:
-            # Make sure you in a zone that is in the grid before making a GridParent
             if (parentObj.isGridParent() and (zoneId >= parentObj.startingZone)):
                 if not self.gridParent:
                     self.gridParent = GridParent.GridParent(self)

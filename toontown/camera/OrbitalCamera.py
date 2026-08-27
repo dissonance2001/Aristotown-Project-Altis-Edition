@@ -226,8 +226,16 @@ class OrbitalCamera(FSM, NodePath):
         self.acceptWheel()
         self.acceptTab()
 
-        self.reparentTo(self.subject)
-        base.camera.reparentTo(self)
+        try:
+            if self.subject and not self.subject.isEmpty():
+                self.reparentTo(self.subject)
+        except Exception:
+            pass
+            
+        try:
+            base.camera.reparentTo(self)
+        except Exception:
+            pass
 
         self.setPos(0, 0, self.subject.getHeight())
         camera.setPosHpr(

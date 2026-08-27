@@ -2755,6 +2755,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 nextTime = nextGiftTime
             if nextGiftTime == None:
                 nextGiftTime = nextTime
+                
+            if nextGiftTime is None:
+                nextGiftTime = 0
+            if nextTime is None:
+                nextTime = 0
+                
             if nextGiftTime < nextTime:
                 nextTime = nextGiftTime
             existingDuration = None

@@ -1275,6 +1275,8 @@ class ToonHead(Actor.Actor):
         return Task.done
 
     def __blinkCloseEyes(self, task):
+        if not hasattr(self, 'eyelids') or self.eyelids is None:
+            return Task.done
         if self.eyelids.getCurrentState().getName() != 'open':
             taskMgr.doMethodLater(4.0, self.__blinkCloseEyes, self.__blinkName)
         else:
@@ -1284,7 +1286,7 @@ class ToonHead(Actor.Actor):
 
     def startBlink(self):
         taskMgr.remove(self.__blinkName)
-        if self.__eyes:
+        if hasattr(self, '_ToonHead__eyes') and self.__eyes:
             self.openEyes()
         taskMgr.doMethodLater(self.randGen.random() * 4.0 + 1, self.__blinkCloseEyes, self.__blinkName)
 

@@ -3920,7 +3920,6 @@ class Toon(Avatar.Avatar, ToonHead):
         hat = self.getHat()
         if (hat[0] < 0 or hat[0] >= len(ToonDNA.HatModels) or
                 ToonDNA.HatModels[hat[0]] is None):
-            self.sendLogSuspiciousEvent('tried to put a wrong hat idx %d' % hat[0])
             return
         if len(self.hatNodes) > 0:
             for hatNode in self.hatNodes:
@@ -4303,7 +4302,7 @@ class Toon(Avatar.Avatar, ToonHead):
         return self.legsParts
 
     def findSomethingToLookAt(self):
-        if self.randGen.random() < 0.1 or not hasattr(self, 'cr'):
+        if self.randGen.random() < 0.1 or not hasattr(self, 'cr') or self.cr is None or not hasattr(self.cr, 'doId2do') or self.cr.doId2do is None:
             x = self.randGen.choice((-0.8,
              -0.5,
              0,
@@ -4319,19 +4318,29 @@ class Toon(Avatar.Avatar, ToonHead):
         for id, obj in list(self.cr.doId2do.items()):
             if hasattr(obj, 'getStareAtNodeAndOffset') and obj != self:
                 node, offset = obj.getStareAtNodeAndOffset()
-                if node.getY(self) > 0.0:
-                    nodePathList.append((node, offset))
+                try:
+                    if node and not node.isEmpty() and node.getY(self) > 0.0:
+                        nodePathList.append((node, offset))
+                except Exception:
+                    pass
 
         if nodePathList:
-            nodePathList.sort(lambda x, y: cmp(x[0].getDistance(self), y[0].getDistance(self)))
-            if len(nodePathList) >= 2:
-                if self.randGen.random() < 0.9:
-                    chosenNodePath = nodePathList[0]
+            try:
+                nodePathList.sort(key=lambda item: item[0].getDistance(self))
+                if len(nodePathList) >= 2:
+                    if self.randGen.random() < 0.9:
+                        chosenNodePath = nodePathList[0]
+                    else:
+                        chosenNodePath = nodePathList[1]
                 else:
-                    chosenNodePath = nodePathList[1]
-            else:
-                chosenNodePath = nodePathList[0]
-            self.lerpLookAt(chosenNodePath[0].getPos(self), blink=1)
+                    chosenNodePath = nodePathList[0]
+                
+                if chosenNodePath and chosenNodePath[0] and not chosenNodePath[0].isEmpty():
+                    self.lerpLookAt(chosenNodePath[0].getPos(self), blink=1)
+                else:
+                    ToonHead.findSomethingToLookAt(self)
+            except Exception:
+                ToonHead.findSomethingToLookAt(self)
         else:
             ToonHead.findSomethingToLookAt(self)
 

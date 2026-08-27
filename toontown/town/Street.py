@@ -229,20 +229,22 @@ class Street(BattlePlace.BattlePlace):
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
 
     def enterTunnelIn(self, requestStatus):
-        self.enterZone(requestStatus['zoneId'])
-        BattlePlace.BattlePlace.enterTunnelIn(self, requestStatus)
+        self.enterTeleportIn(requestStatus)
 
     def enterTeleportIn(self, requestStatus):
         teleportDebug(requestStatus, 'Street.enterTeleportIn(%s)' % (requestStatus,))
         zoneId = requestStatus['zoneId']
-        self._ttfToken = self.addSetZoneCompleteCallback(Functor(self._teleportToFriend, requestStatus))
+        from functools import partial
+        self._ttfToken = self.addSetZoneCompleteCallback(partial(self._teleportToFriend, requestStatus))
         self.enterZone(zoneId)
         BattlePlace.BattlePlace.enterTeleportIn(self, requestStatus)
 
     def _teleportToFriend(self, requestStatus):
+        if 'avId' not in requestStatus:
+            return
         avId = requestStatus['avId']
-        hoodId = requestStatus['hoodId']
-        zoneId = requestStatus['zoneId']
+        hoodId = requestStatus.get('hoodId', 0)
+        zoneId = requestStatus.get('zoneId', 0)
         if avId != -1:
             if avId not in base.cr.doId2do:
                 friend = base.cr.identifyAvatar(avId)
@@ -362,14 +364,19 @@ class Street(BattlePlace.BattlePlace):
                 if newZoneId in loader.zoneVisDict:
                     base.cr.sendSetZoneMsg(newZoneId, loader.zoneVisDict[newZoneId])
                 else:
-                    visList = [newZoneId] + list(loader.zoneVisDict.values())[0]
+                    visValues = list(loader.zoneVisDict.values())
+                    visList = [newZoneId] + list(visValues[0]) if visValues and visValues[0] else [newZoneId]
                     base.cr.sendSetZoneMsg(newZoneId, visList)
             self.zoneId = newZoneId
-        geom = base.cr.playGame.getPlace().loader.geom
-        self.halloweenLights = geom.findAllMatches('**/*light*')
-        self.halloweenLights += geom.findAllMatches('**/*lamp*')
-        for light in self.halloweenLights:
-            light.setColorScaleOff(1)
+            
+        place = base.cr.playGame.getPlace()
+        if place and hasattr(place, 'loader') and place.loader and hasattr(place.loader, 'geom') and place.loader.geom:
+            geom = place.loader.geom
+            self.halloweenLights = geom.findAllMatches('**/*light*')
+            self.halloweenLights += geom.findAllMatches('**/*lamp*')
+            for light in self.halloweenLights:
+                if light and not light.isEmpty():
+                    light.setColorScaleOff(1)
 
     def replaceStreetSignTextures(self):
         if not hasattr(base.cr, 'playGame'):
