@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from direct.distributed import DoHierarchy
 import re
 
@@ -118,7 +119,7 @@ class DoCollectionManagerOR:
 
     def dosByDistance(self):
         objs = list(self.doId2do.values())
-        objs.sort(cmp=self._compareDistance)
+        objs.sort(key=cmp_to_key(self._compareDistance))
         return objs
 
     def doByDistance(self):

@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -535,7 +536,7 @@ class CatalogScreen(DirectFrame):
             return priceB - priceA
 
         itemList = base.localAvatar.monthlyCatalog + base.localAvatar.weeklyCatalog
-        itemList.sort(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly))
+        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
         itemList.reverse()
         allClosetItems = CatalogFurnitureItem.getAllClosets()
         allBankItems = CatalogFurnitureItem.getAllBanks()
@@ -565,7 +566,7 @@ class CatalogScreen(DirectFrame):
                 self.panelList.append(CatalogItemPanel.CatalogItemPanel(parent=hidden, item=item, type=CatalogItem.CatalogTypeWeekly, parentCatalogScreen=self))
 
         itemList = base.localAvatar.backCatalog
-        itemList.sort(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder))
+        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
         itemList.reverse()
         for item in itemList:
             if isinstance(item, CatalogInvalidItem.CatalogInvalidItem):
@@ -720,7 +721,7 @@ class CatalogScreen(DirectFrame):
         self.panelDict = {}
         self.visiblePanels = []
         itemList = base.localAvatar.monthlyCatalog + base.localAvatar.weeklyCatalog
-        itemList.sort(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly))
+        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
         itemList.reverse()
         for item in itemList:
             if item.loyaltyRequirement() != 0:
@@ -729,7 +730,7 @@ class CatalogScreen(DirectFrame):
                 self.panelList.append(CatalogItemPanel.CatalogItemPanel(parent=hidden, item=item, type=CatalogItem.CatalogTypeWeekly))
 
         itemList = base.localAvatar.backCatalog
-        itemList.sort(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder))
+        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
         itemList.reverse()
         for item in itemList:
             if item.loyaltyRequirement() != 0:
@@ -1075,4 +1076,3 @@ class CatalogScreen(DirectFrame):
     def __handleNoAck(self, caller = None):
         if hasattr(self, 'giftToggle') and self.giftToggle:
             self.giftToggle['text'] = TTLocalizer.CatalogGiftToggleNoAck
-

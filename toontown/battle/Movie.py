@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import copy
 import random
 from direct.directnotify import DirectNotifyGlobal
@@ -1551,7 +1552,7 @@ class Movie(DirectObject.DirectObject):
                 return -1
             return 0
 
-        self.toonAttackDicts.sort(compFunc)
+        self.toonAttackDicts.sort(key=cmp_to_key(compFunc))
         return
 
     def __findToonAttack(self, track):

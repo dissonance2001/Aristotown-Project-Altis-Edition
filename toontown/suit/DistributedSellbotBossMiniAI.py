@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 from toontown.suit import DistributedBossCogAI
 from toontown.suit import DistributedSuitAI
@@ -233,7 +234,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
@@ -248,7 +249,7 @@ class DistributedSellbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 

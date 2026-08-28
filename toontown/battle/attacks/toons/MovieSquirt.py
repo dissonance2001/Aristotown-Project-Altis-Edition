@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 import math
 from direct.interval.IntervalGlobal import *
@@ -64,7 +65,7 @@ def doSquirts(squirts):
         elif len(a) < len(b):
             return -1
         return 0
-    suitSquirts.sort(compFunc)
+    suitSquirts.sort(key=cmp_to_key(compFunc))
 
     delay = random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
 

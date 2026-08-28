@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.task.Task import Task
@@ -235,7 +236,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
 
     def updateScrollList(self):
         curShardTuples = base.cr.listActiveShards()
-        curShardTuples.sort(compareShardTuples)
+        curShardTuples.sort(key=cmp_to_key(compareShardTuples))
 
         currentShardId = self.getCurrentShardId()
         actualShardId = base.localAvatar.defaultShard

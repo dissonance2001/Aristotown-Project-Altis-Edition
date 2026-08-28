@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import math
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -163,7 +164,7 @@ def findToonAttack(toons, attacks, track):
             return -1
         return 0
 
-    foundAttacks.sort(compFunc)
+    foundAttacks.sort(key=cmp_to_key(compFunc))
     return foundAttacks
 
 

@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -569,14 +570,14 @@ class FriendsListPanel(DirectFrame, StateData.StateData):
             friendButton.destroy()
             del self.friends[friendPair]
 
-        newFriends.sort(compareFriends)
-        petFriends.sort(compareFriends)
-        localToons.sort(compareFriends)
-        freeChatOneRef.sort(compareFriends)
-        speedChatOneRef.sort(compareFriends)
-        freeChatDouble.sort(compareFriends)
-        speedChatDouble.sort(compareFriends)
-        offlineFriends.sort(compareFriends)
+        newFriends.sort(key=cmp_to_key(compareFriends))
+        petFriends.sort(key=cmp_to_key(compareFriends))
+        localToons.sort(key=cmp_to_key(compareFriends))
+        freeChatOneRef.sort(key=cmp_to_key(compareFriends))
+        speedChatOneRef.sort(key=cmp_to_key(compareFriends))
+        freeChatDouble.sort(key=cmp_to_key(compareFriends))
+        speedChatDouble.sort(key=cmp_to_key(compareFriends))
+        offlineFriends.sort(key=cmp_to_key(compareFriends))
         for friendPair in newFriends:
             if friendPair not in self.friends:
                 friendButton = self.makeFriendButton(friendPair)

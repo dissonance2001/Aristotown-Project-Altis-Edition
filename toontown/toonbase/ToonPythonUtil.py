@@ -35,6 +35,7 @@ __all__ = ['unique', 'indent', 'nonRepeatingRandomList',
 'Averager', 'getRepository', 'formatTimeExact', 'startSuperLog', 'endSuperLog',
 'typeName', 'safeTypeName', 'histogramDict', 'unescapeHtmlString', 'bpdb', ]
 
+from functools import cmp_to_key
 import types
 import string
 import re
@@ -3233,7 +3234,7 @@ class ClassTree:
             newList.append(len(self._bases))
             bases = self._bases
             # print classes with fewer bases first
-            bases.sort(lambda x,y: len(x._bases)-len(y._bases))
+            bases.sort(key=cmp_to_key(lambda x,y: len(x._bases)-len(y._bases)))
             for base in bases:
                 s += '\n%s' % base._getStr(indent+1, newList)
         return s

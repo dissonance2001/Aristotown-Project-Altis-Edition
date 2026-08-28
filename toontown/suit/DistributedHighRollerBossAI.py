@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -131,7 +132,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
@@ -145,7 +146,7 @@ class DistributedHighRollerBossAI(DistributedMinibossAI.DistributedMinibossAI, F
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 

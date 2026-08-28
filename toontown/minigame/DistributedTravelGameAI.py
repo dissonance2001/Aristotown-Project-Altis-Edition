@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -109,7 +110,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
             else:
                 return 1
 
-        self.directionVotes.sort(voteCompare, reverse=True)
+        self.directionVotes.sort(key=cmp_to_key(voteCompare), reverse=True)
         winningVotes = self.directionVotes[0][1]
         self.winningDirections = []
         self.notify.debug('self.directionVotes = %s' % self.directionVotes)

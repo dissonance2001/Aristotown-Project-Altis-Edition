@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 import types
 from direct.directnotify import DirectNotifyGlobal
@@ -33,7 +34,7 @@ class SuitPlannerInteriorAI:
         for currChance in range(num):
             joinChances.append(random.randint(1, 100))
 
-        joinChances.sort(cmp)
+        joinChances.sort(key=cmp_to_key(cmp))
         return joinChances
 
     def _genSuitInfos(self, numFloors, bldgLevel, bldgTrack):
@@ -131,7 +132,7 @@ class SuitPlannerInteriorAI:
             bossLvlRange = bldgInfo[SuitBuildingGlobals.SUIT_BLDG_INFO_BOSS_LVLS]
             newLvl = random.randint(bossLvlRange[0], bossLvlRange[1])
             lvlList.append(newLvl)
-        lvlList.sort(cmp)
+        lvlList.sort(key=cmp_to_key(cmp))
         self.notify.debug('LevelList: ' + repr(lvlList))
         return lvlList
 

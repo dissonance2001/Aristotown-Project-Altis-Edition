@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import os
 import time
 import datetime
@@ -123,7 +124,7 @@ class DirectNewsFrame(DirectObject.DirectObject):
             return fileA.getFilename().compareTo(fileB.getFilename())
 
         homeFileNames = list(homeFileNames)
-        homeFileNames.sort(cmp=fileCmp)
+        homeFileNames.sort(key=cmp_to_key(fileCmp))
         self.notify.debug('returned homeFileNames=%s' % homeFileNames)
         return homeFileNames
 

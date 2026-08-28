@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
 from toontown.battle.BattleProps import *
@@ -72,7 +73,7 @@ def doDrops(drops):
             return -1
         return 0
 
-    suitDrops.sort(compFunc)
+    suitDrops.sort(key=cmp_to_key(compFunc))
     delay = random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
     mtrack = Parallel(name='toplevel-drop')
     npcDrops = {}

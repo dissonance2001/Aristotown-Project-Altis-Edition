@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
@@ -3639,5 +3640,5 @@ def sortAttacks(attacksDict):
             return -1
         return 0
 
-    attacks.sort(compFunc)
+    attacks.sort(key=cmp_to_key(compFunc))
     return attacks

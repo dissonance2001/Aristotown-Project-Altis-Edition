@@ -1,4 +1,5 @@
 #Embedded file name: toontown.suit.DistributedBossbotBossAI
+from functools import cmp_to_key
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.fsm import FSM
@@ -110,7 +111,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
@@ -125,7 +126,7 @@ class DistributedDirectorsAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FS
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 

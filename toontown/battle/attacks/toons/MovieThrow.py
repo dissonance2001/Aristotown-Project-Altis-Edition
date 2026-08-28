@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 import math
 from pandac.PandaModules import *
@@ -58,7 +59,7 @@ def doThrows(throws):
             return -1
         return 0
 
-    suitThrows.sort(compFunc)
+    suitThrows.sort(key=cmp_to_key(compFunc))
     totalHitDict = {}
     singleHitDict = {}
     groupHitDict = {}

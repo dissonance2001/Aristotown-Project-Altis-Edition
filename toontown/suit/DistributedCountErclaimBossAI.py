@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from otp.ai.MagicWordGlobal import *
@@ -284,7 +285,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
         if battleNumber == 2:
@@ -299,7 +300,7 @@ class DistributedCountErclaimBossAI(DistributedMinibossAI.DistributedMinibossAI,
             def compareJoinChance(a, b):
                 return cmp(a[1], b[1])
 
-            reserveSuits.sort(compareJoinChance)
+            reserveSuits.sort(key=cmp_to_key(compareJoinChance))
             return {'activeSuits': activeSuits,
                     'reserveSuits': reserveSuits}
 

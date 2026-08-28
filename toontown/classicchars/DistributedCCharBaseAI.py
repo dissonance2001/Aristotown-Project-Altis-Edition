@@ -1,5 +1,6 @@
 # File: D (Python 2.4)
 
+from functools import cmp_to_key
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedAvatarAI
@@ -89,7 +90,7 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
             else:
                 return 1
 
-        self.nearbyAvatars.sort(nAv_compare)
+        self.nearbyAvatars.sort(key=cmp_to_key(nAv_compare))
 
 
     def getNearbyAvatars(self):
@@ -204,5 +205,4 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def transitionCostume(self):
         self.transitionToCostume = 1
-
 

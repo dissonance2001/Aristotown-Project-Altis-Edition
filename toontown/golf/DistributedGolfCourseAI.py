@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from panda3d.core import *
 from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
@@ -695,9 +696,9 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
                 return -1
 
         if GolfGlobals.TIME_TIE_BREAKER:
-            totalScores.sort(scoreCompareWithTime)
+            totalScores.sort(key=cmp_to_key(scoreCompareWithTime))
         else:
-            totalScores.sort(scoreCompareNoTime)
+            totalScores.sort(key=cmp_to_key(scoreCompareNoTime))
         curRank = 0
         oldScore = 0
         oldTime = 0

@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import random
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
@@ -129,7 +130,7 @@ def doZaps(zaps):
         elif len(a) < len(b):
             return -1
         return 0
-    suitZaps.sort(compFunc)
+    suitZaps.sort(key=cmp_to_key(compFunc))
 
     delay = 0
 

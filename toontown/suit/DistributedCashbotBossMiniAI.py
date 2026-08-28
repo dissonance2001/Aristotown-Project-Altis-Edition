@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from panda3d.core import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
@@ -58,7 +59,7 @@ class DistributedCashbotBossMiniAI(DistributedMinibossAI.DistributedMinibossAI, 
         def compareJoinChance(a, b):
             return cmp(a[1], b[1])
 
-        reserveSuits.sort(compareJoinChance)
+        reserveSuits.sort(key=cmp_to_key(compareJoinChance))
         return {'activeSuits': activeSuits,
          'reserveSuits': reserveSuits}
 

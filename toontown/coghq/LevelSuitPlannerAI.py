@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from toontown.suit import SuitDNA
@@ -43,7 +44,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         for currChance in range(num):
             joinChances.append(random.randint(1, 100))
 
-        joinChances.sort(cmp)
+        joinChances.sort(key=cmp_to_key(cmp))
         return joinChances
 
     def __genSuitInfos(self, level, track):

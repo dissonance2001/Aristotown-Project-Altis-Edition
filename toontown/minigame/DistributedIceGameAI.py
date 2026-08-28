@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import Point3
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.fsm import ClassicFSM, State
@@ -176,7 +177,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
             else:
                 return 0
 
-        sortedByDistance.sort(cmp=compareDistance)
+        sortedByDistance.sort(key=cmp_to_key(compareDistance))
         self.scoresAsList = []
         totalPointsAdded = 0
         for index in range(len(self.avIdList)):

@@ -3,6 +3,7 @@ Created on Nov 16, 2016
 
 @author: Drew
 '''
+from functools import cmp_to_key
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
@@ -217,7 +218,7 @@ class ShardPicker(ShtikerPage.ShtikerPage):
             else:
                 return 0
 
-        curShardTuples.sort(compareShardTuples)
+        curShardTuples.sort(key=cmp_to_key(compareShardTuples))
         if base.cr.welcomeValleyManager:
             curShardTuples.append((ToontownGlobals.WelcomeValleyToken,
              TTLocalizer.WelcomeValley[-1],

@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 import types
@@ -127,7 +128,7 @@ class DistributedPacesetterBossAI(DistributedMinibossAI.DistributedMinibossAI, F
         def compareJoinChance(a, b):
             return cmp(a[1], b[1])
 
-        reserveSuits.sort(compareJoinChance)
+        reserveSuits.sort(key=cmp_to_key(compareJoinChance))
         return {
             'activeSuits': activeSuits,
             'reserveSuits': reserveSuits,

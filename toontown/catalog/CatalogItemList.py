@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from . import CatalogItem
 from pandac.PandaModules import *
 import types
@@ -163,7 +164,7 @@ class CatalogItemList:
         if cmpfunc == None:
             self.__list.sort()
         else:
-            self.__list.sort(cmpfunc)
+            self.__list.sort(key=cmp_to_key(cmpfunc))
         self.__blob = None
         return
 

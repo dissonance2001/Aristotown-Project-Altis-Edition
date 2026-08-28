@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleBase import *
@@ -64,7 +65,7 @@ def doSues(sues):
         elif len(a) < len(b):
             return -1
         return 0
-    suitSues.sort(compFunc)
+    suitSues.sort(key=cmp_to_key(compFunc))
 
     totalHitDict = {}
     singleHitDict = {}
