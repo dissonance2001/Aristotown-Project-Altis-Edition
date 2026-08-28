@@ -229,7 +229,8 @@ class Street(BattlePlace.BattlePlace):
             self.notify.error('Unknown mode: ' + where + ' in handleElevatorDone')
 
     def enterTunnelIn(self, requestStatus):
-        self.enterTeleportIn(requestStatus)
+        self.enterZone(requestStatus['zoneId'])
+        BattlePlace.BattlePlace.enterTunnelIn(self, requestStatus)
 
     def enterTeleportIn(self, requestStatus):
         teleportDebug(requestStatus, 'Street.enterTeleportIn(%s)' % (requestStatus,))

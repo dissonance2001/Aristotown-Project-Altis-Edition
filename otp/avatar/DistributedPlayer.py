@@ -93,8 +93,10 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar, PlayerBase.PlayerBa
         messenger.send(self.GetPlayerGenerateEvent(), [self])
 
     def setLocation(self, parentId, zoneId):
-        DistributedAvatar.DistributedAvatar.setLocation(self, parentId, zoneId)
         if not self.cr:
+            return
+        DistributedAvatar.DistributedAvatar.setLocation(self, parentId, zoneId)
+        if self is base.localAvatar:
             return
         if not (parentId in (0, None) and zoneId in (0, None)):
             if not self.cr._isValidPlayerLocation(parentId, zoneId):

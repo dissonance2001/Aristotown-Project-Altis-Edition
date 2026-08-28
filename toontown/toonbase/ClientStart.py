@@ -77,6 +77,12 @@ DefaultPhases = (3, 3.5, 4, 5, 5.5, 6, 7, 8, 9, 10, 11, 12, 13)
 import glob
 notify.info("Loading Default Pack...")
 builtins.defaultPhaseMultifiles = []
+
+resourcesRoot = Filename.fromOsSpecific(os.path.abspath('resources'))
+if resourcesRoot.exists():
+    if not vfs.mount(resourcesRoot, Filename('/'), VirtualFileSystem.MFReadOnly):
+        notify.warning('Failed to mount loose resources at the VFS root.')
+
 for file in glob.glob('resources/default/*.mf'):
     phaseName = os.path.splitext(os.path.basename(file))[0]
     if not phaseName.startswith('phase_'):

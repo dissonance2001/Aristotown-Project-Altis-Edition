@@ -1266,7 +1266,7 @@ class OTPClientRepository(ClientRepositoryBase):
             self.distributedDistrict = district
 
         self.notify.info('Entering shard %s' % shardId)
-        localAvatar.setLocation(shardId, zoneId)
+        base.localAvatar.setLocation(shardId, zoneId)
         base.localAvatar.defaultShard = shardId
         self.waitForDatabaseTimeout(requestName = 'WaitOnEnterResponses')
         self.handleSetShardComplete()
@@ -1471,7 +1471,7 @@ class OTPClientRepository(ClientRepositoryBase):
             zoneId,
             avId]
 
-        localAvatar.setLeftDistrict()
+        base.localAvatar.setLeftDistrict()
         self.removeShardInterest(self._handleOldShardGone)
         taskMgr.remove('streamerUpdateDist')
         taskMgr.doMethodLater(2, self.updateDistrictName, 'streamerUpdateDist')

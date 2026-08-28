@@ -254,6 +254,9 @@ class DNAStorage(object):
 
     def allowSuitOrigin(self, np):
         # NOTICE: Game-specific hack
+        if 'toon_landmark_hqTT' in np.getName():
+            return False
+
         if 'gag_shop' in np.getName():
             return False
         

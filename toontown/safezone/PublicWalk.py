@@ -63,7 +63,11 @@ class PublicWalk(Walk.Walk):
         base.localAvatar.endAllowPies()
 
     def __handleStickerBookEntry(self):
-        currentState = base.localAvatar.animFSM.getCurrentState().getName()
+        animFSM = base.localAvatar.animFSM if hasattr(base.localAvatar, 'animFSM') else None
+        if animFSM is None:
+            self.notify.warning('Ignoring Sticker Book request while local Toon is unavailable')
+            return
+        currentState = animFSM.getCurrentState().getName()
         if currentState == 'jumpAirborne':
             return
         if base.localAvatar.book.isObscured():
@@ -73,7 +77,11 @@ class PublicWalk(Walk.Walk):
         messenger.send(self.doneEvent, [doneStatus])
 
     def __handleOptionsEntry(self):
-        currentState = base.localAvatar.animFSM.getCurrentState().getName()
+        animFSM = base.localAvatar.animFSM if hasattr(base.localAvatar, 'animFSM') else None
+        if animFSM is None:
+            self.notify.warning('Ignoring Options request while local Toon is unavailable')
+            return
+        currentState = animFSM.getCurrentState().getName()
         if currentState == 'jumpAirborne':
             return
         if base.localAvatar.book.isObscured():

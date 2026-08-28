@@ -16,12 +16,6 @@ class ToontownInternalRepository(AstronInternalRepository):
             self, baseChannel, serverId=serverId, dcFileNames=dcFileNames,
             dcSuffix=dcSuffix, connectMethod=connectMethod, threadedNet=threadedNet)
 
-        # Register our net messenger events
-        self.netMessenger.register(0, 'shardStatus')
-        self.netMessenger.register(1, 'queryShardStatus')
-        self.netMessenger.register(2, 'startInvasion')
-        self.netMessenger.register(3, 'stopInvasion')
-
         self.__messenger = ToontownNetMessengerAI(self)
 
     def getAvatarIdFromSender(self):

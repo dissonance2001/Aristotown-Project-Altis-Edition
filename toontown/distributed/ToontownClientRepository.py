@@ -637,14 +637,13 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
     def dumpAllSubShardObjects(self):
         if self.KeepSubShardObjects:
             return
+        currentAvatar = base.localAvatar if hasattr(base, 'localAvatar') else None
+        if currentAvatar is None:
+            self.notify.warning('dumpAllSubShardObjects called without a local avatar')
+            return
         isNotLive = not base.cr.isLive()
         if isNotLive:
-            try:
-                localAvatar
-            except:
-                self.notify.info('dumpAllSubShardObjects')
-            else:
-                self.notify.info('dumpAllSubShardObjects: defaultShard is %s' % localAvatar.defaultShard)
+            self.notify.info('dumpAllSubShardObjects: defaultShard is %s' % currentAvatar.defaultShard)
 
             ignoredClasses = ('MagicWordManager', 'TimeManager', 'DistributedDistrict', 'FriendManager', 'NewsManager', 'ToontownMagicWordManager', 'WelcomeValleyManager', 'DistributedTrophyMgr', 'CatalogManager', 'DistributedBankMgr', 'EstateManager', 'RaceManager', 'SafeZoneManager', 'DeleteManager', 'TutorialManager', 'ToontownDistrict', 'DistributedDeliveryManager', 'DistributedPartyManager', 'AvatarFriendsManager', 'InGameNewsMgr', 'WhitelistMgr', 'TTCodeRedemptionMgr')
         messenger.send('clientCleanup')
@@ -658,9 +657,9 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             obj = self.doId2do[doId]
             if isNotLive:
                 ignoredClass = obj.__class__.__name__ in ignoredClasses
-                if not ignoredClass and obj.parentId != localAvatar.defaultShard:
+                if not ignoredClass and obj.parentId != currentAvatar.defaultShard:
                     self.notify.info('dumpAllSubShardObjects: %s %s parent %s is not defaultShard' % (obj.__class__.__name__, obj.doId, obj.parentId))
-            if obj.parentId == localAvatar.defaultShard and obj is not localAvatar:
+            if obj.parentId == currentAvatar.defaultShard and obj is not currentAvatar:
                 if obj.neverDisable:
                     if isNotLive:
                         if not ignoredClass:
@@ -974,7 +973,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.setZonesEmulated += 1
         parentId = base.localAvatar.defaultShard
         self.sendSetLocation(base.localAvatar.doId, parentId, zoneId)
-        localAvatar.setLocation(parentId, zoneId)
+        base.localAvatar.setLocation(parentId, zoneId)
         interestZones = zoneId
         messenger.send('zoneChange', [zoneId])
         if visibleZoneList is not None:
@@ -1086,6 +1085,11 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.deleteObject(doId)
 
     def deleteObject(self, doId, ownerView = False):
+        currentAvatar = base.localAvatar if hasattr(base, 'localAvatar') else None
+        if (currentAvatar is not None and doId == currentAvatar.doId and
+                self.doId2do.get(doId) is currentAvatar):
+            self.notify.warning('Ignoring unexpected delete of local avatar %s' % doId)
+            return
         if doId in self.doId2do:
             obj = self.doId2do[doId]
             del self.doId2do[doId]
@@ -1098,8 +1102,11 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             self.notify.warning('Asked to delete non-existent DistObj ' + str(doId))
 
     def _abandonShard(self):
+        currentAvatar = base.localAvatar if hasattr(base, 'localAvatar') else None
+        if currentAvatar is None:
+            return
         for doId, obj in list(self.doId2do.items()):
-            if obj.parentId == localAvatar.defaultShard and obj is not localAvatar:
+            if obj.parentId == currentAvatar.defaultShard and obj is not currentAvatar:
                 self.deleteObject(doId)
 
     def askAvatarKnown(self, avId):

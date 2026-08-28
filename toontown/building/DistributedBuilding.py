@@ -390,7 +390,7 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         sideBldgNodes = self.getNodePaths()
         nodePath = hidden.find(self.getSbSearchString())
         newNP = self.setupSuitBuilding(nodePath)
-        if not self.leftDoor:
+        if newNP is None or not self.leftDoor:
             return
         closeDoors(self.leftDoor, self.rightDoor)
         newNP.stash()
@@ -440,13 +440,13 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         
         dnaStore = self.cr.playGame.dnaStore
         level = int(self.difficulty / 2) + 1
-        suitNP = dnaStore.findNode('suit_landmark_' + chr(self.track) + str(level))
-        
+        track = chr(self.track)
+        suitNP = dnaStore.findNode('suit_landmark_' + track + str(level))
         # if the suit node path is not in the dna store, dont setup
         # the building specified
-        if not suitNP:
-           self.notify.warning("Suit NP could not be found for building!")
-           return
+        if suitNP is None or suitNP.isEmpty():
+            self.notify.warning("Suit NP could not be found for building!")
+            return
 
         zoneId = dnaStore.getZoneFromBlockNumber(self.block)
         zoneId = ZoneUtil.getTrueZoneId(zoneId, self.interiorZoneId)
@@ -469,6 +469,11 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         textHeight = textNode.getHeight()
         zScale = (textHeight + 2) / 3.0
         signOrigin = suitBuildingNP.find('**/sign_origin;+s')
+        frontNP = suitBuildingNP.find('**/*_front/+GeomNode;+s')
+        if signOrigin.isEmpty() or frontNP.isEmpty():
+            self.notify.warning('Suit building model is missing a sign origin or front geometry.')
+            suitBuildingNP.removeNode()
+            return
         backgroundNP = loader.loadModel('phase_5/models/modules/suit_sign')
         backgroundNP.reparentTo(signOrigin)
         backgroundNP.setPosHprScale(0.0, 0.0, textHeight * 0.8 / zScale, 0.0, 0.0, 0.0, 8.0, 8.0, 8.0 * zScale)
@@ -476,7 +481,6 @@ class DistributedBuilding(DistributedObject.DistributedObject):
         signTextNodePath = backgroundNP.attachNewNode(textNode.generate())
         signTextNodePath.setPosHprScale(0.0, -0.001, -0.21 + textHeight * 0.1 / zScale, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1 / zScale)
         signTextNodePath.setColor(1.0, 1.0, 1.0, 1.0)
-        frontNP = suitBuildingNP.find('**/*_front/+GeomNode;+s')
         backgroundNP.wrtReparentTo(frontNP)
         frontNP.node().setEffect(DecalEffect.make())
         suitBuildingNP.setName('sb' + str(self.block) + ':_landmark__DNARoot')
