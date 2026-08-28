@@ -91,6 +91,7 @@ class ToonBase(OTPBase.OTPBase):
         self._fpsFrameBottom = -0.042
         self._fpsFrameRightPad = 0.02
         self._fpsFrameLeftPad = 0.01
+        self._fpsFrameMinWidth = 0.18
         self._resizeFpsFrame()
 
         self._fpsAccum = 0.0
@@ -934,7 +935,8 @@ class ToonBase(OTPBase.OTPBase):
         textWidth = self.fpsText.textNode.calcWidth(self.fpsText.text) * self._fpsTextScale
 
         frameRight = self._fpsTextRightEdge + self._fpsFrameRightPad
-        frameLeft = self._fpsTextRightEdge - textWidth - self._fpsFrameLeftPad
+        neededLeft = self._fpsTextRightEdge - textWidth - self._fpsFrameLeftPad
+        frameLeft = min(neededLeft, -self._fpsFrameMinWidth)
 
         self.fpsFrame["frameSize"] = (frameLeft, frameRight, self._fpsFrameBottom, self._fpsFrameTop)
 
