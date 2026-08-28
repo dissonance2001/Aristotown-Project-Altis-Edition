@@ -330,19 +330,19 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
 		
     def incrementTab(self, index):
         trackAccess = base.localAvatar.getTrackAccess()
-        list = []
+        _list = []
         for x in range(len(trackAccess)):
             if trackAccess[x]:
-                list.append(x)
+                _list.append(x)
         try:
             try:
-                currIndex = list.index(self.activeTab)
+                currIndex = _list.index(self.activeTab)
             except:
                 return
             newIndex = currIndex + index
             if newIndex >= 8:
-                newIndex = list[0]
-            self.activeTab = list[newIndex]
+                newIndex = _list[0]
+            self.activeTab = _list[newIndex]
             self.doTab(self.activeTab)
         except:
             pass
