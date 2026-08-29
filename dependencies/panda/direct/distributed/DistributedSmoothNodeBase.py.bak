@@ -121,8 +121,6 @@ class DistributedSmoothNodeBase:
         # TODO: we explicitly stagger the initial task timing in
         # startPosHprBroadcast; we should at least make an effort to keep
         # this task accurately aligned with its period and starting time.
-        if self.d_broadcastPosHpr is None:
-            return Task.done
         self.d_broadcastPosHpr()
         task.setDelay(self.__broadcastPeriod)
         return Task.again
