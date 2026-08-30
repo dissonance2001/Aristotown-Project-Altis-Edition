@@ -533,13 +533,13 @@ class Suit(Avatar.Avatar):
         if base.config.GetBool('want-new-cogs', 0):
             if cogExists(filePrefix + 'zero.bam'):
                 self.loadModel('phase_3.5' + filePrefix + 'zero')
-                self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero', 'skelehands')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
             else:
                 self.loadModel('phase_3.5' + filePrefix + 'mod')
-                self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero', 'skelehands')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
         else:
             self.loadModel('phase_3.5' + filePrefix + 'mod')
-            self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero', 'skelehands')
+            self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero', 'skelehands')
         self.loadAnims(animDict)
         self.loadAnims(animDict, 'skelehands')
         self.setSuitClothesHybrid()
@@ -556,11 +556,11 @@ class Suit(Avatar.Avatar):
         self.headParts = []
         if base.config.GetBool('want-new-cogs', 0):
             if cogExists(filePrefix + 'zero.bam'):
-                self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
             else:
-                self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero')
+                self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
         else:
-            self.loadModel('phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero')
+            self.loadModel('phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero')
         if self.style.body == 'a' and self.style.name == 'derrhand':
             self.generateHead3('derrickhand_skele', animated=True)
             texture = loader.loadTexture('phase_12/maps/ttcc_ene_derrickhand_skelecog.png')
@@ -1588,9 +1588,9 @@ class Suit(Avatar.Avatar):
                     headModel = Actor.Actor('phase_14/models/char/ttcc_ene_executioner-zero')
                 else:
                     headModel = Actor.Actor(
-                        'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-zero')
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
                 self.generateHeadAnims(
-                    'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-',
+                    'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-',
                     headModel, additionalAnims)
                 self.animatedHeadParts.append(headModel)
                 if headType != 'overwhelmingauthorizer':
@@ -1913,12 +1913,12 @@ class Suit(Avatar.Avatar):
             if headType == 'skelecog':
                 if base.config.GetBool('want-clash-assets', False):
                     headModel = loader.loadModel(
-                        'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-zero')
-                    headReferences = headModel.findAllMatches('**/skeleskull_' + self.style.body.upper())
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                    headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
                 else:
                     headModel = loader.loadModel(
-                        'phase_5/models/char/cog' + self.style.body.upper() + '_robot-head')
-                    headReferences = headModel.findAllMatches('**/suit' + self.style.body.upper())
+                        'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-head')
+                    headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
             else:
                 if pathOverride:
                     headModel = loader.loadModel(pathOverride + headType)
@@ -2069,9 +2069,9 @@ class Suit(Avatar.Avatar):
                         headType)
                 else:
                     headModel = Actor.Actor(
-                        'phase_14/models/char/' + self.style.body.upper() + '-zero')
+                        'phase_14/models/char/' + string.upper(self.style.body) + '-zero')
                 self.generateHeadAnims(
-                    'phase_14/models/char/ttcc_ene_skull' + self.style.body.upper() + '-',
+                    'phase_14/models/char/ttcc_ene_skull' + string.upper(self.style.body) + '-',
                     headModel, additionalAnims)
                 self.headParts.append(headModel)
                 if headTexture:
@@ -2281,12 +2281,12 @@ class Suit(Avatar.Avatar):
             if headType == 'skelecog':
                 if base.config.GetBool('want-clash-assets', True):
                     headModel = loader.loadModel(
-                        'phase_14/models/char/' + self.style.body.upper() + '_robot_head-zero')
-                    headReferences = headModel.findAllMatches('**/skeleskull_' + self.style.body.upper())
+                        'phase_14/models/char/' + string.upper(self.style.body) + '_robot_head-zero')
+                    headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
                 else:
                     headModel = loader.loadModel(
-                        'phase_5/models/char/cog' + self.style.body.upper() + '_robot-head')
-                    headReferences = headModel.findAllMatches('**/suit' + self.style.body.upper())
+                        'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-head')
+                    headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
             else:
                 if pathOverride:
                     headModel = loader.loadModel(pathOverride + headType)
@@ -3993,7 +3993,7 @@ class Suit(Avatar.Avatar):
             self.virtualize2(0)
 
     def getLoseActor(self, headless=False):
-        model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
+        model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
         dept = self.style.dept
@@ -4067,7 +4067,7 @@ class Suit(Avatar.Avatar):
             return self.zapActor
 
         # Generate it only once.
-        model = 'phase_5/models/char/cog%s_robot-zero' % self.style.body.upper()
+        model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
         anims = self.generateAnimDict()
 
         self.zapActor = Actor.Actor(
@@ -4499,7 +4499,7 @@ class Suit(Avatar.Avatar):
         self.zapActorPowerhouse = None
 
     def getZapActorPowerhouse(self):
-        model = 'phase_5/models/char/cog%s_robot-zero' % self.style.body.upper()
+        model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
         anims = self.generateAnimDict()
 
         self.zapActorPowerhouse = Actor.Actor(model, anims)
@@ -4838,7 +4838,7 @@ class Suit(Avatar.Avatar):
 
 
     def __makeZapActorPowerhouseVariant(self, attrName):
-        model = 'phase_5/models/char/cog%s_robot-zero' % self.style.body.upper()
+        model = 'phase_5/models/char/cog%s_robot-zero' % string.upper(self.style.body)
         anims = self.generateAnimDict()
 
         zapActor = Actor.Actor(model, anims)
@@ -5160,7 +5160,7 @@ class Suit(Avatar.Avatar):
         return self.__makeZapActorPowerhouseVariant('zapActorPowerhouseZap')
 
     def makeSkeleton(self, elite=False):
-        model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
+        model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
         dept = self.style.dept
@@ -5282,7 +5282,7 @@ class Suit(Avatar.Avatar):
         self.isSkeleton = 1
 
     def makeSkeleton2(self, elite=False):
-        model = 'phase_5/models/char/cog' + self.style.body.upper() + '_robot-zero'
+        model = 'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-zero'
         anims = self.generateAnimDict()
         anim = self.getCurrentAnim()
         dept = self.style.dept
@@ -6648,9 +6648,9 @@ class Suit(Avatar.Avatar):
                     headModel = Actor.Actor('phase_14/models/char/ttcc_ene_executioner-zero')
                 else:
                     headModel = Actor.Actor(
-                        'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-zero')
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
                 self.generateHeadAnims(
-                    'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-',
+                    'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-',
                     headModel, additionalAnims)
                 self.animatedHeadParts.append(headModel)
                 if headType != 'overwhelmingauthorizer':
@@ -6700,12 +6700,12 @@ class Suit(Avatar.Avatar):
             if headType == 'skelecog':
                 if base.config.GetBool('want-clash-assets', False):
                     headModel = loader.loadModel(
-                        'phase_14/models/char/cog' + self.style.body.upper() + '_robot_head-zero')
-                    headReferences = headModel.findAllMatches('**/skeleskull_' + self.style.body.upper())
+                        'phase_14/models/char/cog' + string.upper(self.style.body) + '_robot_head-zero')
+                    headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
                 else:
                     headModel = loader.loadModel(
-                        'phase_5/models/char/cog' + self.style.body.upper() + '_robot-head')
-                    headReferences = headModel.findAllMatches('**/suit' + self.style.body.upper())
+                        'phase_5/models/char/cog' + string.upper(self.style.body) + '_robot-head')
+                    headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
             else:
                 if pathOverride:
                     headModel = loader.loadModel(pathOverride + headType)
@@ -6869,12 +6869,12 @@ class Suit(Avatar.Avatar):
                 else:
                     headModel = Actor.Actor(
                         'phase_14/models/char/cog%s_robot_head-zero' %
-                        self.style.body.upper()
+                        string.upper(self.style.body)
                     )
 
                 self.generateHeadAnims(
                     'phase_14/models/char/cog%s_robot_head-' %
-                    self.style.body.upper(),
+                    string.upper(self.style.body),
                     headModel,
                     additionalAnims
                 )
@@ -6927,15 +6927,15 @@ class Suit(Avatar.Avatar):
             if base.config.GetBool('want-clash-assets', False):
                 headModel = loader.loadModel(
                     'phase_14/models/char/cog%s_robot_head-zero' %
-                    self.style.body.upper()
+                    string.upper(self.style.body)
                 )
-                headReferences = headModel.findAllMatches('**/skeleskull_' + self.style.body.upper())
+                headReferences = headModel.findAllMatches('**/skeleskull_' + string.upper(self.style.body))
             else:
                 headModel = loader.loadModel(
                     'phase_5/models/char/cog%s_robot-head' %
-                    self.style.body.upper()
+                    string.upper(self.style.body)
                 )
-                headReferences = headModel.findAllMatches('**/suit' + self.style.body.upper())
+                headReferences = headModel.findAllMatches('**/suit' + string.upper(self.style.body))
         else:
             if pathOverride:
                 headModel = loader.loadModel(pathOverride + headType)
