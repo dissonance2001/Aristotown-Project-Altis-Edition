@@ -541,6 +541,17 @@ class GravityWalker(DirectObject.DirectObject):
             self.vel.set(0.0, 0.0, 0.0)
         if self.moving or jump:
             messenger.send("avatarMoving")
+
+        # Tell the avatar what speed it's actually moving at so it can pick
+        # the right walk/run animation for the actual movement direction.
+        # The physics above only moves self.avatarNodePath directly and
+        # never informed self.avatar of speed, so setSpeed() was never
+        # being called with real strafe input, and multi-directional
+        # movement never updated the animation even though the
+        # physics-side slide worked fine.
+        if hasattr(self.avatar, 'setSpeed'):
+            self.avatar.setSpeed(self.speed, self.rotationSpeed, self.slideSpeed)
+
         return Task.cont
 
     def doDeltaPos(self):
