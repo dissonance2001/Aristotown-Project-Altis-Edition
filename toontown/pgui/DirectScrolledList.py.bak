@@ -345,16 +345,16 @@ class DirectScrolledList(DirectFrame):
         Add this string and extraArg to the list
         """
         assert self.notify.debugStateCall(self)
-        if hasattr(item, '__class__'):
+        if(type(item) == types.InstanceType):
             # cant add attribs to non-classes (like strings & ints)
             item.itemID = self.nextItemID
             self.nextItemID += 1
         self['items'].append(item)
-        if hasattr(item, '__class__') and type(item) != type(''):
+        if type(item) != type(''):
             item.reparentTo(self.itemFrame)
         if refresh:
             self.refresh()
-        if hasattr(item, '__class__'):
+        if(type(item) == types.InstanceType):
             return item.itemID  # to pass to scrollToItemID
 
     def removeItem(self, item, refresh=1):
@@ -369,7 +369,7 @@ class DirectScrolledList(DirectFrame):
             if hasattr(self, "currentSelected") and self.currentSelected is item:
                 del self.currentSelected
             self["items"].remove(item)
-            if hasattr(item, '__class__'):
+            if type(item) != type(''):
                 item.reparentTo(hidden)
             self.refresh()
             return 1
@@ -387,7 +387,7 @@ class DirectScrolledList(DirectFrame):
             if (hasattr(item, 'destroy') and hasattr(item.destroy, '__call__')):
                 item.destroy()
             self["items"].remove(item)
-            if hasattr(item, '__class__'):
+            if type(item) != type(''):
                 item.reparentTo(hidden)
             self.refresh()
             return 1
@@ -409,7 +409,7 @@ class DirectScrolledList(DirectFrame):
             if hasattr(self, "currentSelected") and self.currentSelected is item:
                 del self.currentSelected
             self["items"].remove(item)
-            if hasattr(item, '__class__'):
+            if type(item) != type(''):
                 #RAU possible leak here, let's try to do the right thing 
                 #item.reparentTo(hidden)
                 item.removeNode()
@@ -434,7 +434,7 @@ class DirectScrolledList(DirectFrame):
             if (hasattr(item, 'destroy') and hasattr(item.destroy, '__call__')):
                 item.destroy()
             self["items"].remove(item)
-            if hasattr(item, '__class__'):
+            if type(item) != type(''):
                 #RAU possible leak here, let's try to do the right thing 
                 #item.reparentTo(hidden)
                 item.removeNode()
@@ -459,7 +459,7 @@ class DirectScrolledList(DirectFrame):
 
     def getSelectedText(self):
         assert self.notify.debugStateCall(self)
-        if hasattr(self['items'][self.index], '__class__') and self['items'][self.index].__class__.__name__ == 'str':
+        if self['items'][self.index].__class__.__name__ == 'str':
           return self['items'][self.index]
         else:
           return self['items'][self.index]['text']
