@@ -411,7 +411,12 @@ class DistributedNPCToon(DistributedNPCToonBase):
         data = self._getClubVinciData()
         if not data:
             return DistributedNPCToonBase.initToonState(self)
-        self.reparentTo(render)
+
+        clubDeskOrigin = render.find('**/clubdesk_origin_0;+s')
+        if not clubDeskOrigin.isEmpty():
+            self.reparentTo(clubDeskOrigin)
+        else:
+            self.reparentTo(render)
         self.setPos(*data['position'])
         self.setH(data['heading'])
         self.setAnimState('neutral', 0.9, None, None)

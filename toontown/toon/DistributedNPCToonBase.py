@@ -174,7 +174,7 @@ class DistributedNPCToonBase(DistributedToon.DistributedToon):
 
     def __initCollisions(self):
         self.cSphere = CollisionTube(0.0, 1.0, 0.0, 0.0, 1.0, 5.0, self.getCollSphereRadius())
-        self.cSphere.setTangible(0)
+        self.cSphere.setTangible(1)
         self.cSphereNode = CollisionNode('cSphereNode')
         self.cSphereNode.addSolid(self.cSphere)
         self.cSphereNodePath = self.attachNewNode(self.cSphereNode)
