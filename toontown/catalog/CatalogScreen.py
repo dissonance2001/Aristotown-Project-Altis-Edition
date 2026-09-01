@@ -536,7 +536,7 @@ class CatalogScreen(DirectFrame):
             return priceB - priceA
 
         itemList = base.localAvatar.monthlyCatalog + base.localAvatar.weeklyCatalog
-        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
+        itemList = sorted(itemList, key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
         itemList.reverse()
         allClosetItems = CatalogFurnitureItem.getAllClosets()
         allBankItems = CatalogFurnitureItem.getAllBanks()
@@ -549,7 +549,7 @@ class CatalogScreen(DirectFrame):
 
         for item in itemList:
             if item in allBankItems and item.furnitureType == CatalogFurnitureItem.MaxBankId:
-                isMaxBankOffered = true
+                isMaxBankOffered = True
                 break
                 
         for item in itemList:
@@ -566,7 +566,7 @@ class CatalogScreen(DirectFrame):
                 self.panelList.append(CatalogItemPanel.CatalogItemPanel(parent=hidden, item=item, type=CatalogItem.CatalogTypeWeekly, parentCatalogScreen=self))
 
         itemList = base.localAvatar.backCatalog
-        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
+        itemList = sorted(itemList, key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
         itemList.reverse()
         for item in itemList:
             if isinstance(item, CatalogInvalidItem.CatalogInvalidItem):
@@ -721,7 +721,7 @@ class CatalogScreen(DirectFrame):
         self.panelDict = {}
         self.visiblePanels = []
         itemList = base.localAvatar.monthlyCatalog + base.localAvatar.weeklyCatalog
-        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
+        itemList = sorted(itemList, key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeWeekly)))
         itemList.reverse()
         for item in itemList:
             if item.loyaltyRequirement() != 0:
@@ -730,7 +730,7 @@ class CatalogScreen(DirectFrame):
                 self.panelList.append(CatalogItemPanel.CatalogItemPanel(parent=hidden, item=item, type=CatalogItem.CatalogTypeWeekly))
 
         itemList = base.localAvatar.backCatalog
-        itemList.sort(key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
+        itemList = sorted(itemList, key=cmp_to_key(lambda a, b: priceSort(a, b, CatalogItem.CatalogTypeBackorder)))
         itemList.reverse()
         for item in itemList:
             if item.loyaltyRequirement() != 0:

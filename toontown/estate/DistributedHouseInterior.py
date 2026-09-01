@@ -104,7 +104,7 @@ class DistributedHouseInterior(DistributedObject.DistributedObject):
 
             return
         numSurfaceTypes = CatalogSurfaceItem.NUM_ST_TYPES
-        numRooms = min(len(self.wallpaper) / numSurfaceTypes, len(self.roomNames))
+        numRooms = min(len(self.wallpaper) // numSurfaceTypes, len(self.roomNames))
         for room in range(numRooms):
             roomName = self.roomNames[room]
             roomNode = self.interior.find(roomName)
