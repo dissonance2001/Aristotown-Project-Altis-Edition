@@ -2797,7 +2797,7 @@ class TownBattleToonPanel(DirectFrame):
         if avatar.hasToonStatusEffect('target'):
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/worker_management_icon')
-            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('noDodge'),
+            self.extraText = DirectLabel(parent=self.statusIcon, relief=None, text="%s" % avatar.getToonStatusTurns('target'),
                                          text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
                                          text_font=ToontownGlobals.getInterfaceFont(), text_bg=Vec4(0, 0, 0, 0),
                                          pos=(0.25, 0, -0.45),

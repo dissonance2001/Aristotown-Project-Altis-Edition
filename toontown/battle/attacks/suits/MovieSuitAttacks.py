@@ -463,7 +463,9 @@ def doSuitAttack(attack):
     elif name == 'SmokeAndMirrors':
         suitTrack = doCigarSmoke(attack)
     elif name == 'StolenScene':
-            suitTrack = doStolenScene(attack)
+        suitTrack = doStolenScene(attack)
+    elif name == 'RecordBreaker':
+        suitTrack = doRecordBreaker(attack)
     elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
     elif name == 'Crunch':
@@ -5438,6 +5440,113 @@ def doHotAir(attack):
 
     return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
 
+def doRecordBreaker(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    tauntIndex = attack['taunt']
+    dmg = target[0]['hp']
+    toon = attack['target'][0]['toon']
+
+    chip = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
+    firstHoldPosPoints = [Point3(0, 0, -0.8248914616497807), Point3(90, 0, 0)]
+    grabPosPoints = [Point3(0, 0, -0.8248914616497807), Point3(90, 0, 0)]
+
+    damageDelay = 3.1
+    dodgeDelay = 2.2
+
+    suitTrack = getSuitTrack(attack, playRate=1.75)
+
+    landPos = toon.getPos(render)
+    landPos.setZ(landPos.getZ() + 0.25)
+    landUpPos = toon.getPos(render)
+    landUpPos.setZ(landUpPos.getZ() + 0.8)
+
+    invokerScale = suit.getScale()
+    if getSuitBodyType(attack['suitName']) == 'a':
+        scaleFactor = .5  # Head honcho scale
+        startX, startY = 2.9, 4.2
+        endX, endY = 0.7, 5.1
+        startZ = 7.4
+        endZ = 8.8
+        chipHandScale = .5
+        chipGrabScale = .5
+        chipFlipMult = 6.5
+    else:
+        scaleFactor = 0.5 # Insider scale
+        startX, startY = 0.9, 2.1
+        endX, endY = 0.9, 2.45
+        startZ = 3.0
+        endZ = 4.4
+        chipHandScale = .5
+        chipGrabScale = 0.5
+        chipFlipMult = 5.0
+
+    propTrack = Sequence(
+    )
+
+    chipHandPosRenderStart = Point3(startX * (invokerScale[0] / scaleFactor),
+                                    startY * (invokerScale[0] / scaleFactor),
+                                    startZ * (invokerScale[0] / scaleFactor))
+    chipHandPosRenderEnd = Point3(endX * (invokerScale[0] / scaleFactor),
+                                    endY * (invokerScale[0] / scaleFactor),
+                                    endZ * (invokerScale[0] / scaleFactor))
+
+    propFlyTrack = Sequence(
+            getPropAppearTrack(
+            chip,
+            suit.getRightHand(),
+            firstHoldPosPoints,
+            0,
+            Point3(chipHandScale),
+            scaleUpTime=0.25,
+        ),
+        Wait(1.5),
+        Func(chip.wrtReparentTo, render),
+        Parallel(
+            ProjectileInterval(chip, endPos=landPos, duration=0.95, gravityMult=4.15),
+            LerpHprInterval(chip, 0.95, (0, 450, 0), startHpr=(0, 90, 0)),
+            Sequence(
+                Wait(0.25),
+                LerpScaleInterval(chip, 0.65, 1.5),
+            ),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.15, (20, 441, 0)),
+            LerpPosInterval(chip, 0.15, landUpPos, blendType='easeOut'),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.225, (40, 450, 0)),
+            LerpPosInterval(chip, 0.225, landPos, blendType='easeIn'),
+        ),
+        LerpHprInterval(chip, 0.3, (60, 450, 0)),
+        LerpHprInterval(chip, 0.3, (70, 450, 0), blendType='easeOut'),
+        Wait(0.1),
+        LerpScaleInterval(chip, 0.35, 0.01, blendType='easeIn'),
+        Func(chip.hide),
+    )
+
+    toonTrack = getToonTrack(attack, 2.8, ['squish'], 2.0, ['sidestep'])
+    soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
+    toonReactTrack = Sequence(Wait(2.55), Func(toon.playDialogueForString, "!"), Func(toon.enterFlattened), Wait(1.0), Parallel(ActorInterval(toon, 'jump'), soundTrack2, Func(toon.loop, 'neutral'),   Sequence(Wait(0.5), Func(toon.exitFlattened))))
+    soundTrack = getSoundTrack(
+        "SA_hydrate.ogg", delay=2.05, node=suit
+    )
+    if dmg > 0:
+        return Sequence(
+            Parallel(
+                suitTrack, toonTrack, toonReactTrack, soundTrack, propTrack, propFlyTrack,
+            ),
+            Func(MovieUtil.removeProp, chip),
+        )
+    else:
+        return Sequence(
+                Parallel(
+                    suitTrack, toonTrack, soundTrack, propTrack, propFlyTrack,
+                ),
+                Func(MovieUtil.removeProp, chip),
+            )
+
 def doStolenScene(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -5540,7 +5649,7 @@ def doCigarSmoke(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name in ['cinema', 'choreo', 'fmaker', 'director'] and not suit.isSkeleton:
+    if suit.dna.name in ['cinema', 'choreo', 'fmaker'] and not suit.isSkeleton:
         return doSmokeAndMirrors(attack)
     elif suit.dna.name == 'hho' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)

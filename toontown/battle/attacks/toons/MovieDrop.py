@@ -478,7 +478,7 @@ def __createSuitTrack(drop, delay, level, alreadyDodged, alreadyTeased, alreadyH
         totalDamage += hpbonus
 
     # add to queued damage BEFORE building interval
-   # suit.addPendingQueuedDamage(totalDamage)
+    suit.addPendingQueuedDamage(totalDamage)
     if hp > 0:
         alreadyHit = 1
     showDamage = Func(suit.showHpText, -hp, openEnded=0)

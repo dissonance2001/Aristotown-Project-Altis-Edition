@@ -472,6 +472,8 @@ def doNoAttack(attack):
     suitTrack2 = Sequence()
     targets = attack['target']
     notifyTracks = Parallel()
+    if suit.dna.name == 'director':
+        notifyTracks.append(Func(suit.clearSuitStatusEffect, 'directorShielding'))
     for t in targets:
         toon = t['toon']
         dmg = t['hp']

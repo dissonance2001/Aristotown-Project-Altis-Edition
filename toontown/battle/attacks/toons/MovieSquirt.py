@@ -335,7 +335,7 @@ def __doAdjacentSquirtSplash(target, squirt):
     # IMPORTANT:
     # Main __getSuitTrack does this too.
     # The adjacent Cog needs to participate in queued visual HP.
-  #  suit.addPendingQueuedDamage(hp)
+    suit.addPendingQueuedDamage(hp)
 
     # Prestige/bonus Squirt = drenched.
     # Normal Squirt = soaked.
@@ -515,7 +515,7 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             totalDamage += hpbonus
 
         # add to queued damage BEFORE building interval
-    #    suit.addPendingQueuedDamage(totalDamage)
+        suit.addPendingQueuedDamage(totalDamage)
 
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage

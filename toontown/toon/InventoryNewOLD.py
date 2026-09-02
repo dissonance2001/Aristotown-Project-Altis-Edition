@@ -2176,6 +2176,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             self.makeUnpressable(button, track, level)
                         if self.toon.hasToonStatusEffect('highRollerTurn1') and not level == 0:
                             self.makeUnpressable(button, track, level)
+                        if self.toon.hasToonStatusEffect('videographerPhase1') and not level in [0, 1, 2, 3, 4, 5]:
+                            self.makeUnpressable(button, track, level)
                         if self.numItem(track, level) <= 0 or track == HEAL_TRACK and not self.heal or track == TRAP_TRACK and not self.trap or track == LURE_TRACK and not self.lure:
                             self.makeUnpressable(button, track, level)
                         if track == THROW_TRACK and 'disableSingleGags' in base.localAvatar.battleConditions and not self.numItem(

@@ -9222,6 +9222,20 @@ class Suit(Avatar.Avatar):
         if name == 'drenched' and self.hasSuitStatusEffect('soaked'):
             self.clearSuitStatusEffect('soaked')
 
+        if name == 'marked2' and self.hasSuitStatusEffect('marked'):
+            self.clearSuitStatusEffect('marked2')
+
+            self.setSuitStatusEffect(
+                'marked',
+                modifier=modifier,
+                turns=turns,
+                mode=mode
+            )
+            return
+        
+        if name == 'marked' and self.hasSuitStatusEffect('marked2'):
+            self.clearSuitStatusEffect('marked2')
+
         if name not in self.suitStatusEffects:
             self.suitStatusEffects[name] = {'modifier': modifier, 'turns': turns}
         else:

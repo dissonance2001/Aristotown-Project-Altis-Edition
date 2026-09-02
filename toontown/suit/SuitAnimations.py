@@ -1,5 +1,6 @@
 AllSuits = (('golf-club-swing', 'golf-club-swing'), ('pen-squirt', 'fountain-pen'), ('pickpocket', 'pickpocket'), ('effort', 'effort'), ('walk', 'walk'), ('reanimated', 'reanimated'), ('sticker', 'sticker'), ('shuffle-left', 'shuffle-left'), ('shuffle-right', 'shuffle-right'), ('run', 'walk'),
             ('short-squeeze', 'short-squeeze'), ('summon-cog', 'summon-cog'), ('sacrifice-cog', 'sacrifice-cog'), ('mplayer-kneel-into', 'mplayer-kneel-into'), ('mplayer-kneel-neutral', 'mplayer-kneel-neutral'), 
+            ('mplayer-kneel-out', 'mplayer-kneel-out'), ('mplayer-kneel-caress-out', 'mplayer-kneel-caress-out'),  ('mplayer-kneel-caress-into', 'mplayer-kneel-caress-into'), 
             ('lose3', 'wrecked'), ('speak', 'speak'), ('glower', 'glower'), ('rolled', 'rolled'),  ('song-and-dance', 'song-and-dance'), ('calculator', 'calculator'), ('calculating-costs', 'calculating-costs'),
               ('phone', 'phone'), ('blue-chip', 'blue-chip'),
             ('falling-knife', 'falling-knife'), ('throw-object', 'throw-object'), ('flail-wb', 'flailing-wb'), ('tnt-react', 'tnt-react'), ('flail-qs', 'flailing-qs'),

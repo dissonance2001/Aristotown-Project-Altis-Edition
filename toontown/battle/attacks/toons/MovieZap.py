@@ -389,7 +389,7 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
     # chainIndex 1 = first jump, etc.
     jumpDelay = 0.12 * chainIndex
 
-   # suit.addPendingQueuedDamage(hp)
+    suit.addPendingQueuedDamage(hp)
 
     track.append(
         Wait(tContact)
@@ -459,7 +459,7 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
                 )
             )
 
-        elif level > 3 and suit.dna.name != 'chainsaw':
+        elif level > 3 and suit.dna.name != 'chainsaw' and suit.dna.name != 'videog':
             deathTracks.append(
                 Func(
                     suit.clearSuitStatusEffect,
@@ -598,7 +598,7 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         totalDamage = hp
 
         # add to queued damage BEFORE building interval
-       # suit.addPendingQueuedDamage(totalDamage)
+        suit.addPendingQueuedDamage(totalDamage)
         soakRemoval = Func(suit.makeZapped)
         suitTrack.append(Wait(tContact))
         suitTrack.append(showDamage)

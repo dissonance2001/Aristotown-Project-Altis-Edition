@@ -1857,7 +1857,7 @@ class TownBattleCogPanel(DirectFrame):
                                         },
                                     ])
                 self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))
-            elif (self.cog.hasSuitStatusEffect('desperation') and not self.cog.hasSuitStatusEffect('unionBusterNoAttack')) or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'mplayers', 'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep')\
+            elif (self.cog.hasSuitStatusEffect('desperation') and not self.cog.hasSuitStatusEffect('unionBusterNoAttack')) or self.cog.hasSuitStatusEffect('closedSession') or self.cog.dna.name in ('bcaster', 'director', 'mplayers', 'chainsaw', 'psetter', 'mslacker', 'pcrat', 'whunter', 'prethink', 'mplayer', 'hroller', 'hroller2', 'videog', 'fires', 'fbed', 'mouthp', 'rainmake', 'whunter', 'wsi', 'redd', 'duckshfl', 'treek', 'bellring', 'ddiver', 'gatekeep')\
                     or (self.cog.isVulnerable and self.cog.dna.name == 'wtapper') or self.cog.hasSuitStatusEffect('starOfTheShow') or self.cog.hasSuitStatusEffect('silhouetteShielding') or (self.cog.healthCondition == 13 and self.cog.isSkeleton) or (self.cog.hasSuitStatusEffect('enraged') and self.cog.dna.name == 'sgoat'):
                 status2 = loader.loadModel('phase_3.5/models/gui/status_effects')
                 self.statusIcon = status2.find('**/lured_prestige_icon')

@@ -1054,7 +1054,7 @@ def createVideographerDeathMovie(attack):
     startPos = destPos + Point3(0, 0, 0)
     suitTrack.append(Sequence(Func(theSuit.makeUnSwole), Func(theSuit.reparentTo, battle), Func(theSuit.setPos, startPos), Func(theSuit.headsUp, battle),
                               Parallel(Func(theSuit.setChatAbsolute, "Wait... what?", CFSpeech | CFTimeout)), Wait(3.0), 
-                              Parallel(Func(theSuit.setChatAbsolute, "No, hold on. That's now how this scene ends!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "No, hold on. That's not how this scene ends!", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Func(theSuit.setChatAbsolute, "You Toons... actually beat me?", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Func(theSuit.setChatAbsolute, "But I had the right angles, the perfect crew, the entire production!!", CFSpeech | CFTimeout)), Wait(4.0), 
                               Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=4), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "How did a bunch of Toons manage to---", CFSpeech | CFTimeout)), 
@@ -1079,8 +1079,8 @@ def createVideographerDeathMovie(attack):
                               Parallel(Func(theSuit.setChatAbsolute, "...ruin my...", CFSpeech | CFTimeout)), Wait(2.0), 
                               Parallel(Func(theSuit.setChatAbsolute, "...perfect...", CFSpeech | CFTimeout)), Wait(2.0), 
                               Parallel(headRedTrack, Func(theSuit.setChatAbsolute, "...final act?", CFSpeech | CFTimeout)), Wait(4.0), 
-                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=30), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "WAIT! DON'T CUT THE---", CFSpeech | CFTimeout)), 
-                              Parallel(Func(theSuit.setChatAbsolute, "...feed.", CFSpeech | CFTimeout), Sequence(ActorInterval(theSuit, 'pie-small-react'), ActorInterval(theSuit, 'mplayer-kneel-into'), Func(theSuit.loop, 'mplayer-kneel-neutral')), spawnHeadExplosion(theSuit, battle)), Wait(4.0),
+                              Parallel(Wait(2.0), Sequence(ActorInterval(theSuit, 'sound-react-nt', duration=2), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "WAIT! DON'T CUT THE---", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.setChatAbsolute, "...feed.", CFSpeech | CFTimeout), Sequence(ActorInterval(theSuit, 'pie-small-react'), ActorInterval(theSuit, 'mplayer-kneel-into'), Func(theSuit.loop, 'mplayer-kneel-neutral')), spawnHeadExplosion(theSuit, battle)),
                               Parallel(Func(theSuit.hide)), deathSoundTrack
                               ))
     headTracks.append(headTrack)

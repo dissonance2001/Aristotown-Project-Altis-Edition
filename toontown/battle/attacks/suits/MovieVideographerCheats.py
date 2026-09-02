@@ -444,7 +444,7 @@ def doPlacesEveryone(attack):
         animTrack = Sequence(
             Func(otherSuit.stop),
             ActorInterval(otherSuit, 'song-and-dance'),
-            Func(otherSuit.setNeutralAnimationDrop))
+            otherSuit.makeBlendInterval('neutral2'))
         moveTrack = Sequence(
             Parallel(
                 LerpPosInterval(otherSuit, otherSuit.getDuration('song-and-dance') - 1, newPos, startPos=startPos, other=battle, blendType='easeInOut'),
@@ -494,10 +494,19 @@ def doBackToOnes(attack):
         targetSuit = targetData['suit']
         heal = int(targetData.get('heal', 0))
 
-        if heal <= 0:
-            continue
-
-        healTrack = Sequence(Wait(2.0), Parallel(Func(targetSuit.showHpTextNew, heal, text='BACK TO ONES!', colorCode=1), Func(targetSuit.setHealthForMe, heal), Func(targetSuit.updateHealthBar, 0)))
+        healTrack = Sequence(Wait(2.0), Parallel(Func(targetSuit.showHpTextNew, 0, text='BACK TO ONES!', colorCode=1)))
+        healTrack.append(Func(targetSuit.checkCogLured, battle))
+        healTrack.append(Func(battle.unlureSuit, targetSuit))
+        healTrack.append(Wait(1.0))
+        healTrack.append(Func(battle.unSueSuit, targetSuit))
+        healTrack.append(Func(targetSuit.setSued2, 0))
+        healTrack.append(Func(targetSuit.setDizzy, 0))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'lured'))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'zapped'))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'dazed'))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'marked'))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'soaked'))
+        healTrack.append(Func(targetSuit.clearSuitStatusEffect, 'drenched'))
 
         healTracks.append(healTrack)
 
@@ -562,26 +571,58 @@ def doActionCog(attack):
     return Parallel(suitTrack, throwTrack, suitTrack2, sprayTrack)
 
 def doActionPartner(attack):
+    theSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    toon = target[0]['toon']
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    toonPos, toonHpr = battle.getActorPosHpr(toon)
+    oldPos, oldHpr = battle.getActorPosHpr(theSuit)
+    moveTracks = Parallel()
+    moveTracks.append(Sequence(LerpPosInterval(suit, 0, (toonPos.getX(), toonPos.getY() - 6.75, 0), other=battle),
+                               LerpHprInterval(suit, 0, (0, 0, 0), other=battle),
+                               Func(suit.setNeutralAnimationDrop)))
+    cameraTrack = Sequence(doActionPartnerCaress(attack))
+    soundTrack = getSoundTrack('LB_camera_shutter_2.ogg', node=theSuit)
+    return Parallel(soundTrack, moveTracks, cameraTrack)
+
+def doActionPartnerRevert(attack):
+    theSuit = attack['suit']
+    suit = attack['suit']
+    battle = attack['battle']
+    resetPos, resetHpr = battle.getActorPosHpr(suit)
+    oldPos, oldHpr = battle.getActorPosHpr(theSuit)
+    moveTracks = Parallel()
+    moveTracks.append(Sequence(LerpPosInterval(suit, 0, resetPos, other=battle),
+                               LerpHprInterval(suit, 0, resetHpr, other=battle),
+                               Func(suit.setNeutralAnimationDrop)))
+    soundTrack = getSoundTrack('LB_camera_shutter_2.ogg', node=theSuit)
+    return Parallel(soundTrack, moveTracks)
+
+def doActionPartnerCaress(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
-    sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
-    sprayEffect.setDepthWrite(0)
-    sprayEffect.setDepthTest(0)
-    sprayEffect.setTwoSided(1)
-    sprayTrack = Sequence()
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, suit, Point3(0, 1.6, suit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 5.0, [sprayEffect, suit, 0], softStop=-3.5))
-    can = loader.loadModel('phase_5/models/props/megaphone')
+    toonWalkTrackEnd = Sequence(
+            Func(toon.loop, "walk"),
+            LerpHprInterval(toon, 1.0, (toon.getH(), 0, 0)),
+            Func(toon.loop, "neutral"),
+        )
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    suitTrack2 = Sequence(ActorInterval(suit, 'glower'), Func(suit.setNeutralAnimationDrop))
-    posPoints = [Point3(-0.5, 0, .5), VBase3(0, 0, 90)]
-    throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2, 2, 2), scaleUpTime=1.5), Wait(0.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
-    notifyTrack = Sequence(Wait(2.0), ActorInterval(toon, 'confused'))
+    suitTrack2 = Sequence(ActorInterval(suit, 'mplayer-kneel-into'), ActorInterval(suit, 'mplayer-kneel-caress-into', playRate=.75), ActorInterval(suit, 'mplayer-kneel-caress-out'), 
+                          ActorInterval(suit, 'mplayer-kneel-out', playRate=1.25), 
+                          Func(suit.setNeutralAnimationDrop), doActionPartnerRevert(attack))
+    notifyTrack = Sequence(Wait(4.0), ActorInterval(toon, 'cringe', playRate=.75), toonWalkTrackEnd)
+    toonWalkTrack = Sequence(
+            Func(toon.loop, "walk"),
+            LerpHprInterval(toon, 1.0, (toon.getH() + 180, 0, 0)),
+            Func(toon.loop, "neutral"),
+        )
     notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'actionPartner', turns=2)))
-    return Parallel(suitTrack, notifyTrack, throwTrack, suitTrack2, sprayTrack)
+    return Parallel(suitTrack, toonWalkTrack, notifyTrack, suitTrack2)
 
 def createMiniStagelightTrack(
         targetSuit,
@@ -1124,11 +1165,11 @@ def createSignalLostTextureRandomizer(headPart, textureA, textureB, finalTexture
     for i in xrange(10):
         track.append(Func(headPart.setTexture, textureA, 1))
         track.append(Func(tickSound.play))
-        track.append(Wait(0.175))
+        track.append(Wait(0.125))
 
         track.append(Func(headPart.setTexture, textureB, 1))
         track.append(Func(tickSound.play))
-        track.append(Wait(0.175))
+        track.append(Wait(0.125))
 
     track.append(Func(headPart.setTexture, finalTexture, 1))
     track.append(Func(tickSound.play))
@@ -1366,8 +1407,8 @@ def doInFocus(attack):
     posPoints = [Point3(-0.25, -.25, 1), VBase3(-90, 0, 0)]
     throwTrack = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, 0, Point3(2.5, 2.5, 2.5), scaleUpTime=1.0), Wait(suit.getDuration('glower') - 1.5), LerpScaleInterval(can, 0.5, (0, 0, 0)), Func(MovieUtil.removeProp, can))
     toonTrack = getToonTrackCheat(attack, 1.0, ['angry'], 1, ['angry'])
-    notifyTrack = Sequence(Wait(1.0), Func(toon.showHpTextNew, -int(dmg), text="FOCUSED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'noDodge', turns=2)))
+    notifyTrack = Sequence(Wait(1.0), Parallel(ActorInterval(toon, 'angry'), Func(toon.showHpTextNew, 0, text="FOCUSED!", colorCode=1)), Func(toon.loop, 'neutral'))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'target', turns=2)))
     oldcolor = render.getColorScale()
     soundTrack2 = getSoundTrack('Photo_zoom.ogg', delay=1.0, node=suit)
     return Parallel(suitTrack, toonTrack, soundTrack2, notifyTrack, throwTrack)
@@ -1375,7 +1416,7 @@ def doInFocus(attack):
 def doCaughtOnCamera(attack):
     suit = attack['suit']
     can = loader.loadModel('phase_3.5/models/accessories/social/newstoon_camera')
-    suitTrack = Sequence(getSuitTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     posPoints = [Point3(-0.25, -.25, 1), VBase3(-90, 0, 0)]
     sparkle = globalPropPool.getProp('smile')
     sparkle.setScale(5.0)
@@ -1513,11 +1554,6 @@ def doCameraRewind(attack):
             if targetSuit.dna.name in ('director', 'cinema', 'choreo'):
                 targetTrack.append(Func(targetSuit.checkHealingPhrases, 0))
 
-        else:
-            targetTrack.append(Func(targetSuit.showHpTextNew, 0, text="+10% Damage!", colorCode=1))
-            targetTrack.append(Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))
-            targetTrack.append(Func(targetSuit.updateHealthBar, 0))
-
         suitTracks.append(targetTrack)
 
         # =========================================================
@@ -1536,8 +1572,8 @@ def doCameraRewind(attack):
             Parallel(LerpScaleInterval(can, 0.2, VBase3(0.01, 0.01, 0.01)), LerpColorScaleInterval(can, 0.2, Vec4(1, 1, 1, 0))),
             Func(can.removeNode)
         )
-
-        knifeTracks.append(knifeTrack)
+        if heal > 0:
+            knifeTracks.append(knifeTrack)
 
     suitTrackAnim = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.5, node=theSuit)
@@ -1715,6 +1751,8 @@ def doDirectorCuts(attack):
     selfDamageTracks = Parallel()
     smokeTracks = Parallel()
     suitDeathTracks = Parallel()
+    for toon in battle.activeToons:
+        suitDeathTracks.append(Func(toon.clearToonStatusEffect, 'videographerPhase1'))
     for suit in battle.activeSuits:
         smoke = loader.loadModel('phase_4/models/props/test_clouds')
         smoke.setColor(0.8, 0.7, 0.5, 1)
@@ -2450,7 +2488,7 @@ def doVideographerPhase3(attack):
                               Parallel(Func(theSuit.setChatAbsolute, "...What's this??", CFSpeech | CFTimeout), ActorInterval(suit, 'chainsaw-cutscene-leap', duration=2)),
                               Parallel(notifyTrack, headTrack),
                               Func(theSuit.setChatAbsolute, "We-we're getting inter-fer-ference...", CFSpeech | CFTimeout), Wait(4.0),
-                              Parallel(Func(theSuit.nametag3d.setScale, 2.5), Sequence(ActorInterval(theSuit, 'finger-wag'), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "I M-M-MUST keep the feed rol-l-l-ling!!", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.nametag3d.setScale, 2.5), Sequence(ActorInterval(theSuit, 'finger-wag'), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "I M-M-MUST keep the feed rolling!!", CFSpeech | CFTimeout)), 
                               Parallel(Sequence(ActorInterval(theSuit, 'rake-react', playRate=2.0), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "I d-didn't come ---KZZZZT--- this far j-j-just to...", CFSpeech | CFTimeout)), Wait(2.0),
                               Parallel(Sequence(ActorInterval(theSuit, 'small-zap', duration=2), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "KZZZT---", CFSpeech | CFTimeout)), 
                               Parallel(Sequence(ActorInterval(theSuit, 'pie-small-react'), Func(theSuit.loop, 'neutral-unstable')), Func(theSuit.setChatAbsolute, "...CUT TO STATIC!!", CFSpeech | CFTimeout)), 
@@ -2592,13 +2630,17 @@ def doRecordCut(attack):
     posPoints = [Point3(0, 2.5, 5), VBase3(0, 90, 0)]
     soundTrack = getSoundTrack('SA_magic_orb.ogg', node=suit)
     soundTrack3 = getSoundTrack('CHQ_VP_frisbee_gears.ogg', delay=3.8,  node=suit)
-    soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=3.8, node=suit)
+    soundTrack2 = getSoundTrack('SA_hydrate.ogg', delay=3.3, node=suit)
     soundTracks.append(soundTrack)
     soundTracks.append(soundTrack3)
     soundTracks.append(soundTrack2)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        breakEffect = BattleParticles.createParticleEffect(file='soundBreak')
+        breakEffect.setDepthWrite(0)
+        breakEffect.setDepthTest(0)
+        breakEffect.setTwoSided(1)
         toonPos = toon.getPos(battle)
         suitPos, suitHpr = battle.getActorPosHpr(suit)
         leftPosPoints = [Point3(0, 0, 0), VBase3(0, 0, 90)]
@@ -2606,8 +2648,9 @@ def doRecordCut(attack):
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
         explosionTrack = Sequence()
         explosionTrack.append(Wait(3.8))
+        explosionTrack.append(__getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, toon, 0], softStop=-0.5))
         record = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
-        explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
+        #explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3))
         recordTrack = Sequence(Parallel(LerpHprInterval(record, 3.5, (0, 90, 2700), startHpr=(0, 90, 0), other=suit),
                                          getPropAppearTrack(record, suit, posPoints, 0, Point3(1, 1, 1), scaleUpTime=2.0)), 
                                Parallel(LerpHprInterval(record, .3, (0, 90, 900), startHpr=(0, 90, 0), other=suit),

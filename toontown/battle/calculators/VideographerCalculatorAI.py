@@ -283,26 +283,31 @@ class VideographerCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'director':
-                if self.suitHasCondition(suitId, 'retaliationcalculator') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'retaliationcalculator2') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'DirectorActionRetaliation',
                                             'animName': 'nothing',
                                             'hp': 0,
                                             'acc': 100,
                                             'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
                                             'priorityToonConditions': ('collectcalled',)})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'retaliationcalculator2') and self.__suitCanAttack(suitId):
+                sacrificedCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.currHP <= 0:
+                        continue
+                    if self.suitHasCondition(suit.doId, 'greenLight'):
+                        sacrificedCogs += 1
+                if sacrificedCogs > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                            'name': 'DirectorCut',
                                                            'animName': 'nothing',
                                                            'hp': 0,
                                                            'acc': 100,
                                                            'freq': 0,
-                                                           'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                                            'excludeToonConditions': ('bookkeepingtoon',)})
+                                                           'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'actioncogcalculator') and self.__suitCanAttack(suitId):
@@ -322,7 +327,7 @@ class VideographerCalculatorAI:
                              'requiredManagerNames':  ('cinema', 'fmaker', 'director', 'choreo'),})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'partnercalculator') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'directorcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                            'name': 'DirectorActionPartner',
                                                            'animName': 'nothing',
@@ -454,7 +459,7 @@ class VideographerCalculatorAI:
 
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId) and (self.TurnsElapsed + 1) % 2 == 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'VideographerElectricShock4',  # Rising Stars
                                                             'animName': 'snap',
@@ -487,7 +492,7 @@ class VideographerCalculatorAI:
                     })
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phase3') and not len(self.battle.activeSuits) > 5 and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'phase3') and len(self.battle.activeSuits) < 5 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'VideographerRisingStars2',  # Rising Stars
                                                             'animName': 'song-and-dance',
@@ -533,7 +538,7 @@ class VideographerCalculatorAI:
         for i in xrange(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
-                if not self.suitHasCondition(suitId, 'phase2') and self.battle.activeSuits[i].currHP <= 28888 and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'phase2') and self.battle.activeSuits[i].currHP <= 40000 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerDirectorCuts',  # Director Cuts
                                                         'animName': 'song-and-dance',
@@ -542,18 +547,6 @@ class VideographerCalculatorAI:
                                                         'freq': 0,
                                                         'group': SuitBattleGlobals.ATK_TGT_SINGLE,
                             'targetType': 'none',})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'phase2') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(
-                                self.battle.activeSuits) > 7 and self.__suitCanAttack(suitId) and self.TurnsElapsed % 2 == 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                        'name': 'VideographerRisingStars',  # Rising Stars Hollywoods
-                                                        'animName': 'song-and-dance',
-                                                        'hp': 0,
-                                                        'acc': 100,
-                                                        'freq': 0,
-                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'electricshockcalculator') and not self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId):
@@ -568,8 +561,23 @@ class VideographerCalculatorAI:
 
                             'allowSelfTarget': False,
                             'targetSelf': False,
-                        'excludeManagers': True})
+                        'excludeManagers': True,
+                        'excludeConditions': (
+                            'starOfTheShow',
+                        )})
 
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'phase2') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(
+                                self.battle.activeSuits) > 7 and self.__suitCanAttack(suitId) and self.TurnsElapsed % 2 == 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                        'name': 'VideographerRisingStars',  # Rising Stars Hollywoods
+                                                        'animName': 'song-and-dance',
+                                                        'hp': 0,
+                                                        'acc': 100,
+                                                        'freq': 0,
+                                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
 

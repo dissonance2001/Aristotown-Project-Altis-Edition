@@ -1666,7 +1666,7 @@ class SuitPlannerInteriorAI:
                 bldgTrack='l',
                 suitLevel=random.randint(10, 20),
                 revives=0,
-                suitName=random.choice(('le', 'le2', 'bw', 'bw2', 'magi', 'whistleb', 'br'))
+                suitName=random.choice(('le', 'le2', 'bw', 'bw2', 'magi', 'br'))
             )
             suit3 = self.__genSuitObject(
                 self.zoneId,

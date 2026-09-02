@@ -659,7 +659,7 @@ def getSuitAnimTrack(attack, delay = 0, splicedAnims = None, playRate = 1.0, dis
             if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
                 if not disrespectBlend == True:
                     track.append(
-                suit.makeBlendInterval('neutral'))
+                suit.makeBlendInterval('neutral2'))
             else:
                 track.append(
                 Func(suit.setNeutralAnimationDrop))

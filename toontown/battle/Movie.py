@@ -1624,7 +1624,9 @@ class Movie(DirectObject.DirectObject):
                     'acc': attack[0],
                     'freq': attack[5],
                     'group': realGroup,
-                    'targetType': targetTypeCode
+                    'targetType': targetTypeCode,
+                    'currentHp': sa[SUIT_CURRENT_HP_COL],
+                    'maxHp': sa[SUIT_MAX_HP_COL]
                 }
                 adict['suit'] = suit
                 adict['battle'] = self.battle
