@@ -66,6 +66,7 @@ FSGUIcancelButton = 0.06
 FPnewEntry = 0.08
 FPnewRecord = 0.08
 GPgenus = 0.045
+GPweight = 0.03
 FLPnewFriend = 0.045
 FLPsecrets = 0.045
 FLPsecretsPos = (0.152, 0.0, 0.14)

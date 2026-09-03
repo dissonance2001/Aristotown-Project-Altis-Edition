@@ -297,7 +297,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         rodPath = FishGlobals.RodFileDict.get(rodId)
         if not rodPath:
             self.notify.warning('Rod id: %s model not found' % rodId)
-            rodPath = RodFileDict[0]
+            rodPath = FishGlobals.RodFileDict[0]
         self.pole = Actor.Actor()
         self.pole.loadModel(rodPath)
         self.pole.loadAnims({'cast': 'phase_4/models/props/fishing-pole-chan'})

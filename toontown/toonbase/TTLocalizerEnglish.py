@@ -13375,6 +13375,16 @@ FishPageWeightSmallP = '%d oz.'
 FishPageWeightConversion = 16
 FishPageValueS = 'Value: %d Jellybean'
 FishPageValueP = 'Value: %d Jellybeans'
+FishPageRarity = 'Rarity: %s'
+RarityToString = {1: 'Cod Do Better',
+                  2: 'Common',
+                  3: 'Finteresting',
+                  4: 'Rare',
+                  5: 'Very Rare',
+                  6: 'Reel-y Rare',
+                  7: 'Trouta This World',
+                  8: 'You\'re Piranha Roll!'}
+FishPageWeight = 'Record: %s'
 FishPageCollectedTotal = 'Fish Species Collected: %d of %d'
 FishPageRodInfo = '%s Rod\n%d - %d Pounds'
 FishPageTankTab = 'Bucket'
@@ -17778,6 +17788,11 @@ FishBingoTypeCorners = 'Four Corners'
 FishBingoTypeDiagonal = 'Diagonals'
 FishBingoTypeThreeway = 'Three Way'
 FishBingoTypeBlockout = 'BLOCKOUT!'
+FishBingoTypePerimeter = 'Perimeter'
+FishBingoTypeT = 'Tea Time'
+FishBingoTypeCrossout = 'Crossout'
+FishBingoTypeFouredges = 'Four Edges'
+FishBingoTypeCheckerboard = 'Checkerboard'
 FishBingoStart = "It's time for Fish Bingo!  Go to any available pier to play!"
 FishBingoOngoing = 'Welcome! Fish Bingo is currently in progress.'
 FishBingoEnd = 'Hope you had fun playing Fish Bingo.'
@@ -17789,6 +17804,11 @@ FishBingoHelpCorners = 'An easy Corners card.  Mark all four corners to win.'
 FishBingoHelpThreeway = "Three-way.  Mark both diagonals and the middle row to win.  This one isn't easy!"
 FishBingoHelpBingo = 'Bingo!'
 FishBingoHelpBlockout = 'Blockout!.  Mark the entire card to win.  You are competing against all the other ponds for a huge jackpot!'
+FishBingoHelpPerimeter = 'Mark off the borders  \nto win.'
+FishBingoHelpT = 'Mark out a T-shape  \nfrom the board.'
+FishBingoHelpCrossout = 'Mark out a plus sign  \nto win.'
+FishBingoHelpFouredges = 'Mark the middle of  \neach edge to win.'
+FishBingoHelpCheckerboard = 'Mark off every other  \ntile to win.'
 FishBingoOfferToSellFish = 'Your fish bucket is full. Would you like to sell your fish?'
 FishBingoJackpotWin = 'Win %s Jellybeans!'
 ResistanceToonupMenu = 'Toon-up'

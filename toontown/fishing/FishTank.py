@@ -1,23 +1,47 @@
 from toontown.fishing import FishBase
 from toontown.fishing import FishGlobals
 
+
 class FishTank:
+    """
+    FishTank
+    """
 
     def __init__(self):
         self.fishList = []
 
     def __len__(self):
+        """
+        For convenience
+        """
         return len(self.fishList)
 
     def getFish(self):
+        """
+        :return: the current fish list
+        """
         return self.fishList
 
     def makeFromNetLists(self, genusList, speciesList, weightList):
+        """
+        Fill in the fish collection based on lists passed in like they are
+        in the toon.dc file
+
+        :type genusList: list
+        :type speciesList: list
+        :type weightList: list
+        """
         self.fishList = []
         for genus, species, weight in zip(genusList, speciesList, weightList):
             self.fishList.append(FishBase.FishBase(genus, species, weight))
 
     def getNetLists(self):
+        """
+        Return lists formatted for toon.dc style setting and getting
+        We store parallel lists of genus, species, and weight in the db
+
+        :return: [genusList, speciesList, weightList]
+        """
         genusList = []
         speciesList = []
         weightList = []
@@ -29,28 +53,47 @@ class FishTank:
         return [genusList, speciesList, weightList]
 
     def hasFish(self, genus, species):
+        """
+        Return 1 if we have the fish specified by this genus and species
+        Return 0 if we do not
+
+        :return: 0 | 1
+        """
         for fish in self.fishList:
             if fish.getGenus() == genus and fish.getSpecies() == species:
                 return 1
-
         return 0
 
     def hasBiggerFish(self, genus, species, weight):
+        """
+        Return 1 if we have the fish specified by this genus and species
+        and the fish in this tank is heavier or equal to weight.
+        Return 0 if we do not.
+
+        :return: 0 | 1
+        """
         for fish in self.fishList:
             if fish.getGenus() == genus and fish.getSpecies() == species and fish.getWeight() >= weight:
                 return 1
-
         return 0
 
     def addFish(self, fish):
+        """
+        Add this fish to our collection
+        """
         self.fishList.append(fish)
         return 1
 
     def removeFishAtIndex(self, index):
+        """
+        Remove the fish at index
+
+        :return: 0 (out of index) | 1 (success)
+        """
         if index >= len(self.fishList):
             return 0
         else:
-            del self.fishList[i]
+            del self.fishList[index]
             return 1
 
     def generateRandomTank(self):
@@ -64,10 +107,12 @@ class FishTank:
             self.addFish(fish)
 
     def getTotalValue(self):
+        """
+        total value of fish in fishList
+        """
         value = 0
         for fish in self.fishList:
             value += fish.getValue()
-
         return value
 
     def __str__(self):
@@ -77,6 +122,5 @@ class FishTank:
         for fish in self.fishList:
             txt += '\n' + str(fish)
             value += fish.getValue()
-
         txt += '\nTotal value: %s' % value
         return txt

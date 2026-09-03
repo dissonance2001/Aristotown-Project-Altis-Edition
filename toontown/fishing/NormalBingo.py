@@ -1,16 +1,38 @@
-from direct.directnotify import DirectNotifyGlobal
 from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardBase
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
+
+@DirectNotifyCategory()
 class NormalBingo(BingoCardBase.BingoCardBase):
-    notify = DirectNotifyGlobal.directNotify.newCategory('NormalBingo')
+    """
+    NormalBingo(BingoCardBase)
+
+    Provide a base layout of the bingo card which can be used in a variety of games.
+    """
 
     def __init__(self, cardSize = BingoGlobals.CARD_SIZE, rowSize = BingoGlobals.CARD_ROWS, colSize = BingoGlobals.CARD_COLS):
+        """
+        This method provides initial construction of the Card.
+        It determines if the card is of a valid size, and that it is square.
+        Checking of a non-square card is impossible for diagonal cases.
+
+        :param cardSize: The size of the card rowSize x colSize.
+        :param rowSize: The number of rows in the card.
+        :param colSize: The number of cols in the card.
+        """
         BingoCardBase.BingoCardBase.__init__(self, cardSize, rowSize, colSize)
         self.gameType = BingoGlobals.NORMAL_CARD
 
     def checkForWin(self, id):
-        rowId = int(id / BingoGlobals.CARD_ROWS)
+        """
+        This method checks if there was a win after the last cell update.
+        It calls all of the game logic methods which are required to determine a win.
+
+        :param id: The ID Number of the cell to Check.
+        :return: 0 [NO_UPDATE] | 2 [WIN]
+        """
+        rowId = id // BingoGlobals.CARD_ROWS
         colId = id % BingoGlobals.CARD_COLS
         rowResult = self.rowCheck(rowId)
         colResult = self.colCheck(colId)
@@ -21,17 +43,33 @@ class NormalBingo(BingoCardBase.BingoCardBase):
         return BingoGlobals.NO_UPDATE
 
     def checkForColor(self, id):
+        """
+        This method determines if a specified cell ID should be a particular color.
+
+        :param id: The ID Number of the cell to Check.
+        :return: 1 since this is normal bingo.
+        """
         return 1
 
     def checkForBingo(self):
-        id = self.cardSize / 2
+        """
+        This method checks if there was a win after the last cell update.
+        It calls all of the game logic methods which are required to determine a win.
+
+        :return: 0 [NO_UPDATE] | 2 [WIN]
+        """
+
+        # First Check the middle square to eliminate
+        # diagonals and middle row & col
+        id = self.cardSize // 2
         if self.checkForWin(id):
             return BingoGlobals.WIN
+
+        # Next check remaining rows and columns
         for i in range(BingoGlobals.CARD_ROWS):
-            if i != BingoGlobals.CARD_ROWS / 2:
+            if i != BingoGlobals.CARD_ROWS // 2:
                 rowResult = self.rowCheck(i)
                 colResult = self.colCheck(i)
                 if rowResult | colResult:
                     return BingoGlobals.WIN
-
         return BingoGlobals.NO_UPDATE

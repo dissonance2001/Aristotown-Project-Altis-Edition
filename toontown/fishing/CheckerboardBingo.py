@@ -4,9 +4,9 @@ from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DiagonalBingo(BingoCardBase.BingoCardBase):
+class CheckerboardBingo(BingoCardBase.BingoCardBase):
     """
-    DiagonalBingo(BingoCardBase)
+    CheckerboardBingo(BingoCardBase)
 
     Provide a base layout of the bingo card which can be used in a variety of games.
     """
@@ -22,7 +22,7 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
         :param colSize: The number of cols in the card.
         """
         BingoCardBase.BingoCardBase.__init__(self, cardSize, rowSize, colSize)
-        self.gameType = BingoGlobals.DIAGONAL_CARD
+        self.gameType = BingoGlobals.CHECKERBOARD_CARD
         self.fDiagResult = 0
         self.bDiagResult = 0
 
@@ -38,7 +38,10 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
             self.fDiagResult = 1
         if self.bDiagCheck(id):
             self.bDiagResult = 1
-        if self.fDiagResult and self.bDiagResult:
+        corners = [2, 10, 14, 22]
+        if self.cellCheck(corners[0]) and self.cellCheck(corners[1]) \
+            and self.cellCheck(corners[2]) and self.cellCheck(corners[3]) \
+                and self.fDiagResult and self.bDiagResult:
             return BingoGlobals.WIN
         return BingoGlobals.NO_UPDATE
 
@@ -47,9 +50,19 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
         This method determines if a specified cell ID should be a particular color.
 
         :param int id: The ID Number of the cell to Check.
-        :return: returns 1 if on a diagonal, 0 if it is not
+        :return: 1 if on a corner, 0 if it is not
         """
-        return self.onFDiag(id) | self.onBDiag(id)
+        top, left, right, bottom = (0, 0, 0, 0)
+        corners = [2, 10, 14, 22]
+        if id == corners[0]:
+            top = 1
+        elif id == corners[1]:
+            left = 1
+        elif id == corners[2]:
+            right = 1
+        elif id == corners[3]:
+            bottom = 1
+        return top or left or right or bottom or self.onFDiag(id) | self.onBDiag(id)
 
     def checkForBingo(self):
         """

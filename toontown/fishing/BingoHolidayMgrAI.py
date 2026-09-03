@@ -1,8 +1,12 @@
-from direct.directnotify.DirectNotifyGlobal import *
 from toontown.ai import HolidayBaseAI
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
+
+@DirectNotifyCategory()
 class BingoHolidayMgrAI(HolidayBaseAI.HolidayBaseAI):
-    notify = directNotify.newCategory('BingoHolidayMgrAI')
+    """
+    BingoHolidayMgrAI(HolidayBaseAI)
+    """
 
     PostName = 'BingoHoliday'
     StartStopMsg = 'BingoHolidayStartStop'

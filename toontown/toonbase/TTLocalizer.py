@@ -9,6 +9,14 @@ except:
     language = DConfig.GetString('language', 'english')
     checkLanguage = DConfig.GetBool('check-language', 0)
 
+# imports / other setup above this
+
+DialogOK = 'OK'
+DialogCancel = 'Cancel'
+DialogYes = 'Yes'
+DialogNo = 'No'
+# rest of TTLocalizer.py below
+
 def getLanguage():
     return language
 

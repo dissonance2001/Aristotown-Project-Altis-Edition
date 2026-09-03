@@ -1,24 +1,36 @@
-from pandac.PandaModules import *
+from panda3d.core import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedNode
-from direct.fsm import ClassicFSM
-from direct.fsm import State
-from direct.directutil import Mopath
-from toontown.toonbase import ToontownGlobals
-from direct.actor import Actor
 from toontown.fishing import FishingTargetGlobals
-import random
 import math
 from toontown.effects import Bubbles
+from typing import TYPE_CHECKING
 
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+
+if TYPE_CHECKING:
+    from toontown.distributed.ToontownClientRepository import ToontownClientRepository
+
+
+@DirectNotifyCategory()
 class DistributedFishingTarget(DistributedNode.DistributedNode):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFishingTarget')
+    """
+    DistributedFishingTarget(DistributedNode.DistributedNode)
+
+    This handles the graphic representation of the fish that are under
+    the water.  They are shown as a shadow with bubbles coming up.  These
+    are the things that the player 'shoots at' when fishing.
+    """
+
     radius = 2.5
 
     def __init__(self, cr):
+        """
+        :param ToontownClientRepository cr: The client repository which maintains all client-side distributed objects.
+        """
         DistributedNode.DistributedNode.__init__(self, cr)
+        # Initialize our NodePath essense
         NodePath.__init__(self)
         self.pond = None
         self.centerPoint = (0, 0, 0)
@@ -76,6 +88,9 @@ class DistributedFishingTarget(DistributedNode.DistributedNode):
         return (x, y, z)
 
     def setState(self, stateIndex, angle, radius, time, timeStamp):
+        self.notify.debug("setState: angle: %s radius: %s time: %s timeStamp: %s" %
+                          (angle, radius, time, timeStamp))
+
         ts = globalClockDelta.localElapsedTime(timeStamp)
         pos = self.getDestPos(angle, radius)
         if self.track and self.track.isPlaying():

@@ -4,9 +4,9 @@ from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DiagonalBingo(BingoCardBase.BingoCardBase):
+class FourEdgeBingo(BingoCardBase.BingoCardBase):
     """
-    DiagonalBingo(BingoCardBase)
+    FourEdgeBingo(BingoCardBase)
 
     Provide a base layout of the bingo card which can be used in a variety of games.
     """
@@ -22,23 +22,19 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
         :param colSize: The number of cols in the card.
         """
         BingoCardBase.BingoCardBase.__init__(self, cardSize, rowSize, colSize)
-        self.gameType = BingoGlobals.DIAGONAL_CARD
-        self.fDiagResult = 0
-        self.bDiagResult = 0
+        self.gameType = BingoGlobals.FOUREDGES_CARD
 
     def checkForWin(self, id):
         """
         This method checks if there was a win after the last cell update.
         It calls all of the game logic methods which are required to determine a win.
 
-        :param int id: The ID Number of the cell to Check.
+        :param id: The ID Number of the cell to Check.
         :return: 0 [NO_UPDATE] | 2 [WIN]
         """
-        if self.fDiagCheck(id):
-            self.fDiagResult = 1
-        if self.bDiagCheck(id):
-            self.bDiagResult = 1
-        if self.fDiagResult and self.bDiagResult:
+        corners = [2, 10, 14, 22]
+        if self.cellCheck(corners[0]) and self.cellCheck(corners[1]) \
+                and self.cellCheck(corners[2]) and self.cellCheck(corners[3]):
             return BingoGlobals.WIN
         return BingoGlobals.NO_UPDATE
 
@@ -46,10 +42,19 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
         """
         This method determines if a specified cell ID should be a particular color.
 
-        :param int id: The ID Number of the cell to Check.
-        :return: returns 1 if on a diagonal, 0 if it is not
+        :param id: The ID Number of the cell to Check.
         """
-        return self.onFDiag(id) | self.onBDiag(id)
+        top, left, right, bottom = (0, 0, 0, 0)
+        corners = [2, 10, 14, 22]
+        if id == corners[0]:
+            top = 1
+        elif id == corners[1]:
+            left = 1
+        elif id == corners[2]:
+            right = 1
+        elif id == corners[3]:
+            bottom = 1
+        return top or left or right or bottom
 
     def checkForBingo(self):
         """
@@ -58,7 +63,4 @@ class DiagonalBingo(BingoCardBase.BingoCardBase):
 
         :return: 0 [NO_UPDATE] | 2 [WIN]
         """
-        id = self.cardSize // 2
-        if self.checkForWin(id):
-            return BingoGlobals.WIN
-        return BingoGlobals.NO_UPDATE
+        return self.checkForWin(0)

@@ -1,33 +1,53 @@
 from direct.distributed import DistributedObject
 from direct.distributed.ClockDelta import *
-from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import FSM
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
-from direct.task import Task
+from panda3d.core import *
+
 from toontown.fishing import BingoGlobals
 from toontown.fishing import BingoCardGui
-from toontown.fishing import FishGlobals
 from toontown.fishing import NormalBingo
 from toontown.fishing import FourCornerBingo
 from toontown.fishing import DiagonalBingo
 from toontown.fishing import ThreewayBingo
 from toontown.fishing import BlockoutBingo
-from direct.showbase import RandomNumGen
-from toontown.toonbase import ToontownTimer
-from toontown.toonbase import ToontownGlobals
+from toontown.fishing import PerimeterBingo
+from toontown.fishing import TBingo
+from toontown.fishing import CrossoutBingo
+from toontown.fishing import FourEdgeBingo
+from toontown.fishing import CheckerboardBingo
 from toontown.toonbase import TTLocalizer
-import time
+from typing import TYPE_CHECKING
 
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+
+if TYPE_CHECKING:
+    from toontown.distributed.ToontownClientRepository import ToontownClientRepository
+
+
+@DirectNotifyCategory()
 class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
-    notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPondBingoManager')
-    cardTypeDict = {BingoGlobals.NORMAL_CARD: NormalBingo.NormalBingo,
-     BingoGlobals.FOURCORNER_CARD: FourCornerBingo.FourCornerBingo,
-     BingoGlobals.DIAGONAL_CARD: DiagonalBingo.DiagonalBingo,
-     BingoGlobals.THREEWAY_CARD: ThreewayBingo.ThreewayBingo,
-     BingoGlobals.BLOCKOUT_CARD: BlockoutBingo.BlockoutBingo}
+    """
+    DistributedPondBingoManager(DistributedObject, FSM)
+    """
+
+    cardTypeDict = {
+        BingoGlobals.NORMAL_CARD:       NormalBingo.NormalBingo,
+        BingoGlobals.FOURCORNER_CARD:   FourCornerBingo.FourCornerBingo,
+        BingoGlobals.DIAGONAL_CARD:     DiagonalBingo.DiagonalBingo,
+        BingoGlobals.THREEWAY_CARD:     ThreewayBingo.ThreewayBingo,
+        BingoGlobals.BLOCKOUT_CARD:     BlockoutBingo.BlockoutBingo,
+        BingoGlobals.PERIMETER_CARD:    PerimeterBingo.PerimeterBingo,
+        BingoGlobals.T_CARD:            TBingo.TBingo,
+        BingoGlobals.CROSSOUT_CARD:     CrossoutBingo.CrossoutBingo,
+        BingoGlobals.FOUREDGES_CARD:    FourEdgeBingo.FourEdgeBingo,
+        BingoGlobals.CHECKERBOARD_CARD: CheckerboardBingo.CheckerboardBingo
+    }
 
     def __init__(self, cr):
+        """
+        :param ToontownClientRepository cr: The client repository which maintains all client-side distributed objects.
+        """
         DistributedObject.DistributedObject.__init__(self, cr)
         FSM.FSM.__init__(self, 'DistributedPondBingoManager')
         self.cardId = 0
@@ -38,7 +58,7 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
         self.hasEntered = 0
         self.initGameState = None
         self.lastCatch = None
-        self.typeId = BingoGlobals.NORMAL_CARD
+        self.typeId = BingoGlobals.NORMAL_CARD  # 0
         return
 
     def generate(self):
@@ -61,10 +81,7 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
         return
 
     def d_cardUpdate(self, cellId, genus, species):
-        self.sendUpdate('cardUpdate', [self.cardId,
-         cellId,
-         genus,
-         species])
+        self.sendUpdate('cardUpdate', [self.cardId, cellId, genus, species])
 
     def d_bingoCall(self):
         self.sendUpdate('handleBingoCall', [self.cardId])
@@ -177,8 +194,8 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
     def setJackpot(self, jackpot):
         self.jackpot = jackpot
 
-    #todo: fix crash
-    def enterOff(self, args = None):
+    # todo: fix crash
+    def enterOff(self, args=None):
         self.notify.debug('enterOff: Enter Off State')
         del self.spot
         self.spot = None
@@ -197,7 +214,10 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
             return (request, args)
         elif request == 'Playing':
             self.__generateCard()
-            self.card.setJackpotText(str(self.jackpot))
+            # TODO: route through Altis's booster/gumball multiplier system (toontown.gumball.GumballGlobals.applyBoosters)
+            # once jellybean boosters are wired up; no multiplier applied for now.
+            amount = round(self.jackpot)
+            self.card.setJackpotText(str(amount))
             return (request, args)
         elif request == 'Intermission':
             return (request, args)
@@ -211,7 +231,7 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
     def exitOff(self):
         self.notify.debug('exitOff: Exit Off State')
 
-    def enterIntro(self, args = None):
+    def enterIntro(self, args=None):
         self.notify.debug('enterIntro: Enter Intro State')
         self.pond.setSpotGui()
         self.hasEntered = 1
@@ -242,7 +262,10 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
         self.notify.debug('exitWaitCountdown: Exit WaitCountdown State')
         if self.pond:
             self.__generateCard()
-            self.card.setJackpotText(str(self.jackpot))
+            # TODO: route through Altis's booster/gumball multiplier system (toontown.gumball.GumballGlobals.applyBoosters)
+            # once jellybean boosters are wired up; no multiplier applied for now.
+            mult = round(self.jackpot)
+            self.card.setJackpotText(str(mult))
             self.card.resetGameTimer()
             self.card.hideNextGameTimer()
 
@@ -273,9 +296,6 @@ class DistributedPondBingoManager(DistributedObject.DistributedObject, FSM.FSM):
             self.card.setBingo()
             self.card.removeGame()
             self.card.setGameOver(TTLocalizer.FishBingoVictory)
-        localToonSpot = self.pond.getLocalToonSpot()
-        if localToonSpot:
-            localToonSpot.setJarAmount(self.jackpot)
         self.jackpot = 0
 
     def filterReward(self, request, args):

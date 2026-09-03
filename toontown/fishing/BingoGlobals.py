@@ -1,39 +1,54 @@
+#################################################################
+# File: BingoGlobals.py
+# Purpose: Provides Global Variables for use within all Bingo
+#          related files.
+#################################################################
+
 from toontown.toonbase import TTLocalizer
+
+# Card Type Enums
 NORMAL_CARD = 0
 FOURCORNER_CARD = 1
 DIAGONAL_CARD = 2
 THREEWAY_CARD = 3
 BLOCKOUT_CARD = 4
-Style1 = ((249, 193, 41, 255), (106, 241, 233, 255), (64, 215, 206, 255))
-Style2 = ((138, 241, 106, 255), (246, 129, 220, 255), (221, 113, 197, 255))
-Style3 = ((128, 108, 250, 255), (248, 129, 56, 255), (250, 95, 26, 255))
-Style4 = ((10, 118, 251, 255), (252, 225, 97, 255), (245, 207, 29, 255))
-Style5 = ((243, 84, 253, 255), (97, 163, 253, 255), (48, 129, 240, 255))
-CardTypeDict = {NORMAL_CARD: (Style1,
-               10,
-               140,
-               TTLocalizer.FishBingoTypeNormal,
-               TTLocalizer.FishBingoHelpNormal),
- FOURCORNER_CARD: (Style2,
-                   20,
-                   120,
-                   TTLocalizer.FishBingoTypeCorners,
-                   TTLocalizer.FishBingoHelpCorners),
- DIAGONAL_CARD: (Style3,
-                 40,
-                 180,
-                 TTLocalizer.FishBingoTypeDiagonal,
-                 TTLocalizer.FishBingoHelpDiagonals),
- THREEWAY_CARD: (Style4,
-                 80,
-                 180,
-                 TTLocalizer.FishBingoTypeThreeway,
-                 TTLocalizer.FishBingoHelpThreeway),
- BLOCKOUT_CARD: (Style5,
-                 1000,
-                 90,
-                 TTLocalizer.FishBingoTypeBlockout,
-                 TTLocalizer.FishBingoHelpBlockout)}
+PERIMETER_CARD = 5
+T_CARD = 6
+CROSSOUT_CARD = 7
+FOUREDGES_CARD = 8
+CHECKERBOARD_CARD = 9
+
+# A dictionary containing the Card Type ID as a key, with a tuple
+# representing different aspects of the card.
+# { Key : ( (Color), Base_Reward, Game_Time ) }
+
+          #base color,           button color,         button rollover
+Style1 = ((249, 193, 41, 255), (106, 241, 233, 255), (64, 215, 206, 255))       # normal (Gold)
+Style2 = ((138, 241, 106, 255), (246, 129, 220, 255), (221, 113, 197, 255))     # four corners (Light Green)
+Style3 = ((128, 108, 250, 255), (248, 129, 56, 255), (250, 95, 26, 255))        # diagonal (Purple)
+Style4 = ((10, 118, 251, 255), (252, 225, 97, 255), (245, 207, 29, 255))        # threeway (Blue)
+Style5 = ((243, 84, 253, 255), (97, 163, 253, 255), (48, 129, 240, 255))        # blockout (Light Purple)
+Style6 = ((209, 105, 15, 255), (48, 212, 15, 255), (44, 163, 20, 255))          # perimeter
+Style7 = ((120, 63, 22, 255), (168, 127, 13, 255), (130, 100, 12, 255))         # tea time
+Style8 = ((189, 25, 25, 255), (209, 108, 29, 255), (153, 83, 28, 255))          # crossout
+Style9 = ((207, 10, 112, 255), (25, 184, 17, 255), (19, 122, 16, 255))          # four edges
+Style10 =((194, 19, 19, 255), (56, 53, 53, 255), (41, 39, 39, 255))             # checkerboard
+
+
+CardTypeDict = {
+    #                   color,  reward, time, name, help string
+    NORMAL_CARD:       (Style1, 30, 175, TTLocalizer.FishBingoTypeNormal, TTLocalizer.FishBingoHelpNormal),
+    FOURCORNER_CARD:   (Style2, 60, 150, TTLocalizer.FishBingoTypeCorners, TTLocalizer.FishBingoHelpCorners),
+    DIAGONAL_CARD:     (Style3, 125, 225, TTLocalizer.FishBingoTypeDiagonal, TTLocalizer.FishBingoHelpDiagonals),
+    THREEWAY_CARD:     (Style4, 180, 225, TTLocalizer.FishBingoTypeThreeway, TTLocalizer.FishBingoHelpThreeway),
+    BLOCKOUT_CARD:     (Style5, 375, 300, TTLocalizer.FishBingoTypeBlockout, TTLocalizer.FishBingoHelpBlockout),
+    PERIMETER_CARD:    (Style6, 200, 225, TTLocalizer.FishBingoTypePerimeter, TTLocalizer.FishBingoHelpPerimeter),
+    T_CARD:            (Style7, 140, 200, TTLocalizer.FishBingoTypeT, TTLocalizer.FishBingoHelpT),
+    CROSSOUT_CARD:     (Style8, 110, 250, TTLocalizer.FishBingoTypeCrossout, TTLocalizer.FishBingoHelpCrossout),
+    FOUREDGES_CARD:    (Style9, 75, 125, TTLocalizer.FishBingoTypeFouredges, TTLocalizer.FishBingoHelpFouredges),
+    CHECKERBOARD_CARD: (Style10, 175, 250, TTLocalizer.FishBingoTypeCheckerboard, TTLocalizer.FishBingoHelpCheckerboard)
+}
+
 
 def getGameTime(typeId):
     return CardTypeDict[typeId][2]
@@ -66,52 +81,81 @@ def getHelpString(typeId):
     return CardTypeDict[typeId][4]
 
 
-CellColorActive = (1.0, 1.0, 1.0, 1.0)
-CellColorInactive = (0.8, 0.8, 0.8, 1.0)
+#cell colors
+CellColorActive = (1.0, 1.0, 1.0, 1.0)  # a square needed to 'win' a game
+CellColorInactive = (0.67, 0.67, 0.67, 1.0)  # a square that is not needed for this game
+
+# Min/Max Number of JBs the super jackpot can
+# reach.
 ROLLOVER_AMOUNT = 100
 MIN_SUPER_JACKPOT = 1000
 MAX_SUPER_JACKPOT = 10000
+
+# Win Check Enums
 NO_UPDATE = 0
 UPDATE = 1
 WIN = 2
+
+# Bingo Time Constants
 CARD_ROWS = 5
 CARD_COLS = 5
 CARD_SIZE = 25
+
+# Time Between each state Change
 INTRO_SESSION = 5.0
 TIMEOUT_SESSION = 15.0
 REWARD_TIMEOUT = 5.0
 CLOSE_EVENT_TIMEOUT = 5.0
+
 HOUR_BREAK_SESSION = 300
 HOUR_BREAK_MIN = 55
+
 NORMAL_GAME = 0
 INTERMISSION = 1
 CLOSE_EVENT = 2
+
+# Default size of the Card Image. Height is 0.05 greater than width
 CardImageScale = (0.035, 0.035, 0.035)
-CardPosition = (0.75, 1.0, -.65)
-TutorialPosition = (0.2, 1.0, -0.76)
+
+# Default position of the Card upon the screen. This
+# is dependent to the size of the card image scale because
+# the card is placed at the top of the screen.
+CardPosition = (1, 1.0, -.65)
+
+TutorialPosition = (0.2, 1.0, -0.85)
 TutorialScale = 0.6
 TutorialTextScale = (0.07, 0.233)
+
+# Cell Defaults Image Values. These ensure that no matter
+# what value the CardImageScale takes, the card GUI will
+# scale accordingly!
 CellImageScale = 0.088
 GridXOffset = -0.052
-FishButtonDict = {-1: ('mickeyButton',),
- 0: ('BaloonFishButton',),
- 2: ('CatfishButton',),
- 4: ('ClownfishButton',),
- 6: ('FrozenfishButton',),
- 8: ('starfishButton',),
- 10: ('holyMackrelButton',),
- 12: ('DogfishButton',),
- 14: ('amoreEelButton',),
- 16: ('nursesharkButton',),
- 18: ('kingcrabButton',),
- 20: ('moonfishButton',),
- 22: ('pPlane21',),
- 24: ('poolsharkButton',),
- 26: ('BearacudaButton',),
- 28: ('troutButton',),
- 30: ('pianotunaButton',),
- 32: ('PBJfishButton',),
- 34: ('DevilrayButton',)}
+
+FishButtonDict = {
+    # species: (buttonName)
+    -1: ('mickeyButton',),
+    0: ('BaloonFishButton',),
+    2: ('CatfishButton',),
+    4: ('ClownfishButton',),
+    6: ('FrozenfishButton',),
+    8: ('starfishButton',),
+    10: ('holyMackrelButton',),
+    12: ('DogfishButton',),
+    14: ('amoreEelButton',),
+    16: ('nursesharkButton',),
+    18: ('kingcrabButton',),
+    20: ('moonfishButton',),
+    22: ('pPlane21',),
+    24: ('poolsharkButton',),
+    26: ('BearacudaButton',),
+    28: ('troutButton',),
+    30: ('pianotunaButton',),
+    32: ('PBJfishButton',),
+    34: ('DevilrayButton',)
+}
+
+# tutorial type enum
 TutorialIntro = 1
 TutorialMark = 2
 TutorialCard = 3

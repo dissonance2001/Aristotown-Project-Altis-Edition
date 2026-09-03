@@ -1,13 +1,17 @@
-from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedNodeAI import DistributedNodeAI
 from direct.distributed.ClockDelta import *
 from toontown.fishing import FishingTargetGlobals
-from direct.task import Task
 import random
 import math
 
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+
+
+@DirectNotifyCategory()
 class DistributedFishingTargetAI(DistributedNodeAI):
-    notify = DirectNotifyGlobal.directNotify.newCategory("DistributedFishingTargetAI")
+    """
+    DistributedFishingTargetAI(DistributedNodeAI)
+    """
 
     def __init__(self, air):
         DistributedNodeAI.__init__(self, air)
@@ -21,7 +25,8 @@ class DistributedFishingTargetAI(DistributedNodeAI):
         DistributedNodeAI.generate(self)
         self.updateState()
         if not self.pondId:
-            #We dont have a pond ID for some reason...
+            self.notify.warning("we don't have a pond ID for some reason?")
+            # We don't have a pond ID for some reason...
             return
         
         pond = self.air.doId2do[self.pondId]

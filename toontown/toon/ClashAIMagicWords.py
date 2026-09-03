@@ -4,6 +4,7 @@ from toontown.shtiker import CogPageGlobals
 from toontown.suit import SuitDNA
 from toontown.suit.SuitInvasionGlobals import IFV2, IFSkelecog, IFWaiter, INVASION_TYPE_MEGA, INVASION_TYPE_NORMAL
 from toontown.toonbase import ToontownGlobals
+from toontown.toonbase import TTLocalizer
 
 
 def _resolveSuitName(value):
@@ -238,3 +239,13 @@ def clashPresentThiefEnd():
     hood.scheduleNextMinigame()
     return message
 
+
+
+@magicWord(name='setrod', category=CATEGORY_PROGRAMMER, types=[int])
+def clashSetRod(rodId):
+    """Sets the target's fishing rod (0=Twig, 1=Bamboo, 2=Hardwood, 3=Steel, 4=Gold). Temporary testing aid until the Tell-Tale Carp rod clerk is placed."""
+    if rodId < 0 or rodId > 4:
+        return 'Rod id must be 0-4 (0=Twig, 1=Bamboo, 2=Hardwood, 3=Steel, 4=Gold).'
+    target = spellbook.getTarget()
+    target.b_setFishingRod(rodId)
+    return 'Set rod to %s.' % TTLocalizer.FishingRodNameDict.get(rodId, rodId)
