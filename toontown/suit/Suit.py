@@ -31,6 +31,13 @@ import string
 import os
 from toontown.suit import SuitGlobals
 FreakoutTaskName = 'headPartFreakout'
+HeadFreakoutWaitRangeVideographer = (0.25, 1.0)
+HeadFreakoutTwitchTimeRangeVideographer = (0.07, 0.12)
+HeadFreakoutAngleRangeVideographer = [25, 50]
+
+HeadFreakoutRepeatTimesVideographer = [1, 2, 3]
+HeadFreakoutRepeatWeightsVideographer = [3, 4, 5]
+
 
 HeadFreakoutWaitRange = (0.4, 2.0)
 HeadFreakoutTwitchTimeRange = (0.07, 0.12)
@@ -7852,6 +7859,18 @@ class Suit(Avatar.Avatar):
             self.uniqueName(FreakoutTaskName)
         )
 
+    def startHeadFreakoutVideographerDeath(self):
+        self.stopHeadFreakout()
+
+        if not getattr(self, 'headFreakoutPart', None):
+            return
+
+        taskMgr.doMethodLater(
+            0,
+            self.__doHeadFreakoutVideographer,
+            self.uniqueName(FreakoutTaskName)
+        )
+
     def pauseHeadFreakout(self):
         self.headFreakoutPaused = True
 
@@ -7958,6 +7977,128 @@ class Suit(Avatar.Avatar):
             twitchTime = random.uniform(
                 HeadFreakoutTwitchTimeRange[0],
                 HeadFreakoutTwitchTimeRange[1]
+            )
+
+            useHeading = random.random() < 0.5
+
+            if useHeading:
+                minimumAngle = HeadFreakoutAngleRange[0]
+                maximumAngle = HeadFreakoutAngleRange[1]
+            else:
+                minimumAngle = HeadFreakoutAngleRange[0] * (2.0 / 3.0)
+                maximumAngle = HeadFreakoutAngleRange[1] * (2.0 / 3.0)
+
+            angle = random.uniform(minimumAngle, maximumAngle)
+            angle *= random.choice((-1, 1))
+
+            if useHeading:
+                finalHpr = Vec3(
+                    originalHpr.getX() + angle,
+                    originalHpr.getY(),
+                    originalHpr.getZ()
+                )
+            else:
+                finalHpr = Vec3(
+                    originalHpr.getX(),
+                    originalHpr.getY(),
+                    originalHpr.getZ() + angle
+                )
+
+            self.headFreakoutSeq.append(
+                Sequence(
+                    Func(
+                        self.__setHeadFreakoutTexture,
+                        self.headFreakoutGlitchTex
+                    ),
+                    LerpHprInterval(
+                        headPart,
+                        twitchTime,
+                        finalHpr,
+                        startHpr=originalHpr
+                    )
+                )
+            )
+            if float(self.currHP) / float(self.maxHP) <= 0.25:
+                if lastTwitch:
+                    self.headFreakoutSeq.append(
+                        Func(
+                            self.__setHeadFreakoutTexture,
+                            self.headFreakoutNormalTexHurt
+                        )
+                    )
+
+                    self.headFreakoutSeq.append(
+                        LerpHprInterval(
+                            headPart,
+                            twitchTime * 2.0,
+                            originalHpr,
+                            blendType='easeOut'
+                        )
+                    )
+            else:
+                if lastTwitch:
+                    self.headFreakoutSeq.append(
+                        Func(
+                            self.__setHeadFreakoutTexture,
+                            self.headFreakoutNormalTex
+                        )
+                    )
+
+                    self.headFreakoutSeq.append(
+                        LerpHprInterval(
+                            headPart,
+                            twitchTime * 2.0,
+                            originalHpr,
+                            blendType='easeOut'
+                        )
+                    )
+                
+
+        self.headFreakoutSeq.start()
+
+        task.delayTime = (
+            waitForNextTime +
+            self.headFreakoutSeq.getDuration()
+        )
+
+        return task.again
+
+    def __doHeadFreakoutVideographer(self, task):
+        if self.headFreakoutPaused:
+            task.delayTime = 0.1
+            return task.again
+        self.__finishHeadFreakoutSequence()
+
+        for headPart in self.animatedHeadParts:
+            headPart = headPart
+
+        if not headPart or headPart.isEmpty():
+            return task.done
+
+        waitForNextTime = random.uniform(
+            HeadFreakoutWaitRangeVideographer[0],
+            HeadFreakoutWaitRangeVideographer[1]
+        )
+
+        twitchRepeatAmount = self.__weightedRandomChoice(
+            HeadFreakoutRepeatTimesVideographer,
+            HeadFreakoutRepeatWeightsVideographer
+        )
+
+        originalHpr = getattr(
+            self,
+            'headFreakoutOriginalHpr',
+            headPart.getHpr()
+        )
+
+        self.headFreakoutSeq = Sequence()
+
+        for i in range(twitchRepeatAmount):
+            lastTwitch = i == twitchRepeatAmount - 1
+
+            twitchTime = random.uniform(
+                HeadFreakoutTwitchTimeRangeVideographer[0],
+                HeadFreakoutTwitchTimeRangeVideographer[1]
             )
 
             useHeading = random.random() < 0.5
@@ -9080,6 +9221,20 @@ class Suit(Avatar.Avatar):
         
         if name == 'drenched' and self.hasSuitStatusEffect('soaked'):
             self.clearSuitStatusEffect('soaked')
+
+        if name == 'marked2' and self.hasSuitStatusEffect('marked'):
+            self.clearSuitStatusEffect('marked2')
+
+            self.setSuitStatusEffect(
+                'marked',
+                modifier=modifier,
+                turns=turns,
+                mode=mode
+            )
+            return
+        
+        if name == 'marked' and self.hasSuitStatusEffect('marked2'):
+            self.clearSuitStatusEffect('marked2')
 
         if name not in self.suitStatusEffects:
             self.suitStatusEffects[name] = {'modifier': modifier, 'turns': turns}

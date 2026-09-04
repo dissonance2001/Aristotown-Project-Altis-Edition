@@ -41,7 +41,7 @@ class SuitConditionCalculatorAI:
     def calculateSuitConditions(self):
         for i in range(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
-            x = self.TurnsElapsed
+            x = self.calculator.TurnsElapsed
             # if x % 99 == 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn2'):
             #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
             #                             'name': 'CogSpawn',
@@ -301,18 +301,23 @@ class SuitConditionCalculatorAI:
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'extortioncalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'fmaker':  # filmmaker
-                if x % 2 == 0:
-                    self.setSuitCondition(suitId, 'filmmakercalculator', 1, 10, 'setBoth')
+                if x % 3 == 0:
+                    self.setSuitCondition(suitId, 'rewindcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'director':  # director
-                self.directorMultiplier += 4
+                if (x + 2) % 3 == 0:
+                    self.setSuitCondition(suitId, 'partnercalculator', 1, 10, 'setBoth')
                 if x % 3 == 0:
                     self.setSuitCondition(suitId, 'directorcalculator', 1, 10, 'setBoth')
+                if (x + 1) % 3 == 0:
+                    self.setSuitCondition(suitId, 'actioncogcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'choreo':  # choreographer
-                if x % 2 == 0:
+                if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'choreocalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'cinema':  # photographer
-                if x % 2 == 0:
-                    self.setSuitCondition(suitId, 'cinemacalculator', 1, 10, 'setBoth')
+                if (x + 1) % 2 == 0:
+                    self.setSuitCondition(suitId, 'focuscalculator', 1, 10, 'setBoth')
+                if (x + 1) % 3 == 0:
+                    self.setSuitCondition(suitId, 'flashcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':  # high roller phase 1
                 self.setSuitCondition(suitId, 'gametimecalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'videog':  # videographer

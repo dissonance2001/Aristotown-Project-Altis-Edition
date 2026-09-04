@@ -1,5 +1,4 @@
 import random
-import types
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import SuitBuildingGlobals
 from otp.ai.AIBaseGlobal import *
@@ -45,7 +44,7 @@ class SuitPlannerInteriorAI:
             self.dbg_defaultSuitType = None
         else:
             self.dbg_defaultSuitType = SuitDNA.getSuitType(dbg_defaultSuitName)
-        if isinstance(bldgLevel, bytes):
+        if isinstance(bldgLevel, str):
             self.notify.warning('bldgLevel is a string!')
             bldgLevel = int(bldgLevel)
         
@@ -1077,7 +1076,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erfit2':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(12, 16)
@@ -1091,7 +1090,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erfit3':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(14, 18)
@@ -1105,7 +1104,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erfit4':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(16, 20)
@@ -1119,7 +1118,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erfit5':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(20, 30)
@@ -1133,7 +1132,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erclaim':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(10, 15)
@@ -1147,7 +1146,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'erclaim2':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(15, 25)
@@ -1161,7 +1160,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
             skelecogChance=100
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'paceGrunts':
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
             suitLevel = random.randint(10, 25)
@@ -1174,13 +1173,13 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'crf':
             # generate random cashbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, 25, 'm', 25, 0)
             suit2 = self.__genSuitObject(self.zoneId, 20, 's', 20, 1)
             suit3 = self.__genSuitObject(self.zoneId, 27, 'm', 27, 0)
-            reserveSuits.append(random.choice((suit, suit2, suit3)))
+            reserveSuits.append((random.choice((suit, suit2, suit3)), 100))
         if specialCode == 'lit':
             # litigation
             suitLevel = random.randint(10, 20)
@@ -1193,7 +1192,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'litDesperation':
             # litigation
             suitLevel = random.randint(15, 25)
@@ -1206,7 +1205,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'amb':
             # litigation
             suitLevel = random.randint(10, 20)
@@ -1219,7 +1218,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'ambDesperation':
             # litigation
             suitLevel = random.randint(15, 25)
@@ -1232,7 +1231,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'pres':
             # litigation
             suitLevel = random.randint(10, 20)
@@ -1245,7 +1244,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'presDesperation':
             # litigation
             suitLevel = random.randint(15, 25)
@@ -1258,7 +1257,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'bdlit':
             # litigation
             suitLevel = random.randint(10, 20)
@@ -1271,7 +1270,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'bdlitDesperation':
             # litigation
             suitLevel = random.randint(15, 25)
@@ -1284,7 +1283,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'lit2':
             # witness stand-in
             dept = random.choice(('c', 'm', 's', 'g', 'l', 't', 'p'))
@@ -1298,7 +1297,7 @@ class SuitPlannerInteriorAI:
                 suitLevel=suitLevel,
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'phantom':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1307,7 +1306,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='cbutcher'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'dking':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1316,7 +1315,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='dking'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'cdirector':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1325,7 +1324,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='cdirector'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'rkeeper':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1334,7 +1333,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='rkeeper'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'liquid':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1343,7 +1342,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='liquid'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'ubuster':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1352,7 +1351,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='ubuster'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'safesupervis':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1361,7 +1360,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='safesupervis'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'racket':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1370,7 +1369,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hustle'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'radiog':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1379,7 +1378,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='radiog'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'wtapper':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1388,7 +1387,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='wtapper'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'ambass':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1397,7 +1396,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='ambass'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'bkeeper':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1406,7 +1405,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='bkeeper'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'phouse':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1415,7 +1414,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='phouse'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'stenog':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1424,7 +1423,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='stenog'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'lgator':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1433,7 +1432,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='lgator'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'caseman':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1442,7 +1441,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='caseman'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'sgoat':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1451,7 +1450,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='sgoat'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'hrollerPhase3':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1460,7 +1459,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hroller2'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'videogPhase2':
             miniboss = self.__genSuitObject(
                 self.zoneId,
@@ -1469,7 +1468,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='videog'
             )
-            reserveSuits.append(miniboss)
+            reserveSuits.append((miniboss, 100))
         if specialCode == 'std':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1478,7 +1477,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='std2'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'mh':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1487,7 +1486,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='mh2'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'cnd':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1496,13 +1495,13 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='cnd2'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'ffm2':
             suit = self.__genSuitObject(self.zoneId, 17, 't', random.randint(17, 20), 0)
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'ffm':
             suit = self.__genSuitObject(self.zoneId, suitKind, 's', suitLevel, 0)
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'crf1':
             suit = self.__genRandomUncappedSuit(
                 1,
@@ -1510,7 +1509,7 @@ class SuitPlannerInteriorAI:
                 bldgTrack=random.choice(('c', 'm', 'l', 'p', 't', 'g', 's')),
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'crfMinigame':
             suit = self.__genRandomUncappedSuit(
                 1,
@@ -1518,10 +1517,10 @@ class SuitPlannerInteriorAI:
                 bldgTrack=random.choice(('c', 'm', 'l', 'p', 't', 'g', 's')),
                 revives=0
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'crf2':
             suit = self.__genSuitObject(self.zoneId, 27, 'm', random.randint(27, 36), 0)
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil1':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1530,7 +1529,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil2':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1539,7 +1538,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil3':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1548,7 +1547,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil4':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1557,7 +1556,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil5':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1566,7 +1565,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil6':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1575,7 +1574,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil7':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1584,7 +1583,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil8':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1593,7 +1592,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil9':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1602,7 +1601,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil10':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1611,7 +1610,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil11':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1620,7 +1619,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'sil12':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1629,7 +1628,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='hrollers'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'videog':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1652,7 +1651,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='mh2'
             )
-            reserveSuits.append(random.choice((suit, suit2, suit3)))
+            reserveSuits.append((random.choice((suit, suit2, suit3)), 100))
         if specialCode == 'videoPhase1':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1666,7 +1665,7 @@ class SuitPlannerInteriorAI:
                 bldgTrack='l',
                 suitLevel=random.randint(10, 20),
                 revives=0,
-                suitName=random.choice(('le', 'le2', 'bw', 'bw2', 'magi', 'whistleb', 'br'))
+                suitName=random.choice(('le', 'le2', 'bw', 'bw2', 'magi', 'br'))
             )
             suit3 = self.__genSuitObject(
                 self.zoneId,
@@ -1703,7 +1702,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName=random.choice(('nsh', 'anc'))
             )
-            reserveSuits.append(random.choice((suit, suit2, suit3, suit4, suit5, suit6, suit7)))
+            reserveSuits.append((random.choice((suit, suit2, suit3, suit4, suit5, suit6, suit7)), 100))
         if specialCode == 'videog4':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1712,6 +1711,8 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='bcaster'
             )
+            reserveSuits.append((suit, 100))
+        if specialCode == 'videog5':
             suit2 = self.__genSuitObject(
                 self.zoneId,
                 bldgTrack='c',
@@ -1719,8 +1720,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='mplayers'
             )
-            reserveSuits.append(suit)
-            reserveSuits.append(suit2)
+            reserveSuits.append((suit2, 100))
         if specialCode == 'choreo':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1729,7 +1729,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='choreo'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'cinema':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1738,7 +1738,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='cinema'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'fmaker':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1747,7 +1747,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='fmaker'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'director':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1756,7 +1756,7 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='director'
             )
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'videog2':
             suit = self.__genSuitObject(
                 self.zoneId,
@@ -1779,24 +1779,24 @@ class SuitPlannerInteriorAI:
                 revives=0,
                 suitName='mh2'
             )
-            reserveSuits.append(random.choice((suit, suit2, suit3)))
+            reserveSuits.append((random.choice((suit, suit2, suit3)), 100))
         if specialCode == 'videog3':
             suit2 = self.__genSuitObject(self.zoneId, 17, 'p', 17, 0)
             suit3 = self.__genSuitObject(self.zoneId, 19, 't', 19, 0)
             suit = self.__genSuitObject(self.zoneId, 22, 'c', 22, 0)
             suit4 = self.__genSuitObject(self.zoneId, 23, 's', 23, 0)
-            reserveSuits.append(suit3)
-            reserveSuits.append(suit)
-            reserveSuits.append(suit2)
-            reserveSuits.append(suit4)
+            reserveSuits.append((suit3, 100))
+            reserveSuits.append((suit, 100))
+            reserveSuits.append((suit2, 100))
+            reserveSuits.append((suit4, 100))
         if specialCode == 'gtk':
             # generate random bossbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
         if specialCode == 'gtk2':
             # generate random bossbot from lv 12 to 20
             suit = self.__genSuitObject(self.zoneId, suitKind, random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')), suitLevel, 0)
-            reserveSuits.append(suit)
+            reserveSuits.append((suit, 100))
 
         suitHandles['reserveSuits'] = reserveSuits
         return suitHandles

@@ -272,7 +272,7 @@ class SuitAttackTracksCalculatorAI:
 
             # # Retarget to this specific toon.
             # attack[SUIT_TGT_COL] = [targetIndex]
-            # attack[SUIT_HP_COL] = [-1 for i in xrange(len(self.battle.activeToons))]
+            # attack[SUIT_HP_COL] = [-1 for i in range(len(self.battle.activeToons))]
             # attack[SUIT_HP_COL][targetIndex] = calculatedHp[targetIndex]
 
             if suit.currHP > 0 or suit.dna.name in ('stenog', 'caseman'):
@@ -289,7 +289,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.battle.activeSuits[i].getActualLevel() == 32 and not self.battle.activeSuits[i].currHP <= 0:
@@ -316,7 +316,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.suitHasCondition(suitId, 'barcalculator') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and not \
@@ -350,7 +350,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -370,6 +370,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Lure')
             self.__queueAbsorbMovieForTrack(suit, 'Lure', LURE)
@@ -457,7 +466,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -477,6 +486,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Throw')
             self.__queueAbsorbMovieForTrack(suit, 'Throw', THROW)
@@ -584,7 +602,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -604,6 +622,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Squirt')
             self.__queueAbsorbMovieForTrack(suit, 'Squirt', SQUIRT)
@@ -708,7 +735,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -728,6 +755,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             suitId = suit.doId
             self.__queueGagBanRetaliation(suit, 'Zap')
@@ -779,7 +815,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -799,6 +835,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Sound')
             self.__queueAbsorbMovieForTrack(suit, 'Sound', SOUND)
@@ -874,7 +919,7 @@ class SuitAttackTracksCalculatorAI:
                         continue
                     if suit.getHP() > 0 and suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
                         damageCogs = 1
-                if damageCogs == 0:
+                if damageCogs == 0 and self.suitHasCondition(suitId, 'phase2'):
                     self.setSuitCondition(suitId, 'immunecalculator', 1, 1, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'hroller':
                 damageCogs = 0
@@ -894,6 +939,15 @@ class SuitAttackTracksCalculatorAI:
                         damageCogs = 1
                 if damageCogs == 0:
                     self.setSuitCondition(suitId, 'directorDamageReduction', 0, 0, 'setBoth')
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'director',
+                         'name': 'HighRollerNoAttack',
+                         'animName': 'nothing',
+                         'hp': 0,
+                         'acc': 100,
+                         'freq': 0,
+                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for suit in self.battle.activeSuits:
             self.__queueGagBanRetaliation(suit, 'Drop')
             self.__queueAbsorbMovieForTrack(suit, 'Drop', DROP)

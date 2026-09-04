@@ -433,7 +433,7 @@ def __throwPie(throw, delay, hitCount, npcs):
             totalDamage += hpbonus
 
         # add to queued damage BEFORE building interval
-       # suit.addPendingQueuedDamage(totalDamage)
+        suit.addPendingQueuedDamage(totalDamage)
 
         hpAfter = suit.getQueuedProjectedHP()
         hpBefore = hpAfter + totalDamage
@@ -494,7 +494,7 @@ def __throwPie(throw, delay, hitCount, npcs):
         if toon.getTrackBonusLevel(THROW_TRACK) > 1:
             suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'marked', modifier=1, turns=2))
         else:
-            suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'marked', modifier=1, turns=1))
+            suitResponseTrack.append(Func(suit.setSuitStatusEffect, 'marked2', modifier=1, turns=1))
         suitResponseTrack.append(sival)
         #suitResponseTrack.append(Wait(0))
         #suitResponseTrack.append(markDamage)

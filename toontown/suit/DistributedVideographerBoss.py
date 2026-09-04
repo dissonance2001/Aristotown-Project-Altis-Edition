@@ -52,6 +52,28 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
      # Some constants
     ballSpinDuration = 6.0
 
+    audienceSuitPool = (
+    'stenog',
+    'lgator',
+    'hustle',
+    'liquid',
+    'rkeeper',
+    'dopa', 
+    'dopr', 
+    'derrhand',
+    'wtapper',
+    'ambass',
+    'caseman',
+    'sgoat',
+    'dking',
+    'cdirector',
+    'psetter',
+    'phouse',
+    'bkeeper',
+    'radiog',
+    'ubuster'
+    )
+
     # Names of Nodes
     discofloorNames = ['**/discofloor_%d' % i for i in range(6)]
     discoballNames = ['**/discoball_%d' % i for i in range(3)]
@@ -95,7 +117,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         (5, 7)
     )
 
-    suitCount = 48
+    suitCount = 24
 
     SUIT_TINT = (0.76, 0.76, 0.76, 1.0)
 
@@ -195,7 +217,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         gravity = LinearVectorForce(0, 0, -32)
         fn.addForce(gravity)
         self.physicsMgr.addLinearForce(gravity)
-        self.titleText = OnscreenText('Major Player Place\nThe High Roller', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
+        self.titleText = OnscreenText('Major Player Place\nThe Videographer', fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), font=ToontownGlobals.getSuitFont(), pos=(0, -0.5), scale=0.16, drawOrder=0, mayChange=1)
         self.titleText.hide()
         if OneVideographerController is not None and OneVideographerController is not self:
             self.notify.warning('Multiple High Roller instance controllers are visible.')
@@ -631,7 +653,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def startPhase2Particles(self):
         self.__playHighRollerMusic(self.phaseTwoMusic, looping=1, volume=1)
         self.battleOneMusic.stop()
-        self.highRollerArena.setColor(0.161, 0.161, 0.161, 1)
+        self.highRollerArena.setColor(0.1, 0.1, 0.1, 1)
         self.stopHighRollerParticles()
 
         BattleParticles.loadParticles()
@@ -813,9 +835,9 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         # Alternatively, define them as their own variables and have them do their own
         # color scale changes during cutscenes.
         lightGeometry = [
-            # "rainbow_backdrop",
-            # "crossbeams_rainbow",
-            "discofloor_base",
+            "rainbow_backdrop",
+            "crossbeams_rainbow",
+            # "discofloor_base",
             "wall_lights",
              "stage_floorlights",
             # "stage_background",
@@ -1109,24 +1131,47 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.__marks.wrtReparentTo(self.__marksNode)
 
     def initializeAudience(self):
-        dept = None
-        # Make talkingAudience first, must always be made
-        for indices in self.talkingAudienceIndices:
-            # Generate a suit for that seat
+        audiencePool = list(self.audienceSuitPool)
+        random.shuffle(audiencePool)
 
-            suit = self.createSuitRandom()
+        # Make talking audience first.
+        for indices in self.talkingAudienceIndices:
+            if not audiencePool:
+                break
+
+            suitName = audiencePool.pop()
+            suit = self.createAudienceSuit(suitName)
             self.seatSuit(suit, indices[0], indices[1])
             self.suitList.append(suit)
-        # Make random suits now
+
+        # Fill only 4 seats at each table.
+        seatsPerTable = 4
+
         for tableIndex in range(len(self.tableLocators)):
+            availableChairs = []
+
             for chairIndex in range(len(self.chairLocatorPosH)):
-                # Don't make a second suit in an occupied suit
-                if self.sittingSuits[tableIndex][chairIndex]:
-                    continue
-                # Generate a suit for that seat
-                suit = self.createSuitRandom()
+                if not self.sittingSuits[tableIndex][chairIndex]:
+                    availableChairs.append(chairIndex)
+
+            random.shuffle(availableChairs)
+
+            currentCount = 0
+            for suit in self.sittingSuits[tableIndex]:
+                if suit:
+                    currentCount += 1
+
+            needed = max(0, seatsPerTable - currentCount)
+
+            for chairIndex in availableChairs[:needed]:
+                if not audiencePool:
+                    break
+
+                suitName = audiencePool.pop()
+                suit = self.createAudienceSuit(suitName)
                 self.seatSuit(suit, tableIndex, chairIndex)
                 self.suitList.append(suit)
+
         self.loopAudience()
 
     def loopAudience(self):
@@ -1134,7 +1179,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
             for chairIndex, suit in enumerate(table):
                 if suit:
                     fromFrame = tableIndex + chairIndex
-                    for control in suit.getAnimControls('sit', None):
+                    for control in suit.getAnimControls('sit-exec', None):
                         toFrame = fromFrame + control.getNumFrames() - 1
                         control.loop(1, fromFrame, toFrame)
 
@@ -1204,11 +1249,10 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def getGeom(self):
         return self.__bossRoom
 
-    def createSuitRandom(self):
+    def createAudienceSuit(self, suitName):
         diner = Suit.Suit()
         diner.dna = SuitDNA.SuitDNA()
-        level = random.choice([7, 8])
-        diner.dna.newSuitRandom('s', name=random.choice(('mh2', 'cnd2', 'std2')))
+        diner.dna.newSuit(suitName)
         diner.setDNA(diner.dna)
         diner.makeExecutive()
         diner.loop('sit')
@@ -1243,6 +1287,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         for suit in self.suitList:
             suit.delete()
         self.talkingAudience = []
+        self.stopHighRollerParticles()
         self.suitList = []
         self.discofloors = []
         self.discoballs = []
@@ -1571,7 +1616,6 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
                 self.door3.posInterval(2.5, Point3(0, 0, 25), startPos=Point3(0, 0, 18)))),
             (5.5, Func(self.setChatAbsolute, outtaHere, CFSpeech)),
             (5.5, SoundInterval(trainPassingSfx)),
-            (8.1, Func(self.clearChat)),
             (9.4, Sequence(
                 Func(loco.reparentTo, render),
                 Func(car1.reparentTo, render),
@@ -1742,7 +1786,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def enterOff(self):
         self.cleanupIntervals()
         self.hide()
-        self.clearChat()
+        #self.clearChat()
         self.toWalkMode()
 
     def exitOff(self):
@@ -1799,6 +1843,10 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
         self.introduction.stop()
 
         self.controlToons()
+        for toonId in self.involvedToons:
+            toon = self.cr.doId2do.get(toonId)
+            if toon:
+                toon.setToonStatusEffect('videographerPhase1')
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)
         base.localAvatar.setFriendsListButtonActive(1)
@@ -1964,7 +2012,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def enterReward(self):
         self.cleanupIntervals()
-        self.clearChat()
+        #self.clearChat()
         self.stash()
         self.stopAnimate()
         self.controlToons()
@@ -2041,7 +2089,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
     def enterEpilogue(self):
 
         self.cleanupIntervals()
-        self.clearChat()
+        #self.clearChat()
         if self.resistanceToon:
             self.__hideResistanceToon()
         self.stash()
@@ -2078,7 +2126,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def enterFrolic(self):
         self.cleanupIntervals()
-        self.clearChat()
+        #self.clearChat()
         self.releaseToons()
         if self.hasLocalToon():
             self.toWalkMode()

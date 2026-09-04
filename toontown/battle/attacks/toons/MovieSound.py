@@ -98,7 +98,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
             updateHealthBar = Func(suit.updateHealthBar, totalDamage[targetIndex])
 
             # add to queued damage BEFORE building interval
-        #    suit.addPendingQueuedDamage(totalDamage[targetIndex])
+            suit.addPendingQueuedDamage(totalDamage[targetIndex])
             if isUber:
                 breakEffect = BattleParticles.createParticleEffect(file='soundBreak')
                 breakEffect.setDepthWrite(0)
@@ -110,7 +110,7 @@ def __getSuitTrack(sound, hitCount, totalDamage):
                 suitTrack.append(Wait(delayTime + 1))
                 suitTrack.append(Func(setPosFromOther, breakEffect, suit, Point3(0, 0.0, suit.getHeight() - 1.0)))
                 suitTrack.append(Parallel(showDamage, updateHealthBar, SoundInterval(soundEffect, node=suit), __getPartTrack(breakEffect, 0.0, 1.0, [breakEffect, suit, 0], softStop=-0.5)))
-                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name in ['erfit', 'erclaim', 'redd', 'wsi', 'psetter', 'chainsaw']:
+                if died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name in ['erfit', 'videog', 'erclaim', 'redd', 'wsi', 'psetter', 'chainsaw']:
                     suitTrack.append(headExplodeTrack(suit, battle))
             else:
                 suitTrack.append(showDamage)
@@ -306,7 +306,7 @@ def __getSuitDeathTracks(sound):
             deathTracks.append(MovieUtil.makeErclaimDeath(suit, battle))
         elif died and suit.dna.name in ('psetter', 'chainsaw'):
             deathTracks.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
+        elif died and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured') and not suit.dna.name == 'videog':
             if sound['level'] >= 7:
                 deathTracks.append(MovieUtil.createSuitHeadlessDeathTrack(suit, battle))
             else:

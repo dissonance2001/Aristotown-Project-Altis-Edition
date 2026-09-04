@@ -19,6 +19,7 @@ TOON_KBBONUS_COL = 7
 SUIT_DIED_COL = 8
 SUIT_REVIVE_COL = 9
 TOON_LURE_KB_COL = 10
+
 SUIT_ID_COL = 0
 SUIT_ATK_COL = 1
 SUIT_TGT_COL = 2
@@ -28,6 +29,9 @@ SUIT_BEFORE_TOONS_COL = 5
 SUIT_TAUNT_COL = 6
 SUIT_TARGET_DIED_COL = 7
 SUIT_HEAL_COL = 8
+SUIT_CURRENT_HP_COL = 9
+SUIT_MAX_HP_COL = 10
+
 NO_ID = -1
 NO_ATTACK = -1
 UN_ATTACK = -2
@@ -105,27 +109,31 @@ def getToonAttack(id, track=NO_ATTACK, level=-1, target=-1):
 
 def getDefaultSuitAttacks():
     suitAttacks = [
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []],
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []],
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []],
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []],
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []],
-        [NO_ID, {}, [], [], 0, 0, 0, 0, []]
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0],
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0],
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0],
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0],
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0],
+        [NO_ID, {}, [], [], 0, 0, 0, 0, [], 0, 0]
     ]
 
     return suitAttacks
 
 
 def getDefaultSuitAttack():
-    return [NO_ID,
-     {},
-     [],
-     [],
-     0,
-     0,
-     0,
-     0,
-     []]
+    return [
+        NO_ID,  # 0 id
+        {},     # 1 attack
+        [],     # 2 targets
+        [],     # 3 hp
+        0,      # 4 toon died
+        0,      # 5 before toons
+        0,      # 6 taunt
+        0,      # 7 target died
+        [],     # 8 heal
+        0,      # 9 current HP
+        0       # 10 max HP
+    ]
 
 
 def findToonAttack(toons, attacks, track):
@@ -233,14 +241,14 @@ class BattleBase:
         (Point3(-15, 15, 0), 179),
         (Point3(-20, 15, 0), 170))
     suitPendingPointsSilhouettes = (
-        (Point3(0, 10, 0), 190),
-        (Point3(-4, 10, 0), 179),
-        (Point3(4, 10, 0), 170),
-        (Point3(8, 10, 0), 160),
-        (Point3(-8, 10, 0), 165),
-        (Point3(12, 10, 0), 170),
-        (Point3(-12, 10, 0), 179),
-        (Point3(-16, 7.5, 0), 170))
+        (Point3(0, 0, 0), 190),
+        (Point3(-4, 0, 0), 179),
+        (Point3(4, 0, 0), 170),
+        (Point3(8, 0, 0), 160),
+        (Point3(-8, 0, 0), 165),
+        (Point3(12, 0, 0), 170),
+        (Point3(-12, 0, 0), 179),
+        (Point3(-16, 0, 0), 170))
     suitPendingPointsSilhouettesHighRoller = (
         (Point3(-4, 5, 0), 179),
         (Point3(4, 5, 0), 170),

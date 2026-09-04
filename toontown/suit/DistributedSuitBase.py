@@ -1802,7 +1802,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         sampleTex = loader.loadTexture(sampleFilename)
         if not sampleTex:
-            print()
+            print
             'Failed to load sample splat texture:', sampleFilename
             return
 
@@ -1810,7 +1810,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         sampleTex.store(sampleImage)
 
         if sampleImage.getNumChannels() < 1:
-            print()
+            print
             'Sample splat image invalid:', sampleFilename
             return
 
@@ -4141,6 +4141,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('glitched'):
             Sequence(Func(self.loop, 'neutral-override')
                                  ).start()
+        elif self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                     ).start()
         elif self.hasSuitStatusEffect('semi-glitched'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                  ).start()
@@ -4248,6 +4251,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             #     Func(self.loopSyncedLuredAnimations)
             # ).start()
             self.loopSyncedLuredAnimations()
+        elif self.hasSuitStatusEffect('rolledNeutral'):
+            Sequence(Func(self.loop, 'rolled')
+                     ).start()
         elif self.hasSuitStatusEffect('brokenConnection'):
             Sequence(Func(self.loop, 'neutral-unstable')
                                          ).start()

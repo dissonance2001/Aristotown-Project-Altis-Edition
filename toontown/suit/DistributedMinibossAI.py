@@ -543,13 +543,16 @@ class DistributedMinibossAI(DistributedAvatarAI.DistributedAvatarAI):
                 deadSuits.append(suit)
 
         joinedReserves = []
+        reservesToRemove = []
         if len(self.reserveSuits) > 0 and len(activeSuits) <= 6:
             for info in self.reserveSuits:
                 if len(activeSuits) <= 6:
-                    suits.append(info)
-                    activeSuits.append(info)
-                    joinedReserves.append(info)
-            for info in joinedReserves:
+                    suit = info[0]
+                    suits.append(suit)
+                    activeSuits.append(suit)
+                    joinedReserves.append(suit)
+                    reservesToRemove.append(info)
+            for info in reservesToRemove:
                 self.reserveSuits.remove(info)
 
         battle.resume(joinedReserves)

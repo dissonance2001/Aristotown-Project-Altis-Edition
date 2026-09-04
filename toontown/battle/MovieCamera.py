@@ -837,6 +837,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'BlueChip':
         camTrack.append(defaultCamera(openShotDuration=3.0))
+    elif name == 'RecordBreaker':
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'FallingKnife':
         camTrack.append(Sequence(defaultCamera(attackDuration=3.0, openShotDuration=3.0), heldRelativeShot(target[0]['toon'], 2.5, 10, 1, 165, 25, 0, attackDuration - 3.0)))
     elif name == 'GuiltTrip':
@@ -1915,7 +1917,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RecordkeeperRedlinedClauseMissedPayment':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
     elif name == 'RecordkeeperAuditCycle':
-        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration - 3, suit, h=210, p=0, startH=150, startP=0), Wait(3)))
+        camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntryDamage':
         camTrack.append(Sequence(motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'RecordkeeperPhantomEntrySpawn':
@@ -2331,10 +2333,40 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), moveCameraOnly(-4.0, 9.0, suit.height - 1, attackDuration, suit, h=210, p=0, startH=150, startP=0)))
     elif name == 'VideographerRisingStarsSacrifice':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'VideographerStagelightsCogs':
+        for headPart in suit.animatedHeadParts:
+            camTrack.append(Sequence(motionShot(0, 9, suit.height - 1, 180, 0, 0.0, 0, suit), moveCameraOnly(0, 3, 1, 1, headPart, h=180, p=0, startH=180, startP=0),
+                                     moveCameraOnly(0, 3, 1, 3.5, headPart, h=180, p=0, startH=180, startP=0), 
+                                     heldShot(0.0, -15.0, 12.5, 0, -20, 0, attackDuration - 4.5)))
+    elif name == 'VideographerStagelightsToons':
+        for headPart in suit.animatedHeadParts:
+            camTrack.append(Sequence(motionShot(0, 9, suit.height - 1, 180, 0, 0.0, 0, suit), moveCameraOnly(0, 3, 1, 1, headPart, h=180, p=0, startH=180, startP=0),
+                                     moveCameraOnly(0, 3, 1, 3.5, headPart, h=180, p=0, startH=180, startP=0), 
+                                     heldShot(0.0, -20.0, 12.5, 0, -20, 0, attackDuration - 4.5)))
     elif name == 'VideographerRisingStarsSilhouette':
         camTrack.append(Sequence(motionShot(0.0, 10.8096, 10.77317, -180, 0.0, 0.0, 0, suit), Wait(attackDuration)))
     elif name == 'VideographerVideoStatic':
         camTrack.append(heldShot(0.0, -15.0, 12.5, 0, -20, 0, attackDuration))
+    elif name == 'VideographerPhase3':
+        camTrack2 = Sequence(motionShot(0, 15, 9, 180, 0, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 20, 9, 3 + suit.getDuration('frustrated') + 4, suit, p=0, startP=0, h=180, startH=180),
+                             motionShot(0, 5, 3, 180, 50, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 10, 9, 4, suit, h=180, p=0, startP=50, startH=180),
+                             moveCameraOnly(0, 15, 9, .5, suit, h=180, p=0, startP=0, startH=180), Wait(1.5),
+                             motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-4.0, 9.0, suit.height - 1, .5 + 2.5 + (suit.getDuration('throttletwo') - 3) + 4, suit, h=210, p=0, startH=150, startP=0),
+                             motionShot(0, -50.0, suit.height - 1, 0, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, -15.0, suit.height - 1, suit.getDuration('finger-wag') + (suit.getDuration('rake-react') / 2) + 2 + 2 + suit.getDuration('pie-small-react'), suit, h=0, p=0, startH=0, startP=0),
+                             motionShot(0.0, 10.0, 5.0, 180, 30.0, 0.0, 0, suit), moveCameraOnly(0.0, 9.0, suit.height + 5, suit.getDuration('effort'), suit, h=180, p=-30),
+                             motionShot(0, 15, 9, 180, 0, 0.0, 0, suit),
+                             moveCameraOnly(0, 20, 9, 4, suit, h=180, p=0, startP=0, startH=180),
+                             motionShot(0, 10, 10, 180, 0, -35, 0, suit), Wait(2.0),
+                             motionShot(0, 8, 10, 180, 0, 35, 0, suit), Wait(2.0),
+                              motionShot(0, 6, 10, 180, 0, 0, 0, suit), Wait(4.0),
+                              motionShot(4.0, 9.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-4.0, 9.0, suit.height - 1, 8, suit, h=210, p=0, startH=150, startP=0),
+                             motionShot(0, 6, 10, 180, 0, 0, 0, suit), Wait(4.0))
+        return camTrack2
     elif name == 'VideographerElectricShock':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerElectricShock2':
@@ -2344,7 +2376,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'VideographerElectricShock4':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'VideographerDeath':
-        camTrack2 = heldShot(0.0, -10.0, 10.0, 0, -20, 0, attackDuration)
+        camTrack2 = Sequence(motionShot(0, 30, 3, 180, 0, 0.0, 0, suit), Wait(4), 
+                             moveCameraOnly(0, 15, 8, 19, suit, p=0, startP=0, h=180, startH=180),
+                             motionShot(0, -10.0, suit.height - 1, 0, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, -25.0, suit.height - 1, 28, suit, h=0, p=0, startH=0, startP=0),
+                             motionShot(6.0, 12.0, suit.height - 1, 150, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-6.0, 12.0, suit.height - 1, 12, suit, h=210, p=0, startH=150, startP=0),
+                            motionShot(5, -10.0, 3, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(-5.0, -10.0, 3, 18, suit, h=0, p=0, startH=0, startP=0), 
+                             motionShot(0, 15.0, 8, 180, 0, 0.0, 0, suit), 
+                             moveCameraOnly(0, 10.0, 8, 18, suit, h=180, p=0, startH=180, startP=0), Wait(20))
         return camTrack2
     elif name == 'VideographerAttackRewind':
         camTrack.append(defaultCamera(openShotDuration=1.0))
@@ -2367,6 +2408,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ChoreoPlacesEveryone':
         camTrack.append(allGroupHighShot(suit, attackDuration))
     elif name == 'ChoreoChoreography':
+        camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
+    elif name == 'FilmmakerInFocus':
+        target = attack['target']
+        toon = target[0]['toon']
+        camTrack.append(Sequence(motionShot(0, -6, suit.height + 3, 0, 0, 0.0, 0, suit), Wait(1), moveCameraOnly(0, 5, 2, 1, toon, h=180, p=0, startH=180, startP=0), Wait(attackDuration - 2)))
+    elif name == 'FilmmakerCaughtOnCamera':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'FilmmakerCameraFlash':
         camTrack.append(defaultCamera(openShotDuration=1.5))
@@ -2425,14 +2472,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         )
         pbpText = attack['playByPlayText']
         pbpDc = PlayByPlayText.PlayByPlayText()
-        pbpDesc = pbpDc.getShowIntervalDesc('The Director requires all Toons to attack the %s!' % (targetSuit.name), attackDuration - 2)
+        pbpDesc = pbpDc.getShowIntervalDesc('The Director requires Toons to target the %s!' % (targetSuit.name), attackDuration - 2)
         pbpTrack = pbpText.getShowIntervalCheat('Action!', attackDuration - 2)
 
         return Parallel(pbpTrack, pbpDesc, camTrack2)
     elif name == 'DirectorActionRetaliation':
         camTrack.append(defaultCamera(openShotDuration=3.55))
     elif name == 'DirectorActionPartner':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.0, attackDuration=2), heldShot(0.0, 0.0, 3.5, 180, -20, 0, attackDuration - 2)))
+        target = attack['target']
+        toon = target[0]['toon']
+        camTrack.append(Sequence(moveCameraOnly(0, 6, 4, 0, toon, h=180, p=0, startH=180, startP=0), Wait(attackDuration)))
     elif name == 'DirectorCut':
         camTrack.append(defaultCamera(openShotDuration=3.55))
     elif name == 'DirectorAction':
@@ -3130,6 +3179,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
+    currentHp = attack['currentHp']
+    maxHp = attack['maxHp']
+
+    hpPercent = float(currentHp) / float(maxHp) if maxHp > 0 else 0.0
     if attack['name'] in TTLocalizer.SuitCheatNames:
         pbpDc = PlayByPlayText.PlayByPlayText()
         if name in (
@@ -3141,13 +3194,23 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             'PowerhouseSnipeSoaked',
         ):
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
-            pbpTrack = suit.makePlayByPlayTextCheatInterval(pbpText, displayName, attackDuration - 2)
+            if hpPercent >= 1.5:
+                pbpTrack = pbpText.getShowIntervalCheatOvercharged(displayName, attackDuration - 2)
+            elif hpPercent > 1.0:
+                pbpTrack = pbpText.getShowIntervalCheatOverhealed(displayName, attackDuration - 2)
+            else:
+                pbpTrack = pbpText.getShowIntervalCheatRed(displayName, attackDuration - 2)
         else:
             pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2)
         return Parallel(camTrack, pbpTrack, pbpDesc)
     else:
-        pbpTrack = suit.makePlayByPlayTextInterval(pbpText, displayName, attackDuration - 2)
+        if hpPercent >= 1.5:
+            pbpTrack = pbpText.getShowIntervalOvercharged(displayName, attackDuration - 2)
+        elif hpPercent > 1.0:
+            pbpTrack = pbpText.getShowIntervalOverhealed(displayName, attackDuration - 2)
+        else:
+            pbpTrack = pbpText.getShowInterval(displayName, attackDuration - 2)
     track = Sequence(Parallel(camTrack, pbpTrack))
     return track
 

@@ -553,6 +553,8 @@ def createSuitReviveTrack(suit, battle):
     suitTrack = Sequence()
     if suit.style.name == 'erfit':
         return createErfitReviveTrack(suit, battle)
+    if suit.style.name == 'videog':
+        return Sequence()
     if suit.style.name == 'erclaim':
         trapProp = globalPropPool.getProp('quicksand')
         trapProp.setColor(Vec4(0.1, 0.1, 1.0, 1))
@@ -966,6 +968,126 @@ def createAmbassadorReviveTrack(suit, battle):
     returnval = Parallel(suitTrack, deathSoundTrack, explosionTrack)
     return returnval
 
+def createVideographerGlitchTrack(suit, glitchCount=20):
+    track = Sequence()
+
+    glitchAnims = (
+        'reach',
+        'soak',
+        'effort',
+        'pie-small-react',
+        'rake-react',
+        'flail',
+        'gag-miss',
+        'small-zap',
+        'large-zap',
+        'song-and-dance',
+        'neutral',
+        'finger-wag',
+    )
+
+    for i in range(glitchCount):
+        anim = random.choice(glitchAnims)
+        duration = suit.getDuration(anim)
+
+        progress = float(i) / max(1, glitchCount - 1)
+
+        glitchLength = 0.16 - (progress * 0.11)
+        playRate = 3.0 + (progress * 7.0)
+
+        startTime = random.uniform(0.0, max(0.0, duration - glitchLength))
+        endTime = min(duration, startTime + glitchLength)
+
+        # 10% chance to suddenly freeze on a random frame.
+        if random.random() < 0.1:
+            freezeFrame = random.uniform(0.0, duration)
+
+            track.append(
+                ActorInterval(
+                    suit,
+                    anim,
+                    startTime=freezeFrame,
+                    endTime=freezeFrame
+                )
+            )
+
+            track.append(
+                Wait(random.uniform(0.03, 0.08))
+            )
+
+        # Continue rapidly glitching afterward.
+        track.append(
+            ActorInterval(
+                suit,
+                anim,
+                startTime=startTime,
+                endTime=endTime,
+                playRate=playRate
+            )
+        )
+
+    return track
+
+def createVideographerDeathMovie(attack):
+    suit = attack['suit']
+    theSuit = attack['suit']
+    battle = attack['battle']
+    headTracks = Parallel()
+    suitTrack = Sequence()
+    headTrack = Sequence()
+    vaporTracks = Parallel()
+    headRedTrack = Sequence()
+    deathSound = loader.loadSfx('phase_11/audio/sfx/LB_camera_shutter_2.ogg')
+    deathSoundTrack = Sequence(SoundInterval(deathSound))
+    for targetSuit in battle.activeSuits:
+        if not targetSuit.dna.name == 'videog':
+            vaporTracks.append(shortCircuitTrack(targetSuit, battle))
+    for headPart in suit.animatedHeadParts:
+        headTrack.append(Wait(19.0))
+        headTrack.append(Func(suit.stopHeadFreakout))
+        headTrack.append(Wait(1))
+        headTrack.append(Func(suit.startHeadFreakoutVideographerDeath))
+    for headPart in suit.animatedHeadParts:
+        headRedTrack.append(LerpColorScaleInterval(headPart, 4.0, (1, .2, .2, 1), blendType='easeIn'))
+    animationTrack = Sequence(ActorInterval(suit, 'defeated-into'), 
+        Func(suit.loop, 'defeated-loop'))
+    destPos, h = battle.suitPendingPointsSilhouettesHighRoller[7]
+    startPos = destPos + Point3(0, 0, 0)
+    suitTrack.append(Sequence(Func(theSuit.makeUnSwole), Func(theSuit.reparentTo, battle), Func(theSuit.setPos, startPos), Func(theSuit.headsUp, battle),
+                              Parallel(Func(theSuit.setChatAbsolute, "Wait... what?", CFSpeech | CFTimeout)), Wait(3.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "No, hold on. That's not how this scene ends!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "You Toons... actually beat me?", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "But I had the right angles, the perfect crew, the entire production!!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=4), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "How did a bunch of Toons manage to---", CFSpeech | CFTimeout)), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=4), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "...What was that?", CFSpeech | CFTimeout)), 
+                              Func(theSuit.setChatAbsolute, "Okay... minor technical difficulty... nothing I can't fix in post...", CFSpeech | CFTimeout), Wait(4.0),
+                              Parallel(Func(theSuit.setChatAbsolute, "I just need to get the signal back and then we can---", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=4), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "...Why can't I get a clear picture?", CFSpeech | CFTimeout)), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=8), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "N-No, wait! What's happening to my feed?!", CFSpeech | CFTimeout)), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=16), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "Stop! That's not the animation I told you to---", CFSpeech | CFTimeout)), 
+                              Parallel(Sequence(ActorInterval(theSuit, 'rake-react', playRate=2.0), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "WHO'S RUNNING THIS PRODUCTION?!", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=24), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "This isn't interference anymore...", CFSpeech | CFTimeout)),
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=30), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "Something's wrong with my ---KZZZZT--- hardware...", CFSpeech | CFTimeout)),
+                              Parallel(Func(theSuit.setChatAbsolute, "No... no, you couldn't have done THAT much damage.", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=30), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "I decide when we cut!", CFSpeech | CFTimeout)),
+                              Parallel(Func(theSuit.nametag3d.setZ, 3), Func(theSuit.setChatAbsolute, "...Hello?", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "Can anybody still see me?", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "Okay... j-just stay c-c-calm... restoring the f-feed...", CFSpeech | CFTimeout)), Wait(3.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "No... I'm losing signal!!", CFSpeech | CFTimeout)), Wait(3.0),
+                              Parallel(Wait(4.0), Func(theSuit.nametag3d.setZ, 10), Sequence(createVideographerGlitchTrack(suit, glitchCount=30), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "I can't go off the air yet!", CFSpeech | CFTimeout)), 
+                              Parallel(Wait(4.0), Sequence(createVideographerGlitchTrack(suit, glitchCount=30), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "Give me another camera! Another feed! ANYTHING!!!", CFSpeech | CFTimeout)), Wait(4.0),  
+                              Parallel(Func(theSuit.setChatAbsolute, "How did you...", CFSpeech | CFTimeout)), Wait(2.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "...ruin my...", CFSpeech | CFTimeout)), Wait(2.0), 
+                              Parallel(Func(theSuit.setChatAbsolute, "...perfect...", CFSpeech | CFTimeout)), Wait(2.0), 
+                              Parallel(headRedTrack, Func(theSuit.setChatAbsolute, "...final act?", CFSpeech | CFTimeout)), Wait(4.0), 
+                              Parallel(Wait(2.0), Sequence(ActorInterval(theSuit, 'sound-react-nt', duration=2), Func(theSuit.loop, 'defeated-loop')), Func(theSuit.setChatAbsolute, "WAIT! DON'T CUT THE---", CFSpeech | CFTimeout)), 
+                              Parallel(Func(theSuit.setChatAbsolute, "...feed.", CFSpeech | CFTimeout), Sequence(ActorInterval(theSuit, 'pie-small-react'), ActorInterval(theSuit, 'mplayer-kneel-into'), Func(theSuit.loop, 'mplayer-kneel-neutral')), spawnHeadExplosion(theSuit, battle)),
+                              Parallel(Func(theSuit.hide)), deathSoundTrack
+                              ))
+    headTracks.append(headTrack)
+
+    return Parallel(suitTrack, vaporTracks, headTracks, animationTrack)
+
 def createErfitDeathTrack(suit, battle):
     suitTrack = Sequence()
     from toontown.battle import MovieCamera
@@ -1279,12 +1401,10 @@ def createRisingStars(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(Func(suit.setMaxHP, (suit.getMaxHP() / 2)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier'))
     suitTrack.append(Func(suit.makeLaserRevive))
     suitTrack.append(LerpColorScaleInterval(suit, 0, (0, 0, 0, 0)))
-    suitTrack.append(Func(suit.setNeutralAnimation))
     returnval = Parallel(suitTrack)
     return returnval
 
@@ -1772,6 +1892,8 @@ def createSuitDeathTrack(suit, battle):
         return makeErclaimDeath(suit, battle)
     if suit.style.name == 'erfit':
         return createErfitDeathTrack(suit, battle)
+    if suit.style.name == 'videog':
+        return Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
@@ -1969,9 +2091,11 @@ def createSuitDeathTrack(suit, battle):
         toonMTrack.append(Sequence(Wait(1.0), ActorInterval(mtoon, 'duck'), ActorInterval(mtoon, 'duck', startTime=1.8), Func(mtoon.loop, 'neutral')))
     if suit.style.name == 'erfit':
         returnval = Parallel(suitTrackErfit)
+    if suit.style.name == 'videog':
+        returnval = Sequence()
     else:
         returnval = Parallel(suitTrack, deathSoundTrack, gears1Track, gears2MTrack, toonMTrack)
-    if hasAnimatedHead and not suit.style.name == 'erfit':
+    if hasAnimatedHead and not suit.style.name == 'erfit' and not suit.style.name == 'videog':
         returnval.append(headInterval)
     return returnval
 
@@ -2114,6 +2238,8 @@ def createSuitHeadlessDeathTrack(suit, battle):
         return makeErclaimDeath(suit, battle)
     if suit.style.name == 'erfit':
         return createErfitDeathTrack(suit, battle)
+    if suit.style.name == 'videog':
+        return Sequence()
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     removeTrainTrack(suit, battle, suitTrack)
     deathSuit = suit
@@ -3457,7 +3583,7 @@ def zapCog(suit, anim, before, after, battle, died, level):
     #                               Func(bodyPart.setColorScale, (1, 1, 0, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1)), Wait(.2),
     #                               Func(bodyPart.setColorScale, (1, 1, 1, 1))))
-    if not died or suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ['erclaim', 'erfit', 'wsi', 'redd'] or level <= 3:
+    if not died or suit.isVirtual or suit.hasSuitStatusEffect('overpressured') or suit.dna.name in ['erclaim', 'erfit', 'videog', 'wsi', 'redd'] or level <= 3:
         spazzTrack = Sequence(Func(stopZapCogNeutral, suit), ActorInterval(suit, anim, startTime=0), suit.makeCogStepBackDeathInterval(battle))
         spazzTrack2 = Sequence(ActorInterval(zapSuit, anim, startFrame=0, endFrame=19), Wait(after))
     else:

@@ -110,6 +110,16 @@ class BaseSuitAttackCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+                if  self.battle.activeSuits[i].currHP <= 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'VideographerDeath',  # Snap Bindings Retaliation
+                                                            'animName': 'nothing',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'erfit':
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (x + 2) % 3 == 0 and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
@@ -199,6 +209,20 @@ class BaseSuitAttackCalculatorAI:
                     if suit.getGovernaught():
                         if suit.currHP <= 0:
                             self.calculator.governaughtCogs += 1
+                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                        'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
+                                        'animName': 'nothing',
+                                        'hp': 0,
+                                        'acc': 100,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name in ['director', 'fmaker', 'choreo', 'cinema'] and self.battle.activeSuits[i].currHP <= 0 and not self.suitHasCondition(suitId, 'alreadyGovDeath'):
+                for suit in self.battle.activeSuits:
+                    if suit.dna.name in ['director', 'fmaker', 'choreo', 'cinema']:
+                        if suit.currHP <= 0:
+                            self.calculator.governaughtCogs += 5
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                         'name': 'GovernaughtDeath',  # Governaught Death Gag Damage Boost
                                         'animName': 'nothing',
@@ -793,6 +817,74 @@ class BaseSuitAttackCalculatorAI:
                     self.battle.suitAttacks.append(attack)
                     if self.battle.activeSuits[i].dna.name == 'videog':
                         self.calculator.applyVideographerSilhouetteAttack(attack)
+                        for i in range(len(self.battle.activeSuits)): # Regular Manager Attacks
+                            suitId = self.battle.activeSuits[i].doId
+                            if self.battle.activeSuits[i].dna.name == 'bcaster':
+                                if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
+                                    attack = self.__getLureRemoval(suitId)
+                                    if attack[SUIT_ATK_COL]:
+                                        self.battle.suitAttacks.append(attack)
+                                if self.__suitCanAttack(suitId):
+                                    if self.suitHasCondition(suitId, 'schmoozecalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'Schmooze',
+                                        'animName': 'speak',
+                                        'hp': 32,
+                                        'acc': 85,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
+                                    if self.suitHasCondition(suitId, 'razzledazzlecalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'RazzleDazzle',
+                                        'animName': 'smile',
+                                        'hp': 34,
+                                        'acc': 85,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
+                                    if self.suitHasCondition(suitId, 'fingerwagcalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'FingerWag',
+                                        'animName': 'finger-wag',
+                                        'hp': 28,
+                                        'acc': 90,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
+                                    if self.suitHasCondition(suitId, 'cigarsmokecalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'CigarSmoke',
+                                        'animName': 'cigar-smoke',
+                                        'hp': 32,
+                                        'acc': 90,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
+                                    if self.suitHasCondition(suitId, 'songanddancecalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'SongAndDance',
+                                        'animName': 'song-and-dance',
+                                        'hp': 28,
+                                        'acc': 85,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
+                                    if self.suitHasCondition(suitId, 'beguilecalculator'):
+                                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
+                                        'name': 'Beguile',
+                                        'animName': 'glower',
+                                        'hp': 30,
+                                        'acc': 95,
+                                        'freq': 0,
+                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                                        if attack[SUIT_ATK_COL]:
+                                            self.battle.suitAttacks.append(attack)
             if self.suitHasCondition(suitId, 'syphon') and self.battle.activeSuits[i].dna.name in SuitBattleGlobals.SpecialCogDict and self.calculator.syphonHP.get(suitId, 0) > 0 and not self.suitHasCondition(suitId, 'dead') and not self.battle.activeSuits[i].dna.name == 'phouse' and not self.battle.activeSuits[i].dna.name == 'safesupervis':
                 attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                  'name': 'SyphonMovie', # Syphon Movie
@@ -835,68 +927,6 @@ class BaseSuitAttackCalculatorAI:
             #                                                 'group': SuitBattleGlobals.ATK_TGT_SINGLE})
             #         if attack[SUIT_ATK_COL]:
             #             self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'bcaster':
-                if self.__suitCanAttack(suitId):
-                    if self.suitHasCondition(suitId, 'schmoozecalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'Schmooze',
-                         'animName': 'speak',
-                         'hp': 32,
-                         'acc': 85,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'razzledazzlecalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'RazzleDazzle',
-                         'animName': 'smile',
-                         'hp': 34,
-                         'acc': 85,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'fingerwagcalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'FingerWag',
-                         'animName': 'finger-wag',
-                         'hp': 28,
-                         'acc': 90,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'cigarsmokecalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'CigarSmoke',
-                         'animName': 'cigar-smoke',
-                         'hp': 32,
-                         'acc': 90,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'songanddancecalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'SongAndDance',
-                         'animName': 'song-and-dance',
-                         'hp': 28,
-                         'acc': 85,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.suitHasCondition(suitId, 'beguilecalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bcaster',
-                         'name': 'Beguile',
-                         'animName': 'glower',
-                         'hp': 30,
-                         'acc': 95,
-                         'freq': 0,
-                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.__suitCanAttack(suitId):
                     if self.suitHasCondition(suitId, 'HRpowertrip'):
@@ -1416,6 +1446,22 @@ class BaseSuitAttackCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
+            if self.battle.activeSuits[i].dna.name == 'cinema':
+                if self.suitHasCondition(suitId, 'focuscalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                        'name': 'FilmmakerInFocus',
+                                                        # Rising Stars Sacrifice
+                                                        'animName': 'glower',
+                                                        'hp': 0,
+                                                        'acc': 100,
+                                                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                        'excludeToonConditions': (
+                            'inFocus',
+                        )
+                    })
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             # if self.battle.activeSuits[i].dna.name in ['cdirector', 'dking', 'rkeeper', 'liquid']:
             #     if not self.suitHasCondition(suitId, 'boardbotLit') and self.__suitCanAttack(suitId):
             #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2008,7 +2054,7 @@ class BaseSuitAttackCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
 
-        # for i in xrange(len(self.battle.activeSuits)):
+        # for i in range(len(self.battle.activeSuits)):
         #     suitId = self.battle.activeSuits[i].doId
         #     if not self.suitHasCondition(suitId, 'suemovie') and self.suitHasCondition(suitId, 'sued') and self.battle.activeSuits[i].currHP > 0:
         #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2021,7 +2067,7 @@ class BaseSuitAttackCalculatorAI:
         #         if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
 
-        # for i in xrange(len(self.battle.activeSuits)):
+        # for i in range(len(self.battle.activeSuits)):
         #     suitId = self.battle.activeSuits[i].doId
         #     if self.battle.activeSuits[i].dna.name == 'foreman': 
         #         if self.battle.activeSuits[i].currHP > 0:

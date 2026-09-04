@@ -2027,6 +2027,7 @@ class SuitGenerator(object):
                 headPart.setTexture(texture, 1)
             self.setHeight(10.6)
             self.setTransparency(1)
+            self.setSuitStatusEffect('rolledNeutral')
 
         # Pressbots
         elif dna.name == 'ppb':

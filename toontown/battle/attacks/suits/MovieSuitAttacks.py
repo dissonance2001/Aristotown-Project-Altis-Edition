@@ -13,6 +13,7 @@ from toontown.battle.attacks.suits import MovieUniversalCheats
 from toontown.battle.attacks.suits import MovieFaceTheFamilyCheats
 from toontown.battle.attacks.suits import MovieCountCheats
 from toontown.battle.attacks.suits import MovieIntervals
+from toontown.battle.attacks.suits import MovieVideographerCheats
 from toontown.battle import MovieUtil
 from toontown.battle import BattleParticles
 from direct.directnotify import DirectNotifyGlobal
@@ -462,7 +463,9 @@ def doSuitAttack(attack):
     elif name == 'SmokeAndMirrors':
         suitTrack = doCigarSmoke(attack)
     elif name == 'StolenScene':
-            suitTrack = doStolenScene(attack)
+        suitTrack = doStolenScene(attack)
+    elif name == 'RecordBreaker':
+        suitTrack = doRecordBreaker(attack)
     elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
     elif name == 'Crunch':
@@ -1456,71 +1459,83 @@ def doSuitAttack(attack):
     elif name == 'HighRollerCheerRetaliation':
         suitTrack = MovieHighRollerCheats.doSnipe(attack)
     #videographer cheats
-    elif name == 'VideographerStarOfTheShow':
-        suitTrack = MovieHighRollerCheats.doStarOfTheShow(attack)
+    elif name == 'VideographerStagelightsCogs':
+        suitTrack = MovieVideographerCheats.doSignalLost(attack)
+    elif name == 'VideographerStagelightsToons':
+        suitTrack = MovieVideographerCheats.doSignalLost(attack)
     elif name == 'VideographerHardCut':
-        suitTrack = MovieHighRollerCheats.doHardCut(attack)
+        suitTrack = MovieVideographerCheats.doHardCut(attack)
+    elif name == 'VideographerStarOfTheShow':
+        suitTrack = MovieVideographerCheats.doStarOfTheShow(attack)
+    elif name == 'VideographerHardCut':
+        suitTrack = MovieVideographerCheats.doHardCut(attack)
     elif name == 'VideographerRisingStars':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStars2':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStarsSilhouette':
-        suitTrack = MovieHighRollerCheats.doRisingStars(attack)
+        suitTrack = MovieVideographerCheats.doRisingStars(attack)
     elif name == 'VideographerRisingStarsSacrifice':
-        suitTrack = MovieHighRollerCheats.doRisingStarsSacrifice(attack)
+        suitTrack = MovieVideographerCheats.doRisingStarsSacrifice(attack)
     elif name == 'VideographerVideoStatic':
-        suitTrack = MovieHighRollerCheats.doVideoStatic(attack)
+        suitTrack = MovieVideographerCheats.doVideoStatic(attack)
+    elif name == 'VideographerPhase3':
+        suitTrack = MovieVideographerCheats.doVideographerPhase3(attack)
     elif name == 'VideographerElectricShock':
-        suitTrack = MovieHighRollerCheats.doPhase3Videographer(attack)
+        suitTrack = MovieVideographerCheats.doPhase3Videographer(attack)
     elif name == 'VideographerElectricShock2':
-        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
     elif name == 'VideographerElectricShock3':
-        suitTrack = MovieHighRollerCheats.doHardCutBan(attack)
+        suitTrack = MovieVideographerCheats.doHardCutBan(attack)
     elif name == 'VideographerElectricShock4':
-        suitTrack = MovieHighRollerCheats.doTouchUp(attack)
+        suitTrack = MovieVideographerCheats.doTouchUp(attack)
     elif name == 'VideographerAttackRewind':
-        suitTrack = MovieHighRollerCheats.doAttackRewind(attack)
+        suitTrack = MovieVideographerCheats.doAttackRewind(attack)
     elif name == 'VideographerDirectorCuts':
-        suitTrack = MovieHighRollerCheats.doDirectorCuts(attack)
+        suitTrack = MovieVideographerCheats.doDirectorCuts(attack)
     elif name == 'VideographerDeath':
-        suitTrack = MovieHighRollerCheats.doVideographerDeath(attack)
+        suitTrack = MovieUtil.createVideographerDeathMovie(attack)
     # broadcaster cheats
     elif name == 'BroadcasterDonation':
-        suitTrack = MovieHighRollerCheats.doDonation2(attack)
+        suitTrack = MovieVideographerCheats.doDonation2(attack)
     elif name == 'BroadcasterDonation2':
-        suitTrack = MovieHighRollerCheats.doDonationFail(attack)
+        suitTrack = MovieVideographerCheats.doDonationFail(attack)
     elif name == 'BroadcasterViralSensation':
-        suitTrack = MovieHighRollerCheats.doViralSensation(attack)
+        suitTrack = MovieVideographerCheats.doViralSensation(attack)
     #filmmaker cheats
     elif name == 'ChoreoPlacesEveryone':
-        suitTrack = MovieHighRollerCheats.doPlacesEveryone(attack)
+        suitTrack = MovieVideographerCheats.doPlacesEveryone(attack)
     elif name == 'ChoreoChoreography':
-        suitTrack = MovieHighRollerCheats.doChoreography(attack)
+        suitTrack = MovieVideographerCheats.doChoreography(attack)
     elif name == 'FilmmakerCameraFlash':
-        suitTrack = MovieHighRollerCheats.doCameraFlash(attack)
+        suitTrack = MovieVideographerCheats.doCameraFlash(attack)
+    elif name == 'FilmmakerCaughtOnCamera':
+        suitTrack = MovieVideographerCheats.doCaughtOnCamera(attack)
+    elif name == 'FilmmakerInFocus':
+        suitTrack = MovieVideographerCheats.doInFocus(attack)
     elif name == 'FilmmakerWrappedInTheFilm':
-        suitTrack = MovieHighRollerCheats.doWrappedInTheFilm(attack)
+        suitTrack = MovieVideographerCheats.doWrappedInTheFilm(attack)
     elif name == 'FilmmakerCameraRewind':
-        suitTrack = MovieHighRollerCheats.doCameraRewind(attack)
+        suitTrack = MovieVideographerCheats.doCameraRewind(attack)
     elif name == 'FilmmakerBudgetCuts':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
     #director cheats
     elif name == 'DirectorCut':
-        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
+        suitTrack = MovieVideographerCheats.doRecordCut(attack)
     elif name == 'DirectorAction':
-        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
     elif name == 'DirectorActionCog':
-        suitTrack = MovieHighRollerCheats.doActionCog(attack)
+        suitTrack = MovieVideographerCheats.doActionCog(attack)
     elif name == 'DirectorActionRetaliation':
-        suitTrack = MovieHighRollerCheats.doRecordCut(attack)
+        suitTrack = MovieVideographerCheats.doRecordCut(attack)
     elif name == 'DirectorActionPartner':
-        suitTrack = MovieHighRollerCheats.doActionPartner(attack)
+        suitTrack = MovieVideographerCheats.doActionPartner(attack)
     elif name == 'DirectorBackToOnes':
-        suitTrack = MovieHighRollerCheats.doBackToOnes(attack)
+        suitTrack = MovieVideographerCheats.doBackToOnes(attack)
     elif name == 'DirectorProductionBudget':
-        suitTrack = MovieHighRollerCheats.doSynergy(attack)
+        suitTrack = MovieVideographerCheats.doSynergy(attack)
     elif name == 'DirectorBudgetExpansion':
-        suitTrack = MovieHighRollerCheats.doBudgetExpansion(attack)
+        suitTrack = MovieVideographerCheats.doBudgetExpansion(attack)
     #universal cheats
     elif name == 'TargetCheck':
         suitTrack = MovieHighRollerCheats.doNoAttack(attack)
@@ -3309,7 +3324,7 @@ def doRazzleDazzle(attack):
             hitPoint = lambda toon = toon: __toonFacePoint(toon)
         else:
             hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
-        signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
+        signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint, blendType='easeInOut'), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
         signPropAnimTrack = ActorInterval(sign, 'smile', duration=2.5, startTime=1)
         signPropTracks.append(signPropTrack)
         signPropAnimTracks.append(signPropAnimTrack)
@@ -4923,7 +4938,7 @@ def doEvilEye(attack):
             "dl": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
             "txm": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
             "br": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
-            "itn": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
+            "itn": [Point3(-0.4, 5.0, 6.0), VBase3(-155.0, -20.0, 0.0)],
             "lgator": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
             "ubuster": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
             "wsi": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
@@ -5425,6 +5440,113 @@ def doHotAir(attack):
 
     return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
 
+def doRecordBreaker(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    target = attack['target']
+    tauntIndex = attack['taunt']
+    dmg = target[0]['hp']
+    toon = attack['target'][0]['toon']
+
+    chip = loader.loadModel('props/general/models/cc_m_gen_prp_vinyl_disk')
+    firstHoldPosPoints = [Point3(0, 0, -0.8248914616497807), Point3(90, 0, 0)]
+    grabPosPoints = [Point3(0, 0, -0.8248914616497807), Point3(90, 0, 0)]
+
+    damageDelay = 3.1
+    dodgeDelay = 2.2
+
+    suitTrack = getSuitTrack(attack, playRate=1.75)
+
+    landPos = toon.getPos(render)
+    landPos.setZ(landPos.getZ() + 0.25)
+    landUpPos = toon.getPos(render)
+    landUpPos.setZ(landUpPos.getZ() + 0.8)
+
+    invokerScale = suit.getScale()
+    if getSuitBodyType(attack['suitName']) == 'a':
+        scaleFactor = .5  # Head honcho scale
+        startX, startY = 2.9, 4.2
+        endX, endY = 0.7, 5.1
+        startZ = 7.4
+        endZ = 8.8
+        chipHandScale = .5
+        chipGrabScale = .5
+        chipFlipMult = 6.5
+    else:
+        scaleFactor = 0.5 # Insider scale
+        startX, startY = 0.9, 2.1
+        endX, endY = 0.9, 2.45
+        startZ = 3.0
+        endZ = 4.4
+        chipHandScale = .5
+        chipGrabScale = 0.5
+        chipFlipMult = 5.0
+
+    propTrack = Sequence(
+    )
+
+    chipHandPosRenderStart = Point3(startX * (invokerScale[0] / scaleFactor),
+                                    startY * (invokerScale[0] / scaleFactor),
+                                    startZ * (invokerScale[0] / scaleFactor))
+    chipHandPosRenderEnd = Point3(endX * (invokerScale[0] / scaleFactor),
+                                    endY * (invokerScale[0] / scaleFactor),
+                                    endZ * (invokerScale[0] / scaleFactor))
+
+    propFlyTrack = Sequence(
+            getPropAppearTrack(
+            chip,
+            suit.getRightHand(),
+            firstHoldPosPoints,
+            0,
+            Point3(chipHandScale),
+            scaleUpTime=0.25,
+        ),
+        Wait(1.5),
+        Func(chip.wrtReparentTo, render),
+        Parallel(
+            ProjectileInterval(chip, endPos=landPos, duration=0.95, gravityMult=4.15),
+            LerpHprInterval(chip, 0.95, (0, 450, 0), startHpr=(0, 90, 0)),
+            Sequence(
+                Wait(0.25),
+                LerpScaleInterval(chip, 0.65, 1.5),
+            ),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.15, (20, 441, 0)),
+            LerpPosInterval(chip, 0.15, landUpPos, blendType='easeOut'),
+        ),
+        Parallel(
+            LerpHprInterval(chip, 0.225, (40, 450, 0)),
+            LerpPosInterval(chip, 0.225, landPos, blendType='easeIn'),
+        ),
+        LerpHprInterval(chip, 0.3, (60, 450, 0)),
+        LerpHprInterval(chip, 0.3, (70, 450, 0), blendType='easeOut'),
+        Wait(0.1),
+        LerpScaleInterval(chip, 0.35, 0.01, blendType='easeIn'),
+        Func(chip.hide),
+    )
+
+    toonTrack = getToonTrack(attack, 2.8, ['squish'], 2.0, ['sidestep'])
+    soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
+    toonReactTrack = Sequence(Wait(2.55), Func(toon.playDialogueForString, "!"), Func(toon.enterFlattened), Wait(1.0), Parallel(ActorInterval(toon, 'jump'), soundTrack2, Func(toon.loop, 'neutral'),   Sequence(Wait(0.5), Func(toon.exitFlattened))))
+    soundTrack = getSoundTrack(
+        "SA_hydrate.ogg", delay=2.05, node=suit
+    )
+    if dmg > 0:
+        return Sequence(
+            Parallel(
+                suitTrack, toonTrack, toonReactTrack, soundTrack, propTrack, propFlyTrack,
+            ),
+            Func(MovieUtil.removeProp, chip),
+        )
+    else:
+        return Sequence(
+                Parallel(
+                    suitTrack, toonTrack, soundTrack, propTrack, propFlyTrack,
+                ),
+                Func(MovieUtil.removeProp, chip),
+            )
+
 def doStolenScene(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -5527,7 +5649,7 @@ def doCigarSmoke(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name in ['cinema', 'choreo', 'fmaker', 'director'] and not suit.isSkeleton:
+    if suit.dna.name in ['cinema', 'choreo', 'fmaker'] and not suit.isSkeleton:
         return doSmokeAndMirrors(attack)
     elif suit.dna.name == 'hho' and not suit.isSkeleton:
         return doHeadHonchoCigarSmoke(attack)
@@ -7631,7 +7753,7 @@ def doSmokeAndMirrors(attack):
     for i in range(0, 5):
         particleEffect = BattleParticles.createParticleEffect('Smile')
         particleEffect.setZ(suit.height - 1)
-        particleEffect.setScale(2)
+        particleEffect.setScale(.01)
         particles.append(particleEffect)
 
     if hitSuit:
@@ -7643,7 +7765,8 @@ def doSmokeAndMirrors(attack):
         particleTrack = Parallel()
         particleTrack.append(Sequence(Wait(2), Wait(i * .25), Func(particles[i].start, suit),
                                 Func(particles[i].wrtReparentTo, render), 
-                                LerpPosInterval(particles[i], 1.5, pos=hitPoint, blendType='easeInOut'), 
+                                Parallel(LerpPosInterval(particles[i], 1.5, pos=hitPoint, blendType='easeInOut'),
+                                         LerpScaleInterval(particles[i], 1.5, Point3(2), startScale=Point3(0.01), blendType='easeInOut')),
                                 Func(particles[i].cleanup),
                                 Func(battle.movie.clearRestoreParticleEffect, particles[i])))
         particleTracks.append(particleTrack)
