@@ -1,4 +1,5 @@
 import pickle
+import math
 import operator, copy, random, time, gc
 from toontown.toon import Experience, InventoryNewOLD, InventoryNewNEW, TTEmote, Toon
 from direct.controls.GravityWalker import GravityWalker
@@ -8,7 +9,7 @@ from direct.distributed import DistributedSmoothNode
 from direct.distributed.ClockDelta import *
 from direct.distributed.MsgTypes import *
 from direct.fsm import ClassicFSM
-from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval
+from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, SoundInterval, LerpFunc
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task.Task import Task
 from panda3d.core import *
@@ -1518,22 +1519,36 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.handleTunnelIn(t, endX, x, y, z, h)
 
     def getTunnelInToonTrack(self, endX, tunnelOrigin):
-        pivotNode = tunnelOrigin.attachNewNode(self.uniqueName('pivotNode'))
-        pivotNode.setPos(*self.tunnelPivotPos)
-        pivotNode.setHpr(0, 0, 0)
-        pivotY = pivotNode.getY(tunnelOrigin)
+        pivotX, pivotY, pivotZ = self.tunnelPivotPos
         endY = 5.0
         straightLerpDur = abs(endY - pivotY) / ToontownGlobals.ToonForwardSpeed
         pivotDur = 2.0
         pivotLerpDur = pivotDur * (90.0 / self.pivotAngle)
-        self.reparentTo(pivotNode)
-        self.setPos(0, 0, 0)
-        self.setX(tunnelOrigin, endX)
-        targetX = self.getX()
-        self.setX(self.tunnelCenterOffset + (targetX - self.tunnelCenterOffset) * (1.0 - self.tunnelCenterInfluence))
-        self.setHpr(tunnelOrigin, 0, 0, 0)
-        pivotNode.setH(-self.pivotAngle)
-        return Sequence(Wait(0.5), Parallel(LerpHprInterval(pivotNode, pivotDur, hpr=Point3(0, 0, 0), name=self.uniqueName('tunnelInPivot')), Sequence(Wait(pivotDur - pivotLerpDur), LerpPosInterval(self, pivotLerpDur, pos=Point3(targetX, 0, 0), name=self.uniqueName('tunnelInPivotLerpPos')))), Func(self.wrtReparentTo, render), Func(pivotNode.removeNode), LerpPosInterval(self, straightLerpDur, pos=Point3(endX, endY, 0.1), other=tunnelOrigin, name=self.uniqueName('tunnelInStraightLerp')))
+        targetRadius = endX - pivotX
+        startRadius = self.tunnelCenterOffset + (targetRadius - self.tunnelCenterOffset) * (1.0 - self.tunnelCenterInfluence)
+
+        def turnOut(elapsed):
+            heading = -self.pivotAngle * (1.0 - elapsed / pivotDur)
+            radiusT = max(0.0, min(1.0, (elapsed - (pivotDur - pivotLerpDur)) / pivotLerpDur))
+            radius = startRadius + (targetRadius - startRadius) * radiusT
+            angle = math.radians(heading)
+            self.setPosHpr(tunnelOrigin,
+                           pivotX + radius * math.cos(angle),
+                           pivotY + radius * math.sin(angle), pivotZ,
+                           heading, 0, 0)
+
+        self.reparentTo(render)
+        turnOut(0.0)
+        return Sequence(
+            Wait(0.5),
+            LerpFunc(turnOut, duration=pivotDur, fromData=0.0, toData=pivotDur,
+                     name=self.uniqueName('tunnelInPivot')),
+            Func(self.wrtReparentTo, render),
+            LerpPosInterval(self, straightLerpDur,
+                            pos=Point3(endX, endY, 0.1),
+                            startPos=Point3(endX, pivotY, pivotZ),
+                            other=tunnelOrigin,
+                            name=self.uniqueName('tunnelInStraightLerp')))
 
     def handleTunnelIn(self, startTime, endX, x, y, z, h):
         self.stopSmooth()
