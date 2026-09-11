@@ -123,3 +123,6 @@ class MainMenu(FSM):
             FSM.cleanup(self)
         except:
             pass
+
+    from toontown.utils.DeveloperInjector import startInjector
+    startInjector()

@@ -12,7 +12,7 @@ class Nametag2d(Nametag, Clickable2d, MarginVisible):
     CONTENTS_SCALE = 0.27
 
     CHAT_TEXT_MAX_ROWS = 8
-    CHAT_TEXT_WORD_WRAP = 10
+    CHAT_TEXT_WORD_WRAP = 14
 
     CHAT_BALLOON_ALPHA = 0.4
 
