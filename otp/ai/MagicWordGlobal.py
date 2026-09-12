@@ -33,7 +33,7 @@ class Spellbook:
         try:
             return self.doWord(word, args)
         except MagicError as e:
-            return e.message
+            return str(e)
         except Exception:
             return PythonUtil.describeException(backTrace=1)
         finally:
