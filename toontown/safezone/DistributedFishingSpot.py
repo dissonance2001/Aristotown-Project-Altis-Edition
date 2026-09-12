@@ -108,6 +108,26 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.__unmakeGui()
         self.pond.stopCheckingTargets()
         self.pond = None
+        if self.localToonFishing:
+            # Safety net: setOccupied(0) above already triggers enterOff()'s
+            # camera-resume logic in the normal case. This only matters if
+            # self.av was already None when disable() got called, which
+            # would have skipped setOccupied()'s call to requestFinalState().
+            # See enterOff() for why this waits for 'walk' state first.
+            def _getPlaceState():
+                try:
+                    return base.cr.playGame.getPlace().getState()
+                except Exception:
+                    return None
+
+            def _waitForWalkState(task):
+                if _getPlaceState() == 'walk' or task.time > 3.0:
+                    base.localAvatar.startUpdateSmartCamera()
+                    return task.done
+                return task.cont
+
+            taskMgr.remove(self.uniqueName('waitForWalkState'))
+            taskMgr.add(_waitForWalkState, self.uniqueName('waitForWalkState'))
         for event in self.getAllAccepting():
             if event.startswith('generate-'):
                 self.ignore(event)
@@ -117,6 +137,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         if hasattr(self, 'fishDeleted'):
             return
         self.fishDeleted = 1
+        taskMgr.remove(self.uniqueName('waitForWalkState'))
         del self.pond
         del self.fsm
         if self.nodePath:
@@ -830,7 +851,21 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.fsm.request('waitForAI')
 
     def enterOff(self):
-        pass
+        if self.localToonFishing:
+            def _getPlaceState():
+                try:
+                    return base.cr.playGame.getPlace().getState()
+                except Exception:
+                    return None
+
+            def _waitForWalkState(task):
+                if _getPlaceState() == 'walk' or task.time > 3.0:
+                    base.localAvatar.startUpdateSmartCamera()
+                    return task.done
+                return task.cont
+
+            taskMgr.remove(self.uniqueName('waitForWalkState'))
+            taskMgr.add(_waitForWalkState, self.uniqueName('waitForWalkState'))
 
     def exitOff(self):
         pass
@@ -842,6 +877,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         if doAnimation:
             toonTrack = Sequence(Func(self.av.setPlayRate, 1.0, 'run'), Func(self.av.loop, 'run'), LerpPosHprInterval(self.av, 1.0, Point3(0, 0, 0), Point3(0, 0, 0)), Func(self.__placeAvatar), Parallel(ActorInterval(self.av, 'pole'), Func(self.pole.pose, 'cast', 0), LerpScaleInterval(self.pole, duration=0.5, scale=1.0, startScale=0.01)), Func(self.av.loop, 'pole-neutral'))
             if self.localToonFishing:
+                base.localAvatar.stopUpdateSmartCamera()
                 camera.wrtReparentTo(render)
                 self.track.append(LerpPosHprInterval(nodePath=camera, other=self.av, duration=1.5, pos=Point3(0, -12, 15), hpr=VBase3(0, -38, 0), blendType='easeInOut'))
                 toonTrack.append(Func(self.__showCastGui))
