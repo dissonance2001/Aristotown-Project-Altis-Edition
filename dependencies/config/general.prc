@@ -174,3 +174,4 @@ want-live-updates #t
 
 # SSL
 server-force-ssl #f
+text-use-harfbuzz false

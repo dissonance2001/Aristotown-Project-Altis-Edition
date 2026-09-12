@@ -41,3 +41,4 @@ want-instant-parties #f
 weather-cycle-duration 100
 
 audio-library-name p3fmod_audio
+text-use-harfbuzz false
