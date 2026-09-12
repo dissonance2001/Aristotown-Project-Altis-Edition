@@ -86,7 +86,7 @@ class TrackPage(ShtikerPage.ShtikerPage):
         zPositions = [0.48, 0.1866667, -0.1066667, -0.4]
         for index in range(len(self.TrackOrder)):
             track = self.TrackOrder[index]
-            column = index / 4
+            column = index // 4
             row = index % 4
             x = -0.79 if column == 0 else 0.22
             z = zPositions[row]
