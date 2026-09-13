@@ -262,7 +262,6 @@ OTGagShop = 7502
 Dungeon = 7507
 CountErfitLobby = 25200
 CountErfitBattle = 25201
-MaxActivityLevel    = [70 - 1, 30 - 1, 30 - 1, 30 - 1]
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
  DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),
@@ -2425,13 +2424,6 @@ STATS_MINTS = 24
 STATS_STAGES = 25
 STATS_CLUBS = 26
 STATS_BOARD_OFFICES = 27
-
-# Activity level enums
-ACTIVITY_FISHING = 0
-ACTIVITY_GOLFING = 1
-ACTIVITY_RACING = 2
-ACTIVITY_TROLLEY = 3
-TOTAL_ACTIVITIES = 4
 
 RegenLaffDict = {ToontownCentral: 1,
  OutdoorZone: 2,

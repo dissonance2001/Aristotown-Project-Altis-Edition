@@ -163,8 +163,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.savedCheesyExpireTime = 0
         self.ghostMode = 0
         self.immortalMode = 0
-        self.activityExp = [0, 0, 0, 0]
-        self.activityLevels = [0, 0, 0, 0]
         self.unlimitedGags = 0
         self.numPies = 0
         self.pieType = 0
@@ -2381,95 +2379,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             self.notify.warning('tried to update progress on a track toon is not training')
         newProgress = self.trackProgress | 1 << progressIndex - 1
         self.b_setTrackProgress(self.trackProgressId, newProgress)
-
-    def b_setActivityExp(self, expArray):
-        self.setActivityExp(expArray)
-        self.d_setActivityExp(expArray)
-
-    def d_setActivityExp(self, expArray):
-        if len(expArray) != ToontownGlobals.TOTAL_ACTIVITIES:
-            expArray = self.fixActivityArrays(expArray)
-        self.sendUpdate('setActivityExp', [expArray])
-
-    def setActivityExp(self, expArray):
-        if len(expArray) != ToontownGlobals.TOTAL_ACTIVITIES:
-            expArray = self.fixActivityArrays(expArray)
-        self.activityExp = expArray
-
-    def addActivityExp(self, deltaExp, activity):
-        expInstance = ToonExperience.ToonExperience()
-        activityExpArray = self.getActivityExp()
-        relevantBooster = ActivityToBooster[activity]
-        boostMultiplier = self.applyBoosters([BoosterItemType.Exp_Activity_Global, relevantBooster], 1.0)
-        deltaExp *= boostMultiplier
-        activityExpArray[activity] += deltaExp
-        levels = self.getActivityLevels()
-        activityLevel = levels[activity]
-        if activityLevel >= ToontownGlobals.MaxActivityLevel[activity]:
-            activityExpArray[activity] = 0
-            self.b_setActivityExp(activityExpArray)
-            if activityLevel > ToontownGlobals.MaxActivityLevel[activity]:
-                levels[activity] = ToontownGlobals.MaxActivityLevel[activity]
-                self.b_setActivityLevels(levels)
-            return
-        while True:
-            for level in range(len(expInstance.ExpPerLevel)):
-                if activityExpArray[activity] >= expInstance.getLevelMaxExp(
-                        activityLevel) and level > activityLevel and not level > ToontownGlobals.MaxActivityLevel[
-                    activity]:
-                    activityExpArray[activity] -= expInstance.getLevelMaxExp(activityLevel)
-                    self.setActivityLevel(activityLevel + 1, activity)
-                    activityLevel += 1
-                elif level <= activityLevel:
-                    continue
-                else:
-                    break
-            break
-        self.b_setActivityExp(activityExpArray)
-        del expInstance
-
-    def getActivityExp(self):
-        return self.activityExp
-
-    def setActivityLevel(self, level, activity):
-        levels = self.getActivityLevels()
-        if levels[activity] > ToontownGlobals.MaxActivityLevel[activity]:
-            levels[activity] = ToontownGlobals.MaxActivityLevel[activity]
-        else:
-            levels[activity] = level
-            if level in ToontownGlobals.ActivityHPLevels[activity]:
-                self.b_setMaxHp(self.getTrueMaxHp() + 1)
-                self.toonUp(self.getMaxHp() - self.hp)
-                self.sendUpdate('notifyExpReward', [level, activity + 3])
-                if activity == ToontownGlobals.ACTIVITY_FISHING:
-                    # Upgrading Rods Tip
-                    self.showToonTip(TTE.TIP_UPGRADE_FISHING_ROD)
-            # Activity Levels Tip
-            self.showToonTip(TTE.TIP_ACTIVITY_LEVEL_UP)
-        self.b_setActivityLevels(levels)
-
-    def b_setActivityLevels(self, levelArray):
-        self.setActivityLevels(levelArray)
-        self.d_setActivityLevels(levelArray)
-
-    def d_setActivityLevels(self, levelArray):
-        if len(levelArray) != ToontownGlobals.TOTAL_ACTIVITIES:
-            levelArray = self.fixActivityArrays(levelArray)
-        self.sendUpdate('setActivityLevels', [levelArray])
-
-    def setActivityLevels(self, levelArray):
-        if len(levelArray) != ToontownGlobals.TOTAL_ACTIVITIES:
-            levelArray = self.fixActivityArrays(levelArray)
-        self.activityLevels = levelArray
-
-    def getActivityLevels(self):
-        return self.activityLevels
-
-    def getActivityLevel(self, activity):
-        return self.activityLevels[activity]
-
-    def isActivityMaxed(self, activity):
-        return self.getActivityLevel(activity) == ToontownGlobals.MaxActivityLevel[activity]
 
     def clearTrackProgress(self):
         self.b_setTrackProgress(-1, 0)

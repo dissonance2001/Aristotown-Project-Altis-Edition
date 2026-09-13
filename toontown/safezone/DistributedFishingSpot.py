@@ -1,7 +1,6 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from direct.gui.DirectGui import *
-from toontown.gui import ActivityExperienceBar
 from pandac.PandaModules import *
 from direct.directtools.DirectGeometry import LineNodePath
 from direct.distributed import DistributedObject
@@ -54,7 +53,6 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.itemGui = None
         self.pole = None
         self.line = None
-        self.expBar = None
         self.poleNode = []
         self.ptop = None
         self.bob = None
@@ -450,16 +448,6 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.__makeGui()
         self.castButton.show()
         self.arrow.hide()
-        self.expBar = ActivityExperienceBar.ActivityExperienceBar(
-            base.localAvatar.activityExp[ToontownGlobals.ACTIVITY_FISHING],
-            base.localAvatar.activityLevels[ToontownGlobals.ACTIVITY_FISHING],
-            ToontownGlobals.ACTIVITY_FISHING,
-            base.localAvatar.style
-        )
-        self.expBar.setAvatar(base.localAvatar)
-        self.expBar.setScale(0.075)
-        self.expBar.reparentTo(base.a2dBottomLeft)
-        self.expBar.start()
         self.exitButton.show()
         self.timer.show()
         self.__updateFishTankGui()
@@ -622,12 +610,6 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         target = base.cr.doFind('DistributedTarget')
         if target:
             target.showGui()
-        if self.expBar:
-            self.expBar.hide()
-            self.expBar.stop()
-            self.expBar.destroy()
-        base.localAvatar.expBar.show()
-
         if self.madeGui:
             self.timer.hide()
             self.castGui.detachNode()

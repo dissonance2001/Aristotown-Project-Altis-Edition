@@ -1,5 +1,4 @@
 from panda3d.core import *
-from toontown.gui import ActivityExperienceBar
 from panda3d.direct import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.gui.DirectGui import *
@@ -54,7 +53,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         self.difficultyOverride = None
         self.trolleyZoneOverride = None
         self.hasLocalToon = 0
-        self.expBar = None
         self.frameworkFSM.enterInitialState()
         self.startingVotes = {}
         self.metagameRound = -1
@@ -177,19 +175,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
                 self.randomNetPlugPullDelay = random.random() * maxDuration
                 taskMgr.doMethodLater(self.randomNetPlugPullDelay, self.doRandomNetworkPlugPull, self.uniqueName('random-netplugpull'))
 
-    def startExpBar(self):
-        base.localAvatar.expBar.hide()
-        self.expBar = ActivityExperienceBar.ActivityExperienceBar(
-            base.localAvatar.activityExp[ToontownGlobals.ACTIVITY_TROLLEY],
-            base.localAvatar.activityLevels[ToontownGlobals.ACTIVITY_TROLLEY],
-            ToontownGlobals.ACTIVITY_TROLLEY,
-            base.localAvatar.style
-        )
-        self.expBar.setAvatar(base.localAvatar)
-        self.expBar.setScale(0.075)
-        self.expBar.reparentTo(base.a2dBottomLeft)
-        self.expBar.start()
-
     def doRandomAbort(self, task):
         print('*** DOING RANDOM MINIGAME ABORT AFTER %.2f SECONDS ***' % self.randomAbortDelay)
         self.d_requestExit()
@@ -211,11 +196,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
             av = self.getAvatar(avId)
             if av:
                 av.detachNode()
-        if self.expBar:
-            self.expBar.hide()
-            self.expBar.stop()
-            self.expBar.destroy()
-            base.localAvatar.expBar.show()
 
         messenger.send('minigameOffstage')
 
@@ -358,7 +338,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         self.rulesPanel.load()
         self.rulesPanel.enter()
         self.setVoteSkips(0)
-        base.localAvatar.expBar.hide()
 
     def exitFrameworkRules(self):
         self.ignore(self.rulesDoneEvent)
@@ -370,7 +349,7 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         self.notify.debug('BASE: handleRulesDone')
         self.sendUpdate('setAvatarReady', [])
         self.frameworkFSM.request('frameworkWaitServerStart')
-
+        
 
     def enterFrameworkWaitServerStart(self):
         self.notify.debug('BASE: enterFrameworkWaitServerStart')
@@ -386,7 +365,6 @@ class DistributedMinigame(DistributedObject.DistributedObject):
 
     def enterFrameworkGame(self):
         self.notify.debug('BASE: enterFrameworkGame')
-        self.startExpBar()
 
     def exitFrameworkGame(self):
         pass
@@ -470,12 +448,12 @@ class DistributedMinigame(DistributedObject.DistributedObject):
 
     def setMetagameRound(self, metagameRound):
         self.metagameRound = metagameRound
-
+        
     def setAvatarReady(self):
         messenger.send('endVoteSkip')
-
+        
     def requestVoteSkip(self):
         self.sendUpdate('requestSkip')
-
+        
     def setVoteSkips(self, votes):
         messenger.send('minigameSkipVoted', [votes, len(self.avIdList)])
