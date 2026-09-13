@@ -30,7 +30,8 @@ from toontown.toonbase import ToontownAccess
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toontowngui import TTDialog
 from toontown.options import GraphicsOptions
-from toontown.audio.AltisAudio import AltisAudio
+from toontown.audio.ToontownAudio import ToontownAudio
+from toontown.audio.ToontownMusic import ToontownMusic
 from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
@@ -173,7 +174,9 @@ class ToonBase(OTPBase.OTPBase):
         self.graphicsEngine.renderFrame()
         self.graphicsEngine.renderFrame()
         
-        self.audioMgr = AltisAudio()
+
+        self.audioMgr = ToontownAudio(self) # Audio Effects manager
+        self.musicMgr = ToontownMusic() # Music Manager
         
         self.disableShowbaseMouse()
         self.addCullBins()

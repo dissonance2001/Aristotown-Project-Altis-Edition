@@ -101,6 +101,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.maxCarry = 0
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
+        self.activityExp = [0, 0, 0, 0]
+        self.activityLevels = [0, 0, 0, 0]
         self.cogIndex = -1
         self.disguisePage = None
         self.sosPage = None
@@ -2135,6 +2137,26 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def hasTeleportAccess(self, zoneId):
         return zoneId in self.teleportZoneArray
+
+    def setActivityExp(self, expArray):
+        if len(expArray) != ToontownGlobals.TOTAL_ACTIVITIES:
+            expArray = self.fixActivityArrays(expArray)
+        if expArray != self.activityExp:
+            self.activityExp = expArray
+        messenger.send(self.uniqueName('activityExpChange'), [self.activityExp, self.activityLevels])
+
+    def getActivityExp(self):
+        return self.activityExp
+
+    def setActivityLevels(self, levelArray):
+        if len(levelArray) != ToontownGlobals.TOTAL_ACTIVITIES:
+            levelArray = self.fixActivityArrays(levelArray)
+        if levelArray != self.activityLevels:
+            self.activityLevels = levelArray
+
+    def getActivityLevels(self):
+        return self.activityLevels
+
 
     def setScavengerHunt(self, scavengerHuntArray):
         self.scavengerHuntArray = scavengerHuntArray
