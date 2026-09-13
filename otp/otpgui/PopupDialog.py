@@ -12,7 +12,7 @@ class PopupDialog:
     def __init__(self):
         self.popupGui = aspect2d.attachNewNode('popupGui')
         self.popupGui.reparentTo(aspect2d, 3000)
-        if base.hasattr("matGui") and base.matGui:
+        if hasattr(base, "matGui") and base.matGui:
             gui = base.matGui
         else:
             gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui')
