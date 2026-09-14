@@ -634,9 +634,9 @@ class Purchase(PurchaseBase):
             headFrame[1].show()
             headFrame[1].reparentTo(self.toon.inventory.purchaseFrame)
 
-        self.playAgain.setPos(1, 0, -0.285)
+        self.playAgain.setPos(0.984, 0, -0.295)
         self.playAgain.setScale(1.04)
-        self.backToPlayground.setPos(1, 0, -0.050)
+        self.backToPlayground.setPos(0.984, 0, -0.054)
         self.backToPlayground.setScale(1.04)
         if self.headFrames:
             self.headFrames[0][1].setPos(0.5, 0, -0.7)
