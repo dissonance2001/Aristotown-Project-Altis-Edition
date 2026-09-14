@@ -64,11 +64,11 @@ class Purchase(PurchaseBase):
         wainTex = loader.loadTexture('phase_%s/maps/wall_paper_b4.jpg' % interiorPhase)
         self.wb.setTexture(wainTex, 100)
         self.wb.setColorScale(0.473, 0.675, 0.488, 1.0)
-        self.playAgain = DirectButton(parent=self.frame, relief=None, scale=1.04, pos=(0.72, 0, -0.24), image=(purchaseModels.find('**/PurchScrn_BTN_UP'),
+        self.playAgain = DirectButton(parent=self.frame, relief=None, scale=1.04, pos=(0.95, 0, -0.24), image=(purchaseModels.find('**/PurchScrn_BTN_UP'),
          purchaseModels.find('**/PurchScrn_BTN_DN'),
          purchaseModels.find('**/PurchScrn_BTN_RLVR'),
          purchaseModels.find('**/PurchScrn_BTN_UP')), text=TTLocalizer.GagShopPlayAgain, text_fg=(0, 0.1, 0.7, 1), text_scale=0.05, text_pos=(0, 0.015, 0), image3_color=Vec4(0.6, 0.6, 0.6, 1), text3_fg=Vec4(0, 0, 0.4, 1), command=self.__handlePlayAgain)
-        self.backToPlayground = DirectButton(parent=self.frame, relief=None, scale=1.04, pos=(0.72, 0, -0.045), image=(purchaseModels.find('**/PurchScrn_BTN_UP'),
+        self.backToPlayground = DirectButton(parent=self.frame, relief=None, scale=1.04, pos=(0.95, 0, -0.045), image=(purchaseModels.find('**/PurchScrn_BTN_UP'),
          purchaseModels.find('**/PurchScrn_BTN_DN'),
          purchaseModels.find('**/PurchScrn_BTN_RLVR'),
          purchaseModels.find('**/PurchScrn_BTN_UP')), text=TTLocalizer.GagShopBackToPlayground, text_fg=(0, 0.1, 0.7, 1), text_scale=0.05, text_pos=(0, 0.015, 0), image3_color=Vec4(0.6, 0.6, 0.6, 1), text3_fg=Vec4(0, 0, 0.4, 1), command=self.__handleBackToPlayground)
@@ -633,6 +633,14 @@ class Purchase(PurchaseBase):
         for headFrame in self.headFrames:
             headFrame[1].show()
             headFrame[1].reparentTo(self.toon.inventory.purchaseFrame)
+
+        self.playAgain.setPos(1, 0, -0.285)
+        self.playAgain.setScale(1.04)
+        self.backToPlayground.setPos(1, 0, -0.050)
+        self.backToPlayground.setScale(1.04)
+        if self.headFrames:
+            self.headFrames[0][1].setPos(0.5, 0, -0.7)
+            self.headFrames[0][1].setScale(1.1)
 
         if base.cr.periodTimerExpired:
             base.cr.loginFSM.request('periodTimeout')

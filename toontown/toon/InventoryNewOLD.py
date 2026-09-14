@@ -324,8 +324,12 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
         self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.prestigeStar = self.rowModels.find('**/prestige_star_empty')
-                                          
+
+        gagSelectGui = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+
+
         hasOrganic = False
+
 
         for item in range(0, len(Levels[track])):
             if self.toon.checkGagBonus(track, item):
@@ -375,6 +379,12 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.deleteHelpText = DirectLabel(parent=self.invFrame, relief=None, pos=(0.272, 0.3, -0.907), text=TTLocalizer.InventoryDeleteHelp, text_fg=(0, 0, 0, 1), text_scale=0.08, textMayChange=0)
         self.deleteHelpText.hide()
         self.detailFrame = DirectFrame(parent=self.invFrame, relief=None, pos=(0, 0, 0))
+        self.detailBackground = DirectFrame(
+            parent=self.detailFrame,
+            relief=None,
+            image=gagSelectGui.find('**/gag_info_main'),
+        )
+        self.detailBackground.hide()
         emblemModel = self.rowModels
 
         self.questionEmblem = DirectFrame(
@@ -1435,10 +1445,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyPurchaseCustomLayout()
         return
 
     def purchaseDeleteDeactivateButtons(self):
+        self._revertPurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.purchaseFrame.hide()
         self.deleteDeactivateButtons()
@@ -1495,10 +1506,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyStorePurchaseCustomLayout()
         return
 
     def storePurchaseDeleteDeactivateButtons(self):
+        self._revertStorePurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.storePurchaseFrame.hide()
         self.deleteDeactivateButtons()
@@ -1535,10 +1547,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyStorePurchaseCustomLayout()
         return
 
     def storePurchaseBrokeDeactivateButtons(self):
+        self._revertStorePurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.storePurchaseFrame.hide()
 
@@ -1625,10 +1638,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyPurchaseCustomLayout()
         return
 
     def purchaseDeactivateButtons(self):
+        self._revertPurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.purchaseFrame.hide()
 
@@ -1681,12 +1695,179 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyStorePurchaseCustomLayout()
         return
 
     def storePurchaseDeactivateButtons(self):
+        self._revertStorePurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.storePurchaseFrame.hide()
+
+    def _applyStorePurchaseCustomLayout(self):
+        # Custom layout for the Goofy's Gag Shop store-purchase screen.
+        # Uses LOCAL constants instead of touching self.TrackYOffset/
+        # self.TrackYSpacing, so book/battle/purchase modes are never affected.
+        CUSTOM_TRACK_Y_OFFSET = 0.54
+        CUSTOM_TRACK_Y_SPACING = -0.155
+
+        self.invFrame.setScale(0.66)
+        self.invFrame.setPos(-0.18, 0, 0.0)
+
+        x_offset = 0.25
+        row_scale = (1.05, 1.0, 1.1)
+        ButtonXOffset = -0.410
+        ButtonXSpacing = 0.178
+        adjustLeft = -0.065
+
+        order = self.getDisplayTrackOrder()
+        for i, track in enumerate(order):
+            row = self.trackRows[track]
+            row.setPos(x_offset, 0, CUSTOM_TRACK_Y_OFFSET + i * CUSTOM_TRACK_Y_SPACING)
+            row.setScale(*row_scale)
+
+            for level, button in enumerate(self.buttons[track]):
+                if level < len(self.buttons[track]) - 1:
+                    bx = ButtonXOffset + level * ButtonXSpacing + adjustLeft
+                else:
+                    bx = ButtonXOffset + level * ButtonXSpacing - 0.095
+                button.setPos(bx, -0.1, 0.001)
+
+
+
+
+
+        self.detailBackground.show()
+        self.detailBackground.setPos(-0.02, 0, 0.05)
+        self.detailBackground.setScale(1.3)
+        self.detailBackground.setColor(1, 1, 1, 1)
+        self.detailBackground.setBin('fixed', 0)
+        self.detailFrame.setPos(1.75, 0, 0.2)
+        self.detailFrame.setScale(0.8)
+        self.gagEmblem.setPos(0.001, 0, 0.43)
+        self.gagEmblem.setScale(0.7)
+
+        self.questionEmblem.setPos(0.01, 0, 0.44)
+        self.questionEmblem.setScale(0.7)
+        self.questionEmblem.setColor(1, 1, 1, 1)
+
+
+
+        self.deleteEnterButton.setPos(-1.4, 0, -0.33)
+        self.deleteEnterButton.setScale(0.70)
+        self.deleteAllButton.setPos(-1.2, 0, -0.33)
+        self.deleteAllButton.setScale(0.70)
+        self.deleteExitButton.setPos(-1.4, 0, -0.33)
+        self.deleteExitButton.setScale(0.70)
+        self.deleteHelpText.setPos(0.272, 0.3, -0.907)
+
+        if not hasattr(self, '_origShowDetail'):
+            self._origShowDetail = self.showDetail
+
+            def _patchedShowDetail(track, level, event=None, _self=self):
+                _self._origShowDetail(track, level, event)
+                if _self.activateMode in ('storePurchase', 'storePurchaseDelete'):
+                    _self.detailNameLabel.configure(
+                        image_scale=13.0,  # <-- tune this
+                        image_pos=(0.0, 0, 1.9),  # <-- tune this
+                    )
+
+            self.showDetail = _patchedShowDetail
+
+    def _revertStorePurchaseCustomLayout(self):
+        # Restore trackRows/buttons to the stock layout computed in load(),
+        # so book/battle/purchase modes see the original positions again.
+        adjustLeft = -0.065
+        for track in range(len(Tracks)):
+            row = self.trackRows[track]
+            row.setPos(-0.25, 0, self.TrackYOffset + track * self.TrackYSpacing)
+            row.setScale(1.0, 1.0, 1.1)
+
+            for item, button in enumerate(self.buttons[track]):
+                starItem = len(Levels[track])
+                if item < starItem:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft
+                else:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + -0.095
+                button.setPos(bx, -0.1, 0)
+
+    def _applyPurchaseCustomLayout(self):
+        CUSTOM_TRACK_Y_OFFSET = 0.54
+        CUSTOM_TRACK_Y_SPACING = -0.155
+
+        self.invFrame.setScale(0.66)
+        self.invFrame.setPos(0.05, 0, 0.0)
+
+        x_offset = -0.1
+        row_scale = (1.05, 1.0, 1.1)
+        ButtonXOffset = -0.410
+        ButtonXSpacing = 0.178
+        adjustLeft = -0.065
+
+        order = self.getDisplayTrackOrder()
+        for i, track in enumerate(order):
+            row = self.trackRows[track]
+            row.setPos(x_offset, 0, CUSTOM_TRACK_Y_OFFSET + i * CUSTOM_TRACK_Y_SPACING)
+            row.setScale(*row_scale)
+
+            for level, button in enumerate(self.buttons[track]):
+                if level < len(self.buttons[track]) - 1:
+                    bx = ButtonXOffset + level * ButtonXSpacing + adjustLeft
+                else:
+                    bx = ButtonXOffset + level * ButtonXSpacing - 0.095
+                button.setPos(bx, -0.1, 0.001)
+
+        self.detailFrame.setPos(1.4, 0, 0.5)
+        self.detailFrame.setScale(0.8)
+        self.detailBackground.show()
+        self.detailBackground.setPos(-0.02, 0, 0.05)
+        self.detailBackground.setScale(1.3)
+        self.detailBackground.setColor(1, 1, 1, 1)
+        self.detailBackground.setBin('fixed', 0)
+        self.questionEmblem.setPos(0.01, 0, 0.5)
+        self.questionEmblem.setScale(0.7)
+        self.questionEmblem.setColor(1, 1, 1, 1)
+        self.gagEmblem.setPos(0.001, 0, 0.43)
+        self.gagEmblem.setScale(0.7)
+
+    def _revertPurchaseCustomLayout(self):
+        # Restore trackRows/buttons to stock positions from load().
+        adjustLeft = -0.065
+        for track in range(len(Tracks)):
+            row = self.trackRows[track]
+            row.setPos(-0.25, 0, self.TrackYOffset + track * self.TrackYSpacing)
+            row.setScale(1.0, 1.0, 1.1)
+
+            for item, button in enumerate(self.buttons[track]):
+                starItem = len(Levels[track])
+                if item < starItem:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft
+                else:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + -0.095
+                button.setPos(bx, -0.1, 0)
+
+    def _revertPurchaseCustomLayout(self):
+        # Restore trackRows/buttons/detailFrame/questionEmblem to the
+        # stock positions computed in load().
+        adjustLeft = -0.065
+        for track in range(len(Tracks)):
+            row = self.trackRows[track]
+            row.setPos(-0.25, 0, self.TrackYOffset + track * self.TrackYSpacing)
+            row.setScale(1.0, 1.0, 1.1)
+
+            for item, button in enumerate(self.buttons[track]):
+                starItem = len(Levels[track])
+                if item < starItem:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + adjustLeft
+                else:
+                    bx = self.ButtonXOffset + item * self.ButtonXSpacing + -0.095
+                button.setPos(bx, -0.1, 0)
+
+    def _hideBattleOnlyButtons(self):
+        for attrName in ('runButton', 'sosButton', 'passButton', 'fireButton',
+                          'sueButton', 'surrenderButton', 'surrenderVoteFlag'):
+            widget = getattr(self, attrName, None)
+            if widget is not None:
+                widget.hide()
 
     def purchaseBrokeActivateButtons(self):
         self.reparentTo(aspect2d)
@@ -1723,10 +1904,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
             else:
                 self.hideTrack(track)
-
+        self._applyPurchaseCustomLayout()
         return
 
     def purchaseBrokeDeactivateButtons(self):
+        self._revertPurchaseCustomLayout()
         self.invFrame.reparentTo(self)
         self.purchaseFrame.hide()
 
@@ -2280,6 +2462,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.levelsButton.hide()
         self.battleFrame.hide()
         self.stopAndClearPropBonusIval()
+        self._hideBattleOnlyButtons()
 
     def plantTreeActivateButtons(self):
         self.reparentTo(aspect2d)
@@ -2328,6 +2511,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.invFrame.reparentTo(self)
         self.levelsButton.hide()
         self.battleFrame.hide()
+        self._hideBattleOnlyButtons()
 
     def itemIsUsable(self, track, level):
         if self.gagTutMode:
@@ -2686,19 +2870,40 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         return
 
     def loadPurchaseFrame(self):
-        purchaseModels = loader.loadModel('phase_4/models/gui/purchase_gui')
-        self.purchaseFrame = DirectFrame(relief=None, image=purchaseModels.find('**/PurchasePanel'), image_pos=(-0.21, 0, 0.08), parent=self)
-        self.purchaseFrame.setX(-.06)
+        gagSelectionGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+
+        self.purchaseFrame = DirectFrame(
+            parent=self,
+            relief=None,
+            image=gagSelectionGui.find('**/purchase_main'),
+            image_scale=(2.5, 1, 1.25)
+        )
+        # Play Again Button Background
+        DirectFrame(
+            parent=self.purchaseFrame,
+            relief=None,
+            image=gagSelectionGui.find('**/purchase_button_panel'),
+            image_scale=(1, 1, 0.5),
+            pos=(0.972, 0, -0.052),
+            scale=0.625
+        )
+
+        gagSelectionGui.removeNode()
         self.purchaseFrame.hide()
-        purchaseModels.removeNode()
-        return
 
     def loadStorePurchaseFrame(self):
-        storePurchaseModels = loader.loadModel('phase_4/models/gui/gag_shop_purchase_gui')
-        self.storePurchaseFrame = DirectFrame(relief=None, image=storePurchaseModels.find('**/gagShopPanel'), image_pos=(-0.21, 0, 0.18), parent=self)
+        gagSelectionGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
+
+        self.storePurchaseFrame = DirectFrame(
+            parent=self,
+            relief=None,
+            image=gagSelectionGui.find('**/purchase_main'),
+            image_scale=(2.5, 1, 1.25)
+        )
+
+        gagSelectionGui.removeNode()
+
         self.storePurchaseFrame.hide()
-        storePurchaseModels.removeNode()
-        return
 
     def buttonLookup(self, track, level):
         return self.invModels[track][level]

@@ -109,8 +109,14 @@ class DistributedCatchGame(DistributedMinigame):
         self.toonSDs[avId] = toonSD
         toonSD.load()
         if self.WantSuits:
-            suitTypes = SuitDNA.suitHeadTypes
-			
+            excludedSuits = ['dcr', 'cn', 'pdx']
+            suitTypes = []
+            for dept in SuitDNA.suitDepts:
+                for tier in range(1, 7):  # tiers 1-6: Flunky through Downsizer
+                    for name in SuitDNA.getSuitsForTier(dept, tier):
+                        if name not in excludedSuits:
+                            suitTypes.append(name)
+
             self.suits = []
             for type in suitTypes:
                 suit = Suit.Suit()
