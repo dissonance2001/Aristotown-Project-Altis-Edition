@@ -61,6 +61,9 @@ class TrackPage(ShtikerPage.ShtikerPage):
         self.menuModel = loader.loadModel('phase_3/models/gui/ttcc_menu_buttons')
         self.menuNormal = self.menuModel.find('**/menubtn')
         self.menuPressed = self.menuModel.find('**/menubtn-press')
+        self.refundMenuModel = loader.loadModel('phase_3/models/gui/ttcc_gs_menu_buttons')
+        self.refundMenuNormal = self.refundMenuModel.find('**/menubtn')
+        self.refundMenuPressed = self.refundMenuModel.find('**/menubtn-press')
 
         self.infoModel = loader.loadModel('phase_3/models/gui/ttcc_gui_generalButtons')
         self.infoUp = self.infoModel.find('**/report_BtnUP')
@@ -223,10 +226,10 @@ class TrackPage(ShtikerPage.ShtikerPage):
             pos=(0.42, 0, -0.67566),
             scale=(1.4, 1, 1),
             image=(
-                self.menuNormal,
-                self.menuPressed,
-                self.menuNormal,
-                self.menuPressed),
+                self.refundMenuNormal,
+                self.refundMenuPressed,
+                self.refundMenuNormal,
+                self.refundMenuPressed),
             image_scale=(0.3, 0.15, 0.15),
             image1_scale=(0.3, 0.15, 0.15),
             image2_scale=(0.3, 0.15, 0.15),
@@ -251,6 +254,8 @@ class TrackPage(ShtikerPage.ShtikerPage):
             self.inventoryIconModel = None
         if self.menuModel:
             self.menuModel.removeNode()
+        if self.refundMenuModel:
+            self.refundMenuModel.removeNode()
         if self.infoModel:
             self.infoModel.removeNode()
         if self.gagSelectionModel:
@@ -353,30 +358,59 @@ class TrackPage(ShtikerPage.ShtikerPage):
                 self.trackStars[track].hide()
 
         button = self.manageButtons[track]
-        button['image_color'] = (1, 1, 1, 1)
-        button['image3_color'] = (0.75, 0.75, 0.75, 1)
+
+        def setManageButton(text, enabled=True, command=None, color=None):
+            button['text'] = text
+            button['state'] = DGG.NORMAL if enabled else DGG.DISABLED
+            if command is not None:
+                button['command'] = command
+
+            if color is None:
+                button['image'] = (
+                    self.menuNormal,
+                    self.menuPressed,
+                    self.menuNormal,
+                    self.menuPressed)
+                button['image_color'] = (1, 1, 1, 1) if enabled else (0.75, 0.75, 0.75, 1.0)
+            else:
+                gui = loader.loadModel('phase_3/models/gui/ttcc_gs_menu_buttons')
+                normal = gui.find('**/menubtn')
+                pressed = gui.find('**/menubtn-press')
+                button['image'] = (normal, pressed, normal, pressed)
+                button['image_color'] = color if enabled else tuple(component * 0.75 for component in color[:3]) + (color[3],)
+                gui.removeNode()
 
         if not self.refundMode:
             if not bought:
-                button['text'] = 'Unlock (x2)'
-                button['state'] = DGG.NORMAL if self.canBuyTrack(track) else DGG.DISABLED
+                setManageButton(
+                    'Unlock (x2)',
+                    self.canBuyTrack(track),
+                    self.handleManage)
             elif not prestiged:
-                button['text'] = 'Prestige (x1)'
-                button['state'] = DGG.NORMAL if self.canPrestigeTrack(track) else DGG.DISABLED
-                button['image_color'] = (0.43, 0.37, 1.0, 1)
+                setManageButton(
+                    'Prestige (x1)',
+                    self.canPrestigeTrack(track),
+                    self.handleManage,
+                    (0.43137255, 0.36862745, 1.0, 1.0))
             else:
-                button['text'] = 'Unprestige'
-                button['state'] = DGG.NORMAL
-                button['image_color'] = (1.0, 0.26, 0.36, 1.0)
+                setManageButton(
+                    'Unprestige',
+                    True,
+                    self.handleManage,
+                    (1.0, 0.2627451, 0.3607843, 1.0))
         else:
             if self.canRefundTrack(track):
-                button['text'] = 'Refund Track'
-                button['state'] = DGG.NORMAL
-                button['image_color'] = (1.0, 0.45, 0.45, 1.0)
+                setManageButton(
+                    'Refund Track',
+                    True,
+                    self.handleManage,
+                    (1.0, 0.45, 0.45, 1.0))
             else:
-                button['text'] = "Can't Refund"
-                button['state'] = DGG.DISABLED
-                button['image_color'] = (0.75, 0.75, 0.75, 1.0)
+                setManageButton(
+                    "Can't Refund",
+                    False,
+                    self.handleManage,
+                    (0.75, 0.75, 0.75, 1.0))
 
     def changeRefundMode(self):
         self.refundMode = not self.refundMode
