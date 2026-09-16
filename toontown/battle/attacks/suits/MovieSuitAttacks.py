@@ -468,7 +468,7 @@ def doSuitAttack(attack):
         suitTrack = doRecordBreaker(attack)
     elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
-    elif name == 'Crunch':
+    elif name in ('Crunch', 'MudSling'):
         suitTrack = doCrunch(attack)
     elif name == 'Demotion':
         suitTrack = doDemotion(attack)
@@ -7049,68 +7049,103 @@ def doTabulate(attack):
     return Parallel(suitTrack, toonTracks, soundTrack, calcPropTrack, partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
 
 
-def doCrunch(attack):
+def doCrunch(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    throwDuration = 1.75
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    numberNames = ['one',
-     'two',
-     'three',
-     'four',
-     'five',
-     'six']
+    targets: list[dict] = attack['target']
+    throwDuration: float = 2.75
+    suitTrack: Sequence = getSuitTrack(attack)
+
+    def getPartTex(attack: dict = attack) -> dict:
+        '''
+        If the attack is Mud Sling, then we should use mud instead of numbers.
+
+        Parameters:
+            attack (dict): The attack dictionary, which will be used to get the name of the attack.
+        
+        Returns:
+            out (dict): A kwargs dict.  The 'name' key is for the texture, and the 'color' key, if it exists, is to change the color.
+        '''
+        if attack['name'] == 'MudSling':
+            return {'name': 'raindrop',
+                    'color': Vec4(0.6, 0.3, 0.3, 1.0)}
+        else:
+            numberNames = ('one',
+             'two',
+             'three',
+             'four',
+             'five',
+             'six')
+            return {'name': 'audit-' + random.choice(numberNames)}
+
     BattleParticles.loadParticles()
-    numberSpill1 = BattleParticles.createParticleEffect(file='numberSpill')
-    numberSpill2 = BattleParticles.createParticleEffect(file='numberSpill')
-    spillTexture1 = random.choice(numberNames)
-    spillTexture2 = random.choice(numberNames)
-    BattleParticles.setEffectTexture(numberSpill1, 'audit-' + spillTexture1)
-    BattleParticles.setEffectTexture(numberSpill2, 'audit-' + spillTexture2)
-    numberSpillTrack1 = getPartTrack(numberSpill1, .5, 3.1, [numberSpill1, suit, 0], softStop=-1)
-    numberSpillTrack2 = getPartTrack(numberSpill2, .5, 3.1, [numberSpill2, suit, 0], softStop=-1)
-    numberSprayTracks = Parallel()
-    numOfNumbers = random.randint(10, 15)
-    for i in range(0, numOfNumbers - 1):
-        nextSpray = BattleParticles.createParticleEffect(file='numberSpray')
-        nextTexture = random.choice(numberNames)
-        BattleParticles.setEffectTexture(nextSpray, 'audit-' + nextTexture)
-        nextStartTime = random.random() * 0.6 + throwDuration
-        nextDuration = random.random() * 0.4 + 1.4
-        nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration + 1, [nextSpray, suit, 0], softStop=-1)
-        numberSprayTracks.append(nextSprayTrack)
+    numberSpillTracks = ()
+    for t in targets:
+        numberSpill1 = BattleParticles.createParticleEffect(file='numberSpill')
+        numberSpill2 = BattleParticles.createParticleEffect(file='numberSpill')
+        BattleParticles.setEffectTexture(numberSpill1, **getPartTex())
+        BattleParticles.setEffectTexture(numberSpill2, **getPartTex())
+        numberSpillTrack1 = getPartTrack(numberSpill1, 1.1, 2.2, [numberSpill1, suit, 0], softStop=-1.0)
+        numberSpillTrack2 = getPartTrack(numberSpill2, 1.5, 1.0, [numberSpill2, suit, 0], softStop=-1.0)
+        numberSpillTracks += (numberSpillTrack1, numberSpillTrack2)
+
+    allSprayTracks = ()
+    numOfNumbers = random.randint(11, 16)
+    for t in targets:
+        toon = t['toon']
+        numberSprayTracks = Parallel()
+        particleNode = battle.attachNewNode('particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        for i in range(0, numOfNumbers - 1):
+            nextSpray = BattleParticles.createParticleEffect(file='numberSpray')
+            BattleParticles.setEffectTexture(nextSpray, **getPartTex())
+            nextStartTime = random.random() * 0.2 + throwDuration
+            nextDuration = random.random() * 0.3 + 1.2
+            nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration, [nextSpray, particleNode, 0], softStop=-1.0)
+            numberSprayTracks.append(nextSprayTrack)
+
+        numberSprayTracks = ParallelEndTogether(
+            LerpColorScaleInterval(particleNode, 0.21, (1.0, 1.0, 1.0, 0.0), blendType='easeIn'),
+            Sequence(
+                numberSprayTracks,
+                Func(particleNode.removeNode)
+            )
+        )
+        allSprayTracks += (numberSprayTracks,)
 
     numberTracks = Parallel()
-    for i in range(0, numOfNumbers):
-        texture = random.choice(numberNames)
-        next = MovieUtil.copyProp(BattleParticles.getParticle('audit-' + texture))
-        numberTrack = Sequence(Wait(0.5), Parallel(Func(next.reparentTo, suit.getRightHand()),
-        Func(next.setScale, 0.01, 0.01, 0.01),
-        Func(next.setColor, Vec4(0.0, 0.0, 0.0, 1.0)),
-        Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3),
-        Func(next.setHpr, VBase3(-1.15, 86.58, -76.78)), ),
-                               LerpScaleInterval(next, 0.25, MovieUtil.PNT3_ONE), Wait(1.1), Func(MovieUtil.removeProp, next))
+    for i in range(0, numOfNumbers * len(targets)):
+        texture = getPartTex()
+        next = MovieUtil.copyProp(BattleParticles.getParticle(texture['name']))
+        numberTrack = Sequence(
+            Wait(0.9),
+            Func(next.reparentTo, suit.getRightHand()),
+            Func(next.setScale, 0.01, 0.01, 0.01),
+            Func(next.setColor, texture.get('color', Vec4(0.0, 0.0, 0.0, 1.0))),
+            Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3),
+            Func(next.setHpr, VBase3(-1.15, 86.58, -76.78)),
+            LerpScaleInterval(next, 0.6, MovieUtil.PNT3_ONE),
+            Wait(1.7),
+            Func(MovieUtil.removeProp, next)
+        )
         numberTracks.append(numberTrack)
 
     damageAnims = []
-    damageAnims.append(['cringe',
-     0.01,
-     0.14,
-     0.28])
-    damageAnims.append(['cringe',
-     0.01,
-     0.16,
-     0.3])
-    damageAnims.append(['cringe',
-     0.01,
-     0.13,
-     0.22])
+    damageAnims.append(['cringe', 0.01, 0.14, 0.28])
+    damageAnims.append(['cringe', 0.01, 0.16, 0.3])
+    damageAnims.append(['cringe', 0.01, 0.13, 0.22])
     damageAnims.append(['slip-forward', 0.01, 0.6])
-    toonTrack = getToonTrack(attack, damageDelay=3, splicedDamageAnims=damageAnims, dodgeDelay=2.6, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_crunch.ogg', delay=3, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, numberSpillTrack1, numberSpillTrack2, numberTracks, numberSprayTracks)
+    toonTracks = getToonTracks(attack, damageDelay=4.7, splicedDamageAnims=damageAnims, dodgeDelay=2.4, dodgeAnimNames=['duck'])
+    if attack['name'] == 'MudSling':
+        soundEffect = loader.loadSfx('phase_9/audio/sfx/CHQ_FACT_paint_splash.ogg') # NOTE: Probably does not account for content pack changes.
+    else:
+        soundEffect = globalBattleSoundCache.getSound('SA_crunch.ogg')
+    soundTrack = Sequence(
+        Wait(4.7),
+        SoundInterval(soundEffect, node=suit)
+    )
+    return Parallel(suitTrack, toonTracks, soundTrack, *numberSpillTracks, numberTracks, *allSprayTracks)
 
 def doLiquidateGROUP(attack):
     suit = attack['suit']

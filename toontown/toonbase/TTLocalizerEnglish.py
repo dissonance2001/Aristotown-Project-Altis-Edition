@@ -5546,6 +5546,7 @@ SuitAttackNames = {
     'MarketCrash': "Market Crash!",
     'MoneyTrip': "Synergy!",
     'MysteriousDisappearance': "Mysterious Disappearance!",
+    'MudSling': 'Mud Sling!',
     'MumboJumbo': "Mumbo Jumbo!",
     'Newspaper': "Newspaper!",
     'Novel': "Novel!",
@@ -7894,6 +7895,8 @@ SuitAttackTaunts = {
              "I'll get back to you on this.",
              "Let's get right to business.",
              'Consider this a Synergy crisis.'],},
+ 'MudSling': ['This goes well with your shirt.',
+              'In my opinion, your face is mud.'],
 'RecordBreaker': {
  'director': ["Let's put a new spin on this scene.",
                 "Take it from the top!",
