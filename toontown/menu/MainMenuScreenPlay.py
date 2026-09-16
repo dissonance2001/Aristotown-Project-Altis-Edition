@@ -436,6 +436,7 @@ class MainMenuScreenPlay(MainMenuScreen):
         def cancel(arg=None):
             self.deleteWithPasswordFrame.destroy()
             base.transitions.noFade()
+            self.enableButtons()
 
         def diagDone():
             if delDialog.doneStatus == 'ok':
