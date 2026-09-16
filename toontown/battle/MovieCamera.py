@@ -791,8 +791,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ClipOnTie':
         camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'Crunch':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name in ('Crunch', 'MudSling'):
+        camTrack.append(defaultCamera())
     elif name == 'Demotion':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'DoubleTalk':

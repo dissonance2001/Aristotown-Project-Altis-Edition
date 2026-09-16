@@ -1999,7 +1999,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
         'freq': (30, 35, 40, 45, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50),
         'acc': (35, 40, 45, 50, 55, 60, 65, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70),
         'attacks':
-            (SuitAttack('Schmooze',
+            (SuitAttack('MudSling',
                         hp=(18, 21, 24, 27, 30, 32, 34, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48),
                         acc=(75, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80),
                         freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
@@ -2231,7 +2231,7 @@ SuitAttributes = {'f': {'name': 'Flunky', # cog name
          'freq':(0,),
          'acc':(50,),
          'attacks':
-             (SuitAttack('Schmooze',
+             (SuitAttack('MudSling',
                           hp=(27,),
                          acc=(95,),
                          freq=(25,)),
@@ -7121,6 +7121,7 @@ SuitAttacks = {
  'MarketCrash': ('throw-object', ATK_TGT_SINGLE),
  'MoneyTrip': ('magic3', ATK_TGT_GROUP),  # Synergy
  'MysteriousDisappearance': ('throw-paper', ATK_TGT_SINGLE),
+ 'MudSling': ('throw-object', ATK_TGT_SINGLE),
  'MumboJumbo': ('speak', ATK_TGT_SINGLE),
  'Newspaper': ('throw-object', ATK_TGT_SINGLE),
  'Novel': ('throw-object', ATK_TGT_SINGLE),
