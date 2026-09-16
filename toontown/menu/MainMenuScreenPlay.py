@@ -138,14 +138,13 @@ class MainMenuScreenPlay(MainMenuScreen):
         self.uiItems.append(self.changeName)
 
         pickAToonGui = loader.loadModel('phase_3/models/gui/tt_m_gui_pat_mainGui')
-        self.buttonBgs = [
-            pickAToonGui.find('**/tt_t_gui_pat_squareRed'),
-            pickAToonGui.find('**/tt_t_gui_pat_squareGreen'),
-            pickAToonGui.find('**/tt_t_gui_pat_squarePurple'),
-            pickAToonGui.find('**/tt_t_gui_pat_squareBlue'),
-            pickAToonGui.find('**/tt_t_gui_pat_squarePink'),
-            pickAToonGui.find('**/tt_t_gui_pat_squareYellow')
-        ]
+        self.buttonBgs = []
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squareRed'))
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squareGreen'))
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squarePurple'))
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squareBlue'))
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squarePink'))
+        self.buttonBgs.append(pickAToonGui.find('**/tt_t_gui_pat_squareYellow'))
 
         buttonIndex = []
         for av in self.avatarList:
@@ -164,37 +163,25 @@ class MainMenuScreenPlay(MainMenuScreen):
         base.cr.avChoice = self
 
     def setupButtons(self, av=None, position=0):
-        button = DirectButton(
-            relief=None,
-            image=self.buttonBgs[position],
-            image_scale=1,
-            image3_scale=1.2,
-            command=self.selectToon,
-            extraArgs=[position]
-        )
-        label = DirectLabel(
-            text=TTLocalizer.AvatarChoiceMakeAToon,
-            relief=None,
-            text_font=ToontownGlobals.getToonFont(),
-            text_scale=.1,
-            text_fg=(1, 1, 1, 1),
-            text_shadow=(0, 0, 0, 1),
-            activeState=1
-        )
+        button = DirectButton(relief=None, image=self.buttonBgs[position], image_scale=1, image3_scale=1.2,
+                              command=self.selectToon, extraArgs=[position])
+        label = DirectLabel(text=TTLocalizer.AvatarChoiceMakeAToon, relief=None,
+                            text_font=ToontownGlobals.getToonFont(), text_scale=.1, text_fg=(1, 1, 1, 1),
+                            text_shadow=(0, 0, 0, 1), activeState=1)
         button.reparentTo(self)
         label.reparentTo(button)
+
         button.setPos(MainMenuGlobals.TT_PLAY_AV_BOX_POSITIONS[position])
         button.setScale(.5)
-
         if av:
             headmod = ToonHead.ToonHead()
-            dna = ToonDNA.ToonDNA()
-            dna.makeFromNetString(av.dna)
-            headmod.setupHead(dna, forGui=1)
-            headmod.setPosHprScale(0, 5, -.1, 180, 0, 0, .24, .24, .24)
+            headmod.setupHead(ToonDNA.ToonDNA(av.dna), forGui=1)
+            headmod.setPosHprScale(0, 5, -0.1, 180, 0, 0, 0.24, 0.24, 0.24)
             headmod.reparentTo(button)
-            label.setBin('fixed', 1)
+
+            label.setBin('fixed', 1)  # Set z index for label to appear in front of model
             button.setBin('fixed', 0)
+
             headmod.startBlink()
             headmod.startLookAround()
             label['text'] = av.name
@@ -204,35 +191,25 @@ class MainMenuScreenPlay(MainMenuScreen):
             label['text_roll'] = self.TEXTTILT[position]
 
             trashcanGui = loader.loadModel('phase_3/models/gui/trashcan_gui')
-            deleteButton = DirectButton(
-                parent=button,
-                geom=(
-                    trashcanGui.find('**/TrashCan_CLSD'),
-                    trashcanGui.find('**/TrashCan_OPEN'),
-                    trashcanGui.find('**/TrashCan_RLVR')
-                ),
-                text=('', TTLocalizer.AvatarChoiceDelete, TTLocalizer.AvatarChoiceDelete, ''),
-                text_fg=(1, 1, 1, 1),
-                text_shadow=(0, 0, 0, 1),
-                text_scale=.15,
-                text_pos=(0, -.1),
-                relief=None,
-                scale=.5,
-                command=self.__handleDelete,
-                extraArgs=[position],
-                pos=(.2, 0, -.2)
-            )
-            self.deleteButtonList[position] = deleteButton
-            trashcanGui.removeNode()
+            deleteButton = DirectButton(parent=button,
+                                        geom=(trashcanGui.find('**/TrashCan_CLSD'),
+                                              trashcanGui.find('**/TrashCan_OPEN'),
+                                              trashcanGui.find('**/TrashCan_RLVR')),
+                                        text=('', TTLocalizer.AvatarChoiceDelete, TTLocalizer.AvatarChoiceDelete, ''),
+                                        text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1),
+                                        text_scale=0.15, text_pos=(0, -0.1), relief=None,
+                                        scale=.5, command=self.__handleDelete, extraArgs=[position], pos=(.2, 0, -.2))
+            self.deleteButtonList[position] = (deleteButton)
         else:
             label['text_scale'] = .135
-            label['text_pos'] = (-.01, .08)
+            label['text_pos'] = (-0.01, 0.08)
             label['text_shadow'] = (1, 1, 1, 1)
-            label['text_fg'] = (.498, 1, .921, 1)
+            label['text_fg'] = (0.498, 1, 0.921, 1)
             label['text_font'] = ToontownGlobals.getSignFont()
 
         button.bind(DGG.WITHIN, self.__setNameVisibility, [label, 0, button, .6])
         button.bind(DGG.WITHOUT, self.__setNameVisibility, [label, 1, button, .5])
+
         self.buttonList[position] = button
         self.buttonScales[position] = button.getScale()
         self.labelList[position] = label
@@ -444,11 +421,13 @@ class MainMenuScreenPlay(MainMenuScreen):
         if self.selectedToon != position:
             self.selectToon(position)
         av = [x for x in self.avatarList if x.position == position][0]
+        self.disableButtons()
 
         def doDelete(arg=None):
             if self.passwordEntry.get().lower() == TTLocalizer.AvatarChoiceDeleteConfirmUserTypes:
                 self.deleteWithPasswordFrame.destroy()
                 delDialog.cleanup()
+                self.enableButtons()
                 base.transitions.noFade()
                 messenger.send(self.doneEvent, [{'mode': 'delete', 'choice': self.selectedToon}])
             else:
@@ -456,11 +435,11 @@ class MainMenuScreenPlay(MainMenuScreen):
 
         def cancel(arg=None):
             self.deleteWithPasswordFrame.destroy()
-            delDialog.cleanup()
             base.transitions.noFade()
 
         def diagDone():
             if delDialog.doneStatus == 'ok':
+                delDialog.cleanup()
                 buttons = loader.loadModel('phase_3/models/gui/ttcc_gui_generalButtons')
                 buttons.flattenMedium()
                 try:
@@ -502,12 +481,15 @@ class MainMenuScreenPlay(MainMenuScreen):
                     parent=self.deleteWithPasswordFrame,
                     relief=None,
                     image=inputImage,
-                    scale=.064,
-                    pos=(-.14, 0, -.2),
+                    image_scale=(0.6, 1, 0.15),
+                    scale=0.6,
+                    pos=(-0.012, 0, -0.2),
                     width=4,
                     numLines=1,
                     focus=1,
                     cursorKeys=1,
+                    text_scale=0.11,
+                    text_pos=(-0.25, -0.03),
                     command=doDelete
                 )
                 self.passwordEntry.flattenMedium()
@@ -517,6 +499,7 @@ class MainMenuScreenPlay(MainMenuScreen):
                 gui.removeNode()
                 buttons.removeNode()
             else:
+                self.enableButtons()
                 delDialog.cleanup()
                 base.transitions.noFade()
 
