@@ -867,6 +867,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'MarketCrash':
         camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'MoneyTalks':
+        camTrack.append(defaultCamera())
     elif name == 'MumboJumbo':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'ParadigmShift':
@@ -937,6 +939,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Novel':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Newspaper':
+        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'TickingTimeBomb':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Tremor':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5),

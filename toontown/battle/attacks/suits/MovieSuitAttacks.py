@@ -111,6 +111,25 @@ def __makeCancelledNodePath():
     tnpath.setScale(1)
     return tntop
 
+
+def __makeMoneyTalksNodePath():
+    tn = TextNode('MoneyTalks')
+    tn.setFont(loader.loadFont('phase_3/fonts/BettyNoir.ttf'))
+    tn.setText(random.choice(('bands', 'bread', 'bribe', 'bucks', 'cha-\x04ching', 'cheddar', 'clams', 'dough', 'fiver', 'grand', 'hush\nmoney', 'moolah', 'tenner')))
+    tn.setAlign(TextNode.ACenter)
+    tn.setShadow(0.1)
+    tn.setShadowColor(0.3, 0.3, 0.3, 0.5)
+    r = random.random() * 0.5 + 0.25
+    b = random.random() * 0.5 + 0.25
+    tn.setTextColor(r, 1.0, b, 0.5)
+    tntop = hidden.attachNewNode('MoneyTalksTop')
+    tnpath = tntop.attachNewNode(tn)
+    tnpath.setDepthWrite(False)
+    tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
+    tnpathback.setH(180.0)
+    return tntop
+
+
 def doDefault(attack):
     notify.debug('building suit attack in doDefault')
     attack['name'] = 'FingerWag'
@@ -544,6 +563,8 @@ def doSuitAttack(attack):
         suitTrack = doLiquidate(attack)
     elif name == 'MarketCrash':
         suitTrack = doMarketCrash(attack)
+    elif name == 'MoneyTalks':
+        suitTrack = doMoneyTalks(attack)
     elif name == 'MumboJumbo':
         suitTrack = doMumboJumbo(attack)
     elif name == 'ParadigmShift':
@@ -609,6 +630,8 @@ def doSuitAttack(attack):
         suitTrack = doThrowBook(attack)
     elif name == 'Newspaper':
         suitTrack = doMarketCrash(attack)
+    elif name == 'TickingTimeBomb':
+        suitTrack = doTickingTimeBomb(attack)
     elif name == 'Tremor':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doTremor(attack))
@@ -5262,28 +5285,42 @@ def doCloseTheLoop(attack):
         soundTrack = Parallel(getSoundTrack('ttr_s_ene_bat_closeTheLoopMiss.ogg', delay=0, node=suit))
     return Parallel(suitTrack, toonTracks, propTrack, partTrack1, partTrack2, soundTrack)
 
-def doMoneyTalks(attack):
+
+def doMoneyTalks(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('moneyTalksRight')
-    particleEffect2 = BattleParticles.createParticleEffect('moneyTalksLeft')
-    BattleParticles.setEffectTexture(particleEffect, 'doubletalk-double', color=Vec4(0, 1.0, 0.0, 1))
-    BattleParticles.setEffectTexture(particleEffect2, 'doubletalk-good', color=Vec4(0, 1.0, 0.0, 1))
-    suitType = getSuitBodyType(attack['suitName'])
-    partDelay = 2.25
-    damageDelay = 2.0
-    dodgeDelay = 2.25
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    partTrack = getPartTrack(particleEffect, partDelay, 2.5, [particleEffect, suit, 0], softStop=-1)
-    partTrack2 = getPartTrack(particleEffect2, partDelay, 2.5, [particleEffect2, suit, 0], softStop=-1)
-    damageAnims = [['duck',
-      0.01,
-      0.4,
-      1.05], ['cringe', 1e-06, 0.8]]
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=[['duck', 0.01, 1.4]], showMissedExtraTime=0.9, showDamageExtraTime=0.8)
-    soundTrack = getSoundTrack('SA_doubletalk.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, toonTrack, partTrack, partTrack2, soundTrack)
+    targets: list[dict] = attack['target']
+    hitAtleastOneToon: bool = False
+    for t in targets:
+        if t['hp'] > 0:
+            hitAtleastOneToon = True
+
+    numWords: int = 25
+    wordDelay: float = 3.7
+    suitTrack: Sequence = getSuitAnimTrack(attack)
+    wordTracks: Parallel = Parallel()
+    for i in range(numWords):
+        word = __makeMoneyTalksNodePath()
+        x = random.random() * 14.0 - 7.0
+        y = random.random() * 2.0 + 0.5
+        z = random.random() * 2.0 + 4.0
+        wordTracks.append(Sequence(
+            Wait(0.5 + i * 0.1),
+            Func(word.reparentTo, battle),
+            Func(word.setPosHpr, x, y, z, 0.0, 0.0, 0.0),
+            LerpScaleInterval(word, 0.5, 0.6, startScale=0.01, blendType='easeOut'),
+            Wait(wordDelay - (1.0 + i * 0.1)),
+            ParallelEndTogether(
+                LerpFunctionInterval(word.setY, 1.0, y, y - 9.0),
+                LerpFunctionInterval(word.setAlphaScale, 0.3, 1.0, 0.0)
+            ),
+            Func(MovieUtil.removeProp, word)
+        ))
+
+    dodgeAnims = [['duck', 0.01, 1.4]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=4.4, damageAnimNames=['conked'], dodgeDelay=3.7, splicedDodgeAnims=dodgeAnims)
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon else 'Miss'}.ogg", node=suit)
+    return Parallel(suitTrack, wordTracks, toonTracks, soundTrack)
 
 
 def doDoubleTalk(attack):
@@ -5913,6 +5950,82 @@ def doSchmooze(attack):
     soundTrack = getSoundTrack('SA_schmooze.ogg', delay=damageDelay, node=suit)
     toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.9, showDamageExtraTime=1.1)
     return Parallel(suitTrack, toonTrack, upperPartTracks, lowerPartTracks, soundTrack)
+
+
+def doTickingTimeBomb(attack: dict) -> MetaInterval:
+    suit = attack['suit']
+    battle = attack['battle']
+    targets: list[dict] = attack['target']
+    propDelay: float = 0.5
+    scaleUpTime: float = 0.5
+    suitDelay: float = 1.5
+    throwDuration: float = 0.3
+    totalDelay: float = propDelay + scaleUpTime + suitDelay + throwDuration
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.25)
+    bombTracks = Parallel()
+    explosionTracks = ()
+
+    def changeColor(parts) -> None:
+        for partNum in range(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            nextPart.setColorScale(Vec4(0.0, 0.0, 0.0, 1.0))
+
+
+    def resetColor(parts) -> None:
+        for partNum in range(0, parts.getNumPaths()):
+            nextPart = parts.getPath(partNum)
+            nextPart.clearColorScale()
+
+    colorTracks = ()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        bomb = globalPropPool.getProp('tnt')
+        bomb.pose('tnt', bomb.getNumFrames('tnt') - 1) # bomb.find('**/joint_fuse').hide() does not appear to work.
+        clock = globalPropPool.getProp('clock')
+        clock.reparentTo(bomb)
+        clock.setPosHprScale(0.45, 0.1, 0.43, 270.0, 5.0, 263.0, 0.1, 0.1, 0.1)
+        hourHand = clock.find('**/hour_hand')
+        minuteHand = clock.find('**/minute_hand')
+        hourHand.setHpr(VBase3(0.0, 0.0, (totalDelay - propDelay) * -30.0))
+        minuteHand.setHpr(VBase3(0.0, 0.0, (totalDelay - propDelay) * -360.0))
+        posPoints = [Point3(-0.6, 0.0, -0.3), VBase3(350.0, 0.0, 90.0)]
+        bombTrack = getPropAppearTrack(bomb, suit.getRightHand(), posPoints, propDelay, scaleUpPoint=Point3(1.0), scaleUpTime=scaleUpTime)
+        bombTracks.append(Parallel(
+            LerpHprInterval(minuteHand, totalDelay - propDelay, VBase3(0.0, 0.0, 0.0)),
+            LerpHprInterval(hourHand, totalDelay - propDelay, VBase3(0.0, 0.0, 0.0))
+        ))
+        bombTrack.append(Wait(suitDelay))
+        hitPoint = __toonTorsoPoint(toon)
+        missPoint = __toonMissBehindPoint(toon)
+        bombTrack.append(getPropThrowTrack(attack, bomb, hitPoints=[hitPoint], missPoints=[missPoint], hitDuration=throwDuration, missDuration=throwDuration))
+        bombTracks.append(bombTrack)
+        explosionTracks += (Sequence(
+            Wait(totalDelay),
+            Func(base.playSfx, globalBattleSoundCache.getSound('ENC_cogfall_apart.ogg'), node=toon),
+            MovieUtil.createKapowExplosionTrack(render, explosionPoint=hitPoint if dmg > 0 else missPoint)
+        ),)
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            torsoParts = toon.getTorsoParts()
+            legsParts = toon.getLegsParts()
+            colorTrack = Sequence(
+                Wait(totalDelay),
+                Func(battle.movie.needRestoreColor),
+                Func(changeColor, headParts),
+                Func(changeColor, torsoParts),
+                Func(changeColor, legsParts),
+                Wait(2.2),
+                Func(resetColor, headParts),
+                Func(resetColor, torsoParts),
+                Func(resetColor, legsParts),
+                Func(battle.movie.clearRestoreColor)
+            )
+            colorTracks += (colorTrack,)
+
+    toonTracks: Parallel = getToonTracks(attack, totalDelay, ['slip-backward'], 1.9, ['sidestep'])
+    soundTrack: Sequence = getSoundTrack('General_device_appear.ogg', totalDelay - throwDuration, node=suit)
+    return Parallel(suitTrack, bombTracks, *explosionTracks, *colorTracks, toonTracks, soundTrack)
 
 
 def doQuake(attack):

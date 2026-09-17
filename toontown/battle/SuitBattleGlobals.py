@@ -7119,6 +7119,7 @@ SuitAttacks = {
  'Legalese': ('speak', ATK_TGT_SINGLE),
  'Liquidate': ('magic1', ATK_TGT_SINGLE),
  'MarketCrash': ('throw-object', ATK_TGT_SINGLE),
+ 'MoneyTalks': ('speak', ATK_TGT_GROUP),
  'MoneyTrip': ('magic3', ATK_TGT_GROUP),  # Synergy
  'MysteriousDisappearance': ('throw-paper', ATK_TGT_SINGLE),
  'MudSling': ('throw-object', ATK_TGT_SINGLE),
@@ -7162,6 +7163,7 @@ SuitAttacks = {
  'Tabulate': ('calculator', ATK_TGT_SINGLE),
  'TeeOff': ('golf-club-swing', ATK_TGT_SINGLE),
  'ThrowBook': ('throw-object', ATK_TGT_SINGLE), # May be unused
+ 'TickingTimeBomb': ('throw-object', ATK_TGT_SINGLE),
  'Tremor': ('stomp', ATK_TGT_GROUP),
  'VersionControl': ('magic2', ATK_TGT_GROUP),
  'VoodooMagic': ('pickpocket', ATK_TGT_SINGLE),
