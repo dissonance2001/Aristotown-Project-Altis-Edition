@@ -2699,6 +2699,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.trackBars[trackIndex]['range'] = nextExp
             self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryGuestExp
         elif curExp >= regMaxSkill:
+            self.trackBars[trackIndex].hide()
             self.trackBars[trackIndex]['range'] = UberSkill
             self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryUberTrackExp % {'nextExp': MaxSkill - curExp}
         else:
