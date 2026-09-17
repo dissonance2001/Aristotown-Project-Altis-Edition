@@ -885,14 +885,19 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
 
     def enterFishing(self):
         base.localAvatar.b_setAnimState('neutral', 1)
+        if getattr(base.localAvatar, 'sprinting', False):
+            base.localAvatar.sprintToggled = False
+            base.localAvatar.stopSprint(fromFunc=True)
         self.accept('teleportQuery', self.handleTeleportQuery)
         base.localAvatar.setTeleportAvailable(1)
         base.localAvatar.laffMeter.start()
+        base.camLens.setMinFov(settings['fieldofview'] / (4. / 3.))
 
     def exitFishing(self):
         base.localAvatar.setTeleportAvailable(0)
         self.ignore('teleportQuery')
         base.localAvatar.laffMeter.stop()
+        base.camLens.setMinFov(settings['fieldofview'] / (4. / 3.))
 
     def enterBanking(self):
         base.localAvatar.b_setAnimState('neutral', 1)
