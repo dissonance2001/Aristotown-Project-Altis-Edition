@@ -103,7 +103,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         # InventoryManager whenever this toon's inventory is (re)received. See
         # setEquippedItems/getEquippedItems below.
         self.equippedItems = []
-        self._equippedItemsPending = False
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
         self.cogIndex = -1
@@ -243,15 +242,43 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.equippedItems = equippedItems
         else:
             self.equippedItems = InventoryItem.fromStructList(equippedItems)
-
-        torso = self.getPart('torso')
-        if torso is None or torso.isEmpty():
-            self._equippedItemsPending = True
-        else:
-            self.setToonEquippedItems(self.equippedItems)
-            self._equippedItemsPending = False
-
         messenger.send(f'EquippedInventorySet-{self.doId}')
+        self.handlePostEquippedItemsSet()
+
+    def handlePostEquippedItemsSet(self):
+        from toontown.inventory.enums.ItemEnums import (
+            ItemType, ClothingTopItemType, ClothingBottomItemType
+        )
+        from toontown.inventory.base.InventoryItem import InventoryItem
+
+        equippedClothingBottoms = self.getEquippedItemsOfType(ItemType.Cosmetic_Clothing_Bottom)
+        equippedClothingBottom = (
+            equippedClothingBottoms[0]
+            if equippedClothingBottoms
+            else InventoryItem.fromSubtype(ClothingBottomItemType.ShortswithBelt)
+        )
+
+        equippedClothingTops = self.getEquippedItemsOfType(ItemType.Cosmetic_Clothing_Top)
+        equippedClothingTop = (
+            equippedClothingTops[0]
+            if equippedClothingTops
+            else InventoryItem.fromSubtype(ClothingTopItemType.Shirt_Desat_Classic_Plain)
+        )
+
+        accessoryTypes = [
+            ItemType.Cosmetic_Hat,
+            ItemType.Cosmetic_Glasses,
+            ItemType.Cosmetic_Backpack,
+            ItemType.Cosmetic_Shoes,
+            ItemType.Cosmetic_Neck,
+        ]
+        equippedAccessories = [
+            item
+            for itemType in accessoryTypes
+            for item in self.getEquippedItemsOfType(itemType)
+        ]
+
+        self.setToonEquippedItems([equippedClothingBottom, equippedClothingTop] + equippedAccessories)
 
     def getEquippedItems(self):
         return self.equippedItems
@@ -941,9 +968,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setDNAString(self, dnaString):
         Toon.Toon.setDNAString(self, dnaString)
-        if self._equippedItemsPending:
-            self.setToonEquippedItems(self.equippedItems)
-            self._equippedItemsPending = False
 
     def setDNA(self, dna):
         if base.cr.newsManager:

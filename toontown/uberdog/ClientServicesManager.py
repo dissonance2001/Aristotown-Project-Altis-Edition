@@ -7,6 +7,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobal import DistributedObjectGlobal
 from pandac.PandaModules import *
 from otp.distributed.PotentialAvatar import PotentialAvatar
+from toontown.inventory.PotentialAvatarInventory import unpackPotentialAvatarDNA
 from otp.otpbase import OTPGlobals
 from toontown.chat.ChatGlobals import WTSystem
 from toontown.chat.WhisperPopup import WhisperPopup
@@ -49,6 +50,7 @@ class ClientServicesManager(DistributedObjectGlobal):
     def setAvatars(self, avatars):
         avList = []
         for avNum, avName, avDNA, avPosition, nameState, hp, maxHp, hat, glasses, backpack, shoes in avatars:
+            avDNA, equippedItems = unpackPotentialAvatarDNA(avDNA)
             nameOpen = int(nameState == 1)
             names = [avName, '', '', '']
             if nameState == 2: # PENDING
@@ -57,7 +59,9 @@ class ClientServicesManager(DistributedObjectGlobal):
                 names[2] = avName
             elif nameState == 4: # REJECTED
                 names[3] = avName
-            avList.append(PotentialAvatar(avNum, names, avDNA, avPosition, nameOpen, hp = hp, maxHp = maxHp, hat = hat, glasses = glasses, backpack = backpack, shoes = shoes))
+            av = PotentialAvatar(avNum, names, avDNA, avPosition, nameOpen, hp = hp, maxHp = maxHp, hat = hat, glasses = glasses, backpack = backpack, shoes = shoes)
+            av.equippedItems = equippedItems
+            avList.append(av)
 
         self.cr.handleAvatarsList(avList)
 

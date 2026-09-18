@@ -255,6 +255,8 @@ class PickAToon(DirectObject):
                 self.toon.setName(av.name)
                 self.changeName.hide()
             self.toon.setDNAString(dna)
+            if getattr(av, 'equippedItems', None):
+                self.toon.setToonEquippedItems(av.equippedItems)
             self.laffMeter = LaffMeter.LaffMeter(ToonDNA.ToonDNA(dna), av.hp, av.maxHp)
             self.laffMeter.set_pos(-.6, 0, -.5)
             self.laffMeter.reparent_to(self.patNode2d)

@@ -3150,7 +3150,9 @@ class Toon(Avatar.Avatar, ToonHead):
         if hasattr(self, 'isDisguised'):
             if self.isDisguised:
                 return
-        
+
+        self.clearAccessories()
+
         if self.style:
             self.updateToonDNA(dna)
         else:
@@ -3158,6 +3160,8 @@ class Toon(Avatar.Avatar, ToonHead):
             self.generateToon()
             self.initializeDropShadow()
             self.initializeNametag3d()
+
+        self.regenerateAccessories()
 
     def parentToonParts(self):
         if self.hasLOD():

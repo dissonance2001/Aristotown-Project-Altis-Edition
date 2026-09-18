@@ -105,10 +105,19 @@ class ToonAccessory(AsyncDirectObject):
     def _attachAccessory(self):
         """Attaches the accessory to the toon"""
         itemDef = self.item.getItemDefinition()
-        for partNode in self.toon.findAllMatches(itemDef.getToonAttachNode()):
-            accNode = partNode.attachNewNode('hatNode')
-            self.accessoryNodes.append(accNode)
-            self.accessoryGeom.instanceTo(accNode)
+        attachNode = itemDef.getToonAttachNode()
+        if self.toon.hasLOD():
+            for lodName in self.toon.getLODNames():
+                lodRoot = self.toon.getLOD(lodName)
+                for partNode in lodRoot.findAllMatches(attachNode):
+                    accNode = partNode.attachNewNode('hatNode')
+                    self.accessoryNodes.append(accNode)
+                    self.accessoryGeom.instanceTo(accNode)
+        else:
+            for partNode in self.toon.findAllMatches(attachNode):
+                accNode = partNode.attachNewNode('hatNode')
+                self.accessoryNodes.append(accNode)
+                self.accessoryGeom.instanceTo(accNode)
 
     def accessoryIgnoreEffects(self):
         # Do nothing if the following effects are ON

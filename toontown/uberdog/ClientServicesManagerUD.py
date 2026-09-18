@@ -1,3 +1,4 @@
+from toontown.inventory.PotentialAvatarInventory import packPotentialAvatarDNA
 import dbm
 import base64
 import hashlib
@@ -594,13 +595,15 @@ class GetAvatarsFSM(AvatarOperationFSM):
             elif wishNameState == 'REJECTED':
                 nameState = 4
 
-            # NOTE: setHat/setGlasses/setBackpack/setShoes were removed as DB fields from
-            # DistributedToon as part of the hammerspace migration, so they no longer appear
-            # in the queried fields dict. Falling back to empty lists keeps the PotentialToon
-            # struct (which the client still expects) satisfied; the toon-selection preview
-            # just won't show old-style equipped cosmetics until it's wired up to read
-            # equipped hammerspace items instead.
-            potentialAvs.append([avId, name, fields['setDNAString'][0], index, nameState, fields['setHp'][0], fields['setMaxHp'][0], fields.get('setHat', []), fields.get('setGlasses', []), fields.get('setBackpack', []), fields.get('setShoes', [])])
+            avatarDNA = fields['setDNAString'][0]
+            try:
+                inventory = self.csm.air.inventoryDb.queryInventory(avId)
+                equippedItems = inventory.cache.getEquippedItems() if inventory else []
+                avatarDNA = packPotentialAvatarDNA(avatarDNA, equippedItems)
+            except Exception:
+                pass
+
+            potentialAvs.append([avId, name, avatarDNA, index, nameState, fields['setHp'][0], fields['setMaxHp'][0], fields.get('setHat', []), fields.get('setGlasses', []), fields.get('setBackpack', []), fields.get('setShoes', [])])
 
         self.csm.sendUpdateToAccountId(self.target, 'setAvatars', [potentialAvs])
         self.demand('Off')
