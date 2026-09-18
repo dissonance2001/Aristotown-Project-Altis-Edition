@@ -4325,14 +4325,17 @@ class Toon(Avatar.Avatar, ToonHead):
         shirtColor = itemDef.getColor(item)
         sleeveColor = itemDef.getSleeveColor(item)
 
-        thisPart = self.getPart('torso')
-        top = thisPart.find('**/torso-top')
-        top.setTexture(shirtTex, 1)
-        top.setColor(shirtColor)
-        sleeves = thisPart.find('**/sleeves')
-        sleeves.show()
-        sleeves.setTexture(sleeveTex, 1)
-        sleeves.setColor(sleeveColor)
+        for lodName in self.getLODNames():
+            thisPart = self.getPart('torso', lodName)
+            if not thisPart:
+                continue
+            top = thisPart.find('**/torso-top')
+            top.setTexture(shirtTex, 1)
+            top.setColor(shirtColor)
+            sleeves = thisPart.find('**/sleeves')
+            sleeves.show()
+            sleeves.setTexture(sleeveTex, 1)
+            sleeves.setColor(sleeveColor)
 
     def setBottomItem(self, item):
         """Sets a bottom item on the Toon (aka shorts/skirt)."""
@@ -4352,13 +4355,16 @@ class Toon(Avatar.Avatar, ToonHead):
         darkBottomColor = bottomColor * 0.5
         darkBottomColor.setW(1.0)
 
-        thisPart = self.getPart('torso')
-        bottoms = thisPart.findAllMatches('**/torso-bot')
-        for bottom in bottoms:
-            bottom.setTexture(bottomTex, 1)
-            bottom.setColor(bottomColor)
-        caps = thisPart.findAllMatches('**/torso-bot-cap')
-        caps.setColor(darkBottomColor)
+        for lodName in self.getLODNames():
+            thisPart = self.getPart('torso', lodName)
+            if not thisPart:
+                continue
+            bottoms = thisPart.findAllMatches('**/torso-bot')
+            for bottom in bottoms:
+                bottom.setTexture(bottomTex, 1)
+                bottom.setColor(bottomColor)
+            caps = thisPart.findAllMatches('**/torso-bot-cap')
+            caps.setColor(darkBottomColor)
 
         if swappedTorso:
             self.reapplyCheesyEffect(lerpTime=0.5)

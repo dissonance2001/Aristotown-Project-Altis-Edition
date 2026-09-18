@@ -73,6 +73,7 @@ class BackpackToonWidget(DirectFrame, Bounds):
         self.toonModel = Toon()
         self.toonModel.flattenStrong()
         self.toonModel.setDNAString(base.localAvatar.style.makeNetString())
+        self.toonModel.reparentTo(self.toonNode)
         self.__equippedItemsEvent = f'EquippedInventorySet-{base.localAvatar.doId}'
         self.accept(self.__equippedItemsEvent, self.__refreshEquippedItems)
         self.__refreshEquippedItems()
@@ -80,7 +81,6 @@ class BackpackToonWidget(DirectFrame, Bounds):
         self.toonModel.getGeomNode().setDepthTest(1)
         self.toonModel.getGeomNode().setTwoSided(True)
         self.toonModel.loop('neutral')
-        self.toonModel.reparentTo(self.toonNode)
 
         p1 = Point3()
         p2 = Point3()

@@ -301,6 +301,8 @@ class MainMenuScreenPlay(MainMenuScreen):
 
         self.toon.setPickable(0)
         self.toon.setDNAString(dnaString)
+        if getattr(av, 'equippedItems', None):
+            self.toon.setToonEquippedItems(av.equippedItems)
         try:
             self.toon.setHat(av.hat[0], av.hat[1], av.hat[2])
             self.toon.setGlasses(av.glasses[0], av.glasses[1], av.glasses[2])

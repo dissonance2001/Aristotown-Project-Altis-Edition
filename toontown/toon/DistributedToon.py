@@ -103,6 +103,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         # InventoryManager whenever this toon's inventory is (re)received. See
         # setEquippedItems/getEquippedItems below.
         self.equippedItems = []
+        self._equippedItemsPending = False
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
         self.cogIndex = -1
@@ -242,7 +243,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.equippedItems = equippedItems
         else:
             self.equippedItems = InventoryItem.fromStructList(equippedItems)
-        self.setToonEquippedItems(self.equippedItems)
+
+        torso = self.getPart('torso')
+        if torso is None or torso.isEmpty():
+            self._equippedItemsPending = True
+        else:
+            self.setToonEquippedItems(self.equippedItems)
+            self._equippedItemsPending = False
+
         messenger.send(f'EquippedInventorySet-{self.doId}')
 
     def getEquippedItems(self):
@@ -933,6 +941,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setDNAString(self, dnaString):
         Toon.Toon.setDNAString(self, dnaString)
+        if self._equippedItemsPending:
+            self.setToonEquippedItems(self.equippedItems)
+            self._equippedItemsPending = False
 
     def setDNA(self, dna):
         if base.cr.newsManager:

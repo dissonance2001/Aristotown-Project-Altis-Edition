@@ -35,12 +35,14 @@ from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
 from toontown.discord import DiscordManager
+from toontown.utils.asyncutil import AsyncRequestManager
 
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
     def __init__(self):
         OTPBase.OTPBase.__init__(self)
+        self.asyncRequestMgr = AsyncRequestManager
         self.discord = DiscordManager.DiscordManager()
         self.discord.start()
         # First, build a list of all possible resolutions:
