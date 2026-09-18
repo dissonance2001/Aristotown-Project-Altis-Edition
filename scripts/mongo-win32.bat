@@ -2,7 +2,8 @@
 title Project Altis Mongo
 mode con: cols=60 lines=20
 
-cd ../dependencies/astron
+cd /d "%~dp0"
 
-"mongo\Server\3.6\bin\mongod.exe" --dbpath mongo/astrondb-3.6
+"%~dp0..\dependencies\astron\mongo\Server\3.6\bin\mongod.exe" --dbpath "%~dp0..\dependencies\astron\databases\astrondb" --bind_ip 127.0.0.1 --port 27017
+
 pause

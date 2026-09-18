@@ -3,7 +3,8 @@ from direct.gui.DirectGui import DirectButton, DirectFrame, DirectSlider, Direct
 from direct.interval.IntervalGlobal import Sequence, Parallel, Wait, Func, LerpPosInterval, LerpColorScaleInterval
 from toontown.menu.MainMenuGlobals import colGlobals, rowStartingZ, rowSeparation, colCondensedGlobals, rowCondensedGlobals
 from toontown.settings import ToontownSettings
-
+from toontown.gui.EasyManagedButton import EasyManagedButton
+from toontown.gui.TTGui import ScalingButton, kwargsToOptionDefs
 
 descriptionFrameSize = (-0.275, 0.275, -0.125, 0.125)
 
@@ -351,11 +352,46 @@ class MainMenuButton(DirectButton):
         gui.removeNode()
 
 
-class GoodMainMenuButton(MainMenuButton):
+class GoodMainMenuButton(EasyManagedButton):
+
     def __init__(self, parent=aspect2d, **kw):
-        if 'image_color' not in kw:
-            kw['image_color'] = Vec4(0.299805, 0.614258, 1, 1)
-        MainMenuButton.__init__(self, parent, **kw)
+        gui = loader.loadModel("phase_3/models/gui/ttcc_gs_menu_buttons")
+        optiondefs = kwargsToOptionDefs(
+            relief=None,
+            image=(
+                 gui.find('**/menubtn'), gui.find('**/menubtn-press'),
+                 gui.find('**/menubtn'), gui.find('**/menubtn-press'),
+            ),
+            image_scale=(.3 * 1.4, .15, .15),
+            image_color=Vec4(0.299805, 0.614258, 1, 1),
+            text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1),
+            text_scale=0.05,
+            text_pos=(0, -0.02),
+            hoverScale=1.03,
+
+            pos=(0, 0, 0),
+            scale=1.0,
+
+            easyHeight=-0.15,
+            easyWidth=0.42,
+        )
+        self.defineoptions(kw, optiondefs)
+        super().__init__(parent)
+        self.initialiseoptions(GoodMainMenuButton)
+        scale = self['scale'] or 1.0
+        if type(scale) in (int, float):
+            self.bind(DGG.ENTER, hoverButton, [self, scale * self['hoverScale']])
+        else:
+            self.bind(DGG.ENTER, hoverButton, [self, Vec3(*scale) * self['hoverScale']])
+        self.bind(DGG.EXIT, hoverButton, [self, self['scale']])
+        gui.removeNode()
+
+    def press(self):
+        command = self['command']
+        extraArgs = self['extraArgs'] or []
+        if command:
+            command(*extraArgs)
 
 
 class BaseOption(DirectButton):
