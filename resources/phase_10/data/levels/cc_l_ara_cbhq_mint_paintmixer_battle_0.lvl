@@ -1,0 +1,219 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE69a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10169": {
+            "type": "gagBarrel",
+            "name": "gag",
+            "comment": "",
+            "parentEntId": 10170,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    1.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "gagLevel": 5,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 6
+        },
+        "10171": {
+            "type": "gagBarrel",
+            "name": "gagLeft",
+            "comment": "",
+            "parentEntId": 10170,
+            "pos": {
+                "LPoint3f": [
+                    -3.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "gagLevel": 5,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 6
+        },
+        "10172": {
+            "type": "gagBarrel",
+            "name": "gagRight",
+            "comment": "",
+            "parentEntId": 10170,
+            "pos": {
+                "LPoint3f": [
+                    3.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    9.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "gagLevel": 5,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 6
+        },
+        "10177": {
+            "type": "healBarrel",
+            "name": "healLeft",
+            "comment": "",
+            "parentEntId": 10170,
+            "pos": {
+                "LPoint3f": [
+                    -1.5,
+                    0.0,
+                    4.599999904632568
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 6
+        },
+        "10178": {
+            "type": "healBarrel",
+            "name": "healRight",
+            "comment": "",
+            "parentEntId": 10170,
+            "pos": {
+                "LPoint3f": [
+                    1.5,
+                    0.0,
+                    4.599999904632568
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 6
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10170": {
+            "type": "nodepath",
+            "name": "barrels",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    24.660999298095703,
+                    0.05700000002980232,
+                    0.02500000037252903
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

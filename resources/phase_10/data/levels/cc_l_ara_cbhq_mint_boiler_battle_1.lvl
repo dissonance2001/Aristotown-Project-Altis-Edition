@@ -1,0 +1,1239 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE08a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10006": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10005,
+            "pos": {
+                "LPoint3f": [
+                    -23.895578384399414,
+                    -29.891464233398438,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 5,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 7
+        },
+        "10007": {
+            "type": "healBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10005,
+            "pos": {
+                "LPoint3f": [
+                    -7.710000038146973,
+                    6.038173675537109,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 8
+        },
+        "10001": {
+            "type": "locator",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "searchPath": "**/EXIT"
+        },
+        "10014": {
+            "type": "mintProduct",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10015": {
+            "type": "mintProduct",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    9.736055374145508,
+                    0.9354305267333984,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10016": {
+            "type": "mintProduct",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    -11.056411743164062,
+                    0.21302412450313568,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10028": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10027,
+            "pos": {
+                "LPoint3f": [
+                    12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10029": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10030": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10027,
+            "pos": {
+                "LPoint3f": [
+                    -12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10031": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10030,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10033": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10034": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10033,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10035": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    24.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10036": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10037": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    -24.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10038": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10040": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10039,
+            "pos": {
+                "LPoint3f": [
+                    12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10041": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10040,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10044": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10039,
+            "pos": {
+                "LPoint3f": [
+                    -12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10045": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10044,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10046": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10039,
+            "pos": {
+                "LPoint3f": [
+                    -36.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10047": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10049": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10050": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    24.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10051": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    -24.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10052": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10049,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10053": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10050,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10054": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10051,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10056": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10055,
+            "pos": {
+                "LPoint3f": [
+                    12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10057": {
+            "type": "mintShelf",
+            "name": "shelfPair",
+            "comment": "",
+            "parentEntId": 10055,
+            "pos": {
+                "LPoint3f": [
+                    -12.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "mintId": 12500
+        },
+        "10058": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10056,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10059": {
+            "type": "mintShelf",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10057,
+            "pos": {
+                "LPoint3f": [
+                    0.16791892051696777,
+                    6.800000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10002": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/VaultDoorCover.bam"
+        },
+        "10011": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    34.303741455078125,
+                    6.250694274902344,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    306.8699035644531,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2287901639938354,
+                    1.2287901639938354,
+                    1.2287901639938354
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/boiler_A2.bam"
+        },
+        "10012": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    -37.59638214111328,
+                    0.6801338195800781,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    45.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.7612518668174744,
+                    0.7612518668174744,
+                    0.7612518668174744
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_D1.bam"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    68.93225860595703,
+                    9.971467018127441
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10021": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    50.5890007019043,
+                    7.38700008392334,
+                    0.02500000037252903
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10003": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10004": {
+            "type": "nodepath",
+            "name": "lower",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10005": {
+            "type": "nodepath",
+            "name": "barrels",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10008": {
+            "type": "nodepath",
+            "name": "upperLevel",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    65.49675750732422,
+                    9.994510650634766
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10013": {
+            "type": "nodepath",
+            "name": "product",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    17.81999969482422,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10023": {
+            "type": "nodepath",
+            "name": "shelves",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    1.8941036462783813,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10027": {
+            "type": "nodepath",
+            "name": "row1",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -32.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10032": {
+            "type": "nodepath",
+            "name": "row2",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -14.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10039": {
+            "type": "nodepath",
+            "name": "row3",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    4.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10048": {
+            "type": "nodepath",
+            "name": "row4",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    22.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10055": {
+            "type": "nodepath",
+            "name": "row5",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    40.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

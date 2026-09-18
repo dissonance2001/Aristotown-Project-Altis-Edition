@@ -1,0 +1,575 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone22a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "100030": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -0.12431800365447998,
+                    -27.164400100708008,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 25.0
+        },
+        "100000": {
+            "type": "elevatorMarker",
+            "name": "elevator",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.20000000298023224,
+                    -31.799999237060547,
+                    -0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "modelPath": 0
+        },
+        "100001": {
+            "type": "model",
+            "name": "bookshelf",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -30.3882999420166,
+                    13.556099891662598
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.626199960708618,
+                    2.626199960708618,
+                    2.626199960708618
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfB"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10001": {
+            "type": "nodepath",
+            "name": "chairs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "11000": {
+            "type": "chair",
+            "name": "chair 1",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    14.529999732971191,
+                    15.880000114440918,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -45.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11001": {
+            "type": "chair",
+            "name": "couch chair 1",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    21.459999084472656,
+                    3.299999952316284,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11002": {
+            "type": "chair",
+            "name": "couch chair 1",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    21.459999084472656,
+                    -1.100000023841858,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11003": {
+            "type": "chair",
+            "name": "couch chair 1",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    21.459999084472656,
+                    -5.300000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11004": {
+            "type": "chair",
+            "name": "chair 2",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    15.229999542236328,
+                    -17.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -135.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11005": {
+            "type": "chair",
+            "name": "chair 3",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -14.399999618530273,
+                    -16.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    135.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11006": {
+            "type": "chair",
+            "name": "couch chair 2",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -20.959999084472656,
+                    -5.300000190734863,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11007": {
+            "type": "chair",
+            "name": "couch chair 2",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -20.959999084472656,
+                    -1.100000023841858,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11008": {
+            "type": "chair",
+            "name": "couch chair 2",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -20.959999084472656,
+                    3.299999952316284,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "11009": {
+            "type": "chair",
+            "name": "chair 4",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -15.949999809265137,
+                    16.739999771118164,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    45.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

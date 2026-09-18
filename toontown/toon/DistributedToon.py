@@ -99,6 +99,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.track = None
         self.effect = None
         self.maxCarry = 0
+        # Hammerspace: list of currently-equipped InventoryItems, kept in sync by
+        # InventoryManager whenever this toon's inventory is (re)received. See
+        # setEquippedItems/getEquippedItems below.
+        self.equippedItems = []
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
         self.cogIndex = -1
@@ -219,6 +223,48 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
         self.kudosBoardGui = None
+
+    """
+    Hammerspace equipped-items state.
+
+    Populated by InventoryManager whenever this toon's inventory is (re)received
+    (see toontown/inventory/InventoryManager.py). Drives cosmetic rendering via
+    Toon.setToonEquippedItems() (clothing top/bottom, hat, glasses, backpack,
+    neck, shoes) and lets the inventory GUI (ItemFrame etc.) check whether an
+    item is currently equipped.
+    """
+
+    def setEquippedItems(self, equippedItems):
+        from toontown.inventory.base.InventoryItem import InventoryItem
+        if not equippedItems:
+            self.equippedItems = []
+        elif isinstance(equippedItems[0], InventoryItem):
+            self.equippedItems = equippedItems
+        else:
+            self.equippedItems = InventoryItem.fromStructList(equippedItems)
+        self.setToonEquippedItems(self.equippedItems)
+        messenger.send(f'EquippedInventorySet-{self.doId}')
+
+    def getEquippedItems(self):
+        return self.equippedItems
+
+    def getEquippedItemsOfType(self, itemType):
+        from toontown.inventory.base.InventoryItem import InventoryItem
+        return InventoryItem.findItemTypesFromItemList(itemType, self.getEquippedItems())
+
+    def getHammerspace(self):
+        """Returns this (local) toon's own hammerspace Inventory, or None if not yet loaded."""
+        return base.cr.inventoryManager.getInventory()
+
+    def d_requestEquipItems(self, items):
+        """Asks the AI to equip the given hammerspace items."""
+        from toontown.inventory.base.InventoryItem import InventoryItem
+        self.sendUpdate('requestEquipItems', [InventoryItem.toStructList(items)])
+
+    def d_requestUnequipItems(self, items):
+        """Asks the AI to unequip the given hammerspace items."""
+        from toontown.inventory.base.InventoryItem import InventoryItem
+        self.sendUpdate('requestUnequipItems', [InventoryItem.toStructList(items)])
 
     def checkCooldownRoundCountdown(self):
         if self.damageInterval:

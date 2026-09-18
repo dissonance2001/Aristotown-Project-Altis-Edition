@@ -27,12 +27,48 @@ from otp.distributed import CentralLogger/AI/UD
 from otp.web import SettingsMgr/AI/UD
 from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
+from toontown.inventory import InventoryManager/AI
+from toontown.inventory.distributed import DistributedInventory/AI
 
 typedef uint8 bool;
 
 typedef uint32 DoId;
 
 typedef DoId DoIdList[];
+typedef uint16 ShopItem;
+
+// Hammerspace / Inventory //
+
+struct AstronUUID {
+    int64 intA;
+    int64 intB;
+    int64 intC;
+    int64 intD;
+};
+
+struct AstronDict {
+  blob data;
+};
+
+struct InventoryItem {
+  uint32 itemType;
+  uint32 itemSubtype;
+  uint64 quantity;
+  AstronDict attributes;
+  AstronUUID itemId;
+};
+
+struct Inventory {
+  uint16 inventoryType;
+  AstronUUID equippedItemIDs[];
+  InventoryItem items[];
+  AstronDict attributes;
+};
+
+struct InventoryDelta {
+  uint8 action;
+  InventoryItem item;
+};
 
 struct AvatarPendingDel {
   uint32 Avatar;
@@ -64,6 +100,48 @@ dclass DistributedObject {
   execCommand(string command, DoId magicWordMgr,
               DoId avatar, uint32 zoneId);
   broadcastMessage() broadcast;
+};
+
+dclass InventoryManager : DistributedObject {
+  /*
+   * Client Inventory State Management
+   * - These protocols handle the inventory state management
+   *   for sending clients their inventory data.
+   * sendInventoryDelta (AI -> Client)
+   * - Sends a list of inventory deltas to a client.
+   * askInventoryUpdate (Client -> AI)
+   * - Asks for a full inventory update.
+   * - This protocol is ratelimited.
+   * setAvatarInventory (AI -> Client)
+   * - Sets the avatar's full inventory.
+   */
+  sendInventoryDelta(InventoryDelta deltas[], uint64 inventoryHash);
+  askInventoryUpdate() clsend airecv;
+  setAvatarInventory(Inventory inventory, InventoryItem items[], uint16 segment, uint16 segments);
+
+  /*
+   * Debug Protocols
+   * - Used for testing on dev.
+   * debug_applyLocalDelta (Client -> AI)
+   * - Forces an InventoryDelta onto your local av.
+   * - Used in debugging only.
+   */
+  debug_applyLocalDelta(InventoryDelta) clsend airecv;
+};
+
+dclass DistributedInventory : DistributedObject {
+  // Client requests
+  CL_AI_requestInventory() clsend airecv;
+  CL_AI_requestAddItem(InventoryItem item) clsend airecv;
+  CL_AI_requestTakeItem(InventoryItem item) clsend airecv;
+  CL_AI_requestDeleteItem(InventoryItem item) clsend airecv;
+
+  // Server callbacks
+  AI_CL_updateInventory(Inventory inventory);
+  AI_CL_retrieveDeltas(InventoryDelta deltas[], uint64 inventoryHash);
+
+  // Required fields
+  setAccess(AstronDict dict) required broadcast ram;
 };
 
 dclass DistributedObjectGlobal : DistributedObject {
@@ -1041,20 +1119,10 @@ dclass DistributedToon : DistributedPlayer {
   setInterface(blob = []) required ownrecv db;
   setLastHood(uint32 = 0) required ownrecv broadcast db;
   setTutorialAck(uint8) required ownrecv db;
-  setMaxClothes(uint32 = 10) required ownrecv db;
-  setClothesTopsList(uint8[] = []) required ownrecv db;
-  setClothesBottomsList(uint8[] = []) required ownrecv db;
-  setMaxAccessories(uint32 = 0) required ownrecv db;
-  setHatList(uint8[] = []) required ownrecv db;
-  setGlassesList(uint8[] = []) required ownrecv db;
-  setBackpackList(uint8[] = []) required ownrecv db;
-  setShoesList(uint8[] = []) required ownrecv db;
-  setHat(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setGlasses(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setBackpack(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  setShoes(uint16 = 0, uint8 = 0, uint8 = 0) required broadcast db ownrecv;
-  requestSetClothing(blob) clsend airecv;
-  requestSetAccessories(uint16, uint8, uint8, uint16, uint8, uint8, uint16, uint8, uint8, uint16, uint8, uint8) clsend airecv;
+  // Hammerspace stuff (replaces legacy clothes/accessory list fields)
+  requestEquipItems(InventoryItem items[]) ownsend airecv;
+  requestUnequipItems(InventoryItem items[]) ownsend airecv;
+  setEquippedItems(InventoryItem equippedItems[] = []) required broadcast ram;
   setGardenSpecials(gardenSpecial [] = []) required ownrecv db airecv;
   setEarnedExperience(uint16[]) ownrecv;
   setTunnelIn(int16, int16/10, int16/10, int16/10, int16/100, int32/100) ownsend broadcast;
@@ -2627,10 +2695,6 @@ dclass DistributedNPCToonBase : DistributedNode {
   setPageNumber(int16, int8, int16) broadcast ram clsend;
   avatarEnter() airecv clsend;
   freeAvatar();
-  setHat(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setGlasses(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setBackpack(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
-  setShoes(uint16 = 0, uint8 = 0, uint8 = 0) broadcast ram;
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {
@@ -2663,9 +2727,12 @@ dclass DistributedNPCClerk : DistributedNPCToonBase {
 };
 
 dclass DistributedNPCTailor : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, int16) broadcast ram;
-  setDNA(blob, int8, uint8) airecv clsend;
-  setCustomerDNA(uint32, blob) broadcast ram;
+  // NOTE: replaced the old DNA-swap fields (setMovie/setDNA/setCustomerDNA)
+  // with Clash's generic NPC item-shop system.
+  requestItemPurchase(ShopItem shopItem) airecv clsend;
+  handleBuyResponse(uint8) ownrecv;
+  handleInteraction(uint8, uint8) broadcast;
+  toonInteracted(uint8) clsend airecv;
 };
 
 dclass DistributedNPCBlocker : DistributedNPCToonBase {

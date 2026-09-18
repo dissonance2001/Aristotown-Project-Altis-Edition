@@ -1,0 +1,1273 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone08a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10055": {
+            "type": "attribModifier",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10001,
+            "attribName": "modelPath",
+            "recursive": 1,
+            "typeName": "model",
+            "value": ""
+        },
+        "100023": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 10.0,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 90.0,
+            "strength": 25,
+            "velocity": 15
+        },
+        "100024": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100022,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 10.0,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 90.0,
+            "strength": 25,
+            "velocity": 15
+        },
+        "100000": {
+            "type": "model",
+            "name": "wall",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    51.420501708984375,
+                    -2.2981700897216797,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100002": {
+            "type": "model",
+            "name": "copy of wall",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    36.415000915527344,
+                    -2.299999952316284,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100005": {
+            "type": "model",
+            "name": "copy of wall (2)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    23.28529930114746,
+                    -0.37178298830986023,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100006": {
+            "type": "model",
+            "name": "copy of wall (3)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    23.28529930114746,
+                    -15.232600212097168,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100007": {
+            "type": "model",
+            "name": "copy of wall (4)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    23.28529930114746,
+                    -30.345800399780273,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100008": {
+            "type": "model",
+            "name": "copy of wall (5)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    8.384480476379395,
+                    29.612699508666992,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100009": {
+            "type": "model",
+            "name": "copy of wall (6)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    8.384480476379395,
+                    14.889399528503418,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100010": {
+            "type": "model",
+            "name": "copy of wall (7)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    8.384480476379395,
+                    -0.13527600467205048,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100011": {
+            "type": "model",
+            "name": "copy of wall (8)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -8.544440269470215,
+                    0.08282969892024994,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100012": {
+            "type": "model",
+            "name": "copy of wall (9)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -23.685400009155273,
+                    0.08282969892024994,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100013": {
+            "type": "model",
+            "name": "copy of wall (10)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    -45.2411003112793,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100014": {
+            "type": "model",
+            "name": "copy of wall (11)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    -30.55699920654297,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100015": {
+            "type": "model",
+            "name": "copy of wall (12)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    -15.612000465393066,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100016": {
+            "type": "model",
+            "name": "copy of wall (13)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    -0.4538930058479309,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100017": {
+            "type": "model",
+            "name": "copy of wall (14)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    14.668499946594238,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100018": {
+            "type": "model",
+            "name": "copy of wall (15)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -36.5,
+                    14.668499946594238,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "100019": {
+            "type": "model",
+            "name": "copy of wall (16)",
+            "comment": "",
+            "parentEntId": 100004,
+            "pos": {
+                "LPoint3f": [
+                    -21.585800170898438,
+                    14.668499946594238,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    2.0,
+                    1.25
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_wall_panel.bam"
+        },
+        "10001": {
+            "type": "nodepath",
+            "name": "crates",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2999999523162842,
+                    1.2999999523162842,
+                    1.6489200592041016
+                ]
+            }
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "rewardBarrels",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -0.7197340130805969,
+                    56.96910095214844,
+                    10.002099990844727
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    61.69919967651367,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10003": {
+            "type": "nodepath",
+            "name": "upperWall",
+            "comment": "TODO: replace with lines of shelves",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -20.32029914855957,
+                    52.65489959716797,
+                    9.908729553222656
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.114300012588501,
+                    1.114300012588501,
+                    1.114300012588501
+                ]
+            }
+        },
+        "10009": {
+            "type": "nodepath",
+            "name": "toGear0",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -26.55929946899414,
+                    31.856000900268555,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10011": {
+            "type": "nodepath",
+            "name": "toGear1",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    -25.884000778198242,
+                    13.67490005493164,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    41.63349914550781,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10023": {
+            "type": "nodepath",
+            "name": "leftWall",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10024": {
+            "type": "nodepath",
+            "name": "rightWall",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    -26.711200714111328,
+                    6.8598198890686035,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10028": {
+            "type": "nodepath",
+            "name": "lowerPuzzle",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10029": {
+            "type": "nodepath",
+            "name": "entranceWall",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10032": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10038": {
+            "type": "nodepath",
+            "name": "archStompers",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10040": {
+            "type": "nodepath",
+            "name": "backWall",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10044": {
+            "type": "nodepath",
+            "name": "gear",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    11.850000381469727,
+                    -11.380000114440918,
+                    12.527999877929688
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10046": {
+            "type": "nodepath",
+            "name": "supportedCrateBackWall",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    34.90449905395508,
+                    -34.05889892578125,
+                    -1.5168700218200684
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    63.434898376464844,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10051": {
+            "type": "nodepath",
+            "name": "supportedCrateEntrance",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    48.5077018737793,
+                    7.75915002822876,
+                    0.357897013425827
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10059": {
+            "type": "nodepath",
+            "name": "largeStack",
+            "comment": "",
+            "parentEntId": 10029,
+            "pos": {
+                "LPoint3f": [
+                    47.97999954223633,
+                    -16.979999542236328,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10061": {
+            "type": "nodepath",
+            "name": "lower",
+            "comment": "",
+            "parentEntId": 10059,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100001": {
+            "type": "nodepath",
+            "name": "trap1 cog node",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -54.428001403808594,
+                    -10.3100004196167,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100004": {
+            "type": "nodepath",
+            "name": "maze",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100021": {
+            "type": "nodepath",
+            "name": "Goon Parent",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100003": {
+            "type": "path",
+            "name": "test goon path",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -50.48080062866211,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "100020": {
+            "type": "path",
+            "name": "GoonPath1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "200013": {
+            "type": "healBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -64.33000183105469,
+                    -41.16999816894531,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 25,
+            "rewardPerGrabMax": 0
+        },
+        "200014": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -59.33000183105469,
+                    -41.16999816894531,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 6,
+            "gagLevelMax": 5,
+            "gagTrack": "random",
+            "rewardPerGrab": 4,
+            "rewardPerGrabMax": 6
+        },
+        "100025": {
+            "type": "path",
+            "name": "GoonPath1",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    45.0,
+                    -30.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 2.0
+        },
+        "100022": {
+            "type": "path",
+            "name": "GoonPath1",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    -30.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 2.0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

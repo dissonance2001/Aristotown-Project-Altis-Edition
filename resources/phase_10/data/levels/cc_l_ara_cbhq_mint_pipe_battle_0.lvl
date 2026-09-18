@@ -1,0 +1,342 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE13a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10001": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    135.90512084960938,
+                    -2.067227363586426,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 10.0
+        },
+        "10003": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -86.73509216308594,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.37820470333099365,
+                    2.941274881362915,
+                    2.808586835861206
+                ]
+            },
+            "cellId": 1,
+            "radius": 10
+        },
+        "10005": {
+            "type": "model",
+            "name": "farLeft",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    45.65029525756836,
+                    31.864765167236328,
+                    0.22889910638332367
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    333.4349365234375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10006": {
+            "type": "model",
+            "name": "farRight",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    50.05595779418945,
+                    -32.76097106933594,
+                    0.22889910638332367
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    206.56504821777344,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10008": {
+            "type": "model",
+            "name": "nearLeft",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    -47.96963119506836,
+                    31.864765167236328,
+                    0.22889910638332367
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    26.565052032470703,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_D1.bam"
+        },
+        "10009": {
+            "type": "model",
+            "name": "nearRight",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    -43.63874816894531,
+                    -36.88835525512695,
+                    0.22889910638332367
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    154.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_D1.bam"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    102.42070007324219,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "frontCogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -94.4453353881836,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10004": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10007": {
+            "type": "nodepath",
+            "name": "leftCogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    40.958465576171875,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10010": {
+            "type": "nodepath",
+            "name": "rightCogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -40.959999084472656,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

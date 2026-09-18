@@ -1,0 +1,608 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone7av2",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10007": {
+            "type": "attribModifier",
+            "name": "goonStrength",
+            "comment": "",
+            "parentEntId": 0,
+            "attribName": "strength",
+            "recursive": 1,
+            "typeName": "goon",
+            "value": "10"
+        },
+        "10002": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10001,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4.0
+        },
+        "10004": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10006": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10005,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10009": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10011": {
+            "type": "healBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10012,
+            "pos": {
+                "LPoint3f": [
+                    2.158991575241089,
+                    2.2961511611938477,
+                    5.459385395050049
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    331.1091003417969,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 8,
+            "rewardPerGrabMax": 0
+        },
+        "10012": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10010,
+            "pos": {
+                "LPoint3f": [
+                    20.936113357543945,
+                    13.86726188659668,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.9200000166893005,
+                    0.9200000166893005,
+                    0.9200000166893005
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/CBMetalCrate.bam"
+        },
+        "10013": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    57.02186965942383,
+                    5.150238990783691,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.6605172157287598,
+                    0.6605172157287598,
+                    0.6605172157287598
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10015": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -25.95987892150879,
+                    59.441162109375,
+                    9.735513687133789
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    274.0899963378906,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.537900447845459,
+                    1.537900447845459,
+                    1.537900447845459
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10016": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    33.3394889831543,
+                    -18.364303588867188,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.6600000262260437,
+                    0.6600000262260437,
+                    0.6600000262260437
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10017": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10018,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    169.6999969482422,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.9024696946144104,
+                    0.9024696946144104,
+                    0.9024696946144104
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_vacuum_pipes.bam"
+        },
+        "10020": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10018,
+            "pos": {
+                "LPoint3f": [
+                    -12.071434020996094,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    288.4349365234375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.9024696946144104,
+                    0.9024696946144104,
+                    0.9024696946144104
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_vacuum_pipes.bam"
+        },
+        "10022": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    -5.971791744232178,
+                    -60.31336212158203,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.869391143321991,
+                    0.869391143321991,
+                    0.869391143321991
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10010": {
+            "type": "nodepath",
+            "name": "healPuzzle",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    43.179630279541016,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10018": {
+            "type": "nodepath",
+            "name": "rightVertPipes",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    -16.453657150268555,
+                    -45.39817810058594,
+                    -8.399999618530273
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6499999761581421,
+                    0.6499999761581421,
+                    1.559999942779541
+                ]
+            }
+        },
+        "10021": {
+            "type": "nodepath",
+            "name": "rightPipes",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10001": {
+            "type": "path",
+            "name": "nearPace",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -59.73919677734375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 3,
+            "pathScale": 1.0
+        },
+        "10003": {
+            "type": "path",
+            "name": "bowtie",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -40.033687591552734,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 2,
+            "pathScale": 1.0
+        },
+        "10005": {
+            "type": "path",
+            "name": "bridgePace",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -8.806181907653809,
+                    -1.5122487545013428,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 3,
+            "pathScale": 1.0
+        },
+        "10008": {
+            "type": "path",
+            "name": "farPace",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    7.526582717895508,
+                    7.5624003410339355,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 3,
+            "pathScale": 1.0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

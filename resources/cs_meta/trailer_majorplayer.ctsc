@@ -1,0 +1,982 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [0.0, -8.61177, 5.26989], \"blendType\": \"easeInOut\", \"startPos\": [0, 0, 0], \"useStartPos\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "closeElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 26, \"delay\": 0, \"duration\": 0, \"colorScale\": [0.30913, 0.30913, 0.30592, 1.0], \"startColorScale\": [1.0, 1.0, 1.0, 1.0], \"useStartColorScale\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "functionCall",
+                "kwargs": "{\"functionIndex\": 0, \"delay\": 0, \"disable\": false, \"hasArgument\": false, \"argumentIndex\": null, \"returnsInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "Position Suits",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"pos\": [0.0, 0.0, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [-36.59175, 87.24726, 29.0], \"hpr\": [-94.16283, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [0.0, 3.57876, 0.0], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [-29.50073, 93.11691, 29.0], \"hpr\": [-123.08281, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "4": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [-19.6, 77.9396, 0.60616], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "5": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"pos\": [42.89485, 47.84547, 0.32285], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "6": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"pos\": [31.29771, 94.3422, 29.0], \"hpr\": [114.06201, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "7": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 10, \"delay\": 0, \"pos\": [-50.0, 18.706, 0.0], \"hpr\": [18.04736, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "8": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 11, \"delay\": 0, \"pos\": [34.42747, 134.50768, 5.1], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "9": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 12, \"delay\": 0, \"pos\": [28.68964, 112.76215, 5.1], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "10": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 13, \"delay\": 0, \"pos\": [-45.11617, 52.0902, 0.0], \"hpr\": [-136.04143, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "11": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 14, \"delay\": 0, \"pos\": [20.55, 65.81545, -0.04916], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "12": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 15, \"delay\": 0, \"pos\": [-0.0, 107.90457, 5.33], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "13": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 16, \"delay\": 0, \"pos\": [18.30623, 27.32725, 0.63938], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "14": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 17, \"delay\": 0, \"pos\": [33.38432, 85.99609, 29.0], \"hpr\": [102.49392, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "15": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 18, \"delay\": 0, \"pos\": [43.0708, 28.79568, 0.51944], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "16": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 19, \"delay\": 0, \"pos\": [27.47179, 23.83199, 0.46083], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "17": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 20, \"delay\": 0, \"pos\": [27.47181, 18.13919, 0.30268], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "18": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 21, \"delay\": 0, \"pos\": [24.426, 17.03707, -0.88462], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "19": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 22, \"delay\": 0, \"pos\": [19.16009, 16.46056, -0.62747], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "20": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 23, \"delay\": 0, \"pos\": [15.68202, 18.06987, 0.14375], \"hpr\": [-90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "21": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 24, \"delay\": 0, \"pos\": [38.4, 136.69272, 5.1], \"hpr\": [101.56796, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "22": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 25, \"delay\": 0, \"pos\": [38.4, 131.03226, 5.1], \"hpr\": [70.33437, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            }
+        }
+    },
+    {
+        "name": "Scene Start",
+        "time": 2.39,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "openElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "3": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 15}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA : Start",
+        "time": 2.39,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 2.4, \"delay\": 0.0, \"pos\": [-1.09252, 94.6973, 10.54174], \"blendType\": \"easeIn\", \"startPos\": [0.0, -8.61177, 5.26989], \"useStartPos\": true}"
+            },
+            "1": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.4, \"delay\": 0.0, \"end\": 60.0, \"blendType\": \"easeInOut\", \"start\": 45.54, \"useStart\": true}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.0, \"delay\": 1.4, \"hpr\": [-25.44966, 0.0, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [0, 0, 0], \"useStartHpr\": true}"
+            }
+        }
+    },
+    {
+        "name": "Suit Inits",
+        "time": 2.39,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 9, \"anim\": \"sit-dock\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 11, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 4, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitPingpong",
+                "kwargs": "{\"suitIndex\": 7, \"anim\": \"slip-forward\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0.0, \"startTime\": 1.22107, \"endTime\": 1.12466}"
+            },
+            "4": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 13, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "5": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 16, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "6": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 17, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "7": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 18, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "8": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 19, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "9": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 20, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "10": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 5, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "11": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 15, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "12": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "13": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 3, \"targetIndex\": 27, \"wrt\": 0, \"disable\": false}"
+            },
+            "14": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"duration\": 0.0, \"pos\": [0.0, 3.08484, 0.38561], \"startPos\": [0, 0, 0], \"useStartPos\": 0, \"hpr\": [0, 0, 0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "15": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 1, \"vfxIndex\": 1, \"delay\": 0.0}"
+            },
+            "16": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"emergeHead\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "#1",
+        "time": 4.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 12, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 15, \"messageIndex\": 0, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-9.09249, 2.3136, 5.51925], \"hpr\": [160.9219, -1.15676, 1.15691], \"scale\": 1.69511, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #1",
+        "time": 4.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 43.29, \"blendType\": \"easeIn\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-1.66622, 114.52114, 21.59861], \"blendType\": \"easeIn\", \"startPos\": [-1.09252, 94.6973, 10.54174], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-26.60642, 11.56807, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-25.44966, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#2",
+        "time": 6.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 0, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 0, \"messageIndex\": 1, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [7.11169, 124.65809, 24.60648], \"hpr\": [-53.08706, 0.0, -5.78409], \"scale\": 1.24524, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #2",
+        "time": 6.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 61.92802, \"blendType\": \"easeIn\", \"start\": 43.29, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [27.95979, 136.55524, 8.51665], \"blendType\": \"easeIn\", \"startPos\": [-1.09252, 94.6973, 10.54174], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-126.09168, -3.47031, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-25.44966, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#3",
+        "time": 7.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 8, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 21, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "2": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 22, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "3": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 11, \"messageIndex\": 2, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-4.72234, 1.92802, 3.46271], \"hpr\": [124.29271, 0.0, 3.47037], \"scale\": 1.18097, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #3",
+        "time": 7.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 61.92802, \"blendType\": \"easeIn\", \"start\": 61.928, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [25.35972, 105.02231, 5.32527], \"blendType\": \"easeIn\", \"startPos\": [-1.09252, 94.6973, 10.54174], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-40.48829, 6.94085, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-25.44966, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#4",
+        "time": 8.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 9, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 12, \"messageIndex\": 3, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [3.88945, -3.85603, 1.66323], \"hpr\": [-41.51894, 0.0, -3.47052], \"scale\": 0.92391, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #4",
+        "time": 8.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 49.07, \"blendType\": \"easeIn\", \"start\": 61.928, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-23.97764, 87.24917, 31.77514], \"blendType\": \"easeIn\", \"startPos\": [-1.09252, 94.6973, 10.54174], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [24.16327, 14.01156, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-25.44966, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#5",
+        "time": 9.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 3, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 31}"
+            },
+            "3": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 6, \"messageIndex\": 4, \"delay\": 0.0, \"duration\": 2.4, \"pos\": [-5.62208, 0.25708, 6.03339], \"hpr\": [122.74726, 8.09765, 9.25446], \"scale\": 1.24524, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #5",
+        "time": 9.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 47.78, \"blendType\": \"easeIn\", \"start\": 49.07, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-23.97764, 82.60288, 36.65943], \"blendType\": \"easeIn\", \"startPos\": [-23.97764, 87.24917, 31.77514], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [48.45608, -25.31973, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [24.16327, 14.01156, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#6",
+        "time": 10.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 1, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 1, \"anim\": \"emergeHead\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.9, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 4, \"messageIndex\": 5, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-4.97941, -0.12853, 1.66322], \"hpr\": [123.90426, -5.78394, -1.1568], \"scale\": 1.34164, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #6",
+        "time": 10.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 50.6, \"blendType\": \"easeIn\", \"start\": 47.78, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [24.17796, 87.80553, 32.83743], \"blendType\": \"easeIn\", \"startPos\": [-1.09252, 94.6973, 10.54174], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-27.76318, 8.09772, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-25.44966, 0.0, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#7",
+        "time": 12.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 6, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 6, \"anim\": \"victory\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.3, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 1}"
+            },
+            "3": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 9, \"messageIndex\": 6, \"delay\": 0.0, \"duration\": 2.4, \"pos\": [2.08995, 5.26991, 5.90485], \"hpr\": [-108.61361, 0.0, 3.47048], \"scale\": 0.66683, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #7",
+        "time": 12.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 50.6, \"blendType\": \"easeIn\", \"start\": 50.6, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [24.49546, 78.48126, 34.10732], \"blendType\": \"easeIn\", \"startPos\": [24.17796, 87.80553, 32.83743], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-35.86068, 5.78396, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-27.76318, 8.09772, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#8",
+        "time": 13.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 14, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 14, \"anim\": \"sparkplug\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.83547, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.20952, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 17, \"messageIndex\": 7, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [1.44729, 5.91255, 4.49098], \"hpr\": [-110.92718, 0.0, -8.09765], \"scale\": 0.66684, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #8",
+        "time": 13.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 50.6813, \"blendType\": \"easeIn\", \"start\": 50.6, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [22.88471, 70.42427, 5.59795], \"blendType\": \"easeIn\", \"startPos\": [24.49546, 78.48126, 34.10732], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [142.28692, -6e-05, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-35.86068, 5.78396, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#9",
+        "time": 14.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 11, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 14, \"messageIndex\": 8, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-8.57835, -3.34189, 5.51925], \"hpr\": [137.78574, -5.78409, 5.78409], \"scale\": 1.14884, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #9",
+        "time": 14.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 49.7173, \"blendType\": \"easeIn\", \"start\": 50.6, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-20.36952, 73.39969, 4.68518], \"blendType\": \"easeIn\", \"startPos\": [22.88471, 70.42427, 5.59795], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-24.29299, 2.3135, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [142.28692, -6e-05, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#10",
+        "time": 15.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 4, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 7, \"messageIndex\": 9, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-3.17993, 0.0, 4.61951], \"hpr\": [140.09946, 0.0, -1.1569], \"scale\": 0.69898, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #10",
+        "time": 15.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 39.43, \"blendType\": \"easeIn\", \"start\": 49.71, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-41.4523, 36.32364, 6.66662], \"blendType\": \"easeIn\", \"startPos\": [-20.36952, 73.39969, 4.68518], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [-1.27224, -2.31363, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-24.29298, 2.3135, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#11",
+        "time": 16.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 10, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 10, \"anim\": \"mob-mentality\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": true, \"startTime\": 0.3856, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1.3, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "2": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 13, \"messageIndex\": 10, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-5.75061, 4.62722, 9.11819], \"hpr\": [105.39526, 0.0, 0.0], \"scale\": 1.34164, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #11",
+        "time": 16.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 60.0, \"blendType\": \"easeIn\", \"start\": 39.43, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-46.09155, 25.84326, 2.32674], \"blendType\": \"easeIn\", \"startPos\": [-41.4523, 36.32364, 6.66662], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [119.03556, -12.72484, 0.0], \"blendType\": \"easeIn\", \"startHpr\": [-1.27224, -2.31363, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#12",
+        "time": 18.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 7, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 2}"
+            },
+            "2": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 32}"
+            },
+            "3": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 28, \"delay\": 0, \"duration\": 0.73907, \"hpr\": [-53.21292, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": true, \"blendType\": \"easeInOut\"}"
+            },
+            "4": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 10, \"messageIndex\": 11, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-4.46527, 7.5835, 1.40615], \"hpr\": [75.31836, -11.56797, 0.0], \"scale\": 0.98817, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #12",
+        "time": 18.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 60.964, \"blendType\": \"easeIn\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [-6.79578, 9.20036, 4.63826], \"blendType\": \"easeIn\", \"startPos\": [-46.09155, 25.84326, 2.32674], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [209.9766, -3.09259, 1e-05], \"blendType\": \"easeIn\", \"startHpr\": [119.03556, -12.72484, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "#13",
+        "time": 19.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 2, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "closeElev",
+                "kwargs": "{\"elevatorModelIndex\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 0, \"messageIndex\": 12, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-5.75061, 3.85602, 4.74805], \"hpr\": [-165.29701, 0.0, 2.31357], \"scale\": 0.66683, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #13",
+        "time": 19.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 52.93, \"blendType\": \"easeIn\", \"start\": 60.0, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [15.31206, 10.19928, 7.53027], \"blendType\": \"easeIn\", \"startPos\": [-6.79578, 9.20036, 4.63826], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [333.3317, -9.73339, 1e-05], \"blendType\": \"easeIn\", \"startHpr\": [209.97659, -3.09259, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Gatekeeper Turn",
+        "time": 19.2,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"duration\": 0.70694, \"hpr\": [55.52653, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 2, \"anim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            }
+        }
+    },
+    {
+        "name": "#14",
+        "time": 20.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 13, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 16, \"messageIndex\": 13, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-3.17992, 0.0, 7.44725], \"hpr\": [174.21596, 0.0, -2.31371], \"scale\": 1.24524, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            },
+            "2": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 19, \"messageIndex\": 16, \"delay\": 0.3, \"duration\": 1.2, \"pos\": [2.57067, 2e-05, 4.75576], \"hpr\": [-138.75974, 0.0, 2.31372], \"scale\": 1.03214, \"kwargs\": null}"
+            },
+            "3": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 20, \"messageIndex\": 17, \"delay\": 0.35, \"duration\": 1.2, \"pos\": [2.82774, 2e-05, 4.24162], \"hpr\": [-138.75974, 0.0, -5.78403], \"scale\": 1.03214, \"kwargs\": null}"
+            },
+            "4": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 21, \"messageIndex\": 18, \"delay\": 0.4, \"duration\": 1.2, \"pos\": [-0.12855, -0.25704, 5.14136], \"hpr\": [-65.88108, -10.41122, -4.62727], \"scale\": 0.80721, \"kwargs\": null}"
+            },
+            "5": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 22, \"messageIndex\": 19, \"delay\": 0.45, \"duration\": 1.2, \"pos\": [-1.41388, -1.54238, 5.78403], \"hpr\": [-20.76552, -17.35206, 0.0], \"scale\": 0.4216, \"kwargs\": null}"
+            },
+            "6": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 23, \"messageIndex\": 20, \"delay\": 0.5, \"duration\": 1.2, \"pos\": [2.57067, 2e-05, 6.04111], \"hpr\": [94.91484, 0.0, -4.62723], \"scale\": 0.29307, \"kwargs\": null}"
+            }
+        }
+    },
+    {
+        "name": "CAMERA - #14",
+        "time": 20.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"end\": 53.25201, \"blendType\": \"easeIn\", \"start\": 52.93, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"pos\": [35.75984, 44.74278, 7.53027], \"blendType\": \"easeIn\", \"startPos\": [15.31206, 10.19928, 7.53027], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.4, \"delay\": 0.8, \"hpr\": [269.99999, -11.17952, 1e-05], \"blendType\": \"easeIn\", \"startHpr\": [333.3317, -9.73338, 1e-05], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Event #41",
+        "time": 20.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.3}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 16, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #42",
+        "time": 20.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.35}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 17, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #43",
+        "time": 20.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.4}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 18, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #44",
+        "time": 20.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.45}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 19, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    },
+    {
+        "name": "Event #45",
+        "time": 20.4,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.5}"
+            },
+            "1": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 20, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            }
+        }
+    },
+    {
+        "name": "#15",
+        "time": 21.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 5, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "1": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 15}"
+            },
+            "2": {
+                "eventDefEnum": "applyStagelight",
+                "kwargs": "{\"targetIndex\": 15, \"delay\": 0.0, \"stagelightAlpha\": 0.28, \"disableColorScale\": true}"
+            },
+            "3": {
+                "eventDefEnum": "suitApplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 15, \"vfxIndex\": 0, \"delay\": 0.0}"
+            },
+            "4": {
+                "eventDefEnum": "hideNode",
+                "kwargs": "{\"nodeIndex\": 33}"
+            },
+            "5": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 8, \"messageIndex\": 14, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-4.85087, 0.0, 7.06165], \"hpr\": [169.01953, 0.0, 2.31357], \"scale\": 0.7311, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Dumb joke",
+        "time": 21.6,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 18, \"delay\": 0.6, \"duration\": 0.6, \"pos\": [43.0708, 41.9691, 0.5194], \"startPos\": [41.0708, 41.9691, 0.0], \"useStartPos\": false, \"hpr\": [90.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"easeIn\"}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.6, \"delay\": 0.6, \"pos\": [33.26334, 44.74278, 8.15437], \"blendType\": \"easeIn\", \"startPos\": [35.75984, 44.74278, 7.53027], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 30, \"delay\": 0, \"duration\": 0.0, \"hpr\": [-53.21303, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "3": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 29, \"delay\": 1.09254, \"duration\": 0.44987, \"hpr\": [30.07696, -2.31361, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "#16",
+        "time": 22.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "suitUnapplyVisualEffect",
+                "kwargs": "{\"suitIndex\": 15, \"vfxIndex\": 0, \"delay\": 0.4}"
+            },
+            "1": {
+                "eventDefEnum": "basicLabel",
+                "kwargs": "{\"nodeIndex\": 18, \"messageIndex\": 15, \"delay\": 0.0, \"duration\": 1.2, \"pos\": [-2.02312, 1.02827, 5.77633], \"hpr\": [137.78566, -13.88169, -4.62727], \"scale\": 0.50617, \"kwargs\": null, \"enterDuration\": 1.0, \"holdDuration\": 1.0, \"fadeDuration\": 1.0, \"hasFadeIn\": false, \"hasFadeOut\": false, \"movePos\": false, \"moveHpr\": false, \"startPos\": [0.0, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"blendPos\": \"easeIn\", \"blendHpr\": \"easeIn\", \"textColor\": [1.0, 1.0, 1.0, 1.0], \"frameColor\": [0.0, 0.0, 0.0, 0.75761], \"shadowColor\": [0.0, 0.0, 0.0, 0.0]}"
+            }
+        }
+    },
+    {
+        "name": "Start Pullback",
+        "time": 24.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"end\": 77.99481, \"blendType\": \"easeInOut\", \"start\": 53.25201, \"useStart\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"pos\": [-45.80928, 11.86312, 12.81029], \"blendType\": \"easeInOut\", \"startPos\": [33.26334, 44.74278, 8.15437], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 3.0, \"delay\": 0.0, \"hpr\": [309.96036, -3.72471, 1e-05], \"blendType\": \"easeIn\", \"startHpr\": [270.0, -11.17952, 2e-05], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "end",
+        "time": 27.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.03214}"
+            }
+        }
+    }
+]

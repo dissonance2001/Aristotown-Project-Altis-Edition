@@ -798,6 +798,16 @@ class Toon(Avatar.Avatar, ToonHead):
         self.liquidatedRounds = 0
         self.energized = 0
         self.energizedRounds = 0
+        # Hammerspace: accessory (hat/glasses/backpack/neck) items currently worn,
+        # the loaded ToonAccessory instances rendering them, and the currently-worn
+        # shoe item. Distinct from the old self.hat/self.glasses/self.backpack/
+        # self.shoes tuples below, which stay intact for local preview rendering
+        # (toon-select screen, trunk/closet preview GUI) until those are migrated.
+        # Populated by setToonEquippedItems(), called from
+        # DistributedToon.setEquippedItems() whenever the toon's inventory changes.
+        self.accessoryItems = []
+        self.accessoryGeoms = []
+        self.hammerspaceShoe = None
         self.driedOut = 0
         self.driedOutRounds = 0
         self.encore = 0
@@ -4212,6 +4222,194 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def getShoes(self):
         return self.shoes
+
+    """
+    Hammerspace cosmetic rendering.
+
+    Distinct from the old setHat/setGlasses/setBackpack/setShoes/generateHat/
+    generateGlasses/generateBackpack/generateShoes tuple-based methods above,
+    which remain intact for local preview rendering (toon-select screen,
+    trunk/closet preview GUI) until those are migrated to hammerspace too.
+    setToonEquippedItems() is the entry point, called from
+    DistributedToon.setEquippedItems() whenever the toon's inventory changes.
+    """
+
+    def generateHammerspaceShoe(self):
+        """
+        Renders the currently-equipped hammerspace shoe item (self.hammerspaceShoe,
+        an InventoryItem or None). Supports both Clash-style ShoeItemDefinition
+        (shared leg geometry keyed by ShoeType) and AltisLegacyShoeItemDefinition
+        (Altis's original per-style stashed node approach) -- see
+        AltisLegacyAccessories.py.
+        """
+        self.findAllMatches('**/feet;+s').stash()
+        self.findAllMatches('**/boots_short;+s').stash()
+        self.findAllMatches('**/boots_long;+s').stash()
+        self.findAllMatches('**/shoes;+s').stash()
+
+        if not self.hammerspaceShoe:
+            self.findAllMatches('**/feet;+s').unstash()
+            return
+
+        itemDef = self.hammerspaceShoe.getItemDefinition()
+
+        from toontown.toon.accessories.AltisLegacyAccessories import AltisLegacyShoeItemDefinition
+        if isinstance(itemDef, AltisLegacyShoeItemDefinition):
+            # Altis-legacy: unstash the node matching this style, then texture it.
+            geoms = self.findAllMatches('**/%s;+s' % itemDef.nodeName)
+            for geom in geoms:
+                geom.unstash()
+            texturePath = itemDef.getTexturePath()
+            if texturePath:
+                tex = loader.loadTexture(texturePath, okMissing=True)
+                if tex is None:
+                    self.sendLogSuspiciousEvent('failed to load shoe texture %s' % texturePath)
+                else:
+                    tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                    tex.setMagfilter(Texture.FTLinear)
+                    for geom in geoms:
+                        geom.setTexture(tex, 1)
+        else:
+            # Clash-style: shared leg geometry keyed by ShoeType, then textured.
+            texturePath = itemDef.getTexturePath()
+            tex = loader.loadTexture(texturePath, okMissing=True) if texturePath else None
+            if tex is not None:
+                tex.setMinfilter(Texture.FTLinearMipmapLinear)
+                tex.setMagfilter(Texture.FTLinear)
+            geoms = self.findAllMatches('**/%s;+s' % str(itemDef.getShoeType()))
+            for geom in geoms:
+                geom.unstash()
+                if tex is not None:
+                    geom.setTexture(tex, 1)
+
+    def setHammerspaceShoe(self, shoe, regen: bool = True):
+        """Sets the currently-equipped hammerspace shoe item (or None), and re-renders."""
+        self.hammerspaceShoe = shoe
+        if regen:
+            self.generateHammerspaceShoe()
+
+    def setToonEquippedItems(self, equippedItems: list):
+        """
+        Rebuilds all hammerspace-driven cosmetics (clothing top/bottom, hat,
+        glasses, backpack, neck, shoes) from a list of equipped InventoryItems.
+        """
+        from toontown.inventory.enums.ItemEnums import ItemType
+
+        self.clearAccessoryItems(regen=False)
+        self.setHammerspaceShoe(shoe=None, regen=False)
+
+        # Bottoms first -- setting shorts/skirt can rebuild the Toon model.
+        for item in equippedItems:
+            if item.getItemType() == ItemType.Cosmetic_Clothing_Bottom:
+                self.setBottomItem(item)
+
+        for item in equippedItems:
+            itemType = item.getItemType()
+            if itemType == ItemType.Cosmetic_Clothing_Top:
+                self.setTopItem(item)
+            elif itemType in (ItemType.Cosmetic_Hat, ItemType.Cosmetic_Glasses,
+                              ItemType.Cosmetic_Backpack, ItemType.Cosmetic_Neck):
+                self.addAccessory(item=item, regen=False)
+            elif itemType == ItemType.Cosmetic_Shoes:
+                self.setHammerspaceShoe(shoe=item, regen=False)
+
+        self.generateHammerspaceShoe()
+        self.regenerateAccessories()
+
+    def setTopItem(self, item):
+        """Sets a top item on the Toon (aka a shirt item)."""
+        itemDef = item.getItemDefinition()
+
+        shirtTex = itemDef.getTexture()
+        sleeveTex = itemDef.getSleeveTexture()
+        shirtColor = itemDef.getColor(item)
+        sleeveColor = itemDef.getSleeveColor(item)
+
+        thisPart = self.getPart('torso')
+        top = thisPart.find('**/torso-top')
+        top.setTexture(shirtTex, 1)
+        top.setColor(shirtColor)
+        sleeves = thisPart.find('**/sleeves')
+        sleeves.show()
+        sleeves.setTexture(sleeveTex, 1)
+        sleeves.setColor(sleeveColor)
+
+    def setBottomItem(self, item):
+        """Sets a bottom item on the Toon (aka shorts/skirt)."""
+        itemDef = item.getItemDefinition()
+
+        swappedTorso = 0
+        if self.style.torso[1] == 's' and itemDef.isSkirt():
+            self.swapToonTorso(self.style.torso[0] + 'd', genClothes=0)
+            swappedTorso = 1
+        elif self.style.torso[1] == 'd' and itemDef.isShorts():
+            self.swapToonTorso(self.style.torso[0] + 's', genClothes=0)
+            swappedTorso = 1
+
+        bottomTex = itemDef.getTexture()
+        bottomColor = itemDef.getColor(item)
+
+        darkBottomColor = bottomColor * 0.5
+        darkBottomColor.setW(1.0)
+
+        thisPart = self.getPart('torso')
+        bottoms = thisPart.findAllMatches('**/torso-bot')
+        for bottom in bottoms:
+            bottom.setTexture(bottomTex, 1)
+            bottom.setColor(bottomColor)
+        caps = thisPart.findAllMatches('**/torso-bot-cap')
+        caps.setColor(darkBottomColor)
+
+        if swappedTorso:
+            self.reapplyCheesyEffect(lerpTime=0.5)
+            self.loop('neutral')
+            self.setBlend(frameBlend=base.wantSmoothAnims)
+            self.setLODAnimation(base.lodMaxRange, base.lodMinRange, base.lodDelayFactor)
+
+    def addAccessory(self, item, regen: bool = True):
+        """Adds a hat/glasses/backpack/neck accessory item to the Toon."""
+        self.accessoryItems.append(item)
+        if regen:
+            self.regenerateAccessories()
+
+    def removeAccessory(self, item, regen: bool = True):
+        if item not in self.accessoryItems:
+            return
+        self.accessoryItems.remove(item)
+        if regen:
+            self.regenerateAccessories()
+
+    def clearAccessoryItems(self, regen: bool = True):
+        """Clears equipped accessory items (use regen to also clear the visuals)."""
+        self.accessoryItems = []
+        if regen:
+            self.regenerateAccessories()
+
+    def clearAccessories(self):
+        """Clears accessory visuals only (leaves the equipped-items list alone)."""
+        for accessory in self.accessoryGeoms:
+            accessory.unload()
+        self.accessoryGeoms = []
+
+    def regenerateAccessories(self):
+        # Pass 1: remove accessories that are no longer equipped.
+        for accessory in self.accessoryGeoms[:]:
+            if accessory.getInventoryItem() not in self.accessoryItems:
+                accessory.unload()
+                self.accessoryGeoms.remove(accessory)
+
+        # Pass 2: build any newly-equipped accessories.
+        accessoryGeomItems = [accessory.getInventoryItem() for accessory in self.accessoryGeoms]
+        for item in self.accessoryItems:
+            if item not in accessoryGeomItems:
+                itemDef = item.getItemDefinition()
+                acc = itemDef.getAccessoryClass()(self, item)
+                acc.load()
+                self.accessoryGeoms.append(acc)
+
+    def requestAccessoryAnim(self, request):
+        """Requests an animation on all animated accessories."""
+        pass
 
     def getDialogueArray(self):
         animalType = self.style.getType()

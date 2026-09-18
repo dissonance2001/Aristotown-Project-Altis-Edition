@@ -1,0 +1,1206 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone13a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "100002": {
+            "type": "button",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.795999526977539,
+                    37.91809844970703,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    23.962499618530273,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isOn": 0,
+            "isOnEvent": 0,
+            "secondsOn": -1.0
+        },
+        "100003": {
+            "type": "button",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -11.02299976348877,
+                    -40.73640060424805,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    338.1990051269531,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isOn": 0,
+            "isOnEvent": 0,
+            "secondsOn": -1.0
+        },
+        "100006": {
+            "type": "door",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100010,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    1.0230300426483154,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isLock0Unlocked": 0,
+            "isLock1Unlocked": 1,
+            "isLock2Unlocked": 0,
+            "isLock3Unlocked": 1,
+            "isOpen": 0,
+            "isOpenEvent": 0,
+            "isVisBlocker": 1,
+            "secondsOpen": 5,
+            "unlock0Event": 100000,
+            "unlock1Event": 0,
+            "unlock2Event": 100001,
+            "unlock3Event": 0
+        },
+        "100000": {
+            "type": "laserField",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -57.916500091552734,
+                    36.49020004272461,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    296.56500244140625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "gridGame": "Random",
+            "gridScaleX": 40.0,
+            "gridScaleY": 40.0,
+            "laserFactor": 3,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    21.0,
+                    21.0,
+                    25.0
+                ]
+            },
+            "switchId": 100002
+        },
+        "100001": {
+            "type": "laserField",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -40.057098388671875,
+                    -3.384239912033081,
+                    0.07000000029802322
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    243.43499755859375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 1,
+            "gridGame": "Random",
+            "gridScaleX": 37.0,
+            "gridScaleY": 38.0,
+            "laserFactor": 3,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    21.0,
+                    21.0,
+                    25.0
+                ]
+            },
+            "switchId": 100003
+        },
+        "100008": {
+            "type": "model",
+            "name": "testMoverModel",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks2"
+        },
+        "100011": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -66.4030990600586,
+                    -28.33370018005371,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    330.94500732421875,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_stacks"
+        },
+        "100012": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -61.341400146484375,
+                    28.383899688720703,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    330.94500732421875,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_stacks"
+        },
+        "100013": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -73.00189971923828,
+                    23.1112003326416,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    311.42401123046875,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_stacks"
+        },
+        "100014": {
+            "type": "model",
+            "name": "critbox4",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.53950023651123,
+                    55.536598205566406,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    26.565099716186523,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100015": {
+            "type": "model",
+            "name": "critbox3",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -2.5155599117279053,
+                    -64.21890258789062,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    333.43499755859375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100016": {
+            "type": "model",
+            "name": "critbox2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -0.5590839982032776,
+                    -27.46500015258789,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    333.43499755859375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks2"
+        },
+        "100019": {
+            "type": "model",
+            "name": "copy of crit box",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    3.8242199420928955,
+                    21.966400146484375,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    60.94540023803711,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.550000011920929,
+                    0.550000011920929,
+                    0.8999999761581421
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100021": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100017,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks2"
+        },
+        "100022": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100017,
+            "pos": {
+                "LPoint3f": [
+                    -1.7202199697494507,
+                    8.943829536437988,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks2"
+        },
+        "100023": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100017,
+            "pos": {
+                "LPoint3f": [
+                    -1.272510051727295,
+                    -8.842559814453125,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks2"
+        },
+        "100026": {
+            "type": "model",
+            "name": "crit box",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    1.3729000091552734,
+                    25.043399810791016,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    26.565099716186523,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100028": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100027,
+            "pos": {
+                "LPoint3f": [
+                    -0.7580490112304688,
+                    -10.196599960327148,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100029": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 100027,
+            "pos": {
+                "LPoint3f": [
+                    1.8243800401687622,
+                    -2.9468600749969482,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100030": {
+            "type": "model",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 100027,
+            "pos": {
+                "LPoint3f": [
+                    0.16411300003528595,
+                    4.442440032958984,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100031": {
+            "type": "model",
+            "name": "copy of <unnamed> (6)",
+            "comment": "",
+            "parentEntId": 100027,
+            "pos": {
+                "LPoint3f": [
+                    5.1321702003479,
+                    10.059399604797363,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.800000011920929
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100035": {
+            "type": "model",
+            "name": "copy of crit box (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    3.017210006713867,
+                    -23.374099731445312,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    13.240500450134277,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.550000011920929,
+                    0.550000011920929,
+                    0.8999999761581421
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100036": {
+            "type": "model",
+            "name": "copy of crit box (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -8.589229583740234,
+                    61.95479965209961,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    26.565099716186523,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.550000011920929,
+                    0.550000011920929,
+                    0.8999999761581421
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_big_stacks3"
+        },
+        "100018": {
+            "type": "mover",
+            "name": "testMover",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -64.38169860839844,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cycleType": "return",
+            "entity2Move": 100008,
+            "modelPath": 0,
+            "moveTarget": 100034,
+            "pos0Move": 2,
+            "pos0Wait": 2,
+            "pos1Move": 2,
+            "pos1Wait": 2,
+            "startOn": 0,
+            "switchId": 0
+        },
+        "100024": {
+            "type": "mover",
+            "name": "paperwall2mover",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -46.39569854736328,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    333.43499755859375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cycleType": "oneWay",
+            "entity2Move": 100017,
+            "modelPath": 0,
+            "moveTarget": 100025,
+            "pos0Move": 2,
+            "pos0Wait": 2,
+            "pos1Move": 2,
+            "pos1Wait": 2,
+            "startOn": 0,
+            "switchId": 100001
+        },
+        "100032": {
+            "type": "mover",
+            "name": "paperwall1mover",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -1.5433199405670166,
+                    42.01570129394531,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    26.565099716186523,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cycleType": "oneWay",
+            "entity2Move": 100027,
+            "modelPath": 0,
+            "moveTarget": 100033,
+            "pos0Move": 2,
+            "pos0Wait": 2,
+            "pos1Move": 2,
+            "pos1Wait": 2,
+            "startOn": 0,
+            "switchId": 100000
+        },
+        "100004": {
+            "type": "nodepath",
+            "name": "BattlePos1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -31.968900680541992,
+                    28.7455997467041,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    22.61989974975586,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100005": {
+            "type": "nodepath",
+            "name": "BattlePos2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -31.085800170898438,
+                    -34.98350143432617,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    331.3900146484375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100007": {
+            "type": "nodepath",
+            "name": "copy of Cog Parent1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -11.0871000289917,
+                    37.40010070800781,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    299.2489929199219,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100009": {
+            "type": "nodepath",
+            "name": "Cog Parent1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.224599838256836,
+                    -41.59429931640625,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    246.21400451660156,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100010": {
+            "type": "nodepath",
+            "name": "doorparent",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    133.89999389648438,
+                    -1.8129099607467651,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    265.739990234375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100017": {
+            "type": "nodepath",
+            "name": "PaperDoor2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100020": {
+            "type": "nodepath",
+            "name": "movertarget",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -84.02729797363281,
+                    -14.722700119018555,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100025": {
+            "type": "nodepath",
+            "name": "papperwall2target",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    14.299799919128418,
+                    -46.09109878540039,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    336.0379943847656,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100027": {
+            "type": "nodepath",
+            "name": "PaperWall1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100033": {
+            "type": "nodepath",
+            "name": "paperwall1movertarget",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    13.668399810791016,
+                    42.786399841308594,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    41.1859016418457,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100034": {
+            "type": "nodepath",
+            "name": "test mover target",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -51.15489959716797,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

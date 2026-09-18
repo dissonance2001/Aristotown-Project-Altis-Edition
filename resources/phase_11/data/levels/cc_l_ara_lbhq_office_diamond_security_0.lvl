@@ -1,0 +1,208 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE13a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "100001": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "100002": {
+            "type": "nodepath",
+            "name": "pathmasta1",
+            "comment": "",
+            "parentEntId": 100000,
+            "pos": {
+                "LPoint3f": [
+                    32.0525016784668,
+                    0.2045159935951233,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100003": {
+            "type": "nodepath",
+            "name": "copy of pathmasta1",
+            "comment": "",
+            "parentEntId": 100000,
+            "pos": {
+                "LPoint3f": [
+                    -28.24920082092285,
+                    5.565889835357666,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100004": {
+            "type": "nodepath",
+            "name": "copy of pathmasta1",
+            "comment": "",
+            "parentEntId": 100000,
+            "pos": {
+                "LPoint3f": [
+                    -10.817899703979492,
+                    14.648099899291992,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100005": {
+            "type": "nodepath",
+            "name": "pathmastachild",
+            "comment": "",
+            "parentEntId": 100000,
+            "pos": {
+                "LPoint3f": [
+                    -59.49869918823242,
+                    29.144800186157227,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100000": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -17.295700073242188,
+                    -37.52690124511719,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 100002,
+            "pathTarget1": 100003,
+            "pathTarget2": 100004,
+            "pathTarget3": 100005,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

@@ -640,6 +640,8 @@ class CogStatusEffectTooltip(DirectFrame):
             geom_scale=0.125
         )
 
+        self.tooltipFont = DynamicTextFont(TTLocalizer.InterfaceFont)
+
         self.titleLabel = DirectLabel(
             parent=self.background,
             relief=None,
@@ -647,7 +649,7 @@ class CogStatusEffectTooltip(DirectFrame):
             text='',
             text_scale=0.053,
             text_align=TextNode.ACenter,
-            text_font=ToontownGlobals.getInterfaceFont(),
+            text_font=self.tooltipFont,
             text_fg=(0, 0, 0, 1),
             text_wordwrap=18
         )
@@ -659,7 +661,7 @@ class CogStatusEffectTooltip(DirectFrame):
             text='',
             text_scale=0.0375,
             text_align=TextNode.ACenter,
-            text_font=ToontownGlobals.getInterfaceFont(),
+            text_font=self.tooltipFont,
             text_fg=(0, 0, 0, 1),
             text_wordwrap=23
         )

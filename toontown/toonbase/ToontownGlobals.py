@@ -2445,3 +2445,23 @@ CODE_UNAVAILABLE = 6
 
 MagicWordInvokerPrefix = '~'
 MagicWordTargetPrefix = '~~'
+
+# --- Added for hammerspace/booster port ---
+
+# Booster activity types (matches Clash's BoosterGlobals.py numbering)
+ACTIVITY_FISHING = 0
+ACTIVITY_GOLFING = 1
+ACTIVITY_RACING = 2
+ACTIVITY_TROLLEY = 3
+
+# Additional code-redemption result codes (continuing Altis's own CODE_* sequence,
+# used by the hammerspace-based code redemption GUI)
+CODE_USED = 7
+CODE_TOO_MANY_USES = 8
+CODE_UNKNOWN_ERROR = 9
+CODE_NOT_ENOUGH_ROOM = 10
+
+# NOTE: getNametagFont/setNametagFont/NametagFonts/NametagFontPaths are already
+# provided via `from otp.otpbase.OTPGlobals import *` above -- no need to
+# redefine them here (an earlier version of this file incorrectly did, which
+# shadowed the real ones and broke the connection to Altis's nametag rendering).

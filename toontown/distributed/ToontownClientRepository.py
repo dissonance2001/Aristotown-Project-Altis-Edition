@@ -83,6 +83,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
             self.http.setVerifySsl(HTTPClient.VSNoDateCheck)
         self.__forbidCheesyEffects = 0
         self.friendManager = None
+        self.inventoryManager = None
         self.speedchatRelay = None
         self.trophyManager = None
         self.bankManager = None

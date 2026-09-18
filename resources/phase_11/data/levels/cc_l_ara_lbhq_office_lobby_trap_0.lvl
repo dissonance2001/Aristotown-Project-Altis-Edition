@@ -1,0 +1,788 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone04b",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "100018": {
+            "type": "button",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    54.7666015625,
+                    7.038959980010986,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isOn": 0,
+            "isOnEvent": 0,
+            "secondsOn": -1.0
+        },
+        "100019": {
+            "type": "button",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -58.083499908447266,
+                    7.372189998626709,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isOn": 0,
+            "isOnEvent": 0,
+            "secondsOn": -1.0
+        },
+        "100015": {
+            "type": "door",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100005,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "isLock0Unlocked": 0,
+            "isLock1Unlocked": 1,
+            "isLock2Unlocked": 0,
+            "isLock3Unlocked": 1,
+            "isOpen": 0,
+            "isOpenEvent": 0,
+            "isVisBlocker": 1,
+            "secondsOpen": 5,
+            "unlock0Event": 100016,
+            "unlock1Event": 0,
+            "unlock2Event": 100017,
+            "unlock3Event": 0
+        },
+        "100016": {
+            "type": "laserField",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -15.134499549865723,
+                    -13.228500366210938,
+                    0.25
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "gridGame": "Random",
+            "gridScaleX": 42.0,
+            "gridScaleY": 40.0,
+            "laserFactor": 3,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    20.0,
+                    40.0,
+                    45.0
+                ]
+            },
+            "switchId": 100019
+        },
+        "100017": {
+            "type": "laserField",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    11.294099807739258,
+                    28.77389907836914,
+                    0.2800000011920929
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 1,
+            "gridGame": "Random",
+            "gridScaleX": 42.0,
+            "gridScaleY": 40.0,
+            "laserFactor": 3,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    20.0,
+                    40.0,
+                    45.0
+                ]
+            },
+            "switchId": 100018
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "0",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -64.0541000366211,
+                    7.628499984741211,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100020": {
+            "type": "nodepath",
+            "name": "battle place 1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -35.09280014038086,
+                    6.215179920196533,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100021": {
+            "type": "nodepath",
+            "name": "cogparent2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    64.2291030883789,
+                    5.467189788818359,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100022": {
+            "type": "nodepath",
+            "name": "BattlePlace2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    32.480899810791016,
+                    7.689489841461182,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100035": {
+            "type": "nodepath",
+            "name": "cogparent1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100005": {
+            "type": "rendering",
+            "name": "doorparent",
+            "comment": "delta from EXIT locator = (+0.10, -0.8193, z)",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -0.5379999876022339,
+                    72.97869873046875,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "blending": "Normal",
+            "colorA": 1.0,
+            "colorB": 0.75,
+            "colorG": 0.75,
+            "colorR": 0.8,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "100006": {
+            "type": "rendering",
+            "name": "wallparent3",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    61.72990036010742,
+                    -14.647100448608398,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 1.0,
+            "colorG": 1.0,
+            "colorR": 1.0,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "100011": {
+            "type": "rendering",
+            "name": "wallprent4",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    62.355499267578125,
+                    30.41010093688965,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 1.0,
+            "colorG": 1.0,
+            "colorR": 1.0,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "100024": {
+            "type": "rendering",
+            "name": "cogrenderingparent2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    64.2291030883789,
+                    5.467189788818359,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "blending": "Additive",
+            "colorA": 1.0,
+            "colorB": 0.0,
+            "colorG": 0.0,
+            "colorR": 1.0,
+            "fogOn": 0,
+            "renderBin": "fixed"
+        },
+        "100034": {
+            "type": "rendering",
+            "name": "scenaryLight",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 0.5,
+            "colorG": 0.5,
+            "colorR": 0.6,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "100043": {
+            "type": "chair",
+            "name": "chair 1",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -28.399999618530273,
+                    -25.6200008392334,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "100044": {
+            "type": "chair",
+            "name": "chair 2",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -28.399999618530273,
+                    -28.100000381469727,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "100045": {
+            "type": "chair",
+            "name": "chair 3",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -28.399999618530273,
+                    -30.600000381469727,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            }
+        },
+        "100046": {
+            "type": "chair",
+            "name": "chair 4",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -40.459999084472656,
+                    -20.3700008392334,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    16.100000381469727,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            },
+            "radius": 3
+        },
+        "100047": {
+            "type": "chair",
+            "name": "chair 5",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -38.040000915527344,
+                    -19.700000762939453,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    16.100000381469727,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            },
+            "radius": 3
+        },
+        "100048": {
+            "type": "chair",
+            "name": "chair 6",
+            "comment": "",
+            "parentEntId": 100035,
+            "pos": {
+                "LPoint3f": [
+                    -35.619998931884766,
+                    -19.09000015258789,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    16.100000381469727,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -3.75,
+                    2.5
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    0.0
+                ]
+            },
+            "radius": 3
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

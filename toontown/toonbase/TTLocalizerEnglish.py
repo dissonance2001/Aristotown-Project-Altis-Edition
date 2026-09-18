@@ -19193,3 +19193,21 @@ TsMinigameDoorsLocked = "This shop is currently closed! Get out there and stop t
 TsMinigameCogsSpawn = "Cogs are stealing\nthe presents!!"
 TsMinigameStartingSoon = "The Cogs have arrived! Keep our presents safe by bringing them to the center tree, and keep the Cog's hands off of them by using snowballs!"
 TsMinigameEnd = "Great job, Toons! We've fought off the wave of Cogs. But keep alert, there may be more that try to invade!"
+
+# --- Added for hammerspace/ItemsPage port ---
+ItemsPageWardrobeTab = 'Wardrobe'
+ItemsPageCodesTab = 'Codes'
+FriendsListSearchBarDefaultText = 'Search...'
+
+
+def GetPossesive(name):
+    # NOTE: pre-existing bug fix -- this function was already referenced by
+    # DistributedToon.py's party-invite code but was never defined here.
+    if name[-1:] == 's':
+        possesive = name + "'"
+    else:
+        possesive = name + "'s"
+    return possesive
+
+# --- Added for hammerspace IOU item names ---
+BattleGlobalTracksUpper = ['Toon-Up', 'Trap', 'Lure', 'Sound', 'Squirt', 'Zap', 'Throw', 'Drop']

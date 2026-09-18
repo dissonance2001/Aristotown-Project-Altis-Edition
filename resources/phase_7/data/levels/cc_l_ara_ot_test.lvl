@@ -1,0 +1,2004 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "battleMusicKey": "",
+            "modelFilename": "phase_3.5/models/areas/ttcc_ara_test_street.bam",
+            "musicKey": "",
+            "skyboxModel": "",
+            "titleColor": "ttc"
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": [
+                1,
+                2,
+                3,
+                4
+            ]
+        },
+        "1": {
+            "type": "zone",
+            "name": "Entrance",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": [
+                1,
+                2
+            ]
+        },
+        "2": {
+            "type": "zone",
+            "name": "Fairway",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": [
+                1,
+                2,
+                3,
+                4
+            ]
+        },
+        "3": {
+            "type": "zone",
+            "name": "Grass",
+            "comment": "Grass",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "Grass",
+            "visibility": [
+                2,
+                3
+            ]
+        },
+        "4": {
+            "type": "zone",
+            "name": "Exit",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": [
+                2,
+                4
+            ]
+        },
+        "110005": {
+            "type": "building",
+            "name": "awesome building",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    30.0,
+                    60.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 1,
+            "buildingName": "Hello Dante",
+            "capturable": 1,
+            "destZone": 7901,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110006": {
+            "type": "building",
+            "name": "awesome building 2",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    90.0,
+                    22.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 2,
+            "buildingName": "Sit Happens - Chair Repair",
+            "capturable": 1,
+            "destZone": 7902,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110007": {
+            "type": "building",
+            "name": "Awesome building 3",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    90.0,
+                    75.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 3,
+            "buildingName": "covfefe coffee shop",
+            "capturable": 1,
+            "destZone": 7903,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110008": {
+            "type": "building",
+            "name": "awesome building part 4 in the next zone",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    -3.0,
+                    19.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 4,
+            "buildingName": "Bust a nut police academy",
+            "capturable": 1,
+            "destZone": 7904,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110009": {
+            "type": "building",
+            "name": "new building mml abrasive building",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    37.0,
+                    70.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 5,
+            "buildingName": "sex sells music store",
+            "capturable": 1,
+            "destZone": 7905,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110010": {
+            "type": "building",
+            "name": "sloppy joe mama",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    130.0,
+                    70.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 6,
+            "buildingName": "sloppy joe mama",
+            "capturable": 1,
+            "destZone": 7906,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110011": {
+            "type": "building",
+            "name": "tequila mocking bird",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    220.0,
+                    70.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 7,
+            "buildingName": "tequila mocking bird",
+            "capturable": 1,
+            "destZone": 7907,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110012": {
+            "type": "building",
+            "name": "party poopers plumbing",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    262.0,
+                    21.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 8,
+            "buildingName": "party poopers plumbing",
+            "capturable": 1,
+            "destZone": 7908,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110013": {
+            "type": "building",
+            "name": "clo in a whole new way",
+            "comment": "",
+            "parentEntId": 4,
+            "pos": {
+                "LPoint3f": [
+                    -52.0,
+                    -7.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 9,
+            "buildingName": "clo in a whole new way",
+            "capturable": 1,
+            "destZone": 7909,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "110014": {
+            "type": "building",
+            "name": "boarding groups in a hole",
+            "comment": "",
+            "parentEntId": 4,
+            "pos": {
+                "LPoint3f": [
+                    -52.0,
+                    -60.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blockNumber": 10,
+            "buildingName": "boarding groups in a hole",
+            "capturable": 1,
+            "destZone": 7910,
+            "enabled": true,
+            "modelFilename": "phase_6/models/modules/gagShop_OZ"
+        },
+        "1002": {
+            "type": "buildingMgr",
+            "name": "BuildingMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "suitBuildingMax": 1,
+            "suitBuildingMin": 1
+        },
+        "110001": {
+            "type": "entrancePoint",
+            "name": "Entrance entrance",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    30.0,
+                    20.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "entranceId": 0,
+            "radius": 15,
+            "theta": 20
+        },
+        "10000": {
+            "type": "model",
+            "name": "Tunnel Sign",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.25,
+                    20.0,
+                    17.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.75,
+                    1.0,
+                    1.75
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "none",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_4/models/props/tunnel_sign_purple"
+        },
+        "10002": {
+            "type": "model",
+            "name": "awesomebuilding2 sign",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "strong",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_4/models/props/tunnel_sign_purple"
+        },
+        "10004": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    -70.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/CashBotSafe"
+        },
+        "10005": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    18.0,
+                    -70.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/CashBotSafe"
+        },
+        "10006": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    26.0,
+                    -70.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/CashBotSafe"
+        },
+        "10007": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    34.0,
+                    -70.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/CashBotSafe"
+        },
+        "10008": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    42.0,
+                    -70.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/CashBotSafe"
+        },
+        "10009": {
+            "type": "model",
+            "name": "cash bag",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    -70.0,
+                    9.5
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    135.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/MoneyBag"
+        },
+        "10010": {
+            "type": "model",
+            "name": "copy of cash bag",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    18.0,
+                    -70.0,
+                    9.5
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    215.53799438476562,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.949999988079071,
+                    0.949999988079071,
+                    0.949999988079071
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/MoneyBag"
+        },
+        "10011": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    -60.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    165.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/MoneyStack"
+        },
+        "10012": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    12.5,
+                    -60.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    195.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5,
+                    0.5,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_10/models/cashbotHQ/MoneyStack"
+        },
+        "10014": {
+            "type": "model",
+            "name": "Kazoology Sign",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    5.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "none",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "**/MM_sign3",
+            "modelPath": "phase_6/models/props/signs_MM"
+        },
+        "10017": {
+            "type": "model",
+            "name": "Kazoo",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    3.0,
+                    -0.009999999776482582,
+                    8.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    15.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    50.0,
+                    1.0,
+                    50.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "none",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "**/prop_3_0",
+            "modelPath": "phase_3.5/models/gui/inventory_icons"
+        },
+        "10003": {
+            "type": "nodepath",
+            "name": "Entrance Tunnel Group",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10013": {
+            "type": "nodepath",
+            "name": "Demo Sign Group",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "20000": {
+            "type": "questAnimated",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    47.5,
+                    0.0,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    3.5,
+                    3.5,
+                    3.5
+                ]
+            },
+            "animList": [
+                "summon",
+                "idle"
+            ],
+            "ctsc_finQuest_args": {
+                "anim": "summon",
+                "sfx": "phase_13/audio/sfx/april_toons/highroller/cc_s_sfx_ara_wheel_summon.ogg",
+                "extraWaitTime": 3.0
+            },
+            "ctsc_finQuest_key": "iris_show_play_anim",
+            "ctsc_getQuest_args": {},
+            "ctsc_getQuest_key": "",
+            "modelPath": "phase_13/models/events/apriltoons/highroller/char/cc_m_chr_ara_hr_prp_wheel",
+            "qst_finAnim": "idle",
+            "qst_finArgs": [],
+            "qst_finBehavior": "Loop",
+            "qst_unfinAnim": "",
+            "qst_unfinArgs": [],
+            "qst_unfinBehavior": "Hide",
+            "wantedQuest": {
+                "tuple": [
+                    6,
+                    49,
+                    2
+                ]
+            }
+        },
+        "110042": {
+            "type": "questAnimated",
+            "name": "big gate",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    155.0,
+                    42.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    7.0,
+                    7.0,
+                    3.0
+                ]
+            },
+            "animList": [],
+            "ctsc_finQuest_args": {
+                "specialAnim": "open",
+                "extraWaitTime": 3.0,
+                "camPosHpr": [
+                    30,
+                    0,
+                    15,
+                    90,
+                    -10,
+                    0
+                ]
+            },
+            "ctsc_finQuest_key": "pan_special_model_anim",
+            "ctsc_getQuest_args": {},
+            "ctsc_getQuest_key": "",
+            "modelPath": "phase_6/models/modules/ttcc_bb_street_gatePier",
+            "qst_finAnim": "open",
+            "qst_finArgs": [],
+            "qst_finBehavior": "Special",
+            "qst_unfinAnim": "",
+            "qst_unfinArgs": [],
+            "qst_unfinBehavior": "None",
+            "wantedQuest": {
+                "tuple": [
+                    2,
+                    100,
+                    1
+                ]
+            }
+        },
+        "110044": {
+            "type": "questInteractible",
+            "name": "gate unlocker",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    151.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "animList": [],
+            "ctsc_finQuest_args": {},
+            "ctsc_finQuest_key": "",
+            "ctsc_getQuest_args": {},
+            "ctsc_getQuest_key": "",
+            "interactibleType": "test_crate",
+            "modelPath": "phase_9/models/cogHQ/woodCrateB.bam",
+            "qst_finAnim": "",
+            "qst_finArgs": [],
+            "qst_finBehavior": "None",
+            "qst_unfinAnim": "",
+            "qst_unfinArgs": [],
+            "qst_unfinBehavior": "None",
+            "spherePos": {
+                "tuple": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "sphereRadius": 5.0,
+            "wantedQuest": {
+                "tuple": [
+                    2,
+                    100,
+                    1
+                ]
+            }
+        },
+        "110041": {
+            "type": "questModel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    20.0,
+                    -5.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "ctsc_finQuest_args": {},
+            "ctsc_finQuest_key": "iris_show",
+            "ctsc_getQuest_args": {},
+            "ctsc_getQuest_key": "",
+            "flattenType": "light",
+            "goonHatType": "none",
+            "hideCondition": "unfinishedQuest",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_9/models/cogHQ/woodCrateB.bam",
+            "wantedQuest": {
+                "tuple": [
+                    6,
+                    49,
+                    2
+                ]
+            }
+        },
+        "110043": {
+            "type": "questModel",
+            "name": "gate coll blocker",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    156.0,
+                    45.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    10.25,
+                    8.0
+                ]
+            },
+            "collisionsOnly": true,
+            "ctsc_finQuest_args": {},
+            "ctsc_finQuest_key": "hide",
+            "ctsc_getQuest_args": {},
+            "ctsc_getQuest_key": "",
+            "flattenType": "light",
+            "goonHatType": "none",
+            "hideCondition": "finishedQuest",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_9/models/cogHQ/woodCrateB.bam",
+            "wantedQuest": {
+                "tuple": [
+                    2,
+                    100,
+                    1
+                ]
+            }
+        },
+        "110024": {
+            "type": "suitBattleCell",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -30.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110025": {
+            "type": "suitBattleCell",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110026": {
+            "type": "suitBattleCell",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    40.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110029": {
+            "type": "suitBattleCell",
+            "name": "duck shuffler smile",
+            "comment": "",
+            "parentEntId": 110027,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110038": {
+            "type": "suitBattleCell",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -20.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110039": {
+            "type": "suitBattleCell",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110040": {
+            "type": "suitBattleCell",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    40.0,
+                    2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110015": {
+            "type": "suitPathCollection",
+            "name": "entrance SPC",
+            "comment": "",
+            "parentEntId": 1,
+            "pos": {
+                "LPoint3f": [
+                    60.0,
+                    20.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "battleCellIds": [
+                110024,
+                110025,
+                110026
+            ],
+            "buildingIds": [
+                110005,
+                110006,
+                110007
+            ],
+            "enabled": true,
+            "maxSuits": 15,
+            "minSuits": 5,
+            "spawnDataKey": "test_spawn",
+            "spawnDelay": 5.0
+        },
+        "110027": {
+            "type": "suitPathCollection",
+            "name": "duck shuffler fight",
+            "comment": "",
+            "parentEntId": 3,
+            "pos": {
+                "LPoint3f": [
+                    25.0,
+                    -50.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "battleCellIds": [
+                110029
+            ],
+            "buildingIds": [],
+            "enabled": true,
+            "maxSuits": 1,
+            "minSuits": 1,
+            "spawnDataKey": "test_shuffler",
+            "spawnDelay": 25.0
+        },
+        "110030": {
+            "type": "suitPathCollection",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    25.0,
+                    40.0,
+                    -0.75
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "battleCellIds": [
+                110038,
+                110039,
+                110040
+            ],
+            "buildingIds": [
+                110008,
+                110009
+            ],
+            "enabled": true,
+            "maxSuits": 4,
+            "minSuits": 1,
+            "spawnDataKey": "test_spawn",
+            "spawnDelay": 5.0
+        },
+        "110016": {
+            "type": "suitPathPoint",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    7.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110017
+        },
+        "110017": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    7.5,
+                    54.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110018
+        },
+        "110018": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -7.5,
+                    54.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110019
+        },
+        "110019": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -7.5,
+                    40.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110020
+        },
+        "110020": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -7.5,
+                    7.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110021
+        },
+        "110021": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -35.0,
+                    7.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110022
+        },
+        "110022": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (6)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    -35.0,
+                    -7.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110023
+        },
+        "110023": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (7)",
+            "comment": "",
+            "parentEntId": 110015,
+            "pos": {
+                "LPoint3f": [
+                    7.5,
+                    -7.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110016
+        },
+        "110028": {
+            "type": "suitPathPoint",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110027,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 0
+        },
+        "110031": {
+            "type": "suitPathPoint",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    -7.5,
+                    -21.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110033
+        },
+        "110032": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    -7.5,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110031
+        },
+        "110033": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    7.5,
+                    -21.5,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110034
+        },
+        "110034": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    7.5,
+                    -6.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110035
+        },
+        "110035": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    50.0,
+                    -6.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110036
+        },
+        "110036": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    50.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110037
+        },
+        "110037": {
+            "type": "suitPathPoint",
+            "name": "copy of <unnamed> (6)",
+            "comment": "",
+            "parentEntId": 110030,
+            "pos": {
+                "LPoint3f": [
+                    12.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pointsTo": 110032
+        },
+        "10001": {
+            "type": "textNode",
+            "name": "Drowsy Dreamland?",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    -2.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "dropShadow": 0,
+            "font": "phase_3/fonts/MickeyFont.bam",
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    0.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "height": 50.0,
+            "indent": 0.0,
+            "kern": 0.0,
+            "smallCaps": 0,
+            "stomp": 0.0,
+            "stumble": 0.0,
+            "text": "Drowsy Dreamland?",
+            "width": 1.0,
+            "wiggle": 0.0
+        },
+        "10015": {
+            "type": "textNode",
+            "name": "KAZOOLOGY",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    6.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.75,
+                    1.0,
+                    1.0
+                ]
+            },
+            "dropShadow": 0,
+            "font": "phase_3/fonts/Bocah.ttf",
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    0.0,
+                    0.35294100642204285,
+                    1.0
+                ]
+            },
+            "height": 10.0,
+            "indent": 0.0,
+            "kern": 0.0,
+            "smallCaps": 0,
+            "stomp": 0.0,
+            "stumble": 0.0,
+            "text": "KAZOOLOGY",
+            "width": 1.0,
+            "wiggle": 0.0
+        },
+        "10016": {
+            "type": "textNode",
+            "name": "SCHOOL OF MUSIC",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    5.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.25,
+                    1.0,
+                    1.0
+                ]
+            },
+            "dropShadow": 0,
+            "font": "phase_3/fonts/Bocah.ttf",
+            "color": {
+                "LVector4f": [
+                    0.35294100642204285,
+                    0.0,
+                    0.35294100642204285,
+                    1.0
+                ]
+            },
+            "height": 15.0,
+            "indent": 0.0,
+            "kern": 0.0,
+            "smallCaps": 0,
+            "stomp": 0.0,
+            "stumble": 0.0,
+            "text": "School of Music",
+            "width": 1.0,
+            "wiggle": 0.0
+        },
+        "110003": {
+            "type": "textNode",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 110002,
+            "pos": {
+                "LPoint3f": [
+                    20.0,
+                    0.0,
+                    15.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    4.0,
+                    4.0,
+                    4.0
+                ]
+            },
+            "dropShadow": 0,
+            "font": "phase_3/fonts/Humanist.ttf",
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            },
+            "height": 20.0,
+            "indent": 0.0,
+            "kern": 0.0,
+            "smallCaps": 0,
+            "stomp": 0.0,
+            "stumble": 0.01,
+            "text": "Leave. Now.",
+            "width": 3.0,
+            "wiggle": 0.0
+        },
+        "110004": {
+            "type": "textNode",
+            "name": "Developer Drive",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    -1.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.399999976158142,
+                    1.0,
+                    1.2999999523162842
+                ]
+            },
+            "dropShadow": 0,
+            "font": "phase_3/fonts/MickeyFont.bam",
+            "color": {
+                "LVector4f": [
+                    1.0,
+                    0.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "height": 50.0,
+            "indent": 0.0,
+            "kern": 0.0,
+            "smallCaps": 0,
+            "stomp": 0.0,
+            "stumble": 0.0,
+            "text": "DEVELOPER DRIVE",
+            "width": 1.0,
+            "wiggle": 0.0
+        },
+        "110000": {
+            "type": "tunnel",
+            "name": "Entrance Tunnel",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.5
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "destinationTunnelId": 5,
+            "destinationZone": 9400,
+            "legacyDestination": 0,
+            "tunnelId": 1,
+            "tunnelModelPath": "phase_3.5/models/modules/cc_m_gen_prp_tunnel_st2sz"
+        },
+        "110002": {
+            "type": "tunnel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 4,
+            "pos": {
+                "LPoint3f": [
+                    35.0,
+                    -42.75,
+                    -0.5
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "destinationTunnelId": 1,
+            "destinationZone": 7400,
+            "legacyDestination": 0,
+            "tunnelId": 2,
+            "tunnelModelPath": "phase_3.5/models/modules/cc_m_gen_prp_tunnel_st2sz"
+        },
+        "110045": {
+            "type": "model",
+            "name": "random crate",
+            "comment": "",
+            "parentEntId": 2,
+            "pos": {
+                "LPoint3f": [
+                    105.0,
+                    63.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "loadType": "loadModel",
+            "modelPath": "phase_9/models/cogHQ/woodCrateB.bam",
+            "modelNode": "",
+            "flattenType": "light",
+            "collisionsOnly": 0,
+            "goonHatType": "none"
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}
