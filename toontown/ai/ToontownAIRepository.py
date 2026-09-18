@@ -109,8 +109,9 @@ class ToontownAIRepository(ToontownInternalRepository):
         # Hammerspace inventory system expects self.air.mongodb (Clash's naming
         # for the database handle) -- alias it to Altis's existing connection
         # rather than opening a second one.
-        from toontown.inventory.services.InventoryDatabaseAI import InventoryDatabaseAI
-        self.inventoryDb = InventoryDatabaseAI(self)
+        self.mongodb = self.dbGlobalCursor
+        from toontown.inventory.services.InventoryDatabaseAI import InventoryMongoDatabaseAI
+        self.inventoryDb = InventoryMongoDatabaseAI(self)
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
         self.zoneDataStore = AIZoneDataStore()

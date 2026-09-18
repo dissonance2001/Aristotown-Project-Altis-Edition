@@ -105,3 +105,66 @@ class InventoryDatabaseAI(DirectObject):
         inventory = DefaultInventory.getDefaultInventory()
         self.inventoryCache[avId] = inventory
         return inventory
+
+
+class InventoryMongoDatabaseAI(InventoryDatabaseAI):
+    """
+    Provides an interface for direct query & interfaces for Toon inventories.
+    Interfaces with MongoDB.
+    """
+    DEV_RESET_ON_LOGIN = False
+
+    def __init__(self, air):
+        """:type air: ToontownAIRepository"""
+        super().__init__(air)
+        self.collection: Collection = self.air.mongodb.inventory
+
+    def queryInventory(self, avId: int, create: bool = False) -> Optional[Inventory]:
+        """
+        Queries for an avatar's inventory.
+        """
+        # NOTE: Clash additionally gated this to dev realms via RealmGlobals.
+        # Altis has no realm concept, so this now relies solely on DEV_RESET_ON_LOGIN.
+        if self.DEV_RESET_ON_LOGIN:
+            return self.makeInventory(avId, force=True)
+
+        inventoryJson = self.collection.find_one({'_id': avId})
+        if not inventoryJson:
+            # No document found ... what do we do?
+            if create:
+                # Force create an inventory.
+                return self.makeInventory(avId, force=True)
+            else:
+                # Nope, return nothin'.
+                return None
+
+        # Return our inventory dict
+        return Inventory.fromMongo(inventoryJson)
+
+    def saveInventory(self, avId: int, inventory: Inventory) -> None:
+        """
+        Saves an avatar's inventory.
+        """
+        self.collection.update_one({'_id': avId}, {"$set": inventory.toMongo()})
+
+    def makeInventory(self, avId: int, force: bool = False) -> Inventory:
+        """
+        Creates an avatar's default inventory.
+        """
+        inventoryJson = self.collection.find_one({'_id': avId})
+        if inventoryJson:
+            if not force:
+                raise AttributeError("avId already has an inventory!")
+            else:
+                self.collection.delete_one({'_id': avId})
+
+        # Make default inventory.
+        inventory = DefaultInventory.getDefaultInventory()
+
+        # Save it in DB.
+        inventoryJson = inventory.toMongo()
+        inventoryJson.update({'_id': avId})
+        self.collection.insert_one(inventoryJson)
+
+        # Return the inventory.
+        return inventory
