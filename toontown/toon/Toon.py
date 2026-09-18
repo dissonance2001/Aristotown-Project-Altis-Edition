@@ -4299,6 +4299,7 @@ class Toon(Avatar.Avatar, ToonHead):
         """
         from toontown.inventory.enums.ItemEnums import ItemType
 
+        self.clearAccessories()
         self.clearAccessoryItems(regen=False)
         self.setHammerspaceShoe(shoe=None, regen=False)
 

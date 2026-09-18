@@ -22,9 +22,6 @@ class ToonAccessory(AsyncDirectObject):
         self.async_addLoadCallback(self.start)
 
     def load_postModelLoad(self, model):
-        modelPath = self.item.getItemDefinition().getModelPath()
-        if modelPath:
-            base.globalCache.addModelToCache(modelPath, model)
         self.accessoryGeom = model
         self._loadTexture()
         self._positionAccessory()
@@ -53,8 +50,8 @@ class ToonAccessory(AsyncDirectObject):
         itemDef = self.item.getItemDefinition()
         modelPath = itemDef.getModelPath()
         if modelPath:
-            loadReq = base.asyncRequestMgr.loadModel(modelPath, self.load_postModelLoad)
-            self.async_loadRequests.append(loadReq)
+            geom = loader.loadModel(modelPath)
+            self.load_postModelLoad(geom)
         else:
             geom = hidden.attachNewNode('blankAccessory')
             self.load_postModelLoad(geom)
