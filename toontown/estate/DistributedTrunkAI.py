@@ -35,10 +35,14 @@ class DistributedTrunkAI(DistributedClosetAI):
         if dclass != self.air.dclassesByName['DistributedToonAI']:
             self.notify.warning('Got object of wrong type!')
             return
-        self.hatList = fields['setHatList'][0]
-        self.glassesList = fields['setGlassesList'][0]
-        self.backpackList = fields['setBackpackList'][0]
-        self.shoesList = fields['setShoesList'][0]
+        # NOTE: setHatList/setGlassesList/setBackpackList/setShoesList were removed as DB
+        # fields from DistributedToon as part of the hammerspace migration, so they no
+        # longer appear in the queried fields dict. Defaulting to [] here until the closet/
+        # trunk UI is migrated to read equipped hammerspace items instead.
+        self.hatList = fields.get('setHatList', [[]])[0]
+        self.glassesList = fields.get('setGlassesList', [[]])[0]
+        self.backpackList = fields.get('setBackpackList', [[]])[0]
+        self.shoesList = fields.get('setShoesList', [[]])[0]
         dna = ToonDNA(str=fields['setDNAString'][0])
         self.gender = dna.gender
 

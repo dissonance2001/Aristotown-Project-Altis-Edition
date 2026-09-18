@@ -233,6 +233,15 @@ class ToonBase(OTPBase.OTPBase):
         
         __builtins__['NO_FADE_SORT_INDEX'] = 4000
         oldLoader.destroy()
+
+        # Needed by the hammerspace inventory GUI for item hover tooltips.
+        # NOTE: this must be created after addCullBins() (so the
+        # 'item-hover-tooltip' bin exists) and after the ToontownLoader/phase
+        # mounts are installed above (so phase_3 GUI textures can resolve),
+        # otherwise HoverFrame's ScaledFrame can end up in a broken state
+        # that also disrupts other popup-bin GUI (e.g. inventory icons).
+        from toontown.gui.hover.HoverFrameManager import HoverFrameManager
+        self.hoverMgr = HoverFrameManager()
         self.accept('PandaPaused', self.disableAllAudio)
         self.accept('PandaRestarted', self.enableAllAudio)
         self.friendMode = self.config.GetBool('switchboard-friends', 0)
@@ -309,6 +318,49 @@ class ToonBase(OTPBase.OTPBase):
         cogGray.setTextColor(0.2, 0.2, 0.2, 1.0)
         cogGray.setShadow(.01)
         tpMgr.setProperties('cogGray', cogGray)
+
+        # Text properties used by the item hover tooltip (HoverFrame). These
+        # were being referenced via \1name\1 tags but were never registered,
+        # so they silently had no effect (equip indicator not highlighted,
+        # underline separator not dimmed/styled, rarity words uncolored).
+        deepYellow = TextProperties()
+        deepYellow.setTextColor(1.0, 0.85, 0.1, 1.0)
+        tpMgr.setProperties('deepYellow', deepYellow)
+
+        itemHoverUnderline = TextProperties()
+        itemHoverUnderline.setTextColor(0.5, 0.5, 0.5, 1.0)
+        tpMgr.setProperties('item_hover_underline', itemHoverUnderline)
+
+        textShrink = TextProperties()
+        textShrink.setTextScale(0.01)
+        tpMgr.setProperties('TextShrink', textShrink)
+
+        slightSlant = TextProperties()
+        slightSlant.setSlant(0.2)
+        slightSlant.setTextColor(0.85, 0.3, 0.3, 1.0)
+        tpMgr.setProperties('SlightSlant', slightSlant)
+
+        # Rarity colors for item hover tooltips (e.g. "Common", "Rare").
+        rarityCommon = TextProperties()
+        rarityCommon.setTextColor(0.75, 0.75, 0.75, 1.0)
+        tpMgr.setProperties('rarityCommon', rarityCommon)
+
+        rarityUncommon = TextProperties()
+        rarityUncommon.setTextColor(0.2, 0.85, 0.3, 1.0)
+        tpMgr.setProperties('rarityUncommon', rarityUncommon)
+
+        rarityRare = TextProperties()
+        rarityRare.setTextColor(0.25, 0.55, 1.0, 1.0)
+        tpMgr.setProperties('rarityRare', rarityRare)
+
+        rarityEpic = TextProperties()
+        rarityEpic.setTextColor(0.7, 0.3, 0.95, 1.0)
+        tpMgr.setProperties('rarityEpic', rarityEpic)
+
+        rarityLegendary = TextProperties()
+        rarityLegendary.setTextColor(1.0, 0.65, 0.0, 1.0)
+        tpMgr.setProperties('rarityLegendary', rarityLegendary)
+
         del tpMgr
         self.lastScreenShotTime = globalClock.getRealTime()
         self.accept('InputState-forward', self.__walking)
@@ -519,6 +571,7 @@ class ToonBase(OTPBase.OTPBase):
         cbm.addBin('ground', CullBinManager.BTUnsorted, 18)
         cbm.addBin('shadow', CullBinManager.BTBackToFront, 19)
         cbm.addBin('gui-popup', CullBinManager.BTUnsorted, 60)
+        cbm.addBin('item-hover-tooltip', CullBinManager.BTFixed, 1000)
 
     def disableShowbaseMouse(self):
         self.useDrive()

@@ -30,8 +30,12 @@ class DistributedClosetAI(DistributedFurnitureItemAI):
     def __gotOwner(self, dclass, fields):
         if dclass != self.air.dclassesByName['DistributedToonAI']:
             return
-        self.botList = fields['setClothesBottomsList'][0]
-        self.topList = fields['setClothesTopsList'][0]
+        # NOTE: setClothesTopsList/setClothesBottomsList were removed as DB fields from
+        # DistributedToon as part of the hammerspace migration, so they no longer appear
+        # in the queried fields dict. Defaulting to [] here until the closet UI is
+        # migrated to read equipped hammerspace items instead.
+        self.botList = fields.get('setClothesBottomsList', [[]])[0]
+        self.topList = fields.get('setClothesTopsList', [[]])[0]
         dna = ToonDNA(str=fields['setDNAString'][0])
         self.gender = dna.gender
 

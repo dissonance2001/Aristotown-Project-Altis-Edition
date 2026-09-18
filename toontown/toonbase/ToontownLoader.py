@@ -95,6 +95,13 @@ class ToontownLoader(nLoader.Loader):
         self.tick()
         return ret
 
+    def loadModelRaw(self, *args, **kw):
+        # NOTE: Clash's loadModelRaw bypasses an asset-cache wrapper that
+        # Altis's own loadModel doesn't have (it already loads directly via
+        # the base Loader, uncached). Kept as a plain alias so ported code
+        # that calls loadModelRaw works without assuming a cache layer.
+        return nLoader.Loader.loadModel(self, *args, **kw)
+
     def loadFont(self, *args, **kw):
         if args:
             newArgs = list(args)

@@ -1,0 +1,1904 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone7a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10013": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    57.02190017700195,
+                    -5.0,
+                    2.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.5,
+                    2.5,
+                    2.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10015": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -25.739999771118164,
+                    58.35749816894531,
+                    9.735509872436523
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    95.44029998779297,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.5378999710083008,
+                    1.5378999710083008,
+                    1.5378999710083008
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10016": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    33.339500427246094,
+                    -23.0,
+                    2.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.5,
+                    2.5,
+                    2.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "10017": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10018,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    6.75
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    169.6999969482422,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2200000286102295,
+                    2.2200000286102295,
+                    2.2200000286102295
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_vacuum_pipes.bam"
+        },
+        "10020": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10018,
+            "pos": {
+                "LPoint3f": [
+                    -12.071399688720703,
+                    0.0,
+                    6.75
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    288.43499755859375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2200000286102295,
+                    2.2200000286102295,
+                    2.2200000286102295
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_vacuum_pipes.bam"
+        },
+        "10022": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -65.0,
+                    2.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.5,
+                    2.5,
+                    2.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_side_pipes.bam"
+        },
+        "100015": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -1.3169599771499634,
+                    0.0,
+                    0.10000000149011612
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.600000023841858,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100016": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -12.74779987335205,
+                    -11.999099731445312,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.47000122070312,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6669999957084656,
+                    0.6669999957084656,
+                    0.6669999957084656
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_couch"
+        },
+        "100017": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -17.05030059814453,
+                    0.0,
+                    0.10000000149011612
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100019": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    0.8978319764137268,
+                    -12.205300331115723,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.47000122070312,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6669999957084656,
+                    0.6669999957084656,
+                    0.6669999957084656
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_couch"
+        },
+        "100020": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    6.349100112915039,
+                    -6.576119899749756,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    0.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/PartitionA"
+        },
+        "100021": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -20.9335994720459,
+                    -5.071579933166504,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0044900178909302,
+                    1.0044900178909302,
+                    1.0044900178909302
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_twist_stacks"
+        },
+        "100022": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    4.961719989776611,
+                    -5.071579933166504,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    272.489990234375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0044900178909302,
+                    1.0044900178909302,
+                    1.0044900178909302
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_twist_stacks"
+        },
+        "100023": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -20.536300659179688,
+                    -8.427550315856934,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.3329999446868896,
+                    1.3329999446868896,
+                    1.3329999446868896
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_armchair"
+        },
+        "100024": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100018,
+            "pos": {
+                "LPoint3f": [
+                    -5.939199924468994,
+                    -12.349499702453613,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.47000122070312,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk_lamp"
+        },
+        "100026": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    16.78660011291504,
+                    12.956199645996094,
+                    0.10000000149011612
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    185.19400024414062,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100027": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    -21.24690055847168,
+                    12.853500366210938,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    187.125,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100028": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    5.20127010345459,
+                    12.853500366210938,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100029": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    -8.510089874267578,
+                    13.111800193786621,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100030": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    -15.78030014038086,
+                    1.7984399795532227,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    188.1300048828125,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100031": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    14.449000358581543,
+                    2.9023799896240234,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    184.76400756835938,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100032": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    12.240900039672852,
+                    -22.04319953918457,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    184.76400756835938,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.399999976158142,
+                    1.399999976158142,
+                    1.399999976158142
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "100033": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100025,
+            "pos": {
+                "LPoint3f": [
+                    -1.1836999654769897,
+                    1.7984399795532227,
+                    0.09298510104417801
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    170.53799438476562,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    -2.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10018": {
+            "type": "nodepath",
+            "name": "rightVertPipes",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    -16.453699111938477,
+                    -45.39820098876953,
+                    -8.399999618530273
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.6499999761581421,
+                    0.6499999761581421,
+                    1.559999942779541
+                ]
+            }
+        },
+        "10021": {
+            "type": "nodepath",
+            "name": "rightPipes",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100001": {
+            "type": "nodepath",
+            "name": "cameraTarget1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100002": {
+            "type": "nodepath",
+            "name": "copy of cameraTarget1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    30.0,
+                    -10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100003": {
+            "type": "nodepath",
+            "name": "copy of cameraTarget1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    40.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100005": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -30.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100006": {
+            "type": "nodepath",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -60.0,
+                    15.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100007": {
+            "type": "nodepath",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -60.0,
+                    -15.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100009": {
+            "type": "nodepath",
+            "name": "camera3 target",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    25.0,
+                    -2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100010": {
+            "type": "nodepath",
+            "name": "copy of camera3 target",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    -2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100011": {
+            "type": "nodepath",
+            "name": "copy of camera3 target (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -50.0,
+                    -2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100013": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    60.0,
+                    10.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100014": {
+            "type": "nodepath",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    40.0,
+                    10.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100018": {
+            "type": "nodepath",
+            "name": "wall1parent",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -7.532360076904297,
+                    20.74880027770996,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100025": {
+            "type": "nodepath",
+            "name": "wall2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -7.366980075836182,
+                    -23.693300247192383,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100035": {
+            "type": "nodepath",
+            "name": "targ1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -27.713199615478516,
+                    -17.019899368286133,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100036": {
+            "type": "nodepath",
+            "name": "copy of targ1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    9.37401008605957,
+                    -17.019899368286133,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100038": {
+            "type": "nodepath",
+            "name": "tegrat",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    8.31643009185791,
+                    -40.45320129394531,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100039": {
+            "type": "nodepath",
+            "name": "copy of tegrat",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -27.661300659179688,
+                    -37.08409881591797,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100040": {
+            "type": "nodepath",
+            "name": "copy of tegrat (2)",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -6.484119892120361,
+                    -29.811500549316406,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100042": {
+            "type": "nodepath",
+            "name": "gettar",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -7.9239702224731445,
+                    14.302599906921387,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100043": {
+            "type": "nodepath",
+            "name": "copy of gettar",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -23.197799682617188,
+                    15.190500259399414,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100000": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    33.4453010559082,
+                    -2.27554988861084,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    -3.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 6.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 10.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    -3.0,
+                    -3.0,
+                    25.0
+                ]
+            },
+            "radius": 6.0,
+            "switchId": 0,
+            "trackTarget1": 100001,
+            "trackTarget2": 100002,
+            "trackTarget3": 100003
+        },
+        "100004": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -58.477298736572266,
+                    4.031970024108887,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 4.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 15.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    6.0,
+                    6.0,
+                    25.0
+                ]
+            },
+            "radius": 5,
+            "switchId": 0,
+            "trackTarget1": 100005,
+            "trackTarget2": 100006,
+            "trackTarget3": 100007
+        },
+        "100008": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -22.592300415039062,
+                    -33.40999984741211,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 17.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 20.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    12.0,
+                    16.0,
+                    32.0
+                ]
+            },
+            "radius": 7.0,
+            "switchId": 0,
+            "trackTarget1": 100009,
+            "trackTarget2": 100010,
+            "trackTarget3": 100011
+        },
+        "100012": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -9.200730323791504,
+                    65.65630340576172,
+                    8.449999809265137
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 7.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 15.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    17.0
+                ]
+            },
+            "radius": 5,
+            "switchId": 0,
+            "trackTarget1": 100014,
+            "trackTarget2": 100013,
+            "trackTarget3": 0
+        },
+        "100034": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -10.55370044708252,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 40.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 20.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    25.0
+                ]
+            },
+            "radius": 4.0,
+            "switchId": 0,
+            "trackTarget1": 100035,
+            "trackTarget2": 100036,
+            "trackTarget3": 0
+        },
+        "100037": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -28.996400833129883,
+                    -30.284900665283203,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 5.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 12.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    6.0,
+                    6.0,
+                    25.0
+                ]
+            },
+            "radius": 5,
+            "switchId": 0,
+            "trackTarget1": 100039,
+            "trackTarget2": 100038,
+            "trackTarget3": 100040
+        },
+        "100041": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -32.95690155029297,
+                    19.61370086669922,
+                    0.04708750173449516
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 12.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 5,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    12.0,
+                    0.0,
+                    25.0
+                ]
+            },
+            "radius": 5,
+            "switchId": 0,
+            "trackTarget1": 100042,
+            "trackTarget2": 100043,
+            "trackTarget3": 0
+        },
+        "100142": {
+            "type": "chair",
+            "name": "chair 1",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -29.299999237060547,
+                    12.199999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "100143": {
+            "type": "chair",
+            "name": "chair 2",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -22.649999618530273,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "100144": {
+            "type": "chair",
+            "name": "chair 3",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -20.18000030517578,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "100145": {
+            "type": "chair",
+            "name": "chair 4",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -17.68000030517578,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "100146": {
+            "type": "chair",
+            "name": "chair 5",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -9.199999809265137,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7000000476837158
+                ]
+            }
+        },
+        "100147": {
+            "type": "chair",
+            "name": "chair 6",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -6.599999904632568,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "100148": {
+            "type": "chair",
+            "name": "chair 7",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -4.0,
+                    7.699999809265137,
+                    0.30000001192092896
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    -180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "hopOnPos": {
+                "LPoint3f": [
+                    -0.10000000149011612,
+                    -4.300000190734863,
+                    4.0
+                ]
+            },
+            "hopOffPos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.0,
+                    1.7999999523162842
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

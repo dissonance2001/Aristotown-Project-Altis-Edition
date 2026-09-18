@@ -1,0 +1,112 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_12/models/bossbotHQ/BossbotPresidentsRm",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "110400": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    4.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 10
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "110401": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    101.06999969482422,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

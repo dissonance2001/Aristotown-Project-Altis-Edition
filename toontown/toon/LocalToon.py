@@ -1035,6 +1035,79 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             if self.sprinting:
                 self.stopSprint(fromFunc=True)
 
+    def lockControlsForEntry(self):
+        """
+        Disables toon movement/typing while a modal text-entry widget (e.g.
+        the TTGui SearchBar) has keyboard focus. Called by TTGui.lockAvatar.
+
+        NOTE: ported from Clash, but adapted to Altis's architecture:
+        - Clash calls self.disableControls()/enableControls() directly;
+          Altis's LocalToon has no such bare method, movement is disabled
+          via self.controlManager (a direct.controls.ControlManager
+          instance) instead, as done elsewhere in this file (setSpeeds,
+          collisionsOn, etc).
+        - Clash also calls self.chatContainer.deactivateKeybinds() and
+          base.cr.gameGui.stickerBook.disableBookPageHotkeys(). Neither
+          exists here (Altis has no ChatContainer/gameGui); hotkey
+          suppression instead lives on self.book as _ignoreCloseHotkeys/
+          _acceptCloseHotkeys, so those calls were dropped/adapted rather
+          than ported as-is.
+        """
+        self.disableSpeedChatPlusTyping = 1
+        self.controlManager.disableControls()
+        if getattr(self, 'book', None):
+            self.book._ignoreCloseHotkeys()
+
+    def unlockControlsForEntry(self):
+        self.disableSpeedChatPlusTyping = 0
+        self.controlManager.enableControls()
+        if getattr(self, 'book', None):
+            self.book._acceptCloseHotkeys()
+
+    def disableHotkeys(self):
+        """
+        Suppresses the sticker-book-open hotkey (and options-page hotkey)
+        while a modal text-entry widget has focus, so e.g. pressing a bound
+        key while typing in the search bar doesn't also pop the book open.
+        Called by TTGui.lockAvatar.
+
+        NOTE: ported from Clash, adapted to Altis's architecture. Clash
+        calls place.walkStateData.disableBookHotkey() /
+        base.cr.gameGui.stickerBook.removeShtikerHotkeys(); Altis has
+        neither. The equivalents here are PublicWalk._ignoreActionKeys()
+        (used while walking around) and ShtikerBook._ignoreCloseHotkeys()
+        (used while the book itself is open) -- both already exist and are
+        used the same way elsewhere in this codebase.
+        """
+        place = base.cr.playGame.getPlace()
+        if place is None:
+            return
+        placeState = place.getState()
+        if placeState == "walk":
+            walkStateData = getattr(place, 'walkStateData', None)
+            if walkStateData and hasattr(walkStateData, '_ignoreActionKeys'):
+                walkStateData._ignoreActionKeys()
+        elif placeState == "stickerBook":
+            if getattr(self, 'book', None):
+                self.book._ignoreCloseHotkeys()
+        self.ignore("disable-hotkeys")
+        self.accept("enable-hotkeys", self.enableHotkeys)
+
+    def enableHotkeys(self):
+        place = base.cr.playGame.getPlace()
+        if place is None:
+            return
+        placeState = place.getState()
+        if placeState == "walk":
+            walkStateData = getattr(place, 'walkStateData', None)
+            if walkStateData and hasattr(walkStateData, '_acceptActionKeys'):
+                walkStateData._acceptActionKeys()
+        elif placeState == "stickerBook":
+            if getattr(self, 'book', None):
+                self.book._acceptCloseHotkeys()
+        self.ignore("enable-hotkeys")
+        self.accept("disable-hotkeys", self.disableHotkeys)
+
     def requestSprint(self):
         # In toggle mode, one press turns sprint on and the next press turns
         # it off. In hold mode the key-up handler below stops sprinting.

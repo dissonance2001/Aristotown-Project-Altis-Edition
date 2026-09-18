@@ -1,0 +1,1350 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone08a",
+            "wantDoors": 1
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10001": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    -1.0292500257492065,
+                    87.0907974243164,
+                    11.895999908447266
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 10.0
+        },
+        "10006": {
+            "type": "battleBlocker",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    -60.90650177001953,
+                    -3.269059896469116,
+                    0.11710900068283081
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 1,
+            "radius": 15.0
+        },
+        "10047": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    0.20000000298023224,
+                    1.0
+                ]
+            },
+            "cellId": 2,
+            "radius": 20.0
+        },
+        "10034": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10033,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    163.30099487304688,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 6,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 4,
+            "rewardPerGrabMax": 6
+        },
+        "10041": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10033,
+            "pos": {
+                "LPoint3f": [
+                    5.406109809875488,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    199.44000244140625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 6,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 4,
+            "rewardPerGrabMax": 6
+        },
+        "10004": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -1.0980499982833862,
+                    0.02500000037252903
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "strong",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10009": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    -3.9962100982666016,
+                    0.6950790286064148,
+                    0.41999998688697815
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.5,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2000000476837158,
+                    1.2000000476837158,
+                    1.2000000476837158
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10010": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    48.04999923706055,
+                    0.699999988079071,
+                    0.4000000059604645
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.5,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10012": {
+            "type": "model",
+            "name": "rightCrates",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    33.29999923706055,
+                    66.5,
+                    10.640000343322754
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    318.0,
+                    0.0,
+                    0.5
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10015": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10014,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10016": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10014,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    16.200000762939453,
+                    0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10017": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10014,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    32.400001525878906,
+                    0.03999999910593033
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10018": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 10014,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    48.599998474121094,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10022": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    13.0,
+                    0.02500000037252903
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10024": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    -3.7328600883483887,
+                    27.12179946899414,
+                    0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10026": {
+            "type": "model",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 10045,
+            "pos": {
+                "LPoint3f": [
+                    2.200000047683716,
+                    68.44999694824219,
+                    0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10027": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    -11.934900283813477,
+                    38.95280075073242,
+                    0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10029": {
+            "type": "model",
+            "name": "crate",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.8636019825935364,
+                    0.019999999552965164
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10030": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10031": {
+            "type": "model",
+            "name": "copy of crate",
+            "comment": "",
+            "parentEntId": 10029,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    5.46999979019165
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10032": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -5.92218017578125,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10036": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    14.75,
+                    0.019999999552965164
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10037": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    30.950000762939453,
+                    0.029999999329447746
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10039": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10010,
+            "pos": {
+                "LPoint3f": [
+                    -9.2366304397583,
+                    0.8211439847946167,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10042": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    3.0,
+                    -11.84000015258789,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10043": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    -36.66239929199219,
+                    -35.400001525878906,
+                    0.029999999329447746
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    88.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10044": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    29.200000762939453,
+                    0.02500000037252903
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.7999999523162842,
+                    1.7999999523162842,
+                    1.7999999523162842
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_bookshelfA"
+        },
+        "10048": {
+            "type": "model",
+            "name": "cratesAgainstWall",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    -36.0,
+                    68.69999694824219,
+                    10.680000305175781
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    220.0,
+                    -0.5,
+                    0.4000000059604645
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelNode": "",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    66.12000274658203,
+                    10.748000144958496
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "battle",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10003": {
+            "type": "nodepath",
+            "name": "cogs2",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    -53.92470169067383,
+                    -22.761600494384766,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    45.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10005": {
+            "type": "nodepath",
+            "name": "battle",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10007": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10008": {
+            "type": "nodepath",
+            "name": "topWall",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    48.029998779296875,
+                    10.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10011": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10013": {
+            "type": "nodepath",
+            "name": "frontCogs",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    25.395700454711914,
+                    -12.300600051879883,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10014": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    45.54999923706055,
+                    37.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    182.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10021": {
+            "type": "nodepath",
+            "name": "middlePalletWallLeft",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    -37.99290084838867,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10023": {
+            "type": "nodepath",
+            "name": "crateIsland",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    -23.181299209594727,
+                    7.08758020401001,
+                    0.009999999776482582
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        "10028": {
+            "type": "nodepath",
+            "name": "rewardCulDeSac",
+            "comment": "",
+            "parentEntId": 10045,
+            "pos": {
+                "LPoint3f": [
+                    -8.261719703674316,
+                    38.37739944458008,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10033": {
+            "type": "nodepath",
+            "name": "barrels",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    -4.75078010559082,
+                    34.14250183105469,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10035": {
+            "type": "nodepath",
+            "name": "backPalletWall",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    -47.65019989013672,
+                    40.006900787353516,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10040": {
+            "type": "nodepath",
+            "name": "centerCogs",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    -23.937599182128906,
+                    28.353300094604492,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10045": {
+            "type": "nodepath",
+            "name": "middlePalletWallRight",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    17.420000076293945,
+                    -38.29999923706055,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10046": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

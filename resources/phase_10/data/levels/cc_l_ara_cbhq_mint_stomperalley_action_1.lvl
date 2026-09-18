@@ -1,0 +1,543 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE17a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10002": {
+            "type": "gagBarrel",
+            "name": "gag",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -1.8093181848526,
+                    65.05412292480469,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 5,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 5,
+            "rewardPerGrabMax": 0
+        },
+        "10007": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10008": {
+            "type": "mintShelf",
+            "name": "frontShelf",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    0.7547905445098877,
+                    -116.74100494384766,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10009": {
+            "type": "mintShelf",
+            "name": "backShelf1",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    5.0981316566467285,
+                    63.66017532348633,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "10010": {
+            "type": "mintShelf",
+            "name": "copy of backShelf1",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    -3.801971673965454,
+                    81.76020812988281,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "mintId": 12500
+        },
+        "20000": {
+            "type": "nodepath",
+            "name": "stompers",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.75,
+                    0.0,
+                    0.5
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "20001": {
+            "type": "stomper",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    7.0,
+                    5.0,
+                    7.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 3,
+            "period": 4.0,
+            "phaseShift": 0.0,
+            "range": 30.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    12.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 2,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20002": {
+            "type": "stomper",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -14.329400062561035,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    7.0,
+                    5.0,
+                    7.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 3,
+            "period": 2.0,
+            "phaseShift": 0.0,
+            "range": 10.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    12.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 2,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20003": {
+            "type": "stomper",
+            "name": "copy of copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -28.325199127197266,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    7.0,
+                    5.0,
+                    7.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 4,
+            "period": 2.0,
+            "phaseShift": 0.5,
+            "range": 10.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    12.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 2,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20004": {
+            "type": "stomper",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    -3.5,
+                    16.258800506591797,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    3.5,
+                    5.0,
+                    3.5
+                ]
+            },
+            "modelPath": 0,
+            "motion": 1,
+            "period": 3.0001373423482587,
+            "phaseShift": 0.0,
+            "range": 15.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.7099999785423279,
+                    12.0,
+                    0.7099999785423279
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20005": {
+            "type": "stomper",
+            "name": "copy of copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    16.258800506591797,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    3.5,
+                    5.0,
+                    3.5
+                ]
+            },
+            "modelPath": 0,
+            "motion": 0,
+            "period": 1.5,
+            "phaseShift": 0.0,
+            "range": 15.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.7099999785423279,
+                    12.0,
+                    0.7099999785423279
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 1,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20006": {
+            "type": "stomper",
+            "name": "copy of copy of copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    -3.5,
+                    23.439199447631836,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    3.5,
+                    5.0,
+                    3.5
+                ]
+            },
+            "modelPath": 0,
+            "motion": 2,
+            "period": 1.5,
+            "phaseShift": 0.5,
+            "range": 15.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.7099999785423279,
+                    12.0,
+                    0.7099999785423279
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "20007": {
+            "type": "stomper",
+            "name": "copy of copy of copy of copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 20000,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    23.439199447631836,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "crushCellId": null,
+            "damage": 5,
+            "headScale": {
+                "LPoint3f": [
+                    3.5,
+                    5.0,
+                    3.5
+                ]
+            },
+            "modelPath": 0,
+            "motion": 3,
+            "period": 5.0,
+            "phaseShift": 0.5,
+            "range": 15.0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.7099999785423279,
+                    12.0,
+                    0.7099999785423279
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

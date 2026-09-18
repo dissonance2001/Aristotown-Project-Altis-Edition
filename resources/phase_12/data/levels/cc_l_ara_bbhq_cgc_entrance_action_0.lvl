@@ -1,0 +1,173 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_12/models/bossbotHQ/BossbotEntranceRoom",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10000": {
+            "type": "entrancePoint",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    6.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "entranceId": 0,
+            "radius": 15,
+            "theta": 20
+        },
+        "110600": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    8.045999526977539,
+                    -30.70199966430664,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 10
+        },
+        "10041": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -38.34700012207031,
+                    -18.96299934387207,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 7,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 4,
+            "rewardPerGrabMax": 6
+        },
+        "10042": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -38.34700012207031,
+                    -10.54800033569336,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 7,
+            "gagLevelMax": 0,
+            "gagTrack": "random",
+            "rewardPerGrab": 4,
+            "rewardPerGrabMax": 6
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

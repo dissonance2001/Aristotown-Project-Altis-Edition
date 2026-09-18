@@ -9,6 +9,10 @@ from toontown.toon import ToonExperience
 from toontown.toon import InventoryBase
 from toontown.toon import ModuleListAI
 from toontown.toon import ToonDNA
+from toontown.utils.RateLimiter import IdRateLimiter
+from toontown.inventory.base.InventoryItem import InventoryItem
+from toontown.inventory.base.Inventory import Inventory
+from typing import List
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedSmoothNodeAI
 from direct.distributed.ClockDelta import *
@@ -104,6 +108,17 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             PetLookerAI.PetLookerAI.__init__(self)
 
         self.air = air
+        # Hammerspace: currently-equipped items, broadcast to all observers so
+        # other players see this toon's cosmetics. See getHammerspace/addItem/
+        # requestEquipItems/requestUnequipItems below.
+        self.equippedItems = []
+        self.inventoryRateLimiter = IdRateLimiter(max_hits=3, period=1)
+        # STUB: racing/kart activity-level progression tracking. Altis has no
+        # such system yet (planned for later); this always reports level 0 so
+        # ActivityLevelPurchaseRequirement-gated shop items are structurally
+        # wired but simply stay locked until the real system is built.
+        import collections
+        self.activityLevels = collections.defaultdict(int)
         self._lastStickerTime = 0.0
         self.dna = ToonDNA.ToonDNA()
         self.magicWordDNABackups = {}
@@ -273,6 +288,70 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                         tpAccess.append(ToontownGlobals.GoofySpeedway)
                         self.b_setTeleportAccess(tpAccess)
 
+    """
+    Hammerspace Fields
+    """
+
+    def getHammerspace(self) -> Inventory:
+        return self.air.inventoryManager.getInventory(self.getDoId())
+
+    def addItem(self, itemEnum, quantity: int = 1) -> bool:
+        return self.getHammerspace().addItem(itemEnum, quantity)
+
+    def requestEquipItems(self, items):
+        # Received from a client request to equip some items
+        if self.inventoryRateLimiter.userBlocked(self.doId):
+            return
+
+        requestedItems = InventoryItem.fromStructList(items)
+        for item in requestedItems:
+            # This covers a variety of scenarios, including: not owning the item,
+            # item not equippable, inventory type can't equip items, item already
+            # equipped, max equip limit reached and can't force unequip an old
+            # item. All of this is auto included in the equipItem function.
+            if not self.getHammerspace().equipItem(item):
+                self.air.writeServerEvent('suspicious', self.doId,
+                                          f'DistributedToonAI.requestEquipItems item cant be equipped: {item.toStruct()}')
+                self.notify.warning(f'requestEquipItems on avId {self.doId} - item cant be equipped: {item.toStruct()}')
+
+    def requestUnequipItems(self, items):
+        # Received from a client request to unequip some items
+        if self.inventoryRateLimiter.userBlocked(self.doId):
+            return
+
+        requestedItems = InventoryItem.fromStructList(items)
+        for item in requestedItems:
+            # This covers a variety of scenarios, including: not owning the item,
+            # item not unequippable, inventory type can't equip items, item not
+            # equipped, minimum equip limit reached. All of this is auto included
+            # in the unequipItem function.
+            if not self.getHammerspace().unequipItem(item):
+                self.air.writeServerEvent('suspicious', self.doId,
+                                          f'DistributedToonAI.requestUnequipItems item cant be unequipped: {item.toStruct()}')
+                self.notify.warning(f'requestUnequipItems on avId {self.doId} - item cant be unequipped: {item.toStruct()}')
+
+    def b_setEquippedItems(self, equippedItems: List[InventoryItem]):
+        self.setEquippedItems(equippedItems)
+        self.d_setEquippedItems(equippedItems)
+
+    def d_setEquippedItems(self, equippedItems: List[InventoryItem]):
+        self.sendUpdate('setEquippedItems', [InventoryItem.toStructList(equippedItems)])
+
+    def setEquippedItems(self, equippedItems: List[InventoryItem]):
+        self.equippedItems = equippedItems
+
+    def getEquippedItems(self):
+        return self.equippedItems
+
+    def getEquippedItemsOfType(self, itemType):
+        return InventoryItem.findItemTypesFromItemList(itemType, self.getEquippedItems())
+
+    def getActivityLevels(self):
+        return self.activityLevels
+
+    def getActivityLevel(self, activity):
+        return self.activityLevels[activity]
+
     def sendDeleteEvent(self):
         if simbase.wantPets:
             isInEstate = self.isInEstate()
@@ -285,6 +364,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedAvatarAI.DistributedAvatarAI.sendDeleteEvent(self)
 
     def delete(self):
+        self.inventoryRateLimiter = None
         if self._dbCheckDoLater:
             taskMgr.remove(self._dbCheckDoLater)
             self._dbCheckDoLater = None
@@ -515,8 +595,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setHat(idx, textureIdx, colorIdx)
 
     def d_setHat(self, idx, textureIdx, colorIdx):
+        # NOTE: setHat was removed from the .dc file as part of the hammerspace migration --
+        # hats are now equipped via requestEquipItems/requestUnequipItems. This local state
+        # (self.hat) is kept for existing code (catalog/trunk/NPC) until that's migrated too.
         if self.checkAccessorySanity(ToonDNA.HAT, idx, textureIdx, colorIdx):
-            self.sendUpdate('setHat', [idx, textureIdx, colorIdx])
+            pass
 
     def setHat(self, idx, textureIdx, colorIdx):
         if self.checkAccessorySanity(ToonDNA.HAT, idx, textureIdx, colorIdx):
@@ -530,8 +613,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setGlasses(idx, textureIdx, colorIdx)
 
     def d_setGlasses(self, idx, textureIdx, colorIdx):
+        # NOTE: setGlasses removed from .dc -- see d_setHat note above.
         if self.checkAccessorySanity(ToonDNA.GLASSES, idx, textureIdx, colorIdx):
-            self.sendUpdate('setGlasses', [idx, textureIdx, colorIdx])
+            pass
 
     def setGlasses(self, idx, textureIdx, colorIdx):
         if self.checkAccessorySanity(ToonDNA.GLASSES, idx, textureIdx, colorIdx):
@@ -545,8 +629,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setBackpack(idx, textureIdx, colorIdx)
 
     def d_setBackpack(self, idx, textureIdx, colorIdx):
+        # NOTE: setBackpack removed from .dc -- see d_setHat note above.
         if self.checkAccessorySanity(ToonDNA.BACKPACK, idx, textureIdx, colorIdx):
-            self.sendUpdate('setBackpack', [idx, textureIdx, colorIdx])
+            pass
 
     def setBackpack(self, idx, textureIdx, colorIdx):
         if self.checkAccessorySanity(ToonDNA.BACKPACK, idx, textureIdx, colorIdx):
@@ -560,8 +645,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setShoes(idx, textureIdx, colorIdx)
 
     def d_setShoes(self, idx, textureIdx, colorIdx):
+        # NOTE: setShoes removed from .dc -- see d_setHat note above.
         if self.checkAccessorySanity(ToonDNA.SHOES, idx, textureIdx, colorIdx):
-            self.sendUpdate('setShoes', [idx, textureIdx, colorIdx])
+            pass
 
     def setShoes(self, idx, textureIdx, colorIdx):
         if self.checkAccessorySanity(ToonDNA.SHOES, idx, textureIdx, colorIdx):
@@ -982,7 +1068,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return numAccessories + extraAccessories >= self.maxAccessories
 
     def d_setHatList(self, clothesList):
-        self.sendUpdate('setHatList', [clothesList])
+        # NOTE: setHatList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setHatList(self, clothesList):
         self.hatList = clothesList
@@ -995,7 +1082,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.hatList
 
     def d_setGlassesList(self, clothesList):
-        self.sendUpdate('setGlassesList', [clothesList])
+        # NOTE: setGlassesList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setGlassesList(self, clothesList):
         self.glassesList = clothesList
@@ -1008,7 +1096,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.glassesList
 
     def d_setBackpackList(self, clothesList):
-        self.sendUpdate('setBackpackList', [clothesList])
+        # NOTE: setBackpackList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setBackpackList(self, clothesList):
         self.backpackList = clothesList
@@ -1021,7 +1110,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return self.backpackList
 
     def d_setShoesList(self, clothesList):
-        self.sendUpdate('setShoesList', [clothesList])
+        # NOTE: setShoesList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setShoesList(self, clothesList):
         self.shoesList = clothesList
@@ -1202,7 +1292,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return numClothes + extraClothes >= self.maxClothes
 
     def d_setClothesTopsList(self, clothesList):
-        self.sendUpdate('setClothesTopsList', [clothesList])
+        # NOTE: setClothesTopsList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setClothesTopsList(self, clothesList):
         self.clothesTopsList = clothesList
@@ -1254,7 +1345,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         return 0
 
     def d_setClothesBottomsList(self, clothesList):
-        self.sendUpdate('setClothesBottomsList', [clothesList])
+        # NOTE: setClothesBottomsList removed from .dc as part of the hammerspace migration.
+        pass
 
     def setClothesBottomsList(self, clothesList):
         self.clothesBottomsList = clothesList

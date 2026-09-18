@@ -1,0 +1,373 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE15a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10001": {
+            "type": "battleBlocker",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    44.257774353027344,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "cellId": 0,
+            "radius": 10.0
+        },
+        "10003": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    39.39640808105469,
+                    22.259342193603516,
+                    16.0659122467041
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    90.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.560864269733429,
+                    0.560864269733429,
+                    0.560864269733429
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10005": {
+            "type": "model",
+            "name": "farLeft",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    41.822696685791016,
+                    16.54340362548828,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2877755165100098,
+                    2.2877755165100098,
+                    2.2877755165100098
+                ]
+            },
+            "collisionsOnly": 1,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/CBMetalCrate.bam"
+        },
+        "10006": {
+            "type": "model",
+            "name": "farRight",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    41.822696685791016,
+                    -16.540000915527344,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2877755165100098,
+                    2.2877755165100098,
+                    2.2877755165100098
+                ]
+            },
+            "collisionsOnly": 1,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/CBMetalCrate.bam"
+        },
+        "10007": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    39.31927490234375,
+                    -22.823434829711914,
+                    13.609273910522461
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    270.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5600000023841858,
+                    0.560864269733429,
+                    0.560864269733429
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10008": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    -39.38008117675781,
+                    -22.88553810119629,
+                    16.0659122467041
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    90.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    0.560864269733429,
+                    0.560864269733429,
+                    0.560864269733429
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10009": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    -39.3062858581543,
+                    22.180709838867188,
+                    13.609273910522461
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    270.0
+                ]
+            },
+            "scale": {
+                "LPoint3f": [
+                    0.5600000023841858,
+                    0.560864269733429,
+                    0.560864269733429
+                ]
+            },
+            "collisionsOnly": 0,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_C.bam"
+        },
+        "10010": {
+            "type": "model",
+            "name": "nearLeft",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    -41.81999969482422,
+                    16.54340362548828,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2877755165100098,
+                    2.2877755165100098,
+                    2.2877755165100098
+                ]
+            },
+            "collisionsOnly": 1,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/CBMetalCrate.bam"
+        },
+        "10011": {
+            "type": "model",
+            "name": "nearRight",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    -41.81999969482422,
+                    -16.540000915527344,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.2877755165100098,
+                    2.2877755165100098,
+                    2.2877755165100098
+                ]
+            },
+            "collisionsOnly": 1,
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/CBMetalCrate.bam"
+        },
+        "10000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10004": {
+            "type": "nodepath",
+            "name": "collisions",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

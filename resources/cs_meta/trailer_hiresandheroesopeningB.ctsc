@@ -1,0 +1,796 @@
+[
+    {
+        "name": "Initialization",
+        "time": 0.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 2, \"targetIndex\": 3, \"wrt\": 0, \"disable\": false}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"pos\": [-58.99101, -439.18515, 5.06623], \"hpr\": [180.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "2": {
+                "eventDefEnum": "destroyFog",
+                "kwargs": "{\"nodeIndex\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Position All Toons",
+        "time": 0.0,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 4, \"delay\": 0, \"pos\": [-85.66816, -478.47084, -2e-05], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 5, \"delay\": 0, \"pos\": [20.0, -642.48362, -1e-05], \"hpr\": [0.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "2": {
+                "eventDefEnum": "showToons",
+                "kwargs": "{}"
+            },
+            "3": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 26, \"delay\": 0, \"pos\": [0, 0.18, 0.4], \"hpr\": [180, 355, 0], \"scale\": [0.4, 0.314073, 0.4]}"
+            },
+            "4": {
+                "eventDefEnum": "hideSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "5": {
+                "eventDefEnum": "setToonSpecies",
+                "kwargs": "{\"toonIndex\": 9, \"toonSpecies\": \"m\", \"active\": false}"
+            },
+            "6": {
+                "eventDefEnum": "setToonSpecies",
+                "kwargs": "{\"toonIndex\": 17, \"toonSpecies\": \"d\", \"active\": false}"
+            }
+        }
+    },
+    {
+        "name": "Begin",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 5.7, \"delay\": 0.0, \"pos\": [-2.82775, 5.52698, -2.82775], \"blendType\": \"noBlend\", \"startPos\": [-2.82775, -4.11306, -2.82775], \"useStartPos\": true}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 5.7, \"delay\": 0.0, \"hpr\": [-11.56802, 1.15676, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [-64.78114, 3.47037, 0.0], \"useStartHpr\": true}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 5.7, \"delay\": 0.0, \"end\": 47.14659, \"blendType\": \"noBlend\", \"start\": 32.68657, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Spamonia",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 6, \"delay\": 0, \"pos\": [1.67096, 14.65285, 6.94084], \"hpr\": [-180.0, 4e-05, 9.25442], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 0, \"startAnim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "really",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 7, \"delay\": 0, \"pos\": [-19.08719, -133.35385, 1e-05], \"hpr\": [-89.07395, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 1, \"delay\": 2.31361, \"emoteIndex\": \"Dance\"}"
+            }
+        }
+    },
+    {
+        "name": "Lazy Hal",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 8, \"delay\": 0, \"pos\": [29.64005, 7.60433, 2.23315], \"hpr\": [24.29296, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 2, \"startAnim\": \"sit\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "guffaw",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 9, \"delay\": 0, \"pos\": [17.6735, -141.90147, 1e-05], \"hpr\": [24.2929, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 3, \"delay\": 2.18508, \"emoteIndex\": \"Laugh\"}"
+            }
+        }
+    },
+    {
+        "name": "woody nickel",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 10, \"delay\": 0, \"pos\": [6.36238, -138.5595, 1e-05], \"hpr\": [-121.4645, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 4, \"delay\": 4.01668, \"emoteIndex\": \"Yawn\"}"
+            }
+        }
+    },
+    {
+        "name": "Loony Louis",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 11, \"delay\": 0, \"pos\": [-1.15677, 16.4783, 0.0], \"hpr\": [90.0, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnAndMoveToon",
+                "kwargs": "{\"toonIndex\": 5, \"goalPos\": [-80.0, 16.58088, 0.0], \"goalHpr\": [0, 0, 0], \"moveDuration\": 4.96014, \"turnDuration\": 0, \"delay\": 0, \"walkAnim\": \"walk\", \"runAnim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "Frank Furter",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 12, \"delay\": 0, \"pos\": [-11.82511, 9.89709, 0.0], \"hpr\": [-180.0, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 6, \"delay\": 0.54627, \"emoteIndex\": \"Think\"}"
+            }
+        }
+    },
+    {
+        "name": "Joy Buzzer",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 13, \"delay\": 0, \"pos\": [8.09761, -17.42932, -0.46], \"hpr\": [-149.9958, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 7, \"delay\": 4.27376, \"emoteIndex\": \"No\"}"
+            }
+        }
+    },
+    {
+        "name": "Feather Duster",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 14, \"delay\": 0, \"pos\": [13.68887, -30.02564, -0.46], \"hpr\": [9.25446, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 8, \"delay\": 2.53855, \"emoteIndex\": \"Yes\"}"
+            }
+        }
+    },
+    {
+        "name": "dr euphoric",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 16, \"delay\": 0, \"pos\": [-3.00448, -28.30649, -0.0], \"hpr\": [-45.11532, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 10, \"delay\": 1.02827, \"emoteIndex\": \"Bored\"}"
+            }
+        }
+    },
+    {
+        "name": "silent simone",
+        "time": 0.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 17, \"delay\": 0, \"pos\": [-0.64267, -14.01019, 0.0], \"hpr\": [-41.64505, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 3.14908}"
+            },
+            "2": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 11, \"startAnim\": \"sidestep-left\", \"loop\": false, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "sal snicker",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 19, \"delay\": 0, \"pos\": [20.2892, 35.03844, -0.46], \"hpr\": [-102.95568, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 13, \"delay\": 0.99614, \"emoteIndex\": \"Shrug\"}"
+            }
+        }
+    },
+    {
+        "name": "happy",
+        "time": 0.1,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 20, \"delay\": 0, \"pos\": [23.86618, 32.13346, -0.46], \"hpr\": [25.44966, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 14, \"delay\": 1.96014, \"emoteIndex\": \"OK\"}"
+            },
+            "2": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.64267}"
+            },
+            "3": {
+                "eventDefEnum": "turnAndMoveToon",
+                "kwargs": "{\"toonIndex\": 14, \"goalPos\": [-32.13376, 32.0, -0.46], \"goalHpr\": [87.91723, 0.0, 0.0], \"moveDuration\": 3.0, \"turnDuration\": 0.78279, \"delay\": 0, \"walkAnim\": \"walk\", \"runAnim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "Muldoon",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 21, \"delay\": 0, \"pos\": [20.0, -80.0, -0.46], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "turnAndMoveToon",
+                "kwargs": "{\"toonIndex\": 15, \"goalPos\": [20.0, 19.53715, -0.46], \"goalHpr\": [0, 0, 0], \"moveDuration\": 5.76348, \"turnDuration\": 0, \"delay\": 2.85988, \"walkAnim\": \"walk\", \"runAnim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "Dan Dribbles",
+        "time": 0.1,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 22, \"delay\": 0, \"pos\": [0.0, -0.64266, 0.0], \"hpr\": [-180.0, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 16, \"delay\": 3.82389, \"emoteIndex\": \"Surprise\"}"
+            }
+        }
+    },
+    {
+        "name": "start",
+        "time": 1.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "fish cut",
+        "time": 5.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Camera 2",
+        "time": 5.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 3, \"delay\": 0, \"pos\": [20.0, -681.49118, 3.31117], \"hpr\": [0, 0, 0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 2.6, \"delay\": 0.0, \"pos\": [6.70105, 29.8007, -0.0], \"blendType\": \"noBlend\", \"startPos\": [8.61307, 29.8007, -0.0], \"useStartPos\": true}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 2.6, \"delay\": 0.0, \"hpr\": [0.0, 1.15676, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0.0, 1.15676, 0.0], \"useStartHpr\": true}"
+            },
+            "3": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.6, \"delay\": 0.0, \"end\": 34.29, \"blendType\": \"easeInOut\", \"start\": 34.29318, \"useStart\": false}"
+            }
+        }
+    },
+    {
+        "name": "Billy",
+        "time": 5.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 23, \"delay\": 0, \"pos\": [9.64003, 2.18508, 0.0], \"hpr\": [211.81218, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 17, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 0.8}"
+            },
+            "3": {
+                "eventDefEnum": "turnAndMoveToon",
+                "kwargs": "{\"toonIndex\": 17, \"goalPos\": [0.0, 0.0, 0.0], \"goalHpr\": [117.99402, 0.0, 0.0], \"moveDuration\": 0, \"turnDuration\": 0.49358, \"delay\": 0, \"walkAnim\": \"walk\", \"runAnim\": \"run\"}"
+            },
+            "4": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 17, \"startAnim\": \"wave\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Mary",
+        "time": 5.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 18, \"delay\": 0, \"pos\": [-0.22835, 47.4037, -0.0], \"hpr\": [93.70121, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "1": {
+                "eventDefEnum": "turnAndMoveToon",
+                "kwargs": "{\"toonIndex\": 12, \"goalPos\": [-49.81989, 60.97699, 0.0], \"goalHpr\": [65.9379, 0.0, 0.0], \"moveDuration\": 3.0, \"turnDuration\": 0, \"delay\": 0, \"walkAnim\": \"walk\", \"runAnim\": \"run\"}"
+            }
+        }
+    },
+    {
+        "name": "Daffy Don",
+        "time": 5.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 15, \"delay\": 0, \"pos\": [5.65551, 0.64266, 0.0], \"hpr\": [-58.99711, 0.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 9, \"startAnim\": \"wave\", \"loop\": 0, \"hasDuration\": true, \"duration\": 3.2, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": false, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            },
+            "2": {
+                "eventDefEnum": "timeSleep",
+                "kwargs": "{\"time\": 3.2}"
+            },
+            "3": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 9, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            }
+        }
+    },
+    {
+        "name": "the fog rolling in town",
+        "time": 5.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "createFog",
+                "kwargs": "{\"nodeIndex\": 0, \"fogType\": \"Exponential\", \"expDensity\": 0, \"fogColor\": [0.82648, 1.0, 0.67545]}"
+            },
+            "1": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0.0, \"duration\": 3.69921, \"startDensity\": 0.0, \"endDensity\": 0.02, \"blendType\": \"easeIn\"}"
+            }
+        }
+    },
+    {
+        "name": "optim",
+        "time": 5.8,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "hideToons",
+                "kwargs": "{}"
+            },
+            "1": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 17}"
+            },
+            "2": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 9}"
+            },
+            "3": {
+                "eventDefEnum": "showToon",
+                "kwargs": "{\"toonIndex\": 12}"
+            },
+            "4": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 17, \"toonExpression\": \"normal\"}"
+            },
+            "5": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 9, \"toonExpression\": \"normal\"}"
+            }
+        }
+    },
+    {
+        "name": "Camera Cut",
+        "time": 8.4,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPosHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [4.84348, 48.02039, -0.57843], \"hpr\": [-157.78697, 4.62728, 0.0], \"useStartPos\": 0, \"useStartHpr\": 0, \"blendType\": \"easeInOut\", \"startPos\": [20.1482, 29.8007, -0.0], \"startHpr\": [0, 0, 0]}"
+            }
+        }
+    },
+    {
+        "name": "HIT",
+        "time": 9.39,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Toons Fall",
+        "time": 9.39,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 17, \"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": false, \"duration\": 0.83547, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 0.99614, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 9, \"startAnim\": \"slip-forward\", \"loop\": 0, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": true, \"endTime\": 0.99, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 17, \"toonExpression\": \"surprise\"}"
+            },
+            "3": {
+                "eventDefEnum": "setToonExpression",
+                "kwargs": "{\"toonIndex\": 9, \"toonExpression\": \"surprise\"}"
+            }
+        }
+    },
+    {
+        "name": "camera SHAKE",
+        "time": 9.39,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 24, \"delay\": 0, \"pos\": [24.84351, -633.471, 3.00001], \"hpr\": [-157.787, 10.0, 0.0], \"scale\": [1, 1, 1]}"
+            },
+            "1": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 24, \"wrt\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.0, -0.0, -0.0], \"blendType\": \"easeInOut\", \"startPos\": [-0.0, -0.0, -0.0], \"useStartPos\": 0}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [0.0, 0.0, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0}"
+            },
+            "4": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 34.29, \"blendType\": \"easeInOut\", \"start\": 34.29, \"useStart\": 0}"
+            },
+            "5": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.05, \"delay\": 0.0, \"pos\": [-0.5, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.5, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "6": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.05, \"delay\": 0.0, \"pos\": [0.5, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [-0.5, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "7": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.04, \"delay\": 0.0, \"pos\": [-0.4, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.5, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "8": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.04, \"delay\": 0.0, \"pos\": [0.4, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [-0.4, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "9": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.03, \"delay\": 0.0, \"pos\": [-0.3, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.4, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "10": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.03, \"delay\": 0.0, \"pos\": [0.3, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [-0.3, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "11": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.02, \"delay\": 0.0, \"pos\": [-0.2, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.3, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "12": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.02, \"delay\": 0.0, \"pos\": [0.2, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [-0.2, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "13": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.01, \"delay\": 0.0, \"pos\": [-0.1, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.2, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "14": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.01, \"delay\": 0.0, \"pos\": [0.1, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [-0.1, 0.0, 0.0], \"useStartPos\": true}"
+            },
+            "15": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.01, \"delay\": 0.0, \"pos\": [0.0, 0.0, 0.0], \"blendType\": \"noBlend\", \"startPos\": [0.1, 0.0, 0.0], \"useStartPos\": true}"
+            }
+        }
+    },
+    {
+        "name": "turn toons",
+        "time": 10.168494800000001,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 15, \"delay\": 0, \"duration\": 0.0, \"hpr\": [6.94087, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "rotateNode",
+                "kwargs": "{\"nodeIndex\": 23, \"delay\": 0, \"duration\": 0.0, \"hpr\": [25.44949, 0.0, 0.0], \"startHpr\": [0, 0, 0], \"useStartHpr\": 0, \"blendType\": \"easeInOut\"}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 26, \"delay\": 0, \"pos\": [-1.54242, 1.59386, -0.62826], \"hpr\": [200.62969, -0.86175, -6.87655], \"scale\": [0.4, 0.31407, 0.4]}"
+            }
+        }
+    },
+    {
+        "name": "move camera",
+        "time": 10.168494800000001,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.5784, \"delay\": 0.0, \"pos\": [-0.12853, -6.0411, -1.37288], \"blendType\": \"easeOut\", \"startPos\": [0.0, 0.0, 0.28367], \"useStartPos\": 0}"
+            }
+        }
+    },
+    {
+        "name": "Camera Cut",
+        "time": 11.101,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "reparentCamera",
+                "kwargs": "{\"targetIndex\": 3, \"wrt\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "setFogDensity",
+                "kwargs": "{\"nodeIndex\": 0, \"delay\": 0.0, \"duration\": 1.86374, \"startDensity\": 0.0903, \"endDensity\": 0.00582, \"blendType\": \"noBlend\"}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0, \"delay\": 0.0, \"pos\": [4.30588, 26.88955, -1.7585], \"blendType\": \"easeOut\", \"startPos\": [4.30588, 26.88955, -1.7585], \"useStartPos\": true}"
+            },
+            "3": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 2.7036, \"delay\": 0.0, \"hpr\": [10.41118, 4.62709, 0.0], \"blendType\": \"easeOut\", \"startHpr\": [4.62713, 6.9407, 0.0], \"useStartHpr\": true}"
+            },
+            "4": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 2.63933, \"delay\": 0.0, \"end\": 14.04592, \"blendType\": \"easeOut\", \"start\": 31.71932, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "Duck Move In",
+        "time": 11.101,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "showSuit",
+                "kwargs": "{\"suitIndex\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "reparentNode",
+                "kwargs": "{\"nodeIndex\": 25, \"targetIndex\": 5, \"wrt\": false, \"disable\": false}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 25, \"delay\": 0, \"pos\": [-7.90677, 42.99257, -0.0], \"hpr\": [-163.1095, 0.0, 0.0], \"scale\": [1.0, 1.0, 1.0]}"
+            },
+            "3": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"walk\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 1}"
+            },
+            "4": {
+                "eventDefEnum": "moveNode",
+                "kwargs": "{\"nodeIndex\": 25, \"delay\": 0, \"duration\": 1.85654, \"pos\": [-2.5006, 23.72874, -0.0], \"startPos\": [0.0, 0.0, 0.0], \"useStartPos\": 0, \"hpr\": [-164.26612, 0.0, 0.0], \"startHpr\": [0.0, 0.0, 0.0], \"useStartHpr\": 0, \"blendType\": \"noBlend\"}"
+            },
+            "5": {
+                "eventDefEnum": "duckShufflerEyePos",
+                "kwargs": "{\"suitIndex\": 0, \"eyePos\": 0.27}"
+            }
+        }
+    },
+    {
+        "name": "Duck Silhouette",
+        "time": 11.101,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 25, \"delay\": 0, \"duration\": 1.18895, \"colorScale\": [0.0, 0.0, 0.0, 1.0], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeInOut\"}"
+            },
+            "1": {
+                "eventDefEnum": "colorScaleNode",
+                "kwargs": "{\"nodeIndex\": 25, \"delay\": 0, \"duration\": 1.31747, \"colorScale\": [1.0, 1.0, 1.0, 1.0], \"startColorScale\": [0.0, 0.0, 0.0, 1.0], \"useStartColorScale\": true, \"blendType\": \"easeInOut\"}"
+            }
+        }
+    },
+    {
+        "name": "GAMBLING",
+        "time": 12.96,
+        "sequenceMode": "Sequence",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "duckShufflerRoll",
+                "kwargs": "{\"suitIndex\": 0, \"rollWait\": 1.1, \"rollADuration\": 0, \"rollBDuration\": 1.05, \"rollCDuration\": 1.74, \"endDuration\": 0.1, \"stopDistance\": 0.04, \"rollCount\": 6.0, \"asInterval\": true}"
+            },
+            "1": {
+                "eventDefEnum": "doSuitAnim",
+                "kwargs": "{\"suitIndex\": 0, \"anim\": \"pull-slots\", \"loop\": 0, \"hasDuration\": false, \"duration\": 2.95, \"hasStartTime\": false, \"startTime\": 0, \"hasEndTime\": false, \"endTime\": 2.95, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": false}"
+            }
+        }
+    },
+    {
+        "name": "ONE",
+        "time": 14.19,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"end\": 14.04592, \"blendType\": \"easeInOut\", \"start\": 14.04592, \"useStart\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"pos\": [-0.00459, 50.0, 0.49082], \"blendType\": \"easeInOut\", \"startPos\": [13.39976, 26.88955, -1.7585], \"useStartPos\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 0.0, \"delay\": 0.0, \"hpr\": [10.41118, 4.62709, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [10.41118, 4.62709, 0.0], \"useStartHpr\": 0}"
+            }
+        }
+    },
+    {
+        "name": "POINT",
+        "time": 15.01,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "THREE!!!",
+        "time": 15.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "Camera Comes Home",
+        "time": 16.096,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "moveCameraPos",
+                "kwargs": "{\"duration\": 1.3, \"delay\": 0.0, \"pos\": [-6.81686, 20.0, 9.87381], \"blendType\": \"easeInOut\", \"startPos\": [-0.00459, 50.0, 0.49082], \"useStartPos\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "moveCameraHpr",
+                "kwargs": "{\"duration\": 1.3, \"delay\": 0.0, \"hpr\": [-20.82256, -18.50915, 0.0], \"blendType\": \"easeInOut\", \"startHpr\": [10.41118, 4.62709, 0.0], \"useStartHpr\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "changeCameraFov",
+                "kwargs": "{\"duration\": 1.3, \"delay\": 0.0, \"end\": 27.22064, \"blendType\": \"easeInOut\", \"start\": 14.04592, \"useStart\": true}"
+            }
+        }
+    },
+    {
+        "name": "SOS (save the stoons)",
+        "time": 16.096,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 9, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "1": {
+                "eventDefEnum": "animateSingleToon",
+                "kwargs": "{\"toonIndex\": 17, \"startAnim\": \"neutral\", \"loop\": true, \"hasDuration\": 0, \"duration\": 0, \"hasStartTime\": 0, \"startTime\": 0, \"hasEndTime\": 0, \"endTime\": 0, \"playRate\": 1, \"useEndAnim\": 0, \"endAnim\": \"neutral\", \"isInterval\": 0}"
+            },
+            "2": {
+                "eventDefEnum": "nodePosHprScale",
+                "kwargs": "{\"nodeIndex\": 26, \"delay\": 0, \"pos\": [0, 0.18, 0.4], \"hpr\": [180, 355, 0], \"scale\": [0.4, 0.314073, 0.4]}"
+            }
+        }
+    },
+    {
+        "name": "poof lol",
+        "time": 16.8,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "setToonSpecies",
+                "kwargs": "{\"toonIndex\": 9, \"toonSpecies\": \"f\", \"active\": false}"
+            },
+            "1": {
+                "eventDefEnum": "setToonSpecies",
+                "kwargs": "{\"toonIndex\": 17, \"toonSpecies\": \"f\", \"active\": false}"
+            },
+            "2": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 9, \"delay\": 0, \"emoteIndex\": \"Cringe\"}"
+            },
+            "3": {
+                "eventDefEnum": "setOneEmote",
+                "kwargs": "{\"toonIndex\": 17, \"delay\": 0, \"emoteIndex\": \"Cringe\"}"
+            }
+        }
+    },
+    {
+        "name": "clip ends",
+        "time": 18.2,
+        "sequenceMode": "Parallel",
+        "subEvents": {}
+    },
+    {
+        "name": "loop",
+        "time": 20.0,
+        "sequenceMode": "Parallel",
+        "subEvents": {
+            "0": {
+                "eventDefEnum": "duckShufflerEyePos",
+                "kwargs": "{\"suitIndex\": 0, \"eyePos\": 0.27}"
+            }
+        }
+    }
+]

@@ -1,0 +1,319 @@
+{
+    "battleCells": {
+        "0": {
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "1": {
+            "parentEntId": 10005,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "2": {
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "3": {
+            "parentEntId": 10040,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    },
+    "cogData": [
+        {
+            "parentEntId": 10000,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10000,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10000,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10000,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10003,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10003,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10003,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10003,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10013,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10013,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10013,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10013,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10040,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10040,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10040,
+            "boss": 0,
+            "level": 11,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10040,
+            "boss": 0,
+            "level": 10,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        }
+    ],
+    "reserveData": []
+}

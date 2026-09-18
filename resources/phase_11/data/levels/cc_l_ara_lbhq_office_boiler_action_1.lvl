@@ -1,0 +1,1864 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone08a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10010": {
+            "type": "attribModifier",
+            "name": "goonStrength",
+            "comment": "",
+            "parentEntId": 100021,
+            "attribName": "strength",
+            "recursive": 1,
+            "typeName": "goon",
+            "value": "15"
+        },
+        "10015": {
+            "type": "collisionSolid",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "length": 3.0,
+            "radius": 3.0,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10017": {
+            "type": "collisionSolid",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10018,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "length": 3.0,
+            "radius": 3.0,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10026": {
+            "type": "collisionSolid",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10024,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "length": 3.0,
+            "radius": 1.0,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10027": {
+            "type": "collisionSolid",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    51.03300094604492,
+                    -2.3669400215148926,
+                    -0.8212829828262329
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "length": 10.0,
+            "radius": 7.0,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10028": {
+            "type": "collisionSolid",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    14.992300033569336,
+                    28.70400047302246,
+                    -0.8212829828262329
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "length": 10.0,
+            "radius": 7.518188505180132,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10038": {
+            "type": "collisionSolid",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    -2.320460081100464,
+                    0.4392260015010834,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "length": 6.0,
+            "radius": 0.8,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10041": {
+            "type": "collisionSolid",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10040,
+            "pos": {
+                "LPoint3f": [
+                    2.451200008392334,
+                    1.7278300523757935,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "length": 10.0,
+            "radius": 4.0,
+            "showSolid": 0,
+            "solidType": "tube"
+        },
+        "10001": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10008": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10012": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10020": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10019,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10047": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10052": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10051,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10057": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10056,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 3.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "sg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 15,
+            "velocity": 4
+        },
+        "10007": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10009,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    164.05499267578125,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_9/models/char/da_goon"
+        },
+        "10018": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10016,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    215.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_9/models/char/da_goon"
+        },
+        "10024": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10025,
+            "pos": {
+                "LPoint3f": [
+                    28.0,
+                    6.0,
+                    4.800000190734863
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    45.0,
+                    283.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.5,
+                    2.5,
+                    2.5
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_9/models/char/da_goon"
+        },
+        "10031": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10032": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    1.75,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10033": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10034": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_plant.bam"
+        },
+        "10036": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10035,
+            "pos": {
+                "LPoint3f": [
+                    -2.5999999046325684,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_plant.bam"
+        },
+        "10040": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10039,
+            "pos": {
+                "LPoint3f": [
+                    14.664199829101562,
+                    -1.0176700353622437,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.3212800025939941,
+                    1.3212800025939941,
+                    1.3212800025939941
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_twist_stacks.bam"
+        },
+        "10044": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10043,
+            "pos": {
+                "LPoint3f": [
+                    1.75,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10045": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10043,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10060": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10043,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10062": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10061,
+            "pos": {
+                "LPoint3f": [
+                    1.75,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10063": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 10061,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10064": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10061,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LA_filing_cabA.bam"
+        },
+        "10066": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10065,
+            "pos": {
+                "LPoint3f": [
+                    8.933030128479004,
+                    26.854999542236328,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    315.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2872099876403809,
+                    1.2872099876403809,
+                    1.2872099876403809
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_twist_stacks.bam"
+        },
+        "10067": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10065,
+            "pos": {
+                "LPoint3f": [
+                    40.4296989440918,
+                    -10.71969985961914,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    41.1859016418457,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.3866499662399292,
+                    1.3866499662399292,
+                    1.3866499662399292
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_paper_twist_stacks.bam"
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10004": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    -30.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10005": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "20000": {
+            "type": "nodepath",
+            "name": "cogs",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -5.309000015258789,
+                    62.888999938964844,
+                    10.604000091552734
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10006": {
+            "type": "nodepath",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    25.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10013": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10014": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    -40.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10021": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10019,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10022": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10019,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10023": {
+            "type": "nodepath",
+            "name": "upperFloor",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    60.0,
+                    10.616600036621094
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10029": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10030": {
+            "type": "nodepath",
+            "name": "leftWall",
+            "comment": "",
+            "parentEntId": 10029,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -43.0807991027832,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.5,
+                    2.5,
+                    2.5
+                ]
+            }
+        },
+        "10035": {
+            "type": "nodepath",
+            "name": "plants",
+            "comment": "",
+            "parentEntId": 10030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -0.8999999761581421,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.299999952316284,
+                    2.299999952316284,
+                    2.299999952316284
+                ]
+            }
+        },
+        "10037": {
+            "type": "nodepath",
+            "name": "filingCabinets",
+            "comment": "",
+            "parentEntId": 10030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2999999523162842,
+                    1.2999999523162842,
+                    1.2999999523162842
+                ]
+            }
+        },
+        "10039": {
+            "type": "nodepath",
+            "name": "paperStacks",
+            "comment": "",
+            "parentEntId": 10030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10042": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10043": {
+            "type": "nodepath",
+            "name": "filingCabinets",
+            "comment": "",
+            "parentEntId": 10042,
+            "pos": {
+                "LPoint3f": [
+                    -40.250099182128906,
+                    9.259530067443848,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    41.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2999999523162842,
+                    1.2999999523162842,
+                    1.2999999523162842
+                ]
+            }
+        },
+        "10048": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10049": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10050": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10046,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10053": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10051,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10054": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10051,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    10.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10055": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10051,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    15.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10058": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10056,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10059": {
+            "type": "nodepath",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10056,
+            "pos": {
+                "LPoint3f": [
+                    20.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10061": {
+            "type": "nodepath",
+            "name": "filingCabinets",
+            "comment": "",
+            "parentEntId": 10042,
+            "pos": {
+                "LPoint3f": [
+                    -29.695899963378906,
+                    18.237899780273438,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    41.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2999999523162842,
+                    1.2999999523162842,
+                    1.2999999523162842
+                ]
+            }
+        },
+        "10065": {
+            "type": "nodepath",
+            "name": "paperStacks",
+            "comment": "",
+            "parentEntId": 10042,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100021": {
+            "type": "nodepath",
+            "name": "gauntlet",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    30.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10000": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    35.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10002,
+            "pathTarget1": 10004,
+            "pathTarget2": 0,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10003": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -7.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10005,
+            "pathTarget1": 10006,
+            "pathTarget2": 0,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10011": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -35.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10013,
+            "pathTarget1": 10014,
+            "pathTarget2": 0,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10019": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    -90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10021,
+            "pathTarget1": 10022,
+            "pathTarget2": 0,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10046": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    -30.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10048,
+            "pathTarget1": 10049,
+            "pathTarget2": 10050,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10051": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    -60.0,
+                    20.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10053,
+            "pathTarget1": 10054,
+            "pathTarget2": 10055,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10056": {
+            "type": "pathMaster",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100021,
+            "pos": {
+                "LPoint3f": [
+                    -80.0,
+                    -20.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0,
+            "pathTarget0": 10058,
+            "pathTarget1": 10059,
+            "pathTarget2": 0,
+            "pathTarget3": 0,
+            "pathTarget4": 0,
+            "pathTarget5": 0,
+            "pathTarget6": 0,
+            "pathTarget7": 0
+        },
+        "10009": {
+            "type": "rendering",
+            "name": "farCornerGoon",
+            "comment": "",
+            "parentEntId": 10029,
+            "pos": {
+                "LPoint3f": [
+                    -60.0,
+                    -36.79999923706055,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    330.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 0.2,
+            "colorG": 0.2,
+            "colorR": 0.5,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "10016": {
+            "type": "rendering",
+            "name": "nearCornerGoon",
+            "comment": "",
+            "parentEntId": 10029,
+            "pos": {
+                "LPoint3f": [
+                    60.0,
+                    -37.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 0.2,
+            "colorG": 0.2,
+            "colorR": 0.5,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "10025": {
+            "type": "rendering",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "blending": "Alpha",
+            "colorA": 1.0,
+            "colorB": 0.2,
+            "colorG": 0.2,
+            "colorR": 0.5,
+            "fogOn": 0,
+            "renderBin": "transparent"
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

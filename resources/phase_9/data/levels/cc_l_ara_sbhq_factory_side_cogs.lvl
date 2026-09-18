@@ -1,0 +1,946 @@
+{
+    "battleCells": {
+        "0": {
+            "parentEntId": 10014,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "1": {
+            "parentEntId": 10030,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "4": {
+            "parentEntId": 10034,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "5": {
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "7": {
+            "parentEntId": 10064,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "2": {
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "3": {
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "6": {
+            "parentEntId": 10036,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "8": {
+            "parentEntId": 20058,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "9": {
+            "parentEntId": 10047,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        "10": {
+            "parentEntId": 10068,
+            "pos": {
+                "LPoint3f": [
+                    -20.0,
+                    -10.0,
+                    0.0
+                ]
+            }
+        },
+        "11": {
+            "parentEntId": 7000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    },
+    "cogData": [
+        {
+            "parentEntId": 10014,
+            "boss": 0,
+            "level": 5,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20078,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10014,
+            "boss": 0,
+            "level": 5,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20079,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10014,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    32.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10014,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 0,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20009,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10030,
+            "boss": 0,
+            "level": 5,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "walk",
+            "path": 20076,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10030,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "walk",
+            "path": 20077,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10030,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10030,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 1,
+            "pos": {
+                "LPoint3f": [
+                    3.5,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10034,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 4,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20103,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10034,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 4,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10034,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 4,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20104,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10034,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 4,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20105,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10037,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 5,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20039,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10037,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 5,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20049,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10037,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 5,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20075,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10037,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 5,
+            "pos": {
+                "LPoint3f": [
+                    -15.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 20095,
+            "type": "foreman",
+            "boss": 1,
+            "level": 11,
+            "battleCell": 7,
+            "pos": {
+                "LPoint3f": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 20095,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 7,
+            "pos": {
+                "LPoint3f": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20095,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 7,
+            "pos": {
+                "LPoint3f": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20095,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 7,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20094,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 9,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20097,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20094,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 9,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20098,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20094,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 9,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20099,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20094,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 9,
+            "pos": {
+                "LPoint3f": [
+                    6.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20096,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 10,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20100,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20096,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 10,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20101,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20096,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 10,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20102,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20096,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 10,
+            "pos": {
+                "LPoint3f": [
+                    8.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10023,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20109,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10023,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20110,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10023,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20111,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10023,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 2,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10032,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20106,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10032,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20107,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10032,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20108,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10032,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 3,
+            "pos": {
+                "LPoint3f": [
+                    14.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 7000,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 11,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20103,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 7000,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 11,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 180,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 7000,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 11,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20104,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 7000,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 11,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20105,
+            "skeleton": 1
+        },
+        {
+            "parentEntId": 10036,
+            "boss": 0,
+            "level": 5,
+            "battleCell": 6,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20038,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10036,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 6,
+            "pos": {
+                "LPoint3f": [
+                    10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20067,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10036,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 6,
+            "pos": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "chase",
+            "path": 20068,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 10036,
+            "boss": 0,
+            "level": 5,
+            "battleCell": 6,
+            "pos": {
+                "LPoint3f": [
+                    -8.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "h": 0,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20058,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 8,
+            "pos": {
+                "LPoint3f": [
+                    5.0,
+                    -10.75,
+                    0.0
+                ]
+            },
+            "h": -90,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20058,
+            "boss": 0,
+            "level": 7,
+            "battleCell": 8,
+            "pos": {
+                "LPoint3f": [
+                    5.0,
+                    -3.25,
+                    0.0
+                ]
+            },
+            "h": -90,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20058,
+            "boss": 0,
+            "level": 6,
+            "battleCell": 8,
+            "pos": {
+                "LPoint3f": [
+                    5.0,
+                    3.25,
+                    0.0
+                ]
+            },
+            "h": -90,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        },
+        {
+            "parentEntId": 20058,
+            "boss": 0,
+            "level": 8,
+            "battleCell": 8,
+            "pos": {
+                "LPoint3f": [
+                    5.0,
+                    10.75,
+                    0.0
+                ]
+            },
+            "h": -90,
+            "behavior": "stand",
+            "path": null,
+            "skeleton": 0
+        }
+    ],
+    "reserveData": [
+        {}
+    ]
+}

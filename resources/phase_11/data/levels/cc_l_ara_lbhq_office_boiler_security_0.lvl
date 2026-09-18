@@ -1,0 +1,1351 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_11/models/lawbotHQ/LB_Zone08a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "100014": {
+            "type": "gagBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -25.17770004272461,
+                    5.838359832763672,
+                    0.029999999329447746
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    92.86239624023438,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 6,
+            "gagLevelMax": 5,
+            "gagTrack": "random",
+            "rewardPerGrab": 3,
+            "rewardPerGrabMax": 0
+        },
+        "100035": {
+            "type": "gagBarrel",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    16.73539924621582,
+                    -42.96009826660156,
+                    0.029999999329447746
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    151.0489959716797,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "gagLevel": 6,
+            "gagLevelMax": 5,
+            "gagTrack": "random",
+            "rewardPerGrab": 3,
+            "rewardPerGrabMax": 0
+        },
+        "100013": {
+            "type": "healBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100012,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.5918490290641785
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    147.9949951171875,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 15,
+            "rewardPerGrabMax": 0
+        },
+        "100016": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    1.7760900259017944,
+                    -38.53419876098633,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100018": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    27.54509925842285,
+                    -38.47090148925781,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100019": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    36.48460006713867,
+                    -35.330101013183594,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.5260009765625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100020": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    10.788700103759766,
+                    -34.85580062866211,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.5260009765625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100022": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    27.0,
+                    -36.0,
+                    4.5
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.600000023841858,
+                    1.600000023841858,
+                    1.600000023841858
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk_lamp"
+        },
+        "100023": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    1.5,
+                    -36.0,
+                    4.5
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.600000023841858,
+                    1.600000023841858,
+                    1.600000023841858
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk_lamp"
+        },
+        "100024": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    -39.228599548339844,
+                    -39.574100494384766,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBoxX2"
+        },
+        "100025": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    -62.875099182128906,
+                    -40.07939910888672,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.700000047683716,
+                    2.700000047683716,
+                    2.700000047683716
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_plant"
+        },
+        "100026": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    -39.228599548339844,
+                    -33.027000427246094,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100027": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    -31.265199661254883,
+                    -39.73210144042969,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100028": {
+            "type": "model",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    -22.05780029296875,
+                    -39.3922004699707,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100029": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    1.7760900259017944,
+                    -21.82659912109375,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100030": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    10.788700103759766,
+                    -18.07040023803711,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.5260009765625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100031": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    36.687400817871094,
+                    -16.121200561523438,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.5260009765625,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100032": {
+            "type": "model",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    27.54509925842285,
+                    -20.532899856567383,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk"
+        },
+        "100033": {
+            "type": "model",
+            "name": "copy of <unnamed> (3)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    27.0,
+                    -19.0,
+                    4.5
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.600000023841858,
+                    1.600000023841858,
+                    1.600000023841858
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk_lamp"
+        },
+        "100034": {
+            "type": "model",
+            "name": "copy of <unnamed> (4)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    1.5,
+                    -18.0,
+                    4.5
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.600000023841858,
+                    1.600000023841858,
+                    1.600000023841858
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/da_desk_lamp"
+        },
+        "100036": {
+            "type": "model",
+            "name": "copy of <unnamed> (5)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    15.09060001373291,
+                    40.375999450683594,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100037": {
+            "type": "model",
+            "name": "copy of <unnamed> (6)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    23.88050079345703,
+                    40.375999450683594,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100038": {
+            "type": "model",
+            "name": "copy of <unnamed> (7)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    31.741600036621094,
+                    40.375999450683594,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBox"
+        },
+        "100039": {
+            "type": "model",
+            "name": "copy of <unnamed> (8)",
+            "comment": "",
+            "parentEntId": 100015,
+            "pos": {
+                "LPoint3f": [
+                    31.741600036621094,
+                    33.211299896240234,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "loadType": "loadModel",
+            "modelPath": "phase_11/models/lawbotHQ/LB_CardBoardBoxX2"
+        },
+        "100003": {
+            "type": "nodepath",
+            "name": "light target 2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -46.46500015258789,
+                    -27.101900100708008,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100004": {
+            "type": "nodepath",
+            "name": "light target1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    45.46120071411133,
+                    -33.63970184326172,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100006": {
+            "type": "nodepath",
+            "name": "copy of light target 2",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -46.46500015258789,
+                    31.22920036315918,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100007": {
+            "type": "nodepath",
+            "name": "copy of light target1",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    22.370800018310547,
+                    14.194999694824219,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100008": {
+            "type": "nodepath",
+            "name": "stompergroup",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -45.2963981628418,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "100015": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.05000000074505806
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "100011": {
+            "type": "platform",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    -8.924619674682617,
+                    5.2636399269104,
+                    19.999399185180664
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "floorName": "platformcollision",
+            "modelPath": "phase_9/models/cogHQ/platform1",
+            "modelScale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "motion": "noBlend",
+            "offset": {
+                "LPoint3f": [
+                    -10.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "period": 8.0,
+            "phaseShift": 0.0,
+            "waitPercent": 0.1
+        },
+        "100012": {
+            "type": "platform",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    -18.146799087524414,
+                    -5.110000133514404,
+                    20.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "floorName": "platformcollision",
+            "modelPath": "phase_9/models/cogHQ/platform1",
+            "modelScale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "motion": "noBlend",
+            "offset": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "period": 2,
+            "phaseShift": 0.0,
+            "waitPercent": 0.1
+        },
+        "100002": {
+            "type": "securityCamera",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -5.848430156707764,
+                    -50.804298400878906,
+                    0.10000000149011612
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 5.0,
+            "damPow": 10,
+            "hideModel": 0,
+            "maxVel": 15.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    6.0,
+                    6.0,
+                    25.0
+                ]
+            },
+            "radius": 10.0,
+            "switchId": 0,
+            "trackTarget1": 100004,
+            "trackTarget2": 100003,
+            "trackTarget3": 0
+        },
+        "100005": {
+            "type": "securityCamera",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    -5.385650157928467,
+                    34.131099700927734,
+                    0.10000000149011612
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "accel": 5.0,
+            "damPow": 8,
+            "hideModel": 0,
+            "maxVel": 15.0,
+            "modelPath": 0,
+            "projector": {
+                "LPoint3f": [
+                    6.0,
+                    6.0,
+                    25.0
+                ]
+            },
+            "radius": 10.0,
+            "switchId": 0,
+            "trackTarget1": 100006,
+            "trackTarget2": 100007,
+            "trackTarget3": 0
+        },
+        "100000": {
+            "type": "stomper",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    5.0,
+                    5.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "animateShadow": 1,
+            "cogStyle": 1,
+            "crushCellId": null,
+            "damage": 10,
+            "headScale": {
+                "LPoint3f": [
+                    8.0,
+                    4.0,
+                    8.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 4,
+            "period": 2.0,
+            "phaseShift": 0.0,
+            "range": 18.0,
+            "removeCamBarrierCollisions": 0,
+            "removeHeadFloor": 0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    10.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "100001": {
+            "type": "stomper",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    34.06079864501953,
+                    5.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "animateShadow": 1,
+            "cogStyle": 1,
+            "crushCellId": null,
+            "damage": 10,
+            "headScale": {
+                "LPoint3f": [
+                    8.0,
+                    4.0,
+                    8.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 4,
+            "period": 2.0,
+            "phaseShift": 0.75,
+            "range": 12.0,
+            "removeCamBarrierCollisions": 0,
+            "removeHeadFloor": 0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    10.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "100009": {
+            "type": "stomper",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    19.685800552368164,
+                    21.60449981689453,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "animateShadow": 1,
+            "cogStyle": 1,
+            "crushCellId": null,
+            "damage": 10,
+            "headScale": {
+                "LPoint3f": [
+                    8.0,
+                    4.0,
+                    8.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 4,
+            "period": 2.0,
+            "phaseShift": 0.5,
+            "range": 12.0,
+            "removeCamBarrierCollisions": 0,
+            "removeHeadFloor": 0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    10.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "100010": {
+            "type": "stomper",
+            "name": "copy of <unnamed> (2)",
+            "comment": "",
+            "parentEntId": 100008,
+            "pos": {
+                "LPoint3f": [
+                    19.685800552368164,
+                    -11.560099601745605,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "animateShadow": 1,
+            "cogStyle": 1,
+            "crushCellId": null,
+            "damage": 10,
+            "headScale": {
+                "LPoint3f": [
+                    8.0,
+                    4.0,
+                    8.0
+                ]
+            },
+            "modelPath": 0,
+            "motion": 4,
+            "period": 2.0,
+            "phaseShift": 0.25,
+            "range": 12.0,
+            "removeCamBarrierCollisions": 0,
+            "removeHeadFloor": 0,
+            "shaftScale": {
+                "LPoint3f": [
+                    0.5,
+                    10.0,
+                    0.5
+                ]
+            },
+            "soundLen": 0,
+            "soundOn": 1,
+            "soundPath": 0,
+            "style": "vertical",
+            "switchId": 0,
+            "wantShadow": 1,
+            "wantSmoke": 1,
+            "zOffset": 0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}

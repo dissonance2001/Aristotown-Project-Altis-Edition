@@ -1,270 +1,364 @@
-'''
-Created on Jan 30, 2017
+import math
 
-@author: Drew
-'''
-from panda3d.core import *
-from toontown.shtiker import ShtikerPage
-from toontown.toonbase import ToontownGlobals
-from toontown.toonbase import TTLocalizer
-from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
-from direct.gui import DirectGuiGlobals
-from toontown.toontowngui import TTDialog
-from toontown.shtiker.OptionsPageGUI import *
-from toontown.fishing import FishGlobals
-from direct.actor import Actor
-from direct.interval.IntervalGlobal import *
+from panda3d.core import *
+
+from toontown.gui import UiHelpers
+from toontown.gui.GUINode import GUINode
+from toontown.gui.TTGui import LockingEntry
+from toontown.inventory.gui.general.ItemFrameGrid import ItemFrameGrid
+from toontown.shtiker import ShtikerPage
+from toontown.toonbase import TTLocalizer, ToontownGlobals
+from toontown.shtiker.backpack import BackpackCategoryGlobals
+from toontown.shtiker.backpack.BackpackCategoryButton import BackpackCategoryButton
+from toontown.shtiker.backpack.widgets import *
+
+from typing import Type
+
 
 class ItemsPage(ShtikerPage.ShtikerPage):
+    TotalCategoryButtons = 12
+    CategoryButtonsPerSide = 6
+    ItemRows = 5
+    ItemColumns = 4
+
+    BackpackTabCategories = [
+        BackpackCategoryGlobals.BackpackCategory.All,
+        BackpackCategoryGlobals.BackpackCategory.Social,
+        BackpackCategoryGlobals.BackpackCategory.Profile,
+        BackpackCategoryGlobals.BackpackCategory.Battle,
+        BackpackCategoryGlobals.BackpackCategory.Estates,
+        BackpackCategoryGlobals.BackpackCategory.Activities,
+        BackpackCategoryGlobals.BackpackCategory.Misc,
+    ]
+    WardrobeTabCategories = [
+        BackpackCategoryGlobals.BackpackCategory.W_All,
+        BackpackCategoryGlobals.BackpackCategory.W_Shirts,
+        BackpackCategoryGlobals.BackpackCategory.W_Shorts,
+        BackpackCategoryGlobals.BackpackCategory.W_Skirts,
+        BackpackCategoryGlobals.BackpackCategory.W_Hats,
+        BackpackCategoryGlobals.BackpackCategory.W_Glasses,
+        BackpackCategoryGlobals.BackpackCategory.W_Neck,
+        BackpackCategoryGlobals.BackpackCategory.W_Backpack,
+        BackpackCategoryGlobals.BackpackCategory.W_Shoes,
+    ]
 
     def __init__(self):
         ShtikerPage.ShtikerPage.__init__(self)
+        self.title = None
+        self.grid = None
+
+        # Tabs
+        self.backpackTab = None
+        self.wardrobeTab = None
+        self.codesTab = None
+        self.tabs = []
+
+        # Categories
+        self.selectedCategory = BackpackCategoryGlobals.BackpackCategory.All
+        self.categoryButtons = []
+        self.leftCategoryButtons = []
+        self.rightCategoryButtons = []
+
+        # Search
+        self.searchBar = None
+        self.searchQuery = ''
+
+        # Grid page number
+        self.pageNumber = 0
+        self.pageLabel = None
+        self.leftArrow = None
+        self.rightArrow = None
+
+        # Item widget
+        self.widgetNode = None
+        self.currWidget = None
 
     def load(self):
         ShtikerPage.ShtikerPage.load(self)
-        self.title = OptionLabel(parent=self, relief=None, text_align = TextNode.ACenter, text=TTLocalizer.ItemsPageTitle, text_scale=0.1, pos=(0, 0, 0.65))
-        self.buttonModel = 'phase_3/models/gui/quit_button.bam'
-        matGui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui')
-        gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
-        self.nametagStyle_label = DirectLabel(parent = self, relief=None, text=TTLocalizer.ItemsPageNametagStyle, text_align=TextNode.ALeft, text_scale=0.054, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight * 0.145 + .3))
-        self.nametagStyle_preview = DirectLabel(parent = self, relief=None, text='Preview', scale=0.06, text_align = TextNode.ACenter, text_wordwrap=9, pos=(buttonbase_xcoord, 0, textStartHeight * 0.145 + .3))
-        self.nametagStyle_leftButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale= -0.6, pos=(0.15, 0, textStartHeight * 0.145 + .3), command=self.__changeNametagStyle, extraArgs=[-1])
-        self.nametagStyle_rightButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale = 0.6, pos = (0.55, 0, textStartHeight * 0.145 + .3), command = self.__changeNametagStyle, extraArgs = [1])
-        self.nametagStyle_index = 0
-        
-        self.fishingRods_label = DirectLabel(parent = self, relief=None, text=TTLocalizer.ItemsPageFishingRods, text_align=TextNode.ALeft, text_scale=0.054, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight * 0.145))
-        # The preview is a button to enable the hover effect
-        self.fishingRods_preview = DirectButton(parent = self, relief=None, text='Preview', scale=0.06, text_align = TextNode.ACenter, text_wordwrap=9, pos=(buttonbase_xcoord, 0, textStartHeight * 0.145))
-        self.fishingRods_leftButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale= -0.6, pos=(0.15, 0, textStartHeight * 0.145), command=self.__changeFishingRods, extraArgs=[-1])
-        self.fishingRods_rightButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale = 0.6, pos = (0.55, 0, textStartHeight * 0.145), command = self.__changeFishingRods, extraArgs = [1])
-        self.fishingRods_index = 0
-        self.fishingRods_previewPanel = OnscreenImage(parent = self, image = 'phase_3/maps/stat_board.png', pos = (buttonbase_xcoord, 0, textStartHeight * 0.145), scale = 0.2)
-        self.fishingRods_previewPanel.setTransparency(TransparencyAttrib.MAlpha)
-        self.fishingRods_previewPanel.hide()
-        self.fishingRods_preview.bind(DirectGuiGlobals.ENTER, self.enterHoverFishing)
-        self.fishingRods_preview.bind(DirectGuiGlobals.EXIT, self.exitHoverFishing)
-        self.geom = None
-        self.geomRotate = None
-        
-        self.cheesyEffect_label = DirectLabel(parent = self, relief=None, text=TTLocalizer.ItemsPageCheesyEffect, text_align=TextNode.ALeft, text_scale=0.054, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight * 0.145 - .3))
-        self.cheesyEffect_preview = DirectLabel(parent = self, relief=None, text='Preview', scale=0.06, text_align = TextNode.ACenter, text_wordwrap=9, pos=(buttonbase_xcoord, 0, textStartHeight * 0.145 - .3))
-        self.cheesyEffect_leftButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale= -0.6, pos=(0.15, 0, textStartHeight * 0.145 - .3), command=self.__changeCheesyEffect, extraArgs=[-1])
-        self.cheesyEffect_rightButton = DirectButton(parent = self, relief=None, image=(gui.find('**/Horiz_Arrow_UP'),
-         gui.find('**/Horiz_Arrow_DN'),
-         gui.find('**/Horiz_Arrow_Rllvr'),
-         gui.find('**/Horiz_Arrow_UP')), scale = 0.6, pos = (0.55, 0, textStartHeight * 0.145 - .3), command = self.__changeCheesyEffect, extraArgs = [1])
-        self.cheesyEffect_index = 0
+        self.title = DirectLabel(parent=self, relief=None, text=TTLocalizer.ItemsPageTitle, text_scale=0.09,
+                                 textMayChange=1, pos=(0, 0, 0.635))
+        self.grid = ItemFrameGrid(
+            parent=self,
+            pos=(0.4375, 0, -0.1),
+            scale=0.75,
+            gridWidth=self.ItemColumns,
+            gridHeight=self.ItemRows,
+            gridDistance=0.04,
+            gridScale=1.1,
+            scrollEnabled=False,
+            allowPageOvershoot=True,
+            callback=self.__handleClickedItem,
+        )
 
-    def unload(self):
-        ShtikerPage.ShtikerPage.unload(self)
-        if self.title:
-            self.title.removeNode()
-        if self.geom:
-            self.geom.cleanup()
-            self.geom.removeNode()
-        if self.geomRotate:
-            self.geomRotate.finish()
-        self.nametagStyle_label.destroy()
-        del self.nametagStyle_label
-        self.nametagStyle_preview.destroy()
-        del self.nametagStyle_preview
-        self.nametagStyle_leftButton.destroy()
-        del self.nametagStyle_leftButton
-        self.nametagStyle_rightButton.destroy()
-        del self.nametagStyle_rightButton
+        # Tabs
+        self.backpackTab = self.generateTab(text=TTLocalizer.ItemsPageTitle, pos=(-0.5, 0, 0.785), scale=(0.038, 0, 0.045),
+                                            command=self.switchToBackpack)
+        self.wardrobeTab = self.generateTab(text=TTLocalizer.ItemsPageWardrobeTab, pos=(0, 0, 0.785), scale=(0.038, 0, 0.045),
+                                            command=self.switchToWardrobe)
+        self.codesTab = self.generateTab(text=TTLocalizer.ItemsPageCodesTab, pos=(0.5, 0, 0.785), scale=(0.038, 0, 0.045),
+                                         command=self.switchToCodes)
+        self.tabs = [self.backpackTab, self.wardrobeTab, self.codesTab]
 
-        self.fishingRods_label.destroy()
-        del self.fishingRods_label
-        self.fishingRods_preview.destroy()
-        del self.fishingRods_preview
-        self.fishingRods_leftButton.destroy()
-        del self.fishingRods_leftButton
-        self.fishingRods_rightButton.destroy()
-        del self.fishingRods_rightButton
-        self.fishingRods_previewPanel.destroy()
-        del self.fishingRods_previewPanel
-        
-        self.cheesyEffect_label.destroy()
-        del self.cheesyEffect_label
-        self.cheesyEffect_preview.destroy()
-        del self.cheesyEffect_preview
-        self.cheesyEffect_leftButton.destroy()
-        del self.cheesyEffect_leftButton
-        self.cheesyEffect_rightButton.destroy()
-        del self.cheesyEffect_rightButton
-        
+        # Categories
+        self.categoryButtons = [BackpackCategoryButton(parent=self, scale=0.1) for _ in range(self.TotalCategoryButtons)]
+        self.leftCategoryButtons = self.categoryButtons[:self.CategoryButtonsPerSide]
+        self.rightCategoryButtons = self.categoryButtons[self.CategoryButtonsPerSide:]
+        UiHelpers.placeElementsInHorizontalLine(self.leftCategoryButtons, startPos=(-0.8, 0, 0.55), scale=0.1)
+        UiHelpers.placeElementsInHorizontalLine(self.rightCategoryButtons, startPos=(0.1, 0, 0.55), scale=0.1)
+
+        # Search
+        self.searchBar = LockingEntry(
+            parent=self, relief=DGG.FLAT,
+            pos=(0.045, 0, 0.415), scale=0.07795,
+            borderWidth=(0.05, 0.05),
+            frameColor=(0.7, 0.7, 0.7, 1.0), state=DGG.NORMAL,
+            text_align=TextNode.ALeft, text_scale=0.7, width=14.35, numLines=1,
+            focus=0, backgroundFocus=0, cursorKeys=1, text_fg=(0, 0, 0, 1), suppressMouse=1, autoCapitalize=0,
+            initialText=TTLocalizer.FriendsListSearchBarDefaultText, clearOnFocus=True,
+            funcOnAccept=self.setSearchQuery,
+        )
+
+        # Grid page number
+        self.pageLabel = DirectLabel(
+            parent=self,
+            relief=None,
+            pos=(0.4375, 0, -0.683),
+            text='1/1',
+            text_scale=0.065,
+            text_font=ToontownGlobals.getInterfaceFont(),
+            text_align=TextNode.ACenter,
+            textMayChange=1,
+            text_fg=Vec4(0, 0, 0, 1),
+        )
+        m = loader.loadModel('phase_3.5/models/gui/clothingpage/clothing_page')
+        self.leftArrow = DirectButton(parent=self, relief=None, pos=(0.2375, 0, -0.665),
+                                      image=(m.find('**/Arrow_N'), m.find('**/Arrow_P'), m.find('**/Arrow_H')),
+                                      image_scale=(1.2 / 8, 1.0, 1.2 / 16),
+                                      frameColor=(0.7, 0.7, 0.7, 1),
+                                      command=self.__handleArrow,
+                                      extraArgs=[-1])
+        self.rightArrow = DirectButton(parent=self, relief=None, pos=(0.6375, 0, -0.665),
+                                       image=(m.find('**/Arrow_N'), m.find('**/Arrow_P'), m.find('**/Arrow_H')),
+                                       image_scale=(-1.2 / 8, 1.0, 1.2 / 16),
+                                       frameColor=(0.7, 0.7, 0.7, 1),
+                                       command=self.__handleArrow,
+                                       extraArgs=[1])
+        m.removeNode()
+
+        # Item widget
+        self.widgetNode = GUINode(parent=self, pos=(-0.4375, 0, 0))
+        self.currWidget = BackpackToonWidget(parent=self.widgetNode)
+
     def enter(self):
         ShtikerPage.ShtikerPage.enter(self)
+        self.refreshItemList()
+        self.accept('LocalInventorySet', self.refreshItemList)
+        self.accept('inventoryDelta', self.refreshItemList)
 
-        toonId = str(base.localAvatar.doId)
-        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
-        if not nametagStyles:
-            nametagStyles = [0]
-            base.localAvatar.nametagStyles = nametagStyles
+        # Finally, swap to the backpack tab
+        self.switchToBackpack()
 
-        currentStyle = base.localAvatar.getNametagStyle()
-        try:
-            currentIndex = nametagStyles.index(currentStyle)
-        except ValueError:
-            currentIndex = 0
+    def refreshItemList(self, delta=None):
+        # NOTE: the hammerspace inventory may not have loaded yet if the player
+        # opens this page very soon after login -- self.accept('LocalInventorySet',
+        # self.refreshItemList) above means we'll be called again once it arrives.
+        hammerspace = base.localAvatar.getHammerspace()
+        items = hammerspace.getItems() if hammerspace else []
 
-        savedNametagIndex = settings.get('lastNametag', {}).get(toonId, currentIndex)
-        try:
-            savedNametagIndex = int(savedNametagIndex)
-        except (TypeError, ValueError):
-            savedNametagIndex = currentIndex
-        if savedNametagIndex < 0 or savedNametagIndex >= len(nametagStyles):
-            savedNametagIndex = currentIndex
-        self.nametagStyle_index = savedNametagIndex
+        def baseFilter(item):
+            return BackpackCategoryGlobals.isItemValidForCategory(item, self.selectedCategory)
+        filterFunc = baseFilter
 
-        self.fishingRods_index = settings.get('lastRod', {}).get(toonId, 0)
-        self.cheesyEffect_index = settings.get('lastEffect', {}).get(toonId, 0)
+        if self.searchQuery and self.searchQuery != '':
+            strippedQuery = self.searchQuery.lower().replace(' ', '')
+            if strippedQuery != '':
+                def searchFilter(item):
+                    itemDef = item.getItemDefinition()
+                    itemName = itemDef.getName().lower().replace(' ', '')
+                    itemType = itemDef.getItemTypeName().lower().replace(' ', '')
+                    return (strippedQuery in itemName or strippedQuery in itemType) and baseFilter(item)
+                filterFunc = searchFilter
 
-        self.__updateNametagStyle()
-        self.__updateFishingRods()
-        self.__updateCheesyEffect()
+        self.grid.setItemList(list(filter(lambda item: filterFunc(item), items)))
 
     def exit(self):
         ShtikerPage.ShtikerPage.exit(self)
+        self.ignore('LocalInventorySet')
+        self.ignore('inventoryDelta')
 
-        toonId = str(base.localAvatar.doId)
-        nametagStyleIndexes = settings.get('lastNametag', {})
-        fishingRodIndexes = settings.get('lastRod', {})
-        cheesyEffectIndexes = settings.get('lastEffect', {})
+    def unload(self):
+        if self.grid:
+            self.grid.destroy()
+            self.grid = None
+        self.title = None
+        self.backpackTab = None
+        self.wardrobeTab = None
+        self.codesTab = None
+        self.tabs = []
+        self.categoryButtons = []
+        self.leftCategoryButtons = []
+        self.rightCategoryButtons = []
+        self.pageLabel = None
+        self.leftArrow = None
+        self.rightArrow = None
+        self.searchBar = None
+        self.widgetNode = None
+        self.currWidget = None
 
-        nametagStyleIndexes[toonId] = self.nametagStyle_index
-        settings['lastNametag'] = nametagStyleIndexes
+        ShtikerPage.ShtikerPage.unload(self)
 
-        fishingRodIndexes[toonId] = self.fishingRods_index
-        settings['lastRod'] = fishingRodIndexes
+    # region Helper stuff
 
-        cheesyEffectIndexes[toonId] = self.cheesyEffect_index
-        settings['lastEffect'] = cheesyEffectIndexes
+    def generateTab(self, text, pos, scale, command) -> DirectButton:
+        # Creates a tab to go on the top of the Book. Will run command when clicked.
+        normalColor = (1, 1, 1, 1)
+        clickColor = (0.8, 0.8, 0, 1)
+        rolloverColor = (0.15, 0.82, 1.0, 1)
+        disabledColor = (1.0, 0.98, 0.15, 1)
+        return DirectButton(parent=self, relief=None, text=text,
+                            text_scale=TTLocalizer.GPrecordsTab, text_align=TextNode.ACenter,
+                            image=loader.loadModel('phase_3.5/models/gui/fishingBook').find('**/tabs/polySurface2'),
+                            image_pos=(0, 0, -1.06),
+                            image_hpr=(0, 0, -90), image_scale=scale, image_color=normalColor,
+                            image1_color=clickColor, image2_color=rolloverColor, image3_color=disabledColor,
+                            text_fg=Vec4(0.2, 0.1, 0, 1), command=command,
+                            pos=pos, scale=0.9)
 
-        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
-        if 0 <= self.nametagStyle_index < len(nametagStyles):
-            selectedStyle = nametagStyles[self.nametagStyle_index]
-            if selectedStyle != base.localAvatar.getNametagStyle():
-                base.localAvatar.requestNametagStyle(selectedStyle)
+    def makeTabActive(self, tab: DirectFrame) -> None:
+        # Selects a tab as the current page, highlighting it and making it unselectable.
+        tab['state'] = DGG.DISABLED
+        for bTab in [pTab for pTab in self.tabs if pTab is not tab]:
+            bTab['state'] = DGG.NORMAL
 
-        if self.fishingRods_index != -1 and self.fishingRods_index != base.localAvatar.fishingRods.index(base.localAvatar.getFishingRod()):
-            base.localAvatar.requestFishingRod(base.localAvatar.fishingRods[self.fishingRods_index])
-        if self.cheesyEffect_index != -1 and self.cheesyEffect_index != base.localAvatar.cheesyEffects.index(base.localAvatar.savedCheesyEffect):
-            base.localAvatar.requestCheesyEffects(base.localAvatar.cheesyEffects[self.cheesyEffect_index])
+    def setCategory(self, category: BackpackCategoryGlobals.BackpackCategory) -> None:
+        self.selectedCategory = category
+        self.setPageNumber(0)
+        self.refreshItemList()
+        self.updatePageLabel()
+        self.swapToWidgetType(BackpackToonWidget)
+        self.currWidget.exitCodesMode()
 
-    def __updateNametagStyle(self):
-        nametagStyles = list(getattr(base.localAvatar, 'nametagStyles', []))
-        nametagCount = len(nametagStyles)
+    def makeCategoryButtonsActive(self, categoryList: list[BackpackCategoryGlobals.BackpackCategory]) -> None:
+        # Run through all buttons and make the ones active that we need
+        for i, button in enumerate(self.categoryButtons):
+            if i > len(categoryList) - 1:
+                button.configure(command=None, extraArgs=None)
+                button.hide()
+                continue
+            button.configure(backpackCategory=categoryList[i], command=self.setCategory, extraArgs=[categoryList[i]])
+            button.show()
 
-        if nametagCount == 0:
-            self.nametagStyle_index = -1
-            self.nametagStyle_preview['text_font'] = ToontownGlobals.getToonFont()
-            self.nametagStyle_preview['text'] = TTLocalizer.NametagFontNames[0]
-            self.nametagStyle_rightButton.hide()
-            self.nametagStyle_leftButton.hide()
+    def __handleArrow(self, value: int):
+        if self.grid.maxPages <= 0:
+            return
+        newValue = self.pageNumber + value
+        if newValue > self.numFullPages or newValue < 0:
+            return
+        self.setPageNumber(newValue)
+        self.grid.refresh(force=True)
+        self.updatePageLabel()
+
+    def setPageNumber(self, value: int):
+        self.pageNumber = value
+        self.grid.currentPage = self.pageNumber * self.ItemRows
+
+    def updatePageLabel(self):
+        self.pageLabel['text'] = f'{self.pageNumber + 1}/{self.numFullPages + 1}'
+
+    @property
+    def numFullPages(self):
+        return int(math.ceil(self.grid.maxPages / self.ItemRows))
+
+    def setSearchQuery(self):
+        searchText = self.searchBar.get()
+        if searchText in (TTLocalizer.FriendsListSearchBarDefaultText, ''):
+            self.searchBar.set(TTLocalizer.FriendsListSearchBarDefaultText)
+            searchText = ''
+
+        newQuery = searchText.lower().replace(' ', '')
+        if newQuery == self.searchQuery:
             return
 
-        self.nametagStyle_index = max(0, min(self.nametagStyle_index, nametagCount - 1))
-        nametagStyle = nametagStyles[self.nametagStyle_index]
-        if nametagStyle < 0 or nametagStyle >= len(TTLocalizer.NametagFonts):
-            nametagStyle = 0
+        self.searchQuery = newQuery
+        self.setPageNumber(0)
+        self.refreshItemList()
+        self.updatePageLabel()
 
-        self.nametagStyle_preview['text_font'] = ToontownGlobals.getNametagFont(nametagStyle)
-        self.nametagStyle_preview['text'] = TTLocalizer.NametagFontNames[nametagStyle]
+    def getWidgetForItem(self, item):
+        return BackpackStandardItemWidget
 
-        if self.nametagStyle_index >= nametagCount - 1:
-            self.nametagStyle_rightButton.hide()
-        else:
-            self.nametagStyle_rightButton.show()
+    def swapToWidgetType(self, widgetType: Type[DirectFrame]):
+        if self.currWidget and self.currWidget.__class__ is widgetType:
+            return
 
-        if self.nametagStyle_index <= 0:
-            self.nametagStyle_leftButton.hide()
-        else:
-            self.nametagStyle_leftButton.show()
+        if self.currWidget:
+            self.currWidget.destroy()
+        self.currWidget = widgetType(parent=self.widgetNode)
 
-    def __changeNametagStyle(self, val):
-        self.nametagStyle_index += val
-        self.__updateNametagStyle()
+    def __handleClickedItem(self, item):
+        self.swapToWidgetType(self.getWidgetForItem(item))
+        self.currWidget['inventoryItem'] = item
 
-    def __updateFishingRods(self):
-        self.fishingRods_preview['text'] = TTLocalizer.FishingRodNameDict.get(base.localAvatar.fishingRods[self.fishingRods_index])
-        rodPath = FishGlobals.RodFileDict.get(base.localAvatar.fishingRods[self.fishingRods_index])
-        if self.geom:
-            self.geom.cleanup()
-            self.geom.removeNode()
-            self.geom = None
-            if self.geomRotate:
-                self.geomRotate.finish()
-        self.geom = Actor.Actor(rodPath, {'cast': 'phase_4/models/props/fishing-pole-chan'})
-        self.geom.setHpr(90, 55, -90)
-        self.geom.setPos(0, 0, -.5)
-        self.geom.setScale(.4)
-        self.geomRotate = self.geom.hprInterval(4, Vec3(450, 55, -90)).loop()
-        self.geom.reparentTo(self.fishingRods_previewPanel)
-        self.geom.pose('cast', 130)
-        nametagCount = len(base.localAvatar.fishingRods)            
-        if nametagCount == 0:
-            self.fishingRods_rightButton.hide()
-            self.fishingRods_leftButton.hide()
-            
-        if self.fishingRods_index >= (nametagCount - 1):
-            self.fishingRods_rightButton.hide()
-        else:
-            self.fishingRods_rightButton.show()
-        
-        if self.fishingRods_index <= 0:
-            self.fishingRods_leftButton.hide()
-        else:
-            self.fishingRods_leftButton.show()
-    
-    def __changeFishingRods(self, val):
-        self.fishingRods_index += val
-        self.__updateFishingRods()
+    # endregion
+    # region Backpack
 
-    def enterHoverFishing(self, hoverEvent):
-        if hasattr(self, 'fishingRods_previewPanel'):
-            self.fishingRods_previewPanel.show()
-    
-    def exitHoverFishing(self, hoverEvent):
-        if hasattr(self, 'fishingRods_previewPanel'):
-            self.fishingRods_previewPanel.hide()
-            
-    def __updateCheesyEffect(self):
-        try:
-            self.cheesyEffect_preview['text'] = TTLocalizer.CheesyEffectId2Name.get(base.localAvatar.cheesyEffects[self.cheesyEffect_index])
-        except:
-            self.cheesyEffect_preview['text'] = 'Unknown Effect ID: %s' % self.cheesyEffect_index
-        ceCount = len(base.localAvatar.cheesyEffects)            
-        if ceCount == 0:
-            self.cheesyEffect_rightButton.hide()
-            self.cheesyEffect_leftButton.hide()
-            
-        if self.cheesyEffect_index >= (ceCount - 1):
-            self.cheesyEffect_rightButton.hide()
-        else:
-            self.cheesyEffect_rightButton.show()
-        
-        if self.cheesyEffect_index <= 0:
-            self.cheesyEffect_leftButton.hide()
-        else:
-            self.cheesyEffect_leftButton.show()
-    
-    def __changeCheesyEffect(self, val):
-        self.cheesyEffect_index += val
-        self.__updateCheesyEffect()
+    def switchToBackpack(self) -> None:
+        self.title['text'] = TTLocalizer.ItemsPageTitle
+
+        # UI Hide/Show
+        self.grid.show()
+        self.pageLabel.show()
+        self.leftArrow.show()
+        self.rightArrow.show()
+        self.searchBar.show()
+        if self.currWidget:
+            self.currWidget.show()
+
+        self.setCategory(BackpackCategoryGlobals.BackpackCategory.All)
+        self.makeCategoryButtonsActive(self.BackpackTabCategories)
+        self.makeTabActive(self.backpackTab)
+        # Widget swap is handled in setCategory
+        messenger.send('wakeup')
+
+    # endregion
+    # region Wardrobe
+
+    def switchToWardrobe(self):
+        self.title['text'] = TTLocalizer.ItemsPageWardrobeTab
+
+        # UI Hide/Show
+        self.grid.show()
+        self.pageLabel.show()
+        self.leftArrow.show()
+        self.rightArrow.show()
+        self.searchBar.show()
+        if self.currWidget:
+            self.currWidget.show()
+
+        self.setCategory(BackpackCategoryGlobals.BackpackCategory.W_All)
+        self.makeCategoryButtonsActive(self.WardrobeTabCategories)
+        self.makeTabActive(self.wardrobeTab)
+        # Widget swap is handled in setCategory
+        messenger.send('wakeup')
+
+    # endregion
+    # region Codes
+
+    def switchToCodes(self):
+        self.title['text'] = TTLocalizer.ItemsPageCodesTab
+
+        # UI Hide/Show
+        self.grid.hide()
+        self.pageLabel.hide()
+        self.leftArrow.hide()
+        self.rightArrow.hide()
+        self.searchBar.hide()
+        [button.hide() for button in self.categoryButtons]
+
+        self.makeTabActive(self.codesTab)
+        self.swapToWidgetType(BackpackToonWidget)
+        self.currWidget.enterCodesMode()
+        messenger.send('wakeup')
+
+    # endregion

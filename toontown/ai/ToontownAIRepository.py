@@ -8,6 +8,9 @@ from otp.ai import BanManagerAI
 from otp.distributed.OtpDoGlobals import *
 from otp.friends.FriendManagerAI import FriendManagerAI
 from toontown.ai import CogPageManagerAI
+from toontown.inventory.InventoryManagerAI import InventoryManagerAI
+# Imported for side effects: registers the ~hammerspace debug magic words.
+from toontown.ai import HammerspaceMagicWords
 from toontown.ai import CogSuitManagerAI
 from toontown.ai import PromotionManagerAI
 from toontown.ai import ExperienceRewardManagerAI
@@ -102,6 +105,13 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.dbConn = pymongo.MongoClient(config.GetString('mongodb-url', 'localhost'))
         self.dbGlobalCursor = self.dbConn.altis
         self.dbCursor = self.dbGlobalCursor['air-%d' % self.ourChannel]
+
+        # Hammerspace inventory system expects self.air.mongodb (Clash's naming
+        # for the database handle) -- alias it to Altis's existing connection
+        # rather than opening a second one.
+        self.mongodb = self.dbGlobalCursor
+        from toontown.inventory.services.InventoryDatabaseAI import InventoryMongoDatabaseAI
+        self.inventoryDb = InventoryMongoDatabaseAI(self)
         self.zoneAllocator = UniqueIdAllocator(ToontownGlobals.DynamicZonesBegin,
                                                ToontownGlobals.DynamicZonesEnd)
         self.zoneDataStore = AIZoneDataStore()
@@ -123,6 +133,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.weatherCycleDuration = self.config.GetInt('weather-cycle-duration', 100)
 
     def createManagers(self):
+        self.inventoryManager = InventoryManagerAI(self)
+        self.inventoryManager.generateWithRequired(2)
         self.timeManager = TimeManagerAI(self)
         self.timeManager.generateWithRequired(2)
         self.magicWordManager = MagicWordManagerAI(self)

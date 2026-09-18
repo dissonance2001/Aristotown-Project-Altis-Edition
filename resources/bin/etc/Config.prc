@@ -1,0 +1,421 @@
+###########################################################
+###                                                     ###
+### Panda3D Configuration File -  User-Editable Portion ###
+###                                                     ###
+###########################################################
+
+default-antialias-enable 1
+framebuffer-multisample 1
+
+interpolate-frames 1
+
+# Uncomment one of the following lines to choose whether you should
+# run using OpenGL, DirectX or TinyPanda (software) rendering.
+# There can only be one load-display line, but you can use
+# multiple aux-display lines to specify fallback modules.
+# When the module indicated by load-display fails, it will fall
+# back to the next display module indicated by aux-display,
+# when that fails, the next aux-display line, and so on.
+
+load-display pandagl
+aux-display p3tinydisplay
+aux-display pandadx9
+screenshot-extension png
+# These control the placement and size of the default rendering window.
+# A value of -2 for the origin means to center it on the screen,
+# while -1 lets the window manager choose the position.
+
+win-origin -2 -2
+win-size 800 600
+
+pview-test-hack #t
+
+# Uncomment this line if you want to run Panda fullscreen instead of
+# in a window.
+
+fullscreen #f
+
+# The framebuffer-hardware flag forces it to use an accelerated driver.
+# The framebuffer-software flag forces it to use a software renderer.
+# If you set both to false, it will use whatever's available.
+
+framebuffer-hardware #t
+framebuffer-software #f
+
+# These set the minimum requirements for the framebuffer.
+# A value of 1 means: get as many bits as possible,
+# consistent with the other framebuffer requirements.
+
+depth-bits 1
+color-bits 1 1 1
+alpha-bits 0
+stencil-bits 0
+multisamples 0
+
+# These control the amount of output Panda gives for some various
+# categories.  The severity levels, in order, are "spam", "debug",
+# "info", "warning", and "error"; the default is "info".  Uncomment
+# one (or define a new one for the particular category you wish to
+# change) to control this output.
+
+notify-level warning
+default-directnotify-level warning
+
+# These specify where model files may be loaded from.  You probably
+# want to set this to a sensible path for yourself.  $THIS_PRC_DIR is
+# a special variable that indicates the same directory as this
+# particular Config.prc file.
+
+model-path    $MAIN_DIR
+model-path    $THIS_PRC_DIR/..
+model-path    $THIS_PRC_DIR/../models
+
+# This enable the automatic creation of a TK window when running
+# Direct.
+
+want-directtools  #f
+want-tk           #f
+
+# Enable/disable performance profiling tool and frame-rate meter
+
+want-pstats            #f
+show-frame-rate-meter  #f
+
+# Enable audio using the OpenAL audio library by default:
+
+audio-library-name p3openal_audio
+
+# Enable the use of the new movietexture class.
+
+use-movietexture #t
+
+# The new version of panda supports hardware vertex animation, but it's not quite ready
+
+hardware-animated-vertices #f
+
+# Enable the model-cache, but only for models, not textures.
+
+model-cache-dir $USER_APPDATA/Panda3D-1.11
+model-cache-textures #f
+
+# This option specifies the default profiles for Cg shaders.
+# Setting it to #t makes them arbvp1 and arbfp1, since these
+# seem to be most reliable. Setting it to #f makes Panda use
+# the latest profile available.
+
+basic-shaders-only #f
+# The following lines define some handy object types to use within the
+# egg syntax.  This remaps <ObjectType> { name } into whatever egg
+# syntax is given by egg-object-type-name, which makes a handy
+# abbreviation for modeling packages (like Maya) to insert
+# sophisticated egg syntax into the generated egg file, using a single
+# object type string.
+
+# Egg bible:
+# https://raw.githubusercontent.com/panda3d/panda3d/master/panda/src/doc/eggSyntax.txt
+
+####################################################################################
+#   This indicates that this group begins an animated character.  A
+#   Character node, which is the fundamental animatable object of
+#   Panda's high-level Actor class, will be created for this group.
+#   This flag should always be present within the <Group> entry at the
+#   top of any hierarchy of <Joint>'s and/or geometry with morphed
+#   vertices; joints and morphs appearing outside of a hierarchy
+#   identified with a <Dart> flag are undefined.
+egg-object-type-dart            <Dart> { 1 }
+egg-object-type-structured      <Dart> { structured }
+
+#   This attribute indicates that the child nodes of this group
+#   represent a series of animation frames that should be
+#   consecutively displayed.  In the absence of an "fps" scalar for
+#   the group (see below), the egg loader creates a SwitchNode, and it
+#   the responsibility of the show code to perform the switching.  If
+#   an fps scalar is defined and is nonzero, the egg loader creates a
+#   SequenceNode instead, which automatically cycles through its
+#   children.
+egg-object-type-switch          <Switch> { 1 }
+
+egg-object-type-seq2            <Switch> { 1 } <Scalar>  fps { 2 }
+egg-object-type-seq4            <Switch> { 1 } <Scalar>  fps { 4 }
+egg-object-type-seq6            <Switch> { 1 } <Scalar>  fps { 6 }
+egg-object-type-seq8            <Switch> { 1 } <Scalar> fps { 8 }
+egg-object-type-seq10           <Switch> { 1 } <Scalar> fps { 10 }
+egg-object-type-seq12           <Switch> { 1 } <Scalar> fps { 12 }
+egg-object-type-seq24           <Switch> { 1 } <Scalar> fps { 24 }
+
+####################################################################################
+# These are just shortcuts to define the Model and DCS flags, which
+# indicate nodes that should not be flattened out of the hierarchy
+# during the conversion process.  DCS goes one step further and
+# indicates that the node's transform is important and should be
+# preserved (DCS stands for Dynamic Coordinate System).  Notouch is
+# even stronger, and means not to do any flattening below the node at
+# all.
+egg-object-type-model           <Model> { 1 }
+
+# Stands for a local transform: takes the root node of the hierarchy and transforms from there.
+# Good for things like environment models' locators, like door_origin or elevator_origin.
+egg-object-type-localdcs        <DCS> { local }
+
+# takes parent's transforms into account when translating. Good for actors that need joints exposed for further manipulation in the code.
+egg-object-type-netdcs          <DCS> { net }
+egg-object-type-dcs             <DCS> { 1 }
+egg-object-type-notouch         <DCS> { no-touch }
+
+
+
+####################################################################################
+# The following define various kinds of collision geometry.  These
+# mark the geometry at this level and below as invisible collision
+# polygons, which can be used by Panda's collision system to detect
+# collisions more optimally than regular visible polygons.
+
+egg-object-type-trigger         <Scalar> collide-mask { 0x01 } <Collide> { Polyset descend intangible }
+egg-object-type-trigger-sphere  <Scalar> collide-mask { 0x01 } <Collide> { Sphere descend intangible }
+
+# "barrier" means a vertical wall, with bitmask 0x01
+egg-object-type-barrier         <Scalar> collide-mask { 0x01 } <Collide> { Polyset descend }
+# Makes it easier when importing panda models into Maya
+egg-object-type-barrier-no-mask <Collide> { Polyset descend }
+
+egg-object-type-planebarrier    <Scalar> collide-mask { 0x01 } <Collide> { Plane descend }
+egg-object-type-planefloor      <Scalar> collide-mask { 0x02 } <Collide> { Plane descend }
+
+egg-object-type-sphere          <Scalar> collide-mask { 0x01 } <Collide> { Sphere descend }
+egg-object-type-tube            <Scalar> collide-mask { 0x01 } <Collide> { Tube descend }
+
+# "bubble" puts an invisible bubble around an object, but does not
+# otherwise remove the geometry.
+egg-object-type-bubble          <Collide> { Sphere keep descend }
+
+egg-object-type-camtransbarrier <Scalar> collide-mask { 0x09 } <Collide> { Polyset descend }
+egg-object-type-camera-barrier-sphere  <Scalar> collide-mask { 0x05 } <Collide> { Sphere descend }
+# shorthand for maya
+egg-object-type-cambarrier-sphere  <Scalar> collide-mask { 0x05 } <Collide> { Sphere descend }
+egg-object-type-cambarrier  <Scalar> collide-mask { 0x05 } <Collide> { Polyset descend }
+egg-object-type-camera-barrier  <Scalar> collide-mask { 0x05 } <Collide> { Polyset descend }
+
+# "camera-collide" means things that the camera should avoid, with bitmask 0x04
+egg-object-type-camera-collide  <Scalar> collide-mask { 0x04 } <Collide> { Polyset descend }
+egg-object-type-camcollide  <Scalar> collide-mask { 0x04 } <Collide> { Polyset descend }
+egg-object-type-camera-collide-sphere  <Scalar> collide-mask { 0x04 } <Collide> { Sphere descend }
+
+egg-object-type-camtransparent  <Scalar> collide-mask { 0x08 } <Collide> { Polyset descend }
+
+egg-object-type-direct-widget   <Scalar> collide-mask { 0x80000000 } <Collide> { Polyset descend }
+
+# "floor" and "dupefloor" define the nodes in question as floor polygons.
+# dupefloor means to duplicate the geometry first so that
+# the same polygons serve both as visible geometry and as collision polygons.
+# "floor" means a horizontal floor, with bitmask 0x02
+egg-object-type-floor           <Scalar> collide-mask { 0x02 } <Collide> { Polyset descend level }
+egg-object-type-dupefloor       <Scalar> collide-mask { 0x02 } <Collide> { Polyset keep descend level }
+egg-object-type-floor-collide   <Scalar> collide-mask { 0x06 }
+egg-object-type-smooth-floors   <Collide> { Polyset descend } <Scalar> from-collide-mask { 0x000fffff } <Scalar> into-collide-mask { 0x00000002 }
+
+### Panda3D specific ###
+egg-object-type-invsphere       <Collide> { InvSphere descend }
+egg-object-type-solidpoly       <Collide> { Polyset descend solid }
+egg-object-type-turnstile       <Collide> { Polyset descend turnstile }
+egg-object-type-eye-trigger     <Collide> { Polyset descend intangible center }
+
+####################################################################################
+### Toontown specific ###
+
+# Collision polygons for moving platforms (normally these are not seen
+# by the player; this helps the collision system do the right thing;
+# toons that are not on the platform do not react to this bit mask):
+egg-object-type-safety-net     <Scalar> collide-mask { 0x200 }
+
+# Collision polygons for _near_ moving platforms (normally these are
+# not seen by the player; this helps the collision system do the
+# right thing; toons that _are_ on the platform do not react to
+# this bit mask):
+egg-object-type-safety-gate     <Scalar> collide-mask { 0x400 }
+
+# Things we can throw a pie at.  (Pies also react to CameraBitmask and
+# FloorBitmask, but not WallBitmask.):
+# Brought in from OTPGlobals
+egg-object-type-pie     <Scalar> collide-mask { 0x100 }
+
+# Things the magnet can pick up in the Cashbot CFO battle (same as
+# CatchGameBitmask):
+egg-object-catch-grab    <Scalar> collide-mask { 0x10 }
+
+# Pets avoid this
+egg-object-type-pet             <Scalar> collide-mask { 0x08 }
+
+# Furniture movement
+egg-object-type-furniture-side             <Scalar> collide-mask { 0x20 }
+egg-object-type-furniture-top             <Scalar> collide-mask { 0x40 }
+egg-object-type-furniture-drag             <Scalar> collide-mask { 0x80 }
+
+# Used when toon hits lava
+egg-object-type-ouch1           <Tag> ouch { 1 }
+egg-object-type-ouch2           <Tag> ouch { 2 }
+egg-object-type-ouch3           <Tag> ouch { 3 }
+egg-object-type-ouch4           <Tag> ouch { 4 }
+egg-object-type-ouch5           <Tag> ouch { 5 }
+
+####################################################################################
+# Alpha channels
+#   If alpha-type is OFF, it means not to enable transparency, even if
+#   the image contains an alpha channel or the format is RGBA.  If
+#   alpha-type is ON, it means to enable the default transparency,
+#   even if the image filename does not contain an alpha channel.  If
+#   alpha-type is any of the other options, it specifies the type of
+#   transparency to be enabled.
+egg-object-type-multisample     <Scalar> alpha { ms }
+egg-object-type-multisample-mask <Scalar> alpha { ms-mask }
+egg-object-type-binary          <Scalar> alpha { binary }
+egg-object-type-dual            <Scalar> alpha { dual }
+egg-object-type-blend           <Scalar> alpha { blend }
+egg-object-type-glass           <Scalar> alpha { blend-no-occlude }
+
+####################################################################################
+#   It is sometimes important to control the order in which objects
+#   are rendered, particularly when transparency is in use.  In Panda,
+#   this is achieved via the use of named bins and, within certain
+#   kinds of bins, sometimes an explicit draw-order is also used (see
+#   below).
+#   In the normal (state-sorting) mode, Panda renders its geometry by
+#   first grouping into one or more named bins, and then rendering the
+#   bins in a specified order.  The programmer is free to define any
+#   number of bins, named whatever he/she desires.
+#   This scalar specifies which bin this particular polygon is to be
+#   rendered within.  If no bin scalar is given, or if the name given
+#   does not match any of the known bins, the polygon will be assigned
+#   to the default bin, which renders all opaque geometry sorted by
+#   state, followed by all transparent geometry sorted back-to-front.
+#   Define a "ground" type, for rendering ground surfaces immediately
+#   behind the drop shadows.
+egg-object-type-ground          <Scalar> bin { ground }
+egg-object-type-shground        <Tag> cam { shground }
+egg-object-type-shadow-ground   <Tag> cam { shground }
+
+#   Define a "shadow" object type, so we can render all shadows in their
+#   own bin and have them not fight with each other (or with other
+#   transparent geometry).
+egg-object-type-shadow          <Scalar> bin { shadow } <Scalar> alpha { blend-no-occlude }
+
+# This is actually the default bin.
+egg-object-type-bin-fixed       <Scalar> bin { fixed }
+
+# Don't know if these have any value, though these bins exist within Toontown's codebase.
+egg-object-type-bin-gui-popup   <Scalar> bin { gui-popup }
+egg-object-type-bin-unsorted    <Scalar> bin { unsorted }
+# Background might be good for dust clouds
+egg-object-type-bin-background  <Scalar> bin { background }
+egg-object-type-bin-transparent <Scalar> bin { transparent }
+# aux support
+egg-object-type-transparent <Scalar> bin { transparent }
+# Used in DistributedGolfHole
+egg-object-type-bin-opaque      <Scalar> bin { opaque }
+# aux support
+egg-object-type-opaque <Scalar> bin { opaque }
+
+#   This works in conjunction with bin to further refine the
+#   order in which this polygon is drawn, relative to other geometry
+#   in the same bin.  If (and only if) the bin type named in the bin
+#   scalar is a CullBinFixed, this draw-order is used to define the
+#   fixed order that all geometry in the same will be rendered, from
+#   smaller numbers to larger numbers.
+#   If the draw-order scalar is specified but no bin scalar is
+#   specified, the default is a bin named "fixed", which is a
+#   CullBinFixed object that always exists by default.
+#egg-object-type-draw0           <Scalar> draw-order { 0 }
+#egg-object-type-draw1           <Scalar> draw-order { 1 }
+
+####################################################################################
+#   If this is present and boolean-value is non-zero, it indicates
+#   that the geometry *below* this level is coplanar with the geometry
+#   *at* this level, and the geometry below is to be drawn as a decal
+#   onto the geometry at this level.  This means the geometry below
+#   this level will be rendered "on top of" this geometry, but without
+#   the Z-fighting artifacts one might expect without the use of the
+#   decal flag.
+#   AKA Used for Z-fighting issues
+egg-object-type-decal           <Scalar> decal { 1 }
+
+egg-object-type-invisible       <Scalar> visibility { hidden }
+
+####################################################################################
+#   Specifies that a special blend mode should be applied geometry at
+#   this level and below.
+#   "glow" is useful for halo effects and things of that ilk.  It
+#   renders the object in add mode instead of the normal opaque mode.
+egg-object-type-glow            <Scalar> blend { add }
+egg-object-type-blend-add       <Scalar> blend { add }
+egg-object-type-blend-sub       <Scalar> blend { subtract }
+egg-object-type-blend-inv-sub   <Scalar> blend { inv-subtract }
+egg-object-type-blend-min       <Scalar> blend { min }
+egg-object-type-blend-max       <Scalar> blend { max }
+
+####################################################################################
+#   This makes the first (or only) polygon within this group node into
+#   an occluder.  The polygon must have exactly four vertices.  An
+#   occluder polygon is invisible.  When the occluder is activated
+#   with model.set_occluder(occluder), objects that are behind the
+#   occluder will not be drawn.  This can be a useful rendering
+#   optimization for complex scenes, but should not be overused or
+#   performance can suffer.
+egg-object-type-occlude         <Scalar> occluder { 1 }
+
+####################################################################################
+egg-object-type-billboard       <Billboard> { axis }
+#egg-object-type-billboard-axis  <Billboard> { axis }
+egg-object-type billboard-point <Billboard> { point }
+
+####################################################################################
+# These don't play nicely with Maya right now, so commenting them out.
+
+#   These are to be used by MATERIALS ONLY!
+#   This specifies the type of texture environment to create; i.e. it
+#   controls the way in which textures apply to models.
+#   The default environment type is MODULATE, which means the texture
+#   color is multiplied with the base polygon (or vertex) color.  This
+#   is the most common texture environment by far.
+#egg-object-type-env-modulate   <Scalar> envtype { modulate }
+#egg-object-type-env-decal      <Scalar> envtype { decal }
+#egg-object-type-env-blend      <Scalar> envtype { blend }
+#egg-object-type-env-replace    <Scalar> envtype { replace }
+#egg-object-type-env-add        <Scalar> envtype { add }
+#egg-object-type-env-blend-color-scale <Scalar> envtype { blend_color_scale }
+#egg-object-type-env-modulate-glow  <Scalar> envtype { modulate_glow }
+#egg-object-type-env-modulate-gloss <Scalar> envtype { modulate_gloss }
+
+####################################################################################
+# surface attributes
+egg-object-type-surface-dirt    <Tag> surface { dirt }
+egg-object-type-surface-gravel  <Tag> surface { gravel }
+egg-object-type-surface-grass   <Tag> surface { grass }
+egg-object-type-surface-asphalt <Tag> surface { asphalt }
+egg-object-type-surface-wood    <Tag> surface { wood }
+egg-object-type-surface-water   <Tag> surface { water }
+egg-object-type-surface-snow    <Tag> surface { snow }
+egg-object-type-surface-ice   <Tag> surface { ice }
+egg-object-type-surface-sticky  <Tag> surface { sticky }
+egg-object-type-surface-metal  <Tag> surface { metal }
+
+# SPECIAL tag used for placeholder and debugging ONLY. Custom tag intended to remove the node 
+# (called by the user) out of the scene, since it's only purpose is for being viewed on the model separately.
+egg-object-type-tag-norender  <Tag> surface { norender }
+egg-object-type-norender  <Tag> surface { norender }
+
+egg-object-type-tag-snowball <Tag> giveSnowballs { snowballs }
+egg-object-type-snowball <Tag> giveSnowballs { snowballs }
+
+####################################################################################
+# I don't know what these are used for, it's not listed anywhere in the egg syntax
+# though it is listed by default
+#egg-object-type-portal          <Scalar> portal { 1 }
+#egg-object-type-polylight       <Scalar> polylight { 1 }
+#egg-object-type-indexed         <Scalar> indexed { 1 }
+
+# This isn't used in the egg loader, it controls a setting only within
+# maya2egg itself.  So if it appears in an egg file, it means nothing.
+# Edit: Seems useless for now, so removing.
+# egg-object-type-keep-all-uvsets
+
+####################################################################################
+

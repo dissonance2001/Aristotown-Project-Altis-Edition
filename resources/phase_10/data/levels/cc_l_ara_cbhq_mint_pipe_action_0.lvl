@@ -1,0 +1,1599 @@
+{
+    "globalEntities": {
+        "1000": {
+            "type": "levelMgr",
+            "name": "LevelMgr",
+            "comment": "",
+            "parentEntId": 0,
+            "cogLevel": 0,
+            "farPlaneDistance": 1500,
+            "modelFilename": "phase_10/models/cashbotHQ/ZONE13a",
+            "wantDoors": 1
+        },
+        "0": {
+            "type": "zone",
+            "name": "UberZone",
+            "comment": "",
+            "parentEntId": 0,
+            "scale": 1,
+            "description": "",
+            "visibility": []
+        },
+        "10025": {
+            "type": "attribModifier",
+            "name": "strength",
+            "comment": "",
+            "parentEntId": 10002,
+            "attribName": "strength",
+            "recursive": 1,
+            "typeName": "goon",
+            "value": "10"
+        },
+        "10001": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10000,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10005": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10003,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10006": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10004,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10014": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10013,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10016": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10015,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10018": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10017,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10021": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10020,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10024": {
+            "type": "goon",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10023,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1.5,
+            "attackRadius": 15,
+            "crushCellId": null,
+            "goonType": "pg",
+            "gridId": null,
+            "hFov": 70,
+            "strength": 10,
+            "velocity": 4
+        },
+        "10035": {
+            "type": "healBarrel",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    -56.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 7,
+            "rewardPerGrabMax": 8
+        },
+        "10036": {
+            "type": "healBarrel",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10037,
+            "pos": {
+                "LPoint3f": [
+                    15.385199546813965,
+                    21.03580093383789,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    52.431400299072266,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "rewardPerGrab": 7,
+            "rewardPerGrabMax": 8
+        },
+        "10029": {
+            "type": "model",
+            "name": "rightPillar",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -22.344200134277344,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10030": {
+            "type": "model",
+            "name": "leftPillar",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    21.945199966430664,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10033": {
+            "type": "model",
+            "name": "backPillar",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    41.44329833984375,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10034": {
+            "type": "model",
+            "name": "frontPillar",
+            "comment": "",
+            "parentEntId": 10032,
+            "pos": {
+                "LPoint3f": [
+                    -41.084800720214844,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10039": {
+            "type": "model",
+            "name": "rightPillar",
+            "comment": "",
+            "parentEntId": 10038,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -66.86160278320312,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10040": {
+            "type": "model",
+            "name": "leftPillar",
+            "comment": "",
+            "parentEntId": 10038,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    67.09660339355469,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10042": {
+            "type": "model",
+            "name": "frontRightPillar",
+            "comment": "",
+            "parentEntId": 10043,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -22.57110023498535,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10044": {
+            "type": "model",
+            "name": "frontLeftPillar",
+            "comment": "",
+            "parentEntId": 10043,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    22.168699264526367,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10046": {
+            "type": "model",
+            "name": "frontRightPillar",
+            "comment": "",
+            "parentEntId": 10045,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -22.57110023498535,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10047": {
+            "type": "model",
+            "name": "frontLeftPillar",
+            "comment": "",
+            "parentEntId": 10045,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    22.168699264526367,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/pipes_A1"
+        },
+        "10049": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    0.9498980045318604,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.2906099557876587,
+                    1.2906099557876587,
+                    1.2906099557876587
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_F1.bam"
+        },
+        "10050": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    -13.181900024414062,
+                    -7.171380043029785,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_E.bam"
+        },
+        "10051": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10048,
+            "pos": {
+                "LPoint3f": [
+                    0.9683340191841125,
+                    -13.378499984741211,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    180.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_C1.bam"
+        },
+        "10053": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    0.606361985206604,
+                    -12.135299682617188,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_G1.bam"
+        },
+        "10054": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    7.8521599769592285,
+                    20.042699813842773,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.1665899753570557,
+                    1.1665899753570557,
+                    1.1665899753570557
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_E.bam"
+        },
+        "10055": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    13.51669979095459,
+                    -0.8191390037536621,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.5191400051116943,
+                    1.5191400051116943,
+                    1.5191400051116943
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_D.bam"
+        },
+        "10056": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    10.874500274658203,
+                    4.617030143737793,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_C1.bam"
+        },
+        "10057": {
+            "type": "model",
+            "name": "<unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    31.847000122070312,
+                    -14.564599990844727,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.1728099584579468,
+                    1.1728099584579468,
+                    1.1728099584579468
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_A.bam"
+        },
+        "10058": {
+            "type": "model",
+            "name": "copy of <unnamed>",
+            "comment": "",
+            "parentEntId": 10052,
+            "pos": {
+                "LPoint3f": [
+                    31.936899185180664,
+                    14.30370044708252,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    90.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.1728099584579468,
+                    1.1728099584579468,
+                    1.1728099584579468
+                ]
+            },
+            "collisionsOnly": 0,
+            "flattenType": "light",
+            "goonHatType": "none",
+            "loadType": "loadModel",
+            "modelPath": "phase_10/models/cashbotHQ/crates_A.bam"
+        },
+        "10002": {
+            "type": "nodepath",
+            "name": "goons",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LPoint3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10007": {
+            "type": "nodepath",
+            "name": "rightElbow",
+            "comment": "",
+            "parentEntId": 10027,
+            "pos": {
+                "LPoint3f": [
+                    43.30830001831055,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10008": {
+            "type": "nodepath",
+            "name": "leftElbow",
+            "comment": "",
+            "parentEntId": 10026,
+            "pos": {
+                "LPoint3f": [
+                    -38.57899856567383,
+                    -2.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10009": {
+            "type": "nodepath",
+            "name": "nearRight",
+            "comment": "",
+            "parentEntId": 10027,
+            "pos": {
+                "LPoint3f": [
+                    25.60420036315918,
+                    -41.37540054321289,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    320.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10010": {
+            "type": "nodepath",
+            "name": "nearLeft",
+            "comment": "",
+            "parentEntId": 10026,
+            "pos": {
+                "LPoint3f": [
+                    -25.600000381469727,
+                    -41.380001068115234,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10011": {
+            "type": "nodepath",
+            "name": "farRight",
+            "comment": "",
+            "parentEntId": 10027,
+            "pos": {
+                "LPoint3f": [
+                    25.600000381469727,
+                    41.380001068115234,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10012": {
+            "type": "nodepath",
+            "name": "farLeft",
+            "comment": "",
+            "parentEntId": 10026,
+            "pos": {
+                "LPoint3f": [
+                    -25.600000381469727,
+                    41.380001068115234,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10019": {
+            "type": "nodepath",
+            "name": "entrance",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -82.5020980834961,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10022": {
+            "type": "nodepath",
+            "name": "exit",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    88.4478988647461,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10026": {
+            "type": "nodepath",
+            "name": "left",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10027": {
+            "type": "nodepath",
+            "name": "right",
+            "comment": "",
+            "parentEntId": 10002,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10028": {
+            "type": "nodepath",
+            "name": "props",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    -1.8047800064086914,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10031": {
+            "type": "nodepath",
+            "name": "pillars",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10032": {
+            "type": "nodepath",
+            "name": "centerPillars",
+            "comment": "",
+            "parentEntId": 10031,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10037": {
+            "type": "nodepath",
+            "name": "barrels",
+            "comment": "",
+            "parentEntId": 0,
+            "pos": {
+                "LPoint3f": [
+                    102.77999877929688,
+                    -1.2400000095367432,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10038": {
+            "type": "nodepath",
+            "name": "outerPillars",
+            "comment": "",
+            "parentEntId": 10031,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10043": {
+            "type": "nodepath",
+            "name": "frontPillars",
+            "comment": "",
+            "parentEntId": 10031,
+            "pos": {
+                "LPoint3f": [
+                    -89.96659851074219,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10045": {
+            "type": "nodepath",
+            "name": "backPillars",
+            "comment": "",
+            "parentEntId": 10031,
+            "pos": {
+                "LPoint3f": [
+                    89.97000122070312,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "10048": {
+            "type": "nodepath",
+            "name": "frontProps",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    -100.41300201416016,
+                    -10.883500099182129,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    270.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": {
+                "LVector3f": [
+                    1.668470025062561,
+                    1.668470025062561,
+                    1.668470025062561
+                ]
+            }
+        },
+        "10052": {
+            "type": "nodepath",
+            "name": "backProps",
+            "comment": "",
+            "parentEntId": 10028,
+            "pos": {
+                "LPoint3f": [
+                    100.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1
+        },
+        "10000": {
+            "type": "path",
+            "name": "triangle",
+            "comment": "",
+            "parentEntId": 10008,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 1,
+            "pathScale": 1.5
+        },
+        "10003": {
+            "type": "path",
+            "name": "square",
+            "comment": "",
+            "parentEntId": 10007,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "10004": {
+            "type": "path",
+            "name": "bowtie",
+            "comment": "",
+            "parentEntId": 10009,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 2,
+            "pathScale": 1.0
+        },
+        "10013": {
+            "type": "path",
+            "name": "square",
+            "comment": "",
+            "parentEntId": 10010,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "10015": {
+            "type": "path",
+            "name": "square",
+            "comment": "",
+            "parentEntId": 10011,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "10017": {
+            "type": "path",
+            "name": "square",
+            "comment": "",
+            "parentEntId": 10012,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 0,
+            "pathScale": 1.0
+        },
+        "10020": {
+            "type": "path",
+            "name": "pace",
+            "comment": "",
+            "parentEntId": 10019,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 3,
+            "pathScale": 1.0
+        },
+        "10023": {
+            "type": "path",
+            "name": "pace",
+            "comment": "",
+            "parentEntId": 10022,
+            "pos": {
+                "LPoint3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "hpr": {
+                "LVector3f": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            "scale": 1,
+            "pathIndex": 3,
+            "pathScale": 1.0
+        },
+        "1001": {
+            "type": "editMgr",
+            "name": "EditMgr",
+            "parentEntId": 0,
+            "insertEntity": null,
+            "removeEntity": null,
+            "requestNewEntity": null,
+            "requestSave": null
+        }
+    },
+    "scenarios": [
+        {}
+    ]
+}
