@@ -343,11 +343,9 @@ def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list
             targetActor = t['suit']
             break
 
+    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
     if (attack['suitName'] == 'videog' and suit.hasSuitStatusEffect('videoStatic')):
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
         taunt = applyVideographerStaticTaunt(suit, taunt)
-    else:
-        taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
 
     track = Sequence(
         Wait(delay)
