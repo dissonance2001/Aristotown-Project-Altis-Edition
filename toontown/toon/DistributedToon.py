@@ -1504,7 +1504,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.inventory.updateGUI()
 
     def setHp(self, hp):
+        oldHp = self.getHp() if hasattr(self, 'getHp') else None
         DistributedPlayer.DistributedPlayer.setHp(self, hp)
+        if oldHp is not None and hp < oldHp:
+            messenger.send(self.getTakeDamageMessageName(), [oldHp - hp])
         if hasattr(self, 'doId') and self.doId == getattr(getattr(base, 'localAvatar', None), 'doId', -1):
             try:
                 if hasattr(base, 'discord'):

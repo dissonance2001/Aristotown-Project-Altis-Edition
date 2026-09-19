@@ -686,6 +686,9 @@ class Toon(Avatar.Avatar, ToonHead):
     notify = DirectNotifyGlobal.directNotify.newCategory('Toon')
     afkTimeout = base.config.GetInt('afk-timeout', 600)
 
+    def getTakeDamageMessageName(self):
+        return self.uniqueName('takeDamage')
+
     def __init__(self):
         try:
             self.Toon_initialized
