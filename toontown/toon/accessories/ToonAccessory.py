@@ -162,8 +162,8 @@ class ToonAccessory(AsyncDirectObject):
         if getattr(self.toon, 'isFakeToon', False):
             return False
 
-        from toontown.toon.DistributedToonBase import DistributedToonBase
-        return isinstance(self.toon, DistributedToonBase)
+        from toontown.toon.DistributedToon import DistributedToon
+        return isinstance(self.toon, DistributedToon)
 
     """
     Getters

@@ -13,6 +13,26 @@ from typing import Optional
 from toontown.inventory.definitions.AccessoryDefinition import AccessoryDefinition
 from toontown.inventory.enums.ItemTags import ItemTag
 from toontown.inventory.base.InventoryItem import InventoryItem
+from toontown.toon import ToonDNA, AccessoryGlobals
+
+
+def _getLegacyAccessoryPlacement(definition, stylePrefix, styles, models, placementTable):
+    name = definition.getName()
+    if name.startswith(stylePrefix):
+        styleName = name[len(stylePrefix):]
+        styleData = styles.get(styleName)
+        if styleData:
+            return placementTable.get(styleData[0], {})
+
+    modelPath = definition.getModelPath()
+    if modelPath:
+        try:
+            modelIndex = models.index(modelPath)
+        except ValueError:
+            return {}
+        return placementTable.get(modelIndex, {})
+
+    return {}
 
 
 class AltisLegacyHatItemDefinition(AccessoryDefinition):
@@ -31,6 +51,11 @@ class AltisLegacyHatItemDefinition(AccessoryDefinition):
 
     def getTexturePath(self):
         return self._texturePath
+
+    def getAccessoryPlacement(self, item: Optional[InventoryItem] = None):
+        return _getLegacyAccessoryPlacement(
+            self, 'Hat Style ', ToonDNA.HatStyles, ToonDNA.HatModels,
+            AccessoryGlobals.ExtendedHatTransTable)
 
     def getTags(self, item: 'InventoryItem') -> set:
         tags = super().getTags(item)
@@ -58,6 +83,11 @@ class AltisLegacyGlassesItemDefinition(AccessoryDefinition):
     def getTexturePath(self):
         return self._texturePath
 
+    def getAccessoryPlacement(self, item: Optional[InventoryItem] = None):
+        return _getLegacyAccessoryPlacement(
+            self, 'Glasses Style ', ToonDNA.GlassesStyles, ToonDNA.GlassesModels,
+            AccessoryGlobals.ExtendedGlassesTransTable)
+
 
 class AltisLegacyBackpackItemDefinition(AccessoryDefinition):
     """An Altis-original backpack, ported as a hammerspace item."""
@@ -78,6 +108,11 @@ class AltisLegacyBackpackItemDefinition(AccessoryDefinition):
 
     def getTexturePath(self):
         return self._texturePath
+
+    def getAccessoryPlacement(self, item: Optional[InventoryItem] = None):
+        return _getLegacyAccessoryPlacement(
+            self, 'Backpack Style ', ToonDNA.BackpackStyles, ToonDNA.BackpackModels,
+            AccessoryGlobals.ExtendedBackpackTransTable)
 
 
 class AltisLegacyShoeItemDefinition(AccessoryDefinition):

@@ -38,83 +38,6 @@ from toontown.toonbase import ToontownGlobals
 import importlib
 
 
-def _getAccessoryPlacementOverride(accessoryType, accessoryId, dnaKey):
-    relativePath = os.path.join(
-        'resources',
-        'phase_14',
-        'accessories',
-        'accessory_placements.json'
-    )
-
-    roots = []
-    currentDirectory = os.path.abspath(os.getcwd())
-
-    while True:
-        if currentDirectory not in roots:
-            roots.append(currentDirectory)
-        parentDirectory = os.path.dirname(currentDirectory)
-        if parentDirectory == currentDirectory:
-            break
-        currentDirectory = parentDirectory
-
-    try:
-        currentDirectory = os.path.dirname(os.path.abspath(__file__))
-        while True:
-            if currentDirectory not in roots:
-                roots.append(currentDirectory)
-            parentDirectory = os.path.dirname(currentDirectory)
-            if parentDirectory == currentDirectory:
-                break
-            currentDirectory = parentDirectory
-    except:
-        pass
-
-    placementPath = None
-    for root in roots:
-        candidate = os.path.join(root, relativePath)
-        if os.path.isfile(candidate):
-            placementPath = candidate
-            break
-
-    if placementPath is None:
-        return None
-
-    try:
-        placementFile = open(placementPath, 'r')
-        try:
-            placementData = json.load(placementFile)
-        finally:
-            placementFile.close()
-    except Exception as error:
-        print('Accessory placement override read failed:', error)
-        return None
-
-    try:
-        saved = placementData.get(accessoryType, {}).get(
-            str(accessoryId), {}
-        ).get(dnaKey)
-    except Exception:
-        return None
-
-    if not isinstance(saved, dict):
-        return None
-
-    pos = saved.get('pos')
-    hpr = saved.get('hpr')
-    scale = saved.get('scale')
-
-    if pos is None or hpr is None or scale is None:
-        return None
-
-    result = (
-        tuple(pos),
-        tuple(hpr),
-        tuple(scale)
-    )
-
-    print('APPLYING ACCESSORY OVERRIDE:', accessoryType, accessoryId, dnaKey, result)
-    return result
-
 TOON_STATUS_EFFECT_VISUALS = {
     'zapped': {
         'start': 'makeZapped',
@@ -3734,8 +3657,8 @@ class Toon(Avatar.Avatar, ToonHead):
         elif accessoryType == 'backpack':
             self._clearCustomAccessoryNodes('backpackNodes')
             placementKey = self.style.torso[:1]
-            transOffset = _getAccessoryPlacementOverride('backpack', accessoryId, placementKey)
-            if transOffset is None and AccessoryGlobals.ExtendedBackpackTransTable.get(accessoryId):
+            transOffset = None
+            if AccessoryGlobals.ExtendedBackpackTransTable.get(accessoryId):
                 transOffset = AccessoryGlobals.ExtendedBackpackTransTable[accessoryId].get(placementKey)
             if transOffset is None:
                 transOffset = AccessoryGlobals.BackpackTransTable.get(placementKey)
@@ -3963,20 +3886,9 @@ class Toon(Avatar.Avatar, ToonHead):
                 if fromRTM:
                     importlib.reload(AccessoryGlobals)
                 headKey = self.style.head[:2]
-                transOffset = _getAccessoryPlacementOverride(
-                    'hat',
-                    hat[0],
-                    headKey
-                )
-
-                if transOffset is None:
-                    hatModelPath = ToonDNA.HatModels[hat[0]]
-                    if isinstance(hatModelPath, str) and hatModelPath.startswith('phase_14/accessories/'):
-                        transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
-
-                if transOffset is None:
-                    if AccessoryGlobals.ExtendedHatTransTable.get(hat[0]):
-                        transOffset = AccessoryGlobals.ExtendedHatTransTable[hat[0]].get(headKey)
+                transOffset = None
+                if AccessoryGlobals.ExtendedHatTransTable.get(hat[0]):
+                    transOffset = AccessoryGlobals.ExtendedHatTransTable[hat[0]].get(headKey)
 
                 if transOffset is None:
                     transOffset = AccessoryGlobals.HatTransTable.get(headKey)
@@ -4086,20 +3998,9 @@ class Toon(Avatar.Avatar, ToonHead):
                 if fromRTM:
                     importlib.reload(AccessoryGlobals)
                 headKey = self.style.head[:2]
-                transOffset = _getAccessoryPlacementOverride(
-                    'glasses',
-                    glasses[0],
-                    headKey
-                )
-
-                if transOffset is None:
-                    glassesModelPath = ToonDNA.GlassesModels[glasses[0]]
-                    if isinstance(glassesModelPath, str) and glassesModelPath.startswith('phase_14/accessories/'):
-                        transOffset = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
-
-                if transOffset is None:
-                    if AccessoryGlobals.ExtendedGlassesTransTable.get(glasses[0]):
-                        transOffset = AccessoryGlobals.ExtendedGlassesTransTable[glasses[0]].get(headKey)
+                transOffset = None
+                if AccessoryGlobals.ExtendedGlassesTransTable.get(glasses[0]):
+                    transOffset = AccessoryGlobals.ExtendedGlassesTransTable[glasses[0]].get(headKey)
 
                 if transOffset is None:
                     transOffset = AccessoryGlobals.GlassesTransTable.get(headKey)
@@ -4299,7 +4200,6 @@ class Toon(Avatar.Avatar, ToonHead):
         """
         from toontown.inventory.enums.ItemEnums import ItemType
 
-        self.clearAccessories()
         self.clearAccessoryItems(regen=False)
         self.setHammerspaceShoe(shoe=None, regen=False)
 
