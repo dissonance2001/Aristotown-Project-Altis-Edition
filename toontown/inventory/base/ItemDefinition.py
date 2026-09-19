@@ -355,13 +355,17 @@ class ItemDefinition:
 
         # Are we auto-rescaling the item to fit?
         if adjustScale:
-            bMin, bMax = copiedModel.getTightBounds()
-            center = (bMin + bMax) / 2.0
-            corner = Vec3(bMax - center)
-            scale = (1.0 / max(corner[0], corner[1], corner[2])) * 0.09
-            pos = (-center[0] * scale, -center[1] * scale, -center[2] * scale)
-            copiedModel.setPos(pos)
-            copiedModel.setScale(scale)
+            bounds = copiedModel.getTightBounds()
+            if bounds is not None:
+                bMin, bMax = bounds
+                center = (bMin + bMax) / 2.0
+                corner = Vec3(bMax - center)
+                largestAxis = max(corner[0], corner[1], corner[2])
+                if largestAxis > 0:
+                    scale = (1.0 / largestAxis) * 0.09
+                    pos = (-center[0] * scale, -center[1] * scale, -center[2] * scale)
+                    copiedModel.setPos(pos)
+                    copiedModel.setScale(scale)
 
         # Set model bin.
         if modelBin is not None:

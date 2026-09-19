@@ -114,7 +114,7 @@ class ItemsPage(ShtikerPage.ShtikerPage):
             borderWidth=(0.05, 0.05),
             frameColor=(0.7, 0.7, 0.7, 1.0), state=DGG.NORMAL,
             text_align=TextNode.ALeft, text_scale=0.7, width=14.35, numLines=1,
-            focus=0, backgroundFocus=0, cursorKeys=1, text_fg=(0, 0, 0, 1), suppressMouse=1, autoCapitalize=0,
+            focus=0, backgroundFocus=0, cursorKeys=1, text_fg=(0, 0, 0, 1), suppressMouse=1, suppressKeys=1, autoCapitalize=0,
             initialText=TTLocalizer.FriendsListSearchBarDefaultText, clearOnFocus=True,
             funcOnAccept=self.setSearchQuery,
         )
