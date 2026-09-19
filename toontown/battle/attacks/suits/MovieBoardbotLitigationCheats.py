@@ -63,7 +63,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSplicedLerpAnims,
     getSoundTrack,
     getToonTrackCheat,
-    getToonDodgeTrackCheat
+    getToonDodgeTrackCheat,
+    getToonTracksCheat
 )
 from toontown.battle.attacks.suits.MovieBossbotLitigationCheats import getToonTrackCheat2
 
