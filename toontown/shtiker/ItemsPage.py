@@ -149,22 +149,29 @@ class ItemsPage(ShtikerPage.ShtikerPage):
         # Item widget
         self.widgetNode = GUINode(parent=self, pos=(-0.4375, 0, 0))
         self.currWidget = BackpackToonWidget(parent=self.widgetNode)
+        self._inventoryRefreshTask = None
 
     def enter(self):
         ShtikerPage.ShtikerPage.enter(self)
-        self.refreshItemList()
         self.accept('LocalInventorySet', self.refreshItemList)
         self.accept('inventoryDelta', self.refreshItemList)
+        self.refreshItemList()
+        taskMgr.remove(self.uniqueName('inventoryRefresh'))
+        self._inventoryRefreshTask = taskMgr.doMethodLater(0.1, self.__retryInventoryRefresh, self.uniqueName('inventoryRefresh'))
 
         # Finally, swap to the backpack tab
         self.switchToBackpack()
 
     def refreshItemList(self, delta=None):
-        # NOTE: the hammerspace inventory may not have loaded yet if the player
-        # opens this page very soon after login -- self.accept('LocalInventorySet',
-        # self.refreshItemList) above means we'll be called again once it arrives.
         hammerspace = base.localAvatar.getHammerspace()
-        items = hammerspace.getItems() if hammerspace else []
+        if hammerspace is None:
+            return
+
+        if self._inventoryRefreshTask is not None:
+            taskMgr.remove(self.uniqueName('inventoryRefresh'))
+            self._inventoryRefreshTask = None
+
+        items = hammerspace.getItems()
 
         def baseFilter(item):
             return BackpackCategoryGlobals.isItemValidForCategory(item, self.selectedCategory)
@@ -182,10 +189,22 @@ class ItemsPage(ShtikerPage.ShtikerPage):
 
         self.grid.setItemList(list(filter(lambda item: filterFunc(item), items)))
 
+    def __retryInventoryRefresh(self, task):
+        self._inventoryRefreshTask = None
+        if not self.isVisible():
+            return task.done
+        if base.localAvatar.getHammerspace() is None:
+            self._inventoryRefreshTask = taskMgr.doMethodLater(0.1, self.__retryInventoryRefresh, self.uniqueName('inventoryRefresh'))
+            return task.done
+        self.refreshItemList()
+        return task.done
+
     def exit(self):
         ShtikerPage.ShtikerPage.exit(self)
         self.ignore('LocalInventorySet')
         self.ignore('inventoryDelta')
+        taskMgr.remove(self.uniqueName('inventoryRefresh'))
+        self._inventoryRefreshTask = None
 
     def unload(self):
         if self.grid:

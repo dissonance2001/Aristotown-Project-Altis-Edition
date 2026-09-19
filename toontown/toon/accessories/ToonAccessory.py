@@ -69,32 +69,33 @@ class ToonAccessory(AsyncDirectObject):
             self.accessoryGeom.setTexture(texture, 1)
 
     def _positionAccessory(self):
-        # Get the accessory transformation
         itemDef = self.item.getItemDefinition()
-        placementDict: dict[str, tuple] = itemDef.getAccessoryPlacement(self.item)
+        placementDict = itemDef.getAccessoryPlacement(self.item) or {}
+        itemType = self.item.getItemType()
+        placementTuple = None
 
-        # Determine the placement tuple.
-        placementTuple = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
-        if len(placementDict) <= 3:
+        if itemType in (ItemType.Cosmetic_Hat, ItemType.Cosmetic_Glasses):
+            headType = self.toon.style.head
+            for key in (headType, headType[:2], headType[:1]):
+                if key in placementDict:
+                    placementTuple = placementDict[key]
+                    break
+        elif itemType in (ItemType.Cosmetic_Backpack, ItemType.Cosmetic_Neck):
             torsoType = self.toon.style.torso[:1]
             if torsoType in placementDict:
-                placementTuple = placementDict.get(torsoType)
-            else:
-                raise KeyError
-        else:
-            headType = self.toon.style.head
-            shortHeadType = headType[:2]
-            speciesType = headType[0]
-            if headType in placementDict:
-                placementTuple = placementDict.get(headType)
-            elif shortHeadType in placementDict:
-                placementTuple = placementDict.get(shortHeadType)
-            elif speciesType in placementDict:
-                placementTuple = placementDict.get(speciesType)
-            else:
-                raise KeyError
+                placementTuple = placementDict[torsoType]
 
-        # Apply the accessory transformation.
+        if placementTuple is None:
+            if itemType == ItemType.Cosmetic_Hat:
+                placementTuple = AccessoryGlobals.HatTransTable.get(self.toon.style.head[:2])
+            elif itemType == ItemType.Cosmetic_Glasses:
+                placementTuple = AccessoryGlobals.GlassesTransTable.get(self.toon.style.head[:2])
+            elif itemType in (ItemType.Cosmetic_Backpack, ItemType.Cosmetic_Neck):
+                placementTuple = AccessoryGlobals.BackpackTransTable.get(self.toon.style.torso[:1])
+
+        if placementTuple is None:
+            placementTuple = ((0, 0, 0), (0, 0, 0), (1, 1, 1))
+
         xyz, hpr, sxyz = placementTuple
         self.accessoryGeom.setPosHpr(*xyz, *hpr)
         self.accessoryGeom.setScale(*sxyz)
