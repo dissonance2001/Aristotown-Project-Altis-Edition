@@ -2203,10 +2203,10 @@ def doBudgetCuts(attack):
         tubeTracks.append(Func(battle.movie.needRestoreHips))
         for partNum in range(0, hips.getNumPaths()):
             nextPart = hips.getPath(partNum)
-            tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 0, 3, scaleUpPoint=scaleUpPoint))
+            tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 0.0, 3.0, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        soundTrack = getSoundTrack('SA_red_tape.ogg', delay=0, node=suit)
+        soundTrack = getSoundTrack('SA_red_tape.ogg', delay=0.0, node=suit)
         toonDamageTrack = Sequence(ActorInterval(toon, 'struggle'))
         if dmg > 0:
             allTubeTracks.append(tubeTracks)
@@ -2568,7 +2568,7 @@ def doRecordCut(attack):
 
         notifyTrack = Sequence(Wait(3.8), Func(toon.showHpTextNew, - int(dmg), text="DAMAGE CUT!", colorCode=4))
         notifyTrack.append(Func(toon.setToonStatusEffect, 'damageDown', modifier=50, turns=2, mode='keepHighest'))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         if dmg > 0:
             explosionTracks.append(explosionTrack)
             notifyTracks.append(notifyTrack)
@@ -2632,7 +2632,7 @@ def doSnipeMegaphone(attack):
 
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="DAMAGE CUT!", colorCode=4))
         notifyTrack.append(Func(toon.setToonStatusEffect, 'damageDown', modifier=50, turns=2, mode='keepHighest'))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Parallel(getSuitAnimTrack(attack, disrespectBlend=True))

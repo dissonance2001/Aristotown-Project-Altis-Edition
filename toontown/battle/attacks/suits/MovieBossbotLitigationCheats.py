@@ -48,6 +48,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSuitAnimTrackAttack,
     getPartTrack,
     getPartTracks,
+    getIndicatorTracks,
     getToonTrack,
     getToonTracks,
     getToonDodgeTrack,
@@ -77,21 +78,9 @@ def getToonTrackCheat2(attack, damageDelay = 1e-06, damageAnimNames = None, dodg
     name = attack['name']
     if suit:
         suitPos, suitHpr = battle.getActorPosHpr(suit)
-    toonPos = toon.getPos(battle)
-    indicator = loader.loadModel('phase_5/models/effects/cc_m_txc_fx_bat_target_indicators')
-    indicator.setHpr(0, -90, 0)
-    indicator.setPos(toonPos.getX(), toonPos.getY(), .05)
     dmg = target['hp']
     animTrack = Sequence()
-    indicatorTracks = Sequence(Func(indicator.reparentTo, battle), LerpScaleInterval(indicator, 0, Point3(4, 1, 4)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(1, 0, 0, 1)),
-                               LerpColorScaleInterval(indicator, 0.25, Vec4(0, 0, 0, 0)),
-                               Func(indicator.reparentTo, hidden), Func(indicator.clearColorScale),
-                               Func(indicator.removeNode))
+    indicatorTracks: Sequence = getIndicatorTracks(toon, battle)
     if dmg > 0:
         animTrack.append(Func(toon.headsUp, battle, suitPos))
         animTrack.append(getToonTakeDamageTrackCheat(attack, toon, target['died'], dmg, damageDelay, damageAnimNames, splicedDamageAnims, showDamageExtraTime))

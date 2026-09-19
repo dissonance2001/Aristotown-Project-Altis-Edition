@@ -474,7 +474,7 @@ def doFootnoteOverload(attack):
         missPoint.setX(missPoint.getX() - 1.1)
         propTrack.append(getPropThrowTrack(attack, tnt, [hitPoint], [missPoint], .25, parent=battle))
         propTracks.append(propTrack)
-    toonTrack = getToonTracks(attack, 2.5, ['slip-forward'], 0, ['nothing'])
+    toonTrack = getToonTracks(attack, 2.5, ['slip-forward'], 0.0, [])
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     soundTrack = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.25)
     return Parallel(suitTrack, toonTrack, soundTrack, propTracks, explosionTracks)
@@ -1600,7 +1600,7 @@ def doSnipe(attack):
                 rightKnifeTracks.append(rightTrack)
 
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="SNIPED!", colorCode=4))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Sequence(getSuitAnimTrackAttack(attack))
@@ -4243,7 +4243,7 @@ def doSnipeCut(attack):
                 rightKnifeTracks.append(rightTrack)
 
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="-40% Damage!", colorCode=4))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Parallel(getSuitAnimTrack(attack))
@@ -4331,7 +4331,7 @@ def doSnipeCut(attack):
 #                 rightKnifeTracks.append(rightTrack)
 #
 #         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="-40% Damage!", colorCode=4))
-#         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+#         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
 #         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
 #         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
 #         suitTrack = Sequence(getSuitTrack(attack))
@@ -5557,7 +5557,7 @@ def donothing(attack):
             spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, [spinEffect3, battle, 0], softStop=-2))
             soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0))
             toonSpinTracks.append(Sequence(Func(toon.makeUnMandatoryToll), Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
-    toonDamageTrack = getToonTracks(attack, damageDelay=damageDelay + 0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['neutral'], showDamageExtraTime=1.0)
+    toonDamageTrack = getToonTracks(attack, damageDelay=damageDelay + 0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=[], showDamageExtraTime=1.0)
     soundTracks.append(Sequence(getSoundTrack('SA_life_insurance_loop.ogg', delay=2.0), getSoundTrack('SA_life_insurance_loop.ogg'), getSoundTrack('SA_life_insurance_loop.ogg')))
     return Parallel(toonTracks, toonSpinTracks, toonDamageTrack, suitTrack, spinTracks1, spinTracks2, spinTracks3, soundTracks)
 
@@ -6299,7 +6299,7 @@ def doLedgerOfSound(attack):
                 rightKnifeTracks.append(rightTrack)
 
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg)))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Sequence(getSuitAnimTrack(attack), 
@@ -6459,7 +6459,7 @@ def doLedgerOfSoundOLDER(attack):
                 rightKnifeTracks.append(rightTrack)
 
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="SNIPED!", colorCode=4))
-        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
+        #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
         soundTrack = getSoundTrack('SA_glower_power.ogg', delay=1.1, node=suit)
         soundTrack2 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=1.5, node=suit)
         suitTrack = Sequence(getSuitAnimTrack(attack), Func(suit.setSuitStatusEffect, 'vulnerable', modifier=5, mode='refreshModifier'), Parallel(Func(suit.showHpTextNew, 0, text="+5% Vulnerable!", colorCode=4)),

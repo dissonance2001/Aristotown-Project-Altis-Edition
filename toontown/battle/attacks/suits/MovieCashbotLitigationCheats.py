@@ -334,7 +334,7 @@ def doExtortion(attack):
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.5, startTime=0.9))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
     damageAnims.append(['cringe', 2.6, 1.5])
-    toonTrack = getToonTracks(attack, 4, ['nothing'], 0, ['neutral'])
+    toonTrack = getToonTracks(attack, 4.0, [], 0.0, [])
     multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
     soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', delay=0, node=suit)
     soundTrack2 = getSoundTrack('SA_life_insurance_register.ogg', delay=4, node=suit)

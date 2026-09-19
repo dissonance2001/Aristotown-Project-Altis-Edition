@@ -2365,7 +2365,7 @@ def doClipOnTie(attack):
         tiePropTrack.append(Func(tie.removeNode))
         tiePropTracks.append(tiePropTrack)
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
     throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 1.05, node=suit)
     return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
 
@@ -2594,11 +2594,11 @@ def doShred(attack):
     shredder = globalPropPool.getProp('shredder')
     particleEffect = BattleParticles.createParticleEffect('Shred')
     suitTrack = getSuitTrack(attack)
-    partTrack = getPartTrack(particleEffect, 3.5, 3.9, [particleEffect, suit, 0], softStop=-2)
+    partTrack = getPartTrack(particleEffect, 3.5, 3.9, [particleEffect, suit, 0], softStop=-2.0)
     paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
-    paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.4, 1e-05, scaleUpTime=0.2, anim=1, propName='shredder-paper', animDuration=1.5, animStartTime=2.8)
+    paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.4, 1e-05, scaleUpTime=0.2, anim=True, propName='shredder-paper', animDuration=1.5, animStartTime=2.8)
     shredderPosPoints = [Point3(0, 0, -0.5), VBase3(-90.0, -53.77, -0.0)]
-    shredderPropTrack = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 1, 3, scaleUpPoint=Point3(4.81, 4.81, 4.81))
+    shredderPropTrack = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 1.0, 3.0, scaleUpPoint=Point3(4.81, 4.81, 4.81))
     toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.1, ['conked'], suitTrack.getDuration() - 3.1, ['sidestep'])
     soundTrack = getSoundTrack('SA_shred.ogg', delay=3.4, node=suit)
     return Parallel(suitTrack, paperPropTrack, shredderPropTrack, partTrack, toonTrack, soundTrack)
@@ -3156,7 +3156,7 @@ def doDiskScratch(attack):
     padPosPoints = [Point3(-0.564399421128801, 0, -0.13024602026049337), VBase3(90, 90, 0)]
     padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57, scaleUpPoint = Point3(.5))
     padPropTrack.append(Func(pad.removeNode))
-    toonTrack = getToonTracks(attack, 3.2, ['cringe'], 3.0, ['nothing'])
+    toonTrack = getToonTracks(attack, 3.2, ['cringe'], 3.0, [])
     oldcolor = render.getColorScale()
     lightingTrack = Sequence(Wait(1), LerpColorScaleInterval(render, 0.5, (0, 0.992, 1, 1)),
                              LerpColorScaleInterval(render, 2.5, (0, 0.992, 1, 1)),
@@ -3621,7 +3621,7 @@ def doTeeOff(attack):
     club = globalPropPool.getProp('golf-club')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
-    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3, Point3(1.1, 1.1, 1.1))
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3.0, Point3(1.1, 1.1, 1.1))
     suitName = attack['suitName']
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTracks = Parallel()
@@ -3649,7 +3649,7 @@ def doTeeOffGroup(attack):
     club = globalPropPool.getProp('golf-club')
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
-    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3, Point3(1.1, 1.1, 1.1))
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3.0, Point3(1.1, 1.1, 1.1))
     ballPropTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -3679,7 +3679,7 @@ def doTeeOff2(attack):
     ball = globalPropPool.getProp('golf-ball')
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
-    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3, Point3(1.1, 1.1, 1.1))
+    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3.0, Point3(1.1, 1.1, 1.1))
     suitName = attack['suitName']
     ballPosPoints = [Point3(5.1, 4.0, 0.1)]
     ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.5, 1.5, 1.5)),
@@ -3725,9 +3725,9 @@ def doMulliganGroup(attack):
         ballPropTrack.append(Func(MovieUtil.removeProp, ball))
         ballPropTracks.append(ballPropTrack)
     dodgeDelay = suitTrack.getDuration()
-    toonTracks = getToonTracks(attack, 2.5, ['slip-backward'], 1, ['duck'],
+    toonTracks = getToonTracks(attack, 2.5, ['slip-backward'], 1.0, ['duck'],
                              showMissedExtraTime=1.7)
-    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
+    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.0, node=suit)
     return Parallel(suitTrack, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
 
 def doMulligan(attack):
@@ -3761,7 +3761,7 @@ def doMulligan(attack):
     dodgeDelay = suitTrack.getDuration()
     toonTrack = getToonTrack(attack, 2.5, ['slip-backward'], 1, ['duck'],
                              showMissedExtraTime=1.7)
-    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2, node=suit)
+    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.0, node=suit)
     ceaseTrack = ActorInterval(suit, 'cease')
     ceaseSoundTrack = Parallel(SoundInterval(globalBattleSoundCache.getSound('SA_cease_and_desist.ogg'), node=suit))
     ceaseSpeechTrack = Parallel(Func(suit.setChatAbsolute,
@@ -4619,7 +4619,7 @@ def doHalfWindsor(attack):
         tiePropTrack.append(Func(tie.removeNode))
         tiePropTracks.append(tiePropTrack)
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
     throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit)
     if hitAtleastOneToon:
         hitSound = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
@@ -4886,7 +4886,7 @@ def doRolodex(attack):
     partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0], softStop=-1)
     partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0, softStop=-1)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 3.7, scaleUpPoint=propScale, anim=0, propName='rollodex', animDuration=0, animStartTime=0)
+    propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 3.7, scaleUpPoint=propScale)
     toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
     soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
     return Parallel(suitTrack, toonTracks, propTrack, soundTrack, partTrack2, partTracks3)
@@ -5089,7 +5089,7 @@ def doPowerTie(attack):
         tiePropTrack.append(Func(tie.removeNode))
         tiePropTracks.append(tiePropTrack)
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['neutral'])
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
     throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit)
     if hitAtleastOneToon:
         hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
@@ -5664,9 +5664,9 @@ def doCigarSmoke(attack):
     baseFlameSmall.setScale(0.7)
     cigar = globalPropPool.getProp('cigar')
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2)
-    partTrack = getPartTrack(cigarSmoke, 1, 4.0, [cigarSmoke, suit, 0], softStop=-2)
+    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
+    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
+    partTrack = getPartTrack(cigarSmoke, 1, 4.0, [cigarSmoke, suit, 0], softStop=-2.0)
 
     def changeColor(parts):
         track = Parallel()
@@ -5745,10 +5745,10 @@ def doCigarSmokeOLD(attack):
     elif suitType == 'c':
         suitTrack = Sequence(getSuitTrack(attack))
         cigarPosPoints = [Point3(0.13024602026048981, -0.390738060781473, -0.21707670043415206), VBase3(180.0, 0.0, 0.0)]
-    cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0, 4.0, scaleUpPoint=Point3(7.0, 7.0, 7.0))
+    cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.0, 4.0, scaleUpPoint=Point3(7.0, 7.0, 7.0))
     toonTrack = getToonTrack(attack, 2.8, ['cringe'], 2.0, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
-    smokeTrack = getPartTrack(smoke, 2.75, 2.75, [smoke, suit, 0], softStop=-2)
+    smokeTrack = getPartTrack(smoke, 2.75, 2.75, [smoke, suit, 0], softStop=-2.0)
     multiTrackList.append(cigarPropTrack)
     multiTrackList.append(smokeTrack)
     baseFlameEffect = BattleParticles.createParticleEffect(file='cigarSmokeAtk')
@@ -6425,7 +6425,7 @@ def doBounceCheck(attack):
         LerpHprInterval(check, endDur, startHpr=(0, 90, 0), hpr=(1200, 90, 0)),
     )
     toonTrack = Parallel(
-        getToonTrack(attack, damageDelay, ['nothing'], dodgeDelay, ['nothing']),
+        getToonTrack(attack, damageDelay, [], dodgeDelay, []),
         Sequence(
             Wait(damageDelay),
             ActorInterval(toon, 'slip-backward', playRate=1.3),
@@ -6599,7 +6599,7 @@ def doBounceRate(attack):
         LerpHprInterval(check, endDur, startHpr=(0, 90, 0), hpr=(1200, 90, 0)),
     )
     toonTrack = Parallel(
-        getToonTrack(attack, damageDelay, ['nothing'], dodgeDelay, ['nothing']),
+        getToonTrack(attack, damageDelay, [], dodgeDelay, []),
         Sequence(
             Wait(damageDelay),
             ActorInterval(toon, 'slip-backward', playRate=1.3),
@@ -7680,10 +7680,10 @@ def doInject(attack):
         ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
         Func(MovieUtil.removeProp, card)
     )
-    #propTrackNew.append(getPropTrack(card, suit.getLeftHand(), laptopPosPoints, 1e-06, 2, scaleUpPoint=scaleUpPoint, scaleUpTime=0,
-                                         #     anim=1, animStartTime=0.5, animDuration=2.5,
+    #propTrackNew.append(getPropTrack(card, suit.getLeftHand(), laptopPosPoints, 1e-06, 2.0, scaleUpPoint=scaleUpPoint, scaleUpTime=0.0,
+                                         #     anim=True, animStartTime=0.5, animDuration=2.5,
                                           #    propName='ttht_m_ene_techbotLaptop'))
-    #calcPropTrack = getPropTrack(laptop, suit.getLeftHand(), laptopPosPoints, 1e-06, laptopDuration, scaleUpPoint=scaleUpPoint, anim=0, propName='laptop', animStartTime=0, animDuration=0)
+    #calcPropTrack = getPropTrack(laptop, suit.getLeftHand(), laptopPosPoints, 1e-06, laptopDuration, scaleUpPoint=scaleUpPoint, anim=False, propName='laptop', animStartTime=0.0, animDuration=0.0)
     toonTracks = getToonTracks(attack, 1.5, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['sidestep'])
     return Parallel(suitTrack, toonTracks, soundTrack, propTrackNew, partTracks, partTracks2, partTracks3, partTracks4, partTracks5)
 
@@ -7842,9 +7842,9 @@ def doSmokeAndMirrors(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2)
+    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
+    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
+    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
     hitSuit = dmg > 0
     particles = []
     particleTracks = Parallel()
@@ -7940,9 +7940,9 @@ def doHeadHonchoCigarSmoke(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2)
+    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
+    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
+    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
 
     def changeColor(parts):
         track = Parallel()
@@ -8010,9 +8010,9 @@ def doFirestarterCigarSmoke(attack):
     cigarPosPoints = [Point3(0, -0.08670520231213885, 0), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(4.0, 4.0, 4.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2)
+    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
+    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
+    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
 
     def changeColor(parts):
         track = Parallel()
