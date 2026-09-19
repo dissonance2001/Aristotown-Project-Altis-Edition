@@ -58,6 +58,8 @@ class DistributedEstate(DistributedObject.DistributedObject):
         self.__stopCrickets()
         DistributedObject.DistributedObject.disable(self)
         self.ignore('enterFlowerSellBox')
+        if base.estate is self:
+            base.estate = None
 
     def delete(self):
         self.notify.debug('delete')

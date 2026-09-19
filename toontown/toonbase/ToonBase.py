@@ -284,6 +284,7 @@ class ToonBase(OTPBase.OTPBase):
             del self.creditCardUpFront
         else:
             self.creditCardUpFront = self.creditCardUpFront != 0
+        self.estate = None
         self.housingEnabled = self.config.GetBool('want-housing', 1)
         self.cannonsEnabled = self.config.GetBool('estate-cannons', 0)
         self.fireworksEnabled = self.config.GetBool('estate-fireworks', 0)

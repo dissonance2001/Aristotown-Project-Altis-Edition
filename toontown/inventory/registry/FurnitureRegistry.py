@@ -258,7 +258,7 @@ class FurnitureDefinition(ItemDefinition):
         return f'{self.getName()} Furniture'
 
     def getClickable(self) -> tuple[bool, str]:
-        if not base.estate:
+        if not getattr(base, 'estate', None):
             return True, ""
 
         if (
