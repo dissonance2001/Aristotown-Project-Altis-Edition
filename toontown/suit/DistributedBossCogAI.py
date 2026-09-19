@@ -9,13 +9,14 @@ from toontown.toon import InventoryBase
 from toontown.battle import DistributedBattleFinalAI
 from toontown.building import SuitPlannerInteriorAI
 from toontown.battle import BattleBase
+from toontown.modifiers.contentsync.ContentSyncApplierAI import ContentSyncApplierAI
 from pandac.PandaModules import *
 from toontown.suit import SuitDNA
 from toontown.suit import BossCutsceneSkipAI
 import math
 AllBossCogs = []
 
-class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
+class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI, ContentSyncApplierAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBossCogAI')
 
     def __init__(self, air, dept):

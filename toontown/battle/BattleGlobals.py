@@ -1,3 +1,10 @@
+
+MIN_TRACK_INDEX = 0
+MAX_TRACK_INDEX = 7
+
+MIN_LEVEL_INDEX = 0
+MAX_LEVEL_INDEX = 7
+
 AccuracyBonuses = [0,
  20,
  40,

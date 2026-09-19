@@ -10,6 +10,9 @@ from toontown.battle import BattleExperienceAI
 from direct.distributed import DistributedObjectAI
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
+from toontown.modifiers import ModifierEnums
+from toontown.modifiers.ModifierEnums import ModifierType
+from toontown.modifiers.contentsync.ContentSyncDefinitions import SuitToContentSyncType
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
 from toontown.ai import DatabaseObject
@@ -685,6 +688,14 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.battleCalc.suitStatusConditionsNew[suit.doId] = []
         suit.battleTrap = NO_TRAP
         self.numSuitsEver += 1
+
+        # Content Sync, if necessary.
+        syncType = SuitToContentSyncType.get(suit.dna.name)
+        if syncType:
+            self.battleCalc.createEnvironmental(
+                environmentalType=ENV_ENUM.CONTENT_SYNC,
+                contentSyncType=syncType,
+            )
 
     def __joinSuit(self, suit):
         self.joiningSuits.append(suit)

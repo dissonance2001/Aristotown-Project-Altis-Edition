@@ -12,6 +12,8 @@ from toontown.toon import ToonDNA
 from toontown.utils.RateLimiter import IdRateLimiter
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.base.Inventory import Inventory
+from toontown.modifiers.ModifierEnums import ModifierType, REWARD_MODIFIERS
+from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
 from typing import List
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedSmoothNodeAI
@@ -4432,11 +4434,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setTrackBonusLevel(self, trackBonusLevelArray):
         self.trackBonusLevel = trackBonusLevelArray
 
-    def getTrackBonusLevel(self, track = None):
-        if track == None:
-            return self.trackBonusLevel
-        else:
-            return self.trackBonusLevel[track]
+    def getTrackBonusLevel(self, track=None):
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                return [8 for _ in range(BattleGlobals.NUM_GAG_TRACKS)] if track is None else 1
+        return self.trackBonusLevel if track is None else self.trackBonusLevel[track]
 
     def checkGagBonus(self, track, level):
         trackBonus = self.getTrackBonusLevel(track)

@@ -16,6 +16,9 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from otp.otpbase import OTPGlobals
 from toontown.toontowngui import TTDialog
+from toontown.modifiers.ModifierEnums import ModifierType
+from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
+
 
 # Corporate Clash inventory reward text colours.
 _rewardTextPropertiesManager = TextPropertiesManager.getGlobalPtr()
@@ -660,6 +663,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             self.detailNameLabel.configure(image_scale=20, image_pos=(0, 0, 2.75))
         self.detailAmountLabel.show()
+        maxLevel = BattleGlobals.MAX_LEVEL_INDEX
+        for gagModifier in base.localAvatar.getModifiersOfType(ModifierType.GagsContentSync):
+            maxLevel = min(maxLevel, gagModifier.getMaxGagLevel())
         organicBonus = self.toon.checkGagBonus(track, level)
         self.setGagEmblemOrganic(organicBonus)
         self.detailAmountLabel.configure(text=TTLocalizer.InventoryDetailAmount % {'numItems': self.numItem(track, level),
@@ -2521,6 +2527,17 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if curSkill < Levels[track][level]:
             return 0
         else:
+            return 1
+
+        maxLevel = GagsContentSyncModifier.capGagLevel(do=self.toon)
+        if level > maxLevel:
+            return 0
+
+        forceHas = any(
+            gagModifier.getForceMaxed()
+            for gagModifier in self.toon.getModifiersOfType(ModifierType.GagsContentSync)
+        )
+        if forceHas:
             return 1
 
     def itemIsCredit(self, track, level):

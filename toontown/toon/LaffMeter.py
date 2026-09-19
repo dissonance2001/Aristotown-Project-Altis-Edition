@@ -11,6 +11,7 @@ from otp.otpbase import OTPGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownIntervals
 from toontown.toonbase import TTLocalizer
+from toontown.modifiers.ModifierEnums import HP_MODIFIERS, ModifierType
 
 class LaffMeter(DirectFrame):
     deathColor = Vec4(0.58039216, 0.80392157, 0.34117647, 1.0)
@@ -112,7 +113,17 @@ class LaffMeter(DirectFrame):
 
     def setFlashThreshold(self, num):
         self.flashThreshold = num
-        
+
+    def acceptModifierEvent(self):
+        self.cleanupModifierEvent()
+        self.av.hookCallbackToModifier(
+            *HP_MODIFIERS,
+            method=self.update,
+        )
+
+    def cleanupModifierEvent(self):
+        self.av.clearCallbackToModifier(*HP_MODIFIERS)
+
     def showGags(self):
         self.showDetailsButton['command'] = self.backToDetails
         self.gagsBtn.hide()
@@ -386,6 +397,12 @@ class LaffMeter(DirectFrame):
             if hp < 0 and self.hp < 0:
                 numToShow = 0
 
+                # Show or hide the content sync icon.
+                if self.av and (self.av.hasModifier(ModifierType.LaffContentSync) and not self.battleGui):
+                    self.syncIcon.show()
+                else:
+                    self.syncIcon.hide()
+
             self.makeDeltaNumber(numToShow)
             self.hp = hp
             self.maxHp = maxHp
@@ -409,6 +426,7 @@ class LaffMeter(DirectFrame):
 
             if (float(self.hp) / float(self.maxHp)) <= 0.166666:
                 self.startFlash()
+
 
     def start(self):
         if self.av:

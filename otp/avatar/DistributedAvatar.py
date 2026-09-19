@@ -1,5 +1,6 @@
 from direct.actor.DistributedActor import DistributedActor
 from direct.distributed import DistributedNode
+from typing import List
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task import Task
@@ -11,8 +12,11 @@ from pandac.PandaModules import AudioSound
 from otp.otpbase import OTPGlobals
 from toontown.battle.BattleSounds import *
 from toontown.battle.BattleProps import globalPropPool
+from toontown.modifiers.ModifiableDO import ModifiableDO
+from toontown.modifiers.Modifier import Modifier
+from toontown.modifiers.ModifierEnums import HP_MODIFIERS
 
-class DistributedAvatar(DistributedActor, Avatar):
+class DistributedAvatar(DistributedActor, Avatar, ModifiableDO):
     HpTextGenerator = TextNode('HpTextGenerator')
     HpTextEnabled = 1
     ManagesNametagAmbientLightChanged = True
@@ -31,6 +35,7 @@ class DistributedAvatar(DistributedActor, Avatar):
         self.hpTextInterval2 = None
         self.hpTextInterval = None
         self.maxHp = None
+        self.modifiers: List[Modifier] = []
 
     def disable(self):
         try:
@@ -79,6 +84,13 @@ class DistributedAvatar(DistributedActor, Avatar):
         if not self.isLocal():
             self.initializeBodyCollisions('distAvatarCollNode-' + str(self.doId))
         DistributedActor.announceGenerate(self)
+
+        # Hook some modifier callbacks
+        self.hookCallbackToModifier(
+            *HP_MODIFIERS,
+            method=self.hpModifierApplied,
+        )
+
 
     def __setTags(self, extra = None):
         if hasattr(base, 'idTags'):
@@ -145,6 +157,18 @@ class DistributedAvatar(DistributedActor, Avatar):
         if justRanOutOfHp:
             self.died()
 
+    def hpModifierApplied(self):
+        self.hpChange()
+        messenger.send(ConditionGlobals.RefreshMsg)
+
+    def hpChange(self, quietly = 0):
+        # We may not have a doId yet... in which case we can't send the event, and don't need to anyway.
+        if hasattr(self, 'doId'):
+            if self.hp is not None and self.getMaxHp() is not None:
+                messenger.send(self.uniqueName('hpChange'), [self.getHp(), self.getMaxHp(), quietly])
+            if self.hp is not None and self.hp > 0:
+                messenger.send(self.uniqueName('positiveHP'))
+
     def hpChange(self, quietly = 0):
         if hasattr(self, 'doId'):
             if self.hp != None and self.maxHp != None:
@@ -163,7 +187,10 @@ class DistributedAvatar(DistributedActor, Avatar):
         self.hpChange()
 
     def getMaxHp(self):
-        return self.maxHp
+        return self.applyModifiers(
+            *HP_MODIFIERS,
+            value=self.maxHp,
+        )
 
     def getName(self):
         return Avatar.getName(self)
@@ -713,6 +740,14 @@ class DistributedAvatar(DistributedActor, Avatar):
 
     def getDialogueArray(self):
         return None
+
+    """
+       Modifiers
+       """
+
+    def getAllModifiers(self) -> List[Modifier]:
+        return self.modifiers
+
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def warp():

@@ -1,4 +1,5 @@
 from functools import cmp_to_key
+from typing import Optional
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from otp.ai.MagicWordGlobal import *
@@ -9,6 +10,7 @@ from toontown.battle import DistributedBattleMinibossAI
 from toontown.suit import DistributedSuitAI
 from toontown.battle import BattleExperienceAI
 from toontown.suit import DistributedMinibossAI
+from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.building import SuitPlannerInteriorAI
 from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
@@ -76,6 +78,9 @@ class DistributedLawbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.F
         taskName = self.uniqueName('clearBonus')
         taskMgr.remove(taskName)
         return  DistributedMinibossAI.DistributedMinibossAI.delete(self)
+
+    def getContentSync(self) -> Optional[ContentSyncType]:
+        return ContentSyncType.LBHQ
 
     def getHoodId(self):
         return ToontownGlobals.LawbotHQ

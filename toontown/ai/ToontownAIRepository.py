@@ -19,6 +19,7 @@ from toontown.ai.CertificateManagerAI import CertificateManagerAI
 from toontown.ai.FishManagerAI import  FishManagerAI
 from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.DialogueManagerAI import DialogueManagerAI
+from toontown.modifiers.contentsync.ContentSyncManagerAI import ContentSyncManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
 from toontown.ai.QuestManagerAI import QuestManagerAI
 from toontown.coderedemption.TTCodeRedemptionMgrAI import TTCodeRedemptionMgrAI
@@ -148,6 +149,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
         self.questManager = QuestManagerAI(self)
+        self.contentSyncManager = ContentSyncManagerAI(self)
         self.banManager = BanManagerAI.BanManagerAI(self)
         self.achievementsManager = AchievementsManagerAI(self)
         self.certManager = CertificateManagerAI(self)

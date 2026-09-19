@@ -13,6 +13,7 @@ from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Sound
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task.Task import Task
 from panda3d.core import *
+from toontown.modifiers.ModifierEnums import REWARD_MODIFIERS, ModifierType
 from otp.ai.MagicWordGlobal import *
 from otp.avatar import Avatar, DistributedAvatar
 from otp.otpbase import OTPLocalizerEnglish
@@ -1975,6 +1976,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.inventory.updateGUI()
 
     def getMaxCarry(self):
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                return 100
         return self.maxCarry
 
     def setCheesyEffect(self, effect, hoodId, expireTime):
@@ -2188,6 +2192,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.inventory.updateGUI()
 
     def getTrackAccess(self):
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                return [1 for _ in range(BattleGlobals.NUM_GAG_TRACKS)]
         return self.trackArray
 
     def hasTrackAccess(self, track):
@@ -3096,11 +3103,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.isLocal():
             messenger.send('skillPointChange')
 
-    def getTrackBonusLevel(self, track = None):
-        if track == None:
-            return self.trackBonusLevel
-        else:
-            return self.trackBonusLevel[track]
+    def getTrackBonusLevel(self, track=None):
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                return [8 for _ in range(BattleGlobals.NUM_GAG_TRACKS)] if track is None else 1
+        return self.trackBonusLevel if track is None else self.trackBonusLevel[track]
 
     def checkGagBonus(self, track, level):
         trackBonus = self.getTrackBonusLevel(track)
@@ -3193,9 +3200,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return self.ceaseAndDesists
         else:
             return 0
-    
-    def setCeaseAndDesists(self, ceaseAndDesists):
-        self.ceaseAndDesists = ceaseAndDesists
+
+    def getCeaseDesists(self):
+        for rewardModifier in self.getModifiersOfType(*REWARD_MODIFIERS):
+            if not rewardModifier.canUseCNDs():
+                return 0
+        if not base.cr.inventoryManager or not base.cr.inventoryManager.inventory:
+            return 0
+        return sum([stack.getQuantity() for stack in self.getHammerspace().findItems(MaterialItemType.CeaseAndDesists)])
 
     def setAccess(self, access):
         self.setGameAccess(access)
@@ -3209,6 +3221,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return self.gameAccess
 
         return 0
+
+    def getIOUs(self):
+        for rewardModifier in self.getModifiersOfType(*REWARD_MODIFIERS):
+            if not rewardModifier.canUseIOUs():
+                return 0
+        if not base.cr.inventoryManager or not base.cr.inventoryManager.inventory:
+            return 0
+        return self.getHammerspace().findItemsOfType(ItemType.IOU)
 
     def setDisplayName(self, str):
         if self.getGameAccess() == OTPGlobals.AccessFull and not self.isDisguised:

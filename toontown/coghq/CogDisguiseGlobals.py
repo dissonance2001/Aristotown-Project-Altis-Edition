@@ -3421,8 +3421,9 @@ def asNumber(bitstring):
 
     return num
 
-
 def dept2deptIndex(dept):
-    if type(dept) == bytes:
-        dept = SuitDNA.suitDepts.index(dept)
-    return dept
+    if isinstance(dept, (bytes, str)):
+        if isinstance(dept, bytes):
+            dept = dept.decode('ascii')          
+        return SuitDNA.suitDepts.index(dept)
+    return dept   # already an int

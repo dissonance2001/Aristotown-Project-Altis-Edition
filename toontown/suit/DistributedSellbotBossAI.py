@@ -1,5 +1,6 @@
 from functools import cmp_to_key
 import random
+from typing import Optional
 from toontown.suit import DistributedBossCogAI
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
@@ -14,6 +15,7 @@ from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.building import SuitBuildingGlobals
+from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from otp.ai.MagicWordGlobal import *
 
 class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.FSM):
@@ -42,6 +44,9 @@ class DistributedSellbotBossAI(DistributedMinibossAI.DistributedMinibossAI, FSM.
 
     def delete(self):
         return DistributedBossCogAI.DistributedBossCogAI.delete(self)
+
+    def getContentSync(self) -> Optional[ContentSyncType]:
+        return ContentSyncType.SBHQ
 
     def getHoodId(self):
         return ToontownGlobals.SellbotHQ

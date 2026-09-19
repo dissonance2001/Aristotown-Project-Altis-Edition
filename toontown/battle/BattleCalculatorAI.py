@@ -38,6 +38,7 @@ from toontown.battle.calculators.BaseSuitAttackCalculatorAI import BaseSuitAttac
 from toontown.battle.calculators.AttackHPCalculatorAI import AttackHPCalculatorAI
 from . import StatusEffects
 
+
 SUIT_ATTACK_UNTARGETABLE_CONDITIONS = {
     'default': ['hidden'],
     'SoakRemoval': [],

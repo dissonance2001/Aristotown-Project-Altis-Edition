@@ -1,16 +1,21 @@
+from typing import List
 from otp.ai.AIBaseGlobal import *
 from otp.otpbase import OTPGlobals
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.distributed import DistributedNodeAI
 from direct.task import Task
+from toontown.modifiers.ModifiableDOAI import ModifiableDOAI
+from toontown.modifiers.Modifier import Modifier
+from toontown.modifiers.ModifierEnums import HP_MODIFIERS
 
-class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
+class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI, ModifiableDOAI):
 
     def __init__(self, air):
         DistributedNodeAI.DistributedNodeAI.__init__(self, air)
         self.hp = 0
         self.maxHp = 0
+        self.modifiers: List[Modifier] = []
 
     def b_setName(self, name):
         self.setName(name)
@@ -49,6 +54,12 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         self.maxHp = maxHp
 
     def getMaxHp(self):
+        return self.applyModifiers(
+            *HP_MODIFIERS,
+            value=self.maxHp,
+        )
+
+    def getTrueMaxHp(self):
         return self.maxHp
 
     def b_setHp(self, hp):
@@ -114,3 +125,10 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
             self.notify.warning('Admin chat warning: %s using setParentStr to send "%s"' % (senderId, parentToken))
         
         DistributedNodeAI.DistributedNodeAI.setParentStr(self, parentToken)
+
+    """
+        Modifiers
+        """
+
+    def getAllModifiers(self) -> List[Modifier]:
+        return self.modifiers
