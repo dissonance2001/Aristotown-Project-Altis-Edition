@@ -597,11 +597,11 @@ class GetAvatarsFSM(AvatarOperationFSM):
 
             avatarDNA = fields['setDNAString'][0]
             try:
-                inventory = self.csm.air.inventoryDb.queryInventory(avId)
+                inventory = self.csm.air.inventoryDatabase.queryInventory(avId)
                 equippedItems = inventory.cache.getEquippedItems() if inventory else []
                 avatarDNA = packPotentialAvatarDNA(avatarDNA, equippedItems)
             except Exception:
-                pass
+                self.notify.warning(f"Couldn't fetch equipped items for avatar {avId}:\n{traceback.format_exc()}")
 
             potentialAvs.append([avId, name, avatarDNA, index, nameState, fields['setHp'][0], fields['setMaxHp'][0], fields.get('setHat', []), fields.get('setGlasses', []), fields.get('setBackpack', []), fields.get('setShoes', [])])
 
