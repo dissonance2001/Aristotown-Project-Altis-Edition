@@ -1107,6 +1107,24 @@ def getSplicedLerpAnims(animName: str, origDuration: float, newDuration: float, 
     return anims
 
 
-def getSoundTrack(fileName: str, delay: float = 0.01, duration: float = 0.0, node = None) -> Sequence:
-    return Sequence(Wait(delay), SoundInterval(globalBattleSoundCache.getSound(fileName), duration=duration, node=node))
+def getSoundTrack(fileName: str, delay: float = 0.01, duration: float = 0.0, node = None, isolated: bool = False, playRate: float = 1.0, volume: float = 1.0, startTime: float = 0.0) -> Sequence:
+    from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
+
+    soundEffect = globalBattleSoundCache.getSound(fileName)
+    intervalClass: type[SoundInterval] = IsolatedSoundInterval if isolated else SoundInterval
+    if playRate != 1.0:
+        soundIval: SoundInterval = intervalClass(soundEffect, duration=duration, node=node, volume=volume, startTime=startTime)
+
+        def setPlayRate(t: float) -> None:
+            if soundIval.sound:
+                soundIval.sound.setPlayRate(playRate)
+
+        return Sequence(
+            Wait(delay),
+            Func(setPlayRate, playRate),
+            soundIval,
+            Func(setPlayRate, 1.0)
+        )
+    else:
+        return Sequence(Wait(delay), intervalClass(soundEffect, duration=duration, node=node, volume=volume, startTime=startTime))
 
