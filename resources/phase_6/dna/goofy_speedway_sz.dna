@@ -892,7 +892,7 @@ group "goofySpeedway" [
    ]
    prop "linktunnel_gz_17000_DNARoot" [
     code [ "prop_GS_tunnel" ]
-    pos [ 0 89.1 0 ]
+    pos [ 0 89.1 -0.73 ]
     nhpr [ -180 0 -0 ]
     sign [
      baseline [

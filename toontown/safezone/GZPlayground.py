@@ -37,7 +37,7 @@ class GZPlayground(Playground.Playground):
                 tunnelParent = self.loader.geom
             self.roadsterRacewayTunnelHook = NodePath('roadsterRacewayTunnelHook')
             self.roadsterRacewayTunnelHook.reparentTo(tunnelParent)
-            self.roadsterRacewayTunnelHook.setPosHprScale(109.601, -107.531, 0, 45, 0, 0, 1.5, 1.5, 1.5)
+            self.roadsterRacewayTunnelHook.setPosHprScale(109.601, -107.531, 0.129929, 45, 0, 0, 1.5, 1.5, 1.5)
             self.roadsterRacewayTunnel.reparentTo(self.roadsterRacewayTunnelHook)
             self.roadsterRacewayTunnel.setPosHprScale(0, 0, 0, 0, 0, 0, 1, 1, 1)
             self.roadsterRacewayTunnel.setName('linktunnel_gs_8000_DNARoot')

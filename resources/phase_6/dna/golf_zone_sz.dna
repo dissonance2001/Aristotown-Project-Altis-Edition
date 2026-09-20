@@ -1413,7 +1413,7 @@ group "goofySpeedway" [
    ]
    prop "linktunnel_gs_8000_DNARoot" [
     code [ "prop_GS_tunnel" ]
-    pos [ 109.601 -107.531 0 ]
+    pos [ 109.601 -107.531 0.129929 ]
     nhpr [ 45 0 -0 ]
     scale [ 1.5 1.5 1.5 ]
     sign [
