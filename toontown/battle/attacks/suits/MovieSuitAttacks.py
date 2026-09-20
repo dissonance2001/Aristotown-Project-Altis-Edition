@@ -6382,7 +6382,7 @@ def doBounceCheck(attack):
     throwDelay = 48/24 / 2
     dodgeDelay = 1.7 + throwDelay
     damageDelay = 2.0 + throwDelay
-    suitTrack = getSuitTrack(attack, playRate=2)
+    suitTrack = getSuitTrack(attack, playRate=2.0)
     checkPropTrack = Sequence(
         getPropAppearTrack(
             check,
@@ -6436,9 +6436,9 @@ def doBounceCheck(attack):
     soundName = "SA_pink_slip.ogg"  # "AA_drop_anvil_miss.ogg"  # "SA_pink_slip.ogg"
     soundTracks = Parallel(
         getSoundTrack(soundName, delay=throwDelay + 0.2, duration=0.7,
-                            node=suit),
-        getSoundTrack(soundName, delay=throwDelay+0.8, duration=0.7, node=suit),
-        getSoundTrack(soundName, delay=throwDelay+1.4, duration=0.7, node=suit),
+                            node=suit, playRate=1.05),
+        getSoundTrack(soundName, delay=throwDelay+0.8, duration=0.7, node=suit, playRate=1.05, volume=0.8),
+        getSoundTrack(soundName, delay=throwDelay+1.4, duration=0.7, node=suit, playRate=1.05, volume=0.8),
     )
     hitSeq = Sequence()
     if hitSuit:
