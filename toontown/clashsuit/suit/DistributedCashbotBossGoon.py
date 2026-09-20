@@ -3,13 +3,13 @@ from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.distributed.ClockDelta import *
 
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq.cashbothq import DistributedCashbotBossObject
 from direct.showbase import PythonUtil
-from toontown.suit import DistributedGoon
+from toontown.clashsuit.suit import DistributedGoon
 
 
 

@@ -1,19 +1,24 @@
+from __future__ import annotations
 import pickle
 import random
 import time
 import re
 import json
 import os
+from toontown.quest3.kudos import KudosConstants
 from toontown.toon import Experience
 from toontown.toon import ToonExperience
-from toontown.toon import InventoryBase
+from toontown.toon import GagInventoryBase
 from toontown.toon import ModuleListAI
 from toontown.toon import ToonDNA
 from toontown.utils.RateLimiter import IdRateLimiter
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.base.Inventory import Inventory
 from toontown.modifiers.ModifierEnums import ModifierType, REWARD_MODIFIERS
+from toontown.inventory.enums.ItemEnums import MaterialItemType, BoosterItemType
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
+from toontown.booster.BoosterHandler import (BoosterHandler,
+                                             getHolidayBoosterHandler)
 from typing import List
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedSmoothNodeAI
@@ -78,7 +83,7 @@ else:
 if simbase.wantKarts:
     from toontown.racing.KartDNA import *
 
-class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI):
+class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI, BoosterHandler):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonAI')
     maxCallsPerNPC = 100
     partTypeIds = {ToontownGlobals.FT_FullSuit: (CogDisguiseGlobals.leftLegIndex,
@@ -105,6 +110,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def __init__(self, air):
         DistributedPlayerAI.DistributedPlayerAI.__init__(self, air)
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.__init__(self, air)
+        BoosterHandler.__init__(self)
 
         if simbase.wantPets:
             PetLookerAI.PetLookerAI.__init__(self)
@@ -241,6 +247,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.buffs = []
         self.stats = [0] * ToontownGlobals.TOTAL_STATS
         self.interiorLayout = 0
+        self.preset = None
         self.trueFriends = []
         self.trueFriendRequests = (0, 0)
         self.cheesyEffects = [0]
@@ -250,6 +257,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.certs = []
         self.petPresent = False
         self.chatMode = 0
+        self.playgroundGagMultipliers = {}
+        self.playgroundGagDiscounts = {}
 
     def generate(self):
         DistributedPlayerAI.DistributedPlayerAI.generate(self)
@@ -842,8 +851,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.inventory:
             self.inventory.updateInvString(inventoryNetString)
         else:
-            self.inventory = InventoryBase.InventoryBase(self, inventoryNetString)
-        emptyInv = InventoryBase.InventoryBase(self)
+            self.inventory = GagInventoryBase.GagInventoryBase(self, inventoryNetString)
+        emptyInv = GagInventoryBase.GagInventoryBase(self)
         emptyString = emptyInv.makeNetString()
         lengthMatch = len(inventoryNetString) - len(emptyString)
         if lengthMatch != 0:
@@ -861,7 +870,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.inventory.zeroInv()
                 self.inventory.maxOutInv(1, 1)
             else:
-                newInventory = InventoryBase.InventoryBase(self)
+                newInventory = GagInventoryBase.GagInventoryBase(self)
                 oldList = emptyInv.makeFromNetStringForceSize(inventoryNetString, oldTracks, oldLevels)
                 for indexTrack in range(0, oldTracks):
                     for indexGag in range(0, oldLevels):
@@ -873,9 +882,28 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getInventory(self):
         return self.inventory.makeNetString()
 
-    def doRestock(self, noUber = 1, noPaid = 1):
+    def b_setGagPreset(self, preset):
+        self.setGagPreset(preset)
+        self.d_setGagPreset(preset)
+
+    def d_setGagPreset(self, preset):
+        self.sendUpdate('setGagPreset', [preset])
+
+    def setGagPreset(self, presetNetString):
+        if self.preset:
+            self.preset.updateInvString(presetNetString)
+        else:
+            self.preset = GagInventoryBase.GagInventoryBase(self, presetNetString)
+
+    def getGagPreset(self):
+        return self.preset.makeNetString()
+
+    def saveNewGagPreset(self, presetNetString):
+        self.b_setGagPreset(presetNetString)
+
+    def doRestock(self, noUber=1):
         self.inventory.zeroInv()
-        self.inventory.maxOutInv(noUber, noPaid)
+        self.inventory.maxOutInv(noUber)
         self.d_setInventory(self.inventory.makeNetString())
 
     def setDefaultShard(self, shard):
@@ -4648,6 +4676,68 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         ceaseAndDesists = max(self.ceaseAndDesists - amount, 0)
         self.b_setCeaseAndDesists(ceaseAndDesists)
 
+    def getCounterfeits(self):
+        return sum([stack.getQuantity() for stack in self.getHammerspace().findItems(MaterialItemType.Counterfeits)])
+
+    def setSeenCutscenes(self, seenCutscenes):
+        self.seenCutscenes = seenCutscenes
+
+    def d_setSeenCutscenes(self, seenCutscenes):
+        self.sendUpdate('setSeenCutscenes', [seenCutscenes])
+
+    def b_setSeenCutscenes(self, seenCutscenes):
+        self.setSeenCutscenes(seenCutscenes)
+        self.d_setSeenCutscenes(seenCutscenes)
+
+    def getSeenCutscenes(self):
+        return self.seenCutscenes
+
+    def hasSeenCutscene(self, cutsceneId):
+        return cutsceneId in self.seenCutscenes
+
+    def hasSeenAnyCutscene(self, cutsceneList):
+        return any([self.hasSeenCutscene(cutsceneId) for cutsceneId in cutsceneList])
+
+    def addSeenCutscene(self, cutsceneId):
+        if self.hasSeenCutscene(cutsceneId):
+            return
+
+        self.seenCutscenes.append(cutsceneId)
+        self.b_setSeenCutscenes(self.seenCutscenes)
+
+    def addNewBooster(self, boosterType: BoosterItemType, timeDelta: datetime.timedelta = None,
+                      queueScavenge: bool = True):
+        super().addNewBooster(boosterType, timeDelta)
+        # if queueScavenge:
+        #     self.queueScavenge(
+        #         amount=1,
+        #         scavengeType=ScavengeType.BoosterScavenge,
+        #         extraArgs=[int(boosterType), round(timeDelta.total_seconds() / 3600)]
+        #     )
+
+    def b_setRawBoosters(self, boosters):
+        """Do not call directly."""
+        self.setRawBoosters(boosters)
+        self.d_setRawBoosters(boosters)
+
+    def d_setRawBoosters(self, boosters):
+        """Do not call directly."""
+        self.sendUpdate('setRawBoosters', [boosters])
+
+    def setRawBoosters(self, boosters):
+        """Do not call directly."""
+        self._rawBoosters = boosters
+
+    def _getChildBoosterHandlers(self):
+        """Gets all of the child boosters for the AI Toon."""
+        return [getHolidayBoosterHandler(ai=True)]
+
+        # getRawBoosters is defined in BoosterHandler
+
+    """
+    Toon Booster End
+    """
+
     def setPreviousAccess(self, access):
         self.previousAccess = access
 
@@ -5672,6 +5762,88 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getCerts(self):
         return self.certs
+
+    """
+        Kudos specific rewards
+        """
+
+    @staticmethod
+    def playgroundInfoDictToList(pgDict) -> list:
+        return list(zip(pgDict.keys(), pgDict.values()))
+
+    @staticmethod
+    def playgroundInfoListToDict(pgList) -> dict:
+        return {entry[0]: entry[1] for entry in pgList}
+
+    def b_setPlaygroundGagMultipliers(self, pgGagMultis: dict) -> None:
+        self.d_setPlaygroundGagMultipliers(pgGagMultis)
+        self.setPlaygroundGagMultipliers(self.playgroundInfoDictToList(pgGagMultis))
+
+    def d_setPlaygroundGagMultipliers(self, pgGagMultis: dict) -> None:
+        self.sendUpdate("setPlaygroundGagMultipliers", [self.playgroundInfoDictToList(pgGagMultis)])
+
+    def setPlaygroundGagMultipliers(self, pgGagMultis: list) -> None:
+        self.playgroundGagMultipliers = self.playgroundInfoListToDict(pgGagMultis)
+
+    def getPlaygroundGagMultiplier(self, zoneId: int) -> int:
+        if zoneId not in self.playgroundGagMultipliers:
+            return 0
+
+        return self.playgroundGagMultipliers[zoneId]
+
+    def updatePlaygroundGagMultiplier(self, zoneId: int, amount: int) -> None:
+        if zoneId not in ToontownGlobals.safeZones:
+            self.notify.warning(f"Avatar {self.doId} redeemed playground gag multiplier reward: " \
+                                f"{amount} for invalid zoneId: {zoneId}")
+            return
+
+        # Update the value.
+        gagMults = self.playgroundGagMultipliers.copy()
+        gagMults.setdefault(zoneId, 0)
+        gagMults[zoneId] = amount
+
+        # Distribute the new value.
+        self.b_setPlaygroundGagMultipliers(gagMults)
+
+    def b_setPlaygroundGagDiscounts(self, pgGagDiscounts: dict) -> None:
+        self.d_setPlaygroundGagDiscounts(pgGagDiscounts)
+        self.setPlaygroundGagDiscounts(self.playgroundInfoDictToList(pgGagDiscounts))
+
+    def d_setPlaygroundGagDiscounts(self, pgGagDiscounts: dict) -> None:
+        pgGagDiscounts = list(zip(pgGagDiscounts.keys(), pgGagDiscounts.values()))
+        self.sendUpdate("setPlaygroundGagDiscounts", [pgGagDiscounts])
+
+    def setPlaygroundGagDiscounts(self, pgGagDiscounts: list) -> None:
+        self.playgroundGagDiscounts = self.playgroundInfoListToDict(pgGagDiscounts)
+
+    def getPlaygroundGagDiscount(self, zoneId: int) -> float:
+        return KudosConstants.getPlaygroundDiscountAmount(self.playgroundGagDiscounts.get(zoneId, 0))
+
+    def updatePlaygroundGagDiscount(self, zoneId: int, amount: int) -> None:
+        if zoneId not in ToontownGlobals.safeZones:
+            self.notify.warning(f"Avatar {self.doId} redeemed playground gag discount reward: " \
+                                f"{amount} for invalid zoneId: {zoneId}")
+            return
+
+        # Update the value.
+        gagDiscounts = self.playgroundGagDiscounts.copy()
+        gagDiscounts[zoneId] = amount
+
+        # Distribute the new value.
+        self.b_setPlaygroundGagDiscounts(gagDiscounts)
+
+    def getBoosterUnlockLevel(self, zoneId: int) -> int:
+        # A bit hacky, but we derive this from the playground discount level.
+        return self.playgroundGagDiscounts.get(zoneId, 0)
+
+    def getPlaygroundHealBoost(self, zoneId: int) -> int:
+        healBoost = 0
+        kudosRank = KudosConstants.getKudosRank(self, zoneId)
+        for neededRank, potentialHealBoost in KudosConstants.PG_HEAL_BOOSTS.items():
+            if kudosRank >= neededRank:
+                healBoost = potentialHealBoost
+
+        return healBoost
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def cheesyEffect(value, hood=0, expire=0):

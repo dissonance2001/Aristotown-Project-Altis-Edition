@@ -6,7 +6,7 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.task.TaskManagerGlobal import taskMgr
 
 from toontown.events.winter.DistributedWinterMinigameSuitAI import DistributedWinterMinigameSuitAI
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 
 MIN_PRESENT_ID = 100

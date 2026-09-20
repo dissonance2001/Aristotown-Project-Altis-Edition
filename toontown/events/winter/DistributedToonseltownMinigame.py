@@ -6,7 +6,7 @@ from direct.gui.DirectGui import OnscreenText
 from direct.interval.IntervalGlobal import Sequence, Parallel, ActorInterval, LerpFunctionInterval, Wait, SoundInterval, ParticleInterval, Func, Track
 from pandac.PandaModules import CollisionNode, CollisionTube, Vec4, TextNode, Point3
 
-from toontown.battle import BattleParticles, MovieUtil
+from toontown.clashbattle.battle import BattleParticles, MovieUtil
 from toontown.toonbase import ToontownTimer, ToontownGlobals, TTLocalizer
 
 teamScoreText = "Total Team Score: %s"

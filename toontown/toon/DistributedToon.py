@@ -1,7 +1,10 @@
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle import BattleAvatar as BattleAvatarModule
 import pickle
 import math
 import operator, copy, random, time, gc
-from toontown.toon import Experience, InventoryNewOLD, InventoryNewNEW, TTEmote, Toon
+from toontown.quest3.kudos import KudosConstants
+from toontown.toon import Experience, GagInventory, TTEmote, Toon
 from direct.controls.GravityWalker import GravityWalker
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
@@ -14,7 +17,11 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task.Task import Task
 from panda3d.core import *
 from toontown.modifiers.ModifierEnums import REWARD_MODIFIERS, ModifierType
+from toontown.inventory.enums.ItemEnums import MaterialItemType
 from otp.ai.MagicWordGlobal import *
+from toontown.booster.BoosterBase import BoosterBase
+from toontown.booster.BoosterHandler import (BoosterHandler,
+                                             getHolidayBoosterHandler)
 from otp.avatar import Avatar, DistributedAvatar
 from otp.otpbase import OTPLocalizerEnglish
 from otp.avatar import DistributedPlayer
@@ -68,7 +75,7 @@ if (__debug__):
     import pdb
 
 
-class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable):
+class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable, BattleAvatar, BoosterHandler):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
     partyNotify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon_Party')
     chatGarbler = ToonChatGarbler.ToonChatGarbler()
@@ -84,6 +91,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         DistributedPlayer.DistributedPlayer.__init__(self, cr)
         Toon.Toon.__init__(self)
         DistributedSmoothNode.DistributedSmoothNode.__init__(self, cr)
+        BattleAvatar.__init__(self)
+        BoosterHandler.__init__(self)
         self.overheadMeter = None
         self.stickerSequence = None
         self.bFake = bFake
@@ -120,6 +129,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.glasses = [0, 0, 0]
         self.backpack = [0, 0, 0]
         self.shoes = [0, 0, 0]
+        self.experience = None
         self.trackBonusLevel = [-1, -1, -1, -1, -1, -1, -1, -1]
         self.inventoryNetString = None
         self.savedCheesyEffect = ToontownGlobals.CENormal
@@ -224,6 +234,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
         self.kudosBoardGui = None
+        self.playgroundGagMultipliers = {}
+        self.playgroundGagDiscounts = {}
+        self.preset = None
 
     """
     Hammerspace equipped-items state.
@@ -1026,14 +1039,35 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.inventory:
             self.inventory.updateGUI()
 
+    def getExperience(self):
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                e = Experience.Experience()
+                e.maxOut()
+                return e
+        if self.experience is None:
+            return Experience.Experience()
+        return self.experience
+
     def setInventory(self, inventoryNetString):
+        # Create a new inventory if we don't already have one
         if not self.inventory:
-            self.inventory = InventoryNewOLD.InventoryNewOLD(self, inventoryNetString)
-        self.inventory.updateInvString(inventoryNetString)
-        self.inventoryString = inventoryNetString
+            self.inventory = GagInventory.GagInventory(self, inventoryNetString)
 		
     def getInventory(self):
         return self.inventoryString
+
+    def setGagPreset(self, presetNetString):
+        if self.preset:
+            self.preset.updateInvString(presetNetString)
+        else:
+            self.preset = GagInventory.GagInventory(self, presetNetString)
+
+    def getGagPreset(self):
+        return self.preset.makeNetString()
+
+    def saveNewGagPreset(self, presetNetString):
+        self.sendUpdate('saveNewGagPreset', [presetNetString])
 
     def notifyExpReward(self, level, type):
         if type == 0:
@@ -3197,7 +3231,16 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setPinkSlips(self, pinkSlips):
         self.pinkSlips = pinkSlips
-    
+
+    def getCounterfeits(self):
+        for rewardModifier in self.getModifiersOfType(*REWARD_MODIFIERS):
+            if not rewardModifier.canUseCounterfeits():
+                return 0
+        if not base.cr.inventoryManager or not base.cr.inventoryManager.inventory:
+            return 0
+        return sum([stack.getQuantity() for stack in self.getHammerspace().findItems(MaterialItemType.Counterfeits)])
+
+
     def getCeaseAndDesists(self):
         if hasattr(self, 'ceaseAndDesists'):
             return self.ceaseAndDesists
@@ -3211,6 +3254,26 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if not base.cr.inventoryManager or not base.cr.inventoryManager.inventory:
             return 0
         return sum([stack.getQuantity() for stack in self.getHammerspace().findItems(MaterialItemType.CeaseAndDesists)])
+
+    def setSeenCutscenes(self, seenCutscenes):
+        self.seenCutscenes = seenCutscenes
+        if self.isLocal():
+            messenger.send('localSeenCutscenesChanged')
+
+    def getSeenCutscenes(self):
+        return self.seenCutscenes
+
+    def hasSeenAnyCutscene(self, cutsceneList):
+        return any([self.hasSeenCutscene(cutsceneId) for cutsceneId in cutsceneList])
+
+    def hasSeenCutscene(self, cutsceneId):
+        return cutsceneId in self.seenCutscenes
+
+    def requestAddSeenCutscene(self, cutsceneId):
+        if self.hasSeenCutscene(cutsceneId):
+            return
+
+        self.sendUpdate('addSeenCutscene', [cutsceneId])
 
     def setAccess(self, access):
         self.setGameAccess(access)
@@ -4418,6 +4481,115 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 		
     def getCerts(self):
         return self.certs
+
+    """
+       Boosters Start
+       """
+
+    def setRawBoosters(self, boosters):
+        self._rawBoosters = boosters
+
+        # Update our boosters and notify that they are updated.
+        self._updateBoosters()
+
+        if not self.isLocal():
+            return
+
+        # Notify that our local boosts have updated.
+        messenger.send('boostsUpdated')
+
+        # Set booster reminders.
+        self.__setBoosterReminders()
+
+    def _getChildBoosterHandlers(self):
+        """Gets all of the child boosters for the client Toon."""
+        return [getHolidayBoosterHandler(client=True)]
+
+    def __setBoosterReminders(self):
+        # Clear our current boost reminders.
+        taskMgr.remove('booster-running-out')
+
+        # Iterate over all of our boosters.
+        for booster in self.boosters:
+            booster: BoosterBase
+            boostRemainingTime = booster.getTimeLeft()
+            boost30MinsLeft = max(booster.getTimeLeft() - 30 * 60, 1)
+
+            # Do a check here so that we don't save the time remaining when boosts were last set.
+            # If less than 30 minutes left (notification is going out instantly), then calculate the remaining
+            # minutes. Else, just say 30 minutes, because that will be accurate when this notification goes out.
+            if boost30MinsLeft <= 1:
+                minutesTilExpire = max(int(round(boostRemainingTime / 60)), 1)
+            else:
+                minutesTilExpire = 30
+
+            self.notify.debug(f'time to announce boost expiring in <30 mins: {boost30MinsLeft}')
+            self.notify.debug(f'time to announce boost expiring altogether: {boostRemainingTime}')
+
+            boostName = getItemDefinition(booster.getBoostType()).getName(None)
+
+            # We check for this specifically, as boosts are not technically cleared until the next time
+            # a serverside check for one is used. This means that, technically, year-old boosts could still
+            # be on the toon, just not cleared out if they have been inactive.
+            if boostRemainingTime > 0:
+                taskMgr.doMethodLater(boost30MinsLeft, self.shoutoutDailyBoosterRunningOut, 'booster-running-out',
+                                      extraArgs=[boostName, 0, minutesTilExpire])
+                taskMgr.doMethodLater(boostRemainingTime, self.shoutoutDailyBoosterRunningOut, 'booster-running-out',
+                                      extraArgs=[boostName, 1])
+
+    def shoutoutDailyBoosterRunningOut(self, boostName, expiring=0, minutes=1):
+        """Sends a whisper to the player that their daily booster may expire soon."""
+        if expiring:
+            message = TTLocalizer.DailyTaskBoostRanOut % boostName
+        else:
+            plurality = 's' if minutes > 1 else ''
+            message = TTLocalizer.DailyTaskBoostRunningOut % (boostName, minutes, plurality)
+
+        self.cr.chatManager.sendSystemMessageLocally(message, senderName=TTLocalizer.lToonHQ)
+
+    """
+    Boosters End
+    """
+
+    """
+        Kudos specific rewards
+        """
+
+    @staticmethod
+    def playgroundInfoDictToList(pgDict) -> list:
+        return list(zip(pgDict.keys(), pgDict.values()))
+
+    @staticmethod
+    def playgroundInfoListToDict(pgList) -> dict:
+        return {entry[0]: entry[1] for entry in pgList}
+
+    def setPlaygroundGagMultipliers(self, pgGagMultis: list) -> None:
+        self.playgroundGagMultipliers = self.playgroundInfoListToDict(pgGagMultis)
+
+    def getPlaygroundGagMultiplier(self, zoneId: int) -> int:
+        if zoneId not in self.playgroundGagMultipliers:
+            return 0
+
+        return self.playgroundGagMultipliers[zoneId]
+
+    def setPlaygroundGagDiscounts(self, pgGagDiscounts: list) -> None:
+        self.playgroundGagDiscounts = self.playgroundInfoListToDict(pgGagDiscounts)
+
+    def getPlaygroundGagDiscount(self, zoneId: int) -> float:
+        return KudosConstants.getPlaygroundDiscountAmount(self.playgroundGagDiscounts.get(zoneId, 0))
+
+    def getBoosterUnlockLevel(self, zoneId: int) -> int:
+        # A bit hacky, but we derive this from the playground discount level.
+        return self.playgroundGagDiscounts.get(zoneId, 0)
+
+    def getPlaygroundHealBoost(self, zoneId: int) -> int:
+        healBoost = 0
+        kudosRank = KudosConstants.getKudosRank(self, zoneId)
+        for neededRank, potentialHealBoost in KudosConstants.PG_HEAL_BOOSTS.items():
+            if kudosRank >= neededRank:
+                healBoost = potentialHealBoost
+
+        return healBoost
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def zone(zoneId):

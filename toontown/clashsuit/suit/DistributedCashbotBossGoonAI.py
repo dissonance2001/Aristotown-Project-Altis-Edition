@@ -1,11 +1,11 @@
 from panda3d.core import *
 from direct.task.TaskManagerGlobal import *
 from direct.distributed.ClockDelta import *
-from toontown.suit import GoonGlobals
+from toontown.clashsuit.suit import GoonGlobals
 from direct.task.Task import Task
 from toontown.coghq.cashbothq import DistributedCashbotBossObjectAI
 from direct.showbase import PythonUtil
-from toontown.suit import DistributedGoonAI
+from toontown.clashsuit.suit import DistributedGoonAI
 from toontown.toonbase import ToontownGlobals
 import math
 import random
