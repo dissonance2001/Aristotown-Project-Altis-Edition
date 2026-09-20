@@ -25,4 +25,4 @@ fi
 
 chmod +x "$ASTROND"
 cd "$ASTRON_DIR" || exit 1
-exec "$ASTROND" --loglevel info config/cluster-yaml.yml
+exec "$ASTROND" --loglevel info config/cluster.yml

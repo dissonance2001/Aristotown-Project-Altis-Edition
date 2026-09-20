@@ -101,11 +101,12 @@ class AccountDB:
         pass  # Inheritors should override this.
 
     def storeAccountID(self, userId, accountId, callback):
-        self.dbm[str(userId)] = str(accountId)
-        if getattr(self.dbm, 'sync', None):
-            self.dbm.sync()
+        try:
+            self.dbm[str(userId)] = str(accountId)
+            if getattr(self.dbm, 'sync', None):
+                self.dbm.sync()
             callback(True)
-        else:
+        except Exception:
             self.notify.warning('Unable to associate user %s with account %d!' % (userId, accountId))
             callback(False)
 
@@ -159,11 +160,11 @@ class OperationFSM(FSM):
 
         FSM.__init__(self, self.__class__.__name__)
 
-    def enterKill(self, reason=''):
+    def enterKill(self, reason='', errorCode=155):
         if self.TARGET_CONNECTION:
-            self.csm.killConnection(self.target, reason)
+            self.csm.killConnection(self.target, reason, errorCode=errorCode)
         else:
-            self.csm.killAccount(self.target, reason)
+            self.csm.killAccount(self.target, reason, errorCode=errorCode)
         self.demand('Off')
 
     def enterOff(self):
@@ -209,7 +210,8 @@ class LoginAccountFSM(OperationFSM):
     def __handleRetrieve(self, dclass, fields):
         print('[DEBUG] __handleRetrieve: dclass=%r fields=%r' % (dclass, fields))
         if dclass != self.csm.air.dclassesByName['AccountUD']:
-            self.demand('Kill', 'Your account object was not found in the database!')
+            self.notify.warning('Account %d for user %s not found in database; creating new account.' % (self.accountId, self.userId))
+            self.demand('CreateAccount')
             return
 
         self.account = fields
@@ -970,10 +972,10 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         # Instantiate our account DB interface:
         self.accountDB = LocalAccountDB(self)
 
-    def killConnection(self, connId, reason):
+    def killConnection(self, connId, reason, errorCode=155):
         datagram = PyDatagram()
         datagram.addServerHeader(connId, self.air.ourChannel, CLIENTAGENT_EJECT)
-        datagram.addUint16(122)
+        datagram.addUint16(errorCode)
         datagram.addString(reason)
         self.air.send(datagram)
 
@@ -986,8 +988,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
 
         self.killConnection(connId, 'An operation is already underway')
 
-    def killAccount(self, accountId, reason):
-        self.killConnection(self.GetAccountConnectionChannel(accountId), reason)
+    def killAccount(self, accountId, reason, errorCode=155):
+        self.killConnection(self.GetAccountConnectionChannel(accountId), reason, errorCode=errorCode)
 
     def killAccountFSM(self, accountId):
         fsm = self.account2fsm.get(accountId)

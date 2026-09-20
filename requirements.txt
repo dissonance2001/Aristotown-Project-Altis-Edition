@@ -5,3 +5,4 @@ pycryptodome
 pyyaml
 semidbm
 six
+strenum
